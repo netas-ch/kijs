@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/kijs.gui.php">
+
+        <!-- Achtung: Reihenfolge beachten -->
+        <!-- <script type="text/javascript" src="js/lib/ace/ace.js"></script>-->
+        
+        
+        <script type="text/javascript" src="js/kijs.js"></script>
+        <script type="text/javascript" src="js/kijs.String.js"></script>
+        <script type="text/javascript" src="js/kijs.Array.js"></script>
+        <script type="text/javascript" src="js/kijs.Object.js"></script>
+        <script type="text/javascript" src="js/kijs.Date.js"></script>
+        <script type="text/javascript" src="js/kijs.Dom.js"></script>
+        
+        <script type="text/javascript" src="js/kijs.Observable.js"></script>
+        
+        <script type="text/javascript" src="js/kijs.Ajax.js"></script>
+        <script type="text/javascript" src="js/kijs.Rpc.js"></script>
+
+        <script type="text/javascript" src="js/kijs.Data.js"></script>
+        
+        <script type="text/javascript" src="js/gui/kijs.gui.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Dom.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.ToolTip.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Element.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Container.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.ViewPort.js"></script>
+        
+        <script type="text/javascript" src="js/gui/kijs.gui.Icon.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Button.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.ButtonGroup.js"></script>
+        
+        <script type="text/javascript" src="js/gui/kijs.gui.HeaderBar.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.FooterBar.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Resizer.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Splitter.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Panel.js"></script>
+
+        <script type="text/javascript" src="js/gui/kijs.gui.Mask.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.LayerManager.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.Window.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.MsgBox.js"></script>
+        
+        <script type="text/javascript" src="js/gui/kijs.gui.CornerTipContainer.js"></script>
+        
+        
+        <script type="text/javascript" src="tests/kijs.Test.js"></script>
+
+        <script type="text/javascript" src="tests/test_1_class.js"></script>
+        <script type="text/javascript" src="tests/test_2_multiLevelInheritance.js"></script>
+        <script type="text/javascript" src="tests/test_3_singleton.js"></script>
+        <script type="text/javascript" src="tests/test_4_event.js"></script>
+        <script type="text/javascript" src="tests/test_5_ajax.js"></script>
+        <script type="text/javascript" src="tests/test_6_rpc.js"></script>
+        <script type="text/javascript" src="tests/test_7_date.js"></script>
+        <script type="text/javascript" src="tests/test_8_nodeEvents.js"></script>
+        
+        <script type="text/javascript" src="tests/gui/gui_test_1_element.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_2_container.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_3_icon.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_4_button.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_5_headerBar.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_6_footerBar.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_7_panel.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_8_window.js"></script>
+
+        
+        <script>
+            function toggleTodosVisibility() {
+                var stl=document.getElementById("todoInner").style;
+                stl.display = !stl.display||stl.display=='none' ? 'block' : 'none';
+            }
+        </script>
+        <title>kijs Library</title>
+    </head>
+    <body>
+        <section id="content">
+            <h1>Tests</h1>
+            <p><a href="javascript:test_1_class();">1 Klassen</a></p>
+            <p><a href="javascript:test_2_multiLevelInheritance();">2 mehrstufige Vererbung</a></p>
+            <p><a href="javascript:test_3_singleton();">3 Klasse vom Typ singleton</a></p>
+            <p><a href="javascript:test_4_event();">4 Events</a></p>
+            <p><a href="javascript:test_5_ajax();">5 Ajax</a></p>
+            <p><a href="javascript:test_6_rpc();">6 RPC</a></p>
+            <p><a href="javascript:test_7_date();">7 Datum</a></p>
+            <p><a href="javascript:test_8_nodeEvents();">8 Node-Events</a></p>
+            <p>&nbsp;</p>
+            <h2>GUI</h2>
+            <p><a href="javascript:gui_test_1_element();">1 Element</a></p>
+            <p><a href="javascript:gui_test_2_container();">2 Container</a></p>
+            <p><a href="javascript:gui_test_3_icon();">3 Icon</a></p>
+            <p><a href="javascript:gui_test_4_button();">4 Button</a></p>
+            <p><a href="javascript:gui_test_5_headerBar();">5 HeaderBar</a></p>
+            <p><a href="javascript:gui_test_6_footerBar();">6 FooterBar</a></p>
+            <p><a href="javascript:gui_test_7_panel();">7 Panel</a></p>
+            <p><a href="javascript:gui_test_8_window();">8 Window</a></p>
+            <p><a href="testViewPort/test_9_afterResize.html">9 ViewPort afterResize Events</a></p>
+            <p><a href="testApp/index.html">10 Test-App</a></p>
+            <section id="todo" onclick="toggleTodosVisibility();">
+                <h1>To-Do</h1>
+                <section id="todoInner">
+                    <h2>Klassen</h2>
+                    <p>X regular</p>
+                    <p>X singleton</p>
+                    
+                    <h2>Klassen erweitert</h2>
+                    <p>X Events</p>
+                    <p>X Destructor</p>
+                                        
+                    <h2>Weiteres</h2>
+                    <p>X Ajax</p>
+                    <p>X RPC</p>
+                    <p>O DOM-Events</p>
+                    <p>O Config-Argumente</p>
+                    <p>X JSON definition von Formularen (xtype)</p>
+                    <p>O Hilfsfunktionen z.B. für DOM-Operationen</p>
+                    
+                    <h2>GUI Basiselemente</h2>
+                    <p>O gui.ElementManager ?</p>
+                    <p>X gui.Element</p>
+                    <p>X gui.BoxElement</p>
+                    <p>X gui.Container</p>
+                    <p>X gui.ViewPort</p>
+                    <p>X gui.Icon</p>
+                    <p>X gui.HeaderBar</p>
+                    <p>X gui.Resizer</p>
+                    <p>O gui.Panel</p>
+                    <p>O gui.Window</p>
+                    
+                    <h2>GUI Elemente</h2>
+                    <p>X gui.Button</p>
+                    <p>O gui.Tabs</p>
+                    <p>O gui.Accordeon</p>
+                    <p>O gui.Navi</p>
+                    <p>O gui.Tree</p>
+                    <p>O gui.DataView</p>
+                    <p>O gui.Grid</p>
+                    
+                    <h2>Fields</h2>
+                    <p>O gui.field.Field</p>
+                    <p>O gui.field.Label</p>
+                    <p>X gui.field.Text</p>
+                    <p>O gui.field.Memo</p>
+                    <p>O gui.field.Number</p>
+                    <p>O gui.field.YesNo</p>
+                    <p>O gui.field.Combo</p>
+                    <p>O gui.field.Multiselect</p>
+                    
+                    <h2>Phase 3</h2>
+                    <p>O App Builder (PHP)</p>
+                </section>
+            </section>
+        </section>
+    </body>
+</html>

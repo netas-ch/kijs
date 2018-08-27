@@ -1,0 +1,1496 @@
+@viewport-bkgrnd-color: #f6f6f6;
+@splitter-bkgrnd-color: #b4b4b4;
+
+@lightgreyccc-bkgrnd-color: #ccc;
+@lightgrey-bkgrnd-color: #d2d2d2;
+@lightgreyddd-bkgrnd-color: #ddd;
+
+
+@blue-bkgrnd-color: #4398dd;
+@panel-bkgrnd-color: #fff;
+
+@font-white-color: #fff;
+@font-black-color: #000;
+
+@font-grey333olor: #333;
+@font-grey555-color: #555;
+@font-grey888-color: #888;
+@font-greyf0f0f0-color: #f0f0f0;
+@font-greycfcfcf-color: #cfcfcf;
+
+
+@border-greyaaa-color: #aaa;
+
+@drag-over-color: #f00;
+
+
+@today-color: #2B8BD9;
+
+@error-icon-color: #BE6280;
+@error-icon-bkgrnd-color: #F3E2EB;
+@error-input-bkgrnd-color: #ffdaec;
+
+
+
+@help-icon-color: #6295BE;
+@help-icon-bkgrnd-color: #DCE6EF;
+
+
+@input-disabled-bkgrnd-color: #efefef;
+
+
+
+
+
+/* ******************
+   * font-awesome-4.7.0(www.fontawesome.io)
+   ****************** */
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('../fonts/fontawesome-webfont.eot?v=4.7.0');
+    src: url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'),
+         url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'),
+         url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'),
+         url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'),
+         url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+
+
+/* ******************
+   * Allgemein
+   ****************** */
+.kijs *, .kijs-viewport, .kijs-viewport * {
+    box-sizing: border-box;
+    z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
+}
+
+.kijs div, .kijs-viewport, .kijs-viewport div {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* ******************
+   * Ergänzungen für alle Elemente
+   ****************** */
+/* Blendet das Element aus */
+.kijs-hidden {
+    display: none;
+}
+
+/* Schatten für Elemente */
+.kijs-shadow {
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Scrollbar automatisch einblenden für container-inner */
+.kijs-autoscroll {
+    overflow-y: auto;
+}
+
+
+
+
+
+/* ******************
+   * Container
+   ****************** */
+.kijs-container {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.kijs-container-inner {
+    position: relative;
+    flex: 1 1 auto;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    
+    -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
+}
+
+
+
+/* ******************
+   * Accordion
+   ****************** */
+.kijs-accordion > .kijs-container-inner > .kijs-panel {
+    flex: 1 1 auto
+}
+
+
+
+
+/* ******************
+   * Viewport
+   ****************** */
+.kijs-viewport {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    background-color:@viewport-bkgrnd-color;
+    background-image: none;
+}
+
+
+/* ******************
+   * Splitter
+   ****************** */
+.kijs-splitter-horizontal {
+    width: 5px;
+    background-color: @viewport-bkgrnd-color;
+    cursor: ew-resize;
+}
+
+.kijs-splitter-overlay-horizontal {
+    position: absolute;
+    width: 5px;
+    height: 100%;
+    background-color:@splitter-bkgrnd-color;
+    opacity: 0.8;
+    cursor: ew-resize;
+}
+
+.kijs-splitter-vertical {
+    height: 5px;
+    background-color: @viewport-bkgrnd-color;
+    cursor: ns-resize;
+}
+
+.kijs-splitter-overlay-vertical {
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    background-color:@splitter-bkgrnd-color;
+    opacity: 0.8;
+    cursor: ns-resize;
+}
+  
+
+/* ******************
+   * Panel
+   ****************** */
+.kijs-panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color:@panel-bkgrnd-color;
+    transition: 0.2s;
+    
+    &:focus {
+        /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
+        /*border: 1px solid @blue-bkgrnd-color;*/
+    }
+
+    > .kijs-header {
+        flex: none;
+        border-left: 1px solid @lightgrey-bkgrnd-color;
+        border-right: 1px solid @lightgrey-bkgrnd-color;
+        border-bottom: 1px solid @lightgrey-bkgrnd-color;
+        background-color: @viewport-bkgrnd-color;
+    }
+    > .kijs-footer {
+        flex: none;
+        border-top: 1px solid @lightgrey-bkgrnd-color;
+        border-left: 1px solid @lightgrey-bkgrnd-color;
+        border-right: 1px solid @lightgrey-bkgrnd-color;
+        background-color: @viewport-bkgrnd-color;
+    }
+    > .kijs-footer > .kijs-container-inner {
+        text-align: right;
+    }
+
+    &.kijs-maximize {
+        position: fixed !important;
+        top: 0px !important;
+        left: 0px !important;
+        right: 0px !important;
+        bottom: 0px !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 0 !important;
+        
+        > .kijs-resizer {
+            display: none;
+        }
+    }
+    
+    
+    &.kijs-collapse-top, &.kijs-collapse-bottom {
+        height: 30px !important;
+        flex: none !important;
+    }
+
+    &.kijs-collapse-right, &.kijs-collapse-left {
+        height: auto !important;
+        width: 30px !important;
+        flex: none !important;
+        display: flex;
+        flex-direction: row;
+    }
+    
+    &.kijs-collapse-top > *:not(.kijs-headerbar), 
+    &.kijs-collapse-right > *:not(.kijs-headerbar), 
+    &.kijs-collapse-bottom > *:not(.kijs-headerbar), 
+    &.kijs-collapse-left > *:not(.kijs-headerbar) {
+        display: none;
+    }
+
+    /* bei Schatten auch diverse Linien anzeigen */
+    &.kijs-shadow > .kijs-container-inner {
+        border-left: 1px solid @lightgrey-bkgrnd-color;
+        border-right: 1px solid @lightgrey-bkgrnd-color;
+    }
+    &.kijs-shadow > div:first-child:not(.kijs-headerbar) {
+        border-top: 1px solid @lightgrey-bkgrnd-color;
+    }
+
+    &.kijs-shadow > div:last-child:not(.kijs-footerbar):not(.kijs-resizer) {
+        border-bottom: 1px solid @lightgrey-bkgrnd-color;
+    }
+}
+
+
+
+/* ******************
+   * Window
+   ****************** */
+.kijs-window {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+        
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+}
+
+
+
+
+/* ******************
+   * Mask
+   ****************** */
+.kijs-mask {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 60000;
+    background-color: rgba(0, 0, 0, 0.5);
+    
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    bottom: 0px;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    
+    > .kijs-icon {
+        color: white;
+        font-size: 40px;
+    }
+}
+
+
+
+
+/* ******************
+   * MsgBox
+   ****************** */
+.kijs-msgbox {
+    min-width: 200px;
+    
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        color: @font-black-color;
+    }
+    > .kijs-container-inner > .kijs-icon {
+        flex: none;
+        font-size: 30px;
+        width: 40px;
+        margin: 10px 0 10px 10px;
+    }
+    > .kijs-container-inner > .kijs-msgbox-inner {
+        flex: 1;
+        padding: 10px;
+        overflow: auto;
+    }
+
+
+    > .kijs-footer {
+        padding: 10px;
+    }
+    > .kijs-footer > .kijs-container-inner > .kijs-button {
+        margin: 0 4px 0 0;
+        padding: 0 10px;
+        min-width: 80px;
+    }
+}
+    
+
+
+
+/* ******************
+   * CornerTipContainer
+   ****************** */
+.kijs-cornertipcontainer {
+    position: fixed;
+    right: 0px;
+    bottom: 0px;
+    z-index: 70000;
+    
+    .kijs-panel {
+        border-radius: 4px;
+        margin: 0 10px 10px 0;
+    }
+
+    .kijs-panel > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        color: @font-black-color;
+    }
+    .kijs-panel > .kijs-container-inner > .kijs-icon {
+        flex: none;
+        font-size: 30px;
+        width: 40px;
+        margin: 10px 0 10px 10px;
+    }
+    .kijs-panel > .kijs-container-inner > .kijs-msgbox-inner {
+        flex: 1;
+        padding: 10px;
+        overflow: auto;
+    }
+}
+    
+
+
+
+/* ******************
+   * Resizer
+   ****************** */
+.kijs-resizer {
+    position: absolute;
+    bottom: -1px;
+    right: 0px;
+    width: 15px;
+    height: 15px;
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAABZJREFUeAFjIAUwUshlpJDLSIhLGAAACQ4AFk79JaMAAAAASUVORK5CYII=);
+    cursor: nw-resize;
+    opacity: 0.3;
+    
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.kijs-resizer-overlay {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px dashed rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+/* ******************
+   * Icon
+   ****************** */
+.kijs-icon {
+    display: inline-block;
+    font: normal normal normal 18px/1 FontAwesome;
+    background-repeat: no-repeat;
+    background-position: center center;
+  
+    &.kijs-hidden {
+        display: none;
+    }
+    
+    &.kijs-disabled {
+        filter: grayscale(100%); 
+    }
+}
+
+
+
+/* ******************
+   * Button
+   ****************** */
+.kijs-button {
+    margin: 0 4px;
+    border: 0;
+    border-radius: 6px;
+    padding: 3px 8px;
+    background-color: @viewport-bkgrnd-color;
+    border: 1px solid @viewport-bkgrnd-color;
+    cursor: pointer;
+    
+    > .kijs-icon {
+        color: @font-grey555-color;
+    }
+
+    > .kijs-icon:not(:empty) + .kijs-caption:not(:empty) {
+        margin-left: 4px;
+    }
+
+    > .kijs-caption {
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        color: @font-grey333olor;
+    }
+
+    &:hover,
+    &:focus {
+        background-color: @lightgreyddd-bkgrnd-color;
+        border: 1px solid @lightgreyddd-bkgrnd-color;
+    }
+    &:hover > *,
+    &:focus > * {
+        color: @font-grey333olor;
+    }
+
+    &.kijs-default {
+        box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+
+    &.kijs-disabled {
+        border: 1px solid @viewport-bkgrnd-color;
+        background-color: @viewport-bkgrnd-color;
+        cursor: auto;
+    }
+    &.kijs-disabled > * {
+        color: @font-grey888-color;
+    }
+}
+
+/* Buttons im Fuss eines Panels haben einen Rahmen */
+.kijs-panel {
+    > .kijs-footer .kijs-button {
+        border:1px solid @border-greyaaa-color;
+        background-color: transparent;
+    }
+
+    > .kijs-footer .kijs-button:hover,
+    > .kijs-footer .kijs-button:focus {
+        background-color: @lightgreyccc-bkgrnd-color;
+        border: 1px solid @border-greyaaa-color;
+    }
+
+    > .kijs-footer .kijs-button.kijs-disabled {
+        border:1px solid @border-greyaaa-color;
+        background-color: transparent;
+        cursor: auto;
+    }
+}
+
+/* Buttons im Fuss eines Fensters sind blau */
+.kijs-window {
+    > .kijs-footer .kijs-button {
+        background-color: @blue-bkgrnd-color;
+        border: 1px solid @blue-bkgrnd-color;
+    }
+
+    > .kijs-footer .kijs-button > * {
+        color: @font-grey333olor;
+    }
+
+    > .kijs-footer .kijs-button:hover,
+    > .kijs-footer .kijs-button:focus {
+        background-color: @blue-bkgrnd-color;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+    }
+    > .kijs-footer .kijs-button:hover > *,
+    > .kijs-footer .kijs-button:focus > * {
+        color: @font-black-color;
+    }
+}
+
+
+
+/* ******************
+   * Trigger Button
+   ****************** */
+.kijs-button.kijs-trigger {
+    display: block;
+    margin: 0;
+    padding: 0px 2px 0 1px;
+    border-radius: 0;
+    border-top: 1px solid @border-greyaaa-color;
+    border-right: 1px solid @border-greyaaa-color;
+    border-bottom: 1px solid @border-greyaaa-color;
+}
+
+
+
+
+/* ******************
+   * FooterBar
+   ****************** */
+.kijs-footerbar {
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    background-color: @blue-bkgrnd-color;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    
+    > .kijs-caption {
+        flex: 1 1 auto;
+        margin: 0 6px 0 0;
+        line-height: 30px;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 16px;
+        text-align: right;
+        color: @font-white-color;
+    }
+
+    > .kijs-container-inner {
+        flex: 0 1 auto;
+        width: auto;
+        margin: 0 0 0 4px;
+    }
+
+    > .kijs-container-inner > .kijs-button {
+        margin: 0 2px;
+        border-radius: 0;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+    }
+    > .kijs-container-inner > .kijs-button * {
+        line-height: 30px;
+        color: @font-greyf0f0f0-color;
+    }
+
+    > .kijs-container-inner > .kijs-button:hover > *,
+    > .kijs-container-inner > .kijs-button:focus > * {
+        color: @font-white-color;
+    }
+
+    > .kijs-container-inner > .kijs-button.kijs-disabled {
+        cursor: auto;
+    }
+}
+
+    
+
+/* ******************
+   * HeaderBar
+   ****************** */
+.kijs-headerbar {
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    height: 30px;
+    padding: 0 3px 0 0;
+    background-color: @blue-bkgrnd-color;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    
+    > .kijs-icon {
+        order: 10;
+        margin: 0 0 0 6px;
+        line-height: 30px;
+        height: auto;
+        color: @font-white-color;
+    }
+
+    > .kijs-caption {
+        flex: 1 1 auto;
+        order: 20;
+        margin: 0 0 0 6px;
+        line-height: 30px;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 16px;
+        text-align: left;
+        color: @font-white-color;
+    }
+
+    > .kijs-container-inner {
+        flex: 0 1 auto;
+        order: 30;
+        width: auto;
+    }
+
+    > .kijs-container-inner > .kijs-button {
+        margin: 0 3px;
+        border-radius: 0;
+        padding: 0;
+        border: none;
+        background-color: transparent;
+    }
+    > .kijs-container-inner > .kijs-button * {
+        line-height: 30px;
+    }
+
+
+    > .kijs-container-inner > .kijs-button * {
+        color: @font-greyf0f0f0-color;
+    }
+
+    > .kijs-container-inner > .kijs-button:hover > *,
+    > .kijs-container-inner > .kijs-button:focus > * {
+        color: @font-white-color;
+    }
+
+    > .kijs-container-inner > .kijs-button.kijs-disabled {
+        cursor: auto;
+    }
+    > .kijs-container-inner > .kijs-button.kijs-disabled > * {
+        color: @font-greycfcfcf-color;
+    }
+}
+
+/* HeaderBar Minimiert */
+.kijs-panel {
+    
+    &.kijs-collapse-right, &.kijs-collapse-left {
+        
+        > .kijs-headerbar {
+            width: 30px;
+            height: auto;
+            flex-direction: column;
+            
+            > .kijs-container-inner {
+                order: 5;
+                height: auto;
+                display: flex;
+                flex-direction: column-reverse;
+                margin: 4px 0 0 0;
+            }
+
+            > .kijs-container-inner > .kijs-button {
+                margin: 0;
+            }
+
+            > .kijs-container-inner > .kijs-button * {
+                line-height: 22px;
+            }
+
+            > .kijs-icon {
+                display: none;
+            }
+
+            > .kijs-caption {
+                -webkit-writing-mode: tb-rl;
+                -ms-writing-mode: tb-rl;
+                writing-mode: tb-rl;
+                margin: 4px auto 0 auto;
+                /*flex: none;*/
+                /*transform: rotate(90deg);*/
+            }
+        }
+    }
+}
+
+
+
+
+/* ******************
+   * ButtonGroup
+   ****************** */
+.kijs-buttongroup {
+    display: flex;
+    flex-direction: column-reverse;
+    border-right: 1px solid @lightgrey-bkgrnd-color;
+    
+    > .kijs-caption {
+        flex: none;
+        margin: 2px 0;
+        font-size: 11px;
+        line-height: 11px;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        text-align: center;
+        color: @font-grey555-color;
+    }
+
+    > .kijs-container-inner {
+        > .kijs-button {
+            display: block;
+            margin: 4px;
+            /*border-radius: 0;*/
+            padding: 0;
+            background-color: transparent;
+            
+            * {
+                line-height: 30px;
+                /*color: @font-grey555-color;*/
+            }
+
+            &:hover,
+            &:focus {
+                background-color: @lightgrey-bkgrnd-color;
+                > * {
+                    color: @font-grey333olor;
+                }
+            }
+        }
+    }
+}
+
+    
+
+
+
+/* ******************
+   * DataView
+   ****************** */
+.kijs-dataview {
+    > .kijs-container-inner {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .kijs-dataviewelement {
+        width: 200px;
+        margin: 4px;
+        padding: 2px 4px 6px 4px;
+        border: 1px solid @viewport-bkgrnd-color;
+        border-radius: 4px;
+        
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        color: @font-black-color;
+        
+        * {
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            color: @font-black-color;
+        }
+        &:focus,
+        &:hover {
+            background-color: @viewport-bkgrnd-color;
+        }
+        
+        > div > .label {
+            display: inline-block;
+            width: 50px;
+            font-size: 10px;
+            color: @font-grey888-color;
+        }
+
+        > div > .value {
+            display: inline-block;
+        }
+    }
+    
+    .kijs-dataviewelement.kijs-selected {
+        border-color: @blue-bkgrnd-color;
+    }
+        
+}
+
+.kijs-dragover {
+    background-color: @drag-over-color !important;
+}
+
+
+
+
+/* ******************
+   * DatePicker
+   ****************** */
+.kijs-datepicker {
+    display: inline-block;
+    border: 1px solid @viewport-bkgrnd-color;
+    background-color: @panel-bkgrnd-color;
+    
+    .kijs-header {
+        background-color: @blue-bkgrnd-color;
+    }
+
+    .kijs-header > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .kijs-footer {
+        margin-bottom: 6px;
+    }
+
+    .kijs-footer > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }
+
+
+
+
+    table {
+        border-collapse: collapse;
+    }
+
+    td,
+    th {
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        line-height: 17px;
+        padding: 4px 6px;
+        text-align: right;
+    }
+    th {
+        color: @font-grey888-color;
+    }
+    .kijs-dayselect td.kijs-day:hover {
+        background-color: @lightgrey-bkgrnd-color;
+    }
+    .kijs-weekselect tr:hover td {
+        background-color: @lightgrey-bkgrnd-color;
+    }
+    .kijs-weekno {
+        font-size: 10px;
+        color: @font-grey888-color;
+    }
+    .kijs-weekend {
+        background-color: @viewport-bkgrnd-color;
+    }
+    .kijs-outofmonth {
+        color: @font-grey888-color;
+    }
+
+    .kijs-today {
+        color: @today-color;
+    }
+
+    .kijs-value {
+        background-color: @blue-bkgrnd-color;
+        color: @font-white-color;
+    }
+
+    .kijs-header {
+        .kijs-button {
+            margin: 0 10px;
+            border-radius: 0;
+            padding: 0;
+            border: none;
+            background-color: transparent;
+            
+            * {
+                line-height: 30px;
+                color: @font-greyf0f0f0-color;
+            }
+
+            &:hover > *,
+            &:focus > * {
+                color: @font-white-color;
+            }
+        }
+        .kijs-button.kijs-disabled {
+            cursor: auto;
+        }
+        .kijs-button.kijs-disabled > * {
+            color: @font-greycfcfcf-color;
+        }
+    }
+}
+
+    
+
+
+/* ******************
+   * Menu Month
+   ****************** */
+.kijs-menu-month {
+    width: 236px;
+    
+    .kijs-panel > .kijs-container-inner {
+        display: flex;
+        flex-flow: row nowrap;
+    }
+
+    .kijs-menu-month-l {
+        flex: 1 1 auto;
+        border-right: 1px solid @lightgrey-bkgrnd-color;
+    }
+    .kijs-menu-month-r {
+        flex: 1 1 auto;
+    }
+    .kijs-menu-month-r > .kijs-container-inner {
+        display: flex;
+        flex-flow: column nowrap;
+    }
+    .kijs-menu-month-r-t {
+        flex: none;
+    }
+    .kijs-menu-month-r-t > .kijs-container-inner {
+        margin-top: 4px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .kijs-dataview {
+        flex: 1 1 auto;
+    }
+
+    .kijs-dataviewelement {
+        margin: 2px;
+        width: 54px;
+        line-height: 17px;
+        border-radius: 0;
+        border-color: transparent;
+        text-align: center;
+    }
+}
+
+
+
+
+/* ******************
+   * Field
+   ****************** */
+.kijs-field {
+    display: flex;
+    flex-direction: row;
+    
+    > .kijs-label {
+        display: block;
+        flex: none;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        line-height: 17px;
+        padding: 3px 0 0 0;
+    }
+
+    > .kijs-inputwrapper {
+        position: relative;
+        display: block;
+        flex: 1 1 auto;
+    }
+    
+    > .kijs-container-inner {
+        flex: none;
+        
+        > .kijs-button {
+            display: block;
+            margin: 0 0 0 2px;
+            padding: 0px 4px;
+            height: 100%;
+        }
+    }
+}
+
+    
+
+.kijs-icon-error {
+    margin: 2px 0 0 2px;
+    color: @error-icon-color;
+    cursor: default;
+    height: 20px;
+}
+
+.kijs-icon-help {
+    margin: 2px 0 0 2px;
+    color: @help-icon-color;
+    cursor: default;
+    height: 20px;
+}
+
+
+/* ******************
+   * Field Text
+   ****************** */
+.kijs-field-text {
+    height: 25px;
+    
+    > .kijs-inputwrapper {
+        > input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 4px;
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+            
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @error-input-bkgrnd-color;
+        /*border: 1px solid @error-icon-color;*/
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+/* ******************
+   * Field Password
+   ****************** */
+.kijs-field-password {
+    height: 25px;
+    
+    > .kijs-inputwrapper {
+        > password {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 4px;
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+            
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > password {
+        background-color: @error-input-bkgrnd-color;
+        /*border: 1px solid @error-icon-color;*/
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > password {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+
+/* ******************
+   * Field Date
+   ****************** */
+.kijs-field-date {
+    height: 25px;
+    
+    > .kijs-inputwrapper {
+        display: flex;
+        flex-flow: row nowrap;
+        
+        > div {
+            flex: 1 1 auto;
+        }
+        
+        .kijs-trigger {
+            flex:none;
+        }
+        
+        > input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 4px;
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @error-input-bkgrnd-color;
+        /*border: 1px solid @error-icon-color;*/
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+
+/* ******************
+   * Field Memo
+   ****************** */
+.kijs-field-memo {
+    height: 50px;
+    
+    > .kijs-inputwrapper > textarea {
+        display: block;
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        border: 1px solid @border-greyaaa-color;
+        padding: 2px 4px;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        font-size: 15px;
+        line-height: 17px;
+        resize: none;
+        
+        &:focus {
+            border: 1px solid @blue-bkgrnd-color;
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > textarea {
+        background-color: @error-input-bkgrnd-color;
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > textarea {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+
+/* ******************
+   * Field Combo
+   ****************** */
+.kijs-field-combo {
+    height: 25px;
+
+    > .kijs-inputwrapper {
+        
+        > select {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 0px;
+            appearance: none;
+            -moz-appearance: none;
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+            background: @panel-bkgrnd-color;
+            cursor: pointer;
+            
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+        
+        &:before {
+            content: '';
+            position: absolute;
+            display: block;
+            top: 1px;
+            right: 1px; 
+            bottom: 1px; 
+            width: 21px;
+            background: @panel-bkgrnd-color;
+            pointer-events: none;
+        }
+
+        &:after {
+            content: '\f0d7';
+            position: absolute;
+            top: 2px;
+            right: 8px; 
+            padding: 0 0 2px;
+            font: normal normal normal 18px/1 FontAwesome;
+            color: @border-greyaaa-color;
+            pointer-events: none;
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > select {
+        background-color: @error-input-bkgrnd-color;
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > select {
+            background-color: @input-disabled-bkgrnd-color;
+            color: @font-black-color;
+        }
+        
+        > .kijs-inputwrapper:before {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+
+/* ******************
+   * Checkbox
+   ****************** */
+.kijs-field-checkbox {
+    > .kijs-inputwrapper {
+        > input {
+            :focus {
+                /* TODO !!! */
+            }
+        }
+
+        > .kijs-caption {
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+        }
+    }
+}
+
+    
+
+
+/* ******************
+   * CheckboxGroup
+   ****************** */
+.kijs-field-checkboxgroup {
+    > .kijs-inputwrapper {
+        > .kijs-optionwrapper {
+            > .kijs-caption {
+                font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+                font-size: 15px;
+                line-height: 17px;
+            }
+
+            > input:focus {
+                /* TODO !!! */
+            }
+        }
+    }
+    
+    /* Ergänzungen für CheckboxGroup */
+    &.kijs-inline > .kijs-inputwrapper > .kijs-optionwrapper {
+        display: inline;
+        margin-right: 10px;
+        
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+    
+
+
+
+/* ******************
+   * RadioGroup
+   ****************** */
+.kijs-field-radiogroup {
+    > .kijs-inputwrapper {
+        > .kijs-optionwrapper {
+            > .kijs-caption {
+                font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+                font-size: 15px;
+                line-height: 17px;
+            }
+
+            > input:focus {
+                /* TODO !!! */
+            }
+        }
+    }
+    
+    /* Ergänzungen für RadioGroup */
+    &.kijs-inline > .kijs-inputwrapper > .kijs-optionwrapper {
+        display: inline;
+        margin-right: 10px;
+        
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}
+
+
+
+/* ******************
+   * Editor
+   ****************** */
+.kijs-field-editor {
+    > .ace_editor {
+        border: 1px solid @border-greyaaa-color;
+    }
+    
+    &.kijs-error .ace_editor {
+        background-color: @error-input-bkgrnd-color;
+        
+        &.ace_focus {
+            border: 1px solid @blue-bkgrnd-color;
+        }
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .ace_editor {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+
+
+
+  /* ******************
+   * Menu
+   ****************** */
+.kijs-menu {
+    position: absolute;
+    display: block;
+    z-index: 101;
+    /*border-radius: 4px;*/
+    border: 1px solid @lightgrey-bkgrnd-color;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    font-size: 13px;
+    background-color: @viewport-bkgrnd-color;
+    overflow: auto;
+    opacity: 1;
+    transition: none;
+    visibility: visible;
+    
+    &.kijs-hidden {
+        visibility: hidden;
+        opacity: 0;
+        transition: 0.2s;
+    }
+}
+    
+
+
+
+
+/* ******************
+   * ToolTip
+   ****************** */
+.kijs-tooltip {
+    position: fixed;
+    display: block;
+    z-index: 100;
+    border-radius: 4px;
+    padding: 8px;
+    border: 1px solid @lightgrey-bkgrnd-color;
+    font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    font-size: 13px;
+    background-color: @viewport-bkgrnd-color;
+    opacity: 1;
+    transition: none;
+    visibility: visible;
+    
+    ul {
+        margin: 0 0 0 14px;
+        padding: 0;
+    }
+    
+    &.kijs-error {
+        border: 1px solid @error-icon-color;
+        background-color: @error-icon-bkgrnd-color;
+    }
+    &.kijs-help {
+        border: 1px solid @help-icon-color;
+        background-color: @help-icon-bkgrnd-color;
+    }
+
+    &.kijs-hidden {
+        visibility: hidden;
+        opacity: 0;
+        transition: 1s;
+    }
+}
+    
+    
+
+
+
+
+/* ******************
+   * Ergänzungen für Container
+   ****************** */
+.kijs-flexrow > .kijs-container-inner {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.kijs-flexcolumn > .kijs-container-inner {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+
+
+
+/* ******************
+   * Ergänzungen für Icons
+   ****************** */
+/* Dreh-Effekt für Icons */
+.kijs-spin {
+  -webkit-animation: kijs-spin 2s infinite linear;
+  animation: kijs-spin 2s infinite linear;
+}
+
+/* Pulse-Effekt für Load-Icons */
+.kijs-pulse {
+  -webkit-animation: kijs-spin 1s infinite steps(8);
+  animation: kijs-spin 1s infinite steps(8);
+}
+
+
+
+
+
+
+
+/* Animationen zu den Spin- und Pulse-Effekten */
+@-webkit-keyframes kijs-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+@keyframes kijs-spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
