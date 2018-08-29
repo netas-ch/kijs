@@ -199,6 +199,7 @@ kit.App = class kit_App {
                                     resizable: true,
                                     height: 300,
                                     shadow: true,
+                                    autoLoad: false,
                                     rpc: this._rpc,
                                     waitMaskTargetDomProperty: 'innerDom',
                                     facadeFnLoad: 'address.load',
@@ -549,7 +550,7 @@ kit.App = class kit_App {
                                             caption: 'RPC Load',
                                             on: {
                                                 click: function() {
-                                                    this.parent.parent.load(1);
+                                                    this.upX('kijs.gui.FormPanel').load();
                                                 }
                                             }
                                         },{
@@ -690,26 +691,31 @@ kit.App = class kit_App {
                                     maximizable: true,
                                     height: 200,
                                     shadow: true,
+                                    cls: 'kijs-flexrow',
                                     style: {
                                         marginTop: '10px'
                                     },
-                                    innerStyle: {
+                                    /*innerStyle: {
                                         padding: '10px',
                                         overflowY: 'auto'
-                                    },
+                                    },*/
                                     elements: [
-                                        /*{
+                                        {
                                             xtype: 'kijs.gui.DataView',
                                             selectType: 'multi',
                                             rpc: this._rpc,
+                                            //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
+                                            autoLoad: true,
                                             facadeFnLoad: 'dataview.load',
-                                            data: new kijs.Data(),
-                                            on: {
-                                                afterfirstrenderto: function(e, el) {
-                                                    el.load();
-                                                }
+                                            waitMaskTargetDomProperty: 'innerDom',
+                                            style: {
+                                                flex: 1
+                                            },
+                                            innerStyle: {
+                                                padding: '10px',
+                                                overflowY: 'auto'
                                             }
-                                        }*/
+                                        }
                                     ],
                                     footerStyle: {
                                         padding: '10px'

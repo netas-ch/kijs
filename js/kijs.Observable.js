@@ -37,6 +37,38 @@ kijs.Observable = class kijs_Observable {
     // MEMBERS
     // --------------------------------------------------------------
     /**
+     * Überprüft ob ein Listener existiert
+     * @param {String} name                     Name des Listeners
+     * @param {function|null} [callback=null]   Callback Funktion oder null für alle
+     * @param {object|null} [context=null]      Kontext oder null für alle
+     * @returns {Boolean}
+     */
+    hasListener(name, callback=null, context=null) {
+        let listeners = this._events[name];
+            
+        if (listeners) {
+            if (!callback && !context) {
+                return true;
+                
+            } else {
+                for (let i=0; i<listeners.length; i++) {
+                    let listener = listeners[i];
+                    
+                    const callbackOk = !callback || callback === listener.callback;
+                    const contextOk = !context || context === listener.context;
+                    
+                    if (callbackOk && contextOk) {
+                        return true;
+                    }
+                }
+
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
      * Entfernt ein oder mehrere Listeners
      * @param {string|array|null} [names] - Name oder Array mit Namen der Listeners oder leer um alle zu löschen.
      *                                
@@ -84,7 +116,7 @@ kijs.Observable = class kijs_Observable {
                 let remaining = [];
                 for (let j=0; j<listeners.length; j++) {
                     let listener = listeners[j];
-                    if ( (callback && callback !== listener.callback && callback !== listener.callback._callback)
+                    if ( (callback && callback !== listener.callback)
                             || (context && context !== listener.context) ) {
                         remaining.push(listener);
                     }

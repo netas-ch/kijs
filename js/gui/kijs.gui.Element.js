@@ -212,6 +212,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Event-Weiterleitungen von this._dom
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
+        this._eventForwardsAdd('drag', this._dom);
+        this._eventForwardsAdd('dragOver', this._dom);
+        this._eventForwardsAdd('dragStart', this._dom);
+        this._eventForwardsAdd('dragLeave', this._dom);
+        this._eventForwardsAdd('dragEnd', this._dom);
+        this._eventForwardsAdd('drop', this._dom);
         this._eventForwardsAdd('enterPress', this._dom);
         this._eventForwardsAdd('enterEscPress', this._dom);
         this._eventForwardsAdd('escPress', this._dom);
@@ -221,12 +227,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseLeafe', this._dom);
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
-        this._eventForwardsAdd('drag', this._dom);
-        this._eventForwardsAdd('dragOver', this._dom);
-        this._eventForwardsAdd('dragStart', this._dom);
-        this._eventForwardsAdd('dragLeave', this._dom);
-        this._eventForwardsAdd('dragEnd', this._dom);
-        this._eventForwardsAdd('drop', this._dom);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -495,7 +495,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
         
         if (this._waitMaskEl) {
-            kijs.defer(this._waitMaskEl.show, 300, this._waitMaskEl);
+            kijs.defer(function() {
+                if (this._waitMaskEl) {
+                    this._waitMaskEl.show();
+                }
+            }, 300, this);
         }
 
         // Event afterRender auslösen

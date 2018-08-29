@@ -33,6 +33,19 @@ kijs.Rpc = class kijs_Rpc {
 
 
     // --------------------------------------------------------------
+    // STATIC GETTERS / SETTERS
+    // --------------------------------------------------------------
+    static get states() {
+        return {
+            QUEUE: 1,
+            TRANSMITTED: 2,
+            CANCELED_BEFORE_TRANSMIT: 3,
+            CANCELED_AFTER_TRANSMIT: 4
+        };
+    }
+    
+
+    // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get timeout() { return this._timeout; }
@@ -78,12 +91,12 @@ kijs.Rpc = class kijs_Rpc {
                 if (this._queue[i].facadeFn === facadeFn) {
                     switch (this._queue[i].state) {
                         case 1: // queue
-                            this._queue[i].state = 3; // canceled before transmit
+                            this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
                             this._receive([{tid: this._queue[i].tid}], {postData:[this._queue[i]]});
                             break;
 
                         case 2: // transmitted
-                            this._queue[i].state = 4; // canceled after transmit
+                            this._queue[i].state = kijs.Rpc.states.CANCELED_AFTER_TRANSMIT;
                             break;
                     }
                 }
@@ -99,7 +112,7 @@ kijs.Rpc = class kijs_Rpc {
             context: context,
             rpcParams: rpcParams,
             responseArgs: responseArgs,
-            state: 1 // queue
+            state: kijs.Rpc.states.QUEUE
         });
 
         this._deferId = kijs.defer(this._transmit, this.timeout, this);
@@ -159,7 +172,8 @@ kijs.Rpc = class kijs_Rpc {
             }
 
             // Abbruch durch neueren Request?
-            if (subRequest.state === 3 || subRequest.state === 4) {
+            if (subRequest.state === kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT || 
+                    subRequest.state === kijs.Rpc.states.CANCELED_AFTER_TRANSMIT) {
                 subResponse.canceled = true;
             }
 
@@ -198,7 +212,7 @@ kijs.Rpc = class kijs_Rpc {
         const transmitData = [];
         
         for (let i=0; i<this._queue.length; i++) {
-            if (this._queue[i].state === 1) {
+            if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
                 const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
                 subRequest.facadeFn = this._queue[i].facadeFn;
                 subRequest.data = this._queue[i].data;
@@ -206,7 +220,7 @@ kijs.Rpc = class kijs_Rpc {
                 subRequest.tid = this._queue[i].tid;
                 
                 transmitData.push(subRequest);
-                this._queue[i].state = 2; // transmitted
+                this._queue[i].state = kijs.Rpc.states.TRANSMITTED;
             }
         }
         

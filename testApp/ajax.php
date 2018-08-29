@@ -31,8 +31,33 @@
             
             case 'dataview.load':
                 try {
-                    $response->columns = array('Name', 'Vorname');
-                    $response->rows = array(array('Muster','Peter'),array('Zürcher','Vreni'),array('Keller','Hans'),array('Müller','Max'),array('Tobler','Silvia'),array('Wehrli','Klara'),array('Zwahlen','Susanne'),array('Meier','Kurt'),array('Meier','Karin'),array('Schneider','Peter'),array('Koch','Marlies'),array('Koch','Stephan'),array('Wenger','Sandro'),array('Schuster','Lia'),array('Schuster','Franz'),array('Zürcher','Benjamin'),array('Kaiser','Sigfried'),array('Tanner','Ursula'),array('Tanner','Fred'),array('Kocher','Paul'),array('Schneeberger','Sandro'));
+                    $rows = array();
+                    
+                    $rows[] = array('Name'=>'Muster', 'Vorname'=>'Peter');
+                    $rows[] = array('Name'=>'Zürcher', 'Vorname'=>'Vreni');
+                    $rows[] = array('Name'=>'Keller', 'Vorname'=>'Hans');
+                    $rows[] = array('Name'=>'Müller', 'Vorname'=>'Max');
+                    $rows[] = array('Name'=>'Tobler', 'Vorname'=>'Silvia');
+                    $rows[] = array('Name'=>'Wehrli', 'Vorname'=>'Klara');
+                    $rows[] = array('Name'=>'Zwahlen', 'Vorname'=>'Susanne');
+                    $rows[] = array('Name'=>'Meier', 'Vorname'=>'Kurt');
+                    $rows[] = array('Name'=>'Meier', 'Vorname'=>'Karin');
+                    $rows[] = array('Name'=>'Schneider', 'Vorname'=>'Peter');
+                    $rows[] = array('Name'=>'Koch', 'Vorname'=>'Marlies');
+                    $rows[] = array('Name'=>'Koch', 'Vorname'=>'Stephan');
+                    $rows[] = array('Name'=>'Wenger', 'Vorname'=>'Sandro');
+                    $rows[] = array('Name'=>'Schuster', 'Vorname'=>'Lia');
+                    $rows[] = array('Name'=>'Schuster', 'Vorname'=>'Franz');
+                    $rows[] = array('Name'=>'Zürcher', 'Vorname'=>'Benjamin');
+                    $rows[] = array('Name'=>'Kaiser', 'Vorname'=>'Sigfried');
+                    $rows[] = array('Name'=>'Tanner', 'Vorname'=>'Ursula');
+                    $rows[] = array('Name'=>'Tanner', 'Vorname'=>'Fred');
+                    $rows[] = array('Name'=>'Kocher', 'Vorname'=>'Paul');
+                    $rows[] = array('Name'=>'Schneeberger', 'Vorname'=>'Sandro');
+                    
+                    $response->rows = $rows;
+                    //sleep(1);
+                    
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();
                 }
@@ -95,6 +120,7 @@
 
                     if ($fieldErrors && $fieldErrors !== new stdClass()) {
                         $response->fieldErrors = $fieldErrors;
+                        $response->errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt';
                     }
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();

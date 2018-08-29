@@ -12,7 +12,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     constructor(config={}) {
         super();
         
-        this._data = null;          // Instanz von kijs.Data
+        this._data = {};
         this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
@@ -20,6 +20,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
+            data: { target: 'data'},    //Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             facadeFnLoad: true,
             facadeFnSave: true,
             rpc: { target: 'rpc' }
@@ -35,7 +37,36 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get data() { return this._data; }
+    get autoLoad() {
+        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+    }
+    set autoLoad(val) {
+        if (val) {
+            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        } else {
+            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        }
+    }
+    
+    get data() {
+        // Daten aus Formular entnehmen
+        let $data = {};
+        kijs.Array.each(this._fields, function(field) {
+            $data[field.name] = field.value;
+        }, this);
+        
+        // Bestehendes Recordset mit Daten aus Formular ergänzen
+        return Object.assign({}, this._data, $data);
+    }
+    set data(val) {
+        this._data = val;
+        // Daten in Formular einfüllen
+        kijs.Array.each(this._fields, function(field) {
+            if (field.name in this._data) {
+                field.value = this._data[field.name];
+            }
+        }, this);
+    }
     
     get fields() { return this._fields; }
     
@@ -45,12 +76,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     get facadeFnSave() { return this._facadeFnSave; }
     set facadeFnSave(val) { this._facadeFnSave = val; }
 
-    get rpc() { return !!this._rpc;}
+    get rpc() { return this._rpc;}
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {
-            if (this._rpc) {
-                this._rpc.destruct();
-            }
             this._rpc = val;
             
         } else if (kijs.isString(val)) {
@@ -80,7 +108,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      */
     load(args, searchFields) {
         this._rpc.do(this._facadeFnLoad, args, function(response) {
-
+            
             // Formular
             if (response.form) {
                 this.removeAll();
@@ -90,22 +118,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             if (searchFields || response.form || kijs.isEmpty(this._fields)) {
                 this.searchFields();
             }
-
-            // Formulardaten
+            
+            // Formulardaten in Formular einfüllen
             if (response.formData) {
-                this._data = new kijs.Data({
-                    rows: [response.formData]
-                });
-                kijs.Array.each(this._fields, function(field) {
-                    if (this._data.columnExist(field.name)) {
-                        field.value = this._data.rows[0][field.name];
-                    }
-                }, this);
+                this.data = response.formData;
             }
-
-        }, this, true, this, 'dom', false, this._showFieldErrors);
+        }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
     }
-
 
     /**
      * Sendet die Formulardaten an den Server
@@ -121,20 +140,16 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
 
         // Zuerst lokal validieren
-        let ok = true;
-        for (let i=0; i<this._fields.length; i++) {
-            let fld = this._fields[i];
-            if (!fld.validate()) {
-                ok = false;
-            }
-            args.formData[fld.name] = fld.value;
-        }
-
+        let ok = this.validate();
+        
+        // formData ermitteln
+        args.formData = this.data;
+                
         // Wenn die lokale Validierung ok ist, an den Server senden
         if (ok) {
             this._rpc.do(this.facadeFnSave, args, function(response) {
                 // nix tun
-            }, this, false, this, 'dom', false, this._showFieldErrors);
+            }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
         } else {
             kijs.gui.MsgBox.error('Fehler', 'Es wurden noch nicht alle Felder richtig ausgefüllt.');
         }
@@ -180,21 +195,21 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         return ret;
     }
 
-    // PROTECTED
+    // EVENTS
     /**
-     * callback-fnBeforeDisplayError, die eventuelle Fehler direkt im Formular anzeigt
+     * callback-fnBeforeMessages, die eventuelle Fehler direkt im Formular anzeigt
      * @param {type} response
      * @returns {undefined}
      */
-    _showFieldErrors(response) {
+    _onRpcBeforeMessages(response) {
         if (!kijs.isEmpty(response.fieldErrors)) {
             // Fehler bei den entsprechenden Feldern anzeigen
-            for (let i=0; i<this._fields.length; i++) {
-                if (response.fieldErrors[this._fields[i].name]) {
-                    this._fields[i].addValidateErrors(response.fieldErrors[this._fields[i].name]);
+            kijs.Array.each(this._fields, function(field) {
+                if (response.fieldErrors[field.name]) {
+                    field.addValidateErrors(response.fieldErrors[field.name]);
                 }
-            }
-
+            }, this);
+            
             // Fehler als Meldung anzeigen
             const msg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
             if (kijs.isEmpty(response.errorMsg)) {
@@ -207,6 +222,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }
         }
     }
+
+    _onAfterFirstRenderTo(e) {
+        this.load();
+    }
     
     
     // --------------------------------------------------------------
@@ -216,11 +235,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Event auslösen.
         if (!preventDestructEvent) {
             this.raiseEvent('destruct');
-        }
-        
-        // Elemente/DOM-Objekte entladen
-        if (this._rpc) {
-            this._rpc.destruct();
         }
         
         // Variablen (Objekte/Arrays) leeren

@@ -23,13 +23,13 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @param {String} [waitMaskTargetDomPropertyName='dom']                    Name der DOM-Eigenschaft in der die Lademaske 
      *                                                                          angezeigt werden soll.
      * @param {Boolean} [ignoreWarnings=false]  Sollen Warnungen ignoriert werden?
-     * @param {Function} [fnBeforeDisplayError] Callback-Funktion, die vor der Ausgabe von Fehlern ausgeführt wird
+     * @param {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird
      *                                          Wird z.B. verwendet um bei Formularen die Fehler bei den einzelnen Feldern
      *                                          anzuzeigen.
      * @returns {undefined}
      */
     // overwrite (Vorsicht andere Argumente!)
-    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
+    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeMessages) {
         // Lademaske anzeigen
         let waitMask;
         if (waitMaskTarget instanceof kijs.gui.Element) {
@@ -54,11 +54,11 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
             }
 
             if (!response.canceled) {
-                // Evtl.  callback-fnBeforeDisplayError ausführen
-                if (fnBeforeDisplayError && kijs.isFunction(fnBeforeDisplayError)) {
-                    fnBeforeDisplayError.call(context || this, response || null);
+                // Evtl. callback-fnBeforeMessages ausführen
+                if (fnBeforeMessages && kijs.isFunction(fnBeforeMessages)) {
+                    fnBeforeMessages.call(context || this, response || null);
                 }
-
+                
                 // Fehler --> FehlerMsg + Abbruch
                 // response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (!kijs.isEmpty(response.errorMsg)) {
