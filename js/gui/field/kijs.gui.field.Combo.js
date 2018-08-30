@@ -97,6 +97,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 opt.value = row[this._valueField];
                 this._inputDom.node.appendChild(opt);
             }, this);
+            
+            this.value = this._value; 
         }
     }
     
