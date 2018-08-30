@@ -426,20 +426,17 @@ kit.App = class kit_App {
                                             label: 'Feld <b>3</b>',
                                             labelWidth: 110,
                                             labelHtmlDisplayType : 'text'
-                                        })/*,{
+                                        }),{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Anrede',
                                             label: 'Anrede',
                                             optionCaptionDisplayType: 'html',
                                             value: 'w',
-                                            data: {
-                                                xtype: 'kijs.Data',
-                                                rows: [
-                                                    {caption: 'Herr', value: 'm'},
-                                                    {caption: 'Frau', value: 'w'},
-                                                    {caption: 'Familie', value: 'f'}
-                                                ]
-                                            },
+                                            data: [
+                                                {caption: 'Herr', value: 'm'},
+                                                {caption: 'Frau', value: 'w'},
+                                                {caption: 'Familie', value: 'f'}
+                                            ],
                                             elements: [
                                                 {
                                                     xtype: 'kijs.gui.Button',
@@ -451,20 +448,20 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }/*,{
                                             xtype: 'kijs.gui.field.Editor',
                                             name: 'editor',
                                             label: 'Editor',
                                             mode: 'javascript',
                                             value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
                                             height: 100
-                                        },{
+                                        }*/,{
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
                                             label: 'Bemerkungen (test)',
                                             value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen!',
                                             helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!'
-                                        }*/
+                                        }
                                     ],
                                     footerStyle: {
                                         padding: '10px'
