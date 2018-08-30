@@ -90,25 +90,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Bestehende Elemente löschen
             kijs.Dom.removeAllChildNodes(this._inputDom.node);
             
-            //let valueSelected = false;
+            // Neue Elemente einfügen
             kijs.Array.each(this._data, function(row) {
                 const opt = document.createElement('option');
                 kijs.Dom.setInnerHtml(opt, row[this._captionField], this._optionCaptionDisplayType);
                 opt.value = row[this._valueField];
-                /*if (this._value === row[this._valueField] && !valueSelected) {
-                    valueSelected = true;
-                    opt.selected = 'selected';
-                }*/
                 this._inputDom.node.appendChild(opt);
             }, this);
-            
-            // Falls das Combo den Value nicht kennt: diesen noch am Ende anfügen
-            /*if (!valueSelected && !kijs.isEmpty(this._value)) {
-                const opt = document.createElement('option');
-                opt.value = this._value;
-                opt.selected = 'selected';
-                this._inputDom.node.appendChild(opt);
-            }*/
         }
     }
     
