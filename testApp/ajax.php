@@ -63,6 +63,23 @@
                 }
                 break;
             
+            case 'land.load':
+                try {
+                    $rows = array();
+                    
+                    $rows[] = array('value'=>'CH', 'caption'=>'Schweiz');
+                    $rows[] = array('value'=>'DE', 'caption'=>'Deutschland');
+                    $rows[] = array('value'=>'IT', 'caption'=>'Italien');
+                    $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
+                    
+                    $response->rows = $rows;
+                    //sleep(1);
+                    
+                } catch (Exception $ex) {
+                    $response->errorMsg = $ex->getMessage();
+                }
+                break;
+            
             case 'test.load':
                 try {
                     // Formular
@@ -146,7 +163,7 @@
                 break;
             
             default:
-                
+                $response->errorMsg = 'FacadeFn "' . $request->facadeFn . '" existiert nicht.';
         }
         
         $responses[] = $response;

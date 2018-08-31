@@ -16,9 +16,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         super(false);
         
         this._captionField = null;
-        this._optionCaptionDisplayType = null;
-        this._valueField = null;
         this._data = [];
+        this._facadeFnLoad = null;
+        this._optionCaptionDisplayType = null;
+        this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._valueField = null;
         this._value = null;
         
         this._inputDom = new kijs.gui.Dom({
@@ -44,10 +46,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autoLoad: { target: 'autoLoad' },   // Soll nach dem erten Rendern automatisch die Load-Funktion aufgerufen werden?
             captionField: true,
             data: { target: 'data' },
+            facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
             multiselect: { target: 'multiselect' },
             optionCaptionDisplayType: true,
+            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
             size: { target: 'size' },
             valueField: true
         });
@@ -75,6 +80,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autoLoad() {
+        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+    }
+    set autoLoad(val) {
+        if (val) {
+            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        } else {
+            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        }
+    }
+    
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
 
@@ -114,6 +130,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
     
+    get facadeFnLoad() { return this._facadeFnLoad; }
+    set facadeFnLoad(val) { this._facadeFnLoad = val; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
 
@@ -130,6 +149,26 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('disabled', true);  // (readOnly gibts leider nicht bei select-tags)
         } else {
             this._inputDom.nodeAttributeSet('disabled', false);
+        }
+    }
+    
+    get rpc() { return this._rpc;}
+    set rpc(val) {
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+            
+        } else if (kijs.isString(val)) {
+            if (this._rpc) {
+                this._rpc.url = val;
+            } else {
+                this._rpc = new kijs.gui.Rpc({
+                    url: val
+                });
+            }
+            
+        } else {
+            throw new Error(`Unkown format on config "rpc"`);
+            
         }
     }
     
@@ -150,6 +189,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Füllt das Combo mit Daten vom Server
+     * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
+     * @returns {undefined}
+     */
+    load(args) {
+        this._rpc.do(this._facadeFnLoad, args, function(response) {
+            this.data = response.rows;
+        }, this, true, this, 'dom', false);
+    }
+
     // overwrite
     render(preventAfterRender) {
         super.render(true);
@@ -179,7 +229,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
 
-    // LISTENERS
+    // EVENTS
+    _onAfterFirstRenderTo(e) {
+        this.load();
+    }
+
     _onInput(e) {
         this._value = this.value;
         this.validate();
@@ -203,7 +257,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Variablen (Objekte/Arrays) leeren
         this._data = null;
         this._inputDom = null;
-
+        this._rpc = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

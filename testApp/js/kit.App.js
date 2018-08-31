@@ -448,6 +448,14 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
+                                        },{
+                                            xtype: 'kijs.gui.field.Combo',
+                                            name: 'Land',
+                                            label: 'Land',
+                                            rpc: this._rpc,
+                                            facadeFnLoad: 'land.load',
+                                            autoLoad: true,
+                                            value: 'CH'
                                         }/*,{
                                             xtype: 'kijs.gui.field.Editor',
                                             name: 'editor',
