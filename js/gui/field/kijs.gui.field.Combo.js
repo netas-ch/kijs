@@ -36,10 +36,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
        // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
             captionField: 'caption',
-            optionCaptionDisplayType : 'code',      // Darstellung der captions. Default: 'html'
-                                                    // html: als html-Inhalt (innerHtml)
-                                                    // code: Tags werden als als Text angezeigt
-                                                    // text: Tags werden entfernt
+            optionCaptionDisplayType : 'code',
             size: 1,
             valueField: 'value'
         }, config);
@@ -49,10 +46,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem erten Rendern automatisch die Load-Funktion aufgerufen werden?
             captionField: true,
             data: { target: 'data' },
-            facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
+            facadeFnLoad: true,             // Name der Facade-Funktion. Bsp: 'address.load'
             multiselect: { target: 'multiselect' },
-            optionCaptionDisplayType: true,
-            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
+            optionCaptionDisplayType: true, // Darstellung der captions. Default: 'html'
+                                            // html: als html-Inhalt (innerHtml)
+                                            // code: Tags werden als als Text angezeigt
+                                            // text: Tags werden entfernt
+            rpc: { target: 'rpc' },         // Instanz von kijs.gui.Rpc
             size: { target: 'size' },
             valueField: true
         });

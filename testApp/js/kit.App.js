@@ -233,17 +233,17 @@ kit.App = class kit_App {
                                                     this.parent.down('Feld 1').value = this.value;
                                                 }
                                             }
-                                        },/*{
+                                        },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
                                             label: 'Label',
                                             caption: 'Caption',
                                             valueChecked: 'Individueller Wert',
                                             value: true,
-                                            width: 214,
+                                            //width: 400,
                                             on: {
-                                                input: function(e, el) {
-                                                    console.log('input:' + el.getValue());
+                                                input: function(e) {
+                                                    console.log('input:' + this.value);
                                                 }
                                             },
                                             elements: [
@@ -253,14 +253,15 @@ kit.App = class kit_App {
                                                     toolTip: 'test',
                                                     on: {
                                                         click: function() {
-                                                            console.log(this.parent.value);
-                                                            this.parent.value(!this.parent.value);
-                                                            console.log(this.parent.value);
+                                                            let chkBox = this.upX('kijs.gui.field.Checkbox');
+                                                            console.log(chkBox.value);
+                                                            chkBox.value = !chkBox.value;
+                                                            console.log(chkBox.value);
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        },/*{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroup',
                                             label: 'CheckboxGroup',
