@@ -36,6 +36,7 @@
 @help-icon-bkgrnd-color: #DCE6EF;
 
 
+@input-disabled-color: #888;
 @input-disabled-bkgrnd-color: #efefef;
 
 
@@ -1272,6 +1273,12 @@
             font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
             font-size: 15px;
             line-height: 17px;
+        }
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > .kijs-caption {
+            color: @input-disabled-color;
         }
     }
 }

@@ -89,14 +89,11 @@
                                 "xtype": "kijs.gui.field.Combo",
                                 "name": "Anrede",
                                 "label": "Anrede",
-                                "data": {
-                                    "xtype": "kijs.Data",
-                                    "rows": [
-                                        {"caption": "Herr", "value": "m"},
-                                        {"caption": "Frau", "value": "w"},
-                                        {"caption": "Familie", "value": "f"}
-                                    ]
-                                }
+                                "data": [
+                                    {"caption": "Herr", "value": "m"},
+                                    {"caption": "Frau", "value": "w"},
+                                    {"caption": "Familie", "value": "f"}
+                                ]
                             },{
                                 "xtype": "kijs.gui.field.Text",
                                 "name": "Name",
@@ -135,7 +132,7 @@
                         $fieldErrors->Anrede = 'Falsche Anrede.';
                     }
 
-                    if ($fieldErrors && $fieldErrors !== new stdClass()) {
+                    if (count(get_object_vars($fieldErrors))) {
                         $response->fieldErrors = $fieldErrors;
                         $response->errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt';
                     }

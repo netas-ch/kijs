@@ -647,6 +647,9 @@ kit.App = class kit_App {
                                         style: {marginBottom: '4px'}
                                     },
                                     on: {
+                                        afterSave: function(e) {
+                                            kijs.gui.CornerTipContainer.show('Info', 'Speichern erfolgreich.' , 'info');
+                                        },
                                         enterPress: function(e) { console.log("Panel: enterPress"); }
                                     },
                                     elements: [

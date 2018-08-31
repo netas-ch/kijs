@@ -266,11 +266,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             errors = [errors];
         }
 
-        this._errors = this.errors.concat(errors);
+        this._errors = this._errors.concat(errors);
 
-        if (this.isRendered) {
-            this.render();
-        }
+        // Fehler anzeigen, falls vorhanden
+        this._displayErrors();
     }
 
     // overwrite
@@ -320,6 +319,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Validierungen anwenden
         this._validationRules(this.value);
         
+        // Fehler anzeigen, falls vorhanden
+        this._displayErrors();
+        
+        return kijs.isEmpty(this._errors);
+    }
+
+
+    // PROTECTED
+    /**
+     * Zeigt die Fehler aus this._errors im errorIcon an
+     * @returns {undefined}
+     */
+    _displayErrors() {
         if (!kijs.isEmpty(this._errors)) {
             this._dom.clsAdd('kijs-error');
             this._errorIconEl.toolTip = this._errors;
@@ -328,11 +340,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this._dom.clsRemove('kijs-error');
             this._errorIconEl.visible = false;
         }
-        return kijs.isEmpty(this._errors);
     }
-
-
-    // PROTECTED
+    
    /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {type} value

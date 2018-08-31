@@ -148,7 +148,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Wenn die lokale Validierung ok ist, an den Server senden
         if (ok) {
             this._rpc.do(this.facadeFnSave, args, function(response) {
-                // nix tun
+                this.raiseEvent('afterSave');
             }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
         } else {
             kijs.gui.MsgBox.error('Fehler', 'Es wurden noch nicht alle Felder richtig ausgefüllt.');
@@ -214,11 +214,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             const msg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
             if (kijs.isEmpty(response.errorMsg)) {
                 response.errorMsg = msg;
-            } else {
-                if (!kijs.isArray(response.errorMsg)) {
-                    response.errorMsg = [response.errorMsg];
-                }
-                response.errorMsg.push(msg);
             }
         }
     }
