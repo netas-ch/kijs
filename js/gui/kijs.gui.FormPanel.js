@@ -123,6 +123,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             if (response.formData) {
                 this.data = response.formData;
             }
+            
+            this.raiseEvent('afterLoad');
         }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
     }
 
