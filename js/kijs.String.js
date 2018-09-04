@@ -56,25 +56,59 @@ kijs.String = class kijs_String {
     
     /**
      * Ergänzt eine Zahl mit vorangestellten Nullen
-     * @param {String} input
+     * @param {String} text
      * @param {Number} length
      * @param {String} [padString=' ']
      * @param {String} [type='right'] 'left', 'right' oder 'both'
      * @returns {String}
      */
-    static padding(input, length, padString, type) {
+    static padding(text, length, padString, type) {
         length = length || 0;
-        input = input + '';
-        while (input.length < length) {
+        text = text + '';
+        while (text.length < length) {
             if (type === 'left' || type === 'both') {
-                input = padString + input;
+                text = padString + text;
             }
             
             if (!type || type === 'right' || type === 'both') {
-                input = input + padString;
+                text = text + padString;
             }
         }
-        return input;
+        return text;
+    }
+    
+    /**
+     * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
+     * @param {string} text
+     * @param {number} length maximlae Länge
+     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschnieden
+     * @param {string} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
+     * @returns {String}
+     */
+    static trunc(text, length, useWordBoundary=false, postFixChar='…') {
+        if (kijs.isEmpty(text) || !length || text.length <= length) {
+            return text;
+        }
+        let subString = text.substr(0, length-1);
+        if (useWordBoundary) {
+            subString = subString.substr(0, subString.lastIndexOf(' '));
+        }
+        return subString + '' + postFixChar;
     }
 
+    /**
+     * Fügt Zeilenumbrüche in eine Zeichenkette ein
+     * https://stackoverflow.com/a/51506718
+     * @param {string} text
+     * @param {number} length Anzahl Zeichen pro Zeile
+     * @param {boolean} [useWordBoundary=true] Nur bei Leerzeichen Umbrüche einfügen
+     * @returns {string}
+     */
+    static wrap(text, length, useWordBoundary=true) {
+        if (useWordBoundary) {
+            return text.replace(new RegExp(`(?![^\\n]{1,${length}}$)([^\\n]{1,${length}})\\s`, 'g'), '$1\n');
+        } else {
+            return text.replace(new RegExp(`(?![^\\n]{1,${length}}$)([^\\n]{1,${length}})`, 'g'), '$1\n');
+        }
+    }
 };

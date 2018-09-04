@@ -20,8 +20,8 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @param {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
      * @param {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node 
      *                                                                          für Lademaske, NULL=document.body
-     * @param {String} [waitMaskTargetDomPropertyName='dom']                    Name der DOM-Eigenschaft in der die Lademaske 
-     *                                                                          angezeigt werden soll.
+     * @param {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske 
+     *                                                          angezeigt werden soll.
      * @param {Boolean} [ignoreWarnings=false]  Sollen Warnungen ignoriert werden?
      * @param {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird
      *                                          Wird z.B. verwendet um bei Formularen die Fehler bei den einzelnen Feldern
@@ -29,7 +29,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @returns {undefined}
      */
     // overwrite (Vorsicht andere Argumente!)
-    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeMessages) {
+    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty='dom', ignoreWarnings, fnBeforeMessages) {
         // Lademaske anzeigen
         let waitMask;
         if (waitMaskTarget instanceof kijs.gui.Element) {
@@ -38,7 +38,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
             waitMask = new kijs.gui.Mask({
                 displayWaitIcon: true,
                 target: waitMaskTarget,
-                targetDomPropertyName: waitMaskTargetDomPropertyName
+                targetDomProperty: waitMaskTargetDomProperty
             });
             waitMask.show();
         }
@@ -72,7 +72,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     kijs.gui.MsgBox.warning('Warnung', response.warningMsg, function(e) {
                         if (e.btn === 'ok') {
                             // Request nochmal senden mit Flag ignoreWarnings
-                            this.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, true);
+                            this.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty, true);
                         }
                     }, this);
                     return;

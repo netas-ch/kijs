@@ -6,7 +6,7 @@
 /*
  * Datumsformatierung
  * ------------------
- * date.format('d.m.Y H:i');
+ * date.format(date, 'd.m.Y H:i', de);
  * 
  * Tag
  * d   Tag des Monats, 2-stellig mit führender Null  01 bis 31
