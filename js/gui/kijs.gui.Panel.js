@@ -528,8 +528,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 node.focus();
             }
         }
-        
-        this._dom.focus(alsoSetIfNoTabIndex);
     }
     
     /**
