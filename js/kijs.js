@@ -367,10 +367,10 @@ window.kijs = class kijs {
      * @returns {String}
      */
     static uniqId(prefix = '') {
-        if (!this.__uniqueId) {
-            this.__uniqId = 0;
+        if (!window.kijs.__uniqId) {
+            window.kijs.__uniqId = 0;
         }
-        this.__uniqId++;
-        return 'kijs-' + (prefix ? prefix + '-' : '') + this.__uniqId;
+        window.kijs.__uniqId++;
+        return 'kijs-' + (prefix ? prefix + '-' : '') + window.kijs.__uniqId;
     }
 };

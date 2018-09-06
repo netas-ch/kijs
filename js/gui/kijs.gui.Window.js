@@ -262,9 +262,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._raiseAfterResizeEvent(true);
         
         this.toFront();
-        kijs.defer(this.focus, this._focusDelay, this);
+        this.focus();
     }
-    
     
     toFront() {
         if (this._dom.node && this._dom.node.parentNode && 

@@ -498,6 +498,40 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._raiseAfterResizeEvent(true);
     }
     
+    // overwrite
+    focus(alsoSetIfNoTabIndex=false) {
+        if (alsoSetIfNoTabIndex) {
+            return super.focus(alsoSetIfNoTabIndex);
+            
+        } else {
+            // Zuerst versuchen den Fokus auf ein Element im innerDom zu setzen
+            let node = this._innerDom.focus(false);
+            // dann auf eine Schaltfläche im footer
+            if (!node && !this._footerEl.isEmpty && this._footerEl.isRendered) {
+                node = this._footerEl.focus(alsoSetIfNoTabIndex);
+            }
+            // falls nicht erfolgreich. Den Fokus direkt auf das Fenster setzen
+            if (!node) {
+                node = super.focus(alsoSetIfNoTabIndex);
+            }
+            return node;
+        }
+        
+        // Darf der Node den Fokus erhalten?
+        if (alsoSetIfNoTabIndex) {
+            this._dom.node.focus();
+
+        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+        } else {
+            const node = kijs.Dom.getFirstFocusableNode(this._node);
+            if (node) {
+                node.focus();
+            }
+        }
+        
+        this._dom.focus(alsoSetIfNoTabIndex);
+    }
+    
     /**
      * Maximiert das Panel
      * @returns {undefined}

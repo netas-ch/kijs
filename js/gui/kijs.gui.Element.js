@@ -442,10 +442,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
-     * @returns {undefined}
+     * @returns {HTMLElement|Null}                     HTML-Node, das den Fokus erhalten hat
      */
     focus(alsoSetIfNoTabIndex=false) {
-        this._dom.focus(alsoSetIfNoTabIndex);
+        return this._dom.focus(alsoSetIfNoTabIndex);
     }
 
     // overwrite
