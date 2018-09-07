@@ -409,7 +409,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
     
     get xtype() { 
-        if (kijs.isString(this.constructor.name)) {
+        if (kijs.isString(this.constructor.name) && !kijs.isEmpty(this.constructor.name)) {
             return this.constructor.name.replace(/_/g, '.');
             
         // Workaround für IE und Edge
