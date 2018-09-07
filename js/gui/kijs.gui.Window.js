@@ -147,8 +147,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             this._targetX.on('destruct', this._onTargetElDestruct, this);
             
         // Target ist der Body
-        } else if (val === document.body) {
-            this._targetX = val;
+        } else if (val === document.body || val === null) {
+            this._targetX = document.body;
             
             // onResize überwachen
             // Wenn der Browser langsam grösser gezogen wird, wird der event dauernd
