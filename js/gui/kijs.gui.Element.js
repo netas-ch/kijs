@@ -415,16 +415,17 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Workaround für IE und Edge
         } else {
             // Wenn der xtype noch nicht ermittelt worden ist, muss er ermittelt werden
-            if (!this.prototype.__xtype) {
+            const proto = Object.getPrototypeOf(this);
+            if (!proto.__xtype) {
                 const results = /function\s([^(]{1,})\(/.exec(this.constructor.toString());
                 if (results && results.length > 1) {
-                    this.prototype.__xtype = results[1].trim().replace(/_/g, '.');
+                    proto.__xtype = results[1].trim().replace(/_/g, '.');
                 } else {
                     throw new Error(`xtype can not be determined`);
                 }
             }
             
-            return this.prototype.__xtype;
+            return proto.__xtype;
         }
         
     }
