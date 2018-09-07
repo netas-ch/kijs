@@ -418,7 +418,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             const proto = Object.getPrototypeOf(this);
             // Zuerst den Klassennamen suchen (Edge)
             if (!proto.__xtype) {
-                let results = /class\s([^(]{1,})\(/.exec(this.constructor.toString());
+                let results = /class\s([^(extends)\{ ]{1,})\(/.exec(this.constructor.toString());
                 if (results && results.length > 1) {
                     proto.__xtype = results[1].trim().replace(/_/g, '.');
                 }
@@ -426,7 +426,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             
             // Sonst den Funktionsname suchen (IE)
             if (!proto.__xtype) {
-                let results = /function\s([^(]{1,})\(/.exec(this.constructor.toString());
+                let results = /function\s([^( ]{1,})\(/.exec(this.constructor.toString());
                 if (results && results.length > 1) {
                     proto.__xtype = results[1].trim().replace(/_/g, '.');
                 }
