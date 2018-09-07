@@ -89,7 +89,7 @@
  *   modifier       [modifier]              Muss eine Modifier-Taste gedrückt sein?
  *                                          modifier = {shift:false, ctrl:false, alt:false}]
  * 
- * nodeAttributeGet                         Gibt den Wert eine Eigenschaft des DOM-Nodes zurück
+ * nodeAttributeGet                         Gibt den Wert einer Eigenschaft des DOM-Nodes zurück
  *  Args:
  *   name           String
  *  Return: Boolean
