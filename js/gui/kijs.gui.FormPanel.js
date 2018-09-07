@@ -57,7 +57,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         
         // Bestehendes Recordset mit Daten aus Formular ergänzen
         Object.assign(this._data, data);
-        this._data;
+        return this._data;
     }
     set data(val) {
         this._data = val;
