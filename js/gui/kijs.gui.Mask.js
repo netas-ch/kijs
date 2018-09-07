@@ -160,8 +160,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._targetX.on('destruct', this._onTargetElDestruct, this);
             
         // Target ist der Body
-        } else if (val === document.body) {
-            this._targetX = val;
+        } else if (val === document.body || val === null) {
+            this._targetX = document.body;
             
         } else {
             throw new Error(`Unkown format on config "target"`);
