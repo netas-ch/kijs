@@ -47,16 +47,17 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
         }
     }
-    
+
     get data() {
         // Daten aus Formular entnehmen
-        let $data = {};
+        let data = {};
         kijs.Array.each(this._fields, function(field) {
-            $data[field.name] = field.value;
+            data[field.name] = field.value;
         }, this);
         
         // Bestehendes Recordset mit Daten aus Formular ergänzen
-        return Object.assign({}, this._data, $data);
+        Object.assign(this._data, data);
+        this._data;
     }
     set data(val) {
         this._data = val;
