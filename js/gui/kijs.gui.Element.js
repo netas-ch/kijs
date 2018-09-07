@@ -416,16 +416,27 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         } else {
             // Wenn der xtype noch nicht ermittelt worden ist, muss er ermittelt werden
             const proto = Object.getPrototypeOf(this);
+            // Zuerst den Klassennamen suchen (Edge)
             if (!proto.__xtype) {
-                const results = /function\s([^(]{1,})\(/.exec(this.constructor.toString());
+                let results = /class\s([^(]{1,})\(/.exec(this.constructor.toString());
                 if (results && results.length > 1) {
                     proto.__xtype = results[1].trim().replace(/_/g, '.');
-                } else {
-                    throw new Error(`xtype can not be determined`);
                 }
             }
             
-            return proto.__xtype;
+            // Sonst den Funktionsname suchen (IE)
+            if (!proto.__xtype) {
+                let results = /function\s([^(]{1,})\(/.exec(this.constructor.toString());
+                if (results && results.length > 1) {
+                    proto.__xtype = results[1].trim().replace(/_/g, '.');
+                }
+            }
+            
+            if  (proto.__xtype) {
+                return proto.__xtype;
+            } else {
+                throw new Error(`xtype can not be determined`);
+            }
         }
         
     }
