@@ -38,7 +38,7 @@ function test_5_ajax() {
                     kijs.Ajax.request({
                         url: 'tests/ajaxTest/ajaxTest.txt',
                         fn: function(ret) {
-                            tx.addTest("Hallo Welt!\r\nZweite Zeile.", 'Text');
+                            tx.addTest("Hallo Welt!\nZweite Zeile.", 'Text');
                             tx.addResult(ret);
 
                             tx.addTest('a-b', 'defer');
