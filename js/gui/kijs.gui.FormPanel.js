@@ -49,24 +49,27 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     get data() {
-        // Daten aus Formular entnehmen
         let data = {};
-        kijs.Array.each(this._fields, function(field) {
-            data[field.name] = field.value;
-        }, this);
-        
+        // Evtl. Daten aus Formular holen
+        if (!kijs.isEmpty(this._fields)) {
+            kijs.Array.each(this._fields, function(field) {
+                data[field.name] = field.value;
+            }, this);
+        }
         // Bestehendes Recordset mit Daten aus Formular ergänzen
         Object.assign(this._data, data);
         return this._data;
     }
     set data(val) {
         this._data = val;
-        // Daten in Formular einfüllen
-        kijs.Array.each(this._fields, function(field) {
-            if (field.name in this._data) {
-                field.value = this._data[field.name];
-            }
-        }, this);
+        // Evtl. Daten in Formular einfüllen
+        if (!kijs.isEmpty(this._fields)) {
+            kijs.Array.each(this._fields, function(field) {
+                if (field.name in this._data) {
+                    field.value = this._data[field.name];
+                }
+            }, this);
+        }
     }
     
     get fields() { return this._fields; }
@@ -207,11 +210,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     _onRpcBeforeMessages(response) {
         if (!kijs.isEmpty(response.fieldErrors)) {
             // Fehler bei den entsprechenden Feldern anzeigen
-            kijs.Array.each(this._fields, function(field) {
-                if (response.fieldErrors[field.name]) {
-                    field.addValidateErrors(response.fieldErrors[field.name]);
-                }
-            }, this);
+            if (!kijs.isEmpty(this._fields)) {
+                kijs.Array.each(this._fields, function(field) {
+                    if (response.fieldErrors[field.name]) {
+                        field.addValidateErrors(response.fieldErrors[field.name]);
+                    }
+                }, this);
+            }
             
             // Fehler als Meldung anzeigen
             const msg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
