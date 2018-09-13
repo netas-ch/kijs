@@ -307,7 +307,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     /**
      * Selektiert ein oder mehrere Elemente
-     * @param {Array|Object} filters                           Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
+     * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
      *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
      *                                                  { field: "Id", value: 123 }
      *                                                  
