@@ -56,6 +56,32 @@
                     $rows[] = array('Name'=>'Schneeberger', 'Vorname'=>'Sandro');
                     
                     $response->rows = $rows;
+                    $response->selectFilters = array();
+                    
+                    $filter = array();
+                    $flt = new stdClass();
+                    $flt->field = 'Name';
+                    $flt->value = 'Meier';
+                    $filter[] = $flt;
+                    $flt = new stdClass();
+                    $flt->field = 'Vorname';
+                    $flt->value = 'Kurt';
+                    $filter[] = $flt;
+                    $response->selectFilters[] = $filter;
+                    
+                    $filter = array();
+                    $flt = new stdClass();
+                    $flt->field = 'Name';
+                    $flt->value = 'Tobler';
+                    $filter[] = $flt;
+                    $flt = new stdClass();
+                    $flt->field = 'Vorname';
+                    $flt->value = 'Silvia';
+                    $filter[] = $flt;
+                    $response->selectFilters[] = $filter;
+                    
+                    
+                    
                     //sleep(1);
                     
                 } catch (Exception $ex) {

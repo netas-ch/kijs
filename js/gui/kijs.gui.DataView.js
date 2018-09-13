@@ -354,20 +354,23 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         kijs.Array.each(this._elements, function(el) {
             const row = el.dataRow;
-            
+
             kijs.Array.each(filters, function(filterFields) {
-                let ok = true;
+                let ok = false;
                 kijs.Array.each(filterFields, function(filterField) {
-                    if (filterField.value !== row[filterField.field]) {
+                    if (filterField.value === row[filterField.field]) {
+                        ok = true;
+                    } else {
                         ok = false;
-                        return;
+                        return false;
                     }
                 }, this);
                 if (ok) {
                     selElements.push(el);
+                    return false;
                 }
             }, this);
-            
+
         }, this);
         
         // Elemente selektieren
