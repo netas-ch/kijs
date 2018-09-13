@@ -19,7 +19,14 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
             }
         });
         
+        this._trimValue = true;
+        
         this._dom.clsAdd('kijs-field-memo');
+        
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+        });
         
         // Event-Weiterleitungen von this._inputDom
         this._eventForwardsAdd('input', this._inputDom);
@@ -72,12 +79,20 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         }
     }
 
+    get trimValue() { return this._trimValue; }
+    set trimValue(val) { this._trimValue = val; }
+    
     // overwrite
-    get value() { return this._inputDom.nodeAttributeGet('value'); }
+    get value() {
+        let val = this._inputDom.nodeAttributeGet('value');
+        if (this._trimValue && kijs.isString(val)) {
+            val = val.trim();
+        }
+        return val;
+    }
     set value(val) { 
         this._inputDom.nodeAttributeSet('value', val);
     }
-
 
 
     // --------------------------------------------------------------

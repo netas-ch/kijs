@@ -19,13 +19,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                 id: this._inputId
             }
         });
-        // Listeners
-        this._inputDom.on('input', this._onDomInput, this);
-        
-        
         
         this._disableBrowserSecurityWarning = false;
         this._passwordChar = '•';
+        this._trimValue = false;
         
         this._value = null;
         
@@ -37,7 +34,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                                                                     // true:  Eigenes Feld, dass nicht als Kennwort-Feld erkannt wird und 
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
-            passwordChar: true
+            passwordChar: true,
+            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
         });
         
         // Event-Weiterleitungen von this._inputDom
@@ -53,6 +51,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         
         // Listeners
         this.on('input', this._onInput, this);
+        this._inputDom.on('input', this._onDomInput, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -107,13 +106,24 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
     }
     
+    get trimValue() { return this._trimValue; }
+    set trimValue(val) { this._trimValue = val; }
+    
     // overwrite
     get value() {
+        let val;
+        
         if (this._disableBrowserSecurityWarning) {
-            return this._value;
+            val = this._value;
         } else {
-            return this._inputDom.nodeAttributeGet('value');
+            val = this._inputDom.nodeAttributeGet('value');
         }
+        
+        if (this._trimValue && kijs.isString(val)) {
+            val = val.trim();
+        }
+        
+        return val;
     }
     set value(val) {
         if (this._disableBrowserSecurityWarning) {
