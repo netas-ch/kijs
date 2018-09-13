@@ -358,6 +358,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             kijs.Array.each(filters, function(filterFields) {
                 let ok = false;
                 kijs.Array.each(filterFields, function(filterField) {
+                    if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
+                        throw new Error(`Unkown filter format.`);
+                    }
+                    
                     if (filterField.value === row[filterField.field]) {
                         ok = true;
                     } else {
