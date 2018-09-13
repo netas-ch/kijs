@@ -302,6 +302,77 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.raiseEvent('selectionchange', elements, this);
         }
     }
+    
+    /**
+     * Selektiert ein oder mehrere Elemente
+     * @param {Array} filters                           Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
+     *                                                  { field: "Id", value: 123 }
+     *                                                  
+     *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem Primary-Field):
+     *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
+     *                                                  
+     *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren Primary-Fields):
+     *                                                  [
+     *                                                    { field: "Name", value: "Muster" },
+     *                                                    { field: "Vorname", value: "Max" }
+     *                                                  ]
+     *                                                  
+     *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren Primary-Fields):
+     *                                                  [
+     *                                                    [
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ],[
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ]
+     *                                                  ]
+     * 
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByValues(filters, keepExisting, preventSelectionChange) {
+        if (kijs.isEmpty(filters)) {
+            return;
+        }
+        
+        // Evtl. das Format ändern auf: [ [{...}, {...}], [{...}, {...}] ]
+        if (kijs.isObject(filters)) {
+            filters = [filters];
+        }
+        for (let i=0; i<filters.length; i++) {
+            if (kijs.isObject(filters[i])) {
+                filters[i] = [filters[i]];
+            }
+        }
+        
+        // Nun die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
+        const selElements = [];
+        kijs.Array.each(this._elements, function(el) {
+            const row = el.dataRow;
+            
+            kijs.Array.each(filters, function(filterFields) {
+                let ok = true;
+                kijs.Array.each(filterFields, function(filterField) {
+                    if (filterField.value !== row[filterField.field]) {
+                        ok = false;
+                        return;
+                    }
+                }, this);
+                if (ok) {
+                    selElements.push(el);
+                }
+            }, this);
+            
+        }, this);
+        
+        // Elemente selektieren
+        if (!kijs.isEmpty(selElements)) {
+            this.select(selElements, keepExisting, preventSelectionChange);
+        }
+    }
 
     /**
      * Selektiert alle Elemente zwischen el1 und el2
