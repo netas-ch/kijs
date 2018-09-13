@@ -102,13 +102,13 @@
 /* ******************
    * Container
    ****************** */
-.kijs-container {
+div.kijs-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
 }
 
-.kijs-container-inner {
+div.kijs-container-inner {
     position: relative;
     flex: 1 1 auto;
     
@@ -125,7 +125,7 @@
 /* ******************
    * Accordion
    ****************** */
-.kijs-accordion > .kijs-container-inner > .kijs-panel {
+div.kijs-accordion > .kijs-container-inner > .kijs-panel {
     flex: 1 1 auto
 }
 
@@ -155,13 +155,13 @@
 /* ******************
    * Splitter
    ****************** */
-.kijs-splitter-horizontal {
+div.kijs-splitter-horizontal {
     width: 5px;
     background-color: @viewport-bkgrnd-color;
     cursor: ew-resize;
 }
 
-.kijs-splitter-overlay-horizontal {
+div.kijs-splitter-overlay-horizontal {
     position: absolute;
     width: 5px;
     height: 100%;
@@ -170,13 +170,13 @@
     cursor: ew-resize;
 }
 
-.kijs-splitter-vertical {
+div.kijs-splitter-vertical {
     height: 5px;
     background-color: @viewport-bkgrnd-color;
     cursor: ns-resize;
 }
 
-.kijs-splitter-overlay-vertical {
+div.kijs-splitter-overlay-vertical {
     position: absolute;
     height: 5px;
     width: 100%;
@@ -189,7 +189,7 @@
 /* ******************
    * Panel
    ****************** */
-.kijs-panel {
+div.kijs-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -274,7 +274,7 @@
 /* ******************
    * Window
    ****************** */
-.kijs-window {
+div.kijs-window {
     position: absolute;
     max-width: 100%;
     max-height: 100%;
@@ -291,7 +291,7 @@
 /* ******************
    * Mask
    ****************** */
-.kijs-mask {
+div.kijs-mask {
     position: absolute;
     display: flex;
     align-items: center;
@@ -321,7 +321,7 @@
 /* ******************
    * MsgBox
    ****************** */
-.kijs-msgbox {
+div.kijs-msgbox {
     min-width: 200px;
     
     > .kijs-container-inner {
@@ -360,7 +360,7 @@
 /* ******************
    * CornerTipContainer
    ****************** */
-.kijs-cornertipcontainer {
+div.kijs-cornertipcontainer {
     position: fixed;
     right: 0px;
     bottom: 0px;
@@ -397,7 +397,7 @@
 /* ******************
    * Resizer
    ****************** */
-.kijs-resizer {
+div.kijs-resizer {
     position: absolute;
     bottom: -1px;
     right: 0px;
@@ -412,7 +412,7 @@
     }
 }
 
-.kijs-resizer-overlay {
+div.kijs-resizer-overlay {
     position: absolute;
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px dashed rgba(0, 0, 0, 0.5);
@@ -424,7 +424,7 @@
 /* ******************
    * Icon
    ****************** */
-.kijs-icon {
+span.kijs-icon {
     display: inline-block;
     font: normal normal normal 18px/1 FontAwesome;
     background-repeat: no-repeat;
@@ -444,7 +444,7 @@
 /* ******************
    * Button
    ****************** */
-.kijs-button {
+button.kijs-button {
     margin: 0 4px;
     border: 0;
     border-radius: 6px;
@@ -492,7 +492,7 @@
 }
 
 /* Buttons im Fuss eines Panels haben einen Rahmen */
-.kijs-panel {
+div.kijs-panel {
     > .kijs-footer .kijs-button {
         border:1px solid @border-greyaaa-color;
         background-color: transparent;
@@ -512,7 +512,7 @@
 }
 
 /* Buttons im Fuss eines Fensters sind blau */
-.kijs-window {
+div.kijs-window {
     > .kijs-footer .kijs-button {
         background-color: @blue-bkgrnd-color;
         border: 1px solid @blue-bkgrnd-color;
@@ -538,7 +538,7 @@
 /* ******************
    * Trigger Button
    ****************** */
-.kijs-button.kijs-trigger {
+button.kijs-button.kijs-trigger {
     display: block;
     margin: 0;
     padding: 0px 2px 0 1px;
@@ -554,7 +554,7 @@
 /* ******************
    * FooterBar
    ****************** */
-.kijs-footerbar {
+div.kijs-footerbar {
     flex: none;
     display: flex;
     flex-direction: row;
@@ -609,7 +609,7 @@
 /* ******************
    * HeaderBar
    ****************** */
-.kijs-headerbar {
+div.kijs-headerbar {
     flex: none;
     display: flex;
     flex-direction: row;
@@ -677,7 +677,7 @@
 }
 
 /* HeaderBar Minimiert */
-.kijs-panel {
+div.kijs-panel {
     
     &.kijs-collapse-right, &.kijs-collapse-left {
         
@@ -724,7 +724,7 @@
 /* ******************
    * ButtonGroup
    ****************** */
-.kijs-buttongroup {
+div.kijs-buttongroup {
     display: flex;
     flex-direction: column-reverse;
     border-right: 1px solid @lightgrey-bkgrnd-color;
@@ -770,7 +770,7 @@
 /* ******************
    * DataView
    ****************** */
-.kijs-dataview {
+div.kijs-dataview {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -828,7 +828,7 @@
 /* ******************
    * DatePicker
    ****************** */
-.kijs-datepicker {
+div.kijs-datepicker {
     display: inline-block;
     border: 1px solid @viewport-bkgrnd-color;
     background-color: @panel-bkgrnd-color;
@@ -929,7 +929,7 @@
 /* ******************
    * Menu Month
    ****************** */
-.kijs-menu-month {
+div.kijs-menu-month {
     width: 236px;
     
     .kijs-panel > .kijs-container-inner {
@@ -978,7 +978,7 @@
 /* ******************
    * Field
    ****************** */
-.kijs-field {
+div.kijs-field {
     display: flex;
     flex-direction: row;
     
@@ -1031,7 +1031,7 @@
 /* ******************
    * Field Text
    ****************** */
-.kijs-field-text {
+div.kijs-field-text {
     height: 25px;
     
     > .kijs-inputwrapper {
@@ -1068,7 +1068,7 @@
 /* ******************
    * Field Password
    ****************** */
-.kijs-field-password {
+div.kijs-field-password {
     height: 25px;
     
     > .kijs-inputwrapper {
@@ -1106,7 +1106,7 @@
 /* ******************
    * Field Date
    ****************** */
-.kijs-field-date {
+div.kijs-field-date {
     height: 25px;
     
     > .kijs-inputwrapper {
@@ -1155,7 +1155,7 @@
 /* ******************
    * Field Memo
    ****************** */
-.kijs-field-memo {
+div.kijs-field-memo {
     height: 50px;
     
     > .kijs-inputwrapper > textarea {
@@ -1191,7 +1191,7 @@
 /* ******************
    * Field Combo
    ****************** */
-.kijs-field-combo {
+div.kijs-field-combo {
     height: 25px;
 
     > .kijs-inputwrapper {
@@ -1261,7 +1261,7 @@
 /* ******************
    * Checkbox
    ****************** */
-.kijs-field-checkbox {
+div.kijs-field-checkbox {
     > .kijs-inputwrapper {
         > input {
             :focus {
@@ -1289,7 +1289,7 @@
 /* ******************
    * CheckboxGroup
    ****************** */
-.kijs-field-checkboxgroup {
+div.kijs-field-checkboxgroup {
     > .kijs-inputwrapper {
         > .kijs-optionwrapper {
             > .kijs-caption {
@@ -1322,7 +1322,7 @@
 /* ******************
    * RadioGroup
    ****************** */
-.kijs-field-radiogroup {
+div.kijs-field-radiogroup {
     > .kijs-inputwrapper {
         > .kijs-optionwrapper {
             > .kijs-caption {
@@ -1353,7 +1353,7 @@
 /* ******************
    * Editor
    ****************** */
-.kijs-field-editor {
+div.kijs-field-editor {
     > .ace_editor {
         border: 1px solid @border-greyaaa-color;
     }
@@ -1380,10 +1380,10 @@
   /* ******************
    * Menu
    ****************** */
-.kijs-menu {
+div.kijs-menu {
     position: absolute;
     display: block;
-    z-index: 101;
+    z-index: 10100;
     /*border-radius: 4px;*/
     border: 1px solid @lightgrey-bkgrnd-color;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -1409,12 +1409,12 @@
 /* ******************
    * ToolTip
    ****************** */
-.kijs-tooltip {
+div.kijs-tooltip {
     position: fixed;
     display: block;
-    z-index: 100;
+    z-index: 10101;
     border-radius: 4px;
-    padding: 8px;
+    padding: 4px;
     border: 1px solid @lightgrey-bkgrnd-color;
     font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
     font-size: 13px;
