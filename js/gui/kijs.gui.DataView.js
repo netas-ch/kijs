@@ -269,7 +269,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     load(args) {
         this._rpc.do(this._facadeFnLoad, args, function(response) {
             this.data = response.rows;
-            this.select(response.values);
+            if (!kijs.isEmpty(response.selectFilters)) {
+                this.selectByFilters(response.selectFilters);
+            }
         }, this, true, this, 'dom', false);
     }
 
@@ -305,7 +307,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     /**
      * Selektiert ein oder mehrere Elemente
-     * @param {Array} filters                           Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
+     * @param {Array|Object} filters                           Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
      *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
      *                                                  { field: "Id", value: 123 }
      *                                                  
@@ -333,7 +335,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    selectByValues(filters, keepExisting, preventSelectionChange) {
+    selectByFilters(filters, keepExisting, preventSelectionChange) {
         if (kijs.isEmpty(filters)) {
             return;
         }
