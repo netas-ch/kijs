@@ -25,16 +25,16 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         
         this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
         
-        this._valueChecked = 1;
+        this._valueChecked = true;
         this._valueDeterminated = 2;
-        this._valueUnchecked = 0;
+        this._valueUnchecked = false;
+        
+        this._inputWrapperDom.nodeAttributeSet('tabIndex', 0);
         
         this._checkboxIconEl = new kijs.gui.Icon({
             parent: this,
             cls: 'kijs-checkbox-input'
         });
-        this._checkboxIconEl.dom.nodeAttributeSet('id', this._inputId);
-        this._checkboxIconEl.dom.nodeAttributeSet('tabIndex', 0);
         
         this._iconEl = new kijs.gui.Icon({ 
             parent: this,
@@ -76,24 +76,16 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             valueDeterminated: { prio: 1002, target: '_valueDeterminated' },
             
             value: { prio: 1003, target: 'value' },
-            checked: { prio: 1004, target: 'value' }
+            checked: { prio: 1004, target: 'checked' }
         });
         
-        // Event-Weiterleitungen von this._inputDom
-        this._eventForwardsAdd('blur', this._checkboxIconEl.dom);
-        
-        this._eventForwardsRemove('enterPress', this._dom);
-        this._eventForwardsRemove('enterEscPress', this._dom);
-        this._eventForwardsRemove('escPress', this._dom);
-        this._eventForwardsAdd('enterPress', this._inputDom);
-        this._eventForwardsAdd('enterEscPress', this._inputDom);
-        this._eventForwardsAdd('escPress', this._inputDom);
+        // Event-Weiterleitungen von this._inputWrapperDom
+        this._eventForwardsAdd('focus', this._inputWrapperDom);
+        this._eventForwardsAdd('blur', this._inputWrapperDom);
         
         // Listeners
-        this._checkboxIconEl.on('click', this._onClick, this);
-        this._iconEl.on('click', this._onClick, this);
-        this._captionDom.on('click', this._onClick, this);
-        this._checkboxIconEl.on('spacePress', this._onSpacePress, this);
+        this._inputWrapperDom.on('click', this._onClick, this);
+        this._inputWrapperDom.on('spacePress', this._onSpacePress, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -143,9 +135,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
         this._updateCheckboxIcon();
     }
-    
-    
-    
+
     get checkboxIcon() { return this._checkboxIconEl; }
 
     get icon() { return this._iconEl; }
@@ -254,6 +244,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         
         // Checkbox rendern (kijs.guiDom)
         this._checkboxIconEl.renderTo(this._inputWrapperDom.node);
+        this._updateCheckboxIcon();
         
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
@@ -274,7 +265,6 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this.raiseEvent('afterRender');
         }
     }
-
 
     // overwrite
     unRender() {
@@ -319,6 +309,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // LISTENERS
     _onClick(e) {
         if (!this.readOnly && !this.disabled) {
+            const oldChecked = this._checked;
             const oldValue = this.value;
 
             this._checked ++;
@@ -337,12 +328,13 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._checkboxIconEl.focus();
             this.validate();
 
-            this.raiseEvent('input', { oldValue: oldValue, value: this.value } );
+            this.raiseEvent('input', { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
         }
     }
 
     _onSpacePress(e) {
         if (!this.readOnly && !this.disabled) {
+            const oldChecked = this._checked;
             const oldValue = this.value;
 
             this._checked ++;
@@ -360,7 +352,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._updateCheckboxIcon();
             this.validate();
 
-            this.raiseEvent('input', { oldValue: oldValue, value: this.value } );
+            this.raiseEvent('input', { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
         }
         // Bildlauf der Space-Taste verhindern
         e.nodeEvent.preventDefault();

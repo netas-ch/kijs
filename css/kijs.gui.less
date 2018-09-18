@@ -1271,20 +1271,22 @@ div.kijs-field-checkbox {
             height: 22px;
             width: 22px;
             color: @font-grey555-color;
-            
-            &:focus {
-                color: @blue-bkgrnd-color;
-            }
         }
         
         > .kijs-checkbox-icon {
-            
+            margin-right: 4px;
         }
         
         > .kijs-caption {
             font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
             font-size: 15px;
             line-height: 17px;
+        }
+        
+        &:focus {
+            > .kijs-checkbox-input {
+                color: @blue-bkgrnd-color;
+            }
         }
     }
     
@@ -1301,27 +1303,20 @@ div.kijs-field-checkbox {
    * CheckboxGroup
    ****************** */
 div.kijs-field-checkboxgroup {
-    > .kijs-inputwrapper {
-        > .kijs-optionwrapper {
-            > .kijs-caption {
-                font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-                font-size: 15px;
-                line-height: 17px;
-            }
-
-            > input:focus {
-                /* TODO !!! */
-            }
-        }
-    }
+    
     
     /* Ergänzungen für CheckboxGroup */
-    &.kijs-inline > .kijs-inputwrapper > .kijs-optionwrapper {
-        display: inline;
-        margin-right: 10px;
+    &.kijs-inline > .kijs-inputwrapper {
+        flex: none;
+        display: flex;
+        flex-direction: row;
         
-        &:last-child {
-            margin-right: 0;
+        > .kijs-field-checkbox {
+            margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
         }
     }
 }

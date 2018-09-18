@@ -12,43 +12,47 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     constructor(config={}) {
         super(false);
     
-        this._data = [];
-        
+        this._captionField = null;
         this._captionHtmlDisplayType = 'html';
-        this._elements = [];
+        this._valueField = null;
+        this._iconCharField = null;
+        this._iconClsField = null;
+        this._iconColorField = null;
+        
+        this._checkedIconChar = '&#xf046';          // Radio-Style: '&#xf05d' oder '&#xf111'
+        this._checkedIconCls = null;
+        this._uncheckedIconChar = '&#xf096';        // Radio-Style: '&#xf10c'
+        this._uncheckedIconCls = null;
+        
+        this._checkboxElements = [];
+        this._data = [];
+        this._oldValue = [];
         
         this._dom.clsAdd('kijs-field-checkboxgroup');
        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem erten Rendern automatisch die Load-Funktion aufgerufen werden?
-            //captionField: true,
-            data: { target: 'data' },
-            facadeFnLoad: true,             // Name der Facade-Funktion. Bsp: 'address.load'
-            multiselect: { target: 'multiselect' },
-            captionField: true,
             captionHtmlDisplayType: true,   // Darstellung der captions. Default: 'html'
                                             // html: als html-Inhalt (innerHtml)
                                             // code: Tags werden als als Text angezeigt
                                             // text: Tags werden entfernt
-            rpc: { target: 'rpc' },         // Instanz von kijs.gui.Rpc
+            
+            checkedIconChar: true,
+            checkedIconCls: true,
+            uncheckedIconChar: true,
+            uncheckedIconCls: true,
 
+            data: { target: 'data' },
+            facadeFnLoad: true,             // Name der Facade-Funktion. Bsp: 'address.load'
+            rpc: { target: 'rpc' },         // Instanz von kijs.gui.Rpc
+            
+            captionField: true,
+            iconCharField: true,
+            iconClsField: true,
+            iconColorField: true,
             valueField: true
         });
-        
-        // Event-Weiterleitungen von this._inputDom
-        /*this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('blur', this._inputDom);
-        
-        this._eventForwardsRemove('enterPress', this._dom);
-        this._eventForwardsRemove('enterEscPress', this._dom);
-        this._eventForwardsRemove('escPress', this._dom);
-        this._eventForwardsAdd('enterPress', this._inputDom);
-        this._eventForwardsAdd('enterEscPress', this._inputDom);
-        this._eventForwardsAdd('escPress', this._inputDom);*/
-        
-        // Listeners
-        //this.on('input', this._onInput, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -77,69 +81,70 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     get valueField() { return this._valueField; }
     set valueField(val) { this._valueField = val; }
 
-    
     get data() { return this._data; }
     set data(val) { 
         this._data = val;
         
         // Bestehende Elemente löschen
-        kijs.Array.each(this._elements, function(el) {
+        kijs.Array.each(this._checkboxElements, function(el) {
             el.destruct();
         }, this);
-        this._elements = [];
+        this._checkboxElements = [];
 
         // Neue Elemente einfügen
         kijs.Array.each(this._data, function(row) {
             const el = new kijs.gui.field.Checkbox({
                 captionHtmlDisplayType: this._captionHtmlDisplayType,
-                caption: row[this._captionField],
+                checkedIconChar: this._checkedIconChar,
+                checkedIconCls: this._checkedIconCls,
+                uncheckedIconChar: this._uncheckedIconChar,
+                uncheckedIconCls: this._uncheckedIconCls,
+                caption: this._captionField && row[this._captionField] ? row[this._captionField] : '',
+                iconChar: this._iconCharField && row[this._iconCharField] ? row[this._iconCharField] : '',
+                iconCls: this._iconClsField && row[this._iconClsField] ? row[this._iconClsField] : '',
+                iconColor: this._iconColorField && row[this._iconColorField] ? row[this._iconColorField] : undefined,
                 valueChecked: row[this._valueField],
-                valueUnchecked: false,
-                value: false,
+                valueUnchecked: null,
+                labelHide: true,
                 threeState: false
             });
-            this._elements.push(el);
+            el.on('input', this._onCheckboxElementInput, this);
+            
+            this._checkboxElements.push(el);
         }, this);
 
         this.value = this._value; 
         
         if (this._inputWrapperDom.isRendered) {
-            kijs.Array.each(this._elements, function(el) {
+            kijs.Array.each(this._checkboxElements, function(el) {
                 el.renderTo(this._inputWrapperDom.node);
             }, this);
         }
     }
 
     // overwrite
-    /*get disabled() { return super.disabled; }
+    get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('disabled', true);  // (readOnly gibts leider nicht bei select-tags)
-        } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
-        }
-    }*/
+        kijs.Array.each(this._checkboxElements, function(el) {
+            el.disabled = !!val;
+        }, this);
+    }
     
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
     // overwrite
-    //get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
-    
-    //get multiselect() { return !!this._inputDom.nodeAttributeGet('multiple'); }
-    //set multiselect(val) { this._inputDom.nodeAttributeSet('multiple', !!val); }
+    get isEmpty() { return kijs.isEmpty(this.value); }
     
     // overwrite
-    /*get readOnly() { return super.readOnly; }
+    get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('disabled', true);  // (readOnly gibts leider nicht bei select-tags)
-        } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
-        }
-    }*/
+        kijs.Array.each(this._checkboxElements, function(el) {
+            el.readOnly = !!val;
+        }, this);
+    }
     
     get rpc() { return this._rpc;}
     set rpc(val) {
@@ -163,9 +168,9 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     
     // overwrite
     get value() {
-        if (!kijs.isEmpty(this._elements)) {
+        if (!kijs.isEmpty(this._checkboxElements)) {
             const value = [];
-            kijs.Array.each(this._elements, function(el) {
+            kijs.Array.each(this._checkboxElements, function(el) {
                 let val = el.value;
                 if (!kijs.isEmpty(val)) {
                     value.push(val);
@@ -178,10 +183,13 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     set value(val) {
         if (kijs.isEmpty(val)) {
             val = [];
+        } else if (!kijs.isArray(val)) {
+            val = [val];
         }
         this._value = val;
-        kijs.Array.each(this._elements, function(el) {
-            el.value = kijs.Array.contains(val, el.valueChecked) ? el.valueChecked : false;
+        this._oldValue = val;
+        kijs.Array.each(this._checkboxElements, function(el) {
+            el.checked = kijs.Array.contains(val, el.valueChecked) ? 1 : 0;
         }, this);
     }
     
@@ -213,19 +221,35 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         if (this._data) {
             this.data = this._data;
         }
+        
+        // Event afterRender auslösen
+        if (!preventAfterRender) {
+            this.raiseEvent('afterRender');
+        }
     }
-
 
     // overwrite
     unRender() {
-        //this._inputDom.unRender();
+        kijs.Array.each(this._checkboxElements, function(el) {
+            el.destruct();
+        }, this);
         super.unRender();
     }
 
-        // EVENTS
+
+    // EVENTS
     _onAfterFirstRenderTo(e) {
         this.load();
     }
+    
+    _onCheckboxElementInput(e) {
+        const val = this.value;
+
+        this._value = val;
+        this.raiseEvent('input', { oldValue: this._oldValue, value: val });
+        this._oldValue = val;
+    }
+    
     
 
     // --------------------------------------------------------------
@@ -238,13 +262,14 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }
         
         // Elemente/DOM-Objekte entladen
-        kijs.Array.each(this._elements, function(el) {
+        kijs.Array.each(this._checkboxElements, function(el) {
             el.destruct();
         }, this);
         
         // Variablen (Objekte/Arrays) leeren
+        this._checkboxElements = null;
         this._data = null;
-        this._elements = null;
+        this._oldValue = null;
         
         // Basisklasse entladen
         super.destruct(true);

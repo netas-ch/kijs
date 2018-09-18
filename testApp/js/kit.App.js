@@ -236,10 +236,10 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
-                                            label: 'Label',
+                                            label: 'Checkbox',
                                             caption: 'Caption',
                                             threeState: true,
-                                            value: 0,
+                                            //value: false,
                                             width: 250,
                                             on: {
                                                 input: function(e) {
@@ -260,8 +260,24 @@ kit.App = class kit_App {
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.Checkbox',
-                                            name: 'Option',
-                                            label: 'Label',
+                                            name: 'CheckboxIcon',
+                                            label: '... mit Icon',
+                                            iconCls: 'icoWizard16',
+                                            caption: 'Caption',
+                                            checked: 1,
+                                            width: 250
+                                        },{
+                                            xtype: 'kijs.gui.field.Checkbox',
+                                            name: 'CheckboxColor',
+                                            label: '... mit Farbe',
+                                            iconChar: '&#xf111',
+                                            iconColor: '#ff8800',
+                                            caption: 'Caption',
+                                            width: 250
+                                        },{
+                                            xtype: 'kijs.gui.field.Checkbox',
+                                            name: 'CheckboxOption',
+                                            label: '... als Option',
                                             caption: 'Caption',
                                             checkedIconChar: '&#xf05d',
                                             uncheckedIconChar: '&#xf10c',
@@ -297,15 +313,17 @@ kit.App = class kit_App {
                                             label: 'CheckboxGroup',
                                             valueField: 'id',
                                             captionField: 'Bezeichnung',
+                                            iconCharField: 'Icon',
+                                            iconColorField: 'Color',
                                             data: [
-                                                {id:1, Bezeichnung:'Wert A'}, 
-                                                {id:2, Bezeichnung:'Wert B'}, 
-                                                {id:3, Bezeichnung:'Wert C'}
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
+                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }, 
                                             ],
                                             value: [2,3],
                                             on: {
                                                 input: function(e) {
-                                                    //console.log(this.getValue());
+                                                    console.log(e);
                                                 }
                                             },
                                             elements: [
@@ -333,22 +351,45 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },/*{
+                                        },{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroupInline',
                                             label: 'CheckboxGroup Inline',
                                             cls: 'kijs-inline',
-                                            idField: 'id',
-                                            captionField: 'caption',
-                                            data: new kijs.Data({
-                                                rows:[
-                                                    {id:1, caption:'Wert A'}, 
-                                                    {id:2, caption:'Wert B'}, 
-                                                    {id:3, caption:'Wert C'}
-                                                ]
-                                            }),
-                                            value: [3]
+                                            valueField: 'color',
+                                            captionField: 'Bez',
+                                            iconCharField: 'iconChar',
+                                            iconColorField: 'color',
+                                            rpc: this._rpc,
+                                            facadeFnLoad: 'color.load',
+                                            autoLoad: true,
+                                            value: ['#0f0', '#ff0'],
+                                            on: {
+                                                input: function(e) {
+                                                    console.log(e);
+                                                }
+                                            }
                                         },{
+                                            xtype: 'kijs.gui.field.OptionGroup',
+                                            name: 'OptionGroupInline',
+                                            label: 'OptionGroup Inline',
+                                            cls: 'kijs-inline',
+                                            valueField: 'id',
+                                            captionField: 'Bezeichnung',
+                                            iconCharField: 'Icon',
+                                            iconColorField: 'Color',
+                                            data: [
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
+                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }, 
+                                            ],
+                                            value: 2,
+                                            on: {
+                                                input: function(e) {
+                                                    console.log('oldValue:' + e.oldValue + ' value:' + e.value);
+                                                }
+                                            }
+                                        },/*{
                                             xtype: 'kijs.gui.field.RadioGroup',
                                             name: 'RadioGroup',
                                             label: 'RadioGroup',
