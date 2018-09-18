@@ -68,10 +68,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             errorIcon: { target: 'errorIcon' },
             errorIconChar: { target: 'errorIconChar', context: this._errorIconEl },
             errorIconCls: { target: 'errorIconCls', context: this._errorIconEl },
+            errorIconColor: { target: 'errorIconColor', context: this._errorIconEl },
             
             helpIcon: { target: 'helpIcon' },
             helpIconChar: { target: 'helpIconChar', context: this._helpIconEl },
             helpIconCls: { target: 'helpIconCls', context: this._helpIconEl },
+            helpIconColor: { target: 'helpIconColor', context: this._helpIconEl },
             
             helpText: { target: 'helpText' },
             
@@ -117,8 +119,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set errorIcon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._errorIconEl.iconCls = null;
             this._errorIconEl.iconChar = null;
+            this._errorIconEl.iconCls = null;
+            this._errorIconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
             }
@@ -160,6 +163,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
     
+    get errorIconColor() { return this._errorIconEl.iconColor; }
+    set errorIconColor(val) {
+        this._iconEl.errorIconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
     
     get helpIcon() { return this._helpIconEl; }
     /**
@@ -169,8 +180,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set helpIcon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._helpIconEl.iconCls = null;
             this._helpIconEl.iconChar = null;
+            this._helpIconEl.iconCls = null;
+            this._helpIconEl.iconColor = null;
                         
         // kijs.gui.Icon Instanz
         } else if (val instanceof kijs.gui.Icon) {
@@ -201,6 +213,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get helpIconCls() { return this._helpIconEl.iconCls; }
     set helpIconCls(val) {
         this._helpIconEl.iconCls = val;
+    }
+    
+    get helpIconColor() { return this._helpIconEl.iconColor; }
+    set helpIconColor(val) {
+        this._iconEl.helpIconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
     }
     
     get helpText() { return this._helpIconEl.toolTip.html; }

@@ -209,7 +209,7 @@ kit.App = class kit_App {
                                         overflowY: 'auto'
                                     },
                                     defaults: {
-                                        labelWidth: 110,
+                                        labelWidth: 120,
                                         required: true,
                                         maxLength: 50,
                                         style: {marginBottom: '4px'}
@@ -238,9 +238,39 @@ kit.App = class kit_App {
                                             name: 'Checkbox',
                                             label: 'Label',
                                             caption: 'Caption',
-                                            valueChecked: 'Individueller Wert',
-                                            value: true,
-                                            //width: 400,
+                                            threeState: true,
+                                            value: 0,
+                                            width: 250,
+                                            on: {
+                                                input: function(e) {
+                                                    console.log('input:' + this.value);
+                                                }
+                                            },
+                                            elements: [
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    iconChar: '&#xf0d0',
+                                                    toolTip: 'test',
+                                                    on: {
+                                                        click: function() {
+                                                            this.upX('kijs.gui.field.Checkbox').checked = 2;
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },{
+                                            xtype: 'kijs.gui.field.Checkbox',
+                                            name: 'Option',
+                                            label: 'Label',
+                                            caption: 'Caption',
+                                            checkedIconChar: '&#xf05d',
+                                            uncheckedIconChar: '&#xf10c',
+                                            determinatedIconChar: '&#xf111',
+                                            valueChecked: 'Ein',
+                                            valueDeterminated: 'wedernoch',
+                                            valueUnchecked: 'Aus',
+                                            value: 'Ein',
+                                            width: 250,
                                             on: {
                                                 input: function(e) {
                                                     console.log('input:' + this.value);
@@ -255,29 +285,27 @@ kit.App = class kit_App {
                                                         click: function() {
                                                             let chkBox = this.upX('kijs.gui.field.Checkbox');
                                                             console.log(chkBox.value);
-                                                            chkBox.value = !chkBox.value;
+                                                            chkBox.checked = 2;
                                                             console.log(chkBox.value);
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },/*{
+                                        },{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroup',
                                             label: 'CheckboxGroup',
-                                            idField: 'id',
+                                            valueField: 'id',
                                             captionField: 'Bezeichnung',
-                                            data: new kijs.Data({
-                                                rows:[
-                                                    {id:1, Bezeichnung:'Wert A'}, 
-                                                    {id:2, Bezeichnung:'Wert B'}, 
-                                                    {id:3, Bezeichnung:'Wert C'}
-                                                ]
-                                            }),
+                                            data: [
+                                                {id:1, Bezeichnung:'Wert A'}, 
+                                                {id:2, Bezeichnung:'Wert B'}, 
+                                                {id:3, Bezeichnung:'Wert C'}
+                                            ],
                                             value: [2,3],
                                             on: {
-                                                input: function(e, el) {
-                                                    console.log(this.getValue());
+                                                input: function(e) {
+                                                    //console.log(this.getValue());
                                                 }
                                             },
                                             elements: [
@@ -305,7 +333,7 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        },/*{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroupInline',
                                             label: 'CheckboxGroup Inline',

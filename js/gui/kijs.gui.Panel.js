@@ -62,6 +62,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             headerBarElements: { fn: 'function', target: this._headerBarEl.add, context: this._headerBarEl },
             iconChar: { target: 'iconChar', context: this._headerBarEl },
             iconCls: { target: 'iconCls', context: this._headerBarEl },
+            iconColor: { target: 'iconColor', context: this._headerBarEl },
             
             // header
             headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },

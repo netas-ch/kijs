@@ -221,6 +221,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('enterPress', this._dom);
         this._eventForwardsAdd('enterEscPress', this._dom);
         this._eventForwardsAdd('escPress', this._dom);
+        this._eventForwardsAdd('spacePress', this._dom);
         this._eventForwardsAdd('focus', this._dom);
         this._eventForwardsAdd('keyDown', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);

@@ -231,6 +231,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
             },
+            spacePress: { 
+                nodeEventName: 'keydown',       // Node-Event Name
+                keys: [kijs.keys.SPACE],        // Bei welchen Tasten soll das Event ausgelöst werden?
+                shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
+                ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
+                altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
+                usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
+            },
             focus: { nodeEventName: 'focus', useCapture: false },
             keyDown: { nodeEventName: 'keydown', useCapture: false },
             keyUp: { nodeEventName: 'keyup', useCapture: false },

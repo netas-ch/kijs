@@ -26,7 +26,8 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },
             iconChar: { target: 'html', context: this._dom },   // Alias für html
-            iconCls: { target: 'iconCls' }
+            iconCls: { target: 'iconCls' },
+            iconColor: { target: 'iconColor' }
         });
         
         // Config anwenden
@@ -67,6 +68,13 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         if (this._iconCls) {
             this._dom.clsAdd(this._iconCls);
         }
+    }
+    
+    get iconColor() {
+        return this._dom.style.color;
+    }
+    set iconColor(val) {
+        this._dom.style.color = val;
     }
 
     get isEmpty() {

@@ -12,35 +12,42 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     constructor(config={}) {
         super(false);
         
-        this._captionHide = false;
-        this._valueChecked = true;
-        this._valueUnchecked = false;
-    
-        this._inputDom = new kijs.gui.Dom({
-            disableEnterEscBubbeling: true,
-            nodeTagName: 'input',
-            nodeAttribute: {
-                id: this._inputId,
-                type: 'checkbox'
-            }
+        this._captionHide = false;                  // caption ausblenden?
+        
+        this._checked = 0;                          // 0=checked, 1=unchecked, 2=indeterminated
+
+        this._checkedIconChar = '&#xf046';          // Radio-Style: '&#xf05d' oder '&#xf111'
+        this._checkedIconCls = null;
+        this._determinatedIconChar = '&#xf147';
+        this._determinatedIconCls = null;
+        this._uncheckedIconChar = '&#xf096';        // Radio-Style: '&#xf10c'
+        this._uncheckedIconCls = null;
+        
+        this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
+        
+        this._valueChecked = 1;
+        this._valueDeterminated = 2;
+        this._valueUnchecked = 0;
+        
+        this._checkboxIconEl = new kijs.gui.Icon({
+            parent: this,
+            cls: 'kijs-checkbox-input'
+        });
+        this._checkboxIconEl.dom.nodeAttributeSet('id', this._inputId);
+        this._checkboxIconEl.dom.nodeAttributeSet('tabIndex', 0);
+        
+        this._iconEl = new kijs.gui.Icon({ 
+            parent: this,
+            cls: 'kijs-checkbox-icon'
         });
         
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
-            nodeTagName: 'label',
-            nodeAttribute: {
-                htmlFor: this._inputId
-            }
+            nodeTagName: 'span'
         });
         
         this._dom.clsAdd('kijs-field-checkbox');
        
-       // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-            valueChecked: true,         // Wert, wenn angehäckelt
-            valueUnchecked : false      // Wert, wenn nicht angehäckelt
-        }, config);
-        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             caption: { target: 'html', context: this._captionDom },
@@ -49,14 +56,31 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             captionWidth: { target: 'captionWidth' },
+            
+            checkedIconChar: true,
+            checkedIconCls: true,
+            determinatedIconChar: true,
+            determinatedIconCls: true,
+            uncheckedIconChar: true,
+            uncheckedIconCls: true,
 
-            valueChecked: true,
-            valueUnchecked: true
+            icon: { target: 'icon' },
+            iconChar: { target: 'iconChar', context: this._iconEl },
+            iconCls: { target: 'iconCls', context: this._iconEl },
+            iconColor: { target: 'iconColor', context: this._iconEl },
+            
+            threeState: { prio: 1001, target: '_threeState' },
+            
+            valueChecked: { prio: 1002, target: '_valueChecked' },
+            valueUnchecked: { prio: 1002, target: '_valueUnchecked' },
+            valueDeterminated: { prio: 1002, target: '_valueDeterminated' },
+            
+            value: { prio: 1003, target: 'value' },
+            checked: { prio: 1004, target: 'value' }
         });
         
         // Event-Weiterleitungen von this._inputDom
-        this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('blur', this._inputDom);
+        this._eventForwardsAdd('blur', this._checkboxIconEl.dom);
         
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);
@@ -66,7 +90,10 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._eventForwardsAdd('escPress', this._inputDom);
         
         // Listeners
-        this.on('input', this._onInput, this);
+        this._checkboxIconEl.on('click', this._onClick, this);
+        this._iconEl.on('click', this._onClick, this);
+        this._captionDom.on('click', this._onClick, this);
+        this._checkboxIconEl.on('spacePress', this._onSpacePress, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -103,43 +130,118 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }
     
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+    get checked() { return this._checked; }
+    set checked(val) { 
+        if (val === 2 || val === '2') {
+            this._checked = 2;
+        } else if (val === 1 || val === '1' || val === true) {
+            this._checked = 1;
+        } else if (val === 0 || val === '0' || val === false || kijs.isEmpty(val)) {
+            this._checked = 0;
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            throw new Error(`config "checked" is not valid.`);
         }
+        this._updateCheckboxIcon();
     }
     
-    // overwrite
-    get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
+    
+    
+    get checkboxIcon() { return this._checkboxIconEl; }
 
-    get inputDom() { return this._inputDom; }
-    
-    // overwrite
-    get readOnly() { return super.readOnly; }
-    set readOnly(val) {
-        super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+    get icon() { return this._iconEl; }
+    /**
+     * Icon zuweisen
+     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     */
+    set icon(val) {
+        // Icon zurücksetzen?
+        if (kijs.isEmpty(val)) {
+            this._iconEl.iconChar = null;
+            this._iconEl.iconCls = null;
+            this._iconEl.iconColor = null;
+            if (this.isRendered) {
+                this.render();
+            }
+            
+        // kijs.gui.Icon Instanz
+        } else if (val instanceof kijs.gui.Icon) {
+            this._iconEl.destruct();
+            this._iconEl = val;
+            if (this.isRendered) {
+                this.render();
+            }
+            
+        // Config Objekt
+        } else if (kijs.isObject(val)) {
+            this._iconEl.applyConfig(val);
+            if (this.isRendered) {
+                this.render();
+            }
+            
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            throw new Error(`config "icon" is not valid.`);
+            
         }
     }
     
+    get iconChar() { return this._iconEl.iconChar; }
+    set iconChar(val) { 
+        this._iconEl.iconChar = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get iconCls() { return this._iconEl.iconCls; }
+    set iconCls(val) {
+        this._iconEl.iconCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get iconColor() { return this._iconEl.iconColor; }
+    set iconColor(val) {
+        this._iconEl.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
     // overwrite
-    get value() { return this._inputDom.nodeAttributeGet('checked') ? this._valueChecked : this._valueUnchecked; }
-    set value(val) { 
-        this._inputDom.nodeAttributeSet('checked', !!val);
+    get isEmpty() { return kijs.isEmpty(this._checked === 0); }
+
+    get threeState() { return this._threeState; }
+    set threeState(val) { this._threeState = val; }
+    
+    // overwrite
+    get value() {
+        switch (this._checked) {
+            case 0: return this._valueUnchecked;
+            case 1: return this._valueChecked;
+            case 2: return this._valueDeterminated;
+        }
+    }
+    set value(val) {
+        if (val === this._valueUnchecked) {
+            this._checked = 0;
+        } else if (val === this._valueChecked) {
+            this._checked = 1;
+        } else if (val === this._valueDeterminated) {
+            this._checked = 2;
+        } else {
+            throw new Error(`config "value" is not valid.`);
+        }
+        this._updateCheckboxIcon();
     }
 
     get valueChecked() { return this._valueChecked; }
     set valueChecked(val) { this._valueChecked = val; }
 
-    get valueChecked() { return this._valueChecked; }
+    get valueDeterminated() { return this._valueDeterminated; }
+    set valueDeterminated(val) { this._valueDeterminated = val; }
+
+    get valueUnchecked() { return this._valueUnchecked; }
     set valueUnchecked(val) { this._valueUnchecked = val; }
 
     
@@ -150,10 +252,17 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     render(preventAfterRender) {
         super.render(true);
         
-        // Input rendern (kijs.guiDom)
-        this._inputDom.renderTo(this._inputWrapperDom.node);
+        // Checkbox rendern (kijs.guiDom)
+        this._checkboxIconEl.renderTo(this._inputWrapperDom.node);
         
-        // Caption rendern (kijs.guiDom)
+        // Span icon rendern (kijs.gui.Icon)
+        if (!this._iconEl.isEmpty) {
+            this._iconEl.renderTo(this._inputWrapperDom.node);
+        } else {
+            this._iconEl.unRender();
+        }
+
+        // Span caption rendern (kijs.guiDom)
         if (!this._captionHide) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
         } else {
@@ -169,17 +278,94 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
     // overwrite
     unRender() {
-        this._inputDom.unRender();
+        this._checkboxIconEl.unRender();
+        this._iconEl.unRender();
         this._captionDom.unRender();
         super.unRender();
     }
 
 
-    // LISTENERS
-    _onInput(e) {
-        this.validate();
+    // PROTECTED
+    _updateCheckboxIcon() {
+        let cls, iconChar, iconCls;
+        
+        switch (this._checked) {
+            case 0:
+                cls = 'kijs-unchecked';
+                iconChar = this._uncheckedIconChar;
+                iconCls = this._uncheckedIconCls;
+                break;
+                
+            case 1:
+                cls = 'kijs-checked';
+                iconChar = this._checkedIconChar;
+                iconCls = this._checkedIconCls;
+                break;
+                
+            case 2:
+                cls = 'kijs-determinated';
+                iconChar = this._determinatedIconChar;
+                iconCls = this._determinatedIconCls;
+                break;
+        }
+        
+        this._dom.clsRemove(['kijs-checked', 'kijs-determinated', 'kijs-unchecked']);
+        this._dom.clsAdd(cls);
+        this._checkboxIconEl.iconChar = iconChar;
+        this._checkboxIconEl.iconCls = iconCls;
     }
-    
+
+
+    // LISTENERS
+    _onClick(e) {
+        if (!this.readOnly && !this.disabled) {
+            const oldValue = this.value;
+
+            this._checked ++;
+            
+            if (this._threeState) {
+                if (this._checked > 2) {
+                    this._checked = 0;
+                }
+            } else {
+                if (this._checked > 1) {
+                    this._checked = 0;
+                }
+            }
+            
+            this._updateCheckboxIcon();
+            this._checkboxIconEl.focus();
+            this.validate();
+
+            this.raiseEvent('input', { oldValue: oldValue, value: this.value } );
+        }
+    }
+
+    _onSpacePress(e) {
+        if (!this.readOnly && !this.disabled) {
+            const oldValue = this.value;
+
+            this._checked ++;
+            
+            if (this._threeState) {
+                if (this._checked > 2) {
+                    this._checked = 0;
+                }
+            } else {
+                if (this._checked > 1) {
+                    this._checked = 0;
+                }
+            }
+            
+            this._updateCheckboxIcon();
+            this.validate();
+
+            this.raiseEvent('input', { oldValue: oldValue, value: this.value } );
+        }
+        // Bildlauf der Space-Taste verhindern
+        e.nodeEvent.preventDefault();
+    }
+
     
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -191,8 +377,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
         
         // Elemente/DOM-Objekte entladen
-        if (this._inputDom) {
-            this._inputDom.destruct();
+        if (this._checkboxIconEl) {
+            this._checkboxIconEl.destruct();
+        }
+        
+        if (this._iconEl) {
+            this._iconEl.destruct();
         }
         
         if (this._captionDom) {
@@ -200,7 +390,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
         
         // Variablen (Objekte/Arrays) leeren
-        this._inputDom = null;
+        this._checkboxIconEl = null;
+        this._iconEl = null;
         this._captionDom = null;
         
         // Basisklasse entladen

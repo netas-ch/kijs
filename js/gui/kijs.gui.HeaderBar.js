@@ -35,7 +35,8 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
-            iconCls: { target: 'iconCls', context: this._iconEl }
+            iconCls: { target: 'iconCls', context: this._iconEl },
+            iconColor: { target: 'iconColor', context: this._iconEl }
         });
         
         // click- und mouseDown-Event soll nur auf dem label und icon kommen. Bei den elements nicht.
@@ -82,8 +83,9 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._iconEl.iconCls = null;
             this._iconEl.iconChar = null;
+            this._iconEl.iconCls = null;
+            this._iconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
             }
@@ -120,6 +122,14 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) {
         this._iconEl.iconCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
+    get iconColor() { return this._iconEl.iconColor; }
+    set iconColor(val) {
+        this._iconEl.iconColor = val;
         if (this.isRendered) {
             this.render();
         }

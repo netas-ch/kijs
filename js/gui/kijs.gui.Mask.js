@@ -46,6 +46,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
+            iconColor: { target: 'iconColor', context: this._iconEl },
             target: { target: 'target' },
             targetDomProperty: true
         });
@@ -80,8 +81,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._iconEl.iconCls = null;
             this._iconEl.iconChar = null;
+            this._iconEl.iconCls = null;
+            this._iconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
             }
@@ -118,6 +120,14 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) {
         this._iconEl.iconCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
+    get iconColor() { return this._iconEl.iconColor; }
+    set iconColor(val) {
+        this._iconEl.iconColor = val;
         if (this.isRendered) {
             this.render();
         }
