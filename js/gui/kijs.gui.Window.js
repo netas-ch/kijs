@@ -82,8 +82,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             this._headerBarEl.on('mouseDown', this._onHeaderBarMouseDown, this);
         } else if (!val && this._draggable) {
             this._headerBarEl.off('mouseDown', this._onHeaderBarMouseDown, this);
-            kijs.Dom.removeEventListener('mousemove', document, this._onDocumentMouseMove, this);
-            kijs.Dom.removeEventListener('mouseup', document, this._onDocumentMouseUp, this);
+            kijs.Dom.removeEventListener('mousemove', document, this);
+            kijs.Dom.removeEventListener('mouseup', document, this);
         }
         this._draggable = !!val;
     }
@@ -392,8 +392,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
     _onDocumentMouseUp(e) {
         // Beim ersten auslösen Listeners gleich wieder entfernen
-        kijs.Dom.removeEventListener('mousemove', document, this._onDocumentMouseMove, this);
-        kijs.Dom.removeEventListener('mouseup', document, this._onDocumentMouseUp, this);
+        kijs.Dom.removeEventListener('mousemove', document, this);
+        kijs.Dom.removeEventListener('mouseup', document, this);
 
         if (kijs.isEmpty(this._dragInitialPos)) {
             return;
@@ -451,8 +451,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         if (this._targetX === document.body) {
             kijs.Dom.removeEventListener('resize', window, this);
         }
-        kijs.Dom.removeEventListener('mouseMove', document, this._onDocumentMouseMove, this);
-        kijs.Dom.removeEventListener('mouseUp', document, this._onDocumentMouseUp, this);
+        kijs.Dom.removeEventListener('mouseMove', document, this);
+        kijs.Dom.removeEventListener('mouseUp', document, this);
         
         // Event-Listeners entfernen
         if (this._targetX instanceof kijs.gui.Element) {

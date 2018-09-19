@@ -121,6 +121,41 @@ div.kijs-container-inner {
 }
 
 
+/* ******************
+   * SpinBox
+   ****************** */
+div.kijs-spinbox {
+    position: absolute;
+    max-width: 100%;
+    max-height: 100%;
+    border: 1px solid @border-greyaaa-color;
+    box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    background-color: @panel-bkgrnd-color;
+    
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    user-select: none;          /* Likely future */
+    
+    &.kijs-pos-top {
+        margin-top:2px;
+        box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    &.kijs-pos-right {
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    &.kijs-pos-bottom {
+        margin-top:-1px;
+        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+    }
+    
+    &.kijs-pos-left {
+        box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.1);
+    }
+}
+
 
 /* ******************
    * Accordion
@@ -1011,6 +1046,23 @@ div.kijs-field {
             margin: 0 0 0 2px;
             padding: 0px 4px;
             height: 100%;
+        }
+    }
+    
+    > .kijs-icon-spindown {
+        flex: none;
+        display: block;
+        margin: 0 0 0 0;
+        padding: 2px 4px;
+        height: 100%;
+        border-top: 1px solid @border-greyaaa-color;
+        border-right: 1px solid @border-greyaaa-color;
+        border-bottom: 1px solid @border-greyaaa-color;
+        color: @font-grey555-color;
+        cursor: pointer;
+        
+        &:hover {
+            background-color: @viewport-bkgrnd-color;
         }
     }
 }

@@ -28,10 +28,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         });
         
-        this._spinButtonEl = new kijs.gui.Button({
+        this._spinIconEl = new kijs.gui.Icon({
             parent: this,
             iconChar: '&#xf0d7',
-            cls: 'kijs-spinbutton',
+            cls: 'kijs-icon-spindown',
             visible: true
         });
         
@@ -55,13 +55,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
-            html: 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-            elements: [
-                {
-                    xtype: 'kijs.gui.Button',
-                    caption: 'XXXXXXXXXXXXXXX'
-                }
-            ]
+            targetDomProperty: 'inputWrapperDom',
+            ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
+            style: {
+                padding: '10px'
+            },
+            html: 'XXXX<br>XXXX<br><br><br><br>XX<br>XX<br>XXX<br><br>XXX<br>XX<br><br>XXXXXXXX'
         });
         
         this._maxLength = null;
@@ -99,15 +98,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
             required: true,
             
-            spinButton: { target: 'spinButton' },
-            spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
-            spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },
-            spinButtonIconColor: { target: 'iconColor', context: this._spinButtonEl },
-            spinButtonVisible: { target: 'visible', context: this._spinButtonEl }
+            spinIcon: { target: 'spinIcon' },
+            spinIconChar: { target: 'iconChar', context: this._spinIconEl },
+            spinIconCls: { target: 'iconCls', context: this._spinIconEl },
+            spinIconColor: { target: 'iconColor', context: this._spinIconEl },
+            spinIconVisible: { target: 'visible', context: this._spinIconEl }
         });
         
         // Listeners
-        this._spinButtonEl.on('click', this._onSpinButtonClick, this);
+        this._spinIconEl.on('click', this._onSpinButtonClick, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -128,7 +127,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
         
         // Icons auch aktivieren/deaktivieren
-        this._spinButtonEl.disabled = val;
+        this._spinIconEl.disabled = val;
         this._errorIconEl.disabled = val;
         this._helpIconEl.disabled = val;
         
@@ -294,69 +293,69 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
     
     
-    get spinButton() { return this._spinButtonEl; }
+    get spinIcon() { return this._spinIconEl; }
     /**
      * Button zuweisen
      * @param {kijs.gui.Button|Object} val     Button als icon-Config oder kijs.gui.Button Element
      */
-    set spinButton(val) {
+    set spinIcon(val) {
         // Button zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._spinButtonEl.iconChar = null;
-            this._spinButtonEl.iconCls = null;
-            this._spinButtonEl.iconColor = null;
+            this._spinIconEl.iconChar = null;
+            this._spinIconEl.iconCls = null;
+            this._spinIconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
             }
             
         // kijs.gui.Button Instanz
         } else if (val instanceof kijs.gui.Button) {
-            this._spinButtonEl.destruct();
-            this._spinButtonEl = val;
+            this._spinIconEl.destruct();
+            this._spinIconEl = val;
             if (this.isRendered) {
                 this.render();
             }
             
         // Config Objekt
         } else if (kijs.isObject(val)) {
-            this._spinButtonEl.applyConfig(val);
+            this._spinIconEl.applyConfig(val);
             if (this.isRendered) {
                 this.render();
             }
             
         } else {
-            throw new Error(`config "spinButton" is not valid.`);
+            throw new Error(`config "spinIcon" is not valid.`);
             
         }
     }
     
-    get spinButtonIconChar() { return this._spinButtonEl.iconChar; }
-    set spinButtonIconChar(val) { 
-        this._spinButtonEl.iconChar = val;
+    get spinIconChar() { return this._spinIconEl.iconChar; }
+    set spinIconChar(val) { 
+        this._spinIconEl.iconChar = val;
         if (this.isRendered) {
             this.render();
         }
     }
 
-    get spinButtonIconCls() { return this._spinButtonEl.iconCls; }
-    set spinButtonIconCls(val) {
-        this._spinButtonEl.iconCls = val;
+    get spinIconCls() { return this._spinIconEl.iconCls; }
+    set spinIconCls(val) {
+        this._spinIconEl.iconCls = val;
         if (this.isRendered) {
             this.render();
         }
     }
     
-    get spinButtonIconColor() { return this._spinButtonEl.iconColor; }
-    set spinButtonIconColor(val) {
-        this._spinButtonEl.iconColor = val;
+    get spinIconColor() { return this._spinIconEl.iconColor; }
+    set spinIconColor(val) {
+        this._spinIconEl.iconColor = val;
         if (this.isRendered) {
             this.render();
         }
     }
     
-    get spinButtonVisible() { return !!this._spinButtonEl.visible; }
-    set spinButtonVisible(val) { 
-        this._spinButtonEl.visible = !!val;
+    get spinIconVisible() { return !!this._spinIconEl.visible; }
+    set spinIconVisible(val) { 
+        this._spinIconEl.visible = !!val;
         if (this.isRendered) {
             this.render();
         } }
@@ -404,7 +403,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._inputWrapperDom.renderTo(this._dom.node, this._innerDom.node);
         
          // Spin icon rendern (kijs.gui.Icon)
-        this._spinButtonEl.renderTo(this._dom.node);
+        this._spinIconEl.renderTo(this._dom.node, this._innerDom.node);
         
         // Help icon rendern (kijs.gui.Icon)
         this._helpIconEl.renderTo(this._dom.node);
@@ -426,7 +425,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._spinBox) {
             this._spinBox.unRender();
         }
-        this._spinButtonEl.unRender();
+        this._spinIconEl.unRender();
         this._errorIconEl.unRender();
         this._helpIconEl.unRender();
         super.unRender();
@@ -491,7 +490,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // LISTENERS
     _onSpinButtonClick(e) {
         if (this._spinBoxEl) {
-            this._spinBoxEl.show();
+            if (this._spinBoxEl.isRendered) {
+                this._spinBoxEl.hide();
+            } else {
+                const width = this._inputWrapperDom.width + this._spinIconEl.width;
+                this._spinBoxEl.style.minWidth = width + 'px';
+                this._spinBoxEl.show();
+            }
         }
     }
     
@@ -515,8 +520,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._spinBoxEl) {
             this._spinBoxEl.destruct();
         }
-        if (this._spinButtonEl) {
-            this._spinButtonEl.destruct();
+        if (this._spinIconEl) {
+            this._spinIconEl.destruct();
         }
         if (this._errorIconEl) {
             this._errorIconEl.destruct();
@@ -530,7 +535,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._labelDom = null;
         this._inputWrapperDom = null;
         this._spinBoxEl = null;
-        this._spinButtonEl = null;
+        this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
         this._value = null;

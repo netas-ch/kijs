@@ -568,7 +568,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @returns {undefined}
+     * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
     alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY) {
         targetPos = targetPos || 'bl';
@@ -709,6 +709,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (setHeight) {
             this.height = rect.h;
         }
+        
+        return {
+            pos: posSwap ? posSwap : pos,
+            targetPos: targetPosSwap ? targetPosSwap : targetPos
+        };
     }
     
     /**
