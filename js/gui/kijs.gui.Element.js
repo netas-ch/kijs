@@ -489,7 +489,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         kijs.Array.each(names, function(name) {
             if (this._eventForwards[name]) {
                 kijs.Array.each(this._eventForwards[name], function(forward) {
-                    forward.target.on(forward.targetEventName, this._onDomEvent, this);
+                    forward.target.on(forward.targetEventName, this._onForwardEvent, this);
                 }, this);
             }
         }, this);
@@ -641,7 +641,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * Leitet einen Event-Listener, der mit on oder once erstellt wurde an ein untergeordnetes kijs.gui.Dom Objekt weiter
      * @param {String} eventName            kijs-Event Name
-     * @param {kijs.gui.Dom} target         Untergeordnetes Objekt, an dieses der Listener weitergeleitet wird
+     * @param {kijs.gui.Dom|kijs.gui.Element} target  Untergeordnetes Objekt, an dieses der Listener weitergeleitet wird
      * @param {String} [targetEventName]    kijs-Event Name im untergeordneten Objekt oder leer bei gleichem Event-Namen
      * @returns {undefined}
      */
@@ -662,7 +662,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * Überprüft, ob eine Eventweiterleitung existiert
      * @param {String} eventName            kijs-Event Name
-     * @param {kijs.gui.Dom} target         Untergeordnetes Objekt, an dieses der Listener weitergeleitet wird
+     * @param {kijs.gui.Dom|kijs.gui.Element} target Untergeordnetes Objekt, an dieses der Listener weitergeleitet wird
      * @param {String} [targetEventName]    kijs-Event Name im untergeordneten Objekt oder leer bei gleichem Event-Namen
      * @returns {Boolean}
      */
@@ -687,7 +687,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * Entfernt eine Event-Weiterleitung
      * @param {String} eventName            Name des Events, dessen Weiterleitung entfernt werden soll 
-     * @param {kijs.gui.Dom} target         Ziel, dessen Weiterleitung entfernt werden soll
+     * @param {kijs.gui.Dom|kijs.gui.Element} target  Ziel, dessen Weiterleitung entfernt werden soll
      * @param {String} [targetEventName]    kijs-Event Name im untergeordneten Objekt oder leer bei gleichem Event-Namen
      * @returns {undefined}
      */
@@ -777,19 +777,20 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     
     // LISTENERS
     /**
-     * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom Objekte
+     * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte
      * Hier werden die Events, die in (this._eventForwards) zum weiterleiten gekennzeichnet sind weitergeleitet
      * @param {Object} e
      * @returns {Boolean}
      */
-    _onDomEvent(e) {
+    _onForwardEvent(e) {
         let ret = true;
 
         // Vorhandene Weiterleitungen durchgehen und bei Übereinstimmung das Event weiterleiten
         kijs.Object.each(this._eventForwards, function(eventName, forwards) {
 
             kijs.Array.each(forwards, function(forward) {
-                if (forward.target === e.context && forward.targetEventName === e.eventName) {
+                const eventContextProperty = forward.target instanceof kijs.gui.Dom ? 'context' : 'element';
+                if (forward.target === e[eventContextProperty] && forward.targetEventName === e.eventName) {
                     e.element = this;
                     if (!this.raiseEvent(eventName, e) === false) {
                         ret = false;

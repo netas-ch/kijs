@@ -36,7 +36,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._focusDelay = 300;    // Delay zwischen dem rendern und dem setzen vom Fokus
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
         
-        this._targetX = null;           // Zielelement (kijs.gui.Dom) oder Body (HTMLElement)
+        this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
         
         this._dom.clsAdd('kijs-window');

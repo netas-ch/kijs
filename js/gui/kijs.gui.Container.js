@@ -168,7 +168,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoScroll() { this._innerDom.clsHas('kijs-autoscroll'); }
+    get autoScroll() { return this._innerDom.clsHas('kijs-autoscroll'); }
     set autoScroll(val) {
         if (val) {
             this._innerDom.clsAdd('kijs-autoscroll');

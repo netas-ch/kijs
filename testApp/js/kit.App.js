@@ -315,6 +315,7 @@ kit.App = class kit_App {
                                             captionField: 'Bezeichnung',
                                             iconCharField: 'Icon',
                                             iconColorField: 'Color',
+                                            helpText: 'Hilfe Text!',
                                             data: [
                                                 {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
                                                 {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 

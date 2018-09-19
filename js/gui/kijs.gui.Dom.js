@@ -1074,7 +1074,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
     /**
-     * Listener für alle DOM-Node-Events, der die kijs-Events auslöst.
+     * Listener für alle DOM-Node-Events, der die kijs-Events auslösen.
      * @param {Object} e
      * @returns {Boolean}
      */
