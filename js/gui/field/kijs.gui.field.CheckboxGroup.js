@@ -18,6 +18,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this._iconCharField = null;
         this._iconClsField = null;
         this._iconColorField = null;
+        this._toolTipField = null;
         
         this._checkedIconChar = '&#xf046';          // Radio-Style: '&#xf05d' oder '&#xf111'
         this._checkedIconCls = null;
@@ -51,6 +52,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             iconCharField: true,
             iconClsField: true,
             iconColorField: true,
+            toolTipField: true,
             valueField: true
         });
         
@@ -103,6 +105,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
                 iconChar: this._iconCharField && row[this._iconCharField] ? row[this._iconCharField] : '',
                 iconCls: this._iconClsField && row[this._iconClsField] ? row[this._iconClsField] : '',
                 iconColor: this._iconColorField && row[this._iconColorField] ? row[this._iconColorField] : undefined,
+                toolTip: this._toolTipField && row[this._toolTipField] ? row[this._toolTipField] : '',
                 valueChecked: row[this._valueField],
                 valueUnchecked: null,
                 labelHide: true,

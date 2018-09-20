@@ -444,7 +444,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     
     get toolTip() { return this._toolTip; }
     set toolTip(val) {
-        if (val instanceof kijs.gui.ToolTip) {
+        if (kijs.isEmpty(val)) {
+            if (this._toolTip) {
+                this._toolTip.destruct();
+            }
+            this._toolTip = null;
+            
+        } else if (val instanceof kijs.gui.ToolTip) {
             this._toolTip = val;
             
         } else if (kijs.isObject(val)) {
@@ -479,12 +485,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             } else {
                 this._toolTip = new kijs.gui.ToolTip({ html: val });
             }
-            
-        } else if (kijs.isEmpty(val)) {
-            if (this._toolTip) {
-                this._toolTip.destruct();
-            }
-            this._toolTip = null;
             
         } else {
             throw new Error(`Unkown toolTip format`);

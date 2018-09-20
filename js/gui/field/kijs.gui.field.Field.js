@@ -58,7 +58,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             target: this,
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            openOnInput: false,
+            openOnInput: true,
             style: {
                 padding: '10px'
             },
@@ -495,7 +495,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     _onSpinButtonClick(e) {
         if (this._spinBoxEl) {
             if (this._spinBoxEl.isRendered) {
-                this._spinBoxEl.hide();
+                this._spinBoxEl.close();
             } else {
                 const width = this._inputWrapperDom.width + this._spinIconEl.width;
                 this._spinBoxEl.style.minWidth = width + 'px';

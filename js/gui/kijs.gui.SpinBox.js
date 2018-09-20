@@ -239,14 +239,14 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // LISTENERS
     _onBodyMouseDown(e) {
         if (!this._preventHide) {
-            this.hide();
+            this.close();
         }
         this._preventHide = false;
     }
     
     _onWindowResize(e) {
         if (!this._preventHide) {
-            this.hide();
+            this.close();
         }
         this._preventHide = false;
     }
