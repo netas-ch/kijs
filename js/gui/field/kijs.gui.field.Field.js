@@ -32,7 +32,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             parent: this,
             iconChar: '&#xf0d7',
             cls: 'kijs-icon-spindown',
-            visible: true
+            visible: false
         });
         
         this._errorIconEl = new kijs.gui.Icon({
@@ -53,15 +53,17 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             visible: false
         });
         
-        this._spinBoxEl = new kijs.gui.SpinBox({
+        this._spinBoxEl = null;
+        /*this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
+            openOnInput: false,
             style: {
                 padding: '10px'
             },
             html: 'XXXX<br>XXXX<br><br><br><br>XX<br>XX<br>XXX<br><br>XXX<br>XX<br><br>XXXXXXXX'
-        });
+        });*/
         
         this._maxLength = null;
         this._required = false;
@@ -73,7 +75,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },   // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
-           
+            
             label: { target: 'html', context: this._labelDom },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,

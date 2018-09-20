@@ -495,7 +495,7 @@ kit.App = class kit_App {
                                         }, new kijs.gui.field.Text({
                                             name: 'Feld 3',
                                             label: 'Feld <b>3</b>',
-                                            labelWidth: 110,
+                                            labelWidth: 120,
                                             labelHtmlDisplayType : 'text'
                                         }),{
                                             xtype: 'kijs.gui.field.Combo',
