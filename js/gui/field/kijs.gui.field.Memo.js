@@ -1,4 +1,4 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.field.Memo
@@ -35,6 +35,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);
         this._eventForwardsRemove('escPress', this._dom);
+        
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);

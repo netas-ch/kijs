@@ -25,7 +25,6 @@ function test_4_event() {
             
             this._color = '';
 
-            
             this.on('hupe', function(arg1, arg2){
                 tx.addResult('hup 1! ' + this._color + ' ' + arg1 + ' ' + arg2);
             }, this);
@@ -33,6 +32,10 @@ function test_4_event() {
             this.on('hupe', function(arg1, arg2){
                 tx.addResult('hup 2! ' + this._color + ' ' + arg1 + ' ' + arg2);
             }, this);
+            
+            this.on('hupe', this._onHupe, this);
+            // mehrfache Listener auf gleiche Funktion sollten nur einmal ausgeführt werden
+            this.on('hupe', this._onHupe, this);
             
             this.once('hupe', function(arg1, arg2){
                 tx.addResult('hup once 1! ' + this._color + ' ' + arg1 + ' ' + arg2);
@@ -58,7 +61,11 @@ function test_4_event() {
             this.raiseEvent('hupe', a, b);
         }
         
-
+        _onHupe(arg1, arg2) {
+            tx.addResult('hup function! ' + this._color + ' ' + arg1 + ' ' + arg2);
+        }
+        
+        
 
         // --------------------------------------------------------------
         // DESTRUCTOR
@@ -86,16 +93,16 @@ function test_4_event() {
     let vehicle2 = new kijs.Vehicle('vehicle2');
     vehicle2.color = 'blue';
     
-    tx.addTest(['hup 1! red a1 a2','hup 2! red a1 a2','hup once 1! red a1 a2','hup once 2! red a1 a2'], 'Event Test');
+    tx.addTest(['hup 1! red a1 a2','hup 2! red a1 a2','hup function! red a1 a2','hup once 1! red a1 a2','hup once 2! red a1 a2'], 'Event Test');
     vehicle.hupe('a1', 'a2');
 
-    tx.addTest(['hup 1! red b1 b2','hup 2! red b1 b2'], 'Event Test');
+    tx.addTest(['hup 1! red b1 b2','hup 2! red b1 b2','hup function! red b1 b2'], 'Event Test');
     vehicle.hupe('b1', 'b2');
     
-    tx.addTest(['hup 1! blue a1 a2','hup 2! blue a1 a2','hup once 1! blue a1 a2','hup once 2! blue a1 a2'], 'Event Test');
+    tx.addTest(['hup 1! blue a1 a2','hup 2! blue a1 a2','hup function! blue a1 a2','hup once 1! blue a1 a2','hup once 2! blue a1 a2'], 'Event Test');
     vehicle2.hupe('a1', 'a2');
 
-    tx.addTest(['hup 1! blue b1 b2','hup 2! blue b1 b2'], 'Event Test');
+    tx.addTest(['hup 1! blue b1 b2','hup 2! blue b1 b2','hup function! blue b1 b2'], 'Event Test');
     vehicle2.hupe('b1', 'b2');
     
     

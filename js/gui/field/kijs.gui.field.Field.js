@@ -108,6 +108,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Listeners
         this._spinIconEl.on('click', this._onSpinButtonClick, this);
         
+        //this.on('keyDown', function() { console.log('keyDown Field'); }, this);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);

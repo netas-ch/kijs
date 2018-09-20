@@ -218,16 +218,20 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('dragLeave', this._dom);
         this._eventForwardsAdd('dragEnd', this._dom);
         this._eventForwardsAdd('drop', this._dom);
-        this._eventForwardsAdd('enterPress', this._dom);
-        this._eventForwardsAdd('enterEscPress', this._dom);
-        this._eventForwardsAdd('escPress', this._dom);
-        this._eventForwardsAdd('spacePress', this._dom);
         this._eventForwardsAdd('focus', this._dom);
-        this._eventForwardsAdd('keyDown', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);
         this._eventForwardsAdd('mouseLeafe', this._dom);
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
+        this._eventForwardsAdd('wheel', this._dom);
+        
+        // key events
+        this._eventForwardsAdd('keyDown', this._dom);
+        this._eventForwardsAdd('enterPress', this._dom);
+        this._eventForwardsAdd('enterEscPress', this._dom);
+        this._eventForwardsAdd('escPress', this._dom);
+        this._eventForwardsAdd('spacePress', this._dom);
+        
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -652,10 +656,22 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         
         if (!this._eventForwardsHas(eventName, target, targetEventName)) {
             this._eventForwards[eventName] = this._eventForwards[eventName] || [];
-            this._eventForwards[eventName].push({
+            const forward = {
                 target: target,
                 targetEventName: targetEventName
-            });
+            };
+            
+            this._eventForwards[eventName].push(forward);
+            
+            /*// Bei kijs.gui.Element-Targets, wird der Forward-Listener sofort erstellt, 
+            // weil sonst, wenn der Listener vor dem _eventForwardsAdd gemacht wird, nicht funktioniert.
+            // Da dieser Vorfall bei kijs.gui.Dom nicht auftreten kann, können wir dort den Listener erst bei einer
+            // Verwendung erstellen.
+            //console.log(forward.target);
+            if (forward.target instanceof kijs.gui.Element) {
+                console.log('test');
+                forward.target.on(forward.targetEventName, this._onForwardEvent, this);
+            }*/
         }
     }
     
@@ -784,7 +800,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      */
     _onForwardEvent(e) {
         let ret = true;
-
+        
         // Vorhandene Weiterleitungen durchgehen und bei Übereinstimmung das Event weiterleiten
         kijs.Object.each(this._eventForwards, function(eventName, forwards) {
 

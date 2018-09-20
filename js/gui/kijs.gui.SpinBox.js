@@ -27,10 +27,14 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         
         this._ownerNodes = [this._dom]; // Events auf diesen kijs.gui.Dom oder HTMLNodes werden ignoriert, die SpinBox wird nicht geschlossen
         
+        this._openOnInput = true;   // Soll beim Texteingeben in Inputfield die SpinBox automatisch geöffnet werden?
+        
         this._preventHide = false;  // das Ausblenden der SpinBox verhindern
         
-        this._targetX = null;               // Zielelement (kijs.gui.Element)
+        this._targetEl = null;              // Zielelement (kijs.gui.Element)
         this._targetDomProperty = 'dom';    // Dom-Eigenschaft im Zielelement (String)
+        
+        //this._dom.nodeAttributeSet('tabIndex', -1);
         
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-spinbox');
@@ -48,11 +52,15 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             offsetX: true,
             offsetY: true,
             ownPos: true,
+            openOnInput: true,
             targetPos: true,
             target: { target: 'target' },
             targetDomProperty: true,
             ownerNodes: { fn: 'appendUnique', target: '_ownerNodes' }
         });
+        
+        // Listeners
+        this.on('wheel', this._onWheel, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -85,19 +93,25 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
     
+    get openOnInput() { return this._openOnInput; }
+    set openOnInput(val) { this._openOnInput = val; }
+    
     get target() {
-        return this._targetX;
+        return this._targetEl;
     }
     set target(val) {
-        // Evtl. Listeners vom alten _targetX entfernen
-        if (!kijs.isEmpty(this._targetX)) {
-            this._targetX.off('destruct', this._onTargetElDestruct, this);
+        // Evtl. Listeners vom alten _targetEl entfernen
+        if (!kijs.isEmpty(this._targetEl)) {
+            this._targetEl.off('input', this._onTargetElInput, this);
+            this._targetEl.off('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.off('destruct', this._onTargetElDestruct, this);
         }
         
         if (val instanceof kijs.gui.Element) {
-            this._targetX = val;
-            
-            this._targetX.on('destruct', this._onTargetElDestruct, this);
+            this._targetEl = val;
+            this._targetEl.on('input', this._onTargetElInput, this);
+            this._targetEl.on('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.on('destruct', this._onTargetElDestruct, this);
             
         } else {
             throw new Error(`Unkown format on config "target"`);
@@ -113,7 +127,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {HTMLElement}
      */
     get targetNode() {
-        return this._targetX[this._targetDomProperty].node;
+        return this._targetEl[this._targetDomProperty].node;
     }
 
 
@@ -130,24 +144,22 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    hide() {
+    close() {
         kijs.Dom.removeEventListener('mousedown', document.body, this);
         kijs.Dom.removeEventListener('resize', window, this);
         kijs.Dom.removeEventListener('wheel', window, this);
-        kijs.Dom.removeEventListener('keydown', document.body, this);
         
         kijs.Array.each(this._ownerNodes, function(x) {
             const node = x instanceof kijs.gui.Dom ? x.node : x;
             kijs.Dom.removeEventListener('mousedown', node, this);
             kijs.Dom.removeEventListener('resize', node, this);
-            kijs.Dom.removeEventListener('wheel', node, this);
         }, this);
         
         this.unRender();
     }
     
     /**
-     * Zeigt das Fenster an 
+     * Zeigt die SpinBox an 
      * @returns {undefined}
      */
     show() {
@@ -160,23 +172,18 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
         
-        this.focus();
+        this._targetEl.focus();
         
         // Listeners auf body/window zum ausblenden
         kijs.Dom.addEventListener('mousedown', document.body, this._onBodyMouseDown, this);
         kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
         kijs.Dom.addEventListener('wheel', window, this._onWindowWheel, this);
         
-        // Zusätzlich werden noch die keyDown-Events des body abgefragt,
-        // damit beim navigieren per Tastatur auch ein- und ausgeblendet werden kann.
-        kijs.Dom.addEventListener('keydown', document.body, this._onBodyKeyDown, this);
-
         // Listeners auf die _ownerNodes die das Ausblenden verhindern
         kijs.Array.each(this._ownerNodes, function(x) {
             const node = x instanceof kijs.gui.Dom ? x.node : x;
             kijs.Dom.addEventListener('mousedown', node, this._onNodeMouseDown, this);
             kijs.Dom.addEventListener('resize', node, this._onNodeResize, this);
-            kijs.Dom.addEventListener('wheel', node, this._onNodeWheel, this);
         }, this);
     }
 
@@ -237,10 +244,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._preventHide = false;
     }
     
-    _onTargetElDestruct(e) {
-        this.destruct();
-    }
-    
     _onWindowResize(e) {
         if (!this._preventHide) {
             this.hide();
@@ -250,7 +253,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     
     _onWindowWheel(e) {
         if (!this._preventHide) {
-            this.hide();
+            this.close();
         }
         this._preventHide = false;
     }
@@ -266,17 +269,37 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._preventHide = true;
     }
     
-    _onNodeWheel(e) {
+    _onWheel(e) {
         this._preventHide = true;
     }
     
-    _onBodyKeyDown(e) {
+    _onTargetElInput(e) {
+        if (this._openOnInput && !this.isRendered) {
+            this.show();
+        }
+    }
+    
+    _onTargetElKeyDown(e) {
         switch (e.nodeEvent.keyCode) {
+            case kijs.keys.ESC:
             case kijs.keys.TAB:
-                this.hide();
+                this.close();
+                break;
+                
+            case kijs.keys.F4:
+                if (this.isRendered) {
+                    this.close();
+                } else {
+                    this.show();
+                }
                 break;
         }
     }
+    
+    _onTargetElDestruct(e) {
+        this.destruct();
+    }
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -288,14 +311,14 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
         
         // Event-Listeners entfernen
-        if (this._targetX) {
-            this._targetX.off(null, null, this);
+        if (this._targetEl) {
+            this._targetEl.off(null, null, this);
         }
         
         kijs.Dom.removeEventListener('mousedown', document.body, this);
         kijs.Dom.removeEventListener('resize', window, this);
         kijs.Dom.removeEventListener('wheel', window, this);
-        kijs.Dom.removeEventListener('keydown', document.body, this);
+        
 
         if (!kijs.isEmpty(this._ownerNodes)) {
             kijs.Array.each(this._ownerNodes, function(x) {
@@ -304,7 +327,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                     if (node) {
                         kijs.Dom.removeEventListener('mousedown', node, this);
                         kijs.Dom.removeEventListener('resize', node, this);
-                        kijs.Dom.removeEventListener('wheel', node, this);
                     }
                 }
             }, this);
@@ -314,7 +336,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         
         
         // Variablen (Objekte/Arrays) leeren
-        this._targetX = null;
+        this._targetEl = null;
         this._ownerNodes = null;
         
         // Basisklasse entladen

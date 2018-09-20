@@ -143,14 +143,18 @@ kijs.Observable = class kijs_Observable {
         names = kijs.isArray(names) ? names : [names];
         
         kijs.Array.each(names, function(name) {
-            if (!this._events[name]) {
-                this._events[name] = [];
+            // Falls der Listener noch nicht existiert: einfügen
+            if (!this.hasListener(name, callback, context)) {
+                if (!this._events[name]) {
+                    this._events[name] = [];
+                }
+                
+                this._events[name].push({
+                    callback: callback, 
+                    context: context
+                });
             }
-
-            this._events[name].push({
-                callback: callback, 
-                context: context
-            });
+            
         }, this);
     }
 

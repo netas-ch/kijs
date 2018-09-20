@@ -207,6 +207,23 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             blur: { nodeEventName: 'blur', useCapture: false },
             click: { nodeEventName: 'click', useCapture: false },
             dblClick: { nodeEventName: 'dblclick', useCapture: false },
+            drag: { nodeEventName: 'drag', useCapture: false },
+            dragOver: { nodeEventName: 'dragover', useCapture: false },
+            dragStart: { nodeEventName: 'dragstart', useCapture: false },
+            dragLeave: { nodeEventName: 'dragleave', useCapture: false },
+            dragEnd: { nodeEventName: 'dragend', useCapture: false },
+            drop: { nodeEventName: 'drop', useCapture: false },
+            focus: { nodeEventName: 'focus', useCapture: false },
+            mouseDown: { nodeEventName: 'mousedown', useCapture: false },
+            mouseLeave: { nodeEventName: 'mouseleave', useCapture: false },
+            mouseMove: { nodeEventName: 'mousemove', useCapture: false },
+            mouseUp: { nodeEventName: 'mouseup', useCapture: false },
+            wheel: { nodeEventName: 'wheel', useCapture: false },
+            
+            // key events
+            input: { nodeEventName: 'input', useCapture: false },
+            keyDown: { nodeEventName: 'keydown', useCapture: false },
+            keyUp: { nodeEventName: 'keyup', useCapture: false },
             enterPress: { 
                 nodeEventName: 'keydown',       // Node-Event Name
                 keys: [kijs.keys.ENTER],        // Bei welchen Tasten soll das Event ausgelöst werden?
@@ -238,21 +255,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
-            },
-            focus: { nodeEventName: 'focus', useCapture: false },
-            keyDown: { nodeEventName: 'keydown', useCapture: false },
-            keyUp: { nodeEventName: 'keyup', useCapture: false },
-            mouseDown: { nodeEventName: 'mousedown', useCapture: false },
-            mouseLeave: { nodeEventName: 'mouseleave', useCapture: false },
-            mouseMove: { nodeEventName: 'mousemove', useCapture: false },
-            mouseUp: { nodeEventName: 'mouseup', useCapture: false },
-            drag: { nodeEventName: 'drag', useCapture: false },
-            dragOver: { nodeEventName: 'dragover', useCapture: false },
-            dragStart: { nodeEventName: 'dragstart', useCapture: false },
-            dragLeave: { nodeEventName: 'dragleave', useCapture: false },
-            dragEnd: { nodeEventName: 'dragend', useCapture: false },
-            drop: { nodeEventName: 'drop', useCapture: false },
-            input: { nodeEventName: 'input', useCapture: false }
+            }
         };
         
         // Config anwenden
@@ -811,7 +814,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     /**
      * Setzt den Fokus auf den Node
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
-     *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
+     *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|Null}                     HTML-Node, das den Fokus erhalten hat
@@ -1044,7 +1047,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
     /**
-     * Erstellt oder entfernt Listeners auf den DOM-Node aufgrund 
+     * Erstellt oder entfernt Listeners auf den DOM-Node aufgrund der _events
      * @returns {undefined}
      */
     _nodeEventListenersAppy() {
@@ -1085,7 +1088,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      */
     _onNodeEvent(e) {
         let ret = true;
-            
+
         // kijs-Events ermitteln, die aufgrund des DOM-Node-Events ausgelöst werden sollen
         kijs.Object.each(this._eventMap, function(eventName, val) {
             // Eventname und useCapture muss übereinstimmen
