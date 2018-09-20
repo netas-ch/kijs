@@ -24,7 +24,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._value = null;
         
         this._inputDom = new kijs.gui.Dom({
-            disableEnterEscBubbeling: true,
+            disableEscBubbeling: true,
             nodeTagName: 'select',
             nodeAttribute: {
                 id: this._inputId

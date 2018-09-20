@@ -12,7 +12,8 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         super(false);
         
         this._inputDom = new kijs.gui.Dom({
-            disableEnterEscBubbeling: true,
+            disableEnterBubbeling: true,
+            disableEscBubbeling: true,
             nodeTagName: 'textarea',
             nodeAttribute: {
                 id: this._inputId

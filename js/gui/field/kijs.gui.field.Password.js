@@ -13,7 +13,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         super(false);
         
         this._inputDom = new kijs.gui.Dom({
-            disableEnterEscBubbeling: true,
+            disableEscBubbeling: true,
             nodeTagName: 'password',
             nodeAttribute: {
                 id: this._inputId
