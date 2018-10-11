@@ -909,18 +909,94 @@ div.kijs-dataview {
         > div > .value {
             display: inline-block;
         }
-    }
-    
-    .kijs-dataviewelement.kijs-selected {
-        border-color: @blue-bkgrnd-color;
-    }
         
+        &.kijs-selected {
+            border-color: @blue-bkgrnd-color;
+        }
+    }
 }
 
 .kijs-dragover {
     background-color: @drag-over-color !important;
 }
 
+
+/* ******************
+   * ListView
+   ****************** */
+div.kijs-listview {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid @border-greyaaa-color;
+    
+    > .kijs-container-inner {
+        overflow-y: auto;
+    }
+    .kijs-dataviewelement {
+        border: 1px solid @panel-bkgrnd-color;
+        padding: 1px 4px 1px 4px;
+        
+        &.kijs-selected {
+            border-color: @blue-bkgrnd-color;
+        }
+        
+        &.kijs-display-checkboxes {
+            border-color: @panel-bkgrnd-color;
+            
+            &:before {
+                font: normal normal normal 18px/1 FontAwesome;
+                content: '\f096';
+                margin-right: 4px;
+            }
+            
+            &.kijs-selected:before {
+                content: '\f046';
+            }
+        }
+        
+        &.kijs-display-options {
+            border-color: @panel-bkgrnd-color;
+            
+            &:before {
+                font: normal normal normal 18px/1 FontAwesome;
+                content: '\f10c';
+                margin-right: 4px;
+            }
+            
+            &.kijs-selected:before {
+                content: '\f05d';
+            }
+        }
+        
+        > .kijs-icon {
+            margin-right: 4px;
+        }
+        
+        > .kijs-caption {
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 15px;
+            color: @font-black-color;
+        }
+        
+        &:focus,
+        &:hover {
+            background-color: @viewport-bkgrnd-color;
+        }
+        
+        > div > .label {
+            display: inline-block;
+            width: 50px;
+            font-size: 10px;
+            color: @font-grey888-color;
+        }
+
+        > div > .value {
+            display: inline-block;
+        }
+    }
+}
 
 
 
@@ -1316,11 +1392,47 @@ div.kijs-field-memo {
 }
 
 
-
 /* ******************
    * Field Combo
    ****************** */
 div.kijs-field-combo {
+    height: 25px;
+    
+    > .kijs-inputwrapper {
+        > input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 4px;
+            font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+            font-size: 15px;
+            line-height: 17px;
+            
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @error-input-bkgrnd-color;
+        /*border: 1px solid @error-icon-color;*/
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+
+/* ******************
+   * Field Combo_ALT
+   ****************** */
+div.kijs-field-combo_ALT {
     height: 25px;
 
     > .kijs-inputwrapper {

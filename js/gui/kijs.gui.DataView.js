@@ -37,7 +37,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad: { target: 'autoLoad' },   // Soll nach dem erten Rendern automatisch die Load-Funktion aufgerufen werden?
+            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
@@ -301,7 +301,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
 
         if (!preventSelectionChange) {
-            this.raiseEvent('selectionchange', elements, this);
+            this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
     }
     
@@ -459,7 +459,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
         
         if (!preventSelectionChange) {
-            this.raiseEvent('selectionchange', [], this);
+            this.raiseEvent('selectionChange', { elements: elements, unSelect: true } );
         }
     }
 

@@ -318,9 +318,9 @@ kit.App = class kit_App {
                                             iconColorField: 'Color',
                                             helpText: 'Hilfe Text!',
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
-                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }, 
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
+                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }
                                             ],
                                             value: [2,3],
                                             on: {
@@ -381,9 +381,9 @@ kit.App = class kit_App {
                                             iconCharField: 'Icon',
                                             iconColorField: 'Color',
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
-                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }, 
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
+                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }
                                             ],
                                             value: 2,
                                             on: {
@@ -497,7 +497,8 @@ kit.App = class kit_App {
                                             name: 'Feld 3',
                                             label: 'Feld <b>3</b>',
                                             labelWidth: 120,
-                                            labelHtmlDisplayType : 'text'
+                                            labelHtmlDisplayType : 'text',
+                                            style: {marginBottom: '4px'}
                                         }),{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Anrede',

@@ -1,9 +1,9 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.field.CheckboxGroup
+// kijs.gui.field.ListView
 // --------------------------------------------------------------
-kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.gui.field.Field {
+kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.Field {
     
 
     // --------------------------------------------------------------
@@ -29,7 +29,24 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this._data = [];
         this._oldValue = [];
         
-        this._dom.clsAdd('kijs-field-checkboxgroup');
+        this._dataView = new kijs.gui.DataView({
+            selectType: 'multi',
+            //rpc: this._rpc,
+            //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
+            //autoLoad: true,
+            //facadeFnLoad: 'dataview.load',
+            waitMaskTargetDomProperty: 'innerDom',
+            style: {
+                flex: 1
+            },
+            innerStyle: {
+                padding: '10px',
+                overflowY: 'auto'
+            }
+        });
+        
+        
+        this._dom.clsAdd('kijs-field-ListView');
        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -44,7 +61,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             uncheckedIconChar: true,
             uncheckedIconCls: true,
 
-            data: { target: 'data' },
+            data: { target: 'data', context: this._dataView },
             facadeFnLoad: true,             // Name der Facade-Funktion. Bsp: 'address.load'
             rpc: { target: 'rpc' },         // Instanz von kijs.gui.Rpc
             
@@ -82,48 +99,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
 
     get valueField() { return this._valueField; }
     set valueField(val) { this._valueField = val; }
-
-    get data() { return this._data; }
-    set data(val) { 
-        this._data = val;
-        
-        // Bestehende Elemente löschen
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.destruct();
-        }, this);
-        this._checkboxElements = [];
-
-        // Neue Elemente einfügen
-        kijs.Array.each(this._data, function(row) {
-            const el = new kijs.gui.field.Checkbox({
-                captionHtmlDisplayType: this._captionHtmlDisplayType,
-                checkedIconChar: this._checkedIconChar,
-                checkedIconCls: this._checkedIconCls,
-                uncheckedIconChar: this._uncheckedIconChar,
-                uncheckedIconCls: this._uncheckedIconCls,
-                caption: this._captionField && row[this._captionField] ? row[this._captionField] : '',
-                iconChar: this._iconCharField && row[this._iconCharField] ? row[this._iconCharField] : '',
-                iconCls: this._iconClsField && row[this._iconClsField] ? row[this._iconClsField] : '',
-                iconColor: this._iconColorField && row[this._iconColorField] ? row[this._iconColorField] : undefined,
-                toolTip: this._toolTipField && row[this._toolTipField] ? row[this._toolTipField] : '',
-                valueChecked: row[this._valueField],
-                valueUnchecked: null,
-                labelHide: true,
-                threeState: false
-            });
-            el.on('input', this._onCheckboxElementInput, this);
-            
-            this._checkboxElements.push(el);
-        }, this);
-
-        this.value = this._value; 
-        
-        if (this._inputWrapperDom.isRendered) {
-            kijs.Array.each(this._checkboxElements, function(el) {
-                el.renderTo(this._inputWrapperDom.node);
-            }, this);
-        }
-    }
 
     // overwrite
     get disabled() { return super.disabled; }
@@ -216,9 +191,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     render(preventAfterRender) {
         super.render(true);
         
-        if (this._data) {
-            this.data = this._data;
-        }
+        this._dataView.renderTo(this._inputWrapperDom.node);
         
         // Event afterRender auslösen
         if (!preventAfterRender) {
