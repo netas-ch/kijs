@@ -11,7 +11,7 @@ function gui_test_5_headerBar() {
     }
 
     let testCont = document.createElement('div');
-    testCont.className = 'testContainer';
+    testCont.className = 'testContainer kijs';
     testCont.innerHTML = '<a class="testContainerCloser" href="javascript:window.location.reload(true)">Reload</a>';
     document.body.appendChild(testCont);
 
@@ -35,10 +35,12 @@ function gui_test_5_headerBar() {
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                iconChar: '&#xf02f'
+                iconChar: '&#xf02f',
+                badgeText: '5'
             },{
                 xtype: 'kijs.gui.Button',
-                iconChar: '&#xf164'
+                iconChar: '&#xf164',
+                badgeText: '6'
             }
         ]
     });

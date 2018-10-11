@@ -11,7 +11,7 @@ function gui_test_4_button() {
     }
 
     let testCont = document.createElement('div');
-    testCont.className = 'testContainer';
+    testCont.className = 'testContainer kijs';
     testCont.innerHTML = '<a class="testContainerCloser" href="javascript:window.location.reload(true)">Reload</a>';
     document.body.appendChild(testCont);
 
@@ -21,6 +21,7 @@ function gui_test_4_button() {
     // --------------------------------------------------------------
     let button = new kijs.gui.Button({
         caption: 'Test Handler Funktion',
+        badgeText: 'Hallo',
         style: { marginRight: '4px'},
         on: {
             click: function() {
@@ -32,6 +33,7 @@ function gui_test_4_button() {
 
     button = new kijs.gui.Button({
         caption: 'Test Context',
+        badgeText: 5,
         style: { marginRight: '4px'},
         on: {
             click: function() {

@@ -146,7 +146,8 @@ kit.App = class kit_App {
                             headerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    iconChar: '&#xf085'
+                                    iconChar: '&#xf085',
+                                    badgeText: '4'
                                 }
                             ],
                             headerElements: [
@@ -632,6 +633,7 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Validieren',
+                                            badgeText: 'test',
                                             toolTip: 'Da darfst Du nicht draufdrücken!',
                                             on: {click: function() {
                                                 this.toolTip = 'Nein, er hat es tatsächlich getan!';
@@ -645,6 +647,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnReadOnly',
                                             caption: 'ReadOnly',
+                                            badgeText: '7',
                                             on: {click: function() {
                                                 kijs.Array.each(this.parent.parent.elements, function(element) {
                                                     if (element instanceof kijs.gui.field.Field) {
@@ -991,7 +994,8 @@ kit.App = class kit_App {
                             footerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    iconChar: '&#xf085'
+                                    iconChar: '&#xf085',
+                                    badgeText: '2'
                                 }
                             ]
 
@@ -1011,10 +1015,11 @@ kit.App = class kit_App {
                                 {
                                     xtype: 'kijs.gui.Button',
                                     iconChar: '&#xf02f',
+                                    badgeText: '5',
                                     on: {
                                         click: function(e, el) {
                                             let editor = el.parent.parent.up('editor');
-                                            console.log(editor.getValue());
+                                            console.log(editor.value);
                                         }
                                     }
                                 }

@@ -19,6 +19,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         
         this._iconEl = new kijs.gui.Icon({ parent: this });
         
+        this._badgeDom = new kijs.gui.Dom({
+            cls: 'kijs-badge',
+            nodeTagName: 'span'
+        });
+        
         this._dom.nodeTagName = 'button';
         this._dom.nodeAttributeSet('type', 'button');
         
@@ -31,6 +36,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            badgeText: { target: 'html', context: this._badgeDom },
+            badgeCls: { fn: 'function', target: this._badgeDom.clsAdd, context: this._badgeDom },
+            badgeTextHtmlDisplayType: { target: 'htmlDisplayType', context: this._badgeDom },
+            badgeStyle: { fn: 'assign', target: 'style', context: this._badgeDom },
             caption: { target: 'html', context: this._captionDom },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
@@ -54,6 +63,19 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get badgeText() { return this._badgeDom.html; }
+    set badgeText(val) { 
+        this._badgeDom.html = val; 
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
+    get badgeDom() { return this._badgeDom; }
+
+    get badgeTextHtmlDisplayType() { return this._badgeDom.htmlDisplayType; }
+    set badgeTextHtmlDisplayType(val) { this._badgeDom.htmlDisplayType = val; }
+    
     get caption() { return this._captionDom.html; }
     set caption(val) { 
         this._captionDom.html = val; 
@@ -149,7 +171,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
     
     // overwrite
-    get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty; }
+    get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._badgeDom.isEmpty; }
     
     
     
@@ -186,6 +208,13 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         } else {
             this._captionDom.unRender();
         }
+        
+        // Div badge rendern (kijs.guiDom)
+        if (!this._badgeDom.isEmpty) {
+            this._badgeDom.renderTo(this._dom.node);
+        } else {
+            this._badgeDom.unRender();
+        }
 
         // Event afterRender auslösen
         if (!preventAfterRender) {
@@ -197,6 +226,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     unRender() {
         this._iconEl.unRender();
         this._captionDom.unRender();
+        this._badgeDom.unRender();
         super.unRender();
     }
     
@@ -211,6 +241,9 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
         
         // Elemente/DOM-Objekte entladen
+        if (this._badgeDom) {
+            this._badgeDom.destruct();
+        }
         if (this._captionDom) {
             this._captionDom.destruct();
         }
@@ -219,6 +252,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     
         // Variablen (Objekte/Arrays) leeren
+        this._badgeDom = null;
         this._captionDom = null;
         this._iconEl = null;
         

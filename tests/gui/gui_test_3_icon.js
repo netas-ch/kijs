@@ -11,7 +11,7 @@ function gui_test_3_icon() {
     }
 
     let testCont = document.createElement('div');
-    testCont.className = 'testContainer';
+    testCont.className = 'testContainer kijs';
     testCont.innerHTML = '<a class="testContainerCloser" href="javascript:window.location.reload(true)">Reload</a>';
     document.body.appendChild(testCont);
 

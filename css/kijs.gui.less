@@ -12,7 +12,7 @@
 @font-white-color: #fff;
 @font-black-color: #000;
 
-@font-grey333olor: #333;
+@font-grey333-color: #333;
 @font-grey555-color: #555;
 @font-grey888-color: #888;
 @font-greyf0f0f0-color: #f0f0f0;
@@ -30,7 +30,7 @@
 @error-icon-bkgrnd-color: #F3E2EB;
 @error-input-bkgrnd-color: #ffdaec;
 
-
+@badge-bkgrnd-color: #ff8800;
 
 @help-icon-color: #6295BE;
 @help-icon-bkgrnd-color: #DCE6EF;
@@ -64,7 +64,7 @@
 /* ******************
    * Allgemein
    ****************** */
-.kijs *, .kijs-viewport, .kijs-viewport * {
+.kijs *, .kijs-viewport, .kijs-viewport *, .kijs-window, .kijs-window * {
     box-sizing: border-box;
     z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
 }
@@ -480,6 +480,7 @@ span.kijs-icon {
    * Button
    ****************** */
 button.kijs-button {
+    position: relative;
     margin: 0 4px;
     border: 0;
     border-radius: 6px;
@@ -499,7 +500,26 @@ button.kijs-button {
     > .kijs-caption {
         font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
         font-size: 15px;
-        color: @font-grey333olor;
+        color: @font-grey333-color;
+    }
+    
+    > .kijs-badge {
+        position: absolute;
+        display: inline-block;
+        top: -2px;
+        right: -2px;
+        height: 14px;
+        min-width: 14px;
+        border-radius: 50%;
+        padding: 2px;
+        font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+        line-height: 10px;
+        font-size: 10px;
+        color: @font-black-color;
+        text-align: center;
+        background-color: @badge-bkgrnd-color;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1;
     }
 
     &:hover,
@@ -509,7 +529,7 @@ button.kijs-button {
     }
     &:hover > *,
     &:focus > * {
-        color: @font-grey333olor;
+        color: @font-grey333-color;
     }
 
     &.kijs-default {
@@ -554,7 +574,7 @@ div.kijs-window {
     }
 
     > .kijs-footer .kijs-button > * {
-        color: @font-grey333olor;
+        color: @font-grey333-color;
     }
 
     > .kijs-footer .kijs-button:hover,
@@ -627,19 +647,36 @@ div.kijs-footerbar {
         padding: 0;
         border: none;
         background-color: transparent;
-    }
-    > .kijs-container-inner > .kijs-button * {
-        line-height: 30px;
-        color: @font-greyf0f0f0-color;
-    }
+        
+        > .kijs-caption, > .kijs-icon {
+            line-height: 30px;
+            color: @font-greyf0f0f0-color;
+        }
+        
+        > .kijs-badge {
+            top: 0px;
+            right: -1px;
+            padding: 2px;
+            font-size: 8px;
+            line-height: 8px;
+        }
+        
+        &:hover,
+        &:focus {
+            > .kijs-caption,
+            > .kijs-icon {
+                color: @font-white-color;
+            }
+        }
+        
+        &.kijs-disabled {
+            cursor: auto;
 
-    > .kijs-container-inner > .kijs-button:hover > *,
-    > .kijs-container-inner > .kijs-button:focus > * {
-        color: @font-white-color;
-    }
-
-    > .kijs-container-inner > .kijs-button.kijs-disabled {
-        cursor: auto;
+            > .kijs-caption,
+            > .kijs-icon{
+                color: @font-greycfcfcf-color;
+            }
+        }
     }
 }
 
@@ -692,26 +729,36 @@ div.kijs-headerbar {
         padding: 0;
         border: none;
         background-color: transparent;
-    }
-    > .kijs-container-inner > .kijs-button * {
-        line-height: 30px;
-    }
+        
+        > .kijs-caption, > .kijs-icon {
+            line-height: 30px;
+            color: @font-greyf0f0f0-color;
+        }
+        
+        > .kijs-badge {
+            top: 0px;
+            right: -3px;
+            padding: 2px;
+            font-size: 8px;
+            line-height: 8px;
+        }
+        
+        &:hover,
+        &:focus {
+            > .kijs-caption,
+            > .kijs-icon {
+                color: @font-white-color;
+            }
+        }
+        
+        &.kijs-disabled {
+            cursor: auto;
 
-
-    > .kijs-container-inner > .kijs-button * {
-        color: @font-greyf0f0f0-color;
-    }
-
-    > .kijs-container-inner > .kijs-button:hover > *,
-    > .kijs-container-inner > .kijs-button:focus > * {
-        color: @font-white-color;
-    }
-
-    > .kijs-container-inner > .kijs-button.kijs-disabled {
-        cursor: auto;
-    }
-    > .kijs-container-inner > .kijs-button.kijs-disabled > * {
-        color: @font-greycfcfcf-color;
+            > .kijs-caption,
+            > .kijs-icon{
+                color: @font-greycfcfcf-color;
+            }
+        }
     }
 }
 
@@ -735,10 +782,15 @@ div.kijs-panel {
 
             > .kijs-container-inner > .kijs-button {
                 margin: 0;
-            }
-
-            > .kijs-container-inner > .kijs-button * {
-                line-height: 22px;
+                
+                > .kijs-caption, > .kijs-icon {
+                    line-height: 22px;
+                }
+                
+                > .kijs-badge {
+                    right: 0px;
+                }
+                
             }
 
             > .kijs-icon {
@@ -795,7 +847,7 @@ div.kijs-buttongroup {
             &:focus {
                 background-color: @lightgrey-bkgrnd-color;
                 > * {
-                    color: @font-grey333olor;
+                    color: @font-grey333-color;
                 }
             }
         }

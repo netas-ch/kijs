@@ -11,7 +11,7 @@ function gui_test_7_panel() {
     }
 
     let testCont = document.createElement('div');
-    testCont.className = 'testContainer';
+    testCont.className = 'testContainer kijs';
     testCont.innerHTML = '<a class="testContainerCloser" href="javascript:window.location.reload(true)">Reload</a>';
     document.body.appendChild(testCont);
 
@@ -48,6 +48,7 @@ function gui_test_7_panel() {
                 xtype: 'kijs.gui.Button',
                 caption: 'Hide',
                 iconCls: 'icoWizard16',
+                badgeText: '1',
                 toolTip: { html: '<p>Test</p>', followPointer: false },
                 on: {
                     click: function() {
@@ -59,7 +60,8 @@ function gui_test_7_panel() {
                 iconChar: '&#xf02f'
             },{
                 xtype: 'kijs.gui.Button',
-                iconChar: '&#xf164'
+                iconChar: '&#xf164',
+                badgeText: '2'
             }
         ],
         
@@ -68,6 +70,7 @@ function gui_test_7_panel() {
                 xtype: 'kijs.gui.Button',
                 iconCls: 'icoWizard16',
                 caption: 'Toggle Text',
+                badgeText: '1',
                 on: {
                     click: function() {
                         if (this.caption === 'Text A') {
@@ -88,6 +91,7 @@ function gui_test_7_panel() {
             },{
                 xtype: 'kijs.gui.Button',
                 caption: 'remove WaitMask',
+                badgeText: '2',
                 on: {
                     click: function() {
                         this.upX('kijs.gui.Panel').downX('kijs.gui.Container').waitMaskRemove();
@@ -177,6 +181,7 @@ function gui_test_7_panel() {
                 xtype: 'kijs.gui.Button',
                 caption: 'OK',
                 iconChar: '&#xf00c',
+                badgeText: '1',
                 isDefault: true,
                 on: {
                     click: function(e) {
@@ -188,6 +193,7 @@ function gui_test_7_panel() {
                 xtype: 'kijs.gui.Button',
                 caption: 'Abbrechen',
                 iconChar: '&#xf00d',
+                badgeText: '2',
                 on: {
                     click: function(e) {
                         console.log('Abbrechen click');
@@ -210,10 +216,12 @@ function gui_test_7_panel() {
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                iconChar: '&#xf02f'
+                iconChar: '&#xf02f',
+                badgeText: '1'
             },{
                 xtype: 'kijs.gui.Button',
-                iconChar: '&#xf164'
+                iconChar: '&#xf164',
+                badgeText: '2'
             }
         ]
     });
