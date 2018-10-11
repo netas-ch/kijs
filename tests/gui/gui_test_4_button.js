@@ -60,6 +60,7 @@ function gui_test_4_button() {
     
     button = new kijs.gui.Button({
         caption: 'Disabled',
+        badgeText: '4',
         toolTip: 'click to disable',
         style: { marginRight: '4px'},
         on: {

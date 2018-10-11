@@ -30,7 +30,8 @@
 @error-icon-bkgrnd-color: #F3E2EB;
 @error-input-bkgrnd-color: #ffdaec;
 
-@badge-bkgrnd-color: #ff8800;
+@badge-bkgrnd-color: #f4aa56;
+@badge-bkgrnd-disabled-color: #bdbcbc;
 
 @help-icon-color: #6295BE;
 @help-icon-bkgrnd-color: #DCE6EF;
@@ -540,9 +541,16 @@ button.kijs-button {
         border: 1px solid @viewport-bkgrnd-color;
         background-color: @viewport-bkgrnd-color;
         cursor: auto;
-    }
-    &.kijs-disabled > * {
-        color: @font-grey888-color;
+        
+        > .kijs-caption,
+        > .kijs-icon {
+            color: @font-grey888-color;
+        }
+        
+        > .kijs-badge {
+            background-color: @badge-bkgrnd-disabled-color;
+            color: @font-grey888-color;
+        }
     }
 }
 
