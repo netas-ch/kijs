@@ -33,7 +33,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._modalMaskEl = null;
         
         this._draggable = false;
-        this._focusDelay = 300;    // Delay zwischen dem rendern und dem setzen vom Fokus
+        //this._focusDelay = 300;    // Delay zwischen dem rendern und dem setzen vom Fokus
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
         
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
@@ -56,7 +56,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             draggable: { target: 'draggable' },
-            focusDelay: true,
+            //focusDelay: true,
             modal: { target: 'modal' },     // Soll das Fenster modal geöffnet werden (alles Andere wird mit einer halbtransparenten Maske verdeckt)?
             resizeDelay: true,
             target: { target: 'target' },
@@ -88,8 +88,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._draggable = !!val;
     }
     
-    get focusDelay() { return this._focusDelay; }
-    set focusDelay(val) { this._focusDelay = val; }
+    //get focusDelay() { return this._focusDelay; }
+    //set focusDelay(val) { this._focusDelay = val; }
     
     get modal() { return !kijs.isEmpty(this._modalMaskEl); }
     set modal(val) { 
@@ -262,7 +262,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._raiseAfterResizeEvent(true);
         
         this.toFront();
-        this.focus();
     }
     
     toFront() {

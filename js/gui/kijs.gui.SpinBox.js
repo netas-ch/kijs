@@ -22,6 +22,13 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         
         this._allowSwapX = true;    // Swappen möglich auf X-Achse?
         this._allowSwapY = true;    // Swappen möglich auf Y-Achse?
+        
+        this._autoSize = 'min';     // Grösse (ja nach Pos die Breite oder Höhe) an das targetEl anpassen. 
+                                    // Werte: 'min' Grösse ist mind. wie beim targetEl
+                                    //        'max' Grösse ist höchstens wie beim targetEl
+                                    //        'fit' Grösse ist gleich wie beim targetEl
+                                    //        'none' Grösse wird nicht angepasst
+        
         this._offsetX = 0;           // Verschiebung aus dem Ankerpunkt auf der X-Achse
         this._offsetY = 0;           // Verschiebung aus dem Ankerpunkt auf der Y-Achse
         
@@ -49,6 +56,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         Object.assign(this._configMap, {
             allowSwapX: true,
             allowSwapY: true,
+            autoSize: { target: 'autoSize' },
             offsetX: true,
             offsetY: true,
             ownPos: true,
@@ -78,6 +86,15 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     get allowSwapY() { return this._allowSwapY; }
     set allowSwapY(val) { this._allowSwapY = !!val; }
 
+    get autoSize() { return this._autoSize; }
+    set autoSize(val) {
+        if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
+            this._autoSize = val;
+        } else {
+            throw new Error(`Unkown format on config "autoSize"`);
+        }
+    }
+    
     get offsetX() { return this._offsetX; }
     set offsetX(val) { this._offsetX = val; }
 
@@ -198,6 +215,30 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // afterResize-Event deaktivieren
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
+        
+        // Evtl. Grösse automatisch anpassen
+        if (this._autoSize !== 'none') {
+            // Breite anpassen
+            if ( (this._targetPos.indexOf('t') !== -1 || this._targetPos.indexOf('b') !== -1) && 
+                    (this._ownPos.indexOf('t') !== -1 || this._ownPos.indexOf('b') !== -1) ) {
+                const width = this._targetEl.spinBoxWidth;
+                switch (this._autoSize) {
+                    case 'min': this.style.minWidth = width + 'px'; break;
+                    case 'max': this.style.maxWidth = width + 'px'; break;
+                    case 'fit': this.style.width = width + 'px'; break;
+                }
+                
+            // Höhe anpassen
+            } else if ( (this._targetPos.indexOf('l') !== -1 || this._targetPos.indexOf('r') !== -1) && 
+                    (this._ownPos.indexOf('l') !== -1 || this._ownPos.indexOf('r') !== -1) ) {
+                let height = this._targetEl.spinBoxHeight;
+                switch (this._autoSize) {
+                    case 'min': this.style.minHeight = height + 'px'; break;
+                    case 'max': this.style.maxHeight = height + 'px'; break;
+                    case 'fit': this.style.height = height + 'px'; break;
+                }
+            }
+        }
         
         // Aurichten
         const positions = this._dom.alignToTarget(

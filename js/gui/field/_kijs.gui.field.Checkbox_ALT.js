@@ -17,7 +17,6 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._valueUnchecked = false;
     
         this._inputDom = new kijs.gui.Dom({
-            disableEnterEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId,

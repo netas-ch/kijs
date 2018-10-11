@@ -189,7 +189,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._configMap = {
             afterResizeDelay: true,
             cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
-            disableEnterEscBubbeling: { target: 'disableEnterEscBubbeling', context: this._dom },
+            disableEnterBubbeling: { target: 'disableEnterBubbeling', context: this._dom },
+            disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },
             nodeTagName: { target: 'nodeTagName', context: this._dom },
             defaults: { fn: 'manual' }, // wird nur bei containern gebraucht
             height: { target: 'height' },
@@ -808,7 +809,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 const eventContextProperty = forward.target instanceof kijs.gui.Dom ? 'context' : 'element';
                 if (forward.target === e[eventContextProperty] && forward.targetEventName === e.eventName) {
                     e.element = this;
-                    if (!this.raiseEvent(eventName, e) === false) {
+                    if (this.raiseEvent(eventName, e) === false) {
                         ret = false;
                     }
                 }

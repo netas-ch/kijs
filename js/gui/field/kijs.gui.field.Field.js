@@ -296,6 +296,25 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
     
+    /**
+     * Berechnet die Höhe für die spinBox
+     * @returns {Number}
+     */
+    get spinBoxHeight() {
+        return this._inputWrapperDom.height;
+    }
+    
+    /**
+     * Berechnet die Breite für die spinBox
+     * @returns {Number}
+     */
+    get spinBoxWidth() {
+        let width = this._inputWrapperDom.width;
+        if (this._spinIconEl.visible) {
+            width += this._spinIconEl.width;
+        }
+        return width;
+    }
     
     get spinIcon() { return this._spinIconEl; }
     /**
@@ -497,8 +516,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             if (this._spinBoxEl.isRendered) {
                 this._spinBoxEl.close();
             } else {
-                const width = this._inputWrapperDom.width + this._spinIconEl.width;
-                this._spinBoxEl.style.minWidth = width + 'px';
                 this._spinBoxEl.show();
             }
         }

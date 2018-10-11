@@ -13,7 +13,9 @@
  * 
  * disabled     Boolean
  * 
- * disableEnterEscBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Enter und Escape
+ * disableEnterBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Enter
+ *
+ * disableEscBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Escape
  *
  * eventMap     Object [optional]
  * 
@@ -118,7 +120,8 @@
  * EIGENSCHAFTEN
  * -------------
  * disabled
- * disableEnterEscBubbeling
+ * disableEnterBubbeling
+ * disableEscBubbeling
  * height
  * html
  * htmlDisplayType
@@ -141,7 +144,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         super();
         
         this._cls = [];
-        this._disableEnterEscBubbeling = false;
+        this._disableEnterBubbeling = false;
+        this._disableEscBubbeling = false;
         this._html = undefined;
         this._htmlDisplayType = 'html', // Darstellung der Eigenschaft 'html'. Default: 'html'
                                         // html: als html-Inhalt (innerHtml)
@@ -187,7 +191,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._configMap = {
             cls: { fn: 'function', target: this.clsAdd },
             disabled: true,
-            disableEnterEscBubbeling: { target: 'disableEnterEscBubbeling' },
+            disableEnterBubbeling: { target: 'disableEnterBubbeling' },
+            disableEscBubbeling: { target: 'disableEscBubbeling' },
             eventMap: { fn: 'assign' },
             html: true,
             htmlDisplayType: true,
@@ -287,16 +292,30 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
     /**
-     * Stoppt das Bubbeling der KeyDown-Events von Enter und Escape
+     * Stoppt das Bubbeling der KeyDown-Events von Enter
      * @returns {Boolean}
      */
-    get disableEnterEscBubbeling() { return this._disableEnterEscBubbeling;  }
-    set disableEnterEscBubbeling(val) {
-        this._disableEnterEscBubbeling = val;
+    get disableEnterBubbeling() { return this._disableEnterBubbeling;  }
+    set disableEnterBubbeling(val) {
+        this._disableEnterBubbeling = val;
         if (val) {
-            this.on('enterEscPress', this._onEnterEscPress, this);
+            this.on('enterPress', this._onKeyPressStopBubbeling, this);
         } else {
-            this.off('enterEscPress', this._onEnterEscPress, this);
+            this.off('enterPress', this._onKeyPressStopBubbeling, this);
+        }
+    }
+    
+    /**
+     * Stoppt das Bubbeling der KeyDown-Events von Escape
+     * @returns {Boolean}
+     */
+    get disableEscBubbeling() { return this._disableEscBubbeling;  }
+    set disableEscBubbeling(val) {
+        this._disableEscBubbeling = val;
+        if (val) {
+            this.on('escPress', this._onKeyPressStopBubbeling, this);
+        } else {
+            this.off('escPress', this._onKeyPressStopBubbeling, this);
         }
     }
 
@@ -1077,7 +1096,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     
     
     // LISTENERS
-    _onEnterEscPress(e) {
+    _onKeyPressStopBubbeling(e) {
         e.nodeEvent.stopPropagation();
     }
     
