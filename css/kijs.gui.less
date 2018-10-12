@@ -7,6 +7,8 @@
 
 
 @blue-bkgrnd-color: #4398dd;
+@lightblue-bkgrnd-color: #d9ecfc;
+
 @panel-bkgrnd-color: #fff;
 
 @font-white-color: #fff;
@@ -912,6 +914,22 @@ div.kijs-dataview {
         
         &.kijs-selected {
             border-color: @blue-bkgrnd-color;
+            background-color: @lightblue-bkgrnd-color;
+        }
+    }
+    
+    &.kijs-disabled {
+        background-color: @input-disabled-bkgrnd-color;
+        
+        .kijs-dataviewelement {
+            &:focus,
+            &:hover {
+                background-color: @input-disabled-bkgrnd-color;
+            }
+        
+            &.kijs-selected {
+                border-color: @border-greyaaa-color;
+            }
         }
     }
 }
@@ -934,19 +952,31 @@ div.kijs-listview {
         overflow-y: auto;
     }
     .kijs-dataviewelement {
-        border: 1px solid @panel-bkgrnd-color;
+        border: 1px solid transparent;
         padding: 1px 4px 1px 4px;
+        white-space: nowrap;
+        overflow-x: hidden;
         
+        &:focus,
+        &:hover {
+            background-color: @viewport-bkgrnd-color;
+        }
+
         &.kijs-selected {
             border-color: @blue-bkgrnd-color;
+            &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                background-color: @lightblue-bkgrnd-color;
+            } 
         }
         
         &.kijs-display-checkboxes {
-            border-color: @panel-bkgrnd-color;
+            border-color: transparent;
             
             &:before {
+                display: inline-block;
                 font: normal normal normal 18px/1 FontAwesome;
                 content: '\f096';
+                min-width: 16px;
                 margin-right: 4px;
             }
             
@@ -956,11 +986,13 @@ div.kijs-listview {
         }
         
         &.kijs-display-options {
-            border-color: @panel-bkgrnd-color;
+            border-color: transparent;
             
             &:before {
+                display: inline-block;
                 font: normal normal normal 18px/1 FontAwesome;
                 content: '\f10c';
+                min-width: 16px;
                 margin-right: 4px;
             }
             
@@ -980,11 +1012,6 @@ div.kijs-listview {
             color: @font-black-color;
         }
         
-        &:focus,
-        &:hover {
-            background-color: @viewport-bkgrnd-color;
-        }
-        
         > div > .label {
             display: inline-block;
             width: 50px;
@@ -994,6 +1021,19 @@ div.kijs-listview {
 
         > div > .value {
             display: inline-block;
+        }
+    }
+    
+    &.kijs-disabled {
+        background-color: @input-disabled-bkgrnd-color;
+        
+        div.kijs-dataviewelement {
+            background-color: transparent;
+        
+            &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                border-color: @border-greyaaa-color;
+                background-color: transparent;
+            }
         }
     }
 }
@@ -1390,6 +1430,36 @@ div.kijs-field-memo {
         }
     }
 }
+
+
+
+/* ******************
+   * Field ListView
+   ****************** */
+div.kijs-field-listview {
+    
+    > .kijs-inputwrapper {
+        > .kijs-listview {
+            height: 100%;
+            
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
+        border: 1px solid @error-icon-color;
+    }
+    
+    &.kijs-disabled,
+    &.kijs-readonly {
+        > .kijs-inputwrapper > .kijs-listview {
+            border-color: @border-greyaaa-color;
+        }
+    }
+}
+
 
 
 /* ******************

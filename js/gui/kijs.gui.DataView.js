@@ -39,6 +39,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
+            disabled: { target: 'disabled'},
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
             selectType: true            // 'none': Es kann nichts selektiert werden
@@ -170,6 +171,20 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = !kijs.isEmpty(this._elements) ? this._elements[0] : null;
     }
     
+    get disabled() { return this._dom.clsHas('kijs-disabled'); }
+    set disabled(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-disabled');
+        } else {
+            this._dom.clsRemove('kijs-disabled');
+        }
+        
+        // Elements auch aktivieren/deaktivieren
+        kijs.Array.each(this._elements, function(el) {
+            el.disabled = !!val;
+        }, this);
+    }
+
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
@@ -272,6 +287,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             if (!kijs.isEmpty(response.selectFilters)) {
                 this.selectByFilters(response.selectFilters);
             }
+            this.raiseEvent('afterLoad');
         }, this, true, this, 'dom', false);
     }
 
@@ -533,103 +549,109 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
     
     _onElementClick(e) {
-        this.current = e.raiseElement;
-        e.raiseElement.focus();
-        this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+        if (!this.disabled) {
+            this.current = e.raiseElement;
+            e.raiseElement.focus();
+            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+        }
     }
 
     _onElementFocus(e) {
-        // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
-        this.setFocussableElement(e.raiseElement);
+        if (!this.disabled) {
+            // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
+            this.setFocussableElement(e.raiseElement);
+        }
     }
 
     _onKeyDown(e) {
-        switch (e.nodeEvent.keyCode) {
-            case kijs.keys.LEFT_ARROW:
-                if (this._currentEl) {
-                    const prev = this._currentEl.previous;
-                    if (prev) {
-                        this.current = prev;
-                        prev.focus();
-                    }
-
-                    if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
-                        this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    }
-                }
-                e.nodeEvent.preventDefault();
-                break;
-                
-            case kijs.keys.UP_ARROW:
-                if (this._currentEl && this._elements) {
-                    let found = false;
-                    
-                    kijs.Array.each(this._elements, function(el) {
-                        if (found) {
-                            if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
-                                this.current = el;
-                                el.focus();
-                                return false;
-                            }
-                        } else {
-                            if (el === this._currentEl) {
-                                found = true;
-                            }
+        if (!this.disabled) {
+            switch (e.nodeEvent.keyCode) {
+                case kijs.keys.LEFT_ARROW:
+                    if (this._currentEl) {
+                        const prev = this._currentEl.previous;
+                        if (prev) {
+                            this.current = prev;
+                            prev.focus();
                         }
-                    }, this, true);
 
-
-                    if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                        this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    }
-                }
-                e.nodeEvent.preventDefault();
-                break;
-            
-            case kijs.keys.RIGHT_ARROW:
-                if (this._currentEl) {
-                    const next = this._currentEl.next;
-                    if (next) {
-                        this.current = next;
-                        next.focus();
-                    }
-
-                    if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                        this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    }
-                }
-                e.nodeEvent.preventDefault();
-                break;
-                
-            case kijs.keys.DOWN_ARROW:
-                if (this._currentEl && this._elements) {
-                    let found = false;
-                    kijs.Array.each(this._elements, function(el) {
-                        if (found) {
-                            if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
-                                this.current = el;
-                                el.focus();
-                                return false;
-                            }
-                        } else {
-                            if (el === this._currentEl) {
-                                found = true;
-                            }
+                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
                         }
-                    }, this);
-                    
-                    if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                        this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
                     }
-                }
-                e.nodeEvent.preventDefault();
-                break;
+                    e.nodeEvent.preventDefault();
+                    break;
 
-            case kijs.keys.SPACE:
-                this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                e.nodeEvent.preventDefault();
-                break;
-                
+                case kijs.keys.UP_ARROW:
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    el.focus();
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this, true);
+
+
+                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+                        }
+                    }
+                    e.nodeEvent.preventDefault();
+                    break;
+
+                case kijs.keys.RIGHT_ARROW:
+                    if (this._currentEl) {
+                        const next = this._currentEl.next;
+                        if (next) {
+                            this.current = next;
+                            next.focus();
+                        }
+
+                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+                        }
+                    }
+                    e.nodeEvent.preventDefault();
+                    break;
+
+                case kijs.keys.DOWN_ARROW:
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    el.focus();
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this);
+
+                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+                        }
+                    }
+                    e.nodeEvent.preventDefault();
+                    break;
+
+                case kijs.keys.SPACE:
+                    this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+                    e.nodeEvent.preventDefault();
+                    break;
+
+            }
         }
     }
     

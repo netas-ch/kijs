@@ -20,6 +20,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._iconColorField = null;
         this._toolTipField = null;
         this._showCheckBoxes = false;
+        this._value = null;
         
         this._dom.clsRemove('kijs-dataview');
         this._dom.clsAdd('kijs-listview');
@@ -48,6 +49,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
         
         this.applyConfig(config);
+        
+        // Events
+        this.on('afterLoad', this._onAfterLoad, this);
     }
     
     
@@ -56,6 +60,21 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
+
+    get iconCharField() { return this._iconCharField; }
+    set iconCharField(val) { this._iconCharField = val; }
+
+    get iconClsField() { return this._iconClsField; }
+    set iconClsField(val) { this._iconClsField = val; }
+
+    get iconColorField() { return this._iconColorField; }
+    set iconColorField(val) { this._iconColorField = val; }
+
+    get showCheckBoxes() { return this._showCheckBoxes; }
+    set showCheckBoxes(val) { this._showCheckBoxes = val; }
+
+    get toolTipField() { return this._toolTipField; }
+    set toolTipField(val) { this._toolTipField = val; }
 
     get valueField() { return this._valueField; }
     set valueField(val) { this._valueField = val; }
@@ -82,6 +101,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             throw new Error(`Es wurde kein "valueField" definiert.`);
         }
         
+        this._value = val;
         
         let filters = [];
         
@@ -163,6 +183,14 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         });
     }
     
+    // LISTENERS
+    _onAfterLoad(e) {
+        if (!kijs.isEmpty(this._value)) {
+            this.value = this._value;
+        }
+    }
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -173,7 +201,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
             
         // Variablen (Objekte/Arrays) leeren
-        
+        this._value = null;
         
         // Basisklasse entladen
         super.destruct(true);

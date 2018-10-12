@@ -88,7 +88,7 @@ kijs.Rpc = class kijs_Rpc {
 
         if (cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
-                if (this._queue[i].facadeFn === facadeFn) {
+                if (this._queue[i].facadeFn === facadeFn && this._queue[i].context === context && this._queue[i].fn === fn) {
                     switch (this._queue[i].state) {
                         case 1: // queue
                             this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;

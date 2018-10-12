@@ -30,6 +30,9 @@ function gui_test_9_listView() {
         selectType: 'single',
         width: 200,
         height: 200,
+        style: {
+            marginBottom: '4px'
+        },
         data: [
             {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
             {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
@@ -53,29 +56,20 @@ function gui_test_9_listView() {
     el.renderTo(testCont);
     
     let el2 = new kijs.gui.ListView({
-        valueField: 'id',
-        captionField: 'Bezeichnung',
-        iconCharField: 'Icon',
-        iconColorField: 'Color',
-        toolTipField: 'Color',
+        valueField: 'color',
+        captionField: 'Bez',
+        iconCharField: 'iconChar',
+        iconColorField: 'color',
+        rpc: 'tests/rpcTest/rpc.php',
+        facadeFnLoad: 'color.load',
+        autoLoad: true,
+        value: '#0f0',
         showCheckBoxes: true,
         selectType: 'single',
         width: 200,
-        height: 200,
-        data: [
-            {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
-            {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
-            {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' },
-            {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' }, 
-            {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' }, 
-            {id:6, Bezeichnung:'viollet', Icon:'&#xf111', Color:'#8800ff' },
-            {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' }, 
-            {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' }, 
-            {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' }, 
-            {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' }, 
-            {id:11, Bezeichnung:'schwarz', Icon:'&#xf111', Color:'#000000' }
-        ],
-        value: 5,
+        style: {
+            marginBottom: '4px'
+        },
         on: {
             selectionChange: function(e) {
                 console.log(this.value);
@@ -94,6 +88,9 @@ function gui_test_9_listView() {
         selectType: 'simple',
         width: 200,
         height: 200,
+        style: {
+            marginBottom: '4px'
+        },
         data: [
             {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
             {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
@@ -115,6 +112,45 @@ function gui_test_9_listView() {
         }
     });
     el3.renderTo(testCont);
+    
+    let el4 = new kijs.gui.field.ListView({
+        label: 'kijs.gui.field.ListView',
+        labelWidth: 150,
+        valueField: 'id',
+        captionField: 'Bezeichnung',
+        iconCharField: 'Icon',
+        iconColorField: 'Color',
+        toolTipField: 'Color',
+        showCheckBoxes: true,
+        selectType: 'simple',
+        helpText: 'Hilfe Text!',
+        required: true,
+        width: 350,
+        style: {
+            marginBottom: '4px'
+        },
+        data: [
+            {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
+            {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
+            {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' },
+            {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' }, 
+            {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' }, 
+            {id:6, Bezeichnung:'viollet', Icon:'&#xf111', Color:'#8800ff' },
+            {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' }, 
+            {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' }, 
+            {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' }, 
+            {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' }, 
+            {id:11, Bezeichnung:'schwarz', Icon:'&#xf111', Color:'#000000' }
+        ],
+        value: [2,3],
+        on: {
+            input: function(e) {
+                console.log(e.oldValue);
+                console.log(e.value);
+            }
+        }
+    });
+    el4.renderTo(testCont);
 
 
 }

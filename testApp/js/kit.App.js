@@ -198,7 +198,7 @@ kit.App = class kit_App {
                                     closable: true,
                                     collapsible: 'top',
                                     resizable: true,
-                                    height: 300,
+                                    height: 600,
                                     shadow: true,
                                     autoLoad: false,
                                     rpc: this._rpc,
@@ -542,6 +542,108 @@ kit.App = class kit_App {
                                             label: 'Bemerkungen (test)',
                                             value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen!',
                                             helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!'
+                                        },{
+                                            xtype: 'kijs.gui.field.ListView',
+                                            label: 'ListView',
+                                            valueField: 'id',
+                                            captionField: 'Bezeichnung',
+                                            iconCharField: 'Icon',
+                                            iconColorField: 'Color',
+                                            toolTipField: 'Color',
+                                            showCheckBoxes: true,
+                                            selectType: 'simple',
+                                            helpText: 'Hilfe Text!',
+                                            width: 270,
+                                            height: 200,
+                                            style: {
+                                                marginBottom: '4px'
+                                            },
+                                            data: [
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
+                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' },
+                                                {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' }, 
+                                                {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' }, 
+                                                {id:6, Bezeichnung:'viollet', Icon:'&#xf111', Color:'#8800ff' },
+                                                {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' }, 
+                                                {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' }, 
+                                                {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' }, 
+                                                {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' }, 
+                                                {id:11, Bezeichnung:'schwarz', Icon:'&#xf111', Color:'#000000' }
+                                            ],
+                                            value: [2,3],
+                                            on: {
+                                                input: function(e) {
+                                                    console.log(e.oldValue);
+                                                    console.log(e.value);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.field.ListView',
+                                            label: 'ListView remote',
+                                            valueField: 'color',
+                                            captionField: 'Bez',
+                                            iconCharField: 'iconChar',
+                                            iconColorField: 'color',
+                                            rpc: this._rpc,
+                                            facadeFnLoad: 'color.load',
+                                            autoLoad: true,
+                                            value: '#0f0',
+                                            showCheckBoxes: false,
+                                            selectType: 'single',
+                                            style: {
+                                                marginBottom: '4px'
+                                            },
+                                            on: {
+                                                selectionChange: function(e) {
+                                                    console.log(this.value);
+                                                }
+                                            },
+                                            elements: [
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Load',
+                                                    on: {
+                                                        click: function() {
+                                                            this.parent.load();
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        },{
+                                            xtype: 'kijs.gui.field.ListView',
+                                            label: 'ListView remote',
+                                            valueField: 'color',
+                                            captionField: 'Bez',
+                                            iconCharField: 'iconChar',
+                                            iconColorField: 'color',
+                                            rpc: this._rpc,
+                                            facadeFnLoad: 'color.load',
+                                            autoLoad: true,
+                                            value: '#ff0',
+                                            showCheckBoxes: true,
+                                            selectType: 'simple',
+                                            minSelectCount: 2,
+                                            maxSelectCount: 3,
+                                            style: {
+                                                marginBottom: '4px'
+                                            },
+                                            on: {
+                                                selectionChange: function(e) {
+                                                    console.log(this.value);
+                                                }
+                                            },
+                                            elements: [
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Load',
+                                                    on: {
+                                                        click: function() {
+                                                            this.parent.load();
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         }
                                     ],
                                     footerStyle: {
@@ -805,6 +907,13 @@ kit.App = class kit_App {
                                     },
                                     footerElements: [
                                         {
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'Disable/Enable',
+                                            on: {click: function() {
+                                                let dataView = this.upX('kijs.gui.Panel').downX('kijs.gui.DataView');
+                                                dataView.disabled = !dataView.disabled;
+                                            }}
+                                        },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Alert',
                                             on: {click: function() {

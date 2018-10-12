@@ -11,106 +11,70 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-    
-        this._captionField = null;
-        this._captionHtmlDisplayType = 'html';
-        this._valueField = null;
-        this._iconCharField = null;
-        this._iconClsField = null;
-        this._iconColorField = null;
-        this._toolTipField = null;
-        
-        this._checkedIconChar = '&#xf046';          // Radio-Style: '&#xf05d' oder '&#xf111'
-        this._checkedIconCls = null;
-        this._uncheckedIconChar = '&#xf096';        // Radio-Style: '&#xf10c'
-        this._uncheckedIconCls = null;
-        
-        this._checkboxElements = [];
-        this._data = [];
+
+        this._minSelectCount = null;
+        this._maxSelectCount = null;
         this._oldValue = [];
         
-        this._dataView = new kijs.gui.DataView({
-            selectType: 'multi',
-            //rpc: this._rpc,
-            //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
-            //autoLoad: true,
-            //facadeFnLoad: 'dataview.load',
-            waitMaskTargetDomProperty: 'innerDom',
-            style: {
-                flex: 1
-            },
-            innerStyle: {
-                padding: '10px',
-                overflowY: 'auto'
-            }
-        });
+        this._listView = new kijs.gui.ListView({});
         
-        
-        this._dom.clsAdd('kijs-field-ListView');
+        this._dom.clsAdd('kijs-field-listview');
        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            captionHtmlDisplayType: true,   // Darstellung der captions. Default: 'html'
-                                            // html: als html-Inhalt (innerHtml)
-                                            // code: Tags werden als als Text angezeigt
-                                            // text: Tags werden entfernt
+            autoLoad: { target: 'autoLoad', context: this._listView },
             
-            checkedIconChar: true,
-            checkedIconCls: true,
-            uncheckedIconChar: true,
-            uncheckedIconCls: true,
-
-            data: { target: 'data', context: this._dataView },
-            facadeFnLoad: true,             // Name der Facade-Funktion. Bsp: 'address.load'
-            rpc: { target: 'rpc' },         // Instanz von kijs.gui.Rpc
+            showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
+            selectType: { target: 'selectType', context: this._listView },
             
-            captionField: true,
-            iconCharField: true,
-            iconClsField: true,
-            iconColorField: true,
-            toolTipField: true,
-            valueField: true
+            facadeFnLoad: { target: 'facadeFnLoad', context: this._listView },
+            rpc: { target: 'rpc', context: this._listView },
+            
+            captionField: { target: 'captionField', context: this._listView },
+            iconCharField: { target: 'iconCharField', context: this._listView },
+            iconClsField: { target: 'iconClsField', context: this._listView },
+            iconColorField: { target: 'iconColorField', context: this._listView },
+            toolTipField: { target: 'toolTipField', context: this._listView },
+            valueField: { target: 'valueField', context: this._listView },
+            
+            minSelectCount: true,
+            maxSelectCount: true,
+            
+            data: { prio: 1000, target: 'data', context: this._listView },
+            value: { prio: 1001, target: 'value' }
         });
         
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
+        
+        // Listeners
+        this._listView.on('selectionChange', this._onListViewSelectionChange, this);
     }
     
     
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
-    }
-    set autoLoad(val) {
-        if (val) {
-            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
-        } else {
-            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
-        }
-    }
+    get autoLoad() { return this._listView.autoLoad; }
+    set autoLoad(val) { this._listView.autoLoad = val; }
     
-    get captionField() { return this._captionField; }
-    set captionField(val) { this._captionField = val; }
+    get captionField() { return this._listView.captionField; }
+    set captionField(val) { this._listView.captionField = val; }
 
-    get valueField() { return this._valueField; }
-    set valueField(val) { this._valueField = val; }
+    get valueField() { return this._listView.valueField; }
+    set valueField(val) { this._listView.valueField = val; }
 
     // overwrite
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.disabled = !!val;
-        }, this);
+        this._listView.disabled = val || this._dom.clsHas('kijs-readonly');
     }
     
-    get facadeFnLoad() { return this._facadeFnLoad; }
-    set facadeFnLoad(val) { this._facadeFnLoad = val; }
+    get facadeFnLoad() { return this._listView.facadeFnLoad; }
+    set facadeFnLoad(val) { this._listView.facadeFnLoad = val; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
@@ -119,56 +83,17 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.readOnly = !!val;
-        }, this);
+        this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
     }
     
-    get rpc() { return this._rpc;}
-    set rpc(val) {
-        if (val instanceof kijs.gui.Rpc) {
-            this._rpc = val;
-            
-        } else if (kijs.isString(val)) {
-            if (this._rpc) {
-                this._rpc.url = val;
-            } else {
-                this._rpc = new kijs.gui.Rpc({
-                    url: val
-                });
-            }
-            
-        } else {
-            throw new Error(`Unkown format on config "rpc"`);
-            
-        }
-    }
+    get rpc() { return this._listView.rpc; }
+    set rpc(val) { this._listView.rpc = val; }
     
     // overwrite
-    get value() {
-        if (!kijs.isEmpty(this._checkboxElements)) {
-            const value = [];
-            kijs.Array.each(this._checkboxElements, function(el) {
-                let val = el.value;
-                if (!kijs.isEmpty(val)) {
-                    value.push(val);
-                }
-            }, this);
-           this._value = value;
-        }
-        return this._value;
-    }
-    set value(val) {
-        if (kijs.isEmpty(val)) {
-            val = [];
-        } else if (!kijs.isArray(val)) {
-            val = [val];
-        }
-        this._value = val;
-        this._oldValue = val;
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.checked = kijs.Array.contains(val, el.valueChecked) ? 1 : 0;
-        }, this);
+    get value() { return this._listView.value; }
+    set value(val) { 
+        this._listView.value = val;
+        this._oldValue = this._listView.value;
     }
     
 
@@ -182,16 +107,14 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      * @returns {undefined}
      */
     load(args) {
-        this._rpc.do(this._facadeFnLoad, args, function(response) {
-            this.data = response.rows;
-        }, this, true, this, 'dom', false);
+        this._listView.load(args);
     }
 
     // overwrite
     render(preventAfterRender) {
         super.render(true);
         
-        this._dataView.renderTo(this._inputWrapperDom.node);
+        this._listView.renderTo(this._inputWrapperDom.node);
         
         // Event afterRender auslösen
         if (!preventAfterRender) {
@@ -201,26 +124,63 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
     // overwrite
     unRender() {
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.destruct();
-        }, this);
+        this._listView.unRender();
         super.unRender();
     }
 
+    
+    // PROTECTED
+    // overwrite
+    _validationRules(value) {
 
-    // EVENTS
+        // Eingabe erforderlich
+        if (this._required) {
+            if (kijs.isEmpty(value)) {
+                this._errors.push('Dieses Feld darf nicht leer sein');
+            }
+        }
+
+        // minSelectCount
+        if (!kijs.isEmpty(this._minSelectCount)) {
+            const minSelectCount = this._minSelectCount;
+            
+            if (kijs.isArray(value)) {
+                if (value.length < minSelectCount) {
+                    this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+                }
+            } else if (kijs.isEmpty(value) && minSelectCount > 0) {
+                this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+            }
+        }
+        
+        // maxSelectCount
+        if (!kijs.isEmpty(this._maxSelectCount)) {
+            const maxSelectCount = this._maxSelectCount;
+            
+            if (kijs.isArray(value)) {
+                if (value.length > maxSelectCount) {
+                    this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+                }
+            } else if (!kijs.isEmpty(value) && maxSelectCount < 1) {
+                this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+            }
+        }
+    }
+    
+    // LISTENERS
     _onAfterFirstRenderTo(e) {
         this.load();
     }
     
-    _onCheckboxElementInput(e) {
+    _onListViewSelectionChange(e) {
         const val = this.value;
 
         this._value = val;
         this.raiseEvent('input', { oldValue: this._oldValue, value: val });
         this._oldValue = val;
+        
+        this.validate();
     }
-    
     
 
     // --------------------------------------------------------------
@@ -233,13 +193,12 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         }
         
         // Elemente/DOM-Objekte entladen
-        kijs.Array.each(this._checkboxElements, function(el) {
-            el.destruct();
-        }, this);
+        if (this._listView) {
+            this._listView.destruct();
+        }
         
         // Variablen (Objekte/Arrays) leeren
-        this._checkboxElements = null;
-        this._data = null;
+        this._listView = null;
         this._oldValue = null;
         
         // Basisklasse entladen
