@@ -922,10 +922,7 @@ div.kijs-dataview {
         background-color: @input-disabled-bkgrnd-color;
         
         .kijs-dataviewelement {
-            &:focus,
-            &:hover {
-                background-color: @input-disabled-bkgrnd-color;
-            }
+            background-color: transparent;
         
             &.kijs-selected {
                 border-color: @border-greyaaa-color;
@@ -976,8 +973,8 @@ div.kijs-listview {
                 display: inline-block;
                 font: normal normal normal 18px/1 FontAwesome;
                 content: '\f096';
-                min-width: 16px;
-                margin-right: 4px;
+                min-width: 18px;
+                margin-right: 2px;
             }
             
             &.kijs-selected:before {
@@ -992,8 +989,8 @@ div.kijs-listview {
                 display: inline-block;
                 font: normal normal normal 18px/1 FontAwesome;
                 content: '\f10c';
-                min-width: 16px;
-                margin-right: 4px;
+                min-width: 18px;
+                margin-right: 2px;
             }
             
             &.kijs-selected:before {
@@ -1317,7 +1314,7 @@ div.kijs-field-password {
     height: 25px;
     
     > .kijs-inputwrapper {
-        > password {
+        > input {
             display: block;
             height: 100%;
             width: 100%;
@@ -1461,6 +1458,64 @@ div.kijs-field-listview {
 }
 
 
+/* ******************
+   * OptionGroup
+   * CheckboxGroup
+   ****************** */
+div.kijs-field-optiongroup,
+div.kijs-field-checkboxgroup{
+    
+    > .kijs-inputwrapper {
+        > .kijs-listview {
+            height: 100%;
+            background-color: transparent;
+            border-color: transparent;
+            
+            .kijs-dataviewelement {
+                background-color: transparent;
+                
+                &:focus,
+                &:hover {
+                    color: @blue-bkgrnd-color;
+                }
+                
+            }
+            
+                
+        }
+    }
+    
+    &.kijs-error  > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+        color: @error-icon-color;
+    }
+    
+    &.kijs-disabled,
+    &.kijs-readonly {
+        > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+            color: @input-disabled-color;
+            
+            > .kijs-caption {
+                color: @input-disabled-color;
+            }
+        }
+    }
+    
+    &.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        
+        > .kijs-dataviewelement {
+            flex: none;
+            margin-right: 10px;
+
+            &:last-child {
+                margin-right: 0;
+            }
+        }
+    }
+}
+
 
 /* ******************
    * Field Combo
@@ -1497,6 +1552,14 @@ div.kijs-field-combo {
         }
     }
 }
+
+div.kijs-spinbox > .kijs-container-inner {
+    > .kijs-listview {
+        height: 100%;
+        border: 0;
+    }
+}
+
 
 
 /* ******************
@@ -1607,69 +1670,25 @@ div.kijs-field-checkbox {
 
 
 /* ******************
-   * CheckboxGroup
-   ****************** */
-div.kijs-field-checkboxgroup {
-    
-    
-    /* Ergänzungen für CheckboxGroup */
-    &.kijs-inline > .kijs-inputwrapper {
-        flex: none;
-        display: flex;
-        flex-direction: row;
-        
-        > .kijs-field-checkbox {
-            margin-right: 10px;
-
-            &:last-child {
-                margin-right: 0;
-            }
-        }
-    }
-}
-
-
-
-/* ******************
-   * RadioGroup
-   ****************** */
-div.kijs-field-radiogroup {
-    > .kijs-inputwrapper {
-        > .kijs-optionwrapper {
-            > .kijs-caption {
-                font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-                font-size: 15px;
-                line-height: 17px;
-            }
-
-            > input:focus {
-                /* TODO !!! */
-            }
-        }
-    }
-    
-    /* Ergänzungen für RadioGroup */
-    &.kijs-inline > .kijs-inputwrapper > .kijs-optionwrapper {
-        display: inline;
-        margin-right: 10px;
-        
-        &:last-child {
-            margin-right: 0;
-        }
-    }
-}
-
-
-
-/* ******************
    * Editor
    ****************** */
 div.kijs-field-editor {
-    > .ace_editor {
+    > .kijs-inputwrapper {
         border: 1px solid @border-greyaaa-color;
+        
+        > div {
+            height: 100%;
+            
+            .ace_scrollbar-v {
+                overflow-y: auto;
+            }
+            .ace_scrollbar-h {
+                overflow-x: auto;
+            }
+        }
     }
     
-    &.kijs-error .ace_editor {
+    &.kijs-error > .kijs-inputwrapper {
         background-color: @error-input-bkgrnd-color;
         
         &.ace_focus {
@@ -1678,7 +1697,7 @@ div.kijs-field-editor {
     }
     
     &.kijs-disabled, &.kijs-readonly {
-        > .ace_editor {
+        > .kijs-inputwrapper {
             background-color: @input-disabled-bkgrnd-color;
         }
     }

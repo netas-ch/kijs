@@ -44,13 +44,13 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             value: { prio: 1001, target: 'value' }
         });
         
+        // Listeners
+        this._listView.on('selectionChange', this._onListViewSelectionChange, this);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
-        
-        // Listeners
-        this._listView.on('selectionChange', this._onListViewSelectionChange, this);
     }
     
     
@@ -132,14 +132,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // PROTECTED
     // overwrite
     _validationRules(value) {
-
-        // Eingabe erforderlich
-        if (this._required) {
-            if (kijs.isEmpty(value)) {
-                this._errors.push('Dieses Feld darf nicht leer sein');
-            }
-        }
-
+        super._validationRules(value);
+        
         // minSelectCount
         if (!kijs.isEmpty(this._minSelectCount)) {
             const minSelectCount = this._minSelectCount;

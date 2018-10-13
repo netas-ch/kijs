@@ -182,8 +182,8 @@ kit.App = class kit_App {
                                             caption: 'Address Load',
                                             on: {
                                                 click: function() {
-                                                    //let addressPanel = this.parent.parent.parent.getElementByName('addressPanel');
-                                                    //addressPanel.load(1);
+                                                    const addressPanel = this.upX('kijs.gui.Panel').down('addressPanel');
+                                                    addressPanel.load();
                                                 }
                                             }
                                         }
@@ -224,17 +224,6 @@ kit.App = class kit_App {
                                             weekSelect: false,
                                             width: 230
                                         },*/{
-                                            xtype: 'kijs.gui.field.Password',
-                                            name: 'Passwort',
-                                            label: 'Passwort',
-                                            disableBrowserSecurityWarning: false,
-                                            width: 200,
-                                            on: {
-                                                input: function(e) {
-                                                    this.parent.down('Feld 1').value = this.value;
-                                                }
-                                            }
-                                        },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
                                             label: 'Checkbox',
@@ -380,22 +369,23 @@ kit.App = class kit_App {
                                             captionField: 'Bezeichnung',
                                             iconCharField: 'Icon',
                                             iconColorField: 'Color',
+                                            required: true,
                                             data: [
                                                 {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
                                                 {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
                                                 {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }
                                             ],
-                                            value: 2,
+                                            //value: 2,
                                             on: {
                                                 input: function(e) {
                                                     console.log('oldValue:' + e.oldValue + ' value:' + e.value);
                                                 }
                                             }
-                                        },/*{
-                                            xtype: 'kijs.gui.field.RadioGroup',
-                                            name: 'RadioGroup',
-                                            label: 'RadioGroup',
-                                            idField: 'id',
+                                        },{
+                                            xtype: 'kijs.gui.field.OptionGroup',
+                                            name: 'OptionGroup',
+                                            label: 'OptionGroup',
+                                            valueField: 'id',
                                             captionField: 'caption',
                                             data: [
                                                 {id:1, caption:'Wert A'},
@@ -404,8 +394,8 @@ kit.App = class kit_App {
                                             ],
                                             value: 2,
                                             on: {
-                                                input: function(e, el) {
-                                                    console.log('input:' + this.getValue());
+                                                input: function(e) {
+                                                    console.log('input:' + this.value);
                                                 }
                                             },
                                             elements: [
@@ -421,21 +411,23 @@ kit.App = class kit_App {
                                                                 val = null;
                                                             }
                                                             this.parent.value = val;
-                                                            this.toolTip = this.parent.value;
+                                                            this.toolTip = this.parent.value + '';
                                                         }
                                                     }
                                                 }
                                             ]
                                         },{
-                                            xtype: 'kijs.gui.field.RadioGroup',
-                                            name: 'RadioGroupInline',
-                                            label: 'RadioGroup Inline',
+                                            xtype: 'kijs.gui.field.OptionGroup',
+                                            name: 'OptionGroupInline',
+                                            label: 'OptionGroup Inline',
+                                            valueField: 'id',
+                                            captionField: 'id',
                                             cls: 'kijs-inline',
-                                            data: ['1', '2', '3'],
+                                            data: [{id:1}, {id:2}, {id:3}],
                                             value: 2,
                                             on: {
-                                                input: function(e, el) {
-                                                    console.log('input:' + this.getValue());
+                                                input: function(e) {
+                                                    console.log('input:' + this.value);
                                                 }
                                             },
                                             elements: [
@@ -451,12 +443,23 @@ kit.App = class kit_App {
                                                                 val = null;
                                                             }
                                                             this.parent.value = val;
-                                                            this.toolTip = this.parent.value;
+                                                            this.toolTip = this.parent.value + '';
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },*/{
+                                        },{
+                                            xtype: 'kijs.gui.field.Password',
+                                            name: 'Passwort',
+                                            label: 'Passwort',
+                                            disableBrowserSecurityWarning: 'auto',
+                                            width: 200,
+                                            on: {
+                                                input: function(e) {
+                                                    this.parent.down('Feld 1').value = this.value;
+                                                }
+                                            }
+                                        },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 1',
                                             label: 'Feld <b>1</b>',
@@ -503,8 +506,9 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Anrede',
                                             label: 'Anrede',
-                                            optionCaptionDisplayType: 'html',
                                             value: 'w',
+                                            valueField: 'value',
+                                            captionField: 'caption',
                                             data: [
                                                 {caption: 'Herr', value: 'm'},
                                                 {caption: 'Frau', value: 'w'},
@@ -528,15 +532,18 @@ kit.App = class kit_App {
                                             rpc: this._rpc,
                                             facadeFnLoad: 'land.load',
                                             autoLoad: true,
-                                            value: 'CH'
-                                        }/*,{
+                                            value: 'CH',
+                                            valueField: 'value',
+                                            captionField: 'caption'
+                                        },{
                                             xtype: 'kijs.gui.field.Editor',
                                             name: 'editor',
                                             label: 'Editor',
                                             mode: 'javascript',
+                                            //theme: 'monokai',
                                             value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
                                             height: 100
-                                        }*/,{
+                                        },{
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
                                             label: 'Bemerkungen (test)',
@@ -880,10 +887,6 @@ kit.App = class kit_App {
                                     style: {
                                         marginTop: '10px'
                                     },
-                                    /*innerStyle: {
-                                        padding: '10px',
-                                        overflowY: 'auto'
-                                    },*/
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.DataView',
@@ -996,11 +999,13 @@ kit.App = class kit_App {
                                                 padding: '10px'
                                             },
                                             elements:[
-                                                /*{
+                                                {
                                                     xtype: 'kijs.gui.field.Memo',
                                                     value: 'Bemerkungsfeld',
-                                                    height: 100
-                                                }*/
+                                                    style: {
+                                                        height: '100%'
+                                                    }
+                                                }
                                             ],
                                             footerStyle: {
                                                 padding: '10px'
@@ -1127,24 +1132,24 @@ kit.App = class kit_App {
                                     iconChar: '&#xf02f',
                                     badgeText: '5',
                                     on: {
-                                        click: function(e, el) {
-                                            let editor = el.parent.parent.up('editor');
+                                        click: function(e) {
+                                            let editor = this.upX('kijs.gui.Panel').down('editor');
                                             console.log(editor.value);
                                         }
                                     }
                                 }
                             ],
                             elements:[
-                                /*{
+                                {
                                     xtype: 'kijs.gui.field.Editor',
                                     name: 'editor',
-                                    hideLabel: true,
+                                    labelHide: true,
                                     mode: 'javascript',
                                     value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");',
                                     style: {
                                         flex: '1 1 auto'
                                     }
-                                }*/
+                                }
                             ]
                         }
                     ]
@@ -1208,74 +1213,7 @@ kit.App = class kit_App {
     rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
         this._rpc.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, ignoreWarnings, fnBeforeDisplayError);
     }
-    
-    /*_rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, ignoreWarnings) {
         
-        // Lademaske anzeigen
-        let waitMask;
-        if (waitMaskTarget instanceof kijs.gui.Element) {
-            waitMask = waitMaskTarget.waitMaskAdd();
-        } else {
-            waitMask = new kijs.gui.Mask({
-                displayWaitIcon: true,
-                target: waitMaskTarget
-            });
-            waitMask.show();
-        }
-    
-        this._rpc.do(facadeFn, data, function(response, request) {
-            
-            // Lademaske entfernen
-            if (request.responseArgs && request.responseArgs.waitMask) {
-                if (request.responseArgs.waitMask.target instanceof kijs.gui.Element) {
-                    request.responseArgs.waitMask.target.waitMaskRemove();
-                } else {
-                    request.responseArgs.waitMask.destruct();
-                }
-            }
-            
-            if (!response.canceled) {
-                // Fehler --> FehlerMsg + Abbruch
-                // data.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (!kijs.isEmpty(response.errorMsg)) {
-                    kijs.gui.MsgBox.error('Fehler', response.errorMsg);
-                    return;
-                }
-
-                // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
-                // data.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (!kijs.isEmpty(response.warningMsg)) {
-                    kijs.gui.MsgBox.warning('Warnung', response.warningMsg, function(e) {
-                        if (e.btn === 'ok') {
-                            // Request nochmal senden mit Flag ignoreWarnings
-                            this.rpc(facadeFn, data, fn, this, cancelRunningRpcs, waitMaskTarget, true);
-                        }
-                    }, this);
-                    return;
-                }
-
-                // Info --> Msg ohne Icon kein Abbruch
-                // data.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (!kijs.isEmpty(response.infoMsg)) {
-                    kijs.gui.MsgBox.info('Info', response.infoMsg);
-
-                }
-                // Tip -> Msg, die automatisch wieder verschwindet kein Abbruch
-                // data.tipMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (!kijs.isEmpty(response.cornerTipMsg)) {
-                    kijs.gui.CornerTipContainer.show('Info', response.cornerTipMsg, 'info');
-                }
-
-                // callback-fn ausführen
-                if (fn && kijs.isFunction(fn)) {
-                    fn.call(context || this, response || null);
-                }
-            }
-
-        }, this, cancelRunningRpcs, {ignoreWarnings: !!ignoreWarnings}, {waitMask: waitMask});
-    }*/
-    
-    
     
     // --------------------------------------------------------------
     // DESTRUCTOR

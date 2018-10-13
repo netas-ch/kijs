@@ -353,7 +353,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      */
     selectByFilters(filters, keepExisting, preventSelectionChange) {
         if (kijs.isEmpty(filters)) {
-            return;
+            filters = [];
         }
         
         // Evtl. das Format ändern auf: [ [{...}, {...}], [{...}, {...}] ]
@@ -368,35 +368,35 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Nun die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
         const selElements = [];
-        kijs.Array.each(this._elements, function(el) {
-            const row = el.dataRow;
+        if (!kijs.isEmpty(filters)) {
+            kijs.Array.each(this._elements, function(el) {
+                const row = el.dataRow;
 
-            kijs.Array.each(filters, function(filterFields) {
-                let ok = false;
-                kijs.Array.each(filterFields, function(filterField) {
-                    if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                        throw new Error(`Unkown filter format.`);
-                    }
-                    
-                    if (filterField.value === row[filterField.field]) {
-                        ok = true;
-                    } else {
-                        ok = false;
+                kijs.Array.each(filters, function(filterFields) {
+                    let ok = false;
+                    kijs.Array.each(filterFields, function(filterField) {
+                        if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
+                            throw new Error(`Unkown filter format.`);
+                        }
+
+                        if (filterField.value === row[filterField.field]) {
+                            ok = true;
+                        } else {
+                            ok = false;
+                            return false;
+                        }
+                    }, this);
+                    if (ok) {
+                        selElements.push(el);
                         return false;
                     }
                 }, this);
-                if (ok) {
-                    selElements.push(el);
-                    return false;
-                }
-            }, this);
 
-        }, this);
+            }, this);
+        }
         
         // Elemente selektieren
-        if (!kijs.isEmpty(selElements)) {
-            this.select(selElements, keepExisting, preventSelectionChange);
-        }
+        this.select(selElements, keepExisting, preventSelectionChange);
     }
 
     /**

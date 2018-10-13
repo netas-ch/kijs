@@ -118,7 +118,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
                 value: val
             };
         }
-        
         this.selectByFilters(filters, false, true);
     }
     

@@ -14,9 +14,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
-            nodeTagName: 'password',
+            nodeTagName: 'input',
             nodeAttribute: {
-                id: this._inputId
+                id: this._inputId,
+                type: 'password'
             }
         });
         
@@ -149,7 +150,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     render(preventAfterRender) {
         // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen
         if (this._disableBrowserSecurityWarning) {
-            this._inputDom.nodeTagName = 'input';
+            this._inputDom.nodeAttributeSet('type', null);
             
             // DOM-Events
             this._inputDom.on('keyUp', this._onKeyUp, this);
@@ -245,10 +246,6 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         kijs.defer(this._reposCursor, 10, this);
     }
 
-    
-    
-    
-    
     
     // --------------------------------------------------------------
     // DESTRUCTOR
