@@ -107,12 +107,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
                 var _this = this;
-                this._aceEditor.on('input', function() {
+                this._aceEditor.getSession().on('change', function() {
                     _this.raiseEvent('input');
                 });
             }, 200, this);
-
         }
+        
         this._aceEditor.setHighlightActiveLine(false);
         //this._aceEditor.$blockScrolling = Infinity;
 

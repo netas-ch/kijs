@@ -1688,7 +1688,7 @@ div.kijs-field-editor {
         }
     }
     
-    &.kijs-error > .kijs-inputwrapper {
+    &.kijs-error > .kijs-inputwrapper > div {
         background-color: @error-input-bkgrnd-color;
         
         &.ace_focus {
@@ -1697,7 +1697,7 @@ div.kijs-field-editor {
     }
     
     &.kijs-disabled, &.kijs-readonly {
-        > .kijs-inputwrapper {
+        > .kijs-inputwrapper > div {
             background-color: @input-disabled-bkgrnd-color;
         }
     }
