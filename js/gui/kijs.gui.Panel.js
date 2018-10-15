@@ -575,9 +575,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         // dom mit elements rendern (innerDom)
         super.render(true);
         
-        // Panel selektierbar machen
-        this._dom.node.tabIndex = -1;
-        
         // HeaderBar rendern (kijs.gui.HeaderBar)
         if (!this._headerBarEl.isEmpty) {
             this._headerBarEl.renderTo(this._dom.node, this._innerDom.node);

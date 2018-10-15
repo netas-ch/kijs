@@ -41,8 +41,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._targetEl = null;              // Zielelement (kijs.gui.Element)
         this._targetDomProperty = 'dom';    // Dom-Eigenschaft im Zielelement (String)
         
-        //this._dom.nodeAttributeSet('tabIndex', -1);
-        
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-spinbox');
         

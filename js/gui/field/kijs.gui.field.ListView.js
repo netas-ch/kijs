@@ -19,7 +19,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._listView = new kijs.gui.ListView({});
         
         this._dom.clsAdd('kijs-field-listview');
-       
+        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad', context: this._listView },

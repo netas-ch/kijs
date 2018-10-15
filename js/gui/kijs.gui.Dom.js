@@ -833,6 +833,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     /**
      * Setzt den Fokus auf den Node
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
+     *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
@@ -896,7 +897,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
                 
         if (this._node) {
-            this._node[name] = value;
+            //this._node[name] = value; // Funktioniert nicht zum entfernen der Eigenschaft 'tabIndex'
+            if (kijs.isEmpty(value)) {
+                this._node.removeAttribute(name);
+            } else {
+                this._node.setAttribute(name, value);
+            }
         }
     }
     

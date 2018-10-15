@@ -23,7 +23,6 @@ function gui_test_1_element() {
         html: 'Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen',
         style: { backgroundColor:'#ddd'},
         toolTip: { html: '<p>Test</p>', followPointer: false },
-        disableEnterEscBubbeling: true,
         on: {
             click: function(e) {
                 e.element.toolTip.disabled = !this.toolTip.disabled;

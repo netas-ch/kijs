@@ -23,7 +23,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         });
         
-        this._listView = new kijs.gui.ListView({});
+        this._listView = new kijs.gui.ListView({
+            focusable: false
+        });
         
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,

@@ -17,21 +17,19 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._lastSelectedEl = null;    // Letztes Element das Selektiert wurde. Wird gebraucht, 
                                         // wenn mit der Shift-Taste mehrere selektiert werden.
 
-
-        
         this._currentEl = null;
         this._data = [];
         this._facadeFnLoad = null;
+        this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
         
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview');
-        
-        this._dom.nodeAttributeSet('tabIndex', -1);
-        
+
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
+            focusable: true,
             selectType: 'single'
         }, config);
         
@@ -41,6 +39,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             disabled: { target: 'disabled'},
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
+            focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
             selectType: true            // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden
@@ -79,12 +78,33 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     get current() { return this._currentEl; }
     /**
-     * Setzt das aktuelle Element, dass den Fokus erhalten wird
+     * Setzt das aktuelle Element, dass den Fokus erhalten wird. Null = automatische Ermittlung.
      * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Element.
-     * @param {kijs.gui.DataViewElement} el
+     * @param {kijs.gui.DataViewElement|Null} el
      * @returns {undefined}
      */
     set current(el) {
+        if (!el && !kijs.isEmpty(this._elements)) {
+            // Falls es schon eine Curremt-Element gibt, dieses nehmen
+            if (this._currentEl) {
+                el = this._currentEl;
+            }
+            // Sonst das erste Selektierte Element
+            if (!el) {
+                let sel = this.getSelected();
+                if (!kijs.isEmpty(sel)) {
+                    if (kijs.isArray(sel)) {
+                        sel = sel[0];
+                    }
+                    el = sel;
+                }
+            }
+            // Sonst halt das erste Element
+            if (!el) {
+                el = this._elements[0];
+            }
+        }
+        
         this._currentEl = el;
         kijs.Array.each(this._elements, function(elem) {
             if (elem === el) {
@@ -95,7 +115,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
         
         if (el) {
-            this.setFocussableElement(el);
+            this.setFocusableElement(el);
         }
     }
     
@@ -168,7 +188,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.add(newElements);
         
         // Current = erstes Element
-        this.current = !kijs.isEmpty(this._elements) ? this._elements[0] : null;
+        //this.current = !kijs.isEmpty(this._elements) ? this._elements[0] : null;
     }
     
     get disabled() { return this._dom.clsHas('kijs-disabled'); }
@@ -187,6 +207,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
+
+    get focusable() { return this._focusable; }
+    set focusable(val) { 
+        this._focusable = val; 
+        if (val) {
+            //this._dom.nodeAttributeSet('tabIndex', -1);
+        } else {
+            //this._dom.nodeAttributeSet('tabIndex', undefined);
+        }
+    }
 
     get rpc() { return this._rpc;}
     set rpc(val) {
@@ -287,6 +317,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             if (!kijs.isEmpty(response.selectFilters)) {
                 this.selectByFilters(response.selectFilters);
             }
+            
+            this.current = null;
+            
             this.raiseEvent('afterLoad');
         }, this, true, this, 'dom', false);
     }
@@ -315,7 +348,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         kijs.Array.each(elements, function(el) {
             el.selected = true;
         }, this);
-
+        
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
@@ -397,6 +430,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Elemente selektieren
         this.select(selElements, keepExisting, preventSelectionChange);
+        
+        // Element mit Fokus neu ermitteln
+        this._currentEl = null;
+        this.current = null;
     }
 
     /**
@@ -438,24 +475,31 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Element festlegen, welches über die Tabulator-Taste den Fokus erhält
      * Setzt den tabIndex des Elements auf 0
-     * und bei allen anderen Elementen auf -1
+     * und bei allen anderen Elementen auf undefined
      * @param {type} el
      * @returns {undefined}
      */
-    setFocussableElement(el) {
+    setFocusableElement(el) {
         // Sicherstellen, dass alle anderen Elemente den Fokus nicht mehr über die Tabulator-Taste erhalten können
         kijs.Array.each(this._elements, function(elem) {
-            elem.dom.nodeAttributeSet('tabIndex', -1);
+            elem.dom.nodeAttributeSet('tabIndex', undefined);
         }, this);
         
-        if (!el && !kijs.isEmpty(this._elements)) {
+        /*if (!el && !kijs.isEmpty(this._elements)) {
             el = this._elements[0];
-        }
+        }*/
 
         // Beim neuen Element: tabIndex einschalten
         // kann nun auch über die Tastatur und Maus fokussiert werden.
-        if (el) {
-            el.dom.nodeAttributeSet('tabIndex', 0);
+        if (this._focusable) {
+            if (el) {
+                el.dom.nodeAttributeSet('tabIndex', 0);
+                //this._dom.nodeAttributeSet('tabIndex', undefined);
+            } else {
+                //this._dom.nodeAttributeSet('tabIndex', 0);
+            }
+        } else {
+            //this._dom.nodeAttributeSet('tabIndex', undefined);
         }
     }
 
@@ -551,7 +595,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     _onElementClick(e) {
         if (!this.disabled) {
             this.current = e.raiseElement;
-            e.raiseElement.focus();
+            if (this._focusable) {
+                e.raiseElement.focus();
+            }
             this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
         }
     }
@@ -559,7 +605,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     _onElementFocus(e) {
         if (!this.disabled) {
             // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
-            this.setFocussableElement(e.raiseElement);
+            this.setFocusableElement(e.raiseElement);
         }
     }
 
@@ -571,7 +617,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                         const prev = this._currentEl.previous;
                         if (prev) {
                             this.current = prev;
-                            prev.focus();
+                            if (this._focusable) {
+                                prev.focus();
+                            }
                         }
 
                         if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
@@ -589,7 +637,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             if (found) {
                                 if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
                                     this.current = el;
-                                    el.focus();
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
                                     return false;
                                 }
                             } else {
@@ -612,7 +662,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                         const next = this._currentEl.next;
                         if (next) {
                             this.current = next;
-                            next.focus();
+                            if (this._focusable) {
+                                next.focus();
+                            }
                         }
 
                         if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
@@ -629,7 +681,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             if (found) {
                                 if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
                                     this.current = el;
-                                    el.focus();
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
                                     return false;
                                 }
                             } else {
