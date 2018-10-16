@@ -29,9 +29,14 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         
         this._dom.clsAdd('kijs-field-password');
        
+        // Standard-config-Eigenschaften mergen
+        config = Object.assign({}, {
+            disableBrowserSecurityWarning: 'auto'
+        }, config);
+        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disableBrowserSecurityWarning: { target: 'disableBrowserSecurityWarning' },  // false: Nimmt das Standard Passwort-Feld
+            disableBrowserSecurityWarning: { prio: -1, target: 'disableBrowserSecurityWarning' },  // false: Nimmt das Standard Passwort-Feld
                                                                     // true:  Eigenes Feld, dass nicht als Kennwort-Feld erkannt wird und 
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
@@ -51,8 +56,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._eventForwardsAdd('escPress', this._inputDom);
         
         // Listeners
-        this.on('input', this._onInput, this);
         this._inputDom.on('input', this._onDomInput, this);
+        this.on('input', this._onInput, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -67,14 +72,28 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get disableBrowserSecurityWarning() { return this._disableBrowserSecurityWarning; }
     set disableBrowserSecurityWarning(val) {
         if (val === 'auto') {
-            if (location.protocol !== 'https:' && kijs.isFirefox()) {
-                this.disableBrowserSecurityWarning = true;
-            } else {
-                this.disableBrowserSecurityWarning = false;
-            }
-        } else {
-            this._disableBrowserSecurityWarning = !!val;
+            val = location.protocol !== 'https:' && kijs.isFirefox();
         }
+
+        // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen
+        if (val) {
+            this._inputDom.nodeAttributeSet('type', undefined);
+            
+            // DOM-Events
+            this._inputDom.on('keyUp', this._onKeyUp, this);
+            this._inputDom.on('mouseUp', this._onMouseUp, this);
+            this._inputDom.on('input', this._onInput, this);
+        } else {
+            this._inputDom.nodeAttributeSet('type', 'password');
+            
+            // DOM-Events
+            this._inputDom.off('keyUp', this._onKeyUp, this);
+            this._inputDom.off('mouseUp', this._onMouseUp, this);
+            this._inputDom.off('input', this._onInput, this);
+
+        }
+        
+        this._disableBrowserSecurityWarning = !!val;
     }
     
     // overwrite
@@ -148,16 +167,6 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     // --------------------------------------------------------------
     // overwrite
     render(preventAfterRender) {
-        // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen
-        if (this._disableBrowserSecurityWarning) {
-            this._inputDom.nodeAttributeSet('type', null);
-            
-            // DOM-Events
-            this._inputDom.on('keyUp', this._onKeyUp, this);
-            this._inputDom.on('mouseUp', this._onMouseUp, this);
-            this._inputDom.on('input', this._onInput, this);
-        }
-        
         super.render(true);
 
         // Input rendern (kijs.guiDom)

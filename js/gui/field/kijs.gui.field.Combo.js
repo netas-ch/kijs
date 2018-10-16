@@ -80,8 +80,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);*/
         
+        
+        
         // Listeners
         //this.on('input', this._onInput, this);
+        this.on('keyDown', this._onKeyDown, this);
+        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
         this._listView.on('selectionChange', this._onListViewSelectionChange, this);
         
         // Config anwenden
@@ -226,7 +230,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     /*_onInput(e) {
         this.validate();
     }*/
-        
+    
+    _onKeyDown(e) {
+        this._listView.raiseEvent('keyDown', e);
+    }
+    
+    
     _onListViewSelectionChange(e) {
         const val = this.value;
 
@@ -235,6 +244,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._oldValue = val;
         
         this.validate();
+    }
+    
+    _onSpinBoxClick() {
+        this._inputDom.focus();
     }
     
     

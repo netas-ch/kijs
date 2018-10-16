@@ -57,7 +57,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Events
         this.on('keyDown', this._onKeyDown, this);
         this.on('elementClick', this._onElementClick, this);
-        this.on('elementFocus', this._onElementFocus, this);
+        //this.on('elementFocus', this._onElementFocus, this);
     }
     
     
@@ -78,18 +78,20 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     get current() { return this._currentEl; }
     /**
-     * Setzt das aktuelle Element, dass den Fokus erhalten wird. Null = automatische Ermittlung.
+     * Setzt das aktuelle Element, dass den Fokus erhalten wird.
+     * Null = automatische Ermittlung
      * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Element.
      * @param {kijs.gui.DataViewElement|Null} el
      * @returns {undefined}
      */
     set current(el) {
+        // Falls kein el übergeben wurde:
         if (!el && !kijs.isEmpty(this._elements)) {
-            // Falls es schon eine Curremt-Element gibt, dieses nehmen
-            if (this._currentEl) {
+            // Falls es schon ein gültiges Current-Element gibt, dieses nehmen
+            if (this._currentEl && kijs.Array.contains(this._elements, el)) {
                 el = this._currentEl;
             }
-            // Sonst das erste Selektierte Element
+            // Sonst das erste selektierte Element
             if (!el) {
                 let sel = this.getSelected();
                 if (!kijs.isEmpty(sel)) {
@@ -112,11 +114,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             } else {
                 elem.dom.clsRemove('kijs-current');
             }
+            // Nur das currentEl darf den Fokus erhalten können
+            if (this._focusable && elem === el) {
+                el.dom.nodeAttributeSet('tabIndex', 0);
+            } else {
+                elem.dom.nodeAttributeSet('tabIndex', undefined);
+            }
         }, this);
-        
-        if (el) {
-            this.setFocusableElement(el);
-        }
     }
     
     
@@ -187,8 +191,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // neue Elemente einfügen
         this.add(newElements);
         
-        // Current = erstes Element
-        //this.current = !kijs.isEmpty(this._elements) ? this._elements[0] : null;
+        // Current Element ermitteln und setzen
+        this.current = null;
     }
     
     get disabled() { return this._dom.clsHas('kijs-disabled'); }
@@ -317,9 +321,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             if (!kijs.isEmpty(response.selectFilters)) {
                 this.selectByFilters(response.selectFilters);
             }
-            
-            this.current = null;
-            
+
             this.raiseEvent('afterLoad');
         }, this, true, this, 'dom', false);
     }
@@ -349,6 +351,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             el.selected = true;
         }, this);
         
+        // SelectionChange auslösen
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
@@ -479,15 +482,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {type} el
      * @returns {undefined}
      */
-    setFocusableElement(el) {
+    /*setFocusableElement(el) {
         // Sicherstellen, dass alle anderen Elemente den Fokus nicht mehr über die Tabulator-Taste erhalten können
         kijs.Array.each(this._elements, function(elem) {
             elem.dom.nodeAttributeSet('tabIndex', undefined);
         }, this);
         
-        /*if (!el && !kijs.isEmpty(this._elements)) {
-            el = this._elements[0];
-        }*/
+        //if (!el && !kijs.isEmpty(this._elements)) {
+        //    el = this._elements[0];
+        //}
 
         // Beim neuen Element: tabIndex einschalten
         // kann nun auch über die Tastatur und Maus fokussiert werden.
@@ -501,7 +504,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         } else {
             //this._dom.nodeAttributeSet('tabIndex', undefined);
         }
-    }
+    }*/
 
     /**
      * Deselektiert ein oder mehrere Elemente
@@ -602,12 +605,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    _onElementFocus(e) {
+    /*_onElementFocus(e) {
         if (!this.disabled) {
             // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
-            this.setFocusableElement(e.raiseElement);
+            //this.setFocusableElement(e.raiseElement);
         }
-    }
+    }*/
 
     _onKeyDown(e) {
         if (!this.disabled) {

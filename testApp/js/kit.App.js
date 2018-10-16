@@ -452,7 +452,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Password',
                                             name: 'Passwort',
                                             label: 'Passwort',
-                                            disableBrowserSecurityWarning: 'auto',
+                                            //disableBrowserSecurityWarning: 'auto',
                                             width: 200,
                                             on: {
                                                 input: function(e) {
