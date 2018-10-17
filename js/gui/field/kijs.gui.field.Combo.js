@@ -27,6 +27,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         });
         
         this._listViewEl = new kijs.gui.ListView({
+            autoLoad: false,
             focusable: false
         });
         
@@ -45,12 +46,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
+            //autoLoad: true,
             spinIconVisible: true
         }, config);
         
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad: { target: 'autoLoad', context: this._listViewEl },
+            autoLoad: { target: 'autoLoad' },
             
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
@@ -103,8 +105,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoLoad() { return this._listViewEl.autoLoad; }
-    set autoLoad(val) { this._listViewEl.autoLoad = val; }
+    get autoLoad() {
+        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+    }
+    set autoLoad(val) {
+        if (val) {
+            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        } else {
+            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        }
+    }
     
     get captionField() { return this._listViewEl.captionField; }
     set captionField(val) { this._listViewEl.captionField = val; }
@@ -257,6 +267,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     
     // LISTENERS
     _onAfterFirstRenderTo(e) {
+        console.log('load');
         this.load();
     }
     
