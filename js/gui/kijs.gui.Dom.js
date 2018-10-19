@@ -223,6 +223,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             mouseLeave: { nodeEventName: 'mouseleave', useCapture: false },
             mouseMove: { nodeEventName: 'mousemove', useCapture: false },
             mouseUp: { nodeEventName: 'mouseup', useCapture: false },
+            touchStart: { nodeEventName: 'touchstart', useCapture: false },
             wheel: { nodeEventName: 'wheel', useCapture: false },
             
             // key events

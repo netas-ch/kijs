@@ -224,6 +224,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseLeafe', this._dom);
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
+        this._eventForwardsAdd('touchStart', this._dom);
         this._eventForwardsAdd('wheel', this._dom);
         
         // key events
