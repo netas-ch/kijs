@@ -276,6 +276,10 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
     // PROTECTED
     static _convertArrayToHtml(messages) {
+        if (messages.length === 1) {
+            return messages[0];
+        }
+        
         let ret = '<ul>';
         kijs.Array.each(messages, function(msg) {
             ret += '<li>' + msg + '</li>';

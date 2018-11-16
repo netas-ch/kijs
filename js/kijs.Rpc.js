@@ -159,16 +159,12 @@ kijs.Rpc = class kijs_Rpc {
             let subRequest = this._getByTid(request.postData[i].tid);
 
             // Behandlung von Übertragungsfehlern
-            if (kijs.isEmpty(subResponse)) {
-                subResponse = {
-                    errorMsg: 'Übertragungsfehler'
-                };
+            let subErrorMsg = errorMsg;
+            if (!subErrorMsg && kijs.isEmpty(subResponse)) {
+                subErrorMsg = 'Übertragungsfehler';
             }
-            if (!errorMsg && subResponse.tid !== subRequest.tid) {
-                errorMsg = 'Die RPC-Antwort passt nicht zum Request';
-            }
-            if (errorMsg) {
-                subResponse.errorMsg = errorMsg;
+            if (!subErrorMsg && subResponse.tid !== subRequest.tid) {
+                subErrorMsg = 'Die RPC-Antwort passt nicht zum Request';
             }
 
             // Abbruch durch neueren Request?
@@ -182,7 +178,7 @@ kijs.Rpc = class kijs_Rpc {
 
             // callback-fn ausführen
             if (subRequest.fn && kijs.isFunction(subRequest.fn)) {
-                subRequest.fn.call(subRequest.context || this, subResponse, subRequest);
+                subRequest.fn.call(subRequest.context || this, subResponse.data || null, subRequest, subErrorMsg);
             }
         }
     }

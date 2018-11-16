@@ -12,10 +12,10 @@
             
             case 'myFacade.myFunction':
                 try {
-                    $response->data = $request->data;
+                    $response->data->data = $request->data;
                     
                 } catch (Exception $ex) {
-                    $response->errorMsg = $ex->getMessage();
+                    $response->data->errorMsg = $ex->getMessage();
                 }
                 break;
             
@@ -29,12 +29,12 @@
                     $rows[] = array('Bez'=>'gelb', 'color'=>'#ff0', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'violett', 'color'=>'#f0f', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'hellblau', 'color'=>'#0ff', 'iconChar'=>'&#xf111');
-                    $response->rows = $rows;
+                    $response->data->rows = $rows;
 
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->errorMsg = $ex->getMessage();
+                    $response->data->errorMsg = $ex->getMessage();
                 }
                 break;
             

@@ -79,7 +79,7 @@ kijs.Ajax = class kijs_Ajax {
                         case 'json': val = JSON.parse(xmlhttp.responseText); break;
                         case 'xml': val = kijs.Ajax.parseXml(xmlhttp.responseXML); break;
                     }
-                    config.fn.call(config.context || this, val, config, false);
+                    config.fn.call(config.context || this, val, config, null);
                 } else {
                     const error = 'Verbindung konnte nicht aufgebaut werden!';
                     config.fn.call(config.context || this, val, config, error);

@@ -228,6 +228,10 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
     // PROTECTED
     _convertArrayToHtml(messages) {
+        if (messages.length === 1) {
+            return messages[0];
+        }
+        
         let ret = '<ul>';
         kijs.Array.each(messages, function(msg) {
             ret += '<li>' + msg + '</li>';
