@@ -4,7 +4,7 @@
 // kijs.gui.Container
 // --------------------------------------------------------------
 /**
- * Container Element, dass untergeordnete Elemente beinhalten kann.
+ * Container Element, welches untergeordnete Elemente beinhalten kann.
  * Das Element besteht aus zwei ineinanderliegenden dom-Nodes.
  * 
  * KLASSENHIERARCHIE
@@ -203,7 +203,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @param {Number} [index=null] Position an der Eingefügt werden soll null=am Schluss
      * @returns {undefined}
      */
-    add(elements, index) {
+    add(elements, index=null) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -225,11 +225,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         // zu elements hinzufügen.
         kijs.Array.each(newElements, function(el) {
-            this._elements.push(el);
-
-            // rendern falls DOM vorhanden
-            if (this._innerDom.node) {
-                el.renderTo(this._innerDom.node);
+            if (kijs.isInteger(index)) {
+                this._elements.splice(index, 0, el);
+            } else {
+                this._elements.push(el);
             }
         }, this);
 
@@ -413,8 +412,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el.destruct) {
-                el.destruct();
+            if (el.unRender) {
+                el.unRender();
             }
             kijs.Array.remove(this._elements, el);
         }, this);
@@ -441,18 +440,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         // leeren
         kijs.Array.each(this._elements, function(el) {
-            if (el.destruct) {
-                el.destruct();
+            el.off(null, null, this);
+            if (el.unRender) {
+                el.unRender();
             }
         }, this);
-        this._elements = [];
+        kijs.Array.clear(this._elements);
 
-        // Falls der DOM gemacht ist, child löschen und es wird neu gerendert.
-        if (this._innerDom) {
-            while (this._innerDom.firstChild) {
-                this._innerDom.removeChild(this._innerDom.firstChild);
-            }
-        }
+        // Falls der DOM gemacht ist, wird neu gerendert.
         if (this.dom && !preventRender) {
             this.render();
         }
@@ -468,14 +463,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         super.render(true);
         
         // innerDOM rendern
-        this._innerDom.render();
-        this._dom.node.appendChild(this._innerDom.node);
+        this._innerDom.renderTo(this._dom.node);
 
         // elements im innerDOM rendern
         kijs.Array.each(this._elements, function(el) {
             el.renderTo(this._innerDom.node);
         }, this);
-        
+
 
         // Event afterRender auslösen
         if (!preventAfterRender) {
@@ -485,7 +479,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
     // overwrite
     unRender() {
+        kijs.Array.each(this._elements, function(el) {
+            el.unRender();
+        }, this);
+
         this._innerDom.unRender();
+        
         super.unRender();
     }
     

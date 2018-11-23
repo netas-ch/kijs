@@ -75,6 +75,124 @@ kit.App = class kit_App {
                             width: 180,
                             cls: 'kijs-flexcolumn',
                             elements:[
+                                {
+                                    xtype: 'kijs.gui.ContainerStack',
+                                    name: 'testcontainerstack',
+                                    elements: [{
+                                        xtype: 'kijs.gui.Panel',
+                                        name: 'testcontainerstackpanel_1',
+                                        caption: 'Panel 1',
+                                        style: {
+                                            backgroundColor: 'red'
+                                        },
+                                        elements: [{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'Wechsel zu 2',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_2');
+                                                }
+                                            }
+                                        }]
+                                    },{
+                                        xtype: 'kijs.gui.Panel',
+                                        name: 'testcontainerstackpanel_2',
+                                        caption: 'Panel 2',
+                                        style: {
+                                            backgroundColor: 'green'
+                                        },
+                                        elements: [{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'fade',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'fade');
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'slideLeft 10s',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideLeft', 10000);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'slideRight',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideRight');
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'slideTop',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideTop');
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'slideBottom',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideBottom');
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            caption: 'Add panel',
+                                            iconChar: '&#xf0d0',
+                                            toolTip: 'test',
+                                            on: {
+                                                click: function() {
+                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                    testcontainerstack.add({
+                                                        xtype: 'kijs.gui.Panel',
+                                                        name: 'addedpanel',
+                                                        caption: 'Panel ' + (new Date()).toLocaleString(),
+                                                        html: 'neues panel ',
+                                                        elements: [{
+                                                            xtype: 'kijs.gui.Button',
+                                                            caption: 'Remove panel',
+                                                            iconChar: '&#xf0d0',
+                                                            toolTip: 'test',
+                                                            on: {
+                                                                click: function() {
+                                                                    let testcontainerstack = this.up('testcontainerstack');
+                                                                    testcontainerstack.remove(this.up('addedpanel'));
+                                                                }
+                                                            }
+                                                        }]
+                                                    }, 0);
+                                                    testcontainerstack.activateAnimated('addedpanel', 'fade');
+                                                }
+                                            }
+                                        }]
+                                    }]
+                                }
+
+
                                 /*{
                                     xtype: 'kijs.gui.Accordion',
                                     currentElement: 0,

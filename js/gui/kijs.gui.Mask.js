@@ -170,7 +170,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._targetX.on('destruct', this._onTargetElDestruct, this);
             
         // Target ist der Body
-        } else if (val === document.body || val === null) {
+        } else if (val === document.body || val === null || val === undefined) {
             this._targetX = document.body;
             
         } else {

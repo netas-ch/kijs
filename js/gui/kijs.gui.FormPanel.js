@@ -111,25 +111,27 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @returns {undefined}
      */
     load(args, searchFields) {
-        this._rpc.do(this._facadeFnLoad, args, function(response) {
-            
-            // Formular
-            if (response.form) {
-                this.removeAll();
-                this.add(response.form);
-            }
+        if (this._facadeFnLoad) {
+            this._rpc.do(this._facadeFnLoad, args, function(response) {
 
-            if (searchFields || response.form || kijs.isEmpty(this._fields)) {
-                this.searchFields();
-            }
-            
-            // Formulardaten in Formular einfüllen
-            if (response.formData) {
-                this.data = response.formData;
-            }
-            
-            this.raiseEvent('afterLoad');
-        }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
+                // Formular
+                if (response.form) {
+                    this.removeAll();
+                    this.add(response.form);
+                }
+
+                if (searchFields || response.form || kijs.isEmpty(this._fields)) {
+                    this.searchFields();
+                }
+
+                // Formulardaten in Formular einfüllen
+                if (response.formData) {
+                    this.data = response.formData;
+                }
+
+                this.raiseEvent('afterLoad');
+            }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
+        }
     }
 
     /**
@@ -154,7 +156,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Wenn die lokale Validierung ok ist, an den Server senden
         if (ok) {
             this._rpc.do(this.facadeFnSave, args, function(response) {
-                this.raiseEvent('afterSave');
+                this.raiseEvent('afterSave', {response: response});
             }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
         } else {
             kijs.gui.MsgBox.error('Fehler', 'Es wurden noch nicht alle Felder richtig ausgefüllt.');

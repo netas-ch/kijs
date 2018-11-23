@@ -85,7 +85,7 @@
    ****************** */
 /* Blendet das Element aus */
 .kijs-hidden {
-    display: none;
+    display: none !important;
 }
 
 /* Schatten für Elemente */
@@ -123,6 +123,91 @@ div.kijs-container-inner {
     -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
 }
 
+
+
+/* ******************
+   * ContainerStack
+   ****************** */
+div.kijs-container.kijs-containerstack {
+    height: 100%;
+    
+    .kijs-container-inner {
+        height: 100%;
+        overflow: hidden;
+
+        .kijs-containerstack-element {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: @panel-bkgrnd-color;
+
+            &.kijs-animation-fade {
+                animation: kijs-containerstack-fade 1s;
+            }
+            &.kijs-animation-slideleft {
+                animation: kijs-containerstack-slideleft 1s;
+            }
+            &.kijs-animation-slideleft-out {
+                animation: kijs-containerstack-slideleft-out 1s;
+            }
+            &.kijs-animation-slideright {
+                animation: kijs-containerstack-slideright 1s;
+            }
+            &.kijs-animation-slideright-out {
+                animation: kijs-containerstack-slideright-out 1s;
+            }
+            &.kijs-animation-slidetop {
+                animation: kijs-containerstack-slidetop 1s;
+            }
+            &.kijs-animation-slidetop-out {
+                animation: kijs-containerstack-slidetop-out 1s;
+            }
+            &.kijs-animation-slidebottom {
+                animation: kijs-containerstack-slidebottom 1s;
+            }
+            &.kijs-animation-slidebottom-out {
+                animation: kijs-containerstack-slidebottom-out 1s;
+            }
+        }
+    }
+}
+
+@keyframes kijs-containerstack-fade {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes kijs-containerstack-slideleft {
+    from { left: 100%; }
+    to   { left: 0; }
+}
+@keyframes kijs-containerstack-slideleft-out {
+    from { left: 0; }
+    to   { left: -100%; }
+}
+@keyframes kijs-containerstack-slideright {
+    from { left: -100%; }
+    to   { left: 0; }
+}
+@keyframes kijs-containerstack-slideright-out {
+    from { left: 0; }
+    to   { left: 100%; }
+}
+@keyframes kijs-containerstack-slidetop {
+    from { top: 100%; }
+    to   { top: 0; }
+}
+@keyframes kijs-containerstack-slidetop-out {
+    from { top: 0; }
+    to   { top: -100%; }
+}
+@keyframes kijs-containerstack-slidebottom {
+    from { top: -100%; }
+    to   { top: 0; }
+}
+@keyframes kijs-containerstack-slidebottom-out {
+    from { top: 0; }
+    to   { top: 100%; }
+}
 
 /* ******************
    * SpinBox

@@ -432,6 +432,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._node.style.left = val;
         }
     }
+    get leftAbsolute() {
+        if (this._node) {
+            return kijs.Dom.getAbsolutePos(this._node).x;
+        } else {
+            return false;
+        }
+    }
 
     get node() { return this._node; }
     set node(val) { this._node = val; }
@@ -538,6 +545,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 val += 'px';
             }
             this._node.style.top = val;
+        }
+    }
+
+    get topAbsolute() {
+        if (this._node) {
+            return kijs.Dom.getAbsolutePos(this._node).y;
+        } else {
+            return false;
         }
     }
     
@@ -788,7 +803,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!kijs.isArray(cls)) {
             cls = cls.split(' ');
         }
-        this._cls = kijs.Array.removeMultiple(this._cls, cls);
+        kijs.Array.removeMultiple(this._cls, cls);
         
         this._clsApply();
     }
@@ -1040,11 +1055,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             kijs.Dom.removeAllChildNodes(this._node);
             
             // Node selber löschen
-            if (this._node !== document.body) {
+            if (this._node !== document.body && this._node.parentNode) {
                 this._node.parentNode.removeChild(this._node);
             }
         }
         this._node = null;
+
+        if (this._toolTip) {
+            this._toolTip.unRender();
+        }
     }
 
 
@@ -1183,7 +1202,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // DOM-Nodes entfernen
         if (this._node) {
             kijs.Dom.removeAllChildNodes(this._node);
-            if (this._node !== document.body) {
+            if (this._node !== document.body && this._node.parentNode) {
                 this._node.parentNode.removeChild(this._node);
             }
         }

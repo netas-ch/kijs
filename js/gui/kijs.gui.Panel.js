@@ -668,7 +668,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._headerEl.unRender();
         this._footerEl.unRender();
         this._footerBarEl.unRender();
-        this._resizerEl.unRender();
+        if (this._resizerEl) {
+            this._resizerEl.unRender();
+        }
         super.unRender();
     }
     

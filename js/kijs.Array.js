@@ -144,45 +144,44 @@ kijs.Array = class kijs_Array {
         
         return array;
     }
-    
-    /*static remove(array, value, strict=true) {
-        const len = array.length;
-        const ret = [];
 
-        for (let i=0; i<len; i++) {
-            if (strict && array[i] !== value) {
-                ret.push(array[i]);
+    /**
+     * Löscht einen Wert aus einem Array, wenn die übergebene Funktion
+     * true zurückgibt. Die Fn wird für jedes Item aufgerufen.
+     * @param {Array} array     Array, aus dem gelöscht wird
+     * @param {Function} fn     Funktion, die die Löschung prüft
+     * @param {Object} context  Kontext der Funktion
+     * @returns {Array}
+     */
+    static removeIf(array, fn, context) {
+        let toDelete = [];
+        kijs.Array.each(array, function(item) {
+            if (fn.call(context, item) === true) {
+                toDelete.push(item);
             }
-            if (!strict && array[i] != value) {
-                ret.push(array[i]);
-            }
-        }
-        return ret;
-    }*/
+        }, this);
+        kijs.Array.removeMultiple(array, toDelete);
+        return array;
+    }
     
     /**
-     * Löscht Werte aus einem Array und gibt ein neues zurück. Die Werte werden mittels Array übergeben
-     * @param {Array} array
+     * Löscht Werte aus einem Array. Die Werte werden mittels Array übergeben.
+     * @param {Array} array     Array, aus dem die Werte gelöscht werden.
      * @param {Array} values    Array mit zu entfernenden Werten
      * @returns {Array}
      */
     static removeMultiple(array, values) {
-        const len = array.length;
-        const ret = [];
-        
-        for (let i=0; i<len; i++) {
-            if (values.indexOf(array[i]) === -1) {
-                ret.push(array[i]);
-            }
-        }
-        return ret;
+        kijs.Array.each(values, function(value) {
+            kijs.Array.remove(array, value);
+        });
+        return array;
     }
     
     /**
      * Gibt einen Teil des Arrays als Kopie zurück.
      * @param {Array} array
-     * @param {Number} [begin] - Erstes Element des genommen werden soll. Leer = Element mit Index 0.
-     * @param {Number} [end] - Letztes Element des genommen werden soll. Leer = letztes Element.
+     * @param {Number} begin  Erstes Element des genommen werden soll. Leer = Element mit Index 0.
+     * @param {Number} end    Letztes Element des genommen werden soll. Leer = letztes Element.
     * @returns {Array}
      */
     static slice(array, begin, end) {
@@ -208,7 +207,7 @@ kijs.Array = class kijs_Array {
     static unique(array) {
         const ret = [];
         
-        for (let i=0; i<array.length; ++i) {
+        for (let i=0; i<array.length; i++) {
             if (ret.indexOf(array[i]) === -1) {
                 ret.push(array[i]);
             }

@@ -90,7 +90,12 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     
     
     hide() {
-        this._dom.clsAdd('kijs-hidden');
+        if (this._dom) {
+            this._dom.clsAdd('kijs-hidden');
+        }
+
+        // listener auf body entfernen
+        kijs.Dom.removeEventListener('mousemove', document.body, this);
     }
 
     /**
@@ -109,7 +114,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
         if (create) {
             this.render();
         }
-        
+
         // Position setzen
         if (create || this._dom.clsHas('kijs-hidden') || this._followPointer) {
             // X
@@ -146,11 +151,23 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
             
             // Einblenden
             this._dom.clsRemove('kijs-hidden');
-        }
 
+            // listener auf body
+            kijs.Dom.addEventListener('mousemove', document.body, this._onMouseMoveOnBody, this);
+        }
+        
         if (create) {
             document.body.appendChild(this._dom.node);
         }
+    }
+
+
+    /**
+     * Node aus DOM entfernen, falls vorhanden
+     * @returns {undefined}
+     */
+    unRender() {
+        this._dom.unRender();        
     }
 
 
@@ -165,6 +182,27 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
             this.show();
         }
     }*/
+
+    _onMouseMoveOnBody(e) {
+        if (this._target) {
+            let mouseX = e.nodeEvent.clientX, mouseY = e.nodeEvent.clientY;
+            let top = this._target.topAbsolute,
+                    left = this._target.leftAbsolute,
+                    width = this._target.width,
+                    height = this._target.height;
+
+            if (top && left && width && height) {
+                // prüfen, ob der Mauszeiger über dem Element ist.
+                if (mouseX < left || mouseX > left+width || mouseY < top || mouseY > top+height) {
+                    this.hide();
+                }
+            } else {
+                this.hide();
+            }
+        } else {
+            this.hide();
+        }
+    }
 
     _onMouseMoveTarget(e) {
         if (!this.disabled) {
