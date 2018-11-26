@@ -6,16 +6,16 @@
     foreach ($requests as $request) {
         $response = new stdClass();
         $response->tid = $request->tid;
-        $response->data = new stdClass();
+        $response->responseData = new stdClass();
         
         switch ($request->facadeFn) {
             
             case 'myFacade.myFunction':
                 try {
-                    $response->data->data = $request->data;
+                    $response->responseData = $request->requestData;
                     
                 } catch (Exception $ex) {
-                    $response->data->errorMsg = $ex->getMessage();
+                    $response->errorMsg = $ex->getMessage();
                 }
                 break;
             
@@ -29,12 +29,12 @@
                     $rows[] = array('Bez'=>'gelb', 'color'=>'#ff0', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'violett', 'color'=>'#f0f', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'hellblau', 'color'=>'#0ff', 'iconChar'=>'&#xf111');
-                    $response->data->rows = $rows;
+                    $response->responseData->rows = $rows;
 
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->data->errorMsg = $ex->getMessage();
+                    $response->errorMsg = $ex->getMessage();
                 }
                 break;
             

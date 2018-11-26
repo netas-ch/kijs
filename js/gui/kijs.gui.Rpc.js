@@ -45,7 +45,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
             waitMask.show();
         }
 
-        super.do(facadeFn, data, function(response, request, errorMsg) {
+        super.do(facadeFn, data, function(response, request) {
             // Lademaske entfernen
             if (request.responseArgs && request.responseArgs.waitMask) {
                 if (request.responseArgs.waitMask.target instanceof kijs.gui.Element) {
@@ -57,12 +57,6 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
             if (!response.canceled) {
 
-                // Fehler beim RPC?
-                if (!kijs.isEmpty(errorMsg) && errorMsg) {
-                    kijs.gui.MsgBox.error('Übertragungsfehler', errorMsg);
-                    return;
-                }
-
                 // Evtl. callback-fnBeforeMessages ausführen
                 if (fnBeforeMessages && kijs.isFunction(fnBeforeMessages)) {
                     fnBeforeMessages.call(context || this, response || null);
@@ -70,8 +64,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                 // Fehler --> FehlerMsg + Abbruch
                 // response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (kijs.isObject(response.errorMsg)) {
-                    kijs.gui.MsgBox.error(response.errorMsg.title, response.errorMsg.msg);
+                if (response.errorMsg) {
+                    let err = this._getMsg(response.errorMsg, 'Fehler');
+                    kijs.gui.MsgBox.error(err.title, err.msg);
                     if (response.errorMsg.cancelCb !== false) {
                         return;
                     }
@@ -79,8 +74,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                 // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
                 // response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (kijs.isObject(response.warningMsg)) {
-                    kijs.gui.MsgBox.warning(response.warningMsg.title, response.warningMsg.msg, function(e) {
+                if (response.warningMsg) {
+                    let warn = this._getMsg(response.warningMsg, 'Warnung');
+                    kijs.gui.MsgBox.warning(warn.title, warn.msg, function(e) {
                         if (e.btn === 'ok') {
                             // Request nochmal senden mit Flag ignoreWarnings
                             this.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty, true);
@@ -91,35 +87,47 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                 // Info --> Msg ohne Icon kein Abbruch
                 // response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (kijs.isObject(response.infoMsg)) {
-                    kijs.gui.MsgBox.info(response.infoMsg.title, response.infoMsg.msg);                    
+                if (response.infoMsg) {
+                    let info = this._getMsg(response.infoMsg, 'Info');
+                    kijs.gui.MsgBox.info(info.title, info.msg);
                 }
 
                 // Tip -> Msg, die automatisch wieder verschwindet kein Abbruch
                 // response.tipMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                if (kijs.isObject(response.cornerTipMsg)) {
-                    kijs.gui.CornerTipContainer.show(response.cornerTipMsg.title, response.cornerTipMsg.msg, 'info');                    
+                if (response.cornerTipMsg) {
+                    let info = this._getMsg(response.cornerTipMsg, 'Info');
+                    kijs.gui.CornerTipContainer.show(info.title, info.msg, 'info');
                 }
 
-                // Antwort von der RpcResponse-Klasse?
-                // Dann wird nur das 'callbackData' Element dem callback übergeben.
-                if (response && response.type === 'RpcResponse') {
-                    // callback-fn ausführen
-                    if (fn && kijs.isFunction(fn)) {
-                        fn.call(context || this, response.callbackData);
-                    }
 
-                // Die Antwort wurde nicht mit der RpcResponse-Klasse erstellt.
-                // Die erhaltenen Daten werden an die cb-funktion übergeben.
-                } else {
-
-                    // callback-fn ausführen
-                    if (fn && kijs.isFunction(fn)) {
-                        fn.call(context || this, response || null);
-                    }
-                }
+                // callback-fn ausführen
+                if (fn && kijs.isFunction(fn)) {
+                    fn.call(context || this, response.responseData || null);
+                }                
             }
 
         }, this, cancelRunningRpcs, {ignoreWarnings: !!ignoreWarnings}, {waitMask: waitMask});
+    }
+
+
+    /**
+     * Ist die msg ein String, wird dieser mit dem Standardtitel zurückgegeben-
+     * Ansonsten wird Titel und Text aus Objekt gelesen
+     * @param {String|Object|Array} msg
+     * @param {String} defaultTitle
+     * @returns {Object}
+     */
+    _getMsg(msg, defaultTitle) {
+        let returnMsg = {msg:'', title: ''};
+
+        if (kijs.isString(msg) || kijs.isArray(msg)) {
+            returnMsg.msg = msg;
+            returnMsg.title = defaultTitle;
+            
+        } else if (kijs.isObject(msg)) {
+            returnMsg.msg = msg.msg;
+            returnMsg.title = msg.title ? msg.title : defaultTitle;
+        }
+        return returnMsg;
     }
 };

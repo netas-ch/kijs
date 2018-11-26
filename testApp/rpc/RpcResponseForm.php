@@ -60,7 +60,7 @@ class RpcResponseForm extends RpcResponseBase {
      * overwrite: Werte für callback-Funktion aufbereiten
      * @return \stdClass
      */
-    protected function prepareCallbackData() {
+    public function jsonSerialize() {
         $cbData = new stdClass();
         if ($this->items) {
             $cbData->items = $this->items;

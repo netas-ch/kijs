@@ -186,8 +186,8 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     _onMouseMoveOnBody(e) {
         if (this._target) {
             let mouseX = e.nodeEvent.clientX, mouseY = e.nodeEvent.clientY;
-            let top = this._target.topAbsolute,
-                    left = this._target.leftAbsolute,
+            let top = kijs.Dom.getAbsolutePos(this._target.node).y,
+                    left = kijs.Dom.getAbsolutePos(this._target.node).x,
                     width = this._target.width,
                     height = this._target.height;
 

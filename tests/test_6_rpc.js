@@ -23,7 +23,7 @@ function test_6_rpc() {
         meineZahl: 53.4,
         meinArray: [1, 2, 3]
     }, function(response, request) {
-        tx.addResult(JSON.stringify(response.data));
+        tx.addResult(JSON.stringify(response.responseData));
     });
     
     kijs.defer(tx.displayTests, 500, tx);

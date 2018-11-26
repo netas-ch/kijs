@@ -1,5 +1,6 @@
 <?php
 
+
 /**
  * Die RpcResponse-Klasse dient zur Daten-Rückgabe vom Server an den Browser.
  * @author Lukas Buchs
@@ -25,9 +26,36 @@ abstract class RpcResponseBase implements \JsonSerializable {
     // -----------------
 
     /**
+     * Gibt die Nachrichten als stdClass zurück.
+     * Funktion wird vom Router aufgerufen, um die Nachrichten
+     * an den RPC zu übergeben.
+     * @return \stdClass
+     */
+    public function getMessages() {
+        $messages = new \stdClass();
+        if ($this->cornerTipMsgs) {
+            $messages->cornerTipMsg = array('msg' => $this->cornerTipMsgs, 'title' => $this->cornerTipTitle);
+        }
+
+        if ($this->errorMsgs) {
+            $messages->errorMsg = array('msg' => $this->errorMsgs, 'title' => $this->errorTitle, 'cancelCb' => $this->errorCancelCallback);
+        }
+
+        if ($this->infoMsgs) {
+            $messages->infoMsg = array('msg' => $this->infoMsgs, 'title' => $this->infoTitle);
+        }
+
+        if ($this->warningMsgs) {
+            $messages->warningMsg = array('msg' => $this->warningMsgs, 'title' => $this->warningTitle);
+        }
+
+        return $messages;
+    }
+
+    /**
      * Zeigt eine Meldung als Tiptext unten Links an.
      * @param string $message
-     * @param string $title
+     * @param string|null $title
      */
     public function showCornerTipMsg($message, $title=null) {
         $this->cornerTipMsgs[] = $message;
@@ -38,14 +66,11 @@ abstract class RpcResponseBase implements \JsonSerializable {
 
     /**
      * Zeigt eine Fehlermeldung an. Die Callback-Fn wird nicht aufgerufen.
-     * @param string|Throwable $message
-     * @param string $title
+     * @param string $message
+     * @param string|null $title
      * @param bool $cancelCallback false, falls die callback-Fn trotzdem aufgerufen werden soll.
      */
-    public function showErrorMsg($message, $title=null, $cancelCallback=true) {
-        if ($message instanceof Throwable) {
-            $message = $message->getMessage();
-        }
+    public function showErrorMsg($message, $title=null, bool $cancelCallback=true) {
         $this->errorMsgs[] = $message;
         if ($title) {
             $this->errorTitle = $title;
@@ -56,7 +81,7 @@ abstract class RpcResponseBase implements \JsonSerializable {
     /**
      * Zeigt eine Info-Meldung mit einem 'ok' Button an
      * @param string $message
-     * @param string $title
+     * @param string|null $title
      */
     public function showInfoMsg($message, $title=null) {
         $this->infoMsgs[] = $message;
@@ -68,7 +93,7 @@ abstract class RpcResponseBase implements \JsonSerializable {
     /**
      * Zeigt eine Warnung mit einem 'ok' und einem 'Abbrechen' Button an.
      * @param string $message
-     * @param string $title
+     * @param string|null $title
      */
     public function showWarningMsg($message, $title=null) {
         $this->warningMsgs[] = $message;
@@ -83,45 +108,12 @@ abstract class RpcResponseBase implements \JsonSerializable {
     // -----------------
 
     /**
-     * Funktion wird vom json_encode aufgerufen, um die Daten
-     * ans JavaScript zu übertragen.
-     * @return \stdClass
-     */
-    public function jsonSerialize() {
-        $json = new \stdClass();
-        $json->type = $this->jsonType;
-        $json->callbackData = $this->prepareCallbackData();
-
-        if ($this->cornerTipMsgs) {
-            $json->cornerTipMsg = array('msg' => $this->cornerTipMsgs, 'title' => $this->cornerTipTitle);
-        }
-
-        if ($this->errorMsgs) {
-            $json->errorMsg = array('msg' => $this->errorMsgs, 'title' => $this->errorTitle, 'cancelCb' => $this->errorCancelCallback);
-        }
-
-        if ($this->infoMsgs) {
-            $json->infoMsg = array('msg' => $this->infoMsgs, 'title' => $this->infoTitle);
-        }
-
-        if ($this->warningMsgs) {
-            $json->warningMsg = array('msg' => $this->warningMsgs, 'title' => $this->warningTitle);
-        }
-
-        return $json;
-    }
-
-    // -----------------
-    // Protected
-    // -----------------
-
-    /**
      * Bereitet Argumente für die Rückgabe an die callback-Funktion auf.
      * Methode kann in abgeleiteter Klasse überschrieben werden, falls
      * Daten an die Callback-Funktion übergeben werden sollen.
-     * @return null|stdClass
+     * @return null|object
      */
-    protected function prepareCallbackData() {
+    public function jsonSerialize() {
         return null;
     }
 }

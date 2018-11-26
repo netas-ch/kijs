@@ -432,13 +432,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._node.style.left = val;
         }
     }
-    get leftAbsolute() {
-        if (this._node) {
-            return kijs.Dom.getAbsolutePos(this._node).x;
-        } else {
-            return false;
-        }
-    }
 
     get node() { return this._node; }
     set node(val) { this._node = val; }
@@ -545,14 +538,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 val += 'px';
             }
             this._node.style.top = val;
-        }
-    }
-
-    get topAbsolute() {
-        if (this._node) {
-            return kijs.Dom.getAbsolutePos(this._node).y;
-        } else {
-            return false;
         }
     }
     

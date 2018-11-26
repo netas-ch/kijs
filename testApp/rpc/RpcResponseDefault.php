@@ -50,7 +50,7 @@ class RpcResponseDefault extends RpcResponseBase {
      * overwrite
      * @return \stdClass
      */
-    protected function prepareCallbackData() {
+    public function jsonSerialize() {
         return (object) $this->parameters;
     }
 }

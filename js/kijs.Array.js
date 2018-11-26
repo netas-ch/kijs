@@ -180,8 +180,8 @@ kijs.Array = class kijs_Array {
     /**
      * Gibt einen Teil des Arrays als Kopie zurück.
      * @param {Array} array
-     * @param {Number} begin  Erstes Element des genommen werden soll. Leer = Element mit Index 0.
-     * @param {Number} end    Letztes Element des genommen werden soll. Leer = letztes Element.
+     * @param {Number} [begin]  Erstes Element des genommen werden soll. Leer = Element mit Index 0.
+     * @param {Number} [end]    Letztes Element des genommen werden soll. Leer = letztes Element.
     * @returns {Array}
      */
     static slice(array, begin, end) {

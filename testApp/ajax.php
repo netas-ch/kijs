@@ -11,13 +11,13 @@
     foreach ($requests as $request) {
         $response = new stdClass();
         $response->tid = $request->tid;
-        $response->data = new RpcResponseDefault();
+        $response->responseData = new RpcResponseDefault();
         
         switch ($request->facadeFn) {
             case 'address.load':
                 try {
-                    $response->data = new RpcResponseForm();
-                    $response->data->setFormData(array(
+                    $response->responseData = new RpcResponseForm();
+                    $response->responseData->setFormData(array(
                         'Passwort'=>'123',
                         'Checkbox'=>true,
                         'CheckboxIcon'=>false,
@@ -35,7 +35,7 @@
                         'Bemerkungen'=>"Meine Bemerkung\nvon RPC"
                     ));
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
@@ -49,12 +49,12 @@
                     $rows[] = array('Bez'=>'gelb', 'color'=>'#ff0', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'violett', 'color'=>'#f0f', 'iconChar'=>'&#xf111');
                     $rows[] = array('Bez'=>'hellblau', 'color'=>'#0ff', 'iconChar'=>'&#xf111');
-                    $response->data->rows = $rows;
+                    $response->responseData->rows = $rows;
 
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
@@ -84,8 +84,8 @@
                     $rows[] = array('Name'=>'Kocher', 'Vorname'=>'Paul');
                     $rows[] = array('Name'=>'Schneeberger', 'Vorname'=>'Sandro');
                     
-                    $response->data->rows = $rows;
-                    $response->data->selectFilters = array();
+                    $response->responseData->rows = $rows;
+                    $response->responseData->selectFilters = array();
                     
                     $filter = array();
                     $flt = new stdClass();
@@ -96,7 +96,7 @@
                     $flt->field = 'Vorname';
                     $flt->value = 'Kurt';
                     $filter[] = $flt;
-                    $response->data->selectFilters[] = $filter;
+                    $response->responseData->selectFilters[] = $filter;
                     
                     $filter = array();
                     $flt = new stdClass();
@@ -107,14 +107,14 @@
                     $flt->field = 'Vorname';
                     $flt->value = 'Silvia';
                     $filter[] = $flt;
-                    $response->data->selectFilters[] = $filter;
+                    $response->responseData->selectFilters[] = $filter;
                     
                     
                     
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
@@ -127,21 +127,21 @@
                     $rows[] = array('value'=>'IT', 'caption'=>'Italien');
                     $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
 
-                    $response->data = new RpcResponseCombo();
-                    $response->data->addRows($rows);
-                    $response->data->addRows(array('value'=>'LI', 'caption'=>'Liechtenstein'));
+                    $response->responseData = new RpcResponseCombo();
+                    $response->responseData->addRows($rows);
+                    $response->responseData->addRows(array('value'=>'LI', 'caption'=>'Liechtenstein'));
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
             case 'test.load':
                 try {
                     // Formular
-                    $response->data = new RpcResponseForm();
-                    $response->data->addItems(json_decode('
+                    $response->responseData = new RpcResponseForm();
+                    $response->responseData->addItems(json_decode('
                         [
                             {
                                 "xtype": "kijs.gui.field.Combo",
@@ -165,13 +165,13 @@
                     '));
 
                     // Formulardaten
-                    $response->data->setFormData(array(
+                    $response->responseData->setFormData(array(
                         'Anrede'=>'w',
                         'Name'=>'Meier',
                         'Vorname'=>'Susanne'
                     ));
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
@@ -179,7 +179,7 @@
                 try {
                 
                     $fieldErrors = array();
-                    $response->data = new RpcResponseForm();
+                    $response->responseData = new RpcResponseForm();
 
                     $formData = $request->data->formData;
 
@@ -192,11 +192,11 @@
                     }
 
                     if ($fieldErrors) {
-                        $response->data->setFieldErrors($fieldErrors);
-                        $response->data->showErrorMsg('Es wurden noch nicht alle Felder richtig ausgefüllt');
+                        $response->responseData->setFieldErrors($fieldErrors);
+                        $response->responseData->showErrorMsg('Es wurden noch nicht alle Felder richtig ausgefüllt');
                     }
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
@@ -206,21 +206,27 @@
                     $ignoreWarnings = property_exists($request, 'ignoreWarnings') && $request->ignoreWarnings;
 
                     if ($ignoreWarnings) {
-                        $response->data->showInfoMsg('Habs geschafft','Gratuliere!');
-                        $response->data->showInfoMsg('Bin völlig fertig.');
+                        $response->responseData->showInfoMsg('Habs geschafft','Gratuliere!');
+                        $response->responseData->showInfoMsg('Bin völlig fertig.');
                     } else {
-                        $response->data->showWarningMsg('Willst Du das wirklich tun?');
+                        $response->responseData->showWarningMsg('Willst Du das wirklich tun?');
                     }
-                    $response->data->showCornerTipMsg('Hänudehaut');
+                    $response->responseData->showCornerTipMsg('Hänudehaut');
                     
-                    $response->data->result = 'test';
+                    $response->responseData->result = 'test';
                 } catch (Exception $ex) {
-                    $response->data->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex);
                 }
                 break;
             
             default:
-                $response->data->showErrorMsg('FacadeFn "' . $request->facadeFn . '" existiert nicht.');
+                $response->responseData->showErrorMsg('FacadeFn "' . $request->facadeFn . '" existiert nicht.');
+        }
+
+        if ($response->responseData instanceof RpcResponseBase) {
+            foreach ($response->responseData->getMessages() as $key => $value) {
+                $response->{$key} = $value;
+            }
         }
         
         $responses[] = $response;

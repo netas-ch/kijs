@@ -71,7 +71,7 @@ kijs.Rpc = class kijs_Rpc {
     /**
      * Führt einen RPC aus.
      * @param {String} facadeFn      Modul/Facaden-name und Methodenname Bsp: 'address.save'
-     * @param {Mixed} data           Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
+     * @param {Mixed} requestData    Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      * @param {Function} fn          Callback-Funktion
      * @param {Object} context       Kontext für die Callback-Funktion
      * @param {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
@@ -81,7 +81,7 @@ kijs.Rpc = class kijs_Rpc {
      *                               z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
      * @returns {undefined}
      */
-    do(facadeFn, data, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
+    do(facadeFn, requestData, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
         if (this._deferId) {
             clearTimeout(this._deferId);
         }
@@ -105,7 +105,7 @@ kijs.Rpc = class kijs_Rpc {
 
         this._queue.push({
             facadeFn: facadeFn,
-            data: data,
+            requestData: requestData,
             type: 'rpc',
             tid: this._createTid(),
             fn: fn,
@@ -158,13 +158,18 @@ kijs.Rpc = class kijs_Rpc {
             // Passenden subRequest aus Queue holen
             let subRequest = this._getByTid(request.postData[i].tid);
 
-            // Behandlung von Übertragungsfehlern
-            let subErrorMsg = errorMsg;
-            if (!subErrorMsg && kijs.isEmpty(subResponse)) {
-                subErrorMsg = 'Übertragungsfehler';
+            if (!kijs.isObject(subResponse)) {
+                subResponse = {
+                    errorMsg: 'RPC-Antwort im falschen Format'
+                };
             }
-            if (!subErrorMsg && subResponse.tid !== subRequest.tid) {
-                subErrorMsg = 'Die RPC-Antwort passt nicht zum Request';
+
+            // Behandlung von Übertragungsfehlern
+            if (errorMsg) {
+                subResponse.errorMsg = errorMsg;
+            }
+            if (!subResponse.errorMsg && subResponse.tid !== subRequest.tid) {
+                subResponse.errorMsg = 'Die RPC-Antwort passt nicht zum Request';
             }
 
             // Abbruch durch neueren Request?
@@ -178,7 +183,7 @@ kijs.Rpc = class kijs_Rpc {
 
             // callback-fn ausführen
             if (subRequest.fn && kijs.isFunction(subRequest.fn)) {
-                subRequest.fn.call(subRequest.context || this, subResponse.data || null, subRequest, subErrorMsg);
+                subRequest.fn.call(subRequest.context || this, subResponse, subRequest);
             }
         }
     }
@@ -211,7 +216,7 @@ kijs.Rpc = class kijs_Rpc {
             if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
                 const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
                 subRequest.facadeFn = this._queue[i].facadeFn;
-                subRequest.data = this._queue[i].data;
+                subRequest.requestData = this._queue[i].requestData;
                 subRequest.type = this._queue[i].type;
                 subRequest.tid = this._queue[i].tid;
                 

@@ -32,7 +32,7 @@ class RpcResponseCombo extends RpcResponseBase {
      * overwrite: Werte für callback-Funktion aufbereiten
      * @return \stdClass
      */
-    protected function prepareCallbackData() {
+    public function jsonSerialize() {
         $cbData = new stdClass();
         $cbData->rows = $this->rows;
         return $cbData;
