@@ -1,50 +1,38 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.Storage
+// kijs.Storage (Static)
 // --------------------------------------------------------------
-
 /**
  * Klasse zum Lesen und Schreiben in den Local- oder Sessionstorage.
- * Beim Instanzieren kann angegeben werden, ob der Sessionstorage
- * verwendet werden soll.
+ * Damit keine Konflikte entstehen, wenn mehrere KIJS-Frameworks unter
+ * der selben Domain laufen, wird standardmässig der Titel der Webseite
+ * als prefix verwendet. Wenn dieses nicht sein soll, kann als argument
+ * ein anderes Prefix übergeben werden.
  */
 kijs.Storage = class kijs_Storage {
 
-    // --------------------------------------------------------------
-    // CONSTRUCTOR
-    // --------------------------------------------------------------
-
-    /**
-     * @param {Boolean} useSessionStorage true, falls der session-storage verwendet werden soll
-     * @param {Boolean} useTitlePrefix, false, falls kein titel verwendet werden soll.
-     * @returns {kijs_Storage}
-     */
-    constructor(useSessionStorage=false, useTitlePrefix=true) {
-        this._storage = useSessionStorage ? window.sessionStorage : window.localStorage;
-        this._prefix = 'socialoffice-';
-        if (useTitlePrefix && document.title) {
-            this._prefix = document.title.toLowerCase().replace(/[^a-z0-9]/, '') + '-';
-        }
-    }
-
 
     // --------------------------------------------------------------
-    // PUBLIC
+    // STATICS
     // --------------------------------------------------------------
 
     /**
-     * Liest einen Wert aus dem LocalStorage.
+     * Liest einen Wert aus dem Storage.
      * @param {String} key
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
      * @returns {Mixed}
      */
-    getItem(key) {
+    static getItem(key, mode='local', keyPrefix=true) {
+        let prefix = kijs.Storage._getPrefix(keyPrefix),
+                storage = kijs.Storage._getStorage(mode);
         try {
-            if (!this._storage) {
+            if (!storage) {
                 return false;
             }
 
-            let val = this._storage.getItem(this._prefix + key);
+            let val = storage.getItem(prefix + key);
             if (val) {
                 val = JSON.parse(val);
                 if (val && kijs.isObject(val) && val.value !== undefined) {
@@ -60,18 +48,22 @@ kijs.Storage = class kijs_Storage {
 
     /**
      * Gibt alle gespeicherten Schlüssel in einem Array zurück
-     * @returns {Array|Boolean} die Keys oder false, falls kein localStorage unterstüzt wird
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
+     * @returns {Array}
      */
-    getKeys() {
+    static getKeys(mode='local', keyPrefix=true) {
+        let prefix = kijs.Storage._getPrefix(keyPrefix),
+                storage = kijs.Storage._getStorage(mode);
         try {
-            if (!this._storage || !this._storage.key) {
+            if (!storage || !storage.key) {
                 return false;
             }
             let keys = [], i, k;
-            for (i=0; i< this._storage.length; i++) {
-                k = this._storage.key(i);
-                if (k && k.substr(0, this._prefix.length) === this._prefix) {
-                    keys.push(k.substr(this._prefix.length));
+            for (i=0; i< storage.length; i++) {
+                k = storage.key(i);
+                if (k && k.substr(0, prefix.length) === prefix) {
+                    keys.push(k.substr(prefix.length));
                 }
             }
             return keys;
@@ -83,17 +75,19 @@ kijs.Storage = class kijs_Storage {
 
     /**
      * Löscht alle Elemente aus dem localStorage.
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
      * @returns {Boolean}
      */
-    removeAll() {
-        let keys = this.getKeys();
+    static removeAll(mode='local', keyPrefix=true) {
+        let keys = kijs.Storage.getKeys(mode, keyPrefix);
 
         if (keys === false) {
             return false;
         }
 
         for (let i=0; i<keys.length; i++) {
-            this.removeItem(keys[i]);
+            kijs.Storage.removeItem(keys[i], mode, keyPrefix);
         }
         return true;
     }
@@ -101,14 +95,18 @@ kijs.Storage = class kijs_Storage {
     /**
      * Löscht ein Wert aus dem LocalStorage.
      * @param {String} key
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
      * @returns {Boolean}
      */
-    removeItem(key) {
+    static removeItem(key, mode='local', keyPrefix=true) {
+        let prefix = kijs.Storage._getPrefix(keyPrefix),
+                storage = kijs.Storage._getStorage(mode);
         try {
-            if (!this._storage) {
+            if (!storage) {
                 return false;
             }
-            this._storage.removeItem(this._prefix + key);
+            storage.removeItem(prefix + key);
 
         } catch (e) {
             return false;
@@ -119,14 +117,18 @@ kijs.Storage = class kijs_Storage {
      * Speichert einen Wert im LocalStorage.
      * @param {String} key
      * @param {Mixed} value
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
      * @returns {Boolean}
      */
-    setItem(key, value) {
+    static setItem(key, value, mode='local', keyPrefix=true) {
+        let prefix = kijs.Storage._getPrefix(keyPrefix),
+                storage = kijs.Storage._getStorage(mode);
         try {
-            if (!this._storage) {
+            if (!storage || !storage.setItem) {
                 return false;
             }
-            this._storage.setItem(this._prefix + key, JSON.stringify({value: value}));
+            storage.setItem(prefix + key, JSON.stringify({value: value}));
             return true;
 
         } catch (e) {
@@ -138,20 +140,55 @@ kijs.Storage = class kijs_Storage {
      * Aktualisiert ein Objekt im LocalStorage
      * @param {String} key
      * @param {Object} value
+     * @param {String} [mode]                  'local' für LocalStorage oder 'session' für SessionStorage
+     * @param {Boolean|String} [keyPrefix]     individuelles prefix, falls nicht der titel verwendet werden soll.
      * @returns {Boolean}
      */
-    updateItem(key, value) {
+    static updateItem(key, value, mode='local', keyPrefix=true) {
         if (!kijs.isObject(value)) {
             return false;
         }
-        let oldValue = this.getItem(key);
+        
+        let oldValue = kijs.Storage.getItem(key, mode, keyPrefix);
         if (!kijs.isObject(oldValue)) {
             oldValue = {};
         }
+
         // update
         for (let k in value) {
             oldValue[k] = value[k];
         }
-        return this.setItem(key, oldValue);
+
+        return kijs.Storage.setItem(key, oldValue, mode, keyPrefix);
+    }
+
+    // --------------------------------------------------------------
+    // PROTECTED STATICS
+    // --------------------------------------------------------------
+
+    /**
+     * Gibt die instanz auf den Storage zurück.
+     * @returns {window.localStorage|window.sessionStorage}
+     */
+    static _getStorage(mode) {
+        if (!kijs.Array.contains(['session', 'local'], mode)) {
+            throw new Error('invalid storage mode');
+        }
+        return mode === 'session' ? window.sessionStorage : window.localStorage;
+    }
+
+    /**
+     * Gibt das Prefix zurück
+     * @param {String|Boolean} prefix
+     * @returns {String}
+     */
+    static _getPrefix(pref) {
+        let prefix = 'kijs-';
+        if (pref === true && document.title) {
+            prefix += document.title.toLowerCase().replace(/[^a-z0-9]/, '') + '-';
+        } else if (kijs.isString(pref) && pref) {
+            prefix += pref + '-';
+        }
+        return prefix;
     }
 };
