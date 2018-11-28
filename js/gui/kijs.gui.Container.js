@@ -113,16 +113,37 @@
  * EVENTS
  * ----------
  * add
- * 
- * beforeadd
- * 
- * beforeremove
- * 
+ * beforeAdd
+ * beforeRemove
  * childElementAfterResize
- * 
  * remove
  * 
- * 
+ * // Geerbte Events
+ * afterFirstRenderTo
+ * afterRender
+ * afterResize
+ * changeVisibility
+ * dblClick
+ * destruct
+ * drag
+ * dragEnd
+ * dragLeave
+ * dragOver
+ * dragStart
+ * drop
+ * focus
+ * mouseDown
+ * mouseLeafe
+ * mouseMove
+ * mouseUp
+ * wheel
+ *
+ * // key events
+ * keyDown
+ * enterPress
+ * enterEscPress
+ * escPress
+ * spacePress
  */
 kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     

@@ -3,9 +3,44 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Checkbox
 // --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ * // Geerbte Events
+ * add
+ * afterFirstRenderTo
+ * afterRender
+ * afterResize
+ * beforeAdd
+ * beforeRemove
+ * changeVisibility
+ * childElementAfterResize
+ * dblClick
+ * destruct
+ * drag
+ * dragEnd
+ * dragLeave
+ * dragOver
+ * dragStart
+ * drop
+ * focus
+ * mouseDown
+ * mouseLeafe
+ * mouseMove
+ * mouseUp
+ * remove
+ * wheel
+ *
+ * // key events
+ * keyDown
+ * enterPress
+ * enterEscPress
+ * escPress
+ * spacePress
+ */
 kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.Field {
     
-
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------

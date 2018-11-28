@@ -3,6 +3,44 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Text
 // --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ * blur
+ * input
+ * 
+ * // Geerbte Events
+ * add
+ * afterFirstRenderTo
+ * afterRender
+ * afterResize
+ * beforeAdd
+ * beforeRemove
+ * changeVisibility
+ * childElementAfterResize
+ * dblClick
+ * destruct
+ * drag
+ * dragEnd
+ * dragLeave
+ * dragOver
+ * dragStart
+ * drop
+ * focus
+ * mouseDown
+ * mouseLeafe
+ * mouseMove
+ * mouseUp
+ * remove
+ * wheel
+ *
+ * // key events
+ * keyDown
+ * enterPress
+ * enterEscPress
+ * escPress
+ * spacePress
+ */
 kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     
     // --------------------------------------------------------------
