@@ -136,11 +136,31 @@
  * 
  * EVENTS
  * ----------
+ * afterFirstRenderTo
  * afterRender
  * afterResize
- * afterFirstRenderTo
  * changeVisibility
+ * dblClick
  * destruct
+ * drag
+ * dragEnd
+ * dragLeave
+ * dragOver
+ * dragStart
+ * drop
+ * focus
+ * mouseDown
+ * mouseLeafe
+ * mouseMove
+ * mouseUp
+ * wheel
+ *
+ * // key events
+ * keyDown
+ * enterPress
+ * enterEscPress
+ * escPress
+ * spacePress
  */
 kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
