@@ -229,6 +229,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         this._afterAnimationDefer = kijs.defer(function() {
             this._afterAnimationDefer = null;
             this._setSubElementsVisible();
+            this._removeAllAnimationClasses();
         }, duration, this);
 
         
@@ -355,6 +356,21 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
             } else if (element === topEl && kijs.isBoolean(element.visible)) {
                 element.visible = true;
             }
+        }, this);
+    }
+
+    /**
+     * Entfernt alle CSS Animationen
+     * @returns {undefined}
+     */
+    _removeAllAnimationClasses() {
+        kijs.Array.each(this._elements, function(element) {
+            kijs.Array.each(this._animationTypes, function(at) {
+                this._getDomOfElement(element).clsRemove([
+                    'kijs-animation-' + at.toLowerCase(),
+                    'kijs-animation-' + at.toLowerCase() + '-out'
+                ]);
+            }, this);
         }, this);
     }
 
