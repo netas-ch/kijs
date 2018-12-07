@@ -9,8 +9,7 @@
  * 
  * KLASSENHIERARCHIE
  * kijs.gui.Element 
- *  kijs.gui.BoxElement
- *   kijs.gui.Container
+ *  kijs.gui.Container
  * 
  * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
  * ----------------

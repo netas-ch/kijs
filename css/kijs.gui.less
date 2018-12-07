@@ -12,6 +12,7 @@
 @panel-bkgrnd-color: #fff;
 
 @font-family-default: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+@font-size-default: 15px;
 
 @font-white-color: #fff;
 @font-black-color: #000;
@@ -25,8 +26,8 @@
 
 @border-greyaaa-color: #aaa;
 
-@drag-over-color: #f00;
-
+@drag-over-border-color: #00700C;
+@drag-over-forbidden-border-color: #BE2318;
 
 @today-color: #2B8BD9;
 
@@ -204,6 +205,24 @@ div.kijs-container.kijs-containerstack {
 @keyframes kijs-containerstack-slidebottom-out {
     from { top: 0; }
     to   { top: 100%; }
+}
+
+
+/* ******************
+   * DropZone
+   ****************** */
+div.kijs-container.kijs-dropzone {
+    border-color: @panel-bkgrnd-color;
+    transition: border-color 0.6s linear;
+    
+    &.kijs-dragover {
+        border: 2px dashed @drag-over-border-color;
+    }
+
+    &.kijs-dragover-forbidden {
+        border-color: @drag-over-forbidden-border-color;
+        cursor: no-drop;
+    }
 }
 
 /* ******************
@@ -448,7 +467,7 @@ div.kijs-msgbox {
         display: flex;
         flex-direction: row;
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         color: @font-black-color;
     }
     > .kijs-container-inner > .kijs-icon {
@@ -499,7 +518,7 @@ div.kijs-cornertipcontainer {
         display: flex;
         flex-direction: row;
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         color: @font-black-color;
     }
     .kijs-panel > .kijs-container-inner > .kijs-icon {
@@ -588,7 +607,7 @@ button.kijs-button {
 
     > .kijs-caption {
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         color: @font-grey333-color;
     }
     
@@ -977,12 +996,12 @@ div.kijs-dataview {
         border-radius: 4px;
         
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         color: @font-black-color;
         
         * {
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             color: @font-black-color;
         }
         &:focus,
@@ -1020,9 +1039,6 @@ div.kijs-dataview {
     }
 }
 
-.kijs-dragover {
-    background-color: @drag-over-color !important;
-}
 
 
 /* ******************
@@ -1093,7 +1109,7 @@ div.kijs-listview {
         
         > .kijs-caption {
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 15px;
             color: @font-black-color;
         }
@@ -1163,7 +1179,7 @@ div.kijs-datepicker {
     td,
     th {
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         line-height: 17px;
         padding: 4px 6px;
         text-align: right;
@@ -1274,6 +1290,63 @@ div.kijs-menu-month {
 }
 
 
+/* ******************
+   * ProgressBar
+   ****************** */
+div.kijs-progressbar {
+
+    .kijs-progressbar-caption-bottom, .kijs-progressbar-caption {
+        font-family: @font-family-default;
+        font-size: @font-size-default;
+        line-height: 17px;
+    }
+
+    .kijs-progressbar-caption {
+        padding: 0 0 2px 0;
+    }
+
+    .kijs-progressbar-caption-bottom {
+        padding: 2px 0 0 0;
+        font-size: 11px;
+        line-height: 12px;
+
+        .error {
+            padding: 0;
+            color: red;
+        }
+    }
+
+    .kijs-progressbar-field {
+        position: relative;
+        padding: 3px;
+        border: 1px solid @border-greyaaa-color;
+        background-color: white;
+        min-height: 14px;
+
+        .kijs-progressbar-bar {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            left: 0px;
+            width: 0%;
+            background-color: @blue-bkgrnd-color;
+            transition: width 2s;
+        }
+
+        .kijs-progressbar-text {
+            position: relative;
+            display: inline;
+            margin: 0;
+            font-family: @font-family-default;
+            font-size: @font-size-default;
+            line-height: 15px;
+            color: white;
+            opacity: 0;
+            transition: opacity 2s;            
+        }
+    }
+}
+
 
 
 /* ******************
@@ -1287,7 +1360,7 @@ div.kijs-field {
         display: block;
         flex: none;
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         line-height: 17px;
         padding: 3px 0 0 0;
     }
@@ -1374,7 +1447,7 @@ div.kijs-field-text {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
             
             &:focus {
@@ -1411,7 +1484,7 @@ div.kijs-field-password {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
             
             &:focus {
@@ -1460,7 +1533,7 @@ div.kijs-field-date {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
 
             &:focus {
@@ -1497,7 +1570,7 @@ div.kijs-field-memo {
         border: 1px solid @border-greyaaa-color;
         padding: 2px 4px;
         font-family: @font-family-default;
-        font-size: 15px;
+        font-size: @font-size-default;
         line-height: 17px;
         resize: none;
         
@@ -1621,7 +1694,7 @@ div.kijs-field-combo {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
             
             &:focus {
@@ -1669,7 +1742,7 @@ div.kijs-field-combo_ALT {
             appearance: none;
             -moz-appearance: none;
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
             background: @panel-bkgrnd-color;
             cursor: pointer;
@@ -1738,7 +1811,7 @@ div.kijs-field-checkbox {
         
         > .kijs-caption {
             font-family: @font-family-default;
-            font-size: 15px;
+            font-size: @font-size-default;
             line-height: 17px;
         }
         
@@ -1788,6 +1861,22 @@ div.kijs-field-editor {
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > div {
             background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+/* ******************
+   * Display
+   ****************** */
+div.kijs-field-display {
+    .kijs-inputwrapper {
+        font-family: @font-family-default;
+        font-size: @font-size-default;
+    }
+
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > * {
+                color: @input-disabled-color;
         }
     }
 }

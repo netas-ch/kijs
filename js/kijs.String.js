@@ -39,19 +39,36 @@ kijs.String = class kijs_String {
     static endsWith(text, search) {
         return text.indexOf(search, text.length - search.length) !== -1;
     }
-    
+
     /**
-     * Ersetzt alle Vorkommen in einem String ohne reguläre Ausdrücke
-     * @param {String} text
-     * @param {String} search
-     * @param {String} replace
-     * @returns {String} replace
+     * Wandelt Sonderzeichen in HTML-Codes um
+     * @param {String}  text           Die zu konvertierende Zeichenkette.
+     * @param {Boolean} [doubleEncode] Wird der Parameter doubleEncode ausgeschaltet,
+     *                                 kodiert es bereits existierende HTML-Entities
+     *                                 nicht noch einmal. Standardmässig werden
+     *                                 jedoch alle Zeichen konvertiert.
+     * @returns {String}
      */
-    static replaceAll(text, search, replace) {
-        text = kijs.isEmpty(text) ? '' : text;
-        search = kijs.isEmpty(search) ? '' : search;
-        replace = kijs.isEmpty(replace) ? '' : replace;
-        return text.split(search).join(replace);
+    static htmlspecialchars(text, doubleEncode=true) {
+        let replaces = [
+            {f:'&', t: '&amp;'},
+            {f:'"', t: '&quot;'},
+            {f:'\'', t: '&apos;'},
+            {f:'<', t: '&lt;'},
+            {f:'>', t: '&gt;'}
+        ];
+
+        if (!doubleEncode) {
+            kijs.Array.each(replaces, function(replace) {
+                text = kijs.String.replaceAll(text, replace.t, replace.f);
+            }, this);
+        }
+
+        kijs.Array.each(replaces, function(replace) {
+            text = kijs.String.replaceAll(text, replace.f, replace.t);
+        }, this);
+
+        return text;
     }
     
     /**
@@ -75,6 +92,20 @@ kijs.String = class kijs_String {
             }
         }
         return text;
+    }
+
+    /**
+     * Ersetzt alle Vorkommen in einem String ohne reguläre Ausdrücke
+     * @param {String} text
+     * @param {String} search
+     * @param {String} replace
+     * @returns {String} replace
+     */
+    static replaceAll(text, search, replace) {
+        text = kijs.isEmpty(text) ? '' : text;
+        search = kijs.isEmpty(search) ? '' : search;
+        replace = kijs.isEmpty(replace) ? '' : replace;
+        return text.split(search).join(replace);
     }
     
     /**

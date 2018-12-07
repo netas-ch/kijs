@@ -20,6 +20,7 @@ kijs.Ajax = class kijs_Ajax {
     *     {string} [method='GET']      'GET' oder 'POST'
     *     {string} [format='json']     'json', 'xml' oder 'text'
     *     {function} fn                Callback Funktion
+    *     {function} progressFn        Progress Funktion
     *     {object} context             Kontext für die Callback Funktion
     *     {object} [headers]           Objekt mit heders die mitgesendet werden 
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
@@ -69,6 +70,13 @@ kijs.Ajax = class kijs_Ajax {
         }
 
         const xmlhttp = new XMLHttpRequest();
+
+        // fortschritt überwachen
+        if (kijs.isFunction(config.progressFn)) {
+            xmlhttp.onprogress = function(oEvent) {
+                config.progressFn.call(config.context || this, oEvent, config);
+            };
+        }
 
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState === 4) {

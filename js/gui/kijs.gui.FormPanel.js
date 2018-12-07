@@ -53,7 +53,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Evtl. Daten aus Formular holen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
-                data[field.name] = field.value;
+                if (field.submitValue !== false) {
+                    data[field.name] = field.value;
+                } else {
+                    // Wert soll nicht übermittelt werden.
+                    delete this._data[field.name];
+                }
             }, this);
         }
         // Bestehendes Recordset mit Daten aus Formular ergänzen

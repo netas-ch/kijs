@@ -19,17 +19,15 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            // keine
+            disableDrop: true
         }, config);
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            // Keine
+            disableDrop: { target: 'disableDrop' }
         });
         
         // onResize überwachen
-        // Wenn der Browser langsam grösser gezogen wird, wird der event dauernd
-        // ausgelöst, darum wird er verzögert weitergegeben.
         kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
         
         // Config anwenden
@@ -38,7 +36,34 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         }
     }
 
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
 
+    set disableDrop(val) {
+        if (val === true) {
+            // Standardmässig öffnet der Browser das Dokument, wenn
+            // es über einer Webseite verschoben wird. Mittels preventDefault
+            // wird sichergestellt, dass in diesem Fall nichts passiert.
+            kijs.Dom.addEventListener('dragover', window, function(e) {
+                e.nodeEvent.preventDefault();
+            }, this);
+            kijs.Dom.addEventListener('drop', window, function(e) {
+                e.nodeEvent.preventDefault();
+            }, this);
+            
+        } else if (val === false) {
+            kijs.Dom.removeEventListener('dragover', window, this);
+            kijs.Dom.removeEventListener('drop', window, this);
+            
+        } else {
+           throw new Error('invalid value for property "disableDrop" in kijs.gui.ViewPort');
+        }
+    }
+
+    get disableDrop() {
+        return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
+    }
 
     // --------------------------------------------------------------
     // MEMBERS

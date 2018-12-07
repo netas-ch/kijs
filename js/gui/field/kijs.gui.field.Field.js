@@ -102,6 +102,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         
         this._maxLength = null;
         this._required = false;
+        this._submitValue = true;
 
 
         this._dom.clsRemove('kijs-container');
@@ -134,6 +135,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             maxLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
             required: true,
+            submitValue: true,
             
             spinIcon: { target: 'spinIcon' },
             spinIconChar: { target: 'iconChar', context: this._spinIconEl },
@@ -416,7 +418,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl.visible = !!val;
         if (this.isRendered) {
             this.render();
-        } }
+        }
+    }
+
+    // false, falls der Wert vom Feld nicht übermittelt werden soll.
+    get submitValue() { return this._submitValue; }
+    set submitValue(val) { this._submitValue = !!val; }
     
     // Muss überschrieben werden
     get value() { return null; }
