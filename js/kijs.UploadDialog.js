@@ -224,35 +224,30 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     _uploadFile(file) {
-        let reader = new FileReader(), uploadId = this._uploadId++;
-        reader.readAsBinaryString(file);
+        let uploadId = this._uploadId++,
+            headers = {},
+            filename = file.name,
+            filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
+            filetype = file.type || 'application/octet-stream';
 
-        reader.onload = kijs.createDelegate(function(e) {
-            let content = e.target.result, 
-                headers = {},
-                filename = file.name,
-                filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
-                filetype = file.type || 'application/octet-stream';
+        headers[this._filenameHeader] = filename;
+        headers[this._pathnameHeader] = filedir;
+        headers['Content-Type'] = filetype;
 
-            headers[this._filenameHeader] = filename;
-            headers[this._pathnameHeader] = filedir;
-            headers['Content-Type'] = filetype;
+        kijs.Ajax.request({
+            url: this._ajaxUrl,
+            method: 'POST',
+            format: 'json',
+            headers: headers,
+            postData: file,
+            fn: this._onEndUpload,
+            progressFn: this._onProgress,
+            context: this,
+            uploadId: uploadId
+        });
 
-            kijs.Ajax.request({
-                url: this._ajaxUrl,
-                method: 'POST',
-                format: 'json',
-                headers: headers,
-                postData: content,
-                fn: this._onEndUpload,
-                progressFn: this._onProgress,
-                context: this,
-                uploadId: uploadId
-            });
-
-            this._currentUploadIds.push(uploadId);
-            this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
-        }, this);
+        this._currentUploadIds.push(uploadId);
+        this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
     }
 
     _onEndUpload(val, config, error) {
