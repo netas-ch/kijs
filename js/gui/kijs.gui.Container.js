@@ -526,6 +526,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             
             // defaults
             if (!kijs.isEmpty(this._defaults)) {
+                // Bei unbekannten defaults soll kein Fehler ausgelöst werden
+                this._defaults.skipUnknownConfig = true;
+
                 // defaults in die config übernehmen. Bereits vorhandene Eigenschaften werden nicht verändert.
                 kijs.Object.assignDeep(obj, this._defaults, false);
                 
