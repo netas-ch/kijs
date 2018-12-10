@@ -49,13 +49,33 @@ kit.App = class kit_App {
                             xtype: 'kijs.gui.Button',
                             iconChar: '&#xf059',
                             disabled: true
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconChar: '&#xf0ee',
+                            on: {
+                                click: function() {
+                                    let uploadDialog = new kijs.UploadDialog({
+                                        directory: true
+                                    });
+                                    uploadDialog.showFileSelectDialog();
+
+                                    let uploadWin = new kijs.gui.UploadWindow({
+                                        uploadDialog: uploadDialog
+                                    });
+                                }
+                            }
                         }
                     ],
                     elements:[
-                        /*{
-                            xtype: 'kijs.gui.DatePicker',
-                            value: '2017-07-13'
-                        }*/
+                        {
+                            xtype: 'kijs.gui.DropZone',
+                            height: 100,
+                            html: '<div style="text-align:center;font-family:Arial;padding-top:20px;">drop it like its hot!</div>',
+                            contentTypes: 'image',
+                            on: {
+                                drop: function(e) { console.log(e); }
+                            }
+                        }
                     ]
                 },{
                     xtype: 'kijs.gui.Container',
@@ -597,6 +617,11 @@ kit.App = class kit_App {
                                                 }
                                             ]
                                         },{
+                                            xtype: 'kijs.gui.field.Display',
+                                            name: 'displayfeld',
+                                            label: 'Mein Label',
+                                            value: 'Mein Text<b>t</b>'
+                                        },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 2',
                                             label: 'Feld <b>2</b>',
@@ -1102,6 +1127,61 @@ kit.App = class kit_App {
                             },
                             footerElements: [
                                 {
+                                    xtype: 'kijs.gui.Button',
+                                    caption: 'Progress Bar',
+                                    iconChar: '&#xf0ae',
+                                    on: {click: function() {
+                                        let pgWin = new kijs.gui.Window({
+                                            caption: 'Progressbar',
+                                            iconChar: '&#xf2d0',
+                                            collapsible: 'top',
+                                            modal: false,
+//                                            height: 200,
+                                            width: 250,
+                                            innerStyle: {
+                                                padding: '10px'
+                                            },
+                                            elements:[
+                                                {
+                                                    xtype: 'kijs.gui.ProgressBar',
+                                                    name: 'myprogressbar',
+                                                    showPercent: true
+                                                },{
+                                                    xtype: 'kijs.gui.ProgressBar',
+                                                    name: 'myprogressbar2',
+                                                    caption: 'Caption',
+                                                    bottomCaption: 'Bottom Caption',
+                                                    style: {
+                                                        marginTop:'10px'
+                                                    }
+                                                }
+                                            ],
+                                            footerStyle: {
+                                                padding: '10px'
+                                            },
+                                            footerElements:[
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'OK',
+                                                    isDefault: true,
+                                                    on: {click: function() {
+                                                        pgWin.destruct();
+                                                    }}
+                                                }
+                                            ]
+                                        });
+                                        pgWin.show();
+                                        let perc = 0, perc1= 0;
+                                        window.setInterval(function(){
+                                            pgWin.down('myprogressbar').percent = perc;
+                                            pgWin.down('myprogressbar2').percent = perc1;
+                                            perc += 6;
+                                            perc1 += 1;
+                                            if (perc > 100)  perc -= 99;
+                                            if (perc1 > 100)  perc1 = 1;
+                                        },900);
+                                    }}
+                                },{
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Fenster',
                                     iconChar: '&#xf2d0',
