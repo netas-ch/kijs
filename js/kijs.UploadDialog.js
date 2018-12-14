@@ -31,6 +31,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._dropZones = [];
         this._contentTypes = [];
         this._currentUploadIds = [];
+        this._uploadResponses = {};
         this._validMediaTypes = [
             'application',
             'audio',
@@ -212,6 +213,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     _uploadFiles(fileList) {
+        this._uploadResponses = {};
         if (fileList) {            
             for (let i=0; i<fileList.length; i++) {
                 if (this._checkMime(fileList[i].type)) {
@@ -258,11 +260,18 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             error = error || val.msg || 'Es ist ein unbekannter Fehler aufgetreten.';
         }
 
-        this.raiseEvent('upload', this, val ? (val.upload || null) : null, error, config.uploadId);
+        // Antwort vom Server
+        let uploadResponse = val ? (val.upload || null) : null;
+
+        // Responses in Objekt sammeln
+        this._uploadResponses[config.uploadId] = uploadResponse;
+
+        // Event werfen
+        this.raiseEvent('upload', this, uploadResponse, error, config.uploadId);
 
         // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
         if (this._currentUploadIds.length === 0) {
-            this.raiseEvent('endUpload', this);
+            this.raiseEvent('endUpload', this, this._uploadResponses);
         }
     }
 

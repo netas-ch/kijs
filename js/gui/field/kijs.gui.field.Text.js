@@ -67,8 +67,9 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         });
         
         // Event-Weiterleitungen von this._inputDom
-        this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
+        this._eventForwardsAdd('change', this._inputDom);
+        this._eventForwardsAdd('input', this._inputDom);
         
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);

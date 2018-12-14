@@ -803,7 +803,8 @@ kit.App = class kit_App {
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Menü',
-                                            iconChar: '&#xf0d7',
+                                            iconChar: '&#xf135',
+                                            icon2Char: '&#xf0d7',
                                             on: {
                                                 click: function() {
                                                     /*if (!this.menu) {

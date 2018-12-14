@@ -18,6 +18,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         });
         
         this._iconEl = new kijs.gui.Icon({ parent: this });
+        this._icon2El = new kijs.gui.Icon({ parent: this, cls:'kijs-icon2' });
         
         this._badgeDom = new kijs.gui.Dom({
             cls: 'kijs-badge',
@@ -48,6 +49,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
+            icon2: { target: 'icon2' },
+            icon2Char: { target: 'iconChar', context: this._icon2El },
+            icon2Cls: { target: 'iconCls', context: this._icon2El },
+            icon2Color: { target: 'iconColor', context: this._icon2El },
             isDefault: { target: 'isDefault' },
             
             disabled: { prio: 100, target: 'disabled' }
@@ -159,6 +164,67 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+
+    get icon2() { return this._icon2El; }
+    /**
+     * Icon zuweisen
+     * @param {kijs.gui.Icon|Object} val     Icon als icon2-Config oder kijs.gui.Icon Element
+     */
+    set icon2(val) {
+        // Icon zurücksetzen?
+        if (kijs.isEmpty(val)) {
+            this._icon2El.iconChar = null;
+            this._icon2El.iconCls = null;
+            this._icon2El.iconColor = null;
+            if (this.isRendered) {
+                this.render();
+            }
+
+        // kijs.gui.Icon Instanz
+        } else if (val instanceof kijs.gui.Icon) {
+            this._icon2El.destruct();
+            this._icon2El = val;
+            if (this.isRendered) {
+                this.render();
+            }
+
+        // Config Objekt
+        } else if (kijs.isObject(val)) {
+            this._icon2El.applyConfig(val);
+            if (this.isRendered) {
+                this.render();
+            }
+
+        } else {
+            throw new Error(`config "icon2" is not valid.`);
+
+        }
+    }
+
+    get icon2Char() { return this._icon2El.iconChar; }
+    set icon2Char(val) {
+        this._icon2El.iconChar = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get icon2Cls() { return this._icon2El.iconCls; }
+    set icon2Cls(val) {
+        this._icon2El.iconCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get icon2Color() { return this._icon2El.iconColor; }
+    set icon2Color(val) {
+        this._icon2El.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
     get isDefault() {
         return this._dom.clsHas('kijs-default');
     }
@@ -171,7 +237,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
     
     // overwrite
-    get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._badgeDom.isEmpty; }
+    get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._icon2El.isEmpty && this._badgeDom.isEmpty; }
     
     
     
@@ -216,6 +282,13 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             this._badgeDom.unRender();
         }
 
+        // Span icon2 rendern (kijs.gui.Icon)
+        if (!this._icon2El.isEmpty) {
+            this._icon2El.renderTo(this._dom.node);
+        } else {
+            this._icon2El.unRender();
+        }
+
         // Event afterRender auslösen
         if (!preventAfterRender) {
             this.raiseEvent('afterRender');
@@ -225,6 +298,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // overwrite
     unRender() {
         this._iconEl.unRender();
+        this._icon2El.unRender();
         this._captionDom.unRender();
         this._badgeDom.unRender();
         super.unRender();
@@ -249,6 +323,9 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
         if (this._iconEl) {
             this._iconEl.destruct();
+        }
+        if (this._icon2El) {
+            this._icon2El.destruct();
         }
     
         // Variablen (Objekte/Arrays) leeren

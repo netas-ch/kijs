@@ -145,8 +145,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @returns {undefined}
      */
     save(searchFields) {
-        let args = {};
-        args.formData = {};
+        let args = {
+            formData: null
+        };
 
         if (searchFields || kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -215,20 +216,14 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @returns {undefined}
      */
     _onRpcBeforeMessages(response) {
-        if (!kijs.isEmpty(response.fieldErrors)) {
+        if (response.responseData && !kijs.isEmpty(response.responseData.fieldErrors)) {
             // Fehler bei den entsprechenden Feldern anzeigen
             if (!kijs.isEmpty(this._fields)) {
                 kijs.Array.each(this._fields, function(field) {
-                    if (response.fieldErrors[field.name]) {
-                        field.addValidateErrors(response.fieldErrors[field.name]);
+                    if (response.responseData.fieldErrors[field.name]) {
+                        field.addValidateErrors(response.responseData.fieldErrors[field.name]);
                     }
                 }, this);
-            }
-            
-            // Fehler als Meldung anzeigen
-            const msg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
-            if (kijs.isEmpty(response.errorMsg)) {
-                response.errorMsg = msg;
             }
         }
     }

@@ -210,6 +210,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // Mapping das aussagt, welche DOM-Node-Events bei welchem kijs-Event abgefragt werden sollen
         this._eventMap = {
             blur: { nodeEventName: 'blur', useCapture: false },
+            change: { nodeEventName: 'change', useCapture: false },
             click: { nodeEventName: 'click', useCapture: false },
             dblClick: { nodeEventName: 'dblclick', useCapture: false },
             drag: { nodeEventName: 'drag', useCapture: false },

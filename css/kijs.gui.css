@@ -436,6 +436,9 @@ button.kijs-button {
 button.kijs-button > .kijs-icon {
   color: #555;
 }
+button.kijs-button > .kijs-icon2 {
+  margin-left: 4px;
+}
 button.kijs-button > .kijs-icon:not(:empty) + .kijs-caption:not(:empty) {
   margin-left: 4px;
 }
@@ -1374,6 +1377,8 @@ div.kijs-field-editor.kijs-readonly > .kijs-inputwrapper > div {
 div.kijs-field-display .kijs-inputwrapper {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
   font-size: 15px;
+  line-height: 17px;
+  padding: 3px 0 0 0;
 }
 div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > *,
 div.kijs-field-display.kijs-readonly > .kijs-inputwrapper > * {
