@@ -17,11 +17,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data'},    //Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            data: { target: 'data'},            //Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
             rpc: { target: 'rpc' }
@@ -224,6 +226,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                         field.addValidateErrors(response.responseData.fieldErrors[field.name]);
                     }
                 }, this);
+            }
+
+            if (kijs.isEmpty(response.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
+                response.errorMsg = this._errorMsg;
             }
         }
     }
