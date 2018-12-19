@@ -35,7 +35,7 @@
                         'Bemerkungen'=>"Meine Bemerkung\nvon RPC"
                     ));
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -54,7 +54,7 @@
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -114,7 +114,7 @@
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -133,7 +133,7 @@
                     //sleep(1);
                     
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -171,7 +171,7 @@
                         'Vorname'=>'Susanne'
                     ));
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -181,7 +181,7 @@
                     $fieldErrors = array();
                     $response->responseData = new RpcResponseForm();
 
-                    $formData = $request->data->formData;
+                    $formData = $request->requestData->formData;
 
                     if (!property_exists($formData, 'Anrede')) {
                         throw new Exception("Das Feld 'Anrede' ist nicht vorhanden.");
@@ -196,7 +196,7 @@
                         $response->responseData->showErrorMsg('Es wurden noch nicht alle Felder richtig ausgefüllt');
                     }
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
@@ -215,7 +215,7 @@
                     
                     $response->responseData->result = 'test';
                 } catch (Exception $ex) {
-                    $response->responseData->showErrorMsg($ex);
+                    $response->responseData->showErrorMsg($ex->getMessage());
                 }
                 break;
             
