@@ -242,16 +242,19 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         this._targetEl.height = h;
         
         // Overlay wieder ausblenden
-        this._overlayDom.unRender();
+        this._overlayDom.unrender();
     }
     
     
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

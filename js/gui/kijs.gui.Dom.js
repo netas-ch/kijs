@@ -222,6 +222,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             drop: { nodeEventName: 'drop', useCapture: false },
             focus: { nodeEventName: 'focus', useCapture: false },
             mouseDown: { nodeEventName: 'mousedown', useCapture: false },
+            mouseEnter: { nodeEventName: 'mouseenter', useCapture: false },
             mouseLeave: { nodeEventName: 'mouseleave', useCapture: false },
             mouseMove: { nodeEventName: 'mousemove', useCapture: false },
             mouseUp: { nodeEventName: 'mouseup', useCapture: false },
@@ -593,9 +594,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
+     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
-    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY) {
+    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true) {
         targetPos = targetPos || 'bl';
         pos = pos || 'tl';
 
@@ -613,6 +615,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         offsetX = offsetX || 0;
         offsetY = offsetY || 0;
+
+        // Wenn der offset geswappt werden soll, wird dieser *-1 gerechnet.
+        const swapOffsetFactor = swapOffset ? -1 : 1;
 
         const b = kijs.Dom.getAbsolutePos(document.body);
         const e = kijs.Dom.getAbsolutePos(this._node);
@@ -646,7 +651,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
                 // Kann in der Höhe die Position gewechselt werden? (t->b und b->t)
                 if (posSwap) {
-                    rectSwap = kijs.Grafic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX, offsetY);
+                    rectSwap = kijs.Grafic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX, offsetY*swapOffsetFactor);
                     overlapSwap = kijs.Grafic.rectsOverlap(rectSwap, b);
 
                     if (overlapSwap.fitY) {
@@ -668,10 +673,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 // Am unteren/oberen Rand ausrichten
                 if (pos.indexOf('t')!==-1) {
                     // Unten ausrichten
-                    rect.t = b.h - rect.h;
+                    rect.y = b.h - rect.h;
                 } else {
                     // oben ausrichten
-                    rect.t = 0;
+                    rect.y = 0;
                 }
                 fit = true;
             }
@@ -695,10 +700,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
                 // Kann in der Breite die Position gewechselt werden? (l->r und r->l)
                 if (posSwap) {
-                    rectSwap = kijs.Grafic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX, offsetY);
+                    rectSwap = kijs.Grafic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX*swapOffsetFactor, offsetY);
                     overlapSwap = kijs.Grafic.rectsOverlap(rectSwap, b);
 
                     if (overlapSwap.fitX) {
+                        // Y Achse übernehmen, da vorgängig berechnet
+                        rectSwap.y = rect.y;
                         rect = rectSwap;
                         fit = true;
                     }
@@ -1031,7 +1038,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Node aus DOM entfernen, falls vorhanden
      * @returns {undefined}
      */
-    unRender() {
+    unrender() {
         if (this._node) {
             // Node-Event-Listeners entfernen
             if (!kijs.isEmpty(this._nodeEventListeners)) {
@@ -1049,7 +1056,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._node = null;
 
         if (this._toolTip) {
-            this._toolTip.unRender();
+            this._toolTip.unrender();
         }
     }
 
@@ -1178,20 +1185,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
+        // Unrender
+        this.unrender();
+
         // ToolTip entladen
         if (this._toolTip) {
             this._toolTip.destruct();
-        }
-        
-        // Listeners vom DOM-Node entfernen
-        kijs.Dom.removeAllEventListenersFromContext(this);
-        
-        // DOM-Nodes entfernen
-        if (this._node) {
-            kijs.Dom.removeAllChildNodes(this._node);
-            if (this._node !== document.body && this._node.parentNode) {
-                this._node.parentNode.removeChild(this._node);
-            }
         }
         
         // Variablen (Objekte/Arrays) leeren

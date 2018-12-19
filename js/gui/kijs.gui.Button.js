@@ -258,59 +258,67 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
         } else {
-            this._iconEl.unRender();
+            this._iconEl.unrender();
         }
 
         // Span caption rendern (kijs.guiDom)
         if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._dom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
         
         // Div badge rendern (kijs.guiDom)
         if (!this._badgeDom.isEmpty) {
             this._badgeDom.renderTo(this._dom.node);
         } else {
-            this._badgeDom.unRender();
+            this._badgeDom.unrender();
         }
 
         // Span icon2 rendern (kijs.gui.Icon)
         if (!this._icon2El.isEmpty) {
             this._icon2El.renderTo(this._dom.node);
         } else {
-            this._icon2El.unRender();
+            this._icon2El.unrender();
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._iconEl.unRender();
-        this._icon2El.unRender();
-        this._captionDom.unRender();
-        this._badgeDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._iconEl.unrender();
+        this._icon2El.unrender();
+        this._captionDom.unrender();
+        this._badgeDom.unrender();
+        super.unrender(true);
     }
     
     
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

@@ -142,7 +142,7 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         // dom mit Tools rendern (innerDom)
         super.render(true);
         
@@ -150,36 +150,44 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._iconEl.unRender();
+            this._iconEl.unrender();
         }
 
         // Span caption rendern (captionDom kijs.guiDom)
         if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._iconEl.unRender();
-        this._captionDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._iconEl.unrender();
+        this._captionDom.unrender();
+        super.unrender(true);
     }
 
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

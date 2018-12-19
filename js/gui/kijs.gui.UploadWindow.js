@@ -188,9 +188,12 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

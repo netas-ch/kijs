@@ -252,7 +252,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         kijs.Array.each(elements, function(element) {
             kijs.Array.removeIf(this._domElements, function(domEl) {
                 if (domEl.element === element) {
-                    domEl.dom.unRender();
+                    domEl.dom.unrender();
                     domEl.dom.destruct();
                     return true;
                 }
@@ -271,7 +271,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
 
         // DOM-Elemente entfernen
         kijs.Array.each(this._domElements, function(domEl) {
-            domEl.dom.unRender();
+            domEl.dom.unrender();
             domEl.dom.destruct();
         }, this);
         kijs.Array.clear(this._domElements);
@@ -279,7 +279,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
     }
 
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         // Renderer vom Container überspringen, damit
         // elements nicht in innerDom gerendert werden.
         kijs.gui.Element.prototype.render.call(this, arguments);
@@ -295,7 +295,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         }, this);
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
@@ -379,9 +379,12 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
     // DESTRUCTOR
     // --------------------------------------------------------------
 
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
 

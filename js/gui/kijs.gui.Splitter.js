@@ -160,7 +160,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         kijs.Dom.removeEventListener('mouseup', document, this);
 
         // Overlay wieder ausblenden
-        this._overlayDom.unRender();
+        this._overlayDom.unrender();
 
         // Differenz zur vorherigen Position ermitteln
         let offset;
@@ -183,9 +183,12 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

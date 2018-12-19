@@ -25,7 +25,7 @@
  * drop
  * focus
  * mouseDown
- * mouseLeafe
+ * mouseLeave
  * mouseMove
  * mouseUp
  * remove
@@ -144,7 +144,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             if (val) {
                 this._captionDom.renderTo(this._inputWrapperDom.node, this._inputDom.node);
             } else {
-                this._captionDom.unRender();
+                this._captionDom.unrender();
             }
         }
     }
@@ -274,7 +274,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Checkbox rendern (kijs.guiDom)
@@ -285,28 +285,33 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._inputWrapperDom.node);
         } else {
-            this._iconEl.unRender();
+            this._iconEl.unrender();
         }
 
         // Span caption rendern (kijs.guiDom)
         if (!this._captionHide) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
         
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._checkboxIconEl.unRender();
-        this._iconEl.unRender();
-        this._captionDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._checkboxIconEl.unrender();
+        this._iconEl.unrender();
+        this._captionDom.unrender();
+        super.unrender(true);
     }
 
 
@@ -397,9 +402,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

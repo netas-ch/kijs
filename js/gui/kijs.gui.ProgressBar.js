@@ -147,7 +147,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
 
 
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
 
         // innerDOM rendern
@@ -166,17 +166,22 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._barDom.unRender();
-        this._textDom.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
 
-        super.unRender();
+        this._barDom.unrender();
+        this._textDom.unrender();
+
+        super.unrender(true);
     }
 
 
@@ -201,9 +206,12 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
 

@@ -227,11 +227,11 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     }
 
     // overwrite
-    unRender() {
+    unrender() {
         kijs.Array.each(this._checkboxElements, function(el) {
             el.destruct();
         }, this);
-        super.unRender();
+        super.unrender();
     }
 
 

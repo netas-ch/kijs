@@ -100,12 +100,17 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
 
     /**
      * rendert den DOM-Node
-     * @param {Boolean} [preventAfterRender=false]
+     * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
-    render(preventAfterRender) {
+    render(superCall) {
         // DOM Rendern
         this._dom.render();
+
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
     }
 
     show(x, y) {
@@ -166,8 +171,16 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
      * Node aus DOM entfernen, falls vorhanden
      * @returns {undefined}
      */
-    unRender() {
-        this._dom.unRender();        
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        // Event entfernen
+        kijs.Dom.removeEventListener('mousemove', document.body, this);
+
+        this._dom.unrender();
     }
 
 
@@ -218,9 +231,12 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

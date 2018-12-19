@@ -201,14 +201,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
         
@@ -223,9 +223,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
     // overwrite
-    unRender() {
-        this._inputDom.unRender();
-        super.unRender();
+    unrender() {
+        this._inputDom.unrender();
+        super.unrender(true);
     }
 
 

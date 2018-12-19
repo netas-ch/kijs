@@ -40,6 +40,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         
         this._targetEl = null;              // Zielelement (kijs.gui.Element)
         this._targetDomProperty = 'dom';    // Dom-Eigenschaft im Zielelement (String)
+        this._autoWidth = true;
         
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-spinbox');
@@ -64,9 +65,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             targetDomProperty: true,
             ownerNodes: { fn: 'appendUnique', target: '_ownerNodes' }
         });
-        
-        // Listeners
-        this.on('wheel', this._onWheel, this);
+
+        // Listener
+        this.on('keyDown', this._onElKeyDown, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -118,14 +119,14 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // Evtl. Listeners vom alten _targetEl entfernen
         if (!kijs.isEmpty(this._targetEl)) {
             this._targetEl.off('input', this._onTargetElInput, this);
-            this._targetEl.off('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.off('keyDown', this._onElKeyDown, this);
             this._targetEl.off('destruct', this._onTargetElDestruct, this);
         }
         
         if (val instanceof kijs.gui.Element) {
             this._targetEl = val;
             this._targetEl.on('input', this._onTargetElInput, this);
-            this._targetEl.on('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.on('keyDown', this._onElKeyDown, this);
             this._targetEl.on('destruct', this._onTargetElDestruct, this);
             
         } else {
@@ -154,23 +155,71 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             throw new Error(`Unkown format on config "targetPos"`);
         }
     }
+
+    // overwrite
+    set width(val) {
+        this._autoWidth = kijs.isNumeric(val) ? false : true;
+        super.width = val;
+    }
     
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    close() {
-        kijs.Dom.removeEventListener('mousedown', document.body, this);
-        kijs.Dom.removeEventListener('resize', window, this);
-        kijs.Dom.removeEventListener('wheel', window, this);
-        
-        kijs.Array.each(this._ownerNodes, function(x) {
-            const node = x instanceof kijs.gui.Dom ? x.node : x;
-            kijs.Dom.removeEventListener('mousedown', node, this);
-            kijs.Dom.removeEventListener('resize', node, this);
-        }, this);
-        
-        this.unRender();
+    /**
+     * Schliesst die SpinBox
+     * @returns {undefined}
+     */
+    close() {        
+        this.unrender();
+        this.raiseEvent('close');
+    }
+
+    /**
+     * Fügt eine Node hinzu, bei Klick auf diese wird das Fenster nicht geschlossen.
+     * @param {kijs.gui.Element|kijs.gui.Dom|DOMElement} ownerNode
+     * @returns {undefined}
+     */
+    ownerNodeAdd(ownerNode) {
+        if (!kijs.Array.contains(this._ownerNodes, ownerNode)) {
+            this._ownerNodes.push(ownerNode);
+        }
+
+        if (ownerNode instanceof kijs.gui.Element) {
+            ownerNode = ownerNode.dom;
+        }
+        if (ownerNode instanceof kijs.gui.Dom) {
+            ownerNode = ownerNode.node;
+        }
+        if (ownerNode) {
+            kijs.Dom.addEventListener('mousedown', ownerNode, this._onNodeMouseDown, this);
+            kijs.Dom.addEventListener('resize', ownerNode, this._onNodeResize, this);
+            kijs.Dom.addEventListener('wheel', ownerNode, this._onNodeWheel, this);
+        }
+    }
+
+    /**
+     * Entfernt eine Node aus den überwachten elementen
+     * @param {kijs.gui.Element|kijs.gui.Dom|DOMElement} ownerNode
+     * @param {Bool} removeFromObservedNodes soll die Node von der Überwachung entfernt werden?
+     * @returns {undefined}
+     */
+    ownerNodeRemove(ownerNode, removeFromObservedNodes=true) {
+        if (removeFromObservedNodes) {
+            kijs.Array.remove(this._ownerNodes, ownerNode);
+        }
+
+        if (ownerNode instanceof kijs.gui.Element) {
+            ownerNode = ownerNode.dom;
+        }
+        if (ownerNode instanceof kijs.gui.Dom) {
+            ownerNode = ownerNode.node;
+        }
+        if (ownerNode) {
+            kijs.Dom.removeEventListener('mousedown', ownerNode, this);
+            kijs.Dom.removeEventListener('resize', ownerNode, this);
+            kijs.Dom.removeEventListener('wheel', ownerNode, this);
+        }
     }
     
     /**
@@ -180,6 +229,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     show() {
         // SpinBox anzeigen
         this.renderTo(document.body);
+
+        // Breite rechnen
+        this._calculateWidth();
         
         // Ausrichten
         this._adjustPositionToTarget(true);
@@ -195,11 +247,28 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         kijs.Dom.addEventListener('wheel', window, this._onWindowWheel, this);
         
         // Listeners auf die _ownerNodes die das Ausblenden verhindern
-        kijs.Array.each(this._ownerNodes, function(x) {
-            const node = x instanceof kijs.gui.Dom ? x.node : x;
-            kijs.Dom.addEventListener('mousedown', node, this._onNodeMouseDown, this);
-            kijs.Dom.addEventListener('resize', node, this._onNodeResize, this);
+        kijs.Array.each(this._ownerNodes, function(ownerNode) {
+            this.ownerNodeAdd(ownerNode);
         }, this);
+
+        this.raiseEvent('show');
+    }
+
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        kijs.Dom.removeEventListener('mousedown', document.body, this);
+        kijs.Dom.removeEventListener('resize', window, this);
+        kijs.Dom.removeEventListener('wheel', window, this);
+
+        kijs.Array.each(this._ownerNodes, function(ownerNode) {
+            this.ownerNodeRemove(ownerNode, false);
+        }, this);
+
+        super.unrender(true);
     }
 
 
@@ -274,6 +343,30 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese Fix ein.
+     * Dies wird benötigt, das Firefox die Scrollbar nicht in die Breite einrechnet.
+     * @returns {undefined}
+     */
+    _calculateWidth() {
+        if (this._autoWidth) {
+            this._dom.node.style.overflow = 'hidden';
+            this._dom.width = null;
+            let pos = kijs.Dom.getAbsolutePos(this._dom.node);
+            let sbw = kijs.Dom.getScrollbarWidth();
+            let w = pos.w + sbw + 10;
+
+            // Firefox macht die scrollbar innerhalb
+            // vom Container, deshalb benötigt er mehr Breite.
+            if (kijs.isFirefox()) {
+                w += 7;
+            }
+
+            this._dom.width = w;
+            this._dom.node.style.overflow = 'auto';
+        }
+    }
+
 
     // LISTENERS
     _onBodyMouseDown(e) {
@@ -308,7 +401,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._preventHide = true;
     }
     
-    _onWheel(e) {
+    _onNodeWheel(e) {
         this._preventHide = true;
     }
     
@@ -318,7 +411,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
     
-    _onTargetElKeyDown(e) {
+    _onElKeyDown(e) {
         switch (e.nodeEvent.keyCode) {
             case kijs.keys.ESC:
             case kijs.keys.TAB:
@@ -343,9 +436,12 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         
@@ -353,26 +449,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (this._targetEl) {
             this._targetEl.off(null, null, this);
         }
-        
-        kijs.Dom.removeEventListener('mousedown', document.body, this);
-        kijs.Dom.removeEventListener('resize', window, this);
-        kijs.Dom.removeEventListener('wheel', window, this);
-        
 
-        if (!kijs.isEmpty(this._ownerNodes)) {
-            kijs.Array.each(this._ownerNodes, function(x) {
-                if (x) {
-                    const node = x instanceof kijs.gui.Dom ? x.node : x;
-                    if (node) {
-                        kijs.Dom.removeEventListener('mousedown', node, this);
-                        kijs.Dom.removeEventListener('resize', node, this);
-                    }
-                }
-            }, this);
-        }
-        
-        // Elemente/DOM-Objekte entladen
-        
         
         // Variablen (Objekte/Arrays) leeren
         this._targetEl = null;

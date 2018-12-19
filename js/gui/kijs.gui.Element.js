@@ -150,9 +150,10 @@
  * drop
  * focus
  * mouseDown
- * mouseLeafe
+ * mouseLeave
  * mouseMove
  * mouseUp
+ * unrender
  * wheel
  *
  * // key events
@@ -241,7 +242,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('drop', this._dom);
         this._eventForwardsAdd('focus', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);
-        this._eventForwardsAdd('mouseLeafe', this._dom);
+        this._eventForwardsAdd('mouseEnter', this._dom);
+        this._eventForwardsAdd('mouseLeave', this._dom);
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
         this._eventForwardsAdd('touchStart', this._dom);
@@ -542,10 +544,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * rendert den DOM-Node
-     * @param {Boolean} [preventAfterRender=false]
+     * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
-    render(preventAfterRender) {
+    render(superCall) {
         // DOM Rendern
         this._dom.render();
 
@@ -563,7 +565,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
@@ -593,10 +595,16 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     
     /**
      * Node aus DOM entfernen, falls vorhanden
+     * @param {Boolean} superCall
      * @returns {undefined}
      */
-    unRender() {
-        this._dom.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._dom.unrender();
     }
     
     /**
@@ -865,15 +873,18 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
+    destruct(superCall) {
         // atferResize-Events verhindern
         this._preventAfterResize = true;
         if (this._afterResizeDeferHandle) {
             window.clearTimeout(this._afterResizeDeferHandle);
         }
-        
-        // Event auslösen.
-        if (!preventDestructEvent) {
+
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         
@@ -898,7 +909,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._configMap = null;
         this._lastSize = null;
         this._waitMaskEl = null;
-        
+
         // Basisklasse entladen
         super.destruct();
     }

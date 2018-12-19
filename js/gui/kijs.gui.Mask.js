@@ -201,7 +201,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Maskierung positionieren
@@ -211,19 +211,24 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
         } else {
-            this._iconEl.unRender();
+            this._iconEl.unrender();
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._iconEl.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._iconEl.unrender();
+        super.unrender(true);
     }
 
     /**
@@ -269,9 +274,12 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         
@@ -284,12 +292,12 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (this._iconEl) {
             this._iconEl.destruct();
         }
+
+        // Basisklasse entladen
+        super.destruct(true);
     
         // Variablen (Objekte/Arrays) leeren
         this._iconEl = null;
         this._targetX = null;
-        
-        // Basisklasse entladen
-        super.destruct(true);
     }
 };

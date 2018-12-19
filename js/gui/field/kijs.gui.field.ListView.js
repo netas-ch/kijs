@@ -111,21 +111,26 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     }
 
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         this._listView.renderTo(this._inputWrapperDom.node);
         
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._listView.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._listView.unrender();
+        super.unrender(true);
     }
 
     
@@ -180,9 +185,12 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

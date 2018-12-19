@@ -89,7 +89,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             if (val) {
                 this._captionDom.renderTo(this._inputWrapperDom.node, this._inputDom.node);
             } else {
-                this._captionDom.unRender();
+                this._captionDom.unrender();
             }
         }
     }
@@ -156,7 +156,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         if (!this._captionHide) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
         
         // Event afterRender auslösen
@@ -167,10 +167,10 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
 
     // overwrite
-    unRender() {
-        this._inputDom.unRender();
-        this._captionDom.unRender();
-        super.unRender();
+    unrender() {
+        this._inputDom.unrender();
+        this._captionDom.unrender();
+        super.unrender();
     }
 
 

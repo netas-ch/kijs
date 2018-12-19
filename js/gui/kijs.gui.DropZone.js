@@ -171,9 +171,12 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // DESTRUCTOR
     // --------------------------------------------------------------
 
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
 

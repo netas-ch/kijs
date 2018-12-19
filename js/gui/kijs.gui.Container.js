@@ -132,7 +132,7 @@
  * drop
  * focus
  * mouseDown
- * mouseLeafe
+ * mouseLeave
  * mouseMove
  * mouseUp
  * wheel
@@ -196,6 +196,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             this._innerDom.clsRemove('kijs-autoscroll');
         }
     }
+
+    get defaults() { return this._defaults; }
+    set defaults(val) { this._defaults = val; }
     
     get elements() { return this._elements; }
     
@@ -432,8 +435,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el.unRender) {
-                el.unRender();
+            if (el.unrender) {
+                el.unrender();
             }
             kijs.Array.remove(this._elements, el);
         }, this);
@@ -461,8 +464,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // leeren
         kijs.Array.each(this._elements, function(el) {
             el.off(null, null, this);
-            if (el.unRender) {
-                el.unRender();
+            if (el.unrender) {
+                el.unrender();
             }
         }, this);
         kijs.Array.clear(this._elements);
@@ -479,7 +482,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
 
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // innerDOM rendern
@@ -492,20 +495,25 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
         kijs.Array.each(this._elements, function(el) {
-            el.unRender();
+            el.unrender();
         }, this);
 
-        this._innerDom.unRender();
+        this._innerDom.unrender();
         
-        super.unRender();
+        super.unrender(true);
     }
     
 
@@ -520,6 +528,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Falls eine Instanz übergeben wird
         if (obj instanceof kijs.gui.Element) {
             // Da das Element bereits erstellt wurde, werden hier keine defaults übernommen
+            
+            // Parent zuweisen
+            obj.parent = this;
 
         // Falls ein Config-Objekt übergeben wird
         } else  if (kijs.isObject(obj)) {
@@ -551,17 +562,16 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
                 throw new Error(`Unknown xtype "${obj.xtype}".`);
             }
 
+            // Parent zuweisen
+            obj.parent = this;
+
             // Element erstellen
             obj = new constr(obj);
 
         // Ungültige Übergabe
         } else {
             throw new Error(`kijs.gui.Container: invalid element.`);
-            obj = null;
         }
-        
-        // Parent zuweisen
-        obj.parent = this;
         
         return obj;
     }
@@ -581,9 +591,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

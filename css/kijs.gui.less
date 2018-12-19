@@ -127,7 +127,7 @@ div.kijs-container-inner {
    * ContainerStack
    ****************** */
 div.kijs-container.kijs-containerstack {
-    height: 100%;
+    flex: 1;
     
     .kijs-container-inner {
         height: 100%;
@@ -722,6 +722,36 @@ button.kijs-button.kijs-trigger {
     border-bottom: 1px solid @border-greyaaa-color;
 }
 
+
+/* ******************
+   * Menu-Button
+   ****************** */
+div.kijs-menubutton-spinbox {
+    overflow: auto;
+    
+    .kijs-container-inner > * {
+        margin: 0;
+        border-radius: 0;
+    }
+
+    button.kijs-button {
+        text-align: left;
+        display: flex;
+        flex-direction: row;
+    }
+    button.kijs-button > .kijs-caption {
+        flex: 1;
+    }
+    button.kijs-button > .kijs-caption:first-child {
+        margin-left: 22px;
+    }
+    button.kijs-button > .kijs-icon {
+        width: 18px;
+    }
+    button.kijs-button > .kijs-icon2 {
+        text-align: right;
+    }
+}
 
 
 

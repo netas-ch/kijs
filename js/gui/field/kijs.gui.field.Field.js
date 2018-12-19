@@ -25,7 +25,7 @@
  * drop
  * focus
  * mouseDown
- * mouseLeafe
+ * mouseLeave
  * mouseMove
  * mouseUp
  * remove
@@ -311,7 +311,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             if (val) {
                 this._labelDom.renderTo(this._dom.node, this._inputWrapperDom.node);
             } else {
-                this._labelDom.unRender();
+                this._labelDom.unrender();
             }
         }
     }
@@ -453,7 +453,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         // dom mit elements rendern (innerDom)
         super.render(true);
         
@@ -461,7 +461,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (!this._labelHide) {
             this._labelDom.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._labelDom.unRender();
+            this._labelDom.unrender();
         }
         
         // InputWrapper rendern (kijs.guiDom)
@@ -477,23 +477,28 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errorIconEl.renderTo(this._dom.node);
         
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
 
     // overwrite
-    unRender() {
-        this._labelDom.unRender();
-        this._inputWrapperDom.unRender();
-        if (this._spinBox) {
-            this._spinBox.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
         }
-        this._spinIconEl.unRender();
-        this._errorIconEl.unRender();
-        this._helpIconEl.unRender();
-        super.unRender();
+
+        this._labelDom.unrender();
+        this._inputWrapperDom.unrender();
+        if (this._spinBox) {
+            this._spinBox.unrender();
+        }
+        this._spinIconEl.unrender();
+        this._errorIconEl.unrender();
+        this._helpIconEl.unrender();
+        super.unrender(true);
     }
 
     /**
@@ -567,9 +572,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

@@ -28,7 +28,7 @@
  * drop
  * focus
  * mouseDown
- * mouseLeafe
+ * mouseLeave
  * mouseMove
  * mouseUp
  * remove
@@ -139,23 +139,28 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
 
     // overwrite
-    unRender() {
-        this._inputDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._inputDom.unrender();
+        super.unrender(true);
     }
 
 
@@ -168,9 +173,12 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

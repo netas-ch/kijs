@@ -68,7 +68,7 @@ kijs.gui.FooterBar = class kijs_gui_FooterBar extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         // dom mit Tools rendern (innerDom)
         super.render(true);
         
@@ -77,28 +77,36 @@ kijs.gui.FooterBar = class kijs_gui_FooterBar extends kijs.gui.Container {
             this._captionDom.render();
             this._dom.node.appendChild(this._captionDom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._captionDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+        
+        this._captionDom.unrender();
+        super.unrender(true);
     }
 
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

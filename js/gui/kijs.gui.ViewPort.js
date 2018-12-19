@@ -69,7 +69,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // innerDOM Rendern
@@ -82,7 +82,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         }, this);
         
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
         
@@ -100,9 +100,12 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

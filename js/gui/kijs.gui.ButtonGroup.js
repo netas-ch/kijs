@@ -64,35 +64,43 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         super.render(true);
         
         // Span caption rendern (kijs.guiDom)
         if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._captionDom.unRender();
+            this._captionDom.unrender();
         }
 
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
 
     // overwrite
-    unRender() {
-        this._captionDom.unRender();
-        super.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._captionDom.unrender();
+        super.unrender(true);
     }
     
     
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

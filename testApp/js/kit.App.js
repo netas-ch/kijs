@@ -1,4 +1,4 @@
--1/* global kijs */
+/* global kijs */
 
 // --------------------------------------------------------------
 // kit.App
@@ -801,60 +801,45 @@ kit.App = class kit_App {
                                     },
                                     footerElements: [
                                         {
-                                            xtype: 'kijs.gui.Button',
+                                            xtype: 'kijs.gui.MenuButton',
                                             caption: 'Menü',
                                             iconChar: '&#xf135',
-                                            icon2Char: '&#xf0d7',
-                                            on: {
-                                                click: function() {
-                                                    /*if (!this.menu) {
-                                                        this.menu = new kijs.gui.menu.Menu({
-                                                            targetEl: this,
-                                                            width: 100,
-                                                            defaults: {
-                                                                xtype: 'kijs.gui.Button',
-                                                                style: {
-                                                                    width: '100%'
-                                                                }
-                                                            },
-                                                            elements: [
-                                                                { caption: 'Punkt 1 ' },
-                                                                { caption: 'Punkt 2' },
-                                                                { 
-                                                                    caption: 'Sub Menü', 
-                                                                    iconChar: '&#xf105',
-                                                                    on: {
-                                                                        click: function() {
-                                                                            if (!this.subMenu) {
-                                                                                this.subMenu = new kijs.gui.menu.Menu({
-                                                                                    parentMenu: this.parent,
-                                                                                    targetEl: this,
-                                                                                    targetPos: 'tr',
-                                                                                    width: 100,
-                                                                                    defaults: {
-                                                                                        xtype: 'kijs.gui.Button',
-                                                                                        style: {
-                                                                                            width: '100%'
-                                                                                        }
-                                                                                    },
-                                                                                    elements: [
-                                                                                        { caption: 'Punkt 1' },
-                                                                                        { caption: 'Punkt 2' },
-                                                                                        { caption: 'Punkt 3' }
-                                                                                    ]
-                                                                                });
-                                                                            }
-                                                                            this.subMenu.show();
-                                                                        }
-                                                                    }
-                                                                },
-                                                                { caption: 'Punkt 3' }
-                                                            ]
+                                            elements: [{
+                                                caption:'Hallo 1'
+                                            },{
+                                                caption:'Hallo 3',
+                                                iconChar: '&#xf135'
+                                            },{
+                                                xtype: 'kijs.gui.MenuButton',
+                                                caption:'MULTI',
+                                                elements: (function(){
+                                                    let steps=150, p = [];
+                                                    for (let i=0; i<steps; i++) {
+                                                        p.push({
+                                                            caption: 'El ' + i + ' von ' + steps
                                                         });
                                                     }
-                                                    this.menu.show();*/
-                                                }
-                                            }
+                                                    return p;
+                                                })()
+                                            },{
+                                                xtype: 'kijs.gui.MenuButton',
+                                                caption:'ENDLESS',
+                                                elements: (function(){
+                                                    let steps=20, p = [{
+                                                            caption:'ÄTSCH NICHTS DA'
+                                                        }];
+                                                    for (let i=0; i<steps; i++) {
+                                                        p = [{
+                                                                caption: 'Stufe ' + i + ' von ' + steps
+                                                            },{
+                                                                xtype: 'kijs.gui.MenuButton',
+                                                                caption:'Nächste Stufe',
+                                                                elements:p
+                                                            }];
+                                                    }
+                                                    return p;
+                                                })()                                               
+                                            }]
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Menü',

@@ -571,7 +571,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     // Overwrite
-    render(preventAfterRender) {
+    render(superCall) {
         // dom mit elements rendern (innerDom)
         super.render(true);
         
@@ -579,28 +579,28 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (!this._headerBarEl.isEmpty) {
             this._headerBarEl.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._headerBarEl.unRender();
+            this._headerBarEl.unrender();
         }
 
         // Header rendern (kijs.gui.Container)
         if (!this._headerEl.isEmpty) {
             this._headerEl.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._headerEl.unRender();
+            this._headerEl.unrender();
         }
         
         // Footer rendern (kijs.gui.Container)
         if (!this._footerEl.isEmpty) {
             this._footerEl.renderTo(this._dom.node);
         } else {
-            this._footerEl.unRender();
+            this._footerEl.unrender();
         }
         
         // FooterBar rendern (kijs.gui.FooterBar)
         if (!this._footerBarEl.isEmpty) {
             this._footerBarEl.renderTo(this._dom.node);
         } else {
-            this._footerBarEl.unRender();
+            this._footerBarEl.unrender();
         }
 
         // resizer
@@ -609,7 +609,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         
         // Event afterRender auslösen
-        if (!preventAfterRender) {
+        if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
@@ -663,15 +663,20 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     // overwrite
-    unRender() {
-        this._headerBarEl.unRender();
-        this._headerEl.unRender();
-        this._footerEl.unRender();
-        this._footerBarEl.unRender();
-        if (this._resizerEl) {
-            this._resizerEl.unRender();
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
         }
-        super.unRender();
+
+        this._headerBarEl.unrender();
+        this._headerEl.unrender();
+        this._footerEl.unrender();
+        this._footerBarEl.unrender();
+        if (this._resizerEl) {
+            this._resizerEl.unrender();
+        }
+        super.unrender(true);
     }
     
     
@@ -786,9 +791,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct(preventDestructEvent) {
-        // Event auslösen.
-        if (!preventDestructEvent) {
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
         

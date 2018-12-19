@@ -46,7 +46,7 @@ div.kijs-container-inner {
   -webkit-overflow-scrolling: touch;
 }
 div.kijs-container.kijs-containerstack {
-  height: 100%;
+  flex: 1;
 }
 div.kijs-container.kijs-containerstack .kijs-container-inner {
   height: 100%;
@@ -528,6 +528,30 @@ button.kijs-button.kijs-trigger {
   border-top: 1px solid #aaa;
   border-right: 1px solid #aaa;
   border-bottom: 1px solid #aaa;
+}
+div.kijs-menubutton-spinbox {
+  overflow: auto;
+}
+div.kijs-menubutton-spinbox .kijs-container-inner > * {
+  margin: 0;
+  border-radius: 0;
+}
+div.kijs-menubutton-spinbox button.kijs-button {
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+}
+div.kijs-menubutton-spinbox button.kijs-button > .kijs-caption {
+  flex: 1;
+}
+div.kijs-menubutton-spinbox button.kijs-button > .kijs-caption:first-child {
+  margin-left: 22px;
+}
+div.kijs-menubutton-spinbox button.kijs-button > .kijs-icon {
+  width: 18px;
+}
+div.kijs-menubutton-spinbox button.kijs-button > .kijs-icon2 {
+  text-align: right;
 }
 div.kijs-footerbar {
   flex: none;
