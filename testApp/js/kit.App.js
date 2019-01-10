@@ -1114,6 +1114,27 @@ kit.App = class kit_App {
                             footerElements: [
                                 {
                                     xtype: 'kijs.gui.Button',
+                                    caption: 'Uhrzeit',
+                                    iconChar: '&#xf017',
+                                    on: {click: function() {
+                                        let window = new kijs.gui.Window({
+                                            target: this.parent.parent.down('addressPanel'),
+                                            targetDomProperty: 'innerDom',
+                                            caption: 'Fenster',
+                                            iconChar: '&#xf017',
+                                            collapsible: 'top',
+                                            maximized: false,
+                                            modal: true,
+                                            height: 270,
+                                            width: 160,
+                                            elements:[{
+                                                    xtype: 'kijs.gui.TimePicker'
+                                            }]
+                                        });
+                                        window.show();
+                                    }}
+                                },{
+                                    xtype: 'kijs.gui.Button',
                                     caption: 'Progress Bar',
                                     iconChar: '&#xf0ae',
                                     on: {click: function() {
@@ -1202,7 +1223,7 @@ kit.App = class kit_App {
                                                     on: {click: function() {
                                                         kijs.gui.MsgBox.warning('Warnung', 'Wirklich schliessen?', function(e) {
                                                             if (e.btn === 'ok') {
-                                                                window.destruct();
+                                                                window.close();
                                                             }
                                                         });
                                                     }}

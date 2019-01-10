@@ -1945,6 +1945,73 @@ div.kijs-menu {
         transition: 0.2s;
     }
 }
+
+div.kijs-timepicker {
+    height: 100%;
+    min-width: 100px;
+    display: flex;
+    flex-direction: column;
+    
+    .kijs-headerbar {
+        display: block;
+        text-align: center;
+        flex: none;
+        height: 30px;
+        font-family: @font-family-default;
+        font-size: 16px;
+        color: #fff;
+        line-height: 30px;
+    }
+
+    .kijs-inputcontainer {
+        flex: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        height: 45px;
+
+        input, span {
+            font-size: 40px;
+            line-height: 40px;
+        }
+
+        input {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            width: 45px;
+            border: 0;
+        }
+
+        input::selection {
+            background: #fff;
+        }
+        input::-moz-selection {
+            background: #fff;
+        }
+
+        input:focus {
+            color: #2B8BD9;
+        }
+    }
+
+    .kijs-canvascontainer {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        canvas {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+    }
+
+    button {
+        flex: none;
+    }
+}
     
 
 

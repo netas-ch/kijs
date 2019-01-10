@@ -1427,6 +1427,64 @@ div.kijs-menu.kijs-hidden {
   opacity: 0;
   transition: 0.2s;
 }
+div.kijs-timepicker {
+  height: 100%;
+  min-width: 100px;
+  display: flex;
+  flex-direction: column;
+}
+div.kijs-timepicker .kijs-headerbar {
+  display: block;
+  text-align: center;
+  flex: none;
+  height: 30px;
+  font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+  font-size: 16px;
+  color: #fff;
+  line-height: 30px;
+}
+div.kijs-timepicker .kijs-inputcontainer {
+  flex: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 45px;
+}
+div.kijs-timepicker .kijs-inputcontainer input,
+div.kijs-timepicker .kijs-inputcontainer span {
+  font-size: 40px;
+  line-height: 40px;
+}
+div.kijs-timepicker .kijs-inputcontainer input {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  width: 45px;
+  border: 0;
+}
+div.kijs-timepicker .kijs-inputcontainer input::selection {
+  background: #fff;
+}
+div.kijs-timepicker .kijs-inputcontainer input::-moz-selection {
+  background: #fff;
+}
+div.kijs-timepicker .kijs-inputcontainer input:focus {
+  color: #2B8BD9;
+}
+div.kijs-timepicker .kijs-canvascontainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+div.kijs-timepicker .kijs-canvascontainer canvas {
+  margin: 0;
+  padding: 0;
+  position: relative;
+}
+div.kijs-timepicker button {
+  flex: none;
+}
 div.kijs-tooltip {
   position: fixed;
   display: block;

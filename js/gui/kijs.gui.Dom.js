@@ -847,21 +847,25 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
-     * @returns {HTMLElement|Null}                     HTML-Node, das den Fokus erhalten hat
+     * @returns {HTMLElement|Null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
     focus(alsoSetIfNoTabIndex=false) {
-        // Darf der Node den Fokus erhalten?
-        if (alsoSetIfNoTabIndex) {
-            this._node.focus();
-            return this._node;
-            
-        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
-        } else {
-            const node = kijs.Dom.getFirstFocusableNode(this._node);
-            if (node) {
-                node.focus();
+        if (this._node) {
+            // Darf der Node den Fokus erhalten?
+            if (alsoSetIfNoTabIndex) {
+                this._node.focus();
+                return this._node;
+
+            // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+            } else {
+                const node = kijs.Dom.getFirstFocusableNode(this._node);
+                if (node) {
+                    node.focus();
+                }
+                return node;
             }
-            return node;
+        } else {
+            return false;
         }
     }
         

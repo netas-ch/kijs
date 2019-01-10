@@ -256,7 +256,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isEmpty(value){
-        if (value === null || value === '' || value === undefined ) {
+        if (value === null || value === '' || value === undefined) {
             return true;
         }
         
