@@ -70,7 +70,7 @@ abstract class RpcResponseBase implements \JsonSerializable {
      * @param string|null $title
      * @param bool $cancelCallback false, falls die callback-Fn trotzdem aufgerufen werden soll.
      */
-    public function showErrorMsg($message, $title=null, bool $cancelCallback=true) {
+    public function showErrorMsg($message, $title=null, $cancelCallback=true) {
         $this->errorMsgs[] = $message;
         if ($title) {
             $this->errorTitle = $title;
