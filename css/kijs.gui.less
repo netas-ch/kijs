@@ -1589,6 +1589,47 @@ div.kijs-field-date {
 }
 
 
+/* ******************
+   * Field DateTime
+   ****************** */
+div.kijs-field-datetime {
+    height: 25px;
+
+    > .kijs-inputwrapper {
+        > input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @border-greyaaa-color;
+            padding: 2px 4px;
+            font-family: @font-family-default;
+            font-size: @font-size-default;
+            line-height: 17px;
+
+            &:focus {
+                border: 1px solid @blue-bkgrnd-color;
+            }
+        }
+    }
+
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @error-input-bkgrnd-color;
+        /*border: 1px solid @error-icon-color;*/
+    }
+
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @input-disabled-bkgrnd-color;
+        }
+    }
+}
+
+.kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
+    height: 100%;
+}
+
+
 
 /* ******************
    * Field Memo

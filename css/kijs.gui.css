@@ -1189,6 +1189,33 @@ div.kijs-field-date.kijs-disabled > .kijs-inputwrapper > input,
 div.kijs-field-date.kijs-readonly > .kijs-inputwrapper > input {
   background-color: #efefef;
 }
+div.kijs-field-datetime {
+  height: 25px;
+}
+div.kijs-field-datetime > .kijs-inputwrapper > input {
+  display: block;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  border: 1px solid #aaa;
+  padding: 2px 4px;
+  font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+  font-size: 15px;
+  line-height: 17px;
+}
+div.kijs-field-datetime > .kijs-inputwrapper > input:focus {
+  border: 1px solid #4398dd;
+}
+div.kijs-field-datetime.kijs-error  > .kijs-inputwrapper > input {
+  background-color: #ffdaec;
+}
+div.kijs-field-datetime.kijs-disabled > .kijs-inputwrapper > input,
+div.kijs-field-datetime.kijs-readonly > .kijs-inputwrapper > input {
+  background-color: #efefef;
+}
+.kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
+  height: 100%;
+}
 div.kijs-field-memo {
   height: 50px;
 }

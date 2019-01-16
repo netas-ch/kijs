@@ -146,7 +146,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         return val;
     }
 
-    set value(val) {
+    set value(val) { 
         val = val +'';
         val = val.split(this._separator);
         
@@ -189,9 +189,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         if (this._inputSecondDom.node) {
             this._inputSecondDom.node.value = this._zeroPad(this._second);
         }
-
-        // Event
-        this.raiseEvent('change', {value: this.value});
+        return;
     }
 
     // --------------------------------------------------------------
@@ -278,6 +276,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     paint(pointerPos=null) {
         // Grösse einstellen.
         this._canvasSize = Math.min(this._canvasContainerDom.width, this._canvasContainerDom.height);
+        if (this._canvasSize === 0 || !this._canvasDom.node) {
+            return;
+        }
+
         this._canvasDom.node.width = this._canvasSize;
         this._canvasDom.node.height = this._canvasSize;
         this._clockRadius = this._canvasSize / 2 - 1;
@@ -573,12 +575,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                         if (this._inputSecondDom.node) {
                             this._inputSecondDom.focus();
                             this._inputSecondDom.node.select();
-                        } else {
-                            this.raiseEvent('change', {value: this.value});
                         }
                         break;
                     case 'second':
-                        this.raiseEvent('change', {value: this.value});
                         break;
                 }
             }
@@ -647,9 +646,15 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
         if (fld === this._inputMinuteDom) {
             this._minute = parseInt(fld.node.value);
+
+            if (!this._hasSeconds) {
+                this.raiseEvent('change', {value: this.value});
+            }
         }
+
         if (fld === this._inputSecondDom) {
             this._second = parseInt(fld.node.value);
+            this.raiseEvent('change', {value: this.value});
         }
 
         // zeichnen
@@ -663,6 +668,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     _onNowButtonClick() {
         let time = new Date();
         this.value =  '' + time.getHours() + this._separator + time.getMinutes() + this._separator + time.getSeconds();
+
+        // Event
+        this.raiseEvent('change', {value: this.value});
     }
 
     /**

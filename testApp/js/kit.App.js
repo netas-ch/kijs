@@ -587,6 +587,23 @@ kit.App = class kit_App {
                                                 }
                                             ]
                                         },{
+                                            xtype: 'kijs.gui.field.DateTime',
+                                            name: 'DatumUhrzeit',
+                                            label: 'Datum & Zeit',
+                                            width: 290
+                                        },{
+                                            xtype: 'kijs.gui.field.DateTime',
+                                            name: 'Datum',
+                                            label: 'Datum',
+                                            hasTime: false,
+                                            width: 240
+                                        },{
+                                            xtype: 'kijs.gui.field.DateTime',
+                                            name: 'Uhrzeit',
+                                            label: 'Uhrzeit',
+                                            hasDate: false,
+                                            width: 200
+                                        },{
                                             xtype: 'kijs.gui.field.Password',
                                             name: 'Passwort',
                                             label: 'Passwort',
