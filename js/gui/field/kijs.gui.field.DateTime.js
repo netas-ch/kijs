@@ -66,6 +66,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasTime = true;
         this._hasDate = true;
         this._hasSeconds = false;
+        this._timeRequired = false;
 
 
         this._timePicker = new kijs.gui.TimePicker({
@@ -96,7 +97,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             //autoLoad: true,
             spinIconVisible: true,
             spinIconChar: '&#xf073', // calendar
-            displayFormat: 'd.m.Y H:i', // Format, das angezeigt wird
+            displayFormat: 'd.m.Y H:i:s', // Format, das angezeigt wird
             valueFormat: 'Y-m-d H:i:s'  // Format, das mit value ausgeliefert wird
         }, config);
 
@@ -105,6 +106,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             hasTime: true,    // Enthält das Feld die Uhrzeit?
             hasDate: true,    // Enthält das Feld das Datum?
             hasSeconds: true, // Hat das Uhrzeitfeld Sekunden?
+            timeRequired: true, // Muss die Zeit eingegeben werden?
             displayFormat: true,
             valueFormat: true
         });
@@ -135,6 +137,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (!this._hasDate) {
             this.spinIconChar = '&#xf017'; // clock
         }
+
+        this._timePicker.hasSeconds = !!this._hasSeconds;
     }
 
 
@@ -152,6 +156,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
     }
 
+    get hasDate() { return this._hasDate; }
+    set hasDate(val) { this._hasDate = !!val; }
+
+    get hasSeconds() { return this._hasSeconds; }
+    set hasSeconds(val) { this._hasSeconds = !!val; }
+
+    get hasTime() { return this._hasTime; }
+    set hasTime(val) { this._hasTime = !!val; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
 
@@ -167,6 +180,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._inputDom.nodeAttributeSet('readOnly', false);
         }
     }
+
+    get timeRequired() { return this._timeRequired; }
+    set timeRequired(val) { this._timeRequired = !!val; }
 
     // overwrite
     get value() {
@@ -221,8 +237,14 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         super.unrender(true);
     }
 
+    /**
+     * Formatiert ein Datum im angegebenen Format
+     * @param {String} format
+     * @param {Date} datetime
+     * @returns {String}
+     */
     _format(format, datetime) {
-        format = this._getFormat(format);
+        format = this._getFormat(format, datetime);
         if (format !== '' && datetime instanceof Date) {
             return kijs.Date.format(datetime, format, this._languageId);
         }
@@ -233,18 +255,35 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      * Entfernt Datums- oder Zeitbuchstaben vom Format,
      * wenn diese nicht aktiv sind.
      * @param {String} format
+     * @param {Date|null} datetime
      * @returns {String}
      */
-    _getFormat(format) {
+    _getFormat(format, datetime=null) {
+        let hasNoTime = false;
+
+        // Wenn keine Uhrzeit gefunden wurde und diese nicht nötig
+        // ist, wird die Zeit abgeschnitten.
+        if (datetime instanceof Date && !this._timeRequired) {
+            if (datetime.timeMatch === false) {
+                hasNoTime = true;
+            }
+        }
+
         // alle Datumszeichen entfernen
         if (!this._hasDate) {
             format = format.replace(/[^a-zA-Z]?[dDjlFmMnWYyL][^a-zA-Z]?/gu, '').trim();
         }
 
         // alle Zeitzeichen entfernen
-        if (!this._hasTime) {
+        if (!this._hasTime || hasNoTime) {
             format = format.replace(/[^a-zA-Z]?[His][^a-zA-Z]?/gu, '').trim();
         }
+
+        // Sekunden entfernen
+        if (!this._hasSeconds) {
+            format = format.replace(/[^a-zA-Z]?s[^a-zA-Z]?/gu, '').trim();
+        }
+
         return format;
     }
 
@@ -257,58 +296,61 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _getDateTimeByString(dateTimeStr) {
         let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false;
 
-        // Uhrzeit lesen (12:12)
-        dateTimeStr = dateTimeStr.replace(/([0-9]{1,2}):([0-9]{1,2})(?::([0-9]{1,2}))?/u, function(match, h, i, s) {
-            timeMatch = true;
-            h = parseInt(h);
-            i = parseInt(i);
-            s = s ? parseInt(s) : 0;
-            if (h === 24) {
-                h = 0;
-            }
-            if (h >= 0 && h <= 23) {
-                hour = h;
-            }
-            if (i >= 0 && i < 60) {
-                minute = i;
-            }
-            if (s >= 0 && s < 60) {
-                second = s;
-            }
-            return '';
-        }).trim();
+        // Uhrzeit
+        if (this._hasTime) {
 
-        // Falls nur eine Uhrzeit gesucht ist, versuchen die Uhrzeit zu lesen.
-        // Wenn eine einzelne Zahl eingegeben wurde, diese als Stunde handeln
-        if (!timeMatch && this._hasTime && !this._hasDate) {
-            let tm = dateTimeStr.match(/[0-9]+/u);
-            if (tm) {
-                let tH = parseInt(tm[0]);
-                if (tH >= 0 && tH <= 24) {
-                    hour = tH === 24 ? 0 : tH;
-                    timeMatch = true;
+            // Uhrzeit lesen (12:12)
+            dateTimeStr = dateTimeStr.replace(/([0-9]{1,2}):([0-9]{1,2})(?::([0-9]{1,2}))?/u, function(match, h, i, s) {
+                timeMatch = true;
+                h = parseInt(h);
+                i = parseInt(i);
+                s = s ? parseInt(s) : 0;
+                if (h === 24) {
+                    h = 0;
+                }
+                if (h >= 0 && h <= 23) {
+                    hour = h;
+                }
+                if (i >= 0 && i < 60) {
+                    minute = i;
+                }
+                if (s >= 0 && s < 60) {
+                    second = s;
+                }
+                return '';
+            }).trim();
+
+            // Falls nur eine Uhrzeit gesucht ist, versuchen die Uhrzeit zu lesen.
+            // Wenn eine einzelne Zahl eingegeben wurde, diese als Stunde handeln
+            if (!timeMatch && !this._hasDate) {
+                let tm = dateTimeStr.match(/[0-9]+/u);
+                if (tm) {
+                    let tH = parseInt(tm[0]);
+                    if (tH >= 0 && tH <= 24) {
+                        hour = tH === 24 ? 0 : tH;
+                        timeMatch = true;
+                    }
                 }
             }
-        }
 
-        // drei oder vier ziffern als HHMM handeln
-        if (!timeMatch && this._hasTime && !this._hasDate) {
-            let tm = dateTimeStr.match(/([0-9]{1,2})([0-9]{2})/u);
-            if (tm) {
-                let tH = parseInt(tm[1]);
-                let tI = parseInt(tm[2]);
+            // drei oder vier ziffern als [H]HMM handeln
+            if (!timeMatch && !this._hasDate) {
+                let tm = dateTimeStr.match(/([0-9]{1,2})([0-9]{2})/u);
+                if (tm) {
+                    let tH = parseInt(tm[1]);
+                    let tI = parseInt(tm[2]);
 
-                if (tH >= 0 && tH <= 24 && tI >= 0 && tI <= 59) {
-                    hour = tH;
-                    minute = tI;
+                    if (tH >= 0 && tH <= 24 && tI >= 0 && tI <= 59) {
+                        hour = tH;
+                        minute = tI;
+                    } else {
+                        return false;
+                    }
                 } else {
                     return false;
                 }
-            } else {
-                return false;
             }
         }
-
 
         // Datum im DB-Format (2019-01-10) lesen
         dateTimeStr.replace(/([0-9]{2}|[0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/u, function(match, Y, m, d) {
@@ -349,7 +391,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
 
-        return new Date(year, month-1, day, hour, minute, second);
+        let datetime = new Date(year, month-1, day, hour, minute, second);
+        datetime.timeMatch = timeMatch; // Uhrzeit definiert oder default (00:00)
+        return datetime;
     }
 
     _validationRules(value) {

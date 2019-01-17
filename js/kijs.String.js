@@ -47,7 +47,7 @@ kijs.String = class kijs_String {
      *  - < und >
      *  - &
      * Beispiel: '<p>Test</p>' => '&#60;p&#62;Test&#60;/p&#62;'
-     * @param {type} html
+     * @param {String} html
      * @returns {String}
      */
     static htmlentities(html) {
