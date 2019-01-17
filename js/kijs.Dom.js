@@ -273,22 +273,6 @@ kijs.Dom = class kijs_Dom {
     }
     
     /**
-     * Konvertiert einen HTML-String in einen String, in dem die HTML-Zeichen als Unicode eingebunden sind
-     * Es werden folgende Zeichen ersetzt
-     *  - Unicode 00A0 - 9999
-     *  - < und >
-     *  - &
-     * Beispiel: '<p>Test</p>' => '&#60;p&#62;Test&#60;/p&#62;'
-     * @param {type} html
-     * @returns {String}
-     */
-    static htmlentities(html) {
-        return (html+'').replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-            return '&#'+i.charCodeAt(0)+';';
-        });
-    }
-    
-    /**
      * Fügt einen Node in den Dom ein, direkt nach einem anderen Knoten
      * @param {HTMLElement} node
      * @param {HTMLElement} targetNode

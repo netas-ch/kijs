@@ -39,6 +39,22 @@ kijs.String = class kijs_String {
     static endsWith(text, search) {
         return text.indexOf(search, text.length - search.length) !== -1;
     }
+    
+    /**
+     * Konvertiert einen HTML-String in einen String, in dem die HTML-Zeichen als Unicode eingebunden sind
+     * Es werden folgende Zeichen ersetzt
+     *  - Unicode 00A0 - 9999
+     *  - < und >
+     *  - &
+     * Beispiel: '<p>Test</p>' => '&#60;p&#62;Test&#60;/p&#62;'
+     * @param {type} html
+     * @returns {String}
+     */
+    static htmlentities(html) {
+        return (html+'').replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+            return '&#'+i.charCodeAt(0)+';';
+        });
+    }
 
     /**
      * Wandelt Sonderzeichen in HTML-Codes um
