@@ -251,6 +251,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         
         // key events
         this._eventForwardsAdd('keyDown', this._dom);
+        this._eventForwardsAdd('keyUp', this._dom);
+        this._eventForwardsAdd('keyPress', this._dom);
         this._eventForwardsAdd('enterPress', this._dom);
         this._eventForwardsAdd('enterEscPress', this._dom);
         this._eventForwardsAdd('escPress', this._dom);
@@ -320,6 +322,28 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     
     get left() { return this._dom.left; }
     set left(val) { this._dom.left = val; }
+
+    /**
+     * Gibt das Element zurück, das grafisch unterhalb liegt.
+     * @returns {kijs.gui.Element|Null}
+     */
+    get lowerElement() {
+        if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
+            return null;
+        }
+
+        let curTop=null, lowerEl=null;
+        kijs.Array.each(this._parentEl.elements, function(el) {
+            if (!kijs.isEmpty(el.top) && el.left === this.left && el !== this) {
+                if (el.top > this.top && (curTop === null || el.top < curTop)) {
+                    lowerEl = el;
+                    curTop = el.top;
+                }
+            }
+        }, this);
+
+        return lowerEl;
+    }
     
     get name() { return this._name; }
     set name(val) { this._name = val; }
@@ -400,6 +424,28 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     
     get top() { return this._dom.top; }
     set top(val) { this._dom.top = val; }
+
+    /**
+     * Gibt das Element zurück, das grafisch oberhalb liegt.
+     * @returns {kijs.gui.Element|Null}
+     */
+    get upperElement() {
+        if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
+            return null;
+        }
+        
+        let curTop=null, upperEl=null;
+        kijs.Array.each(this._parentEl.elements, function(el) {
+            if (!kijs.isEmpty(el.top) && el.left === this.left && el !== this) {
+                if (el.top < this.top && (curTop === null || el.top > curTop)) {
+                    upperEl = el;
+                    curTop = el.top;
+                }
+            }
+        }, this);
+
+        return upperEl;
+    }
     
     get visible() { 
         return this._visible;

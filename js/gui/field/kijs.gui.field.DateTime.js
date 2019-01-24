@@ -49,6 +49,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     constructor(config={}) {
         super(false);
 
+        this._hasTime = true;
+        this._hasDate = true;
+        this._hasSeconds = false;
+        this._timeRequired = false;
+        let useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
+
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
             nodeTagName: 'input',
@@ -60,14 +66,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 context: this
             }
         });
-
         this._dom.clsAdd('kijs-field-datetime');
-
-        this._hasTime = true;
-        this._hasDate = true;
-        this._hasSeconds = false;
-        this._timeRequired = false;
-
 
         this._timePicker = new kijs.gui.TimePicker({
             on: {
@@ -77,19 +76,36 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         });
 
-        // TODO: datePicker
+        this._spBxSeparator = new kijs.gui.Element({
+            cls: 'kijs-separator'
+        });
+
+        this._datePicker = new kijs.gui.DatePicker({
+            on: {
+                dateSelected: this._onDatePickerSelected,
+                dateChanged: this._onDatePickerChange,
+                context: this
+            }
+        });
 
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
-            width: 180,
+            width: 383,
             height: 260,
-            cls: ['kijs-flexcolumn', 'kijs-spinbox-datetime'],
+            cls: ['kijs-flexrow', 'kijs-spinbox-datetime'],
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
             openOnInput: false,
+            parent: this,
             elements: [
+                this._datePicker,
+                this._spBxSeparator,
                 this._timePicker
-            ]
+            ],
+            on: {
+                show: this._onSpinBoxShow,
+                context: this
+            }
         });
 
        // Standard-config-Eigenschaften mergen
@@ -134,8 +150,29 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (!this._hasDate && !this._hasTime) {
             throw new Error('hasDate and hasTime is false, nothing to display');
         }
-        if (!this._hasDate) {
+        if (useDefaultSpinIcon && !this._hasDate) {
             this.spinIconChar = '&#xf017'; // clock
+        }
+
+        if (this._hasDate) {
+            this._spinBoxEl.add(this._datePicker);
+            this._spinBoxEl.width = 223;
+        } else {
+            this._spinBoxEl.remove(this._datePicker);
+        }
+
+        if (this._hasTime) {
+            this._spinBoxEl.add(this._timePicker);
+            this._spinBoxEl.width = 157;
+        } else {
+            this._spinBoxEl.remove(this._timePicker);
+        }
+
+        if (this._hasDate && this._hasTime) {
+            this._spinBoxEl.add(this._spBxSeparator);
+            this._spinBoxEl.width = 383;
+        } else {
+            this._spinBoxEl.remove(this._spBxSeparator);
         }
 
         this._timePicker.hasSeconds = !!this._hasSeconds;
@@ -295,6 +332,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      */
     _getDateTimeByString(dateTimeStr) {
         let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false;
+        dateTimeStr = dateTimeStr +'';
 
         // Uhrzeit
         if (this._hasTime) {
@@ -399,8 +437,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _validationRules(value) {
         let rawValue = this._inputDom.nodeAttributeGet('value');
 
+        super._validationRules(rawValue);
+
         // Eingabe erforderlich
-        if (this._getDateTimeByString(rawValue) === false) {
+        if (rawValue !== '' && this._getDateTimeByString(rawValue) === false) {
             this._errors.push('Ungültiges Format.');
         }
     }
@@ -414,7 +454,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _onChange(e) {
         let dateTime = this._getDateTimeByString(e.nodeEvent.target.value);
         if (dateTime) {
-            // formatierens
+            // formatieren
             this.value = dateTime;
         }
     }
@@ -429,8 +469,37 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         let v = this._getDateTimeByString(this.value) || new Date();
         this.value = this._format('Y-m-d', v) + ' ' + e.value;
         this._spinBoxEl.close();
+        this.validate();
     }
 
+    _onDatePickerChange(e) {
+        if (e instanceof Date) {
+            let v = this._getDateTimeByString(this.value);
+
+            if (!v) {
+                v =  kijs.Date.getDatePart(new Date());
+                v.timeMatch = false;
+            }
+
+            this.value = this._format('Y-m-d', e) + ' ' + this._format('H:i:s', v);
+        }
+        this.validate();
+    }
+
+    _onDatePickerSelected(e) {
+        this._spinBoxEl.close();
+    }
+
+    _onSpinBoxShow() {
+        let v = this._getDateTimeByString(this.value);
+        if (v && this._hasDate) {
+            this._datePicker.value = v;
+        }
+
+        if (v && this._hasTime) {
+            this._timePicker.value = this._format('H:i:s', v);
+        }
+    }
 
 
     // --------------------------------------------------------------
