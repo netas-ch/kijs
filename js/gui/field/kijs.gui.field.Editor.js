@@ -108,7 +108,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             kijs.defer(function() {
                 var _this = this;
                 this._aceEditor.getSession().on('change', function() {
-                    _this.raiseEvent('input');
+                    _this.raiseEvent(['input', 'change']);
                 });
             }, 200, this);
         }

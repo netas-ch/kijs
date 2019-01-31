@@ -47,6 +47,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         // Event-Weiterleitungen von this._inputDom
         //this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
+        this._eventForwardsAdd('change', this._inputDom);
         
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);

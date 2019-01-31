@@ -449,6 +449,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // LISTENERS
     _onInput(e) {
         this.validate();
+        this.raiseEvent('input', {value: this.value});
     }
 
     _onChange(e) {
@@ -457,6 +458,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             // formatieren
             this.value = dateTime;
         }
+
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onTimePickerAfterRender() {
@@ -470,6 +473,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this.value = this._format('Y-m-d', v) + ' ' + e.value;
         this._spinBoxEl.close();
         this.validate();
+
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onDatePickerChange(e) {
@@ -484,6 +489,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.value = this._format('Y-m-d', e) + ' ' + this._format('H:i:s', v);
         }
         this.validate();
+
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onDatePickerSelected(e) {

@@ -368,7 +368,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._checkboxIconEl.focus();
             this.validate();
 
-            this.raiseEvent('input', { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
+            this.raiseEvent(['input', 'change'], { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
         }
     }
 
@@ -392,7 +392,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._updateCheckboxIcon();
             this.validate();
 
-            this.raiseEvent('input', { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
+            this.raiseEvent(['input', 'change'], { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
         }
         // Bildlauf der Space-Taste verhindern
         e.nodeEvent.preventDefault();
