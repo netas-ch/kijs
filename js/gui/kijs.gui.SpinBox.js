@@ -358,7 +358,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
             // Firefox macht die scrollbar innerhalb
             // vom Container, deshalb benötigt er mehr Breite.
-            if (kijs.isFirefox()) {
+            if (kijs.Navigator.isFirefox) {
                 w += 7;
             }
 

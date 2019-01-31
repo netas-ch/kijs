@@ -295,6 +295,42 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
+     * Gibt alle Unterelemente als flaches Array zurück
+     * @param {Number} [deep]         default=-1    Gewünschte Suchtiefe
+     *                                              0=nur im aktuellen Container
+     *                                              1=im aktuellen Container und in deren untergeordneten
+     *                                              2=im aktuellen Container, deren untergeordneten und deren untergeordneten
+     *                                              n=...
+     *                                              -1=unendlich
+     * @returns {Array}
+     */
+    getElements(deep=-1) {
+        let ret = [];
+
+        // elements im aktuellen Container
+        kijs.Array.each(this._elements, function(el) {
+            ret.push(el);
+        }, this);
+
+        // rekursiv unterelemente hinzufügen
+        if (deep !== 0) {
+            if (deep>0) {
+                deep--;
+            }
+            kijs.Array.each(this._elements, function(el) {
+                if (kijs.isFunction(el.getElements)) {
+                    let retSub = el.getElements(deep);
+                    if (!kijs.isEmpty(retSub)) {
+                        ret = ret.concat(retSub);
+                    }
+                }
+            }, this);
+        }
+
+        return ret;
+    }
+
+    /**
      * Gibt untergeordnete Elemente aufgrund ihres 'name' zurück
      * @param {String} name
      * @param {Number} deep [optional] default=-1    Gewünschte Suchtiefe 

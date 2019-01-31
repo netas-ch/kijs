@@ -9,6 +9,8 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    static get version() { return '0.0.1'; }
+
     static get keys() {
         return {
             BACKSPACE: 8,
@@ -269,14 +271,6 @@ window.kijs = class kijs {
         }
         
         return false;
-    }
-
-    /**
-     * Handelt es sich um einen FireFox-Browser?
-     * @returns {Boolean}
-     */
-    static isFirefox() {
-        return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     }
 
     /**

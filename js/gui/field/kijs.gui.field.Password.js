@@ -72,7 +72,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get disableBrowserSecurityWarning() { return this._disableBrowserSecurityWarning; }
     set disableBrowserSecurityWarning(val) {
         if (val === 'auto') {
-            val = kijs.isFirefox() && window.isSecureContext === false;
+            val = kijs.Navigator.isFirefox && window.isSecureContext === false;
         }
 
         // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen

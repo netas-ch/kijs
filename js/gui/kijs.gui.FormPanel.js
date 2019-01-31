@@ -28,6 +28,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             facadeFnSave: true,
             rpc: { target: 'rpc' }
         });
+
+        // Listeners auf Kindelemente
+        this.on('add', this._observChilds, this);
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -211,6 +214,26 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         return ret;
     }
 
+    // PROTECTED
+
+    /**
+     * Fügt für alle Unterelemente listeners hinzu.
+     */
+    _observChilds() {
+        kijs.Array.each(this.getElements(), function(el) {
+            if (el instanceof kijs.gui.Container && !(el instanceof kijs.gui.field.Field)) {
+                if (!el.hasListener('add', this._onChildAdd, this)) {
+                    el.on('add', this._onChildAdd, this);
+                }
+
+            } else if (el instanceof kijs.gui.field.Field) {
+                if (!el.hasListener('change', this._onChildChange, this)) {
+                    el.on('change', this._onChildChange, this);
+                }
+            }
+        }, this);
+    }
+
     // EVENTS
     /**
      * callback-fnBeforeMessages, die eventuelle Fehler direkt im Formular anzeigt
@@ -236,6 +259,15 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     _onAfterFirstRenderTo(e) {
         this.load();
+    }
+
+
+    _onChildAdd() {
+        this._observChilds();
+    }
+
+    _onChildChange(e) {
+        this.raiseEvent('change', e);
     }
     
     
