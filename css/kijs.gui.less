@@ -12,7 +12,10 @@
 @panel-bkgrnd-color: #fff;
 
 @font-family-default: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-@font-size-default: 15px;
+@font-size-default: 11px;
+@font-size-field: 12px;
+@font-size-msg: 12px;
+@font-size-bar: 12px;
 
 @font-white-color: #fff;
 @font-black-color: #000;
@@ -467,7 +470,7 @@ div.kijs-msgbox {
         display: flex;
         flex-direction: row;
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-msg;
         color: @font-black-color;
     }
     > .kijs-container-inner > .kijs-icon {
@@ -775,7 +778,7 @@ div.kijs-footerbar {
         margin: 0 6px 0 0;
         line-height: 30px;
         font-family: @font-family-default;
-        font-size: 16px;
+        font-size: @font-size-bar;
         text-align: right;
         color: @font-white-color;
         
@@ -861,7 +864,7 @@ div.kijs-headerbar {
         margin: 0 0 0 6px;
         line-height: 30px;
         font-family: @font-family-default;
-        font-size: 16px;
+        font-size: @font-size-bar;
         text-align: left;
         color: @font-white-color;
     }
@@ -1030,12 +1033,12 @@ div.kijs-dataview {
         border-radius: 4px;
         
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         color: @font-black-color;
         
         * {
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             color: @font-black-color;
         }
         &:focus,
@@ -1143,7 +1146,7 @@ div.kijs-listview {
         
         > .kijs-caption {
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 15px;
             color: @font-black-color;
         }
@@ -1213,7 +1216,7 @@ div.kijs-listview {
     td,
     th {
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         line-height: 17px;
         padding: 4px 6px;
         text-align: right;
@@ -1285,7 +1288,7 @@ div.kijs-datepicker {
         flex: none;
         height: 30px;
         font-family: @font-family-default;
-        font-size: 16px;
+        font-size: @font-size-bar;
         color: #fff;
         line-height: 30px;
 
@@ -1309,7 +1312,7 @@ div.kijs-datepicker {
             display: table-cell;
             text-align: right;
             padding: 2px;
-            line-height: 16px;
+            line-height: @font-size-bar;
             padding: 4px 4px 4px 1px;
             width: 29px;
 
@@ -1387,7 +1390,7 @@ div.kijs-datepicker {
         display: flex;
         flex-direction: row;
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         
         .kijs-monthselector {
             flex: 2;
@@ -1575,7 +1578,7 @@ div.kijs-field {
         display: block;
         flex: none;
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         line-height: 17px;
         padding: 3px 0 0 0;
     }
@@ -1662,7 +1665,7 @@ div.kijs-field-text {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
             
             &:focus {
@@ -1699,7 +1702,7 @@ div.kijs-field-password {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
             
             &:focus {
@@ -1748,7 +1751,7 @@ div.kijs-field-date {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
 
             &:focus {
@@ -1785,7 +1788,7 @@ div.kijs-field-datetime {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
 
             &:focus {
@@ -1826,7 +1829,7 @@ div.kijs-field-memo {
         border: 1px solid @border-greyaaa-color;
         padding: 2px 4px;
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         line-height: 17px;
         resize: none;
         
@@ -1950,7 +1953,7 @@ div.kijs-field-combo {
             border: 1px solid @border-greyaaa-color;
             padding: 2px 4px;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
             
             &:focus {
@@ -1998,7 +2001,7 @@ div.kijs-field-combo_ALT {
             appearance: none;
             -moz-appearance: none;
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
             background: @panel-bkgrnd-color;
             cursor: pointer;
@@ -2067,7 +2070,7 @@ div.kijs-field-checkbox {
         
         > .kijs-caption {
             font-family: @font-family-default;
-            font-size: @font-size-default;
+            font-size: @font-size-field;
             line-height: 17px;
         }
         
@@ -2127,7 +2130,7 @@ div.kijs-field-editor {
 div.kijs-field-display {
     .kijs-inputwrapper {
         font-family: @font-family-default;
-        font-size: @font-size-default;
+        font-size: @font-size-field;
         line-height: 17px;
         padding: 3px 0 0 0;
     }
@@ -2136,6 +2139,14 @@ div.kijs-field-display {
         > .kijs-inputwrapper > * {
                 color: @input-disabled-color;
         }
+    }
+
+    .kijs-link {
+        cursor: pointer;
+    }
+
+    .kijs-link:hover {
+        text-decoration: underline;
     }
 }
 
@@ -2180,7 +2191,7 @@ div.kijs-timepicker {
         flex: none;
         height: 30px;
         font-family: @font-family-default;
-        font-size: 16px;
+        font-size: @font-size-bar;
         color: #fff;
         line-height: 30px;
     }

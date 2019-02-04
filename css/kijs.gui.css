@@ -339,7 +339,7 @@ div.kijs-msgbox > .kijs-container-inner {
   display: flex;
   flex-direction: row;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   color: #000;
 }
 div.kijs-msgbox > .kijs-container-inner > .kijs-icon {
@@ -379,7 +379,7 @@ div.kijs-cornertipcontainer .kijs-panel > .kijs-container-inner {
   display: flex;
   flex-direction: row;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   color: #000;
 }
 div.kijs-cornertipcontainer .kijs-panel > .kijs-container-inner > .kijs-icon {
@@ -444,7 +444,7 @@ button.kijs-button > .kijs-icon:not(:empty) + .kijs-caption:not(:empty) {
 }
 button.kijs-button > .kijs-caption {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   color: #333;
 }
 button.kijs-button > .kijs-badge {
@@ -569,7 +569,7 @@ div.kijs-footerbar > .kijs-caption {
   margin: 0 6px 0 0;
   line-height: 30px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   text-align: right;
   color: #fff;
 }
@@ -638,7 +638,7 @@ div.kijs-headerbar > .kijs-caption {
   margin: 0 0 0 6px;
   line-height: 30px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   text-align: left;
   color: #fff;
 }
@@ -768,12 +768,12 @@ div.kijs-dataview .kijs-dataviewelement {
   border: 1px solid #f6f6f6;
   border-radius: 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   color: #000;
 }
 div.kijs-dataview .kijs-dataviewelement * {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   color: #000;
 }
 div.kijs-dataview .kijs-dataviewelement:focus,
@@ -858,7 +858,7 @@ div.kijs-listview .kijs-dataviewelement > .kijs-icon {
 }
 div.kijs-listview .kijs-dataviewelement > .kijs-caption {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 15px;
   color: #000;
 }
@@ -887,7 +887,7 @@ div.kijs-datepicker .kijs-headerbar {
   flex: none;
   height: 30px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   color: #fff;
   line-height: 30px;
 }
@@ -907,7 +907,7 @@ div.kijs-datepicker .kijs-calendarcontainer > div > div {
   display: table-cell;
   text-align: right;
   padding: 2px;
-  line-height: 16px;
+  line-height: 12px;
   padding: 4px 4px 4px 1px;
   width: 29px;
 }
@@ -981,7 +981,7 @@ div.kijs-datepicker .kijs-monthyearselector {
   display: flex;
   flex-direction: row;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
 }
 div.kijs-datepicker .kijs-monthyearselector .kijs-monthselector {
   flex: 2;
@@ -1078,7 +1078,7 @@ div.kijs-menu-month .kijs-dataviewelement {
 div.kijs-progressbar .kijs-progressbar-caption-bottom,
 div.kijs-progressbar .kijs-progressbar-caption {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   line-height: 17px;
 }
 div.kijs-progressbar .kijs-progressbar-caption {
@@ -1114,7 +1114,7 @@ div.kijs-progressbar .kijs-progressbar-field .kijs-progressbar-text {
   display: inline;
   margin: 0;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 11px;
   line-height: 15px;
   color: white;
   opacity: 0;
@@ -1128,7 +1128,7 @@ div.kijs-field > .kijs-label {
   display: block;
   flex: none;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
   padding: 3px 0 0 0;
 }
@@ -1196,7 +1196,7 @@ div.kijs-field-text > .kijs-inputwrapper > input {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-text > .kijs-inputwrapper > input:focus {
@@ -1220,7 +1220,7 @@ div.kijs-field-password > .kijs-inputwrapper > input {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-password > .kijs-inputwrapper > input:focus {
@@ -1254,7 +1254,7 @@ div.kijs-field-date > .kijs-inputwrapper > input {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-date > .kijs-inputwrapper > input:focus {
@@ -1278,7 +1278,7 @@ div.kijs-field-datetime > .kijs-inputwrapper > input {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-datetime > .kijs-inputwrapper > input:focus {
@@ -1305,7 +1305,7 @@ div.kijs-field-memo > .kijs-inputwrapper > textarea {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
   resize: none;
 }
@@ -1390,7 +1390,7 @@ div.kijs-field-combo > .kijs-inputwrapper > input {
   border: 1px solid #aaa;
   padding: 2px 4px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-combo > .kijs-inputwrapper > input:focus {
@@ -1420,7 +1420,7 @@ div.kijs-field-combo_ALT > .kijs-inputwrapper > select {
   appearance: none;
   -moz-appearance: none;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
   background: #fff;
   cursor: pointer;
@@ -1471,7 +1471,7 @@ div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-icon {
 }
 div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-caption {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
 }
 div.kijs-field-checkbox > .kijs-inputwrapper:focus > .kijs-checkbox-input {
@@ -1505,13 +1505,19 @@ div.kijs-field-editor.kijs-readonly > .kijs-inputwrapper > div {
 }
 div.kijs-field-display .kijs-inputwrapper {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 17px;
   padding: 3px 0 0 0;
 }
 div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > *,
 div.kijs-field-display.kijs-readonly > .kijs-inputwrapper > * {
   color: #888;
+}
+div.kijs-field-display .kijs-link {
+  cursor: pointer;
+}
+div.kijs-field-display .kijs-link:hover {
+  text-decoration: underline;
 }
 div.kijs-menu {
   position: absolute;
@@ -1544,7 +1550,7 @@ div.kijs-timepicker .kijs-headerbar {
   flex: none;
   height: 30px;
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 16px;
+  font-size: 12px;
   color: #fff;
   line-height: 30px;
 }

@@ -639,6 +639,24 @@ kit.App = class kit_App {
                                             label: 'Mein Label',
                                             value: 'Mein Text<b>t</b>'
                                         },{
+                                            xtype: 'kijs.gui.field.Display',
+                                            name: 'displayfeld',
+                                            label: 'Telefon',
+                                            value: '+41 31 552 00 13',
+                                            link: true
+                                        },{
+                                            xtype: 'kijs.gui.field.Display',
+                                            name: 'displayfeld',
+                                            label: 'Email',
+                                            value: 'info@kipferinformatik.ch',
+                                            link: true
+                                        },{
+                                            xtype: 'kijs.gui.field.Display',
+                                            name: 'displayfeld',
+                                            label: 'Webseite',
+                                            value: 'www.kipferinformatik.ch',
+                                            link: true
+                                        },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 2',
                                             label: 'Feld <b>2</b>',
@@ -1197,6 +1215,7 @@ kit.App = class kit_App {
                                         pgWin.show();
                                         let perc = 0, perc1= 0;
                                         window.setInterval(function(){
+                                            if (!pgWin || !pgWin.dom) return;
                                             pgWin.down('myprogressbar').percent = perc;
                                             pgWin.down('myprogressbar2').percent = perc1;
                                             perc += 6;

@@ -53,6 +53,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             nodeAttribute: {
                 id: this._inputId,
                 cls: 'kijs-displayvalue'
+            },
+            on: {
+                click: this._onDomClick,
+                context: this
             }
         });
 
@@ -63,12 +67,16 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
             htmlDisplayType: 'html',
-            submitValue: false
+            submitValue: false,
+            link: false,
+            linkType: 'auto' 
         }, config);
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            link: true,                  // Weblink zum anklicken machen
+            linkType: true,              // Art des Links: tel, mail, web (default: automatisch)
             htmlDisplayType: { target: 'htmlDisplayType', context: this._inputDom }
         });
 
@@ -121,6 +129,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     }
     set value(val) {
         this._inputDom.html = val;
+        this._setLinkClass();
     }
 
 
@@ -139,6 +148,8 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
+
+        this._setLinkClass();
     }
 
 
@@ -158,6 +169,69 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // display kann nicht invalid sein,
         // da der User nichts ändern kann.
         return true;
+    }
+
+    _setLinkClass() {
+        let autoLinkType = this._getLinkType(this.value);
+        if (this._link && ((this._linkType === 'auto' && autoLinkType !== false) || this._linkType === autoLinkType)) {
+            this._inputDom.clsAdd('kijs-link');
+        } else {
+            this._inputDom.clsRemove('kijs-link');
+        }
+    }
+
+    /**
+     * Prüft, ob ein Wert ein Link ist.
+     * @param {String} value
+     * @returns {String|false} tel|mail|web
+     */
+    _getLinkType(value) {
+        value = value + '';
+        
+        // Telefon
+        if (value.match(/^\s*\+?[0-9\s]+$/i)) {
+            return 'tel';
+        }
+
+        // Email
+        if (value.match(/^[^@]+@[^@\.]+\.[a-z]+$/i)) {
+            return 'mail';
+        }
+
+        // Webseite
+        if (value.match(/^[\w0-9-öüäéèà\.]+\.[a-z]{2,}$/i)) {
+            return 'web';
+        }
+
+        return false;
+    }
+
+    /**
+     * Öffnet ein Link (beim Klick)
+     * @param {String} link
+     * @param {String} type
+     * @returns {undefined}
+     */
+    _openLink(link, type) {
+        if (type === 'tel') {
+            window.open('tel:' + link.replace(/[^\+0-9]/i, ''));
+
+        } else if (type === 'mail') {
+            window.open('mailto:' + link, '');
+
+        }  else if (type === 'web' && link.substr(0,4) === 'http') {
+            window.open(link, '');
+
+        }  else if (type === 'web') {
+            window.open('http://' + link, '');
+        }
+    }
+
+    _onDomClick() {
+        if (this._link) {
+            let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
+            this._openLink(this.value+'', linkType);
+        }
     }
 
 
