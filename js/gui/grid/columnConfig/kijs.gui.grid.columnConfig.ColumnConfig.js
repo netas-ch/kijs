@@ -1,0 +1,233 @@
+/* global kijs, this */
+
+// --------------------------------------------------------------
+// kijs.gui.grid.column.Column (Abstract)
+// --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ *
+ */
+kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_ColumnConfig extends kijs.Observable {
+
+
+    // --------------------------------------------------------------
+    // CONSTRUCTOR
+    // --------------------------------------------------------------
+    constructor(config={}) {
+        super(false);
+
+        if (config !== false) {
+            throw new Error('do not create a instance of kijs.gui.grid.columnConfig.ColumnConfig directly');
+        }
+
+        this._caption = '';
+        this._editable = false;
+        this._visible = true;
+        this._hideable = true;
+        this._resizable = true;
+        this._sortable = true;
+        this._valueField = '';
+        this._width = 100;
+
+        // xtypes
+        this._cellXtype = null;
+        this._filterFieldXtype = null;
+        this._headerCellXtype = null;
+
+        // Configs
+        this._cellConfig = null;
+        this._filterFieldConfig = null;
+        this._headerCellConfig = null;
+
+        // grid
+        this._grid = null;
+        
+        // Standard-config-Eigenschaften mergen
+        config = Object.assign({}, {
+            // keine
+        }, config);
+
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        this._configMap = {
+            grid: true,
+            cellXtype: true,
+            filterFieldXtype: true,
+            headerCellXtype: true,
+
+            caption: {target: 'caption' },
+            editable: true,
+            visible: true,
+            hideable: true,
+            resizable: true,
+            sortable: true,
+            valueField: true,
+            width: true,
+
+            cellConfig: {target: 'cellConfig' },
+            headerCellConfig: {target: 'headerCellConfig' },
+            filterFieldConfig: {target: 'filterFieldConfig' }
+
+        };
+
+        // Config anwenden
+        if (kijs.isObject(config)) {
+            this.applyConfig(config, true);
+        }
+
+        if (this.cellConfig === null) {
+            this.cellConfig = this._cellXtype;
+        }
+        if (this.filterFieldConfig === null) {
+            this.filterFieldConfig = this._filterFieldXtype;
+        }
+        if (this.headerCellConfig === null) {
+            this.headerCellConfig = this._headerCellXtype;
+        }
+    }
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get caption() { return this._caption; }
+    set caption(val) {
+        this._caption = val;
+        this.raiseEvent('change', {caption: val});
+    }
+
+    get cellConfig() {
+        let cCnf =  this._cellConfig || {xtype: this._cellXtype};
+        cCnf.columnConfig = this;
+        return cCnf;
+    }
+    set cellConfig(val) {
+        if (kijs.isString(val)) {
+            this._cellConfig = {
+                xtype: val
+            };
+        } else if (kijs.isObject(val)) {
+            this._cellConfig = val;
+            if (!this._cellConfig.xtype) {
+                this._cellConfig.xtype = this._cellXtype;
+            }
+            this._cellConfig.columnConfig = this;
+        }
+    }
+
+    get editable() { return this._editable; }
+    set editable(val) {
+        this._editable = !!val;
+        this.raiseEvent('change', {editable: !!val});
+    }
+
+    get filterFieldConfig() {
+        let cCnf =  this._filterFieldConfig || {xtype: this._filterFieldXtype};
+        cCnf.columnConfig = this;
+        return cCnf;
+    }
+    set filterFieldConfig(val) {
+        if (kijs.isString(val)) {
+            this._filterFieldConfig = {
+                xtype: val
+            };
+        } else if (kijs.isObject(val)) {
+            this._filterFieldConfig = val;
+            if (!this._filterFieldConfig.xtype) {
+                this._filterFieldConfig.xtype = this._cellXtype;
+            }
+            this._filterFieldConfig.columnConfig = this;
+        }
+    }
+
+    get grid() { return this._grid; }
+    set grid(val) { this._grid = val; }
+
+    get headerCellConfig() {
+        let cCnf =  this._headerCellConfig || {xtype: this._headerCellXtype};
+        cCnf.columnConfig = this;
+        return cCnf;
+    }
+    set headerCellConfig(val) {
+        if (kijs.isString(val)) {
+            this._headerCellConfig = {
+                xtype: val
+            };
+        } else if (kijs.isObject(val)) {
+            this._headerCellConfig = val;
+            if (!this._headerCellConfig.xtype) {
+                this._headerCellConfig.xtype = this._cellXtype;
+            }
+            this._headerCellConfig.columnConfig = this;
+        }
+    }
+
+    get visible() { return this._visible; }
+    set visible(val) {
+        this._visible = !!val;
+        this.raiseEvent('change', {visible: !!val});
+    }
+
+    get hideable() { return this._hideable; }
+    set hideable(val) {
+        this._hideable = !!val;
+        this.raiseEvent('change', {hideable: !!val});
+    }
+
+    get position() {
+        if (this._grid) {
+            this._grid.columnConfigs.indexOf(this);
+        }
+        return false;
+    }
+
+    get resizable() { return this._resizable; }
+    set resizable(val) {
+        this._resizable = !!val;
+        this.raiseEvent('change', {resizable: !!val});
+    }
+
+    get sortable() { return this._sortable; }
+    set sortable(val) {
+        this._sortable = !!val;
+        this.raiseEvent('change', {sortable: !!val});
+    }
+
+    get width() { return this._width; }
+    set width(val) {
+        if (!kijs.isNumeric(val)) {
+            throw new Error('invalid width value for columnConfig');
+        }
+        this._width = val;
+        this.raiseEvent('change', {width: val});
+    }
+
+    get valueField() { return this._valueField; }
+
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+
+    /**
+     * Wendet die Konfigurations-Eigenschaften an
+     * @param {Object} config
+     * @param {Boolean} [preventEvents=false]   // Das Auslösen des afterResize-Event verhindern?
+     * @returns {undefined}
+     */
+    applyConfig(config={}, preventEvents=false) {
+        // evtl. afterResize-Event deaktivieren
+        const prevAfterRes = this._preventAfterResize;
+        if (preventEvents) {
+            this._preventAfterResize = true;
+        }
+
+        // Config zuweisen
+        kijs.Object.assignConfig(this, config, this._configMap);
+
+        // Evtl. afterResize-Event wieder zulassen
+        if (preventEvents) {
+            this._preventAfterResize = prevAfterRes;
+        }
+    }
+};

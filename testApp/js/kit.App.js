@@ -330,6 +330,45 @@ kit.App = class kit_App {
                             ],
                             elements: [
                                 {
+                                    xtype: 'kijs.gui.Panel',
+                                    name: 'gridPanel',
+                                    caption: 'Tabelle',
+                                    closable: true,
+                                    collapsible: 'top',
+                                    resizable: true,
+                                    height: 200,
+                                    shadow: true,
+                                    waitMaskTargetDomProperty: 'innerDom',
+//                                    innerStyle: {
+//                                        padding: '10px',
+//                                        overflowY: 'auto'
+//                                    },
+                                    elements: [{
+                                        xtype: 'kijs.gui.grid.Grid',
+                                        columnConfigs: (function(){
+                                            let cols = [];
+                                            for (let i=0; i<26; i++) {
+                                                cols.push({
+                                                   caption:'Spalte ' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1),
+                                                   valueField:'field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1).toLowerCase()
+                                                });
+                                            }
+                                            return cols;
+                                        })(),
+                                        data:(function(){
+                                            let rows = [];
+                                            for (let i=0; i<200; i++) {
+                                                let row = {};
+                                                for (let y=0; y<26; y++) {
+                                                    row['field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1).toLowerCase()] =
+                                                            i+1 + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1);
+                                                }
+                                                rows.push(row);
+                                            }
+                                            return rows;
+                                        })()
+                                    }]
+                                }, {
                                     xtype: 'kijs.gui.FormPanel',
                                     name: 'addressPanel',
                                     caption: 'Adresse',
@@ -343,6 +382,9 @@ kit.App = class kit_App {
                                     waitMaskTargetDomProperty: 'innerDom',
                                     facadeFnLoad: 'address.load',
                                     facadeFnSave: 'address.save',
+                                    style: {
+                                        marginTop:'10px'
+                                    },
                                     innerStyle: {
                                         padding: '10px',
                                         overflowY: 'auto'

@@ -1519,6 +1519,40 @@ div.kijs-field-display .kijs-link {
 div.kijs-field-display .kijs-link:hover {
   text-decoration: underline;
 }
+div.kijs-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+  font-size: 11px;
+}
+div.kijs-grid table {
+  border-collapse: collapse;
+  white-space: nowrap;
+}
+div.kijs-grid table td {
+  border-bottom: 1px solid #eee;
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  table-layout: fixed;
+  text-overflow: ellipsis;
+}
+div.kijs-grid table tr:hover td {
+  background-color: #eee;
+}
+div.kijs-grid .kijs-center {
+  flex: 1;
+}
+div.kijs-grid .kijs-center > div {
+  max-height: 100%;
+}
+div.kijs-grid .kijs-center .kijs-tablecontainer {
+  overflow: auto;
+}
 div.kijs-menu {
   position: absolute;
   display: block;
