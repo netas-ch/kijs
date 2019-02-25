@@ -25,11 +25,11 @@ kit.App = class kit_App {
     // --------------------------------------------------------------
     run() {
         let _this = this;
-        
+
         // ViewPort erstellen
         let viewport = new kijs.gui.ViewPort({
             cls: 'kijs-flexcolumn',
-            elements: [                
+            elements: [
                 // TOP
                 {
                     xtype: 'kijs.gui.Panel',
@@ -346,7 +346,7 @@ kit.App = class kit_App {
                                     elements: [{
                                         xtype: 'kijs.gui.grid.Grid',
                                         columnConfigs: (function(){
-                                            let cols = [];
+                                            let cols = [{caption:'Vorname', valueField:'vorname'}];
                                             for (let i=0; i<26; i++) {
                                                 cols.push({
                                                    caption:'Spalte ' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1),
@@ -355,18 +355,22 @@ kit.App = class kit_App {
                                             }
                                             return cols;
                                         })(),
-                                        data:(function(){
-                                            let rows = [];
-                                            for (let i=0; i<200; i++) {
-                                                let row = {};
-                                                for (let y=0; y<26; y++) {
-                                                    row['field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1).toLowerCase()] =
-                                                            i+1 + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1);
-                                                }
-                                                rows.push(row);
-                                            }
-                                            return rows;
-                                        })()
+
+                                        facadeFnLoad: 'grid.load',
+                                        rpc: this._rpc,
+                                        primaryKeys:'field_a'
+//                                        data:(function(){
+//                                            let rows = [];
+//                                            for (let i=0; i<200; i++) {
+//                                                let row = {};
+//                                                for (let y=0; y<26; y++) {
+//                                                    row['field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1).toLowerCase()] =
+//                                                            ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(y,1) + (i+1);
+//                                                }
+//                                                rows.push(row);
+//                                            }
+//                                            return rows;
+//                                        })()
                                     }]
                                 }, {
                                     xtype: 'kijs.gui.FormPanel',
@@ -786,16 +790,16 @@ kit.App = class kit_App {
                                                 marginBottom: '4px'
                                             },
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' }, 
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' }, 
+                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
+                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
                                                 {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' },
-                                                {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' }, 
-                                                {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' }, 
+                                                {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' },
+                                                {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' },
                                                 {id:6, Bezeichnung:'viollet', Icon:'&#xf111', Color:'#8800ff' },
-                                                {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' }, 
-                                                {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' }, 
-                                                {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' }, 
-                                                {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' }, 
+                                                {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' },
+                                                {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' },
+                                                {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' },
+                                                {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' },
                                                 {id:11, Bezeichnung:'schwarz', Icon:'&#xf111', Color:'#000000' }
                                             ],
                                             value: [2,3],
@@ -915,7 +919,7 @@ kit.App = class kit_App {
                                                             }];
                                                     }
                                                     return p;
-                                                })()                                               
+                                                })()
                                             }]
                                         },{
                                             xtype: 'kijs.gui.Button',
@@ -1176,7 +1180,7 @@ kit.App = class kit_App {
                                                     } else if (this.___cornerTipIcon === 'warning') {
                                                         this.___cornerTipIcon = 'error';
                                                     }
-                                                    
+
                                                     kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', this.___cornerTipIcon);
                                                 },
                                                 context: this
@@ -1462,20 +1466,20 @@ kit.App = class kit_App {
                                     let el = this.parent.elements[0];
                                     let html = 'Text mit <span style="color:#f00">Formatierung</span>';
                                     switch (this.__testState) {
-                                        case 0: 
+                                        case 0:
                                             el.htmlDisplayType = 'html';
                                             el.html = html;
-                                            this.caption = 'code'; 
+                                            this.caption = 'code';
                                             break;
                                         case 1:
                                             el.htmlDisplayType = 'code';
                                             el.html = html;
-                                            this.caption = 'text'; 
+                                            this.caption = 'text';
                                             break;
                                         case 2:
                                             el.htmlDisplayType = 'text';
                                             el.html = html;
-                                            this.caption = 'html'; 
+                                            this.caption = 'html';
                                             break;
                                     }
                                     this.__testState++;
@@ -1491,22 +1495,22 @@ kit.App = class kit_App {
         });
         viewport.render();
     }
-    
-    
+
+
     rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
         this._rpc.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, ignoreWarnings, fnBeforeDisplayError);
     }
-        
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         // RPC entladen
         this._rpc.destruct();
-        
+
         // Variablen
         this._rpc = null;
     }
-    
+
 };

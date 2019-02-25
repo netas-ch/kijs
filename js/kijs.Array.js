@@ -44,7 +44,7 @@ kijs.Array = class kijs_Array {
         if (array1.length !== array2.length) {
             return false;
         }
-        
+   
         // Elemente durchgehen un den Inhalt vergleichen
         for (let i=0, l=array1.length; i<l; i++) {
             // Bei sub-Arrays: Rekursiver Aufruf
@@ -127,6 +127,26 @@ kijs.Array = class kijs_Array {
         }
 
         return true;
+    }
+
+    /**
+     * Schiebt ein Element in einem Array um einen bestimmten Offset
+     * @param {Array} array
+     * @param {Mixed} value
+     * @param {Int} offset Anzahl Positionen, die geschoben werden soll.
+     * @returns {Array}
+     */
+    static move(array, value, offset) {
+        const fromIndex = array.indexOf(value);
+        if (fromIndex !== -1) {
+            let toIndex = fromIndex + offset;
+            toIndex = Math.max(0, Math.min(toIndex, array.length));
+
+            array.splice(fromIndex, 1);
+            array.splice(toIndex, 0, value);
+        }
+
+        return array;
     }
     
     /**

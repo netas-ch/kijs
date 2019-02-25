@@ -5,33 +5,33 @@
 // --------------------------------------------------------------
 /**
  * Ein einfaches DOM-Element ohne Positionierungen.
- * 
+ *
  * CONFIG-Parameter
  * ----------------
  * afterResizeDelay Number [optional=300]
- * 
+ *
  * cls          Array|String [optional] CSS-Klassennamen
  *                                      Beispiel: cls:['cls-a','cls-b'] oder cls:'cls-a cls-b'
- * 
+ *
  * displayWaitMask Booelan [optional]   Soll die Lademaske angezeigt werden?
- * 
+ *
  * height       Number [optional]       Höhe
- * 
+ *
  * html         String [optional]       HTML-Code, der in das Element eingefügt wird
  *                                      Beispiel: html:'<p>Hallo Welt</p>'
- * 
+ *
  * htmlDisplayType String [optional]    Darstellung der Eigenschaft 'html'. Default: 'html'
  *                                      html: als html-Inhalt (innerHtml)
  *                                      code: Tags werden als als Text angezeigt
  *                                      text: Tags werden entfernt
- * 
+ *
  * left         Number [optional]       X-Koordinate
- * 
+ *
  * name         String [optional]       Element-Namen Siehe dazu auch kijs.gui.Container.getElementByName()
- * 
+ *
  * nodeTagName   String [optional]       Tag-Name des DOM-node. Default='div'
  *                                      Beispiel: nodeTagName='section'
- * 
+ *
  * on           Object [optional]       Objekt mit Listener-Funktionen und optionalem context.
  *                                      Wenn kein context angegeben wird, so wird das aktuelle Objekt genommen.
  *                                      Beispiel: on: {
@@ -43,97 +43,97 @@
  *                                          },
  *                                          context: xy
  *                                      }
- * 
- * parent       kijs.gui.Element [optional] Verweis auf das übergeordenete Element    
- * 
- * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript 
+ *
+ * parent       kijs.gui.Element [optional] Verweis auf das übergeordenete Element
+ *
+ * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
  *                                      Beispiel: style:{background-color:'#ff8800'}
- * 
+ *
  * toolTip      String|Object|kijs.gui.ToolTip [optional]  ToolTip als
  *                                                   - String (HTML-Code). Beispiel: html:'<p>Hallo Welt</p>'
  *                                                   - ToolTip-Config Objekt
  *                                                   - kijs.gui.ToolTip-Instanz
- * 
+ *
  * top          Number [optional]       Y-Koordinate
- * 
+ *
  * visible      Boolean [optional]      Sichtbarkeit des Elements Default=true
  *                                      Beispiel: visible:false
- * 
+ *
  * width        Number [optional]      Breite
- * 
- *  
- *  
+ *
+ *
+ *
  * FUNKTIONEN
  * ----------
  * applyConfig                          Wendet ein Konfigurations-Objekt an
  *  Args:
  *   config     Object
- * 
+ *
  * destruct                             Destruktor ->Entlädt das Objekt samt allen untergeordneten Objekten
 
  * waitMaskAdd                          Zeigt die Lademaske an oder zählt den Zähler hoch, falls sie schon sichtbar ist
- * 
+ *
  * waitMaskRemove                       Zählt den Zähler nach unten und blendet bei 0 die Lademaske aus
- * 
+ *
  * render                               rendert den DOM-Node
- * 
+ *
  * renderTo                             rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
- *  Args: 
+ *  Args:
  *   targetNode    HTMLElement
  *   insertBefore  HTMLElement [optional]
- * 
- * up                                   Durchläuft den Element-Baum nach oben und gibt das erste Element zurück, 
+ *
+ * up                                   Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
  *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
- *   name          String 
+ *   name          String
  *  Return:        kijs_gui_Element|Null
  *
- * upX                                  Durchläuft den Element-Baum nach oben und gibt das erste Element zurück, 
+ * upX                                  Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
  *  Args:                               dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
- *   name          String 
+ *   name          String
  *  Return:        kijs_gui_Element|Null
- * 
- * 
+ *
+ *
  * EIGENSCHAFTEN
  * -------------
  * afterResizeDelay
- * 
+ *
  * cls          kijs.helper.Cls         Verweis auf den Cls-Helper
- * 
+ *
  * height       Number                  Höhe
- * 
+ *
  * html         String                  Siehe kijs.gui.Dom.html
- * 
+ *
  * htmlDisplayType String               Siehe kijs.gui.Dom.htmlDisplayType
- * 
+ *
  * isEmpty      Boolean (readonly)
- * 
+ *
  * isRendered   Boolean (readonly)
- * 
+ *
  * left         Number                  X-Koordinate
- * 
+ *
  * node         HTML-Element (readonly) Verweis auf den DOM-Node
- * 
+ *
  * name
- * 
+ *
  * next         kijs.gui.Element|Null (readonly)   Gibt das nächste element im elements-Array zurück
- * 
+ *
  * parent       kijs.gui.Element|Null (readonly)   Verweis auf das übergeordnete Element
- * 
+ *
  * previous     kijs.gui.Element|Null (readonly)   Gibt das vorherige element im elements-Array zurück
- *  
+ *
  * style        (readonly)
- * 
+ *
  * toolTip
- * 
+ *
  * top          Number                  Y-Koordinate
- * 
+ *
  * visible
- * 
+ *
  * width        Number                  Breite
- * 
+ *
  * xtype        String (readonly)       Gibt den Namen der Klasse zurück
- * 
- * 
+ *
+ *
  * EVENTS
  * ----------
  * afterFirstRenderTo
@@ -171,7 +171,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     constructor(config={}) {
         super();
-        
+
         this._afterResizeDeferHandle = null;   // intern
         this._afterResizeDelay = 300;    // delay beim Aufruf des afterResize-Events
         this._dom = new kijs.gui.Dom();
@@ -179,16 +179,16 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._parentEl = null;
         this._visible = true;
         this._lastSize = null;    // Grösse beim letzten Aufruf vom afterResize-Event
-        
+
         this._waitMaskEl = null;        // Instanz der Lademaske
-        this._waitMaskCount = 0;        // Anzahl Lademasken die angezeigt werden sollen. 
-                                        // bei mehreren wird trotzdem nur eine angezeigt. 
+        this._waitMaskCount = 0;        // Anzahl Lademasken die angezeigt werden sollen.
+                                        // bei mehreren wird trotzdem nur eine angezeigt.
                                         // Sobald der Zähler wieder auf 0 ist, wird sie dann entfernt.
-                                        
+
         this._waitMaskTargetDomProperty = 'dom';   // Dom-Property, für das die Lademaske angezeigt werden soll
-        
+
         this._preventAfterResize = false;    // Auslösen des afterResize-Events verhindern?
-        
+
         this._eventForwards = {};   // Events, die an untergeordnete kijs.gui.Dom Objekte weitergeleitet werden sollen
                                     //  {
                                     //    click: [
@@ -205,7 +205,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         config = Object.assign({}, {
             // keine
         }, config);
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             afterResizeDelay: true,
@@ -230,7 +230,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             width: { target: 'width' },
             xtype: { fn: 'manual' }
         };
-        
+
         // Event-Weiterleitungen von this._dom
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
@@ -248,7 +248,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseUp', this._dom);
         this._eventForwardsAdd('touchStart', this._dom);
         this._eventForwardsAdd('wheel', this._dom);
-        
+
         // key events
         this._eventForwardsAdd('keyDown', this._dom);
         this._eventForwardsAdd('keyUp', this._dom);
@@ -257,23 +257,23 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('enterEscPress', this._dom);
         this._eventForwardsAdd('escPress', this._dom);
         this._eventForwardsAdd('spacePress', this._dom);
-        
-        
+
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get afterResizeDelay() { return this._afterResizeDelay; }
     set afterResizeDelay(val) { this._afterResizeDelay = val; }
-    
+
     get displayWaitMask() { return !kijs.isEmpty(this._waitMaskEl); }
-    set displayWaitMask(val) { 
+    set displayWaitMask(val) {
         if (val) {
             if (kijs.isEmpty(this._waitMaskEl)) {
                 this._waitMaskEl = new kijs.gui.Mask({
@@ -282,7 +282,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     targetDomProperty: this._waitMaskTargetDomProperty
                 });
                 this._waitMaskCount = 1;
-                
+
                 if (this.isRendered) {
                     this._waitMaskEl.show();
                 }
@@ -299,10 +299,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     get dom() { return this._dom; }
 
     get isRendered() { return !!this._dom.isRendered; }
-    
+
     get node() { return this._dom.node; }
     get nodeTagName() { return this._dom.nodeTagName; }
-    
+
     get height() { return this._dom.height; }
     set height(val) {
         this._dom.height = val;
@@ -311,15 +311,15 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._raiseAfterResizeEvent(true);
         }
     }
-    
+
     get html() { return this._dom.html; }
     set html(val) { this._dom.html = val; }
-    
+
     get htmlDisplayType() { return this._dom.htmlDisplayType; }
     set htmlDisplayType(val) { this._dom.htmlDisplayType = val; }
-    
+
     get isEmpty() { return this._dom.isEmpty; }
-    
+
     get left() { return this._dom.left; }
     set left(val) { this._dom.left = val; }
 
@@ -344,10 +344,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         return lowerEl;
     }
-    
+
     get name() { return this._name; }
     set name(val) { this._name = val; }
-    
+
     /**
      * Gibt das nächste element im elements-Array zurück
      * @returns {kijs.gui.Element|Null}
@@ -383,14 +383,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 this._parentEl.off('afterResize', this._onParentAfterResize, this);
                 this._parentEl.off('childElementAfterResize', this._onParentChildElementAfterResize, this);
             }
-            
+
             this._parentEl = val;
             this._parentEl.on('afterResize', this._onParentAfterResize, this);
             this._parentEl.on('childElementAfterResize', this._onParentChildElementAfterResize, this);
             this.applyConfig();
         }
     }
-    
+
     /**
      * Gibt das vorherige element im elements-Array zurück
      * @returns {kijs.gui.Element|Null}
@@ -416,12 +416,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     get style() { return this._dom.style; }
-    
+
     get toolTip() { return this._dom.toolTip; }
     set toolTip(val) {
         this._dom.toolTip = val;
     };
-    
+
     get top() { return this._dom.top; }
     set top(val) { this._dom.top = val; }
 
@@ -433,7 +433,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
             return null;
         }
-        
+
         let curTop=null, upperEl=null;
         kijs.Array.each(this._parentEl.elements, function(el) {
             if (!kijs.isEmpty(el.top) && el.left === this.left && el !== this) {
@@ -446,26 +446,26 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         return upperEl;
     }
-    
-    get visible() { 
+
+    get visible() {
         return this._visible;
     }
     set visible(val) {
         const changed = !!this._visible !== !!val;
-        
+
         this._visible = !!val;
-        
+
         if (this._visible) {
             this._dom.clsRemove('kijs-hidden');
         } else {
             this._dom.clsAdd('kijs-hidden');
         }
-        
+
         if (changed) {
             this.raiseEvent('changeVisibility', { visible: this._visible });
         }
     }
-    
+
     get waitMaskTargetDomProperty() { return this._waitMaskTargetDomProperty; }
     set waitMaskTargetDomProperty(val) {
         this._waitMaskTargetDomProperty = val;
@@ -473,7 +473,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._waitMaskEl.targetDomProperty = val;
         }
     }
-    
+
     get width() { return this._dom.width; }
     set width(val) {
         this._dom.width = val;
@@ -482,16 +482,16 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._raiseAfterResizeEvent(true);
         }
     }
-    
-    get xtype() { 
+
+    get xtype() {
         if (kijs.isString(this.constructor.name) && !kijs.isEmpty(this.constructor.name)) {
             return this.constructor.name.replace(/_/g, '.');
-            
+
         // Workaround für IE und Edge
         } else {
             // Wenn der xtype noch nicht ermittelt worden ist, muss er ermittelt werden
             const proto = this;
-            
+
             // Zuerst den Klassennamen suchen (Edge)
             if (!proto.__xtype) {
                 let results = /\s*class\s([a-zA-Z0-9_]+)(\sextends\s[a-zA-Z0-9_.]+)?\s*{/.exec(this.constructor.toString());
@@ -499,7 +499,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     proto.__xtype = results[1].trim().replace(/_/g, '.');
                 }
             }
-            
+
             // Sonst den Funktionsname suchen (IE)
             if (!proto.__xtype) {
                 let results = /\s*function\s([a-zA-Z0-9_]+)\s*\(/.exec(this.constructor.toString());
@@ -514,9 +514,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 throw new Error(`xtype can not be determined`);
             }
         }
-        
+
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -533,10 +533,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (preventEvents) {
             this._preventAfterResize = true;
         }
-        
+
         // Config zuweisen
         kijs.Object.assignConfig(this, config, this._configMap);
-        
+
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
             this._preventAfterResize = prevAfterRes;
@@ -559,7 +559,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // overwrite
     on(names, callback, context) {
         names = kijs.isArray(names) ? names : [names];
-        
+
         // Event Weiterleitungen erstellen, falls noch nicht vorhanden
         kijs.Array.each(names, function(name) {
             if (this._eventForwards[name]) {
@@ -568,7 +568,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 }, this);
             }
         }, this);
-        
+
         // Aufruf der Basisfunktion
         super.on(names, callback, context);
     }
@@ -601,7 +601,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (kijs.isDefined(this._visible)) {
             this.visible = this._visible;
         }
-        
+
         if (this._waitMaskEl) {
             kijs.defer(function() {
                 if (this._waitMaskEl) {
@@ -619,16 +619,30 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
      * @param {HTMLElement} targetNode
-     * @param {HTMLElement} insertBefore - Falls das Element statt angehängt eingefügt werden soll.
+     * @param {HTMLElement} [insert] - Falls das Element statt angehängt eingefügt werden soll.
+     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
      * @returns {undefined}
      */
-    renderTo(targetNode, insertBefore) {
+    renderTo(targetNode, insert, insertPosition='before') {
         const firstRender = !this.isRendered;
-        
+
         this.render();
 
-        if (insertBefore) {
-            targetNode.insertBefore(this._dom.node, insertBefore);
+        if (insert) {
+
+            // Element vor dem insert-Element einfügen
+            if (insertPosition === 'before') {
+                targetNode.insertBefore(this._dom.node, insert);
+
+            // Element nach dem insert-Element einfügen
+            } else if (insertPosition === 'after') {
+                targetNode.insertBefore(this._dom.node, insert.nextSibling);
+                
+            } else {
+                throw new Error('invalid insert position for renderTo');
+            }
+
+        // Element anhängen
         } else {
             targetNode.appendChild(this._dom.node);
         }
@@ -638,7 +652,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this.raiseEvent('afterFirstRenderTo');
         }
     }
-    
+
     /**
      * Node aus DOM entfernen, falls vorhanden
      * @param {Boolean} superCall
@@ -652,9 +666,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         this._dom.unrender();
     }
-    
+
     /**
-     * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück, 
+     * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
      * @param {String} name
      * @returns {kijs_gui_Element|Null}
@@ -669,9 +683,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
         return null;
     }
-    
+
     /**
-     * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück, 
+     * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
      * @param {String} xtype
      * @returns {kijs_gui_Element|Null}
@@ -694,14 +708,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      */
     waitMaskAdd() {
         this._waitMaskCount++;
-        
+
         if (!this._waitMaskEl) {
             this.displayWaitMask = true;
         }
-        
+
         return this._waitMaskEl;
     }
-    
+
     /**
      * Entfernt die Lademaske
      * Falls der Zähler > 1 ist, wird sie nicht geschlossen, sondern nur der Zähler dekrementiert.
@@ -730,17 +744,17 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!targetEventName) {
             targetEventName = eventName;
         }
-        
+
         if (!this._eventForwardsHas(eventName, target, targetEventName)) {
             this._eventForwards[eventName] = this._eventForwards[eventName] || [];
             const forward = {
                 target: target,
                 targetEventName: targetEventName
             };
-            
+
             this._eventForwards[eventName].push(forward);
-            
-            /*// Bei kijs.gui.Element-Targets, wird der Forward-Listener sofort erstellt, 
+
+            /*// Bei kijs.gui.Element-Targets, wird der Forward-Listener sofort erstellt,
             // weil sonst, wenn der Listener vor dem _eventForwardsAdd gemacht wird, nicht funktioniert.
             // Da dieser Vorfall bei kijs.gui.Dom nicht auftreten kann, können wir dort den Listener erst bei einer
             // Verwendung erstellen.
@@ -751,7 +765,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             }*/
         }
     }
-    
+
     /**
      * Überprüft, ob eine Eventweiterleitung existiert
      * @param {String} eventName            kijs-Event Name
@@ -763,9 +777,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!targetEventName) {
             targetEventName = eventName;
         }
-        
+
         let ret = false;
-        
+
         if (!kijs.isEmpty(this._eventForwards[eventName])) {
             kijs.Array.each(this._eventForwards[eventName], function(forward) {
                 if (forward.target === target && forward.targetEventName === targetEventName) {
@@ -776,10 +790,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
         return ret;
     }
-    
+
     /**
      * Entfernt eine Event-Weiterleitung
-     * @param {String} eventName            Name des Events, dessen Weiterleitung entfernt werden soll 
+     * @param {String} eventName            Name des Events, dessen Weiterleitung entfernt werden soll
      * @param {kijs.gui.Dom|kijs.gui.Element} target  Ziel, dessen Weiterleitung entfernt werden soll
      * @param {String} [targetEventName]    kijs-Event Name im untergeordneten Objekt oder leer bei gleichem Event-Namen
      * @returns {undefined}
@@ -788,9 +802,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!targetEventName) {
             targetEventName = eventName;
         }
-        
+
         let forwardToDelete = null;
-        
+
         if (!kijs.isEmpty(this._eventForwards[eventName])) {
             kijs.Array.each(this._eventForwards[eventName], function(forward) {
                 if (forward.target === target && forward.targetEventName === targetEventName) {
@@ -799,15 +813,15 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 }
             }, this);
         }
-        
+
         if (forwardToDelete) {
             kijs.Array.remove(this._eventForwards[eventName], forwardToDelete);
         }
     }
-    
+
     /**
      * Hat die Grösse seit dem letzten Aufruf von _raiseAfterResizeEvent geändert?
-     * @param {Number|null} [height=null]   null=aktuelle Höhe 
+     * @param {Number|null} [height=null]   null=aktuelle Höhe
      * @param {Number|null} [width=null]    null=aktuelle Breite
      * @returns {Boolean}
      */
@@ -815,25 +829,25 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!kijs.isObject(this._lastSize)) {
             return true;
         }
-        
+
         if (height === null) {
             height = this.height;
         }
         if (width === null) {
             width = this.width;
         }
-        
+
         if (height !== this._lastSize.h || width !== this._lastSize.w) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
      * Falls sich seit dem letzten aufruf dieser Funktion die Grösse geändert hat: das afterResize-Event auslösen
      * @param {Boolean} [useDelay=false]
-     * @param {type} [e={}]   Falls das Event nur weitergereicht wird, kann hier das 
+     * @param {type} [e={}]   Falls das Event nur weitergereicht wird, kann hier das
      *                          e-Arg des vorherigen Events übergeben werden
      * @returns {undefined}
      */
@@ -841,7 +855,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (this._preventAfterResize) {
             return;
         }
-        
+
         // Aufruf mit Verzögerung
         if (useDelay) {
             if (this._afterResizeDeferHandle) {
@@ -856,18 +870,18 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     this.raiseEvent('afterResize', e);
                 }
             }, this._afterResizeDelay, this);
-            
+
         // Aufruf ohne Verzögerung
         } else {
             if (this._hasSizeChanged()) {
                 this._lastSize = { h: this.height, w: this.width };
                 this.raiseEvent('afterResize', e);
             }
-            
+
         }
     }
-    
-    
+
+
     // LISTENERS
     /**
      * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte
@@ -877,7 +891,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      */
     _onForwardEvent(e) {
         let ret = true;
-        
+
         // Vorhandene Weiterleitungen durchgehen und bei Übereinstimmung das Event weiterleiten
         kijs.Object.each(this._eventForwards, function(eventName, forwards) {
 
@@ -894,7 +908,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         return ret;
     }
-    
+
     /**
      * Listener der Aufgerufen wird, wenn die Grösse des Parents geändert hat
      * @param {Object} e
@@ -915,7 +929,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._raiseAfterResizeEvent(false, e);
     }
 
-    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -933,12 +947,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Listeners entfernen
         if (this._parentEl) {
             this._parentEl.off(null, null, this);
         }
-    
+
         // Elemente/DOM-Objekte entladen
         if (this._dom) {
             this._dom.destruct();

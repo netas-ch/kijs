@@ -19,13 +19,13 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         // DOM type
         this._dom.nodeTagName = 'td';
-        
+
         this._originalValue = null;
         this._columnConfig = null;
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            // keine
+            htmlDisplayType: 'code'
         }, config);
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -89,7 +89,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         if (updateDataRow) {
             this._setRowDataRow(value);
         }
-        
+
         if (!markDirty) {
             this.isDirty = false;
         }
@@ -137,17 +137,10 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
-    // LISTENER
-    _onColumnConfigChange(e) {
-        this.render();
-    }
 
     // Overwrite
     render(superCall) {
         super.render(true);
-
-        this._columnConfig.off('change', this._onColumnConfigChange, this);
-        this._columnConfig.on('change', this._onColumnConfigChange, this);
 
         // breite
         this._dom.width = this._columnConfig.width;
