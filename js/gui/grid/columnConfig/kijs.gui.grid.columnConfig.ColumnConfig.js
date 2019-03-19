@@ -42,7 +42,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
         // grid
         this._grid = null;
-        
+
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
             // keine
@@ -93,7 +93,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get caption() { return this._caption; }
     set caption(val) {
         this._caption = val;
-        this.raiseEvent('change', {caption: val});
+        this.raiseEvent('change', {columnConfig: this, caption: val});
     }
 
     get cellConfig() {
@@ -118,7 +118,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get editable() { return this._editable; }
     set editable(val) {
         this._editable = !!val;
-        this.raiseEvent('change', {editable: !!val});
+        this.raiseEvent('change', {columnConfig: this, editable: !!val});
     }
 
     get filterFieldConfig() {
@@ -165,32 +165,46 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get visible() { return this._visible; }
     set visible(val) {
         this._visible = !!val;
-        this.raiseEvent('change', {visible: !!val});
+        this.raiseEvent('change', {columnConfig: this, visible: !!val});
     }
 
     get hideable() { return this._hideable; }
     set hideable(val) {
         this._hideable = !!val;
-        this.raiseEvent('change', {hideable: !!val});
+        this.raiseEvent('change', {columnConfig: this, hideable: !!val});
     }
 
     get position() {
         if (this._grid) {
-            this._grid.columnConfigs.indexOf(this);
+            return this._grid.columnConfigs.indexOf(this);
         }
         return false;
+    }
+    set position(val) {
+        if (this._grid) {
+            let curPos = this.position;
+
+            if (!kijs.isInteger(val)) {
+                throw new Error('invalid position value');
+            }
+            val = Math.max(0, val);
+            val = Math.min(this._grid.columnConfigs.length - 1, val);
+            kijs.Array.move(this._grid.columnConfigs, this, val - curPos);
+
+            this.raiseEvent('change', {columnConfig: this, position: this.position});
+        }
     }
 
     get resizable() { return this._resizable; }
     set resizable(val) {
         this._resizable = !!val;
-        this.raiseEvent('change', {resizable: !!val});
+        this.raiseEvent('change', {columnConfig: this, resizable: !!val});
     }
 
     get sortable() { return this._sortable; }
     set sortable(val) {
         this._sortable = !!val;
-        this.raiseEvent('change', {sortable: !!val});
+        this.raiseEvent('change', {columnConfig: this, sortable: !!val});
     }
 
     get width() { return this._width; }
@@ -199,7 +213,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             throw new Error('invalid width value for columnConfig');
         }
         this._width = val;
-        this.raiseEvent('change', {width: val});
+        this.raiseEvent('change', {columnConfig: this, width: val});
     }
 
     get valueField() { return this._valueField; }

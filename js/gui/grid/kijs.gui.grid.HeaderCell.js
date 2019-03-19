@@ -20,6 +20,51 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // DOM type
         this._dom.nodeTagName = 'td';
         this._columnConfig = null;
+        this._initialPos = 0;
+
+        // drag events
+        this._dom.nodeAttributeSet('draggable', true);
+        this._dom.on('dragStart', this._onDragStart, this);
+        this._dom.on('dragEnter', this._onDragEnter, this);
+        this._dom.on('dragOver', this._onDragOver, this);
+        this._dom.on('dragExit', this._onDragLeave, this);
+        this._dom.on('drop', this._onDrop, this);
+
+        // DOM für label
+        this._captionDom = new kijs.gui.Dom({cls:'kijs-caption'});
+
+        // DOM für Menu
+        this._menuButtonEl = new kijs.gui.MenuButton({
+            parent: this,
+            elements: [{
+                    caption:'Aufsteigend sortieren',
+                    iconChar: '&#xf15d' // fa-sort-alpha-asc
+                },{
+                    caption:'Absteigend sortieren',
+                    iconChar: '&#xf15e' // fa-sort-alpha-desc
+                },{
+                    caption:'Spalten...',
+                    iconChar: '&#xf0db', //  fa-columns
+                    on: {
+                        click: function() {
+                            (new kijs.gui.grid.columnWindow({parent: this})).show();
+                        },
+                        context: this
+                    }
+                }]
+        });
+
+        // DOM für Schieber
+        this._splitterDom = new kijs.gui.Dom({
+            cls:'kijs-splitter',
+            on: {
+                mouseDown: this._onSplitterMouseDown,
+                context: this
+            }
+        });
+
+        // DOM für Schieber overlay
+        this._overlayDom = new kijs.gui.Dom({cls:'kijs-splitter-overlay'});
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
@@ -41,8 +86,19 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // GETTERS / SETTERS
     // --------------------------------------------------------------
 
-    get caption() { return this._dom.html; }
+    get caption() { return this._captionDom.html; }
     set caption(val) { this.setCaption(val); }
+
+    get columnConfig() { return this._columnConfig; }
+    set columnConfig(val) { this._columnConfig = val; }
+
+    get header() { return this.parent; }
+    get index() {
+        if (this.header) {
+            return this.header.cells.indexOf(this);
+        }
+        return null;
+    }
 
 
     // --------------------------------------------------------------
@@ -50,16 +106,14 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // --------------------------------------------------------------
 
     /**
-     * Setzt das value der Zelle.
-     * @param {String} value
-     * @param {Boolean} [silent=false] true, falls kein change-event ausgelöst werden soll.
-     * @param {Boolean} [markDirty=true] false, falls der Eintrag nicht als geändert markiert werden soll.
-     * @param {Boolean} [updateDataRow=true] false, falls die dataRow nicht aktualisiert werden soll.
+     * Setzt das caption der Zelle.
+     * @param {String} caption
+     * @param {Boolean} [updateColumnConfig=true] true, falls kein change-event ausgelöst werden soll.
      * @returns {undefined}
      */
     setCaption(caption, updateColumnConfig=true) {
         // HTML aktualisieren
-        this._dom.html = caption;
+        this._captionDom.html = caption;
 
         if (updateColumnConfig) {
             this._columnConfig.caption = caption;
@@ -80,21 +134,109 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
 
     // PROTECTED
+    /**
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * @param {Number} xAbs     Mausposition clientX
+     * @param {Number} yAbs     Mausposition clientY
+     * @returns {undefined}
+     */
+    _updateOverlayPosition(xAbs, yAbs) {
+        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // die relative Position bezogen zum übergeordneten DOM-Node
+        const parentPos = kijs.Dom.getAbsolutePos(this.parent.grid.dom.node);
+        const newPos = {
+            x: xAbs - parentPos.x,
+            y: yAbs - parentPos.x
+        };
 
+        this._overlayDom.left = newPos.x;
+    }
 
     // LISTENER
-    _onColumnConfigChange(e) {
-        this.render();
+    _onDragStart(e) {
+        e.nodeEvent.dataTransfer.setData('text/headercellindex', this.index);
+    }
+
+    _onDragEnter(e) {
+        this._dom.style.borderLeft = '3px solid red';
+    }
+
+    _onDragOver(e) {
+        e.nodeEvent.preventDefault();
+    }
+
+    _onDragLeave(e) {
+        this._dom.style.borderLeft = '';
+    }
+
+    _onDrop(e) {
+        this._dom.style.borderLeft = '';
+        if (kijs.Array.contains(e.nodeEvent.dataTransfer.types, 'text/headercellindex')) {
+            e.nodeEvent.preventDefault();
+
+            // Index des drag-element auslesen und bei diesem der aktuelle index einstellen
+            let dragIndex = parseInt(e.nodeEvent.dataTransfer.getData('text/headercellindex'));
+            if (kijs.isInteger(dragIndex) && kijs.isInteger(this.index) && dragIndex !== this.index) {
+                let newIndex = dragIndex > this.index ? this.index : this.index - 1;
+                this.header.grid.columnConfigs[dragIndex].position = newIndex;
+            }
+        }
+    }
+
+    _onSplitterMouseDown(e) {
+        if (!this._columnConfig.resizable) {
+            return;
+        }
+
+        this._initialPos = e.nodeEvent.clientX;
+
+        // Overlay Positionieren
+        this._updateOverlayPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
+
+        // Overlay rendern
+        this._overlayDom.render();
+        this.parent.grid.dom.node.appendChild(this._overlayDom.node);
+
+        // mousemove und mouseup Listeners auf das document setzen
+        kijs.Dom.addEventListener('mousemove', document, this._onSplitterMouseMove, this);
+        kijs.Dom.addEventListener('mouseup', document, this._onSplitterMouseUp, this);
+    }
+
+    _onSplitterMouseMove(e) {
+        // Overlay Positionieren
+        this._updateOverlayPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
+    }
+
+    _onSplitterMouseUp(e) {
+        // Beim ersten auslösen Listeners gleich wieder entfernen
+        kijs.Dom.removeEventListener('mousemove', document, this);
+        kijs.Dom.removeEventListener('mouseup', document, this);
+
+        // Overlay wieder ausblenden
+        this._overlayDom.unrender();
+
+        // Differenz zur vorherigen Position ermitteln
+        let offset = e.nodeEvent.clientX - this._initialPos;
+
+        if (this._columnConfig.resizable) {
+            this._columnConfig.width = Math.max(this._columnConfig.width + offset, 40);
+        }
     }
 
     // Overwrite
     render(superCall) {
         super.render(true);
 
-        this._columnConfig.off('change', this._onColumnConfigChange, this);
-        this._columnConfig.on('change', this._onColumnConfigChange, this);
+        // caption dom
+        this._captionDom.renderTo(this._dom.node);
 
-        // breite
+        // dropdown
+        this._menuButtonEl.renderTo(this._dom.node);
+
+        // Splitter
+        this._splitterDom.renderTo(this._dom.node);
+
+        // Breite
         this._dom.width = this._columnConfig.width;
 
         // sichtbar?
@@ -113,6 +255,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             this.raiseEvent('unrender');
         }
 
+        this._captionDom.unrender();
+        this._menuButtonEl.unrender();
+        this._splitterDom.unrender();
+
         super.unrender(true);
     }
 
@@ -129,9 +275,14 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             this.raiseEvent('destruct');
         }
 
+        this._captionDom.destruct();
+        this._menuButtonEl.destruct();
+        this._splitterDom.destruct();
 
         // Variablen (Objekte/Arrays) leeren
-
+        this._captionDom = null;
+        this._menuButtonEl = null;
+        this._splitterDom = null;
 
         // Basisklasse entladen
         super.destruct(true);

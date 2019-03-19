@@ -216,6 +216,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             drag: { nodeEventName: 'drag', useCapture: false },
             dragEnd: { nodeEventName: 'dragend', useCapture: false },
             dragEnter: { nodeEventName: 'dragenter', useCapture: false },
+            dragExit: { nodeEventName: 'dragexit', useCapture: false },
             dragLeave: { nodeEventName: 'dragleave', useCapture: false },
             dragOver: { nodeEventName: 'dragover', useCapture: false },
             dragStart: { nodeEventName: 'dragstart', useCapture: false },
@@ -1089,7 +1090,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     _clsApply() {
-        if (this._node) {
+        if (this._node && (this._node.className || !kijs.isEmpty(this._cls))) {
             this._node.className = this._cls ? this._cls.join(' ') : '';
         }
     }

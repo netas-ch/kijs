@@ -33,8 +33,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         this._lastSelectedRow = null; // letzte Zeile, die selektiert wurde
         this._currentRow = null;      // Zeile, welche zurzeit fokusiert ist
-        this._selectType = 'single';  // multiselect
+        this._selectType = 'single';  // multiselect: single|multi|simple|none
         this._focusable = true;       // ob das grid focusiert weden kann
+        this._editable = false;       // editierbare zeilen?
 
         // Intersection Observer (endless grid loader)
         this._intersectionObserver = null;
@@ -98,11 +99,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             primaryKeys:    { target: 'primaryKeys' },
             data:           { target: 'data' },
 
+            editable: true,
             focusable: true,
-            selectType: true            // 'none': Es kann nichts selektiert werden
-                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden
-                                        // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
-                                        // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+            selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
+                                                 // 'single' (default): Es kann nur ein Datensatz selektiert werden
+                                                 // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
+                                                 // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
 
         });
 
@@ -185,6 +187,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return dataRows;
     }
 
+    get editable() { return this._editable; }
+    set editable(val) { this._editable = !!val; }
+
     get firstRow() {
         if (this._rows.length > 0) {
             return this._rows[0];
@@ -215,7 +220,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get rows() { return this._rows; }
 
     get selectType() { return this._selectType; }
-    set selectType(val) { this._selectType = val; }
+    set selectType(val) {
+        if (!kijs.Array.contains(['single', 'multi', 'simple', 'none'], val)) {
+            throw new Error('invalid value for selectType');
+        }
+        this._selectType = val;
+    }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -723,6 +733,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     // EVENTS
+
+
     _onKeyDown(e) {
         let keyCode=e.nodeEvent.keyCode, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
@@ -855,6 +867,40 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
+        // bottom
+        this._footerLeftDom.unrender();
+        this._footerDom.unrender();
+        this._footerRightDom.unrender();
+
+        // center
+        this._leftDom.unrender();
+        this._tableDom.unrender();
+        this._rightDom.unrender();
+
+        // header
+        this._headerLeftDom.unrender();
+        this._headerDom.unrender();
+        this._headerRightDom.unrender();
+
+        // footer (summary)
+        this._footerLeftContainerDom.unrender();
+        this._footerContainerDom.unrender();
+        this._footerRightContainerDom.unrender();
+
+        // center (grid)
+        this._leftContainerDom.unrender();
+        this._tableContainerDom.unrender();
+        this._rightContainerDom.unrender();
+
+        // header / filter
+        this._headerLeftContainerDom.unrender();
+        this._headerContainerDom.unrender();
+        this._headerRightContainerDom.unrender();
+
+        this._topDom.unrender();
+        this._middleDom.unrender();
+        this._bottomDom.unrender();
+
         super.unrender(true);
     }
 
@@ -871,9 +917,75 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('destruct');
         }
 
+        // bottom
+        this._footerLeftDom.destruct();
+        this._footerDom.destruct();
+        this._footerRightDom.destruct();
+
+        // center
+        this._leftDom.destruct();
+        this._tableDom.destruct();
+        this._rightDom.destruct();
+
+        // header
+        this._headerLeftDom.destruct();
+        this._headerDom.destruct();
+        this._headerRightDom.destruct();
+
+        // footer (summary)
+        this._footerLeftContainerDom.destruct();
+        this._footerContainerDom.destruct();
+        this._footerRightContainerDom.destruct();
+
+        // center (grid)
+        this._leftContainerDom.destruct();
+        this._tableContainerDom.destruct();
+        this._rightContainerDom.destruct();
+
+        // header / filter
+        this._headerLeftContainerDom.destruct();
+        this._headerContainerDom.destruct();
+        this._headerRightContainerDom.destruct();
+
+        this._topDom.destruct();
+        this._middleDom.destruct();
+        this._bottomDom.destruct();
 
         // Variablen (Objekte/Arrays) leeren
+        // -----------------------------------
+        // bottom
+        this._footerLeftDom = null;
+        this._footerDom = null;
+        this._footerRightDom = null;
 
+        // center
+        this._leftDom = null;
+        this._tableDom = null;
+        this._rightDom = null;
+
+        // header
+        this._headerLeftDom = null;
+        this._headerDom = null;
+        this._headerRightDom = null;
+
+        // footer (summary)
+        this._footerLeftContainerDom = null;
+        this._footerContainerDom = null;
+        this._footerRightContainerDom = null;
+
+        // center (grid)
+        this._leftContainerDom = null;
+        this._tableContainerDom = null;
+        this._rightContainerDom = null;
+
+        // header / filter
+        this._headerLeftContainerDom = null;
+        this._headerContainerDom = null;
+        this._headerRightContainerDom = null;
+
+        this._topDom = null;
+        this._middleDom = null;
+        this._bottomDom = null;
 
         // Basisklasse entladen
         super.destruct(true);

@@ -82,6 +82,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
                 columnConfig: columnConfig
             });
 
+            // change listener
+            columnConfig.on('change', this._onColumnConfigChange, this);
+
             cell.loadFromColumnConfig();
 
             this._cells.push({columnConfig: columnConfig, cell: cell});
@@ -98,6 +101,25 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             }
             return 0;
         });
+    }
+
+    _onColumnConfigChange(e) {
+        if ('visible' in e || 'width' in e || 'caption' in e || 'resizable' in e || 'sortable' in e) {
+            kijs.Array.each(this.cells, function(cell) {
+                if (e.columnConfig === cell.columnConfig) {
+                    if (e.caption) {
+                        cell.caption = e.caption;
+                    } else {
+                        cell.render();
+                    }
+                    return false;
+                }
+            }, this);
+
+        }
+        if ('position' in e) {
+            this.render();
+        }
     }
 
     // Overwrite

@@ -168,6 +168,9 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
                 throw new Error('invalid cell xtype for column ' + columnConfig.caption);
             }
 
+            // change listener
+            columnConfig.on('change', this._onColumnConfigChange, this);
+
             cellConfig.parent = this;
             delete cellConfig.xtype;
 
@@ -188,6 +191,22 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
             }
             return 0;
         });
+    }
+
+    // EVENTS
+    _onColumnConfigChange(e) {
+        if ('visible' in e || 'width' in e) {
+            kijs.Array.each(this.cells, function(cell) {
+                if (e.columnConfig === cell.columnConfig) {
+                    cell.render();
+                    return false;
+                }
+            }, this);
+
+        }
+        if ('position' in e) {
+            this.render();
+        }
     }
 
     // Overwrite
