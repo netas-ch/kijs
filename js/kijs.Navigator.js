@@ -21,7 +21,7 @@ kijs.Navigator = class kijs_Navigator {
     static get isEdge() { return kijs.Navigator.getBrowserInfo().isEdge; }
     static get isIE() { return kijs.Navigator.getBrowserInfo().isIE; }
     static get isSafari() { return kijs.Navigator.getBrowserInfo().isSafari; }
-    
+
     static get isWindows() { return kijs.Navigator.getBrowserInfo().isWindows; }
     static get isMac() { return kijs.Navigator.getBrowserInfo().isMac; }
     static get isAndroid() { return kijs.Navigator.getBrowserInfo().isAndroid; }
@@ -38,6 +38,12 @@ kijs.Navigator = class kijs_Navigator {
 
     static getBrowserInfo(userAgent=null) {
         let ua = userAgent || window.navigator.userAgent;
+
+        // antwort aus cache
+        if (userAgent === null && kijs.Navigator._bi) {
+            return kijs.Navigator._bi;
+        }
+
         let bi = {
             browserVersion: '',
             browserVendor: '',
@@ -170,6 +176,11 @@ kijs.Navigator = class kijs_Navigator {
             if (os) {
                 bi.osVersion = os[1];
             }
+        }
+
+        // Speichern für schnellerer Zugriff
+        if (userAgent === null) {
+            kijs.Navigator._bi = bi;
         }
 
         return bi;

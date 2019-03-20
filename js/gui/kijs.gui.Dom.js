@@ -5,33 +5,33 @@
 // --------------------------------------------------------------
 /**
  * Hilfsobjekt zum Handeln von DOM-Nodes
- * 
+ *
  * CONFIG-Parameter
  * ----------------
  * cls          Array|String [optional] CSS-Klassennamen
  *                                      Beispiel: cls:['cls-a','cls-b'] oder cls:'cls-a cls-b'
- * 
+ *
  * disabled     Boolean
- * 
+ *
  * disableEnterBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Enter
  *
  * disableEscBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Escape
  *
  * eventMap     Object [optional]
- * 
+ *
  * html         String [optional]       HTML-Code, der in das Element eingefügt wird
  *                                      Beispiel: html:'<p>Hallo Welt</p>'
- * 
+ *
  * htmlDisplayType String [optional]    Darstellung der Eigenschaft 'html'. Default: 'html'
  *                                      html: als html-Inhalt (innerHtml)
  *                                      code: Tags werden als als Text angezeigt
  *                                      text: Tags werden entfernt
- * 
+ *
  * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. Bsp: { id: 123, for: 'meinFeld' }
- * 
+ *
  * nodeTagName  String [optional]       Tag-Name des DOM-node. Default='div'
  *                                      Beispiel: nodeTagName='section'
- * 
+ *
  * on           Object [optional]       Objekt mit Listener-Funktionen und optionalem context.
  *                                      Wenn kein context angegeben wird, so wird das aktuelle Objekt genommen.
  *                                      Beispiel: on: {
@@ -43,38 +43,38 @@
  *                                          },
  *                                          context: xy
  *                                      }
- * 
- * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript 
+ *
+ * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
  *                                      Beispiel: style:{background-color:'#ff8800'}
  *
- * 
+ *
  * FUNKTIONEN
  * ----------
  * alignToTarget                        Richtet ein Element nach einem Ziel-Element aus.
  * applyConfig                          Wendet ein Konfigurations-Objekt an
  *  Args:
  *   config     Object
- * 
+ *
  * destruct                             Destruktor ->Entlädt das Objekt samt allen untergeordneten Objekten
- * 
+ *
  * clsAdd                                  Fügt eine oder mehrere CSS-Klassen hinzu
  *  Args: cls   String|Array
  *
  * clsHas                                  Überprüft, ob das Element eine CSS-Klasse hat
- *  Args: 
+ *  Args:
  *   cls        String
  *  Return: Boolean
- *    
+ *
  * clsRemove                               Entfernt eine oder mehrere CSS-Klassen
- *  Args: 
+ *  Args:
  *   cls        String|Array
- * 
+ *
  * clsRemoveAll                            Entfernt alle CSS-Klassen
- * 
+ *
  * clsToggle                               Schaltet die übergebenen CSS-Klassen ein oder aus
- *  Args: 
+ *  Args:
  *   cls        String|Array
- *    
+ *
  * keyEventAdd                              Erstellt einen Tastendruck-Listener
  *  Args:
  *   keys       Number|Array                Tastencode der Taste, oder Array mit Tastencodes. Bsp: [kijs.KeyMap.keys.ENTER, 65, 66]
@@ -90,33 +90,33 @@
  *   keys           Array                   Array mit KeyCodes Bsp: [kijs.KeyMap.ENTER, kijs.KeyMap.ESC]
  *   modifier       [modifier]              Muss eine Modifier-Taste gedrückt sein?
  *                                          modifier = {shift:false, ctrl:false, alt:false}]
- * 
+ *
  * nodeAttributeGet                         Gibt den Wert einer Eigenschaft des DOM-Nodes zurück
  *  Args:
  *   name           String
  *  Return: Boolean
- *   
+ *
  * nodeAttributeSet                         Fügt eine Eigenschaft zum DOM-Node hinzu
  *  Args:
  *   name           String
  *   value          String|Null
- * 
+ *
  * nodeAttributeHas                         Überprüft, ob der DOM-Node eine Eigenschaft bestimmte hat
  *  Args:
  *   name           String
- *   
+ *
  * nodeAttributeRemove                      Entfernt eine Eigenschaft vom DOM-Node
  *  Args:
  *   name           String
- * 
+ *
  * render                               rendert den DOM-Node
- * 
+ *
  * renderTo                             rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
- *  Args: 
+ *  Args:
  *   targetNode    HTMLElement
  *   insertBefore  HTMLElement [optional]
  *
- * 
+ *
  * EIGENSCHAFTEN
  * -------------
  * disabled
@@ -135,14 +135,14 @@
  * width
  */
 kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
         super();
-        
+
         this._cls = [];
         this._disableEnterBubbeling = false;
         this._disableEscBubbeling = false;
@@ -151,16 +151,16 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                         // html: als html-Inhalt (innerHtml)
                                         // code: Tags werden als als Text angezeigt
                                         // text: Tags werden entfernt
-        
+
         this._node = null;
-        
+
         this._nodeEventListeners = {}; // Delegates der DOM-Node Events, die mit kijs.Dom.addEventListener gesetzt wurden
                                         // {
                                         //     click: [
                                         //         {node: ..., useCapture: true/false, delegate: ...},
                                         //         {node: ..., useCapture: true/false, delegate: ...}
                                         //     ],
-                                        //     
+                                        //
                                         //     mousemove: [
                                         //         {node: ..., useCapture: true/false, delegate: ...},
                                         //         {node: ..., useCapture: true/false, delegate: ...}
@@ -168,25 +168,25 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                         // }
 
         this._disabled = false;
-        
+
         this._nodeAttribute = {};
-        
+
         this._left = undefined;
         this._top = undefined;
         this._width = undefined;
         this._height = undefined;
-        
+
         this._nodeTagName = 'div';
-        
+
         this._style = {};
-        
+
         this._toolTip = null;
-        
+
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
             // keine
         }, config);
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             cls: { fn: 'function', target: this.clsAdd },
@@ -206,7 +206,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             style : { fn: 'assign' },
             toolTip: { target: 'toolTip' }
         };
-        
+
         // Mapping das aussagt, welche DOM-Node-Events bei welchem kijs-Event abgefragt werden sollen
         this._eventMap = {
             blur: { nodeEventName: 'blur', useCapture: false },
@@ -216,6 +216,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             drag: { nodeEventName: 'drag', useCapture: false },
             dragEnd: { nodeEventName: 'dragend', useCapture: false },
             dragEnter: { nodeEventName: 'dragenter', useCapture: false },
+            dragExit: { nodeEventName: 'dragexit', useCapture: false },
             dragLeave: { nodeEventName: 'dragleave', useCapture: false },
             dragOver: { nodeEventName: 'dragover', useCapture: false },
             dragStart: { nodeEventName: 'dragstart', useCapture: false },
@@ -229,12 +230,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             scroll: { nodeEventName: 'scroll', useCapture: false },
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
             wheel: { nodeEventName: 'wheel', useCapture: false },
-            
+
             // key events
             input: { nodeEventName: 'input', useCapture: false },
             keyDown: { nodeEventName: 'keydown', useCapture: false },
             keyUp: { nodeEventName: 'keyup', useCapture: false },
-            enterPress: { 
+            enterPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
                 keys: [kijs.keys.ENTER],        // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
@@ -250,7 +251,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
             },
-            escPress: { 
+            escPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
                 keys: [kijs.keys.ESC],          // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
@@ -258,7 +259,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
             },
-            spacePress: { 
+            spacePress: {
                 nodeEventName: 'keydown',       // Node-Event Name
                 keys: [kijs.keys.SPACE],        // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
@@ -267,14 +268,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
             }
         };
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -287,7 +288,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     set disabled(val) {
         this._disabled = !!val;
-        
+
         if (this._node) {
             this._node.disabled = !!val;
         }
@@ -295,7 +296,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._toolTip.disabled = !!val;
         }
     }
-    
+
     /**
      * Stoppt das Bubbeling der KeyDown-Events von Enter
      * @returns {Boolean}
@@ -309,7 +310,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this.off('enterPress', this._onKeyPressStopBubbeling, this);
         }
     }
-    
+
     /**
      * Stoppt das Bubbeling der KeyDown-Events von Escape
      * @returns {Boolean}
@@ -335,7 +336,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._left);
         }
     }
-    
+
     /**
      * Wurde die Eigenschaft "height" manuell zugewiesen?
      * @returns {Boolean}
@@ -347,7 +348,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._height);
         }
     }
-    
+
     /**
      * Wurde die Eigenschaft "top" manuell zugewiesen?
      * @returns {Boolean}
@@ -359,7 +360,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._top);
         }
     }
-    
+
     /**
      * Wurde die Eigenschaft "width" manuell zugewiesen?
      * @returns {Boolean}
@@ -371,7 +372,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._width);
         }
     }
-    
+
     get height() {
         if (this._node) {
             return this._node.offsetHeight;
@@ -385,10 +386,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
         if (val !== null && !kijs.isNumeric(val)) {
             throw new Error('set height(x). x must be numeric.');
-        }            
-        
+        }
+
         this._height = val;
-        
+
         if (this._node) {
             if (!kijs.isEmpty(val)) {
                 val += 'px';
@@ -396,7 +397,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._node.style.height = val;
         }
     }
-    
+
     get html() { return this._html; }
     set html(val) {
         this._html = val;
@@ -404,12 +405,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             kijs.Dom.setInnerHtml(this._node, this._html, this._htmlDisplayType);
         }
     }
-    
+
     get htmlDisplayType() { return this._htmlDisplayType; }
     set htmlDisplayType(val) { this._htmlDisplayType = val; }
 
     get isEmpty() { return kijs.isEmpty(this.html); }
-    
+
     get isRendered() { return !!this._node; }
 
     get left() {
@@ -426,9 +427,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (val !== null && !kijs.isNumeric(val)) {
             throw new Error('set left(x). x must be numeric.');
         }
-        
+
         this._left = val;
-        
+
         if (this._node) {
             if (!kijs.isEmpty(val)) {
                 val += 'px';
@@ -439,18 +440,18 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     get node() { return this._node; }
     set node(val) { this._node = val; }
-    
+
     get nodeTagName() { return this._nodeTagName; }
-    set nodeTagName(val) { 
+    set nodeTagName(val) {
         this._nodeTagName = val;
-        
+
         if (!this._node) {
             this._nodeTagName = val;
         } else if (this._node.tagName.toLowerCase() !== val) {
-            throw new Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`); 
+            throw new Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
         }
     }
-    
+
     get style() {
         if (this._node) {
             return this._node.style;
@@ -458,14 +459,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return this._style;
         }
     }
-    set style(val) { 
+    set style(val) {
         if (!this._node) {
             this._style = val;
         } else {
-            throw new Error(`Property "style" can not be set. The node has allready been rendered.`); 
+            throw new Error(`Property "style" can not be set. The node has allready been rendered.`);
         }
     }
-    
+
     get toolTip() { return this._toolTip; }
     set toolTip(val) {
         if (kijs.isEmpty(val)) {
@@ -473,10 +474,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 this._toolTip.destruct();
             }
             this._toolTip = null;
-            
+
         } else if (val instanceof kijs.gui.ToolTip) {
             this._toolTip = val;
-            
+
         } else if (kijs.isObject(val)) {
             if (this._toolTip) {
                 this._toolTip.applyConfig(val);
@@ -502,19 +503,19 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             } else {
                 this._toolTip = new kijs.gui.ToolTip({ html: val });
             }
-            
+
         } else if (kijs.isString(val)) {
             if (this._toolTip) {
                 this._toolTip.html = val;
             } else {
                 this._toolTip = new kijs.gui.ToolTip({ html: val });
             }
-            
+
         } else {
             throw new Error(`Unkown toolTip format`);
-            
+
         }
-        
+
         if (this._toolTip) {
             this._toolTip.target = this;
         }
@@ -534,9 +535,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (val !== null && !kijs.isNumeric(val)) {
             throw new Error('set top(x). x must be numeric.');
         }
-        
+
         this._top = val;
-        
+
         if (this._node) {
             if (!kijs.isEmpty(val)) {
                 val += 'px';
@@ -544,7 +545,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._node.style.top = val;
         }
     }
-    
+
     get width() {
         if (this._node) {
             return this._node.offsetWidth;
@@ -559,9 +560,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (val !== null && !kijs.isNumeric(val)) {
             throw new Error('set width(x). x must be numeric.');
         }
-        
+
         this._width = val;
-        
+
         if (this._node) {
             if (!kijs.isEmpty(val)) {
                 val += 'px';
@@ -570,9 +571,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -588,8 +589,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *                                   |             |
      *                                   l      c      r
      *                                   |             |
-     *                                   bl --- b --- br 
-     * 
+     *                                   bl --- b --- br
+     *
      * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
      * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
@@ -734,7 +735,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         this.left = rect.x;
         this.top = rect.y;
-        
+
         // Abmessungen nur setzen, wenn unbedingt nötig.
         if (setWidth) {
             this.width = rect.w;
@@ -742,13 +743,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (setHeight) {
             this.height = rect.h;
         }
-        
+
         return {
             pos: posSwap ? posSwap : pos,
             targetPos: targetPosSwap ? targetPosSwap : targetPos
         };
     }
-    
+
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -757,8 +758,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
     }
-    
-    
+
+
     /**
      * Fügt eine oder mehrere CSS-Klassen hinzu
      * @param {String|Array} cls
@@ -772,10 +773,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             cls = cls.split(' ');
         }
         this._cls = kijs.Array.concatUnique(this._cls, cls);
-        
+
         this._clsApply();
     }
-    
+
     /**
      * Überprüft, ob das Element eine CSS-Klasse hat
      * @param {String} cls
@@ -794,15 +795,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!cls) {
             return;
         }
-        
+
         if (!kijs.isArray(cls)) {
             cls = cls.split(' ');
         }
         kijs.Array.removeMultiple(this._cls, cls);
-        
+
         this._clsApply();
     }
-    
+
     /**
      * Entfernt alle CSS-Klassen
      * @returns {undefined}
@@ -821,7 +822,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!cls) {
             return;
         }
-        
+
         const newCls = [];
         if (!kijs.isArray(cls)) {
             cls = cls.split(' ');
@@ -833,14 +834,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 newCls.push(cl);
             }
         }, this);
-        
+
         if (cls) {
             this._cls = newCls.concat(cls);
         }
-        
+
         this._clsApply();
     }
-    
+
     /**
      * Setzt den Fokus auf den Node
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
@@ -869,7 +870,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return false;
         }
     }
-        
+
     /**
      * Gibt den Wert eine Eigenschaft des DOM-Nodes zurück
      * @param {String} name
@@ -879,10 +880,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (kijs.isEmpty(name)) {
             return null;
         }
-        
+
         if (this._node) {
             return this._node[name];
-            
+
         } else {
             if (this._nodeAttribute.hasOwnProperty(name)) {
                 return this._nodeAttribute[name];
@@ -891,7 +892,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
         }
     }
-    
+
     /**
      * Fügt eine Eigenschaft zum DOM-Node hinzu
      * @param {String} name
@@ -902,7 +903,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (kijs.isEmpty(name)) {
             return;
         }
-        
+
         if (kijs.isEmpty(value)) {
             if (this._nodeAttribute.hasOwnProperty(name)) {
                 delete this._nodeAttribute[name];
@@ -910,7 +911,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         } else {
             this._nodeAttribute[name] = value;
         }
-                
+
         if (this._node) {
             this._node[name] = value;
             // Kleiner murgs, weil obige Zeiele nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
@@ -919,7 +920,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
         }
     }
-    
+
     /**
      * Überprüft, ob der DOM-Node eine bestimmte Eigenschaft hat
      * @param {String} name
@@ -940,7 +941,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Aufruf der Basisfunktion
         super.on(names, callback, context);
-        
+
         // Anzahl kijs-Events ermitteln
         const eventsCountAfter = Object.keys(this._events).length;
 
@@ -949,7 +950,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._nodeEventListenersAppy();
         }
     }
-    
+
     // overwrite
     off(names, callback, context) {
         // Anzahl kijs-Events ermitteln
@@ -957,7 +958,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Aufruf der Basisfunktion
         super.off(names, callback, context);
-        
+
         // Anzahl kijs-Events ermitteln
         const eventsCountAfter = Object.keys(this._events).length;
 
@@ -966,7 +967,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._nodeEventListenersAppy();
         }
     }
-    
+
     // overwrite
     raiseEvent(name, e={}) {
         Object.assign(e, {
@@ -984,12 +985,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // Node erstellen und Events abfragen
         if (!this._node) {
             this._node = document.createElement(this._nodeTagName);
-            
+
             // Styles mergen
-            if (!kijs.isEmpty(this._style)) { 
+            if (!kijs.isEmpty(this._style)) {
                 Object.assign(this._node.style, this._style);
             }
-            
+
             // Positionierung
             if (!kijs.isEmpty(this._width)) {
                 this.width = this._width;
@@ -1003,42 +1004,58 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (!kijs.isEmpty(this._left)) {
                 this.left = this._left;
             }
-            
+
             // nodeAttribute
             this._nodeAttributeApply();
-            
+
             // disabled
             this.disabled = this._disabled;
         }
-        
+
         // HTML
         if (kijs.isDefined(this._html)) {
             kijs.Dom.setInnerHtml(this._node, this._html, this._htmlDisplayType);
         }
-        
+
         // CSS-Klassen zuweisen
         this._clsApply();
-        
+
         // DOM-Node-Event Listeners erstellen
         this._nodeEventListenersAppy();
     }
-    
+
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
      * @param {HTMLElement} targetNode
-     * @param {HTMLElement} insertBefore - Falls das Element statt angehängt eingefügt werden soll.
+     * @param {HTMLElement} [insert] - Falls das Element statt angehängt eingefügt werden soll.
+     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
      * @returns {undefined}
      */
-    renderTo(targetNode, insertBefore) {
+    renderTo(targetNode, insert, insertPosition='before') {
+        const firstRender = !this.isRendered;
+
         this.render();
 
-        if (insertBefore) {
-            targetNode.insertBefore(this._node, insertBefore);
+        if (insert) {
+
+            // Element vor dem insert-Element einfügen
+            if (insertPosition === 'before') {
+                targetNode.insertBefore(this._node, insert);
+
+            // Element nach dem insert-Element einfügen
+            } else if (insertPosition === 'after') {
+                targetNode.insertBefore(this._node, insert.nextSibling);
+
+            } else {
+                throw new Error('invalid insert position for renderTo');
+            }
+
+        // Element anhängen
         } else {
             targetNode.appendChild(this._node);
         }
     }
-    
+
     /**
      * Node aus DOM entfernen, falls vorhanden
      * @returns {undefined}
@@ -1049,10 +1066,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (!kijs.isEmpty(this._nodeEventListeners)) {
                 kijs.Dom.removeAllEventListenersFromContext(this);
             }
-            
+
             // Childs löschen
             kijs.Dom.removeAllChildNodes(this._node);
-            
+
             // Node selber löschen
             if (this._node !== document.body && this._node.parentNode) {
                 this._node.parentNode.removeChild(this._node);
@@ -1073,11 +1090,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     _clsApply() {
-        if (this._node) {
+        if (this._node && (this._node.className || !kijs.isEmpty(this._cls))) {
             this._node.className = this._cls ? this._cls.join(' ') : '';
         }
     }
-    
+
     /**
      * Weist die Eigenschaften dem DOM-Node zu.
      * @param {String} [name=null] Name der Eigenschaft, die angewendet werden soll oder Null für alle
@@ -1092,7 +1109,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
         }, this);
     }
-    
+
     /**
      * Erstellt oder entfernt Listeners auf den DOM-Node aufgrund der _events
      * @returns {undefined}
@@ -1100,18 +1117,18 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     _nodeEventListenersAppy() {
         // kijs-Events-Namen ermitteln
         const kijsEvents = Object.keys(this._events);
-        
+
         // Falls es bereits Node-Event-Listeners gibt, diese entfernen
         if (!kijs.isEmpty(this._nodeEventListeners)) {
             kijs.Dom.removeAllEventListenersFromContext(this);
         }
-        
+
         // DOM-Node Listeners erstellen
         kijs.Array.each(kijsEvents, function(kijsEvent) {
             if (this._eventMap[kijsEvent]) {
                 const nodeEventName = this._eventMap[kijsEvent].nodeEventName;
                 const useCapture = !!this._eventMap[kijsEvent].useCapture;
-                
+
                 // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
                 if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
                     kijs.Dom.addEventListener(nodeEventName, this._node, this._onNodeEvent, this, useCapture);
@@ -1121,13 +1138,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
         }, this);
     }
-    
-    
+
+
     // LISTENERS
     _onKeyPressStopBubbeling(e) {
         e.nodeEvent.stopPropagation();
     }
-    
+
     /**
      * Listener für alle DOM-Node-Events, der die kijs-Events auslösen.
      * @param {Object} e
@@ -1142,7 +1159,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (val.nodeEventName !== e.nodeEventName || !!val.useCapture !== !!e.useCapture) {
                 return;
             }
-            
+
             // Tastencode muss übereinstimmen, wenn vorhanden
             if (!kijs.isEmpty(val.keys)) {
                 const keys = kijs.isArray(val.keys) ? val.keys : [val.keys];
@@ -1150,7 +1167,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                     return;
                 }
             }
-            
+
             // Zusatztaste shift muss übereinstimmen, wenn vorhanden
             if (!kijs.isEmpty(val.shiftKey)) {
                 if (!!val.shiftKey !== !!e.nodeEvent.shiftKey) {
@@ -1175,17 +1192,17 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             // kijs-Event auslösen
             e.dom = this;
             e.eventName = eventName;
-            
+
             if (this.raiseEvent(eventName, e) === false) {
                 ret = false;
             }
         }, this);
-        
+
         return ret;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -1197,7 +1214,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (this._toolTip) {
             this._toolTip.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._cls = null;
         this._configMap = null;

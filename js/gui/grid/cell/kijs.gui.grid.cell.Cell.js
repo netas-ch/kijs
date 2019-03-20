@@ -19,29 +19,37 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         // DOM type
         this._dom.nodeTagName = 'td';
-        
+
         this._originalValue = null;
         this._columnConfig = null;
+        this._editorXType = 'kijs.gui.field.Text';
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            // keine
+            htmlDisplayType: 'code'
         }, config);
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true
+            columnConfig: true,
+            editorXType: true
         });
 
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
+
+        // Events
+        this._dom.on('dblClick', this._onDblClick, this);
     }
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+
+    get columnConfig() { return this._columnConfig; }
+    set columnConfig(val) { this._columnConfig = val; }
 
     get isDirty() { return this._originalValue !== this.value; }
     set isDirty(val) {
@@ -89,7 +97,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         if (updateDataRow) {
             this._setRowDataRow(value);
         }
-        
+
         if (!markDirty) {
             this.isDirty = false;
         }
@@ -137,17 +145,49 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
-    // LISTENER
-    _onColumnConfigChange(e) {
-        this.render();
+    // EVENTS
+
+    _onDblClick(e) {
+        if (this.row.grid.editable) {
+            // editor starten
+            let editor = kijs.getObjectFromNamespace(this._editorXType);
+
+            if (!editor) {
+                throw new Error('invalid xtype for cell editor');
+            }
+
+            let edInst = new editor({
+                labelHide: true,
+                value: this.value,
+                parent: this,
+                on: {
+                    blur: this._onFieldBlur,
+                    keyDown: function(e) { e.nodeEvent.stopPropagation(); }, // keyDown event stoppen, damit grid keyDown nicht nimmt.
+                    click: function(e) { e.nodeEvent.stopPropagation(); }, // click event stoppen, damit row focus nicht nimmt.
+                    context: this
+                }
+            });
+
+            // Inhalt Löschen und Textfeld in dom rendern
+            kijs.Dom.removeAllChildNodes(this._dom.node);
+            edInst.renderTo(this._dom.node);
+
+        }
     }
+
+    _onFieldBlur(e) {
+        let fld = e.element;
+
+        let val = fld.value;
+        fld.unrender();
+
+        this.setValue(val);
+    }
+
 
     // Overwrite
     render(superCall) {
         super.render(true);
-
-        this._columnConfig.off('change', this._onColumnConfigChange, this);
-        this._columnConfig.on('change', this._onColumnConfigChange, this);
 
         // breite
         this._dom.width = this._columnConfig.width;

@@ -11,19 +11,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
-        this._currentEl = null;         // Aktuelles Element (Wenn der Fokus auf dem DataView ist, 
+
+        this._currentEl = null;         // Aktuelles Element (Wenn der Fokus auf dem DataView ist,
                                         // hat dieses Element den Fokus)
-        this._lastSelectedEl = null;    // Letztes Element das Selektiert wurde. Wird gebraucht, 
+        this._lastSelectedEl = null;    // Letztes Element das Selektiert wurde. Wird gebraucht,
                                         // wenn mit der Shift-Taste mehrere selektiert werden.
 
-        this._currentEl = null;
         this._data = [];
         this._facadeFnLoad = null;
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
-        
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview');
 
@@ -32,7 +31,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             focusable: true,
             selectType: 'single'
         }, config);
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
@@ -46,21 +45,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
         });
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
-        
+
         this.applyConfig(config);
-        
+
         // Events
         this.on('keyDown', this._onKeyDown, this);
         this.on('elementClick', this._onElementClick, this);
         //this.on('elementFocus', this._onElementFocus, this);
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -74,7 +73,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
         }
     }
-    
+
 
     get current() { return this._currentEl; }
     /**
@@ -88,7 +87,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Falls kein el übergeben wurde:
         if (!el && !kijs.isEmpty(this._elements)) {
             // Falls es schon ein gültiges Current-Element gibt, dieses nehmen
-            if (this._currentEl && kijs.Array.contains(this._elements, el)) {
+            if (this._currentEl && kijs.Array.contains(this._elements, this._currentEl)) {
                 el = this._currentEl;
             }
             // Sonst das erste selektierte Element
@@ -106,7 +105,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 el = this._elements[0];
             }
         }
-        
+
         this._currentEl = el;
         kijs.Array.each(this._elements, function(elem) {
             if (elem === el) {
@@ -122,12 +121,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
         }, this);
     }
-    
-    
+
+
     get data() { return this._data; }
-    set data(val) { 
+    set data(val) {
         this._data = val;
-        
+
         // Bestehende Elemente löschen
         if (this._elements) {
             this.removeAll(true);
@@ -139,7 +138,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             const newEl = this.createElement(this._data[i], i);
             newEl.index = i;
             newEl.parent = this;
-            
+
             // click-Event
             newEl.on('click', function(e) {
                 return this.raiseEvent('elementClick', e);
@@ -187,14 +186,14 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             newElements.push(newEl);
         }
-        
+
         // neue Elemente einfügen
         this.add(newElements);
-        
+
         // Current Element ermitteln und setzen
         this.current = null;
     }
-    
+
     get disabled() { return this._dom.clsHas('kijs-disabled'); }
     set disabled(val) {
         if (val) {
@@ -202,7 +201,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         } else {
             this._dom.clsRemove('kijs-disabled');
         }
-        
+
         // Elements auch aktivieren/deaktivieren
         kijs.Array.each(this._elements, function(el) {
             el.disabled = !!val;
@@ -213,8 +212,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
     get focusable() { return this._focusable; }
-    set focusable(val) { 
-        this._focusable = val; 
+    set focusable(val) {
+        this._focusable = val;
         if (val) {
             //this._dom.nodeAttributeSet('tabIndex', -1);
         } else {
@@ -226,7 +225,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
-            
+
         } else if (kijs.isString(val)) {
             if (this._rpc) {
                 this._rpc.url = val;
@@ -235,17 +234,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     url: val
                 });
             }
-            
+
         } else {
             throw new Error(`Unkown format on config "rpc"`);
-            
+
         }
     }
 
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
-    
-    
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -278,7 +277,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             html += ' <span class="value">' + val + '</span>';
             html += '</div>';
         }, this);
-        
+
         return new kijs.gui.DataViewElement({
             dataRow: dataRow,
             html: html
@@ -350,28 +349,28 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         kijs.Array.each(elements, function(el) {
             el.selected = true;
         }, this);
-        
+
         // SelectionChange auslösen
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
     }
-    
+
     /**
      * Selektiert ein oder mehrere Elemente
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
      *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
      *                                                  { field: "Id", value: 123 }
-     *                                                  
+     *
      *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem Primary-Field):
      *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
-     *                                                  
+     *
      *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren Primary-Fields):
      *                                                  [
      *                                                    { field: "Name", value: "Muster" },
      *                                                    { field: "Vorname", value: "Max" }
      *                                                  ]
-     *                                                  
+     *
      *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren Primary-Fields):
      *                                                  [
      *                                                    [
@@ -382,7 +381,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *                                                      { field: "Vorname", value: "Max" }
      *                                                    ]
      *                                                  ]
-     * 
+     *
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
@@ -391,7 +390,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (kijs.isEmpty(filters)) {
             filters = [];
         }
-        
+
         // Evtl. das Format ändern auf: [ [{...}, {...}], [{...}, {...}] ]
         if (kijs.isObject(filters)) {
             filters = [filters];
@@ -401,7 +400,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 filters[i] = [filters[i]];
             }
         }
-        
+
         // Nun die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
@@ -430,10 +429,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             }, this);
         }
-        
+
         // Elemente selektieren
         this.select(selElements, keepExisting, preventSelectionChange);
-        
+
         // Element mit Fokus neu ermitteln
         this._currentEl = null;
         this.current = null;
@@ -468,7 +467,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return false;
             }
         }, this);
-        
+
 
         if (!kijs.isEmpty(elements)) {
             this.select(elements, true, preventSelectionChange);
@@ -487,7 +486,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         kijs.Array.each(this._elements, function(elem) {
             elem.dom.nodeAttributeSet('tabIndex', undefined);
         }, this);
-        
+
         //if (!el && !kijs.isEmpty(this._elements)) {
         //    el = this._elements[0];
         //}
@@ -520,7 +519,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         kijs.Array.each(elements, function(el) {
             el.selected = false;
         }, this);
-        
+
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: true } );
         }
@@ -546,20 +545,20 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 shift = false;
                 ctrl = false;
                 break;
-                
+
             case 'multi':
                 // nix
                 break;
-                
+
             case 'simple':
                 ctrl = true;
                 break;
-                
+
             case 'none':
             default:
                 return;
         }
-        
+
 
         if (shift && this._lastSelectedEl) {
             // bestehende Selektierung entfernen
@@ -594,7 +593,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     _onAfterFirstRenderTo(e) {
         this.load();
     }
-    
+
     _onElementClick(e) {
         if (!this.disabled) {
             this.current = e.raiseElement;
@@ -711,8 +710,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -724,15 +723,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-            
+
         // Variablen (Objekte/Arrays) leeren
         this._currentEl = null;
         this._lastSelectedEl = null;
         this._data = null;
         this._rpc = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };
