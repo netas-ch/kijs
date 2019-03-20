@@ -202,12 +202,12 @@ div.kijs-container {
 div.kijs-container-inner {
     position: relative;
     flex: 1 1 auto;
-    
+
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
-    
+
     -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
 }
 
@@ -218,7 +218,7 @@ div.kijs-container-inner {
    ****************** */
 div.kijs-container.kijs-containerstack {
     flex: 1;
-    
+
     .kijs-container-inner {
         height: 100%;
         overflow: hidden;
@@ -304,7 +304,7 @@ div.kijs-container.kijs-containerstack {
 div.kijs-container.kijs-dropzone {
     border-color: @panel-bkgrndColor;
     transition: border-color 0.6s linear;
-    
+
     &.kijs-dragover {
         border: 2px dashed @dragover-ok-borderColor;
     }
@@ -326,26 +326,26 @@ div.kijs-spinbox {
     border: 1px solid @field-borderColor;
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     background-color: @panel-bkgrndColor;
-    
+
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
-    
+
     &.kijs-pos-top {
         margin-top: 1px;
         box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     &.kijs-pos-right {
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     &.kijs-pos-bottom {
         margin-top: -1px;
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     &.kijs-pos-left {
         box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.1);
     }
@@ -373,7 +373,7 @@ div.kijs-accordion > .kijs-container-inner > .kijs-panel {
     left: 0;
     margin: 0;
     padding: 0;
-    
+
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -414,7 +414,7 @@ div.kijs-splitter-overlay-vertical {
     opacity: 0.8;
     cursor: ns-resize;
 }
- 
+
 
 /* ******************
    * Panel
@@ -425,7 +425,7 @@ div.kijs-panel {
     flex-direction: column;
     background-color:@panel-bkgrndColor;
     transition: 0.2s;
-    
+
     &:focus {
         /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
         /*border: 1px solid @item-selected-borderColor;*/
@@ -458,13 +458,13 @@ div.kijs-panel {
         width: auto !important;
         height: auto !important;
         margin: 0 !important;
-        
+
         > .kijs-resizer {
             display: none;
         }
     }
-    
-    
+
+
     &.kijs-collapse-top, &.kijs-collapse-bottom {
         height: 30px !important;
         flex: none !important;
@@ -477,10 +477,10 @@ div.kijs-panel {
         display: flex;
         flex-direction: row;
     }
-    
-    &.kijs-collapse-top > *:not(.kijs-panelbar), 
-    &.kijs-collapse-right > *:not(.kijs-panelbar), 
-    &.kijs-collapse-bottom > *:not(.kijs-panelbar), 
+
+    &.kijs-collapse-top > *:not(.kijs-panelbar),
+    &.kijs-collapse-right > *:not(.kijs-panelbar),
+    &.kijs-collapse-bottom > *:not(.kijs-panelbar),
     &.kijs-collapse-left > *:not(.kijs-panelbar) {
         display: none;
     }
@@ -508,7 +508,7 @@ div.kijs-window {
     position: absolute;
     max-width: 100%;
     max-height: 100%;
-        
+
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
@@ -528,17 +528,17 @@ div.kijs-mask {
     justify-content: center;
     z-index: 60000;
     background-color: rgba(0, 0, 0, 0.5);
-    
+
     top: 0px;
     right: 0px;
     left: 0px;
     bottom: 0px;
-    
+
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
-    
+
     > .kijs-icon {
         color: white;
         font-size: 40px;
@@ -553,7 +553,7 @@ div.kijs-mask {
    ****************** */
 div.kijs-msgbox {
     min-width: 200px;
-    
+
     > .kijs-container-inner {
         display: flex;
         flex-direction: row;
@@ -581,13 +581,13 @@ div.kijs-msgbox {
         margin: 0 4px 0 0;
         padding: 0 10px;
         min-width: 80px;
-    }    
+    }
     .kijs-msgbox-inner > ul {
         margin: 0 0 0 10px;
         padding: 0;
     }
 }
-    
+
 
 
 
@@ -599,7 +599,7 @@ div.kijs-cornertipcontainer {
     right: 0px;
     bottom: 0px;
     z-index: 70000;
-    
+
     .kijs-panel {
         border-radius: 4px;
         margin: 0 10px 10px 0;
@@ -624,7 +624,7 @@ div.kijs-cornertipcontainer {
         overflow: auto;
     }
 }
-    
+
 
 
 
@@ -640,7 +640,7 @@ div.kijs-resizer {
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAABZJREFUeAFjIAUwUshlpJDLSIhLGAAACQ4AFk79JaMAAAAASUVORK5CYII=);
     cursor: nw-resize;
     opacity: 0.3;
-    
+
     &:hover {
         opacity: 1;
     }
@@ -663,13 +663,13 @@ span.kijs-icon {
     font: normal normal normal 16px/1 FontAwesome;
     background-repeat: no-repeat;
     background-position: center center;
-  
+
     &.kijs-hidden {
         display: none;
     }
-    
+
     &.kijs-disabled {
-        filter: grayscale(100%); 
+        filter: grayscale(100%);
     }
 }
 
@@ -687,7 +687,7 @@ button.kijs-button {
     background-color: @button-bkgrndColor;
     border: 1px solid @button-borderColor;
     cursor: pointer;
-    
+
     > .kijs-icon {
         color: @button-icon-fontColor;
     }
@@ -705,7 +705,7 @@ button.kijs-button {
         font-size: @button-fontSize;
         color: @button-fontColor;
     }
-    
+
     > .kijs-badge {
         position: absolute;
         display: inline-block;
@@ -743,12 +743,12 @@ button.kijs-button {
         background-color: @button-bkgrndColor;
         border: 1px solid @button-borderColor;
         cursor: auto;
-        
+
         > .kijs-caption,
         > .kijs-icon {
             color: @button-disabled-fontColor;
         }
-        
+
         > .kijs-badge {
             background-color: @badge-disabled-bkgrndColor;
             color: @badge-disabled-fontColor;
@@ -819,7 +819,7 @@ button.kijs-button.kijs-trigger {
    ****************** */
 div.kijs-menubutton-spinbox {
     overflow: auto;
-    
+
     .kijs-container-inner > * {
         margin: 0;
         border-radius: 0;
@@ -857,17 +857,17 @@ div.kijs-panelbar {
     height: 30px;
     padding: 0 3px; /* 0 3px 0 0 */
     background-color: @bar-bkgrndColor;
-    
+
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
     -ms-user-select: none;      /* IE 10+ */
     user-select: none;          /* Likely future */
-    
+
     font-family: @default-fontFamily;
     font-size: @default-fontSize;
     text-align: left;
     color: @bar-fontColor;
-    
+
     > .kijs-icon {
         flex: none;
         margin: 0 0 0 3px;
@@ -881,7 +881,7 @@ div.kijs-panelbar {
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        
+
         > .kijs-container-inner > .kijs-button {
             margin: 0 3px;
             border-radius: 0;
@@ -920,58 +920,58 @@ div.kijs-panelbar {
             }
         }
     }
-    
-    
+
+
     > .kijs-container-inner {
         flex: 1 1 auto;
         margin: 0 0 0 6px;
         line-height: 30px;
         text-align: left;
     }
-    
+
     &.kijs-headerbar {
         font-size: @headerBar-fontSize;
-        
+
         > .kijs-container-inner {
             text-align: left;
         }
     }
-    
+
     &.kijs-headerbar-center {
         font-size: @headerBar-fontSize;
-        
+
         > .kijs-container-inner {
             text-align: center;
         }
     }
-    
+
     &.kijs-footerbar {
         font-size: @footerBar-fontSize;
-        
+
         > .kijs-container-inner {
             text-align: right;
         }
-    }    
+    }
 }
 
 /* PanelBar Minimiert */
 div.kijs-panel {
-    
+
     &.kijs-collapse-right, &.kijs-collapse-left {
-        
+
         > .kijs-panelbar {
             width: 30px;
             height: auto;
             padding: 0 3px 0 0;
             flex-direction: column;
-            
+
             > .kijs-container-left {
                 display: none;
             }
-            
+
             > .kijs-container-right {
                 order: 10;
-                
+
                 > .kijs-container-inner {
                     height: auto;
                     display: flex;
@@ -1010,7 +1010,7 @@ div.kijs-panel {
 
 
 
-    
+
 
 
 
@@ -1021,7 +1021,7 @@ div.kijs-buttongroup {
     display: flex;
     flex-direction: column-reverse;
     border-right: 1px solid @panel-borderColor;
-    
+
     > .kijs-caption {
         flex: none;
         margin: 2px 0;
@@ -1039,7 +1039,7 @@ div.kijs-buttongroup {
             /*border-radius: 0;*/
             padding: 0;
             background-color: @buttonGroup-button-bkgrndColor;
-            
+
             * {
                 line-height: 30px;
             }
@@ -1055,7 +1055,7 @@ div.kijs-buttongroup {
     }
 }
 
-    
+
 
 
 
@@ -1065,7 +1065,7 @@ div.kijs-buttongroup {
 div.kijs-dataview {
     display: flex;
     flex-direction: column;
-    
+
     > .kijs-container-inner {
         flex: 1 1 0%;
         display: flex;
@@ -1081,11 +1081,11 @@ div.kijs-dataview {
         background-color: @item-bkgrndColor;
         border: 1px solid @item-borderColor;
         border-radius: 4px;
-        
+
         font-family: @default-fontFamily;
         font-size: @item-fontSize;
         color: @item-fontColor;
-        
+
         * {
             font-family: @default-fontFamily;
             font-size: @item-fontSize;
@@ -1097,7 +1097,7 @@ div.kijs-dataview {
             border-color: @item-focus-borderColor;
             color: @item-focus-fontColor;
         }
-        
+
         > div > .label {
             display: inline-block;
             width: 50px;
@@ -1108,35 +1108,35 @@ div.kijs-dataview {
         > div > .value {
             display: inline-block;
         }
-        
+
         &.kijs-selected {
             background-color: @item-selected-bkgrndColor;
             border-color: @item-selected-borderColor;
             color: @item-selected-fontColor;
         }
     }
-    
+
     &.kijs-disabled {
         background-color: @field-disabled-bkgrndColor;
-        
+
         .kijs-dataviewelement {
             background-color: @item-disabled-bkgrndColor;
             border-color: @item-disabled-borderColor;
             color: @item-disabled-fontColor;
-            
+
             * {
                 color: @item-disabled-fontColor;
             }
-            
+
             > div > .label {
                 color: @item-label-disabled-fontColor;
             }
-            
+
             &.kijs-selected {
                 background-color: @item-selected-disabled-bkgrndColor;
                 border-color: @item-selected-disabled-borderColor;
                 color: @item-selected-disabled-fontColor;
-                
+
                 * {
                     color: @item-selected-disabled-fontColor;
                 }
@@ -1155,16 +1155,16 @@ div.kijs-listview {
     flex-direction: column;
     align-items: stretch;
     border: 1px solid @field-borderColor;
-    
+
     > .kijs-container-inner {
         overflow-y: auto;
     }
     .kijs-dataviewelement {
         border: 1px solid transparent;
-        padding: 0 4px 0 4px;        
+        padding: 0 4px 0 4px;
         white-space: nowrap;
         overflow-x: hidden;
-        
+
         &:focus,
         &:hover {
             background-color: @item-focus-bkgrndColor;
@@ -1176,12 +1176,12 @@ div.kijs-listview {
             border-color: @item-selected-borderColor;
             &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                 background-color: @item-selected-bkgrndColor;
-            } 
+            }
         }
-        
+
         &.kijs-display-checkboxes {
             border-color: transparent;
-            
+
             &:before {
                 display: inline-block;
                 font: normal normal normal 15px/1 FontAwesome;
@@ -1189,15 +1189,15 @@ div.kijs-listview {
                 min-width: 15px;
                 margin-right: 2px;
             }
-            
+
             &.kijs-selected:before {
                 content: '\f046';
             }
         }
-        
+
         &.kijs-display-options {
             border-color: transparent;
-            
+
             &:before {
                 display: inline-block;
                 font: normal normal normal 15px/1 FontAwesome;
@@ -1205,16 +1205,16 @@ div.kijs-listview {
                 min-width: 15px;
                 margin-right: 2px;
             }
-            
+
             &.kijs-selected:before {
                 content: '\f05d';
             }
         }
-        
+
         > .kijs-icon {
             margin-right: 4px;
         }
-        
+
         > .kijs-caption {
             font-family: @default-fontFamily;
             font-size: @item-fontSize;
@@ -1227,13 +1227,13 @@ div.kijs-listview {
             display: inline-block;
         }
     }
-    
+
     &.kijs-disabled {
         background-color: @field-disabled-bkgrndColor;
-        
+
         div.kijs-dataviewelement {
             background-color: transparent;
-        
+
             &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                 border-color: @item-selected-disabled-borderColor;
                 background-color: transparent;
@@ -1335,21 +1335,21 @@ div.kijs-datepicker {
             background-color: transparent;
         }
     }
-    
+
     .kijs-datepicker-monthyearselector {
         width: 223px;
         display: flex;
         flex-direction: row;
         font-family: @default-fontFamily;
         font-size: @field-fontSize;
-        
+
         .kijs-datepicker-monthselector {
             flex: 2;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             border-right: 1px solid @panel-borderColor;
-            
+
             > div {
                 width: 40%;
                 text-align: center;
@@ -1359,13 +1359,13 @@ div.kijs-datepicker {
             }
 
         }
-        
+
         .kijs-datepicker-yearselector {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            
+
             > div {
                 text-align: center;
                 padding: 2px 6px;
@@ -1408,7 +1408,7 @@ div.kijs-datepicker {
     border-right: 1px solid white;
 }
 
-    
+
 
 /* ******************
    * ProgressBar
@@ -1462,7 +1462,7 @@ div.kijs-progressbar {
             line-height: 15px;
             color: white;
             opacity: 0;
-            transition: opacity 2s;            
+            transition: opacity 2s;
         }
     }
 }
@@ -1475,7 +1475,7 @@ div.kijs-progressbar {
 div.kijs-field {
     display: flex;
     flex-direction: row;
-    
+
     > .kijs-label {
         display: block;
         flex: none;
@@ -1490,12 +1490,12 @@ div.kijs-field {
         display: block;
         flex: 1 1 auto;
     }
-    
+
     > .kijs-container-inner {
         display: flex;
         flex-direction: row;
         flex: none;
-        
+
         > .kijs-button {
             display: block;
             margin: 0 0 0 2px;
@@ -1503,7 +1503,7 @@ div.kijs-field {
             height: 100%;
         }
     }
-    
+
     > .kijs-icon-spindown {
         flex: none;
         display: block;
@@ -1515,19 +1515,19 @@ div.kijs-field {
         border-bottom: 1px solid @field-borderColor;
         color: @button-icon-fontColor;
         cursor: pointer;
-        
+
         &:hover {
             background-color: @viewport-bkgrndColor;
         }
-        
+
         &.kijs-hidden {
             display: none;
         }
     }
-    
+
     &.kijs-label-ontop {
         flex-wrap: wrap;
-        
+
         > .kijs-label {
             page-break-after: always;
             margin-bottom: 4px;
@@ -1535,7 +1535,7 @@ div.kijs-field {
     }
 }
 
-    
+
 
 .kijs-icon-error {
     margin: 2px 0 0 2px;
@@ -1557,7 +1557,7 @@ div.kijs-field {
    ****************** */
 div.kijs-field-text {
     height: 25px;
-    
+
     > .kijs-inputwrapper {
         > input {
             display: block;
@@ -1569,17 +1569,17 @@ div.kijs-field-text {
             font-family: @default-fontFamily;
             font-size: @field-fontSize;
             line-height: 17px;
-            
+
             &:focus {
                 border: 1px solid @field-focus-borderColor;
             }
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > input {
         background-color: @field-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
             background-color: @field-disabled-bkgrndColor;
@@ -1593,7 +1593,7 @@ div.kijs-field-text {
    ****************** */
 div.kijs-field-password {
     height: 25px;
-    
+
     > .kijs-inputwrapper {
         > input {
             display: block;
@@ -1605,17 +1605,17 @@ div.kijs-field-password {
             font-family: @default-fontFamily;
             font-size: @field-fontSize;
             line-height: 17px;
-            
+
             &:focus {
                 border: 1px solid @field-focus-borderColor;
             }
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > password {
         background-color: @field-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > password {
             background-color: @field-disabled-bkgrndColor;
@@ -1630,19 +1630,19 @@ div.kijs-field-password {
    ****************** */
 div.kijs-field-date {
     height: 25px;
-    
+
     > .kijs-inputwrapper {
         display: flex;
         flex-flow: row nowrap;
-        
+
         > div {
             flex: 1 1 auto;
         }
-        
+
         .kijs-trigger {
             flex:none;
         }
-        
+
         > input {
             display: block;
             height: 100%;
@@ -1659,11 +1659,11 @@ div.kijs-field-date {
             }
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > input {
         background-color: @field-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
             background-color: @field-disabled-bkgrndColor;
@@ -1718,7 +1718,7 @@ div.kijs-field-datetime {
    ****************** */
 div.kijs-field-memo {
     height: 50px;
-    
+
     > .kijs-inputwrapper > textarea {
         display: block;
         height: 100%;
@@ -1730,16 +1730,16 @@ div.kijs-field-memo {
         font-size: @field-fontSize;
         line-height: 17px;
         resize: none;
-        
+
         &:focus {
             border: 1px solid @field-focus-borderColor;
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > textarea {
         background-color: @field-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > textarea {
             background-color: @field-disabled-bkgrndColor;
@@ -1753,21 +1753,21 @@ div.kijs-field-memo {
    * Field ListView
    ****************** */
 div.kijs-field-listview {
-    
+
     > .kijs-inputwrapper {
         > .kijs-listview {
             height: 100%;
-            
+
             &:focus {
                 border: 1px solid @field-focus-borderColor;
             }
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
         background-color: @icon-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled,
     &.kijs-readonly {
         > .kijs-inputwrapper > .kijs-listview {
@@ -1783,47 +1783,47 @@ div.kijs-field-listview {
    ****************** */
 div.kijs-field-optiongroup,
 div.kijs-field-checkboxgroup{
-    
+
     > .kijs-inputwrapper {
         > .kijs-listview {
             height: 100%;
             background-color: transparent;
             border-color: transparent;
-            
+
             .kijs-dataviewelement {
                 background-color: transparent;
-                
+
                 &:focus,
                 &:hover {
                     color: @field-focus-borderColor;
                 }
-                
+
             }
-            
-                
+
+
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
         background-color: @icon-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled,
     &.kijs-readonly {
         > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
             color: @field-disabled-fontColor;
-            
+
             > .kijs-caption {
                 color: @field-disabled-fontColor;
             }
         }
     }
-    
+
     &.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        
+
         > .kijs-dataviewelement {
             flex: none;
             margin-right: 10px;
@@ -1841,7 +1841,7 @@ div.kijs-field-checkboxgroup{
    ****************** */
 div.kijs-field-combo {
     height: 25px;
-    
+
     > .kijs-inputwrapper {
         > input {
             display: block;
@@ -1853,17 +1853,17 @@ div.kijs-field-combo {
             font-family: @default-fontFamily;
             font-size: @field-fontSize;
             line-height: 17px;
-            
+
             &:focus {
                 border: 1px solid @field-focus-borderColor;
             }
         }
     }
-    
+
     &.kijs-error  > .kijs-inputwrapper > input {
         background-color: @field-error-bkgrndColor;
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
             background-color: @field-disabled-bkgrndColor;
@@ -1893,28 +1893,28 @@ div.kijs-field-checkbox {
             color: @button-icon-fontColor;
             vertical-align: top;
         }
-        
+
         > .kijs-checkbox-icon {
             margin-right: 4px;
             height: 15px;
             width: 15px;
             vertical-align: top;
         }
-        
+
         > .kijs-caption {
             font-family: @default-fontFamily;
             font-size: @default-fontSize;
             line-height: 15px;
             vertical-align: top;
         }
-        
+
         &:focus {
             > .kijs-checkbox-input {
                 color: @field-focus-borderColor;
             }
         }
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > * {
                 color: @field-disabled-fontColor;
@@ -1930,10 +1930,10 @@ div.kijs-field-checkbox {
 div.kijs-field-editor {
     > .kijs-inputwrapper {
         border: 1px solid @field-borderColor;
-        
+
         > div {
             height: 100%;
-            
+
             .ace_scrollbar-v {
                 overflow-y: auto;
             }
@@ -1942,15 +1942,15 @@ div.kijs-field-editor {
             }
         }
     }
-    
+
     &.kijs-error > .kijs-inputwrapper > div {
         background-color: @field-error-bkgrndColor;
-        
+
         &.ace_focus {
             border: 1px solid @field-focus-borderColor;
         }
     }
-    
+
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > div {
             background-color: @field-disabled-bkgrndColor;
@@ -2005,19 +2005,37 @@ div.kijs-grid {
 
     table {
         border-collapse: collapse;
-        white-space: nowrap;
-    }
-
-    table td {
-        border-bottom: 1px solid #eee;
-        overflow: hidden;
-        display: inline-block;
-        white-space: nowrap;
         table-layout: fixed;
-        text-overflow: ellipsis;
-    }
-    table tr:hover td {
-        background-color: #eee;
+
+        tr {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+
+            &.kijs-current {
+                background-color: #f0f0f0;
+            }
+            &.kijs-selected {
+                background-color: #7bd3ee;
+            }
+            &:hover {
+                background-color: #eee;
+            }
+
+        }
+
+        tr td {
+            flex: none;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 19px;
+            padding: 3px 2px;
+
+            &.kijs-hidden {
+                display: none;
+            }
+        }
     }
 
     .kijs-center {
@@ -2030,6 +2048,68 @@ div.kijs-grid {
         .kijs-tablecontainer {
             overflow: auto;
         }
+    }
+
+    .kijs-headercontainer {
+        tr:hover {
+            background-color: transparent;
+        }
+
+        tr td {
+            display: flex;
+            flex-direction: row;
+        }
+
+        tr td .kijs-caption {
+            flex: 1;
+        }
+        tr td .kijs-button {
+            visibility: hidden;
+            flex: none;
+            width: 15px;
+            margin: 0;
+            padding: 0;
+            background-color: transparent;
+            border: 0;
+
+            .kijs-icon {
+                margin: -2px 0 0 0;
+
+            }
+        }
+
+        tr td:hover .kijs-button {
+            visibility: visible;
+        }
+
+        tr td .kijs-splitter {
+            flex: none;
+            width: 3px;
+            border-right: 1px solid #eee;
+            cursor: col-resize;
+            margin: 0 2px 0 2px;
+        }
+
+        /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt.*/
+        tr td:last-child {
+            margin-right: 20px;
+        }
+
+    }
+
+    /*  Die container, welche scrollen, müssen positioniert werden, ansonsten wird domEl.offsetParent
+        nicht aufgerufen und die scrollpos falsch berechnet. */
+    .kijs-headercontainer, .kijs-footercontainer, .kijs-leftcontainer, .kijs-rightcontainer, .kijs-tablecontainer  {
+        position: relative;
+    }
+
+    div.kijs-splitter-overlay {
+        position: absolute;
+        width: 5px;
+        height: 100%;
+        background-color: @splitter-overlay-bkgrndColor;
+        opacity: 0.8;
+        cursor: ew-resize;
     }
 }
 
@@ -2054,7 +2134,7 @@ div.kijs-menu {
     opacity: 1;
     transition: none;
     visibility: visible;
-    
+
     &.kijs-hidden {
         visibility: hidden;
         opacity: 0;
@@ -2072,7 +2152,7 @@ div.kijs-timepicker {
     min-width: 157px;
     display: flex;
     flex-direction: column;
-    
+
     .kijs-inputcontainer {
         flex: none;
         display: flex;
@@ -2127,7 +2207,7 @@ div.kijs-timepicker {
         margin-left: -50px;
     }
 }
-    
+
 
 
 
@@ -2148,12 +2228,12 @@ div.kijs-tooltip {
     opacity: 1;
     transition: none;
     visibility: visible;
-    
+
     ul {
         margin: 0 0 0 14px;
         padding: 0;
     }
-    
+
     &.kijs-error {
         border: 1px solid @icon-error-borderColor;
         background-color: @icon-error-bkgrndColor;

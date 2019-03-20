@@ -21,6 +21,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._dom.nodeTagName = 'td';
         this._columnConfig = null;
         this._initialPos = 0;
+        this._splitterMove = false;
 
         // drag events
         this._dom.nodeAttributeSet('draggable', true);
@@ -154,11 +155,16 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
     // LISTENER
     _onDragStart(e) {
-        e.nodeEvent.dataTransfer.setData('text/headercellindex', this.index);
+        // wenn splitter nicht bewegt wird, drag starten
+        if (!this._splitterMove) {
+            e.nodeEvent.dataTransfer.setData('text/headercellindex', this.index);
+        }
     }
 
     _onDragEnter(e) {
-        this._dom.style.borderLeft = '3px solid red';
+        if (!this._splitterMove) {
+            this._dom.style.borderLeft = '3px solid red';
+        }
     }
 
     _onDragOver(e) {
@@ -171,7 +177,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
     _onDrop(e) {
         this._dom.style.borderLeft = '';
-        if (kijs.Array.contains(e.nodeEvent.dataTransfer.types, 'text/headercellindex')) {
+        if (!this._splitterMove && kijs.Array.contains(e.nodeEvent.dataTransfer.types, 'text/headercellindex')) {
             e.nodeEvent.preventDefault();
 
             // Index des drag-element auslesen und bei diesem der aktuelle index einstellen
@@ -187,6 +193,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         if (!this._columnConfig.resizable) {
             return;
         }
+        this._splitterMove = true;
 
         this._initialPos = e.nodeEvent.clientX;
 
@@ -221,6 +228,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         if (this._columnConfig.resizable) {
             this._columnConfig.width = Math.max(this._columnConfig.width + offset, 40);
         }
+
+        this._splitterMove = false;
     }
 
     // Overwrite

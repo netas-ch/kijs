@@ -67,6 +67,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             // es über einer Webseite verschoben wird. Mittels preventDefault
             // wird sichergestellt, dass in diesem Fall nichts passiert.
             kijs.Dom.addEventListener('dragover', window, function(e) {
+                e.nodeEvent.dataTransfer.dropEffect = 'none';
                 e.nodeEvent.preventDefault();
             }, this);
             kijs.Dom.addEventListener('drop', window, function(e) {

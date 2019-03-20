@@ -1428,18 +1428,32 @@ div.kijs-grid {
 }
 div.kijs-grid table {
   border-collapse: collapse;
-  white-space: nowrap;
-}
-div.kijs-grid table td {
-  border-bottom: 1px solid #eee;
-  overflow: hidden;
-  display: inline-block;
-  white-space: nowrap;
   table-layout: fixed;
-  text-overflow: ellipsis;
 }
-div.kijs-grid table tr:hover td {
+div.kijs-grid table tr {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+}
+div.kijs-grid table tr.kijs-current {
+  background-color: #f0f0f0;
+}
+div.kijs-grid table tr.kijs-selected {
+  background-color: #7bd3ee;
+}
+div.kijs-grid table tr:hover {
   background-color: #eee;
+}
+div.kijs-grid table tr td {
+  flex: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 19px;
+  padding: 3px 2px;
+}
+div.kijs-grid table tr td.kijs-hidden {
+  display: none;
 }
 div.kijs-grid .kijs-center {
   flex: 1;
@@ -1449,6 +1463,56 @@ div.kijs-grid .kijs-center > div {
 }
 div.kijs-grid .kijs-center .kijs-tablecontainer {
   overflow: auto;
+}
+div.kijs-grid .kijs-headercontainer tr:hover {
+  background-color: transparent;
+}
+div.kijs-grid .kijs-headercontainer tr td {
+  display: flex;
+  flex-direction: row;
+}
+div.kijs-grid .kijs-headercontainer tr td .kijs-caption {
+  flex: 1;
+}
+div.kijs-grid .kijs-headercontainer tr td .kijs-button {
+  visibility: hidden;
+  flex: none;
+  width: 15px;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: 0;
+}
+div.kijs-grid .kijs-headercontainer tr td .kijs-button .kijs-icon {
+  margin: -2px 0 0 0;
+}
+div.kijs-grid .kijs-headercontainer tr td:hover .kijs-button {
+  visibility: visible;
+}
+div.kijs-grid .kijs-headercontainer tr td .kijs-splitter {
+  flex: none;
+  width: 3px;
+  border-right: 1px solid #eee;
+  cursor: col-resize;
+  margin: 0 2px 0 2px;
+}
+div.kijs-grid .kijs-headercontainer tr td:last-child {
+  margin-right: 20px;
+}
+div.kijs-grid .kijs-headercontainer,
+div.kijs-grid .kijs-footercontainer,
+div.kijs-grid .kijs-leftcontainer,
+div.kijs-grid .kijs-rightcontainer,
+div.kijs-grid .kijs-tablecontainer {
+  position: relative;
+}
+div.kijs-grid div.kijs-splitter-overlay {
+  position: absolute;
+  width: 5px;
+  height: 100%;
+  background-color: #b4b4b4;
+  opacity: 0.8;
+  cursor: ew-resize;
 }
 div.kijs-menu {
   position: absolute;
