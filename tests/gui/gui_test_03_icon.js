@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit kijs.gui.Icon
 // ---------------------------------
-function gui_test_3_icon() {
+function gui_test_03_icon() {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');

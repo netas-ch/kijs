@@ -1,9 +1,9 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.HeaderBar
+// kijs.gui.PanelBar
 // --------------------------------------------------------------
-kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
+kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -12,15 +12,21 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     constructor(config={}) {
         super();
         
-        this._captionDom = new kijs.gui.Dom({
-            cls: 'kijs-caption',
-            nodeTagName: 'span'
-        });
-        
         this._iconEl = new kijs.gui.Icon({ parent: this });
+        this._containerLeftEl = new kijs.gui.Container({
+            cls: 'kijs-container-left',
+            parent: this
+        });
+        this._containerLeftEl.dom.clsRemove('kijs-container');
+        
+        this._containerRightEl = new kijs.gui.Container({
+            cls: 'kijs-container-right',
+            parent: this
+        });
+        this._containerRightEl.dom.clsRemove('kijs-container');
         
         this._dom.clsRemove('kijs-container');
-        this._dom.clsAdd('kijs-headerbar');
+        this._dom.clsAdd('kijs-panelbar');
         
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
@@ -29,27 +35,26 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            caption: { target: 'html', context: this._captionDom },
-            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
-            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
-            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
-            iconColor: { target: 'iconColor', context: this._iconEl }
+            iconColor: { target: 'iconColor', context: this._iconEl },
+            
+            elementsLeft: { fn: 'function', target: this._containerLeftEl.add, context: this._containerLeftEl },
+            elementsRight: { fn: 'function', target: this._containerRightEl.add, context: this._containerRightEl }
         });
         
         // click- und mouseDown-Event soll nur auf dem label und icon kommen. Bei den elements nicht.
         this._eventForwardsRemove('click', this._dom);
-        this._eventForwardsAdd('click', this._captionDom);
+        this._eventForwardsAdd('click', this._innerDom);
         this._eventForwardsAdd('click', this._iconEl.dom);
 
         this._eventForwardsRemove('dblClick', this._dom);
-        this._eventForwardsAdd('dblClick', this._captionDom);
+        this._eventForwardsAdd('dblClick', this._innerDom);
         this._eventForwardsAdd('dblClick', this._iconEl.dom);
 
         this._eventForwardsRemove('mouseDown', this._dom);
-        this._eventForwardsAdd('mouseDown', this._captionDom);
+        this._eventForwardsAdd('mouseDown', this._innerDom);
         this._eventForwardsAdd('mouseDown', this._iconEl.dom);
 
         // Config anwenden
@@ -62,19 +67,6 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get caption() { return this._captionDom.html; }
-    set caption(val) { 
-        this._captionDom.html = val; 
-        if (this.isRendered) {
-            this.render();
-        }
-    }
-    
-    get captionDom() { return this._captionDom; }
-
-    get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
-    set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
-    
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -135,7 +127,12 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
         }
     }
     
-    get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && super.isEmpty; }
+    // overwrite
+    get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
+
+    get containerLeftEl() { return this._containerLeftEl; }
+    
+    get containerRightEl() { return this._containerRightEl; }
 
 
     // --------------------------------------------------------------
@@ -143,7 +140,14 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // Overwrite
     render(superCall) {
-        // dom mit Tools rendern (innerDom)
+        // Schematischer Aufbau des DOMs:
+        // + panelBar
+        //   + icon
+        //   + containerLeft
+        //   + innerDom
+        //   + containerRight
+        
+        // dom rendern. Im innerDom ist die Bezeichnung (html). Links und rechts davon sind die Tools
         super.render(true);
         
         // Span icon rendern (icon kijs.gui.Icon)
@@ -153,11 +157,18 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
             this._iconEl.unrender();
         }
 
-        // Span caption rendern (captionDom kijs.guiDom)
-        if (!this._captionDom.isEmpty) {
-            this._captionDom.renderTo(this._dom.node, this._innerDom.node);
+        // ToolsLeft rendern (kijs.gui.Container)
+        if (!this._containerLeftEl.isEmpty) {
+            this._containerLeftEl.renderTo(this._dom.node, this._innerDom.node);
         } else {
-            this._captionDom.unrender();
+            this._containerLeftEl.unrender();
+        }
+        
+        // ToolsRight rendern (kijs.gui.Container)
+        if (!this._containerRightEl.isEmpty) {
+            this._containerRightEl.renderTo(this._dom.node);
+        } else {
+            this._containerRightEl.unrender();
         }
 
         // Event afterRender auslösen
@@ -174,7 +185,8 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
         }
 
         this._iconEl.unrender();
-        this._captionDom.unrender();
+        this._containerLeftEl.unrender();
+        this._containerRightEl.unrender();
         super.unrender(true);
     }
 
@@ -192,16 +204,20 @@ kijs.gui.HeaderBar = class kijs_gui_HeaderBar extends kijs.gui.Container {
         }
         
         // Elemente/DOM-Objekte entladen
-        if (this._captionDom) {
-            this._captionDom.destruct();
-        }
         if (this._iconEl) {
             this._iconEl.destruct();
         }
+        if (this._containerLeftEl) {
+            this._containerLeftEl.destruct();
+        }
+        if (this._containerRightEl) {
+            this._containerRightEl.destruct();
+        }
         
         // Variablen (Objekte/Arrays) leeren
-        this._captionDom = null;
         this._iconEl = null;
+        this._containerLeftEl = null;
+        this._containerRightEl = null;
         
         // Basisklasse entladen
         super.destruct(true);

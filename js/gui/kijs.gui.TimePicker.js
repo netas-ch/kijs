@@ -29,9 +29,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             minute: 20,                 // Distanz vom Kreisrand für Minuten
             second: 20                  // Distanz vom Kreisrand für Sekunden
         };
-
-        this._headerDom = new kijs.gui.Dom({
-            cls: 'kijs-headerbar'
+        
+        this._headerBar = new kijs.gui.PanelBar({
+            cls: 'kijs-headerbar-center'
         });
 
         this._timeDom = new kijs.gui.Dom({
@@ -119,7 +119,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             nowText: { target: 'caption', context: this._nowBtn },
-            headerText: { target: 'html', context: this._headerDom },
+            headerText: { target: 'html', context: this._headerBar },
             value: { target: 'value' },
             hasSeconds: true,
             separator: true,
@@ -203,11 +203,11 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     render(superCall) {
         super.render(true);
 
-        // Span icon rendern (kijs.gui.Icon)
-        if (!this._headerDom.isEmpty) {
-            this._headerDom.renderTo(this._dom.node);
+        // HeaderBar
+        if (!this._headerBar.isEmpty) {
+            this._headerBar.renderTo(this._dom.node);
         } else {
-            this._headerDom.unrender();
+            this._headerBar.unrender();
         }
 
         // Time DOM
@@ -265,7 +265,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
-        this._headerDom.unrender();
+        this._headerBar.unrender();
         this._inputHourDom.unrender();
         this._inputMinuteDom.unrender();
         this._inputSecondDom.unrender();
@@ -706,8 +706,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._headerDom) {
-            this._headerDom.destruct();
+        if (this._headerBar) {
+            this._headerBar.destruct();
         }
         if (this._inputHourDom) {
             this._inputHourDom.destruct();
@@ -731,10 +731,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this._nowBtn.destruct();
         }
 
-
-
         // Variablen (Objekte/Arrays) leeren
-        this._headerDom = null;
+        this._headerBar = null;
         this._inputHourDom = null;
         this._inputMinuteDom = null;
         this._inputSecondDom = null;

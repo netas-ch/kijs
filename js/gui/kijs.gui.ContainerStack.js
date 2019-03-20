@@ -77,6 +77,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         ];
         this._afterAnimationDefer = null;
         this._defaultAnimation = 'none';
+        this._defaultDuration = 500;
         this._domElements = [];
         this._topZIndex = 1;
 
@@ -86,7 +87,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
             defaultAnimation: 'none',
-            defaultDuration: 1000,
+            defaultDuration: 500,
             activeEl: 0
         }, config);
 

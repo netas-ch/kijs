@@ -213,7 +213,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     get innerDom() { return this._innerDom; }
     
     // overwrite
-    get isEmpty() { return kijs.isEmpty(this._elements); }
+    get isEmpty() { return this._innerDom.isEmpty && kijs.isEmpty(this._elements); }
     
     
     

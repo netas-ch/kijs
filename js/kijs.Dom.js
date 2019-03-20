@@ -379,6 +379,7 @@ kijs.Dom = class kijs_Dom {
                 break;
                 
             case 'text': 
+                //node.textContent = html;
                 let d = document.createElement('div');
                 d.innerHTML = html;
                 node.innerHTML = d.textContent || d.innerText || '';

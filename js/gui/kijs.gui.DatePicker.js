@@ -22,40 +22,37 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         this._value = new Date(); //null; // ausgewähltes Datum
         this._rangeFrom = null; //new Date(2019, 0, 1);
-        this._rangeTo = null; //new Date(2019, 0, 10);
+        this._rangeTo = null; // new Date(2019, 0, 10);
 
 
-        this._headerTitle = new kijs.gui.Element({
-            on: {
-                click: this._onHeaderClick,
-                context: this
-            }
-        });
-        this._forwardButton = new kijs.gui.Button({
+        this._nextBtn = new kijs.gui.Button({
             iconChar: '&#xf138', // fa-chevron-circle-right
             on: {
-                click: this._onBtnForwardClick,
+                click: this._onNextBtnClick,
                 context: this
             }
         });
-        this._backwardButton = new kijs.gui.Button({
+        
+        this._previousBtn = new kijs.gui.Button({
             iconChar: '&#xf137', // fa-chevron-circle-left
             on: {
-                click: this._onBtnBackwardClick,
+                click: this._onPreviousBtnClick,
                 context: this
             }
         });
-        this._headerBar = new kijs.gui.Container({
-            cls: ['kijs-headerbar', 'kijs-flexrow'],
-            elements: [
-                this._backwardButton,
-                this._headerTitle,
-                this._forwardButton
-            ]
+        
+        this._headerBar = new kijs.gui.PanelBar({
+            cls: 'kijs-headerbar-center',
+            elementsLeft: [this._previousBtn],
+            elementsRight: [this._nextBtn],
+            on: {
+                click: this._onHeaderBarClick,
+                context: this
+            }
         });
 
         this._calendarDom = new kijs.gui.Dom({
-            cls: 'kijs-calendarcontainer',
+            cls: 'kijs-datepicker-calendar',
             on: {
                 mouseLeave: this._onCalendarMouseLeave,
                 wheel: this._onCalendarWheel,
@@ -65,18 +62,18 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Zweidimensionales Grid-Array aufbauen
         this._gridColumns = [];
-        for (let y=0; y < 7; y++) { // max 6 Datumzeilen + 1 Header
+        for (let y=0; y<7; y++) { // max 6 Datumzeilen + 1 Header
             let rows = [];
 
             // Dom-Element für Zeile
             let colDom = new kijs.gui.Dom();
 
             // Dom-Elemente für Spalten
-            for (let x=0; x < 8; x ++) { // 7 Tage + 1 Wochen-Nr.
+            for (let x=0; x<8; x++) { // 7 Tage + 1 Wochen-Nr.
                 rows.push({
                     x: x,
                     y: y,
-                    dom: new kijs.gui.Element({
+                    dom: new kijs.gui.Dom({
                         on: {
                             mouseEnter: this._onDateMouseEnter,
                             click: this._onDateMouseClick,
@@ -98,17 +95,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Selector für Monat / Jahr
         this._yearMonthDom = new kijs.gui.Dom({
-            cls: 'kijs-monthyearselector'
+            cls: 'kijs-datepicker-monthyearselector'
         });
         this._monthDom = new kijs.gui.Dom({
-            cls: 'kijs-monthselector'
+            cls: 'kijs-datepicker-monthselector'
         });
         this._yearDom = new kijs.gui.Dom({
-            cls: 'kijs-yearselector'
+            cls: 'kijs-datepicker-yearselector'
         });
 
         this._monthSelector = [];
-        for (let m=0; m < 12; m++) { // Jan-Dez
+        for (let m=0; m<12; m++) { // Jan-Dez
             this._monthSelector.push({
                 month: m,
                 dom: new kijs.gui.Dom({
@@ -171,6 +168,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         // Button 'heute'
         this._todayBtn = new kijs.gui.Button({
             parent: this,
+            caption: 'Heute',
             on: {
                 click: this._onTodayButtonClick,
                 context: this
@@ -181,16 +179,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            todayText: 'Heute'
+
         }, config);
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            todayText: { target: 'caption', context: this._todayBtn },
-            value: { target: 'value' },
-            hasSeconds: true,
-            separator: true,
-            clockColor: true
+            rangeFrom: true,
+            rangeTo: true,
+            value: { target: 'value' }
         });
 
         // Config anwenden
@@ -204,15 +200,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-
     get value() { return this._value;}
 
     set value(val) {
-        if (!(val instanceof Date)) {
-            throw new Error('invalid date value');
-        }
-        this._value = val;
+        this._value = kijs.Date.create(val);
         this._visibleMonthDate = kijs.Date.getFirstOfMonth(this._value);
         this._calculateCalendar();
     }
@@ -227,10 +218,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -273,7 +264,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
 
         // Button für "Heute"
-        if (this._todayBtn.caption) {
+        if (!this._todayBtn.isEmpty) {
             this._todayBtn.renderTo(this._dom.node);
         } else {
             this._todayBtn.unrender();
@@ -328,7 +319,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         rangeTo = rangeTo ? rangeTo : this._rangeTo;
 
         // Titel schreiben
-        this._headerTitle.html = kijs.Date.format(this._visibleMonthDate, 'F Y', this._languageId);
+        this._headerBar.html = kijs.Date.format(this._visibleMonthDate, 'F Y', this._languageId);
 
         monthIndex = this._visibleMonthDate.getMonth(); // Vorsicht: 0-basierend
 
@@ -348,9 +339,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
        // Spaltenüberschriften (Mo-Fr)
        for (let i=0; i<this._gridColumns[0].rows.length; i++) {
            let fldDom = this._gridColumns[0].rows[i].dom;
-           fldDom.dom.clsAdd('kijs-head');
+           fldDom.clsAdd('kijs-head');
            if (i === 0)  {
-               fldDom.dom.clsAdd('kijs-weekno');
+               fldDom.clsAdd('kijs-weekno');
                fldDom.html = this._showWeekNumbers ? '&nbsp;' : '';
                
            } else {
@@ -361,9 +352,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                fldDom.html = kijs.Date.weekdays_short[this._languageId][wdNo];
 
                 if (wdNo === 0 || wdNo === 6) {
-                    fldDom.dom.clsAdd('kijs-weekend');
+                    fldDom.clsAdd('kijs-weekend');
                 } else {
-                    fldDom.dom.clsRemove('kijs-weekend');
+                    fldDom.clsRemove('kijs-weekend');
                 }
            }
        }
@@ -393,58 +384,58 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
                // Tag ausserhalb vom Monat?
                if (day.getMonth() !== monthIndex) {
-                    fldDom.dom.clsAdd('kijs-outofmonth');
+                    fldDom.clsAdd('kijs-outofmonth');
                } else {
-                    fldDom.dom.clsRemove('kijs-outofmonth');
+                    fldDom.clsRemove('kijs-outofmonth');
                }
 
                // aktueller Tag?
                if (kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(new Date()).getTime()) {
-                   fldDom.dom.clsAdd('kijs-today');
+                   fldDom.clsAdd('kijs-today');
                } else {
-                   fldDom.dom.clsRemove('kijs-today');
+                   fldDom.clsRemove('kijs-today');
                }
 
                // Weekend?
                if (day.getDay() === 0 || day.getDay() === 6) {
-                   fldDom.dom.clsAdd('kijs-weekend');
+                   fldDom.clsAdd('kijs-weekend');
                } else {
-                   fldDom.dom.clsRemove('kijs-weekend');
+                   fldDom.clsRemove('kijs-weekend');
                }
 
                // selektiertes Datum?
                 if (this._value instanceof Date && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(this._value).getTime()) {
-                    fldDom.dom.clsAdd('kijs-value');
+                    fldDom.clsAdd('kijs-value');
                 } else {
-                    fldDom.dom.clsRemove('kijs-value');
+                    fldDom.clsRemove('kijs-value');
                 }
 
                 // range start
                 if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(this._rangeFrom).getTime()) {
-                    fldDom.dom.clsAdd('kijs-range-start');
+                    fldDom.clsAdd('kijs-range-start');
                 } else {
-                    fldDom.dom.clsRemove('kijs-range-start');
+                    fldDom.clsRemove('kijs-range-start');
                 }
 
                 // range end
                 if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(rangeTo).getTime()) {
-                    fldDom.dom.clsAdd('kijs-range-end');
+                    fldDom.clsAdd('kijs-range-end');
                 } else {
-                    fldDom.dom.clsRemove('kijs-range-end');
+                    fldDom.clsRemove('kijs-range-end');
                 }
 
                 // range between
                 if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() > kijs.Date.getDatePart(this._rangeFrom).getTime()
                         && kijs.Date.getDatePart(day).getTime() < kijs.Date.getDatePart(rangeTo).getTime()) {
-                    fldDom.dom.clsAdd('kijs-range-between');
+                    fldDom.clsAdd('kijs-range-between');
                 } else {
-                    fldDom.dom.clsRemove('kijs-range-between');
+                    fldDom.clsRemove('kijs-range-between');
                 }
 
                // Wochen-Nummer schreiben
                if (x===1) {
                    this._gridColumns[i].rows[0].dom.html = this._showWeekNumbers ? parseInt(kijs.Date.format(day, 'W')) : '';
-                   this._gridColumns[i].rows[0].dom.dom.clsAdd('kijs-weekno');
+                   this._gridColumns[i].rows[0].dom.clsAdd('kijs-weekno');
                }
                
                // 1 Tag addieren
@@ -489,14 +480,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
 
     // EVENTS
-    _onBtnForwardClick() {
+    _onNextBtnClick() {
         this._visibleMonthDate.setMonth(this._visibleMonthDate.getMonth()+1);
         this._setYearPicker(this._visibleMonthDate.getFullYear());
         this._calculateCalendar();
         this._calculateMonthYearPicker();
     }
 
-    _onBtnBackwardClick() {
+    _onPreviousBtnClick() {
         this._visibleMonthDate.setMonth(this._visibleMonthDate.getMonth()-1);
         this._setYearPicker(this._visibleMonthDate.getFullYear());
         this._calculateCalendar();
@@ -547,13 +538,13 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
     _onCalendarWheel(e) {
         if (e.nodeEvent.deltaY < 0) {
-            this._onBtnBackwardClick();
+            this._onPreviousBtnClick();
         } else {
-            this._onBtnForwardClick()
+            this._onNextBtnClick()
         }
     }
 
-    _onHeaderClick() {
+    _onHeaderBarClick() {
         this._showCalendar = !this._showCalendar;
         this.render();
     }
@@ -670,9 +661,11 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
 
 
-
         // Variablen (Objekte/Arrays) leeren
+        this._nextBtn = null;
+        this._previousBtn = null;
         this._headerBar = null;
+        
         this._calendarDom = null;
         this._todayBtn = null;
 

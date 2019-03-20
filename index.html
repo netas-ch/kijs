@@ -35,8 +35,7 @@
         <script type="text/javascript" src="js/gui/kijs.gui.Button.js"></script>
         <script type="text/javascript" src="js/gui/kijs.gui.ButtonGroup.js"></script>
         
-        <script type="text/javascript" src="js/gui/kijs.gui.HeaderBar.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.FooterBar.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.PanelBar.js"></script>
         <script type="text/javascript" src="js/gui/kijs.gui.Resizer.js"></script>
         <script type="text/javascript" src="js/gui/kijs.gui.Splitter.js"></script>
         <script type="text/javascript" src="js/gui/kijs.gui.Panel.js"></script>
@@ -54,6 +53,9 @@
         <script type="text/javascript" src="js/gui/kijs.gui.ListView.js"></script>
         <script type="text/javascript" src="js/gui/kijs.gui.FormPanel.js"></script>
         
+        <script type="text/javascript" src="js/gui/kijs.gui.TimePicker.js"></script>
+        <script type="text/javascript" src="js/gui/kijs.gui.DatePicker.js"></script>
+        
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.js"></script>
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.Field.js"></script>
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.Text.js"></script>
@@ -64,30 +66,32 @@
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.CheckboxGroup.js"></script>
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.OptionGroup.js"></script>
         <script type="text/javascript" src="js/gui/field/kijs.gui.field.Combo.js"></script>
+        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Display.js"></script>
+        <script type="text/javascript" src="js/gui/field/kijs.gui.field.DateTime.js"></script>
 
         
         
         <script type="text/javascript" src="tests/kijs.Test.js"></script>
 
-        <script type="text/javascript" src="tests/test_1_class.js"></script>
-        <script type="text/javascript" src="tests/test_2_multiLevelInheritance.js"></script>
-        <script type="text/javascript" src="tests/test_3_singleton.js"></script>
-        <script type="text/javascript" src="tests/test_4_event.js"></script>
-        <script type="text/javascript" src="tests/test_5_ajax.js"></script>
-        <script type="text/javascript" src="tests/test_6_rpc.js"></script>
-        <script type="text/javascript" src="tests/test_7_date.js"></script>
-        <script type="text/javascript" src="tests/test_8_nodeEvents.js"></script>
-        <script type="text/javascript" src="tests/test_9_Storage.js"></script>
+        <script type="text/javascript" src="tests/test_01_class.js"></script>
+        <script type="text/javascript" src="tests/test_02_multiLevelInheritance.js"></script>
+        <script type="text/javascript" src="tests/test_03_singleton.js"></script>
+        <script type="text/javascript" src="tests/test_04_event.js"></script>
+        <script type="text/javascript" src="tests/test_05_ajax.js"></script>
+        <script type="text/javascript" src="tests/test_06_rpc.js"></script>
+        <script type="text/javascript" src="tests/test_07_date.js"></script>
+        <script type="text/javascript" src="tests/test_08_nodeEvents.js"></script>
+        <script type="text/javascript" src="tests/test_09_Storage.js"></script>
         
-        <script type="text/javascript" src="tests/gui/gui_test_1_element.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_2_container.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_3_icon.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_4_button.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_5_headerBar.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_6_footerBar.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_7_panel.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_8_window.js"></script>
-        <script type="text/javascript" src="tests/gui/gui_test_9_listView.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_01_element.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_02_container.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_03_icon.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_04_button.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_05_panelBar.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_06_panel.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_07_window.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_08_listView.js"></script>
+        <script type="text/javascript" src="tests/gui/gui_test_09_calendar.js"></script>
 
         
         <script>
@@ -101,26 +105,26 @@
     <body>
         <section id="content">
             <h1>Tests</h1>
-            <p><a href="javascript:test_1_class();">1 Klassen</a></p>
-            <p><a href="javascript:test_2_multiLevelInheritance();">2 mehrstufige Vererbung</a></p>
-            <p><a href="javascript:test_3_singleton();">3 Klasse vom Typ singleton</a></p>
-            <p><a href="javascript:test_4_event();">4 Events</a></p>
-            <p><a href="javascript:test_5_ajax();">5 Ajax</a></p>
-            <p><a href="javascript:test_6_rpc();">6 RPC</a></p>
-            <p><a href="javascript:test_7_date();">7 Datum</a></p>
-            <p><a href="javascript:test_8_nodeEvents();">8 Node-Events</a></p>
-            <p><a href="javascript:test_9_storage();">9 Storage</a></p>
+            <p><a href="javascript:test_01_class();">1 Klassen</a></p>
+            <p><a href="javascript:test_02_multiLevelInheritance();">2 mehrstufige Vererbung</a></p>
+            <p><a href="javascript:test_03_singleton();">3 Klasse vom Typ singleton</a></p>
+            <p><a href="javascript:test_04_event();">4 Events</a></p>
+            <p><a href="javascript:test_05_ajax();">5 Ajax</a></p>
+            <p><a href="javascript:test_06_rpc();">6 RPC</a></p>
+            <p><a href="javascript:test_07_date();">7 Datum</a></p>
+            <p><a href="javascript:test_08_nodeEvents();">8 Node-Events</a></p>
+            <p><a href="javascript:test_09_storage();">9 Storage</a></p>
             <p>&nbsp;</p>
             <h2>GUI</h2>
-            <p><a href="javascript:gui_test_1_element();">1 Element</a></p>
-            <p><a href="javascript:gui_test_2_container();">2 Container</a></p>
-            <p><a href="javascript:gui_test_3_icon();">3 Icon</a></p>
-            <p><a href="javascript:gui_test_4_button();">4 Button</a></p>
-            <p><a href="javascript:gui_test_5_headerBar();">5 HeaderBar</a></p>
-            <p><a href="javascript:gui_test_6_footerBar();">6 FooterBar</a></p>
-            <p><a href="javascript:gui_test_7_panel();">7 Panel</a></p>
-            <p><a href="javascript:gui_test_8_window();">8 Window</a></p>
-            <p><a href="javascript:gui_test_9_listView();">9 ListView</a></p>
+            <p><a href="javascript:gui_test_01_element();">01 Element</a></p>
+            <p><a href="javascript:gui_test_02_container();">02 Container</a></p>
+            <p><a href="javascript:gui_test_03_icon();">03 Icon</a></p>
+            <p><a href="javascript:gui_test_04_button();">04 Button</a></p>
+            <p><a href="javascript:gui_test_05_panelBar();">05 PanelBar</a></p>
+            <p><a href="javascript:gui_test_06_panel();">06 Panel</a></p>
+            <p><a href="javascript:gui_test_07_window();">07 Window</a></p>
+            <p><a href="javascript:gui_test_08_listView();">08 ListView</a></p>
+            <p><a href="javascript:gui_test_09_calendar();">09 Calendar</a></p>
             <p>&nbsp;</p>
             <p><a href="testViewPort/test_afterResize.html">ViewPort afterResize Events</a></p>
             <p><a href="testApp/index.html">Test-App</a></p>
@@ -138,22 +142,21 @@
                     <h2>Weiteres</h2>
                     <p>X Ajax</p>
                     <p>X RPC</p>
-                    <p>O DOM-Events</p>
-                    <p>O Config-Argumente</p>
+                    <p>X DOM-Events</p>
+                    <p>X Config-Argumente</p>
                     <p>X JSON definition von Formularen (xtype)</p>
-                    <p>O Hilfsfunktionen z.B. für DOM-Operationen</p>
+                    <p>X Hilfsfunktionen z.B. für DOM-Operationen</p>
                     
                     <h2>GUI Basiselemente</h2>
-                    <p>O gui.ElementManager ?</p>
                     <p>X gui.Element</p>
                     <p>X gui.BoxElement</p>
                     <p>X gui.Container</p>
                     <p>X gui.ViewPort</p>
                     <p>X gui.Icon</p>
-                    <p>X gui.HeaderBar</p>
+                    <p>X gui.PanelBar</p>
                     <p>X gui.Resizer</p>
-                    <p>O gui.Panel</p>
-                    <p>O gui.Window</p>
+                    <p>X gui.Panel</p>
+                    <p>X gui.Window</p>
                     
                     <h2>GUI Elemente</h2>
                     <p>X gui.Button</p>
@@ -165,14 +168,14 @@
                     <p>O gui.Grid</p>
                     
                     <h2>Fields</h2>
-                    <p>O gui.field.Field</p>
-                    <p>O gui.field.Label</p>
+                    <p>X gui.field.Field</p>
+                    <p>X gui.field.Label</p>
                     <p>X gui.field.Text</p>
-                    <p>O gui.field.Memo</p>
-                    <p>O gui.field.Number</p>
-                    <p>O gui.field.YesNo</p>
+                    <p>X gui.field.Memo</p>
+                    <p>X gui.field.Number</p>
+                    <p>X gui.field.YesNo</p>
                     <p>O gui.field.Combo</p>
-                    <p>O gui.field.Multiselect</p>
+                    <p>X gui.field.Multiselect</p>
                     
                     <h2>Phase 3</h2>
                     <p>O App Builder (PHP)</p>

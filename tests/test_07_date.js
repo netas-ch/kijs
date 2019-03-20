@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit Date
 // ---------------------------------
-function test_7_date(target) {
+function test_07_date(target) {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');

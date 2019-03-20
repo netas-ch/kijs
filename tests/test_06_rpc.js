@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit RPC
 // ---------------------------------
-function test_6_rpc() {
+function test_06_rpc() {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');

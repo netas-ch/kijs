@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit kijs.gui.Button
 // ---------------------------------
-function gui_test_4_button() {
+function gui_test_04_button() {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');

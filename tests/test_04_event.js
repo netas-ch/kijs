@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit Events
 // ---------------------------------
-function test_4_event() {
+function test_04_event() {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');

@@ -3,7 +3,7 @@
 // ---------------------------------
 // Tests mit Ajax
 // ---------------------------------
-function test_5_ajax() {
+function test_05_ajax() {
     let tx = new kijs.Test();
     if (tx.hasTests()) {
         alert('Es wurden bereits Tests gemacht! Bitte laden sie die Seite neu.');
