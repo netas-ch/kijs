@@ -11,19 +11,20 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     // --------------------------------------------------------------
     constructor(config) {
         super(false);
-        
+
         this._disabled = false;
         this._dom = new kijs.gui.Dom();
         this._followPointer = false;    // Soll sich der TipText mit dem Mauszeiger verschieben?
         this._offsetX = 10;
         this._offsetY = 10;
         this._target = null;
+        this._defaultConfig = {};
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
-        
+        });
+
         // Mapping für die Zuweisung der Config-Eigenmschaften
         this._configMap = {
             cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
@@ -37,10 +38,11 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
             target: { target: 'target' },
             style : { fn: 'assign', target: 'style', context: this._dom }
         };
-        
+
         this._dom.clsAdd('kijs-tooltip');
-        
+
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config);
         }
     }
@@ -52,19 +54,19 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     get disabled() { return this._disabled; }
     set disabled(val) {
         this._disabled = !!val;
-        
+
         if (this._disabled) {
             this.hide();
         }
     }
-    
+
     get dom() { return this._dom; }
-    
+
     get html() { return this._dom.html; }
     set html(val) { this._dom.html = val; }
-    
+
     get isEmpty() { return this._dom.isEmpty; }
-    
+
     get target() { return this._target; }
     set target(val) {
         if (this._target !== val) {
@@ -72,9 +74,9 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
             this._bindEventsToTarget();
         }
     }
-    
-    
-    
+
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -87,8 +89,8 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
     }
-    
-    
+
+
     hide() {
         if (this._dom) {
             this._dom.clsAdd('kijs-hidden');
@@ -128,39 +130,39 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
                 if (this._offsetX) {
                     x += this._offsetX;
                 }
-                
+
                 // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
                 if (x+this._dom.node.offsetWidth > window.innerWidth) {
                     x = Math.abs(window.innerWidth - this._dom.node.offsetWidth);
                 }
-                
+
                 // Position zuweisen
                 this._dom.style.left = x + 'px';
             }
-            
+
             // Y
             if (kijs.isDefined(y)) {
                 // Offset addieren
                 if (this._offsetY) {
                     y += this._offsetY;
                 }
-                
+
                 // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
                 if (y+this._dom.node.offsetHeight > window.innerHeight) {
                     y = Math.abs(window.innerHeight - this._dom.node.offsetHeight);
                 }
-                
+
                 // Position zuweisen
                 this._dom.style.top = y + 'px';
             }
-            
+
             // Einblenden
             this._dom.clsRemove('kijs-hidden');
 
             // listener auf body
             kijs.Dom.addEventListener('mousemove', document.body, this._onMouseMoveOnBody, this);
         }
-        
+
         if (create) {
             document.body.appendChild(this._dom.node);
         }
@@ -189,7 +191,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
         this._target.on('mouseMove', this._onMouseMoveTarget, this);
         this._target.on('mouseLeave', this._onMouseLeave, this);
     }
-    
+
     /*_onMouseMoveTipText(e) {
         if (!this.disabled) {
             this.show();
@@ -239,21 +241,21 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Listeners entfernen
         if (this._target) {
             this._target.off(null, null, this);
         }
-    
+
         // Elemente/DOM-Objekte entladen
         if (this._dom) {
             this._dom.destruct();
         }
-       
+
         // Variablen (Objekte/Arrays) leeren
         this._dom = null;
         this._target = null;
-                
+
         // Basisklasse entladen
         super.destruct();
     }

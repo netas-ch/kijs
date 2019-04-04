@@ -47,6 +47,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }

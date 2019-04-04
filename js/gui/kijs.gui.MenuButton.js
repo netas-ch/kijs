@@ -23,9 +23,9 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         this._expandTimer = null;
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-            // Keine
-        }, config);
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
 
         // default xtype der Unterelemente soll der Button sein.
         if (kijs.isObject(config)) {
@@ -56,6 +56,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -67,7 +68,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 this.direction = 'down';
             }
         }
-        
+
         // falls wir in einem Untermenu sind, wird das Menu beim Hoover automatisch geöffnet
         if (this._expandOnHover === null) {
             if (this.upX('kijs.gui.MenuButton')) {

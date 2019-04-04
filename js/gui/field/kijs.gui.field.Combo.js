@@ -4,20 +4,20 @@
 // kijs.gui.field.Combo
 // --------------------------------------------------------------
 kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
-    
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._caption = null;
         this._oldCaption = null;
         this._oldValue = null;
         this._value = null;
-        
+
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
             nodeTagName: 'input',
@@ -25,12 +25,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 id: this._inputId
             }
         });
-        
+
         this._listViewEl = new kijs.gui.ListView({
             autoLoad: false,
             focusable: false
         });
-        
+
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
             targetDomProperty: 'inputWrapperDom',
@@ -40,53 +40,53 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._listViewEl
             ]
         });
-        
-        this._dom.clsAdd('kijs-field-combo');
-       
 
-       // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        this._dom.clsAdd('kijs-field-combo');
+
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
             //autoLoad: true,
             spinIconVisible: true
-        }, config);
-        
+        });
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },
-            
+
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
-            
+
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
-            
+
             captionField: { target: 'captionField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
             toolTipField: { target: 'toolTipField', context: this._listViewEl },
             valueField: { target: 'valueField', context: this._listViewEl },
-            
+
             minSelectCount: true,
             maxSelectCount: true,
-            
+
             data: { prio: 1000, target: 'data', context: this._listViewEl },
             value: { prio: 1001, target: 'value' }
         });
-        
+
         // Event-Weiterleitungen von this._inputDom
         /*this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
-        
+
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);
         this._eventForwardsRemove('escPress', this._dom);
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);*/
-        
-        
-        
+
+
+
         // Listeners
         //this.on('input', this._onInput, this);
         this.on('keyDown', this._onKeyDown, this);
@@ -94,14 +94,15 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._listViewEl.on('click', this._onListViewClick, this);
         this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
         //this._listViewEl.on('selectionChange', this._onListViewSelectionChange, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -115,7 +116,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
         }
     }
-    
+
     get captionField() { return this._listViewEl.captionField; }
     set captionField(val) { this._listViewEl.captionField = val; }
 
@@ -132,7 +133,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('readOnly', false);
         }
     }
-    
+
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
     set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
 
@@ -140,7 +141,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-    
+
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -152,10 +153,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('readOnly', false);
         }
     }
-    
+
     get rpc() { return this._listViewEl.rpc; }
     set rpc(val) { this._listViewEl.rpc = val; }
-    
+
     // overwrite
     get value() { return this._value; }
     set value(val) {
@@ -167,7 +168,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._listViewEl.value = val;
         this._inputDom.nodeAttributeSet('value', this._caption);
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -180,11 +181,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     load(args) {
         this._listViewEl.load(args);
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
-        
+
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
@@ -201,7 +202,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-        
+
         this._inputDom.unrender();
         super.unrender(true);
     }
@@ -223,15 +224,15 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 return false;
             }
         }, this);
-        
+
         // Falls kein Datensatz existiert, zeigen wir halt den value an
         if (!found) {
             caption = val;
         }
-        
+
         return caption;
     }
-    
+
     // overwrite
     _validationRules(value) {
 
@@ -245,7 +246,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // minSelectCount
         if (!kijs.isEmpty(this._minSelectCount)) {
             const minSelectCount = this._minSelectCount;
-            
+
             if (kijs.isArray(value)) {
                 if (value.length < minSelectCount) {
                     this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
@@ -254,11 +255,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
             }
         }
-        
+
         // maxSelectCount
         if (!kijs.isEmpty(this._maxSelectCount)) {
             const maxSelectCount = this._maxSelectCount;
-            
+
             if (kijs.isArray(value)) {
                 if (value.length > maxSelectCount) {
                     this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
@@ -268,22 +269,22 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
     }
-    
-    
+
+
     // LISTENERS
     _onAfterFirstRenderTo(e) {
         console.log('load');
         this.load();
     }
-    
+
     /*_onInput(e) {
         this.validate();
     }*/
-    
+
     _onKeyDown(e) {
         this._listViewEl.raiseEvent('keyDown', e);
     }
-    
+
     _onListViewAfterLoad(e) {
         this.value = this._value;
     }
@@ -292,16 +293,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.close();
         this.value = this._listViewEl.value;
     }
-    
+
     /*_onListViewSelectionChange(e) {
 
     }*/
-    
+
     _onSpinBoxClick() {
         this._inputDom.focus();
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -313,7 +314,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._inputDom) {
             this._inputDom.destruct();
@@ -321,12 +322,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this._listViewEl) {
             this._listViewEl.destruct();
         }
-            
+
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
         this._listViewEl = null;
         this._oldValue = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }

@@ -25,11 +25,12 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // drag events
         this._dom.nodeAttributeSet('draggable', true);
-        this._dom.on('dragStart', this._onDragStart, this);
-        this._dom.on('dragEnter', this._onDragEnter, this);
-        this._dom.on('dragOver', this._onDragOver, this);
-        this._dom.on('dragExit', this._onDragLeave, this);
-        this._dom.on('drop', this._onDrop, this);
+        kijs.DragDrop.addDragEvents(this, this._dom);
+        kijs.DragDrop.addDropEvents(this, this._dom);
+
+        this.on('ddStart', this._onDdStart, this);
+        this.on('ddOver', this._onDdOver, this);
+        this.on('ddDrop', this._onDdDrop, this);
 
         // DOM für label
         this._captionDom = new kijs.gui.Dom({cls:'kijs-caption'});
@@ -39,16 +40,31 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             parent: this,
             elements: [{
                     caption:'Aufsteigend sortieren',
-                    iconChar: '&#xf15d' // fa-sort-alpha-asc
+                    iconChar: '&#xf15d', // fa-sort-alpha-asc
+                    on: {
+                        click: function() {
+                            this.header.grid.sort(this.columnConfig.valueField, 'ASC');
+                            this._menuButtonEl.menuCloseAll();
+                        },
+                        context: this
+                    }
                 },{
                     caption:'Absteigend sortieren',
-                    iconChar: '&#xf15e' // fa-sort-alpha-desc
+                    iconChar: '&#xf15e', // fa-sort-alpha-desc
+                    on: {
+                        click: function() {
+                            this.header.grid.sort(this.columnConfig.valueField, 'DESC');
+                            this._menuButtonEl.menuCloseAll();
+                        },
+                        context: this
+                    }
                 },{
                     caption:'Spalten...',
                     iconChar: '&#xf0db', //  fa-columns
                     on: {
                         click: function() {
                             (new kijs.gui.grid.columnWindow({parent: this})).show();
+                            this._menuButtonEl.menuCloseAll();
                         },
                         context: this
                     }
@@ -68,9 +84,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._overlayDom = new kijs.gui.Dom({cls:'kijs-splitter-overlay'});
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -79,6 +95,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -154,38 +171,43 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
 
     // LISTENER
-    _onDragStart(e) {
+    _onDdStart(e) {
         // wenn splitter nicht bewegt wird, drag starten
-        if (!this._splitterMove) {
-            e.nodeEvent.dataTransfer.setData('text/headercellindex', this.index);
+        if (this._splitterMove) {
+            return false;
         }
     }
 
-    _onDragEnter(e) {
-        if (!this._splitterMove) {
-            this._dom.style.borderLeft = '3px solid red';
+    _onDdOver(e) {
+        if (this._splitterMove || this.header.cells.indexOf(e.sourceElement) === -1 || e.sourceElement.columnConfig.sortable === false) {
+            // fremdes Element, kein Drop.
+            e.position.allowAbove = false;
+            e.position.allowBelow = false;
+            e.position.allowLeft = false;
+            e.position.allowOnto = false;
+            e.position.allowRight = false;
+
+        } else {
+            // erlaubte Positionen (links, rechts)
+            e.position.allowAbove = false;
+            e.position.allowBelow = false;
+            e.position.allowLeft = true;
+            e.position.allowOnto = false;
+            e.position.allowRight = true;
         }
     }
 
-    _onDragOver(e) {
-        e.nodeEvent.preventDefault();
-    }
 
-    _onDragLeave(e) {
-        this._dom.style.borderLeft = '';
-    }
+    _onDdDrop(e) {
+        let tIndex = this.header.cells.indexOf(e.targetElement);
+        let sIndex = this.header.cells.indexOf(e.sourceElement);
+        let pos = e.position.position;
 
-    _onDrop(e) {
-        this._dom.style.borderLeft = '';
-        if (!this._splitterMove && kijs.Array.contains(e.nodeEvent.dataTransfer.types, 'text/headercellindex')) {
-            e.nodeEvent.preventDefault();
-
-            // Index des drag-element auslesen und bei diesem der aktuelle index einstellen
-            let dragIndex = parseInt(e.nodeEvent.dataTransfer.getData('text/headercellindex'));
-            if (kijs.isInteger(dragIndex) && kijs.isInteger(this.index) && dragIndex !== this.index) {
-                let newIndex = dragIndex > this.index ? this.index : this.index - 1;
-                this.header.grid.columnConfigs[dragIndex].position = newIndex;
+        if (!this._splitterMove && tIndex !== -1 && sIndex !== -1 && tIndex !== sIndex && (pos === 'left' || pos === 'right')) {
+            if (pos === 'right') {
+                tIndex += 1;
             }
+            this.header.grid.columnConfigs[sIndex].position = tIndex;
         }
     }
 

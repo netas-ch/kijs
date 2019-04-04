@@ -10,33 +10,34 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._overlayDom = new kijs.gui.Dom();
-        
+
         this._targetPos = null;
         this._targetEl = null;      // Zielelement (kijs.gui.Element)
-        
+
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             targetPos: 'left'
-        }, config);
-        
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             target: { target: 'target' },   // Optional. Wenn leer wird das Target aufgrund der targetPos ermittelt
             targetPos: { target: 'targetPos' }
         });
-        
+
         // Listeners
         this.on('mouseDown', this._onMouseDown, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -49,7 +50,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             throw new Error(`unknown targetPos`);
         }
     }
-    
+
     get target() {
         // Falls das Target nicht bekannt ist: automatisch aufgrund der targetPos ermitteln
         if (!this._targetEl) {
@@ -58,7 +59,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
                 throw new Error(`config missing "target"`);
             }
         }
-        
+
         return this._targetEl;
     }
     set target(val) {
@@ -73,17 +74,17 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         if (!kijs.Array.contains(['top', 'right', 'left', 'bottom'], val)) {
             throw new Error(`unknown targetPos`);
         }
-        
+
         this._targetPos = val;
-        
+
         this._dom.clsRemove(['kijs-splitter-horizontal', 'kijs-splitter-vertical']);
         this._dom.clsAdd('kijs-splitter-' + this.direction);
 
         this._overlayDom.clsRemove(['kijs-splitter-overlay-horizontal', 'kijs-splitter-overlay-vertical']);
         this._overlayDom.clsAdd('kijs-splitter-overlay-' + this.direction);
     }
-    
-    
+
+
 
 
     // --------------------------------------------------------------
@@ -98,14 +99,14 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         let targetEl = null;
         if (this._targetPos === 'left' || this._targetPos === 'top') {
             targetEl = this.previous;
-            
+
         } else if (this._targetPos === 'right' || this._targetPos === 'bottom') {
             targetEl = this.next;
-            
-        } 
+
+        }
         return targetEl;
     }
-  
+
     /**
      * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
      * @param {Number} xAbs     Mausposition clientX
@@ -113,14 +114,14 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand, 
+        // Berechnet aus der absoluten Position bezogen zum Browserrand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
         const newPos = {
             x: xAbs - parentPos.x,
             y: yAbs - parentPos.x
         };
-        
+
         if (this.direction === 'horizontal') {
             this._overlayDom.left = newPos.x;
         } else {
@@ -136,10 +137,10 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         } else {
             this._initialPos = e.nodeEvent.clientY;
         }
-        
+
         // Overlay Positionieren
         this._updateOverlayPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
-        
+
         // Overlay rendern
         this._overlayDom.render();
         this._dom.node.parentNode.appendChild(this._overlayDom.node);
@@ -169,7 +170,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         } else {
             offset = e.nodeEvent.clientY - this._initialPos;
         }
-        
+
         // Neue Breite des Zielelements berechnen und zuweisen
         switch (this._targetPos) {
             case 'top': this.target.height = this.target.height + offset; break;
@@ -178,8 +179,8 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             case 'left': this.target.width = this.target.width + offset; break;
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -191,18 +192,18 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._overlayDom) {
             this._overlayDom.destruct();
         }
-    
+
         // Variablen (Objekte/Arrays) leeren
         this._overlayDom = null;
         this._targetEl = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

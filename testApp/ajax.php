@@ -214,8 +214,38 @@
                     $limit = (int) $request->requestData->limit;
                     $vornamen = file('vornamen.txt');
 
-                    $response->responseData->rows = array();
+                    // Spalten zurückgeben (wenn verlangt)
+                    if ($request->requestData->getMetaData === true) {
+                        $response->responseData->columns = array();
 
+                        $col = new stdClass();
+                        $col->caption = 'Vorname';
+                        $col->valueField = 'vorname';
+                        $response->responseData->columns[] = $col;
+                        unset ($col);
+
+                        for ($y=0; $y<26; $y++) {
+                            $col = new stdClass();
+                            $col->caption = 'Spalte ' . substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ',$y,1);
+                            $col->valueField = 'field_' . strtolower(substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ',$y,1));
+                            $col->visible = $y === 5 ? false : true; // F
+                            $col->hideable = $y === 6 ? false : true; // G
+                            $col->resizable = $y === 7 ? false : true; // H
+                            $col->sortable = $y === 8 ? false : true; // I
+
+                            if ($y === 9) {
+                                $col->width = 300;
+                            }
+
+                            $response->responseData->columns[] = $col;
+                            unset ($col);
+                        }
+
+                        $response->responseData->primaryKeys = array('vorname');
+                    }
+
+                    // Zeilen zurückgeben
+                    $response->responseData->rows = array();
                     for ($i=0; $i<$limit; $i++) {
                         $rwId = $start + $i;
 

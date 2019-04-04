@@ -29,7 +29,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteDataLimit = 25;   // Anzahl Datensätze, die geladen werden
         this._remoteDataStep = 50;    // Anzahl Datensätze, die pro request hinzugefügt werden.
         this._remoteDataTotal = null; // Anzahl verfügbare Datensätze
+        this._getRemoteMetaData = true;  // Metadaten laden?
         this._isLoading = false;      // wird zurzeit geladen?
+        this._remoteSort = null;      // Remote-Sortierung
 
         this._lastSelectedRow = null; // letzte Zeile, die selektiert wurde
         this._currentRow = null;      // Zeile, welche zurzeit fokusiert ist
@@ -84,9 +86,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         });
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -110,6 +112,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -256,6 +259,23 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
+     * Gibt eine columnConfig anhand ihres valueField-Wertes zurück
+     * @param {String} valueField
+     * @returns {kijs.gui.grid.columnConfig.ColumnConfig|null}
+     */
+    getColumnConfigByValueField(valueField) {
+        let cC = null;
+        kijs.Array.each(this._columnConfigs, function(columnConfig) {
+            if (columnConfig.valueField === valueField) {
+                cC = columnConfig;
+                return false;
+            }
+        }, this);
+
+        return cC;
+    }
+
+    /**
      * Gibt die selektieten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben sonst ein Array mit den Zeilenn
      * @returns {Array|kijs.gui.DataViewRow|Null}
@@ -279,18 +299,32 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
-    rowsAdd(rows) {
+    /**
+     * Fügt eine neue Zeile hinzu oder aktualisiert eine bestehende
+     * @param {Array} rows
+     * @param {Number} startOffset Offset, ab dem die Rows einsortiert werden, wenn bestehende rows aktualisiert werden
+     * @returns {Number} Anzahl neue Zeilen
+     */
+    rowsAdd(rows, startOffset=null) {
         if (!kijs.isArray(rows)) {
             rows = [rows];
         }
 
-        let renderStartOffset = this._rows.length;
+        let renderStartOffset = this._rows.length,
+                newRows = 0,
+                rowPos=0,
+                offsets=[];
 
         kijs.Array.each(rows, function(row) {
+            let currentPos = null;
+
             // instanz einer row gegeben. Direkt einfügen
             if (row instanceof kijs.gui.grid.Row) {
                 row.parent = this;
                 this._rows.push(row);
+
+                // Position der neuen row merken
+                currentPos = this._rows.length-1;
 
             } else {
                 // row per primary key suchen
@@ -300,7 +334,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     // bestehende row updaten
                     pRow.updateDataRow(row);
 
+                    // Position der bestehenden Row merken
+                    currentPos = this._rows.indexOf(pRow);
+
                 } else {
+                    newRows++;
 
                     // neue row hinzufügen
                     this._rows.push(new kijs.gui.grid.Row({
@@ -311,13 +349,32 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                             context: this
                         }
                     }));
+
+                    // Position der neuen row merken
+                    currentPos = this._rows.length-1;
                 }
             }
+
+            // korrekt einsortieren
+            if (startOffset !== null && currentPos !== (startOffset + rowPos)) {
+                kijs.Array.move(this._rows, currentPos, startOffset + rowPos);
+            }
+            offsets.push(startOffset + rowPos);
+
+            // Zähler
+            rowPos++;
+
         }, this);
 
+        // Alle Elemente ab dem ersten neu eingefügten Element neu rendern
+        if (offsets.length > 0) {
+            renderStartOffset = kijs.Array.min(offsets);
+        }
         if (this.isRendered && this._rows.length > renderStartOffset) {
             this._renderRows(renderStartOffset);
         }
+
+        return newRows;
     }
 
     rowsRemove(rows) {
@@ -463,6 +520,39 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.current = null;
     }
 
+    /**
+     * Sortiert die Tabelle nach einer bestimmten Spalte.
+     * @param {String} field
+     * @param {String} [direction] ASC oder DESC
+     * @returns {undefined}
+     */
+    sort(field, direction='ASC') {
+        direction = direction.toUpperCase();
+        if (!kijs.Array.contains(['ASC', 'DESC'], direction)) {
+            throw new Error('invalid value for sort direction');
+        }
+
+        let columnConfig = null;
+        kijs.Array.each(this._columnConfigs, function(cC) {
+            if (cC.valueField === field) {
+                columnConfig = cC;
+                return false;
+            }
+        }, this);
+
+        if (columnConfig === null) {
+            throw new Error('invalid sort field name');
+        }
+
+        this._remoteSort = {
+            field: field,
+            direction: direction
+        };
+
+        // store laden
+        this._remoteLoad(true);
+    }
+
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -534,8 +624,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this._isLoading = true;
 
             let args = {};
-            args.start = this._remoteDataLoaded;
-            args.limit = this._remoteDataLimit - this._remoteDataLoaded;
+            args.sort = this._remoteSort;
+            args.getMetaData = this._getRemoteMetaData;
+
+            // alle Daten neu laden
+            if (force) {
+                args.start = 0;
+                args.limit = this._remoteDataLimit;
+
+            // Nächste Daten laden
+            } else {
+                args.start = this._remoteDataLoaded;
+                args.limit = this._remoteDataLimit - this._remoteDataLoaded;
+            }
 
             if (kijs.isObject(this._facadeFnArgs)) {
                 args = Object.assign(args, this._facadeFnArgs);
@@ -543,40 +644,53 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             // RPC ausführen
             this._rpc.do(this._facadeFnLoad, args, function(response) {
-                if (kijs.isArray(response.rows)) {
-
-                    // Datensätze hinzufügen
-                    if (response.rows.length > 0) {
-                        this.rowsAdd(response.rows);
-                    }
-
-                    // Firefox-Bug: Wenn das scrolltop nicht abgefragt wird,
-                    // springt der browser manchmal nach oben
-                    if (kijs.Navigator.isFirefox) {
-                        let st = this._tableContainerDom.node.scrollTop;
-                    }
-
-                    // Anzahl DS zählen
-                    this._remoteDataLoaded += response.rows.length;
-
-                    // Falls mehr Datensätze zurückgegeben wurden als angefragt,
-                    // limit erhöhen
-                    if (this._remoteDataLoaded > this._remoteDataLimit) {
-                        this._remoteDataLimit = this._remoteDataLoaded;
-                    }
-                }
-
-                // Total Datensätze
-                if (kijs.isInteger(response.count)) {
-                    this._remoteDataTotal = response.count;
-                }
-
-                this.raiseEvent('afterLoad', response.rows);
-
-                this._isLoading = false;
-
+                this._remoteProcess(response, args);
             }, this, true, 'none');
         }
+    }
+
+    _remoteProcess(response, args) {
+
+        // columns
+        if (kijs.isArray(response.columns)) {
+            kijs.Array.clear(this._columnConfigs);
+            this.columnConfigAdd(response.columns);
+
+            this._getRemoteMetaData = false;
+        }
+
+        // primary keys
+        if (response.primaryKeys) {
+            this.primaryKeys = response.primaryKeys;
+        }
+
+        // rows
+        if (kijs.isArray(response.rows)) {
+            let addedRowsCnt = 0;
+
+            // Datensätze hinzufügen
+            if (response.rows.length > 0) {
+                addedRowsCnt = this.rowsAdd(response.rows, args.start);
+            }
+
+            // Anzahl DS zählen
+            this._remoteDataLoaded += addedRowsCnt;
+
+            // Falls mehr Datensätze zurückgegeben wurden als angefragt,
+            // limit erhöhen
+            if (this._remoteDataLoaded > this._remoteDataLimit) {
+                this._remoteDataLimit = this._remoteDataLoaded;
+            }
+        }
+
+        // Total Datensätze
+        if (kijs.isInteger(response.count)) {
+            this._remoteDataTotal = response.count;
+        }
+
+        this.raiseEvent('afterLoad', response);
+
+        this._isLoading = false;
     }
 
     _renderRows(offset=0) {
@@ -660,7 +774,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             if (!this._intersectionObserver || this._intersectionObserver.root !== this._tableContainerDom.node) {
                 this._intersectionObserver = new IntersectionObserver(this._onIntersect.bind(this), {
                     root: this._tableContainerDom.node,
-                    rootMargin: '200px',
+                    rootMargin: '100px',
                     threshold: 0
                 });
             }

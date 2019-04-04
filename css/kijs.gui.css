@@ -28,7 +28,8 @@
 .kijs-shadow {
   box-shadow: 5px 5px 5px rgba(0,0,0,0.5);
 }
-.kijs-autoscroll {
+.kijs-autoscroll,
+div.kijs-autoscroll {
   overflow-y: auto;
 }
 div.kijs-container {
@@ -1367,8 +1368,8 @@ div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-icon {
 }
 div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-caption {
   font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-  font-size: 11px;
-  line-height: 15px;
+  font-size: 12px;
+  line-height: 17px;
   vertical-align: top;
 }
 div.kijs-field-checkbox > .kijs-inputwrapper:focus > .kijs-checkbox-input {
@@ -1616,6 +1617,19 @@ div.kijs-tooltip.kijs-hidden {
   visibility: hidden;
   opacity: 0;
   transition: 1s;
+}
+body > div.kijs-dragdrop-marker {
+  z-index: 90000;
+  position: absolute;
+  background-color: #1E9429;
+}
+body > div.kijs-dragdrop-marker.top,
+body > div.kijs-dragdrop-marker.bottom {
+  height: 2px;
+}
+body > div.kijs-dragdrop-marker.left,
+body > div.kijs-dragdrop-marker.right {
+  width: 2px;
 }
 .kijs-flexrow > .kijs-container-inner {
   display: flex;

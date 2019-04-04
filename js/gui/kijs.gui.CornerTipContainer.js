@@ -18,23 +18,24 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         this._dom.clsAdd('kijs-cornertipcontainer');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             dismissDelay: 5000,
             width: 230
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             dismissDelay: true
         });
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -90,7 +91,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         this.show({
             caption: caption,
             msg: msg
-        });            
+        });
     }
 
 
@@ -114,7 +115,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
                     color: '#be6280'
                 }
             }
-        });            
+        });
     }
 
     /**
@@ -137,7 +138,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
                     color: '#4398dd'
                 }
             }
-        });            
+        });
     }
 
     /**
@@ -222,7 +223,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
                     color: '#ff9900'
                 }
             }
-        });            
+        });
     }
 
 
@@ -231,7 +232,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         if (messages.length === 1) {
             return messages[0];
         }
-        
+
         let ret = '<ul>';
         kijs.Array.each(messages, function(msg) {
             ret += '<li>' + msg + '</li>';
@@ -245,13 +246,13 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     _onCornerTipDestruct(e) {
         this.remove(e.element);
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         super.destruct();
     }
-    
+
 };

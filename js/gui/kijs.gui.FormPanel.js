@@ -11,14 +11,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     constructor(config={}) {
         super();
-        
+
         this._data = {};
         this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
-        
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
@@ -31,14 +36,15 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         // Listeners auf Kindelemente
         this.on('add', this._observChilds, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -81,9 +87,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }, this);
         }
     }
-    
+
     get fields() { return this._fields; }
-    
+
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
@@ -94,7 +100,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
-            
+
         } else if (kijs.isString(val)) {
             if (this._rpc) {
                 this._rpc.url = val;
@@ -103,13 +109,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     url: val
                 });
             }
-            
+
         } else {
             throw new Error(`Unkown format on config "rpc"`);
-            
+
         }
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -160,10 +166,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         // Zuerst lokal validieren
         let ok = this.validate();
-        
+
         // formData ermitteln
         args.formData = this.data;
-                
+
         // Wenn die lokale Validierung ok ist, an den Server senden
         if (ok) {
             this._rpc.do(this.facadeFnSave, args, function(response) {
@@ -269,8 +275,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     _onChildChange(e) {
         this.raiseEvent('change', e);
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -282,14 +288,14 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._data = null;
         this._fields = null;
         this._rpc = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

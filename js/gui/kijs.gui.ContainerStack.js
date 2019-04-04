@@ -85,11 +85,9 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         this._dom.clsAdd('kijs-containerstack');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-            defaultAnimation: 'none',
-            defaultDuration: 500,
+        Object.assign(this._defaultConfig, {
             activeEl: 0
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -100,6 +98,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -161,7 +160,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         if (!kijs.Array.contains(this._animationTypes, animation)) {
             throw new Error(`animation type not valid.`);
         }
-        
+
         // by index
         if (kijs.isInteger(el)) {
             el = this._elements[el];
@@ -233,7 +232,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
             this._removeAllAnimationClasses();
         }, duration, this);
 
-        
+
         // Falls der DOM gemacht ist, wird neu gerendert.
         if (this._innerDom.node) {
             this.render();
@@ -266,7 +265,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
 
     // Overwrite
     removeAll(preventRender) {
-        
+
         // Parent
         super.removeAll(preventRender);
 
@@ -276,7 +275,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
             domEl.dom.destruct();
         }, this);
         kijs.Array.clear(this._domElements);
-        
+
     }
 
     // Overwrite
@@ -353,7 +352,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         kijs.Array.each(this._elements, function(element) {
             if (element !== topEl && kijs.isBoolean(element.visible)) {
                 element.visible = false;
-                
+
             } else if (element === topEl && kijs.isBoolean(element.visible)) {
                 element.visible = true;
             }

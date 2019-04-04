@@ -35,7 +35,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._dom.clsAdd('kijs-uploadwindow');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             caption: 'Upload',
             iconChar: '&#xf093',
             uploadDialog: null,
@@ -66,7 +66,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                     }
                 }
             ]
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -79,6 +79,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -196,7 +197,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Basisklasse auch entladen
         super.destruct(true);
     }

@@ -326,20 +326,20 @@ kit.App = class kit_App {
 //                                    },
                                     elements: [{
                                         xtype: 'kijs.gui.grid.Grid',
-                                        columnConfigs: (function(){
-                                            let cols = [{caption:'Vorname', valueField:'vorname'}];
-                                            for (let i=0; i<26; i++) {
-                                                cols.push({
-                                                   caption:'Spalte ' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1),
-                                                   valueField:'field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1).toLowerCase()
-                                                });
-                                            }
-                                            return cols;
-                                        })(),
+//                                        columnConfigs: (function(){
+//                                            let cols = [{caption:'Vorname', valueField:'vorname'}];
+//                                            for (let i=0; i<26; i++) {
+//                                                cols.push({
+//                                                   caption:'Spalte ' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1),
+//                                                   valueField:'field_' + ('ABCDEFGHIJKLMNOPQRSTUVWXYZ').substr(i,1).toLowerCase()
+//                                                });
+//                                            }
+//                                            return cols;
+//                                        })(),
 
                                         facadeFnLoad: 'grid.load',
-                                        rpc: this._rpc,
-                                        primaryKeys:'field_a'
+                                        rpc: this._rpc
+//                                        primaryKeys:'field_a'
 //                                        data:(function(){
 //                                            let rows = [];
 //                                            for (let i=0; i<200; i++) {

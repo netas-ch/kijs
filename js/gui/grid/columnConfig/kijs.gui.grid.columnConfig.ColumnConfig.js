@@ -39,14 +39,15 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this._cellConfig = null;
         this._filterFieldConfig = null;
         this._headerCellConfig = null;
+        this._defaultConfig = {};
 
         // grid
         this._grid = null;
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
@@ -72,6 +73,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -164,6 +166,9 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
     get visible() { return this._visible; }
     set visible(val) {
+        if (!val && !this.hideable) {
+            return;
+        }
         this._visible = !!val;
         this.raiseEvent('change', {columnConfig: this, visible: !!val});
     }
@@ -187,11 +192,11 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             if (!kijs.isInteger(val)) {
                 throw new Error('invalid position value');
             }
-            val = Math.max(0, val);
-            val = Math.min(this._grid.columnConfigs.length - 1, val);
-            kijs.Array.move(this._grid.columnConfigs, this, val - curPos);
 
-            this.raiseEvent('change', {columnConfig: this, position: this.position});
+            if (val !== curPos) {
+                kijs.Array.move(this._grid.columnConfigs, curPos, val);
+                this.raiseEvent('change', {columnConfig: this, position: this.position});
+            }
         }
     }
 
@@ -207,6 +212,8 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this.raiseEvent('change', {columnConfig: this, sortable: !!val});
     }
 
+    get valueField() { return this._valueField; }
+
     get width() { return this._width; }
     set width(val) {
         if (!kijs.isNumeric(val)) {
@@ -215,8 +222,6 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this._width = val;
         this.raiseEvent('change', {columnConfig: this, width: val});
     }
-
-    get valueField() { return this._valueField; }
 
 
     // --------------------------------------------------------------

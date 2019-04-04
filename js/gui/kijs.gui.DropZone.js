@@ -38,8 +38,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
-        this._dragOverCls = null;
-        this._dragOverForbiddenCls = null;
+        this._dragOverCls = 'kijs-dragover';
+        this._dragOverForbiddenCls = 'kijs-dragover-forbidden';
         this._contentTypes = [];
         this._validMediaTypes = [
             'application',
@@ -57,10 +57,9 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         this._dom.clsAdd('kijs-dropzone');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-            dragOverCls: 'kijs-dragover',
-            dragOverForbiddenCls: 'kijs-dragover-forbidden'
-        }, config);
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -77,6 +76,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -125,15 +125,15 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         return true;
     }
 
-    // EVENTS    
+    // EVENTS
     _onDragEnter(e) {
         this._dom.clsAdd(this._dragOverCls);
         this.raiseEvent('dragEnter', e);
     }
 
-    _onDragOver(e) {        
+    _onDragOver(e) {
         e.nodeEvent.preventDefault();
-        
+
         // 'forbidden' Klasse, falls ungültiger Dateityp
         if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
             if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {

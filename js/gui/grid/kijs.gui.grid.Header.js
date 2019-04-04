@@ -23,9 +23,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         this._cells = [];
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -33,6 +33,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }

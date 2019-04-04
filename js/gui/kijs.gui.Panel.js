@@ -11,7 +11,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     constructor(config={}) {
         super();
-        
+
         this._headerBarEl = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar',
             parent: this,
@@ -21,42 +21,42 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 context: this
             }
         });
-        
+
         this._headerEl = new kijs.gui.Container({
             cls: 'kijs-header',
             parent: this
         });
-        
+
         this._footerEl = new kijs.gui.Container({
             cls: 'kijs-footer',
             parent: this
         });
-        
+
         this._footerBarEl = new kijs.gui.PanelBar({
             cls: 'kijs-footerbar',
             parent: this
         });
-        
+
         this._collapseHeight = null;
         this._collapseWidth = null;
-        
+
         this._domPos = null;
-        
+
         this._closeButtonEl = null;
         this._collapseButtonEl = null;
         this._maximizeButtonEl = null;
         this._collapsible = false;
         this._resizerEl = null;
-        
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-panel');
-        
+
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             collapseHeight: 50,
             collapseWidth: 50
-        }, config);
-        
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             // headerBar
@@ -66,28 +66,28 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             iconChar: { target: 'iconChar', context: this._headerBarEl },
             iconCls: { target: 'iconCls', context: this._headerBarEl },
             iconColor: { target: 'iconColor', context: this._headerBarEl },
-            
+
             // header
             headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
             headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
             headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
-            
+
             // footer
             footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
             footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
             footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
-            
+
             // footerBar
             footerCaption: { target: 'html', context: this._footerBarEl },
             footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
-            
+
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
             shadow: { target: 'shadow' },       // Soll ein Schatten angezeigt werden?
-            
+
             collapseHeight: true,
             collapseWidth: true,
-            
+
             collapsePos: { prio: 1001, target: 'collapsePos' },
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -96,18 +96,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             maximizable: { prio: 1010, target: 'maximizable' },
             maximizeButton: { prio: 1011, target: 'maximizeButton' },
             maximized: { prio: 1012, target: 'maximized' },
-            
+
             closable: { prio: 1013, target: 'closable' },
             closeButton: { prio: 1014, target: 'closeButton' }
-            
+
         });
-        
+
         // Listeners
         this.on('enterPress', this._onEnterPress, this);
         this.on('escPress', this._onEscPress, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -122,23 +123,23 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             if (!this._closeButtonEl) {
                 this.closeButton = {
                     iconChar: '&#xf00d'
-                }; 
+                };
             }
         } else {
             if (this._closeButtonEl) {
-                this.closeButton = null; 
+                this.closeButton = null;
             }
         }
     }
-    
+
     get closeButton() { return this._closeButtonEl; }
     set closeButton(val) {
-        
+
         // Button entfernen
         if (kijs.isEmpty(val)) {
             this._headerBarEl.containerRightEl.remove(this._closeButtonEl);
             this._closeButtonEl = null;
-        
+
         // Instanz von kijs.gui.Button
         } else if (val instanceof kijs.gui.Button) {
             if (this._closeButtonEl) {
@@ -147,7 +148,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this._closeButtonEl = val;
             this._closeButtonEl.on('click', this._onCloseClick, this);
             this._headerBarEl.containerRightEl.add(this._closeButtonEl);
-            
+
         // Config-Objekt
         } else if (kijs.isObject(val)) {
             if (this._closeButtonEl) {
@@ -157,17 +158,17 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._closeButtonEl.on('click', this._onCloseClick, this);
                 this._headerBarEl.containerRightEl.add(this._closeButtonEl);
             }
-            
+
         } else {
             throw new Error(`Unkown format on config "closeButton"`);
         }
-        
+
         if (this.isRendered) {
             this.render();
         }
     }
-    
-    
+
+
     get collapsible() {
         if (this._collapseButtonEl) {
             return this._collapsible;
@@ -177,7 +178,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
     set collapsible(val) {
         const validePos = ['top', 'right', 'bottom', 'left'];
-        
+
         if (kijs.isEmpty(val) || val === false) {
             val = false;
             this._collapsible = false;
@@ -185,31 +186,31 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             if (kijs.Array.contains(validePos, val)) {
                 this._collapsible = val;
             } else {
-                throw new Error(`Unkown pos on config "collapsible"`); 
+                throw new Error(`Unkown pos on config "collapsible"`);
             }
         }
-        
+
         if (val) {
             if (!this._collapseButtonEl) {
                 this.collapseButton = {
                     iconChar: this._getCollapseIconChar()
-                }; 
+                };
             }
         } else {
             if (this._collapseButtonEl) {
-                this.collapseButton = null; 
+                this.collapseButton = null;
             }
         }
     }
-    
+
     get collapseButton() { return this._collapseButtonEl; }
     set collapseButton(val) {
-        
+
         // Button entfernen
         if (kijs.isEmpty(val)) {
             this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
             this._collapseButtonEl = null;
-        
+
         // Instanz von kijs.gui.Button
         } else if (val instanceof kijs.gui.Button) {
             if (this._collapseButtonEl) {
@@ -218,7 +219,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this._collapseButtonEl = val;
             this._collapseButtonEl.on('click', this._onCollapseClick, this);
             this._headerBarEl.containerRightEl.add(this._collapseButtonEl);
-            
+
         // Config-Objekt
         } else if (kijs.isObject(val)) {
             if (this._collapseButtonEl) {
@@ -228,19 +229,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._collapseButtonEl.on('click', this._onCollapseClick, this);
                 this._headerBarEl.containerRightEl.add(this._collapseButtonEl);
             }
-            
+
         } else {
-            throw new Error(`Unkown format on config "collapseButton"`); 
+            throw new Error(`Unkown format on config "collapseButton"`);
         }
-        
+
         if (this.isRendered) {
             this.render();
         }
     }
-    
+
     get collapsed() {
-        return this._dom.clsHas('kijs-collapse-top') || 
-                this._dom.clsHas('kijs-collapse-right') || 
+        return this._dom.clsHas('kijs-collapse-top') ||
+                this._dom.clsHas('kijs-collapse-right') ||
                 this._dom.clsHas('kijs-collapse-bottom') ||
                 this._dom.clsHas('kijs-collapse-left');
     }
@@ -251,25 +252,25 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this.expand();
         }
     }
-    
+
     get collapseHeight() { return this._collapseHeight; }
     set collapseHeight(val) { this._collapseHeight = val; }
-    
+
     get draggable() { return false; }
-    
+
     get footer() { return this._footerEl; }
-    
+
     get footerBar() { return this._footerBarEl; }
-    
+
     get header() { return this._headerEl; }
-    
+
     get headerBar() { return this._headerBarEl; }
 
     // overwrite
     get height() { return super.height; }
     set height(val) {
         let doFn = false;
-        
+
         if (kijs.Array.contains(['top', 'bottom'], this.collapsible) && kijs.isNumber(this._collapseHeight)) {
             if (val <= this._collapseHeight) {
                 doFn = 'collapse';
@@ -277,7 +278,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 doFn = 'expand';
             }
         }
-        
+
         if (doFn === 'collapse') {
             if (!this.collapsed) {
                 this.collapse();
@@ -299,18 +300,18 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         } else {
             if (this._maximizeButtonEl) {
-                this.maximizeButton = null; 
+                this.maximizeButton = null;
             }
         }
     }
-    
+
     get maximizeButton() { return this._maximizeButtonEl; }
     set maximizeButton(val) {
         // Button entfernen
         if (kijs.isEmpty(val)) {
             this._headerBarEl.containerRightEl.remove(this._maximizeButtonEl);
             this._maximizeButtonEl = null;
-        
+
         // Instanz von kijs.gui.Button
         } else if (val instanceof kijs.gui.Button) {
             if (this._maximizeButtonEl) {
@@ -319,7 +320,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this._maximizeButtonEl = val;
             this._maximizeButtonEl.on('click', this._onMaximizeClick, this);
             this._headerBarEl.containerRightEl.add(this._maximizeButtonEl);
-            
+
         // Config-Objekt
         } else if (kijs.isObject(val)) {
             if (this._maximizeButtonEl) {
@@ -329,16 +330,16 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._maximizeButtonEl.on('click', this._onMaximizeClick, this);
                 this._headerBarEl.containerRightEl.add(this._maximizeButtonEl);
             }
-            
+
         } else {
-            throw new Error(`Unkown format on config "maximizeButton"`); 
+            throw new Error(`Unkown format on config "maximizeButton"`);
         }
-        
+
         if (this.isRendered) {
             this.render();
         }
     }
-    
+
     get maximized() {
         return this._dom.clsHas('kijs-maximize');
     }
@@ -367,7 +368,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
     }
-    
+
     get shadow() { this._dom.clsHas('kijs-shadow'); }
     set shadow(val) {
         if (val) {
@@ -376,12 +377,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this._dom.clsRemove('kijs-shadow');
         }
     }
-    
+
     // overwrite
     get width() { return super.width; }
     set width(val) {
         let doFn = false;
-        
+
         if (kijs.Array.contains(['left', 'right'], this.collapsible) && kijs.isNumber(this._collapseWidth)) {
             if (val <= this._collapseWidth) {
                 doFn = 'collapse';
@@ -389,7 +390,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 doFn = 'expand';
             }
         }
-        
+
         if (doFn === 'collapse') {
             if (!this.collapsed) {
                 this.collapse();
@@ -400,7 +401,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             super.width = val;
         }
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -430,7 +431,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this.maximized) {
             this.restore();
         }
-        
+
         if (direction) {
             this._collapsible = direction;
         }
@@ -438,7 +439,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (!this._collapsible) {
             this._collapsible = 'top';
         }
-        
+
         this._dom.clsRemove(['kijs-collapse-top', 'kijs-collapse-right', 'kijs-collapse-bottom', 'kijs-collapse-left']);
 
         switch (this._collapsible) {
@@ -447,7 +448,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             case 'bottom': this._dom.clsAdd('kijs-collapse-bottom'); break;
             case 'left':   this._dom.clsAdd('kijs-collapse-left'); break;
         }
-        
+
         // das richtige Icon in den Button
         if (this._collapseButtonEl) {
             this._collapseButtonEl.iconChar = this._getCollapseIconChar();
@@ -455,7 +456,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;
-        
+
         // Evtl. afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
     }
@@ -469,14 +470,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         // afterResize-Event deaktivieren
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
-        
+
         this._dom.clsRemove(['kijs-collapse-top', 'kijs-collapse-right', 'kijs-collapse-bottom', 'kijs-collapse-left']);
 
         // das richtige Icon in den Button
         if (this._collapseButtonEl) {
             this._collapseButtonEl.iconChar = this._getCollapseIconChar();
         }
-        
+
         // Übergebene Grösse wiederherstellen
         if (!kijs.isEmpty(size)) {
             switch (this._collapsible) {
@@ -495,19 +496,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                     break;
             }
         }
-        
+
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;
-        
+
         // Evtl. afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
     }
-    
+
     // overwrite
     focus(alsoSetIfNoTabIndex=false) {
         if (alsoSetIfNoTabIndex) {
             return super.focus(alsoSetIfNoTabIndex);
-            
+
         } else {
             // Zuerst versuchen den Fokus auf ein Element im innerDom zu setzen
             let node = this._innerDom.focus(false);
@@ -521,7 +522,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
             return node;
         }
-        
+
         // Darf der Node den Fokus erhalten?
         if (alsoSetIfNoTabIndex) {
             this._dom.node.focus();
@@ -534,7 +535,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
     }
-    
+
     /**
      * Maximiert das Panel
      * @returns {undefined}
@@ -543,7 +544,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this.maximized) {
             return;
         }
-        
+
         // afterResize-Event deaktivieren
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
@@ -551,7 +552,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this.collapsed) {
             this.expand();
         }
-        
+
         if (this.isRendered) {
             this._domPos = {
                 parent: this._dom.node.parentNode,
@@ -566,10 +567,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._maximizeButtonEl) {
             this._maximizeButtonEl.iconChar = this._getMaximizeIconChar();
         }
-        
+
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;
-        
+
         // Evtl. afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
     }
@@ -578,7 +579,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     render(superCall) {
         // dom mit elements rendern (innerDom)
         super.render(true);
-        
+
         // HeaderBar rendern (kijs.gui.Bar)
         if (!this._headerBarEl.isEmpty) {
             this._headerBarEl.renderTo(this._dom.node, this._innerDom.node);
@@ -592,14 +593,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         } else {
             this._headerEl.unrender();
         }
-        
+
         // Footer rendern (kijs.gui.Container)
         if (!this._footerEl.isEmpty) {
             this._footerEl.renderTo(this._dom.node);
         } else {
             this._footerEl.unrender();
         }
-        
+
         // FooterBar rendern (kijs.gui.Bar)
         if (!this._footerBarEl.isEmpty) {
             this._footerBarEl.renderTo(this._dom.node);
@@ -611,13 +612,13 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._resizerEl) {
             this._resizerEl.renderTo(this._dom.node);
         }
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
-    
+
     // Overwrite
     renderTo(targetNode, insertBefore) {
         // Falls das Panel schon maximiert geöffnet werden soll, muss der Node zum body verschoben werden
@@ -629,7 +630,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             targetNode = document.body;
             insertBefore = null;
         }
-        
+
         super.renderTo(targetNode, insertBefore);
     }
 
@@ -641,27 +642,27 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (!this.maximized) {
             return;
         }
-        
+
         // afterResize-Event deaktivieren
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
-        
+
         if (this._domPos.nextSibling) {
             this._domPos.parent.insertBefore(this._dom.node, this._domPos.nextSibling);
         } else {
             this._domPos.parent.appendChild(this._dom.node);
         }
-        
+
         this._dom.clsRemove('kijs-maximize');
 
         // das richtige Icon in den Button
         if (this._maximizeButtonEl) {
             this._maximizeButtonEl.iconChar = this._getMaximizeIconChar();
         }
-        
+
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;
-        
+
         // Evtl. afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
     }
@@ -682,8 +683,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         super.unrender(true);
     }
-    
-    
+
+
     // PROTECTED
     /**
      * Gibt das Icon für den Maximieren-Knopf zurück
@@ -697,7 +698,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         } else {
             char = '&#xf2d0';   // maximize
         }
-        
+
         return char;
     }
 
@@ -730,7 +731,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     _onCloseClick(e) {
         this.close();
     }
-    
+
     _onCollapseClick(e) {
         if (this.collapsed) {
             this.expand();
@@ -767,7 +768,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
     }
-    
+
     _onHeaderBarDblClick(e) {
         // Ein Fenster (draggable=true) kann per dblClick auf die HeaderBar maximiert werden.
         if (this.maximizable && this.draggable) {
@@ -776,7 +777,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             } else {
                 this.maximize();
             }
-            
+
         // Falls das Fenster maximiert ist, kann es jederzeit durch einen Doppelklick wiederhergestellt werden
         } else if (this.maximizable && this.maximized) {
             this.restore();
@@ -790,8 +791,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this.maximize();
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -803,7 +804,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._headerBarEl) {
             this._headerBarEl.destruct();
@@ -820,7 +821,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._resizerEl) {
             this._resizerEl.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._domPos = null;
         this._headerBarEl = null;
@@ -831,9 +832,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._collapseButtonEl = null;
         this._maximizeButtonEl = null;
         this._resizerEl = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

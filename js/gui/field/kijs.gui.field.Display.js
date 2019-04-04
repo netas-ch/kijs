@@ -65,12 +65,12 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._dom.clsAdd('kijs-field-display');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             htmlDisplayType: 'html',
             submitValue: false,
             link: false,
-            linkType: 'auto' 
-        }, config);
+            linkType: 'auto'
+        });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -82,6 +82,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -187,7 +188,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
      */
     _getLinkType(value) {
         value = value + '';
-        
+
         // Telefon
         if (value.match(/^\s*\+?[0-9\s]+$/i)) {
             return 'tel';

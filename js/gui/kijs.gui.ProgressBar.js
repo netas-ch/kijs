@@ -12,7 +12,7 @@
  *
  * EVENTS
  * ----------
- * 
+ *
 
  */
 kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
@@ -28,7 +28,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         this._showPercent = true;
         this._uploadDialog = null;
         this._uploadDialogId = null;
-        
+
         this._captionDom = new kijs.gui.Dom();
         this._bottomCaptionDom = new kijs.gui.Dom();
 
@@ -45,10 +45,10 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         this._textDom.clsAdd('kijs-progressbar-text');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             percent: 0,
             showPercent: true
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -62,6 +62,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -158,7 +159,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         if (this._showPercent) {
             this._textDom.renderTo(this._fieldDom.node);
         }
-        
+
         this._barDom.node.style.width = this._percent + '%';
 
         if (this._showPercent && (this._barDom.width >= this._textDom.width+3 || this._percent === 100)) {
@@ -233,7 +234,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         this._fieldDom = null;
         this._barDom = null;
         this._textDom = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }

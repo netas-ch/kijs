@@ -168,7 +168,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                         // }
 
         this._defaultConfig = {};
-        
+
         this._disabled = false;
 
         this._nodeAttribute = {};

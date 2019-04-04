@@ -29,7 +29,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             minute: 20,                 // Distanz vom Kreisrand für Minuten
             second: 20                  // Distanz vom Kreisrand für Sekunden
         };
-        
+
         this._headerBar = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar-center'
         });
@@ -109,12 +109,12 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._dom.clsAdd('kijs-timepicker');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             headerText: 'Uhrzeit',
             nowText: 'Jetzt',
             separator: ':',
             value: '00:00'
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -128,6 +128,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -149,10 +150,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         return val;
     }
 
-    set value(val) { 
+    set value(val) {
         val = val +'';
         val = val.split(this._separator);
-        
+
         this._hour = val[0] ? parseInt(val[0]) : 0;
         this._minute = val[1] ? parseInt(val[1]) : 0;
         this._second = val[2] && this._hasSeconds ? parseInt(val[2]) : 0;
@@ -521,7 +522,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 this._inputSecondDom.node.value = this._zeroPad(this._second);
                 this._inputSecondDom.focus();
             }
-            
+
             this.raiseEvent('change', {value: this.value});
         }
     }

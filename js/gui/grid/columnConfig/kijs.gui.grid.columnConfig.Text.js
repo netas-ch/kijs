@@ -21,11 +21,11 @@ kijs.gui.grid.columnConfig.Text = class kijs_gui_grid_columnConfig_Text extends 
         this._cellXtype = 'kijs.gui.grid.cell.Text';
         this._filterFieldXtype = 'kijs.gui.grid.filterField.Text';
         this._headerCellXtype = 'kijs.gui.grid.headerCell.Text';
-        
+
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-            // Keine
-        }, config);
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -34,6 +34,7 @@ kijs.gui.grid.columnConfig.Text = class kijs_gui_grid_columnConfig_Text extends 
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }

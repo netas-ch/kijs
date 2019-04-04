@@ -11,39 +11,39 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     constructor(config={}) {
         super();
-        
+
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._containerLeftEl = new kijs.gui.Container({
             cls: 'kijs-container-left',
             parent: this
         });
         this._containerLeftEl.dom.clsRemove('kijs-container');
-        
+
         this._containerRightEl = new kijs.gui.Container({
             cls: 'kijs-container-right',
             parent: this
         });
         this._containerRightEl.dom.clsRemove('kijs-container');
-        
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-panelbar');
-        
+
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
-        
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
-            
+
             elementsLeft: { fn: 'function', target: this._containerLeftEl.add, context: this._containerLeftEl },
             elementsRight: { fn: 'function', target: this._containerRightEl.add, context: this._containerRightEl }
         });
-        
+
         // click- und mouseDown-Event soll nur auf dem label und icon kommen. Bei den elements nicht.
         this._eventForwardsRemove('click', this._dom);
         this._eventForwardsAdd('click', this._innerDom);
@@ -59,6 +59,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -81,7 +82,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             if (this.isRendered) {
                 this.render();
             }
-            
+
         // kijs.gui.Icon Instanz
         } else if (val instanceof kijs.gui.Icon) {
             this._iconEl.destruct();
@@ -89,22 +90,22 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             if (this.isRendered) {
                 this.render();
             }
-            
+
         // Config Objekt
         } else if (kijs.isObject(val)) {
             this._iconEl.applyConfig(val);
             if (this.isRendered) {
                 this.render();
             }
-            
+
         } else {
             throw new Error(`config "icon" is not valid.`);
-            
+
         }
     }
-    
+
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) { 
+    set iconChar(val) {
         this._iconEl.iconChar = val;
         if (this.isRendered) {
             this.render();
@@ -118,7 +119,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             this.render();
         }
     }
-    
+
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) {
         this._iconEl.iconColor = val;
@@ -126,12 +127,12 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             this.render();
         }
     }
-    
+
     // overwrite
     get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
 
     get containerLeftEl() { return this._containerLeftEl; }
-    
+
     get containerRightEl() { return this._containerRightEl; }
 
 
@@ -146,10 +147,10 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         //   + containerLeft
         //   + innerDom
         //   + containerRight
-        
+
         // dom rendern. Im innerDom ist die Bezeichnung (html). Links und rechts davon sind die Tools
         super.render(true);
-        
+
         // Span icon rendern (icon kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node, this._innerDom.node);
@@ -163,7 +164,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         } else {
             this._containerLeftEl.unrender();
         }
-        
+
         // ToolsRight rendern (kijs.gui.Container)
         if (!this._containerRightEl.isEmpty) {
             this._containerRightEl.renderTo(this._dom.node);
@@ -202,7 +203,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._iconEl) {
             this._iconEl.destruct();
@@ -213,14 +214,14 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         if (this._containerRightEl) {
             this._containerRightEl.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._iconEl = null;
         this._containerLeftEl = null;
         this._containerRightEl = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

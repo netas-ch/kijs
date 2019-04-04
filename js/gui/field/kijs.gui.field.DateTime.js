@@ -108,14 +108,14 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         });
 
-       // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
             //autoLoad: true,
             spinIconVisible: true,
             spinIconChar: '&#xf073', // calendar
             displayFormat: 'd.m.Y H:i:s', // Format, das angezeigt wird
             valueFormat: 'Y-m-d H:i:s'  // Format, das mit value ausgeliefert wird
-        }, config);
+        });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -144,6 +144,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -405,7 +406,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             month = dp && dp[2] ? parseInt(dp[2]) : null;
             year = dp && dp[3] ? parseInt(dp[3]) : null;
         }
-        
+
         // Jahr anpassen
         if (year !== null && year > 0 && year < 30) {
             year = 2000 + year;

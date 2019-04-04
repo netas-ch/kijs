@@ -151,6 +151,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }

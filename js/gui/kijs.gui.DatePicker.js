@@ -32,7 +32,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 context: this
             }
         });
-        
+
         this._previousBtn = new kijs.gui.Button({
             iconChar: '&#xf137', // fa-chevron-circle-left
             on: {
@@ -40,7 +40,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 context: this
             }
         });
-        
+
         this._headerBar = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar-center',
             elementsLeft: [this._previousBtn],
@@ -85,7 +85,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                     date: null
                 });
             }
-            
+
             this._gridColumns.push({
                 y: y,
                 dom: colDom,
@@ -178,9 +178,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._dom.clsAdd('kijs-datepicker');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
-
-        }, config);
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -191,6 +191,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
@@ -227,7 +228,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         super.render(true);
 
         // Header rendern
-        this._headerBar.renderTo(this._dom.node);        
+        this._headerBar.renderTo(this._dom.node);
 
         // Kalender berechnen
         this._calculateCalendar();
@@ -343,7 +344,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
            if (i === 0)  {
                fldDom.clsAdd('kijs-weekno');
                fldDom.html = this._showWeekNumbers ? '&nbsp;' : '';
-               
+
            } else {
                let wdNo = (i - 1) + this._startWeekday;
                if (wdNo > 6) {
@@ -360,7 +361,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
        }
 
        day = kijs.Date.clone(firstDay);
-       
+
        // Kalender-Zeilen
        for (let i=1; i < this._gridColumns.length; i++) {
 
@@ -371,7 +372,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                this._gridColumns[i].dom.clsAdd('kijs-dayselect');
                this._gridColumns[i].dom.clsRemove('kijs-weekselect');
            }
-           
+
            // Kalender-Spalten
            for (let x=1; x<8; x++) {
                let fldDom = this._gridColumns[i].rows[x].dom;
@@ -437,14 +438,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                    this._gridColumns[i].rows[0].dom.html = this._showWeekNumbers ? parseInt(kijs.Date.format(day, 'W')) : '';
                    this._gridColumns[i].rows[0].dom.clsAdd('kijs-weekno');
                }
-               
+
                // 1 Tag addieren
                day.setDate(day.getDate()+1);
            }
 
 
        }
-       
+
     }
 
     _getElementByDom(dom) {
@@ -467,7 +468,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 return this._yearSelector[i];
             }
         }
-        
+
         return null;
     }
 
@@ -566,7 +567,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     _onMonthSelectorClick(e) {
         let m = this._getElementByDom(e.dom);
         if (m.month || m.month === 0) {
-            this._visibleMonthDate.setMonth(m.month);    
+            this._visibleMonthDate.setMonth(m.month);
             this._calculateCalendar();
             this._calculateMonthYearPicker();
         }
@@ -665,7 +666,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._nextBtn = null;
         this._previousBtn = null;
         this._headerBar = null;
-        
+
         this._calendarDom = null;
         this._todayBtn = null;
 

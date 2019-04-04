@@ -18,7 +18,7 @@ kijs.Array = class kijs_Array {
             array.pop();
         }
     }
-    
+
     /**
      * Erstellt eine Kopie eines flachen Arrays
      * @param {Array} array
@@ -39,12 +39,12 @@ kijs.Array = class kijs_Array {
         if (!kijs.isArray(array1) || !kijs.isArray(array2)) {
             return false;
         }
-        
+
         // Die Länge muss übereinstimmen
         if (array1.length !== array2.length) {
             return false;
         }
-   
+
         // Elemente durchgehen un den Inhalt vergleichen
         for (let i=0, l=array1.length; i<l; i++) {
             // Bei sub-Arrays: Rekursiver Aufruf
@@ -52,23 +52,23 @@ kijs.Array = class kijs_Array {
                 if (!this.compare(array1[i], array2[i])) {
                     return false;
                 }
-            
+
             // Datumswerte vergleichen
             } else if (array1[i] instanceof Date && array2[i] instanceof Date) {
                 if (array1[i].getTime() !== array2[i].getTime()) {
                     return false;
                 }
-                
+
             // Bei allen anderen Datentypen: direkter Vergleich
             // ACHTUNG bei Objekten: {x:20} != {x:20}
-            } else if (array1[i] !== array2[i]) { 
+            } else if (array1[i] !== array2[i]) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     /**
      * Fügt Arrays zusammen
      * @param {...Array} arrays
@@ -79,7 +79,7 @@ kijs.Array = class kijs_Array {
         [arr, ...arrays] = arrays;
         return arr.slice(0).concat(...arrays);
     }
-    
+
     /**
      * Fügt Arrays zusammen und entfernt Duplikate
      * @param {...Array} arrays
@@ -88,7 +88,7 @@ kijs.Array = class kijs_Array {
     static concatUnique(...arrays) {
         return kijs.Array.unique(kijs.Array.concat(...arrays));
     }
-    
+
     /**
      * Prüft, ob ein Wert in einem Array vorkommt
      * @param {Array} array
@@ -96,7 +96,47 @@ kijs.Array = class kijs_Array {
      * @returns {Boolean}
      */
     static contains(array, value) {
-        return array.indexOf(value) !== -1;
+        if (kijs.isFunction(array.indexOf)) {
+            return array.indexOf(value) !== -1;
+
+        // gewisse List Elemente haben keine indexOf-Funktion
+        // z.B. DOMStringList im Edge
+        } else if (kijs.isInteger(array.length)) {
+            for (let i=0; i<array.length; i++) {
+                if (array[i] === value) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Vergleicht array1 mit einem oder mehr anderen Arrays und gibt die Werte
+     * aus array1 zurück, die in keinem der anderen Arrays enthalten sind.
+     * @param {Array} array1
+     * @param {Array} arrays 2...x
+     * @returns {Array}
+     */
+    static diff(array1, ...arrays) {
+        let diff = [];
+        kijs.Array.each(array1, function(v) {
+            let uniqueVal = true;
+            kijs.Array.each(arrays, function(compareArray) {
+                if (kijs.Array.contains(compareArray, v)) {
+                    uniqueVal = false;
+                    return false;
+                }
+            }, this);
+
+            if (uniqueVal) {
+                diff.push(v);
+            }
+
+        }, this);
+
+        return diff;
     }
 
     /**
@@ -130,25 +170,61 @@ kijs.Array = class kijs_Array {
     }
 
     /**
+     * Gibt den grössten Wert eines Arrays zurück
+     * @param {Array} array
+     * @returns {Mixed} Den grössten Wert im Array
+     */
+    static max(array) {
+        let max;
+        for (let i=0; i<array.length; i++) {
+            if (max === undefined || array[i] > max) {
+                max = array[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Gibt den kleinsten Wert eines Arrays zurück
+     * @param {Array} array
+     * @returns {Mixed} Den kleinsten Wert im Array
+     */
+    static min(array) {
+        let min;
+        for (let i=0; i<array.length; i++) {
+            if (min === undefined || array[i] < min) {
+                min = array[i];
+            }
+        }
+        return min;
+    }
+
+    /**
      * Schiebt ein Element in einem Array um einen bestimmten Offset
      * @param {Array} array
-     * @param {Mixed} value
-     * @param {Int} offset Anzahl Positionen, die geschoben werden soll.
+     * @param {Int} fromIndex Index des Elements, das geschoben werden soll
+     * @param {Int} toIndex Index der neuen Position
      * @returns {Array}
      */
-    static move(array, value, offset) {
-        const fromIndex = array.indexOf(value);
-        if (fromIndex !== -1) {
-            let toIndex = fromIndex + offset;
-            toIndex = Math.max(0, Math.min(toIndex, array.length));
+    static move(array, fromIndex, toIndex) {
+        fromIndex = Math.max(0, Math.min(fromIndex, array.length));
+        toIndex = Math.max(0, Math.min(toIndex, array.length));
+        const value = array[fromIndex];
 
+        // Da das array um eine Position kürzer ist, wenn das element
+        // entfernt wird, muss eine pos. abgezogen werden.
+        if (toIndex > fromIndex) {
+            toIndex -= 1;
+        }
+
+        if (fromIndex !== toIndex) {
             array.splice(fromIndex, 1);
             array.splice(toIndex, 0, value);
         }
 
         return array;
     }
-    
+
     /**
      * Löscht einen Wert aus einem Array und gibt dieses zurück.
      * @param {Array} array
@@ -157,11 +233,11 @@ kijs.Array = class kijs_Array {
      */
     static remove(array, value) {
         const index = array.indexOf(value);
-        
+
         if (index !== -1) {
             array.splice(index, 1);
         }
-        
+
         return array;
     }
 
@@ -183,7 +259,7 @@ kijs.Array = class kijs_Array {
         kijs.Array.removeMultiple(array, toDelete);
         return array;
     }
-    
+
     /**
      * Löscht Werte aus einem Array. Die Werte werden mittels Array übergeben.
      * @param {Array} array     Array, aus dem die Werte gelöscht werden.
@@ -196,7 +272,7 @@ kijs.Array = class kijs_Array {
         });
         return array;
     }
-    
+
     /**
      * Gibt einen Teil des Arrays als Kopie zurück.
      * @param {Array} array
@@ -218,7 +294,7 @@ kijs.Array = class kijs_Array {
             return Array.prototype.slice.call(array, begin, end);
         }
     }
-    
+
     /**
      * Klont ein neues Array ohne Duplikate und gibt dieses zurück
      * @param {Array} array
@@ -226,7 +302,7 @@ kijs.Array = class kijs_Array {
      */
     static unique(array) {
         const ret = [];
-        
+
         for (let i=0; i<array.length; i++) {
             if (ret.indexOf(array[i]) === -1) {
                 ret.push(array[i]);

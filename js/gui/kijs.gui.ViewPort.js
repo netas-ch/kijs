@@ -18,10 +18,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         this._dom.clsAdd('kijs-viewport');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             disableDrop: true,
-            disableContextMenu: true
-        }, config);
+            disableContextMenu: false
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -34,6 +34,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -67,7 +68,6 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             // es über einer Webseite verschoben wird. Mittels preventDefault
             // wird sichergestellt, dass in diesem Fall nichts passiert.
             kijs.Dom.addEventListener('dragover', window, function(e) {
-                e.nodeEvent.dataTransfer.dropEffect = 'none';
                 e.nodeEvent.preventDefault();
             }, this);
             kijs.Dom.addEventListener('drop', window, function(e) {

@@ -9,13 +9,13 @@
 // Das Element, dass überdeckt wird, wird mit der Eigenschaft target festgelegt.
 // Dies kann der document.body sein oder ein kijs.gui.Element.
 // Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode).
-// Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node 
+// Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node
 // des Elements, sondern dessen parentNode.
 // Deshalb gibt es die Eigenschaften targetNode und parentNode, welche bei einem
-// kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body 
+// kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body
 // als target, hingegen schon.
-// Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements 
-// als target dient, wird nichts angegeben, so dient das ganze Element als target. 
+// Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
+// als target dient, wird nichts angegeben, so dient das ganze Element als target.
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
 // Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
 // --------------------------------------------------------------
@@ -27,19 +27,19 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._iconEl = new kijs.gui.Icon({ parent: this });
-        
+
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
-        
+
         this._dom.clsAdd('kijs-mask');
-        
+
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             target: document.body
-        }, config);
-        
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             displayWaitIcon: { target: 'displayWaitIcon' },
@@ -50,9 +50,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             target: { target: 'target' },
             targetDomProperty: true
         });
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
@@ -87,7 +88,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             if (this.isRendered) {
                 this.render();
             }
-            
+
         // kijs.gui.Icon Instanz
         } else if (val instanceof kijs.gui.Icon) {
             this._iconEl.destruct();
@@ -95,22 +96,22 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             if (this.isRendered) {
                 this.render();
             }
-            
+
         // Config Objekt
         } else if (kijs.isObject(val)) {
             this._iconEl.applyConfig(val);
             if (this.isRendered) {
                 this.render();
             }
-            
+
         } else {
             throw new Error(`config "icon" is not valid.`);
-            
+
         }
     }
-    
+
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) { 
+    set iconChar(val) {
         this._iconEl.iconChar = val;
         if (this.isRendered) {
             this.render();
@@ -124,7 +125,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.render();
         }
     }
-    
+
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) {
         this._iconEl.iconColor = val;
@@ -132,10 +133,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.render();
         }
     }
-    
+
     // overwrite
     get isEmpty() { return this._iconEl.isEmpty; }
-    
+
     /**
      * Gibt den Node zurück in dem sich die Maske befindet (parentNode)
      * @returns {HTMLElement}
@@ -147,7 +148,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             return this._targetX;
         }
     }
-    
+
     get target() {
         return this._targetX;
     }
@@ -160,28 +161,28 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
                 this._targetX.off('destruct', this._onTargetElDestruct, this);
             }
         }
-        
+
         // Target ist ein kijs.gui.Element
         if (val instanceof kijs.gui.Element) {
             this._targetX = val;
-            
+
             this._targetX.on('afterResize', this._onTargetElAfterResize, this);
             this._targetX.on('changeVisibility', this._onTargetElChangeVisibility, this);
             this._targetX.on('destruct', this._onTargetElDestruct, this);
-            
+
         // Target ist der Body
         } else if (val === document.body || kijs.isEmpty(val)) {
             this._targetX = document.body;
-            
+
         } else {
             throw new Error(`Unkown format on config "target"`);
-            
+
         }
     }
-    
+
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
-    
+
     /**
      * Gibt den Ziel-Node zurück, über den die Maske gelegt wird
      * @returns {HTMLElement}
@@ -193,20 +194,20 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             return this._targetX;
         }
     }
-    
 
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     // Overwrite
     render(superCall) {
         super.render(true);
-        
+
         // Maskierung positionieren
         this._updateMaskPosition();
-        
+
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
@@ -282,12 +283,12 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Event-Listeners entfernen
         if (this._targetX instanceof kijs.gui.Element) {
             this._targetX.off(null, null, this);
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._iconEl) {
             this._iconEl.destruct();
@@ -295,7 +296,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // Basisklasse entladen
         super.destruct(true);
-    
+
         // Variablen (Objekte/Arrays) leeren
         this._iconEl = null;
         this._targetX = null;

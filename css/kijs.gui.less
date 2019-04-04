@@ -182,7 +182,7 @@
 }
 
 /* Scrollbar automatisch einblenden für container-inner */
-.kijs-autoscroll {
+.kijs-autoscroll, div.kijs-autoscroll {
     overflow-y: auto;
 }
 
@@ -1903,8 +1903,8 @@ div.kijs-field-checkbox {
 
         > .kijs-caption {
             font-family: @default-fontFamily;
-            font-size: @default-fontSize;
-            line-height: 15px;
+            font-size: @field-fontSize;
+            line-height: 17px;
             vertical-align: top;
         }
 
@@ -2090,7 +2090,7 @@ div.kijs-grid {
             margin: 0 2px 0 2px;
         }
 
-        /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt.*/
+        /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
         tr td:last-child {
             margin-right: 20px;
         }
@@ -2248,6 +2248,20 @@ div.kijs-tooltip {
         opacity: 0;
         transition: 1s;
     }
+}
+
+
+/* ******************
+   * Drag'n'Drop marker
+   ****************** */
+
+body > div.kijs-dragdrop-marker {
+    z-index: 90000;
+    position: absolute;
+    background-color: @dragover-ok-borderColor;
+
+    &.top, &.bottom { height: 2px }
+    &.left, &.right { width: 2px }
 }
 
 

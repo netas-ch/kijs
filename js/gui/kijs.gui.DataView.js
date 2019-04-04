@@ -27,10 +27,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._dom.clsAdd('kijs-dataview');
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             focusable: true,
             selectType: 'single'
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -48,6 +48,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
 
