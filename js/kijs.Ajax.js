@@ -30,7 +30,7 @@ kijs.Ajax = class kijs_Ajax {
     */
     static request(config = {}) {
         let postData;
-
+        
         config.method = config.method || 'GET';
         config.format = config.format || 'json';
         config.parameters = config.parameters || {};
@@ -53,12 +53,16 @@ kijs.Ajax = class kijs_Ajax {
             }
         }
 
-        // Bei GET-Requests werden die Parameter an die URL angehängt
-        if (config.method === 'GET') {
+        // GET-Parameters
+        if (config.parameters) {
             const parString = kijs.Ajax.createQueryStringFromObject(config.parameters);
             if (parString) {
                 config.url += (/\?/.test(config.url) ? '&' : '?') + parString;
             }
+        }
+    
+        // postData
+        if (config.method === 'GET') {
             postData = null;
 
         } else {

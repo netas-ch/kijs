@@ -167,6 +167,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                         //     ]
                                         // }
 
+        this._defaultConfig = {};
+        
         this._disabled = false;
 
         this._nodeAttribute = {};
@@ -183,9 +185,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._toolTip = null;
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
@@ -271,6 +273,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config);
         }
     }

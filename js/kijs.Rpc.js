@@ -11,6 +11,7 @@ kijs.Rpc = class kijs_Rpc {
     // --------------------------------------------------------------
     constructor(config={}) {
         this._url = '.';                    // URL Beispiel: '.' oder 'index.php'
+        this._parameters = {};              // Objekt mit optionalem GET-Parametern
         this._timeout = 10;
         
         this._deferId = null;
@@ -22,6 +23,7 @@ kijs.Rpc = class kijs_Rpc {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             url: true,
+            parameters: true,
             timeout: true
         };
         
@@ -230,12 +232,13 @@ kijs.Rpc = class kijs_Rpc {
         
         if (transmitData.length > 0) {
             kijs.Ajax.request({
-                method  : 'POST',
-                headers: {'X-LIBRARY': 'kijs'},
-                postData: transmitData,
-                url     : this.url,
-                fn      : this._receive,
-                context : this
+                method      : 'POST',
+                headers     : {'X-LIBRARY': 'kijs'},
+                postData    : transmitData,
+                url         : this.url,
+                parameters  : this._parameters,
+                fn          : this._receive,
+                context     : this
             });
         }
 
@@ -253,6 +256,7 @@ kijs.Rpc = class kijs_Rpc {
         }
         
         // Variablen
+        this._parameters = null;
         this._queue = null;
     }
 };

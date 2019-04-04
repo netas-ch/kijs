@@ -1,4 +1,4 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.Element
@@ -189,6 +189,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         this._preventAfterResize = false;    // Auslösen des afterResize-Events verhindern?
 
+        this._defaultConfig = {};
+        
         this._eventForwards = {};   // Events, die an untergeordnete kijs.gui.Dom Objekte weitergeleitet werden sollen
                                     //  {
                                     //    click: [
@@ -202,9 +204,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
 
         // Standard-config-Eigenschaften mergen
-        config = Object.assign({}, {
+        Object.assign(this._defaultConfig, {
             // keine
-        }, config);
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
@@ -261,6 +263,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
