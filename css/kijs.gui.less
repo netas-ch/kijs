@@ -2029,11 +2029,16 @@ div.kijs-grid {
             flex: none;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
             height: 19px;
-            padding: 3px 2px;
+            padding: 3px 6px;
 
             &.kijs-hidden {
                 display: none;
+            }
+
+            &.kijs-grid-cell-number {
+                text-align: right;
             }
         }
     }
@@ -2058,41 +2063,50 @@ div.kijs-grid {
         tr td {
             display: flex;
             flex-direction: row;
-        }
+            padding-right: 0;
 
-        tr td .kijs-caption {
-            flex: 1;
-        }
-        tr td .kijs-button {
-            visibility: hidden;
-            flex: none;
-            width: 15px;
-            margin: 0;
-            padding: 0;
-            background-color: transparent;
-            border: 0;
 
-            .kijs-icon {
-                margin: -2px 0 0 0;
-
+            .kijs-caption {
+                flex: 1;
             }
-        }
+            .kijs-button {
+                visibility: hidden;
+                flex: none;
+                width: 15px;
+                margin: 0;
+                padding: 0;
+                background-color: transparent;
+                border: 0;
 
-        tr td:hover .kijs-button {
-            visibility: visible;
-        }
+                .kijs-icon {
+                    margin: -2px 0 0 0;
 
-        tr td .kijs-splitter {
-            flex: none;
-            width: 3px;
-            border-right: 1px solid #eee;
-            cursor: col-resize;
-            margin: 0 2px 0 2px;
-        }
+                }
+            }
 
-        /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
-        tr td:last-child {
-            margin-right: 20px;
+            &:hover .kijs-button {
+                visibility: visible;
+            }
+
+            .kijs-splitter {
+                flex: none;
+                width: 3px;
+                border-right: 1px solid #eee;
+                cursor: col-resize;
+                margin: 0 0 0 2px;
+            }
+
+            span.kijs-sort {
+                color: #555;
+                font-family: FontAwesome;
+                vertical-align: sub;
+                padding-left: 5px;
+            }
+
+            /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
+            &:last-child {
+                margin-right: 20px;
+            }
         }
 
     }

@@ -132,7 +132,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * Setzt das aktuelle Zeile, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Zeile.
-     * @param {kijs.gui.grid.Row|Null} cRow
+     * @param {kijs.gui.grid.Row|null} cRow
      * @returns {undefined}
      */
     set current(cRow) {
@@ -278,7 +278,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Gibt die selektieten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben sonst ein Array mit den Zeilenn
-     * @returns {Array|kijs.gui.DataViewRow|Null}
+     * @returns {Array|kijs.gui.DataViewRow|null}
      */
     getSelected() {
         let ret = [];
@@ -297,6 +297,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         } else {
             return ret;
         }
+    }
+
+    /**
+     * Lädt alle Daten im Grid neu.
+     * @returns {undefined}
+     */
+    reload() {
+        this._remoteLoad(true);
     }
 
     /**
@@ -570,7 +578,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
             let constructor = kijs.getObjectFromNamespace(configOrInstance.xtype);
             if (constructor === false) {
-                throw new Error('invalid xtype ' + defaultXType);
+                throw new Error('invalid xtype ' + configOrInstance.xtype);
             }
             delete configOrInstance.xtype;
             inst = new constructor(configOrInstance);
@@ -636,6 +644,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             } else {
                 args.start = this._remoteDataLoaded;
                 args.limit = this._remoteDataLimit - this._remoteDataLoaded;
+
+                // Falls alle vorhandenen Daten geladen sind, brechen wir ab.
+                if (this._remoteDataTotal !== null && this._remoteDataLoaded >= this._remoteDataTotal) {
+                    return;
+                }
             }
 
             if (kijs.isObject(this._facadeFnArgs)) {
@@ -686,6 +699,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Total Datensätze
         if (kijs.isInteger(response.count)) {
             this._remoteDataTotal = response.count;
+        } else {
+            if (response.rows.length < args.limit) {
+                this._remoteDataTotal = args.start + response.rows.length;
+            }
         }
 
         this.raiseEvent('afterLoad', response);
@@ -793,7 +810,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Deselektiert ein oder mehrere Zeilen
      * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
-     * @param {type} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     unSelect(rows, preventSelectionChange) {
@@ -814,7 +831,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * Selektiert alle Zeilen zwischen row1 und row2
      * @param {kijs.gui.grid.Row} row1
      * @param {kijs.gui.grid.Row} row2
-     * @param {type} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     selectBetween(row1, row2, preventSelectionChange) {

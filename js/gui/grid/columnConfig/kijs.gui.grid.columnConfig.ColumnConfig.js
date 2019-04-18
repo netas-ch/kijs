@@ -77,7 +77,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             this.applyConfig(config, true);
         }
 
-        if (this.cellConfig === null) {
+        if (this._cellConfig === null) {
             this.cellConfig = this._cellXtype;
         }
         if (this.filterFieldConfig === null) {
@@ -99,8 +99,11 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     }
 
     get cellConfig() {
-        let cCnf =  this._cellConfig || {xtype: this._cellXtype};
+        let cCnf =  this._cellConfig ? kijs.Object.clone(this._cellConfig) : {};
         cCnf.columnConfig = this;
+        if (!cCnf.xtype) {
+            cCnf.xtype = this._cellXtype;
+        }
         return cCnf;
     }
     set cellConfig(val) {
@@ -110,10 +113,6 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             };
         } else if (kijs.isObject(val)) {
             this._cellConfig = val;
-            if (!this._cellConfig.xtype) {
-                this._cellConfig.xtype = this._cellXtype;
-            }
-            this._cellConfig.columnConfig = this;
         }
     }
 

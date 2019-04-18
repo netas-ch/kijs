@@ -33,7 +33,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this.on('ddDrop', this._onDdDrop, this);
 
         // DOM für label
-        this._captionDom = new kijs.gui.Dom({cls:'kijs-caption'});
+        this._captionContainerDom = new kijs.gui.Dom({cls:'kijs-caption'});
+        this._captionDom = new kijs.gui.Dom({nodeTagName:'span', htmlDisplayType: 'code'});
+        this._sortDom = new kijs.gui.Dom({nodeTagName:'span', cls:'kijs-sort', htmlDisplayType: 'code'});
 
         // DOM für Menu
         this._menuButtonEl = new kijs.gui.MenuButton({
@@ -90,7 +92,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true
+            columnConfig: true,
+            sort: { target: 'sort' }
         });
 
         // Config anwenden
@@ -116,6 +119,24 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             return this.header.cells.indexOf(this);
         }
         return null;
+    }
+
+    get sort() {
+        if (this._sortDom.html === String.fromCharCode(0xf0dd)) {
+            return 'DESC';
+        } else if (this._sortDom.html === String.fromCharCode(0xF0de)) {
+            return 'ASC';
+        }
+        return null;
+    }
+    set sort(val) {
+        if (val === 'DESC') {
+            this._sortDom.html = String.fromCharCode(0xf0dd); // fa-sort-desc
+        } else if (val === 'ASC') {
+            this._sortDom.html = String.fromCharCode(0xF0de); // fa-sort-asc
+        } else {
+            this._sortDom.html = '';
+        }
     }
 
 
@@ -258,8 +279,14 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     render(superCall) {
         super.render(true);
 
+        // container
+        this._captionContainerDom.renderTo(this._dom.node);
+
         // caption dom
-        this._captionDom.renderTo(this._dom.node);
+        this._captionDom.renderTo(this._captionContainerDom.node);
+
+        // sort dom
+        this._sortDom.renderTo(this._captionContainerDom.node);
 
         // dropdown
         this._menuButtonEl.renderTo(this._dom.node);
@@ -287,6 +314,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.unrender();
+        this._captionContainerDom.unrender();
         this._menuButtonEl.unrender();
         this._splitterDom.unrender();
 
@@ -307,6 +335,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.destruct();
+        this._captionContainerDom.destruct();
         this._menuButtonEl.destruct();
         this._splitterDom.destruct();
 

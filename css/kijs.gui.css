@@ -1450,11 +1450,15 @@ div.kijs-grid table tr td {
   flex: none;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   height: 19px;
-  padding: 3px 2px;
+  padding: 3px 6px;
 }
 div.kijs-grid table tr td.kijs-hidden {
   display: none;
+}
+div.kijs-grid table tr td.kijs-grid-cell-number {
+  text-align: right;
 }
 div.kijs-grid .kijs-center {
   flex: 1;
@@ -1471,6 +1475,7 @@ div.kijs-grid .kijs-headercontainer tr:hover {
 div.kijs-grid .kijs-headercontainer tr td {
   display: flex;
   flex-direction: row;
+  padding-right: 0;
 }
 div.kijs-grid .kijs-headercontainer tr td .kijs-caption {
   flex: 1;
@@ -1495,7 +1500,13 @@ div.kijs-grid .kijs-headercontainer tr td .kijs-splitter {
   width: 3px;
   border-right: 1px solid #eee;
   cursor: col-resize;
-  margin: 0 2px 0 2px;
+  margin: 0 0 0 2px;
+}
+div.kijs-grid .kijs-headercontainer tr td span.kijs-sort {
+  color: #555;
+  font-family: FontAwesome;
+  vertical-align: sub;
+  padding-left: 5px;
 }
 div.kijs-grid .kijs-headercontainer tr td:last-child {
   margin-right: 20px;
