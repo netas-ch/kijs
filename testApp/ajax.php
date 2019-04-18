@@ -224,6 +224,13 @@
                         $response->responseData->columns[] = $col;
                         unset ($col);
 
+                        $col = new stdClass();
+                        $col->xtype = 'kijs.gui.grid.columnConfig.Number';
+                        $col->caption = 'Zahl';
+                        $col->valueField = 'number';
+                        $response->responseData->columns[] = $col;
+                        unset ($col);
+
                         for ($y=0; $y<26; $y++) {
                             $col = new stdClass();
                             $col->caption = 'Spalte ' . substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ',$y,1);
@@ -255,6 +262,7 @@
                         }
 
                         $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
+                        $row->number = $rwId;
 
                         $response->responseData->rows[] = $row;
                     }

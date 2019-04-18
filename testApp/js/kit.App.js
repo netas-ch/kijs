@@ -642,6 +642,14 @@ kit.App = class kit_App {
                                                 }
                                             }
                                         },{
+                                            xtype: 'kijs.gui.field.Number',
+                                            name: 'Nummer',
+                                            label: 'Nummer',
+                                            allowBlank: true,
+                                            thousandsSeparator: '\'',
+                                            alwaysDisplayDecimals: true,
+                                            width: 200
+                                        },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 1',
                                             label: 'Feld <b>1</b>',
