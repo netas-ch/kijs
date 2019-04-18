@@ -81,7 +81,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Element.
-     * @param {kijs.gui.DataViewElement|Null} el
+     * @param {kijs.gui.DataViewElement|null} el
      * @returns {undefined}
      */
     set current(el) {
@@ -288,7 +288,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Gibt die selektieten Elemente zurück
      * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
-     * @returns {Array|kijs.gui.DataViewElement|Null}
+     * @returns {Array|kijs.gui.DataViewElement|null}
      */
     getSelected() {
         let ret = [];
@@ -443,7 +443,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Selektiert alle Elemente zwischen el1 und el2
      * @param {kijs.gui.Element} el1
      * @param {kijs.gui.Element} el2
-     * @param {type} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     selectBetween(el1, el2, preventSelectionChange) {
@@ -479,7 +479,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Element festlegen, welches über die Tabulator-Taste den Fokus erhält
      * Setzt den tabIndex des Elements auf 0
      * und bei allen anderen Elementen auf undefined
-     * @param {type} el
+     * @param {Object} el
      * @returns {undefined}
      */
     /*setFocusableElement(el) {
@@ -509,7 +509,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Deselektiert ein oder mehrere Elemente
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die deselektiert werden sollen
-     * @param {type} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     unSelect(elements, preventSelectionChange) {

@@ -11,26 +11,26 @@ kijs.Ajax = class kijs_Ajax {
     // --------------------------------------------------------------
     /**
     * Führt einen Ajax Request aus
-    * 
-    * @param {object} config
+    *
+    * @param {Object} config
     *  config Eigenschaften:
-    *     {string} url
-    *     {object} [parameters]        Objekt mit gewünschten Parametern
+    *     {String} url
+    *     {Object} [parameters]        Objekt mit gewünschten Parametern
     *     {object|string} [postData]   Daten die gesendet werden (nur bei POST)
-    *     {string} [method='GET']      'GET' oder 'POST'
-    *     {string} [format='json']     'json', 'xml' oder 'text'
+    *     {String} [method='GET']      'GET' oder 'POST'
+    *     {String} [format='json']     'json', 'xml' oder 'text'
     *     {function} fn                Callback Funktion
     *     {function} progressFn        Progress Funktion
-    *     {object} context             Kontext für die Callback Funktion
-    *     {object} [headers]           Objekt mit heders die mitgesendet werden 
+    *     {Object} context             Kontext für die Callback Funktion
+    *     {Object} [headers]           Objekt mit heders die mitgesendet werden
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
     *     {boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
-    *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt 
-    * 
+    *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
+    *
     */
     static request(config = {}) {
         let postData;
-        
+
         config.method = config.method || 'GET';
         config.format = config.format || 'json';
         config.parameters = config.parameters || {};
@@ -60,7 +60,7 @@ kijs.Ajax = class kijs_Ajax {
                 config.url += (/\?/.test(config.url) ? '&' : '?') + parString;
             }
         }
-    
+
         // postData
         if (config.method === 'GET') {
             postData = null;
@@ -109,11 +109,11 @@ kijs.Ajax = class kijs_Ajax {
         }
         xmlhttp.send(postData);
     }
-    
+
     /**
      * Erstellt aus einem XML-Document ein Objekt
      * @param {HTMLElement} xml
-     * @returns {object}
+     * @returns {Object}
      */
      static parseXml(xml) {
         let ret = {};
@@ -127,18 +127,18 @@ kijs.Ajax = class kijs_Ajax {
                     ret[attribute.nodeName] = attribute.nodeValue;
                 }
             }
-            
+
         // text
         } else if (xml.nodeType === 3) {
             ret = xml.nodeValue.trim();
         }
-        
+
         // do children
         if (xml.hasChildNodes()) {
             for(let i=0; i<xml.childNodes.length; i++) {
                 let item = xml.childNodes.item(i);
                 let nodeName = item.nodeName;
-                
+
                 if (typeof(ret[nodeName]) === 'undefined') {
                     let tmp = kijs.Ajax.parseXml(item);
                     if (tmp !== '') {
@@ -159,30 +159,30 @@ kijs.Ajax = class kijs_Ajax {
         }
         return ret;
     }
-    
+
     /**
      * Generiert aus einem parameters-Object einen String, der an die URL angehängt werden kann
-     * @param {type} obj
-     * @returns {string}
+     * @param {Object} obj
+     * @returns {String}
      */
     static createQueryStringFromObject(obj) {
         let params = [];
-        
+
         for (let key in obj) {
             let name = encodeURIComponent(key);
             let val = obj[key];
-            
+
             // object
             if (kijs.isObject(val)) {
                 throw new Error('Objects can not be convert to query strings.');
-                
+
             // array
             } else if (kijs.isArray(val)) {
                 kijs.Array.each(val, function(v) {
                     v = encodeURIComponent(v);
                     params.push(name + '=' + v);
                 }, this);
-                
+
             // string, number, boolean
             } else {
                 val = encodeURIComponent(val);
@@ -191,5 +191,5 @@ kijs.Ajax = class kijs_Ajax {
         }
         return params.join('&');
     }
-    
+
 };

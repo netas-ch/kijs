@@ -110,8 +110,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            headerText: 'Uhrzeit',
-            nowText: 'Jetzt',
+            headerText: kijs.getText('Uhrzeit'),
+            nowText: kijs.getText('Jetzt'),
             separator: ':',
             value: '00:00'
         });

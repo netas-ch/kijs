@@ -6,8 +6,6 @@
 /**
  * EVENTS
  * ----------
- * blur
- * input
  *
  * // Geerbte Events
  * add
@@ -16,6 +14,7 @@
  * afterResize
  * beforeAdd
  * beforeRemove
+ * blur
  * changeVisibility
  * childElementAfterResize
  * dblClick
@@ -27,6 +26,7 @@
  * dragStart
  * drop
  * focus
+ * input
  * mouseDown
  * mouseLeave
  * mouseMove

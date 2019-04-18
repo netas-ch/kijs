@@ -284,7 +284,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _format(format, datetime) {
         format = this._getFormat(format, datetime);
         if (format !== '' && datetime instanceof Date) {
-            return kijs.Date.format(datetime, format, this._languageId);
+            return kijs.Date.format(datetime, format);
         }
         return '';
     }

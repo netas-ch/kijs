@@ -21,7 +21,7 @@ kijs.Dom = class kijs_Dom {
     // --------------------------------------------------------------
     
     // Static Properties in this Class
-    //__scrollbarWidth {Number|Null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss, 
+    //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss, 
     //                                  wird das ergebnis hier gemerkt.
     
     /**
@@ -185,7 +185,7 @@ kijs.Dom = class kijs_Dom {
      *     tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *     tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @param {HTMLElement} node
-     * @returns {HTMLElement|Null}
+     * @returns {HTMLElement|null}
      */
     static getFirstFocusableNode(node) {
         let subNode = null;

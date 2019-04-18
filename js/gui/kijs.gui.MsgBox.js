@@ -30,11 +30,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             buttons: [
                 {
                     name: 'ok',
-                    caption: 'OK',
+                    caption: kijs.getText('OK'),
                     isDefault: true
                 }
             ]
-        });            
+        });
     }
 
     /**
@@ -64,13 +64,13 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             buttons: [
                 {
                     name: 'yes',
-                    caption: 'Ja'
+                    caption: kijs.getText('Ja')
                 },{
                     name: 'no',
-                    caption: 'Nein'
+                    caption: kijs.getText('Nein')
                 }
             ]
-        });            
+        });
     }
 
     /**
@@ -100,11 +100,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             buttons: [
                 {
                     name: 'ok',
-                    caption: 'OK',
+                    caption: kijs.getText('OK'),
                     isDefault: true
                 }
             ]
-        });            
+        });
     }
 
     /**
@@ -134,11 +134,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             buttons: [
                 {
                     name: 'ok',
-                    caption: 'OK',
+                    caption: kijs.getText('OK'),
                     isDefault: true
                 }
             ]
-        });            
+        });
     }
 
     /**
@@ -263,14 +263,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             buttons: [
                 {
                     name: 'ok',
-                    caption: 'OK',
+                    caption: kijs.getText('OK'),
                     isDefault: true
                 },{
                     name: 'cancel',
-                    caption: 'Abbrechen'
+                    caption: kijs.getText('Abbrechen')
                 }
             ]
-        });            
+        });
     }
 
 
@@ -279,7 +279,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         if (messages.length === 1) {
             return messages[0];
         }
-        
+
         let ret = '<ul>';
         kijs.Array.each(messages, function(msg) {
             ret += '<li>' + msg + '</li>';

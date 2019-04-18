@@ -36,7 +36,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            caption: 'Upload',
+            caption: kijs.getText('Upload'),
             iconChar: '&#xf093',
             uploadDialog: null,
             closable: false,

@@ -211,7 +211,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // PROTECTED
     /**
      * Caption zu einem Value ermitteln
-     * @param {String|Number|Null} val
+     * @param {String|Number|null} val
      * @returns {String}
      */
     _getCaptionFromValue(val) {

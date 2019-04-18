@@ -79,8 +79,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
      /**
      * Zeigt ein normaler CornerTip
-     * @param {type} caption
-     * @param {type} msg
+     * @param {String} caption
+     * @param {String} msg
      * @returns {undefined}
      */
     alert(caption, msg) {
@@ -97,8 +97,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
     /**
      * Zeigt ein CornerTip mit einem Fehler-Symbol
-     * @param {type} caption
-     * @param {type} msg
+     * @param {String} caption
+     * @param {String} msg
      * @returns {undefined}
      */
     error(caption, msg) {
@@ -120,8 +120,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
     /**
      * Zeigt ein CornerTip mit einem Info-Symbol
-     * @param {type} caption
-     * @param {type} msg
+     * @param {String} caption
+     * @param {String} msg
      * @returns {undefined}
      */
     info(caption, msg) {
@@ -155,7 +155,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      *         }
      *     }
      * }
-     * @param {type} config
+     * @param {Object} config
      * @returns {undefined}
      */
     show(config) {
@@ -205,8 +205,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
     /**
      * Zeigt ein CornerTip mit einem Warnungs-Symbol
-     * @param {type} caption
-     * @param {type} msg
+     * @param {String} caption
+     * @param {String} msg
      * @returns {undefined}
      */
     warning(caption, msg) {

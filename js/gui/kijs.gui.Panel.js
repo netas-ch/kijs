@@ -463,7 +463,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     /**
      * Expandiert das Panel
-     * @param {number} size [optional] Breite oder Höhe in die das Panel wiederhergestellt werden soll
+     * @param {Number} size [optional] Breite oder Höhe in die das Panel wiederhergestellt werden soll
      * @returns {undefined}
      */
     expand(size) {

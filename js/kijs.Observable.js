@@ -13,25 +13,25 @@ kijs.Observable = class kijs_Observable {
         this._events = this._events || {};  // Beispiel: {
                                             //              click: [
                                             //                {
-                                            //                  callback: fn, 
+                                            //                  callback: fn,
                                             //                  context: context
                                             //                },{
-                                            //                  callback: fn, 
+                                            //                  callback: fn,
                                             //                  context: context
                                             //                }
                                             //              ],
                                             //              mouseOver: [
                                             //                {
-                                            //                  callback: fn, 
+                                            //                  callback: fn,
                                             //                  context: context
                                             //                },{
-                                            //                  callback: fn, 
+                                            //                  callback: fn,
                                             //                  context: context
                                             //                }
                                             //              ]
                                             //           }
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -45,18 +45,18 @@ kijs.Observable = class kijs_Observable {
      */
     hasListener(name, callback=null, context=null) {
         let listeners = this._events[name];
-            
+
         if (listeners) {
             if (!callback && !context) {
                 return true;
-                
+
             } else {
                 for (let i=0; i<listeners.length; i++) {
                     let listener = listeners[i];
-                    
+
                     const callbackOk = !callback || callback === listener.callback;
                     const contextOk = !context || context === listener.context;
-                    
+
                     if (callbackOk && contextOk) {
                         return true;
                     }
@@ -64,40 +64,40 @@ kijs.Observable = class kijs_Observable {
 
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Entfernt ein oder mehrere Listeners
      * @param {string|array|null} [names] - Name oder Array mit Namen der Listeners oder leer um alle zu löschen.
-     *                                
-     * @param {function|null} [callback]  - Callback Funktion, deren Listeners gelöscht werden sollen. 
+     *
+     * @param {function|null} [callback]  - Callback Funktion, deren Listeners gelöscht werden sollen.
      *                                      Wenn leer, werden alle gelöscht.
-     *                                
+     *
      * @param {object|null} [context]     - Kontext der Callback Funktion, deren Listeners gelöscht werden sollen.
      *                                      Wenn leer, werden alle gelöscht.
-     *                                
+     *
      * @returns {undefined}
      */
     off(names=null, callback=null, context=null) {
-        
+
         // Wenn kein Argument übergeben wurde: alle Listeners entfernen
         if (!names && !callback && !context) {
             this._events = {};
             return;
         }
-        
+
         if (kijs.isEmpty(names)) {
             names = Object.keys(this._events);
         } else if (!kijs.isArray(names)) {
             names = [names];
         }
-        
+
         // Listeners duchgehen und wenn sie mit den übergebenen Argumenten übereinstimmen: entfernen
         kijs.Array.each(names, function(name) {
             let skip = false;
-            
+
             // Wenn kein Listener existiert: skip
             let listeners = this._events[name];
             if (!listeners) {
@@ -134,35 +134,35 @@ kijs.Observable = class kijs_Observable {
     /**
      * Erstellt einen Listener
      * @param {string|array} names - Name oder Array mit Namen des Listeners
-     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn 
-     * @param {object} context - Kontext für die Callback-Funktion
+     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn
+     * @param {Object} context - Kontext für die Callback-Funktion
      * @returns {undefined}
      */
     on(names, callback, context) {
-        
+
         names = kijs.isArray(names) ? names : [names];
-        
+
         kijs.Array.each(names, function(name) {
             // Falls der Listener noch nicht existiert: einfügen
             if (!this.hasListener(name, callback, context)) {
                 if (!this._events[name]) {
                     this._events[name] = [];
                 }
-                
+
                 this._events[name].push({
-                    callback: callback, 
+                    callback: callback,
                     context: context
                 });
             }
-            
+
         }, this);
     }
 
     /**
      * Erstellt einen Listener, der nur einmal ausgeführt wird und sich dann selber wieder entfernt
      * @param {string|array} names - Name oder Array mit Namen des Listeners
-     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn 
-     * @param {object} context - Kontext für die Callback-Funktion
+     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn
+     * @param {Object} context - Kontext für die Callback-Funktion
      * @returns {undefined}
      */
     once(names, callback, context) {
@@ -172,14 +172,14 @@ kijs.Observable = class kijs_Observable {
             this.off(names, callbackWrapper, context);
             return callback.apply(context, arguments);
         };
-        
+
         this.on(names, callbackWrapper, this);
     }
 
     /**
      * Löst einen Event aus
-     * @param {string} [name] - Name des Events oder leer um alle Events auszulösen
-     * @param {type} [args] - beliebig viele Argumente, die dem Event übergeben werden
+     * @param {String} [name] - Name des Events oder leer um alle Events auszulösen
+     * @param {Mixed} [args] - beliebig viele Argumente, die dem Event übergeben werden
      * @returns {Boolean} - Falls ein Listener false zurückgibt, ist die Rückgabe false, sonst true
      */
     raiseEvent(name, ...args) {

@@ -17,7 +17,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
-        this._errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt.';
+        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -243,7 +243,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // EVENTS
     /**
      * callback-fnBeforeMessages, die eventuelle Fehler direkt im Formular anzeigt
-     * @param {type} response
+     * @param {Object} response
      * @returns {undefined}
      */
     _onRpcBeforeMessages(response) {

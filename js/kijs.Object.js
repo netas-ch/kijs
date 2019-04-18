@@ -208,10 +208,10 @@ kijs.Object = class kijs_Object {
     
     /**
     * Kopiert alle Eigenschaften des source-Objekts in das target-Objekt (rekursiv)
-    * @param {object} target Ziel-Objekt
-    * @param {object} source Quell-Objekt
+    * @param {Object} target Ziel-Objekt
+    * @param {Object} source Quell-Objekt
     * @param {boolean} [overwrite=true] Sollen bereits existierende Objekte überschrieben werden?
-    * @return {object} Erweiteres Ziel-Objekt
+    * @return {Object} Erweiteres Ziel-Objekt
     */
     static assignDeep(target, source, overwrite=true) {
         kijs.Object.each(source, function(key, val){

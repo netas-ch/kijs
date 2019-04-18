@@ -47,7 +47,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     /**
      * Gibt das oberste Element zurück
      * @param {HTMLElement} parentNode
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     getActive(parentNode) {
         const parentProp =  this._parents.get(parentNode);

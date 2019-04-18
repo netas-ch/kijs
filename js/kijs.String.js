@@ -126,10 +126,10 @@ kijs.String = class kijs_String {
     
     /**
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
-     * @param {string} text
-     * @param {number} length maximlae Länge
+     * @param {String} text
+     * @param {Number} length maximlae Länge
      * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschnieden
-     * @param {string} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
+     * @param {String} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
      * @returns {String}
      */
     static trunc(text, length, useWordBoundary=false, postFixChar='…') {
@@ -146,10 +146,10 @@ kijs.String = class kijs_String {
     /**
      * Fügt Zeilenumbrüche in eine Zeichenkette ein
      * https://stackoverflow.com/a/51506718
-     * @param {string} text
-     * @param {number} length Anzahl Zeichen pro Zeile
+     * @param {String} text
+     * @param {Number} length Anzahl Zeichen pro Zeile
      * @param {boolean} [useWordBoundary=true] Nur bei Leerzeichen Umbrüche einfügen
-     * @returns {string}
+     * @returns {String}
      */
     static wrap(text, length, useWordBoundary=true) {
         if (useWordBoundary) {

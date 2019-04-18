@@ -15,7 +15,6 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._startWeekday = 1; // Erster Tag in der Ansicht (1=Montag)
         this._showWeekNumbers = true; // Wochennummern
         this._weekSelect = false; // ganze Woche auswählen?
-        this._languageId = 'de';
         this._showCalendar = true; // Kalender oder Monatswahl?
 
         this._visibleMonthDate = kijs.Date.getFirstOfMonth(new Date()); // Sichtbarer Monat
@@ -109,7 +108,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             this._monthSelector.push({
                 month: m,
                 dom: new kijs.gui.Dom({
-                    html: kijs.Date.months_short[this._languageId][m],
+                    html: kijs.Date.months_short[m],
                     on: {
                         click: this._onMonthSelectorClick,
                         context: this
@@ -168,7 +167,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         // Button 'heute'
         this._todayBtn = new kijs.gui.Button({
             parent: this,
-            caption: 'Heute',
+            caption: kijs.getText('Heute'),
             on: {
                 click: this._onTodayButtonClick,
                 context: this
@@ -288,7 +287,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         for (let i=0; i<this._monthSelector.length; i++) {
 
             // Text
-            this._monthSelector[i].dom.html = kijs.Date.months_short[this._languageId][this._monthSelector[i].month];
+            this._monthSelector[i].dom.html = kijs.Date.months_short[this._monthSelector[i].month];
 
             // aktueller monat
             if (this._visibleMonthDate && this._visibleMonthDate.getMonth() === this._monthSelector[i].month) {
@@ -320,7 +319,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         rangeTo = rangeTo ? rangeTo : this._rangeTo;
 
         // Titel schreiben
-        this._headerBar.html = kijs.Date.format(this._visibleMonthDate, 'F Y', this._languageId);
+        this._headerBar.html = kijs.Date.format(this._visibleMonthDate, 'F Y');
 
         monthIndex = this._visibleMonthDate.getMonth(); // Vorsicht: 0-basierend
 
@@ -350,7 +349,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                if (wdNo > 6) {
                    wdNo -= 7;
                }
-               fldDom.html = kijs.Date.weekdays_short[this._languageId][wdNo];
+               fldDom.html = kijs.Date.weekdays_short[wdNo];
 
                 if (wdNo === 0 || wdNo === 6) {
                     fldDom.clsAdd('kijs-weekend');

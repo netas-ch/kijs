@@ -13,20 +13,20 @@ kijs.Rpc = class kijs_Rpc {
         this._url = '.';                    // URL Beispiel: '.' oder 'index.php'
         this._parameters = {};              // Objekt mit optionalem GET-Parametern
         this._timeout = 10;
-        
+
         this._deferId = null;
         this._queue = null;
         this._tid = 0;
-        
+
         this._queue = [];
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             url: true,
             parameters: true,
             timeout: true
         };
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config);
@@ -45,19 +45,19 @@ kijs.Rpc = class kijs_Rpc {
             CANCELED_AFTER_TRANSMIT: 4
         };
     }
-    
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get timeout() { return this._timeout; }
     set timeout(val) { this._timeout = val; }
-    
+
     get url() { return this._url; }
     set url(val) { this._url = val; }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -69,7 +69,7 @@ kijs.Rpc = class kijs_Rpc {
     applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
     }
-    
+
     /**
      * Führt einen RPC aus.
      * @param {String} facadeFn      Modul/Facaden-name und Methodenname Bsp: 'address.save'
@@ -78,7 +78,7 @@ kijs.Rpc = class kijs_Rpc {
      * @param {Object} context       Kontext für die Callback-Funktion
      * @param {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
      * @param {Object} [rpcParams]   Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
-     * @param {Mixed} [responseArgs] Hier können Daten übergeben werden, 
+     * @param {Mixed} [responseArgs] Hier können Daten übergeben werden,
      *                               die in der Callback-Fn dann wieder zur Verfügung stehen.
      *                               z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
      * @returns {undefined}
@@ -122,8 +122,8 @@ kijs.Rpc = class kijs_Rpc {
 
         this._deferId = kijs.defer(this._transmit, this.timeout, this);
     }
-    
-    
+
+
     // PROTECTED
     /**
      * Generiert die nächste Transfer-ID und gibt sie zurück
@@ -133,10 +133,10 @@ kijs.Rpc = class kijs_Rpc {
         this._tid++;
         return this._tid;
     }
-    
+
     /**
      * Holt einen Request aufgrund der Transfer-ID aus der Queue zurück.
-     * @param {type} tid
+     * @param {Number} tid
      * @returns {Array}
      */
      _getByTid(tid) {
@@ -178,7 +178,7 @@ kijs.Rpc = class kijs_Rpc {
             }
 
             // Abbruch durch neueren Request?
-            if (subRequest.state === kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT || 
+            if (subRequest.state === kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT ||
                     subRequest.state === kijs.Rpc.states.CANCELED_AFTER_TRANSMIT) {
                 subResponse.canceled = true;
             }
@@ -192,8 +192,8 @@ kijs.Rpc = class kijs_Rpc {
             }
         }
     }
-    
-    
+
+
     /**
      * Entfernt eine Transfer-ID aus der Queue
      * @param {Number} tid
@@ -216,7 +216,7 @@ kijs.Rpc = class kijs_Rpc {
     _transmit() {
         this._deferId = null;
         const transmitData = [];
-        
+
         for (let i=0; i<this._queue.length; i++) {
             if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
                 const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
@@ -224,12 +224,12 @@ kijs.Rpc = class kijs_Rpc {
                 subRequest.requestData = this._queue[i].requestData;
                 subRequest.type = this._queue[i].type;
                 subRequest.tid = this._queue[i].tid;
-                
+
                 transmitData.push(subRequest);
                 this._queue[i].state = kijs.Rpc.states.TRANSMITTED;
             }
         }
-        
+
         if (transmitData.length > 0) {
             kijs.Ajax.request({
                 method      : 'POST',
@@ -254,7 +254,7 @@ kijs.Rpc = class kijs_Rpc {
         if (this._deferId) {
             clearTimeout(this._deferId);
         }
-        
+
         // Variablen
         this._parameters = null;
         this._queue = null;

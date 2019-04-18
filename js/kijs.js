@@ -23,15 +23,15 @@ window.kijs = class kijs {
             PAGE_DOWN: 34,
             END: 35,
             HOME: 36,
-            
+
             LEFT_ARROW: 37,
             UP_ARROW: 38,
             RIGHT_ARROW: 39,
             DOWN_ARROW: 40,
-            
+
             INS: 45,
             DEL: 46,
-            
+
             0: 48,
             1: 49,
             2: 50,
@@ -68,7 +68,7 @@ window.kijs = class kijs {
             X: 88,
             Y: 89,
             Z: 90,
-            
+
             KEYPAD_0: 96,
             KEYPAD_1: 97,
             KEYPAD_2: 98,
@@ -79,7 +79,7 @@ window.kijs = class kijs {
             KEYPAD_7: 103,
             KEYPAD_8: 104,
             KEYPAD_9: 105,
-            
+
             F1: 112,
             F2: 113,
             F3: 114,
@@ -100,11 +100,11 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-    
+
     // Static Properties in this Class
-    //__uniqueId {Number|Null}    Zähler der eindeutigen UniqueId
-    
-    
+    //__uniqueId {Number|null}    Zähler der eindeutigen UniqueId
+
+
     /**
      * Erstellt eine Delegate
      * @param {Function} fn
@@ -129,7 +129,7 @@ window.kijs = class kijs {
         const parts = name.split('.');
         let parent = window;
         let part;
-        
+
         for (let i=0; i<parts.length; i++) {
             part = parts[i];
             if (!parent[part]) {
@@ -137,7 +137,7 @@ window.kijs = class kijs {
             }
             parent = parent[part];
         }
-        
+
         return part;
     }
 
@@ -158,7 +158,7 @@ window.kijs = class kijs {
             return 0;
         }
     }
-    
+
     /**
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden
      * @param {String} [parameterName] Den Parameter, der gesucht wird. Ohne Argument werden alle zurückgegeben.
@@ -170,10 +170,10 @@ window.kijs = class kijs {
             const pt = window.location.search.substr(1).split('&');
             for (let i=0; i<pt.length; i++) {
                 let tmp = pt[i].split('=');
-                params[tmp[0]] = tmp.length === 2 ? tmp[1] : null;            
+                params[tmp[0]] = tmp.length === 2 ? tmp[1] : null;
             };
         }
-        
+
         if (parameterName === undefined) {
             return params;
         } else {
@@ -182,7 +182,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Gibt das Objekt/Funktion eines Namespaces zurück. 
+     * Gibt das Objekt/Funktion eines Namespaces zurück.
      * Falls der Namespace nicht existiert wird false zurückgegeben.
      * @param {String} name - Name des Namespace. Beispiel: 'kijs.gui.field'
      * @returns {Function|Object|false}
@@ -191,7 +191,7 @@ window.kijs = class kijs {
         const parts = name.split('.');
         let parent = window;
         let part;
-        
+
         for (let i=0; i<parts.length; i++) {
             part = parts[i];
             if (!parent[part]) {
@@ -199,8 +199,34 @@ window.kijs = class kijs {
             }
             parent = parent[part];
         }
-        
+
         return parent;
+    }
+
+    /**
+     * Text für übersetzung zurückgeben
+     * @param {String} key
+     * @param {String} variant
+     * @param {mixed} args
+     * @param {String} languageId
+     * @returns {String}
+     */
+    static getText(key, variant='', args=null, languageId=null) {
+        if (kijs.isFunction(kijs._getTextFn)) {
+            return kijs._getTextFn.call(kijs._getTextFnScope || this, key, variant, args, languageId);
+        }
+
+        // keine getText-Fn definiert: Argumente ersetzen
+        let text = key;
+        if (args !== null) {
+            args = kijs.isArray(args) ? args : [args];
+
+            for (var i=args.length; i>0; i--) {
+                text = kijs.String.replaceAll(text, '%' + i, args[i-1]);
+            }
+        }
+
+        return text;
     }
 
     /**
@@ -233,7 +259,7 @@ window.kijs = class kijs {
     static isBoolean(value) {
         return value===true || value===false;
     }
-    
+
     /**
      * Prüft ob ein Wert ein gültiges Datum ist
      * @param {Date} value
@@ -242,7 +268,7 @@ window.kijs = class kijs {
     static isDate(value) {
         return value instanceof Date && !isNaN(value.valueOf());
     }
-    
+
     /**
      * Prüft, ob ein value definiert ist.
      * @param {undefined} value
@@ -261,15 +287,15 @@ window.kijs = class kijs {
         if (value === null || value === '' || value === undefined) {
             return true;
         }
-        
+
         if (this.isArray(value)) {
             return value.length === 0;
         }
-        
+
         if (this.isObject(value)) {
             return Object.keys(value).length === 0;
         }
-        
+
         return false;
     }
 
@@ -299,7 +325,7 @@ window.kijs = class kijs {
     static isHTMLElement(value) {
         return value instanceof HTMLElement;
     }
-    
+
     /**
      * Prüft, ob ein value vom Typ Number und kein Float ist.
      * @param {Number} value
@@ -354,7 +380,18 @@ window.kijs = class kijs {
     static isString(value) {
         return typeof value === 'string';
     }
-    
+
+    /**
+     * Setzt eine individuelle getText-Funktion
+     * @param {Function} fn
+     * @param {Object} scope
+     * @returns {undefined}
+     */
+    static setGetTextFn(fn, scope=null) {
+        kijs._getTextFn = fn;
+        kijs._getTextFnScope = scope;
+    }
+
     /**
      * Gibt eine eindeutige ID zurück.
      * @param {String} [prefix=''] Ein optionales Prefix

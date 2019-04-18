@@ -190,7 +190,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._preventAfterResize = false;    // Auslösen des afterResize-Events verhindern?
 
         this._defaultConfig = {};
-        
+
         this._eventForwards = {};   // Events, die an untergeordnete kijs.gui.Dom Objekte weitergeleitet werden sollen
                                     //  {
                                     //    click: [
@@ -328,7 +328,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Gibt das Element zurück, das grafisch unterhalb liegt.
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     get lowerElement() {
         if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
@@ -353,7 +353,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Gibt das nächste element im elements-Array zurück
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     get next() {
         if (!this._parentEl || !this._parentEl.elements) {
@@ -377,7 +377,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Gibt das Elternelement zurück
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     get parent() { return this._parentEl; }
     set parent(val) {
@@ -396,7 +396,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Gibt das vorherige element im elements-Array zurück
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     get previous() {
         if (!this._parentEl || !this._parentEl.elements) {
@@ -430,7 +430,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Gibt das Element zurück, das grafisch oberhalb liegt.
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     get upperElement() {
         if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
@@ -553,7 +553,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
-     * @returns {HTMLElement|Null}                     HTML-Node, das den Fokus erhalten hat
+     * @returns {HTMLElement|null}                     HTML-Node, das den Fokus erhalten hat
      */
     focus(alsoSetIfNoTabIndex=false) {
         return this._dom.focus(alsoSetIfNoTabIndex);
@@ -640,7 +640,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             // Element nach dem insert-Element einfügen
             } else if (insertPosition === 'after') {
                 targetNode.insertBefore(this._dom.node, insert.nextSibling);
-                
+
             } else {
                 throw new Error('invalid insert position for renderTo');
             }
@@ -674,7 +674,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
      * @param {String} name
-     * @returns {kijs_gui_Element|Null}
+     * @returns {kijs_gui_Element|null}
      */
     up(name) {
         if (!kijs.isEmpty(name) && this.parent) {
@@ -691,7 +691,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
      * @param {String} xtype
-     * @returns {kijs_gui_Element|Null}
+     * @returns {kijs_gui_Element|null}
      */
     upX(xtype) {
         if (!kijs.isEmpty(xtype) && this.parent) {
@@ -850,7 +850,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * Falls sich seit dem letzten aufruf dieser Funktion die Grösse geändert hat: das afterResize-Event auslösen
      * @param {Boolean} [useDelay=false]
-     * @param {type} [e={}]   Falls das Event nur weitergereicht wird, kann hier das
+     * @param {Object} [e={}]   Falls das Event nur weitergereicht wird, kann hier das
      *                          e-Arg des vorherigen Events übergeben werden
      * @returns {undefined}
      */
@@ -924,7 +924,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Listener der Aufgerufen wird, wenn die Grösse des Parents geändert hat
-     * @param {type} e
+     * @param {Object} e
      * @returns {undefined}
      */
     _onParentChildElementAfterResize(e) {

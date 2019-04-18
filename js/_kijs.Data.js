@@ -88,7 +88,7 @@ kijs.Data = class kijs_Data {
     * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}] 
     * Alle Datensätze im Array müssen das gleiche Format haben.
     * @param {Object|Array} rows
-    * @param {Boolean|Null} [duplicateCheck=false]
+    * @param {Boolean|null} [duplicateCheck=false]
     * @returns {undefined}
     */
     add(rows, duplicateCheck) {

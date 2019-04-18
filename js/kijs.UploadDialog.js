@@ -8,7 +8,7 @@
  * Die Klasse öffnet ein Fenster zum Auswählen einer Datei zum Upload
  * oder nimmt die Datei über eine Dropzone entgegen. Nach Auswahl wird
  * die Datei an den Server gesendet.
- * 
+ *
  *  * EVENTS
  * ----------
  * failUpload   -- MIME nicht erlaubt
@@ -102,9 +102,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     set directory(val) { this._directory = !!val; }
 
     get multiple() { return this._multiple; }
-    set multiple(val) { 
+    set multiple(val) {
         if (val === true && this._browserSupportsDirectoryUpload()) {
-            this._multiple = true;             
+            this._multiple = true;
         } else {
             this._multiple = false;
         }
@@ -132,7 +132,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
             // hinzufügen falls noch nicht da.
             if (!kijs.Array.contains(this._dropZones, dropZone)) {
-                
+
                 // Events entfernen und wieder setzen.
                 dropZone.off(null, null, this);
                 dropZone.on('drop', this._onDropZoneDrop, this);
@@ -197,7 +197,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         uploadEl = null;
         return support;
     }
-    
+
     _checkMime(filetype) {
         if (filetype && this._contentTypes.length > 0) {
             let parts = filetype.split('/', 2);
@@ -214,7 +214,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     _uploadFiles(fileList) {
         this._uploadResponses = {};
-        if (fileList) {            
+        if (fileList) {
             for (let i=0; i<fileList.length; i++) {
                 if (this._checkMime(fileList[i].type)) {
                     this._uploadFile(fileList[i]);
@@ -257,7 +257,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Fehlermeldung vom server
         if (!val || !val.success) {
-            error = error || val.msg || 'Es ist ein unbekannter Fehler aufgetreten.';
+            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten.');
         }
 
         // Antwort vom Server

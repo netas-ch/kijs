@@ -12,7 +12,7 @@ kijs.gui = class kijs_gui {
     /**
      * Erstellt einen Namespace
      * @param {String} xtype    Beispiel: 'kijs.gui.Element'
-     * @returns {kijs.gui.Element|Null}
+     * @returns {kijs.gui.Element|null}
      */
     static getClassFromXtype(xtype) {
         const parts = xtype.split('.');

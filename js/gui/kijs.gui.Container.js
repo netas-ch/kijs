@@ -283,7 +283,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
      * @param {String} name
-     * @returns {kijs_gui_Element|Null}
+     * @returns {kijs_gui_Element|null}
      */
     down(name) {
         const ret = this.getElementsByName(name, -1, true);
@@ -298,7 +298,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
      * dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
      * @param {String} xtype
-     * @returns {kijs_gui_Element|Null}
+     * @returns {kijs_gui_Element|null}
      */
     downX(xtype) {
         const ret = this.getElementsByXtype(xtype, -1, true);
