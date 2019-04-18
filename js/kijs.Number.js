@@ -72,7 +72,7 @@ kijs.Number = class kijs_String {
         if (decPoint !== '.') {
             number = kijs.String.replaceAll(number, decPoint, '.');
         }
-        number = number.replace(/[^0-9\.]/, '');
+        number = number.replace(/[^\-0-9\.]/, '');
         number = window.parseFloat(number);
 
         if (!window.isNaN(number)) {

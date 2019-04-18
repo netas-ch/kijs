@@ -139,7 +139,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
             if (this._decimalSeparator !== '.') {
                  value = kijs.String.replaceAll(value, this._decimalSeparator, '.');
             }
-            value = value.replace(/[^0-9\.]/, '');
+            value = value.replace(/[^\-0-9\.]/, '');
 
             if (this._allowDecimals) {
                 value = window.parseFloat(value);
