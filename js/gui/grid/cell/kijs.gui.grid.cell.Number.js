@@ -18,7 +18,7 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         super(false);
 
         // default xtype
-        this._editorXType = 'kijs.gui.field.Text';
+        this._editorXType = 'kijs.gui.field.Number';
 
         // Nummer-Einstellungen
         this._decimalPrecision = null;
@@ -42,6 +42,19 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+    }
+
+    // Overwrite
+    _getEditorArgs() {
+        let eArgs = super._getEditorArgs();
+
+        eArgs.allowDecimals = this._decimalPrecision > 0;
+        eArgs.alwaysDisplayDecimals = this._decimalPrecision > 0;
+        eArgs.decimalPrecision = this._decimalPrecision;
+        eArgs.decimalSeparator = this._decimalPoint;
+        eArgs.thousandsSeparator = this._decimalThousandSep;
+
+        return eArgs;
     }
 
     /**

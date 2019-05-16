@@ -70,10 +70,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         Object.assign(this._configMap, {
             allowDecimals: true,
             alwaysDisplayDecimals: true,
-            decimalPrecision: true,
+            decimalPrecision: { target: 'decimalPrecision'},
             decimalSeparator: true,
-            minValue: true,
-            maxValue: true,
+            minValue: { target: 'minValue'},
+            maxValue: { target: 'maxValue'},
             thousandsSeparator: true
         });
 

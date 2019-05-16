@@ -493,8 +493,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._labelDom.unrender();
         this._inputWrapperDom.unrender();
-        if (this._spinBox) {
-            this._spinBox.unrender();
+        if (this._spinBoxEl) {
+            this._spinBoxEl.unrender();
         }
         this._spinIconEl.unrender();
         this._errorIconEl.unrender();

@@ -9,7 +9,7 @@ kijs.String = class kijs_String {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-    
+
     /**
      * Überprüft, ob ein String mit einem gesuchten String beginnt
      * @param {String} text
@@ -19,7 +19,7 @@ kijs.String = class kijs_String {
     static beginsWith(text, search) {
         return text.indexOf(search) === 0;
     }
-    
+
     /**
      * Überprüft, ob ein String einen gesuchten String enthält
      * @param {String} text
@@ -29,7 +29,7 @@ kijs.String = class kijs_String {
     static contains(text, search) {
         return text.indexOf(search) >= 0;
     }
-    
+
     /**
      * Überprüft, ob ein String mit einem gesuchten String endet
      * @param {String} text
@@ -39,7 +39,7 @@ kijs.String = class kijs_String {
     static endsWith(text, search) {
         return text.indexOf(search, text.length - search.length) !== -1;
     }
-    
+
     /**
      * Konvertiert einen HTML-String in einen String, in dem die HTML-Zeichen als Unicode eingebunden sind
      * Es werden folgende Zeichen ersetzt
@@ -86,7 +86,7 @@ kijs.String = class kijs_String {
 
         return text;
     }
-    
+
     /**
      * Ergänzt eine Zahl mit vorangestellten Nullen
      * @param {String} text
@@ -102,12 +102,27 @@ kijs.String = class kijs_String {
             if (type === 'left' || type === 'both') {
                 text = padString + text;
             }
-            
+
             if (!type || type === 'right' || type === 'both') {
                 text = text + padString;
             }
         }
         return text;
+    }
+
+    /**
+     * Wiederholt einen String.
+     * Gibt text multiplier mal wiederholt zurück.
+     * @param {String} text
+     * @param {Number} multiplier
+     * @returns {String}
+     */
+    static repeat(text, multiplier) {
+        let response = '';
+        for (let i=0; i<multiplier; i++) {
+            response += (text+'');
+        }
+        return response;
     }
 
     /**
@@ -123,7 +138,7 @@ kijs.String = class kijs_String {
         replace = kijs.isEmpty(replace) ? '' : replace;
         return text.split(search).join(replace);
     }
-    
+
     /**
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text

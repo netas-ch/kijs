@@ -282,23 +282,24 @@ kit.App = class kit_App {
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Neu',
-                                            iconChar: '&#xf0c7',
+                                            iconChar: '&#xf055',
                                             height: 120
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Duplizieren',
-                                            iconChar: '&#xf0c7'
+                                            iconChar: '&#xf0c5'
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Aktionen',
-                                            iconChar: '&#xf02f'
+                                            iconChar: '&#xf0e7'
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Löschen',
-                                            iconChar: '&#xf0c7'
+                                            iconChar: '&#xf1f8'
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Address Load',
+                                            iconChar: '&#xf0e7',
                                             on: {
                                                 click: function() {
                                                     const addressPanel = this.upX('kijs.gui.Panel').down('addressPanel');

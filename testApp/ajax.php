@@ -231,6 +231,14 @@
                         $response->responseData->columns[] = $col;
                         unset ($col);
 
+                        $col = new stdClass();
+                        $col->xtype = 'kijs.gui.grid.columnConfig.Date';
+                        $col->caption = 'Datum';
+                        $col->valueField = 'date';
+                        $response->responseData->columns[] = $col;
+                        unset ($col);
+
+
                         for ($y=0; $y<26; $y++) {
                             $col = new stdClass();
                             $col->caption = 'Spalte ' . substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ',$y,1);
@@ -263,6 +271,7 @@
 
                         $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
                         $row->number = $rwId;
+                        $row->date = time()+(3600*24*$rwId);
 
                         $response->responseData->rows[] = $row;
                     }

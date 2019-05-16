@@ -161,6 +161,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         } else {
             this._inputDom.nodeAttributeSet('value', val);
         }
+        this.validate();
     }
 
 

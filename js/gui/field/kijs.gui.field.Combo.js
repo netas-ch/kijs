@@ -179,6 +179,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
      * @returns {undefined}
      */
     load(args) {
+        if (!args) {
+            args = {};
+        }
         this._listViewEl.load(args);
     }
 
@@ -292,6 +295,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _onListViewClick(e) {
         this._spinBoxEl.close();
         this.value = this._listViewEl.value;
+        this.raiseEvent('change');
     }
 
     /*_onListViewSelectionChange(e) {
@@ -318,9 +322,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Elemente/DOM-Objekte entladen
         if (this._inputDom) {
             this._inputDom.destruct();
-        }
-        if (this._listViewEl) {
-            this._listViewEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren

@@ -321,6 +321,7 @@ div.kijs-container.kijs-dropzone {
    ****************** */
 div.kijs-spinbox {
     position: absolute;
+    z-index: 10100;
     max-width: 100%;
     max-height: 100%;
     border: 1px solid @field-borderColor;
@@ -2239,9 +2240,7 @@ div.kijs-tooltip {
     font-family: @default-fontFamily;
     font-size: @default-fontSize;
     background-color: @viewport-bkgrndColor;
-    opacity: 1;
-    transition: none;
-    visibility: visible;
+    max-width: 220px;
 
     ul {
         margin: 0 0 0 14px;
@@ -2256,12 +2255,6 @@ div.kijs-tooltip {
         border: 1px solid @icon-help-borderColor;
         background-color: @icon-help-bkgrndColor;
     }
-
-    &.kijs-hidden {
-        visibility: hidden;
-        opacity: 0;
-        transition: 1s;
-    }
 }
 
 
@@ -2270,7 +2263,7 @@ div.kijs-tooltip {
    ****************** */
 
 body > div.kijs-dragdrop-marker {
-    z-index: 90000;
+    z-index: 10201;
     position: absolute;
     background-color: @dragover-ok-borderColor;
 

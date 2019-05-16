@@ -17,6 +17,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._rpcArgs = {};         // Standard RPC-Argumente
         this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.');
 
         // Standard-config-Eigenschaften mergen
@@ -31,7 +32,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
-            rpc: { target: 'rpc' }
+            rpc: { target: 'rpc' },
+            rpcArgs: true
         });
 
         // Listeners auf Kindelemente
@@ -78,6 +80,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
     set data(val) {
         this._data = val;
+
+        if (this._fields === null) {
+            this.searchFields();
+        }
+
         // Evtl. Daten in Formular einfüllen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
@@ -122,12 +129,18 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     /**
      * Lädt das Formular mit Daten vom Server
-     * @param {Object} args
+     * @param {Object|null} args
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @returns {undefined}
      */
-    load(args, searchFields) {
+    load(args=null, searchFields=false) {
         if (this._facadeFnLoad) {
+
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
+            args = Object.assign(args, this._rpcArgs);
+
             this._rpc.do(this._facadeFnLoad, args, function(response) {
 
                 // Formular
@@ -145,7 +158,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     this.data = response.formData;
                 }
 
-                this.raiseEvent('afterLoad');
+                this.raiseEvent('afterLoad', {response: response});
             }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
         }
     }
@@ -210,6 +223,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      */
     validate() {
         let ret = true;
+
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
 
         for (let i=0; i<this._fields.length; i++) {
             if (!this._fields[i].validate()) {

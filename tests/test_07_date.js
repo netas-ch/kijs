@@ -46,19 +46,12 @@ function test_07_date(target) {
     tx.addTest('Mi, 15. Mär 2017 14:19', 'Kurzbezeichnung');
     tx.addResult(kijs.Date.format(d2, 'D, d. M Y H:i'));
 
-    // Franz
-    tx.addTest('mercredi, 15. mars 2017 14:19', 'Franz. Lang');
-    tx.addResult(kijs.Date.format(d2, 'l, d. F Y H:i', 'fr'));
-
-    tx.addTest('Me, 15. MAR 2017 14:19', 'Franz. Kurz');
-    tx.addResult(kijs.Date.format(d2, 'D, d. M Y H:i', 'fr'));
-
     tx.addTest(11, 'Wochennummer', 'Wochen');
     tx.addResult(kijs.Date.getWeekOfYear(d2));
-    
+
     tx.addTest(53, 'Anz. Wochen 2015');
     tx.addResult(kijs.Date.getNumberOfWeeks(2015));
-    
+
     tx.addTest(52, 'Anz. Wochen 2017');
     tx.addResult(kijs.Date.getNumberOfWeeks(2017));
 

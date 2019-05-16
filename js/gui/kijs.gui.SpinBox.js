@@ -121,14 +121,12 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (!kijs.isEmpty(this._targetEl)) {
             this._targetEl.off('input', this._onTargetElInput, this);
             this._targetEl.off('keyDown', this._onElKeyDown, this);
-            this._targetEl.off('destruct', this._onTargetElDestruct, this);
         }
 
         if (val instanceof kijs.gui.Element) {
             this._targetEl = val;
             this._targetEl.on('input', this._onTargetElInput, this);
             this._targetEl.on('keyDown', this._onElKeyDown, this);
-            this._targetEl.on('destruct', this._onTargetElDestruct, this);
 
         } else {
             throw new Error(`Unkown format on config "target"`);
@@ -427,10 +425,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                 }
                 break;
         }
-    }
-
-    _onTargetElDestruct(e) {
-        this.destruct();
     }
 
 

@@ -92,12 +92,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
 
 
     hide() {
-        if (this._dom) {
-            this._dom.clsAdd('kijs-hidden');
-        }
-
-        // listener auf body entfernen
-        kijs.Dom.removeEventListener('mousemove', document.body, this);
+        this.unrender();
     }
 
     /**
@@ -116,61 +111,65 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     }
 
     show(x, y) {
-        const create = !this.dom.node;
+        let updatePos = false;
 
-        if (create) {
+        // rendern
+        if (!this._dom.node) {
             this.render();
         }
 
-        // Position setzen
-        if (create || this._dom.clsHas('kijs-hidden') || this._followPointer) {
-            // X
-            if (kijs.isDefined(x)) {
-                // Offset addieren
-                if (this._offsetX) {
-                    x += this._offsetX;
-                }
-
-                // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
-                if (x+this._dom.node.offsetWidth > window.innerWidth) {
-                    x = Math.abs(window.innerWidth - this._dom.node.offsetWidth);
-                }
-
-                // Position zuweisen
-                this._dom.style.left = x + 'px';
-            }
-
-            // Y
-            if (kijs.isDefined(y)) {
-                // Offset addieren
-                if (this._offsetY) {
-                    y += this._offsetY;
-                }
-
-                // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
-                if (y+this._dom.node.offsetHeight > window.innerHeight) {
-                    y = Math.abs(window.innerHeight - this._dom.node.offsetHeight);
-                }
-
-                // Position zuweisen
-                this._dom.style.top = y + 'px';
-            }
-
-            // Einblenden
-            this._dom.clsRemove('kijs-hidden');
+        // an body anhängen
+        if (this._dom.node.parentNode !== document.body) {
+            document.body.appendChild(this._dom.node);
 
             // listener auf body
             kijs.Dom.addEventListener('mousemove', document.body, this._onMouseMoveOnBody, this);
+
+            // position aktualisieren
+            updatePos = true;
         }
 
-        if (create) {
-            document.body.appendChild(this._dom.node);
+        if (this._followPointer) {
+            updatePos = true;
+        }
+
+        // X
+        if (updatePos && kijs.isDefined(x)) {
+            // Offset addieren
+            if (this._offsetX) {
+                x += this._offsetX;
+            }
+
+            // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
+            if (x+this._dom.node.offsetWidth > window.innerWidth) {
+                x = Math.abs(window.innerWidth - this._dom.node.offsetWidth - 5);
+            }
+
+            // Position zuweisen
+            this._dom.style.left = x + 'px';
+        }
+
+        // Y
+        if (updatePos && kijs.isDefined(y)) {
+            // Offset addieren
+            if (this._offsetY) {
+                y += this._offsetY;
+            }
+
+            // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
+            if (y+this._dom.node.offsetHeight > window.innerHeight) {
+                y = Math.abs(window.innerHeight - this._dom.node.offsetHeight - 5);
+            }
+
+            // Position zuweisen
+            this._dom.style.top = y + 'px';
         }
     }
 
 
     /**
      * Node aus DOM entfernen, falls vorhanden
+     * @param {bool} superCall true, if called from child
      * @returns {undefined}
      */
     unrender(superCall) {
@@ -192,12 +191,6 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
         this._target.on('mouseLeave', this._onMouseLeave, this);
     }
 
-    /*_onMouseMoveTipText(e) {
-        if (!this.disabled) {
-            this.show();
-        }
-    }*/
-
     _onMouseMoveOnBody(e) {
         if (this._target) {
             let mouseX = e.nodeEvent.clientX, mouseY = e.nodeEvent.clientY;
@@ -206,7 +199,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
                     width = this._target.width,
                     height = this._target.height;
 
-            if (top && left && width && height) {
+            if (width && height) {
                 // prüfen, ob der Mauszeiger über dem Element ist.
                 if (mouseX < left || mouseX > left+width || mouseY < top || mouseY > top+height) {
                     this.hide();
@@ -257,6 +250,6 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
         this._target = null;
 
         // Basisklasse entladen
-        super.destruct();
+        super.destruct(true);
     }
 };

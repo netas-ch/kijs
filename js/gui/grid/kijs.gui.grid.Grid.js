@@ -6,6 +6,7 @@
 /**
  * EVENTS
  * ----------
+ * selectionChange
  *
  */
 kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
@@ -193,6 +194,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get editable() { return this._editable; }
     set editable(val) { this._editable = !!val; }
 
+    get facadeFnArgs() { return this._facadeFnArgs; }
+    set facadeFnArgs(val) { this._facadeFnArgs = val; }
+
     get firstRow() {
         if (this._rows.length > 0) {
             return this._rows[0];
@@ -277,7 +281,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     /**
      * Gibt die selektieten Zeilen zurück
-     * Bei selectType='single' wird das Row direkt zurückgegeben sonst ein Array mit den Zeilenn
+     * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
      * @returns {Array|kijs.gui.DataViewRow|null}
      */
     getSelected() {
@@ -296,6 +300,47 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         } else {
             return ret;
+        }
+    }
+
+    /**
+     * Gibt die IDs der selektierten Datensätze zurück.
+     * @returns {Array}
+     */
+    getSelectedIds() {
+        let rows = this.getSelected(),
+                hasPrimarys = this._primaryKeys.length > 0,
+                multiPrimarys = this._primaryKeys.length > 1;
+
+        if (!kijs.isArray(rows)) {
+            rows = [rows];
+        }
+
+        // Falls keine Primarys vorhanden sind, werden die rows zurückgegeben.
+        if (!hasPrimarys) {
+            return rows;
+
+        // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
+        } else if (!multiPrimarys) {
+            let ids = [], primaryKey=this._primaryKeys[0];
+            kijs.Array.each(rows, function(row) {
+                ids.push(row.dataRow[primaryKey]);
+            }, this);
+
+            return ids;
+
+        // Mehrere primary keys: Pro Zeile ein Objekt mit dem Ids zurückgeben
+        } else {
+            let ids = [];
+            kijs.Array.each(rows, function(row) {
+                let idRow = {};
+                kijs.Array.each(this._primaryKeys, function(pk) {
+                    idRow[pk] = row[pk];
+                }, this);
+                ids.push(idRow);
+            }, this);
+
+            return ids;
         }
     }
 
@@ -413,7 +458,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     rowsRemoveAll() {
-        this.rowsRemove(this._rows);
+        while (this._rows.length > 0) {
+            this.rowsRemove(this._rows[0]);
+        }
     }
 
     /**
@@ -647,6 +694,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // Falls alle vorhandenen Daten geladen sind, brechen wir ab.
                 if (this._remoteDataTotal !== null && this._remoteDataLoaded >= this._remoteDataTotal) {
+                    this._isLoading = false;
                     return;
                 }
             }
@@ -657,12 +705,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             // RPC ausführen
             this._rpc.do(this._facadeFnLoad, args, function(response) {
-                this._remoteProcess(response, args);
+                this._remoteProcess(response, args, force);
             }, this, true, 'none');
         }
     }
 
-    _remoteProcess(response, args) {
+    _remoteProcess(response, args, force) {
 
         // columns
         if (kijs.isArray(response.columns)) {
@@ -675,6 +723,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // primary keys
         if (response.primaryKeys) {
             this.primaryKeys = response.primaryKeys;
+        }
+
+        // force?
+        if (force) {
+            this.rowsRemoveAll();
         }
 
         // rows
@@ -700,7 +753,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (kijs.isInteger(response.count)) {
             this._remoteDataTotal = response.count;
         } else {
-            if (response.rows.length < args.limit) {
+            if (response.rows && response.rows.length < args.limit) {
                 this._remoteDataTotal = args.start + response.rows.length;
             }
         }

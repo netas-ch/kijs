@@ -133,6 +133,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     }
     set value(val) {
         this._inputDom.nodeAttributeSet('value', val);
+        this.validate();
     }
 
 

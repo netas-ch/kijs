@@ -22,6 +22,9 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         this._filterFieldXtype = 'kijs.gui.grid.filterField.Date';
         this._headerCellXtype = 'kijs.gui.grid.headerCell.Date';
 
+        this._hasTime = false;
+        this._format = 'd.m.Y';
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -29,7 +32,8 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            // Keine
+            hasTime: true,
+            format: true
         });
 
         // Config anwenden
@@ -37,5 +41,10 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        this.cellConfig = {
+            hasTime: this._hasTime,
+            format: this._format
+        };
     }
 };

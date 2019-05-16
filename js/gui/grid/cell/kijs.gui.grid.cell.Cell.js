@@ -23,6 +23,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         this._originalValue = null;
         this._columnConfig = null;
         this._editorXType = 'kijs.gui.field.Text';
+        this._editorArgs = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -32,7 +33,8 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             columnConfig: true,
-            editorXType: true
+            editorXType: true,
+            editorArgs: true
         });
 
         // Config anwenden
@@ -118,12 +120,31 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      */
     loadFromDataRow() {
         let vF = this._columnConfig.valueField;
-        if (this.row && this.row.dataRow[vF]) {
+        if (this.row && kijs.isDefined(this.row.dataRow[vF])) {
             this.setValue(this.row.dataRow[vF], true, false, false);
         }
     }
 
     // PROTECTED
+
+    /**
+     * Argumente, welche dem Editor beim Instanzieren übergeben werden.
+     * @returns {Object}
+     */
+    _getEditorArgs() {
+        return {
+            labelHide: true,
+            value: this.value,
+            parent: this,
+            on: {
+                blur: this._onFieldBlur,
+                keyDown: function(e) { e.nodeEvent.stopPropagation(); }, // keyDown event stoppen, damit grid keyDown nicht nimmt.
+                click: function(e) { e.nodeEvent.stopPropagation(); }, // click event stoppen, damit row focus nicht nimmt.
+                context: this
+            }
+        };
+    }
+
     /**
      * Setzt das HTML im DOM. Kann in abgeleiteter Klasse überschrieben werden,
      * falls ein anderer Wert angezeigt werden soll als das Value.
@@ -157,17 +178,12 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
                 throw new Error('invalid xtype for cell editor');
             }
 
-            let edInst = new editor({
-                labelHide: true,
-                value: this.value,
-                parent: this,
-                on: {
-                    blur: this._onFieldBlur,
-                    keyDown: function(e) { e.nodeEvent.stopPropagation(); }, // keyDown event stoppen, damit grid keyDown nicht nimmt.
-                    click: function(e) { e.nodeEvent.stopPropagation(); }, // click event stoppen, damit row focus nicht nimmt.
-                    context: this
-                }
-            });
+            let eArgs = this._getEditorArgs();
+            if (kijs.isObject(this._editorArgs)) {
+                eArgs = Object.assign(eArgs, this._editorArgs);
+            }
+
+            let edInst = new editor(eArgs);
 
             // Inhalt Löschen und Textfeld in dom rendern
             kijs.Dom.removeAllChildNodes(this._dom.node);
