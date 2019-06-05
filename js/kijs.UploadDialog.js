@@ -96,7 +96,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     get dropZones() { return this._dropZones; }
-    set dropZones(val) { this.addDropZone(val); }
+    set dropZones(val) { this.bindDropZones(val); }
 
     get directory() { return this._directory; }
     set directory(val) { this._directory = !!val; }
@@ -170,6 +170,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             input.setAttribute('webkitdirectory', 'webkitdirectory');
             input.setAttribute('mozdirectory', 'mozdirectory');
         }
+        if (this._contentTypes.length > 0) {
+            input.setAttribute('accept', this._contentTypes.join(','));
+        }
 
         kijs.Dom.addEventListener('change', input, function(e) {
             if (e.nodeEvent.target && e.nodeEvent.target.files) {
@@ -209,7 +212,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     _onDropZoneDrop(e) {
-        this._uploadFiles(e.nodeEvent.files);
+        this._uploadFiles(e.nodeEvent.dataTransfer.files);
     }
 
     _uploadFiles(fileList) {
@@ -308,8 +311,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // --------------------------------------------------------------
 
     destruct() {
-        this._dropZones = [];
-        this._contentTypes = [];
+        this._dropZones = null;
+//        this._contentTypes = null;
         super.destruct();
     }
 };

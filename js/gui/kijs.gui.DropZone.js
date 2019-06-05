@@ -180,14 +180,6 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
             this.raiseEvent('destruct');
         }
 
-        // Elemente/DOM-Objekte entladen
-        kijs.Array.each(this._innerDomStack, function(dom) {
-           dom.destruct();
-        }, this);
-
-        // Variablen (Objekte/Arrays) leeren
-        this._innerDomStack = null;
-
         // Basisklasse entladen
         super.destruct(true);
     }

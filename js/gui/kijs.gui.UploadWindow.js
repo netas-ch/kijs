@@ -58,8 +58,8 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                     isDefault: true,
                     on: {
                         click: function() {
-                            if (this._uploadRunning !== true) {
-                                this.destruct();
+                            if (this._uploadRunning !== true && this._dom.node) {
+                                this.unrender();
                             }
                         },
                         context: this
@@ -181,7 +181,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         // uploads fertig
         this._uploadRunning = false;
         if (this._autoClose) {
-            this.destruct();
+            kijs.defer(function() {
+                if (this._dom.node) {
+                    this.unrender();
+                }
+            }, 1000, this);
         }
     }
 

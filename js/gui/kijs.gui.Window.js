@@ -273,6 +273,20 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
 
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        // Elemente/DOM-Objekte entladen
+        if (this._modalMaskEl) {
+            this._modalMaskEl.unrender();
+        }
+
+        super.unrender(true);
+    }
     // PROTECTED
     /**
      * Stellt sicher, dass das Fenster innerhalb des Targets angezeigt wird
@@ -444,7 +458,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     destruct(superCall) {
         if (!superCall) {
             // unrender
-            this.unrender(superCall);
+            this.unrender();
 
             // Event auslösen.
             this.raiseEvent('destruct');
