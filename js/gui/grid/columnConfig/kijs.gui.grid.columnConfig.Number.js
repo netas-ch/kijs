@@ -26,6 +26,11 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         this._decimalPoint = '.';
         this._decimalThousandSep = '\'';
 
+        this._numberStyles = [];
+
+        this._unitBefore = '';
+        this._unitAfter = '';
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -35,7 +40,10 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         Object.assign(this._configMap, {
             decimalPrecision: true,
             decimalPoint: true,
-            decimalThousandSep: true
+            decimalThousandSep: true,
+            numberStyles: true,
+            unitBefore: true,
+            unitAfter: true
         });
 
         // Config anwenden
@@ -47,7 +55,10 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         this.cellConfig = {
             decimalPrecision: this._decimalPrecision,
             decimalPoint: this._decimalPoint,
-            decimalThousandSep: this._decimalThousandSep
+            decimalThousandSep: this._decimalThousandSep,
+            numberStyles: this._numberStyles,
+            unitBefore: this._unitBefore,
+            unitAfter: this._unitAfter
         };
     }
 };

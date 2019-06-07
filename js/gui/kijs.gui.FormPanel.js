@@ -28,7 +28,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data'},            //Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            data: { target: 'data'},            // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
@@ -90,6 +90,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             kijs.Array.each(this._fields, function(field) {
                 if (field.name in this._data) {
                     field.value = this._data[field.name];
+                    field.isDirty = false;
                 }
             }, this);
         }
@@ -102,6 +103,29 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     get facadeFnSave() { return this._facadeFnSave; }
     set facadeFnSave(val) { this._facadeFnSave = val; }
+
+    get isDirty() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            if (this._fields[i].isDirty) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    set isDirty(val) {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].isDirty = !!val;
+        }
+    }
 
     get rpc() { return this._rpc;}
     set rpc(val) {
@@ -168,7 +192,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @returns {undefined}
      */
-    save(searchFields) {
+    save(searchFields=false) {
         let args = {
             formData: null
         };
@@ -186,10 +210,16 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Wenn die lokale Validierung ok ist, an den Server senden
         if (ok) {
             this._rpc.do(this.facadeFnSave, args, function(response) {
+
+                // 'dirty' zurücksetzen
+                this.isDirty = false;
+
+                // event
                 this.raiseEvent('afterSave', {response: response});
+
             }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
         } else {
-            kijs.gui.MsgBox.error('Fehler', 'Es wurden noch nicht alle Felder richtig ausgefüllt.');
+            kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.'));
         }
     }
 

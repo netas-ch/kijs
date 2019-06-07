@@ -103,10 +103,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._maxLength = null;
         this._required = false;
         this._submitValue = true;
-
+        this._dirtyValue = null;
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            isDirty: false
+        });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -118,7 +123,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             labelHtmlDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
-            value: { target: 'value' },
+            value: { target: 'value', prio: 1000 },
 
             errorIcon: { target: 'errorIcon' },
             errorIconChar: { target: 'errorIconChar', context: this._errorIconEl },
@@ -131,6 +136,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             helpIconColor: { target: 'helpIconColor', context: this._helpIconEl },
 
             helpText: { target: 'helpText' },
+
+            isDirty: { target: 'isDirty', prio: 1001 },
 
             maxLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
@@ -146,8 +153,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Listeners
         this._spinIconEl.on('click', this._onSpinButtonClick, this);
-
-        //this.on('keyDown', function() { console.log('keyDown Field'); }, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -299,6 +304,16 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
+
+    get isDirty() { return this._dirtyValue !== this.value; }
+    set isDirty(val) {
+        if (val) { // mark as dirty
+            this._dirtyValue = this.value === null ? 0 : null;
+
+        } else { // mark as not dirty
+            this._dirtyValue = this.value;
+        }
+    }
 
     get label() { return this._labelDom.html; }
     set label(val) {

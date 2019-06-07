@@ -145,7 +145,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             val = val.trim();
         }
 
-        return val;
+        return val === null ? '' : val;
     }
     set value(val) {
         if (this._disableBrowserSecurityWarning) {

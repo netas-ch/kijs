@@ -126,7 +126,8 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
     // overwrite
     get value() {
-        return this._inputDom.html;
+        let val = this._inputDom.html;
+        return val === null ? '' : val;
     }
     set value(val) {
         this._inputDom.html = val;

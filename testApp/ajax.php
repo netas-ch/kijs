@@ -228,6 +228,29 @@
                         $col->xtype = 'kijs.gui.grid.columnConfig.Number';
                         $col->caption = 'Zahl';
                         $col->valueField = 'number';
+
+                        // nummern stylen
+                        $numberStyles = [];
+                        $numberStyle = new stdClass();
+                        $numberStyle->color = '#000';
+                        $numberStyle->fontWeight = 'normal';
+                        $numberStyles[] = $numberStyle;
+
+                        $numberStyle = new stdClass();
+                        $numberStyle->from = 10;
+                        $numberStyle->to = 30;
+                        $numberStyle->color = '#FF0000';
+                        $numberStyles[] = $numberStyle;
+
+                        $numberStyle = new stdClass();
+                        $numberStyle->from = 20;
+                        $numberStyle->to = 40;
+                        $numberStyle->fontWeight = 'bold';
+                        $numberStyles[] = $numberStyle;
+
+                        $col->numberStyles = $numberStyles;
+                        $col->unitAfter = '%';
+
                         $response->responseData->columns[] = $col;
                         unset ($col);
 

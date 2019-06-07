@@ -129,7 +129,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         if (this._trimValue && kijs.isString(val)) {
             val = val.trim();
         }
-        return val;
+        return val === null ? '' : val;
     }
     set value(val) {
         this._inputDom.nodeAttributeSet('value', val);

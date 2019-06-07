@@ -108,7 +108,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
     set minValue(val) { this._minValue = val === null ? null : parseFloat(val); }
 
     get value() {
-        let val=super.value, nr = kijs.Number.parse(val, this._decimalPrecision, this._decimalSeparator, this._thousandsSeparator);
+        let val=super.value, nr=null;
+        if (val !== null) {
+            nr = kijs.Number.parse(val, this._decimalPrecision, this._decimalSeparator, this._thousandsSeparator);
+        }
         return nr !== null ? nr : val;
     }
     set value(val) {
