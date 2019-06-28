@@ -261,6 +261,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
         // cells destructen
         kijs.Array.each(this.cells, function(cell) {
+            cell.columnConfig.off('change', this._onColumnConfigChange, this);
             cell.destruct();
         }, this);
 

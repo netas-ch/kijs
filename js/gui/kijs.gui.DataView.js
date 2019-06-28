@@ -326,6 +326,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this, true, this, 'dom', false);
     }
 
+    /**
+     * Setzt css order und display der Elemente zurück
+     * @returns {undefined}
+     */
+    resetDisplayAndOrder() {
+        kijs.Array.each(this._elements, function(el) {
+            el.resetDisplayAndOrder();
+        }, this);
+    }
+
 
     /**
      * Selektiert ein oder mehrere Elemente
@@ -473,6 +483,19 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (!kijs.isEmpty(elements)) {
             this.select(elements, true, preventSelectionChange);
         }
+    }
+
+    /**
+     * Setzt css order und display, damit die Elemente
+     * sortiert und ein- und ausgeblendet werden können.
+     * @param {String} pattern
+     * @param {String} dataRowKey
+     * @returns {undefined}
+     */
+    setDisplayAndOrderByPattern(pattern, dataRowKey) {
+        kijs.Array.each(this._elements, function(el) {
+            el.setDisplayAndOrderByPattern(pattern, dataRowKey);
+        }, this);
     }
 
     /**

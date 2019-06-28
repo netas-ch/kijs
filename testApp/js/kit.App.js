@@ -868,7 +868,7 @@ kit.App = class kit_App {
                                         }
                                     ],
                                     footerStyle: {
-                                        padding: '10px'
+//                                        padding: '10px'
                                     },
                                     footerElements: [
                                         {
@@ -1051,7 +1051,7 @@ kit.App = class kit_App {
                                         }
                                     ],
                                     footerStyle: {
-                                        padding: '10px'
+//                                        padding: '10px'
                                     },
                                     footerElements: [
                                         {
@@ -1106,7 +1106,7 @@ kit.App = class kit_App {
                                         }
                                     ],
                                     footerStyle: {
-                                        padding: '10px'
+//                                        padding: '10px'
                                     },
                                     footerElements: [
                                         {
@@ -1180,7 +1180,7 @@ kit.App = class kit_App {
                                 }
                             ],
                             footerStyle: {
-                                padding: '10px'
+//                                padding: '10px'
                             },
                             footerElements: [
                                 {
@@ -1235,7 +1235,7 @@ kit.App = class kit_App {
                                                 }
                                             ],
                                             footerStyle: {
-                                                padding: '10px'
+//                                                padding: '10px'
                                             },
                                             footerElements:[
                                                 {
@@ -1285,7 +1285,7 @@ kit.App = class kit_App {
                                                 }
                                             ],
                                             footerStyle: {
-                                                padding: '10px'
+//                                                padding: '10px'
                                             },
                                             footerElements:[
                                                 {

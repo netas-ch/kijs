@@ -324,7 +324,7 @@ div.kijs-container.kijs-dropzone {
    ****************** */
 div.kijs-spinbox {
     position: absolute;
-    z-index: 10100;
+    z-index: 50100;
     max-width: 100%;
     max-height: 100%;
     border: 1px solid @field-borderColor;
@@ -338,7 +338,7 @@ div.kijs-spinbox {
 
     &.kijs-pos-top {
         margin-top: 1px;
-        box-shadow: 3px -3px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 -3px 3px 3px rgba(0, 0, 0, 0.1);
     }
 
     &.kijs-pos-right {
@@ -347,7 +347,7 @@ div.kijs-spinbox {
 
     &.kijs-pos-bottom {
         margin-top: -1px;
-        box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 3px 3px 3px rgba(0, 0, 0, 0.1);
     }
 
     &.kijs-pos-left {
@@ -765,6 +765,8 @@ div.kijs-panel {
     > .kijs-footer .kijs-button {
         border:1px solid @footer-button-borderColor;
         background-color: @footer-button-bkgrndColor;
+        margin-top: 5px;
+        margin-bottom: 5px;
     }
 
     > .kijs-footer .kijs-button:hover,
@@ -777,6 +779,10 @@ div.kijs-panel {
         border:1px solid @footer-button-disabled-borderColor;
         background-color: @footer-button-disabled-bkgrndColor;
         cursor: auto;
+    }
+
+    > .kijs-header .kijs-button {
+        margin: 5px;
     }
 }
 
@@ -1242,6 +1248,14 @@ div.kijs-listview {
                 border-color: @item-selected-disabled-borderColor;
                 background-color: transparent;
             }
+        }
+    }
+
+    /* Listview vom combo wird geflext, damit es mit 'order' sortiert werden kann */
+    &.kijs-field-combo {
+        .kijs-container-inner {
+            display: flex;
+            flex-direction: column;
         }
     }
 }
@@ -1971,6 +1985,11 @@ div.kijs-field-display {
         font-size: @field-fontSize;
         line-height: 17px;
         padding: 3px 0 0 0;
+
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
     }
 
     &.kijs-disabled, &.kijs-readonly {
@@ -2158,7 +2177,7 @@ div.kijs-grid {
 div.kijs-menu {
     position: absolute;
     display: block;
-    z-index: 10100;
+    z-index: 30100;
     /*border-radius: 4px;*/
     border: 1px solid @panel-borderColor;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -2253,7 +2272,7 @@ div.kijs-timepicker {
 div.kijs-tooltip {
     position: fixed;
     display: block;
-    z-index: 10101;
+    z-index: 40101;
     border-radius: 4px;
     padding: 4px;
     border: 1px solid @panel-borderColor;
@@ -2283,7 +2302,7 @@ div.kijs-tooltip {
    ****************** */
 
 body > div.kijs-dragdrop-marker {
-    z-index: 10201;
+    z-index: 20201;
     position: absolute;
     background-color: @dragover-ok-borderColor;
 

@@ -102,7 +102,9 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
 
     // Static Properties in this Class
-    //__uniqueId {Number|null}    Zähler der eindeutigen UniqueId
+    // __uniqueId {Number|null}       Zähler der eindeutigen UniqueId
+    // __getTextFn {Function|null}    getText-Methode
+    // __getTextFnScope {Object|null} Kontext der getText-Methode
 
 
     /**
@@ -212,8 +214,8 @@ window.kijs = class kijs {
      * @returns {String}
      */
     static getText(key, variant='', args=null, languageId=null) {
-        if (kijs.isFunction(kijs._getTextFn)) {
-            return kijs._getTextFn.call(kijs._getTextFnScope || this, key, variant, args, languageId);
+        if (kijs.isFunction(kijs.__getTextFn)) {
+            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, languageId);
         }
 
         // keine getText-Fn definiert: Argumente ersetzen
@@ -341,7 +343,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isNumber(value) {
-        return typeof value === 'number';
+        return typeof value === 'number' && !window.isNaN(value);
     }
 
     /**
@@ -388,8 +390,8 @@ window.kijs = class kijs {
      * @returns {undefined}
      */
     static setGetTextFn(fn, scope=null) {
-        kijs._getTextFn = fn;
-        kijs._getTextFnScope = scope;
+        kijs.__getTextFn = fn;
+        kijs.__getTextFnScope = scope;
     }
 
     /**

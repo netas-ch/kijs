@@ -116,10 +116,17 @@
                 try {
                     $rows = array();
 
-                    $rows[] = array('value'=>'CH', 'caption'=>'Schweiz');
-                    $rows[] = array('value'=>'DE', 'caption'=>'Deutschland');
-                    $rows[] = array('value'=>'IT', 'caption'=>'Italien');
-                    $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
+                    $laender = file('land.csv');
+
+                    foreach ($laender as $land) {
+                        $land = explode(';', trim($land));
+                        $rows[] = array('value'=>$land[0], 'caption'=>$land[1]);
+                    }
+
+//                    $rows[] = array('value'=>'CH', 'caption'=>'Schweiz');
+//                    $rows[] = array('value'=>'DE', 'caption'=>'Deutschland');
+//                    $rows[] = array('value'=>'IT', 'caption'=>'Italien');
+//                    $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
 
                     $response->responseData->rows = $rows;
                     //sleep(1);

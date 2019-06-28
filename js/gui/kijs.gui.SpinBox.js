@@ -424,6 +424,20 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                     this.show();
                 }
                 break;
+
+            case kijs.keys.DOWN_ARROW:
+                if (!this.isRendered) {
+                    this.show();
+                }
+                break;
+
+            default:
+                if (kijs.isString(e.nodeEvent.key) && e.nodeEvent.key.length === 1) {
+                    if (!this.isRendered) {
+                        this.show();
+                    }
+                }
+                break;
         }
     }
 
