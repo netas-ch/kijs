@@ -19,8 +19,7 @@ kijs.gui.grid.columnConfig.Text = class kijs_gui_grid_columnConfig_Text extends 
 
         // default xtype
         this._cellXtype = 'kijs.gui.grid.cell.Text';
-        this._filterFieldXtype = 'kijs.gui.grid.filterField.Text';
-        this._headerCellXtype = 'kijs.gui.grid.headerCell.Text';
+        this._filterXtype = 'kijs.gui.grid.filter.Text';
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {

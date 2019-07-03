@@ -32,13 +32,12 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
         // xtypes
         this._cellXtype = null;
-        this._filterFieldXtype = null;
+        this._filterXtype = null;
         this._headerCellXtype = null;
 
         // Configs
         this._cellConfig = null;
-        this._filterFieldConfig = null;
-        this._headerCellConfig = null;
+        this._filterConfig = null;
         this._defaultConfig = {};
 
         // grid
@@ -53,7 +52,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this._configMap = {
             grid: true,
             cellXtype: true,
-            filterFieldXtype: true,
+            filterXtype: true,
             headerCellXtype: true,
 
             caption: {target: 'caption' },
@@ -66,8 +65,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             width: true,
 
             cellConfig: {target: 'cellConfig' },
-            headerCellConfig: {target: 'headerCellConfig' },
-            filterFieldConfig: {target: 'filterFieldConfig' }
+            filterConfig: {target: 'filterConfig' }
 
         };
 
@@ -80,11 +78,8 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         if (this._cellConfig === null) {
             this.cellConfig = this._cellXtype;
         }
-        if (this.filterFieldConfig === null) {
-            this.filterFieldConfig = this._filterFieldXtype;
-        }
-        if (this.headerCellConfig === null) {
-            this.headerCellConfig = this._headerCellXtype;
+        if (this.filterConfig === null) {
+            this.filterConfig = this._filterXtype;
         }
     }
 
@@ -122,46 +117,27 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this.raiseEvent('change', {columnConfig: this, editable: !!val});
     }
 
-    get filterFieldConfig() {
-        let cCnf =  this._filterFieldConfig || {xtype: this._filterFieldXtype};
+    get filterConfig() {
+        let cCnf =  this._filterConfig || {xtype: this._filterXtype};
         cCnf.columnConfig = this;
         return cCnf;
     }
-    set filterFieldConfig(val) {
+    set filterConfig(val) {
         if (kijs.isString(val)) {
-            this._filterFieldConfig = {
+            this._filterConfig = {
                 xtype: val
             };
         } else if (kijs.isObject(val)) {
-            this._filterFieldConfig = val;
-            if (!this._filterFieldConfig.xtype) {
-                this._filterFieldConfig.xtype = this._cellXtype;
+            this._filterConfig = val;
+            if (!this._filterConfig.xtype) {
+                this._filterConfig.xtype = this._cellXtype;
             }
-            this._filterFieldConfig.columnConfig = this;
+            this._filterConfig.columnConfig = this;
         }
     }
 
     get grid() { return this._grid; }
     set grid(val) { this._grid = val; }
-
-    get headerCellConfig() {
-        let cCnf =  this._headerCellConfig || {xtype: this._headerCellXtype};
-        cCnf.columnConfig = this;
-        return cCnf;
-    }
-    set headerCellConfig(val) {
-        if (kijs.isString(val)) {
-            this._headerCellConfig = {
-                xtype: val
-            };
-        } else if (kijs.isObject(val)) {
-            this._headerCellConfig = val;
-            if (!this._headerCellConfig.xtype) {
-                this._headerCellConfig.xtype = this._cellXtype;
-            }
-            this._headerCellConfig.columnConfig = this;
-        }
-    }
 
     get visible() { return this._visible; }
     set visible(val) {

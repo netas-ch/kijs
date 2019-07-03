@@ -81,10 +81,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._footerRightContainerDom = new kijs.gui.Dom({cls: 'kijs-footercontainer-right'});
         this._footerRightDom = new kijs.gui.Dom({nodeTagName: 'table'});
 
-        // header
-        this._header = new kijs.gui.grid.Header({
-            parent: this
-        });
+        // header / filter
+        this._header = new kijs.gui.grid.Header({parent: this});
+        this._filter = new kijs.gui.grid.Filter({parent: this});
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -203,6 +202,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
         return null;
     }
+
+    get filter() { return this._filter; }
 
     get lastRow() {
         if (this._rows.length > 0) {
@@ -349,6 +350,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     reload() {
+        let selected = this.getSelectedIds();
+
+        // !TODO: selection merken und restore
+
         this._remoteLoad(true);
     }
 
@@ -703,10 +708,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 args = Object.assign(args, this._facadeFnArgs);
             }
 
+            // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
+            // wenn sämtliche Datensätze neu geladen werden.
+            let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0);
+
             // RPC ausführen
             this._rpc.do(this._facadeFnLoad, args, function(response) {
                 this._remoteProcess(response, args, force);
-            }, this, true, 'none');
+            }, this, true, showWaitMask ? this : 'none');
         }
     }
 
@@ -1027,8 +1036,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._footerDom.renderTo(this._footerContainerDom.node);
         this._footerRightDom.renderTo(this._footerRightContainerDom.node);
 
-        // header
+        // header / filter
         this._header.renderTo(this._headerDom.node);
+        this._filter.renderTo(this._headerDom.node);
 
         // rows
         this._renderRows();
@@ -1050,6 +1060,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
+
+        // header / filter
+        this._header.unrender();
+        this._filter.unrender();
 
         // bottom
         this._footerLeftDom.unrender();
@@ -1101,6 +1115,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('destruct');
         }
 
+        // header / filter
+        this._header.destruct();
+        this._filter.destruct();
+
         // bottom
         this._footerLeftDom.destruct();
         this._footerDom.destruct();
@@ -1137,6 +1155,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         // -----------------------------------
+
+        // header / filter
+        this._header = null;
+        this._filter = null;
+
         // bottom
         this._footerLeftDom = null;
         this._footerDom = null;

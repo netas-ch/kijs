@@ -19,8 +19,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
 
         // default xtype
         this._cellXtype = 'kijs.gui.grid.cell.Number';
-        this._filterFieldXtype = 'kijs.gui.grid.filterField.Number';
-        this._headerCellXtype = 'kijs.gui.grid.headerCell.Number';
+        this._filterXtype = 'kijs.gui.grid.filter.Number';
 
         this._decimalPrecision = null;
         this._decimalPoint = '.';

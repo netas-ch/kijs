@@ -115,11 +115,15 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         return nr !== null ? nr : val;
     }
     set value(val) {
-        if (!kijs.isNumber(val)) {
+        if (!kijs.isNumber(val) && kijs.isString(val)) {
             val = kijs.Number.parse(val, this._decimalPrecision, this._decimalSeparator, this._thousandsSeparator);
         }
         if (kijs.isNumber(val)) {
             super.value = kijs.Number.format(val, (this._alwaysDisplayDecimals ? this._decimalPrecision : null), this._decimalSeparator, this._thousandsSeparator);
+
+        } else if (val === null) {
+            super.value = '';
+            
         } else {
             super.value = val;
         }

@@ -19,8 +19,7 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
 
         // default xtype
         this._cellXtype = 'kijs.gui.grid.cell.Date';
-        this._filterFieldXtype = 'kijs.gui.grid.filterField.Date';
-        this._headerCellXtype = 'kijs.gui.grid.headerCell.Date';
+        this._filterXtype = 'kijs.gui.grid.filter.Date';
 
         this._hasTime = false;
         this._format = 'd.m.Y';

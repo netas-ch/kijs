@@ -2096,14 +2096,16 @@ div.kijs-grid {
     .kijs-headercontainer {
         background-color: @grid-header-bkgrndColor;
 
-        tr:hover {
-            background-color: transparent;
-        }
 
-        tr td {
+        tr.kijs-grid-header td {
             display: flex;
             flex-direction: row;
             padding-right: 0;
+
+
+            &.kijs-hidden {
+                display: none;
+            }
 
 
             .kijs-caption {
@@ -2147,6 +2149,42 @@ div.kijs-grid {
             &:last-child {
                 margin-right: 20px;
             }
+        }
+
+        tr.kijs-grid-filter {
+            transition: max-height 0.5s;
+            max-height: 19px;
+
+            td {
+                display: flex;
+                flex-direction: row;
+
+                &.kijs-hidden {
+                    display: none;
+                }
+
+                div:first-child {
+                    flex: 1;
+                    display: flex;
+                }
+
+                .kijs-grid-filter-reset {
+                    font-family: FontAwesome;
+                    text-align: center;
+                    width: 10px;
+                    color: @button-icon-fontColor;
+                    cursor: pointer;
+                }
+            }
+        }
+
+        tr.kijs-grid-filter.kijs-hidden {
+            /*display: none;*/
+            max-height: 0px;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            overflow: hidden;
         }
 
     }

@@ -1,14 +1,14 @@
-/* global kijs, this */
+/* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.column.Column
+// kijs.gui.grid.filter.Text
 // --------------------------------------------------------------
 /**
  * EVENTS
  * ----------
  *
  */
-kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox extends kijs.gui.grid.columnConfig.ColumnConfig {
+kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.grid.filter.Filter {
 
 
     // --------------------------------------------------------------
@@ -17,12 +17,6 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
     constructor(config={}) {
         super(false);
 
-        // default xtype
-        this._cellXtype = 'kijs.gui.grid.cell.Checkbox';
-        this._filterXtype = 'kijs.gui.grid.filter.Checkbox';
-
-        this._disabled = false;
-
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -30,7 +24,7 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disabled: true
+
         });
 
         // Config anwenden
@@ -38,9 +32,7 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        this.cellConfig = {
-            disabled: this._disabled
-        };
     }
+
+
 };

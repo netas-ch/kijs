@@ -1,14 +1,14 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.Header
+// kijs.Fi.grid.Filter
 // --------------------------------------------------------------
 /**
  * EVENTS
  * ----------
  *
  */
-kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
+kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
 
     // --------------------------------------------------------------
@@ -20,11 +20,11 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         // dom type
         this._dom.nodeTagName = 'tr';
 
-        this._cells = [];
+        this._filters = [];
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-grid-header'
+            cls: 'kijs-grid-filter'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -42,31 +42,40 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
 
-    get cells() {
-        let cells = [];
-        for (let i=0; i<this._cells.length; i++) {
-            cells.push(this._cells[i].cell);
+    get filters() {
+        let filters = [];
+        for (let i=0; i<this._filters.length; i++) {
+            filters.push(this._filters[i].filter);
         }
-        return cells;
+        return filters;
     }
 
     get grid() { return this.parent; }
-
-
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
 
-    _createCells() {
+    /**
+     * Setzt alle Filter zurück.
+     * @returns {undefined}
+     */
+    reset() {
+        kijs.Array.each(this.filters, function(filter) {
+            filter.reset();
+        }, this);
+    }
+
+    // PROTECTED
+    _createFilters() {
         let newColumnConfigs = [];
 
-        // Prüfen, ob für jede columnConfig eine headerCell existiert.
+        // Prüfen, ob für jede columnConfig eine filter existiert.
         // Wenn nicht, in Array schreiben.
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
             let exist = false;
-            for (let i=0; i<this._cells.length; i++) {
-                if (this._cells[i].columnConfig === columnConfig) {
+            for (let i=0; i<this._filters.length; i++) {
+                if (this._filters[i].columnConfig === columnConfig) {
                     exist = true;
                     break;
                 }
@@ -76,24 +85,28 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             }
         }, this);
 
-        // Falls cell noch nicht vorhanden, neue cell erstellen.
+        // Falls filter noch nicht vorhanden, neue filter erstellen.
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
-            let cell = new kijs.gui.grid.HeaderCell({
-                parent: this,
-                columnConfig: columnConfig
-            });
+            let filterConfig = columnConfig.filterConfig;
+            let constr = kijs.getObjectFromNamespace(filterConfig.xtype);
+
+            if (!constr) {
+                throw new Error('invalid filter xtype for column ' + columnConfig.caption);
+            }
 
             // change listener
             columnConfig.on('change', this._onColumnConfigChange, this);
 
-            cell.loadFromColumnConfig();
+            filterConfig.parent = this;
+            delete filterConfig.xtype;
 
-            this._cells.push({columnConfig: columnConfig, cell: cell});
+            let filter = new constr(filterConfig);
+            this._filters.push({columnConfig: columnConfig, filter: filter});
         }, this);
     }
 
-    _sortCells() {
-        this._cells.sort(function(a, b) {
+    _sortFilters() {
+        this._filters.sort(function(a, b) {
             if (a.columnConfig.position < b.columnConfig.position) {
                 return -1;
             }
@@ -104,15 +117,12 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         });
     }
 
+    // EVENTS
     _onColumnConfigChange(e) {
-        if ('visible' in e || 'width' in e || 'caption' in e || 'resizable' in e || 'sortable' in e) {
-            kijs.Array.each(this.cells, function(cell) {
-                if (e.columnConfig === cell.columnConfig) {
-                    if (e.caption) {
-                        cell.caption = e.caption;
-                    } else {
-                        cell.render();
-                    }
+        if ('visible' in e || 'width' in e) {
+            kijs.Array.each(this.filters, function(filter) {
+                if (e.columnConfig === filter.columnConfig) {
+                    filter.render();
                     return false;
                 }
             }, this);
@@ -127,15 +137,15 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     render(superCall) {
         super.render(true);
 
-        // cells erstellen
-        this._createCells();
+        // filters erstellen
+        this._createFilters();
 
-        // cells sortieren
-        this._sortCells();
+        // filters sortieren
+        this._sortFilters();
 
-        // cells rendern
-        kijs.Array.each(this.cells, function(cell) {
-            cell.renderTo(this._dom.node);
+        // filters rendern
+        kijs.Array.each(this.filters, function(filter) {
+            filter.renderTo(this._dom.node);
         }, this);
 
         // Event afterRender auslösen
@@ -151,9 +161,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
-        // cells unrendern
-        kijs.Array.each(this.cells, function(cell) {
-            cell.unrender();
+        // filters unrendern
+        kijs.Array.each(this.filters, function(filter) {
+            filter.unrender();
         }, this);
 
         super.unrender(true);
@@ -172,13 +182,14 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             this.raiseEvent('destruct');
         }
 
-        // cells destructen
-        kijs.Array.each(this.cells, function(cell) {
-            cell.destruct();
+        // filters destructen
+        kijs.Array.each(this.filters, function(filter) {
+            filter.columnConfig.off('change', this._onColumnConfigChange, this);
+            filter.destruct();
         }, this);
 
         // Variablen (Objekte/Arrays) leeren
-        this._cells = null;
+        this._filters = null;
         this._dataRow = null;
 
         // Basisklasse entladen

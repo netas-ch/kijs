@@ -155,9 +155,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * Lädt das Formular mit Daten vom Server
      * @param {Object|null} args
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
+     * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
      * @returns {undefined}
      */
-    load(args=null, searchFields=false) {
+    load(args=null, searchFields=false, resetValidation=false) {
         if (this._facadeFnLoad) {
 
             if (!kijs.isObject(args)) {
@@ -182,20 +183,42 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     this.data = response.formData;
                 }
 
+                // Validierung zurücksetzen?
+                if (resetValidation) {
+                    this.resetValidation();
+                }
+
                 this.raiseEvent('afterLoad', {response: response});
             }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
         }
     }
 
     /**
-     * Sendet die Formulardaten an den Server
-     * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
+     * Setzt die Validierung zurück.
      * @returns {undefined}
      */
-    save(searchFields=false) {
-        let args = {
-            formData: null
-        };
+    resetValidation() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            if (kijs.isFunction(this._fields[i].markInvalid)) {
+                this._fields[i].markInvalid();
+            }
+        }
+    }
+
+    /**
+     * Sendet die Formulardaten an den Server
+     * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
+     * @param {Object|null} [args=null] Argumente für den RPC
+     * @returns {undefined}
+     */
+    save(searchFields=false, args=null) {
+        if (!kijs.isObject(args)) {
+            args = {};
+        }
 
         if (searchFields || kijs.isEmpty(this._fields)) {
             this.searchFields();

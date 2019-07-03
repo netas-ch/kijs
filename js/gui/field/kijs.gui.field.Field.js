@@ -498,6 +498,24 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zeigt eine individuelle Fehlermeldung an. Wenn keine Meldung
+     * übergeben wird, wird die Fehlermeldung zurückgesetzt.
+     * Diese Methode hat keinen Einfluss auf die 'validate' Methode; ein
+     * Formular kann trotz Fehlermeldung abgesendet werden.
+     * @param msg {string|null} [msg] Anzuzeigende Nachricht
+     * @returns {undefined}
+     */
+    markInvalid(msg=null) {
+        this._errors = [];
+
+        if (kijs.isString(msg) && msg) {
+            this._errors.push(msg);
+        }
+
+        this._displayErrors();
+    }
+
 
     // overwrite
     unrender(superCall) {

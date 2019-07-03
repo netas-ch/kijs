@@ -41,7 +41,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._menuButtonEl = new kijs.gui.MenuButton({
             parent: this,
             elements: [{
-                    caption:'Aufsteigend sortieren',
+                    caption : kijs.getText('Aufsteigend sortieren'),
                     iconChar: '&#xf15d', // fa-sort-alpha-asc
                     on: {
                         click: function() {
@@ -51,7 +51,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         context: this
                     }
                 },{
-                    caption:'Absteigend sortieren',
+                    caption : kijs.getText('Absteigend sortieren'),
                     iconChar: '&#xf15e', // fa-sort-alpha-desc
                     on: {
                         click: function() {
@@ -61,11 +61,21 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         context: this
                     }
                 },{
-                    caption:'Spalten...',
-                    iconChar: '&#xf0db', //  fa-columns
+                    caption : kijs.getText('Spalten...'),
+                    iconChar: '&#xf0db', // fa-columns
                     on: {
                         click: function() {
                             (new kijs.gui.grid.columnWindow({parent: this})).show();
+                            this._menuButtonEl.menuCloseAll();
+                        },
+                        context: this
+                    }
+                },{
+                    caption : kijs.getText('Filter...'),
+                    iconChar: '&#xf0b0', // fa-filter
+                    on: {
+                        click: function() {
+                            this.parent.grid.filter.visible = !this.parent.grid.filter.visible;
                             this._menuButtonEl.menuCloseAll();
                         },
                         context: this
