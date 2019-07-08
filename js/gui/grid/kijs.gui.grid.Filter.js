@@ -24,11 +24,13 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-grid-filter'
+            cls: 'kijs-grid-filter',
+            visible: false
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            // keine
         });
 
         // Config anwenden
@@ -55,6 +57,22 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Gibt die Filter-Objekte als Array  zurück, welche auf dem Server angewendet werden.
+     * @returns {undefined}
+     */
+    getFilters() {
+        let filters = [];
+
+        kijs.Array.each(this.filters, function(filter) {
+            if (filter.isFiltered) {
+                filters.push(filter.filter);
+            }
+        }, this);
+
+        return filters;
+    }
 
     /**
      * Setzt alle Filter zurück.
@@ -101,6 +119,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             delete filterConfig.xtype;
 
             let filter = new constr(filterConfig);
+            filter.on('filter', this._onFilter, this);
             this._filters.push({columnConfig: columnConfig, filter: filter});
         }, this);
     }
@@ -131,6 +150,10 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         if ('position' in e) {
             this.render();
         }
+    }
+
+    _onFilter(e) {
+        this.grid.reload();
     }
 
     // Overwrite

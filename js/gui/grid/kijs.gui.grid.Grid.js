@@ -39,6 +39,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._selectType = 'single';  // multiselect: single|multi|simple|none
         this._focusable = true;       // ob das grid focusiert weden kann
         this._editable = false;       // editierbare zeilen?
+        this._filterable = false;
 
         // Intersection Observer (endless grid loader)
         this._intersectionObserver = null;
@@ -103,6 +104,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             editable: true,
             focusable: true,
+            filterable: true,
             selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
                                                  // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                                  // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -204,6 +206,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     get filter() { return this._filter; }
+
+    get filterable() { return this._filterable; }
+    set filterable(val) { this._filterable = !!val; }
 
     get lastRow() {
         if (this._rows.length > 0) {
@@ -350,7 +355,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     reload() {
-        let selected = this.getSelectedIds();
+//        let selected = this.getSelectedIds();
 
         // !TODO: selection merken und restore
 
@@ -456,10 +461,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 }, this);
             }
         }, this);
-
-        if (this.isRendered) {
-            this.render();
-        }
     }
 
     rowsRemoveAll() {
@@ -686,6 +687,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             let args = {};
             args.sort = this._remoteSort;
             args.getMetaData = this._getRemoteMetaData;
+            args.filter = this._filter.getFilters();
 
             // alle Daten neu laden
             if (force) {
@@ -737,6 +739,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // force?
         if (force) {
             this.rowsRemoveAll();
+            this._remoteDataLoaded = 0;
         }
 
         // rows

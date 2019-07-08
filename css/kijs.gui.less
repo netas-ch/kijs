@@ -839,6 +839,10 @@ div.kijs-menubutton-spinbox {
         text-align: left;
         display: flex;
         flex-direction: row;
+
+        &.kijs-hidden {
+            display: none;
+        }
     }
     button.kijs-button > .kijs-caption {
         flex: 1;
@@ -2152,12 +2156,17 @@ div.kijs-grid {
         }
 
         tr.kijs-grid-filter {
+            background-color: white;
             transition: max-height 0.5s;
-            max-height: 19px;
+            max-height: 25px;
+
+            /*border-bottom-width: 2px;*/
 
             td {
+                height: 25px;
                 display: flex;
                 flex-direction: row;
+                padding: 1px 0 1px 1px;
 
                 &.kijs-hidden {
                     display: none;
@@ -2165,15 +2174,68 @@ div.kijs-grid {
 
                 div:first-child {
                     flex: 1;
-                    display: flex;
                 }
 
-                .kijs-grid-filter-reset {
+                div.kijs-field-text {
+                    margin-left: 4px;
+                    height: 22px;
+
+                    input {
+                        flex: 1;
+                        border:  0; /* 1px solid @grid-border-color;*/
+                        outline: none;
+                        padding: 0;
+                        font-size: 11px;
+                        line-height: 11px;
+                        background-color: transparent;
+
+                        &::placeholder {
+                             transition: opacity 0.5s;
+                             opacity: 0;
+                        }
+                    }
+                }
+
+                div.kijs-icon {
                     font-family: FontAwesome;
                     text-align: center;
-                    width: 10px;
-                    color: @button-icon-fontColor;
-                    cursor: pointer;
+                    font-size: 14px;
+                    padding: 4px 0 4px 18px;
+                }
+
+
+                .kijs-grid-filter-reset {
+                    width: 20px;
+                    margin: 2px 0;
+                    padding: 0px 4px;
+                    border-right: 1px solid @splitter-overlay-bkgrndColor;
+
+                    .kijs-button {
+                        flex: none;
+                        width: 15px;
+                        margin: 0;
+                        padding: 0;
+                        background-color: transparent;
+                        border: 0;
+
+                        .kijs-icon {
+                            transition: color 0.5s;
+                            color: @grid-border-color;
+                            font-size: 12px;
+                            margin: -2px 0 0 0;
+
+                        }
+                    }
+                }
+
+                &:hover {
+                    .kijs-button .kijs-icon {
+                        color: @button-icon-fontColor;
+                    }
+
+                    div.kijs-field-text input::placeholder {
+                        opacity: 0.5;
+                    }
                 }
             }
         }

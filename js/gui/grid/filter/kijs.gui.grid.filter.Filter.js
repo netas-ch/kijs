@@ -22,15 +22,15 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._columnConfig;
         this._filter = {};
 
-        this._searchContainer = new kijs.gui.Dom({html: '&nbsp;'});
+        this._searchContainer = new kijs.gui.Dom();
         this._removeFilterIcon = new kijs.gui.Dom({
-            cls: 'kijs-grid-filter-reset',
-            htmlDisplayType: 'code',
-            html: String.fromCharCode(0xf00d), // fa-times
-            on: {
-                click: function() { this.reset(); },
-                context: this
-            }
+            cls: 'kijs-grid-filter-reset'
+        });
+
+        this._menuButton = new kijs.gui.MenuButton({
+            parent: this,
+            icon2Char: '&#xf0b0', // fa-filter
+            elements: this._getMenuButtons()
         });
 
 
@@ -56,7 +56,13 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     // --------------------------------------------------------------
 
     get columnConfig() { return this._columnConfig; }
-    get filter() { return this._filter; }
+    get filter() {
+        return {
+            type: '',
+            valueField: this._columnConfig.valueField
+        };
+    }
+    get isFiltered() { return false; }
 
 
     // --------------------------------------------------------------
@@ -65,8 +71,42 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
     reset() {
         // Filter zurücksetzen
+        // muss in abgeleiteter Klasse überschrieben werden
+        this._applyToGrid();
     }
 
+    // wendet den Filter auf das grid an.
+    _applyToGrid() {
+        this.raiseEvent('filter', this.filter);
+    }
+
+    _getDefaultMenuButtons() {
+        return [{
+            caption : kijs.getText('Filter löschen'),
+            iconChar: '&#xf00d', // fa-times
+            on: {
+                click: function() {
+                    this.reset();
+                    this._menuButton.menuCloseAll();
+                },
+                context: this
+            }
+        },{
+            caption : kijs.getText('Alle Filter löschen'),
+            iconChar: '&#xf00d', // fa-times
+            on: {
+                click: function() {
+                    this.parent.reset();
+                    this._menuButton.menuCloseAll();
+                },
+                context: this
+            }
+        }];
+    }
+
+    _getMenuButtons() {
+        return this._getDefaultMenuButtons();
+    }
 
     // Overwrite
     render(superCall) {
@@ -74,6 +114,8 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
         this._searchContainer.renderTo(this._dom.node);
         this._removeFilterIcon.renderTo(this._dom.node);
+
+        this._menuButton.renderTo(this._removeFilterIcon.node);
 
         // breite
         this._dom.width = this._columnConfig.width;

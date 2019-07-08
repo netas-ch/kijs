@@ -41,6 +41,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._menuButtonEl = new kijs.gui.MenuButton({
             parent: this,
             elements: [{
+                    name    : 'btn-sort-asc',
                     caption : kijs.getText('Aufsteigend sortieren'),
                     iconChar: '&#xf15d', // fa-sort-alpha-asc
                     on: {
@@ -51,6 +52,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         context: this
                     }
                 },{
+                    name    : 'btn-sort-desc',
                     caption : kijs.getText('Absteigend sortieren'),
                     iconChar: '&#xf15e', // fa-sort-alpha-desc
                     on: {
@@ -61,6 +63,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         context: this
                     }
                 },{
+                    name    : 'btn-columns',
                     caption : kijs.getText('Spalten...'),
                     iconChar: '&#xf0db', // fa-columns
                     on: {
@@ -71,6 +74,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         context: this
                     }
                 },{
+                    name    : 'btn-filters',
                     caption : kijs.getText('Filter...'),
                     iconChar: '&#xf0b0', // fa-filter
                     on: {
@@ -180,6 +184,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     loadFromColumnConfig() {
         let c = this._columnConfig.caption;
         this.setCaption(c, false);
+
+        this._menuButtonEl.spinbox.down('btn-filters').visible = !!this.parent.grid.filterable;
     }
 
     // PROTECTED

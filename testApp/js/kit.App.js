@@ -339,7 +339,8 @@ kit.App = class kit_App {
 //                                        })(),
 
                                         facadeFnLoad: 'grid.load',
-                                        rpc: this._rpc
+                                        rpc: this._rpc,
+                                        filterable: true
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){
 //                                            let rows = [];

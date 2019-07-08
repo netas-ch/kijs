@@ -8,7 +8,7 @@
  * ----------
  *
  */
-kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.grid.filter.Filter {
+kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.grid.filter.Number {
 
 
     // --------------------------------------------------------------
@@ -34,5 +34,14 @@ kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.gri
         }
     }
 
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get filter() {
+        return Object.assign(super.filter, {
+            type: 'date'
+        });
+    }
 
 };

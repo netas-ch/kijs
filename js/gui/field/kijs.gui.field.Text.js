@@ -63,7 +63,8 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            placeholder: { target: 'placeholder' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -108,6 +109,9 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
 
     get inputDom() { return this._inputDom; }
+
+    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
 
     // overwrite
     get readOnly() { return super.readOnly; }
