@@ -21,6 +21,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         this._dom.nodeTagName = 'tr';
 
         this._filters = [];
+        this._filterReloadDefer = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -153,7 +154,16 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     }
 
     _onFilter(e) {
-        this.grid.reload();
+        // Filter verzögert zurücksetzen, da der "filter"
+        // event gleich mehrmals von mehreren Filter kommen kann.
+        if (this._filterReloadDefer) {
+            window.clearTimeout(this._filterReloadDefer);
+            this._filterReloadDefer = null;
+        }
+
+        this._filterReloadDefer = kijs.defer(function() {
+            this.grid.reload();
+        }, 20, this);
     }
 
     // Overwrite

@@ -69,7 +69,7 @@ kijs.Number = class kijs_String {
         if (thousandsSep !== '') {
             number = kijs.String.replaceAll(number, thousandsSep, '');
         }
-        if (decPoint !== '.') {
+        if (decPoint !== '.' && decPoint !== '') {
             number = kijs.String.replaceAll(number, decPoint, '.');
         }
         number = number.replace(/[^\-0-9\.]/, '');

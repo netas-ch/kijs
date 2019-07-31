@@ -249,11 +249,11 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
     }
     set value(val) {
-        if (val === this._valueUnchecked) {
+        if (val === this._valueUnchecked || val === false || val === 0 || val === '0') {
             this._checked = 0;
-        } else if (val === this._valueChecked) {
+        } else if (val === this._valueChecked || val === true || val === 1 || val === '1') {
             this._checked = 1;
-        } else if (val === this._valueDeterminated) {
+        } else if (val === this._valueDeterminated ||val === 2) {
             this._checked = 2;
         } else {
             throw new Error(`config "value" is not valid.`);

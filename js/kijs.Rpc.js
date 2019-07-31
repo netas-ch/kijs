@@ -12,7 +12,8 @@ kijs.Rpc = class kijs_Rpc {
     constructor(config={}) {
         this._url = '.';                    // URL Beispiel: '.' oder 'index.php'
         this._parameters = {};              // Objekt mit optionalem GET-Parametern
-        this._timeout = 10;
+        this._defer = 10;
+        this._timeout = 0;
 
         this._deferId = null;
         this._queue = null;
@@ -22,9 +23,10 @@ kijs.Rpc = class kijs_Rpc {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            url: true,
-            parameters: true,
-            timeout: true
+            defer: true,        // millisekunden, in denen auf weitere RPC gewartet wird
+            timeout: true,      // millisekunden, nach denenen der RPC abgebrochen wird
+            url: true,          // server URL
+            parameters: true    // optionale GET-Parameter
         };
 
         // Config anwenden
@@ -50,13 +52,14 @@ kijs.Rpc = class kijs_Rpc {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get timeout() { return this._timeout; }
-    set timeout(val) { this._timeout = val; }
+    get defer() { return this._defer; }
+    set defer(val) { this._defer = val; }
 
     get url() { return this._url; }
     set url(val) { this._url = val; }
 
-
+    get timeout() { return this._timeout; }
+    set timeout(val) { this._timeout = parseInt(val); }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -120,7 +123,7 @@ kijs.Rpc = class kijs_Rpc {
             state: kijs.Rpc.states.QUEUE
         });
 
-        this._deferId = kijs.defer(this._transmit, this.timeout, this);
+        this._deferId = kijs.defer(this._transmit, this.defer, this);
     }
 
 
@@ -238,7 +241,8 @@ kijs.Rpc = class kijs_Rpc {
                 url         : this.url,
                 parameters  : this._parameters,
                 fn          : this._receive,
-                context     : this
+                context     : this,
+                timeout     : this.timeout
             });
         }
 

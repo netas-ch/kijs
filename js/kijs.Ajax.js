@@ -18,6 +18,7 @@ kijs.Ajax = class kijs_Ajax {
     *     {Object} [parameters]        Objekt mit gewünschten Parametern
     *     {object|string} [postData]   Daten die gesendet werden (nur bei POST)
     *     {String} [method='GET']      'GET' oder 'POST'
+    *     {Number} [timeout=0]         Timeout des Requests in Millisekunden
     *     {String} [format='json']     'json', 'xml' oder 'text'
     *     {function} fn                Callback Funktion
     *     {function} progressFn        Progress Funktion
@@ -26,7 +27,7 @@ kijs.Ajax = class kijs_Ajax {
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
     *     {boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
-    *
+    * @returns {XMLHttpRequest}
     */
     static request(config = {}) {
         let postData;
@@ -34,6 +35,8 @@ kijs.Ajax = class kijs_Ajax {
         config.method = config.method || 'GET';
         config.format = config.format || 'json';
         config.parameters = config.parameters || {};
+        config.abortHappened = false;
+        config.timeoutHappened = false;
 
         if (config.disableCaching) {
             config.parameters.noCache = (new Date()).getTime();
@@ -75,6 +78,11 @@ kijs.Ajax = class kijs_Ajax {
 
         const xmlhttp = new XMLHttpRequest();
 
+        // Timeout übergeben
+        if ('timeout' in config && kijs.isInteger(config.timeout)) {
+            xmlhttp.timeout = config.timeout;
+        }
+
         // fortschritt überwachen
         if (kijs.isFunction(config.progressFn)) {
             xmlhttp.onprogress = function(oEvent) {
@@ -82,20 +90,38 @@ kijs.Ajax = class kijs_Ajax {
             };
         }
 
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState === 4) {
-                let val = null;
-                if (xmlhttp.status === 200) {
-                    switch (config.format) {
-                        case 'text': val = xmlhttp.responseText; break;
-                        case 'json': val = JSON.parse(xmlhttp.responseText); break;
-                        case 'xml': val = kijs.Ajax.parseXml(xmlhttp.responseXML); break;
-                    }
-                    config.fn.call(config.context || this, val, config, null);
-                } else {
-                    const error = 'Verbindung konnte nicht aufgebaut werden!';
-                    config.fn.call(config.context || this, val, config, error);
+        xmlhttp.onabort = function() {
+            config.abortHappened = true;
+        };
+        xmlhttp.ontimeout = function() {
+            config.timeoutHappened = true;
+        };
+
+        xmlhttp.onloadend = function() {
+            let val = null;
+            if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
+                switch (config.format) {
+                    case 'text': val = xmlhttp.responseText; break;
+                    case 'json': val = JSON.parse(xmlhttp.responseText); break;
+                    case 'xml': val = kijs.Ajax.parseXml(xmlhttp.responseXML); break;
                 }
+                config.fn.call(config.context || this, val, config, null);
+            } else {
+                let error = '';
+                if (xmlhttp.status > 0) {
+                    error = kijs.getText('Der Server hat mit einem Fehler geantwortet:') + ' ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
+
+                } else if (config.abortHappened) {
+                    error = kijs.getText('Die Verbindung wurde abgebrochen.');
+
+                } else if (config.timeoutHappened) {
+                    error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden.') + ' ' +
+                            kijs.getText('Die Verbindung wurde abgebrochen.');
+
+                } else {
+                    error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden.');
+                }
+                config.fn.call(config.context || this, val, config, error);
             }
         };
 
@@ -108,6 +134,9 @@ kijs.Ajax = class kijs_Ajax {
             }
         }
         xmlhttp.send(postData);
+
+        // XMLHttpRequest zurückgeben, damit mit abort() abgebrochen werden könnte.
+        return xmlhttp;
     }
 
     /**

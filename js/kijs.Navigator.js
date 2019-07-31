@@ -17,6 +17,7 @@ kijs.Navigator = class kijs_Navigator {
     static get browserVersion() { return kijs.Navigator.getBrowserInfo().browserVersion; }
 
     static get isChrome() { return kijs.Navigator.getBrowserInfo().isChrome; }
+    static get isChromium() { return kijs.Navigator.getBrowserInfo().isChromium; }
     static get isFirefox() { return kijs.Navigator.getBrowserInfo().isFirefox; }
     static get isEdge() { return kijs.Navigator.getBrowserInfo().isEdge; }
     static get isIE() { return kijs.Navigator.getBrowserInfo().isIE; }
@@ -52,6 +53,7 @@ kijs.Navigator = class kijs_Navigator {
             osVersion: '',
             osVendor: '',
             isChrome: false,
+            isChromium: false,
             isFirefox: false,
             isEdge: false,
             isIE: false,
@@ -69,6 +71,14 @@ kijs.Navigator = class kijs_Navigator {
             bi.browserVendor = 'Microsoft';
             bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Edge');
             bi.isEdge = true;
+
+        // Edge (Chromium)
+        } else if (kijs.Navigator._browserVersion(ua, 'Edg')) {
+            bi.browser = 'Edge';
+            bi.browserVendor = 'Microsoft';
+            bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Edg');
+            bi.isEdge = true;
+            bi.isChromium = true;
 
         // Firefox
         } else if (kijs.Navigator._browserVersion(ua, 'Firefox')) {
@@ -89,14 +99,21 @@ kijs.Navigator = class kijs_Navigator {
             bi.browser = 'Vivaldi';
             bi.browserVendor = 'Vivaldi';
             bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Vivaldi');
-            bi.isChrome = true;
+            bi.isChromium = true;
 
         // Opera (Chromium)
         } else if (kijs.Navigator._browserVersion(ua, 'Opera')) {
             bi.browser = 'Opera';
             bi.browserVendor = 'Opera';
             bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Opera');
-            bi.isChrome = true;
+            bi.isChromium = true;
+
+        // Samsung Browser (Chromium)
+        } else if (kijs.Navigator._browserVersion(ua, 'SamsungBrowser')) {
+            bi.browser = 'Internet Browser';
+            bi.browserVendor = 'Samsung';
+            bi.browserVersion = kijs.Navigator._browserVersion(ua, 'SamsungBrowser');
+            bi.isChromium = true;
 
         // Chrome
         } else if (kijs.Navigator._browserVersion(ua, 'Chrome')) {
@@ -104,6 +121,7 @@ kijs.Navigator = class kijs_Navigator {
             bi.browserVendor = 'Google';
             bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Chrome');
             bi.isChrome = true;
+            bi.isChromium = true;
 
         // Safari
         } else if (kijs.Navigator._browserVersion(ua, 'Safari')) {
@@ -120,6 +138,7 @@ kijs.Navigator = class kijs_Navigator {
         let win = ua.match(/Windows NT ([0-9\.]+)/i);
         if (win && win[1]){
             let NtVersion = parseFloat(win[1]);
+            bi.isWindows = true;
             bi.os = 'Windows';
             bi.osVendor = 'Microsoft';
             switch (NtVersion) {
@@ -138,7 +157,7 @@ kijs.Navigator = class kijs_Navigator {
         // iPad / Iphone
         if (!bi.os && ua.match(/(iPad|iPhone|iPod)/i)) {
             bi.isIOS = true;
-            bi.os = 'iOS';
+            bi.os = ua.match(/iPad/i) ? 'iPadOS' : 'iOS';
             bi.osVendor = 'Apple';
             let os = ua.match(/OS ([0-9_]+)/i);
             if (os) {
