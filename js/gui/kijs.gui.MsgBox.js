@@ -140,15 +140,65 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             ]
         });
     }
+    
+    /**
+     * Zeigt ein Eingabefenster mit OK/Abbrechen-Schaltflächen und einem Achtung-Symbol
+     * @param {String} caption
+     * @param {String} msg
+     * @param {String} label
+     * @param {String} value
+     * @param {Function} fn
+     * @param {Object} context
+     * @returns {undefined}
+     */
+    static prompt(caption, msg, label, value, fn, context) {
+        if (kijs.isArray(msg)) {
+            msg = this._convertArrayToHtml(msg);
+        }
 
+        this.show({
+            caption: caption,
+            msg: msg,
+            
+            fieldXtype: 'kijs.gui.field.Text',
+            label: label,
+            value: value, 
+            
+            fn: fn,
+            context: context,
+            icon: {
+                iconChar: '&#xf059',
+                style: {
+                    color: '#4398dd'
+                }
+            },
+            buttons: [
+                {
+                    name: 'ok',
+                    caption: kijs.getText('OK'),
+                    isDefault: true
+                },{
+                    name: 'cancel',
+                    caption: kijs.getText('Abbrechen')
+                }
+            ]
+        });
+    }
+    
     /**
      * Zeigt ein individuelles Meldungsfenster
      * Beispiel config:
      * config = {
-     *     caption = 'Testmeldung',
-     *     msg = 'Hallo Welt!'
-     *     fn = function(e, el) {
-     *         alert('Es wurde geklickt auf: ' . e.btn);
+     *     caption: 'Testmeldung',
+     *     msg: 'Hallo Welt!',
+     *     
+     *     // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
+     *     fieldXtype: 'kijs.gui.field.Text',
+     *     label: 'Wert',
+     *     value: 'Mein Testwert', 
+     *     
+     *     fn: function(e, el) {
+     *         alert('Es wurde geklickt auf: ' + e.btn);
      *     },
      *     context: this,
      *     iconChar: '',
@@ -157,7 +207,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *         style: {
      *             color: '#ff9900'
      *         }
-     *     }
+     *     },
      *     buttons: [
      *         {
      *             name: 'ok',
@@ -173,6 +223,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      */
     static show(config) {
         let btn = 'none';
+        let value = null;
         const elements = [];
         const footerElements = [];
 
@@ -183,14 +234,53 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             }
             elements.push(config.icon);
         }
+        
+        if (config.fieldXtype) {
+            // Beschrieb und Textfeld
+            elements.push({
+                xtype: 'kijs.gui.Container',
+                htmlDisplayType: 'html',
+                cls: 'kijs-msgbox-inner',
+                elements:[
+                    {
+                        xtype: 'kijs.gui.Element',
+                        html: config.msg,
+                        htmlDisplayType: 'html',
+                        style: {
+                            marginBottom: '4px'
+                        }
+                    },{
+                        xtype: config.fieldXtype,
+                        name: 'field',
+                        label: config.label,
+                        value: config.value,
+                        labelStyle: {
+                            marginRight: '4px'
+                        },
+                        on: {
+                            enterPress: function(e) {
+                                if (config.fieldXtype) {
+                                    btn = 'ok';
+                                    value = e.element.upX('kijs.gui.Window').down('field').value;
+                                    e.element.upX('kijs.gui.Window').destruct();
+                                }
+                            },
+                            context: this
+                        }
+                    }
+                ]
+            });
+            
+        } else {
+            // Text
+            elements.push({
+                xtype: 'kijs.gui.Element',
+                html: config.msg,
+                htmlDisplayType: 'html',
+                cls: 'kijs-msgbox-inner'
+            });
 
-        // Text
-        elements.push({
-            xtype: 'kijs.gui.Element',
-            html: config.msg,
-            htmlDisplayType: 'html',
-            cls: 'kijs-msgbox-inner'
-        });
+        }
 
         // Buttons
         kijs.Array.each(config.buttons, function(button) {
@@ -202,6 +292,9 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 if (!button.on.click) {
                     button.on.click = function() {
                         btn = button.name;
+                        if (config.fieldXtype) {
+                            value = this.upX('kijs.gui.Window').down('field').value;
+                        }
                         this.upX('kijs.gui.Window').destruct();
                     };
                 }
@@ -227,6 +320,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         if (config.fn) {
             win.on('destruct', function(e){
                 e.btn = btn;
+                e.value = value;
                 config.fn.call(config.context, e);
             });
         }
@@ -234,7 +328,6 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         // Fenster anzeigen
         win.show();
     }
-
 
     /**
      * Zeigt ein Meldungsfenster mit OK/Abbrechen-Schaltflächen und einem Achtung-Symbol
