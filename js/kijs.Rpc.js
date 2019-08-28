@@ -161,7 +161,7 @@ kijs.Rpc = class kijs_Rpc {
    _receive(response, request, errorMsg) {
         // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<request.postData.length; i++) {
-            let subResponse = response[i];
+            let subResponse = kijs.isArray(response) ? response[i] : null;
 
             // Passenden subRequest aus Queue holen
             let subRequest = this._getByTid(request.postData[i].tid);

@@ -340,7 +340,8 @@ kit.App = class kit_App {
 
                                         facadeFnLoad: 'grid.load',
                                         rpc: this._rpc,
-                                        filterable: true
+                                        filterable: true,
+                                        editable: true
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){
 //                                            let rows = [];
@@ -1367,6 +1368,22 @@ kit.App = class kit_App {
                                     on: {click: function() {
                                         let addressPanel = this.parent.parent.down('addressPanel');
                                         addressPanel.displayWaitMask = !addressPanel.displayWaitMask;
+                                    }}
+                                },{
+                                    xtype: 'kijs.gui.Button',
+                                    caption: 'Lochmaske',
+                                    iconChar: '&#xf192',
+                                    on: {click: function() {
+                                        let addressPanel = this.parent.parent.down('addressPanel');
+                                        let maske = new kijs.gui.ApertureMask({
+                                            target: addressPanel
+                                        });
+                                        maske.show();
+
+                                        // maske nach 3s wieder entfernen
+                                        kijs.defer(function() {
+                                            maske.hide();
+                                        }, 3000, this);
                                     }}
                                 },{
                                     xtype: 'kijs.gui.Button',
