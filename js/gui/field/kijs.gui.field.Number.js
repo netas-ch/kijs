@@ -123,7 +123,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
 
         } else if (val === null) {
             super.value = '';
-            
+
         } else {
             super.value = val;
         }
@@ -143,7 +143,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
             if (this._thousandsSeparator !== '') {
                 value = kijs.String.replaceAll(value, this._thousandsSeparator, '');
             }
-            if (this._decimalSeparator !== '.') {
+            if (this._decimalSeparator !== '.' && this._decimalSeparator !== '') {
                  value = kijs.String.replaceAll(value, this._decimalSeparator, '.');
             }
             value = value.replace(/[^\-0-9\.]/, '');

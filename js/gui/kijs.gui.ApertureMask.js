@@ -37,6 +37,9 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        // window onResize überwachen
+        kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
     }
 
 
@@ -151,7 +154,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
                 this._bottomDom.style.opacity = 1;
                 this._leftDom.style.opacity = 1;
             }, 10, this);
-            
+
         } else {
             this._topDom.style.opacity = 1;
             this._rightDom.style.opacity = 1;
@@ -188,7 +191,15 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
 
     // PROTECTED
     _onAfterResize() {
-        this.updatePosition();
+        if (this.isRendered) {
+            this.updatePosition();
+        }
+    }
+
+    _onWindowResize() {
+        if (this.isRendered) {
+            this.updatePosition();
+        }
     }
 
 
@@ -219,6 +230,9 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
         this._targetEl = null;
         this._targetDom = null;
+
+        // Node-Event Listener auf Window entfernen
+        kijs.Dom.removeEventListener('resize', window, this);
 
         // Elemente/DOM-Objekte entladen
         if (this._topDom) {

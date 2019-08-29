@@ -413,9 +413,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     close() {
         if (this._parentEl && this._parentEl instanceof kijs.gui.Container && this._parentEl.hasChild(this)) {
             this._parentEl.remove(this);
-        } else {
-            this.destruct();
         }
+        this.unrender();
     }
 
     /**

@@ -157,7 +157,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasDate) {
             this._spinBoxEl.add(this._datePicker);
-            this._spinBoxEl.width = 223;
+            this._spinBoxEl.width = 187;
         } else {
             this._spinBoxEl.remove(this._datePicker);
         }
@@ -171,7 +171,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasDate && this._hasTime) {
             this._spinBoxEl.add(this._spBxSeparator);
-            this._spinBoxEl.width = 383;
+            this._spinBoxEl.width = 187+157+3;
         } else {
             this._spinBoxEl.remove(this._spBxSeparator);
         }
@@ -451,7 +451,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // LISTENERS
     _onInput(e) {
         this.validate();
-        this.raiseEvent('input', {value: this.value});
     }
 
     _onChange(e) {
