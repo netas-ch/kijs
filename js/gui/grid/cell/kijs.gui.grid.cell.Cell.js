@@ -120,7 +120,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      */
     loadFromDataRow() {
         let vF = this._columnConfig.valueField;
-        if (this.row && kijs.isDefined(this.row.dataRow[vF])) {
+        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[vF])) {
             this.setValue(this.row.dataRow[vF], true, false, false);
         }
     }

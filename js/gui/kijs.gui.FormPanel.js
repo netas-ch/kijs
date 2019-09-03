@@ -151,6 +151,23 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Löscht allen inhalt aus dem Formular
+     * @returns {undefined}
+     */
+    clear() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].value = null;
+        }
+
+        this.resetValidation();
+    }
+
     /**
      * Lädt das Formular mit Daten vom Server
      * @param {Object|null} args
@@ -240,37 +257,40 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * Sendet die Formulardaten an den Server
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Object|null} [args=null] Argumente für den RPC
-     * @returns {undefined}
+     * @returns {Promise}
      */
     save(searchFields=false, args=null) {
-        if (!kijs.isObject(args)) {
-            args = {};
-        }
+        return new Promise((resolve, reject) => {
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
 
-        if (searchFields || kijs.isEmpty(this._fields)) {
-            this.searchFields();
-        }
+            if (searchFields || kijs.isEmpty(this._fields)) {
+                this.searchFields();
+            }
 
-        // Zuerst lokal validieren
-        let ok = this.validate();
+            // Zuerst lokal validieren
+            let ok = this.validate();
 
-        // formData ermitteln
-        args.formData = this.data;
+            // formData ermitteln
+            args.formData = this.data;
 
-        // Wenn die lokale Validierung ok ist, an den Server senden
-        if (ok) {
-            this._rpc.do(this.facadeFnSave, args, function(response) {
+            // Wenn die lokale Validierung ok ist, an den Server senden
+            if (ok) {
+                this._rpc.do(this.facadeFnSave, args, function(response) {
 
-                // 'dirty' zurücksetzen
-                this.isDirty = false;
+                    // 'dirty' zurücksetzen
+                    this.isDirty = false;
 
-                // event
-                this.raiseEvent('afterSave', {response: response});
+                    // event
+                    this.raiseEvent('afterSave', {response: response});
+                    resolve(response);
 
-            }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
-        } else {
-            kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.'));
-        }
+                }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
+            } else {
+                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.'));
+            }
+        });
     }
 
     /**

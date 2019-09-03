@@ -6,6 +6,8 @@
 /**
  * EVENTS
  * ----------
+ * afterLoad
+ * beforeSelectionChange
  * selectionChange
  *
  */
@@ -355,11 +357,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     reload() {
-//        let selected = this.getSelectedIds();
+        let selected = this.getSelectedIds();
+        this._remoteLoad(true).then(() => {
 
-        // !TODO: selection merken und restore
+            // selektion wiederherstellen
+            if (selected) {
+                this.selectByIds(selected, false, true);
+            }
 
-        this._remoteLoad(true);
+        });
     }
 
     /**
@@ -472,17 +478,28 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Selektiert eine oder mehrere Zeilen
      * @param {kijs.gui.grid.Row|Array} rows oder Array mit Zeilen, die selektiert werden sollen
-     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
-     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @param {Boolean} [keepExisting=false]  Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    select(rows, keepExisting, preventSelectionChange) {
+    select(rows, keepExisting=false, preventEvent=false) {
         if (kijs.isEmpty(rows)) {
             rows = [];
         }
 
         if (!kijs.isArray(rows)) {
             rows = [rows];
+        }
+
+        // beforeSelectionChange-Event
+        if (!preventEvent) {
+            let beforeSelectionChangeArgs = {rows: rows, keepExisting: keepExisting, cancel: false};
+            this.raiseEvent('beforeSelectionChange', beforeSelectionChangeArgs);
+
+            // selectionChange verhindern?
+            if (beforeSelectionChangeArgs.cancel === true) {
+                return;
+            }
         }
 
         if (!keepExisting){
@@ -494,7 +511,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
 
         // SelectionChange auslösen
-        if (!preventSelectionChange) {
+        if (!preventEvent) {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: false } );
         }
     }
@@ -579,6 +596,63 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Element mit Fokus neu ermitteln
         this._currentRow = null;
         this.current = null;
+    }
+
+    /**
+     * Selektiert Datensätze Anhand der ID
+     * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
+     * @param {Boolean} [keepExisting=false]  Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByIds(ids, keepExisting=false, preventEvent=false) {
+        let hasPrimarys = this._primaryKeys.length > 0,
+            multiPrimarys = this._primaryKeys.length > 1,
+            rows = [];
+
+        if (!kijs.isArray(ids)) {
+            ids = [ids];
+        }
+
+        // Keine Primarys, keine ID's
+        if (!hasPrimarys || !ids) {
+            return;
+        }
+
+        // Array mit ID's übergeben: umwandeln in Array mit Objekten
+        if (!multiPrimarys && !kijs.isObject(ids[0])) {
+            let pk = this._primaryKeys[0];
+            for (let i=0; i<ids.length; i++) {
+                let val = ids[i];
+                ids[i] = {};
+                ids[i][pk] = val;
+            }
+        }
+
+        // Zeilen holen
+        for (let i=0; i<ids.length; i++) {
+            if (kijs.isObject(ids[i])) {
+                let match=false;
+
+                kijs.Array.each(this._rows, function(row) {
+                    match = true;
+
+                    for (let idKey in ids[i]) {
+                        if (row.dataRow[idKey] !== ids[i][idKey]) {
+                            match = false;
+                        }
+                    }
+
+                    if (match) {
+                        rows.push(row);
+                    }
+
+                }, this);
+
+            }
+        }
+
+        this.select(rows, keepExisting, preventEvent);
     }
 
     /**
@@ -681,44 +755,50 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _remoteLoad(force=false) {
-        if (this._facadeFnLoad && this._rpc && !this._isLoading && (this._remoteDataLoaded < this._remoteDataLimit || force)) {
-            this._isLoading = true;
+        return new Promise((resolve) => {
+            if (this._facadeFnLoad && this._rpc && !this._isLoading && (this._remoteDataLoaded < this._remoteDataLimit || force)) {
+                this._isLoading = true;
 
-            let args = {};
-            args.sort = this._remoteSort;
-            args.getMetaData = this._getRemoteMetaData;
-            args.filter = this._filter.getFilters();
+                let args = {};
+                args.sort = this._remoteSort;
+                args.getMetaData = this._getRemoteMetaData;
+                args.filter = this._filter.getFilters();
 
-            // alle Daten neu laden
-            if (force) {
-                args.start = 0;
-                args.limit = this._remoteDataLimit;
+                // alle Daten neu laden
+                if (force) {
+                    args.start = 0;
+                    args.limit = this._remoteDataLimit;
 
-            // Nächste Daten laden
-            } else {
-                args.start = this._remoteDataLoaded;
-                args.limit = this._remoteDataLimit - this._remoteDataLoaded;
+                // Nächste Daten laden
+                } else {
+                    args.start = this._remoteDataLoaded;
+                    args.limit = this._remoteDataLimit - this._remoteDataLoaded;
 
-                // Falls alle vorhandenen Daten geladen sind, brechen wir ab.
-                if (this._remoteDataTotal !== null && this._remoteDataLoaded >= this._remoteDataTotal) {
-                    this._isLoading = false;
-                    return;
+                    // Falls alle vorhandenen Daten geladen sind, brechen wir ab.
+                    if (this._remoteDataTotal !== null && this._remoteDataLoaded >= this._remoteDataTotal) {
+                        this._isLoading = false;
+                        return;
+                    }
                 }
+
+                if (kijs.isObject(this._facadeFnArgs)) {
+                    args = Object.assign(args, this._facadeFnArgs);
+                }
+
+                // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
+                // wenn sämtliche Datensätze neu geladen werden.
+                let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0);
+
+                // RPC ausführen
+                this._rpc.do(this._facadeFnLoad, args, function(response) {
+                    this._remoteProcess(response, args, force);
+
+                    // Promise auflösen
+                    resolve();
+
+                }, this, true, showWaitMask ? this : 'none');
             }
-
-            if (kijs.isObject(this._facadeFnArgs)) {
-                args = Object.assign(args, this._facadeFnArgs);
-            }
-
-            // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
-            // wenn sämtliche Datensätze neu geladen werden.
-            let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0);
-
-            // RPC ausführen
-            this._rpc.do(this._facadeFnLoad, args, function(response) {
-                this._remoteProcess(response, args, force);
-            }, this, true, showWaitMask ? this : 'none');
-        }
+        });
     }
 
     _remoteProcess(response, args, force) {
