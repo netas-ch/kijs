@@ -321,6 +321,7 @@ kit.App = class kit_App {
                                     height: 200,
                                     shadow: true,
                                     waitMaskTargetDomProperty: 'innerDom',
+                                    cls: 'kijs-flexcolumn',
 //                                    innerStyle: {
 //                                        padding: '10px',
 //                                        overflowY: 'auto'

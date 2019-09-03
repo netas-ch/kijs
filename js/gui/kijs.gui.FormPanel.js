@@ -156,41 +156,68 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Object|null} args
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
-     * @returns {undefined}
+     * @returns {Promise}
      */
     load(args=null, searchFields=false, resetValidation=false) {
-        if (this._facadeFnLoad) {
+        return new Promise((resolve, reject) => {
+            if (this._facadeFnLoad) {
 
-            if (!kijs.isObject(args)) {
-                args = {};
+                if (!kijs.isObject(args)) {
+                    args = {};
+                }
+                args = Object.assign(args, this._rpcArgs);
+
+                this._rpc.do(this._facadeFnLoad, args, function(response) {
+
+                    // Formular
+                    if (response.form) {
+                        this.removeAll();
+                        this.add(response.form);
+                    }
+
+                    if (searchFields || response.form || kijs.isEmpty(this._fields)) {
+                        this.searchFields();
+                    }
+
+                    // Formulardaten in Formular einfüllen
+                    if (response.formData) {
+                        this.data = response.formData;
+                    }
+
+                    // Validierung zurücksetzen?
+                    if (resetValidation) {
+                        this.resetValidation();
+                    }
+
+                    // 'Dirty' zurücksetzen
+                    this.isDirty = false;
+
+                    // load event
+                    this.raiseEvent('afterLoad', {response: response});
+
+                    // promise ausführen
+                    resolve(response);
+                }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
+            } else {
+                reject(new Error('load: no facade function defined'));
             }
-            args = Object.assign(args, this._rpcArgs);
+        });
+    }
 
-            this._rpc.do(this._facadeFnLoad, args, function(response) {
-
-                // Formular
-                if (response.form) {
-                    this.removeAll();
-                    this.add(response.form);
-                }
-
-                if (searchFields || response.form || kijs.isEmpty(this._fields)) {
-                    this.searchFields();
-                }
-
-                // Formulardaten in Formular einfüllen
-                if (response.formData) {
-                    this.data = response.formData;
-                }
-
-                // Validierung zurücksetzen?
-                if (resetValidation) {
-                    this.resetValidation();
-                }
-
-                this.raiseEvent('afterLoad', {response: response});
-            }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
+    /**
+     * Setzt den Feldwert zurück.
+     * @returns {undefined}
+     */
+    reset() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
         }
+
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].reset();
+        }
+
+        this.raiseEvent('change');
     }
 
     /**

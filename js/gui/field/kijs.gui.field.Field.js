@@ -103,7 +103,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._maxLength = null;
         this._required = false;
         this._submitValue = true;
-        this._dirtyValue = null;
+        this._originalValue = null;
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
@@ -305,13 +305,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get inputWrapperDom() { return this._inputWrapperDom; }
 
-    get isDirty() { return this._dirtyValue !== this.value; }
+    get isDirty() { return this._originalValue !== this.value; }
     set isDirty(val) {
         if (val) { // mark as dirty
-            this._dirtyValue = this.value === null ? 0 : null;
+            this._originalValue = this.value === null ? '' : null;
 
         } else { // mark as not dirty
-            this._dirtyValue = this.value;
+            this._originalValue = this.value;
         }
     }
 
@@ -496,6 +496,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
+    }
+
+    /**
+     * Setzt den Wert zurück.
+     * @returns {undefined}
+     */
+    reset() {
+        this.value = this._originalValue;
     }
 
     /**

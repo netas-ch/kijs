@@ -2045,17 +2045,10 @@ div.kijs-field-display {
 
 div.kijs-grid {
     position: relative;
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
-    align-items: stretch;
     font-family: @default-fontFamily;
     font-size: @default-fontSize;
-
-    .kijs-top, .kijs-center, .kijs-bottom {
-        /*max-height: 100%;*/
-    }
 
     table {
         border-collapse: collapse;
@@ -2111,18 +2104,20 @@ div.kijs-grid {
         }
     }
 
+    .kijs-top, .kijs-center, .kijs-bottom {
+        display: flex;
+        flex-direction: row;
+    }
+
     .kijs-center {
         flex: 1;
 
-        > div {
-            max-height: 100%;
-        }
-
         .kijs-tablecontainer {
             overflow: auto;
-            height: 100%;
+            flex: 1;
         }
     }
+
 
     .kijs-headercontainer {
         background-color: @grid-header-bkgrndColor;
