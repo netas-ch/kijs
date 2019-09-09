@@ -215,8 +215,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     // promise ausführen
                     resolve(response);
                 }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
-            } else {
-                reject(new Error('load: no facade function defined'));
             }
         });
     }

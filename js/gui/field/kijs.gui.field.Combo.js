@@ -140,6 +140,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);
         }
+
+        this._listViewEl.disabled = !!val;
     }
 
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }

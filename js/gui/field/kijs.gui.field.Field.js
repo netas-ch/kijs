@@ -89,16 +89,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         });
 
         this._spinBoxEl = null;
-        /*this._spinBoxEl = new kijs.gui.SpinBox({
-            target: this,
-            targetDomProperty: 'inputWrapperDom',
-            ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            openOnInput: true,
-            style: {
-                padding: '10px'
-            },
-            html: 'XXXX<br>XXXX<br><br><br><br>XX<br>XX<br>XXX<br><br>XXX<br>XX<br><br>XXXXXXXX'
-        });*/
 
         this._maxLength = null;
         this._required = false;
@@ -177,6 +167,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl.disabled = val;
         this._errorIconEl.disabled = val;
         this._helpIconEl.disabled = val;
+
+        if (this._spinBoxEl) {
+            this._spinBoxEl.disabled = val;
+        }
 
         // Buttons auch aktivieren/deaktivieren
         const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
@@ -601,6 +595,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     // LISTENERS
     _onSpinButtonClick(e) {
+        if (this.disabled) {
+             return;
+        }
         if (this._spinBoxEl) {
             if (this._spinBoxEl.isRendered) {
                 this._spinBoxEl.close();
