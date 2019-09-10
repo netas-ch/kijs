@@ -104,7 +104,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     }
     set value(val) {
         if (kijs.isEmpty(this._valueField)) {
-            throw new Error(`Es wurde kein "valueField" definiert.`);
+            throw new kijs.Error(`Es wurde kein "valueField" definiert.`);
         }
 
         this._value = val;

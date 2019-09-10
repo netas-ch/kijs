@@ -149,7 +149,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         if (!this._hasDate && !this._hasTime) {
-            throw new Error('hasDate and hasTime is false, nothing to display');
+            throw new kijs.Error('hasDate and hasTime is false, nothing to display');
         }
         if (useDefaultSpinIcon && !this._hasDate) {
             this.spinIconChar = '&#xf017'; // clock

@@ -172,7 +172,7 @@ kijs.Storage = class kijs_Storage {
      */
     static _getStorage(mode) {
         if (!kijs.Array.contains(['session', 'local'], mode)) {
-            throw new Error('invalid storage mode');
+            throw new kijs.Error('invalid storage mode');
         }
         return mode === 'session' ? window.sessionStorage : window.localStorage;
     }

@@ -388,7 +388,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             val = null;
         }
         if (val !== null && !kijs.isNumeric(val)) {
-            throw new Error('set height(x). x must be numeric.');
+            throw new kijs.Error('set height(x). x must be numeric.');
         }
 
         this._height = val;
@@ -428,7 +428,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             val = null;
         }
         if (val !== null && !kijs.isNumeric(val)) {
-            throw new Error('set left(x). x must be numeric.');
+            throw new kijs.Error('set left(x). x must be numeric.');
         }
 
         this._left = val;
@@ -451,7 +451,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!this._node) {
             this._nodeTagName = val;
         } else if (this._node.tagName.toLowerCase() !== val) {
-            throw new Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
+            throw new kijs.Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
         }
     }
 
@@ -466,7 +466,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!this._node) {
             this._style = val;
         } else {
-            throw new Error(`Property "style" can not be set. The node has allready been rendered.`);
+            throw new kijs.Error(`Property "style" can not be set. The node has allready been rendered.`);
         }
     }
 
@@ -515,7 +515,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
 
         } else {
-            throw new Error(`Unkown toolTip format`);
+            throw new kijs.Error(`Unkown toolTip format`);
 
         }
 
@@ -536,7 +536,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             val = null;
         }
         if (val !== null && !kijs.isNumeric(val)) {
-            throw new Error('set top(x). x must be numeric.');
+            throw new kijs.Error('set top(x). x must be numeric.');
         }
 
         this._top = val;
@@ -561,7 +561,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             val = null;
         }
         if (val !== null && !kijs.isNumeric(val)) {
-            throw new Error('set width(x). x must be numeric.');
+            throw new kijs.Error('set width(x). x must be numeric.');
         }
 
         this._width = val;
@@ -1050,7 +1050,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 targetNode.insertBefore(this._node, insert.nextSibling);
 
             } else {
-                throw new Error('invalid insert position for renderTo');
+                throw new kijs.Error('invalid insert position for renderTo');
             }
 
         // Element anhängen
@@ -1137,7 +1137,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                     kijs.Dom.addEventListener(nodeEventName, this._node, this._onNodeEvent, this, useCapture);
                 }
             } else {
-                throw new Error(`kijsEvent "${kijsEvent}" is not mapped`);
+                throw new kijs.Error(`kijsEvent "${kijsEvent}" is not mapped`);
             }
         }, this);
     }

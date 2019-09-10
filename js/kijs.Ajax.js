@@ -203,7 +203,7 @@ kijs.Ajax = class kijs_Ajax {
 
             // object
             if (kijs.isObject(val)) {
-                throw new Error('Objects can not be convert to query strings.');
+                throw new kijs.Error('Objects can not be convert to query strings.');
 
             // array
             } else if (kijs.isArray(val)) {

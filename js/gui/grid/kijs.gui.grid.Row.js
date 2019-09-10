@@ -166,7 +166,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
             let constr = kijs.getObjectFromNamespace(cellConfig.xtype);
 
             if (!constr) {
-                throw new Error('invalid cell xtype for column ' + columnConfig.caption);
+                throw new kijs.Error('invalid cell xtype for column ' + columnConfig.caption);
             }
 
             // change listener

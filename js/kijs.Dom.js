@@ -150,7 +150,7 @@ kijs.Dom = class kijs_Dom {
                 };
                 
             } else {
-                throw new Error(`Parameter "fn" can not be empty`);
+                throw new kijs.Error(`Parameter "fn" can not be empty`);
             }
 
             context._nodeEventListeners[eventName].push({node:node, useCapture:useCapture, delegate:delegate });

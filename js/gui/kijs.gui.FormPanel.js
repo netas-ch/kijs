@@ -142,7 +142,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }
 
         } else {
-            throw new Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unkown format on config "rpc"`);
 
         }
     }

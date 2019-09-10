@@ -90,7 +90,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     set direction(val) {
         let iconChar = this._getIconChar(val);
         if (!iconChar) {
-            throw new Error('invalid argument for direction attribute');
+            throw new kijs.Error('invalid argument for direction attribute');
         }
         if (!this.icon2Char) {
             this.icon2Char = iconChar;

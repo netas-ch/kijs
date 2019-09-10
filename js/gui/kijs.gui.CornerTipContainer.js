@@ -61,7 +61,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             case 'warning': instance.warning(caption, html); break;
             case 'error': instance.error(caption, html); break;
             default:
-                throw new Error(`Unknown value on argument "icon"`);
+                throw new kijs.Error(`Unknown value on argument "icon"`);
         }
     }
 

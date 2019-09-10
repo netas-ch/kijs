@@ -119,7 +119,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
     get defaultAnimation() { return this._defaultAnimation; }
     set defaultAnimation(val) {
         if (!kijs.Array.contains(this._animationTypes, val)) {
-            throw new Error(`config "defaultAnimation" is not valid.`);
+            throw new kijs.Error(`config "defaultAnimation" is not valid.`);
         }
         this._defaultAnimation = val;
     }
@@ -158,7 +158,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
         let activeEl = this.activeEl;
 
         if (!kijs.Array.contains(this._animationTypes, animation)) {
-            throw new Error(`animation type not valid.`);
+            throw new kijs.Error(`animation type not valid.`);
         }
 
         // by index
@@ -172,7 +172,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
 
         // Prüfen, ob element in den elements ist ist.
         if (!el || !kijs.Array.contains(this._elements, el)) {
-            throw new Error(`element for animated activation not found.`);
+            throw new kijs.Error(`element for animated activation not found.`);
         }
 
         // falls das neue das alte ist, nichts tun.

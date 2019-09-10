@@ -604,13 +604,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
             // xtype vorhanden?
             if (!kijs.isString(obj.xtype)) {
-                throw new Error(`config missing "xtype".`);
+                throw new kijs.Error(`config missing "xtype".`);
             }
 
             // Konstruktor ermitteln
             const constr = kijs.gui.getClassFromXtype(obj.xtype);
             if (!kijs.isFunction(constr)) {
-                throw new Error(`Unknown xtype "${obj.xtype}".`);
+                throw new kijs.Error(`Unknown xtype "${obj.xtype}".`);
             }
 
             // Parent zuweisen
@@ -621,7 +621,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             
         // Ungültige Übergabe
         } else {
-            throw new Error(`kijs.gui.Container: invalid element.`);
+            throw new kijs.Error(`kijs.gui.Container: invalid element.`);
         }
 
         return obj;

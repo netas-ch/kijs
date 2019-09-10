@@ -225,7 +225,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
         kijs.Array.each(val, function(k) {
            if (!kijs.isString(k)) {
-               throw new Error('invalid primary key');
+               throw new kijs.Error('invalid primary key');
            }
         }, this);
         this._primaryKeys = val;
@@ -237,7 +237,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get selectType() { return this._selectType; }
     set selectType(val) {
         if (!kijs.Array.contains(['single', 'multi', 'simple', 'none'], val)) {
-            throw new Error('invalid value for selectType');
+            throw new kijs.Error('invalid value for selectType');
         }
         this._selectType = val;
     }
@@ -571,7 +571,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     let ok = false;
                     kijs.Array.each(filterFields, function(filterField) {
                         if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new Error(`Unkown filter format.`);
+                            throw new kijs.Error(`Unkown filter format.`);
                         }
 
                         if (filterField.value === dataRow[filterField.field]) {
@@ -664,7 +664,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     sort(field, direction='ASC') {
         direction = direction.toUpperCase();
         if (!kijs.Array.contains(['ASC', 'DESC'], direction)) {
-            throw new Error('invalid value for sort direction');
+            throw new kijs.Error('invalid value for sort direction');
         }
 
         let columnConfig = null;
@@ -676,7 +676,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
 
         if (columnConfig === null) {
-            throw new Error('invalid sort field name');
+            throw new kijs.Error('invalid sort field name');
         }
 
         this._remoteSort = {
@@ -705,7 +705,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
             let constructor = kijs.getObjectFromNamespace(configOrInstance.xtype);
             if (constructor === false) {
-                throw new Error('invalid xtype ' + configOrInstance.xtype);
+                throw new kijs.Error('invalid xtype ' + configOrInstance.xtype);
             }
             delete configOrInstance.xtype;
             inst = new constructor(configOrInstance);
@@ -717,7 +717,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         if (requiredClass !== null) {
             if (!kijs.isObject(inst) || !(inst instanceof requiredClass)) {
-                throw new Error('instance not from class ' + requiredClass.name);
+                throw new kijs.Error('instance not from class ' + requiredClass.name);
             }
         }
 

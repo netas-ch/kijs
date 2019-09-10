@@ -101,7 +101,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
      */
     bindUploadDialog(uploadDialog, uploadId=null) {
         if (!(uploadDialog instanceof kijs.UploadDialog)) {
-            throw new Error('Upload Dialog must be of type kijs.UploadDialog');
+            throw new kijs.Error('Upload Dialog must be of type kijs.UploadDialog');
         }
 
         // Events entfernen, wenn bereits eine Klasse verknüpft war.
@@ -126,7 +126,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     setProgress(percent) {
         percent = window.parseInt(percent);
         if (window.isNaN(percent) || percent < 0 || percent > 100) {
-            throw new Error('percent must be numeric between 0 and 100');
+            throw new kijs.Error('percent must be numeric between 0 and 100');
         }
 
         this._percent = percent;

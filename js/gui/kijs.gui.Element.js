@@ -514,7 +514,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             if  (proto.__xtype) {
                 return proto.__xtype;
             } else {
-                throw new Error(`xtype can not be determined`);
+                throw new kijs.Error(`xtype can not be determined`);
             }
         }
 
@@ -642,7 +642,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 targetNode.insertBefore(this._dom.node, insert.nextSibling);
 
             } else {
-                throw new Error('invalid insert position for renderTo');
+                throw new kijs.Error('invalid insert position for renderTo');
             }
 
         // Element anhängen

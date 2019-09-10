@@ -89,7 +89,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         kijs.Array.each(val, function(contentType) {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
-                throw new Error('invalid media type "' + contentType + '"');
+                throw new kijs.Error('invalid media type "' + contentType + '"');
             }
             this._contentTypes.push(parts.join('/'));
         }, this);
@@ -127,7 +127,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }
         kijs.Array.each(dropZones, function(dropZone) {
             if (!(dropZone instanceof kijs.gui.DropZone)) {
-                throw new Error('added zone not of type kijs.gui.DropZone');
+                throw new kijs.Error('added zone not of type kijs.gui.DropZone');
             }
 
             // hinzufügen falls noch nicht da.

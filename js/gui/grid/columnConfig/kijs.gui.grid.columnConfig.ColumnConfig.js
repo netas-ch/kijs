@@ -18,7 +18,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         super(false);
 
         if (config !== false) {
-            throw new Error('do not create a instance of kijs.gui.grid.columnConfig.ColumnConfig directly');
+            throw new kijs.Error('do not create a instance of kijs.gui.grid.columnConfig.ColumnConfig directly');
         }
 
         this._caption = '';
@@ -165,7 +165,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             let curPos = this.position;
 
             if (!kijs.isInteger(val)) {
-                throw new Error('invalid position value');
+                throw new kijs.Error('invalid position value');
             }
 
             if (val !== curPos) {
@@ -192,7 +192,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get width() { return this._width; }
     set width(val) {
         if (!kijs.isNumeric(val)) {
-            throw new Error('invalid width value for columnConfig');
+            throw new kijs.Error('invalid width value for columnConfig');
         }
         this._width = val;
         this.raiseEvent('change', {columnConfig: this, width: val});

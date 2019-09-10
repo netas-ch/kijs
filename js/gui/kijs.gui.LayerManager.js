@@ -107,7 +107,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         
         // Wenn das Element schon drin ist: Fehler
         if (kijs.Array.contains(parentProp.stack, el)) {
-            throw new Error(`element is duplicated in layermanager`);
+            throw new kijs.Error(`element is duplicated in layermanager`);
         }
         
         parentProp.stack.push(el);

@@ -102,7 +102,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         kijs.Array.each(val, function(contentType) {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
-                throw new Error('invalid content type "' + contentType + '"');
+                throw new kijs.Error('invalid content type "' + contentType + '"');
             }
             this._contentTypes.push(parts.join('/'));
         }, this);

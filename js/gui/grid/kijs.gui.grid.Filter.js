@@ -110,7 +110,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             let constr = kijs.getObjectFromNamespace(filterConfig.xtype);
 
             if (!constr) {
-                throw new Error('invalid filter xtype for column ' + columnConfig.caption);
+                throw new kijs.Error('invalid filter xtype for column ' + columnConfig.caption);
             }
 
             // change listener

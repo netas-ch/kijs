@@ -175,7 +175,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             let editor = kijs.getObjectFromNamespace(this._editorXType);
 
             if (!editor) {
-                throw new Error('invalid xtype for cell editor');
+                throw new kijs.Error('invalid xtype for cell editor');
             }
 
             let eArgs = this._getEditorArgs();

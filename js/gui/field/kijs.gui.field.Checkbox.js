@@ -167,7 +167,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         } else if (val === 0 || val === '0' || val === false || kijs.isEmpty(val)) {
             this._checked = 0;
         } else {
-            throw new Error(`config "checked" is not valid.`);
+            throw new kijs.Error(`config "checked" is not valid.`);
         }
         this._updateCheckboxIcon();
     }
@@ -205,7 +205,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             }
 
         } else {
-            throw new Error(`config "icon" is not valid.`);
+            throw new kijs.Error(`config "icon" is not valid.`);
 
         }
     }
@@ -256,7 +256,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         } else if (val === this._valueDeterminated ||val === 2) {
             this._checked = 2;
         } else {
-            throw new Error(`config "value" is not valid.`);
+            throw new kijs.Error(`config "value" is not valid.`);
         }
         this._updateCheckboxIcon();
         this.validate();

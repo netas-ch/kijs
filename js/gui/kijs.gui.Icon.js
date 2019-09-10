@@ -60,7 +60,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             val = null;
         }
         if (!kijs.isString && !val) {
-            throw new Error(`config "iconCls" is not a string`);
+            throw new kijs.Error(`config "iconCls" is not a string`);
         }
         if (this._iconCls) {
             this._dom.clsRemove(this._iconCls);

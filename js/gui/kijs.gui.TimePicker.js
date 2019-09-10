@@ -170,13 +170,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
 
         if (this._hour > 23 || this._hour < 0) {
-            throw new Error('invalid time: hour');
+            throw new kijs.Error('invalid time: hour');
         }
         if (this._minute > 60 || this._minute < 0) {
-            throw new Error('invalid time: minute');
+            throw new kijs.Error('invalid time: minute');
         }
         if (this._second > 60 || this._second < 0) {
-            throw new Error('invalid time: second');
+            throw new kijs.Error('invalid time: second');
         }
 
         // zeichnen falls gerendert
@@ -455,7 +455,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             pointerPos.distance = this._distance.second;
 
         } else {
-            throw new Error('invalid clock mode');
+            throw new kijs.Error('invalid clock mode');
         }
 
         this.paint(pointerPos);

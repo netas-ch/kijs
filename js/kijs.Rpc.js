@@ -88,7 +88,7 @@ kijs.Rpc = class kijs_Rpc {
      */
     do(facadeFn, requestData, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
         if (!facadeFn) {
-            throw new Error('RPC call without facade function');
+            throw new kijs.Error('RPC call without facade function');
         }
         if (this._deferId) {
             clearTimeout(this._deferId);

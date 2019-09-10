@@ -91,7 +91,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
             this._autoSize = val;
         } else {
-            throw new Error(`Unkown format on config "autoSize"`);
+            throw new kijs.Error(`Unkown format on config "autoSize"`);
         }
     }
 
@@ -106,7 +106,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._ownPos = val;
         } else {
-            throw new Error(`Unkown format on config "pos"`);
+            throw new kijs.Error(`Unkown format on config "pos"`);
         }
     }
 
@@ -129,7 +129,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl.on('keyDown', this._onElKeyDown, this);
 
         } else {
-            throw new Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unkown format on config "target"`);
 
         }
     }
@@ -151,7 +151,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._targetPos = val;
         } else {
-            throw new Error(`Unkown format on config "targetPos"`);
+            throw new kijs.Error(`Unkown format on config "targetPos"`);
         }
     }
 

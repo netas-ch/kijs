@@ -99,7 +99,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadDialog = val;
         if (kijs.isDefined(val)) {
             if (!(val instanceof kijs.UploadDialog)) {
-                throw new Error('uploadDialog must be of type kijs.UploadDialog');
+                throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');
             }
 
             this._uploadDialog.on('startUpload', this._onStartUpload, this);

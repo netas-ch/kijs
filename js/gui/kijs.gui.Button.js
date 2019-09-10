@@ -136,7 +136,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             }
 
         } else {
-            throw new Error(`config "icon" is not valid.`);
+            throw new kijs.Error(`config "icon" is not valid.`);
 
         }
     }
@@ -197,7 +197,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             }
 
         } else {
-            throw new Error(`config "icon2" is not valid.`);
+            throw new kijs.Error(`config "icon2" is not valid.`);
 
         }
     }

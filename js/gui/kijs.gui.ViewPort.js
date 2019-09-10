@@ -54,7 +54,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             kijs.Dom.removeEventListener('contextmenu', document.body, this);
 
         } else {
-           throw new Error('invalid value for property "disableContextMenu" in kijs.gui.ViewPort');
+           throw new kijs.Error('invalid value for property "disableContextMenu" in kijs.gui.ViewPort');
         }
     }
 
@@ -79,7 +79,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             kijs.Dom.removeEventListener('drop', window, this);
 
         } else {
-           throw new Error('invalid value for property "disableDrop" in kijs.gui.ViewPort');
+           throw new kijs.Error('invalid value for property "disableDrop" in kijs.gui.ViewPort');
         }
     }
 

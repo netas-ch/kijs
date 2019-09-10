@@ -210,7 +210,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
 
         } else {
-            throw new Error(`config "errorIcon" is not valid.`);
+            throw new kijs.Error(`config "errorIcon" is not valid.`);
 
         }
     }
@@ -268,7 +268,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
 
         } else {
-            throw new Error(`config "helpIcon" is not valid.`);
+            throw new kijs.Error(`config "helpIcon" is not valid.`);
 
         }
     }
@@ -394,7 +394,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
 
         } else {
-            throw new Error(`config "spinIcon" is not valid.`);
+            throw new kijs.Error(`config "spinIcon" is not valid.`);
 
         }
     }

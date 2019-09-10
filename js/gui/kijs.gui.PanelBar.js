@@ -99,7 +99,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             }
 
         } else {
-            throw new Error(`config "icon" is not valid.`);
+            throw new kijs.Error(`config "icon" is not valid.`);
 
         }
     }

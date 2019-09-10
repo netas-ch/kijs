@@ -69,7 +69,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             this._targetDom = val;
 
         } else {
-            throw new Error('invalid element for kijs.gui.ApertureMask target');
+            throw new kijs.Error('invalid element for kijs.gui.ApertureMask target');
         }
     }
 

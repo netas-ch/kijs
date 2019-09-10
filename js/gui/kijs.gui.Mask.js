@@ -105,7 +105,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             }
 
         } else {
-            throw new Error(`config "icon" is not valid.`);
+            throw new kijs.Error(`config "icon" is not valid.`);
 
         }
     }
@@ -175,7 +175,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._targetX = document.body;
 
         } else {
-            throw new Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unkown format on config "target"`);
 
         }
     }

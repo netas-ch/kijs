@@ -237,7 +237,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
 
         } else {
-            throw new Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unkown format on config "rpc"`);
 
         }
     }
@@ -422,7 +422,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     let ok = false;
                     kijs.Array.each(filterFields, function(filterField) {
                         if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new Error(`Unkown filter format.`);
+                            throw new kijs.Error(`Unkown filter format.`);
                         }
 
                         if (filterField.value === row[filterField.field]) {

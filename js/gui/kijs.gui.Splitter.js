@@ -47,7 +47,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         } else if (this._targetPos === 'top' || this._targetPos === 'bottom') {
             return 'vertical';
         } else {
-            throw new Error(`unknown targetPos`);
+            throw new kijs.Error(`unknown targetPos`);
         }
     }
 
@@ -56,7 +56,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         if (!this._targetEl) {
             this.target = this._detectTarget();
             if (!this._targetEl) {
-                throw new Error(`config missing "target"`);
+                throw new kijs.Error(`config missing "target"`);
             }
         }
 
@@ -64,7 +64,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
     set target(val) {
         if (!val instanceof kijs.gui.Element) {
-            throw new Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unkown format on config "target"`);
         }
         this._targetEl = val;
     }
@@ -72,7 +72,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     get targetPos() { return this._targetPos; }
     set targetPos(val) {
         if (!kijs.Array.contains(['top', 'right', 'left', 'bottom'], val)) {
-            throw new Error(`unknown targetPos`);
+            throw new kijs.Error(`unknown targetPos`);
         }
 
         this._targetPos = val;

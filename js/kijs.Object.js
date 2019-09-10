@@ -27,7 +27,7 @@ kijs.Object = class kijs_Object {
                 if (config.skipUnknownConfig || cfgKey === 'skipUnknownConfig') {
                     return;
                 } else {
-                    throw new Error(`Unkown config "${cfgKey}"`);
+                    throw new kijs.Error(`Unkown config "${cfgKey}"`);
                 }
             }
             
@@ -65,7 +65,7 @@ kijs.Object = class kijs_Object {
                     context = map.context;
                 }
             } else {
-                throw new Error(`Unkown format on configMap "${cfgKey}"`);
+                throw new kijs.Error(`Unkown format on configMap "${cfgKey}"`);
                 
             }
             
@@ -145,13 +145,13 @@ kijs.Object = class kijs_Object {
                         if (kijs.isObject(cfg.value)) {
                             Object.assign(cfg.context[cfg.target], cfg.value);
                         } else if (cfg.value) {
-                            throw new Error(`config "${cfg.key}" is not an object`);
+                            throw new kijs.Error(`config "${cfg.key}" is not an object`);
                         }
                     } else {
                         if (kijs.isObject(cfg.value)) {
                             cfg.context[cfg.target] = cfg.value;
                         } else if (cfg.value) {
-                            throw new Error(`config "${cfg.key}" is not an object`);
+                            throw new kijs.Error(`config "${cfg.key}" is not an object`);
                         }
                     }
                     break;
@@ -162,13 +162,13 @@ kijs.Object = class kijs_Object {
                         if (kijs.isObject(cfg.value)) {
                             kijs.Object.assignDeep(cfg.context[cfg.target], cfg.value);
                         } else if (cfg.value) {
-                            throw new Error(`config "${cfg.key}" is not an object`);
+                            throw new kijs.Error(`config "${cfg.key}" is not an object`);
                         }
                     } else {
                         if (kijs.isObject(cfg.value)) {
                             cfg.context[cfg.target] = cfg.value;
                         } else if (cfg.value) {
-                            throw new Error(`config "${cfg.key}" is not an object`);
+                            throw new kijs.Error(`config "${cfg.key}" is not an object`);
                         }
                     }
                     break;
@@ -179,7 +179,7 @@ kijs.Object = class kijs_Object {
                         for (let k in cfg.value) {
                             if (k !== 'context') {
                                 if (!kijs.isFunction(cfg.value[k])) {
-                                    throw new Error('Listener "' + k + '" ist not a function.');
+                                    throw new kijs.Error('Listener "' + k + '" ist not a function.');
                                 }
                                 cfg.context.on(k, cfg.value[k], cfg.value.context || cfg.context);
                             }
@@ -192,13 +192,13 @@ kijs.Object = class kijs_Object {
                     if (kijs.isFunction(cfg.target)) {
                         cfg.target.call(cfg.context, cfg.value);
                     } else {
-                        throw new Error(`config "${cfg.key}" is not a function`);
+                        throw new kijs.Error(`config "${cfg.key}" is not a function`);
                     }
                     break;
 
                 // Zuweisung der Eigenschaft verbieten: Fehler ausgeben
                 case 'error':
-                    throw new Error(`Assignment of config "${cfg.key}" is prohibited`);
+                    throw new kijs.Error(`Assignment of config "${cfg.key}" is prohibited`);
                     break;
 
             }
