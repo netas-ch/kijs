@@ -333,8 +333,32 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      * @returns {Date|Boolean}
      */
     _getDateTimeByString(dateTimeStr) {
-        let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false;
+        let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false, dateTimeAr, timeStr, dateStr;
         dateTimeStr = dateTimeStr +'';
+
+            if (dateTimeStr.includes(" ") && this._hasDate){
+                
+                dateTimeAr = dateTimeStr.split(" ");
+                
+                dateStr = dateTimeAr[0];
+                
+                if (dateTimeAr.length > 1){
+                    kijs.Array.each(dateTimeAr, function(item, i) {
+                        
+                        if (i > 0){
+                            timeStr = timeStr + dateTimeAr[i];
+                        }
+                    });
+                    
+                } else {
+                    timeStr = dateTimeAr[1];
+                }
+                
+                
+            } else {
+                timeStr = dateTimeStr;
+                dateStr = dateTimeStr;
+            }
 
         // Uhrzeit
         if (this._hasTime) {
@@ -360,10 +384,30 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 return '';
             }).trim();
 
+            // Falls die Urzeit eine Lücke hat, Uhrzeit zusammensetzen
+            if (!timeMatch && timeStr.includes(" ")) {
+                
+                let tm = timeStr.split(" ");
+                if (tm) {
+                    let tH = tm[0];
+                    let tI = tm[1];
+
+                    if (tH >= 0 && tH <= 24 && tI >= 0 && tI <= 59) {
+                        hour = tH;
+                        minute = tI;
+                        timeMatch = true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+
             // Falls nur eine Uhrzeit gesucht ist, versuchen die Uhrzeit zu lesen.
             // Wenn eine einzelne Zahl eingegeben wurde, diese als Stunde handeln
             if (!timeMatch && !this._hasDate) {
-                let tm = dateTimeStr.match(/[0-9]+/);
+                let tm = timeStr.match(/[0-9]+/);
                 if (tm) {
                     let tH = parseInt(tm[0]);
                     if (tH >= 0 && tH <= 24) {
@@ -372,10 +416,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     }
                 }
             }
+            
+
 
             // drei oder vier ziffern als [H]HMM handeln
-            if (!timeMatch && !this._hasDate) {
-                let tm = dateTimeStr.match(/([0-9]{1,2})([0-9]{2})/);
+            if (!timeMatch && kijs.isString(timeStr)) {
+                let tm = timeStr.match(/([0-9]{1,2})([0-9]{2})/);
                 if (tm) {
                     let tH = parseInt(tm[1]);
                     let tI = parseInt(tm[2]);
@@ -383,6 +429,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     if (tH >= 0 && tH <= 24 && tI >= 0 && tI <= 59) {
                         hour = tH;
                         minute = tI;
+                        timeMatch = true;
                     } else {
                         return false;
                     }
@@ -390,10 +437,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     return false;
                 }
             }
+            
         }
 
         // Datum im DB-Format (2019-01-10) lesen
-        dateTimeStr.replace(/([0-9]{2}|[0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/, function(match, Y, m, d) {
+        dateStr.replace(/([0-9]{2}|[0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/, function(match, Y, m, d) {
             year = parseInt(Y);
             month = parseInt(m);
             day = parseInt(d);
@@ -402,7 +450,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         // Datum ansonsten im Format Tag . Monat . Jahr lesen
         if (!year) {
-            let dp = dateTimeStr.match(/([\d]+)[^\d]*([\d]*)[^\d]*([\d]*)/);
+            let dp = dateStr.match(/([\d]+)[^\d]*([\d]*)[^\d]*([\d]*)/);
             day = dp && dp[1] ? parseInt(dp[1]) : null;
             month = dp && dp[2] ? parseInt(dp[2]) : null;
             year = dp && dp[3] ? parseInt(dp[3]) : null;

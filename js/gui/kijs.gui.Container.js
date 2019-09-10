@@ -618,7 +618,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
             // Element erstellen
             obj = new constr(obj);
-
+            
         // Ungültige Übergabe
         } else {
             throw new Error(`kijs.gui.Container: invalid element.`);

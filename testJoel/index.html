@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" href="../css/kijs.gui.php">
+
+        <!-- Achtung: Reihenfolge beachten -->
+        <script type="text/javascript" src="../lib/ace/ace.js"></script>
+
+
+        <script type="text/javascript" src="../js/kijs.js"></script>
+        <script type="text/javascript" src="../js/kijs.String.js"></script>
+        <script type="text/javascript" src="../js/kijs.Array.js"></script>
+        <script type="text/javascript" src="../js/kijs.Object.js"></script>
+        <script type="text/javascript" src="../js/kijs.Number.js"></script>
+        <script type="text/javascript" src="../js/kijs.Date.js"></script>
+        <script type="text/javascript" src="../js/kijs.Dom.js"></script>
+        <script type="text/javascript" src="../js/kijs.Grafic.js"></script>
+        <script type="text/javascript" src="../js/kijs.Navigator.js"></script>
+        <script type="text/javascript" src="../js/kijs.DragDrop.js"></script>
+
+        <script type="text/javascript" src="../js/kijs.Observable.js"></script>
+
+        <script type="text/javascript" src="../js/kijs.Ajax.js"></script>
+        <script type="text/javascript" src="../js/kijs.Rpc.js"></script>
+
+        <script type="text/javascript" src="../js/kijs.UploadDialog.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Dom.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ToolTip.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Element.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Container.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ContainerStack.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.DropZone.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.SpinBox.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ViewPort.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.Icon.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Button.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ButtonGroup.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.MenuButton.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.PanelBar.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Resizer.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Splitter.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Panel.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.Mask.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ApertureMask.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.LayerManager.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.Window.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.MsgBox.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ProgressBar.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.UploadWindow.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.CornerTipContainer.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.Rpc.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.DataViewElement.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.DataView.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.ListView.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.FormPanel.js"></script>
+
+        <script type="text/javascript" src="../js/gui/kijs.gui.TimePicker.js"></script>
+        <script type="text/javascript" src="../js/gui/kijs.gui.DatePicker.js"></script>
+
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Field.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Text.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Number.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Memo.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Password.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.ListView.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Checkbox.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.CheckboxGroup.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.OptionGroup.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Combo.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Display.js"></script>
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.DateTime.js"></script>
+
+        <script type="text/javascript" src="../js/gui/field/kijs.gui.field.Editor.js"></script>
+
+        <!-- GRID -->
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.Grid.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.Row.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.Filter.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.Header.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.HeaderCell.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/kijs.gui.grid.ColumnWindow.js"></script>
+
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.ColumnConfig.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Text.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Date.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Number.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Checkbox.js"></script>
+
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.Cell.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.Text.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.Date.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.Number.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/cell/kijs.gui.grid.cell.Checkbox.js"></script>
+
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.Filter.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.Text.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.Number.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.Date.js"></script>
+        <script type="text/javascript" src="../js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js"></script>
+
+
+        <script type="text/javascript" src="js/kit.App.js"></script>
+
+        
+        <script type="text/javascript">
+            kijs.isReady(function(){
+                var app = new kit.App({
+                    ajaxUrl: 'ajax.php'
+                });
+                app.run();
+            });
+        </script>
+
+        <title>kijs TestApp</title>
+    </head>
+    <body>
+    </body>
+</html>

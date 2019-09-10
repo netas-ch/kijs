@@ -144,7 +144,7 @@ kijs.Array = class kijs_Array {
      * Die Iteration kann durch die Rückgabe von false gestoppt werden.
      * @param {Array} array
      * @param {Function} fn - Callback Funktion
-     * @param {Object} context - Gültigkeitebereich
+     * @param {Object} context - Gültigkeitsbereich
      * @param {Boolean} [reverse=false] - Soll das Array rückwärts durchlaufen werden?
      * @returns {Boolean}
      */

@@ -38,7 +38,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 };
             }
         }
-
+                
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             direction: { target: 'direction', context: this},
@@ -47,7 +47,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             // Attribute für Container weiterreichen
             autoScroll: { target: 'autoScroll', context: this._spinbox },
             defaults: { target: 'defaults', context: this._spinbox, prio: 1},
-            elements: { target: this._spinbox.add, fn: 'function', context: this._spinbox, prio: 2},
+            elements: { target: 'elements', prio: 2},
             html: { target: 'html', context: this._spinbox },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._spinbox },
             innerCls: { target: 'innerCls', context: this._spinbox },
@@ -86,14 +86,6 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get spinbox() { return this._spinbox; }
-    set spinbox(val) {
-        if (!(val instanceof kijs.gui.SpinBox)) {
-            throw new Error('invalid type for spinbox attribute');
-        }
-        this._spinbox = val;
-    }
-
     get direction() { return this._direction; }
     set direction(val) {
         let iconChar = this._getIconChar(val);
@@ -128,6 +120,35 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 break;
         }
     }
+    
+    get elements() { return this._spinbox.getElements(0); }
+    set elements(val) {
+        
+        var elements = [];
+        
+        kijs.Array.each(val, function(item) {
+            if (kijs.isString(item)){
+                // Trennstrich
+                if (item === '-'){
+                    var line = new kijs.gui.Container({
+                        html: '<hr>'
+                    });
+                
+                    elements.push(line);
+             
+                // Unbekannter String
+                } else{
+                    throw new Error(`Unknown string: "${item}".`);;
+                }
+                            // Element in array pushen
+            } else {
+                elements.push(item);
+            }
+        });
+            
+        this._spinbox.add(elements);
+    }
+    
 
     get expandOnHover() { return this._expandOnHover; }
     set expandOnHover(val) {
@@ -143,6 +164,14 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         }
 
         this._expandOnHover = !!val;
+    }
+    
+    get spinbox() { return this._spinbox; }
+    set spinbox(val) {
+        if (!(val instanceof kijs.gui.SpinBox)) {
+            throw new Error('invalid type for spinbox attribute');
+        }
+        this._spinbox = val;
     }
 
     // --------------------------------------------------------------
