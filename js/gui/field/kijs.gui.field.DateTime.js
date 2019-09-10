@@ -336,25 +336,22 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false, dateTimeAr, timeStr, dateStr;
         dateTimeStr = dateTimeStr +'';
 
-            if (dateTimeStr.includes(" ") && this._hasDate){
-                
+            if (dateTimeStr.includes(" ") && this._hasDate) {
                 dateTimeAr = dateTimeStr.split(" ");
-                
                 dateStr = dateTimeAr[0];
-                
-                if (dateTimeAr.length > 1){
+
+                if (dateTimeAr.length > 1) {
                     kijs.Array.each(dateTimeAr, function(item, i) {
-                        
-                        if (i > 0){
+
+                        if (i > 0) {
                             timeStr = timeStr + dateTimeAr[i];
                         }
                     });
-                    
+
                 } else {
                     timeStr = dateTimeAr[1];
                 }
-                
-                
+
             } else {
                 timeStr = dateTimeStr;
                 dateStr = dateTimeStr;
@@ -386,7 +383,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
             // Falls die Urzeit eine Lücke hat, Uhrzeit zusammensetzen
             if (!timeMatch && timeStr.includes(" ")) {
-                
+
                 let tm = timeStr.split(" ");
                 if (tm) {
                     let tH = tm[0];
@@ -416,10 +413,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     }
                 }
             }
-            
 
-
-            // drei oder vier ziffern als [H]HMM handeln
+            // drei oder vier Ziffern als [H]HMM handeln
             if (!timeMatch && kijs.isString(timeStr)) {
                 let tm = timeStr.match(/([0-9]{1,2})([0-9]{2})/);
                 if (tm) {
@@ -437,7 +432,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     return false;
                 }
             }
-            
         }
 
         // Datum im DB-Format (2019-01-10) lesen
@@ -483,6 +477,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         datetime.timeMatch = timeMatch; // Uhrzeit definiert oder default (00:00)
         return datetime;
     }
+
 
     _validationRules(value) {
         let rawValue = this._inputDom.nodeAttributeGet('value');

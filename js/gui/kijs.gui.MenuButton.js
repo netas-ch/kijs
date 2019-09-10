@@ -38,7 +38,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 };
             }
         }
-                
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             direction: { target: 'direction', context: this},
@@ -120,35 +120,38 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 break;
         }
     }
-    
-    get elements() { return this._spinbox.getElements(0); }
+
+    get elements() { return this._spinbox.elements; }
     set elements(val) {
-        
-        var elements = [];
-        
-        kijs.Array.each(val, function(item) {
-            if (kijs.isString(item)){
-                // Trennstrich
-                if (item === '-'){
-                    var line = new kijs.gui.Container({
-                        html: '<hr>'
-                    });
-                
-                    elements.push(line);
-             
-                // Unbekannter String
-                } else{
-                    throw new Error(`Unknown string: "${item}".`);;
-                }
-                            // Element in array pushen
+
+        if (!kijs.isArray(val)) {
+            val = [val];
+        }
+
+        let elements = [];
+        kijs.Array.each(val, function(element) {
+
+            // Linie
+            if (kijs.isString(element) && element === '-') {
+                elements.push(new kijs.gui.Container({
+                    html: '<hr>'
+                }));
+
+            // Sonstiger Text
+            } else if (kijs.isString(element)) {
+                elements.push(new kijs.gui.Container({
+                    html: element
+                }));
+
+            // Sonstiges Element
             } else {
-                elements.push(item);
+                elements.push(element);
             }
         });
-            
+
         this._spinbox.add(elements);
     }
-    
+
 
     get expandOnHover() { return this._expandOnHover; }
     set expandOnHover(val) {
@@ -165,14 +168,8 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
         this._expandOnHover = !!val;
     }
-    
+
     get spinbox() { return this._spinbox; }
-    set spinbox(val) {
-        if (!(val instanceof kijs.gui.SpinBox)) {
-            throw new Error('invalid type for spinbox attribute');
-        }
-        this._spinbox = val;
-    }
 
     // --------------------------------------------------------------
     // MEMBERS
