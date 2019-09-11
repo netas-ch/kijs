@@ -1,0 +1,13 @@
+# Zugriff auf dieses Verzeichnis sperren
+# Zugriff vom Localhost erlauben, um Tests auszuführen.
+
+# Apache >= 2.4
+<ifModule mod_authz_core.c>
+    Require all denied
+</ifModule>
+
+# Apache < 2.4
+<ifModule !mod_authz_core.c>
+    order deny,allow
+    deny  from all
+</ifModule>
