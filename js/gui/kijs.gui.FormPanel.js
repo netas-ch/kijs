@@ -165,6 +165,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._fields[i].value = null;
         }
 
+        this._data = null;
+
         this.resetValidation();
     }
 
