@@ -354,17 +354,18 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     /**
      * Lädt alle Daten im Grid neu.
-     * @returns {undefined}
+     * @returns {Promise}
      */
     reload() {
         let selected = this.getSelectedIds();
-        this._remoteLoad(true).then(() => {
+        return this._remoteLoad(true).then((response) => {
 
             // selektion wiederherstellen
             if (selected) {
                 this.selectByIds(selected, false, true);
             }
 
+            return response;
         });
     }
 
@@ -794,7 +795,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     this._remoteProcess(response, args, force);
 
                     // Promise auflösen
-                    resolve();
+                    resolve(response);
 
                 }, this, true, showWaitMask ? this : 'none');
             }
