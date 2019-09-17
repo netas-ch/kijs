@@ -20,7 +20,7 @@ kijs.Number = class kijs_String {
      */
     static format(number, decimals=0, decPoint='.', thousandsSep='\'') {
         let ret = '';
-        let tmp = (number + '').split('.');
+        let tmp = kijs.toString(number).split('.');
 
         // Bei decimals==='' oder null automatisch die Anzahl Kommastellen ermitteln
         if (decimals==='' || decimals===null) {
@@ -35,7 +35,7 @@ kijs.Number = class kijs_String {
 
         // Tausendertrennzeichen einfügen
         if (!kijs.isEmpty(thousandsSep) && !kijs.isEmpty(tmp[0])) {
-            const len = (tmp[0]+'').length;
+            const len = kijs.toString(tmp[0]).length;
             for (let i=len-1; i>=0; i--) {
                 ret = tmp[0].substr(i, 1) + ret;
                 if ((len-i) % 3 === 0 && i > 0) {
@@ -48,7 +48,7 @@ kijs.Number = class kijs_String {
 
         // Anzahl Kommastellen
         if (decimals > 0 && !kijs.isEmpty(ret) && !kijs.isEmpty(decPoint)) {
-            let digits = tmp.length > 1 ? tmp[1]+'' : '';
+            let digits = tmp.length > 1 ? kijs.toString(tmp[1]) : '';
             digits = kijs.String.padding(digits.substr(0, decimals), decimals, '0', 'right');
             ret += decPoint + digits;
         }

@@ -136,7 +136,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
     _validationRules(originalValue) {
         super._validationRules(originalValue);
 
-        let value = originalValue+'';
+        let value = kijs.toString(originalValue);
         if (value.trim() !== '') {
 
             // Zahl parsen

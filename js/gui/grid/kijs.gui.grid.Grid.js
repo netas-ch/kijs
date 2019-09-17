@@ -29,7 +29,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._facadeFnArgs = null;
 
         this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
-        this._remoteDataLimit = 25;   // Anzahl Datensätze, die geladen werden
+        this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
         this._remoteDataStep = 50;    // Anzahl Datensätze, die pro request hinzugefügt werden.
         this._remoteDataTotal = null; // Anzahl verfügbare Datensätze
         this._getRemoteMetaData = true;  // Metadaten laden?

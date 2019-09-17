@@ -27,11 +27,20 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     constructor(config={}) {
         super(false);
 
-        this._uploadId = 1;
-        this._dropZones = [];
+        this._ajaxUrl = 'index.php';
         this._contentTypes = [];
         this._currentUploadIds = [];
+        this._directory = false;
+        this._dropZones = [];
+        this._maxFilesize = null;
+        this._multiple = true;
+        this._sanitizeFilename = false;
+        this._uploadId = 1;
         this._uploadResponses = {};
+
+        this._filenameHeader = 'X-Filename';
+        this._pathnameHeader = 'X-Filepath';
+
         this._validMediaTypes = [
             'application',
             'audio',
@@ -46,23 +55,18 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            ajaxUrl: 'index.php',
-            multiple: true,
-            directory: false,
-            dropZones: [],
-            filenameHeader: 'X-Filename',
-            pathnameHeader: 'X-Filepath',
-            maxFilesize: null
+            // keine
         }, config);
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             ajaxUrl: true,
-            multiple: true,
-            directory: true,
+            directory: { target: 'directory' },
+            multiple: { target: 'multible' },
             filenameHeader: true,
             pathnameHeader: true,
             maxFilesize: true,
+            sanitizeFilename: true,
             dropZones: { target: 'dropZone' },
             contentTypes: { target: 'contentTypes' }
         };
@@ -99,16 +103,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     set dropZones(val) { this.bindDropZones(val); }
 
     get directory() { return this._directory; }
-    set directory(val) { this._directory = !!val; }
+    set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
 
     get multiple() { return this._multiple; }
-    set multiple(val) {
-        if (val === true && this._browserSupportsDirectoryUpload()) {
-            this._multiple = true;
-        } else {
-            this._multiple = false;
-        }
-    }
+    set multiple(val) { this._multiple = !!val; }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -211,6 +209,23 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return true;
     }
 
+    _getFilename(filename) {
+        if (this._sanitizeFilename) {
+            filename = kijs.Char.replaceSpecialChars(filename);
+            let filenameParts = filename.split('.'), extension = '';
+            if (filenameParts.length > 1) {
+                extension = filenameParts.pop().replace(/[^a-zA-Z0-9]/g, '');
+            }
+            filename = filenameParts.join('_').replace(/[^a-zA-Z0-9\-]/g, '_');
+
+            if (extension) {
+                filename += '.' + extension;
+            }
+        }
+
+        return filename;
+    }
+
     _onDropZoneDrop(e) {
         this._uploadFiles(e.nodeEvent.dataTransfer.files);
     }
@@ -222,7 +237,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
                 if (this._checkMime(fileList[i].type)) {
                     this._uploadFile(fileList[i]);
                 } else {
-                    this.raiseEvent('failUpload', this, fileList[i].name, fileList[i].type);
+                    this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
                 }
             }
         }
@@ -231,7 +246,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     _uploadFile(file) {
         let uploadId = this._uploadId++,
             headers = {},
-            filename = file.name,
+            filename = this._getFilename(file.name),
             filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
             filetype = file.type || 'application/octet-stream';
 

@@ -188,7 +188,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
      * @returns {String|false} tel|mail|web
      */
     _getLinkType(value) {
-        value = value + '';
+        value = kijs.toString(value);
 
         // Telefon
         if (value.match(/^\s*\+?[0-9\s]+$/i)) {
@@ -232,7 +232,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     _onDomClick() {
         if (this._link) {
             let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
-            this._openLink(this.value+'', linkType);
+            this._openLink(kijs.toString(this.value), linkType);
         }
     }
 

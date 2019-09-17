@@ -258,8 +258,7 @@ kijs.Date = class kijs_Date {
      */
     static format(date, format) {
         const _this = this;
-        format = format + '';
-        return format.replace(/[a-zA-Z]/g, function(letter){
+        return kijs.toString(format).replace(/[a-zA-Z]/g, function(letter){
             return _this.__formatReplace(letter, date);
         });
     }
@@ -574,7 +573,7 @@ kijs.Date = class kijs_Date {
             // Y  Vierstellige Jahreszahl  Beispiele: 1999 oder 2003
             case 'Y': return date.getFullYear();
             // y  Jahreszahl, zweistellig  Beispiele: 99 oder 03
-            case 'y': return (date.getFullYear() + '').substr(2);
+            case 'y': return kijs.toString(date.getFullYear()).substr(2);
             // L  Schaltjahr oder nicht  1 für ein Schaltjahr, ansonsten 0
             case 'L': return this.isLeapYear(date) ? '1' : '0';
 

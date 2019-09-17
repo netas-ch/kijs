@@ -18,6 +18,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._oldValue = null;
         this._value = '';
         this._keyUpDefer = null;
+        this._remoteSort = false;
+        this._forceSelection = true;
+        this._showPlaceholder = true;
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -51,19 +54,26 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            //autoLoad: true,
-            spinIconVisible: true
+            spinIconVisible: true,
+            minChars: 'auto',
+            valueField: 'value',
+            captionField: 'caption'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },
+            remoteSort: true,
+            showPlaceholder: true,
+            forceSelection: true,
 
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
 
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
+
+            minChars: { target: 'minChars', prio: 2},
 
             captionField: { target: 'captionField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
@@ -101,6 +111,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.on('click', this._onSpinBoxClick, this);
         this._listViewEl.on('click', this._onListViewClick, this);
         this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
+        this._spinBoxEl.on('show', this._onSpinBoxShow, this);
         //this._listViewEl.on('selectionChange', this._onListViewSelectionChange, this);
 
         // Config anwenden
@@ -149,6 +160,25 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get inputDom() { return this._inputDom; }
 
+    get minChars() { return this._minChars; }
+    set minChars(val) {
+        if (val === 'auto') {
+            // remote combo
+            if (this._listViewEl.facadeFnLoad) {
+                this._minChars = 4;
+
+            // local combo
+            } else {
+                this._minChars = 0;
+            }
+        } else if (kijs.isInteger(val) && val > 0) {
+            this._minChars = val;
+
+        } else {
+            throw new kijs.Error(`invalid argument for parameter minChars in kijs.gui.field.Combo`);
+        }
+    }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
@@ -185,13 +215,33 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
+     * @param {Boolean} firstLoad true, wenn es das erste Laden ist
      * @returns {undefined}
      */
-    load(args) {
-        if (!args) {
-            args = {};
+    load(args, firstLoad) {
+        args = args ? args : {};
+        args.remoteSort = !!this._remoteSort;
+
+        if (this._remoteSort) {
+            let query = this._inputDom.nodeAttributeGet('value');
+            args.query = kijs.isString(query) ? query : '';
+            args.value = this.value;
+
+            // Wenn eine Eingabe erfolgt, laden
+            // Beim ersten laden auch laden, wenn ein value vorhanden ist, damit das displayField geladen wird.
+            if (args.query.length >= this._minChars || (firstLoad && this._value !== '' && this._value !== null)) {
+                this._listViewEl.load(args);
+
+            } else {
+                this._listViewEl.removeAll();
+                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten.', '', this._minChars));
+            }
+
+        } else {
+
+            // alle Datensätze laden
+            this._listViewEl.load(args);
         }
-        this._listViewEl.load(args);
     }
 
     // overwrite
@@ -221,6 +271,21 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
     // PROTECTED
+    /**
+     * Fügt dem listView einen Platzhalter hinzu.
+     * @param {String} text Nachricht, die angezeigt wird.
+     */
+    _addPlaceholder(text) {
+        if (this._showPlaceholder) {
+            this._listViewEl.add({
+                xtype: 'kijs.gui.Container',
+                cls: 'kijs-placeholder',
+                html: text,
+                htmlDisplayType: 'code'
+            });
+        }
+    }
+
     /**
      * Caption zu einem Value ermitteln
      * @param {String|Number|null} val
@@ -253,7 +318,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
      */
     _setProposal(key) {
         let inputVal = this._inputDom.nodeAttributeGet('value'), matchVal='';
-        inputVal = (inputVal + '').trim();
+        inputVal = kijs.toString(inputVal).trim();
 
         // Exakten Wert suchen
         if (inputVal && key !== 'Backspace' && key !== 'Delete') {
@@ -289,14 +354,34 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.setDisplayAndOrderByPattern(inputVal, this.captionField);
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.setDisplayAndOrderByPattern(inputVal, this.captionField);
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
 
         } else {
             // Filter des Dropdowns zurücksetzen
-            this._listViewEl.resetDisplayAndOrder();
+            this._listViewEl.applyFilters(null);
+        }
+    }
+
+    _setScrollPositionToSelection() {
+        let sel = this._listViewEl.getSelected();
+        if (kijs.isObject(sel) && sel instanceof kijs.gui.DataViewElement) {
+            if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
+                let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
+
+                let minScrollValue = sel.top;
+                let maxScrollValue = sel.top - spH + sel.height;
+
+                // prüfen, ob selektion ausserhalb von Scrollbar
+                if (this._spinBoxEl.dom.node.scrollTop === 0 || this._spinBoxEl.dom.node.scrollTop > minScrollValue) {
+                    this._spinBoxEl.dom.node.scrollTop = minScrollValue;
+
+                } else if (this._spinBoxEl.dom.node.scrollTop < maxScrollValue) {
+                    this._spinBoxEl.dom.node.scrollTop = maxScrollValue+5;
+                }
+            }
         }
     }
 
@@ -306,33 +391,40 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
-                this._errors.push('Dieses Feld darf nicht leer sein');
+                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
+            }
+        }
+
+        // Ein Datensatz muss ausgewählt werden.
+        if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
+            let match = false;
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (row[this._listViewEl.valueField] === value) {
+                    match = true;
+                    return false;
+                }
+            }, this);
+
+            if (!match) {
+                this._errors.push(kijs.getText(`Der Wert "%1" ist nicht in der Liste enthalten.`, '', value));
             }
         }
 
         // minSelectCount
-        if (!kijs.isEmpty(this._minSelectCount)) {
-            const minSelectCount = this._minSelectCount;
-
+        if (!kijs.isEmpty(this._minSelectCount) && this._minSelectCount >= 0) {
             if (kijs.isArray(value)) {
-                if (value.length < minSelectCount) {
-                    this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+                if (kijs.isEmpty(value) && this._minSelectCount > 0 || value.length < this._minSelectCount) {
+                    this._errors.push(kijs.getText(`Min. %1 Datensätze müssen ausgewählt werden`, '', this._minSelectCount));
                 }
-            } else if (kijs.isEmpty(value) && minSelectCount > 0) {
-                this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
             }
         }
 
         // maxSelectCount
-        if (!kijs.isEmpty(this._maxSelectCount)) {
-            const maxSelectCount = this._maxSelectCount;
-
+        if (!kijs.isEmpty(this._maxSelectCount) && this._maxSelectCount > 0) {
             if (kijs.isArray(value)) {
-                if (value.length > maxSelectCount) {
-                    this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+                if (value.length > this._maxSelectCount) {
+                    this._errors.push(kijs.getText(`Max. %1 Datensätze dürfen ausgewählt werden`, '', this._maxSelectCount));
                 }
-            } else if (!kijs.isEmpty(value) && maxSelectCount < 1) {
-                this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
             }
         }
     }
@@ -340,36 +432,61 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // LISTENERS
     _onAfterFirstRenderTo(e) {
-        this.load();
+        this.load(null, true);
     }
-
-    /*_onInput(e) {
-        this.validate();
-    }*/
 
     _onInputKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
-        this._listViewEl._onKeyDown(e);
+
+        if (this._listViewEl.getSelected()) {
+            this._listViewEl._onKeyDown(e);
+
+        } else if (e.nodeEvent.key === 'ArrowDown') {
+            let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
+            if (indx !== null) {
+                this._listViewEl.selectByIndex(indx);
+            }
+        }
+
+        // Scroll
+        if (e.nodeEvent.key === 'ArrowDown' || e.nodeEvent.key === 'ArrowUp') {
+            // scrollen
+            this._setScrollPositionToSelection();
+        }
 
         // wenn Enter gedrückt wird, listview schliessen und ausgewählten Datensatz übernehmen.
         if (e.nodeEvent.key === 'Enter') {
             let dataViewElement = this._listViewEl.getSelected();
             this._spinBoxEl.close();
 
-            if (dataViewElement) {
-                this.value = dataViewElement.dataRow[this._listViewEl.captionField];
+            if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
+                this.value = dataViewElement.dataRow[this._listViewEl.valueField];
             }
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
+
+        // Esc: Schliessen
+        } else if (e.nodeEvent.key === 'Escape') {
+            this._spinBoxEl.close();
+
+            // Selektion zurücksetzen
+            this._listViewEl.value = this.value;
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
         }
     }
 
     _onInputKeyUp(e) {
         // Steuerbefehle ignorieren
-        if (kijs.Array.contains([
-                'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight',
-                'Delete', 'Insert', 'Home', 'End', 'Alt',
-                'AltGraph', 'ContextMenu', 'Control', 'Shift',
-                'Enter', 'CapsLock', 'Tab', 'OS', 'Escape'
-            ], e.nodeEvent.key)) {
+        let specialKeys = [
+            'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
+            'Delete', 'Insert', 'Home', 'End', 'Alt', 'NumpadEnter',
+            'AltGraph', 'ContextMenu', 'Control', 'Shift',
+            'Enter', 'CapsLock', 'Tab', 'OS', 'Escape', 'Space'
+        ];
+        if (kijs.Array.contains(specialKeys, e.nodeEvent.code) || kijs.Array.contains(specialKeys, e.nodeEvent.key)) {
             return;
         }
 
@@ -381,55 +498,85 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // neues Defer schreiben
         this._keyUpDefer = kijs.defer(function() {
-            this._setProposal(e.nodeEvent.key);
-        }, 500, this);
+            if (this._remoteSort) {
+                this.load();
+
+            } else {
+                this._setProposal(e.nodeEvent.key);
+            }
+        }, this._remoteSort ? 1000 : 500, this);
 
     }
 
     _onInputChange(e) {
-        let inputVal = this._inputDom.nodeAttributeGet('value'), matchVal='';
-        inputVal = (inputVal + '').trim();
+        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='';
+        inputVal = kijs.toString(inputVal).trim();
 
-        // Wert im Store suchen.
-        kijs.Array.each(this._listViewEl.data, function(row) {
-            if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
-                matchVal = row[this._listViewEl.captionField];
-                return false;
-            }
-        }, this);
+        // Leerer Wert = feld löschen
+        if (inputVal === '') {
+            match = true;
 
-        if (matchVal && matchVal !== this.value) {
+        } else {
+
+            // Wert im Store suchen.
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                    match = true;
+                    matchVal = row[this._listViewEl.valueField];
+                    return false;
+                }
+            }, this);
+        }
+
+        if (match && matchVal !== this.value) {
             this.value = matchVal;
             this.raiseEvent('change');
 
-        // Es wurde ein Wert eingegeben, der nicht im store ist, daher Feld zurücksetzen
-        } else if (!matchVal) {
+        // Es wurde ein Wert eingegeben, der nicht im Store ist, und das ist erlaubt.
+        } else if (!match && !this._forceSelection) {
+            if (inputVal !== this.value) {
+                this.value = inputVal;
+                this.raiseEvent('change');
+            }
+
+        // Es wurde ein Wert eingegeben, der nicht im Store ist, daher Feld
+        // auf letzten gültigen Wert zurücksetzen.
+        } else {
             this.value = this._value;
         }
+
+        // validieren
+        this.validate();
     }
 
     _onListViewAfterLoad(e) {
-        this.value = this._value;
+        if (!this._remoteSort) {
+            this.value = this._value;
+        }
     }
 
     _onListViewClick(e) {
         this._spinBoxEl.close();
         this.value = this._listViewEl.value;
+
+        // validieren
+        this.validate();
+
         this.raiseEvent('change');
     }
-
-    /*_onListViewSelectionChange(e) {
-
-    }*/
 
     _onSpinBoxClick() {
         this._inputDom.focus();
     }
 
+    _onSpinBoxShow() {
+        this._setScrollPositionToSelection();
+    }
+
     // overwrite
     _onSpinButtonClick(e) {
         super._onSpinButtonClick(e);
-        this._listViewEl.resetDisplayAndOrder();
+        this._listViewEl.applyFilters();
     }
 
 

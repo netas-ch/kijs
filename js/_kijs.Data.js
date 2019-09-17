@@ -13,9 +13,9 @@ kijs.Data = class kijs_Data {
         this._columns = [];      // Array mit Spaltennamen
         this._rows = [];         // Recordset-Array
         this._primary = [];      // Array mit Namen der Primärschlüssel
-        
+
         this._disableDuplicateCheck = false;    // Duplikat-Kontrolle ausschalten
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             disableDuplicateCheck: true,
@@ -23,7 +23,7 @@ kijs.Data = class kijs_Data {
             columns: true,
             primary: true
         };
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config);
@@ -36,31 +36,31 @@ kijs.Data = class kijs_Data {
     // --------------------------------------------------------------
     get columns() { return this._columns; }
     set columns(val) { this._columns = val; }
-    
+
     get disableDuplicateCheck() { return this._disableDuplicateCheck; }
     set disableDuplicateCheck(val) { this._disableDuplicateCheck = !!val; }
 
     get rows() { return this._rows; }
-    
+
     /**
      * Setzt die Rows-Datenquelle.Das Array muss in einem der folgenden Formate sein:
      * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
-     * - Recordset-Array = [{Anrede: 'Herr', Name='Muster'}, {Anrede: 'Frau', Name='Müller'}] 
+     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
+     * - Recordset-Array = [{Anrede: 'Herr', Name='Muster'}, {Anrede: 'Frau', Name='Müller'}]
      * Alle Datensätze im Array müssen das gleiche Format haben.
      * @param {Array} val
      * @returns {undefined}
      */
-    set rows(val) { 
+    set rows(val) {
         if (kijs.isEmpty(val)) {
             this._rows = [];
             return;
         }
-        
+
         if (!kijs.isArray(val)) {
             val = [val];
         }
-        
+
         // Falls ein anderes Format als unser erwartetes Recordset-Array übergeben wurde: konvertieren
         this._convertFromAnyDataArray(val);
 
@@ -70,22 +70,22 @@ kijs.Data = class kijs_Data {
                 throw new Error('Not unique primary-key on (' + this._primary.join(', ') + ').');
             }
         }
-        
+
         this._rows = val;
     }
-    
+
     get primary() { return this._primary; }
     set primary(val) { this._primary = val; }
-    
-    
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     /**
     * Fügt eine oder mehrere neue rows hinzu. Das Array muss in einem der folgenden Formate sein:
     * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-    * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
-    * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}] 
+    * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
+    * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}]
     * Alle Datensätze im Array müssen das gleiche Format haben.
     * @param {Object|Array} rows
     * @param {Boolean|null} [duplicateCheck=false]
@@ -116,8 +116,8 @@ kijs.Data = class kijs_Data {
             this.rows.push(row);
         }
     }
-        
-    
+
+
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -125,10 +125,10 @@ kijs.Data = class kijs_Data {
      */
     applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
-        
+
         // Evtl. die Rows in win Recordset-Array konvertieren
         this._convertFromAnyDataArray(this._rows);
-        
+
         // Falls nur rows übergeben wurden und keine columns: Die columns automatisch generieren
         if (kijs.isEmpty(this._columns)) {
             this._columns = this._getColumnsFromRows(this._rows);
@@ -143,7 +143,7 @@ kijs.Data = class kijs_Data {
     columnExist(columnName) {
         return kijs.Array.contains(this._columns, columnName);
     }
-    
+
     /**
      * Prüft, ob ein Primary einer Row schon im Recordset ist.
      * @param {Array|Object} rows   // einzelnes row-Objekt oder rows-Array
@@ -151,15 +151,15 @@ kijs.Data = class kijs_Data {
      */
     duplicateCheck(rows) {
         let hasDuplicate = false;
-        
+
         if (kijs.isEmpty(rows)) {
             return false;
         }
-        
+
         if (!kijs.isArray(rows)) {
             rows = [rows];
         }
-        
+
         kijs.Array.each(this._rows, function(item) {
             let match = 0;
             for (let i=0; i<this._primary.length; i++) {
@@ -174,7 +174,7 @@ kijs.Data = class kijs_Data {
                 return false; // schlaufe brechen
             }
         }, this);
-        
+
         return hasDuplicate;
     }
 
@@ -199,8 +199,8 @@ kijs.Data = class kijs_Data {
     getCount() {
         return this._rows.length;
     }
-    
-    
+
+
     /**
      * gibt ein leeres Row-Objekt zurück.
      * @returns {Object}
@@ -212,7 +212,7 @@ kijs.Data = class kijs_Data {
         }
         return o;
     }
-    
+
     /**
      * gibt Zeilen zurück, deren Inhalt dem Value entspricht
      * @param {String} columnName Spaltenname
@@ -222,17 +222,17 @@ kijs.Data = class kijs_Data {
     getRowsByFieldValue(columnName, value) {
         const len = this._rows.length;
         const ret = [];
-        
+
         // Zeilen durchgehen
         for (let i=0, len; i<len; i++) {
-            if (this._rows[i][columnName]+'' === value+'') {
+            if (kijs.toString(this._rows[i][columnName]) === kijs.toString(value)) {
                 ret.push(this._rows[i]);
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
      * gibt eine Zeile aufgrund des Primary zurück
      * @param {String|Number|Array|Object} primary
@@ -240,24 +240,24 @@ kijs.Data = class kijs_Data {
      */
     getRowByPrimary(primary) {
         let keys = {};
-        
+
         // Wenn kein Primary definiert ist: Fehler
         if (kijs.isEmpty(this._primary)) {
             throw new Error('No primary key is defined in this data object.');
         }
-        
+
         // String oder Number
         if (kijs.isString(primary) || kijs.isNumber(primary)) {
             keys[this._primary[0]] = primary;
         }
-        
+
         // Array
         if (kijs.isArray(primary)) {
             for (let i=0; i< primary.length; i++) {
                 keys[this._primary[i]] = primary;
             }
         }
-        
+
         // Objekt
         if (kijs.isObject(primary)) {
             keys = primary;
@@ -269,14 +269,14 @@ kijs.Data = class kijs_Data {
                 throw new Error('Number of primary-columns does not match.');
             }
         }
-        
+
         // Zeilen durchgehen, bis die erste passt
         const len = this._rows.length;
         for (let i=0, len; i<len; i++) {
             let ok = true;
             for (let j=0; j<this._primary.length; j++) {
                 const col = this._primary[j];
-                if (this._rows[i][col]+'' !== keys[col]+'') {
+                if (kijs.toString(this._rows[i][col]) !== kijs.toString(keys[col])) {
                     ok = false;
                     break;
                 }
@@ -285,7 +285,7 @@ kijs.Data = class kijs_Data {
                 return this._rows[i];
             }
         }
-        
+
         return null;
     }
 
@@ -300,7 +300,7 @@ kijs.Data = class kijs_Data {
         if (this._duplicateCheck(row)) {
             return false;
         }
-        
+
         const pos = this._rows.indexOf(row);
         if (pos === -1) {
             this._rows.push(row);
@@ -318,7 +318,7 @@ kijs.Data = class kijs_Data {
     remove(row) {
         const pos = this._rows.indexOf(row);
         if (pos === -1) return false;
-        
+
         this._rows.splice(pos, 1);
         return true;
     }
@@ -350,11 +350,11 @@ kijs.Data = class kijs_Data {
         }
         return ret;
     }
-    
+
     /**
      * Konvertiert ein Daten-Array aus einem der folgenden Formate in unser Recordset-Array
      * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
+     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
      * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}]
      * @param {Array} rows
      * @returns {undefined}
@@ -363,15 +363,15 @@ kijs.Data = class kijs_Data {
         if (kijs.isEmpty(rows)) {
             return;
         }
-        
-        // Die erste Zeile im Array bestimmt das Format. 
+
+        // Die erste Zeile im Array bestimmt das Format.
         // Ein Mix von Formaten im selben Array ist deshalb nicht erlaubt.
         let format;
-        
+
         // Objekt -> keine Konventierung notwendig
         if (kijs.isObject(rows[0])) {
             format = 'object';
-            
+
         // Array mit Werten -> konvertieren
         } else if (kijs.isArray(rows[0])) {
             // Spaltenanzahl muss übereinstimmen
@@ -380,14 +380,14 @@ kijs.Data = class kijs_Data {
             } else {
                 throw new Error('The number of columns does not match.');
             }
-            
+
         // alle anderen Datentypen (String, Number, Boolean) -> enthalten direkt den Wert, sie werden konventiert.
         } else {
             format = 'value';
-            
+
         }
-        
-        
+
+
         // Daten evtl. in den richtigen Datentyp konvertieren
         switch (format) {
             // Objekt -> keine Konventierung notwendig
@@ -399,22 +399,22 @@ kijs.Data = class kijs_Data {
                     }
                 }
                 break;
-                
+
             // Array mit Werten -> konvertieren
             case 'array':
                 // Daten konvertieren
                 for (let i=0; i<rows.length; i++) {
                     let row = {};
-                    
+
                     for (let j=0; j<this._columns.length; j++) {
                         const name = this._columns[j];
                         row[name] = rows[i][j];
                     }
-                    
+
                     rows[i] = row;
                 }
                 break;
-                
+
             // alle anderen Datentypen -> enthalten direkt den Wert (nur ein Wert pro Zeile), sie werden konventiert.
             case 'value':
                 // Feldname ermitteln
@@ -444,11 +444,11 @@ kijs.Data = class kijs_Data {
                         rows[i] = row;
                     }
 
-                }                    
+                }
                 break;
         }
     }
-    
+
     /**
      * Die Columns automatisch anhand der rows ermitteln
      * @param {Array} rows
@@ -463,7 +463,7 @@ kijs.Data = class kijs_Data {
                 columns.push(argName);
             }
         }
-        
+
         return columns;
     }
 

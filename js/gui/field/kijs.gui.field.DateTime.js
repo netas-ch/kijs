@@ -334,7 +334,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      */
     _getDateTimeByString(dateTimeStr) {
         let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false, dateTimeAr, timeStr, dateStr;
-        dateTimeStr = dateTimeStr +'';
+        dateTimeStr = kijs.toString(dateTimeStr);
 
             if (dateTimeStr.includes(" ") && this._hasDate) {
                 dateTimeAr = dateTimeStr.split(" ");
