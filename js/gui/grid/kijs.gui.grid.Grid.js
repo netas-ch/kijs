@@ -133,9 +133,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get current() { return this._currentRow; }
     /**
-     * Setzt das aktuelle Zeile, dass den Fokus erhalten wird.
+     * Setzt die aktuelle Zeile, die den Fokus erhalten wird.
      * Null = automatische Ermittlung
-     * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Zeile.
+     * Um den Fokus zu setzen verwenden Sie stattdessen die Funktion .focus() von der Zeile.
      * @param {kijs.gui.grid.Row|null} cRow
      * @returns {undefined}
      */
