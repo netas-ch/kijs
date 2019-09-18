@@ -302,6 +302,16 @@ kijs.Dom = class kijs_Dom {
 
         return false;
     }
+    
+    /**
+     * Entfernt alle Unterelemente eines DOM-Elements
+     * @param {HTMLElement} node
+     */
+    static removeAllChildNodes(node) {
+        while (node.hasChildNodes()) {
+            node.removeChild(node.lastChild);
+        }
+    }
 
     /**
      * Entfernt alle Event-Listeners eines Context
@@ -319,8 +329,8 @@ kijs.Dom = class kijs_Dom {
 
         context._nodeEventListeners = {};
     }
-
-
+    
+    
     /**
      * Entfernt einen Event-Listener von einem HTMLElement
      * @param {String} eventName
@@ -392,15 +402,5 @@ kijs.Dom = class kijs_Dom {
                 break;
         }
     }
-
-
-    /**
-     * Entfernt alle Unterelemente eines DOM-Elements
-     * @param {HTMLElement} node
-     */
-    static removeAllChildNodes(node) {
-        while (node.hasChildNodes()) {
-            node.removeChild(node.lastChild);
-        }
-    }
+    
 };

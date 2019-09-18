@@ -1058,6 +1058,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             targetNode.appendChild(this._node);
         }
     }
+    
+    /**
+     * Scrollt den Node in den sichtbaren Bereich
+     * @returns {undefined}
+     */
+    scrollIntoView(){
+        this._node.scrollIntoView();
+    }
+
 
     /**
      * Node aus DOM entfernen, falls vorhanden
