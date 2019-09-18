@@ -151,7 +151,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
 
     set value(val) {
-        val = val +'';
+        val = kijs.toString(val);
         val = val.split(this._separator);
 
         this._hour = val[0] ? parseInt(val[0]) : 0;
@@ -686,7 +686,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {String}
      */
     _zeroPad(number, lenght=2) {
-        number = number + '';
+        number = kijs.toString(number);
         while (number.length < lenght) {
             number = '0' + number;
         }

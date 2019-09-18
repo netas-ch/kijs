@@ -51,7 +51,7 @@ kijs.String = class kijs_String {
      * @returns {String}
      */
     static htmlentities(html) {
-        return (html+'').replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
+        return kijs.toString(html).replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
             return '&#'+i.charCodeAt(0)+';';
         });
     }
@@ -95,9 +95,9 @@ kijs.String = class kijs_String {
      * @param {String} [type='right'] 'left', 'right' oder 'both'
      * @returns {String}
      */
-    static padding(text, length, padString, type) {
+    static padding(text, length, padString=' ', type='right') {
         length = length || 0;
-        text = text + '';
+        text = kijs.toString(text);
         while (text.length < length) {
             if (type === 'left' || type === 'both') {
                 text = padString + text;
@@ -111,6 +111,15 @@ kijs.String = class kijs_String {
     }
 
     /**
+     * Maskiert Zeichen regulärer Ausdrücke
+     * @param {String} text
+     * @returns {String}
+     */
+    static regexpEscape(text) {
+        return kijs.toString(text).replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    /**
      * Wiederholt einen String.
      * Gibt text multiplier mal wiederholt zurück.
      * @param {String} text
@@ -120,7 +129,7 @@ kijs.String = class kijs_String {
     static repeat(text, multiplier) {
         let response = '';
         for (let i=0; i<multiplier; i++) {
-            response += (text+'');
+            response += kijs.toString(text);
         }
         return response;
     }
@@ -143,7 +152,7 @@ kijs.String = class kijs_String {
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text
      * @param {Number} length maximlae Länge
-     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschnieden
+     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschneiden
      * @param {String} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
      * @returns {String}
      */

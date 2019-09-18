@@ -19,6 +19,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         this._data = [];
         this._facadeFnLoad = null;
+        this._filters = [];
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
@@ -128,68 +129,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set data(val) {
         this._data = val;
 
-        // Bestehende Elemente löschen
-        if (this._elements) {
-            this.removeAll(true);
-        }
-
-        // Neue Elemente generieren
-        let newElements = [];
-        for (let i=0, len=this._data.length; i<len; i++) {
-            const newEl = this.createElement(this._data[i], i);
-            newEl.index = i;
-            newEl.parent = this;
-
-            // click-Event
-            newEl.on('click', function(e) {
-                return this.raiseEvent('elementClick', e);
-            }, this);
-
-            // dblclick-Event
-            newEl.on('dblClick', function(e) {
-                return this.raiseEvent('elementDblClick', e);
-            }, this);
-
-            // focus-Event
-            newEl.on('focus', function(e) {
-                return this.raiseEvent('elementFocus', e);
-            }, this);
-
-            // dragstart-Event
-            newEl.on('dragStart', function(e) {
-                return this.raiseEvent('elementDragStart', e);
-            }, this);
-
-            // dragover-Event
-            newEl.on('dragOver', function(e) {
-                return this.raiseEvent('elementDragOver', e);
-            }, this);
-
-            // drag-Event
-            newEl.on('drag', function(e) {
-                return this.raiseEvent('elementDrag', e);
-            }, this);
-
-            // dragleave-Event
-            newEl.on('dragLeave', function(e) {
-                return this.raiseEvent('elementDragLeave', e);
-            }, this);
-
-            // dragend-Event
-            newEl.on('dragEnd', function(e) {
-                return this.raiseEvent('elementDragEnd', e);
-            }, this);
-
-            // drop-Event
-            newEl.on('drop', function(e) {
-                return this.raiseEvent('elementDrop', e);
-            }, this);
-
-            newElements.push(newEl);
-        }
-
-        // neue Elemente einfügen
-        this.add(newElements);
+        this._createElements();
 
         // Current Element ermitteln und setzen
         this.current = null;
@@ -211,6 +151,30 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
+
+    get filters() { return this._filters; }
+    set filters(val) {
+        if (!val) {
+            this._filters = [];
+        } else {
+            if (!kijs.isArray(val)) {
+                val = [val];
+            }
+
+            // einzelne Filter validieren
+            kijs.Array.each(val, function(filter) {
+                if (!kijs.isObject(filter) || !('field' in filter) || !('value' in filter) || !kijs.isString(filter.field) || !kijs.isString(filter.value)) {
+                    throw new kijs.Error(`invalid argument for filters in kijs.gui.DataView`);
+                }
+                if (!('compare' in filter) || !kijs.Array.contains(['begin', 'part', 'end', 'full'], filter.compare)) {
+                    filter.compare = 'begin';
+                }
+            }, this);
+
+            this._filters = val;
+        }
+
+    }
 
     get focusable() { return this._focusable; }
     set focusable(val) {
@@ -249,6 +213,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Wendet Filter auf das DataView an.
+     * @param {Array|Object} filters
+     * @returns {undefined}
+     */
+    applyFilters(filters) {
+        this.filters = filters;
+        if (this.isRendered) {
+            this._createElements();
+            this.render();
+        }
+    }
+
+
     /**
      * Entfernt alle Selektionen
      * @param {Boolean} [preventSelectionChange=false]    Soll das SelectionChange-Event verhindert werden?
@@ -327,24 +306,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Setzt css order und display der Elemente zurück
-     * @returns {undefined}
-     */
-    resetDisplayAndOrder() {
-        kijs.Array.each(this._elements, function(el) {
-            el.resetDisplayAndOrder();
-        }, this);
-    }
-
-
-    /**
      * Selektiert ein oder mehrere Elemente
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    select(elements, keepExisting, preventSelectionChange) {
+    select(elements, keepExisting=false, preventSelectionChange=false) {
         if (kijs.isEmpty(elements)) {
             elements = [];
         }
@@ -357,12 +325,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.clearSelections(true);
         }
 
+        var changed = false;
         kijs.Array.each(elements, function(el) {
+            changed = changed || !el.selected;
             el.selected = true;
         }, this);
 
+        // current aktualisieren
+        this._currentEl = null;
+        this.current = null;
+
         // SelectionChange auslösen
-        if (!preventSelectionChange) {
+        if (!preventSelectionChange && changed) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
     }
@@ -416,28 +390,29 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
             kijs.Array.each(this._elements, function(el) {
-                const row = el.dataRow;
+                if (el instanceof kijs.gui.DataViewElement) {
+                    const row = el.dataRow;
 
-                kijs.Array.each(filters, function(filterFields) {
-                    let ok = false;
-                    kijs.Array.each(filterFields, function(filterField) {
-                        if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new kijs.Error(`Unkown filter format.`);
-                        }
+                    kijs.Array.each(filters, function(filterFields) {
+                        let ok = false;
+                        kijs.Array.each(filterFields, function(filterField) {
+                            if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
+                                throw new kijs.Error(`Unkown filter format.`);
+                            }
 
-                        if (filterField.value === row[filterField.field]) {
-                            ok = true;
-                        } else {
-                            ok = false;
+                            if (filterField.value === row[filterField.field]) {
+                                ok = true;
+                            } else {
+                                ok = false;
+                                return false;
+                            }
+                        }, this);
+                        if (ok) {
+                            selElements.push(el);
                             return false;
                         }
                     }, this);
-                    if (ok) {
-                        selElements.push(el);
-                        return false;
-                    }
-                }, this);
-
+                }
             }, this);
         }
 
@@ -450,13 +425,37 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
+     * Selektiert ein oder mehrere Elemente
+     * @param {Array|Int} indexes Index oder Array mit Indexes, die selektiert werden sollen
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByIndex(indexes, keepExisting=false, preventSelectionChange=false) {
+        if (!kijs.isArray(indexes)) {
+            indexes = [indexes];
+        }
+        let selectElements = [];
+        kijs.Array.each(indexes, function(index) {
+            kijs.Array.each(this.elements, function(element) {
+                if (element.index === index) {
+                    selectElements.push(element);
+                    return false;
+                }
+            }, this);
+        }, this);
+
+        this.select(selectElements, keepExisting, preventSelectionChange);
+    }
+
+    /**
      * Selektiert alle Elemente zwischen el1 und el2
      * @param {kijs.gui.Element} el1
      * @param {kijs.gui.Element} el2
      * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    selectBetween(el1, el2, preventSelectionChange) {
+    selectBetween(el1, el2, preventSelectionChange=false) {
         let found = false;
         let elements = [];
 
@@ -483,19 +482,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (!kijs.isEmpty(elements)) {
             this.select(elements, true, preventSelectionChange);
         }
-    }
-
-    /**
-     * Setzt css order und display, damit die Elemente
-     * sortiert und ein- und ausgeblendet werden können.
-     * @param {String} pattern
-     * @param {String} dataRowKey
-     * @returns {undefined}
-     */
-    setDisplayAndOrderByPattern(pattern, dataRowKey) {
-        kijs.Array.each(this._elements, function(el) {
-            el.setDisplayAndOrderByPattern(pattern, dataRowKey);
-        }, this);
     }
 
     /**
@@ -544,6 +530,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             el.selected = false;
         }, this);
 
+        // aktuelles Element neu wählen.
+        this.current = null;
+
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: true } );
         }
@@ -551,6 +540,133 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
 
     // PROTECTED
+    /**
+     * Erstellt die Elemente
+     * @returns {undefined}
+     */
+    _createElements() {
+
+        // index des aktuell selektierten Elements
+        let selectIndex = null;
+        if (this._currentEl && this._currentEl instanceof kijs.gui.DataViewElement && kijs.isDefined(this._currentEl.index)) {
+            selectIndex = this._currentEl.index;
+        }
+
+        // Bestehende Elemente löschen
+        if (this.elements) {
+            this.removeAll(true);
+            this._currentEl = null;
+        }
+
+        // Neue Elemente generieren
+        let newElements = [];
+        for (let i=0, len=this._data.length; i<len; i++) {
+
+            // Zeile überspringen, falls sie im Filter hängen bleibt.
+            if (this._filterMatch(this._data[i])) {
+                continue;
+            }
+
+            const newEl = this.createElement(this._data[i], i);
+            newEl.index = i;
+            newEl.parent = this;
+
+            // click-Event
+            newEl.on('click', function(e) {
+                return this.raiseEvent('elementClick', e);
+            }, this);
+
+            // dblclick-Event
+            newEl.on('dblClick', function(e) {
+                return this.raiseEvent('elementDblClick', e);
+            }, this);
+
+            // focus-Event
+            newEl.on('focus', function(e) {
+                return this.raiseEvent('elementFocus', e);
+            }, this);
+
+            // dragstart-Event
+            newEl.on('dragStart', function(e) {
+                return this.raiseEvent('elementDragStart', e);
+            }, this);
+
+            // dragover-Event
+            newEl.on('dragOver', function(e) {
+                return this.raiseEvent('elementDragOver', e);
+            }, this);
+
+            // drag-Event
+            newEl.on('drag', function(e) {
+                return this.raiseEvent('elementDrag', e);
+            }, this);
+
+            // dragleave-Event
+            newEl.on('dragLeave', function(e) {
+                return this.raiseEvent('elementDragLeave', e);
+            }, this);
+
+            // dragend-Event
+            newEl.on('dragEnd', function(e) {
+                return this.raiseEvent('elementDragEnd', e);
+            }, this);
+
+            // drop-Event
+            newEl.on('drop', function(e) {
+                return this.raiseEvent('elementDrop', e);
+            }, this);
+
+            newElements.push(newEl);
+        }
+
+        // neue Elemente einfügen
+        this.add(newElements);
+
+        // selektion wiederherstellen
+        if (selectIndex !== null) {
+            this.selectByIndex(selectIndex);
+        }
+    }
+
+
+    /**
+     * Prüft, ob ein Filter auf einen Record matcht
+     * @param {Object} record
+     * @returns {Boolean}
+     */
+    _filterMatch(record) {
+        let filterMatch = false;
+
+        kijs.Array.each(this.filters, function(filter) {
+            if (!kijs.isDefined(record[filter.field])) {
+                filterMatch = true;
+            }
+
+            let rgx;
+            if (filter.compare === 'begin') {
+                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
+
+            } else if (filter.compare === 'part') {
+                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
+
+            } else if (filter.compare === 'end') {
+                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
+
+            } else if (filter.compare === 'full') {
+                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
+
+            } else {
+                throw new kijs.Error(`invalid value for filter.compare in kijs.gui.DataView`);
+            }
+
+            if (!kijs.toString(record[filter.field]).match(rgx)) {
+                filterMatch = true;
+            }
+        }, this);
+
+        return filterMatch;
+    }
+
     /**
      * Selektiert ein Element und berücksichtigt dabei die selectType und die tasten shift und ctrl
      * @param {kijs.gui.Element} el
@@ -728,7 +844,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
                 case kijs.keys.SPACE:
                     this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    e.nodeEvent.preventDefault();
                     break;
 
             }

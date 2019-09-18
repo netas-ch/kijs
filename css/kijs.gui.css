@@ -912,6 +912,14 @@ div.kijs-listview.kijs-field-combo .kijs-container-inner {
   display: flex;
   flex-direction: column;
 }
+div.kijs-listview.kijs-field-combo .kijs-placeholder {
+  border: 1px solid transparent;
+  font-family: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+  font-size: 11px;
+  color: #000;
+  background-color: #efefef;
+  font-style: italic;
+}
 div.kijs-datepicker .kijs-datepicker-calendar {
   display: table;
 }

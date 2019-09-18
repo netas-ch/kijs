@@ -66,59 +66,6 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Eleme
     }
 
     // --------------------------------------------------------------
-    // MEMBERS
-    // --------------------------------------------------------------
-
-
-    /**
-     * Setzt display und oder zurück
-     * @returns {undefined}
-     */
-    resetDisplayAndOrder() {
-        this._dom.style.order = 0;
-        this._dom.style.display = 'initial';
-    }
-
-    /**
-     * Setzt css order und display, damit das Element in seinem Container
-     * sortiert und ein- und ausgeblendet werden kann.
-     * @param {String} pattern
-     * @param {String} dataRowKey
-     * @returns {undefined}
-     */
-    setDisplayAndOrderByPattern(pattern, dataRowKey) {
-        if (pattern !== null && pattern !== '') {
-            pattern = pattern + '';
-            let value = (this._dataRow[dataRowKey] || '') + '';
-
-            // Übereinstimmung
-            if (pattern.toLowerCase() === value.toLowerCase()) {
-                this._dom.style.order = -3;
-                this.visible = true;
-
-            // Übereinstimmung am Anfang
-            } else if (pattern.length <= value.length && pattern.toLowerCase() === value.toLowerCase().substr(0, pattern.length)) {
-                this._dom.style.order = -2;
-                this.visible = true;
-
-            // Übereinstimmung zwischendrinn
-            } else if (pattern.length <= value.length && value.toLowerCase().match(pattern.toLowerCase())) {
-                this._dom.style.order = -1;
-                this.visible = true;
-
-            // keine Übereinstimmung
-            } else {
-                this._dom.style.order = 1;
-                this.visible = false;
-            }
-
-        } else {
-            this._dom.style.order = 0;
-            this.visible = true;
-        }
-    }
-
-    // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct(superCall) {

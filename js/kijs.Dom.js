@@ -4,7 +4,7 @@
 // kijs.Dom (Static)
 // --------------------------------------------------------------
 kijs.Dom = class kijs_Dom {
-    
+
     // --------------------------------------------------------------
     // STATICS GETTERS
     // --------------------------------------------------------------
@@ -19,11 +19,11 @@ kijs.Dom = class kijs_Dom {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-    
+
     // Static Properties in this Class
-    //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss, 
+    //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss,
     //                                  wird das ergebnis hier gemerkt.
-    
+
     /**
      * Lesen einer Eigenschaft eines Nodes.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
@@ -39,16 +39,16 @@ kijs.Dom = class kijs_Dom {
             } else {
                 return null;
             }
-            
+
         // Normale Attribute
         } else {
             return node[name];
-            
+
         }
     }*/
-    
+
     /**
-     * Zuweisen einer Eigenschaft zu einem node. 
+     * Zuweisen einer Eigenschaft zu einem node.
      * Dabei werden Murgs-Attribute automatisch anders zugewiesen.
      * @param {HTMLElement} node
      * @param {String} name
@@ -63,14 +63,14 @@ kijs.Dom = class kijs_Dom {
             } else {
                 node.removeAttribute(name);
             }
-            
+
         // alle anderen können normal zugewiesen werden
         } else {
             node[name] = value;
-            
+
         }
     }*/
-    
+
     /**
      * Überprüft ob ein Node über eine Eigenschaft verfügt.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
@@ -82,33 +82,33 @@ kijs.Dom = class kijs_Dom {
         // Murgs-Attribute
         if (kijs.Array.contains(this.murgsPropertyNames, name)) {
             return node.hasAttribute(name);
-            
+
         // Normale Attribute
         } else {
             return kijs.isEmpty(node[name]);
-            
+
         }
     }*/
-    
-    
+
+
     /**
      * Erstellt einen Event-Listener auf ein HTMLElement
-     * 
+     *
      * Die Delegates werden dann in der Eigenschaft context._nodeEventListeners gespeichert,
      * damit kann dann ein Listener später auch wieder entfernt werden.
-     *  
+     *
      * context._nodeEventListeners: {
      *     click: [
      *         {node: ..., useCapture: true/false, delegate: ...},
      *         {node: ..., useCapture: true/false, delegate: ...}
      *     ],
-     *     
+     *
      *     mousemove: [
      *         {node: ..., useCapture: true/false, delegate: ...},
      *         {node: ..., useCapture: true/false, delegate: ...}
      *     ]
      * }
-     * 
+     *
      * @param {String} eventName Name des DOM-Events
      * @param {HTMLElement} node DOM-Node
      * @param {Function|String} fn  Funktion oder Name des kijs-Events das ausgelöst werden soll
@@ -119,14 +119,14 @@ kijs.Dom = class kijs_Dom {
      */
     static addEventListener(eventName, node, fn, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Wenn noch kein Delegate existiert: eines erstellen
         if (!this.hasEventListener(eventName, node, context, useCapture)) {
             let delegate = null;
-            
+
             // Falls keine Funktion, sondern ein kijs-Eventname übergeben wurde, so wird ein kijs-Event ausgelöst
             if (kijs.isString(fn)) {
                 let kijsEventName = fn;
@@ -141,14 +141,14 @@ kijs.Dom = class kijs_Dom {
                 };
             } else if (kijs.isFunction(fn)) {
                 delegate = function(e) {
-                    return fn.apply(context, [{ 
+                    return fn.apply(context, [{
                         nodeEventName: eventName,
                         useCapture: useCapture,
                         nodeEvent: e,
                         context: context
                     }]);
                 };
-                
+
             } else {
                 throw new kijs.Error(`Parameter "fn" can not be empty`);
             }
@@ -157,8 +157,8 @@ kijs.Dom = class kijs_Dom {
             node.addEventListener(eventName, delegate, useCapture);
         }
     }
-    
-    
+
+
     /**
      * Gibt die absolute Position eines HTMLElements bezogen zum Browserrand zurück
      * @param {HTMLElement} node
@@ -169,15 +169,15 @@ kijs.Dom = class kijs_Dom {
         let y = 0;
         let w = node.offsetWidth;
         let h = node.offsetHeight;
-        
+
         while (node) {
             x += node.offsetLeft - node.scrollLeft;
             y += node.offsetTop - node.scrollTop;
             node = node.offsetParent;
         }
-        return {x: x,y: y, w: w, h: h};        
+        return {x: x,y: y, w: w, h: h};
     }
-    
+
     /**
      * Gibt das erste untegeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
      *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
@@ -189,10 +189,10 @@ kijs.Dom = class kijs_Dom {
      */
     static getFirstFocusableNode(node) {
         let subNode = null;
-        
+
         if (node.tabIndex >= 0) {
             return node;
-            
+
         } else {
             if (node.hasChildNodes()) {
                 for (let i=0, len=node.children.length; i<len; i++) {
@@ -203,10 +203,10 @@ kijs.Dom = class kijs_Dom {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Berechnet die Breite einer Scrollbar und gibt diese zurück
      * @returns {Number}
@@ -229,8 +229,8 @@ kijs.Dom = class kijs_Dom {
             // inner-DIV einfügen
             const inner = document.createElement("div");
             inner.style.width = "100%";
-            outer.appendChild(inner);        
-            
+            outer.appendChild(inner);
+
             const widthWithScroll = inner.offsetWidth;
 
             // Aufräumen
@@ -239,10 +239,10 @@ kijs.Dom = class kijs_Dom {
             // Breite der Scrollbar berechnen
             this.__scrollbarWidth = widthNoScroll - widthWithScroll;
         }
-        
+
         return this.__scrollbarWidth;
     }
-    
+
     /**
      * Überprüft, ob ein Event-Listener auf ein HTMLElement existiert
      * @param {String} eventName Name des DOM-Events
@@ -254,10 +254,10 @@ kijs.Dom = class kijs_Dom {
      */
     static hasEventListener(eventName, node, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Ist der Listener bereits vorhanden?
         let ret = false;
         if (context._nodeEventListeners[eventName]) {
@@ -268,10 +268,10 @@ kijs.Dom = class kijs_Dom {
                 }
             }, this);
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Fügt einen Node in den Dom ein, direkt nach einem anderen Knoten
      * @param {HTMLElement} node
@@ -281,7 +281,7 @@ kijs.Dom = class kijs_Dom {
     static insertNodeAfter(node, targetNode) {
         targetNode.parentNode.insertBefore(node, targetNode.nextSibling);
     }
-    
+
     /**
      * Schaut, ob ein Node ein Kindknoten (oder Grosskind, etc.) von einem anderen Node ist (rekursiv).
      * @param {HTMLElement} childNode
@@ -299,10 +299,10 @@ kijs.Dom = class kijs_Dom {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Entfernt alle Event-Listeners eines Context
      * @param {kijs.Observable} context
@@ -316,11 +316,11 @@ kijs.Dom = class kijs_Dom {
                 }, this);
             }, this);
         }
-        
+
         context._nodeEventListeners = {};
     }
-    
-    
+
+
     /**
      * Entfernt einen Event-Listener von einem HTMLElement
      * @param {String} eventName
@@ -332,15 +332,15 @@ kijs.Dom = class kijs_Dom {
      */
     static removeEventListener(eventName, node, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Delegate ermitteln und Listener aus Array entfernen
         let delegate = null;
         if (!kijs.isEmpty(context._nodeEventListeners[eventName])) {
             const arr = [];
-            
+
             kijs.Array.each(context._nodeEventListeners[eventName], function(listener) {
                 if (listener.node === node && listener.useCapture === useCapture) {
                     delegate = listener.delegate;
@@ -348,17 +348,17 @@ kijs.Dom = class kijs_Dom {
                     arr.push(listener);
                 }
             }, this);
-            
+
             context._nodeEventListeners[eventName] = arr;
         }
-        
+
         // Listener entfernen
         if (delegate) {
             node.removeEventListener(eventName, delegate, useCapture);
         }
     }
-    
-    
+
+
     /**
      * Fügt html-Code in einen Node. Je nach htmlDisplayType geschieht dies auf unterschiedliche Weise.
      * Bereits vorhandener Inhalt wird gelöscht.
@@ -370,30 +370,30 @@ kijs.Dom = class kijs_Dom {
      * @returns {undefined}
      */
     static setInnerHtml(node, html, htmlDisplayType) {
-        html = kijs.isEmpty(html) ? '' : html;
-        
+        html = kijs.toString(html);
+
         switch (htmlDisplayType) {
             case 'code':
                 this.removeAllChildNodes(node);
                 node.appendChild(document.createTextNode(html));
                 break;
-                
-            case 'text': 
+
+            case 'text':
                 //node.textContent = html;
                 let d = document.createElement('div');
                 d.innerHTML = html;
                 node.innerHTML = d.textContent || d.innerText || '';
                 d = null;
                 break;
-            
+
             case 'html':
             default:
-                node.innerHTML = html; 
+                node.innerHTML = html;
                 break;
         }
     }
-    
-    
+
+
     /**
      * Entfernt alle Unterelemente eines DOM-Elements
      * @param {HTMLElement} node

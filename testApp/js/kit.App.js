@@ -342,7 +342,11 @@ kit.App = class kit_App {
                                         facadeFnLoad: 'grid.load',
                                         rpc: this._rpc,
                                         filterable: true,
-                                        editable: true
+                                        editable: false,
+                                        on: {
+                                            click: function(e){ console.log(e); },
+                                            dblClick: function(e){ console.log(e); }
+                                        }
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){
 //                                            let rows = [];
@@ -385,14 +389,46 @@ kit.App = class kit_App {
                                         style: {marginBottom: '4px'}
                                     },
                                     elements: [
-                                        /*{
-                                            xtype: 'kijs.gui.field.Date',
-                                            name: 'Datum',
-                                            label: 'Datum',
-                                            value: '2017-07-28',
-                                            weekSelect: false,
-                                            width: 230
-                                        },*/{
+                                        {
+                                            xtype: 'kijs.gui.field.Combo',
+                                            name: 'Test',
+                                            label: 'Server Sort',
+                                            facadeFnLoad: 'combo.load',
+                                            autoLoad: true,
+                                            remoteSort: true,
+                                            rpc: this._rpc,
+                                            spinIconVisible: true
+                                        },{
+                                            xtype: 'kijs.gui.field.Combo',
+                                            name: 'Test',
+                                            label: 'Kein Force',
+                                            facadeFnLoad: 'combo.load',
+                                            autoLoad: true,
+                                            remoteSort: true,
+                                            rpc: this._rpc,
+                                            spinIconVisible: false,
+                                            forceSelection: false,
+                                            showPlaceholder: false
+                                        },{
+                                            xtype: 'kijs.gui.field.Combo',
+                                            name: 'Land',
+                                            label: 'Remote',
+                                            rpc: this._rpc,
+                                            facadeFnLoad: 'land.load',
+                                            autoLoad: true,
+                                            value: 'CH',
+                                            valueField: 'value',
+                                            captionField: 'caption'
+                                        },{
+                                            xtype: 'kijs.gui.field.Combo',
+                                            name: 'localcombo',
+                                            label: 'Local',
+                                            data: [
+                                                {value: 1, caption: 'Datensatz 1'},
+                                                {value: 2, caption: 'Datensatz 2'},
+                                                {value: 3, caption: 'Datensatz 3'}
+                                            ]
+                                        },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
                                             label: 'Checkbox',

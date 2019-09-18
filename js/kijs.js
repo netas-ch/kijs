@@ -384,6 +384,28 @@ window.kijs = class kijs {
     }
 
     /**
+     * Wandelt einen beliebigen Wert in einen String um.
+     * @param {mixed} value
+     * @returns {String}
+     */
+    static toString(value) {
+        if (kijs.isString(value)) {
+            return value;
+
+        } else if (value === null || !kijs.isDefined(value)) {
+            return '';
+
+        } else if (kijs.isBoolean(value)) {
+            return value ? '1' : '0';
+
+        } else if (kijs.isFunction(value.toString)) {
+            return value.toString();
+        }
+
+        return (value + '');
+    }
+
+    /**
      * Setzt eine individuelle getText-Funktion
      * @param {Function} fn
      * @param {Object} scope

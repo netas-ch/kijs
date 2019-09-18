@@ -116,7 +116,7 @@
                 try {
                     $rows = array();
 
-                    $laender = file('land.csv');
+                    $laender = file('testData/land.csv');
 
                     foreach ($laender as $land) {
                         $land = explode(';', trim($land));
@@ -219,7 +219,7 @@
                 try {
                     $start = (int) $request->requestData->start;
                     $limit = (int) $request->requestData->limit;
-                    $vornamen = file('vornamen.txt');
+                    $vornamen = file('testData/vornamen.txt');
 
                     // Spalten zurückgeben (wenn verlangt)
                     if ($request->requestData->getMetaData === true) {
@@ -315,6 +315,38 @@
 
                         $response->responseData->rows[] = $row;
                     }
+
+                } catch (Exception $ex) {
+                    $response->errorMsg = $ex->getMessage();
+                }
+                break;
+
+            case 'combo.load':
+                try {
+                    $query = $request->requestData->query; // suchbegriff
+                    $value = $request->requestData->value; // aktuell selektierte ID
+                    $rows = array();
+
+                    $berufe = file('testData/beruf.csv');
+                    foreach ($berufe as $beruf) {
+                        $beruf = explode(';', trim($beruf));
+
+                        if ($value === $beruf[0] || ($query && mb_stristr($beruf[1], $query))) {
+                            $rows[] = array('value'=>$beruf[0], 'caption'=>$beruf[1]);
+                        }
+                    }
+
+                    if ($query) {
+                        usort($rows, function($a, $b) use ($query) {
+                            if (mb_strtolower(mb_substr($a['caption'],0,mb_strlen($query))) === mb_strtolower($query)) {
+                                return -1;
+                            }
+                            return 0;
+                        });
+                    }
+
+
+                    $response->responseData->rows = $rows;
 
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();

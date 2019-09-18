@@ -118,7 +118,7 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
             }
 
         } else if (value) {
-            this._dom.html = this._unitBefore + '' + value + '' + this._unitAfter;
+            this._dom.html = this._unitBefore + kijs.toString(value) + this._unitAfter;
 
         } else {
             this._dom.html = value;
