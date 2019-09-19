@@ -101,9 +101,21 @@ kijs.Ajax = class kijs_Ajax {
             let val = null;
             if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
                 switch (config.format) {
-                    case 'text': val = xmlhttp.responseText; break;
-                    case 'json': val = JSON.parse(xmlhttp.responseText); break;
-                    case 'xml': val = kijs.Ajax.parseXml(xmlhttp.responseXML); break;
+                    case 'text':
+                        val = xmlhttp.responseText;
+                        break;
+
+                    case 'json':
+                        try {
+                            val = JSON.parse(xmlhttp.responseText);
+                        } catch (e) {
+                            val = xmlhttp.responseText;
+                        }
+                        break;
+
+                    case 'xml':
+                        val = kijs.Ajax.parseXml(xmlhttp.responseXML);
+                        break;
                 }
                 config.fn.call(config.context || this, val, config, null);
             } else {

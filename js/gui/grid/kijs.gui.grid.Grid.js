@@ -788,7 +788,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
                 // wenn sämtliche Datensätze neu geladen werden.
-                let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0);
+                let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0); // !TODO bei Windows gibt es zum Teil keinen Parent-Node
 
                 // RPC ausführen
                 this._rpc.do(this._facadeFnLoad, args, function(response) {
