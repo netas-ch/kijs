@@ -148,10 +148,14 @@ window.kijs = class kijs {
      * @param {Function} fn
      * @param {Number} millis
      * @param {Object} context
-     * @param {Array} [args]
+     * @param {mixed} [args]
      * @returns {Number} Timeout-ID die mit clearTimeout gelöscht werden kann
      */
-    static defer(fn, millis, context, args) {
+    static defer(fn, millis, context, args = null) {
+        if (args !== null) {
+            args = kijs.isArray(args) ? args : [args];
+        }
+        
         fn = this.createDelegate(fn, context, args);
         if (millis > 0) {
             return setTimeout(fn, millis);
