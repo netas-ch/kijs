@@ -343,7 +343,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             kijs.Array.each(rows, function(row) {
                 let idRow = {};
                 kijs.Array.each(this._primaryKeys, function(pk) {
-                    idRow[pk] = row[pk];
+                    idRow[pk] = row.dataRow[pk];
                 }, this);
                 ids.push(idRow);
             }, this);
