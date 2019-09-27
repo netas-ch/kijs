@@ -257,9 +257,8 @@ kijs.Date = class kijs_Date {
      * @returns {String}
      */
     static format(date, format) {
-        const _this = this;
-        return kijs.toString(format).replace(/[a-zA-Z]/g, function(letter){
-            return _this.__formatReplace(letter, date);
+        return kijs.toString(format).replace(/[a-zA-Z]/g, (letter) => {
+            return this.__formatReplace(letter, date);
         });
     }
 
@@ -538,7 +537,7 @@ kijs.Date = class kijs_Date {
      * @returns {Number}
      */
     static unixTimestamp(date) {
-        return parseInt(date.getTime() / 1000);
+        return Math.round(date.getTime() / 1000);
     }
 
 
@@ -586,6 +585,14 @@ kijs.Date = class kijs_Date {
             case 'i': return kijs.String.padding(date.getMinutes(), 2, '0', 'left');
             // s  Sekunden, mit führenden Nullen  00 bis 59
             case 's': return kijs.String.padding(date.getSeconds(), 2, '0', 'left');
+
+            // Vollständige(s) Datum/Uhrzeit
+            // c  ISO 8601 Datum (2011-10-05T14:48:00.000Z)
+            case 'c': return date.toISOString();
+            // r  Gemäß RFC 2822 formatiertes Datum (Tue Aug 19 1975 23:15:30 GMT+0200 (CEST))
+            case 'r': return date.toString();
+            // U  Sekunden seit Beginn der UNIX-Epoche
+            case 'U': return kijs.toString(kijs.Date.unixTimestamp(date));
 
             default: return letter;
         }

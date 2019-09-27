@@ -408,13 +408,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     /**
      * Schliesst das Panel
+     * @param {bool} [preventEvent=false] Kein 'close' Event auslösen
      * @returns {undefined}
      */
-    close() {
+    close(preventEvent=false) {
+        if (!preventEvent) {
+            this.raiseEvent('close');
+        }
+        
         if (this._parentEl && this._parentEl instanceof kijs.gui.Container && this._parentEl.hasChild(this)) {
             this._parentEl.remove(this);
+        } else {
+            this.unrender();
         }
-        this.unrender();
     }
 
     /**

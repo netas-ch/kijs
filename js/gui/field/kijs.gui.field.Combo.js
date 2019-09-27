@@ -71,6 +71,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             selectType: { target: 'selectType', context: this._listViewEl },
 
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listViewEl },
+            facadeFnArgs: { target: 'facadeFnArgs', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
 
             minChars: { target: 'minChars', prio: 2},
@@ -154,6 +155,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._listViewEl.disabled = !!val;
     }
+
+    get facadeFnArgs() { return this._listViewEl.facadeFnArgs; }
+    set facadeFnArgs(val) { this._listViewEl.facadeFnArgs = val; }
 
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
     set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
@@ -297,9 +301,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         let found = false;
         let caption = null;
         kijs.Array.each(this._listViewEl.data, function(row) {
-            if (row[this._listViewEl.valueField] === val) {
+            if (row[this.valueField] === val) {
                 found = true;
-                caption = row[this._listViewEl.captionField];
+                caption = row[this.captionField];
                 return false;
             }
         }, this);
@@ -325,8 +329,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Exakten Wert suchen
         if (inputVal && key !== 'Backspace' && key !== 'Delete') {
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
-                    matchVal = row[this._listViewEl.captionField];
+                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                    matchVal = row[this.captionField];
                     return false;
                 }
             }, this);
@@ -334,12 +338,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Selber Beginn suchen
             if (matchVal === '') {
                 kijs.Array.each(this._listViewEl.data, function(row) {
-                    let caption = row[this._listViewEl.captionField];
+                    let caption = row[this.captionField];
 
-                    if (kijs.isString(row[this._listViewEl.captionField])
+                    if (kijs.isString(row[this.captionField])
                             && inputVal.length <= caption.length
                             && caption.substr(0, inputVal.length).toLowerCase() === inputVal.toLowerCase()) {
-                        matchVal = row[this._listViewEl.captionField];
+                        matchVal = row[this.captionField];
                         return false;
                     }
                 }, this);
@@ -401,7 +405,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
             let match = false;
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (row[this._listViewEl.valueField] === value) {
+                if (row[this.valueField] === value) {
                     match = true;
                     return false;
                 }
@@ -462,7 +466,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._spinBoxEl.close();
 
             if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
-                this.value = dataViewElement.dataRow[this._listViewEl.valueField];
+                this.value = dataViewElement.dataRow[this.valueField];
             }
 
             // event stoppen
@@ -522,9 +526,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Wert im Store suchen.
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
                     match = true;
-                    matchVal = row[this._listViewEl.valueField];
+                    matchVal = row[this.valueField];
                     return false;
                 }
             }, this);
@@ -554,6 +558,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _onListViewAfterLoad(e) {
         if (!this._remoteSort) {
             this.value = this._value;
+        }
+
+        // Spinbox Nachricht anhängen
+        if (e.response && e.response.spinboxMessage) {
+            this._addPlaceholder(e.response.spinboxMessage);
         }
     }
 

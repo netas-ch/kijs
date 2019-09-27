@@ -19,6 +19,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         this._data = [];
         this._facadeFnLoad = null;
+        this._facadeFnArgs = {};
         this._filters = [];
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
@@ -39,6 +40,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             disabled: { target: 'disabled'},
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
+            facadeFnArgs: true,         // Objekt mit Argumenten für die FacadeFn
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
             selectType: true            // 'none': Es kann nichts selektiert werden
@@ -148,6 +150,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             el.disabled = !!val;
         }, this);
     }
+
+    get facadeFnArgs() { return this._facadeFnArgs; }
+    set facadeFnArgs(val) { this._facadeFnArgs = val; }
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
@@ -295,13 +300,27 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {undefined}
      */
     load(args) {
+
+        // Standardargumente anhängen
+        if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
+            if (kijs.isObject(args)) {
+                Object.assign(args, this._facadeFnArgs);
+
+            } else if (kijs.isArray(args)) {
+                args.push(kijs.Object.clone(this._facadeFnArgs));
+
+            } else {
+                args = kijs.Object.clone(this._facadeFnArgs);
+            }
+        }
+
         this._rpc.do(this._facadeFnLoad, args, function(response) {
             this.data = response.rows;
             if (!kijs.isEmpty(response.selectFilters)) {
                 this.selectByFilters(response.selectFilters);
             }
 
-            this.raiseEvent('afterLoad');
+            this.raiseEvent('afterLoad', {response: response});
         }, this, true, this, 'dom', false);
     }
 

@@ -32,6 +32,21 @@ kijs.Observable = class kijs_Observable {
                                             //           }
     }
 
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    /**
+     * Gibt den Namen der Javascript-Klasse zurück
+     * @returns {String|null}
+     */
+    get jsClassName() {
+        if (kijs.isString(this.constructor.name)) {
+            return kijs.String.replaceAll(this.constructor.name, '_', '.');
+        }
+        
+        return null;
+    }
 
     // --------------------------------------------------------------
     // MEMBERS

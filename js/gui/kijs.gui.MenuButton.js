@@ -123,33 +123,8 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
     get elements() { return this._spinbox.elements; }
     set elements(val) {
-
-        if (!kijs.isArray(val)) {
-            val = [val];
-        }
-
-        let elements = [];
-        kijs.Array.each(val, function(element) {
-
-            // Linie
-            if (kijs.isString(element) && element === '-') {
-                elements.push(new kijs.gui.Container({
-                    html: '<hr>'
-                }));
-
-            // Sonstiger Text
-            } else if (kijs.isString(element)) {
-                elements.push(new kijs.gui.Container({
-                    html: element
-                }));
-
-            // Sonstiges Element
-            } else {
-                elements.push(element);
-            }
-        });
-
-        this._spinbox.add(elements);
+        this._spinbox.removeAll();
+        this.add(val);
     }
 
 
@@ -174,6 +149,41 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Fügt dem Menu neue Elemente hinzu.
+     * @param {Object|Array} elements
+     * @returns {undefined}
+     */
+    add(elements) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+
+        let newElements = [];
+        kijs.Array.each(elements, function(element) {
+
+            // Linie
+            if (kijs.isString(element) && element === '-') {
+                newElements.push(new kijs.gui.Element({
+                    cls:  'separator',
+                    html: '<hr />'
+                }));
+
+            // Sonstiger Text
+            } else if (kijs.isString(element)) {
+                newElements.push(new kijs.gui.Element({
+                    html: element
+                }));
+
+            // Sonstiges Element
+            } else {
+                newElements.push(element);
+            }
+        });
+
+        this._spinbox.add(newElements);
+    }
 
     /**
      * Schliesst das Dropdownmenu und alle Untermenus
