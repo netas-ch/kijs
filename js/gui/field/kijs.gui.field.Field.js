@@ -343,6 +343,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    get required() { return this._required; }
+    set required(val) { this._required = !!val; }
+
     /**
      * Berechnet die Höhe für die spinBox
      * @returns {Number}
@@ -545,7 +548,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errors = [];
 
         // Validierungen anwenden
-        this._validationRules(this.value);
+        if (this.visible) {
+            this._validationRules(this.value);
+        }
 
         // Fehler anzeigen, falls vorhanden
         this._displayErrors();
