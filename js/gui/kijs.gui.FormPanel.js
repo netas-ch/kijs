@@ -28,7 +28,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data'},            // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            data: { target: 'data', prio: 100}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
