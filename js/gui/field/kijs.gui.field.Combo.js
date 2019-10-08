@@ -213,8 +213,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     get oldValue() { return this._oldValue; }
-    
-    
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -515,7 +515,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     _onInputChange(e) {
-        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='';
+        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='', changed=false;
         inputVal = kijs.toString(inputVal).trim();
 
         // Leerer Wert = feld löschen
@@ -536,13 +536,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         if (match && matchVal !== this.value) {
             this.value = matchVal;
-            this.raiseEvent('change');
+            changed = true;
 
         // Es wurde ein Wert eingegeben, der nicht im Store ist, und das ist erlaubt.
         } else if (!match && !this._forceSelection) {
             if (inputVal !== this.value) {
                 this.value = inputVal;
-                this.raiseEvent('change');
+                changed = true;
             }
 
         // Es wurde ein Wert eingegeben, der nicht im Store ist, daher Feld
@@ -553,6 +553,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // validieren
         this.validate();
+
+        // change-event
+        if (changed) {
+            this.raiseEvent('change');
+        }
     }
 
     _onListViewAfterLoad(e) {
@@ -568,12 +573,15 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _onListViewClick(e) {
         this._spinBoxEl.close();
-        this.value = this._listViewEl.value;
 
-        // validieren
-        this.validate();
+        if (this.value !== this._listViewEl.value) {
+            this.value = this._listViewEl.value;
 
-        this.raiseEvent('change');
+            // validieren
+            this.validate();
+
+            this.raiseEvent('change');
+        }
     }
 
     _onSpinBoxClick() {
