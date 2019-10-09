@@ -9,6 +9,8 @@
  * afterLoad
  * beforeSelectionChange
  * selectionChange
+ * rowClick
+ * rowDblClick
  *
  */
 kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
@@ -416,6 +418,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                         dataRow: row,
                         on: {
                             click: this._onRowClick,
+                            dblClick: this._onRowDblClick,
                             context: this
                         }
                     }));
@@ -1051,6 +1054,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
             this._selectRow(this._currentRow, shift, ctrl);
         }
+
+        // Event weiterreichen
+        this.raiseEvent('rowClick', e);
+    }
+
+    _onRowDblClick(e) {
+        // Event weiterreichen
+        this.raiseEvent('rowDblClick', e);
     }
 
     _onTableScroll(e) {
