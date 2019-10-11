@@ -28,7 +28,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data', prio: 100}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
@@ -95,6 +95,41 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }, this);
         }
     }
+    
+    get disabled(){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+
+        let disabled = 0;
+        let notDisabled = 0;
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                if (element.disabled){
+                    disabled ++;
+                } else {
+                    notDisabled ++;
+                }
+            }
+        }, this);
+        if (disabled > (this.fields.length / 2)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    set disabled(value){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+        
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                element.disabled = value;
+            }
+        }, this);
+    }
 
     get fields() { return this._fields; }
 
@@ -126,7 +161,39 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._fields[i].isDirty = !!val;
         }
     }
+    
+    get readOnly(){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
 
+        let readOnly = 0;
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                if (element.readOnly){
+                    readOnly ++;
+                }
+            }
+        }, this);
+        if (readOnly > (this.fields.length / 2)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    set readOnly(value){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+        
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                element.readOnly = value;
+            }
+        }, this);
+    }
+    
     get rpc() { return this._rpc;}
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {
