@@ -255,6 +255,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._checked = 1;
         } else if (val === this._valueDeterminated ||val === 2) {
             this._checked = 2;
+        } else if (val === null) {
+            this._checked = 0;
         } else {
             throw new kijs.Error(`config "value" is not valid.`);
         }
