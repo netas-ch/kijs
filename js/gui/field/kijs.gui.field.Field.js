@@ -600,7 +600,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     // LISTENERS
     _onSpinButtonClick(e) {
-        if (this.disabled) {
+        if (this.disabled || this.readOnly) {
              return;
         }
         if (this._spinBoxEl) {

@@ -356,14 +356,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     /**
      * Lädt alle Daten im Grid neu.
+     * @param {boolean} restoreSelection
      * @returns {Promise}
      */
-    reload() {
+    reload(restoreSelection = true) {
         let selected = this.getSelectedIds();
         return this._remoteLoad(true).then((response) => {
 
             // selektion wiederherstellen
-            if (selected) {
+            if (selected && restoreSelection) {
                 this.selectByIds(selected, false, true);
             }
 
