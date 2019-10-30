@@ -95,38 +95,32 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }, this);
         }
     }
-    
-    get disabled(){
+
+    get disabled() {
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
         }
 
-        let disabled = 0;
-        let notDisabled = 0;
+        let fieldCnt = 0, disabledCnt = 0;
         kijs.Array.each(this.fields, function(element) {
             if (element instanceof kijs.gui.field.Field) {
-                if (element.disabled){
-                    disabled ++;
-                } else {
-                    notDisabled ++;
+                fieldCnt++;
+                if (element.disabled) {
+                    disabledCnt++;
                 }
             }
         }, this);
-        if (disabled > (this.fields.length / 2)){
-            return true;
-        } else {
-            return false;
-        }
+        return disabledCnt > (fieldCnt/2);
     }
-    
-    set disabled(value){
+
+    set disabled(value) {
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
         }
-        
+
         kijs.Array.each(this.fields, function(element) {
             if (element instanceof kijs.gui.field.Field) {
-                element.disabled = value;
+                element.disabled = !!value;
             }
         }, this);
     }
@@ -161,7 +155,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._fields[i].isDirty = !!val;
         }
     }
-    
+
     get readOnly(){
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
@@ -181,19 +175,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             return false;
         }
     }
-    
+
     set readOnly(value){
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
         }
-        
+
         kijs.Array.each(this.fields, function(element) {
             if (element instanceof kijs.gui.field.Field) {
                 element.readOnly = value;
             }
         }, this);
     }
-    
+
     get rpc() { return this._rpc;}
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {

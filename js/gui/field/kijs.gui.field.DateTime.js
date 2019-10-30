@@ -238,10 +238,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (kijs.isString(val) && val !== '') {
             val = this._getDateTimeByString(val);
         }
-        
+
         // Datum aus Timestamp
         if (kijs.isInteger(val)) {
-            val = this._getDateTimeByTimestamp(val);
+            val = new Date(val*1000);
+            val.timeMatch = true;
         }
 
         if (val instanceof Date) {
@@ -329,15 +330,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         return format;
-    }
-
-    _getDateTimeByTimestamp(timestamp){
-
-        let date = new Date(timestamp * 1000); // Konvertiert Timestamp zu Millisekunden
-
-        let datetime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds());
-        datetime.timeMatch = true; // Uhrzeit definiert oder default (00:00)
-        return datetime;
     }
 
     /**
