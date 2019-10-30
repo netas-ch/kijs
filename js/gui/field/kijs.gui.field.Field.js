@@ -168,7 +168,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errorIconEl.disabled = val;
         this._helpIconEl.disabled = val;
 
-        if (this._spinBoxEl) {
+        if (this._spinBoxEl && 'disabled' in this._spinBoxEl) {
             this._spinBoxEl.disabled = val;
         }
 

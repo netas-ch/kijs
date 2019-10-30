@@ -15,7 +15,8 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
+        
         this._targetEl = null;
         this._targetDom = null;
         this._animated = true;

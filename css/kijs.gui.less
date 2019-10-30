@@ -745,7 +745,7 @@ button.kijs-button {
         height: 14px;
         min-width: 14px;
         border-radius: 50%;
-        padding: 0;
+        padding: 0 2px;
         font-family: @default-fontFamily;
         font-size: @badge-fontSize;
         line-height: 14px;
@@ -955,7 +955,7 @@ div.kijs-panelbar {
                 right: -3px;
                 padding: 2px;
                 font-size: 8px;
-                line-height: 8px;
+                line-height: 10px;
             }
 
             &:hover,
@@ -1556,6 +1556,12 @@ div.kijs-field {
         font-size: @field-fontSize;
         line-height: 17px;
         padding: 3px 0 0 0;
+
+        /* selektion von Text erlauben */
+        -webkit-user-select: text;
+        -moz-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
     }
 
     > .kijs-inputwrapper {
@@ -1635,9 +1641,10 @@ div.kijs-field {
    * Field Text
    ****************** */
 div.kijs-field-text {
-    height: 25px;
 
     > .kijs-inputwrapper {
+        height: 25px;
+
         > input {
             display: block;
             height: 100%;
@@ -1671,9 +1678,10 @@ div.kijs-field-text {
    * Field Password
    ****************** */
 div.kijs-field-password {
-    height: 25px;
 
     > .kijs-inputwrapper {
+        height: 25px;
+
         > input {
             display: block;
             height: 100%;
@@ -1705,59 +1713,13 @@ div.kijs-field-password {
 
 
 /* ******************
-   * Field Date
-   ****************** */
-div.kijs-field-date {
-    height: 25px;
-
-    > .kijs-inputwrapper {
-        display: flex;
-        flex-flow: row nowrap;
-
-        > div {
-            flex: 1 1 auto;
-        }
-
-        .kijs-trigger {
-            flex:none;
-        }
-
-        > input {
-            display: block;
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            border: 1px solid @field-borderColor;
-            padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
-
-            &:focus {
-                border: 1px solid @field-focus-borderColor;
-            }
-        }
-    }
-
-    &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
-    }
-
-    &.kijs-disabled, &.kijs-readonly {
-        > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
-        }
-    }
-}
-
-
-/* ******************
    * Field DateTime
    ****************** */
 div.kijs-field-datetime {
-    height: 25px;
 
     > .kijs-inputwrapper {
+        height: 25px;
+
         > input {
             display: block;
             height: 100%;
@@ -1773,6 +1735,10 @@ div.kijs-field-datetime {
                 border: 1px solid @field-focus-borderColor;
             }
         }
+    }
+
+    > .kijs-icon {
+        height: 25px;
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
@@ -1796,7 +1762,7 @@ div.kijs-field-datetime {
    * Field Memo
    ****************** */
 div.kijs-field-memo {
-    height: 50px;
+    min-height: 50px;
 
     > .kijs-inputwrapper > textarea {
         display: block;
@@ -1919,9 +1885,10 @@ div.kijs-field-checkboxgroup{
    * Field Combo
    ****************** */
 div.kijs-field-combo {
-    height: 25px;
 
     > .kijs-inputwrapper {
+        height: 25px;
+
         > input {
             display: block;
             height: 100%;
@@ -1937,6 +1904,10 @@ div.kijs-field-combo {
                 border: 1px solid @field-focus-borderColor;
             }
         }
+    }
+
+    > .kijs-icon {
+        height: 25px;
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {

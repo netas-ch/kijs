@@ -10,7 +10,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._headerBarEl = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar',

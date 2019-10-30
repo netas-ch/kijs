@@ -181,7 +181,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     _onListViewSelectionChange(e) {
         const val = this.value;
 
-        this._value = val;
         this.raiseEvent(['input', 'change'], { oldValue: this._oldValue, value: val });
         this._oldValue = val;
 

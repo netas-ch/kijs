@@ -141,7 +141,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._cls = [];
         this._disableEnterBubbeling = false;

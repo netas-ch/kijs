@@ -10,32 +10,32 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._aceEditor = null;
         this._aceEditorNode = null;
         this._mode = null;
         this._theme = null;
         this._value = null;
-        
+
         this._dom.clsAdd('kijs-field-editor');
-       
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             mode: true,          // 'javascript', 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
             theme: true          // (siehe Ordner kijs\lib\ace)
         });
-        
+
         // Listeners
         this.on('input', this._onInput, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -49,13 +49,13 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this._aceEditor.setReadOnly(false);
         }
     }
-    
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-    
+
     get mode() { return this._mode; }
     set mode(val) { this._mode = val; }
-    
+
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -66,13 +66,13 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this._aceEditor.setReadOnly(false);
         }
     }
-    
+
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
-    
+
     get trimValue() { return this._trimValue; }
     set trimValue(val) { this._trimValue = val; }
-    
+
     // overwrite
     get value() {
         if (this._aceEditor) {
@@ -81,7 +81,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             return this._value;
         }
     }
-    set value(val) { 
+    set value(val) {
         this._value = val;
         if (this._aceEditor) {
             this._aceEditor.setValue(val, 1);
@@ -95,15 +95,15 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // overwrite
     render(superCall) {
         super.render(true);
-        
+
         // aceEditor erstellen
         if (!this._aceEditor) {
             this._aceEditorNode = document.createElement('div');
             this._inputWrapperDom.node.appendChild(this._aceEditorNode);
-            
+
             this._aceEditor = ace.edit(this._aceEditorNode);
-            this._inputNode = this._aceEditorNode.firstChild;
-            this._inputNode.id = this._inputId;
+            let inputNode = this._aceEditorNode.firstChild;
+            inputNode.id = this._inputId;
 
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
@@ -113,7 +113,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
                 });
             }, 200, this);
         }
-        
+
         this._aceEditor.setHighlightActiveLine(false);
         //this._aceEditor.$blockScrolling = Infinity;
 
@@ -125,19 +125,19 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         }
 
         this.value = this._value;
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
-    
+
 
     // LISTENERS
     _onInput(e) {
         this.validate();
     }
-    
+
     // PROTECTED
     // overwrite
     _validationRules(value) {
@@ -166,9 +166,9 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
-            
+
         // Variablen (Objekte/Arrays) leeren
         this._aceEditor = null;
         this._aceEditorNode = null;

@@ -55,8 +55,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
 
-        this.applyConfig(config);
-
         // Events
         this.on('keyDown', this._onKeyDown, this);
         this.on('elementClick', this._onElementClick, this);
@@ -147,7 +145,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Elements auch aktivieren/deaktivieren
         kijs.Array.each(this._elements, function(el) {
-            el.disabled = !!val;
+            if ('disabled' in el) {
+                el.disabled = !!val;
+            }
         }, this);
     }
 

@@ -17,7 +17,8 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     constructor(config={}) {
         super(false);
 
-        if (config !== false) {
+        // check if abstract
+        if (kijs.isObject(config)) {
             throw new kijs.Error('do not create a instance of kijs.gui.grid.columnConfig.ColumnConfig directly');
         }
 

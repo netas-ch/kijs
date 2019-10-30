@@ -13,7 +13,7 @@ kijs.gui.grid.columnWindow = class kijs_gui_grid_columnWindow extends kijs.gui.W
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
 
         this._dom.clsAdd('kijs-columnwindow');

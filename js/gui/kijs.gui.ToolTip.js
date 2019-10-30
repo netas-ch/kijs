@@ -9,7 +9,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
-    constructor(config) {
+    constructor(config={}) {
         super(false);
 
         this._disabled = false;

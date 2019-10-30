@@ -170,7 +170,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._afterResizeDeferHandle = null;   // intern
         this._afterResizeDelay = 300;    // delay beim Aufruf des afterResize-Events
@@ -544,6 +544,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (preventEvents) {
             this._preventAfterResize = prevAfterRes;
         }
+
+        // Objekt versiegeln
+        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        Object.seal(this);
     }
 
     /**

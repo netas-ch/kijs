@@ -10,7 +10,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._spinbox = new kijs.gui.SpinBox({
             cls: ['kijs-flexcolumn', 'kijs-menubutton-spinbox'],

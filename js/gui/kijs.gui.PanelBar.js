@@ -10,7 +10,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._containerLeftEl = new kijs.gui.Container({

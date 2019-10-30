@@ -10,6 +10,7 @@ kijs.Observable = class kijs_Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor() {
+        this._nodeEventListeners = {};
         this._events = this._events || {};  // Beispiel: {
                                             //              click: [
                                             //                {
@@ -44,7 +45,7 @@ kijs.Observable = class kijs_Observable {
         if (kijs.isString(this.constructor.name)) {
             return kijs.String.replaceAll(this.constructor.name, '_', '.');
         }
-        
+
         return null;
     }
 
@@ -154,6 +155,13 @@ kijs.Observable = class kijs_Observable {
      * @returns {undefined}
      */
     on(names, callback, context) {
+
+        if (!kijs.isString(names) && !kijs.isArray(names)) {
+            throw new kijs.Error(`invalid argument 1 for on(names, callback, context): string or array expected`);
+        }
+        if (!kijs.isFunction(callback)) {
+            throw new kijs.Error(`invalid argument 2 for on(names, callback, context): function expected`);
+        }
 
         names = kijs.isArray(names) ? names : [names];
 

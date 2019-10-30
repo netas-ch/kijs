@@ -25,7 +25,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._resizeDeferHandle = null;   // intern
         this._dragInitialPos = null;      // intern

@@ -20,10 +20,10 @@ kijs.Number = class kijs_String {
      */
     static format(number, decimals=0, decPoint='.', thousandsSep='\'') {
         let ret = '';
-        let tmp = kijs.toString(number).split('.');
 
         // Bei decimals==='' oder null automatisch die Anzahl Kommastellen ermitteln
         if (decimals==='' || decimals===null) {
+            let tmp = kijs.toString(number).split('.');
             if (tmp.length > 1) {
                 decimals = tmp[1].length;
             } else {
@@ -32,6 +32,9 @@ kijs.Number = class kijs_String {
         } else {
             decimals = Number(decimals);
         }
+
+        // Zahl auf gegebene Präzision runden und in Array wandeln.
+        let tmp = kijs.toString(Math.abs(kijs.Number.round(number, decimals))).split('.');
 
         // Tausendertrennzeichen einfügen
         if (!kijs.isEmpty(thousandsSep) && !kijs.isEmpty(tmp[0])) {
@@ -51,6 +54,12 @@ kijs.Number = class kijs_String {
             let digits = tmp.length > 1 ? kijs.toString(tmp[1]) : '';
             digits = kijs.String.padding(digits.substr(0, decimals), decimals, '0', 'right');
             ret += decPoint + digits;
+        }
+
+
+        // Negative Nummer
+        if (kijs.Number.round(number, decimals) < 0) {
+            ret = '-' + ret;
         }
 
         return ret;
@@ -97,6 +106,20 @@ kijs.Number = class kijs_String {
      */
     static round(number, precision=0) {
         return window.parseFloat(number.toFixed(precision));
+    }
+
+    /**
+     * Rundet eine Zahl auf eine angegebene Präzision
+     * @param {Number} number
+     * @param {Number} roundTo Auf 5er Runden:0.05 auf 10er Runden:0.1 auf Franken:1
+     * @returns {Number}
+     */
+    static roundTo(number, roundTo=0) {
+        if (roundTo > 0) {
+            return kijs.Number.round(number/roundTo) * roundTo;
+        } else {
+            return kijs.Number.round(number);
+        }
     }
 
 };

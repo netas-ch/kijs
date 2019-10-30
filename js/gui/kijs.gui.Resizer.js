@@ -10,7 +10,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._initialPos = null;
         this._targetEl = null;
