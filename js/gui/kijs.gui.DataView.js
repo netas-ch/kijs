@@ -131,7 +131,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set data(val) {
         this._data = val;
 
-        this._createElements();
+        this._createElements(this._data);
 
         // Current Element ermitteln und setzen
         this.current = null;
@@ -227,9 +227,24 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     applyFilters(filters) {
         this.filters = filters;
         if (this.isRendered) {
-            this._createElements();
+            this._createElements(this._data);
             this.render();
         }
+    }
+    
+    /**
+     * Fügt Daten hinzu
+     * @param {type} data
+     * @returns {undefined}
+     */
+    addData(data){
+        if (!kijs.isArray(data)) {
+            data = [data];
+        }
+        
+        this._data = kijs.Array.concat(this._data, data);
+
+        this._createElements(data, false);
     }
 
 
@@ -561,9 +576,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // PROTECTED
     /**
      * Erstellt die Elemente
+     * @param {array|string} data
+     * @param {bool}  removeElements
      * @returns {undefined}
      */
-    _createElements() {
+    _createElements(data, removeElements = true) {
 
         // index des aktuell selektierten Elements
         let selectIndex = null;
@@ -572,21 +589,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         // Bestehende Elemente löschen
-        if (this.elements) {
+        if (this.elements && removeElements) {
             this.removeAll(true);
             this._currentEl = null;
         }
 
         // Neue Elemente generieren
         let newElements = [];
-        for (let i=0, len=this._data.length; i<len; i++) {
+        for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (this._filterMatch(this._data[i])) {
+            if (this._filterMatch(data[i])) {
                 continue;
             }
 
-            const newEl = this.createElement(this._data[i], i);
+            const newEl = this.createElement(data[i], i);
             newEl.index = i;
             newEl.parent = this;
 
@@ -643,7 +660,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // selektion wiederherstellen
         if (selectIndex !== null) {
-            this.selectByIndex(selectIndex);
+            this.selectByIndex(selectIndex, !removeElements, !removeElements);
         }
     }
 

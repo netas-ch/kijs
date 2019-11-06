@@ -306,7 +306,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             return null;
 
         } else if (this._selectType === 'single') {
-            return ret.length ? ret[0] : null ;
+            return ret.length ? ret[0] : [];
 
         } else {
             return ret;
@@ -332,7 +332,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
         } else if (!multiPrimarys) {
-            let ids = [], primaryKey=this._primaryKeys[0];
+            let ids = [], primaryKey = this._primaryKeys[0];
             kijs.Array.each(rows, function(row) {
                 ids.push(row.dataRow[primaryKey]);
             }, this);

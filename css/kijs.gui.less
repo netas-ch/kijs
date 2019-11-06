@@ -2130,6 +2130,13 @@ div.kijs-grid {
             &.kijs-grid-cell-checkbox.kijs-disabled {
                 color: @field-disabled-fontColor;
             }
+            
+            &.kijs-grid-cell-icon {
+                text-align: center;
+                font-family: FontAwesome;
+                font-size: 14px;
+                padding: 2px 0 0 0;
+            }
 
         }
     }
@@ -2319,8 +2326,17 @@ div.kijs-grid {
     }
 }
 
-
-
+  /* ******************
+   * Icon Filter
+   ****************** */
+.kijs-filter-icon-checkboxgroup {
+    background-color: @button-bkgrndColor;
+    
+    div.kijs-display-checkboxes::before {
+        padding: 3px 10px 3px 3px;
+        color: @buttonGroup-button-fontColor;
+    }
+}
 
 
   /* ******************

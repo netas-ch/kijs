@@ -19,6 +19,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
         this._checkedType = '';
         this._searchContainer.clsAdd('kijs-icon');
+        this._compare = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -48,7 +49,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         });
     }
 
-    get isFiltered() { return this._compare !== ''; }
+    get isFiltered() { return this._compare !== null; }
 
     // --------------------------------------------------------------
     // MEMBERS
