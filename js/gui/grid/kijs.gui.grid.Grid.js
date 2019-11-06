@@ -29,6 +29,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._facadeFnLoad = null;
         this._facadeFnSave = null;
         this._facadeFnArgs = null;
+        this._facadeFnBeforeMsgFn = null;
 
         this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
         this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
@@ -97,10 +98,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            rpc: true,
-            facadeFnLoad: true,
-            facadeFnSave: true,
-            facadeFnArgs: true,
+            rpc                 : true,
+            facadeFnLoad        : true,
+            facadeFnSave        : true,
+            facadeFnArgs        : true,
+            facadeFnBeforeMsgFn : true,
 
             columnConfigs:  { fn: 'function', target: this.columnConfigAdd, context: this },
             primaryKeys:    { target: 'primaryKeys' },
@@ -801,7 +803,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     // Promise auflösen
                     resolve(response);
 
-                }, this, true, showWaitMask ? this : 'none');
+                }, this, true, showWaitMask ? this : 'none', false, this._facadeFnBeforeMsgFn);
             }
         });
     }
