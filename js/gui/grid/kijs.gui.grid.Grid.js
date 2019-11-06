@@ -803,7 +803,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     // Promise auflösen
                     resolve(response);
 
-                }, this, true, showWaitMask ? this : 'none', false, this._facadeFnBeforeMsgFn);
+                }, this, true, showWaitMask ? this : 'none', 'dom', false, this._facadeFnBeforeMsgFn);
             }
         });
     }
