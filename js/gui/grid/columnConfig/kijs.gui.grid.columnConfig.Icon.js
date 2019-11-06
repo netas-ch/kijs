@@ -24,10 +24,11 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
         this._iconClsField = null;
         this._iconColorField = null;
         this._iconsCnt = null;
+        this._captionField = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            iconsCnt: 20
+            iconsCnt: 155
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -35,7 +36,8 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
             iconCharField:  true,
             iconClsField:  true,
             iconColorField: true,
-            iconsCnt: true
+            iconsCnt: true,
+            captionField: true
         });
 
         // Config anwenden
@@ -44,9 +46,16 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
             this.applyConfig(config, true);
         }
     }
+    
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get captionField() { return this._captionField; }
+    set captionField(val) { this._captionField = val; }
 
     get iconCharField() { return this._iconCharField; }
-    set iconCharField(val) { this._iconCharField = val; this.valueField = val; }
+    set iconCharField(val) { this._iconCharField = val;}
 
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
@@ -56,4 +65,7 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
     
     get iconsCnt() { return this._iconsCnt; }
     set iconsCnt(val) { this._iconsCnt = val; }
+    
+    get valueField() { return this._valueField; }
+    set valueField(val) { this._valueField = val; }
 };

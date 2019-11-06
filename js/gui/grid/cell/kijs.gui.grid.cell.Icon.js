@@ -21,6 +21,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         this._icon = null;
         this._originalIcon = null;
         this._iconColor = null;
+        this._caption = null;
 
         //this._dom.nodeTagName = 'span';
         this._dom.clsAdd('kijs-icon');
@@ -40,7 +41,8 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
             iconColor: { target: 'iconColor' },
             iconCharField: true,
             iconClsField: true,
-            iconColorField: true
+            iconColorField: true,
+            caption: { target: 'caption' }
         });
 
         // Config anwenden
@@ -57,6 +59,9 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
     get icon() { return this._icon; }
     
     get originalIcon() { return this._originalIcon; }
+    
+    set caption(val) { this._caption = val; }
+    get caption() { return this._caption; }
     
     set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
     get iconColor() { return this._iconColor; }
@@ -75,16 +80,15 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
            this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
            this._dom.style.color = this._iconColor;
         }
-        
-        if (!this.columnConfig.valueField) {
-            let value = null;
-            if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
-               value = this.row.dataRow[this.columnConfig.iconCharField];
-            } else if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
-               value = this.row.dataRow[this.columnConfig.iconClsField];
-            }
-            this._setDomHtml(value);
+
+        let value = null;
+        if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
+           value = this.row.dataRow[this.columnConfig.iconCharField];
+        } else if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
+           value = this.row.dataRow[this.columnConfig.iconClsField];
         }
+        this._caption = this.row.dataRow[this.columnConfig.valueField];
+        this._setDomHtml(value);
     }
     
     /**
@@ -92,7 +96,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
      * @param {String|Number} value
      * @returns {undefined}
      */
-    _setDomHtml(value) {     
+    _setDomHtml(value) {
         let charId = null;
         this._originalIcon = value;
 
@@ -105,7 +109,6 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         this._icon = String.fromCharCode(charId);
         this._dom.html = this._icon;        
     }
-
 
     // Private
     _getCharId(val) {

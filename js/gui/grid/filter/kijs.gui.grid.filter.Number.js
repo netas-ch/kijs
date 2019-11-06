@@ -54,16 +54,13 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), [{
+        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_equal',
             caption : kijs.getText('Gleich'),
             iconChar: '&#xf046', //  fa-check-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
-            },
-            style: {
-                borderTop: '1px solid #aaaaaa'
             }
         },{
             name: 'btn_compare_unequal',

@@ -74,16 +74,13 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), [{
+        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_checked',
             caption : kijs.getText('Alle angewählten'),
             iconChar: '&#xf096', //  fa-square-o
             on: {
                 click: this._onFilterChange,
                 context: this
-            },
-            style: {
-                borderTop: '1px solid #aaaaaa'
             }
         },{
             caption : kijs.getText('Alle nicht angewählten'),

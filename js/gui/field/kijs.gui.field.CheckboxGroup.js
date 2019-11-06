@@ -54,7 +54,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     
     // Checkboxen die ausgewählt werden sollen / sind
     get checkedValues () { return this.value.length ? this.value : []; }
-    set checkedValues (val) {console.log(val);
+    set checkedValues (val) {
         let value = this.value;
 
         if (!kijs.isArray(val)){

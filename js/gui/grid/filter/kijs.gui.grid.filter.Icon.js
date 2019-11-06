@@ -83,14 +83,14 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                             // Überprüfen ob Icon schon in einem der Arrays ist
                             if (icons.length > 0) {
                                 kijs.Array.each(icons, function(value){
-                                        if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor){
+                                        if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){
                                             contains = true;
                                         }
                                 }, this);
                             }
                             if (this._checkboxGroup && !contains){
                                 kijs.Array.each(this._checkboxGroup.data, function(data){
-                                    if (data.id === cell.originalIcon && data.icon === cell.icon && data.color === cell.iconColor){
+                                    if (data.id === cell.originalIcon && data.icon === cell.icon && data.color === cell.iconColor  && data.caption === cell.caption){
                                         contains = true;
                                     }
                                 }, this);
@@ -98,7 +98,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
                             // Icon dem Filter hinzufügen
                             if (!contains){
-                                icons.push({id:cell.originalIcon, icon: cell.icon, color: cell.iconColor});
+                                icons.push({id:cell.originalIcon, icon: cell.icon, color: cell.iconColor, caption: cell.caption});
                                 iconsCheck.push(cell.originalIcon);
                             }
                         }
@@ -123,6 +123,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                 valueField: 'id',
                 iconCharField: 'icon',
                 iconColorField: 'color',
+                captionField: 'caption',
                 data: icons,
                 cls: 'kijs-filter-icon-checkboxgroup',
                 checkedAll: true,
