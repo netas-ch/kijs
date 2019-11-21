@@ -221,6 +221,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
             left: { target: 'left' },
             name: true,
+            nodeAttribute: { target: 'nodeAttribute', context: this._dom },
             on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
