@@ -1691,12 +1691,12 @@ div.kijs-field-password {
         }
     }
 
-    &.kijs-error  > .kijs-inputwrapper > password {
+    &.kijs-error  > .kijs-inputwrapper > input {
         background-color: @field-error-bkgrndColor;
     }
 
     &.kijs-disabled, &.kijs-readonly {
-        > .kijs-inputwrapper > password {
+        > .kijs-inputwrapper > input {
             background-color: @field-disabled-bkgrndColor;
         }
     }
@@ -2331,10 +2331,14 @@ div.kijs-grid {
    ****************** */
 .kijs-filter-icon-checkboxgroup {
     background-color: @button-bkgrndColor;
-    
+
     div.kijs-display-checkboxes::before {
         padding: 3px 10px 3px 3px;
         color: @buttonGroup-button-fontColor;
+    }
+
+    .kijs-icon {
+        width: 20px;
     }
 }
 
