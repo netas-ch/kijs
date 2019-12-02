@@ -62,7 +62,7 @@ kijs.String = class kijs_String {
      * @returns {String}
      */
     static htmlentities_decode(html) {
-        return kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+);/gim, function(entity, number) {
+        return kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+)(;|$)/gim, function(entity, number) {
             let nr = null;
             if (number.substr(0,1).toLowerCase() === 'x') {
                 nr = window.parseInt(number.substr(1), 16);

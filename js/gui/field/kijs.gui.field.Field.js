@@ -653,7 +653,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
-        this._value = null;
 
         // Basisklasse entladen
         super.destruct(true);
