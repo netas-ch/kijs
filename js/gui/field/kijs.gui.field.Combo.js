@@ -11,6 +11,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        this._minChars = null;
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._caption = null;
@@ -214,7 +215,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // overwrite
     get value() { return this._value; }
     set value(val) {
-        this._oldcaption = this._caption;
+        this._oldCaption = this._caption;
         this._oldValue = this._value;
         this._caption  = this._getCaptionFromValue(val);
         this._value = val;

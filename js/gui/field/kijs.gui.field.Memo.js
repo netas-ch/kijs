@@ -31,9 +31,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         });
 
         // Event-Weiterleitungen von this._inputDom
-        this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('change', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
+        this._eventForwardsAdd('change', this._inputDom);
+        this._eventForwardsAdd('focus', this._inputDom);
+        this._eventForwardsAdd('input', this._inputDom);
 
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);
