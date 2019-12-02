@@ -57,6 +57,28 @@ kijs.String = class kijs_String {
     }
 
     /**
+     * Konvertiert einen HTML-String in einen String, in dem die HTML-Entities als Unicode ersetzt sind
+     * @param {String} html
+     * @returns {String}
+     */
+    static htmlentities_decode(html) {
+        return kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+);/gim, function(entity, number) {
+            let nr = null;
+            if (number.substr(0,1).toLowerCase() === 'x') {
+                nr = window.parseInt(number.substr(1), 16);
+            } else {
+                nr = window.parseInt(number, 10);
+            }
+
+            if (kijs.isNumber(nr)) {
+                return String.fromCodePoint(nr);
+            } else {
+                return entity;
+            }
+        });
+    }
+
+    /**
      * Wandelt Sonderzeichen in HTML-Codes um
      * @param {String}  text           Die zu konvertierende Zeichenkette.
      * @param {Boolean} [doubleEncode] Wird der Parameter doubleEncode ausgeschaltet,

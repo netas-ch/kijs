@@ -28,7 +28,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
 
         // class
         this.dom.clsAdd('kijs-grid-cell-icon');
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -51,30 +51,30 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
             this.applyConfig(config, true);
         }
     }
-    
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    
+
     get icon() { return this._icon; }
-    
+
     get originalIcon() { return this._originalIcon; }
-    
+
     set caption(val) { this._caption = val; }
     get caption() { return this._caption; }
-    
+
     set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
     get iconColor() { return this._iconColor; }
-    
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
 
 
     // Overwrite
-    
-     loadFromDataRow(){
-        super.loadFromDataRow();        
+
+     loadFromDataRow() {
+        super.loadFromDataRow();
 
         if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
            this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
@@ -90,37 +90,26 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         this._caption = this.row.dataRow[this.columnConfig.valueField];
         this._setDomHtml(value);
     }
-    
+
     /**
      * Icon rendern
      * @param {String|Number} value
      * @returns {undefined}
      */
     _setDomHtml(value) {
-        let charId = null;
         this._originalIcon = value;
 
         if (kijs.isInteger(value)){
-            charId = value;
-        } else if (kijs.isString(value) && value.substring(0, 2) === '&#') {
-            charId = this._getCharId(value.substring(2, 7));
+            value = String.fromCodePoint(value);
+
+        } else if (kijs.isString(value)) {
+            value = kijs.String.htmlentities_decode(value);
         }
 
-        this._icon = String.fromCharCode(charId);
-        this._dom.html = this._icon;        
+        this._icon = value;
+        this._dom.html = this._icon;
     }
 
-    // Private
-    _getCharId(val) {
-        let charId = null;
-        if (val.substring(0, 1) === 'x') {
-            charId = parseInt(val.substring(1, val.length), 16);
-        } else {
-            charId = parseInt(val.substring(0, val.length), 16);
-        }
-        return charId;
-    }
-    
     _iconCls(val) {
         if (kijs.isEmpty(val)) {
             val = null;

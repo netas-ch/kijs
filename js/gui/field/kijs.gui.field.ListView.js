@@ -64,7 +64,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     get autoLoad() { return this._listView.autoLoad; }
     set autoLoad(val) { this._listView.autoLoad = val; }
-    
+
     get data() { return this._listView.data; }
     set data(val) { this._listView.data = val; }
 
@@ -111,16 +111,16 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    
+
     /**
      * Fügt Daten hinzu
-     * @param {type} data
+     * @param {Array} data
      * @returns {undefined}
      */
-    addData(data){
+    addData(data) {
         this._listView.addData(data);
     }
-    
+
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden

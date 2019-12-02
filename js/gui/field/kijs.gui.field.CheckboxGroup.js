@@ -20,7 +20,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             showCheckBoxes: true,
             selectType: 'simple'
         });
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             checkedAll: { target: 'checkedAll', prio: 1001 }
@@ -32,16 +32,16 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             this.applyConfig(config, true);
         }
     }
-    
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    
+
     // Alle Checkboxen ausgewähen / sind ausgewählt
-    get checkedAll () { return this.value.length > this.data.length / 2 ? true : false; }
+    get checkedAll () { return this.value.length === this.data.length ? true : false; }
     set checkedAll (val) {
         let ids = [];
-        
+
         if (val){
             kijs.Array.each(this.data, function(row) {
                 ids.push(row.id);
@@ -51,8 +51,9 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             this.value = [];
         }
     }
-    
+
     // Checkboxen die ausgewählt werden sollen / sind
+    // TODO: unterschied zu value?
     get checkedValues () { return this.value.length ? this.value : []; }
     set checkedValues (val) {
         let value = this.value;
