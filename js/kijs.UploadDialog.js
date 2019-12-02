@@ -62,7 +62,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._configMap = {
             ajaxUrl: true,
             directory: { target: 'directory' },
-            multiple: { target: 'multible' },
+            multiple: { target: 'multiple' },
             filenameHeader: true,
             pathnameHeader: true,
             maxFilesize: true,
