@@ -233,6 +233,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this.render();
         }
     }
+    
+    get inputWrapperDom() { return this._inputWrapperDom; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._checked === 0); }

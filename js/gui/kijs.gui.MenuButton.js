@@ -166,6 +166,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             // Linie
             if (kijs.isString(element) && element === '-') {
                 newElements.push(new kijs.gui.Element({
+                    name: '<hr>',
                     cls:  'separator',
                     html: '<hr />'
                 }));
@@ -239,6 +240,83 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             p = p.parent;
         }
     }
+
+     /**
+     * Löscht ein oder mehrere untergeordnete Elemente
+     * @param {Object|Array} elements
+     * @returns {undefined}
+     */
+    remove(elements) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+
+        const removeElements = [];
+        for (let i=0,len=elements.length; i<len; i++) {
+            if (elements[i] === '-'){
+                for (let y=0; y<this.elements.length; y++) {
+                    if (this.elements[y].name === '<hr>'){
+                        removeElements.push(this.elements[y]);
+                    }
+                };
+            } else if (kijs.Array.contains(this.elements, elements[i])) {
+                removeElements.push(elements[i]);
+            }
+        }
+        elements = null;
+
+        // event ausführen
+        if (this.raiseEvent('beforeRemove', {elements: removeElements}) === false) {
+            return;
+        }
+
+        // löschen
+        kijs.Array.each(removeElements, function(el) {
+            el.off(null, null, this);
+            if (el.unrender) {
+                el.unrender();
+            }
+            kijs.Array.remove(this.elements, el);
+        }, this);
+
+        // Falls der DOM gemacht ist, wird neu gerendert.
+        if (this.dom) {
+            this.render();
+        }
+
+        // Gelöscht, Event auslösen.
+        this.raiseEvent('remove');
+    }
+
+    /**
+     * Löscht alle untergeordeneten Elemente
+     * @param {Boolean} [preventRender=false]
+     * @returns {undefined}
+     */
+    removeAll(preventRender) {
+        // event ausführen
+        if (this.raiseEvent('beforeRemove', {elements: this.elements}) === false) {
+            return;
+        }
+
+        // leeren
+        kijs.Array.each(this.elements, function(el) {
+            el.off(null, null, this);
+            if (el.unrender) {
+                el.unrender();
+            }
+        }, this);
+        kijs.Array.clear(this.elements);
+
+        // Falls der DOM gemacht ist, wird neu gerendert.
+        if (this.dom && !preventRender) {
+            this.render();
+        }
+
+        // Gelöscht, Event ausführen
+        this.raiseEvent('remove');
+    }
+
 
     // Overwrite
     render(superCall) {

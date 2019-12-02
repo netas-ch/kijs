@@ -22,6 +22,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._remoteSort = false;
         this._forceSelection = true;
         this._showPlaceholder = true;
+        this._selectFirst = false;
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -67,6 +68,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             remoteSort: true,
             showPlaceholder: true,
             forceSelection: true,
+            selectFirst: true,
 
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
@@ -87,7 +89,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minSelectCount: true,
             maxSelectCount: true,
 
-            data: { prio: 1000, target: 'data', context: this._listViewEl },
+            data: { prio: 1000, target: 'data' },
             value: { prio: 1001, target: 'value' }
         });
 
@@ -144,6 +146,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get valueField() { return this._listViewEl.valueField; }
     set valueField(val) { this._listViewEl.valueField = val; }
 
+    // overwrite
+    set data(val) {
+        this._listViewEl.data = val;
+        if (this._selectFirst) {
+            this.value = this._listViewEl.data[0].value;
+        }
+    }
+    
     // overwrite
     get disabled() { return super.disabled; }
     set disabled(val) {
@@ -564,6 +574,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _onListViewAfterLoad(e) {
         if (!this._remoteSort) {
             this.value = this._value;
+        }
+        
+        if (this._selectFirst) {
+            this.value = this._listViewEl.data[0].value;
         }
 
         // Spinbox Nachricht anhängen

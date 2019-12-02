@@ -41,7 +41,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
             passwordChar: true,
-            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            placeholder: { target: 'placeholder' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -116,6 +117,9 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }
+    
+    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
 
     // overwrite
     get readOnly() { return super.readOnly; }

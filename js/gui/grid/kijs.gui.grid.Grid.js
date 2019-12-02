@@ -111,6 +111,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             editable: true,
             focusable: true,
             filterable: true,
+            filterVisible: { target: 'filterVisible' },
             selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
                                                  // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                                  // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -215,6 +216,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get filterable() { return this._filterable; }
     set filterable(val) { this._filterable = !!val; }
+    
+    get filterVisible() { return this._filter.visible; }
+    set filterVisible(val) { this._filter.visible = !!val; }
 
     get lastRow() {
         if (this._rows.length > 0) {
@@ -308,7 +312,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             return null;
 
         } else if (this._selectType === 'single') {
-            return ret.length ? ret[0] : null ;
+            return ret.length ? ret[0] : [];
 
         } else {
             return ret;
@@ -334,7 +338,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
         } else if (!multiPrimarys) {
-            let ids = [], primaryKey=this._primaryKeys[0];
+            let ids = [], primaryKey = this._primaryKeys[0];
             kijs.Array.each(rows, function(row) {
                 ids.push(row.dataRow[primaryKey]);
             }, this);
