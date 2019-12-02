@@ -10,7 +10,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._headerBarEl = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar',
@@ -756,7 +756,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._footerEl) {
             kijs.Array.each(this._footerEl.elements, function(el) {
                 if (el instanceof kijs.gui.Button && el.dom && el.isDefault) {
-                    el.raiseEvent('click');
+
+                    // Wenn der Fokus nicht auf dem Element, Click-Event werfen
+                    if (document.activeElement !== el.dom.node) {
+                        el.raiseEvent('click');
+                    }
                     return;
                 }
             }, this);
