@@ -231,7 +231,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.render();
         }
     }
-    
+
     /**
      * Fügt Daten hinzu
      * @param {type} data
@@ -241,7 +241,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (!kijs.isArray(data)) {
             data = [data];
         }
-        
+
         this._data = kijs.Array.concat(this._data, data);
 
         this._createElements(data, false);
@@ -561,7 +561,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         kijs.Array.each(elements, function(el) {
-            el.selected = false;
+            if ('selected' in el) {
+                el.selected = false;
+            }
         }, this);
 
         // aktuelles Element neu wählen.
