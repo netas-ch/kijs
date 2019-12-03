@@ -46,13 +46,15 @@ kijs.String = class kijs_String {
      *  - Unicode 00A0 - 9999
      *  - < und >
      *  - &
+     *  - "
+     *  - '
      * Beispiel: '<p>Test</p>' => '&#60;p&#62;Test&#60;/p&#62;'
      * @param {String} html
      * @returns {String}
      */
     static htmlentities(html) {
-        return kijs.toString(html).replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-            return '&#'+i.charCodeAt(0)+';';
+        return kijs.toString(html).replace(/[\u00A0-\u9999<>\&\'\"]/gim, function(i) {
+            return '&#x' + i.codePointAt(0).toString(16) + ';';
         });
     }
 

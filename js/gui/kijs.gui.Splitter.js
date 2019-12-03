@@ -13,6 +13,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         this._overlayDom = new kijs.gui.Dom();
 
+        this._initialPos = null;
         this._targetPos = null;
         this._targetEl = null;      // Zielelement (kijs.gui.Element)
 
