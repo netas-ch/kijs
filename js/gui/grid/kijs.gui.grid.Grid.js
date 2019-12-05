@@ -30,6 +30,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._facadeFnSave = null;
         this._facadeFnArgs = null;
         this._facadeFnBeforeMsgFn = null;
+        this._waitMaskTarget = null;
+        this._waitMaskTargetDomProperty = null;
 
         this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
         this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
@@ -93,16 +95,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            waitMaskTarget           : this,
+            waitMaskTargetDomProperty: 'dom'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            rpc                 : true,
-            facadeFnLoad        : true,
-            facadeFnSave        : true,
-            facadeFnArgs        : true,
-            facadeFnBeforeMsgFn : true,
+            rpc                       : true,
+            facadeFnLoad              : true,
+            facadeFnSave              : true,
+            facadeFnArgs              : true,
+            facadeFnBeforeMsgFn       : true,
+            waitMaskTarget            : true,
+            waitMaskTargetDomProperty : true,
 
             columnConfigs:  { fn: 'function', target: this.columnConfigAdd, context: this },
             primaryKeys:    { target: 'primaryKeys' },
@@ -798,16 +803,23 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
                 // wenn sämtliche Datensätze neu geladen werden.
-                let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0); // !TODO bei Windows gibt es zum Teil keinen Parent-Node
+                let showWaitMask = force || this._remoteDataLoaded === 0;
 
                 // RPC ausführen
                 this._rpc.do(this._facadeFnLoad, args, function(response) {
-                    this._remoteProcess(response, args, force);
+                        this._remoteProcess(response, args, force);
 
-                    // Promise auflösen
-                    resolve(response);
+                        // Promise auflösen
+                        resolve(response);
 
-                }, this, true, showWaitMask ? this : 'none', 'dom', false, this._facadeFnBeforeMsgFn);
+                    },
+                    this,                                           // Context
+                    true,                                           // Cancel running
+                    showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
+                    this._waitMaskTargetDomProperty,                // Wait Mask Target Dom Property
+                    false,                                          // Ignore Warnings
+                    this._facadeFnBeforeMsgFn
+                );
             }
         });
     }

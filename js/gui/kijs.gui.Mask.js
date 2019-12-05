@@ -143,7 +143,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
      */
     get parentNode() {
         if (this._targetX instanceof kijs.gui.Element) {
-            return this._targetX[this._targetDomProperty].node.parentNode;
+            if (this._targetX[this._targetDomProperty].node.parentNode) {
+                return this._targetX[this._targetDomProperty].node.parentNode;
+            } else {
+                // Vielleicht ist es besser wenigstens auf dem Node eine Maske anzuzeigen falls es keinen Parent gibt (Window).
+                // Falls nicht halt gar keine Maske anzeigen.
+                return this._targetX[this._targetDomProperty].node;
+            }
         } else {
             return this._targetX;
         }
