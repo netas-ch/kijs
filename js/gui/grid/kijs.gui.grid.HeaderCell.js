@@ -64,7 +64,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     }
                 },{
                     name    : 'btn-columns',
-                    caption : kijs.getText('Spalten...'),
+                    caption : kijs.getText('Spalten') + '...',
                     iconChar: '&#xf0db', // fa-columns
                     on: {
                         click: function() {
@@ -75,7 +75,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     }
                 },{
                     name    : 'btn-filters',
-                    caption : kijs.getText('Filter...'),
+                    caption : kijs.getText('Filter') + '...',
                     iconChar: '&#xf0b0', // fa-filter
                     on: {
                         click: function() {

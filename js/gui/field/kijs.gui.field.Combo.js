@@ -153,7 +153,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._listViewEl.data[0].value;
         }
     }
-    
+
     // overwrite
     get disabled() { return super.disabled; }
     set disabled(val) {
@@ -423,7 +423,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }, this);
 
             if (!match) {
-                this._errors.push(kijs.getText(`Der Wert "%1" ist nicht in der Liste enthalten.`, '', value));
+                this._errors.push(kijs.getText(`Der Wert %1 ist nicht in der Liste enthalten.`, '', value));
             }
         }
 
@@ -575,7 +575,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (!this._remoteSort) {
             this.value = this._value;
         }
-        
+
         if (this._selectFirst) {
             this.value = this._listViewEl.data[0].value;
         }

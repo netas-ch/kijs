@@ -155,7 +155,7 @@ window.kijs = class kijs {
         if (args !== null) {
             args = kijs.isArray(args) ? args : [args];
         }
-        
+
         fn = this.createDelegate(fn, context, args);
         if (millis > 0) {
             return setTimeout(fn, millis);
@@ -214,10 +214,11 @@ window.kijs = class kijs {
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
+     * @param {String} comment          Kommentar für den Übersetzer. Wird nur zum Generieren der Usages-Datei benötigt.
      * @param {String} languageId
      * @returns {String}
      */
-    static getText(key, variant='', args=null, languageId=null) {
+    static getText(key, variant='', args=null, comment='', languageId=null) {
         if (kijs.isFunction(kijs.__getTextFn)) {
             return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, languageId);
         }
