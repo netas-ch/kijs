@@ -423,7 +423,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }, this);
 
             if (!match) {
-                this._errors.push(kijs.getText(`Der Wert %1 ist nicht in der Liste enthalten.`, '', value));
+                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten.', '', value));
             }
         }
 
@@ -431,7 +431,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (!kijs.isEmpty(this._minSelectCount) && this._minSelectCount >= 0) {
             if (kijs.isArray(value)) {
                 if (kijs.isEmpty(value) && this._minSelectCount > 0 || value.length < this._minSelectCount) {
-                    this._errors.push(kijs.getText(`Min. %1 Datensätze müssen ausgewählt werden`, '', this._minSelectCount));
+                    this._errors.push(kijs.getText('Min. %1 Datensätze müssen ausgewählt werden', '', this._minSelectCount));
                 }
             }
         }
@@ -440,7 +440,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (!kijs.isEmpty(this._maxSelectCount) && this._maxSelectCount > 0) {
             if (kijs.isArray(value)) {
                 if (value.length > this._maxSelectCount) {
-                    this._errors.push(kijs.getText(`Max. %1 Datensätze dürfen ausgewählt werden`, '', this._maxSelectCount));
+                    this._errors.push(kijs.getText('Max. %1 Datensätze dürfen ausgewählt werden', '', this._maxSelectCount));
                 }
             }
         }
