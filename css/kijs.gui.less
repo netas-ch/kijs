@@ -532,6 +532,7 @@ div.kijs-mask {
     justify-content: center;
     z-index: 60000;
     background-color: rgba(0, 0, 0, 0.5);
+    flex-direction: column;
 
     top: 0px;
     right: 0px;
@@ -544,8 +545,18 @@ div.kijs-mask {
     user-select: none;          /* Likely future */
 
     > .kijs-icon {
-        color: white;
+        color: #F5F5F5;
         font-size: 40px;
+    }
+
+    > .kijs-mask-text {
+        margin-top: 20px;
+        color: #F5F5F5;
+        font-size: 17px;
+        font-family: @default-fontFamily;
+    }
+    > .kijs-mask-text:empty {
+        display: none;
     }
 }
 
@@ -2101,7 +2112,7 @@ div.kijs-grid {
             &.kijs-grid-cell-checkbox.kijs-disabled {
                 color: @field-disabled-fontColor;
             }
-            
+
             &.kijs-grid-cell-icon {
                 text-align: center;
                 font-family: FontAwesome;

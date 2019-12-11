@@ -121,17 +121,17 @@ kijs.Ajax = class kijs_Ajax {
             } else {
                 let error = '';
                 if (xmlhttp.status > 0) {
-                    error = kijs.getText('Der Server hat mit einem Fehler geantwortet:') + ' ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
+                    error = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
 
                 } else if (config.abortHappened) {
-                    error = kijs.getText('Die Verbindung wurde abgebrochen.');
+                    error = kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                 } else if (config.timeoutHappened) {
-                    error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden.') + ' ' +
-                            kijs.getText('Die Verbindung wurde abgebrochen.');
+                    error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden') + '. ' +
+                            kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                 } else {
-                    error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden.');
+                    error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden') + '.';
                 }
                 config.fn.call(config.context || this, val, config, error);
             }

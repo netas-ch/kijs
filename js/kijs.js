@@ -220,7 +220,7 @@ window.kijs = class kijs {
      */
     static getText(key, variant='', args=null, comment='', languageId=null) {
         if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, languageId);
+            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, comment, languageId);
         }
 
         // keine getText-Fn definiert: Argumente ersetzen
@@ -357,7 +357,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isNumeric(value) {
-        return this.isNumber(value) || (this.isString(value) && value.match(/^[0-9]+\.{0,1}[0-9]*$/));
+        return this.isNumber(value) || !!(this.isString(value) && value.match(/^-{0,1}[0-9]+(\.[0-9]+){0,1}$/));
     }
 
     /**
@@ -376,7 +376,7 @@ window.kijs = class kijs {
      * @returns {undefined}
      */
     static isReady(fn, context) {
-        document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context||this), false);
+        document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context || this), false);
     }
 
     /**
@@ -411,7 +411,8 @@ window.kijs = class kijs {
     }
 
     /**
-     * Setzt eine individuelle getText-Funktion
+     * Setzt eine individuelle getText-Funktion.
+     * Die fn erhält folgende Variablen: key, variant, args, comment, languageId
      * @param {Function} fn
      * @param {Object} scope
      * @returns {undefined}

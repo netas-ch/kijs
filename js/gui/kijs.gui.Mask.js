@@ -18,6 +18,7 @@
 // als target dient, wird nichts angegeben, so dient das ganze Element als target.
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
 // Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
+// Mit dem Attribut "text" kann ein Text unterhalb des icons angezeigt werden.
 // --------------------------------------------------------------
 kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
@@ -29,6 +30,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         super(false);
 
         this._iconEl = new kijs.gui.Icon({ parent: this });
+        this._textEl = new kijs.gui.Dom({cls:'kijs-mask-text'});
 
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
@@ -48,6 +50,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             target: { target: 'target' },
+            text: { target: 'html', context: this._textEl },
             targetDomProperty: true
         });
 
@@ -202,6 +205,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
 
+    get text() { return this._textEl.html; }
+    set text(val) { this._textEl.html = val; }
+
+
 
 
     // --------------------------------------------------------------
@@ -221,6 +228,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._iconEl.unrender();
         }
 
+        this._textEl.renderTo(this._dom.node);
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -235,6 +244,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
 
         this._iconEl.unrender();
+        this._textEl.unrender();
         super.unrender(true);
     }
 
@@ -298,6 +308,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Elemente/DOM-Objekte entladen
         if (this._iconEl) {
             this._iconEl.destruct();
+        }
+
+        if (this._textEl) {
+            this._textEl.destruct();
         }
 
         // Basisklasse entladen

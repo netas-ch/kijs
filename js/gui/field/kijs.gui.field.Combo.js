@@ -251,7 +251,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             } else {
                 this._listViewEl.removeAll();
-                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten.', '', this._minChars));
+                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
 
         } else {
@@ -423,7 +423,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }, this);
 
             if (!match) {
-                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten.', '', value));
+                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
             }
         }
 

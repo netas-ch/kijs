@@ -18,7 +18,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._rpcArgs = {};         // Standard RPC-Argumente
-        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.');
+        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.';
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -349,7 +349,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
                 }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
             } else {
-                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.'));
+                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
             }
         });
     }
