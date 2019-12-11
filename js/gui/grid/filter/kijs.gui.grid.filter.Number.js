@@ -21,7 +21,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            placeholder: kijs.getText('Filtern...')
+            placeholder: kijs.getText('Filtern') + '...'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften

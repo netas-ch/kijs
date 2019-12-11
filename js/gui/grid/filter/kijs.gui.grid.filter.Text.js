@@ -30,7 +30,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            placeholder: kijs.getText('Suche...')
+            placeholder: kijs.getText('Suche') + '...'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften

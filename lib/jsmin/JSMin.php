@@ -1,5 +1,9 @@
 <?php
  /**
+  * 2019-09-12 Joel Kohler: Änderung an Zeile 145, damit auch ` als
+  * Anführungszeichen von Strings verwendet werden können.
+  *
+  *
   * jsmin.php - PHP implementation of Douglas Crockford's JSMin.
   *
   * This is a direct port of jsmin.c to PHP with a few PHP performance tweaks and
@@ -136,7 +140,9 @@
                  // fallthrough
              case self::ACTION_DELETE_A:
                  $this->a = $this->b;
-                 if ($this->a === "'" || $this->a === '"') { // string literal
+
+                 //  || $this->a === '`' hinzugefügt um diese Anführungszeichen auch als String zu beachten
+                 if ($this->a === "'" || $this->a === '"' || $this->a === '`') { // string literal
                      $str = $this->a; // in case needed for exception
                      while (true) {
                          $this->output .= $this->a;
