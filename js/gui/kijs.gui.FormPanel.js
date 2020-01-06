@@ -63,6 +63,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     get data() {
         let data = {};
+
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
         // Evtl. Daten aus Formular holen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
@@ -125,7 +130,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }, this);
     }
 
-    get fields() { return this._fields; }
+    get fields() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        return this._fields;
+    }
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
@@ -138,7 +149,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.searchFields();
         }
 
-        for (let i=0; i<this._fields.length; i++) {
+        for (let i = 0; i < this._fields.length; i++) {
             if (this._fields[i].isDirty) {
                 return true;
             }
@@ -146,6 +157,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return false;
     }
+
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -154,6 +166,22 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         for (let i=0; i<this._fields.length; i++) {
             this._fields[i].isDirty = !!val;
         }
+    }
+
+    get isEmpty() {
+        let empty = true;
+
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i = 0; i < this._fields.length; i++) {
+            if (!this._fields[i].isEmpty) {
+                empty = false;
+            }
+        }
+
+        return empty;
     }
 
     get readOnly(){
@@ -222,8 +250,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.searchFields();
         }
 
-        for (let i=0; i<this._fields.length; i++) {
-            this._fields[i].value = null;
+        for (let i = 0; i < this._fields.length; i++) {
+            if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
+                this._fields[i].value = null;
+            }
         }
 
         this._data = {};

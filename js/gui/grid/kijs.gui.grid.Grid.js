@@ -33,6 +33,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
+        this._autoLoad = true;        // Datensätze nach dem Rendern automatisch vom Server laden
         this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
         this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
         this._remoteDataStep = 50;    // Anzahl Datensätze, die pro request hinzugefügt werden.
@@ -101,6 +102,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autoLoad                  : true,
             rpc                       : true,
             facadeFnLoad              : true,
             facadeFnSave              : true,
@@ -221,7 +223,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get filterable() { return this._filterable; }
     set filterable(val) { this._filterable = !!val; }
-    
+
     get filterVisible() { return this._filter.visible; }
     set filterVisible(val) { this._filter.visible = !!val; }
 
@@ -1165,7 +1167,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         // Daten laden
-        this._remoteLoad();
+        if (this._autoLoad) {
+            this._remoteLoad();
+        }
     }
 
     // overwrite
