@@ -917,7 +917,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         if (this._node) {
             this._node[name] = value;
-            // Kleiner murgs, weil obige Zeiele nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
+            // Kleiner murgs, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
             if (kijs.isEmpty(value)) {
                 this._node.removeAttribute(name);
             }
@@ -1058,7 +1058,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             targetNode.appendChild(this._node);
         }
     }
-    
+
     /**
      * Scrollt den Node in den sichtbaren Bereich
      * @returns {undefined}

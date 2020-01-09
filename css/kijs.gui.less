@@ -94,6 +94,9 @@
 
 @field-error-bkgrndColor: #ffdaec;
 
+/* Range */
+@range-bkgrndColor: #d2d2d2;
+@range-btnColor: #4398dd;
 
 /* Item */
 @item-bkgrndColor: #fff;
@@ -1936,6 +1939,64 @@ div.kijs-spinbox > .kijs-container-inner {
     > .kijs-listview {
         height: 100%;
         border: 0;
+    }
+}
+
+
+/* ******************
+   * Field Range
+   ****************** */
+div.kijs-field-range {
+
+    > .kijs-inputwrapper {
+        height: 26px;
+
+        > input {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            margin: 0px;
+            background: @range-bkgrndColor;
+            outline: none;
+            -webkit-transition: .2s;
+            transition: opacity .2s;
+        }
+
+        > input:hover {
+            opacity: 0.7;
+        }
+
+        > input:active {
+            border:none;
+        }
+
+        > input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 25px;
+            background: @range-btnColor;
+            cursor: pointer;
+        }
+
+        > input::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 25px;
+            background: @range-btnColor;
+            cursor: pointer;
+        }
+    }
+
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @field-error-bkgrndColor;
+    }
+
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @field-disabled-bkgrndColor;
+        }
     }
 }
 
