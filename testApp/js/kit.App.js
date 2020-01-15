@@ -108,6 +108,9 @@ kit.App = class kit_App {
                             iconCls: 'kijs-pulse',
                             collapsible: 'left',
                             width: 180,
+                            style: {
+                                flex: "none"
+                            },
                             cls: 'kijs-flexcolumn',
                             elements:[
                                 {
@@ -343,6 +346,7 @@ kit.App = class kit_App {
                                         rpc: this._rpc,
                                         filterable: true,
                                         editable: false,
+                                        filterVisible: true,
                                         on: {
                                             click: function(e){ console.log(e); },
                                             dblClick: function(e){ console.log(e); }
@@ -423,11 +427,23 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'localcombo',
                                             label: 'Local',
+                                            disabled: true,
                                             data: [
                                                 {value: 1, caption: 'Datensatz 1'},
                                                 {value: 2, caption: 'Datensatz 2'},
                                                 {value: 3, caption: 'Datensatz 3'}
                                             ]
+                                        },{
+                                            xtype: 'kijs.gui.field.Range',
+                                            label: 'Range',
+                                            min: 1,
+                                            max: 10,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log(e.element.value);
+                                                },
+                                                context: this
+                                            }
                                         },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
@@ -529,6 +545,7 @@ kit.App = class kit_App {
                                                     toolTip: 'test',
                                                     on: {
                                                         click: function() {
+                                                            console.log(this.parent);
                                                             let val = this.parent.value;
                                                             if (kijs.isEmpty(val)) {
                                                                 val = 0;
@@ -657,13 +674,17 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeit',
                                             label: 'Datum & Zeit',
-                                            width: 290
+                                            hasSeconds: true,
+                                            readOnly: true,
+                                            width: 290,
+                                            value: 1571314912
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Datum',
                                             label: 'Datum',
                                             hasTime: false,
-                                            width: 240
+                                            width: 240,
+                                            value: 1565301600
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Uhrzeit',
@@ -986,11 +1007,7 @@ kit.App = class kit_App {
                                             toolTip: 'Da darfst Du nicht draufdrücken!',
                                             on: {click: function() {
                                                 this.toolTip = 'Nein, er hat es tatsächlich getan!';
-                                                kijs.Array.each(this.parent.parent.elements, function(element) {
-                                                    if (element instanceof kijs.gui.field.Field) {
-                                                        element.validate();
-                                                    }
-                                                }, this);
+                                                this.parent.parent.validate();
                                             }}
                                         },{
                                             xtype: 'kijs.gui.Button',
@@ -998,11 +1015,8 @@ kit.App = class kit_App {
                                             caption: 'ReadOnly',
                                             badgeText: '7',
                                             on: {click: function() {
-                                                kijs.Array.each(this.parent.parent.elements, function(element) {
-                                                    if (element instanceof kijs.gui.field.Field) {
-                                                        element.readOnly = true;
-                                                    }
-                                                }, this);
+                                                this.parent.parent.readOnly = true;
+
                                                 this.disabled = true;
                                                 this.parent.down('btnEnable').disabled = false;
                                             }}
@@ -1011,11 +1025,8 @@ kit.App = class kit_App {
                                             name: 'btnDisable',
                                             caption: 'Deaktivieren',
                                             on: {click: function() {
-                                                kijs.Array.each(this.parent.parent.elements, function(element) {
-                                                    if (element instanceof kijs.gui.field.Field) {
-                                                        element.disabled = true;
-                                                    }
-                                                }, this);
+                                                this.parent.parent.disabled = true;
+
                                                 this.disabled = true;
                                                 this.parent.down('btnEnable').disabled = false;
                                             }}
@@ -1028,9 +1039,9 @@ kit.App = class kit_App {
                                                 kijs.Array.each(this.parent.parent.elements, function(element) {
                                                     if (element instanceof kijs.gui.field.Field) {
                                                         element.readOnly = false;
-                                                        element.disabled = false;
                                                     }
                                                 }, this);
+                                                this.parent.parent.disabled = false;
                                                 this.disabled = true;
                                                 this.parent.down('btnReadOnly').disabled = false;
                                                 this.parent.down('btnDisable').disabled = false;
@@ -1458,6 +1469,9 @@ kit.App = class kit_App {
                             collapsible: 'right',
                             width: 240,
                             cls: 'kijs-flexrow',
+                            style: {
+                                flex: "none"
+                            },
                             headerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',

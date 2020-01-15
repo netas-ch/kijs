@@ -262,8 +262,17 @@
                         unset ($col);
 
                         $col = new stdClass();
+                        $col->xtype = 'kijs.gui.grid.columnConfig.Icon';
+                        $col->caption = 'Icon';
+                        $col->valueField = 'vorname';
+                        $col->iconCharField = 'icon';
+                        $col->iconColorField = 'color';
+                        $response->responseData->columns[] = $col;
+                        unset ($col);
+                        
+                        $col = new stdClass();
                         $col->xtype = 'kijs.gui.grid.columnConfig.Date';
-                        $col->caption = 'Datum';
+                        $col->caption = 'Date';
                         $col->valueField = 'date';
                         $response->responseData->columns[] = $col;
                         unset ($col);
@@ -311,6 +320,8 @@
                         $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
                         $row->number = $rwId;
                         $row->date = time()+(3600*24*$rwId);
+                        $row->icon = '&#x'.dechex(61440 + $rwId);
+                        $row->color = '#'.dechex($rwId * 100);
                         $row->checkbox = $rwId % 2 === 0;
 
                         $response->responseData->rows[] = $row;
