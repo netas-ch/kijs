@@ -95,10 +95,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -114,10 +114,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 
@@ -196,12 +196,12 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
 
         // Email
-        if (value.match(/^[^@]+@[^@\.]+\.[a-z]+$/i)) {
+        if (value.match(/^[^@]+@[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
             return 'mail';
         }
 
         // Webseite
-        if (value.match(/^[\w0-9-öüäéèà\.]+\.[a-z]{2,}$/i)) {
+        if (value.match(/^[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
             return 'web';
         }
 
@@ -216,21 +216,21 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
      */
     _openLink(link, type) {
         if (type === 'tel') {
-            window.open('tel:' + link.replace(/[^\+0-9]/i, ''));
+            window.open('tel:' + link.replace(/[^\+0-9]/i, ''), '_self');
 
         } else if (type === 'mail') {
-            window.open('mailto:' + link, '');
+            window.open('mailto:' + link, '_self');
 
-        }  else if (type === 'web' && link.substr(0,4) === 'http') {
-            window.open(link, '');
+        }  else if (type === 'web' && link.match(/^(http|ftp)s?:\/\//i)) {
+            window.open(link, '_blank');
 
         }  else if (type === 'web') {
-            window.open('http://' + link, '');
+            window.open('http://' + link, '_blank');
         }
     }
 
     _onDomClick() {
-        if (this._link) {
+        if (this._link && !this.disabled && !this.readOnly) {
             let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
             this._openLink(kijs.toString(this.value), linkType);
         }

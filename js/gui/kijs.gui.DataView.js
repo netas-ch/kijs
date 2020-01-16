@@ -312,31 +312,35 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Füllt das Dataview mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
-     * @returns {undefined}
+     * @returns {Promise}
      */
     load(args) {
+        return new Promise((resolve) => {
+            // Standardargumente anhängen
+            if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
+                if (kijs.isObject(args)) {
+                    Object.assign(args, this._facadeFnArgs);
 
-        // Standardargumente anhängen
-        if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
-            if (kijs.isObject(args)) {
-                Object.assign(args, this._facadeFnArgs);
+                } else if (kijs.isArray(args)) {
+                    args.push(kijs.Object.clone(this._facadeFnArgs));
 
-            } else if (kijs.isArray(args)) {
-                args.push(kijs.Object.clone(this._facadeFnArgs));
-
-            } else {
-                args = kijs.Object.clone(this._facadeFnArgs);
-            }
-        }
-
-        this._rpc.do(this._facadeFnLoad, args, function(response) {
-            this.data = response.rows;
-            if (!kijs.isEmpty(response.selectFilters)) {
-                this.selectByFilters(response.selectFilters);
+                } else {
+                    args = kijs.Object.clone(this._facadeFnArgs);
+                }
             }
 
-            this.raiseEvent('afterLoad', {response: response});
-        }, this, true, this, 'dom', false);
+            this._rpc.do(this._facadeFnLoad, args, function(response) {
+                this.data = response.rows;
+                if (!kijs.isEmpty(response.selectFilters)) {
+                    this.selectByFilters(response.selectFilters);
+                }
+
+                // Promise ausführen
+                resolve(this.data);
+
+                this.raiseEvent('afterLoad', {response: response});
+            }, this, true, this, 'dom', false);
+        });
     }
 
     /**

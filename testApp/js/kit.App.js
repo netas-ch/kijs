@@ -325,6 +325,9 @@ kit.App = class kit_App {
                                     shadow: true,
                                     waitMaskTargetDomProperty: 'innerDom',
                                     cls: 'kijs-flexcolumn',
+                                    on: {
+                                        close: function() { console.log('close') },
+                                    },
 //                                    innerStyle: {
 //                                        padding: '10px',
 //                                        overflowY: 'auto'
@@ -348,8 +351,8 @@ kit.App = class kit_App {
                                         editable: false,
                                         filterVisible: true,
                                         on: {
-                                            click: function(e){ console.log(e); },
-                                            dblClick: function(e){ console.log(e); }
+                                            rowClick: function(e){ console.log(e); },
+                                            rowDblClick: function(e){ console.log(e); }
                                         }
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){
@@ -395,13 +398,22 @@ kit.App = class kit_App {
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.field.Combo',
-                                            name: 'Test',
-                                            label: 'Server Sort',
+                                            name: 'ServerSortCombo',
+                                            label: 'Server Sort mit langem Label',
                                             facadeFnLoad: 'combo.load',
                                             autoLoad: true,
                                             remoteSort: true,
                                             rpc: this._rpc,
-                                            spinIconVisible: true
+                                            spinIconVisible: true,
+                                            elements: [{
+                                                xtype: 'kijs.gui.Button',
+                                                iconChar: '&#xf111',
+                                                on: {
+                                                    click: function() {
+                                                        this.up('ServerSortCombo').value = 3084;
+                                                    }
+                                                }
+                                            }]
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Test',
@@ -435,6 +447,7 @@ kit.App = class kit_App {
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.Range',
+                                            name: 'myrange',
                                             label: 'Range',
                                             min: 1,
                                             max: 10,
@@ -820,9 +833,13 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
-                                            label: 'Bemerkungen (test)',
-                                            value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen!',
-                                            helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!'
+                                            label: 'Bemerkungen (test) Bemerkungen (test) Bemerkungen (test) Bemerkungen (test)',
+                                            value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen! c',
+                                            helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!',
+                                            elements: [{
+                                                xtype: 'kijs.gui.Button',
+                                                iconChar: '&#xf00d'
+                                            }]
                                         },{
                                             xtype: 'kijs.gui.field.ListView',
                                             label: 'ListView',
@@ -940,7 +957,7 @@ kit.App = class kit_App {
                                             },{
                                                 caption:'Hallo 3',
                                                 iconChar: '&#xf135'
-                                            },{
+                                            }, '-', {
                                                 xtype: 'kijs.gui.MenuButton',
                                                 caption:'MULTI',
                                                 elements: (function(){

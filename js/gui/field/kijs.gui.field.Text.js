@@ -98,10 +98,10 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val || this._dom.clsHas('kijs-disabled')) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -117,7 +117,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
+        if (val) {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);

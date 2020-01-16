@@ -21,6 +21,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._keyUpDefer = null;
         this._remoteSort = false;
         this._forceSelection = true;
+        this._firstLoaded = false;
         this._showPlaceholder = true;
         this._selectFirst = false;
 
@@ -97,6 +98,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
         this._eventForwardsAdd('keyDown', this._inputDom);
+        this._eventForwardsAdd('afterLoad', this._listViewEl);
 
 //        this._eventForwardsRemove('enterPress', this._dom);
 //        this._eventForwardsRemove('enterEscPress', this._dom);
@@ -158,10 +160,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
 
         this._listViewEl.disabled = !!val;
@@ -201,8 +203,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        this._listViewEl.disabled = val || this._dom.clsHas('kijs-disabled');
-        if (val || this._dom.clsHas('kijs-disabled')) {
+        this._listViewEl.disabled = !!val;
+        if (val) {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);
@@ -215,11 +217,24 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // overwrite
     get value() { return this._value; }
     set value(val) {
+        let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
         this._oldCaption = this._caption;
         this._oldValue = this._value;
         this._caption  = this._getCaptionFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
+
+        // falls das value nicht im store ist, vom server laden
+        if (this._remoteSort) {
+            if (!valueIsInStore && this._firstLoaded) {
+                this.load(null, true);
+            }
+            // store leeren, wenn value gelöscht wird.
+            if (this._value === '' || this._value === null) {
+//                this._listViewEl.data = [];
+            }
+        }
+
         this._inputDom.nodeAttributeSet('value', this._caption);
     }
 
@@ -232,25 +247,34 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
-     * @param {Boolean} firstLoad true, wenn es das erste Laden ist
+     * @param {Boolean} forceLoad true, wenn immer geladen werden soll
+     * @param {String} query Suchstring
      * @returns {undefined}
      */
-    load(args, firstLoad) {
-        args = args ? args : {};
+    load(args=null, forceLoad=false, query=null) {
+        args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
 
+        // Flag setzen
+        this._firstLoaded = true;
+
         if (this._remoteSort) {
-            let query = this._inputDom.nodeAttributeGet('value');
-            args.query = kijs.isString(query) ? query : '';
+            args.query = kijs.toString(query);
             args.value = this.value;
 
-            // Wenn eine Eingabe erfolgt, laden
-            // Beim ersten laden auch laden, wenn ein value vorhanden ist, damit das displayField geladen wird.
-            if (args.query.length >= this._minChars || (firstLoad && this._value !== '' && this._value !== null)) {
-                this._listViewEl.load(args);
+            // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
+            if (forceLoad || args.query.length >= this._minChars) {
+                this._listViewEl.load(args).then(() => {
+
+                    // Nach dem Laden das value neu setzen,
+                    // damit das Label erscheint
+                    if (query === null && this._isValueInStore(this.value)) {
+                        this.value = this._value;
+                    }
+                });
 
             } else {
-                this._listViewEl.removeAll();
+                this._listViewEl.data = [];
                 this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
 
@@ -294,12 +318,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
      */
     _addPlaceholder(text) {
         if (this._showPlaceholder) {
-            this._listViewEl.add({
-                xtype: 'kijs.gui.Container',
-                cls: 'kijs-placeholder',
-                html: text,
-                htmlDisplayType: 'code'
-            });
+
+            if (this._listViewEl.down('kijs-gui-field-combo-placeholder')) {
+                this._listViewEl.down('kijs-gui-field-combo-placeholder').html = text;
+
+            } else {
+                this._listViewEl.add({
+                    xtype: 'kijs.gui.Container',
+                    name: 'kijs-gui-field-combo-placeholder',
+                    cls: 'kijs-placeholder',
+                    html: text,
+                    htmlDisplayType: 'code'
+                });
+            }
         }
     }
 
@@ -324,7 +355,25 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             caption = val;
         }
 
-        return caption;
+        return kijs.toString(caption);
+    }
+
+    /**
+     * Prüft, ob ein value im Store ist.
+     * @param {String|Number|null} val
+     * @returns {Boolean}
+     */
+    _isValueInStore(val) {
+        let found = false;
+
+        kijs.Array.each(this._listViewEl.data, function(row) {
+            if (row[this.valueField] === val) {
+                found = true;
+                return false;
+            }
+        }, this);
+
+        return found;
     }
 
     /**
@@ -449,7 +498,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // LISTENERS
     _onAfterFirstRenderTo(e) {
-        this.load(null, true);
+        // forceLoad, wenn value vorhanden ist (damit label geladen wird)
+        this.load(null, this.value !== '');
     }
 
     _onInputKeyDown(e) {
@@ -477,7 +527,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._spinBoxEl.close();
 
             if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
-                this.value = dataViewElement.dataRow[this.valueField];
+                let newVal = dataViewElement.dataRow[this.valueField];
+                let changed = newVal !== this.value;
+                this.value = newVal;
+
+                if (changed) {
+                    this.raiseEvent('change');
+                }
             }
 
             // event stoppen
@@ -516,7 +572,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // neues Defer schreiben
         this._keyUpDefer = kijs.defer(function() {
             if (this._remoteSort) {
-                this.load();
+                this.load(null, false, this._inputDom.nodeAttributeGet('value'));
 
             } else {
                 this._setProposal(e.nodeEvent.key);
@@ -526,6 +582,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     _onInputChange(e) {
+
+        // change event nicht berücksichtigen, wenn die spinbox
+        // offen ist.
+        if (this._spinBoxEl.isRendered) {
+            return;
+        }
+
         let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='', changed=false;
         inputVal = kijs.toString(inputVal).trim();
 
@@ -611,6 +674,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _onSpinButtonClick(e) {
         super._onSpinButtonClick(e);
         this._listViewEl.applyFilters();
+
+        if (this._listViewEl.data.length === 0) {
+            this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
+        }
     }
 
 

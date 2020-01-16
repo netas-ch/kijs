@@ -89,11 +89,16 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             val = [val];
         }
 
+        this._contentTypes = [];
+
         // prüfen, ob der media-type gültig ist.
         kijs.Array.each(val, function(contentType) {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
-                throw new kijs.Error('invalid media type "' + contentType + '"');
+                throw new kijs.Error('invalid content type "' + contentType + '"');
+            }
+            if (parts.length === 1) {
+                parts.push('*');
             }
             this._contentTypes.push(parts.join('/'));
         }, this);
@@ -199,14 +204,25 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return support;
     }
 
-    _checkMime(filetype) {
-        if (filetype && this._contentTypes.length > 0) {
-            let parts = filetype.split('/', 2);
-            if (!kijs.Array.contains(this._contentTypes, parts[0]) && !kijs.Array.contains(this._contentTypes, parts.join('/'))) {
-                return false;
-            }
+    /**
+     * Prüft, ob der übergebene MIME type einem der erlaubten MIME entspricht
+     * @param {String} mime
+     * @returns {Boolean}
+     */
+    _checkMime(mime) {
+        let match=false;
+        if (mime && this._contentTypes.length > 0) {
+            mime = mime.toLowerCase();
+            let mimeParts = mime.split('/', 2);
+
+            kijs.Array.each(this._contentTypes, function(contentType) {
+                if (mime === contentType || contentType === mimeParts[0] + '/*') {
+                    match = true;
+                }
+            }, this);
         }
-        return true;
+        
+        return match;
     }
 
     _getFilename(filename) {
@@ -327,7 +343,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     destruct() {
         this._dropZones = null;
-//        this._contentTypes = null;
+        this._contentTypes = null;
         super.destruct();
     }
 };

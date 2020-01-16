@@ -105,7 +105,7 @@ kijs.Number = class kijs_String {
      * @returns {Number}
      */
     static round(number, precision=0) {
-        return window.parseFloat(number.toFixed(precision));
+        return Number(Math.round(number + 'e' + precision) + 'e-' + precision);
     }
 
     /**

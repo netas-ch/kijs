@@ -1399,6 +1399,49 @@ div.kijs-spinbox > .kijs-container-inner > .kijs-listview {
   height: 100%;
   border: 0;
 }
+div.kijs-field-range > .kijs-inputwrapper {
+  height: 26px;
+}
+div.kijs-field-range > .kijs-inputwrapper > input {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 1px;
+  margin: 0px;
+  background: #aaa;
+  outline: none;
+}
+div.kijs-field-range > .kijs-inputwrapper > input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  background: #555;
+  cursor: pointer;
+}
+div.kijs-field-range > .kijs-inputwrapper > input::-moz-range-thumb {
+  width: 15px;
+  height: 15px;
+  border: 0;
+  border-radius: 15px;
+  background-color: #555;
+  cursor: pointer;
+}
+div.kijs-field-range > .kijs-inputwrapper > input:hover::-moz-range-thumb {
+  background-color: #4398dd;
+}
+div.kijs-field-range.kijs-error  > .kijs-inputwrapper > input {
+  background-color: #ffdaec;
+}
+div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input,
+div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input {
+  background-color: #efefef;
+}
+div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input::-moz-range-thumb,
+div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input::-moz-range-thumb {
+  background-color: #888;
+  cursor: default;
+}
 div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-input {
   height: 15px;
   width: 15px;
@@ -1463,8 +1506,17 @@ div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > *,
 div.kijs-field-display.kijs-readonly > .kijs-inputwrapper > * {
   color: #888;
 }
+div.kijs-field-display.kijs-disabled .kijs-link,
+div.kijs-field-display.kijs-readonly .kijs-link {
+  cursor: default;
+}
+div.kijs-field-display.kijs-disabled .kijs-link:hover,
+div.kijs-field-display.kijs-readonly .kijs-link:hover {
+  text-decoration: none;
+}
 div.kijs-field-display .kijs-link {
   cursor: pointer;
+  display: inline;
 }
 div.kijs-field-display .kijs-link:hover {
   text-decoration: underline;

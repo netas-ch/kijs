@@ -342,8 +342,8 @@
                     foreach ($berufe as $beruf) {
                         $beruf = explode(';', trim($beruf));
 
-                        if ($value === $beruf[0] || ($query && mb_stristr($beruf[1], $query))) {
-                            $rows[] = array('value'=>$beruf[0], 'caption'=>$beruf[1]);
+                        if ($value === (int)$beruf[0] || ($query && mb_stristr($beruf[1], $query))) {
+                            $rows[] = array('value'=>(int)$beruf[0], 'caption'=>$beruf[1]);
                         }
                     }
 

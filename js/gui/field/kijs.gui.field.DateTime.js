@@ -187,10 +187,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -212,10 +212,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 

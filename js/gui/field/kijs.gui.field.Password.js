@@ -80,7 +80,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen
         if (val) {
-            this._inputDom.nodeAttributeSet('type', undefined);
+            this._inputDom.nodeAttributeSet('type', 'text');
 
             // DOM-Events
             this._inputDom.on('keyUp', this._onKeyUp, this);
@@ -103,10 +103,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -117,7 +117,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }
-    
+
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
 
@@ -125,10 +125,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 
