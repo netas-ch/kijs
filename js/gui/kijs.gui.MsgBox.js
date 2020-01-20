@@ -254,7 +254,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         name: 'field',
                         label: config.label,
                         value: config.value,
-                        required: config.required ? config.required : false,
+                        required: !!config.required,
                         labelStyle: {
                             marginRight: '4px'
                         },
@@ -280,7 +280,6 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 htmlDisplayType: 'html',
                 cls: 'kijs-msgbox-inner'
             });
-
         }
 
         // Buttons
@@ -296,12 +295,12 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         if (config.fieldXtype) {
                             value = this.upX('kijs.gui.Window').down('field').value;
 
-                            if (this.upX('kijs.gui.Window').down('field').validate()) {
-                                this.upX('kijs.gui.Window').destruct();
+                            if (!this.upX('kijs.gui.Window').down('field').validate()) {
+                                return;
                             }
-                        } else {
-                            this.upX('kijs.gui.Window').destruct();
                         }
+
+                        this.upX('kijs.gui.Window').destruct();
                     };
                 }
             }
