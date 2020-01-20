@@ -755,7 +755,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 let primMatch = true;
 
                 kijs.Array.each(this._primaryKeys, function(primaryKey) {
-                    if (data[primaryKey] !== row.dataRow[primaryKey]) {
+                    if (!data[primaryKey] || data[primaryKey] !== row.dataRow[primaryKey]) {
                         primMatch = false;
                         return false;
                     }
