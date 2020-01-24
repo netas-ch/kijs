@@ -179,7 +179,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._cells = null;
-        this._dataRow = null;
+        if (this._dataRow) {
+            this._dataRow = null;
+        }
 
         // Basisklasse entladen
         super.destruct(true);
