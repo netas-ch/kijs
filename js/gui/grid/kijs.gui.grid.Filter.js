@@ -223,7 +223,9 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._filters = null;
-        this._dataRow = null;
+        if (this._dataRow) {
+            this._dataRow = null;
+        }
 
         // Basisklasse entladen
         super.destruct(true);
