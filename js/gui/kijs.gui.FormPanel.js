@@ -346,14 +346,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     /**
      * Sendet die Formulardaten an den Server
-     * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
-     * @param {Object|null} [args=null] Argumente für den RPC
+     * @param {type} searchFields
+     * @param {type} args
+     * @param {type} waitMaskTarget
      * @returns {Promise}
      */
-    save(searchFields=false, args=null) {
+    save(searchFields=false, args=null, waitMaskTarget=null) {
         return new Promise((resolve, reject) => {
             if (!kijs.isObject(args)) {
                 args = {};
+            }
+
+            if (!waitMaskTarget) {
+                waitMaskTarget = this;
             }
 
             if (searchFields || kijs.isEmpty(this._fields)) {
@@ -377,7 +382,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     this.raiseEvent('afterSave', {response: response});
                     resolve(response);
 
-                }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
+                }, this, false, waitMaskTarget, 'dom', false, this._onRpcBeforeMessages);
             } else {
                 kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
             }
