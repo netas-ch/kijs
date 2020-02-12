@@ -231,7 +231,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      * @param {String} mime
      * @returns {Boolean}
      */
-    _checkMime(mime) {console.log(mime);
+    _checkMime(mime) {
         let match=false;
         if (mime.type && this._contentTypes.length > 0) {
             mime = mime.type.toLowerCase();
