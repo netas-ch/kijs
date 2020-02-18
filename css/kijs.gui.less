@@ -458,10 +458,10 @@ div.kijs-panel {
 
     &.kijs-maximize {
         position: fixed !important;
-        top: 0px !important;
-        left: 0px !important;
-        right: 0px !important;
-        bottom: 0px !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
         width: auto !important;
         height: auto !important;
         margin: 0 !important;
@@ -537,10 +537,10 @@ div.kijs-mask {
     background-color: rgba(0, 0, 0, 0.5);
     flex-direction: column;
 
-    top: 0px;
-    right: 0px;
-    left: 0px;
-    bottom: 0px;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
 
     -webkit-user-select: none;  /* Chrome all / Safari all */
     -moz-user-select: none;     /* Firefox all */
@@ -641,8 +641,8 @@ div.kijs-msgbox {
    ****************** */
 div.kijs-cornertipcontainer {
     position: fixed;
-    right: 0px;
-    bottom: 0px;
+    right: 0;
+    bottom: 0;
     z-index: 70000;
 
     .kijs-panel {
@@ -679,7 +679,7 @@ div.kijs-cornertipcontainer {
 div.kijs-resizer {
     position: absolute;
     bottom: -1px;
-    right: 0px;
+    right: 0;
     width: 15px;
     height: 15px;
     background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAMAAAAMCGV4AAAABlBMVEUAAAAAAAClZ7nPAAAAAXRSTlMAQObYZgAAABZJREFUeAFjIAUwUshlpJDLSIhLGAAACQ4AFk79JaMAAAAASUVORK5CYII=);
@@ -726,7 +726,6 @@ span.kijs-icon {
 button.kijs-button {
     position: relative;
     margin: 0 4px;
-    border: 0;
     border-radius: 6px;
     padding: 3px 8px;
     background-color: @button-bkgrndColor;
@@ -857,7 +856,7 @@ div.kijs-window {
 button.kijs-button.kijs-trigger {
     display: block;
     margin: 0;
-    padding: 0px 2px 0 1px;
+    padding: 0 2px 0 1px;
     border-radius: 0;
     border-top: 1px solid @field-borderColor;
     border-right: 1px solid @field-borderColor;
@@ -1532,10 +1531,10 @@ div.kijs-progressbar {
 
         .kijs-progressbar-bar {
             position: absolute;
-            top: 0px;
-            bottom: 0px;
-            left: 0px;
-            width: 0%;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 0;
             background-color: @bar-bkgrndColor;
             transition: width 2s;
         }
@@ -1592,7 +1591,7 @@ div.kijs-field {
         > .kijs-button {
             display: block;
             margin: 0 0 0 2px;
-            padding: 0px 4px;
+            padding: 0 4px;
             height: 100%;
         }
     }
@@ -1955,7 +1954,7 @@ div.kijs-field-range {
             -webkit-appearance: none;
             width: 100%;
             height: 1px;
-            margin: 0px;
+            margin: 0;
             background: @range-bkgrndColor;
             outline: none;
         }
@@ -2198,6 +2197,10 @@ div.kijs-grid {
         flex-direction: row;
     }
 
+    .kijs-top, .kijs-bottom {
+        flex: 0 0 auto;
+    }
+
     .kijs-center {
         flex: 1;
 
@@ -2318,7 +2321,7 @@ div.kijs-grid {
                 .kijs-grid-filter-reset {
                     width: 20px;
                     margin: 2px 0;
-                    padding: 0px 4px;
+                    padding: 0 4px;
                     border-right: 1px solid @splitter-overlay-bkgrndColor;
 
                     .kijs-button {
@@ -2353,7 +2356,7 @@ div.kijs-grid {
 
         tr.kijs-grid-filter.kijs-hidden {
             /*display: none;*/
-            max-height: 0px;
+            max-height: 0;
             margin: 0;
             padding: 0;
             border: 0;
