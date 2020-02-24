@@ -1,3 +1,5 @@
 # IDE Ordner
 .idea/
-nbproject/
+/nbproject/
+/css/kijs.gui.css
+/css/kijs.gui.css.map

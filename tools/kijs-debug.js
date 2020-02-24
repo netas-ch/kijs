@@ -148,10 +148,14 @@ window.kijs = class kijs {
      * @param {Function} fn
      * @param {Number} millis
      * @param {Object} context
-     * @param {Array} [args]
+     * @param {mixed} [args]
      * @returns {Number} Timeout-ID die mit clearTimeout gelöscht werden kann
      */
-    static defer(fn, millis, context, args) {
+    static defer(fn, millis, context, args = null) {
+        if (args !== null) {
+            args = kijs.isArray(args) ? args : [args];
+        }
+
         fn = this.createDelegate(fn, context, args);
         if (millis > 0) {
             return setTimeout(fn, millis);
@@ -210,12 +214,13 @@ window.kijs = class kijs {
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
+     * @param {String} comment          Kommentar für den Übersetzer. Wird nur zum Generieren der Usages-Datei benötigt.
      * @param {String} languageId
      * @returns {String}
      */
-    static getText(key, variant='', args=null, languageId=null) {
+    static getText(key, variant='', args=null, comment='', languageId=null) {
         if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, languageId);
+            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, comment, languageId);
         }
 
         // keine getText-Fn definiert: Argumente ersetzen
@@ -352,7 +357,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isNumeric(value) {
-        return this.isNumber(value) || (this.isString(value) && value.match(/^[0-9]+\.{0,1}[0-9]*$/));
+        return this.isNumber(value) || !!(this.isString(value) && value.match(/^-{0,1}[0-9]+(\.[0-9]+){0,1}$/));
     }
 
     /**
@@ -371,7 +376,7 @@ window.kijs = class kijs {
      * @returns {undefined}
      */
     static isReady(fn, context) {
-        document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context||this), false);
+        document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context || this), false);
     }
 
     /**
@@ -384,7 +389,30 @@ window.kijs = class kijs {
     }
 
     /**
-     * Setzt eine individuelle getText-Funktion
+     * Wandelt einen beliebigen Wert in einen String um.
+     * @param {mixed} value
+     * @returns {String}
+     */
+    static toString(value) {
+        if (kijs.isString(value)) {
+            return value;
+
+        } else if (value === null || !kijs.isDefined(value)) {
+            return '';
+
+        } else if (kijs.isBoolean(value)) {
+            return value ? '1' : '0';
+
+        } else if (kijs.isFunction(value.toString)) {
+            return value.toString();
+        }
+
+        return (value + '');
+    }
+
+    /**
+     * Setzt eine individuelle getText-Funktion.
+     * Die fn erhält folgende Variablen: key, variant, args, comment, languageId
      * @param {Function} fn
      * @param {Object} scope
      * @returns {undefined}
@@ -407,6 +435,7 @@ window.kijs = class kijs {
         return 'kijs-' + (prefix ? prefix + '-' : '') + window.kijs.__uniqId;
     }
 };
+
 /* global kijs */
 
 // --------------------------------------------------------------
@@ -510,25 +539,37 @@ kijs.Ajax = class kijs_Ajax {
             let val = null;
             if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
                 switch (config.format) {
-                    case 'text': val = xmlhttp.responseText; break;
-                    case 'json': val = JSON.parse(xmlhttp.responseText); break;
-                    case 'xml': val = kijs.Ajax.parseXml(xmlhttp.responseXML); break;
+                    case 'text':
+                        val = xmlhttp.responseText;
+                        break;
+
+                    case 'json':
+                        try {
+                            val = JSON.parse(xmlhttp.responseText);
+                        } catch (e) {
+                            val = xmlhttp.responseText;
+                        }
+                        break;
+
+                    case 'xml':
+                        val = kijs.Ajax.parseXml(xmlhttp.responseXML);
+                        break;
                 }
                 config.fn.call(config.context || this, val, config, null);
             } else {
                 let error = '';
                 if (xmlhttp.status > 0) {
-                    error = kijs.getText('Der Server hat mit einem Fehler geantwortet:') + ' ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
+                    error = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
 
                 } else if (config.abortHappened) {
-                    error = kijs.getText('Die Verbindung wurde abgebrochen.');
+                    error = kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                 } else if (config.timeoutHappened) {
-                    error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden.') + ' ' +
-                            kijs.getText('Die Verbindung wurde abgebrochen.');
+                    error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden') + '. ' +
+                            kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                 } else {
-                    error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden.');
+                    error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden') + '.';
                 }
                 config.fn.call(config.context || this, val, config, error);
             }
@@ -945,6 +986,767 @@ kijs.Array = class kijs_Array {
         return ret;
     }
 };
+/* global kijs */
+
+// --------------------------------------------------------------
+// kijs.Char (Static)
+// --------------------------------------------------------------
+
+kijs.Char = class kijs_Char {
+
+    // --------------------------------------------------------------
+    // STATIC GETTERS / SETTERS
+    // --------------------------------------------------------------
+    static get charTable() {
+        return {
+            A: [     // capital A
+                0x00C1, // Á    capital A with ACUTE
+                0x0102, // Ă    capital A with BREVE
+                0x1EAE, // Ắ    capital A with BREVE and ACUTE
+                0x1EB6, // Ặ    capital A with BREVE and DOT BELOW
+                0x1EB0, // Ằ    capital A with BREVE and GRAVE
+                0x1EB2, // Ẳ    capital A with BREVE and HOOK ABOVE
+                0x1EB4, // Ẵ    capital A with BREVE and TILDE
+                0x01CD, // Ǎ    capital A with CARON
+                0x00C2, // Â    capital A with CIRCUMFLEX
+                0x1EA4, // Ấ    capital A with CIRCUMFLEX and ACUTE
+                0x1EAC, // Ậ    capital A with CIRCUMFLEX and DOT BELOW
+                0x1EA6, // Ầ    capital A with CIRCUMFLEX and GRAVE
+                0x1EA8, // Ẩ    capital A with CIRCUMFLEX and HOOK ABOVE
+                0x1EAA, // Ẫ    capital A with CIRCUMFLEX and TILDE
+                0x00C4, // Ä    capital A with DIAERESIS
+                0x1EA0, // Ạ    capital A with DOT BELOW
+                0x00C0, // À    capital A with GRAVE
+                0x1EA2, // Ả    capital A with HOOK ABOVE
+                0x0100, // Ā    capital A with MACRON
+                0x0104, // Ą    capital A with OGONEK
+                0x00C5, // Å    capital A with RING ABOVE
+                0x01FA, // Ǻ    capital A with RING ABOVE and ACUTE
+                0x00C3, // Ã    capital A with TILDE
+                0x00C6, // Æ    capital AE
+                0x01FC  // Ǽ    capital AE with ACUTE
+            ],
+
+            B: [     // capital B
+                0x1E04, // Ḅ    capital B with DOT BELOW
+                0x0181  // Ɓ    capital B with HOOK
+            ],
+
+            C: [     // capital C
+                0x0106, // Ć    capital C with ACUTE
+                0x010C, // Č    capital C with CARON
+                0x00C7, // Ç    capital C with CEDILLA
+                0x0108, // Ĉ    capital C with CIRCUMFLEX
+                0x010A, // Ċ    capital C with DOT ABOVE
+                0x0186, // Ɔ    capital OPEN O
+                0x0297  // ʗ    LATIN LETTER STRETCHED C
+            ],
+
+            D: [     // capital D
+                0x010E, // Ď    capital D with CARON
+                0x1E12, // Ḓ    capital D with CIRCUMFLEX BELOW
+                0x1E0C, // Ḍ    capital D with DOT BELOW
+                0x018A, // Ɗ    capital D with HOOK
+                0x1E0E, // Ḏ    capital D with LINE BELOW
+                0x01F2, // ǲ    capital D with SMALL LETTER Z
+                0x01C5, // ǅ    capital D with SMALL LETTER Z with CARON
+                0x0110, // Đ    capital D with STROKE
+                0x00D0, // Ð    capital ETH
+                0x01F1, // Ǳ    capital DZ
+                0x01C4  // Ǆ    capital DZ with CARON
+            ],
+
+            E: [     // capital E
+                0x00C9, // É    capital E with ACUTE
+                0x0114, // Ĕ    capital E with BREVE
+                0x011A, // Ě    capital E with CARON
+                0x00CA, // Ê    capital E with CIRCUMFLEX
+                0x1EBE, // Ế    capital E with CIRCUMFLEX and ACUTE
+                0x1EC6, // Ệ    capital E with CIRCUMFLEX and DOT BELOW
+                0x1EC0, // Ề    capital E with CIRCUMFLEX and GRAVE
+                0x1EC2, // Ể    capital E with CIRCUMFLEX and HOOK ABOVE
+                0x1EC4, // Ễ    capital E with CIRCUMFLEX and TILDE
+                0x00CB, // Ë    capital E with DIAERESIS
+                0x0116, // Ė    capital E with DOT ABOVE
+                0x1EB8, // Ẹ    capital E with DOT BELOW
+                0x00C8, // È    capital E with GRAVE
+                0x1EBA, // Ẻ    capital E with HOOK ABOVE
+                0x0112, // Ē    capital E with MACRON
+                0x0118, // Ę    capital E with OGONEK
+                0x1EBC, // Ẽ    capital E with TILDE
+                0x0190, // Ɛ    capital OPEN E
+                0x018F  // Ə    capital SCHWA
+            ],
+
+            F: [     // capital F
+                0x0191  // Ƒ    capital F with HOOK
+            ],
+
+            G: [     // capital G
+                0x01F4, // Ǵ    capital G with ACUTE
+                0x011E, // Ğ    capital G with BREVE
+                0x01E6, // Ǧ    capital G with CARON
+                0x0122, // Ģ    capital G with CEDILLA
+                0x011C, // Ĝ    capital G with CIRCUMFLEX
+                0x0120, // Ġ    capital G with DOT ABOVE
+                0x1E20, // Ḡ    capital G with MACRON
+                0x029B  // ʛ    LATIN LETTER SMALL CAPITAL G with HOOK
+            ],
+
+            H: [     // capital H
+                0x1E2A, // Ḫ    capital H with BREVE BELOW
+                0x0124, // Ĥ    capital H with CIRCUMFLEX
+                0x1E24, // Ḥ    capital H with DOT BELOW
+                0x0126  // Ħ    capital H with STROKE
+            ],
+
+            I: [     // capital I
+                0x00CD, // Í    capital I with ACUTE
+                0x012C, // Ĭ    capital I with BREVE
+                0x01CF, // Ǐ    capital I with CARON
+                0x00CE, // Î    capital I with CIRCUMFLEX
+                0x00CF, // Ï    capital I with DIAERESIS
+                0x0130, // İ    capital I with DOT ABOVE
+                0x1ECA, // Ị    capital I with DOT BELOW
+                0x00CC, // Ì    capital I with GRAVE
+                0x1EC8, // Ỉ    capital I with HOOK ABOVE
+                0x012A, // Ī    capital I with MACRON
+                0x012E, // Į    capital I with OGONEK
+                0x0128, // Ĩ    capital I with TILDE
+                0x0132  // Ĳ    LATIN CAPITAL LIGATURE IJ
+            ],
+
+            J: [     // capital J
+                0x0134  // Ĵ    capital J with CIRCUMFLEX
+            ],
+
+            K: [     // capital K
+                0x0136, // Ķ    capital K with CEDILLA
+                0x1E32, // Ḳ    capital K with DOT BELOW
+                0x0198, // Ƙ    capital K with HOOK
+                0x1E34  // Ḵ    capital K with LINE BELOW
+            ],
+
+            L: [     // capital L
+                0x0139, // Ĺ    capital L with ACUTE
+                0x023D, // Ƚ    capital L with BAR
+                0x013D, // Ľ    capital L with CARON
+                0x013B, // Ļ    capital L with CEDILLA
+                0x1E3C, // Ḽ    capital L with CIRCUMFLEX BELOW
+                0x1E36, // Ḷ    capital L with DOT BELOW
+                0x1E38, // Ḹ    capital L with DOT BELOW and MACRON
+                0x1E3A, // Ḻ    capital L with LINE BELOW
+                0x013F, // Ŀ    capital L with MIDDLE DOT
+                0x01C8, // ǈ    capital L with SMALL LETTER J
+                0x0141, // Ł    capital L with STROKE
+                0x01C7  // Ǉ    capital LJ
+            ],
+
+            M: [     // capital M
+                0x1E3E, // Ḿ    capital M with ACUTE
+                0x1E40, // Ṁ    capital M with DOT ABOVE
+                0x1E42  // Ṃ    capital M with DOT BELOW
+            ],
+
+            N: [     // capital N
+                0x0143, // Ń    capital N with ACUTE
+                0x0147, // Ň    capital N with CARON
+                0x0145, // Ņ    capital N with CEDILLA
+                0x1E4A, // Ṋ    capital N with CIRCUMFLEX BELOW
+                0x1E44, // Ṅ    capital N with DOT ABOVE
+                0x1E46, // Ṇ    capital N with DOT BELOW
+                0x01F8, // Ǹ    capital N with GRAVE
+                0x019D, // Ɲ    capital N with LEFT HOOK
+                0x1E48, // Ṉ    capital N with LINE BELOW
+                0x01CB, // ǋ    capital N with SMALL LETTER J
+                0x00D1, // Ñ    capital N with TILDE
+                0x01CA  // Ǌ    capital NJ
+            ],
+
+            O: [     // capital O
+                0x00D3, // Ó    capital O with ACUTE
+                0x014E, // Ŏ    capital O with BREVE
+                0x01D1, // Ǒ    capital O with CARON
+                0x00D4, // Ô    capital O with CIRCUMFLEX
+                0x1ED0, // Ố    capital O with CIRCUMFLEX and ACUTE
+                0x1ED8, // Ộ    capital O with CIRCUMFLEX and DOT BELOW
+                0x1ED2, // Ồ    capital O with CIRCUMFLEX and GRAVE
+                0x1ED4, // Ổ    capital O with CIRCUMFLEX and HOOK ABOVE
+                0x1ED6, // Ỗ    capital O with CIRCUMFLEX and TILDE
+                0x00D6, // Ö    capital O with DIAERESIS
+                0x1ECC, // Ọ    capital O with DOT BELOW
+                0x0150, // Ő    capital O with DOUBLE ACUTE
+                0x00D2, // Ò    capital O with GRAVE
+                0x1ECE, // Ỏ    capital O with HOOK ABOVE
+                0x01A0, // Ơ    capital O with HORN
+                0x1EDA, // Ớ    capital O with HORN and ACUTE
+                0x1EE2, // Ợ    capital O with HORN and DOT BELOW
+                0x1EDC, // Ờ    capital O with HORN and GRAVE
+                0x1EDE, // Ở    capital O with HORN and HOOK ABOVE
+                0x1EE0, // Ỡ    capital O with HORN and TILDE
+                0x014C, // Ō    capital O with MACRON
+                0x019F, // Ɵ    capital O with MIDDLE TILDE
+                0x01EA, // Ǫ    capital O with OGONEK
+                0x00D8, // Ø    capital O with STROKE
+                0x01FE, // Ǿ    capital O with STROKE and ACUTE
+                0x00D5, // Õ    capital O with TILDE
+                0x0152, // Œ    LATIN CAPITAL LIGATURE OE
+                0x0276  // ɶ    LATIN LETTER SMALL CAPITAL OE
+            ],
+
+            P: [     // capital P
+                0x00DE  // Þ    capital THORN
+            ],
+
+            Q: [     // capital Q
+            ],
+
+            R: [     // capital R
+                0x0154, // Ŕ    capital R with ACUTE
+                0x0158, // Ř    capital R with CARON
+                0x0156, // Ŗ    capital R with CEDILLA
+                0x1E58, // Ṙ    capital R with DOT ABOVE
+                0x1E5A, // Ṛ    capital R with DOT BELOW
+                0x1E5C, // Ṝ    capital R with DOT BELOW and MACRON
+                0x1E5E, // Ṟ    capital R with LINE BELOW
+                0x0281  // ʁ    LATIN LETTER SMALL CAPITAL INVERTED R
+            ],
+
+            S: [     // capital S
+                0x015A, // Ś    capital S with ACUTE
+                0x0160, // Š    capital S with CARON
+                0x015E, // Ş    capital S with CEDILLA
+                0x015C, // Ŝ    capital S with CIRCUMFLEX
+                0x0218, // Ș    capital S with COMMA BELOW
+                0x1E60, // Ṡ    capital S with DOT ABOVE
+                0x1E62, // Ṣ    capital S with DOT BELOW
+                0x1E9E  // ẞ    capital SHARP S
+            ],
+
+            T: [     // capital T
+                0x0164, // Ť    capital T with CARON
+                0x0162, // Ţ    capital T with CEDILLA
+                0x1E70, // Ṱ    capital T with CIRCUMFLEX BELOW
+                0x021A, // Ț    capital T with COMMA BELOW
+                0x1E6C, // Ṭ    capital T with DOT BELOW
+                0x1E6E, // Ṯ    capital T with LINE BELOW
+                0x0166, // Ŧ    capital T with STROKE
+                0x00DE, // Þ    capital THORN
+                0x00D0  // Ð    capital ETH
+            ],
+
+            U: [     // capital U
+                0x00DA, // Ú    capital U with ACUTE
+                0x016C, // Ŭ    capital U with BREVE
+                0x01D3, // Ǔ    capital U with CARON
+                0x00DB, // Û    capital U with CIRCUMFLEX
+                0x00DC, // Ü    capital U with DIAERESIS
+                0x01D7, // Ǘ    capital U with DIAERESIS and ACUTE
+                0x01D9, // Ǚ    capital U with DIAERESIS and CARON
+                0x01DB, // Ǜ    capital U with DIAERESIS and GRAVE
+                0x01D5, // Ǖ    capital U with DIAERESIS and MACRON
+                0x1EE4, // Ụ    capital U with DOT BELOW
+                0x0170, // Ű    capital U with DOUBLE ACUTE
+                0x00D9, // Ù    capital U with GRAVE
+                0x1EE6, // Ủ    capital U with HOOK ABOVE
+                0x01AF, // Ư    capital U with HORN
+                0x1EE8, // Ứ    capital U with HORN and ACUTE
+                0x1EF0, // Ự    capital U with HORN and DOT BELOW
+                0x1EEA, // Ừ    capital U with HORN and GRAVE
+                0x1EEC, // Ử    capital U with HORN and HOOK ABOVE
+                0x1EEE, // Ữ    capital U with HORN and TILDE
+                0x016A, // Ū    capital U with MACRON
+                0x0172, // Ų    capital U with OGONEK
+                0x016E, // Ů    capital U with RING ABOVE
+                0x0168  // Ũ    capital U with TILDE
+            ],
+
+            V: [     // capital V
+            ],
+
+            W: [     // capital W
+                0x1E82, // Ẃ    capital W with ACUTE
+                0x0174, // Ŵ    capital W with CIRCUMFLEX
+                0x1E84, // Ẅ    capital W with DIAERESIS
+                0x1E80, // Ẁ    capital W with GRAVE
+                0x02AC  // ʬ    LATIN LETTER BILABIAL PERCUSSIVE
+            ],
+
+            X: [     // capital X
+            ],
+
+            Y: [     // capital Y
+                0x00DD, // Ý    capital Y with ACUTE
+                0x0176, // Ŷ    capital Y with CIRCUMFLEX
+                0x0178, // Ÿ    capital Y with DIAERESIS
+                0x1E8E, // Ẏ    capital Y with DOT ABOVE
+                0x1EF4, // Ỵ    capital Y with DOT BELOW
+                0x1EF2, // Ỳ    capital Y with GRAVE
+                0x01B3, // Ƴ    capital Y with HOOK
+                0x1EF6, // Ỷ    capital Y with HOOK ABOVE
+                0x0232, // Ȳ    capital Y with MACRON
+                0x1EF8  // Ỹ    capital Y with TILDE
+            ],
+
+            Z: [     // capital Z
+                0x0179, // Ź    capital Z with ACUTE
+                0x017D, // Ž    capital Z with CARON
+                0x017B, // Ż    capital Z with DOT ABOVE
+                0x1E92, // Ẓ    capital Z with DOT BELOW
+                0x1E94, // Ẕ    capital Z with LINE BELOW
+                0x01B5  // Ƶ    capital Z with STROKE
+            ],
+
+            a: [     // lowercase A
+                0x00E1, // á    lowercase A with ACUTE
+                0x0103, // ă    lowercase A with BREVE
+                0x1EAF, // ắ    lowercase A with BREVE and ACUTE
+                0x1EB7, // ặ    lowercase A with BREVE and DOT BELOW
+                0x1EB1, // ằ    lowercase A with BREVE and GRAVE
+                0x1EB3, // ẳ    lowercase A with BREVE and HOOK ABOVE
+                0x1EB5, // ẵ    lowercase A with BREVE and TILDE
+                0x01CE, // ǎ    lowercase A with CARON
+                0x00E2, // â    lowercase A with CIRCUMFLEX
+                0x1EA5, // ấ    lowercase A with CIRCUMFLEX and ACUTE
+                0x1EAD, // ậ    lowercase A with CIRCUMFLEX and DOT BELOW
+                0x1EA7, // ầ    lowercase A with CIRCUMFLEX and GRAVE
+                0x1EA9, // ẩ    lowercase A with CIRCUMFLEX and HOOK ABOVE
+                0x1EAB, // ẫ    lowercase A with CIRCUMFLEX and TILDE
+                0x00E4, // ä    lowercase A with DIAERESIS
+                0x1EA1, // ạ    lowercase A with DOT BELOW
+                0x00E0, // à    lowercase A with GRAVE
+                0x1EA3, // ả    lowercase A with HOOK ABOVE
+                0x0101, // ā    lowercase A with MACRON
+                0x0105, // ą    lowercase A with OGONEK
+                0x00E5, // å    lowercase A with RING ABOVE
+                0x01FB, // ǻ    lowercase A with RING ABOVE and ACUTE
+                0x00E3, // ã    lowercase A with TILDE
+                0x00E6, // æ    lowercase AE
+                0x01FD, // ǽ    lowercase AE with ACUTE
+                0x0251, // ɑ    lowercase ALPHA
+                0x0250, // ɐ    lowercase TURNED A
+                0x0252  // ɒ    lowercase TURNED ALPHA
+            ],
+
+            b: [     // lowercase B
+                0x1E05, // ḅ    lowercase B with DOT BELOW
+                0x0253, // ɓ    lowercase B with HOOK
+                0x00DF  // ß    lowercase SHARP S
+            ],
+
+            c: [     // lowercase C
+                0x0107, // ć    lowercase C with ACUTE
+                0x010D, // č    lowercase C with CARON
+                0x00E7, // ç    lowercase C with CEDILLA
+                0x0109, // ĉ    lowercase C with CIRCUMFLEX
+                0x0255, // ɕ    lowercase C with CURL
+                0x010B  // ċ    lowercase C with DOT ABOVE
+            ],
+
+            d: [     // lowercase D
+                0x010F, // ď    lowercase D with CARON
+                0x1E13, // ḓ    lowercase D with CIRCUMFLEX BELOW
+                0x1E0D, // ḍ    lowercase D with DOT BELOW
+                0x0257, // ɗ    lowercase D with HOOK
+                0x1E0F, // ḏ    lowercase D with LINE BELOW
+                0x0111, // đ    lowercase D with STROKE
+                0x0256, // ɖ    lowercase D with TAIL
+                0x02A4, // ʤ    lowercase DEZH DIGRAPH
+                0x01F3, // ǳ    lowercase DZ
+                0x02A3, // ʣ    lowercase DZ DIGRAPH
+                0x02A5, // ʥ    lowercase DZ DIGRAPH with CURL
+                0x01C6, // ǆ    lowercase DZ with CARON
+                0x00F0  // ð    lowercase ETH
+            ],
+
+            e: [     // lowercase E
+                0x00E9, // é    lowercase E with ACUTE
+                0x0115, // ĕ    lowercase E with BREVE
+                0x011B, // ě    lowercase E with CARON
+                0x00EA, // ê    lowercase E with CIRCUMFLEX
+                0x1EBF, // ế    lowercase E with CIRCUMFLEX and ACUTE
+                0x1EC7, // ệ    lowercase E with CIRCUMFLEX and DOT BELOW
+                0x1EC1, // ề    lowercase E with CIRCUMFLEX and GRAVE
+                0x1EC3, // ể    lowercase E with CIRCUMFLEX and HOOK ABOVE
+                0x1EC5, // ễ    lowercase E with CIRCUMFLEX and TILDE
+                0x00EB, // ë    lowercase E with DIAERESIS
+                0x0117, // ė    lowercase E with DOT ABOVE
+                0x1EB9, // ẹ    lowercase E with DOT BELOW
+                0x00E8, // è    lowercase E with GRAVE
+                0x1EBB, // ẻ    lowercase E with HOOK ABOVE
+                0x0113, // ē    lowercase E with MACRON
+                0x0119, // ę    lowercase E with OGONEK
+                0x1EBD, // ẽ    lowercase E with TILDE
+                0x0292, // ʒ    lowercase EZH
+                0x01EF, // ǯ    lowercase EZH with CARON
+                0x0293, // ʓ    lowercase EZH with CURL
+                0x0258, // ɘ    lowercase REVERSED E
+                0x025C, // ɜ    lowercase REVERSED OPEN E
+                0x025D, // ɝ    lowercase REVERSED OPEN E with HOOK
+                0x0259, // ə    lowercase SCHWA
+                0x025A, // ɚ    lowercase SCHWA with HOOK
+                0x029A, // ʚ    lowercase CLOSED OPEN E
+                0x025E  // ɞ    lowercase CLOSED REVERSED OPEN E
+            ],
+
+            f: [     // lowercase F
+                0x0192, // ƒ    lowercase F with HOOK
+                0x017F, // ſ    lowercase LONG S
+                0x02A9, // ʩ    lowercase FENG DIGRAPH
+                0xFB01, // ﬁ    LATIN SMALL LIGATURE FI
+                0xFB02, // ﬂ    LATIN SMALL LIGATURE FL
+                0x0283, // ʃ    lowercase ESH
+                0x0286, // ʆ    lowercase ESH with CURL
+                0x0285, // ʅ    lowercase SQUAT REVERSED ESH
+                0x025F, // ɟ    lowercase DOTLESS J with STROKE
+                0x0284  // ʄ    lowercase DOTLESS J with STROKE and HOOK
+            ],
+
+            g: [     // lowercase G
+                0x01F5, // ǵ    lowercase G with ACUTE
+                0x011F, // ğ    lowercase G with BREVE
+                0x01E7, // ǧ    lowercase G with CARON
+                0x0123, // ģ    lowercase G with CEDILLA
+                0x011D, // ĝ    lowercase G with CIRCUMFLEX
+                0x0121, // ġ    lowercase G with DOT ABOVE
+                0x0260, // ɠ    lowercase G with HOOK
+                0x1E21, // ḡ    lowercase G with MACRON
+                0x0261, // ɡ    lowercase SCRIPT G
+                0x0263  // ɣ    lowercase GAMMA
+            ],
+
+            h: [     // lowercase H
+                0x1E2B, // ḫ    lowercase H with BREVE BELOW
+                0x0125, // ĥ    lowercase H with CIRCUMFLEX
+                0x1E25, // ḥ    lowercase H with DOT BELOW
+                0x0266, // ɦ    lowercase H with HOOK
+                0x1E96, // ẖ    lowercase H with LINE BELOW
+                0x0127, // ħ    lowercase H with STROKE
+                0x0267, // ɧ    lowercase HENG with HOOK
+                0x0265, // ɥ    lowercase TURNED H
+                0x02AE, // ʮ    lowercase TURNED H with FISHHOOK
+                0x02AF, // ʯ    lowercase TURNED H with FISHHOOK and TAIL
+                0x0173  // ų    lowercase U with OGONEK
+            ],
+
+            i: [     // lowercase I
+                0x00ED, // í    lowercase I with ACUTE
+                0x012D, // ĭ    lowercase I with BREVE
+                0x01D0, // ǐ    lowercase I with CARON
+                0x00EE, // î    lowercase I with CIRCUMFLEX
+                0x00EF, // ï    lowercase I with DIAERESIS
+                0x1ECB, // ị    lowercase I with DOT BELOW
+                0x00EC, // ì    lowercase I with GRAVE
+                0x1EC9, // ỉ    lowercase I with HOOK ABOVE
+                0x012B, // ī    lowercase I with MACRON
+                0x012F, // į    lowercase I with OGONEK
+                0x0268, // ɨ    lowercase I with STROKE
+                0x0129, // ĩ    lowercase I with TILDE
+                0x0269, // ɩ    lowercase IOTA
+                0x0131, // ı    lowercase DOTLESS I
+                0x0133, // ĳ    LATIN SMALL LIGATURE IJ
+                0x025F  // ɟ    lowercase DOTLESS J with STROKE
+            ],
+
+            j: [     // lowercase J
+                0x01F0, // ǰ    lowercase J with CARON
+                0x0135, // ĵ    lowercase J with CIRCUMFLEX
+                0x029D, // ʝ    lowercase J with CROSSED-TAIL
+                0x0237, // ȷ    lowercase DOTLESS J
+                0x025F, // ɟ    lowercase DOTLESS J with STROKE
+                0x0284  // ʄ    lowercase DOTLESS J with STROKE and HOOK
+            ],
+
+            k: [     // lowercase K
+                0x0137, // ķ    lowercase K with CEDILLA
+                0x1E33, // ḳ    lowercase K with DOT BELOW
+                0x0199, // ƙ    lowercase K with HOOK
+                0x1E35, // ḵ    lowercase K with LINE BELOW
+                0x0138, // ĸ    lowercase KRA
+                0x029E  // ʞ    lowercase TURNED K
+            ],
+
+            l: [     // lowercase L
+                0x013A, // ĺ    lowercase L with ACUTE
+                0x019A, // ƚ    lowercase L with BAR
+                0x026C, // ɬ    lowercase L with BELT
+                0x013E, // ľ    lowercase L with CARON
+                0x013C, // ļ    lowercase L with CEDILLA
+                0x1E3D, // ḽ    lowercase L with CIRCUMFLEX BELOW
+                0x1E37, // ḷ    lowercase L with DOT BELOW
+                0x1E39, // ḹ    lowercase L with DOT BELOW and MACRON
+                0x1E3B, // ḻ    lowercase L with LINE BELOW
+                0x0140, // ŀ    lowercase L with MIDDLE DOT
+                0x026B, // ɫ    lowercase L with MIDDLE TILDE
+                0x026D, // ɭ    lowercase L with RETROFLEX HOOK
+                0x0142, // ł    lowercase L with STROKE
+                0x019B, // ƛ    lowercase LAMBDA with STROKE
+                0x026E, // ɮ    lowercase LEZH
+                0x01C9, // ǉ    lowercase LJ
+                0x02AA, // ʪ    lowercase LS DIGRAPH
+                0x02AB  // ʫ    lowercase LZ DIGRAPH
+            ],
+
+            m: [     // lowercase M
+                0x1E3F, // ḿ    lowercase M with ACUTE
+                0x1E41, // ṁ    lowercase M with DOT ABOVE
+                0x1E43, // ṃ    lowercase M with DOT BELOW
+                0x0271, // ɱ    lowercase M with HOOK
+                0x026F, // ɯ    lowercase TURNED M
+                0x0270  // ɰ    lowercase TURNED M with LONG LEG
+            ],
+
+            n: [     // lowercase N
+                0x0149, // ŉ    lowercase N PRECEDED BY APOSTROPHE
+                0x0144, // ń    lowercase N with ACUTE
+                0x0148, // ň    lowercase N with CARON
+                0x0146, // ņ    lowercase N with CEDILLA
+                0x1E4B, // ṋ    lowercase N with CIRCUMFLEX BELOW
+                0x1E45, // ṅ    lowercase N with DOT ABOVE
+                0x1E47, // ṇ    lowercase N with DOT BELOW
+                0x01F9, // ǹ    lowercase N with GRAVE
+                0x0272, // ɲ    lowercase N with LEFT HOOK
+                0x1E49, // ṉ    lowercase N with LINE BELOW
+                0x0273, // ɳ    lowercase N with RETROFLEX HOOK
+                0x00F1, // ñ    lowercase N with TILDE
+                0x01CC, // ǌ    lowercase NJ
+                0x014B, // ŋ    lowercase ENG
+                0x014A  // Ŋ    capital ENG
+            ],
+
+            o: [     // lowercase O
+                0x00F3, // ó    lowercase O with ACUTE
+                0x014F, // ŏ    lowercase O with BREVE
+                0x01D2, // ǒ    lowercase O with CARON
+                0x00F4, // ô    lowercase O with CIRCUMFLEX
+                0x1ED1, // ố    lowercase O with CIRCUMFLEX and ACUTE
+                0x1ED9, // ộ    lowercase O with CIRCUMFLEX and DOT BELOW
+                0x1ED3, // ồ    lowercase O with CIRCUMFLEX and GRAVE
+                0x1ED5, // ổ    lowercase O with CIRCUMFLEX and HOOK ABOVE
+                0x1ED7, // ỗ    lowercase O with CIRCUMFLEX and TILDE
+                0x00F6, // ö    lowercase O with DIAERESIS
+                0x1ECD, // ọ    lowercase O with DOT BELOW
+                0x0151, // ő    lowercase O with DOUBLE ACUTE
+                0x00F2, // ò    lowercase O with GRAVE
+                0x1ECF, // ỏ    lowercase O with HOOK ABOVE
+                0x01A1, // ơ    lowercase O with HORN
+                0x1EDB, // ớ    lowercase O with HORN and ACUTE
+                0x1EE3, // ợ    lowercase O with HORN and DOT BELOW
+                0x1EDD, // ờ    lowercase O with HORN and GRAVE
+                0x1EDF, // ở    lowercase O with HORN and HOOK ABOVE
+                0x1EE1, // ỡ    lowercase O with HORN and TILDE
+                0x014D, // ō    lowercase O with MACRON
+                0x01EB, // ǫ    lowercase O with OGONEK
+                0x00F8, // ø    lowercase O with STROKE
+                0x01FF, // ǿ    lowercase O with STROKE and ACUTE
+                0x00F5, // õ    lowercase O with TILDE
+                0x025B, // ɛ    lowercase OPEN E
+                0x0254, // ɔ    lowercase OPEN O
+                0x0275, // ɵ    lowercase BARRED O
+                0x0298, // ʘ    LATIN LETTER BILABIAL CLICK
+                0x0153  // œ    LATIN SMALL LIGATURE OE
+            ],
+
+            p: [     // lowercase P
+                0x0278, // ɸ    lowercase PHI
+                0x00FE  // þ    lowercase THORN
+            ],
+
+            q: [     // lowercase Q
+                0x02A0  // ʠ    lowercase Q with HOOK
+            ],
+
+            r: [     // lowercase R
+                0x0155, // ŕ    lowercase R with ACUTE
+                0x0159, // ř    lowercase R with CARON
+                0x0157, // ŗ    lowercase R with CEDILLA
+                0x1E59, // ṙ    lowercase R with DOT ABOVE
+                0x1E5B, // ṛ    lowercase R with DOT BELOW
+                0x1E5D, // ṝ    lowercase R with DOT BELOW and MACRON
+                0x027E, // ɾ    lowercase R with FISHHOOK
+                0x1E5F, // ṟ    lowercase R with LINE BELOW
+                0x027C, // ɼ    lowercase R with LONG LEG
+                0x027D, // ɽ    lowercase R with TAIL
+                0x027F, // ɿ    lowercase REVERSED R with FISHHOOK
+                0x0279, // ɹ    lowercase TURNED R
+                0x027B, // ɻ    lowercase TURNED R with HOOK
+                0x027A  // ɺ    lowercase TURNED R with LONG LEG
+            ],
+
+            s: [     // lowercase S
+                0x015B, // ś    lowercase S with ACUTE
+                0x0161, // š    lowercase S with CARON
+                0x015F, // ş    lowercase S with CEDILLA
+                0x015D, // ŝ    lowercase S with CIRCUMFLEX
+                0x0219, // ș    lowercase S with COMMA BELOW
+                0x1E61, // ṡ    lowercase S with DOT ABOVE
+                0x1E63, // ṣ    lowercase S with DOT BELOW
+                0x0282, // ʂ    lowercase S with HOOK
+                0x017F, // ſ    lowercase LONG S
+                0x0283, // ʃ    lowercase ESH
+                0x0286, // ʆ    lowercase ESH with CURL
+                0x00DF, // ß    lowercase SHARP S
+                0x0285  // ʅ    lowercase SQUAT REVERSED ESH
+            ],
+
+            t: [     // lowercase T
+                0x0165, // ť    lowercase T with CARON
+                0x0163, // ţ    lowercase T with CEDILLA
+                0x1E71, // ṱ    lowercase T with CIRCUMFLEX BELOW
+                0x021B, // ț    lowercase T with COMMA BELOW
+                0x1E97, // ẗ    lowercase T with DIAERESIS
+                0x1E6D, // ṭ    lowercase T with DOT BELOW
+                0x1E6F, // ṯ    lowercase T with LINE BELOW
+                0x0288, // ʈ    lowercase T with RETROFLEX HOOK
+                0x0167, // ŧ    lowercase T with STROKE
+                0x02A8, // ʨ    lowercase TC DIGRAPH with CURL
+                0x02A7, // ʧ    lowercase TESH DIGRAPH
+                0x00FE, // þ    lowercase THORN
+                0x00F0, // ð    lowercase ETH
+                0x02A6, // ʦ    lowercase TS DIGRAPH
+                0x0287  // ʇ    lowercase TURNED T
+            ],
+
+            u: [     // lowercase U
+                0x0289, // ʉ    lowercase U BAR
+                0x00FA, // ú    lowercase U with ACUTE
+                0x016D, // ŭ    lowercase U with BREVE
+                0x01D4, // ǔ    lowercase U with CARON
+                0x00FB, // û    lowercase U with CIRCUMFLEX
+                0x00FC, // ü    lowercase U with DIAERESIS
+                0x01D8, // ǘ    lowercase U with DIAERESIS and ACUTE
+                0x01DA, // ǚ    lowercase U with DIAERESIS and CARON
+                0x01DC, // ǜ    lowercase U with DIAERESIS and GRAVE
+                0x01D6, // ǖ    lowercase U with DIAERESIS and MACRON
+                0x1EE5, // ụ    lowercase U with DOT BELOW
+                0x0171, // ű    lowercase U with DOUBLE ACUTE
+                0x00F9, // ù    lowercase U with GRAVE
+                0x1EE7, // ủ    lowercase U with HOOK ABOVE
+                0x01B0, // ư    lowercase U with HORN
+                0x1EE9, // ứ    lowercase U with HORN and ACUTE
+                0x1EF1, // ự    lowercase U with HORN and DOT BELOW
+                0x1EEB, // ừ    lowercase U with HORN and GRAVE
+                0x1EED, // ử    lowercase U with HORN and HOOK ABOVE
+                0x1EEF, // ữ    lowercase U with HORN and TILDE
+                0x016B, // ū    lowercase U with MACRON
+                0x0173, // ų    lowercase U with OGONEK
+                0x016F, // ů    lowercase U with RING ABOVE
+                0x0169, // ũ    lowercase U with TILDE
+                0x028A  // ʊ    lowercase UPSILON
+            ],
+
+            v: [     // lowercase V
+                0x028B, // ʋ    lowercase V with HOOK
+                0x028C  // ʌ    lowercase TURNED V
+            ],
+
+            w: [     // lowercase W
+                0x1E83, // ẃ    lowercase W with ACUTE
+                0x0175, // ŵ    lowercase W with CIRCUMFLEX
+                0x1E85, // ẅ    lowercase W with DIAERESIS
+                0x1E81, // ẁ    lowercase W with GRAVE
+                0x028D  // ʍ    lowercase TURNED W
+            ],
+
+            x: [     // lowercase X
+            ],
+
+            y: [     // lowercase Y
+                0x00FD, // ý    lowercase Y with ACUTE
+                0x0177, // ŷ    lowercase Y with CIRCUMFLEX
+                0x00FF, // ÿ    lowercase Y with DIAERESIS
+                0x1E8F, // ẏ    lowercase Y with DOT ABOVE
+                0x1EF5, // ỵ    lowercase Y with DOT BELOW
+                0x1EF3, // ỳ    lowercase Y with GRAVE
+                0x01B4, // ƴ    lowercase Y with HOOK
+                0x1EF7, // ỷ    lowercase Y with HOOK ABOVE
+                0x0233, // ȳ    lowercase Y with MACRON
+                0x1EF9, // ỹ    lowercase Y with TILDE
+                0x028E  // ʎ    lowercase TURNED Y
+            ],
+
+            z: [     // lowercase Z
+                0x017A, // ź    lowercase Z with ACUTE
+                0x017E, // ž    lowercase Z with CARON
+                0x0291, // ʑ    lowercase Z with CURL
+                0x017C, // ż    lowercase Z with DOT ABOVE
+                0x1E93, // ẓ    lowercase Z with DOT BELOW
+                0x1E95, // ẕ    lowercase Z with LINE BELOW
+                0x0290, // ʐ    lowercase Z with RETROFLEX HOOK
+                0x01B6  // ƶ    lowercase Z with STROKE
+            ]
+        };
+    };
+
+
+    // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
+
+    /**
+     * Returns a RegExp String with every letter (a-zA-Z) replaced with all variants of this letter.
+     * Ex.: 'a' => '[aáăắặằẳẵǎâấậầẩẫäạàảāąåǻãæǽɑɐɒ]'
+     * @param {String} text
+     * @returns {String}
+     */
+    static getRegexPattern(text) {
+
+        // String in Buchstabenarray aufteilen
+        let letters = null;
+        if (kijs.isFunction(Array.from)) {
+            letters = Array.from(text);
+            
+        } else { // Fallback für IE
+            letters = text.split('');
+        }
+
+        let regex = '';
+        kijs.Array.each(letters, function(letter) {
+            if (kijs.isArray(kijs.Char.charTable[letter]) && kijs.Char.charTable[letter].length > 0) {
+                regex += '[' + letter;
+                kijs.Array.each(kijs.Char.charTable[letter], function(specialLetter) {
+                    regex += String.fromCodePoint ? String.fromCodePoint(specialLetter) : String.fromCharCode(specialLetter);
+                }, this);
+                regex += ']';
+            } else {
+                regex += '' + letter;
+            }
+        }, this);
+
+        return regex;
+    }
+
+    /**
+     * Replaces special chars with their base char (öüä => oua).
+     * @param {String} text
+     * @returns {String}
+     */
+    static replaceSpecialChars(text) {
+
+        // String in Buchstabenarray aufteilen
+        let letters = null;
+        if (kijs.isFunction(Array.from)) {
+            letters = Array.from(text);
+        } else { // Fallback für IE
+            letters = text.split('');
+        }
+
+        let responseText = '';
+        kijs.Array.each(letters, function(letter) {
+           for (let char in kijs.Char.charTable) {
+               if (kijs.Array.contains(kijs.Char.charTable[char], letter.codePointAt ? letter.codePointAt(0) : letter.charCodeAt(0))) {
+                   responseText += char;
+                   return;
+               }
+           }
+
+           // no match
+           responseText += letter;
+        });
+
+        return responseText;
+    }
+};
 /* global kijs, this */
 
 // --------------------------------------------------------------
@@ -960,9 +1762,9 @@ kijs.Data = class kijs_Data {
         this._columns = [];      // Array mit Spaltennamen
         this._rows = [];         // Recordset-Array
         this._primary = [];      // Array mit Namen der Primärschlüssel
-        
+
         this._disableDuplicateCheck = false;    // Duplikat-Kontrolle ausschalten
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             disableDuplicateCheck: true,
@@ -970,7 +1772,7 @@ kijs.Data = class kijs_Data {
             columns: true,
             primary: true
         };
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config);
@@ -983,31 +1785,31 @@ kijs.Data = class kijs_Data {
     // --------------------------------------------------------------
     get columns() { return this._columns; }
     set columns(val) { this._columns = val; }
-    
+
     get disableDuplicateCheck() { return this._disableDuplicateCheck; }
     set disableDuplicateCheck(val) { this._disableDuplicateCheck = !!val; }
 
     get rows() { return this._rows; }
-    
+
     /**
      * Setzt die Rows-Datenquelle.Das Array muss in einem der folgenden Formate sein:
      * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
-     * - Recordset-Array = [{Anrede: 'Herr', Name='Muster'}, {Anrede: 'Frau', Name='Müller'}] 
+     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
+     * - Recordset-Array = [{Anrede: 'Herr', Name='Muster'}, {Anrede: 'Frau', Name='Müller'}]
      * Alle Datensätze im Array müssen das gleiche Format haben.
      * @param {Array} val
      * @returns {undefined}
      */
-    set rows(val) { 
+    set rows(val) {
         if (kijs.isEmpty(val)) {
             this._rows = [];
             return;
         }
-        
+
         if (!kijs.isArray(val)) {
             val = [val];
         }
-        
+
         // Falls ein anderes Format als unser erwartetes Recordset-Array übergeben wurde: konvertieren
         this._convertFromAnyDataArray(val);
 
@@ -1017,22 +1819,22 @@ kijs.Data = class kijs_Data {
                 throw new Error('Not unique primary-key on (' + this._primary.join(', ') + ').');
             }
         }
-        
+
         this._rows = val;
     }
-    
+
     get primary() { return this._primary; }
     set primary(val) { this._primary = val; }
-    
-    
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     /**
     * Fügt eine oder mehrere neue rows hinzu. Das Array muss in einem der folgenden Formate sein:
     * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-    * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
-    * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}] 
+    * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
+    * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}]
     * Alle Datensätze im Array müssen das gleiche Format haben.
     * @param {Object|Array} rows
     * @param {Boolean|null} [duplicateCheck=false]
@@ -1063,8 +1865,8 @@ kijs.Data = class kijs_Data {
             this.rows.push(row);
         }
     }
-        
-    
+
+
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -1072,10 +1874,10 @@ kijs.Data = class kijs_Data {
      */
     applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
-        
+
         // Evtl. die Rows in win Recordset-Array konvertieren
         this._convertFromAnyDataArray(this._rows);
-        
+
         // Falls nur rows übergeben wurden und keine columns: Die columns automatisch generieren
         if (kijs.isEmpty(this._columns)) {
             this._columns = this._getColumnsFromRows(this._rows);
@@ -1090,7 +1892,7 @@ kijs.Data = class kijs_Data {
     columnExist(columnName) {
         return kijs.Array.contains(this._columns, columnName);
     }
-    
+
     /**
      * Prüft, ob ein Primary einer Row schon im Recordset ist.
      * @param {Array|Object} rows   // einzelnes row-Objekt oder rows-Array
@@ -1098,15 +1900,15 @@ kijs.Data = class kijs_Data {
      */
     duplicateCheck(rows) {
         let hasDuplicate = false;
-        
+
         if (kijs.isEmpty(rows)) {
             return false;
         }
-        
+
         if (!kijs.isArray(rows)) {
             rows = [rows];
         }
-        
+
         kijs.Array.each(this._rows, function(item) {
             let match = 0;
             for (let i=0; i<this._primary.length; i++) {
@@ -1121,7 +1923,7 @@ kijs.Data = class kijs_Data {
                 return false; // schlaufe brechen
             }
         }, this);
-        
+
         return hasDuplicate;
     }
 
@@ -1146,8 +1948,8 @@ kijs.Data = class kijs_Data {
     getCount() {
         return this._rows.length;
     }
-    
-    
+
+
     /**
      * gibt ein leeres Row-Objekt zurück.
      * @returns {Object}
@@ -1159,7 +1961,7 @@ kijs.Data = class kijs_Data {
         }
         return o;
     }
-    
+
     /**
      * gibt Zeilen zurück, deren Inhalt dem Value entspricht
      * @param {String} columnName Spaltenname
@@ -1169,17 +1971,17 @@ kijs.Data = class kijs_Data {
     getRowsByFieldValue(columnName, value) {
         const len = this._rows.length;
         const ret = [];
-        
+
         // Zeilen durchgehen
         for (let i=0, len; i<len; i++) {
-            if (this._rows[i][columnName]+'' === value+'') {
+            if (kijs.toString(this._rows[i][columnName]) === kijs.toString(value)) {
                 ret.push(this._rows[i]);
             }
         }
-        
+
         return ret;
     }
-    
+
     /**
      * gibt eine Zeile aufgrund des Primary zurück
      * @param {String|Number|Array|Object} primary
@@ -1187,24 +1989,24 @@ kijs.Data = class kijs_Data {
      */
     getRowByPrimary(primary) {
         let keys = {};
-        
+
         // Wenn kein Primary definiert ist: Fehler
         if (kijs.isEmpty(this._primary)) {
             throw new Error('No primary key is defined in this data object.');
         }
-        
+
         // String oder Number
         if (kijs.isString(primary) || kijs.isNumber(primary)) {
             keys[this._primary[0]] = primary;
         }
-        
+
         // Array
         if (kijs.isArray(primary)) {
             for (let i=0; i< primary.length; i++) {
                 keys[this._primary[i]] = primary;
             }
         }
-        
+
         // Objekt
         if (kijs.isObject(primary)) {
             keys = primary;
@@ -1216,14 +2018,14 @@ kijs.Data = class kijs_Data {
                 throw new Error('Number of primary-columns does not match.');
             }
         }
-        
+
         // Zeilen durchgehen, bis die erste passt
         const len = this._rows.length;
         for (let i=0, len; i<len; i++) {
             let ok = true;
             for (let j=0; j<this._primary.length; j++) {
                 const col = this._primary[j];
-                if (this._rows[i][col]+'' !== keys[col]+'') {
+                if (kijs.toString(this._rows[i][col]) !== kijs.toString(keys[col])) {
                     ok = false;
                     break;
                 }
@@ -1232,7 +2034,7 @@ kijs.Data = class kijs_Data {
                 return this._rows[i];
             }
         }
-        
+
         return null;
     }
 
@@ -1247,7 +2049,7 @@ kijs.Data = class kijs_Data {
         if (this._duplicateCheck(row)) {
             return false;
         }
-        
+
         const pos = this._rows.indexOf(row);
         if (pos === -1) {
             this._rows.push(row);
@@ -1265,7 +2067,7 @@ kijs.Data = class kijs_Data {
     remove(row) {
         const pos = this._rows.indexOf(row);
         if (pos === -1) return false;
-        
+
         this._rows.splice(pos, 1);
         return true;
     }
@@ -1297,11 +2099,11 @@ kijs.Data = class kijs_Data {
         }
         return ret;
     }
-    
+
     /**
      * Konvertiert ein Daten-Array aus einem der folgenden Formate in unser Recordset-Array
      * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
-     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']] 
+     * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
      * - Recordset-Array = [{Anrede:'Herr', Name:'Muster'}, {Anrede:'Frau', Name:'Müller'}]
      * @param {Array} rows
      * @returns {undefined}
@@ -1310,15 +2112,15 @@ kijs.Data = class kijs_Data {
         if (kijs.isEmpty(rows)) {
             return;
         }
-        
-        // Die erste Zeile im Array bestimmt das Format. 
+
+        // Die erste Zeile im Array bestimmt das Format.
         // Ein Mix von Formaten im selben Array ist deshalb nicht erlaubt.
         let format;
-        
+
         // Objekt -> keine Konventierung notwendig
         if (kijs.isObject(rows[0])) {
             format = 'object';
-            
+
         // Array mit Werten -> konvertieren
         } else if (kijs.isArray(rows[0])) {
             // Spaltenanzahl muss übereinstimmen
@@ -1327,14 +2129,14 @@ kijs.Data = class kijs_Data {
             } else {
                 throw new Error('The number of columns does not match.');
             }
-            
+
         // alle anderen Datentypen (String, Number, Boolean) -> enthalten direkt den Wert, sie werden konventiert.
         } else {
             format = 'value';
-            
+
         }
-        
-        
+
+
         // Daten evtl. in den richtigen Datentyp konvertieren
         switch (format) {
             // Objekt -> keine Konventierung notwendig
@@ -1346,22 +2148,22 @@ kijs.Data = class kijs_Data {
                     }
                 }
                 break;
-                
+
             // Array mit Werten -> konvertieren
             case 'array':
                 // Daten konvertieren
                 for (let i=0; i<rows.length; i++) {
                     let row = {};
-                    
+
                     for (let j=0; j<this._columns.length; j++) {
                         const name = this._columns[j];
                         row[name] = rows[i][j];
                     }
-                    
+
                     rows[i] = row;
                 }
                 break;
-                
+
             // alle anderen Datentypen -> enthalten direkt den Wert (nur ein Wert pro Zeile), sie werden konventiert.
             case 'value':
                 // Feldname ermitteln
@@ -1391,11 +2193,11 @@ kijs.Data = class kijs_Data {
                         rows[i] = row;
                     }
 
-                }                    
+                }
                 break;
         }
     }
-    
+
     /**
      * Die Columns automatisch anhand der rows ermitteln
      * @param {Array} rows
@@ -1410,7 +2212,7 @@ kijs.Data = class kijs_Data {
                 columns.push(argName);
             }
         }
-        
+
         return columns;
     }
 
@@ -1686,10 +2488,8 @@ kijs.Date = class kijs_Date {
      * @returns {String}
      */
     static format(date, format) {
-        const _this = this;
-        format = format + '';
-        return format.replace(/[a-zA-Z]/g, function(letter){
-            return _this.__formatReplace(letter, date);
+        return kijs.toString(format).replace(/[a-zA-Z]/g, (letter) => {
+            return this.__formatReplace(letter, date);
         });
     }
 
@@ -1968,7 +2768,7 @@ kijs.Date = class kijs_Date {
      * @returns {Number}
      */
     static unixTimestamp(date) {
-        return parseInt(date.getTime() / 1000);
+        return Math.round(date.getTime() / 1000);
     }
 
 
@@ -2003,7 +2803,7 @@ kijs.Date = class kijs_Date {
             // Y  Vierstellige Jahreszahl  Beispiele: 1999 oder 2003
             case 'Y': return date.getFullYear();
             // y  Jahreszahl, zweistellig  Beispiele: 99 oder 03
-            case 'y': return (date.getFullYear() + '').substr(2);
+            case 'y': return kijs.toString(date.getFullYear()).substr(2);
             // L  Schaltjahr oder nicht  1 für ein Schaltjahr, ansonsten 0
             case 'L': return this.isLeapYear(date) ? '1' : '0';
 
@@ -2017,6 +2817,14 @@ kijs.Date = class kijs_Date {
             // s  Sekunden, mit führenden Nullen  00 bis 59
             case 's': return kijs.String.padding(date.getSeconds(), 2, '0', 'left');
 
+            // Vollständige(s) Datum/Uhrzeit
+            // c  ISO 8601 Datum (2011-10-05T14:48:00.000Z)
+            case 'c': return date.toISOString();
+            // r  Gemäß RFC 2822 formatiertes Datum (Tue Aug 19 1975 23:15:30 GMT+0200 (CEST))
+            case 'r': return date.toString();
+            // U  Sekunden seit Beginn der UNIX-Epoche
+            case 'U': return kijs.toString(kijs.Date.unixTimestamp(date));
+
             default: return letter;
         }
     }
@@ -2029,7 +2837,7 @@ kijs.Date = class kijs_Date {
 // kijs.Dom (Static)
 // --------------------------------------------------------------
 kijs.Dom = class kijs_Dom {
-    
+
     // --------------------------------------------------------------
     // STATICS GETTERS
     // --------------------------------------------------------------
@@ -2044,11 +2852,11 @@ kijs.Dom = class kijs_Dom {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-    
+
     // Static Properties in this Class
-    //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss, 
+    //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss,
     //                                  wird das ergebnis hier gemerkt.
-    
+
     /**
      * Lesen einer Eigenschaft eines Nodes.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
@@ -2064,16 +2872,16 @@ kijs.Dom = class kijs_Dom {
             } else {
                 return null;
             }
-            
+
         // Normale Attribute
         } else {
             return node[name];
-            
+
         }
     }*/
-    
+
     /**
-     * Zuweisen einer Eigenschaft zu einem node. 
+     * Zuweisen einer Eigenschaft zu einem node.
      * Dabei werden Murgs-Attribute automatisch anders zugewiesen.
      * @param {HTMLElement} node
      * @param {String} name
@@ -2088,14 +2896,14 @@ kijs.Dom = class kijs_Dom {
             } else {
                 node.removeAttribute(name);
             }
-            
+
         // alle anderen können normal zugewiesen werden
         } else {
             node[name] = value;
-            
+
         }
     }*/
-    
+
     /**
      * Überprüft ob ein Node über eine Eigenschaft verfügt.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
@@ -2107,33 +2915,33 @@ kijs.Dom = class kijs_Dom {
         // Murgs-Attribute
         if (kijs.Array.contains(this.murgsPropertyNames, name)) {
             return node.hasAttribute(name);
-            
+
         // Normale Attribute
         } else {
             return kijs.isEmpty(node[name]);
-            
+
         }
     }*/
-    
-    
+
+
     /**
      * Erstellt einen Event-Listener auf ein HTMLElement
-     * 
+     *
      * Die Delegates werden dann in der Eigenschaft context._nodeEventListeners gespeichert,
      * damit kann dann ein Listener später auch wieder entfernt werden.
-     *  
+     *
      * context._nodeEventListeners: {
      *     click: [
      *         {node: ..., useCapture: true/false, delegate: ...},
      *         {node: ..., useCapture: true/false, delegate: ...}
      *     ],
-     *     
+     *
      *     mousemove: [
      *         {node: ..., useCapture: true/false, delegate: ...},
      *         {node: ..., useCapture: true/false, delegate: ...}
      *     ]
      * }
-     * 
+     *
      * @param {String} eventName Name des DOM-Events
      * @param {HTMLElement} node DOM-Node
      * @param {Function|String} fn  Funktion oder Name des kijs-Events das ausgelöst werden soll
@@ -2144,14 +2952,14 @@ kijs.Dom = class kijs_Dom {
      */
     static addEventListener(eventName, node, fn, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Wenn noch kein Delegate existiert: eines erstellen
         if (!this.hasEventListener(eventName, node, context, useCapture)) {
             let delegate = null;
-            
+
             // Falls keine Funktion, sondern ein kijs-Eventname übergeben wurde, so wird ein kijs-Event ausgelöst
             if (kijs.isString(fn)) {
                 let kijsEventName = fn;
@@ -2166,14 +2974,14 @@ kijs.Dom = class kijs_Dom {
                 };
             } else if (kijs.isFunction(fn)) {
                 delegate = function(e) {
-                    return fn.apply(context, [{ 
+                    return fn.apply(context, [{
                         nodeEventName: eventName,
                         useCapture: useCapture,
                         nodeEvent: e,
                         context: context
                     }]);
                 };
-                
+
             } else {
                 throw new kijs.Error(`Parameter "fn" can not be empty`);
             }
@@ -2182,8 +2990,8 @@ kijs.Dom = class kijs_Dom {
             node.addEventListener(eventName, delegate, useCapture);
         }
     }
-    
-    
+
+
     /**
      * Gibt die absolute Position eines HTMLElements bezogen zum Browserrand zurück
      * @param {HTMLElement} node
@@ -2194,15 +3002,15 @@ kijs.Dom = class kijs_Dom {
         let y = 0;
         let w = node.offsetWidth;
         let h = node.offsetHeight;
-        
+
         while (node) {
             x += node.offsetLeft - node.scrollLeft;
             y += node.offsetTop - node.scrollTop;
             node = node.offsetParent;
         }
-        return {x: x,y: y, w: w, h: h};        
+        return {x: x,y: y, w: w, h: h};
     }
-    
+
     /**
      * Gibt das erste untegeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
      *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
@@ -2214,10 +3022,10 @@ kijs.Dom = class kijs_Dom {
      */
     static getFirstFocusableNode(node) {
         let subNode = null;
-        
+
         if (node.tabIndex >= 0) {
             return node;
-            
+
         } else {
             if (node.hasChildNodes()) {
                 for (let i=0, len=node.children.length; i<len; i++) {
@@ -2228,10 +3036,10 @@ kijs.Dom = class kijs_Dom {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Berechnet die Breite einer Scrollbar und gibt diese zurück
      * @returns {Number}
@@ -2254,8 +3062,8 @@ kijs.Dom = class kijs_Dom {
             // inner-DIV einfügen
             const inner = document.createElement("div");
             inner.style.width = "100%";
-            outer.appendChild(inner);        
-            
+            outer.appendChild(inner);
+
             const widthWithScroll = inner.offsetWidth;
 
             // Aufräumen
@@ -2264,10 +3072,10 @@ kijs.Dom = class kijs_Dom {
             // Breite der Scrollbar berechnen
             this.__scrollbarWidth = widthNoScroll - widthWithScroll;
         }
-        
+
         return this.__scrollbarWidth;
     }
-    
+
     /**
      * Überprüft, ob ein Event-Listener auf ein HTMLElement existiert
      * @param {String} eventName Name des DOM-Events
@@ -2279,10 +3087,10 @@ kijs.Dom = class kijs_Dom {
      */
     static hasEventListener(eventName, node, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Ist der Listener bereits vorhanden?
         let ret = false;
         if (context._nodeEventListeners[eventName]) {
@@ -2293,10 +3101,10 @@ kijs.Dom = class kijs_Dom {
                 }
             }, this);
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Fügt einen Node in den Dom ein, direkt nach einem anderen Knoten
      * @param {HTMLElement} node
@@ -2306,7 +3114,7 @@ kijs.Dom = class kijs_Dom {
     static insertNodeAfter(node, targetNode) {
         targetNode.parentNode.insertBefore(node, targetNode.nextSibling);
     }
-    
+
     /**
      * Schaut, ob ein Node ein Kindknoten (oder Grosskind, etc.) von einem anderen Node ist (rekursiv).
      * @param {HTMLElement} childNode
@@ -2324,10 +3132,20 @@ kijs.Dom = class kijs_Dom {
                 return true;
             }
         }
-        
+
         return false;
     }
     
+    /**
+     * Entfernt alle Unterelemente eines DOM-Elements
+     * @param {HTMLElement} node
+     */
+    static removeAllChildNodes(node) {
+        while (node.hasChildNodes()) {
+            node.removeChild(node.lastChild);
+        }
+    }
+
     /**
      * Entfernt alle Event-Listeners eines Context
      * @param {kijs.Observable} context
@@ -2341,7 +3159,7 @@ kijs.Dom = class kijs_Dom {
                 }, this);
             }, this);
         }
-        
+
         context._nodeEventListeners = {};
     }
     
@@ -2357,15 +3175,15 @@ kijs.Dom = class kijs_Dom {
      */
     static removeEventListener(eventName, node, context, useCapture) {
         useCapture = !!useCapture;
-        
+
         context._nodeEventListeners = context._nodeEventListeners || {};
         context._nodeEventListeners[eventName] = context._nodeEventListeners[eventName] || [];
-        
+
         // Delegate ermitteln und Listener aus Array entfernen
         let delegate = null;
         if (!kijs.isEmpty(context._nodeEventListeners[eventName])) {
             const arr = [];
-            
+
             kijs.Array.each(context._nodeEventListeners[eventName], function(listener) {
                 if (listener.node === node && listener.useCapture === useCapture) {
                     delegate = listener.delegate;
@@ -2373,17 +3191,17 @@ kijs.Dom = class kijs_Dom {
                     arr.push(listener);
                 }
             }, this);
-            
+
             context._nodeEventListeners[eventName] = arr;
         }
-        
+
         // Listener entfernen
         if (delegate) {
             node.removeEventListener(eventName, delegate, useCapture);
         }
     }
-    
-    
+
+
     /**
      * Fügt html-Code in einen Node. Je nach htmlDisplayType geschieht dies auf unterschiedliche Weise.
      * Bereits vorhandener Inhalt wird gelöscht.
@@ -2395,39 +3213,29 @@ kijs.Dom = class kijs_Dom {
      * @returns {undefined}
      */
     static setInnerHtml(node, html, htmlDisplayType) {
-        html = kijs.isEmpty(html) ? '' : html;
-        
+        html = kijs.toString(html);
+
         switch (htmlDisplayType) {
             case 'code':
                 this.removeAllChildNodes(node);
                 node.appendChild(document.createTextNode(html));
                 break;
-                
-            case 'text': 
+
+            case 'text':
                 //node.textContent = html;
                 let d = document.createElement('div');
                 d.innerHTML = html;
                 node.innerHTML = d.textContent || d.innerText || '';
                 d = null;
                 break;
-            
+
             case 'html':
             default:
-                node.innerHTML = html; 
+                node.innerHTML = html;
                 break;
         }
     }
     
-    
-    /**
-     * Entfernt alle Unterelemente eines DOM-Elements
-     * @param {HTMLElement} node
-     */
-    static removeAllChildNodes(node) {
-        while (node.hasChildNodes()) {
-            node.removeChild(node.lastChild);
-        }
-    }
 };
 
 /* global kijs */
@@ -3225,10 +4033,10 @@ kijs.Number = class kijs_String {
      */
     static format(number, decimals=0, decPoint='.', thousandsSep='\'') {
         let ret = '';
-        let tmp = (number + '').split('.');
 
         // Bei decimals==='' oder null automatisch die Anzahl Kommastellen ermitteln
         if (decimals==='' || decimals===null) {
+            let tmp = kijs.toString(number).split('.');
             if (tmp.length > 1) {
                 decimals = tmp[1].length;
             } else {
@@ -3238,9 +4046,12 @@ kijs.Number = class kijs_String {
             decimals = Number(decimals);
         }
 
+        // Zahl auf gegebene Präzision runden und in Array wandeln.
+        let tmp = kijs.toString(Math.abs(kijs.Number.round(number, decimals))).split('.');
+
         // Tausendertrennzeichen einfügen
         if (!kijs.isEmpty(thousandsSep) && !kijs.isEmpty(tmp[0])) {
-            const len = (tmp[0]+'').length;
+            const len = kijs.toString(tmp[0]).length;
             for (let i=len-1; i>=0; i--) {
                 ret = tmp[0].substr(i, 1) + ret;
                 if ((len-i) % 3 === 0 && i > 0) {
@@ -3253,9 +4064,15 @@ kijs.Number = class kijs_String {
 
         // Anzahl Kommastellen
         if (decimals > 0 && !kijs.isEmpty(ret) && !kijs.isEmpty(decPoint)) {
-            let digits = tmp.length > 1 ? tmp[1]+'' : '';
+            let digits = tmp.length > 1 ? kijs.toString(tmp[1]) : '';
             digits = kijs.String.padding(digits.substr(0, decimals), decimals, '0', 'right');
             ret += decPoint + digits;
+        }
+
+
+        // Negative Nummer
+        if (kijs.Number.round(number, decimals) < 0) {
+            ret = '-' + ret;
         }
 
         return ret;
@@ -3301,7 +4118,21 @@ kijs.Number = class kijs_String {
      * @returns {Number}
      */
     static round(number, precision=0) {
-        return window.parseFloat(number.toFixed(precision));
+        return Number(Math.round(number + 'e' + precision) + 'e-' + precision);
+    }
+
+    /**
+     * Rundet eine Zahl auf eine angegebene Präzision
+     * @param {Number} number
+     * @param {Number} roundTo Auf 5er Runden:0.05 auf 10er Runden:0.1 auf Franken:1
+     * @returns {Number}
+     */
+    static roundTo(number, roundTo=0) {
+        if (roundTo > 0) {
+            return kijs.Number.round(number/roundTo) * roundTo;
+        } else {
+            return kijs.Number.round(number);
+        }
     }
 
 };
@@ -3589,6 +4420,7 @@ kijs.Observable = class kijs_Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor() {
+        this._nodeEventListeners = {};
         this._events = this._events || {};  // Beispiel: {
                                             //              click: [
                                             //                {
@@ -3611,6 +4443,21 @@ kijs.Observable = class kijs_Observable {
                                             //           }
     }
 
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    /**
+     * Gibt den Namen der Javascript-Klasse zurück
+     * @returns {String|null}
+     */
+    get jsClassName() {
+        if (kijs.isString(this.constructor.name)) {
+            return kijs.String.replaceAll(this.constructor.name, '_', '.');
+        }
+
+        return null;
+    }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -3718,6 +4565,13 @@ kijs.Observable = class kijs_Observable {
      * @returns {undefined}
      */
     on(names, callback, context) {
+
+        if (!kijs.isString(names) && !kijs.isArray(names)) {
+            throw new kijs.Error(`invalid argument 1 for on(names, callback, context): string or array expected`);
+        }
+        if (!kijs.isFunction(callback)) {
+            throw new kijs.Error(`invalid argument 2 for on(names, callback, context): function expected`);
+        }
 
         names = kijs.isArray(names) ? names : [names];
 
@@ -3883,15 +4737,15 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Führt einen RPC aus.
-     * @param {String} facadeFn      Modul/Facaden-name und Methodenname Bsp: 'address.save'
-     * @param {Mixed} requestData    Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
-     * @param {Function} fn          Callback-Funktion
-     * @param {Object} context       Kontext für die Callback-Funktion
-     * @param {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
-     * @param {Object} [rpcParams]   Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
-     * @param {Mixed} [responseArgs] Hier können Daten übergeben werden,
-     *                               die in der Callback-Fn dann wieder zur Verfügung stehen.
-     *                               z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
+     * @param {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
+     * @param {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
+     * @param {Function} fn                         Callback-Funktion
+     * @param {Object} context                      Kontext für die Callback-Funktion
+     * @param {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
+     * @param {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
+     * @param {Mixed} [responseArgs]                Hier können Daten übergeben werden,
+     *                                              die in der Callback-Fn dann wieder zur Verfügung stehen.
+     *                                              z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
      * @returns {undefined}
      */
     do(facadeFn, requestData, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
@@ -4314,13 +5168,37 @@ kijs.String = class kijs_String {
      *  - Unicode 00A0 - 9999
      *  - < und >
      *  - &
+     *  - "
+     *  - '
      * Beispiel: '<p>Test</p>' => '&#60;p&#62;Test&#60;/p&#62;'
      * @param {String} html
      * @returns {String}
      */
     static htmlentities(html) {
-        return (html+'').replace(/[\u00A0-\u9999<>\&]/gim, function(i) {
-            return '&#'+i.charCodeAt(0)+';';
+        return kijs.toString(html).replace(/[\u00A0-\u9999<>\&\'\"]/gim, function(i) {
+            return '&#x' + i.codePointAt(0).toString(16) + ';';
+        });
+    }
+
+    /**
+     * Konvertiert einen HTML-String in einen String, in dem die HTML-Entities als Unicode ersetzt sind
+     * @param {String} html
+     * @returns {String}
+     */
+    static htmlentities_decode(html) {
+        return kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+)(;|$)/gim, function(entity, number) {
+            let nr = null;
+            if (number.substr(0,1).toLowerCase() === 'x') {
+                nr = window.parseInt(number.substr(1), 16);
+            } else {
+                nr = window.parseInt(number, 10);
+            }
+
+            if (kijs.isNumber(nr)) {
+                return String.fromCodePoint(nr);
+            } else {
+                return entity;
+            }
         });
     }
 
@@ -4363,9 +5241,9 @@ kijs.String = class kijs_String {
      * @param {String} [type='right'] 'left', 'right' oder 'both'
      * @returns {String}
      */
-    static padding(text, length, padString, type) {
+    static padding(text, length, padString=' ', type='right') {
         length = length || 0;
-        text = text + '';
+        text = kijs.toString(text);
         while (text.length < length) {
             if (type === 'left' || type === 'both') {
                 text = padString + text;
@@ -4379,6 +5257,15 @@ kijs.String = class kijs_String {
     }
 
     /**
+     * Maskiert Zeichen regulärer Ausdrücke
+     * @param {String} text
+     * @returns {String}
+     */
+    static regexpEscape(text) {
+        return kijs.toString(text).replace(/[-\\^$*+?.()|[\]{}]/g, '\\$&');
+    }
+
+    /**
      * Wiederholt einen String.
      * Gibt text multiplier mal wiederholt zurück.
      * @param {String} text
@@ -4388,7 +5275,7 @@ kijs.String = class kijs_String {
     static repeat(text, multiplier) {
         let response = '';
         for (let i=0; i<multiplier; i++) {
-            response += (text+'');
+            response += kijs.toString(text);
         }
         return response;
     }
@@ -4411,7 +5298,7 @@ kijs.String = class kijs_String {
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text
      * @param {Number} length maximlae Länge
-     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschnieden
+     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschneiden
      * @param {String} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
      * @returns {String}
      */
@@ -5183,11 +6070,20 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     constructor(config={}) {
         super(false);
 
-        this._uploadId = 1;
-        this._dropZones = [];
+        this._ajaxUrl = 'index.php';
         this._contentTypes = [];
         this._currentUploadIds = [];
+        this._directory = false;
+        this._dropZones = [];
+        this._maxFilesize = null;
+        this._multiple = true;
+        this._sanitizeFilename = false;
+        this._uploadId = 1;
         this._uploadResponses = {};
+
+        this._filenameHeader = 'X-Filename';
+        this._pathnameHeader = 'X-Filepath';
+
         this._validMediaTypes = [
             'application',
             'audio',
@@ -5202,23 +6098,18 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Standard-config-Eigenschaften mergen
         config = Object.assign({}, {
-            ajaxUrl: 'index.php',
-            multiple: true,
-            directory: false,
-            dropZones: [],
-            filenameHeader: 'X-Filename',
-            pathnameHeader: 'X-Filepath',
-            maxFilesize: null
+            // keine
         }, config);
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             ajaxUrl: true,
-            multiple: true,
-            directory: true,
+            directory: { target: 'directory' },
+            multiple: { target: 'multiple' },
             filenameHeader: true,
             pathnameHeader: true,
             maxFilesize: true,
+            sanitizeFilename: true,
             dropZones: { target: 'dropZone' },
             contentTypes: { target: 'contentTypes' }
         };
@@ -5241,11 +6132,16 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             val = [val];
         }
 
+        this._contentTypes = [];
+
         // prüfen, ob der media-type gültig ist.
         kijs.Array.each(val, function(contentType) {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
-                throw new kijs.Error('invalid media type "' + contentType + '"');
+                throw new kijs.Error('invalid content type "' + contentType + '"');
+            }
+            if (parts.length === 1) {
+                parts.push('*');
             }
             this._contentTypes.push(parts.join('/'));
         }, this);
@@ -5255,16 +6151,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     set dropZones(val) { this.bindDropZones(val); }
 
     get directory() { return this._directory; }
-    set directory(val) { this._directory = !!val; }
+    set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
 
     get multiple() { return this._multiple; }
-    set multiple(val) {
-        if (val === true && this._browserSupportsDirectoryUpload()) {
-            this._multiple = true;
-        } else {
-            this._multiple = false;
-        }
-    }
+    set multiple(val) { this._multiple = !!val; }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -5357,14 +6247,42 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return support;
     }
 
-    _checkMime(filetype) {
-        if (filetype && this._contentTypes.length > 0) {
-            let parts = filetype.split('/', 2);
-            if (!kijs.Array.contains(this._contentTypes, parts[0]) && !kijs.Array.contains(this._contentTypes, parts.join('/'))) {
-                return false;
+    /**
+     * Prüft, ob der übergebene MIME type einem der erlaubten MIME entspricht
+     * @param {String} mime
+     * @returns {Boolean}
+     */
+    _checkMime(mime) {
+        let match=false;
+        if (mime && this._contentTypes.length > 0) {
+            mime = mime.toLowerCase();
+            let mimeParts = mime.split('/', 2);
+
+            kijs.Array.each(this._contentTypes, function(contentType) {
+                if (mime === contentType || contentType === mimeParts[0] + '/*') {
+                    match = true;
+                }
+            }, this);
+        }
+        
+        return match;
+    }
+
+    _getFilename(filename) {
+        if (this._sanitizeFilename) {
+            filename = kijs.Char.replaceSpecialChars(filename);
+            let filenameParts = filename.split('.'), extension = '';
+            if (filenameParts.length > 1) {
+                extension = filenameParts.pop().replace(/[^a-zA-Z0-9]/g, '');
+            }
+            filename = filenameParts.join('_').replace(/[^a-zA-Z0-9\-]/g, '_');
+
+            if (extension) {
+                filename += '.' + extension;
             }
         }
-        return true;
+
+        return filename;
     }
 
     _onDropZoneDrop(e) {
@@ -5378,7 +6296,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
                 if (this._checkMime(fileList[i].type)) {
                     this._uploadFile(fileList[i]);
                 } else {
-                    this.raiseEvent('failUpload', this, fileList[i].name, fileList[i].type);
+                    this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
                 }
             }
         }
@@ -5387,7 +6305,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     _uploadFile(file) {
         let uploadId = this._uploadId++,
             headers = {},
-            filename = file.name,
+            filename = this._getFilename(file.name),
             filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
             filetype = file.type || 'application/octet-stream';
 
@@ -5416,7 +6334,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Fehlermeldung vom server
         if (!val || !val.success) {
-            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten.');
+            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
         }
 
         // Antwort vom Server
@@ -5468,7 +6386,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     destruct() {
         this._dropZones = null;
-//        this._contentTypes = null;
+        this._contentTypes = null;
         super.destruct();
     }
 };
@@ -5489,7 +6407,8 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
+        
         this._targetEl = null;
         this._targetDom = null;
         this._animated = true;
@@ -5876,7 +6795,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._cls = [];
         this._disableEnterBubbeling = false;
@@ -6652,7 +7571,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         if (this._node) {
             this._node[name] = value;
-            // Kleiner murgs, weil obige Zeiele nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
+            // Kleiner murgs, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
             if (kijs.isEmpty(value)) {
                 this._node.removeAttribute(name);
             }
@@ -6793,6 +7712,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             targetNode.appendChild(this._node);
         }
     }
+
+    /**
+     * Scrollt den Node in den sichtbaren Bereich
+     * @returns {undefined}
+     */
+    scrollIntoView(){
+        this._node.scrollIntoView();
+    }
+
 
     /**
      * Node aus DOM entfernen, falls vorhanden
@@ -7139,7 +8067,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._afterResizeDeferHandle = null;   // intern
         this._afterResizeDelay = 300;    // delay beim Aufruf des afterResize-Events
@@ -7190,6 +8118,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
             left: { target: 'left' },
             name: true,
+            nodeAttribute: { target: 'nodeAttribute', context: this._dom },
             on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
@@ -7513,6 +8442,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (preventEvents) {
             this._preventAfterResize = prevAfterRes;
         }
+
+        // Objekt versiegeln
+        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        Object.seal(this);
     }
 
     /**
@@ -7967,12 +8900,12 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @param {Function} fn             Callback-Funktion
      * @param {Object} context          Kontext für die Callback-Funktion
      * @param {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
-     * @param {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node 
+     * @param {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node
      *                                                                          für Lademaske, NULL=document.body, 'none' für keine Maske.
-     * @param {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske 
+     * @param {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske
      *                                                          angezeigt werden soll.
      * @param {Boolean} [ignoreWarnings=false]  Sollen Warnungen ignoriert werden?
-     * @param {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird
+     * @param {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird.
      *                                          Wird z.B. verwendet um bei Formularen die Fehler bei den einzelnen Feldern
      *                                          anzuzeigen.
      * @returns {undefined}
@@ -7982,7 +8915,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         // Lademaske anzeigen
         let waitMask;
         if (waitMaskTarget === 'none') {
-            waitMask = null;            
+            waitMask = null;
         } else if (waitMaskTarget instanceof kijs.gui.Element) {
             waitMask = waitMaskTarget.waitMaskAdd();
         } else {
@@ -8014,7 +8947,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 // Fehler --> FehlerMsg + Abbruch
                 // response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (response.errorMsg) {
-                    let err = this._getMsg(response.errorMsg, 'Fehler');
+                    let err = this._getMsg(response.errorMsg, kijs.getText('Fehler'));
                     kijs.gui.MsgBox.error(err.title, err.msg);
                     if (response.errorMsg.cancelCb !== false) {
                         return;
@@ -8024,7 +8957,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
                 // response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (response.warningMsg) {
-                    let warn = this._getMsg(response.warningMsg, 'Warnung');
+                    let warn = this._getMsg(response.warningMsg, kijs.getText('Warnung'));
                     kijs.gui.MsgBox.warning(warn.title, warn.msg, function(e) {
                         if (e.btn === 'ok') {
                             // Request nochmal senden mit Flag ignoreWarnings
@@ -8037,14 +8970,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 // Info --> Msg ohne Icon kein Abbruch
                 // response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (response.infoMsg) {
-                    let info = this._getMsg(response.infoMsg, 'Info');
+                    let info = this._getMsg(response.infoMsg, kijs.getText('Info'));
                     kijs.gui.MsgBox.info(info.title, info.msg);
                 }
 
                 // Tip -> Msg, die automatisch wieder verschwindet kein Abbruch
                 // response.tipMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (response.cornerTipMsg) {
-                    let info = this._getMsg(response.cornerTipMsg, 'Info');
+                    let info = this._getMsg(response.cornerTipMsg, kijs.getText('Info'));
                     kijs.gui.CornerTipContainer.show(info.title, info.msg, 'info');
                 }
 
@@ -8052,7 +8985,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 // callback-fn ausführen
                 if (fn && kijs.isFunction(fn)) {
                     fn.call(context || this, response.responseData || null);
-                }                
+                }
             }
 
         }, this, cancelRunningRpcs, {ignoreWarnings: !!ignoreWarnings}, {waitMask: waitMask});
@@ -8072,7 +9005,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         if (kijs.isString(msg) || kijs.isArray(msg)) {
             returnMsg.msg = msg;
             returnMsg.title = defaultTitle;
-            
+
         } else if (kijs.isObject(msg)) {
             returnMsg.msg = msg.msg;
             returnMsg.title = msg.title ? msg.title : defaultTitle;
@@ -8092,7 +9025,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
-    constructor(config) {
+    constructor(config={}) {
         super(false);
 
         this._disabled = false;
@@ -8355,7 +9288,8 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     constructor(config={}) {
         super(false);
 
-        if (config !== false) {
+        // check if abstract
+        if (kijs.isObject(config)) {
             throw new kijs.Error('do not create a instance of kijs.gui.grid.columnConfig.ColumnConfig directly');
         }
 
@@ -9655,59 +10589,6 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Eleme
     }
 
     // --------------------------------------------------------------
-    // MEMBERS
-    // --------------------------------------------------------------
-
-
-    /**
-     * Setzt display und oder zurück
-     * @returns {undefined}
-     */
-    resetDisplayAndOrder() {
-        this._dom.style.order = 0;
-        this._dom.style.display = 'initial';
-    }
-
-    /**
-     * Setzt css order und display, damit das Element in seinem Container
-     * sortiert und ein- und ausgeblendet werden kann.
-     * @param {String} pattern
-     * @param {String} dataRowKey
-     * @returns {undefined}
-     */
-    setDisplayAndOrderByPattern(pattern, dataRowKey) {
-        if (pattern !== null && pattern !== '') {
-            pattern = pattern + '';
-            let value = (this._dataRow[dataRowKey] || '') + '';
-
-            // Übereinstimmung
-            if (pattern.toLowerCase() === value.toLowerCase()) {
-                this._dom.style.order = -3;
-                this.visible = true;
-
-            // Übereinstimmung am Anfang
-            } else if (pattern.length <= value.length && pattern.toLowerCase() === value.toLowerCase().substr(0, pattern.length)) {
-                this._dom.style.order = -2;
-                this.visible = true;
-
-            // Übereinstimmung zwischendrinn
-            } else if (pattern.length <= value.length && value.toLowerCase().match(pattern.toLowerCase())) {
-                this._dom.style.order = -1;
-                this.visible = true;
-
-            // keine Übereinstimmung
-            } else {
-                this._dom.style.order = 1;
-                this.visible = false;
-            }
-
-        } else {
-            this._dom.style.order = 0;
-            this.visible = true;
-        }
-    }
-
-    // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct(superCall) {
@@ -10508,6 +11389,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 // als target dient, wird nichts angegeben, so dient das ganze Element als target.
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
 // Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
+// Mit dem Attribut "text" kann ein Text unterhalb des icons angezeigt werden.
 // --------------------------------------------------------------
 kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
@@ -10519,6 +11401,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         super(false);
 
         this._iconEl = new kijs.gui.Icon({ parent: this });
+        this._textEl = new kijs.gui.Dom({cls:'kijs-mask-text'});
 
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
@@ -10538,6 +11421,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             target: { target: 'target' },
+            text: { target: 'html', context: this._textEl },
             targetDomProperty: true
         });
 
@@ -10633,7 +11517,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
      */
     get parentNode() {
         if (this._targetX instanceof kijs.gui.Element) {
-            return this._targetX[this._targetDomProperty].node.parentNode;
+            if (this._targetX[this._targetDomProperty].node.parentNode) {
+                return this._targetX[this._targetDomProperty].node.parentNode;
+            } else {
+                // Vielleicht ist es besser wenigstens auf dem Node eine Maske anzuzeigen falls es keinen Parent gibt (Window).
+                // Falls nicht halt gar keine Maske anzeigen.
+                return this._targetX[this._targetDomProperty].node;
+            }
         } else {
             return this._targetX;
         }
@@ -10686,6 +11576,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
 
+    get text() { return this._textEl.html; }
+    set text(val) { this._textEl.html = val; }
+
+
 
 
     // --------------------------------------------------------------
@@ -10705,6 +11599,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._iconEl.unrender();
         }
 
+        this._textEl.renderTo(this._dom.node);
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -10719,6 +11615,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
 
         this._iconEl.unrender();
+        this._textEl.unrender();
         super.unrender(true);
     }
 
@@ -10782,6 +11679,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Elemente/DOM-Objekte entladen
         if (this._iconEl) {
             this._iconEl.destruct();
+        }
+
+        if (this._textEl) {
+            this._textEl.destruct();
         }
 
         // Basisklasse entladen
@@ -11046,7 +11947,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._initialPos = null;
         this._targetEl = null;
@@ -11325,6 +12226,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         this._overlayDom = new kijs.gui.Dom();
 
+        this._initialPos = null;
         this._targetPos = null;
         this._targetEl = null;      // Zielelement (kijs.gui.Element)
 
@@ -11672,7 +12574,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
 
     set value(val) {
-        val = val +'';
+        val = kijs.toString(val);
         val = val.split(this._separator);
 
         this._hour = val[0] ? parseInt(val[0]) : 0;
@@ -12207,7 +13109,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {String}
      */
     _zeroPad(number, lenght=2) {
-        number = number + '';
+        number = kijs.toString(number);
         while (number.length < lenght) {
             number = '0' + number;
         }
@@ -12493,7 +13395,9 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._filters = null;
-        this._dataRow = null;
+        if (this._dataRow) {
+            this._dataRow = null;
+        }
 
         // Basisklasse entladen
         super.destruct(true);
@@ -12510,6 +13414,8 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
  * afterLoad
  * beforeSelectionChange
  * selectionChange
+ * rowClick
+ * rowDblClick
  *
  */
 kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
@@ -12528,9 +13434,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._facadeFnLoad = null;
         this._facadeFnSave = null;
         this._facadeFnArgs = null;
+        this._facadeFnBeforeMsgFn = null;
+        this._waitMaskTarget = null;
+        this._waitMaskTargetDomProperty = null;
 
+        this._autoLoad = true;        // Datensätze nach dem Rendern automatisch vom Server laden
         this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
-        this._remoteDataLimit = 25;   // Anzahl Datensätze, die geladen werden
+        this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
         this._remoteDataStep = 50;    // Anzahl Datensätze, die pro request hinzugefügt werden.
         this._remoteDataTotal = null; // Anzahl verfügbare Datensätze
         this._getRemoteMetaData = true;  // Metadaten laden?
@@ -12591,15 +13501,20 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            waitMaskTarget           : this,
+            waitMaskTargetDomProperty: 'dom'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            rpc: true,
-            facadeFnLoad: true,
-            facadeFnSave: true,
-            facadeFnArgs: true,
+            autoLoad                  : true,
+            rpc                       : true,
+            facadeFnLoad              : true,
+            facadeFnSave              : true,
+            facadeFnArgs              : true,
+            facadeFnBeforeMsgFn       : true,
+            waitMaskTarget            : true,
+            waitMaskTargetDomProperty : true,
 
             columnConfigs:  { fn: 'function', target: this.columnConfigAdd, context: this },
             primaryKeys:    { target: 'primaryKeys' },
@@ -12608,6 +13523,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             editable: true,
             focusable: true,
             filterable: true,
+            filterVisible: { target: 'filterVisible' },
             selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
                                                  // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                                  // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -12634,9 +13550,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get current() { return this._currentRow; }
     /**
-     * Setzt das aktuelle Zeile, dass den Fokus erhalten wird.
+     * Setzt die aktuelle Zeile, die den Fokus erhalten wird.
      * Null = automatische Ermittlung
-     * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Zeile.
+     * Um den Fokus zu setzen verwenden Sie stattdessen die Funktion .focus() von der Zeile.
      * @param {kijs.gui.grid.Row|null} cRow
      * @returns {undefined}
      */
@@ -12712,6 +13628,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get filterable() { return this._filterable; }
     set filterable(val) { this._filterable = !!val; }
+
+    get filterVisible() { return this._filter.visible; }
+    set filterVisible(val) { this._filter.visible = !!val; }
 
     get lastRow() {
         if (this._rows.length > 0) {
@@ -12805,7 +13724,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             return null;
 
         } else if (this._selectType === 'single') {
-            return ret.length ? ret[0] : null ;
+            return ret.length ? ret[0] : [];
 
         } else {
             return ret;
@@ -12831,7 +13750,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
         } else if (!multiPrimarys) {
-            let ids = [], primaryKey=this._primaryKeys[0];
+            let ids = [], primaryKey = this._primaryKeys[0];
             kijs.Array.each(rows, function(row) {
                 ids.push(row.dataRow[primaryKey]);
             }, this);
@@ -12844,7 +13763,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             kijs.Array.each(rows, function(row) {
                 let idRow = {};
                 kijs.Array.each(this._primaryKeys, function(pk) {
-                    idRow[pk] = row[pk];
+                    idRow[pk] = row.dataRow[pk];
                 }, this);
                 ids.push(idRow);
             }, this);
@@ -12855,14 +13774,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     /**
      * Lädt alle Daten im Grid neu.
+     * @param {boolean} restoreSelection
      * @returns {Promise}
      */
-    reload() {
+    reload(restoreSelection = true) {
         let selected = this.getSelectedIds();
         return this._remoteLoad(true).then((response) => {
 
             // selektion wiederherstellen
-            if (selected) {
+            if (selected && restoreSelection) {
                 this.selectByIds(selected, false, true);
             }
 
@@ -12917,6 +13837,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                         dataRow: row,
                         on: {
                             click: this._onRowClick,
+                            dblClick: this._onRowDblClick,
                             context: this
                         }
                     }));
@@ -13289,16 +14210,23 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
                 // wenn sämtliche Datensätze neu geladen werden.
-                let showWaitMask = this.dom.node && this.dom.node.parentNode && (force || this._remoteDataLoaded === 0);
+                let showWaitMask = force || this._remoteDataLoaded === 0;
 
                 // RPC ausführen
                 this._rpc.do(this._facadeFnLoad, args, function(response) {
-                    this._remoteProcess(response, args, force);
+                        this._remoteProcess(response, args, force);
 
-                    // Promise auflösen
-                    resolve(response);
+                        // Promise auflösen
+                        resolve(response);
 
-                }, this, true, showWaitMask ? this : 'none');
+                    },
+                    this,                                           // Context
+                    true,                                           // Cancel running
+                    showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
+                    this._waitMaskTargetDomProperty,                // Wait Mask Target Dom Property
+                    false,                                          // Ignore Warnings
+                    this._facadeFnBeforeMsgFn
+                );
             }
         });
     }
@@ -13552,6 +14480,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
             this._selectRow(this._currentRow, shift, ctrl);
         }
+
+        // Event weiterreichen
+        this.raiseEvent('rowClick', e);
+    }
+
+    _onRowDblClick(e) {
+        // Event weiterreichen
+        this.raiseEvent('rowDblClick', e);
     }
 
     _onTableScroll(e) {
@@ -13636,7 +14572,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         // Daten laden
-        this._remoteLoad();
+        if (this._autoLoad) {
+            this._remoteLoad();
+        }
     }
 
     // overwrite
@@ -13783,6 +14721,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         super.destruct(true);
     }
 };
+
 /* global kijs, this */
 
 // --------------------------------------------------------------
@@ -13964,7 +14903,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._cells = null;
-        this._dataRow = null;
+        if (this._dataRow) {
+            this._dataRow = null;
+        }
 
         // Basisklasse entladen
         super.destruct(true);
@@ -14036,7 +14977,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     }
                 },{
                     name    : 'btn-columns',
-                    caption : kijs.getText('Spalten...'),
+                    caption : kijs.getText('Spalten') + '...',
                     iconChar: '&#xf0db', // fa-columns
                     on: {
                         click: function() {
@@ -14047,7 +14988,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     }
                 },{
                     name    : 'btn-filters',
-                    caption : kijs.getText('Filter...'),
+                    caption : kijs.getText('Filter') + '...',
                     iconChar: '&#xf0b0', // fa-filter
                     on: {
                         click: function() {
@@ -14974,6 +15915,78 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
  * ----------
  *
  */
+kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends kijs.gui.grid.columnConfig.ColumnConfig {
+
+
+    // --------------------------------------------------------------
+    // CONSTRUCTOR
+    // --------------------------------------------------------------
+    constructor(config={}) {
+        super(false);
+
+        // default xtype
+        this._cellXtype = 'kijs.gui.grid.cell.Icon';
+        this._filterXtype = 'kijs.gui.grid.filter.Icon';
+        this._iconCharField = null;
+        this._iconClsField = null;
+        this._iconColorField = null;
+        this._iconsCnt = null;
+        this._captionField = null;
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            iconsCnt: 155
+        });
+
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            iconCharField:  true,
+            iconClsField:  true,
+            iconColorField: true,
+            iconsCnt: true,
+            captionField: true
+        });
+
+        // Config anwenden
+        if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
+            this.applyConfig(config, true);
+        }
+    }
+    
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get captionField() { return this._captionField; }
+    set captionField(val) { this._captionField = val; }
+
+    get iconCharField() { return this._iconCharField; }
+    set iconCharField(val) { this._iconCharField = val;}
+
+    get iconClsField() { return this._iconClsField; }
+    set iconClsField(val) { this._iconClsField = val; }
+
+    get iconColorField() { return this._iconColorField; }
+    set iconColorField(val) { this._iconColorField = val; }
+    
+    get iconsCnt() { return this._iconsCnt; }
+    set iconsCnt(val) { this._iconsCnt = val; }
+    
+    get valueField() { return this._valueField; }
+    set valueField(val) { this._valueField = val; }
+};
+
+/* global kijs, this */
+
+// --------------------------------------------------------------
+// kijs.gui.grid.column.Column
+// --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ *
+ */
 kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
@@ -15769,7 +16782,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._dismissDelay = null;
 
@@ -16036,6 +17049,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         this._data = [];
         this._facadeFnLoad = null;
+        this._facadeFnArgs = {};
+        this._filters = [];
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
@@ -16055,6 +17070,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             disabled: { target: 'disabled'},
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
+            facadeFnArgs: true,         // Objekt mit Argumenten für die FacadeFn
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
             selectType: true            // 'none': Es kann nichts selektiert werden
@@ -16068,8 +17084,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        this.applyConfig(config);
 
         // Events
         this.on('keyDown', this._onKeyDown, this);
@@ -16145,68 +17159,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set data(val) {
         this._data = val;
 
-        // Bestehende Elemente löschen
-        if (this._elements) {
-            this.removeAll(true);
-        }
-
-        // Neue Elemente generieren
-        let newElements = [];
-        for (let i=0, len=this._data.length; i<len; i++) {
-            const newEl = this.createElement(this._data[i], i);
-            newEl.index = i;
-            newEl.parent = this;
-
-            // click-Event
-            newEl.on('click', function(e) {
-                return this.raiseEvent('elementClick', e);
-            }, this);
-
-            // dblclick-Event
-            newEl.on('dblClick', function(e) {
-                return this.raiseEvent('elementDblClick', e);
-            }, this);
-
-            // focus-Event
-            newEl.on('focus', function(e) {
-                return this.raiseEvent('elementFocus', e);
-            }, this);
-
-            // dragstart-Event
-            newEl.on('dragStart', function(e) {
-                return this.raiseEvent('elementDragStart', e);
-            }, this);
-
-            // dragover-Event
-            newEl.on('dragOver', function(e) {
-                return this.raiseEvent('elementDragOver', e);
-            }, this);
-
-            // drag-Event
-            newEl.on('drag', function(e) {
-                return this.raiseEvent('elementDrag', e);
-            }, this);
-
-            // dragleave-Event
-            newEl.on('dragLeave', function(e) {
-                return this.raiseEvent('elementDragLeave', e);
-            }, this);
-
-            // dragend-Event
-            newEl.on('dragEnd', function(e) {
-                return this.raiseEvent('elementDragEnd', e);
-            }, this);
-
-            // drop-Event
-            newEl.on('drop', function(e) {
-                return this.raiseEvent('elementDrop', e);
-            }, this);
-
-            newElements.push(newEl);
-        }
-
-        // neue Elemente einfügen
-        this.add(newElements);
+        this._createElements(this._data);
 
         // Current Element ermitteln und setzen
         this.current = null;
@@ -16222,12 +17175,41 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Elements auch aktivieren/deaktivieren
         kijs.Array.each(this._elements, function(el) {
-            el.disabled = !!val;
+            if ('disabled' in el) {
+                el.disabled = !!val;
+            }
         }, this);
     }
 
+    get facadeFnArgs() { return this._facadeFnArgs; }
+    set facadeFnArgs(val) { this._facadeFnArgs = val; }
+
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
+
+    get filters() { return this._filters; }
+    set filters(val) {
+        if (!val) {
+            this._filters = [];
+        } else {
+            if (!kijs.isArray(val)) {
+                val = [val];
+            }
+
+            // einzelne Filter validieren
+            kijs.Array.each(val, function(filter) {
+                if (!kijs.isObject(filter) || !('field' in filter) || !('value' in filter) || !kijs.isString(filter.field) || !kijs.isString(filter.value)) {
+                    throw new kijs.Error(`invalid argument for filters in kijs.gui.DataView`);
+                }
+                if (!('compare' in filter) || !kijs.Array.contains(['begin', 'part', 'end', 'full'], filter.compare)) {
+                    filter.compare = 'begin';
+                }
+            }, this);
+
+            this._filters = val;
+        }
+
+    }
 
     get focusable() { return this._focusable; }
     set focusable(val) {
@@ -16266,6 +17248,36 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Wendet Filter auf das DataView an.
+     * @param {Array|Object} filters
+     * @returns {undefined}
+     */
+    applyFilters(filters) {
+        this.filters = filters;
+        if (this.isRendered) {
+            this._createElements(this._data);
+            this.render();
+        }
+    }
+
+    /**
+     * Fügt Daten hinzu
+     * @param {type} data
+     * @returns {undefined}
+     */
+    addData(data){
+        if (!kijs.isArray(data)) {
+            data = [data];
+        }
+
+        this._data = kijs.Array.concat(this._data, data);
+
+        this._createElements(data, false);
+    }
+
+
     /**
      * Entfernt alle Selektionen
      * @param {Boolean} [preventSelectionChange=false]    Soll das SelectionChange-Event verhindert werden?
@@ -16330,29 +17342,36 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Füllt das Dataview mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
-     * @returns {undefined}
+     * @returns {Promise}
      */
     load(args) {
-        this._rpc.do(this._facadeFnLoad, args, function(response) {
-            this.data = response.rows;
-            if (!kijs.isEmpty(response.selectFilters)) {
-                this.selectByFilters(response.selectFilters);
+        return new Promise((resolve) => {
+            // Standardargumente anhängen
+            if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
+                if (kijs.isObject(args)) {
+                    Object.assign(args, this._facadeFnArgs);
+
+                } else if (kijs.isArray(args)) {
+                    args.push(kijs.Object.clone(this._facadeFnArgs));
+
+                } else {
+                    args = kijs.Object.clone(this._facadeFnArgs);
+                }
             }
 
-            this.raiseEvent('afterLoad');
-        }, this, true, this, 'dom', false);
-    }
+            this._rpc.do(this._facadeFnLoad, args, function(response) {
+                this.data = response.rows;
+                if (!kijs.isEmpty(response.selectFilters)) {
+                    this.selectByFilters(response.selectFilters);
+                }
 
-    /**
-     * Setzt css order und display der Elemente zurück
-     * @returns {undefined}
-     */
-    resetDisplayAndOrder() {
-        kijs.Array.each(this._elements, function(el) {
-            el.resetDisplayAndOrder();
-        }, this);
-    }
+                // Promise ausführen
+                resolve(this.data);
 
+                this.raiseEvent('afterLoad', {response: response});
+            }, this, true, this, 'dom', false);
+        });
+    }
 
     /**
      * Selektiert ein oder mehrere Elemente
@@ -16361,7 +17380,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    select(elements, keepExisting, preventSelectionChange) {
+    select(elements, keepExisting=false, preventSelectionChange=false) {
         if (kijs.isEmpty(elements)) {
             elements = [];
         }
@@ -16374,12 +17393,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.clearSelections(true);
         }
 
+        var changed = false;
         kijs.Array.each(elements, function(el) {
+            changed = changed || !el.selected;
             el.selected = true;
         }, this);
 
+        // current aktualisieren
+        this._currentEl = null;
+        this.current = null;
+
         // SelectionChange auslösen
-        if (!preventSelectionChange) {
+        if (!preventSelectionChange && changed) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
     }
@@ -16433,28 +17458,29 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
             kijs.Array.each(this._elements, function(el) {
-                const row = el.dataRow;
+                if (el instanceof kijs.gui.DataViewElement) {
+                    const row = el.dataRow;
 
-                kijs.Array.each(filters, function(filterFields) {
-                    let ok = false;
-                    kijs.Array.each(filterFields, function(filterField) {
-                        if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new kijs.Error(`Unkown filter format.`);
-                        }
+                    kijs.Array.each(filters, function(filterFields) {
+                        let ok = false;
+                        kijs.Array.each(filterFields, function(filterField) {
+                            if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
+                                throw new kijs.Error(`Unkown filter format.`);
+                            }
 
-                        if (filterField.value === row[filterField.field]) {
-                            ok = true;
-                        } else {
-                            ok = false;
+                            if (filterField.value === row[filterField.field]) {
+                                ok = true;
+                            } else {
+                                ok = false;
+                                return false;
+                            }
+                        }, this);
+                        if (ok) {
+                            selElements.push(el);
                             return false;
                         }
                     }, this);
-                    if (ok) {
-                        selElements.push(el);
-                        return false;
-                    }
-                }, this);
-
+                }
             }, this);
         }
 
@@ -16467,13 +17493,37 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
+     * Selektiert ein oder mehrere Elemente
+     * @param {Array|Int} indexes Index oder Array mit Indexes, die selektiert werden sollen
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByIndex(indexes, keepExisting=false, preventSelectionChange=false) {
+        if (!kijs.isArray(indexes)) {
+            indexes = [indexes];
+        }
+        let selectElements = [];
+        kijs.Array.each(indexes, function(index) {
+            kijs.Array.each(this.elements, function(element) {
+                if (element.index === index) {
+                    selectElements.push(element);
+                    return false;
+                }
+            }, this);
+        }, this);
+
+        this.select(selectElements, keepExisting, preventSelectionChange);
+    }
+
+    /**
      * Selektiert alle Elemente zwischen el1 und el2
      * @param {kijs.gui.Element} el1
      * @param {kijs.gui.Element} el2
      * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    selectBetween(el1, el2, preventSelectionChange) {
+    selectBetween(el1, el2, preventSelectionChange=false) {
         let found = false;
         let elements = [];
 
@@ -16500,19 +17550,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (!kijs.isEmpty(elements)) {
             this.select(elements, true, preventSelectionChange);
         }
-    }
-
-    /**
-     * Setzt css order und display, damit die Elemente
-     * sortiert und ein- und ausgeblendet werden können.
-     * @param {String} pattern
-     * @param {String} dataRowKey
-     * @returns {undefined}
-     */
-    setDisplayAndOrderByPattern(pattern, dataRowKey) {
-        kijs.Array.each(this._elements, function(el) {
-            el.setDisplayAndOrderByPattern(pattern, dataRowKey);
-        }, this);
     }
 
     /**
@@ -16558,8 +17595,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         kijs.Array.each(elements, function(el) {
-            el.selected = false;
+            if ('selected' in el) {
+                el.selected = false;
+            }
         }, this);
+
+        // aktuelles Element neu wählen.
+        this.current = null;
 
         if (!preventSelectionChange) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: true } );
@@ -16568,6 +17610,135 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
 
     // PROTECTED
+    /**
+     * Erstellt die Elemente
+     * @param {array|string} data
+     * @param {bool}  removeElements
+     * @returns {undefined}
+     */
+    _createElements(data, removeElements = true) {
+
+        // index des aktuell selektierten Elements
+        let selectIndex = null;
+        if (this._currentEl && this._currentEl instanceof kijs.gui.DataViewElement && kijs.isDefined(this._currentEl.index)) {
+            selectIndex = this._currentEl.index;
+        }
+
+        // Bestehende Elemente löschen
+        if (this.elements && removeElements) {
+            this.removeAll(true);
+            this._currentEl = null;
+        }
+
+        // Neue Elemente generieren
+        let newElements = [];
+        for (let i=0, len=data.length; i<len; i++) {
+
+            // Zeile überspringen, falls sie im Filter hängen bleibt.
+            if (this._filterMatch(data[i])) {
+                continue;
+            }
+
+            const newEl = this.createElement(data[i], i);
+            newEl.index = i;
+            newEl.parent = this;
+
+            // click-Event
+            newEl.on('click', function(e) {
+                return this.raiseEvent('elementClick', e);
+            }, this);
+
+            // dblclick-Event
+            newEl.on('dblClick', function(e) {
+                return this.raiseEvent('elementDblClick', e);
+            }, this);
+
+            // focus-Event
+            newEl.on('focus', function(e) {
+                return this.raiseEvent('elementFocus', e);
+            }, this);
+
+            // dragstart-Event
+            newEl.on('dragStart', function(e) {
+                return this.raiseEvent('elementDragStart', e);
+            }, this);
+
+            // dragover-Event
+            newEl.on('dragOver', function(e) {
+                return this.raiseEvent('elementDragOver', e);
+            }, this);
+
+            // drag-Event
+            newEl.on('drag', function(e) {
+                return this.raiseEvent('elementDrag', e);
+            }, this);
+
+            // dragleave-Event
+            newEl.on('dragLeave', function(e) {
+                return this.raiseEvent('elementDragLeave', e);
+            }, this);
+
+            // dragend-Event
+            newEl.on('dragEnd', function(e) {
+                return this.raiseEvent('elementDragEnd', e);
+            }, this);
+
+            // drop-Event
+            newEl.on('drop', function(e) {
+                return this.raiseEvent('elementDrop', e);
+            }, this);
+
+            newElements.push(newEl);
+        }
+
+        // neue Elemente einfügen
+        this.add(newElements);
+
+        // selektion wiederherstellen
+        if (selectIndex !== null) {
+            this.selectByIndex(selectIndex, !removeElements, !removeElements);
+        }
+    }
+
+
+    /**
+     * Prüft, ob ein Filter auf einen Record matcht
+     * @param {Object} record
+     * @returns {Boolean}
+     */
+    _filterMatch(record) {
+        let filterMatch = false;
+
+        kijs.Array.each(this.filters, function(filter) {
+            if (!kijs.isDefined(record[filter.field])) {
+                filterMatch = true;
+            }
+
+            let rgx;
+            if (filter.compare === 'begin') {
+                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
+
+            } else if (filter.compare === 'part') {
+                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
+
+            } else if (filter.compare === 'end') {
+                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
+
+            } else if (filter.compare === 'full') {
+                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
+
+            } else {
+                throw new kijs.Error(`invalid value for filter.compare in kijs.gui.DataView`);
+            }
+
+            if (!kijs.toString(record[filter.field]).match(rgx)) {
+                filterMatch = true;
+            }
+        }, this);
+
+        return filterMatch;
+    }
+
     /**
      * Selektiert ein Element und berücksichtigt dabei die selectType und die tasten shift und ctrl
      * @param {kijs.gui.Element} el
@@ -16745,7 +17916,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
                 case kijs.keys.SPACE:
                     this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    e.nodeEvent.preventDefault();
                     break;
 
             }
@@ -16975,7 +18145,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._spinbox = new kijs.gui.SpinBox({
             cls: ['kijs-flexcolumn', 'kijs-menubutton-spinbox'],
@@ -17088,33 +18258,8 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
     get elements() { return this._spinbox.elements; }
     set elements(val) {
-
-        if (!kijs.isArray(val)) {
-            val = [val];
-        }
-
-        let elements = [];
-        kijs.Array.each(val, function(element) {
-
-            // Linie
-            if (kijs.isString(element) && element === '-') {
-                elements.push(new kijs.gui.Container({
-                    html: '<hr>'
-                }));
-
-            // Sonstiger Text
-            } else if (kijs.isString(element)) {
-                elements.push(new kijs.gui.Container({
-                    html: element
-                }));
-
-            // Sonstiges Element
-            } else {
-                elements.push(element);
-            }
-        });
-
-        this._spinbox.add(elements);
+        this._spinbox.removeAll();
+        this.add(val);
     }
 
 
@@ -17139,6 +18284,42 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Fügt dem Menu neue Elemente hinzu.
+     * @param {Object|Array} elements
+     * @returns {undefined}
+     */
+    add(elements) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+
+        let newElements = [];
+        kijs.Array.each(elements, function(element) {
+
+            // Linie
+            if (kijs.isString(element) && element === '-') {
+                newElements.push(new kijs.gui.Element({
+                    name: '<hr>',
+                    cls:  'separator',
+                    html: '<hr />'
+                }));
+
+            // Sonstiger Text
+            } else if (kijs.isString(element)) {
+                newElements.push(new kijs.gui.Element({
+                    html: element
+                }));
+
+            // Sonstiges Element
+            } else {
+                newElements.push(element);
+            }
+        });
+
+        this._spinbox.add(newElements);
+    }
 
     /**
      * Schliesst das Dropdownmenu und alle Untermenus
@@ -17194,6 +18375,83 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             p = p.parent;
         }
     }
+
+     /**
+     * Löscht ein oder mehrere untergeordnete Elemente
+     * @param {Object|Array} elements
+     * @returns {undefined}
+     */
+    remove(elements) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+
+        const removeElements = [];
+        for (let i=0,len=elements.length; i<len; i++) {
+            if (elements[i] === '-'){
+                for (let y=0; y<this.elements.length; y++) {
+                    if (this.elements[y].name === '<hr>'){
+                        removeElements.push(this.elements[y]);
+                    }
+                };
+            } else if (kijs.Array.contains(this.elements, elements[i])) {
+                removeElements.push(elements[i]);
+            }
+        }
+        elements = null;
+
+        // event ausführen
+        if (this.raiseEvent('beforeRemove', {elements: removeElements}) === false) {
+            return;
+        }
+
+        // löschen
+        kijs.Array.each(removeElements, function(el) {
+            el.off(null, null, this);
+            if (el.unrender) {
+                el.unrender();
+            }
+            kijs.Array.remove(this.elements, el);
+        }, this);
+
+        // Falls der DOM gemacht ist, wird neu gerendert.
+        if (this.dom) {
+            this.render();
+        }
+
+        // Gelöscht, Event auslösen.
+        this.raiseEvent('remove');
+    }
+
+    /**
+     * Löscht alle untergeordeneten Elemente
+     * @param {Boolean} [preventRender=false]
+     * @returns {undefined}
+     */
+    removeAll(preventRender) {
+        // event ausführen
+        if (this.raiseEvent('beforeRemove', {elements: this.elements}) === false) {
+            return;
+        }
+
+        // leeren
+        kijs.Array.each(this.elements, function(el) {
+            el.off(null, null, this);
+            if (el.unrender) {
+                el.unrender();
+            }
+        }, this);
+        kijs.Array.clear(this.elements);
+
+        // Falls der DOM gemacht ist, wird neu gerendert.
+        if (this.dom && !preventRender) {
+            this.render();
+        }
+
+        // Gelöscht, Event ausführen
+        this.raiseEvent('remove');
+    }
+
 
     // Overwrite
     render(superCall) {
@@ -17297,7 +18555,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._headerBarEl = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar',
@@ -17695,13 +18953,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     /**
      * Schliesst das Panel
+     * @param {bool} [preventEvent=false] Kein 'close' Event auslösen
      * @returns {undefined}
      */
-    close() {
+    close(preventEvent=false) {
+        if (!preventEvent) {
+            this.raiseEvent('close');
+        }
+        
         if (this._parentEl && this._parentEl instanceof kijs.gui.Container && this._parentEl.hasChild(this)) {
             this._parentEl.remove(this);
+        } else {
+            this.unrender();
         }
-        this.unrender();
     }
 
     /**
@@ -18037,7 +19301,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._footerEl) {
             kijs.Array.each(this._footerEl.elements, function(el) {
                 if (el instanceof kijs.gui.Button && el.dom && el.isDefault) {
-                    el.raiseEvent('click');
+
+                    // Wenn der Fokus nicht auf dem Element, Click-Event werfen
+                    if (document.activeElement !== el.dom.node) {
+                        el.raiseEvent('click');
+                    }
                     return;
                 }
             }, this);
@@ -18136,7 +19404,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._containerLeftEl = new kijs.gui.Container({
@@ -19134,7 +20402,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errorIconEl.disabled = val;
         this._helpIconEl.disabled = val;
 
-        if (this._spinBoxEl) {
+        if (this._spinBoxEl && 'disabled' in this._spinBoxEl) {
             this._spinBoxEl.disabled = val;
         }
 
@@ -19308,6 +20576,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this._dom.clsRemove('kijs-readonly');
         }
     }
+
+    get required() { return this._required; }
+    set required(val) { this._required = !!val; }
 
     /**
      * Berechnet die Höhe für die spinBox
@@ -19511,7 +20782,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errors = [];
 
         // Validierungen anwenden
-        this._validationRules(this.value);
+        if (this.visible) {
+            this._validationRules(this.value);
+        }
 
         // Fehler anzeigen, falls vorhanden
         this._displayErrors();
@@ -19561,7 +20834,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     // LISTENERS
     _onSpinButtonClick(e) {
-        if (this.disabled) {
+        if (this.disabled || this.readOnly) {
              return;
         }
         if (this._spinBoxEl) {
@@ -19614,7 +20887,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
-        this._value = null;
 
         // Basisklasse entladen
         super.destruct(true);
@@ -19814,6 +21086,135 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
 /* global kijs, this */
 
 // --------------------------------------------------------------
+// kijs.gui.grid.cell.Icon
+// --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ *
+ */
+kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.cell.Cell {
+
+
+    // --------------------------------------------------------------
+    // CONSTRUCTOR
+    // --------------------------------------------------------------
+    constructor(config={}) {
+        super(false);
+
+        this._iconCls = null;
+        this._icon = null;
+        this._originalIcon = null;
+        this._iconColor = null;
+        this._caption = null;
+
+        //this._dom.nodeTagName = 'span';
+        this._dom.clsAdd('kijs-icon');
+
+        // class
+        this.dom.clsAdd('kijs-grid-cell-icon');
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
+
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            iconChar: true,   // Alias für html
+            iconCls: { target: this._iconCls },
+            iconColor: { target: 'iconColor' },
+            iconCharField: true,
+            iconClsField: true,
+            iconColorField: true,
+            caption: { target: 'caption' }
+        });
+
+        // Config anwenden
+        if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
+            this.applyConfig(config, true);
+        }
+    }
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get icon() { return this._icon; }
+
+    get originalIcon() { return this._originalIcon; }
+
+    set caption(val) { this._caption = val; }
+    get caption() { return this._caption; }
+
+    set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
+    get iconColor() { return this._iconColor; }
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+
+
+    // Overwrite
+
+     loadFromDataRow() {
+        super.loadFromDataRow();
+
+        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
+           this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
+           this._dom.style.color = this._iconColor;
+        }
+
+        let value = null;
+        if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
+           value = this.row.dataRow[this.columnConfig.iconCharField];
+        } else if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
+           value = this.row.dataRow[this.columnConfig.iconClsField];
+        }
+        this._caption = this.row.dataRow[this.columnConfig.valueField];
+        this._setDomHtml(value);
+    }
+
+    /**
+     * Icon rendern
+     * @param {String|Number} value
+     * @returns {undefined}
+     */
+    _setDomHtml(value) {
+        this._originalIcon = value;
+
+        if (kijs.isInteger(value)){
+            value = String.fromCodePoint(value);
+
+        } else if (kijs.isString(value)) {
+            value = kijs.String.htmlentities_decode(value);
+        }
+
+        this._icon = value;
+        this._dom.html = this._icon;
+    }
+
+    _iconCls(val) {
+        if (kijs.isEmpty(val)) {
+            val = null;
+        }
+        if (!kijs.isString && !val) {
+            throw new kijs.Error(`config "iconCls" is not a string`);
+        }
+        if (this._iconCls) {
+            this._dom.clsRemove(this._iconCls);
+        }
+        this._iconCls = val;
+        if (this._iconCls) {
+            this._dom.clsAdd(this._iconCls);
+        }
+    }
+};
+
+/* global kijs, this */
+
+// --------------------------------------------------------------
 // kijs.gui.grid.cell.Number
 // --------------------------------------------------------------
 /**
@@ -19931,7 +21332,7 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
             }
 
         } else if (value) {
-            this._dom.html = this._unitBefore + '' + value + '' + this._unitAfter;
+            this._dom.html = this._unitBefore + kijs.toString(value) + this._unitAfter;
 
         } else {
             this._dom.html = value;
@@ -20021,6 +21422,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
         this._checkedType = '';
         this._searchContainer.clsAdd('kijs-icon');
+        this._compare = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -20050,7 +21452,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         });
     }
 
-    get isFiltered() { return this._compare !== ''; }
+    get isFiltered() { return this._compare !== null; }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -20075,16 +21477,13 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), [{
+        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_checked',
             caption : kijs.getText('Alle angewählten'),
             iconChar: '&#xf096', //  fa-square-o
             on: {
                 click: this._onFilterChange,
                 context: this
-            },
-            style: {
-                borderTop: '1px solid #aaaaaa'
             }
         },{
             caption : kijs.getText('Alle nicht angewählten'),
@@ -20118,6 +21517,183 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 /* global kijs */
 
 // --------------------------------------------------------------
+// kijs.gui.grid.filter.Icon
+// --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ *
+ */
+kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.grid.filter.Filter {
+
+
+    // --------------------------------------------------------------
+    // CONSTRUCTOR
+    // --------------------------------------------------------------
+    constructor(config={}) {
+        super(false);
+
+        this._compare = 'begin'; // full, part
+        this._searchField = new kijs.gui.field.Text({disabled: true});
+        this._checkboxGroup = null;
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            //keine
+        });
+
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            //keine
+        });
+
+        // Config anwenden
+        if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
+            this.applyConfig(config, true);
+        }
+        
+        this.parent.grid.on('afterLoad', this._onAfterLoad, this);
+    }
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    get filter() {
+        return Object.assign(super.filter, {
+            type: 'icon',
+            icons: this._checkboxGroup ? this._checkboxGroup.value : null
+        });
+    }
+
+    get isFiltered() { return this._checkboxGroup ? this._checkboxGroup.value ? true : false : false; }
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+
+    reset() {
+        if (this._checkboxGroup) {
+            this._checkboxGroup.checkedAll = true;
+        }
+        super.reset();
+    }
+    
+    // Private
+    _checkIcons() {
+        let icons = [];
+        let iconsCheck = [];
+        let dataCnt = this._checkboxGroup ? this._checkboxGroup.data.length : 0;
+
+        if (dataCnt <= this.columnConfig.iconsCnt) {
+
+            // Alle Zeilen und Zellen vom Grid durchsuchen
+            kijs.Array.each(this.parent.grid.rows, function(row) {
+                    kijs.Array.each(row.cells, function(cell) {
+
+                        // Überprüfen ob Zelle mit dem iconCharField übereinstimmt
+                        if (cell.columnConfig.iconCharField === this.columnConfig.iconCharField){
+                            let contains = false;
+
+                            // Überprüfen ob Icon schon in einem der Arrays ist
+                            if (icons.length > 0) {
+                                kijs.Array.each(icons, function(value){
+                                        if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){
+                                            contains = true;
+                                        }
+                                }, this);
+                            }
+                            if (this._checkboxGroup && !contains){
+                                kijs.Array.each(this._checkboxGroup.data, function(data){
+                                    if (data.id === cell.originalIcon && data.icon === cell.icon && data.color === cell.iconColor  && data.caption === cell.caption){
+                                        contains = true;
+                                    }
+                                }, this);
+                            }
+
+                            // Icon dem Filter hinzufügen
+                            if (!contains){
+                                icons.push({id:cell.originalIcon, icon: cell.icon, color: cell.iconColor, caption: cell.caption});
+                                iconsCheck.push(cell.originalIcon);
+                            }
+                        }
+                    }, this);
+            }, this);
+        }
+        return [icons, iconsCheck, dataCnt];
+    }
+  
+    // Events
+
+    _onAfterLoad() {;
+        let checkIcons = this._checkIcons();
+        let icons = checkIcons[0];
+        let iconsCheck = checkIcons[1];
+        let dataCnt = checkIcons[2];
+
+        // CheckboxGroup erstellen
+        if (this._checkboxGroup === null && dataCnt + icons.length <= this.columnConfig.iconsCnt) {
+            this._checkboxGroup = new kijs.gui.field.CheckboxGroup ({
+                name: 'icons',
+                valueField: 'id',
+                iconCharField: 'icon',
+                iconColorField: 'color',
+                captionField: 'caption',
+                data: icons,
+                cls: 'kijs-filter-icon-checkboxgroup',
+                checkedAll: true,
+                on: {
+                    change: this._onFilterChange,
+                    context: this
+                }
+            });
+            this._menuButton.add(['-', this._checkboxGroup]);
+        
+        } else if (this._checkboxGroup && icons.length > 0 ) {
+
+            // Daten hinzufügen
+            if (dataCnt + icons.length <= this.columnConfig.iconsCnt){
+                this._checkboxGroup.addData(icons);
+                this._checkboxGroup.checkedValues = iconsCheck;
+
+            // CheckboxGroup entfernen
+            } else {
+                this._menuButton.remove(['-', this._checkboxGroup]);
+                this._checkboxGroup = null;
+            }
+        }
+    }
+    
+    _onFilterChange() {
+       this._applyToGrid();
+    }
+
+    _onKeyDown(e) {
+        e.nodeEvent.stopPropagation();
+        if (e.nodeEvent.key === 'Enter') {
+            e.nodeEvent.preventDefault();
+            this._applyToGrid();
+        }
+    }
+
+
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        this._searchField.renderTo(this._searchContainer.node);
+        
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+};
+
+/* global kijs */
+
+// --------------------------------------------------------------
 // kijs.gui.grid.filter.Text
 // --------------------------------------------------------------
 /**
@@ -20147,7 +21723,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            placeholder: kijs.getText('Suche...')
+            placeholder: kijs.getText('Suche') + '...'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -20190,16 +21766,13 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), [{
+        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_begin',
             caption : kijs.getText('Feldanfang'),
             iconChar: '&#xf046', //  fa-check-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
-            },
-            style: {
-                borderTop: '1px solid #aaaaaa'
             }
         },{
             caption : kijs.getText('Beliebiger Teil'),
@@ -20275,7 +21848,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._data = {};
         this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
@@ -20283,7 +21856,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._rpcArgs = {};         // Standard RPC-Argumente
-        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.');
+        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.';
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -20293,7 +21866,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data'},            // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
+            data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
@@ -20328,6 +21901,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     get data() {
         let data = {};
+
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
         // Evtl. Daten aus Formular holen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
@@ -20361,7 +21939,42 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
     }
 
-    get fields() { return this._fields; }
+    get disabled() {
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+
+        let fieldCnt = 0, disabledCnt = 0;
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                fieldCnt++;
+                if (element.disabled) {
+                    disabledCnt++;
+                }
+            }
+        }, this);
+        return disabledCnt > (fieldCnt/2);
+    }
+
+    set disabled(value) {
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                element.disabled = !!value;
+            }
+        }, this);
+    }
+
+    get fields() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        return this._fields;
+    }
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
@@ -20374,7 +21987,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.searchFields();
         }
 
-        for (let i=0; i<this._fields.length; i++) {
+        for (let i = 0; i < this._fields.length; i++) {
             if (this._fields[i].isDirty) {
                 return true;
             }
@@ -20382,6 +21995,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return false;
     }
+
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -20390,6 +22004,54 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         for (let i=0; i<this._fields.length; i++) {
             this._fields[i].isDirty = !!val;
         }
+    }
+
+    get isEmpty() {
+        let empty = true;
+
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i = 0; i < this._fields.length; i++) {
+            if (!this._fields[i].isEmpty) {
+                empty = false;
+            }
+        }
+
+        return empty;
+    }
+
+    get readOnly(){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+
+        let readOnly = 0;
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                if (element.readOnly){
+                    readOnly ++;
+                }
+            }
+        }, this);
+        if (readOnly > (this.fields.length / 2)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    set readOnly(value){
+        if (kijs.isEmpty(this.fields)){
+            this.searchFields();
+        }
+
+        kijs.Array.each(this.fields, function(element) {
+            if (element instanceof kijs.gui.field.Field) {
+                element.readOnly = value;
+            }
+        }, this);
     }
 
     get rpc() { return this._rpc;}
@@ -20426,9 +22088,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.searchFields();
         }
 
-        for (let i=0; i<this._fields.length; i++) {
-            this._fields[i].value = null;
+        for (let i = 0; i < this._fields.length; i++) {
+            if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
+                this._fields[i].value = null;
+            }
         }
+
+        this._data = {};
 
         this.resetValidation();
     }
@@ -20551,7 +22217,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
                 }, this, false, this, 'dom', false, this._onRpcBeforeMessages);
             } else {
-                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt.'));
+                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
             }
         });
     }
@@ -20978,7 +22644,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._resizeDeferHandle = null;   // intern
         this._dragInitialPos = null;      // intern
@@ -21683,6 +23349,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this.render();
         }
     }
+    
+    get inputWrapperDom() { return this._inputWrapperDom; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._checked === 0); }
@@ -21705,6 +23373,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._checked = 1;
         } else if (val === this._valueDeterminated ||val === 2) {
             this._checked = 2;
+        } else if (val === null) {
+            this._checked = 0;
         } else {
             throw new kijs.Error(`config "value" is not valid.`);
         }
@@ -21899,6 +23569,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        this._minChars = null;
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._caption = null;
@@ -21906,7 +23577,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._oldValue = null;
         this._value = '';
         this._keyUpDefer = null;
-        this._serverSort = false;
+        this._remoteSort = false;
+        this._forceSelection = true;
+        this._firstLoaded = false;
+        this._showPlaceholder = true;
+        this._selectFirst = false;
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -21941,18 +23616,24 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             spinIconVisible: true,
-            minChars: 'auto'
+            minChars: 'auto',
+            valueField: 'value',
+            captionField: 'caption'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },
-            serverSort: true,
+            remoteSort: true,
+            showPlaceholder: true,
+            forceSelection: true,
+            selectFirst: true,
 
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
 
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listViewEl },
+            facadeFnArgs: { target: 'facadeFnArgs', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
 
             minChars: { target: 'minChars', prio: 2},
@@ -21967,7 +23648,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minSelectCount: true,
             maxSelectCount: true,
 
-            data: { prio: 1000, target: 'data', context: this._listViewEl },
+            data: { prio: 1000, target: 'data' },
             value: { prio: 1001, target: 'value' }
         });
 
@@ -21975,6 +23656,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
         this._eventForwardsAdd('keyDown', this._inputDom);
+        this._eventForwardsAdd('afterLoad', this._listViewEl);
 
 //        this._eventForwardsRemove('enterPress', this._dom);
 //        this._eventForwardsRemove('enterEscPress', this._dom);
@@ -21993,6 +23675,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.on('click', this._onSpinBoxClick, this);
         this._listViewEl.on('click', this._onListViewClick, this);
         this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
+        this._spinBoxEl.on('show', this._onSpinBoxShow, this);
         //this._listViewEl.on('selectionChange', this._onListViewSelectionChange, this);
 
         // Config anwenden
@@ -22024,17 +23707,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set valueField(val) { this._listViewEl.valueField = val; }
 
     // overwrite
+    set data(val) {
+        this._listViewEl.data = val;
+        if (this._selectFirst) {
+            this.value = this._listViewEl.data[0].value;
+        }
+    }
+
+    // overwrite
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
 
         this._listViewEl.disabled = !!val;
     }
+
+    get facadeFnArgs() { return this._listViewEl.facadeFnArgs; }
+    set facadeFnArgs(val) { this._listViewEl.facadeFnArgs = val; }
 
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
     set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
@@ -22067,8 +23761,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        this._listViewEl.disabled = val || this._dom.clsHas('kijs-disabled');
-        if (val || this._dom.clsHas('kijs-disabled')) {
+        this._listViewEl.disabled = !!val;
+        if (val) {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);
@@ -22081,13 +23775,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // overwrite
     get value() { return this._value; }
     set value(val) {
-        this._oldcaption = this._caption;
+        let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
+        this._oldCaption = this._caption;
         this._oldValue = this._value;
         this._caption  = this._getCaptionFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
+
+        // falls das value nicht im store ist, vom server laden
+        if (this._remoteSort) {
+            if (!valueIsInStore && this._firstLoaded) {
+                this.load(null, true);
+            }
+            // store leeren, wenn value gelöscht wird.
+            if (this._value === '' || this._value === null) {
+//                this._listViewEl.data = [];
+            }
+        }
+
         this._inputDom.nodeAttributeSet('value', this._caption);
     }
+
+    get oldValue() { return this._oldValue; }
 
 
     // --------------------------------------------------------------
@@ -22096,19 +23805,35 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
+     * @param {Boolean} forceLoad true, wenn immer geladen werden soll
+     * @param {String} query Suchstring
      * @returns {undefined}
      */
-    load(args) {
-        args = args ? args : {};
+    load(args=null, forceLoad=false, query=null) {
+        args = kijs.isObject(args) ? args : {};
+        args.remoteSort = !!this._remoteSort;
 
-        if (this._serverSort) {
-            let input = this._inputDom.nodeAttributeGet('value');
-            args.input = kijs.isString(input) ? input : '';
-            args.value = this._value;
+        // Flag setzen
+        this._firstLoaded = true;
 
-            // Wenn eine Eingabe erfolgt, laden
-            if (args.input.length >= this._minChars || this._value !== '') {
-                this._listViewEl.load(args);
+        if (this._remoteSort) {
+            args.query = kijs.toString(query);
+            args.value = this.value;
+
+            // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
+            if (forceLoad || args.query.length >= this._minChars) {
+                this._listViewEl.load(args).then(() => {
+
+                    // Nach dem Laden das value neu setzen,
+                    // damit das Label erscheint
+                    if (query === null && this._isValueInStore(this.value)) {
+                        this.value = this._value;
+                    }
+                });
+
+            } else {
+                this._listViewEl.data = [];
+                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
 
         } else {
@@ -22146,6 +23871,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // PROTECTED
     /**
+     * Fügt dem listView einen Platzhalter hinzu.
+     * @param {String} text Nachricht, die angezeigt wird.
+     */
+    _addPlaceholder(text) {
+        if (this._showPlaceholder) {
+
+            if (this._listViewEl.down('kijs-gui-field-combo-placeholder')) {
+                this._listViewEl.down('kijs-gui-field-combo-placeholder').html = text;
+
+            } else {
+                this._listViewEl.add({
+                    xtype: 'kijs.gui.Container',
+                    name: 'kijs-gui-field-combo-placeholder',
+                    cls: 'kijs-placeholder',
+                    html: text,
+                    htmlDisplayType: 'code'
+                });
+            }
+        }
+    }
+
+    /**
      * Caption zu einem Value ermitteln
      * @param {String|Number|null} val
      * @returns {String}
@@ -22154,9 +23901,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         let found = false;
         let caption = null;
         kijs.Array.each(this._listViewEl.data, function(row) {
-            if (row[this._listViewEl.valueField] === val) {
+            if (row[this.valueField] === val) {
                 found = true;
-                caption = row[this._listViewEl.captionField];
+                caption = row[this.captionField];
                 return false;
             }
         }, this);
@@ -22166,7 +23913,25 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             caption = val;
         }
 
-        return caption;
+        return kijs.toString(caption);
+    }
+
+    /**
+     * Prüft, ob ein value im Store ist.
+     * @param {String|Number|null} val
+     * @returns {Boolean}
+     */
+    _isValueInStore(val) {
+        let found = false;
+
+        kijs.Array.each(this._listViewEl.data, function(row) {
+            if (row[this.valueField] === val) {
+                found = true;
+                return false;
+            }
+        }, this);
+
+        return found;
     }
 
     /**
@@ -22177,13 +23942,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
      */
     _setProposal(key) {
         let inputVal = this._inputDom.nodeAttributeGet('value'), matchVal='';
-        inputVal = (inputVal + '').trim();
+        inputVal = kijs.toString(inputVal).trim();
 
         // Exakten Wert suchen
         if (inputVal && key !== 'Backspace' && key !== 'Delete') {
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
-                    matchVal = row[this._listViewEl.captionField];
+                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                    matchVal = row[this.captionField];
                     return false;
                 }
             }, this);
@@ -22191,12 +23956,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Selber Beginn suchen
             if (matchVal === '') {
                 kijs.Array.each(this._listViewEl.data, function(row) {
-                    let caption = row[this._listViewEl.captionField];
+                    let caption = row[this.captionField];
 
-                    if (kijs.isString(row[this._listViewEl.captionField])
+                    if (kijs.isString(row[this.captionField])
                             && inputVal.length <= caption.length
                             && caption.substr(0, inputVal.length).toLowerCase() === inputVal.toLowerCase()) {
-                        matchVal = row[this._listViewEl.captionField];
+                        matchVal = row[this.captionField];
                         return false;
                     }
                 }, this);
@@ -22213,14 +23978,34 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.setDisplayAndOrderByPattern(inputVal, this.captionField);
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.setDisplayAndOrderByPattern(inputVal, this.captionField);
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
 
         } else {
             // Filter des Dropdowns zurücksetzen
-            this._listViewEl.resetDisplayAndOrder();
+            this._listViewEl.applyFilters(null);
+        }
+    }
+
+    _setScrollPositionToSelection() {
+        let sel = this._listViewEl.getSelected();
+        if (kijs.isObject(sel) && sel instanceof kijs.gui.DataViewElement) {
+            if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
+                let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
+
+                let minScrollValue = sel.top;
+                let maxScrollValue = sel.top - spH + sel.height;
+
+                // prüfen, ob selektion ausserhalb von Scrollbar
+                if (this._spinBoxEl.dom.node.scrollTop === 0 || this._spinBoxEl.dom.node.scrollTop > minScrollValue) {
+                    this._spinBoxEl.dom.node.scrollTop = minScrollValue;
+
+                } else if (this._spinBoxEl.dom.node.scrollTop < maxScrollValue) {
+                    this._spinBoxEl.dom.node.scrollTop = maxScrollValue+5;
+                }
+            }
         }
     }
 
@@ -22230,33 +24015,40 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
-                this._errors.push('Dieses Feld darf nicht leer sein');
+                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
+            }
+        }
+
+        // Ein Datensatz muss ausgewählt werden.
+        if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
+            let match = false;
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (row[this.valueField] === value) {
+                    match = true;
+                    return false;
+                }
+            }, this);
+
+            if (!match) {
+                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
             }
         }
 
         // minSelectCount
-        if (!kijs.isEmpty(this._minSelectCount)) {
-            const minSelectCount = this._minSelectCount;
-
+        if (!kijs.isEmpty(this._minSelectCount) && this._minSelectCount >= 0) {
             if (kijs.isArray(value)) {
-                if (value.length < minSelectCount) {
-                    this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+                if (kijs.isEmpty(value) && this._minSelectCount > 0 || value.length < this._minSelectCount) {
+                    this._errors.push(kijs.getText('Min. %1 Datensätze müssen ausgewählt werden', '', this._minSelectCount));
                 }
-            } else if (kijs.isEmpty(value) && minSelectCount > 0) {
-                this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
             }
         }
 
         // maxSelectCount
-        if (!kijs.isEmpty(this._maxSelectCount)) {
-            const maxSelectCount = this._maxSelectCount;
-
+        if (!kijs.isEmpty(this._maxSelectCount) && this._maxSelectCount > 0) {
             if (kijs.isArray(value)) {
-                if (value.length > maxSelectCount) {
-                    this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+                if (value.length > this._maxSelectCount) {
+                    this._errors.push(kijs.getText('Max. %1 Datensätze dürfen ausgewählt werden', '', this._maxSelectCount));
                 }
-            } else if (!kijs.isEmpty(value) && maxSelectCount < 1) {
-                this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
             }
         }
     }
@@ -22264,36 +24056,68 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // LISTENERS
     _onAfterFirstRenderTo(e) {
-        this.load();
+        // forceLoad, wenn value vorhanden ist (damit label geladen wird)
+        this.load(null, this.value !== '');
     }
-
-    /*_onInput(e) {
-        this.validate();
-    }*/
 
     _onInputKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
-        this._listViewEl._onKeyDown(e);
+
+        if (this._listViewEl.getSelected()) {
+            this._listViewEl._onKeyDown(e);
+
+        } else if (e.nodeEvent.key === 'ArrowDown') {
+            let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
+            if (indx !== null) {
+                this._listViewEl.selectByIndex(indx);
+            }
+        }
+
+        // Scroll
+        if (e.nodeEvent.key === 'ArrowDown' || e.nodeEvent.key === 'ArrowUp') {
+            // scrollen
+            this._setScrollPositionToSelection();
+        }
 
         // wenn Enter gedrückt wird, listview schliessen und ausgewählten Datensatz übernehmen.
         if (e.nodeEvent.key === 'Enter') {
             let dataViewElement = this._listViewEl.getSelected();
             this._spinBoxEl.close();
 
-            if (dataViewElement) {
-                this.value = dataViewElement.dataRow[this._listViewEl.captionField];
+            if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
+                let newVal = dataViewElement.dataRow[this.valueField];
+                let changed = newVal !== this.value;
+                this.value = newVal;
+
+                if (changed) {
+                    this.raiseEvent('change');
+                }
             }
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
+
+        // Esc: Schliessen
+        } else if (e.nodeEvent.key === 'Escape') {
+            this._spinBoxEl.close();
+
+            // Selektion zurücksetzen
+            this._listViewEl.value = this.value;
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
         }
     }
 
     _onInputKeyUp(e) {
         // Steuerbefehle ignorieren
-        if (kijs.Array.contains([
-                'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight',
-                'Delete', 'Insert', 'Home', 'End', 'Alt',
-                'AltGraph', 'ContextMenu', 'Control', 'Shift',
-                'Enter', 'CapsLock', 'Tab', 'OS', 'Escape'
-            ], e.nodeEvent.key)) {
+        let specialKeys = [
+            'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
+            'Delete', 'Insert', 'Home', 'End', 'Alt', 'NumpadEnter',
+            'AltGraph', 'ContextMenu', 'Control', 'Shift',
+            'Enter', 'CapsLock', 'Tab', 'OS', 'Escape', 'Space'
+        ];
+        if (kijs.Array.contains(specialKeys, e.nodeEvent.code) || kijs.Array.contains(specialKeys, e.nodeEvent.key)) {
             return;
         }
 
@@ -22305,59 +24129,113 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // neues Defer schreiben
         this._keyUpDefer = kijs.defer(function() {
-            if (this._serverSort) {
-                this.load();
+            if (this._remoteSort) {
+                this.load(null, false, this._inputDom.nodeAttributeGet('value'));
+
             } else {
                 this._setProposal(e.nodeEvent.key);
             }
-        }, 500, this);
+        }, this._remoteSort ? 1000 : 500, this);
 
     }
 
     _onInputChange(e) {
-        let inputVal = this._inputDom.nodeAttributeGet('value'), matchVal='';
-        inputVal = (inputVal + '').trim();
 
-        // Wert im Store suchen.
-        kijs.Array.each(this._listViewEl.data, function(row) {
-            if (kijs.isString(row[this._listViewEl.captionField]) && row[this._listViewEl.captionField].toLowerCase() === inputVal.toLowerCase()) {
-                matchVal = row[this._listViewEl.captionField];
-                return false;
-            }
-        }, this);
+        // change event nicht berücksichtigen, wenn die spinbox
+        // offen ist.
+        if (this._spinBoxEl.isRendered) {
+            return;
+        }
 
-        if (matchVal && matchVal !== this.value) {
+        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='', changed=false;
+        inputVal = kijs.toString(inputVal).trim();
+
+        // Leerer Wert = feld löschen
+        if (inputVal === '') {
+            match = true;
+
+        } else {
+
+            // Wert im Store suchen.
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                    match = true;
+                    matchVal = row[this.valueField];
+                    return false;
+                }
+            }, this);
+        }
+
+        if (match && matchVal !== this.value) {
             this.value = matchVal;
-            this.raiseEvent('change');
+            changed = true;
 
-        // Es wurde ein Wert eingegeben, der nicht im store ist, daher Feld zurücksetzen
-        } else if (!matchVal) {
+        // Es wurde ein Wert eingegeben, der nicht im Store ist, und das ist erlaubt.
+        } else if (!match && !this._forceSelection) {
+            if (inputVal !== this.value) {
+                this.value = inputVal;
+                changed = true;
+            }
+
+        // Es wurde ein Wert eingegeben, der nicht im Store ist, daher Feld
+        // auf letzten gültigen Wert zurücksetzen.
+        } else {
             this.value = this._value;
+        }
+
+        // validieren
+        this.validate();
+
+        // change-event
+        if (changed) {
+            this.raiseEvent('change');
         }
     }
 
     _onListViewAfterLoad(e) {
-        this.value = this._value;
+        if (!this._remoteSort) {
+            this.value = this._value;
+        }
+
+        if (this._selectFirst) {
+            this.value = this._listViewEl.data[0].value;
+        }
+
+        // Spinbox Nachricht anhängen
+        if (e.response && e.response.spinboxMessage) {
+            this._addPlaceholder(e.response.spinboxMessage);
+        }
     }
 
     _onListViewClick(e) {
         this._spinBoxEl.close();
-        this.value = this._listViewEl.value;
-        this.raiseEvent('change');
+
+        if (this.value !== this._listViewEl.value) {
+            this.value = this._listViewEl.value;
+
+            // validieren
+            this.validate();
+
+            this.raiseEvent('change');
+        }
     }
-
-    /*_onListViewSelectionChange(e) {
-
-    }*/
 
     _onSpinBoxClick() {
         this._inputDom.focus();
     }
 
+    _onSpinBoxShow() {
+        this._setScrollPositionToSelection();
+    }
+
     // overwrite
     _onSpinButtonClick(e) {
         super._onSpinButtonClick(e);
-        this._listViewEl.resetDisplayAndOrder();
+        this._listViewEl.applyFilters();
+
+        if (this._listViewEl.data.length === 0) {
+            this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
+        }
     }
 
 
@@ -22387,6 +24265,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         super.destruct(true);
     }
 };
+
 /* global kijs, this */
 
 // --------------------------------------------------------------
@@ -22442,6 +24321,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasDate = true;
         this._hasSeconds = false;
         this._timeRequired = false;
+        this._changeBufferTimeout = null;
+        this._destroyInterval = null;
         let useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
         this._inputDom = new kijs.gui.Dom({
@@ -22576,10 +24457,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -22601,10 +24482,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 
@@ -22628,6 +24509,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             val = this._getDateTimeByString(val);
         }
 
+        // Datum aus Timestamp
+        if (kijs.isInteger(val)) {
+            val = new Date(val*1000);
+            val.timeMatch = true;
+        }
+
         if (val instanceof Date) {
             display = this._format(this._displayFormat, val);
         }
@@ -22640,6 +24527,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -22663,6 +24551,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._inputDom.unrender();
         super.unrender(true);
+    }
+
+
+    _bufferChangeEvent(value) {
+        clearTimeout(this._changeBufferTimeout);
+        this._changeBufferTimeout = setTimeout(this.raiseEvent, 50, 'change', {value: value});
     }
 
     /**
@@ -22715,7 +24609,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         return format;
     }
 
-
     /**
      * parst ein String und liest ein Datum
      * @param {String} dateTimeStr
@@ -22723,7 +24616,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      */
     _getDateTimeByString(dateTimeStr) {
         let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false, dateTimeAr, timeStr, dateStr;
-        dateTimeStr = dateTimeStr +'';
+        dateTimeStr = kijs.toString(dateTimeStr);
 
             if (dateTimeStr.includes(" ") && this._hasDate) {
                 dateTimeAr = dateTimeStr.split(" ");
@@ -22892,7 +24785,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.value = dateTime;
         }
 
-        this.raiseEvent('change', {value: this.value});
+        this._bufferChangeEvent(this.value);
     }
 
     _onTimePickerAfterRender() {
@@ -22907,7 +24800,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._spinBoxEl.close();
         this.validate();
 
-        this.raiseEvent('change', {value: this.value});
+        this._bufferChangeEvent(this.value);
     }
 
     _onDatePickerChange(e) {
@@ -22923,7 +24816,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
         this.validate();
 
-        this.raiseEvent('change', {value: this.value});
+        this._bufferChangeEvent(this.value);
     }
 
     _onDatePickerSelected(e) {
@@ -22946,6 +24839,17 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct(superCall) {
+        if (this._changeBufferTimeout) {
+            if (this._destroyInterval) {
+                return;
+            } else {
+                this._destroyInterval = setInterval(this.destruct, 10, superCall);
+            }
+        }
+        if (this._destroyInterval) {
+            clearInterval(this._destroyInterval);
+        }
+
         if (!superCall) {
             // unrendern
             this.unrender(superCall);
@@ -23064,10 +24968,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -23083,10 +24987,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 
@@ -23157,7 +25061,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
      * @returns {String|false} tel|mail|web
      */
     _getLinkType(value) {
-        value = value + '';
+        value = kijs.toString(value);
 
         // Telefon
         if (value.match(/^\s*\+?[0-9\s]+$/i)) {
@@ -23165,12 +25069,12 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
 
         // Email
-        if (value.match(/^[^@]+@[^@\.]+\.[a-z]+$/i)) {
+        if (value.match(/^[^@]+@[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
             return 'mail';
         }
 
         // Webseite
-        if (value.match(/^[\w0-9-öüäéèà\.]+\.[a-z]{2,}$/i)) {
+        if (value.match(/^[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
             return 'web';
         }
 
@@ -23185,23 +25089,23 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
      */
     _openLink(link, type) {
         if (type === 'tel') {
-            window.open('tel:' + link.replace(/[^\+0-9]/i, ''));
+            window.open('tel:' + link.replace(/[^\+0-9]/i, ''), '_self');
 
         } else if (type === 'mail') {
-            window.open('mailto:' + link, '');
+            window.open('mailto:' + link, '_self');
 
-        }  else if (type === 'web' && link.substr(0,4) === 'http') {
-            window.open(link, '');
+        }  else if (type === 'web' && link.match(/^(http|ftp)s?:\/\//i)) {
+            window.open(link, '_blank');
 
         }  else if (type === 'web') {
-            window.open('http://' + link, '');
+            window.open('http://' + link, '_blank');
         }
     }
 
     _onDomClick() {
-        if (this._link) {
+        if (this._link && !this.disabled && !this.readOnly) {
             let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
-            this._openLink(this.value+'', linkType);
+            this._openLink(kijs.toString(this.value), linkType);
         }
     }
 
@@ -23243,32 +25147,32 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._aceEditor = null;
         this._aceEditorNode = null;
         this._mode = null;
         this._theme = null;
         this._value = null;
-        
+
         this._dom.clsAdd('kijs-field-editor');
-       
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             mode: true,          // 'javascript', 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
             theme: true          // (siehe Ordner kijs\lib\ace)
         });
-        
+
         // Listeners
         this.on('input', this._onInput, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -23282,13 +25186,13 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this._aceEditor.setReadOnly(false);
         }
     }
-    
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-    
+
     get mode() { return this._mode; }
     set mode(val) { this._mode = val; }
-    
+
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -23299,13 +25203,13 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this._aceEditor.setReadOnly(false);
         }
     }
-    
+
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
-    
+
     get trimValue() { return this._trimValue; }
     set trimValue(val) { this._trimValue = val; }
-    
+
     // overwrite
     get value() {
         if (this._aceEditor) {
@@ -23314,7 +25218,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             return this._value;
         }
     }
-    set value(val) { 
+    set value(val) {
         this._value = val;
         if (this._aceEditor) {
             this._aceEditor.setValue(val, 1);
@@ -23328,15 +25232,15 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // overwrite
     render(superCall) {
         super.render(true);
-        
+
         // aceEditor erstellen
         if (!this._aceEditor) {
             this._aceEditorNode = document.createElement('div');
             this._inputWrapperDom.node.appendChild(this._aceEditorNode);
-            
+
             this._aceEditor = ace.edit(this._aceEditorNode);
-            this._inputNode = this._aceEditorNode.firstChild;
-            this._inputNode.id = this._inputId;
+            let inputNode = this._aceEditorNode.firstChild;
+            inputNode.id = this._inputId;
 
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
@@ -23346,7 +25250,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
                 });
             }, 200, this);
         }
-        
+
         this._aceEditor.setHighlightActiveLine(false);
         //this._aceEditor.$blockScrolling = Infinity;
 
@@ -23358,19 +25262,19 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         }
 
         this.value = this._value;
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
     }
-    
+
 
     // LISTENERS
     _onInput(e) {
         this.validate();
     }
-    
+
     // PROTECTED
     // overwrite
     _validationRules(value) {
@@ -23399,9 +25303,9 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
-            
+
         // Variablen (Objekte/Arrays) leeren
         this._aceEditor = null;
         this._aceEditorNode = null;
@@ -23477,6 +25381,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     get autoLoad() { return this._listView.autoLoad; }
     set autoLoad(val) { this._listView.autoLoad = val; }
 
+    get data() { return this._listView.data; }
+    set data(val) { this._listView.data = val; }
+
     get captionField() { return this._listView.captionField; }
     set captionField(val) { this._listView.captionField = val; }
 
@@ -23520,6 +25427,16 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Fügt Daten hinzu
+     * @param {Array} data
+     * @returns {undefined}
+     */
+    addData(data) {
+        this._listView.addData(data);
+    }
+
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -23593,7 +25510,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     _onListViewSelectionChange(e) {
         const val = this.value;
 
-        this._value = val;
         this.raiseEvent(['input', 'change'], { oldValue: this._oldValue, value: val });
         this._oldValue = val;
 
@@ -23655,13 +25571,15 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            placeholder: { target: 'placeholder' }
         });
 
         // Event-Weiterleitungen von this._inputDom
-        this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('change', this._inputDom);
         this._eventForwardsAdd('blur', this._inputDom);
+        this._eventForwardsAdd('change', this._inputDom);
+        this._eventForwardsAdd('focus', this._inputDom);
+        this._eventForwardsAdd('input', this._inputDom);
 
         this._eventForwardsRemove('enterPress', this._dom);
         this._eventForwardsRemove('enterEscPress', this._dom);
@@ -23700,6 +25618,9 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
 
     get inputDom() { return this._inputDom; }
+
+    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -23831,7 +25752,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
             passwordChar: true,
-            trimValue: true             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            placeholder: { target: 'placeholder' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -23869,7 +25791,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         // Evtl. eigenes Passwort-Feld ohne Sicherheitswarnung erstellen
         if (val) {
-            this._inputDom.nodeAttributeSet('type', undefined);
+            this._inputDom.nodeAttributeSet('type', 'text');
 
             // DOM-Events
             this._inputDom.on('keyUp', this._onKeyUp, this);
@@ -23892,10 +25814,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -23907,14 +25829,17 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }
 
+    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
+
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val) {
+            this._inputDom.nodeAttributeSet('readonly', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
 
@@ -24179,10 +26104,10 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+        if (val || this._dom.clsHas('kijs-disabled')) {
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 
@@ -24198,7 +26123,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
+        if (val) {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);
@@ -24306,7 +26231,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            placeholder: kijs.getText('Filtern...')
+            placeholder: kijs.getText('Filtern') + '...'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -24339,16 +26264,13 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), [{
+        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_equal',
             caption : kijs.getText('Gleich'),
             iconChar: '&#xf046', //  fa-check-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
-            },
-            style: {
-                borderTop: '1px solid #aaaaaa'
             }
         },{
             name: 'btn_compare_unequal',
@@ -24427,7 +26349,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
         this._uploadDialog = null;   // intern
         this._uploads = [];          // intern
@@ -24631,13 +26553,59 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             selectType: 'simple'
         });
 
+        // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            checkedAll: { target: 'checkedAll', prio: 1001 }
+        });
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
     }
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    // Alle Checkboxen ausgewähen / sind ausgewählt
+    get checkedAll () { return this.value.length === this.data.length ? true : false; }
+    set checkedAll (val) {
+        let ids = [];
+
+        if (val){
+            kijs.Array.each(this.data, function(row) {
+                ids.push(row.id);
+            }, this);
+            this.value = ids;
+        } else {
+            this.value = [];
+        }
+    }
+
+    // Checkboxen die ausgewählt werden sollen / sind
+    // TODO: unterschied zu value?
+    get checkedValues () { return this.value.length ? this.value : []; }
+    set checkedValues (val) {
+        let value = this.value;
+
+        if (!kijs.isArray(val)){
+            val = [val];
+        }
+        kijs.Array.each(val, function(v){
+            if (kijs.Array.contains(value, v)){
+                kijs.Array.remove(value, v);
+            } else {
+                value.push(v);
+            }
+
+        }, this);
+
+        this.value = value;
+    }
 };
+
 /* global kijs, this */
 
 // --------------------------------------------------------------
@@ -24776,7 +26744,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
     _validationRules(originalValue) {
         super._validationRules(originalValue);
 
-        let value = originalValue+'';
+        let value = kijs.toString(originalValue);
         if (value.trim() !== '') {
 
             // Zahl parsen
@@ -24891,6 +26859,106 @@ kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.f
         }
     }
 };
+/* global kijs, this */
+
+// --------------------------------------------------------------
+// kijs.gui.field.Range
+// --------------------------------------------------------------
+/**
+ * EVENTS
+ * ----------
+ * blur
+ * input
+ *
+ * // Geerbte Events
+ * add
+ * afterFirstRenderTo
+ * afterRender
+ * afterResize
+ * beforeAdd
+ * beforeRemove
+ * changeVisibility
+ * childElementAfterResize
+ * dblClick
+ * destruct
+ * drag
+ * dragEnd
+ * dragLeave
+ * dragOver
+ * dragStart
+ * drop
+ * focus
+ * mouseDown
+ * mouseLeave
+ * mouseMove
+ * mouseUp
+ * remove
+ * wheel
+ *
+ * // key events
+ * keyDown
+ * enterPress
+ * enterEscPress
+ * escPress
+ * spacePress
+ */
+kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
+
+    // --------------------------------------------------------------
+    // CONSTRUCTOR
+    // --------------------------------------------------------------
+    constructor(config={}) {
+        super(false);
+
+        this._inputDom.nodeAttributeSet('type', 'range');
+        this._dom.clsRemove('kijs-field-text');
+        this._dom.clsAdd('kijs-field-range');
+
+       // Mapping für die Zuweisung der Config-Eigenschaften
+        Object.assign(this._configMap, {
+            min: { target: 'min' },
+            max: { target: 'max' },
+            step: { target: 'step' }
+        });
+
+        // Config anwenden
+        if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
+            this.applyConfig(config, true);
+        }
+    }
+
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
+
+    // overwrite
+    get isEmpty() { return false; }
+
+    set min(val) { this._inputDom.nodeAttributeSet('min', val); }
+    get min() { return this._inputDom.nodeAttributeGet('min'); }
+
+    set max(val) { this._inputDom.nodeAttributeSet('max', val); }
+    get max() { return this._inputDom.nodeAttributeGet('max'); }
+
+    set step(val) { this._inputDom.nodeAttributeSet('step', val); }
+    get step() { return this._inputDom.nodeAttributeGet('step'); }
+
+    // overwrite
+    // 'range' kennt das HTML-Attribut readOnly nicht,
+    // darum disabled benutzen.
+    get readOnly() { return super.readOnly; }
+    set readOnly(val) {
+        super.readOnly = !!val;
+        if (val) {
+            this._inputDom.nodeAttributeSet('disabled', true);
+        } else {
+            this._inputDom.nodeAttributeSet('disabled', false);
+        }
+    }
+};
+
 /* global kijs, this, HTMLElement */
 
 // --------------------------------------------------------------
@@ -24906,7 +26974,7 @@ kijs.gui.grid.columnWindow = class kijs_gui_grid_columnWindow extends kijs.gui.W
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
-        super();
+        super(false);
 
 
         this._dom.clsAdd('kijs-columnwindow');

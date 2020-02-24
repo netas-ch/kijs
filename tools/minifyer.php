@@ -69,7 +69,7 @@ class minifyer {
 
     /**
      * Ordnet die Klassen so an, dass der Parent früher eingebunden wird.
-     * @param Array $stack
+     * @param array $stack
      * @param Int $repeat
      */
     protected function order($stack, $repeat=1) {
