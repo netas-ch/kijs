@@ -233,7 +233,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this.render();
         }
     }
-    
+
     get inputWrapperDom() { return this._inputWrapperDom; }
 
     // overwrite
@@ -349,6 +349,17 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._dom.clsAdd(cls);
         this._checkboxIconEl.iconChar = iconChar;
         this._checkboxIconEl.iconCls = iconCls;
+    }
+
+    // overwrite
+    _validationRules(value) {
+
+        // Eingabe erforderlich
+        if (this._required) {
+            if (!value) {
+                this._errors.push(kijs.getText('Dieses Checkbox muss bestätigt werden'));
+            }
+        }
     }
 
 

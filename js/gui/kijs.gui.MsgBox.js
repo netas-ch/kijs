@@ -140,7 +140,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             ]
         });
     }
-    
+
     /**
      * Zeigt ein Eingabefenster mit OK/Abbrechen-Schaltflächen und einem Achtung-Symbol
      * @param {String} caption
@@ -159,11 +159,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
-            
+
             fieldXtype: 'kijs.gui.field.Text',
             label: label,
-            value: value, 
-            
+            value: value,
+
             fn: fn,
             context: context,
             icon: {
@@ -184,19 +184,19 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             ]
         });
     }
-    
+
     /**
      * Zeigt ein individuelles Meldungsfenster
      * Beispiel config:
      * config = {
      *     caption: 'Testmeldung',
      *     msg: 'Hallo Welt!',
-     *     
+     *
      *     // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
      *     fieldXtype: 'kijs.gui.field.Text',
      *     label: 'Wert',
-     *     value: 'Mein Testwert', 
-     *     
+     *     value: 'Mein Testwert',
+     *
      *     fn: function(e, el) {
      *         alert('Es wurde geklickt auf: ' + e.btn);
      *     },
@@ -234,7 +234,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             }
             elements.push(config.icon);
         }
-        
+
         if (config.fieldXtype) {
             // Beschrieb und Textfeld
             elements.push({
@@ -254,6 +254,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         name: 'field',
                         label: config.label,
                         value: config.value,
+                        required: !!config.required,
                         labelStyle: {
                             marginRight: '4px'
                         },
@@ -270,7 +271,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                     }
                 ]
             });
-            
+
         } else {
             // Text
             elements.push({
@@ -279,7 +280,6 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 htmlDisplayType: 'html',
                 cls: 'kijs-msgbox-inner'
             });
-
         }
 
         // Buttons
@@ -294,7 +294,12 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         btn = button.name;
                         if (config.fieldXtype) {
                             value = this.upX('kijs.gui.Window').down('field').value;
+
+                            if (!this.upX('kijs.gui.Window').down('field').validate()) {
+                                return;
+                            }
                         }
+
                         this.upX('kijs.gui.Window').destruct();
                     };
                 }

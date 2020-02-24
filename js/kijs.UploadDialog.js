@@ -32,6 +32,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._currentUploadIds = [];
         this._directory = false;
         this._dropZones = [];
+        this._fileExtensions = [];
         this._maxFilesize = null;
         this._multiple = true;
         this._sanitizeFilename = false;
@@ -63,6 +64,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             ajaxUrl: true,
             directory: { target: 'directory' },
             multiple: { target: 'multiple' },
+            fileExtensions:  { target: 'fileExtensions' },
             filenameHeader: true,
             pathnameHeader: true,
             maxFilesize: true,
@@ -109,6 +111,23 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     get directory() { return this._directory; }
     set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
+
+    get fileExtensions() { return this._fileExtensions; }
+    set fileExtensions(val) {
+        if (!kijs.isArray(val)) {
+            val = [val];
+        }
+
+        this._fileExtensions = [];
+
+        kijs.Array.each(val, function(type) {
+            if (type.charAt(0) !== '.') {
+                type = '.' + type;
+            }
+
+            this._fileExtensions.push(type);
+        }, this);
+    }
 
     get multiple() { return this._multiple; }
     set multiple(val) { this._multiple = !!val; }
@@ -173,8 +192,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             input.setAttribute('webkitdirectory', 'webkitdirectory');
             input.setAttribute('mozdirectory', 'mozdirectory');
         }
-        if (this._contentTypes.length > 0) {
-            input.setAttribute('accept', this._contentTypes.join(','));
+
+        let acceptTypes = kijs.Array.concat(this._contentTypes, this._fileExtensions);
+
+        if (acceptTypes.length > 0) {
+            input.setAttribute('accept', acceptTypes.join(','));
         }
 
         kijs.Dom.addEventListener('change', input, function(e) {
@@ -211,8 +233,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      */
     _checkMime(mime) {
         let match=false;
-        if (mime && this._contentTypes.length > 0) {
-            mime = mime.toLowerCase();
+        if (mime.type && this._contentTypes.length > 0) {
+            mime = mime.type.toLowerCase();
             let mimeParts = mime.split('/', 2);
 
             kijs.Array.each(this._contentTypes, function(contentType) {
@@ -220,8 +242,19 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
                     match = true;
                 }
             }, this);
+        } else {
+
+            let extension = mime.name.split('.').pop();
+
+            if (extension && this._fileExtensions.length > 0) {
+                kijs.Array.each(this._fileExtensions, function(ext) {
+                    if (ext === '.' + extension) {
+                        match = true;
+                    }
+                }, this);
+            }
         }
-        
+
         return match;
     }
 
@@ -250,7 +283,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadResponses = {};
         if (fileList) {
             for (let i=0; i<fileList.length; i++) {
-                if (this._checkMime(fileList[i].type)) {
+                if (this._checkMime(fileList[i])) {
                     this._uploadFile(fileList[i]);
                 } else {
                     this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
@@ -344,6 +377,19 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     destruct() {
         this._dropZones = null;
         this._contentTypes = null;
+        this._contentTypes = null;
+        this._currentUploadIds = null;
+        this._directory = null;
+        this._dropZones = null;
+        this._fileExtensions = null;
+        this._maxFilesize = null;
+        this._multiple = null;
+        this._sanitizeFilename = null;
+        this._uploadId = null;
+        this._uploadResponses = null;
+        this._filenameHeader = null;
+        this._pathnameHeader = null;
+        this._validMediaTypes = null;
         super.destruct();
     }
 };

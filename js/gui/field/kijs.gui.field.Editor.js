@@ -13,15 +13,16 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
         this._aceEditor = null;
         this._aceEditorNode = null;
-        this._mode = null;
+        this._mode = 'javascript';
         this._theme = null;
         this._value = null;
+        this._oldValue = null;
 
         this._dom.clsAdd('kijs-field-editor');
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            mode: true,          // 'javascript', 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
+            mode: true,          // 'javascript' (Default), 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
             theme: true          // (siehe Ordner kijs\lib\ace)
         });
 
@@ -43,10 +44,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     get disabled() { return super.disabled; }
     set disabled(val) {
         super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-readonly')) {
-            this._aceEditor.setReadOnly(true);
-        } else {
-            this._aceEditor.setReadOnly(false);
+        if (this._aceEditor) {
+            if (val || this._dom.clsHas('kijs-disabled')) {
+                this._aceEditor.setReadOnly(true);
+            } else {
+                this._aceEditor.setReadOnly(false);
+            }
         }
     }
 
@@ -60,18 +63,13 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._aceEditor.setReadOnly(true);
-        } else {
-            this._aceEditor.setReadOnly(false);
+        if (this._aceEditor) {
+            this._aceEditor.setReadOnly(!!val);
         }
     }
 
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
-
-    get trimValue() { return this._trimValue; }
-    set trimValue(val) { this._trimValue = val; }
 
     // overwrite
     get value() {
@@ -84,6 +82,9 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     set value(val) {
         this._value = val;
         if (this._aceEditor) {
+            if (val === null) {
+                val = '';
+            }
             this._aceEditor.setValue(val, 1);
         }
     }
@@ -107,11 +108,15 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
-                var _this = this;
-                this._aceEditor.getSession().on('change', function() {
-                    _this.raiseEvent(['input', 'change']);
+                this._aceEditor.on('change', () => {
+                    this.raiseEvent('input');
                 });
+
+                kijs.Dom.addEventListener('focus', inputNode, this._onInputNodeFocus, this);
+                kijs.Dom.addEventListener('blur', inputNode, this._onInputNodeBlur, this);
             }, 200, this);
+        } else {
+            this._inputWrapperDom.node.appendChild(this._aceEditorNode);
         }
 
         this._aceEditor.setHighlightActiveLine(false);
@@ -124,7 +129,8 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this._aceEditor.session.setMode('ace/mode/' + this._mode);
         }
 
-        this.value = this._value;
+        this.value = this._value ? this._value : '';
+        this._aceEditor.setReadOnly(this.readOnly || this.disabled);
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -134,8 +140,19 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
 
     // LISTENERS
-    _onInput(e) {
+    _onInput() {
         this.validate();
+    }
+
+    _onInputNodeFocus() {
+        this._oldValue = this._value;
+    }
+
+    _onInputNodeBlur() {
+        if (this.value !== this._oldValue) {
+            this._oldValue = this.value;
+            this.raiseEvent('change');
+        }
     }
 
     // PROTECTED
@@ -167,11 +184,19 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this.raiseEvent('destruct');
         }
 
+        kijs.Dom.removeEventListener('change', this._aceEditorNode.firstChild, this);
+
         // Elemente/DOM-Objekte entladen
+        this._aceEditor.destroy();
+        this._aceEditor.container.remove();
 
         // Variablen (Objekte/Arrays) leeren
         this._aceEditor = null;
         this._aceEditorNode = null;
+        this._mode = null;
+        this._theme = null;
+        this._value = null;
+        this._oldValue = null;
 
         // Basisklasse entladen
         super.destruct(true);

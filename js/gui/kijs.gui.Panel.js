@@ -247,7 +247,15 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
     set collapsed(val) {
         if (val) {
-            this.collapse();
+            if (val === 'toggle') {
+                if (this.collapsed) {
+                    this.expand();
+                } else {
+                    this.collapse();
+                }
+            } else {
+                this.collapse();
+            }
         } else {
             this.expand();
         }
@@ -415,7 +423,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (!preventEvent) {
             this.raiseEvent('close');
         }
-        
+
         if (this._parentEl && this._parentEl instanceof kijs.gui.Container && this._parentEl.hasChild(this)) {
             this._parentEl.remove(this);
         } else {
