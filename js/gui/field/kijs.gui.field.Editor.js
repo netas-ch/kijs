@@ -82,7 +82,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     set value(val) {
         this._value = val;
         if (this._aceEditor) {
-            if (val === null) {
+            if (!val) {
                 val = '';
             }
             this._aceEditor.setValue(val, 1);
