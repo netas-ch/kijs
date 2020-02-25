@@ -111,7 +111,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     }
 
     // overwrite
-    get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
+    get isEmpty() { return kijs.isEmpty(this.value); }
 
     get inputDom() { return this._inputDom; }
 

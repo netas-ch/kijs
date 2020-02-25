@@ -108,9 +108,8 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
-                this._aceEditor.on('change', () => {
-                    this.raiseEvent('input');
-                });
+                this._aceEditor.on('change', () => { this.raiseEvent('input'); });
+                this._aceEditor.getSession().on('changeAnnotation', () => { this._onAnnotationChange() });
 
                 kijs.Dom.addEventListener('focus', inputNode, this._onInputNodeFocus, this);
                 kijs.Dom.addEventListener('blur', inputNode, this._onInputNodeBlur, this);
@@ -140,6 +139,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
 
     // LISTENERS
+    _onAnnotationChange() {
+        if (this._value) {
+            this.validate();
+        }
+    }
+
     _onInput() {
         this.validate();
     }
@@ -162,7 +167,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
         // Fehler des Editors auch übernehmen
         if (this._aceEditor) {
-            const annot = this._aceEditor.getSession().getAnnotations();
+            const annot = this._aceEditor.session.getAnnotations();
             for (let key in annot) {
                 if (annot.hasOwnProperty(key)) {
                     this._errors.push("'" + annot[key].text + "'" + ' in Zeile ' + (annot[key].row+1));
