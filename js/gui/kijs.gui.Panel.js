@@ -298,7 +298,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-    get maximizable() { return !!this._closeButtonEl;}
+    get maximizable() { return !!this._maximizeButtonEl; }
     set maximizable(val) {
         if (val) {
             if (!this._maximizeButtonEl) {

@@ -206,7 +206,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     set hasTime(val) { this._hasTime = !!val; }
 
     // overwrite
-    get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
+    get isEmpty() { return kijs.isEmpty(this.value); }
 
     get inputDom() { return this._inputDom; }
 

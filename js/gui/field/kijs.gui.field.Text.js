@@ -106,7 +106,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     }
 
     // overwrite
-    get isEmpty() { return kijs.isEmpty(this._inputDom.value); }
+    get isEmpty() { return kijs.isEmpty(this.value); }
 
     get inputDom() { return this._inputDom; }
 
