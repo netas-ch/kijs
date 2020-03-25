@@ -677,6 +677,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Event
         this.raiseEvent('change', {value: this.value});
+        this.raiseEvent('nowClick', {value: this.value});
     }
 
     /**

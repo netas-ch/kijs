@@ -502,7 +502,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             this.inputField.focus();
         }
 
-        this.raiseEvent('dateChanged', this.value);
+        this.raiseEvent('dateChanged', {value: this.value});
     }
 
     _onDateMouseEnter(e) {
@@ -529,10 +529,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                     case 'ArrowLeft': this.value = kijs.Date.addDays(this.value, -1); break;
                     case 'ArrowRight': this.value = kijs.Date.addDays(this.value, 1); break;
                 }
-                this.raiseEvent('dateChanged', this.value);
+                this.raiseEvent('dateChanged', {value: this.value});
             }
         } else if (this._dom.node && e.nodeEvent.key === 'Enter') {
-            this.raiseEvent('dateSelected', this.value);
+            this.raiseEvent('dateSelected', {value: this.value});
         }
     }
 
@@ -551,16 +551,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
     _onTodayButtonClick(e) {
         this._value = kijs.Date.getDatePart(new Date());
-        this._visibleMonthDate = kijs.Date.getFirstOfMonth(this._value);
-        this._setYearPicker(this._visibleMonthDate.getFullYear());
-        this._calculateCalendar();
-        this._calculateMonthYearPicker();
-
-        if (this.inputField) {
-            this.inputField.focus();
-        }
-        this.raiseEvent('dateChanged', this.value);
-        this.raiseEvent('dateSelected', this.value);
+        this.raiseEvent('dateSelected', {value: this.value});
+        this.raiseEvent('nowClick', {value: this.value});
     }
 
     _onMonthSelectorClick(e) {

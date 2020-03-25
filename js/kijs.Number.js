@@ -98,6 +98,24 @@ kijs.Number = class kijs_String {
     }
 
     /**
+     * Gibt eine Zufallszahl zwischen min und max (inklusiv) zurück
+     * @param {number} min
+     * @param {number} max
+     * @returns {number}
+     */
+    static random(min, max) {
+        if (!kijs.isNumber(min)) {
+            min = 0;
+        }
+        if (!kijs.isNumber(max)) {
+            max = Number.MAX_VALUE;
+        }
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min +1)) + min;
+    }
+
+    /**
      * Rundet einen Fliesskommawert.
      * Halbe werden aufgerundet: Somit wird 1.5 zu 2 und -1.5 zu -2 (Kaufmännisches Runden).
      * @param {Number} number

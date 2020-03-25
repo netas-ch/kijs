@@ -486,14 +486,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el.unrender) {
+            if (el.unrender && el.isRendered && el.isRendered()) {
                 el.unrender();
             }
             kijs.Array.remove(this._elements, el);
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom) {
+        if (this.dom.node) {
             this.render();
         }
 
@@ -507,6 +507,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @returns {undefined}
      */
     removeAll(preventRender) {
+
+        // Elemente vorhanden?
+        if (this._elements.length === 0) {
+            return;
+        }
+
         // event ausführen
         if (this.raiseEvent('beforeRemove', {elements: this._elements}) === false) {
             return;
@@ -515,14 +521,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // leeren
         kijs.Array.each(this._elements, function(el) {
             el.off(null, null, this);
-            if (el.unrender) {
+            if (el.isRendered && el.unrender && el.isRendered()) {
                 el.unrender();
             }
         }, this);
         kijs.Array.clear(this._elements);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom && !preventRender) {
+        if (this.dom.node && !preventRender) {
             this.render();
         }
 

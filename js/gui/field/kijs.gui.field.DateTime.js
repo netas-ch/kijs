@@ -53,8 +53,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasDate = true;
         this._hasSeconds = false;
         this._timeRequired = false;
-        this._changeBufferTimeout = null;
-        this._destroyInterval = null;
         let useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
         this._inputDom = new kijs.gui.Dom({
@@ -74,6 +72,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             on: {
                 change: this._onTimePickerChange,
                 afterRender: this._onTimePickerAfterRender,
+                nowClick: this._onPickerNowClick,
                 context: this
             }
         });
@@ -86,6 +85,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             on: {
                 dateSelected: this._onDatePickerSelected,
                 dateChanged: this._onDatePickerChange,
+                nowClick: this._onPickerNowClick,
                 context: this
             }
         });
@@ -283,12 +283,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._inputDom.unrender();
         super.unrender(true);
-    }
-
-
-    _bufferChangeEvent(value) {
-        clearTimeout(this._changeBufferTimeout);
-        this._changeBufferTimeout = setTimeout(this.raiseEvent, 50, 'change', {value: value});
     }
 
     /**
@@ -517,7 +511,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.value = dateTime;
         }
 
-        this._bufferChangeEvent(this.value);
+        this.raiseEvent('change', {value: value});
     }
 
     _onTimePickerAfterRender() {
@@ -532,11 +526,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._spinBoxEl.close();
         this.validate();
 
-        this._bufferChangeEvent(this.value);
+        this.raiseEvent('change', {value: value});
     }
 
     _onDatePickerChange(e) {
-        if (e instanceof Date) {
+        if (e.value instanceof Date) {
             let v = this._getDateTimeByString(this.value);
 
             if (!v) {
@@ -544,11 +538,16 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 v.timeMatch = false;
             }
 
-            this.value = this._format('Y-m-d', e) + ' ' + this._format('H:i:s', v);
+            this.value = this._format('Y-m-d', e.value) + ' ' + this._format('H:i:s', v);
         }
         this.validate();
 
-        this._bufferChangeEvent(this.value);
+        this.raiseEvent('change', {value: value});
+    }
+
+    _onPickerNowClick(e) {
+        this.value = new Date();
+        this.raiseEvent('change', {value: value});
     }
 
     _onDatePickerSelected(e) {
@@ -571,17 +570,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct(superCall) {
-        if (this._changeBufferTimeout) {
-            if (this._destroyInterval) {
-                return;
-            } else {
-                this._destroyInterval = setInterval(this.destruct, 10, superCall);
-            }
-        }
-        if (this._destroyInterval) {
-            clearInterval(this._destroyInterval);
-        }
-
         if (!superCall) {
             // unrendern
             this.unrender(superCall);

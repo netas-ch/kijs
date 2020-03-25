@@ -273,14 +273,14 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el.unrender) {
+            if (el instanceof kijs.gui.Element && el.isRendered()) {
                 el.unrender();
             }
             kijs.Array.remove(this.elements, el);
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom) {
+        if (this.dom.node) {
             this.render();
         }
 
@@ -302,14 +302,14 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         // leeren
         kijs.Array.each(this.elements, function(el) {
             el.off(null, null, this);
-            if (el.unrender) {
+            if (el instanceof kijs.gui.Element && el.isRendered()) {
                 el.unrender();
             }
         }, this);
         kijs.Array.clear(this.elements);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom && !preventRender) {
+        if (this.dom.node && !preventRender) {
             this.render();
         }
 
@@ -347,6 +347,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
     // PROTECTED
     _onBtnClick() {
+
         if (this._spinbox.dom.node) {
             this.menuClose();
         } else {
