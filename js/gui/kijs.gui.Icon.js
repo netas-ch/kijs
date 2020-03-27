@@ -16,6 +16,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
         this._dom.nodeTagName = 'span';
         this._dom.clsAdd('kijs-icon');
+        this._dom.htmlDisplayType = 'code';
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -25,9 +26,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },
-            iconChar: { target: 'html', context: this._dom },   // Alias für html
+            iconChar: { target: 'iconChar' },
             iconCls: { target: 'iconCls' },
-            iconColor: { target: 'iconColor' }
+            iconColor: { target: 'iconColor' },
+            size: { target: 'size' }
         });
 
         // Config anwenden
@@ -51,8 +53,8 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         this._dom.disabled = !!val;
     }
 
-    get iconChar() { return this._dom.html; }
-    set iconChar(val) { this._dom.html = val; }
+    get iconChar() { return kijs.String.htmlentities(this._dom.html); }
+    set iconChar(val) { this._dom.html = kijs.String.htmlentities_decode(val); }
 
     get iconCls() { return this._iconCls; }
     set iconCls(val) {
@@ -80,6 +82,23 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
     get isEmpty() {
         return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
+    }
+
+    get size() {
+        if (this.style.fontSize) {
+            return window.parseInt(this.style.fontSize);
+        }
+        return 16; // default css size
+    }
+    set size(val) {
+        if (val !== null && !kijs.isInteger(val)) {
+            throw new kijs.Error(`invalid value for kijs.gui.Icon attribute: size`);
+        }
+        if (val === 16 || val === null) { // default css size
+            this.style.fontSize = null;
+        } else {
+            this.style.fontSize = val + 'px';
+        }
     }
 
 };

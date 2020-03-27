@@ -41,7 +41,7 @@ kijs.String = class kijs_String {
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem die HTML-Zeichen als Unicode eingebunden sind
+     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden
      * Es werden folgende Zeichen ersetzt
      *  - Unicode 00A0 - 9999
      *  - < und >
@@ -59,12 +59,20 @@ kijs.String = class kijs_String {
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem die HTML-Entities als Unicode ersetzt sind
+     * Konvertiert einen HTML-String in einen String, in dem die HTML-Entities durch die entsprechenden Unicode-Zeichen ersetzt sind
+     *
      * @param {String} html
      * @returns {String}
      */
     static htmlentities_decode(html) {
-        return kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+)(;|$)/gim, function(entity, number) {
+
+        // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
+        if ((html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
+            return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
+        }
+
+        // HTML-Entities suchen und ersetzen
+        let decoded = kijs.toString(html).replace(/&#(x[0-9a-f]+|[0-9]+)(;|$)/gim, function(entity, number) {
             let nr = null;
             if (number.substr(0,1).toLowerCase() === 'x') {
                 nr = window.parseInt(number.substr(1), 16);
@@ -78,6 +86,26 @@ kijs.String = class kijs_String {
                 return entity;
             }
         });
+
+        // benannte Entities
+        if (decoded.length > 3) {
+            let namedEntity = [
+                ['nbsp', 160],
+                ['lt',   60],
+                ['gt',   62],
+                ['amp',  38],
+                ['quot', 34],
+                ['apos', 39],
+                ['euro', 8364],
+                ['copy', 169],
+                ['reg',  174]
+            ];
+            for (let i=0; i < namedEntity.length; i++) {
+                decoded = kijs.String.replaceAll(decoded, '&' + namedEntity[i][0] + ';',  String.fromCodePoint(namedEntity[i][1]));
+            }
+        }
+
+        return decoded;
     }
 
     /**

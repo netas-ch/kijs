@@ -58,7 +58,8 @@ kit.App = class kit_App {
                             on: {
                                 click: function() {
                                     let uploadDialog = new kijs.UploadDialog({
-                                        directory: true
+                                        fileExtensions: 'sql',
+                                        contentTypes: 'image/*'
                                     });
                                     uploadDialog.showFileSelectDialog();
 
@@ -123,11 +124,27 @@ kit.App = class kit_App {
                                             caption: 'Panel 1',
                                             cls: 'kijs-flexcolumn',
                                             defaults:{
-                                                style: {
+                                                /*style: {
                                                     margin: '4px 4px 0 4px'
-                                                }
+                                                }*/
                                             },
                                             elements: [
+                                                {
+                                                    xtype: 'kijs.gui.Tree',
+                                                    caption: 'Element 1',
+                                                    iconChar: '&#xf114',
+                                                    elements: this.createTreeRecursive(6, 3),
+//                                                    rpc: this._rpc,
+//                                                    facadeFnLoad: 'tree.load',
+                                                    draggable: true,
+                                                    on: {
+                                                        expand: function(){ console.log('expand event'); },
+                                                        collapse: function(){ console.log('collapse event'); },
+                                                        select: function(){ console.log('select event'); },
+                                                        dragDrop: function(s) { console.log('dragDrop event'); console.log(s); },
+                                                        context: this
+                                                    }
+                                                }/*,
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Wechsel zu 2',
@@ -139,7 +156,7 @@ kit.App = class kit_App {
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_2');
                                                         }
                                                     }
-                                                }
+                                                }*/
                                             ]
                                         },{
                                             xtype: 'kijs.gui.Panel',
@@ -368,7 +385,39 @@ kit.App = class kit_App {
 //                                            return rows;
 //                                        })()
                                     }]
-                                }, {
+                                }/*{
+                                    xtype: 'kijs.gui.Panel',
+                                    caption: 'Quill Editor',
+                                    shadow: true,
+                                    visible: false,
+                                    height: '600',
+                                    cls: 'kijs-flexcolumn',
+                                    elements: [
+                                        {
+                                            xtype: 'kijs.gui.field.QuillEditor',
+                                            theme: 'snow',
+                                            value: 'Hallo Welt',
+                                            height: 300,
+                                            //readOnly: true,
+                                            //disabled: true,
+                                            on: {
+                                                change: function(e) {
+                                                    viewport.down('quillContent').html = e.element.value;
+                                                },
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Element',
+                                            name: 'quillContent',
+                                            style: {
+                                                flex: 1
+                                            }
+                                        }
+                                    ],
+                                    style: {
+                                        marginTop:'10px'
+                                    }
+                                }*/,{
                                     xtype: 'kijs.gui.FormPanel',
                                     name: 'addressPanel',
                                     caption: 'Adresse',
@@ -458,11 +507,23 @@ kit.App = class kit_App {
                                                 context: this
                                             }
                                         },{
+                                            xtype: 'kijs.gui.field.Color',
+                                            name: 'mycolor',
+                                            label: 'Color',
+                                            value: 'rgb(0, 0, 255)',
+                                            on: {
+                                                change: function(e) {
+                                                    console.log(e.element.value);
+                                                },
+                                                context: this
+                                            }
+                                        },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
                                             label: 'Checkbox',
                                             caption: 'Caption',
                                             threeState: true,
+                                            require: true,
                                             //value: false,
                                             width: 250,
                                             on: {
@@ -685,10 +746,17 @@ kit.App = class kit_App {
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
+                                            name: 'DatumUhrzeitSec',
+                                            label: 'Datum & Zeit & Sec',
+                                            hasSeconds: true,
+                                            readOnly: false,
+                                            width: 290,
+                                            value: 1571314912
+                                        },{
+                                            xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeit',
                                             label: 'Datum & Zeit',
-                                            hasSeconds: true,
-                                            readOnly: true,
+                                            readOnly: false,
                                             width: 290,
                                             value: 1571314912
                                         },{
@@ -833,8 +901,8 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
-                                            label: 'Bemerkungen (test) Bemerkungen (test) Bemerkungen (test) Bemerkungen (test)',
-                                            value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen! c',
+                                            label: 'Bemerkungen (test)',
+                                            value: 'Dieses Bemerkungsfeld hat\nmehrere Zeilen!',
                                             helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!',
                                             elements: [{
                                                 xtype: 'kijs.gui.Button',
@@ -1575,6 +1643,22 @@ kit.App = class kit_App {
 
     rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
         this._rpc.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, ignoreWarnings, fnBeforeDisplayError);
+    }
+
+    createTreeRecursive(maxDeep, maxSubitem=15, currentDeep=0) {
+        if (currentDeep > maxDeep) {
+            return [];
+        }
+        let treeElements = [];
+        let random = kijs.Number.random(0, maxSubitem);
+        for (var i=0; i<random; i++) {
+            treeElements.push({
+                caption: 'Baum ' + currentDeep + '-' + i,
+                elements: this.createTreeRecursive(maxDeep, maxSubitem, currentDeep+1)
+            });
+        }
+
+        return treeElements;
     }
 
 

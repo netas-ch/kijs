@@ -95,6 +95,9 @@ window.kijs = class kijs {
         };
     }
 
+    // Specifies the maximum time between mouse clicks that are interpreted as a double-click.
+    // Windows default: 500ms
+    static get doubleClickSpeed() { return 600; }
 
 
     // --------------------------------------------------------------
@@ -274,6 +277,15 @@ window.kijs = class kijs {
      */
     static isDate(value) {
         return value instanceof Date && !isNaN(value.valueOf());
+    }
+
+    /**
+     * Prüft, ob ein Objekt ein Standard-Objekt ist
+     * @param {type} value
+     * @returns {Boolean}
+     */
+    static isDefaultObject(value) {
+        return kijs.isObject(value) && value.constructor === window.Object;
     }
 
     /**

@@ -269,7 +269,7 @@
                         $col->iconColorField = 'color';
                         $response->responseData->columns[] = $col;
                         unset ($col);
-                        
+
                         $col = new stdClass();
                         $col->xtype = 'kijs.gui.grid.columnConfig.Date';
                         $col->caption = 'Date';
@@ -362,6 +362,34 @@
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();
                 }
+                break;
+
+            case 'tree.load':
+                $tree = array();
+                $nodeId = $request->requestData->nodeId;
+
+                for ($i = 0; $i < 3; $i++) {
+                    $node = new stdClass();
+
+                    if ($nodeId === null) {
+                        $node->caption = 'Root ' . $i;
+                        $node->nodeId = $i;
+                        $node->leaf = $i <> 1;
+                    } else {
+                        $node->caption = 'Knoten ' . $nodeId . '-' . $i;
+                        $node->nodeId = $nodeId . '-' . $i;
+                        $node->leaf = $i <> 1;
+                    }
+                    $tree[] = $node;
+
+                }
+
+                // verzögerung um Lademaske anzuzeigen
+                if ($nodeId !== null) {
+                    sleep(rand(0, 2));
+                }
+
+                $response->responseData->tree = $tree;
                 break;
 
             default:

@@ -249,6 +249,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseLeave', this._dom);
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
+        this._eventForwardsAdd('singleClick', this._dom);
         this._eventForwardsAdd('touchStart', this._dom);
         this._eventForwardsAdd('wheel', this._dom);
 
@@ -562,6 +563,24 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      */
     focus(alsoSetIfNoTabIndex=false) {
         return this._dom.focus(alsoSetIfNoTabIndex);
+    }
+
+
+    /**
+     * Prüft, ob dieses Element ein Kind von einem anderen Element ist.
+     * @param {kijs.gui.Element} element
+     * @returns {Boolean}
+     */
+    isChildOf(element) {
+        if (this.parent && this.parent instanceof kijs.gui.Element) {
+            if (this.parent === element) {
+                return true;
+            } else {
+                return this.parent.isChildOf(element);
+            }
+        } else {
+            return false;
+        }
     }
 
     // overwrite

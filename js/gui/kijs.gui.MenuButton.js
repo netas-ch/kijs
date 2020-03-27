@@ -168,6 +168,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
                 newElements.push(new kijs.gui.Element({
                     name: '<hr>',
                     cls:  'separator',
+                    htmlDisplayType: 'html',
                     html: '<hr />'
                 }));
 
@@ -273,7 +274,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el instanceof kijs.gui.Element && el.isRendered()) {
+            if (el instanceof kijs.gui.Element && el.isRendered) {
                 el.unrender();
             }
             kijs.Array.remove(this.elements, el);
@@ -302,7 +303,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         // leeren
         kijs.Array.each(this.elements, function(el) {
             el.off(null, null, this);
-            if (el instanceof kijs.gui.Element && el.isRendered()) {
+            if (el instanceof kijs.gui.Element && el.isRendered) {
                 el.unrender();
             }
         }, this);

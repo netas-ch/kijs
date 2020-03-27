@@ -511,7 +511,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.value = dateTime;
         }
 
-        this.raiseEvent('change', {value: value});
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onTimePickerAfterRender() {
@@ -526,7 +526,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._spinBoxEl.close();
         this.validate();
 
-        this.raiseEvent('change', {value: value});
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onDatePickerChange(e) {
@@ -542,12 +542,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
         this.validate();
 
-        this.raiseEvent('change', {value: value});
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onPickerNowClick(e) {
         this.value = new Date();
-        this.raiseEvent('change', {value: value});
+        this.raiseEvent('change', {value: this.value});
     }
 
     _onDatePickerSelected(e) {

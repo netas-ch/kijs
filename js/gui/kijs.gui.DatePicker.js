@@ -342,7 +342,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
            fldDom.clsAdd('kijs-head');
            if (i === 0)  {
                fldDom.clsAdd('kijs-weekno');
-               fldDom.html = this._showWeekNumbers ? '&nbsp;' : '';
+               fldDom.html = this._showWeekNumbers ? kijs.String.htmlentities_decode('&nbsp;') : '';
 
            } else {
                let wdNo = (i - 1) + this._startWeekday;

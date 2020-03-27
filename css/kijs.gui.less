@@ -136,8 +136,8 @@
 
 
 /* Drag & Drop */
-@dragover-ok-borderColor: #1E9429;
-@dragover-forbidden-borderColor: #BE6280;
+@dragover-ok-borderColor: #f4aa56;
+@dragover-forbidden-borderColor: #FB4F42;
 
 /* Grid */
 @grid-header-bkgrndColor: #f6f6f6;
@@ -225,7 +225,7 @@ div.kijs-container-inner {
 div.kijs-container.kijs-containerstack {
     flex: 1;
 
-    .kijs-container-inner {
+    > .kijs-container-inner {
         height: 100%;
         overflow: hidden;
 
@@ -1123,8 +1123,106 @@ div.kijs-buttongroup {
     }
 }
 
+/* ******************
+   * Tree
+   ****************** */
+div.kijs-tree {
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        overflow: auto;
+
+        > .kijs-node {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+
+            > .kijs-expandicon {
+                font-family: FontAwesome;
+                margin-left: 7px;
+                margin-right: 3px;
+                cursor: pointer;
+                transform: rotate(0deg);
+                transition: transform 0.2s;
+
+                &.kijs-leaf {
+                    visibility: hidden;
+                }
+            }
 
 
+            > .kijs-icon {
+                margin: 1px 5px;
+
+                &.kijs-expandedicon {
+                    display: none;
+                }
+
+                &.kijs-spinnericon {
+                    display: none;
+                }
+            }
+
+            > .kijs-treecaption {
+                margin: 4px 0;
+                font-size: @default-fontSize;
+                line-height: 11px;
+                font-family: @default-fontFamily;
+                white-space: nowrap;
+            }
+        }
+
+        > .kijs-expandcontainer {
+            margin-left: 20px;
+            display: none;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
+        }
+    }
+
+    > .kijs-container-inner.kijs-expanded {
+        > .kijs-node > .kijs-expandicon {
+            transform: rotate(90deg);
+            transition: transform 0.2s;
+        }
+
+        > .kijs-expandcontainer {
+            display: flex;
+        }
+
+        > .kijs-node > .kijs-icon {
+            display: none;
+
+            &.kijs-expandedicon {
+                display: inline-block;
+            }
+        }
+    }
+
+    > .kijs-container-inner.kijs-selected {
+        > .kijs-node {
+            > .kijs-icon, > .kijs-treecaption {
+                font-weight: bold;
+                color: @item-selected-fontColor;
+            }
+        }
+    }
+
+    > .kijs-container-inner.kijs-loading {
+        > .kijs-node > .kijs-icon {
+            display: none;
+
+            &.kijs-spinnericon {
+                display: inline-block;
+            }
+
+        }
+    }
+}
 
 
 /* ******************
@@ -1687,6 +1785,29 @@ div.kijs-field-text {
 
 
 /* ******************
+   * Field Color
+   ****************** */
+div.kijs-field-color {
+    > .kijs-inputwrapper {
+        height: 25px;
+
+        > input {
+            border: 1px solid @field-borderColor;
+            border-radius: 2px;
+            padding: 1px;
+            width: 25px;
+            overflow: hidden;
+            cursor: pointer;
+
+            &:hover, &:focus {
+                background-color: @button-focus-bkgrndColor;
+            }
+        }
+    }
+}
+
+
+/* ******************
    * Field Password
    ****************** */
 div.kijs-field-password {
@@ -2059,7 +2180,6 @@ div.kijs-field-checkbox {
 }
 
 
-
 /* ******************
    * Editor
    ****************** */
@@ -2093,6 +2213,61 @@ div.kijs-field-editor {
         }
     }
 }
+
+
+/* ******************
+   * Text Editor
+   ****************** */
+div.kijs-field-quilleditor {
+
+    > .kijs-inputwrapper{
+        display: flex;
+        flex-direction: column;
+        user-select: text;
+
+        .quilleditor {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+
+            .ql-toolbar {
+                overflow: visible;
+                border: none;
+                border-bottom: 1px solid @panel-borderColor;
+            }
+
+            .ql-container {
+                z-index: -1;
+                border: none;
+                border-bottom: 1px solid @panel-borderColor;
+
+                .ql-editor {
+                    overflow-y: auto;
+                    padding: 12px 15px;
+                }
+            }
+        }
+    }
+
+    &.kijs-readonly {
+        .ql-container,
+        .ql-toolbar {
+            pointer-events: none;
+            color: @field-disabled-textColor;
+            background-color: @field-disabled-bkgrndColor;
+        }
+    }
+
+    &.kijs-disabled {
+        .ql-container,
+        .ql-toolbar {
+            pointer-events: none;
+            color: @field-disabled-textColor;
+            background-color: @field-disabled-bkgrndColor;
+        }
+    }
+}
+
 
 /* ******************
    * Display

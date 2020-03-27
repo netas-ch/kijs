@@ -147,7 +147,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._disableEnterBubbeling = false;
         this._disableEscBubbeling = false;
         this._html = undefined;
-        this._htmlDisplayType = 'html', // Darstellung der Eigenschaft 'html'. Default: 'html'
+        this._htmlDisplayType = 'code', // Darstellung der Eigenschaft 'html'. Default: 'html'
                                         // html: als html-Inhalt (innerHtml)
                                         // code: Tags werden als als Text angezeigt
                                         // text: Tags werden entfernt
@@ -230,6 +230,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             mouseMove: { nodeEventName: 'mousemove', useCapture: false },
             mouseUp: { nodeEventName: 'mouseup', useCapture: false },
             scroll: { nodeEventName: 'scroll', useCapture: false },
+            singleClick: { nodeEventName: 'click', useCapture: false, interrupt: kijs.doubleClickSpeed },
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
             wheel: { nodeEventName: 'wheel', useCapture: false },
 
@@ -1199,6 +1200,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 if (!!val.altKey !== !!e.nodeEvent.altKey) {
                     return;
                 }
+            }
+
+            // interrupt einhalten (Event wird für die eingestellte Zeit kein zweites mal ausgeführt)
+            if (kijs.isNumber(val.interrupt) && val.interrupt > 0) {
+                if (val.interruptUntil && val.interruptUntil > Date.now()) {
+                    return;
+                }
+                val.interruptUntil = Date.now() + val.interrupt;
             }
 
             // kijs-Event auslösen

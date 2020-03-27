@@ -14,8 +14,8 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
 
         this._disabled = false;
         this._dom = new kijs.gui.Dom();
-        this._followPointer = false;    // Soll sich der TipText mit dem Mauszeiger verschieben?
-        this._offsetX = 10;
+        this._followPointer = true;    // Soll sich der TipText mit dem Mauszeiger verschieben?
+        this._offsetX = 13;
         this._offsetY = 10;
         this._target = null;
         this._defaultConfig = {};
@@ -27,16 +27,16 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
 
         // Mapping für die Zuweisung der Config-Eigenmschaften
         this._configMap = {
-            cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
-            disabled: true,
-            followPointer: true,
-            html: { target: 'html', context: this._dom },
-            htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
-            offsetX : true,
-            offsetY: true,
-            on: { fn: 'assignListeners' },
-            target: { target: 'target' },
-            style : { fn: 'assign', target: 'style', context: this._dom }
+            cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },
+            disabled        : true,
+            followPointer   : true,
+            html            : { target: 'html', context: this._dom },
+            htmlDisplayType : { target: 'htmlDisplayType', context: this._dom },
+            offsetX         : true,
+            offsetY         : true,
+            on              : { fn: 'assignListeners' },
+            style           : { fn: 'assign', target: 'style', context: this._dom },
+            target          : { target: 'target' }
         };
 
         this._dom.clsAdd('kijs-tooltip');

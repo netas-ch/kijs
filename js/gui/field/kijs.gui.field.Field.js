@@ -58,6 +58,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._labelDom = new kijs.gui.Dom({
             cls: 'kijs-label',
             nodeTagName: 'label',
+            htmlDisplayType: 'code',
             nodeAttribute: {
                 htmlFor: this._inputId
             }
@@ -107,7 +108,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },   // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
 
-            label: { target: 'html', context: this._labelDom },
+            label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,
             labelHtmlDisplayType: { target: 'htmlDisplayType', context: this._labelDom },

@@ -463,9 +463,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     /**
      * Löscht ein oder mehrere untergeordnete Elemente
      * @param {Object|Array} elements
+     * @param {Boolean} [preventRender=false]
+     * @param {Boolean} [destruct=false]
      * @returns {undefined}
      */
-    remove(elements) {
+    remove(elements, preventRender=false, destruct=false) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -486,14 +488,17 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // löschen
         kijs.Array.each(removeElements, function(el) {
             el.off(null, null, this);
-            if (el.unrender && el.isRendered && el.isRendered()) {
+            if (destruct && el.destruct) {
+                el.destruct();
+
+            } else if (el.isRendered && el.unrender) {
                 el.unrender();
             }
             kijs.Array.remove(this._elements, el);
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom.node) {
+        if (this.dom.node && !preventRender) {
             this.render();
         }
 
@@ -504,36 +509,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     /**
      * Löscht alle untergeordeneten Elemente
      * @param {Boolean} [preventRender=false]
+     * @param {Boolean} [destruct=false]
      * @returns {undefined}
      */
-    removeAll(preventRender) {
-
-        // Elemente vorhanden?
-        if (this._elements.length === 0) {
-            return;
+    removeAll(preventRender=false, destruct=false) {
+        if (this._elements.length > 0) {
+            this.remove(this._elements, preventRender, destruct);
         }
-
-        // event ausführen
-        if (this.raiseEvent('beforeRemove', {elements: this._elements}) === false) {
-            return;
-        }
-
-        // leeren
-        kijs.Array.each(this._elements, function(el) {
-            el.off(null, null, this);
-            if (el.isRendered && el.unrender && el.isRendered()) {
-                el.unrender();
-            }
-        }, this);
-        kijs.Array.clear(this._elements);
-
-        // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom.node && !preventRender) {
-            this.render();
-        }
-
-        // Gelöscht, Event ausführen
-        this.raiseEvent('remove');
     }
 
 
@@ -624,7 +606,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
             // Element erstellen
             obj = new constr(obj);
-            
+
         // Ungültige Übergabe
         } else {
             throw new kijs.Error(`kijs.gui.Container: invalid element.`);

@@ -17,6 +17,7 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Eleme
         this._selected = false;
 
         this._dom.clsAdd('kijs-dataviewelement');
+        this._dom.htmlDisplayType = 'html';
 
         //this._dom.nodeAttributeSet('tabIndex', -1);
         this._dom.nodeAttributeSet('draggable', true);
