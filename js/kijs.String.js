@@ -67,7 +67,7 @@ kijs.String = class kijs_String {
     static htmlentities_decode(html) {
 
         // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
-        if ((html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
+        if (kijs.isString(html) && (html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
             return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
         }
 

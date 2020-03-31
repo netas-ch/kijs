@@ -83,12 +83,17 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         this._dom.clsAdd('kijs-field-checkbox');
 
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            captionHtmlDisplayType: 'code'
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            caption: { target: 'html', context: this._captionDom },
+            caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHide: true,
-            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
+            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             captionWidth: { target: 'captionWidth' },
 

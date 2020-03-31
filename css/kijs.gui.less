@@ -1141,9 +1141,12 @@ div.kijs-tree {
             align-items: flex-start;
 
             > .kijs-expandicon {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
                 font-family: FontAwesome;
-                margin-left: 7px;
-                margin-right: 3px;
+                margin: 0 3px 0 7px;
                 cursor: pointer;
                 transform: rotate(0deg);
                 transition: transform 0.2s;
@@ -1152,7 +1155,6 @@ div.kijs-tree {
                     visibility: hidden;
                 }
             }
-
 
             > .kijs-icon {
                 margin: 1px 5px;
@@ -1167,7 +1169,11 @@ div.kijs-tree {
             }
 
             > .kijs-treecaption {
-                margin: 4px 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100%;
+                margin: 0;
                 font-size: @default-fontSize;
                 line-height: 11px;
                 font-family: @default-fontFamily;

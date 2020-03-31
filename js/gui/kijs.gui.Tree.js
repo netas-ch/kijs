@@ -67,8 +67,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         Object.assign(this._defaultConfig, {
          //   waitMaskTarget           : this,
           //  waitMaskTargetDomProperty: 'dom',
-            expandIconChar           : '&#xf105;',
-            folderIcon               : true
+            expandIconChar           : '&#xf105',
+            folderIcon               : 'auto'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -96,17 +96,19 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             expandIconChar            : { target: 'expandIconChar' },
 
             // icon bei geschlossenem Baum
-            iconChar                  : { target: 'iconChar', context: this._iconEl, prio: 10 },
+            iconChar                  : { target: 'iconChar', context: this._iconEl },
             iconCls                   : { target: 'iconCls', context: this._iconEl },
             iconColor                 : { target: 'iconColor', context: this._iconEl },
 
             // icon bei offenen Baum
-            expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl, prio: 10 },
+            expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl },
             expandedIconCls           : { target: 'iconCls', context: this._expandedIconEl },
             expandedIconColor         : { target: 'iconColor', context: this._expandedIconEl },
 
             // setzt das 'iconChar' und das 'expandedIconChar' auf ein Ordner-Symbol.
-            folderIcon                : { target: 'folderIcon', prio: 9 }
+            folderIcon                : { target: 'folderIcon', prio: 10 },
+
+            iconSize                  : { target: 'iconSize' }
         });
 
         // Config anwenden
@@ -173,12 +175,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     }
 
     set folderIcon(val) {
+        if (val === 'auto') {
+            val = (!this._iconEl.iconChar && !this._iconEl.iconCls);
+        }
+
         if (val) {
             this._iconEl.iconChar = '&#xf114';
             this._expandedIconEl.iconChar = '&#xf115';
-        } else {
-            this._iconEl.iconChar = '';
-            this._expandedIconEl.iconChar = '';
         }
     }
     get folderIcon() {
@@ -195,6 +198,31 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         } else {
             this._innerDom.clsRemove('kijs-loading');
         }
+    }
+
+    get iconChar() { return this._iconEl.iconChar; }
+    set iconChar(val) { this._iconEl.iconChar = val; }
+
+    get iconCls() { return this._iconEl.iconCls; }
+    set iconCls(val) { this._iconEl.iconCls = val; }
+
+    get iconColor() { return this._iconEl.iconColor; }
+    set iconColor(val) { this._iconEl.iconColor = val; }
+
+    get expandedIconChar() { return this._expandedIconEl.iconChar; }
+    set expandedIconChar(val) { this._expandedIconEl.iconChar = val; }
+
+    get expandedIconCls() { return this._expandedIconEl.iconCls; }
+    set expandedIconCls(val) { this._expandedIconEl.iconCls = val; }
+
+    get expandedIconColor() { return this._expandedIconEl.iconColor; }
+    set expandedIconColor(val) { this._expandedIconEl.iconColor = val; }
+
+    get iconSize() { return this._iconEl.iconSize; }
+    set iconSize(val) {
+        this._iconEl.iconSize = val;
+        this._expandedIconEl.iconSize = val;
+        this._spinnerIconEl.iconSize = val;
     }
 
     get isRemote() { return !!(this._facadeFnLoad || (this.parent && (this.parent instanceof kijs.gui.Tree) && this.parent.isRemote)); }
@@ -247,7 +275,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {undefined}
      */
     add(elements, index=null) {
-        elements = this._recursiveSetXType(elements);
+        elements = this._recursiveSetProperties(elements);
         super.add(elements, index);
     }
 
@@ -364,8 +392,16 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         });
     }
 
+    // overwrite
+    remove(elements, preventRender=false, destruct=false) {
+        super.remove(elements, preventRender, destruct);
+        if (this.elements.length === 0) {
+            this.collapse();
+        }
+    }
+
     // Setzt den 'selected' Status rekursiv
-    setSelected(selected, recursive=true) {
+    setSelected(selected, recursive=false) {
         this.selected = !!selected;
         if (recursive) {
             kijs.Array.each(this.elements, function(element) {
@@ -399,7 +435,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {mixed}
      * @private
      */
-    _recursiveSetXType(elements) {
+    _recursiveSetProperties(elements) {
         if (kijs.isObject(elements)) {
             elements = [elements];
         }
@@ -408,13 +444,22 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                 let element = elements[i];
                 if (kijs.isDefaultObject(element)) {
                     if (element.elements) {
-                        element.elements = this._recursiveSetXType(element.elements);
+                        element.elements = this._recursiveSetProperties(element.elements);
                     }
-                    if (!element.xtype) {
-                        element.xtype = 'kijs.gui.Tree';
-                    }
-                    if (!kijs.isDefined(element.draggable)) {
-                        element.draggable = this.draggable;
+
+                    element.xtype = element.xtype ? element.xtype : 'kijs.gui.Tree';
+                    element.draggable = element.draggable ? element.draggable : this.getRootNode().draggable;
+
+                    element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;
+                    element.iconCls = element.iconCls ? element.iconCls : this.getRootNode().iconCls;
+                    element.iconColor = element.iconColor ? element.iconColor : this.getRootNode().iconColor;
+
+                    element.expandedIconChar = element.expandedIconChar ? element.expandedIconChar : this.getRootNode().expandedIconChar;
+                    element.expandedIconCls = element.expandedIconCls ? element.expandedIconCls : this.getRootNode().expandedIconCls;
+                    element.expandedIconColor = element.expandedIconColor ? element.expandedIconColor : this.getRootNode().expandedIconColor;
+
+                    if (!element.iconSize && this.getRootNode().iconSize) {
+                        element.iconSize = this.getRootNode().iconSize;
                     }
                 }
             }
@@ -437,6 +482,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         } else {
             this.expand();
         }
+
+        // Event beim Root auslösen
+        this._raiseRootEvent('nodeClick');
     }
 
     /**
@@ -452,6 +500,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         } else {
             this.expand();
         }
+
+        // Event beim Root auslösen
+        this._raiseRootEvent('nodeDblClick');
     }
 
     // Selektiert die Node
@@ -460,7 +511,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             return;
         }
         // alles deselektieren, nur aktuelle selektiert
-        this.getRootNode().setSelected(false);
+        this.getRootNode().setSelected(false, true);
         this.selected = true;
         this._raiseRootEvent('select');
     }
@@ -489,7 +540,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     _onDdOver(dragData) {
 
         // Ein Ordner kann nicht in sein Kindordner gezogen werden
-        if (this.isChildOf(dragData.sourceElement)) {
+        if (!this.draggable || this.isChildOf(dragData.sourceElement)) {
             dragData.position.allowAbove = false;
             dragData.position.allowBelow = false;
             dragData.position.allowOnto = false;
@@ -517,61 +568,60 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {undefined}
      */
     _onDdDrop(dropData) {
-        let eventData = {
-            movedNode   : dropData.sourceElement,
-            movedId     : dropData.sourceElement.nodeId,
-            targetNode  : this,
-            targetId    : this.nodeId,
-            position    : dropData.position.position
-        };
-        this._raiseRootEvent('dragDrop', eventData);
+        if (this.draggable) {
+            let eventData = {
+                movedNode   : dropData.sourceElement,
+                movedId     : dropData.sourceElement.nodeId,
+                targetNode  : this,
+                targetId    : this.nodeId,
+                position    : dropData.position.position
+            };
+            this._raiseRootEvent('dragDrop', eventData);
 
-        // neu laden
-        if (this.isRemote) {
+            // neu laden
+            if (this.isRemote) {
 
-            // verschieben über rpc melden
-            if (this.facadeFnSave && this.rpc) {
-                this.rpc.do(this.facadeFnSave, {
-                    movedId: eventData.movedId,
-                    targetId: eventData.targetId,
-                    position: eventData.position
-                });
-            }
-
-            // Trees zum neu laden
-            let nodeA = eventData.movedNode.parent;
-            let nodeB = eventData.position === 'onto' ? this : this.parent;
-
-            // node A nur neu laden, wenn sie kein Kind von B ist.
-            if (nodeA instanceof kijs.gui.Tree && !nodeA.isChildOf(nodeB)) {
-                console.log('reload ' + nodeA.nodeId);
-                nodeA.load(null, true);
-            }
-
-            // Node B nur neu laden, wenn sie kein Kind von A ist
-            if (nodeB !== nodeA && nodeB instanceof kijs.gui.Tree && !nodeB.isChildOf(nodeA)) {
-                console.log('reload ' + nodeB.nodeId);
-                nodeB.load(null, true);
-            }
-
-        // Elemente verschieben im Dom
-        } else {
-            // Node entfernen
-            eventData.movedNode.parent.remove(eventData.movedNode);
-
-            // Node wieder einfügen.
-            if (eventData.position === 'onto') {
-                this.add(eventData.movedNode);
-
-            } else {
-                let index = this.parent.elements.indexOf(this);
-                if (eventData.position === 'below') {
-                    index++;
+                // verschieben über rpc melden
+                if (this.facadeFnSave && this.rpc) {
+                    this.rpc.do(this.facadeFnSave, {
+                        movedId: eventData.movedId,
+                        targetId: eventData.targetId,
+                        position: eventData.position
+                    });
                 }
 
-                this.parent.add(eventData.movedNode, index);
-            }
+                // Trees zum neu laden
+                let nodeA = eventData.movedNode.parent;
+                let nodeB = eventData.position === 'onto' ? this : this.parent;
 
+                // node A nur neu laden, wenn sie kein Kind von B ist.
+                if (nodeA instanceof kijs.gui.Tree && !nodeA.isChildOf(nodeB)) {
+                    nodeA.load(null, true);
+                }
+
+                // Node B nur neu laden, wenn sie kein Kind von A ist
+                if (nodeB !== nodeA && nodeB instanceof kijs.gui.Tree && !nodeB.isChildOf(nodeA)) {
+                    nodeB.load(null, true);
+                }
+
+            // Elemente verschieben im Dom
+            } else {
+                // Node entfernen
+                eventData.movedNode.parent.remove(eventData.movedNode);
+
+                // Node wieder einfügen.
+                if (eventData.position === 'onto') {
+                    this.add(eventData.movedNode);
+
+                } else {
+                    let index = this.parent.elements.indexOf(this);
+                    if (eventData.position === 'below') {
+                        index++;
+                    }
+
+                    this.parent.add(eventData.movedNode, index);
+                }
+            }
         }
     }
 

@@ -176,9 +176,9 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
                         + this._dec2hex(b);
                 });
             }
-        } else {
-            return '#FFFFFF';
         }
+
+        return '#FFFFFF';
     }
 
     _dec2hex(dec) {

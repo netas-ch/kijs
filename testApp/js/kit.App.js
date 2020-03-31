@@ -132,10 +132,13 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Tree',
                                                     caption: 'Element 1',
-                                                    iconChar: '&#xf114',
-                                                    elements: this.createTreeRecursive(6, 3),
+//                                                    iconChar: '&#xf114',
+//                                                    elements: this.createTreeRecursive(6, 3),
+//                                                    iconCls: 'icoFolder32',
+//                                                    expandedIconCls: 'icoFolderOpen32',
+//                                                    iconSize: 16,
 //                                                    rpc: this._rpc,
-//                                                    facadeFnLoad: 'tree.load',
+                                                    facadeFnLoad: 'tree.load',
                                                     draggable: true,
                                                     on: {
                                                         expand: function(){ console.log('expand event'); },

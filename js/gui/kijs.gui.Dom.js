@@ -147,7 +147,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._disableEnterBubbeling = false;
         this._disableEscBubbeling = false;
         this._html = undefined;
-        this._htmlDisplayType = 'code', // Darstellung der Eigenschaft 'html'. Default: 'html'
+        this._htmlDisplayType = 'html', // Darstellung der Eigenschaft 'html'. Default: 'html'
                                         // html: als html-Inhalt (innerHtml)
                                         // code: Tags werden als als Text angezeigt
                                         // text: Tags werden entfernt

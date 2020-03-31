@@ -66,11 +66,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get displayWaitIcon() {
-        return this._iconEl.iconChar === '&#xf110;';
+        return this._iconEl.iconChar === '&#xf110';
     }
     set displayWaitIcon(val) {
         if (val) {
-            this.iconChar = '&#xf110;';
+            this.iconChar = '&#xf110';
             this._iconEl.dom.clsAdd('kijs-pulse');
         } else {
             this.iconChar = null;
