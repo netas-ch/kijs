@@ -371,9 +371,11 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 args.nodeId = this._nodeId;
 
-
-                // spinner icon
+                // spinner icon aktivieren
                 this.loadSpinner = true;
+
+                // maske?
+                let loadMask = (!this._rootVisible && this.isRoot) ? this : 'none';
 
                 this.rpc.do(this.facadeFnLoad, args, function (response) {
                     this.loadSpinner = false;
@@ -385,7 +387,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                         this.add(response.tree);
                     }
                     resolve(response);
-                }, this, false, 'none');
+                }, this, false, loadMask);
             } else {
                 resolve(null);
             }
@@ -442,7 +444,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (kijs.isArray(elements)) {
             for (let i = 0; i < elements.length; i++) {
                 let element = elements[i];
-                if (kijs.isDefaultObject(element)) {
+                if (kijs.isStandardObject(element)) {
                     if (element.elements) {
                         element.elements = this._recursiveSetProperties(element.elements);
                     }
@@ -628,38 +630,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
     // Overwrite
     render(superCall) {
-
-        // Falls die Root-Node nicht angezeigt werden soll,
-        // wird das Element als normaler Container gerendert.
-        if (!this._rootVisible && this.isRoot) {
-            super.render();
-
-        } else {
-
-            // render vom Container überspringen,
-            // damit elemente nicht in den innerDom gerendert werden
-            kijs.gui.Element.prototype.render.call(this, true);
-
-            // innerDOM rendern
-            this._innerDom.renderTo(this._dom.node);
-
-            // node in den innerDom
-            this._nodeDom.renderTo(this._innerDom.node);
-
-            // elementDom in den innerDom
-            this._elementsDom.renderTo(this._innerDom.node);
-
-            // elements im elementDom rendern
-            kijs.Array.each(this._elements, function(el) {
-                el.renderTo(this._elementsDom.node);
-            }, this);
-
-            this._expandIconDom.renderTo(this._nodeDom.node);
-            this._iconEl.renderTo(this._nodeDom.node);
-            this._expandedIconEl.renderTo(this._nodeDom.node);
-            this._spinnerIconEl.renderTo(this._nodeDom.node);
-            this._treeCaptionDom.renderTo(this._nodeDom.node);
-    }
+        super.render(true);
 
         // leerer ordner
         if (this.leaf) {
@@ -685,7 +656,49 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             this.raiseEvent('unrender');
         }
 
+        this._nodeDom.unrender();
+        this._elementsDom.unrender();
+        this._expandIconDom.unrender();
+        this._iconEl.unrender();
+        this._expandedIconEl.unrender();
+        this._spinnerIconEl.unrender();
+        this._treeCaptionDom.unrender();
+
         super.unrender(true);
+    }
+
+
+    // PROTECTED
+
+    // overwrite
+    _renderElements() {
+        // Beim Root-Element werden die Nodes
+        // direkt in den innerDom gerendert.
+        // Es gibt kein Icon, etc.
+        if (!this._rootVisible && this.isRoot) {
+            // elements im innerDom rendern
+            kijs.Array.each(this._elements, function(el) {
+                el.renderTo(this._innerDom.node);
+            }, this);
+
+        } else {
+            // node in den innerDom
+            this._nodeDom.renderTo(this._innerDom.node);
+
+            // elementDom in den innerDom
+            this._elementsDom.renderTo(this._innerDom.node);
+
+            // elements im elementDom rendern
+            kijs.Array.each(this._elements, function(el) {
+                el.renderTo(this._elementsDom.node);
+            }, this);
+
+            this._expandIconDom.renderTo(this._nodeDom.node);
+            this._iconEl.renderTo(this._nodeDom.node);
+            this._expandedIconEl.renderTo(this._nodeDom.node);
+            this._spinnerIconEl.renderTo(this._nodeDom.node);
+            this._treeCaptionDom.renderTo(this._nodeDom.node);
+        }
     }
 
 
@@ -700,6 +713,14 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
+
+        this._nodeDom.destruct();
+        this._elementsDom.destruct();
+        this._expandIconDom.destruct();
+        this._iconEl.destruct();
+        this._expandedIconEl.destruct();
+        this._spinnerIconEl.destruct();
+        this._treeCaptionDom.destruct();
 
         // Basisklasse entladen
         super.destruct(true);

@@ -276,16 +276,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isDate(value) {
-        return value instanceof Date && !isNaN(value.valueOf());
-    }
-
-    /**
-     * Prüft, ob ein Objekt ein Standard-Objekt ist
-     * @param {type} value
-     * @returns {Boolean}
-     */
-    static isDefaultObject(value) {
-        return kijs.isObject(value) && value.constructor === window.Object;
+        return value instanceof Date && !window.isNaN(value.valueOf());
     }
 
     /**
@@ -389,6 +380,15 @@ window.kijs = class kijs {
      */
     static isReady(fn, context) {
         document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context || this), false);
+    }
+
+    /**
+     * Prüft, ob ein Wert eine Instanz von einem Standard-Objekt ist. (z.B. let obj = {};)
+     * @param {Mixed} value
+     * @returns {Boolean}
+     */
+    static isStandardObject(value) {
+        return kijs.isObject(value) && value.constructor === window.Object;
     }
 
     /**

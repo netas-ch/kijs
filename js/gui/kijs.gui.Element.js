@@ -288,9 +288,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 });
                 this._waitMaskCount = 1;
 
-                if (this.isRendered) {
-                    this._waitMaskEl.show();
-                }
+                this._waitMaskEl.show();
             }
         } else {
             if (!kijs.isEmpty(this._waitMaskEl)) {
@@ -302,6 +300,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     get dom() { return this._dom; }
+
+    get isAppended() { return !!this._dom.isAppended; }
 
     get isRendered() { return !!this._dom.isRendered; }
 

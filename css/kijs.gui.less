@@ -234,6 +234,8 @@ div.kijs-container.kijs-containerstack {
             width: 100%;
             height: 100%;
             background-color: @panel-bkgrndColor;
+            display: flex;
+            flex-direction: column;
 
             &.kijs-animation-fade {
                 animation: kijs-containerstack-fade 1s;
@@ -2259,7 +2261,7 @@ div.kijs-field-quilleditor {
         .ql-container,
         .ql-toolbar {
             pointer-events: none;
-            color: @field-disabled-textColor;
+            color: @field-disabled-fontColor;
             background-color: @field-disabled-bkgrndColor;
         }
     }
@@ -2268,7 +2270,7 @@ div.kijs-field-quilleditor {
         .ql-container,
         .ql-toolbar {
             pointer-events: none;
-            color: @field-disabled-textColor;
+            color: @field-disabled-fontColor;
             background-color: @field-disabled-bkgrndColor;
         }
     }

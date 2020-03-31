@@ -527,11 +527,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // innerDOM rendern
         this._innerDom.renderTo(this._dom.node);
 
-        // elements im innerDOM rendern
-        kijs.Array.each(this._elements, function(el) {
-            el.renderTo(this._innerDom.node);
-        }, this);
-
+        // Render der Elements in Funktion, damit dies
+        // in Vererbungen überschrieben werden könnte.
+        this._renderElements();
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -613,6 +611,16 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
 
         return obj;
+    }
+
+    /**
+     * Rendert die elements in den innerDom.
+     */
+    _renderElements() {
+        // elements im innerDOM rendern
+        kijs.Array.each(this._elements, function(el) {
+            el.renderTo(this._innerDom.node);
+        }, this);
     }
 
 

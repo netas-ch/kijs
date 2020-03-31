@@ -128,6 +128,9 @@ kit.App = class kit_App {
                                                     margin: '4px 4px 0 4px'
                                                 }*/
                                             },
+                                            style: {
+                                                flex: 1
+                                            },
                                             elements: [
                                                 {
                                                     xtype: 'kijs.gui.Tree',
@@ -137,7 +140,7 @@ kit.App = class kit_App {
 //                                                    iconCls: 'icoFolder32',
 //                                                    expandedIconCls: 'icoFolderOpen32',
 //                                                    iconSize: 16,
-//                                                    rpc: this._rpc,
+                                                    rpc: this._rpc,
                                                     facadeFnLoad: 'tree.load',
                                                     draggable: true,
                                                     on: {
@@ -146,6 +149,9 @@ kit.App = class kit_App {
                                                         select: function(){ console.log('select event'); },
                                                         dragDrop: function(s) { console.log('dragDrop event'); console.log(s); },
                                                         context: this
+                                                    },
+                                                    style: {
+                                                        flex: 1
                                                     }
                                                 }/*,
                                                 {
