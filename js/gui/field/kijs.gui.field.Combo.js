@@ -78,7 +78,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             facadeFnArgs: { target: 'facadeFnArgs', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
 
-            minChars: { target: 'minChars', prio: 2},
+            minChars: { target: 'minChars', prio: 2}, // Nicht beachtet wenn remoteSort false ist
 
             captionField: { target: 'captionField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
@@ -675,7 +675,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         super._onSpinButtonClick(e);
         this._listViewEl.applyFilters();
 
-        if (this._listViewEl.data.length === 0) {
+        if (this._listViewEl.data.length === 0 && this._remoteSort) {
             this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
         }
     }

@@ -255,6 +255,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         label: config.label,
                         value: config.value,
                         required: !!config.required,
+                        facadeFnArgs: config.facadeFnArgs ? config.facadeFnArgs : null,
                         labelStyle: {
                             marginRight: '4px'
                         },

@@ -256,10 +256,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // falls das item noch nicht mit "renderTo" an einem Element angehängt wurde,
         // können wir noch nichts anzeigen. show nochmals nach renderTo ausführen.
-        if (!this.parentNode) {
+        if (this._targetElement instanceof kijs.gui.Element && !this._targetElement.isAppended) {
             this._targetElement.once('afterFirstRenderTo', this._onceTargetAfterFirstRenderTo, this);
 
-        } else {
+        } else if (this.parentNode) {
             this.renderTo(this.parentNode);
         }
     }
