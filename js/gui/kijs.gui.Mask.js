@@ -152,7 +152,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
                 return domEl.node.parentNode;
 
             } else {
-                throw new kijs.Error('cannot get parentNode of kijs.gui.Mask::target');
+                return null;
             }
 
         } else {
@@ -256,7 +256,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // falls das item noch nicht mit "renderTo" an einem Element angehängt wurde,
         // können wir noch nichts anzeigen. show nochmals nach renderTo ausführen.
-        if (this._targetElement instanceof kijs.gui.Element && !this._targetElement.isAppended) {
+        if (!this.parentNode) {
             this._targetElement.once('afterFirstRenderTo', this._onceTargetAfterFirstRenderTo, this);
 
         } else {
