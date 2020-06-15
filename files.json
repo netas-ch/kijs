@@ -1,0 +1,133 @@
+{
+    
+ "js":{
+  "core":[
+   "js/kijs.js",
+   "js/kijs.Error.js",
+   "js/kijs.String.js",
+   "js/kijs.Array.js",
+   "js/kijs.Object.js",
+   "js/kijs.Number.js",
+   "js/kijs.Date.js",
+   "js/kijs.Dom.js",
+   "js/kijs.Grafic.js",
+   "js/kijs.Navigator.js",
+   "js/kijs.DragDrop.js",
+   "js/kijs.Char.js",
+  
+   "js/kijs.Observable.js",
+  
+   "js/kijs.Ajax.js",
+   "js/kijs.Rpc.js",
+  
+   "js/kijs.UploadDialog.js"
+  ],
+  
+  "gui":[
+   "js/gui/kijs.gui.js",
+   "js/gui/kijs.gui.Dom.js",
+   "js/gui/kijs.gui.ToolTip.js",
+   "js/gui/kijs.gui.Element.js",
+   "js/gui/kijs.gui.Container.js",
+   "js/gui/kijs.gui.ContainerStack.js",
+   "js/gui/kijs.gui.DropZone.js",
+   "js/gui/kijs.gui.SpinBox.js",
+   "js/gui/kijs.gui.ViewPort.js",
+  
+   "js/gui/kijs.gui.Icon.js",
+   "js/gui/kijs.gui.Button.js",
+   "js/gui/kijs.gui.ButtonGroup.js",
+   "js/gui/kijs.gui.MenuButton.js",
+  
+   "js/gui/kijs.gui.Tree.js",
+   "js/gui/kijs.gui.PanelBar.js",
+   "js/gui/kijs.gui.Resizer.js",
+   "js/gui/kijs.gui.Splitter.js",
+   "js/gui/kijs.gui.Panel.js",
+  
+   "js/gui/kijs.gui.Mask.js",
+   "js/gui/kijs.gui.ApertureMask.js",
+   "js/gui/kijs.gui.LayerManager.js",
+   "js/gui/kijs.gui.Window.js",
+   "js/gui/kijs.gui.MsgBox.js",
+   "js/gui/kijs.gui.ProgressBar.js",
+   "js/gui/kijs.gui.UploadWindow.js",
+  
+   "js/gui/kijs.gui.CornerTipContainer.js",
+  
+   "js/gui/kijs.gui.Rpc.js",
+   "js/gui/kijs.gui.DataViewElement.js",
+   "js/gui/kijs.gui.DataView.js",
+   "js/gui/kijs.gui.ListView.js",
+   "js/gui/kijs.gui.FormPanel.js",
+  
+   "js/gui/kijs.gui.TimePicker.js",
+   "js/gui/kijs.gui.DatePicker.js",
+  
+   "js/gui/field/kijs.gui.field.js",
+   "js/gui/field/kijs.gui.field.Field.js",
+   "js/gui/field/kijs.gui.field.Text.js",
+   "js/gui/field/kijs.gui.field.Number.js",
+   "js/gui/field/kijs.gui.field.Memo.js",
+   "js/gui/field/kijs.gui.field.Password.js",
+   "js/gui/field/kijs.gui.field.ListView.js",
+   "js/gui/field/kijs.gui.field.Checkbox.js",
+   "js/gui/field/kijs.gui.field.CheckboxGroup.js",
+   "js/gui/field/kijs.gui.field.Color.js",
+   "js/gui/field/kijs.gui.field.OptionGroup.js",
+   "js/gui/field/kijs.gui.field.Combo.js",
+   "js/gui/field/kijs.gui.field.Display.js",
+   "js/gui/field/kijs.gui.field.DateTime.js",
+   "js/gui/field/kijs.gui.field.Range.js",
+  
+   "js/gui/field/kijs.gui.field.Editor.js"
+  ],
+  
+  "grid":[
+   "js/gui/grid/kijs.gui.grid.js",
+   "js/gui/grid/kijs.gui.grid.Grid.js",
+   "js/gui/grid/kijs.gui.grid.Row.js",
+   "js/gui/grid/kijs.gui.grid.Filter.js",
+   "js/gui/grid/kijs.gui.grid.Header.js",
+   "js/gui/grid/kijs.gui.grid.HeaderCell.js",
+   "js/gui/grid/kijs.gui.grid.ColumnWindow.js",
+  
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.ColumnConfig.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Text.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Date.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Number.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Checkbox.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Icon.js",
+  
+   "js/gui/grid/cell/kijs.gui.grid.cell.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Cell.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Text.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Date.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Number.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Checkbox.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Icon.js",
+  
+   "js/gui/grid/filter/kijs.gui.grid.filter.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Filter.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Text.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Number.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Date.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Icon.js"
+  ],
+  
+  "ace":[
+   "lib/ace/ace.js",
+   "js/gui/field/kijs.gui.field.Editor.js"
+  ]
+ },
+ 
+ 
+ "css":{
+  "gui":[
+   "css/style.less"
+  ]
+ }
+ 
+}
