@@ -78,9 +78,7 @@
    "js/gui/field/kijs.gui.field.Combo.js",
    "js/gui/field/kijs.gui.field.Display.js",
    "js/gui/field/kijs.gui.field.DateTime.js",
-   "js/gui/field/kijs.gui.field.Range.js",
-  
-   "js/gui/field/kijs.gui.field.Editor.js"
+   "js/gui/field/kijs.gui.field.Range.js"
   ],
   
   "grid":[
