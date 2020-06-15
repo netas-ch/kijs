@@ -115,7 +115,7 @@
    "js/gui/grid/filter/kijs.gui.grid.filter.Icon.js"
   ],
   
-  "ace":[
+  "editor":[
    "lib/ace/ace.js",
    "js/gui/field/kijs.gui.field.Editor.js"
   ]
@@ -124,7 +124,7 @@
  
  "css":{
   "gui":[
-   "css/style.less"
+   "css/kijs.gui.less"
   ]
  }
  

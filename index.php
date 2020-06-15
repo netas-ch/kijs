@@ -3,75 +3,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <link rel="stylesheet" type="text/css" href="css/kijs.gui.php">
+        
+<?php
+    // Base-URL ermittlen
+    $baseUrl = '';
+    $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
+    $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
+    
+    // CSS Files
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
 
-        <!-- Achtung: Reihenfolge beachten -->
-        <!-- <script type="text/javascript" src="js/lib/ace/ace.js"></script>-->
-
-
-        <script type="text/javascript" src="js/kijs.js"></script>
-        <script type="text/javascript" src="js/kijs.String.js"></script>
-        <script type="text/javascript" src="js/kijs.Array.js"></script>
-        <script type="text/javascript" src="js/kijs.Object.js"></script>
-        <script type="text/javascript" src="js/kijs.Date.js"></script>
-        <script type="text/javascript" src="js/kijs.Dom.js"></script>
-        <script type="text/javascript" src="js/kijs.Grafic.js"></script>
-        <script type="text/javascript" src="js/kijs.Storage.js"></script>
-        <script type="text/javascript" src="js/kijs.DragDrop.js"></script>
-
-        <script type="text/javascript" src="js/kijs.Observable.js"></script>
-
-        <script type="text/javascript" src="js/kijs.Ajax.js"></script>
-        <script type="text/javascript" src="js/kijs.Rpc.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Dom.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.ToolTip.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Element.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Container.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.SpinBox.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.ViewPort.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.Icon.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Button.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.ButtonGroup.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.PanelBar.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Resizer.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Splitter.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Panel.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.Mask.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.LayerManager.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.Window.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.MsgBox.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.CornerTipContainer.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.Rpc.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.DataViewElement.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.DataView.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.ListView.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.FormPanel.js"></script>
-
-        <script type="text/javascript" src="js/gui/kijs.gui.TimePicker.js"></script>
-        <script type="text/javascript" src="js/gui/kijs.gui.DatePicker.js"></script>
-
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Field.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Text.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Memo.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Password.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.ListView.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Checkbox.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.CheckboxGroup.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.OptionGroup.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Combo.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.Display.js"></script>
-        <script type="text/javascript" src="js/gui/field/kijs.gui.field.DateTime.js"></script>
-
-
-
+    // JS Files
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
+?>   
+        
         <script type="text/javascript" src="tests/kijs.Test.js"></script>
 
         <script type="text/javascript" src="tests/test_01_class.js"></script>
@@ -127,8 +72,8 @@
             <p><a href="javascript:gui_test_08_listView();">08 ListView</a></p>
             <p><a href="javascript:gui_test_09_calendar();">09 Calendar</a></p>
             <p>&nbsp;</p>
-            <p><a href="testViewPort/test_afterResize.html">ViewPort afterResize Events</a></p>
-            <p><a href="testApp/index.html">Test-App</a></p>
+            <p><a href="testViewPort/test_afterResize.php">ViewPort afterResize Events</a></p>
+            <p><a href="testApp/index.php">Test-App</a></p>
             <section id="todo" onclick="toggleTodosVisibility();">
                 <h1>To-Do</h1>
                 <section id="todoInner">
