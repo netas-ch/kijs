@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html lang="en">
+<head>
+<title>Quill Editor</title>
+    <!-- Include stylesheet -->
+    <link href="lib/quilljs/css/quill.snow.css" rel="stylesheet">
+
+    <!-- Include the Quill library -->
+    <script src="lib/quilljs/quill.min.js"></script>
+</head>
+
+<!-- Create the editor container -->
+<div id="editor">
+  <p>Hello World!</p>
+  <p>Some initial <strong>bold</strong> text</p>
+  <p><br></p>
+</div>
+
+<!-- Initialize Quill editor -->
+<script>
+  var quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: {
+        toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ header: 1 }, { header: 2 }],               // custom button values
+            [{ list: 'ordered'}, { list: 'bullet' }],
+            [{ script: 'sub'}, { script: 'super' }],      // superscript/subscript
+            [{ indent: '-1'}, { indent: '+1' }],          // outdent/indent
+            [{ direction: 'rtl' }],                         // text direction
+
+            [{ size: ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ color: [] }, { background: [] }],          // dropdown with defaults from theme
+            [{ font: [] }],
+            [{ align: [] }],
+
+            ['clean']
+        ]
+    }
+  });
+</script>
+</html>
