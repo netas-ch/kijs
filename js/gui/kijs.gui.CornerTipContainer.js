@@ -48,11 +48,11 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      */
     static show(caption, html, icon='alert') {
         // Singleton-Instanz ermitteln oder erstellen
-        let instance = kijs_gui_CornerTipContainer._singletonInstance;
+        let instance = kijs.gui.CornerTipContainer._singletonInstance;
         if (!instance) {
             instance = new kijs.gui.CornerTipContainer();
             instance.renderTo(document.body);
-            kijs_gui_CornerTipContainer._singletonInstance = instance;
+            kijs.gui.CornerTipContainer._singletonInstance = instance;
         }
 
         switch (icon) {

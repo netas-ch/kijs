@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '0.0.1'; }
+    static get version() { return '1.0.1'; }
 
     static get keys() {
         return {
@@ -440,10 +440,10 @@ window.kijs = class kijs {
      * @returns {String}
      */
     static uniqId(prefix = '') {
-        if (!window.kijs.__uniqId) {
-            window.kijs.__uniqId = 0;
+        if (!kijs.__uniqId) {
+            kijs.__uniqId = 0;
         }
-        window.kijs.__uniqId++;
-        return 'kijs-' + (prefix ? prefix + '-' : '') + window.kijs.__uniqId;
+        kijs.__uniqId++;
+        return 'kijs-' + (prefix ? prefix + '-' : '') + kijs.__uniqId;
     }
 };
