@@ -30,6 +30,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             selectType: { target: 'selectType', context: this._listView },
 
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listView },
+            facadeFnArgs: { target: 'facadeFnArgs', context: this._listView },
             rpc: { target: 'rpc', context: this._listView },
 
             captionField: { target: 'captionField', context: this._listView },

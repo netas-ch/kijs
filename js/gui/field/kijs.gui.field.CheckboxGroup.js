@@ -12,18 +12,22 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     constructor(config={}) {
         super(false);
 
+        this._checkedAll = false;
+
         this._dom.clsRemove('kijs-field-listview');
         this._dom.clsAdd('kijs-field-checkboxgroup');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             showCheckBoxes: true,
-            selectType: 'simple'
+            selectType: 'simple',
+            captionField: 'caption',
+            valueField: 'value'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            checkedAll: { target: 'checkedAll', prio: 1001 }
+            checkedAll: { target: 'checkedAll', prio: 1005 }
         });
 
         // Config anwenden
@@ -31,24 +35,21 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        this._listView.on('afterLoad', this._onAfterLoad, this);
     }
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
 
-    // Alle Checkboxen ausgewähen / sind ausgewählt
+    // Alle Checkboxen auswählen / sind ausgewählt
     get checkedAll () { return this.value.length === this.data.length ? true : false; }
     set checkedAll (val) {
-        let ids = [];
+        this._checkedAll = !!val;
 
-        if (val){
-            kijs.Array.each(this.data, function(row) {
-                ids.push(row.id);
-            }, this);
-            this.value = ids;
-        } else {
-            this.value = [];
+        if (!this._autoLoad && this.data) {
+           this._checkeAll(val);
         }
     }
 
@@ -72,4 +73,24 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
 
         this.value = value;
     }
+
+    _checkeAll(val) {
+        let ids = [];
+
+        if (val) {
+            kijs.Array.each(this.data, function (row) {
+                ids.push(row[this.valueField]);
+            }, this);
+        }
+        this.value = ids;
+    }
+
+    // Events
+    _onAfterLoad(e) {
+        if (this._checkedAll) {
+            this._checkeAll(true);
+        }
+    }
+
+
 };

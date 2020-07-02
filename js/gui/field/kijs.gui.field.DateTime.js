@@ -53,6 +53,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasDate = true;
         this._hasSeconds = false;
         this._timeRequired = false;
+        this._displayFormat = null;
         let useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
         this._inputDom = new kijs.gui.Dom({
@@ -535,7 +536,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
             if (!v) {
                 v =  kijs.Date.getDatePart(new Date());
-                v.timeMatch = false;
+
+                if (!this._hasTime) {
+                    v.timeMatch = false;
+                }
             }
 
             this.value = this._format('Y-m-d', e.value) + ' ' + this._format('H:i:s', v);
@@ -585,6 +589,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
+        this._hasTime = null;
+        this._hasDate = null;
+        this._hasSeconds = null;
+        this._timeRequired = null;
+        this._displayFormat = null;
 
         // Basisklasse entladen
         super.destruct(true);

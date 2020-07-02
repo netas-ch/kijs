@@ -394,7 +394,7 @@ kit.App = class kit_App {
 //                                            return rows;
 //                                        })()
                                     }]
-                                }/*{
+                                },{
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Quill Editor',
                                     shadow: true,
@@ -426,7 +426,7 @@ kit.App = class kit_App {
                                     style: {
                                         marginTop:'10px'
                                     }
-                                }*/,{
+                                },{
                                     xtype: 'kijs.gui.FormPanel',
                                     name: 'addressPanel',
                                     caption: 'Adresse',
@@ -603,6 +603,24 @@ kit.App = class kit_App {
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
+                                            label: 'CheckboxGroup Fix',
+                                            checkedAll: true,
+                                            data: [
+                                                { caption: 'Januar', value: 1},
+                                                { caption: 'Februar', value: 2},
+                                                { caption: 'März', value: 3},
+                                                { caption: 'April', value: 4},
+                                                { caption: 'Mai', value: 5},
+                                                { caption: 'Juni', value: 6},
+                                                { caption: 'Juli', value: 7},
+                                                { caption: 'August', value: 8},
+                                                { caption: 'September', value: 9},
+                                                { caption: 'Oktober', value: 10},
+                                                { caption: 'November', value: 11},
+                                                { caption: 'Dezember', value: 12}
+                                            ]
+                                        },{
+                                            xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroup',
                                             label: 'CheckboxGroup',
                                             valueField: 'id',
@@ -653,6 +671,7 @@ kit.App = class kit_App {
                                             label: 'CheckboxGroup Inline',
                                             cls: 'kijs-inline',
                                             valueField: 'color',
+                                            checkedAll: true,
                                             captionField: 'Bez',
                                             iconCharField: 'iconChar',
                                             iconColorField: 'color',
