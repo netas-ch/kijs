@@ -12,9 +12,17 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
+        this._columns = 1;
+        this._rowSizes = [];
+        this._colSizes = [];
+
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
             nodeTagName: 'span'
+        });
+
+        this._tableDom = new kijs.gui.Dom({
+           nodeTagName: 'table'
         });
 
         this._dom.clsRemove('kijs-container');
@@ -27,6 +35,10 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            columns: true,
+            rowSizes: { target: 'rowSizes' },
+            colSizes: { target: 'colSizes' },
+
             caption: { target: 'html', context: this._captionDom },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
@@ -57,8 +69,33 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
+    get columns() { return this._columns; }
+    set columns(val) { this._columns = kijs.isNumeric(val) ? window.parseInt(val) : 1; }
+
+    get colSizes() {
+        let rs = [];
+        for (let i=0; i<this.elements.length; i++) {
+            rs[i] = kijs.isDefined(this._colSizes[i]) ? this._colSizes[i] : 1;
+        }
+        return rs;
+    }
+    set colSizes(val) {
+        this._colSizes = kijs.isArray(val) ? val : [];
+    }
+
     // overwrite
     get isEmpty() { return this._captionDom.isEmpty && kijs.isEmpty(this._elements); }
+
+    get rowSizes() {
+        let rs = [];
+        for (let i=0; i<this.elements.length; i++) {
+            rs[i] = kijs.isDefined(this._rowSizes[i]) ? this._rowSizes[i] : 1;
+        }
+        return rs;
+    }
+    set rowSizes(val) {
+        this._rowSizes = kijs.isArray(val) ? val : [];
+    }
 
 
     // --------------------------------------------------------------
@@ -90,6 +127,96 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
         this._captionDom.unrender();
         super.unrender(true);
+    }
+
+    // PROTECTED
+    _getTableMatrix() {
+        let colSizes = this.colSizes, rowSizes = this.rowSizes, matrix = [];
+
+        // Anzahl Felder
+        let numberOfCells = 0;
+        for (let i=0; i<this.elements.length; i++) {
+            numberOfCells += Math.max(1, colSizes[i] * rowSizes[i]);
+        }
+
+        // Anzahl rows
+        let rows = Math.ceil(numberOfCells / this._columns);
+
+        // rows in matrix
+        for (let i=0; i<rows; i++) {
+            matrix[i] = [];
+        }
+
+        // cells
+        let rowPointer = 0;
+        let colPointer = 0;
+        for (let i=0; i<this.elements.length; i++) {
+            let colSize = colSizes[i], rowSize = rowSizes[i];
+
+            // weitere benötigte felder markieren
+            for (let ri=0; ri<rowSize; ri++) {
+                for (let ci=0; ci<colSize; ci++) {
+                    if (!matrix[rowPointer + ri]) {
+                        matrix[rowPointer + ri] = [];
+                    }
+                    matrix[rowPointer + ri][colPointer + ci] = (ri === 0 && ci === 0) ? i : 'R';
+                }
+            }
+
+            // pointer erhöhen
+            if (this.elements[i+1]) {
+                let nextFound = false;
+                while (!nextFound) {
+                    rowPointer++;
+
+                    if (rowPointer >= rows && (colPointer+1) < this._columns) {
+                        colPointer++;
+                        rowPointer = 0;
+                    }
+
+                    if (!matrix[rowPointer] || !matrix[rowPointer][colPointer]) {
+                        nextFound = true;
+                    }
+                }
+            }
+        }
+
+        return matrix;
+    }
+
+
+
+    // OVERWRITE
+    _renderElements() {
+        let matrix = this._getTableMatrix();
+
+        // tabelle ausgeben
+        this._tableDom.renderTo(this._innerDom.node);
+        kijs.Dom.removeAllChildNodes(this._tableDom.node);
+
+        // Spalten erstellen
+        for (let iR=0; iR<matrix.length; iR++) {
+            let tr = document.createElement('tr');
+            for (let iC=0; iC<matrix[iR].length; iC++) {
+                if (kijs.isInteger(matrix[iR][iC])) {
+                    let elId = matrix[iR][iC];
+                    let td = document.createElement('td');
+                    let cS = this.colSizes[elId];
+                    let rS = this.rowSizes[elId];
+
+                    if (cS > 1) {
+                        td.setAttribute('colspan', cS);
+                    }
+                    if (rS > 1) {
+                        td.setAttribute('rowspan', rS);
+                    }
+
+                    tr.appendChild(td);
+                    this.elements[elId].renderTo(td);
+                }
+            }
+            this._tableDom.node.appendChild(tr);
+        }
     }
 
 

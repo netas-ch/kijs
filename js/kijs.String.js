@@ -197,7 +197,7 @@ kijs.String = class kijs_String {
         text = kijs.isEmpty(text) ? '' : text;
         search = kijs.isEmpty(search) ? '' : search;
         replace = kijs.isEmpty(replace) ? '' : replace;
-        return text.split(search).join(replace);
+        return kijs.isFunction(text.replaceAll) ? text.replaceAll(search, replace) : text.split(search).join(replace);
     }
 
     /**

@@ -301,18 +301,16 @@ kit.App = class kit_App {
                             headerElements: [
                                 {
                                     xtype: 'kijs.gui.ButtonGroup',
+                                    rowSizes:[2],
                                     caption: 'Funktionen',
-                                    width: 240,
-                                    height: 150,
-                                    innerStyle: {
-                                        columnCount: 3
-                                    },
+                                    width: 400,
+                                    height: 135,
+                                    columns: 3,
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Neu',
-                                            iconChar: '&#xf055',
-                                            height: 120
+                                            iconChar: '&#xf055'
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Duplizieren',
@@ -1443,6 +1441,19 @@ kit.App = class kit_App {
                                                             }
                                                         });
                                                     }}
+                                                },{
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Mask',
+                                                    isDefault: true,
+                                                    on: {
+                                                        click: function() {
+                                                            let waitMask = new kijs.gui.Mask({
+                                                                displayWaitIcon: true,
+                                                                target: window
+                                                            });
+                                                            waitMask.show();
+                                                        }
+                                                    }
                                                 }
                                             ]
                                         });

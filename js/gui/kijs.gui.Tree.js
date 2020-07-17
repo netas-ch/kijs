@@ -44,6 +44,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl = new kijs.gui.Icon({cls: 'kijs-expandedicon'});
         this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon', iconCls: 'kijs-pulse', iconChar: '&#xf110'});
 
+        this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-tree');
 
         // Events
@@ -115,6 +116,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
+        }
+
+        if (this.isRoot) {
+            this._dom.clsAdd('kijs-tree-root');
         }
     }
 

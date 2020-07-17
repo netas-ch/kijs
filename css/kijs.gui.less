@@ -1103,22 +1103,34 @@ div.kijs-buttongroup {
     }
 
     > .kijs-container-inner {
-        > .kijs-button {
-            display: block;
-            margin: 4px;
-            /*border-radius: 0;*/
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        align-content: stretch;
+
+        > table {
+            flex: 1;
+            border-collapse: collapse;
+            border: 4px solid transparent;
+            border-spacing: 0;
+            margin: 2px 0;
             padding: 0;
-            background-color: @buttonGroup-button-bkgrndColor;
+            width: 100%;
 
-            * {
-                line-height: 30px;
-            }
+            .kijs-button {
+                display: inline-block;
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 5px;
+                background-color: @buttonGroup-button-bkgrndColor;
 
-            &:hover,
-            &:focus {
-                background-color: @buttonGroup-button-focus-bkgrndColor;
-                > * {
-                    color: @buttonGroup-button-focus-fontColor;
+                &:hover,
+                &:focus {
+                    background-color: @buttonGroup-button-focus-bkgrndColor;
+                    > * {
+                        color: @buttonGroup-button-focus-fontColor;
+                    }
                 }
             }
         }
@@ -1129,12 +1141,21 @@ div.kijs-buttongroup {
    * Tree
    ****************** */
 div.kijs-tree {
+
+    &.kijs-tree-root > .kijs-container-inner {
+        height: 100%;
+        overflow: auto;
+
+        > div {
+            flex-shrink: 0;
+        }
+    }
+
     > .kijs-container-inner {
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        overflow: auto;
 
         > .kijs-node {
             display: flex;
@@ -1174,8 +1195,7 @@ div.kijs-tree {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                height: 100%;
-                margin: 0;
+                margin: 4px 0;
                 font-size: @default-fontSize;
                 line-height: 11px;
                 font-family: @default-fontFamily;
