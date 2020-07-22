@@ -786,7 +786,19 @@ kit.App = class kit_App {
                                             label: 'Datum & Zeit',
                                             readOnly: false,
                                             width: 290,
-                                            value: 1571314912
+                                            value: 1571314912,
+                                            elements:[
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Ganztägig',
+                                                    on: {
+                                                        click: function(e) {
+                                                            e.element.parent.hasTime = !e.element.parent.hasTime;
+                                                        },
+                                                        context: this
+                                                    }
+                                                }
+                                            ]
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Datum',

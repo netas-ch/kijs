@@ -54,7 +54,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasSeconds = false;
         this._timeRequired = false;
         this._displayFormat = null;
-        let useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
+        this._useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -151,35 +151,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.applyConfig(config, true);
         }
 
-        if (!this._hasDate && !this._hasTime) {
-            throw new kijs.Error('hasDate and hasTime is false, nothing to display');
-        }
-        if (useDefaultSpinIcon && !this._hasDate) {
-            this.spinIconChar = '&#xf017'; // clock
-        }
-
-        if (this._hasDate) {
-            this._spinBoxEl.add(this._datePicker);
-            this._spinBoxEl.width = 187;
-        } else {
-            this._spinBoxEl.remove(this._datePicker);
-        }
-
-        if (this._hasTime) {
-            this._spinBoxEl.add(this._timePicker);
-            this._spinBoxEl.width = 157;
-        } else {
-            this._spinBoxEl.remove(this._timePicker);
-        }
-
-        if (this._hasDate && this._hasTime) {
-            this._spinBoxEl.add(this._spBxSeparator);
-            this._spinBoxEl.width = 187+157+3;
-        } else {
-            this._spinBoxEl.remove(this._spBxSeparator);
-        }
-
-        this._timePicker.hasSeconds = !!this._hasSeconds;
+        this._createSpinBoxElements();
     }
 
 
@@ -198,13 +170,28 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     get hasDate() { return this._hasDate; }
-    set hasDate(val) { this._hasDate = !!val; }
+    set hasDate(val) {
+        this._hasDate = !!val;
+
+        this._spinBoxEl.removeAll();
+        this._createSpinBoxElements();
+
+        this.value = this.value;
+    }
 
     get hasSeconds() { return this._hasSeconds; }
     set hasSeconds(val) { this._hasSeconds = !!val; }
 
     get hasTime() { return this._hasTime; }
-    set hasTime(val) { this._hasTime = !!val; }
+    set hasTime(val) {
+        this._hasTime = !!val;
+
+        this._spinBoxEl.removeAll();
+        this._createSpinBoxElements();
+
+        this.value = this.value;
+    }
+
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
@@ -284,6 +271,38 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._inputDom.unrender();
         super.unrender(true);
+    }
+
+    // Protected
+    _createSpinBoxElements() {
+        if (!this._hasDate && !this._hasTime) {
+            throw new kijs.Error('hasDate and hasTime is false, nothing to display');
+        }
+        if (this._useDefaultSpinIcon && !this._hasDate) {
+            this.spinIconChar = '&#xf017'; // clock
+        }
+
+        if (this._hasDate) {
+            this._spinBoxEl.add(this._datePicker);
+            this._spinBoxEl.width = 187;
+        } else {
+            this._spinBoxEl.remove(this._datePicker);
+        }
+
+        if (this._hasDate && this._hasTime) {
+            this._spinBoxEl.add(this._spBxSeparator);
+        } else {
+            this._spinBoxEl.remove(this._spBxSeparator);
+        }
+
+        if (this._hasTime) {
+            this._spinBoxEl.add(this._timePicker);
+            this._spinBoxEl.width = 157 + (this._hasDate ? 187 + 3 : 0);
+        } else {
+            this._spinBoxEl.remove(this._timePicker);
+        }
+
+        this._timePicker.hasSeconds = !!this._hasSeconds;
     }
 
     /**
