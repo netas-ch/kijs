@@ -33,6 +33,8 @@ kijs.Navigator = class kijs_Navigator {
     static get osVendor()  { return kijs.Navigator.getBrowserInfo().osVendor; }
     static get osVersion() { return kijs.Navigator.getBrowserInfo().osVersion; }
 
+    static get getParams() { return kijs.Navigator.getGetParams(); }
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -203,6 +205,22 @@ kijs.Navigator = class kijs_Navigator {
         }
 
         return bi;
+    }
+
+    /**
+     * Fragt alle 'GET' Parameter in der URL ab.
+     */
+    static getGetParams() {
+        let params = {};
+        if (location.search && location.search.length > 2) {
+            kijs.Array.each(location.search.substr(1).split('&'), function(p) {
+                let tmp = p.split('=');
+                if (tmp.length === 2) {
+                    params[tmp[0]] = decodeURIComponent(tmp[1]);
+                }
+            });
+        }
+        return params;
     }
 
     static _browserVersion(ua, browser) {

@@ -440,10 +440,10 @@ window.kijs = class kijs {
      * @returns {String}
      */
     static uniqId(prefix = '') {
-        if (!window.kijs.__uniqId) {
-            window.kijs.__uniqId = 0;
+        if (!kijs.__uniqId) {
+            kijs.__uniqId = 0;
         }
-        window.kijs.__uniqId++;
-        return 'kijs-' + (prefix ? prefix + '-' : '') + window.kijs.__uniqId;
+        kijs.__uniqId++;
+        return 'kijs-' + (prefix ? prefix + '-' : '') + kijs.__uniqId;
     }
 };
