@@ -126,6 +126,17 @@
   "gui":[
    "css/kijs.gui.less"
   ]
+ },
+ 
+ 
+ "fonts":{
+  "gui":[
+    "fonts/fontawesome-webfont.eot",
+    "fonts/fontawesome-webfont.woff2",
+    "fonts/fontawesome-webfont.woff",
+    "fonts/fontawesome-webfont.ttf",
+    "fonts/fontawesome-webfont.svg"
+  ]
  }
  
 }

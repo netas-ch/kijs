@@ -40,8 +40,6 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Eleme
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        this.applyConfig(config);
     }
 
 
