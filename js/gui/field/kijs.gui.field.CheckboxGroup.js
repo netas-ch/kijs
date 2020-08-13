@@ -13,6 +13,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         super(false);
 
         this._checkedAll = false;
+        this._originalValue = null;
 
         this._dom.clsRemove('kijs-field-listview');
         this._dom.clsAdd('kijs-field-checkboxgroup');
@@ -74,6 +75,21 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this.value = value;
     }
 
+    get isDirty() { return this._originalValue.length !== this.value.length || this._originalValue.every((val, index) => val !== this.value[index]); }
+    set isDirty(val) {
+        if (val) { // mark as dirty
+            this._originalValue = this.value === null ? '' : null;
+
+        } else { // mark as not dirty
+            this._originalValue = this.value;
+        }
+    }
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+    // Protected
+
     _checkeAll(val) {
         let ids = [];
 
@@ -90,7 +106,9 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         if (this._checkedAll) {
             this._checkeAll(true);
         }
+
+        this._originalValue = this.value;
+
+        this.raiseEvent('afterLoad');
     }
-
-
 };
