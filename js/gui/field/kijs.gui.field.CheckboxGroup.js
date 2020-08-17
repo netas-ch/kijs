@@ -75,7 +75,17 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this.value = value;
     }
 
-    get isDirty() { return this._originalValue.length !== this.value.length || this._originalValue.every((val, index) => val !== this.value[index]); }
+    get isDirty() {
+        if (this._originalValue.length !== this.value.length) {
+            return true;
+        }
+
+        if (this.value.length && this._originalValue.length && this._originalValue.every((val, index) => val !== this.value[index])) {
+            return true;
+        }
+
+        return false;
+    }
     set isDirty(val) {
         if (val) { // mark as dirty
             this._originalValue = this.value === null ? '' : null;
