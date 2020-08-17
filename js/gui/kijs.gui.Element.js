@@ -140,6 +140,7 @@
  * afterRender
  * afterResize
  * changeVisibility
+ * click
  * dblClick
  * destruct
  * drag
@@ -150,14 +151,22 @@
  * drop
  * focus
  * mouseDown
+ * mouseEnter
  * mouseLeave
  * mouseMove
  * mouseUp
+ * singleClick
+ * touchStart
+ * touchEnd
+ * touchMove
+ * touchCancel
  * unrender
  * wheel
  *
  * // key events
  * keyDown
+ * keyUp
+ * keyPress
  * enterPress
  * enterEscPress
  * escPress
@@ -251,6 +260,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseUp', this._dom);
         this._eventForwardsAdd('singleClick', this._dom);
         this._eventForwardsAdd('touchStart', this._dom);
+        this._eventForwardsAdd('touchEnd', this._dom);
+        this._eventForwardsAdd('touchMove', this._dom);
+        this._eventForwardsAdd('touchCancel', this._dom);
         this._eventForwardsAdd('wheel', this._dom);
 
         // key events
