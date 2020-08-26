@@ -10,7 +10,7 @@ $files = array(
         '../js/kijs.Object.js',
         '../js/kijs.Date.js',
         '../js/kijs.Dom.js',
-        '../js/kijs.Grafic.js',
+        '../js/kijs.Graphic.js',
         
         '../js/kijs.Observable.js',
         

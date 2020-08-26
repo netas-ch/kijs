@@ -145,7 +145,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
      * @returns {String}
      */
     _valueToHex(value) {
-        return '#' + kijs.Grafic.colorGetHex(value);
+        return '#' + kijs.Graphic.colorGetHex(value);
     }
 
     // overwrite

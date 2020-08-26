@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '1.1.2'; }
+    static get version() { return '1.1.3'; }
 
     static get keys() {
         return {

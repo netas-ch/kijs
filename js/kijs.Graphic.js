@@ -1,9 +1,9 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.Grafic (Static)
+// kijs.Graphic (Static)
 // --------------------------------------------------------------
-kijs.Grafic = class kijs_Grafic {
+kijs.Graphic = class kijs_Graphic {
 
 
     // --------------------------------------------------------------
@@ -141,9 +141,9 @@ kijs.Grafic = class kijs_Grafic {
      * @returns {undefined}
      */
     static colorChangeBrightness(color, brightness) {
-        let hsv = kijs.Grafic.colorRGBtoHSV(kijs.Grafic.colorGet(color));
+        let hsv = kijs.Graphic.colorRGBtoHSV(kijs.Graphic.colorGet(color));
         hsv.v = 1 / 100 * brightness;
-        return kijs.Grafic.colorHSVtoRGB(hsv);
+        return kijs.Graphic.colorHSVtoRGB(hsv);
     }
 
 
@@ -153,7 +153,7 @@ kijs.Grafic = class kijs_Grafic {
      * @returns {Number}
      */
     static colorGetBrightness(color) {
-        let hsv = kijs.Grafic.colorRGBtoHSV(kijs.Grafic.colorGet(color));
+        let hsv = kijs.Graphic.colorRGBtoHSV(kijs.Graphic.colorGet(color));
         return Math.round(100 * hsv.v);
     }
 
@@ -163,7 +163,7 @@ kijs.Grafic = class kijs_Grafic {
      * @returns {String}
      */
     static colorGetHex(color) {
-        color = kijs.Grafic.colorGet(color);
+        color = kijs.Graphic.colorGet(color);
         let hex = '';
         hex += kijs.String.padding(color.r.toString(16), 2, '0', 'left');
         hex += kijs.String.padding(color.g.toString(16), 2, '0', 'left');
@@ -240,10 +240,10 @@ kijs.Grafic = class kijs_Grafic {
             return color;
 
         } else if (kijs.isObject(color) && kijs.isDefined(color.h)  && kijs.isDefined(color.s)  && kijs.isDefined(color.v)) {
-            return kijs.Grafic.colorHSVtoRGB(color);
+            return kijs.Graphic.colorHSVtoRGB(color);
         }
 
-        throw new Error('kijs.Grafic: invalid argument for color');
+        throw new Error('kijs.Graphic: invalid argument for color');
     }
 
     /**

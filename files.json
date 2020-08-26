@@ -10,7 +10,7 @@
    "js/kijs.Number.js",
    "js/kijs.Date.js",
    "js/kijs.Dom.js",
-   "js/kijs.Grafic.js",
+   "js/kijs.Graphic.js",
    "js/kijs.Navigator.js",
    "js/kijs.DragDrop.js",
    "js/kijs.Char.js",
