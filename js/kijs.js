@@ -213,7 +213,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Text für übersetzung zurückgeben
+     * Text für Übersetzung zurückgeben
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
@@ -360,7 +360,7 @@ window.kijs = class kijs {
      * @returns {Boolean}
      */
     static isNumeric(value) {
-        return this.isNumber(value) || !!(this.isString(value) && value.match(/^-{0,1}[0-9]+(\.[0-9]+){0,1}$/));
+        return this.isNumber(value) || !!(this.isString(value) && value.match(/^-?[0-9]+(?:\.[0-9]+)?$/));
     }
 
     /**

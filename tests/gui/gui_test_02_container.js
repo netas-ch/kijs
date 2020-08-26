@@ -19,16 +19,16 @@ function gui_test_02_container() {
     // --------------------------------------------------------------
     // Testanweisungen
     // --------------------------------------------------------------
-    // Container mit html, ToolTip und Events
+    // Container mit html, Tooltip und Events
     let cont = new kijs.gui.Container({
         html: 'Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen',
         style: { backgroundColor:'#ddd'},
         innerStyle: { backgroundColor: '#afa' },
-        toolTip: { html: '<p>Test</p>', followPointer: false },
+        tooltip: { html: '<p>Test</p>', followPointer: false },
         on: {
             click: function(e) {
-                e.element.toolTip.disabled = !this.toolTip.disabled;
-                cont.html = 'toolTip ' + (e.element.toolTip.disabled ? 'disable' : 'enable');
+                e.element.tooltip.disabled = !this.tooltip.disabled;
+                cont.html = 'tooltip ' + (e.element.tooltip.disabled ? 'disable' : 'enable');
             },
             enterPress: function(e) {
                 if (kijs.isNumeric(cont.html)) {

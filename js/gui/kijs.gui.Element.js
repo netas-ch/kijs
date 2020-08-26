@@ -49,10 +49,10 @@
  * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
  *                                      Beispiel: style:{background-color:'#ff8800'}
  *
- * toolTip      String|Object|kijs.gui.ToolTip [optional]  ToolTip als
+ * tooltip      String|Object|kijs.gui.Tooltip [optional]  Tooltip als
  *                                                   - String (HTML-Code). Beispiel: html:'<p>Hallo Welt</p>'
- *                                                   - ToolTip-Config Objekt
- *                                                   - kijs.gui.ToolTip-Instanz
+ *                                                   - Tooltip-Config Objekt
+ *                                                   - kijs.gui.Tooltip-Instanz
  *
  * top          Number [optional]       Y-Koordinate
  *
@@ -123,7 +123,7 @@
  *
  * style        (readonly)
  *
- * toolTip
+ * tooltip
  *
  * top          Number                  Y-Koordinate
  *
@@ -225,7 +225,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
-            toolTip: { target: 'toolTip' },
+            tooltip: { target: 'tooltip' },
+            toolTip: { target: 'toolTip' }, // DEPRECATED
             top: { target: 'top' },
             visible : true,
             displayWaitMask: { target: 'displayWaitMask' },
@@ -422,10 +423,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     get style() { return this._dom.style; }
 
-    get toolTip() { return this._dom.toolTip; }
-    set toolTip(val) {
-        this._dom.toolTip = val;
-    };
+    get toolTip() { console.warn('DEPRECATED: element.toolTip, please use element.tooltip'); return this.tooltip; }
+    set toolTip(val) { console.warn('DEPRECATED: element.toolTip, please use element.tooltip'); this.tooltip = val;  };
+
+    get tooltip() { return this._dom.tooltip; }
+    set tooltip(val) { this._dom.tooltip = val; };
 
     get top() { return this._dom.top; }
     set top(val) { this._dom.top = val; }

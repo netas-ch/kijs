@@ -75,7 +75,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             parent: this,
             iconChar: '&#xf05a',
             cls: 'kijs-icon-error',
-            toolTip: new kijs.gui.ToolTip({ cls: 'kijs-error' }),
+            tooltip: new kijs.gui.Tooltip({ cls: 'kijs-error' }),
             visible: false
         });
 
@@ -85,7 +85,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             parent: this,
             iconChar: '&#xf059',
             cls: 'kijs-icon-help',
-            toolTip: new kijs.gui.ToolTip({ cls: 'kijs-help' }),
+            tooltip: new kijs.gui.Tooltip({ cls: 'kijs-help' }),
             visible: false
         });
 
@@ -292,10 +292,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
-    get helpText() { return this._helpIconEl.toolTip.html; }
+    get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
-        this._helpIconEl.toolTip = val;
-        this._helpIconEl.visible = !kijs.isEmpty(this._helpIconEl.toolTip.html);
+        this._helpIconEl.tooltip = val;
+        this._helpIconEl.visible = !kijs.isEmpty(this._helpIconEl.tooltip.html);
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
@@ -568,7 +568,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     _displayErrors() {
         if (!kijs.isEmpty(this._errors)) {
             this._dom.clsAdd('kijs-error');
-            this._errorIconEl.toolTip = this._errors;
+            this._errorIconEl.tooltip = this._errors;
             this._errorIconEl.visible = true;
         } else {
             this._dom.clsRemove('kijs-error');

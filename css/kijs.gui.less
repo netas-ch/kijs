@@ -771,9 +771,11 @@ button.kijs-button {
         z-index: 1;
     }
 
-    &:hover,
-    &:focus {
+    &:hover {
         background-color: @button-focus-bkgrndColor;
+        border: 1px solid @button-focus-borderColor;
+    }
+    &:focus {
         border: 1px solid @button-focus-borderColor;
     }
     &:hover > .kijs-caption,
@@ -2711,7 +2713,7 @@ div.kijs-timepicker {
 
 
 /* ******************
-   * ToolTip
+   * Tooltip
    ****************** */
 div.kijs-tooltip {
     position: fixed;

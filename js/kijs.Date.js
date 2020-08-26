@@ -242,7 +242,7 @@ kijs.Date = class kijs_Date {
         }
 
         // Ist das Datum ungültig?
-        if (ret && isNaN(ret.valueOf())) {
+        if (!kijs.isDate(ret)) {
             ret = null;
         }
 

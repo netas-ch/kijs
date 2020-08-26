@@ -47,7 +47,7 @@ function gui_test_04_button() {
     button = new kijs.gui.Button({
         caption: 'isDefault',
         isDefault: true,
-        toolTip: 'click to toggle isDefault',
+        tooltip: 'click to toggle isDefault',
         style: { marginRight: '4px'},
         on: {
             click: function() {
@@ -61,7 +61,7 @@ function gui_test_04_button() {
     button = new kijs.gui.Button({
         caption: 'Disabled',
         badgeText: '4',
-        toolTip: 'click to disable',
+        tooltip: 'click to disable',
         style: { marginRight: '4px'},
         on: {
             click: function() {

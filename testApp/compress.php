@@ -19,7 +19,7 @@ $files = array(
         
         '../js/gui/kijs.gui.js',
         '../js/gui/kijs.gui.Dom.js',
-        '../js/gui/kijs.gui.ToolTip.js',
+        '../js/gui/kijs.gui.Tooltip.js',
         '../js/gui/kijs.gui.Element.js',
         '../js/gui/kijs.gui.Container.js',
         '../js/gui/kijs.gui.SpinBox.js',

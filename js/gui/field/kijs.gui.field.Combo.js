@@ -84,7 +84,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
-            toolTipField: { target: 'toolTipField', context: this._listViewEl },
+            tooltipField: { target: 'tooltipField', context: this._listViewEl },
             valueField: { target: 'valueField', context: this._listViewEl },
 
             minSelectCount: true,

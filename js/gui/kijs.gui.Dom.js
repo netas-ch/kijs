@@ -182,7 +182,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         this._style = {};
 
-        this._toolTip = null;
+        this._tooltip = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -206,7 +206,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             nodeTagName: true,
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
-            toolTip: { target: 'toolTip' }
+            tooltip: { target: 'tooltip' },
+            toolTip: { target: 'toolTip' } // DEPRECATED
         };
 
         // Mapping das aussagt, welche DOM-Node-Events bei welchem kijs-Event abgefragt werden sollen
@@ -296,8 +297,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (this._node) {
             this._node.disabled = !!val;
         }
-        if (this._toolTip) {
-            this._toolTip.disabled = !!val;
+        if (this._tooltip) {
+            this._tooltip.disabled = !!val;
         }
     }
 
@@ -473,22 +474,25 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
-    get toolTip() { return this._toolTip; }
-    set toolTip(val) {
-        if (kijs.isEmpty(val)) {
-            if (this._toolTip) {
-                this._toolTip.destruct();
-            }
-            this._toolTip = null;
+    get toolTip() { console.warn('DEPRECATED: Dom.toolTip, please use Dom.tooltip'); return this.tooltip; }
+    set toolTip(val) { console.warn('DEPRECATED: Dom.toolTip, please use Dom.tooltip'); this.tooltip = val;  };
 
-        } else if (val instanceof kijs.gui.ToolTip) {
-            this._toolTip = val;
+    get tooltip() { return this._tooltip; }
+    set tooltip(val) {
+        if (kijs.isEmpty(val)) {
+            if (this._tooltip) {
+                this._tooltip.destruct();
+            }
+            this._tooltip = null;
+
+        } else if (val instanceof kijs.gui.Tooltip) {
+            this._tooltip = val;
 
         } else if (kijs.isObject(val)) {
-            if (this._toolTip) {
-                this._toolTip.applyConfig(val);
+            if (this._tooltip) {
+                this._tooltip.applyConfig(val);
             } else {
-                this._toolTip = new kijs.gui.ToolTip(val);
+                this._tooltip = new kijs.gui.Tooltip(val);
             }
 
         } else if (kijs.isArray(val)) {
@@ -504,26 +508,26 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             } else {
                 val = '';
             }
-            if (this._toolTip) {
-                this._toolTip.html = val;
+            if (this._tooltip) {
+                this._tooltip.html = val;
             } else {
-                this._toolTip = new kijs.gui.ToolTip({ html: val });
+                this._tooltip = new kijs.gui.Tooltip({ html: val });
             }
 
         } else if (kijs.isString(val)) {
-            if (this._toolTip) {
-                this._toolTip.html = val;
+            if (this._tooltip) {
+                this._tooltip.html = val;
             } else {
-                this._toolTip = new kijs.gui.ToolTip({ html: val });
+                this._tooltip = new kijs.gui.Tooltip({ html: val });
             }
 
         } else {
-            throw new kijs.Error(`Unkown toolTip format`);
+            throw new kijs.Error(`Unkown tooltip format`);
 
         }
 
-        if (this._toolTip) {
-            this._toolTip.target = this;
+        if (this._tooltip) {
+            this._tooltip.target = this;
         }
     }
 
@@ -1092,8 +1096,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
         this._node = null;
 
-        if (this._toolTip) {
-            this._toolTip.unrender();
+        if (this._tooltip) {
+            this._tooltip.unrender();
         }
     }
 
@@ -1233,9 +1237,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // Unrender
         this.unrender();
 
-        // ToolTip entladen
-        if (this._toolTip) {
-            this._toolTip.destruct();
+        // Tooltip entladen
+        if (this._tooltip) {
+            this._tooltip.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
@@ -1246,7 +1250,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._nodeAttribute = null;
         this._nodeEventListeners = null;
         this._style = null;
-        this._toolTip = null;
+        this._tooltip = null;
 
         // Basisklasse entladen
         super.destruct();

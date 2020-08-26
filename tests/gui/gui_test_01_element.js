@@ -22,11 +22,11 @@ function gui_test_01_element() {
     let el = new kijs.gui.Element({
         html: 'Bitte "Enter" drücken, draufklicken oder Maus über mich bewegen',
         style: { backgroundColor:'#ddd'},
-        toolTip: { html: '<p>Test</p>', followPointer: false },
+        tooltip: { html: '<p>Test</p>', followPointer: false },
         on: {
             click: function(e) {
-                e.element.toolTip.disabled = !this.toolTip.disabled;
-                el.html = 'toolTip ' + (e.element.toolTip.disabled ? 'disable' : 'enable');
+                e.element.tooltip.disabled = !this.tooltip.disabled;
+                el.html = 'tooltip ' + (e.element.tooltip.disabled ? 'disable' : 'enable');
             },
             enterPress: function(e) {
                 if (kijs.isNumeric(el.html)) {

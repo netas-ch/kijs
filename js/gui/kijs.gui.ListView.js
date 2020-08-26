@@ -18,7 +18,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._iconCharField = null;
         this._iconClsField = null;
         this._iconColorField = null;
-        this._toolTipField = null;
+        this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
         this._ddSort = false;
@@ -38,7 +38,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             iconClsField: true,
             iconColorField: true,
             showCheckBoxes: true,
-            toolTipField: true,
+            tooltipField: true,
             valueField: true,
             ddSort: true,
 
@@ -79,8 +79,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
 
-    get toolTipField() { return this._toolTipField; }
-    set toolTipField(val) { this._toolTipField = val; }
+    get tooltipField() { return this._tooltipField; }
+    set tooltipField(val) { this._tooltipField = val; }
 
     get valueField() { return this._valueField; }
     set valueField(val) { this._valueField = val; }
@@ -158,10 +158,10 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
         html += '</span>';
 
-        // ToolTip
-        let toolTip = '';
-        if (!kijs.isEmpty(this._toolTipField) && !kijs.isEmpty(dataRow[this._toolTipField])) {
-            toolTip = dataRow[this._toolTipField];
+        // Tooltip
+        let tooltip = '';
+        if (!kijs.isEmpty(this._tooltipField) && !kijs.isEmpty(dataRow[this._tooltipField])) {
+            tooltip = dataRow[this._tooltipField];
         }
 
         // Checkbox
@@ -183,7 +183,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         let dve = new kijs.gui.DataViewElement({
             dataRow: dataRow,
             html: html,
-            toolTip: toolTip,
+            tooltip: tooltip,
             cls: cls
         });
 

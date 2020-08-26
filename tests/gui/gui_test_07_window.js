@@ -45,7 +45,7 @@ function gui_test_07_window() {
                 caption: 'Hide',
                 iconCls: 'icoWizard16',
                 badgeText: '1',
-                toolTip: { html: '<p>Test</p>', followPointer: false },
+                tooltip: { html: '<p>Test</p>', followPointer: false },
                 on: {
                     click: function() {
                         this.visible = false;
@@ -206,7 +206,7 @@ function gui_test_07_window() {
                 caption: 'Hide',
                 iconCls: 'icoWizard16',
                 badgeText: '1',
-                toolTip: { html: '<p>Test</p>', followPointer: false },
+                tooltip: { html: '<p>Test</p>', followPointer: false },
                 on: {
                     click: function() {
                         this.visible = false;

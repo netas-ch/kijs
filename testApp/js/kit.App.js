@@ -158,7 +158,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Wechsel zu 2',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -182,7 +182,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'fade',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -193,7 +193,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideLeft 1s',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -204,7 +204,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideRight',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -215,7 +215,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideTop',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -226,7 +226,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideBottom',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -237,7 +237,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Add panel',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -255,7 +255,7 @@ kit.App = class kit_App {
                                                                     xtype: 'kijs.gui.Button',
                                                                     caption: 'Remove panel',
                                                                     iconChar: '&#xf0d0',
-                                                                    toolTip: 'test',
+                                                                    tooltip: 'test',
                                                                     on: {
                                                                         click: function() {
                                                                             let testcontainerstack = this.up('testcontainerstack');
@@ -472,6 +472,24 @@ kit.App = class kit_App {
                                             }]
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
+                                            name: 'ServerSortCombo',
+                                            label: 'Server Sort mit langem Label',
+                                            facadeFnLoad: 'combo.load',
+                                            autoLoad: true,
+                                            remoteSort: true,
+                                            rpc: this._rpc,
+                                            spinIconVisible: true,
+                                            elements: [{
+                                                xtype: 'kijs.gui.Button',
+                                                iconChar: '&#xf111',
+                                                on: {
+                                                    click: function() {
+                                                        this.up('ServerSortCombo').value = 3084;
+                                                    }
+                                                }
+                                            }]
+                                        },{
+                                            xtype: 'kijs.gui.field.Combo',
                                             name: 'Test',
                                             label: 'Kein Force',
                                             facadeFnLoad: 'combo.load',
@@ -542,7 +560,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             this.upX('kijs.gui.field.Checkbox').checked = 2;
@@ -588,7 +606,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let chkBox = this.upX('kijs.gui.field.Checkbox');
@@ -623,7 +641,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             console.log(this.parent);
@@ -705,7 +723,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let val = this.parent.value;
@@ -714,7 +732,7 @@ kit.App = class kit_App {
                                                                 val = null;
                                                             }
                                                             this.parent.value = val;
-                                                            this.toolTip = this.parent.value + '';
+                                                            this.tooltip = this.parent.value + '';
                                                         }
                                                     }
                                                 }
@@ -737,7 +755,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'test',
+                                                    tooltip: 'test',
                                                     on: {
                                                         click: function() {
                                                             let val = this.parent.value;
@@ -746,7 +764,7 @@ kit.App = class kit_App {
                                                                 val = null;
                                                             }
                                                             this.parent.value = val;
-                                                            this.toolTip = this.parent.value + '';
+                                                            this.tooltip = this.parent.value + '';
                                                         }
                                                     }
                                                 }
@@ -809,7 +827,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
-                                                    toolTip: 'Feld leeren',
+                                                    tooltip: 'Feld leeren',
                                                     on: {
                                                         click: function() {
                                                             this.parent.value = '';
@@ -817,6 +835,12 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
+                                        },{
+                                            xtype: 'kijs.gui.field.Text',
+                                            name: 'Feld 33',
+                                            label: 'Feld 33',
+                                            labelHtmlDisplayType : 'html',
+                                            value: 'Hallo Welt 33'
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
@@ -922,7 +946,7 @@ kit.App = class kit_App {
                                             captionField: 'Bezeichnung',
                                             iconCharField: 'Icon',
                                             iconColorField: 'Color',
-                                            toolTipField: 'Color',
+                                            tooltipField: 'Color',
                                             showCheckBoxes: true,
                                             selectType: 'simple',
                                             helpText: 'Hilfe Text!',
@@ -1096,9 +1120,9 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Validieren',
                                             badgeText: 'test',
-                                            toolTip: 'Da darfst Du nicht draufdrücken!',
+                                            tooltip: 'Da darfst Du nicht draufdrücken!',
                                             on: {click: function() {
-                                                this.toolTip = 'Nein, er hat es tatsächlich getan!';
+                                                this.tooltip = 'Nein, er hat es tatsächlich getan!';
                                                 this.parent.parent.validate();
                                             }}
                                         },{

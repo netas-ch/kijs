@@ -141,55 +141,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
     /**
      * Konvertiert eingaben in das Hex-Format (#FF00FF)
-     * @param {String|Array} value
+     * @param {String|Array|Object} value
      * @returns {String}
      */
     _valueToHex(value) {
-        // rgb-array [r, g, b]
-        if (kijs.isArray(value) && value.length === 3) {
-            return '#'
-                + this._dec2hex(value[0])
-                + this._dec2hex(value[1])
-                + this._dec2hex(value[2]);
-
-
-        } else if (kijs.isString(value)) {
-            value = value.toUpperCase();
-
-            // #FFF oder AAFF11
-            if (value.match(/^#?([0-9A-F]{6}|[0-9A-F]{3})$/)) {
-                return value.replace(/^#?([0-9A-F]{6}|[0-9A-F]{3})$/, (m, clr) => {
-                    if (clr.length === 6) {
-                        return '#' + clr;
-                    } else {
-                        return '#' + kijs.String.repeat(clr[0], 2) + kijs.String.repeat(clr[1], 2) + kijs.String.repeat(clr[2], 2);
-                    }
-                });
-            }
-
-            // rgb(244, 0, 244)
-            if (value.match(/^\s*RGB\(\s*([0-9]+),\s*([0-9]+),\s*([0-9]+)\s*\)\s*$/)) {
-                return value.replace(/^\s*RGB\(\s*([0-9]+),\s*([0-9]+),\s*([0-9]+)\s*\)\s*$/, (m, r, g, b) => {
-                   return '#'
-                        + this._dec2hex(r)
-                        + this._dec2hex(g)
-                        + this._dec2hex(b);
-                });
-            }
-        }
-
-        return '#FFFFFF';
-    }
-
-    _dec2hex(dec) {
-        dec = window.parseInt(dec);
-        if (dec > 255) {
-            dec = 255;
-        }
-        if (dec < 0) {
-            dec = 0;
-        }
-        return kijs.String.padding(dec.toString(16), 2, '0', 'left');
+        return '#' + kijs.Grafic.colorGetHex(value);
     }
 
     // overwrite
