@@ -233,6 +233,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             scroll: { nodeEventName: 'scroll', useCapture: false },
             singleClick: { nodeEventName: 'click', useCapture: false, interrupt: kijs.doubleClickSpeed },
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
+            touchEnd: { nodeEventName: 'touchend', useCapture: false },
+            touchMove: { nodeEventName: 'touchmove', useCapture: false },
+            touchCancel: { nodeEventName: 'touchcancel', useCapture: false },
             wheel: { nodeEventName: 'wheel', useCapture: false },
 
             // key events

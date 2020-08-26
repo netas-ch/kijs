@@ -22,7 +22,7 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         this._filterXtype = 'kijs.gui.grid.filter.Date';
 
         this._hasTime = false;
-        this._format = 'd.m.Y';
+        this._format = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -39,6 +39,14 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
+        }
+
+        if (!this._format) {
+            if (this._hasTime) {
+                this._format = 'd.m.Y H:i';
+            } else {
+                this._format = 'd.m.Y';
+            }
         }
 
         this.cellConfig = {

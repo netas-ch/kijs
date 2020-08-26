@@ -392,14 +392,14 @@ kit.App = class kit_App {
 //                                            return rows;
 //                                        })()
                                     }]
-                                }/*{
+                                },{
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Quill Editor',
                                     shadow: true,
                                     visible: false,
                                     height: '600',
                                     cls: 'kijs-flexcolumn',
-                                    elements: [
+                                    elements: [/*
                                         {
                                             xtype: 'kijs.gui.field.QuillEditor',
                                             theme: 'snow',
@@ -420,11 +420,11 @@ kit.App = class kit_App {
                                                 flex: 1
                                             }
                                         }
-                                    ],
+                                    */],
                                     style: {
                                         marginTop:'10px'
                                     }
-                                }*/,{
+                                },{
                                     xtype: 'kijs.gui.FormPanel',
                                     name: 'addressPanel',
                                     caption: 'Adresse',
@@ -619,6 +619,24 @@ kit.App = class kit_App {
                                             ]
                                         },{
                                             xtype: 'kijs.gui.field.CheckboxGroup',
+                                            label: 'CheckboxGroup Fix',
+                                            checkedAll: true,
+                                            data: [
+                                                { caption: 'Januar', value: 1},
+                                                { caption: 'Februar', value: 2},
+                                                { caption: 'März', value: 3},
+                                                { caption: 'April', value: 4},
+                                                { caption: 'Mai', value: 5},
+                                                { caption: 'Juni', value: 6},
+                                                { caption: 'Juli', value: 7},
+                                                { caption: 'August', value: 8},
+                                                { caption: 'September', value: 9},
+                                                { caption: 'Oktober', value: 10},
+                                                { caption: 'November', value: 11},
+                                                { caption: 'Dezember', value: 12}
+                                            ]
+                                        },{
+                                            xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroup',
                                             label: 'CheckboxGroup',
                                             valueField: 'id',
@@ -669,6 +687,7 @@ kit.App = class kit_App {
                                             label: 'CheckboxGroup Inline',
                                             cls: 'kijs-inline',
                                             valueField: 'color',
+                                            checkedAll: true,
                                             captionField: 'Bez',
                                             iconCharField: 'iconChar',
                                             iconColorField: 'color',
@@ -783,7 +802,19 @@ kit.App = class kit_App {
                                             label: 'Datum & Zeit',
                                             readOnly: false,
                                             width: 290,
-                                            value: 1571314912
+                                            value: 1571314912,
+                                            elements:[
+                                                {
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Ganztägig',
+                                                    on: {
+                                                        click: function(e) {
+                                                            e.element.parent.hasTime = !e.element.parent.hasTime;
+                                                        },
+                                                        context: this
+                                                    }
+                                                }
+                                            ]
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Datum',

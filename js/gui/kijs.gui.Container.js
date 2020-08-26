@@ -122,6 +122,7 @@
  * afterRender
  * afterResize
  * changeVisibility
+ * click
  * dblClick
  * destruct
  * drag
@@ -132,13 +133,22 @@
  * drop
  * focus
  * mouseDown
+ * mouseEnter
  * mouseLeave
  * mouseMove
  * mouseUp
+ * singleClick
+ * touchStart
+ * touchEnd
+ * touchMove
+ * touchCancel
+ * unrender
  * wheel
  *
  * // key events
  * keyDown
+ * keyUp
+ * keyPress
  * enterPress
  * enterEscPress
  * escPress

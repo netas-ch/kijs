@@ -20,7 +20,7 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
         // default xtype
         this._editorXType = 'kijs.gui.field.Date';
         this._hasTime = false;
-        this._format = 'd.m.Y';
+        this._format = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -37,6 +37,14 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
+        }
+
+        if (!this._format) {
+            if (this._hasTime) {
+                this._format = 'd.m.Y H:i';
+            } else {
+                this._format = 'd.m.Y';
+            }
         }
     }
 
