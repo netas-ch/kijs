@@ -1,9 +1,9 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.ToolTip
+// kijs.gui.Tooltip
 // --------------------------------------------------------------
-kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
+kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
 
     // --------------------------------------------------------------
@@ -140,7 +140,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
                 x += this._offsetX;
             }
 
-            // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
             if (x+this._dom.node.offsetWidth > window.innerWidth) {
                 x = Math.abs(window.innerWidth - this._dom.node.offsetWidth - 5);
             }
@@ -156,7 +156,7 @@ kijs.gui.ToolTip = class kijs_gui_ToolTip extends kijs.Observable {
                 y += this._offsetY;
             }
 
-            // Sicherstellen, dass der ToolTip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
             if (y+this._dom.node.offsetHeight > window.innerHeight) {
                 y = Math.abs(window.innerHeight - this._dom.node.offsetHeight - 5);
             }
