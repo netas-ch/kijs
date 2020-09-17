@@ -63,9 +63,9 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     set disabled(val) {
         super.disabled = val;
         if (val) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
+            this._inputDom.nodeAttributeSet('disabled', true);
         } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
+            this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
 

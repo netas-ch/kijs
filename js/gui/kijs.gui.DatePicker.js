@@ -14,6 +14,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         this._startWeekday = 1; // Erster Tag in der Ansicht (1=Montag)
         this._showWeekNumbers = true; // Wochennummern
+        this._hasDays = true; // Nur Monat und Jahr auswählen?
         this._weekSelect = false; // ganze Woche auswählen?
         this._showCalendar = true; // Kalender oder Monatswahl?
 
@@ -185,7 +186,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         Object.assign(this._configMap, {
             rangeFrom: true,
             rangeTo: true,
-            value: { target: 'value' }
+            value: { target: 'value' },
+            weekSelect: true,
+            hasDays: true
         });
 
         // Config anwenden
@@ -236,7 +239,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._calculateMonthYearPicker();
 
         // Calendar Container
-        if (this._showCalendar) {
+        if (this._showCalendar && this._hasDays) {
         this._yearMonthDom.unrender();
         this._calendarDom.renderTo(this._dom.node);
 
@@ -545,8 +548,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
 
     _onHeaderBarClick() {
-        this._showCalendar = !this._showCalendar;
-        this.render();
+        if (this._hasDays) {
+            this._showCalendar = !this._showCalendar;
+            this.render();
+        }
     }
 
     _onTodayButtonClick(e) {
@@ -566,6 +571,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (this.inputField) {
             this.inputField.focus();
         }
+
+        this.raiseEvent('monthClick', {value: m.month});
     }
 
     _onYearSelectorClick(e) {
@@ -579,6 +586,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (this.inputField) {
             this.inputField.focus();
         }
+
+        this.raiseEvent('yearClick', {value: y.year});
     }
 
     _onYearSelectorUpClick() {

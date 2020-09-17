@@ -300,7 +300,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get inputWrapperDom() { return this._inputWrapperDom; }
 
-    get isDirty() { return this._originalValue !== this.value; }
+    get isDirty() {
+        if (this._dom.clsHas('kijs-disabled')) {
+            return false;
+        } else {
+            return this._originalValue !== this.value;
+        }
+    }
     set isDirty(val) {
         if (val) { // mark as dirty
             this._originalValue = this.value === null ? '' : null;

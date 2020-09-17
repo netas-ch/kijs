@@ -128,6 +128,9 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         return val === null ? '' : val;
     }
     set value(val) {
+        if (!val) {
+            val = 'fff';
+        }
         val = this._valueToHex(val);
         this._inputDom.nodeAttributeSet('value', val);
         this.validate();
