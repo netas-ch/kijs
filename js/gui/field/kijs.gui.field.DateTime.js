@@ -52,8 +52,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasTime = true;
         this._hasDate = true;
         this._hasSeconds = false;
+        this._selectDateInPast = true;
+        this._selectDateInFuture = true;
         this._timeRequired = false;
         this._displayFormat = null;
+        this._valueFormat = null;
         this._useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
         this._inputDom = new kijs.gui.Dom({
@@ -122,12 +125,14 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            hasTime: true,    // Enthält das Feld die Uhrzeit?
-            hasDate: true,    // Enthält das Feld das Datum?
-            hasSeconds: true, // Hat das Uhrzeitfeld Sekunden?
+            hasTime: true,      // Enthält das Feld die Uhrzeit?
+            hasDate: true,      // Enthält das Feld das Datum?
+            hasSeconds: true,   // Hat das Uhrzeitfeld Sekunden?
             timeRequired: true, // Muss die Zeit eingegeben werden?
             displayFormat: true,
-            valueFormat: true
+            valueFormat: true,
+            selectDateInPast: true,
+            selectDateInFuture: true
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -209,6 +214,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
     }
 
+    set selectDateInPast(val) { this._selectDateInPast = !!val; }
+    get selectDateInPast() { return this._selectDateInPast; }
+
+    set selectDateInFuture(val) { this._selectDateInFuture = !!val; }
+    get selectDateInFuture() { return this._selectDateInFuture; }
+
     get timeRequired() { return this._timeRequired; }
     set timeRequired(val) { this._timeRequired = !!val; }
 
@@ -239,7 +250,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             display = this._format(this._displayFormat, val);
         }
         this._inputDom.nodeAttributeSet('value', display);
-        this.validate();
     }
 
 
@@ -284,7 +294,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasDate) {
             this._spinBoxEl.add(this._datePicker);
-            this._spinBoxEl.width = 187;
+            this._spinBoxEl.width = 190;
         } else {
             this._spinBoxEl.remove(this._datePicker);
         }
@@ -297,12 +307,17 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasTime) {
             this._spinBoxEl.add(this._timePicker);
-            this._spinBoxEl.width = 157 + (this._hasDate ? 187 + 3 : 0);
+            this._spinBoxEl.width = 157 + (this._hasDate ? 190 + 3 : 0);
+            this._spinBoxEl.height = 260;
         } else {
             this._spinBoxEl.remove(this._timePicker);
+            this._spinBoxEl.height = 230;
         }
 
         this._timePicker.hasSeconds = !!this._hasSeconds;
+
+        this._datePicker.selectDateInPast = !!this._selectDateInPast;
+        this._datePicker.selectDateInFuture = !!this._selectDateInFuture;
     }
 
     /**
@@ -611,8 +626,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._hasTime = null;
         this._hasDate = null;
         this._hasSeconds = null;
+        this._selectDateInPast = null;
+        this._selectDateInFuture = null;
         this._timeRequired = null;
         this._displayFormat = null;
+        this._valueFormat = null;
 
         // Basisklasse entladen
         super.destruct(true);

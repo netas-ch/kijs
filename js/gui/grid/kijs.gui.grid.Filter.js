@@ -89,7 +89,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     _createFilters() {
         let newColumnConfigs = [];
 
-        // Prüfen, ob für jede columnConfig eine filter existiert.
+        // Prüfen, ob für jede columnConfig einen Filter existiert.
         // Wenn nicht, in Array schreiben.
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
             let exist = false;
@@ -104,7 +104,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             }
         }, this);
 
-        // Falls filter noch nicht vorhanden, neue filter erstellen.
+        // Falls Filter noch nicht vorhanden, neue Filter erstellen.
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
             let filterConfig = columnConfig.filterConfig;
             let constr = kijs.getObjectFromNamespace(filterConfig.xtype);

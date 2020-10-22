@@ -239,7 +239,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
      * @returns {undefined}
      */
     show() {
-        // Evtl. Maske für modale anzeige einblenden
+        // Evtl. Maske für modale Anzeige einblenden
         if (this._modalMaskEl) {
             this._modalMaskEl.renderTo(this.parentNode);
              new kijs.gui.LayerManager().setActive(this._modalMaskEl);
@@ -253,7 +253,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             if (!this._dom.hasLeft || !this._dom.hasTop) {
                 this.center(true);
 
-            // sonst nur sicherstellen, dass es ins target passt
+            // sonst nur sicherstellen, dass es ins Target passt
             } else {
                 this._adjustPositionToTarget(true);
             }

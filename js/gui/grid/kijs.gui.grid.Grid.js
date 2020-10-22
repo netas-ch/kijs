@@ -249,6 +249,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get rows() { return this._rows; }
 
+    get rowsCount() { return this._remoteDataTotal; }
+
     get selectType() { return this._selectType; }
     set selectType(val) {
         if (!kijs.Array.contains(['single', 'multi', 'simple', 'none'], val)) {
@@ -560,7 +562,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      *                                                    ]
      *                                                  ]
      *
-     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende Selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */

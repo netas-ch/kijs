@@ -62,10 +62,11 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
 
     /**
      * Bringt ein Element in den Vordergrund
-     * @param {kijs.gui.Element} el
-     * @returns {Boolean} Wurden Änderungen gemacht?
+     * @param el
+     * @param setFocus // Setzt den Fokus auf das erste Element
+     * @returns {boolean}
      */
-    setActive(el) {
+    setActive(el, setFocus=true) {
         // Ist das Element schon zuoberst?
         if (el === this.getActive(el.parentNode)) {
             return false;
@@ -83,7 +84,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         // Oberstes sichtbares Element aktualisieren und Fokus setzen
         const parentProp =  this._parents.get(el.parentNode);
         parentProp.activeEl = this._getTopVisibleElement(el.parentNode);
-        if (parentProp.activeEl) {
+        if (parentProp.activeEl && setFocus) {
             parentProp.activeEl.focus();
         }
 
