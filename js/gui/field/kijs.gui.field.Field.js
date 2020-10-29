@@ -95,6 +95,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._required = false;
         this._submitValue = true;
         this._originalValue = null;
+        this._validationFn = null;
+        this._validationFnContext = null;
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
@@ -139,7 +141,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             spinIconChar: { target: 'iconChar', context: this._spinIconEl },
             spinIconCls: { target: 'iconCls', context: this._spinIconEl },
             spinIconColor: { target: 'iconColor', context: this._spinIconEl },
-            spinIconVisible: { target: 'visible', context: this._spinIconEl }
+            spinIconVisible: { target: 'visible', context: this._spinIconEl },
+            
+            validationFn: true,
+            validationFnContext: true
         });
 
         // Listeners
@@ -602,6 +607,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this._errors.push(kijs.getText('Dieses Feld darf maximal %1 Zeichen enthalten', '', this._maxLength));
             }
         }
+        
+        if (this._validationFn && kijs.isFunction(this._validationFn)) {
+            let error = this._validationFn.call(this._validationFnContext || this, value);
+            if (error) {
+                if (kijs.isString(error)) {
+                    this._errors.push(error);
+                } else if (kijs.isArray(error)) {
+                    kijs.Array.each(error, function(e) {
+                        this._errors.push(e);
+                    }, this);
+                }
+            }
+        }
     }
 
 
@@ -660,6 +678,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
+        this._validationFn = null;
+        this._validationFnContext = null;
 
         // Basisklasse entladen
         super.destruct(true);
