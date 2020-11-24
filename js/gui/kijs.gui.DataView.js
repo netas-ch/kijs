@@ -670,12 +670,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // neue Elemente einfügen
         this.add(newElements);
-
-
-        // selektion wiederherstellen
-        /*if (currentIndex !== null) {
-            this.selectByIndex(currentIndex, !removeElements, !removeElements);
-        }*/
     }
 
 
