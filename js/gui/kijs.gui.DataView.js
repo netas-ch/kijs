@@ -332,9 +332,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             this._rpc.do(this._facadeFnLoad, args, function(response) {
                 this.data = response.rows;
-                /*if (!kijs.isEmpty(response.selectFilters)) {
+                if (!kijs.isEmpty(response.selectFilters)) {
                     this.selectByFilters(response.selectFilters);
-                }*/
+                }
 
                 // Promise ausführen
                 resolve(this.data);
