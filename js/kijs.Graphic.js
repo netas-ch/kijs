@@ -138,7 +138,7 @@ kijs.Graphic = class kijs_Graphic {
      * Ändert die Helligkeit einer Farbe.
      * @param {String|Object} color
      * @param {Number} brightness Helligkeit 0-100%
-     * @returns {undefined}
+     * @returns {Object}
      */
     static colorChangeBrightness(color, brightness) {
         let hsv = kijs.Graphic.colorRGBtoHSV(kijs.Graphic.colorGet(color));
@@ -174,8 +174,8 @@ kijs.Graphic = class kijs_Graphic {
 
     /**
      * Parst eine Farbe in einem beliebigen Format zu einem RGB-Objekt
-     * @param {Mixed} color
-     * @returns {Object|Null}
+     * @param {String|Array|Object} color
+     * @returns {Object|null}
      */
     static colorGet(color) {
         if (kijs.isString(color)) {
@@ -254,7 +254,7 @@ kijs.Graphic = class kijs_Graphic {
      * @returns {Object}
      */
     static colorHSVtoRGB(h, s, v) {
-        var r, g, b, i, f, p, q, t;
+        let r, g, b, i, f, p, q, t;
 
         if (arguments.length === 1) {
             s = h.s, v = h.v, h = h.h;
@@ -293,7 +293,7 @@ kijs.Graphic = class kijs_Graphic {
             g = r.g, b = r.b, r = r.r;
         }
 
-        var max = Math.max(r, g, b), min = Math.min(r, g, b),
+        let max = Math.max(r, g, b), min = Math.min(r, g, b),
             d = max - min,
             h,
             s = (max === 0 ? 0 : d / max),

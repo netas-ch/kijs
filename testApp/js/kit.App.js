@@ -1382,6 +1382,28 @@ kit.App = class kit_App {
                             footerElements: [
                                 {
                                     xtype: 'kijs.gui.Button',
+                                    caption: 'Datumsbereich',
+                                    iconChar: '&#xf017',
+                                    on: {click: function() {
+                                        let window = new kijs.gui.Window({
+                                            target: this.parent.parent.down('addressPanel'),
+                                            targetDomProperty: 'innerDom',
+                                            caption: 'Datumsbereich',
+                                            iconChar: '&#xf017',
+                                            collapsible: 'top',
+                                            maximized: false,
+                                            modal: true,
+                                            height: 290,
+                                            width: 188,
+                                            elements:[{
+                                                    xtype: 'kijs.gui.DatePicker',
+                                                    selectRange: true
+                                            }]
+                                        });
+                                        window.show();
+                                    }}
+                                },{
+                                    xtype: 'kijs.gui.Button',
                                     caption: 'Uhrzeit',
                                     iconChar: '&#xf017',
                                     on: {click: function() {

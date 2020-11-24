@@ -16,6 +16,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._showWeekNumbers = true; // Wochennummern
         this._weekSelect = false; // ganze Woche auswählen?
         this._showCalendar = true; // Kalender oder Monatswahl?
+        this._selectRange = false;
 
         this._visibleMonthDate = kijs.Date.getFirstOfMonth(new Date()); // Sichtbarer Monat
 
@@ -183,6 +184,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            selectRange: true,
             rangeFrom: true,
             rangeTo: true,
             value: { target: 'value' }
@@ -200,11 +202,49 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get value() { return this._value;}
+    get value() {
+        if (this._selectRange) {
+            return {
+                from: this._rangeFrom,
+                to: this._rangeTo
+            };
+
+        } else {
+            return this._value;
+        }
+    }
 
     set value(val) {
-        this._value = kijs.Date.create(val);
-        this._visibleMonthDate = kijs.Date.getFirstOfMonth(this._value);
+        if (this._selectRange) {
+            if (kijs.isObject(val)) {
+                this._rangeFrom = val.from ? kijs.Date.create(val.from) : null;
+                this._rangeTo = val.from && val.to ? kijs.Date.create(val.to) : null;
+
+            } else if (kijs.isDate(val)) {
+                if (this._rangeFrom && (!this._rangeTo || val > this._rangeFrom)) {
+                    this._rangeTo = kijs.Date.create(val);
+
+                } else {
+                    this._rangeFrom = kijs.Date.create(val);
+                    this._rangeTo = null;
+                }
+
+            } else {
+                throw new kijs.Error(`invalid value for kijs.gui.DatePicker`);
+            }
+
+            // from bigger than to -> switch
+            if (this._rangeFrom && this._rangeTo && this._rangeFrom > this._rangeTo) {
+                var tmp = this._rangeFrom;
+                this._rangeFrom = this._rangeTo;
+                this._rangeTo = tmp;
+            }
+
+        } else {
+            this._value = kijs.Date.create(val);
+            this._visibleMonthDate = kijs.Date.getFirstOfMonth(this._value);
+        }
+
         this._calculateCalendar();
     }
 
@@ -313,10 +353,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
     _calculateCalendar(rangeTo=null) {
         let offset;
-        let day, firstDay, lastDay, monthIndex;
+        let day, firstDay, lastDay, monthIndex, rangeFrom;
 
         // Aufbereiten
         rangeTo = rangeTo ? rangeTo : this._rangeTo;
+        rangeFrom = this._rangeFrom;
+
+        // switch if from after to
+        if (rangeFrom && rangeTo && rangeFrom > rangeTo) {
+            rangeFrom = rangeTo;
+            rangeTo = this._rangeFrom;
+        }
 
         // Titel schreiben
         this._headerBar.html = kijs.Date.format(this._visibleMonthDate, 'F Y');
@@ -324,126 +371,130 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         monthIndex = this._visibleMonthDate.getMonth(); // Vorsicht: 0-basierend
 
         // Erster Tag im Kalender ermitteln
-       firstDay = kijs.Date.clone(this._visibleMonthDate);
-       offset = firstDay.getDay() - this._startWeekday;
-       if (offset < 0) offset += 7;
-       firstDay = kijs.Date.addDays(firstDay, offset*-1);
+        firstDay = kijs.Date.clone(this._visibleMonthDate);
+        offset = firstDay.getDay() - this._startWeekday;
+        if (offset < 0) {
+            offset += 7;
+        }
+        firstDay = kijs.Date.addDays(firstDay, offset*-1);
 
 
-       // letzter Tag im Kalender ermitteln
-       lastDay = kijs.Date.getLastOfMonth(this._visibleMonthDate);
-       offset = this._startWeekday - lastDay.getDay() - 1;
-       if (offset < 0) offset += 7;
-       lastDay = kijs.Date.addDays(lastDay, offset);
+        // letzter Tag im Kalender ermitteln
+        lastDay = kijs.Date.getLastOfMonth(this._visibleMonthDate);
+        offset = this._startWeekday - lastDay.getDay() - 1;
+        if (offset < 0) {
+            offset += 7;
+        }
+        lastDay = kijs.Date.addDays(lastDay, offset);
 
-       // Spaltenüberschriften (Mo-Fr)
-       for (let i=0; i<this._gridColumns[0].rows.length; i++) {
-           let fldDom = this._gridColumns[0].rows[i].dom;
-           fldDom.clsAdd('kijs-head');
-           if (i === 0)  {
-               fldDom.clsAdd('kijs-weekno');
-               fldDom.html = this._showWeekNumbers ? kijs.String.htmlentities_decode('&nbsp;') : '';
+        // Spaltenüberschriften (Mo-Fr)
+        for (let i=0; i<this._gridColumns[0].rows.length; i++) {
+            let fldDom = this._gridColumns[0].rows[i].dom;
+            fldDom.clsAdd('kijs-head');
+            if (i === 0)  {
+                fldDom.clsAdd('kijs-weekno');
+                fldDom.html = this._showWeekNumbers ? kijs.String.htmlentities_decode('&nbsp;') : '';
 
-           } else {
-               let wdNo = (i - 1) + this._startWeekday;
-               if (wdNo > 6) {
-                   wdNo -= 7;
-               }
-               fldDom.html = kijs.Date.weekdays_short[wdNo];
-
-                if (wdNo === 0 || wdNo === 6) {
-                    fldDom.clsAdd('kijs-weekend');
-                } else {
-                    fldDom.clsRemove('kijs-weekend');
+            } else {
+                let wdNo = (i - 1) + this._startWeekday;
+                if (wdNo > 6) {
+                    wdNo -= 7;
                 }
-           }
-       }
+                fldDom.html = kijs.Date.weekdays_short[wdNo];
+
+                 if (wdNo === 0 || wdNo === 6) {
+                     fldDom.clsAdd('kijs-weekend');
+                 } else {
+                     fldDom.clsRemove('kijs-weekend');
+                 }
+            }
+        }
 
        day = kijs.Date.clone(firstDay);
 
        // Kalender-Zeilen
-       for (let i=1; i < this._gridColumns.length; i++) {
+        for (let i=1; i < this._gridColumns.length; i++) {
 
-           if (this._weekSelect) {
-               this._gridColumns[i].dom.clsAdd('kijs-weekselect');
-               this._gridColumns[i].dom.clsRemove('kijs-dayselect');
-           } else {
-               this._gridColumns[i].dom.clsAdd('kijs-dayselect');
-               this._gridColumns[i].dom.clsRemove('kijs-weekselect');
-           }
+            if (this._weekSelect) {
+                this._gridColumns[i].dom.clsAdd('kijs-weekselect');
+                this._gridColumns[i].dom.clsRemove('kijs-dayselect');
+            } else {
+                this._gridColumns[i].dom.clsAdd('kijs-dayselect');
+                this._gridColumns[i].dom.clsRemove('kijs-weekselect');
+            }
 
-           // Kalender-Spalten
-           for (let x=1; x<8; x++) {
-               let fldDom = this._gridColumns[i].rows[x].dom;
+            // Kalender-Spalten
+            for (let x=1; x<8; x++) {
+                let fldDom = this._gridColumns[i].rows[x].dom;
 
-               // datum eintragen
-               this._gridColumns[i].rows[x].date = kijs.Date.clone(day);
+                // datum eintragen
+                this._gridColumns[i].rows[x].date = kijs.Date.clone(day);
 
-               // Tag schreiben
-               fldDom.html = kijs.Date.format(day, 'j');
+                // Tag schreiben
+                fldDom.html = kijs.Date.format(day, 'j');
 
-               // Tag ausserhalb vom Monat?
-               if (day.getMonth() !== monthIndex) {
-                    fldDom.clsAdd('kijs-outofmonth');
-               } else {
-                    fldDom.clsRemove('kijs-outofmonth');
-               }
+                // Tag ausserhalb vom Monat?
+                if (day.getMonth() !== monthIndex) {
+                     fldDom.clsAdd('kijs-outofmonth');
+                } else {
+                     fldDom.clsRemove('kijs-outofmonth');
+                }
 
-               // aktueller Tag?
-               if (kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(new Date()).getTime()) {
-                   fldDom.clsAdd('kijs-today');
-               } else {
-                   fldDom.clsRemove('kijs-today');
-               }
+                // aktueller Tag?
+                if (kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(new Date()).getTime()) {
+                    fldDom.clsAdd('kijs-today');
+                } else {
+                    fldDom.clsRemove('kijs-today');
+                }
 
-               // Weekend?
-               if (day.getDay() === 0 || day.getDay() === 6) {
-                   fldDom.clsAdd('kijs-weekend');
-               } else {
-                   fldDom.clsRemove('kijs-weekend');
-               }
+                // Weekend?
+                if (day.getDay() === 0 || day.getDay() === 6) {
+                    fldDom.clsAdd('kijs-weekend');
+                } else {
+                    fldDom.clsRemove('kijs-weekend');
+                }
 
-               // selektiertes Datum?
-                if (this._value instanceof Date && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(this._value).getTime()) {
+                // selektiertes Datum?
+                if (!this._selectRange && this._value instanceof Date && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(this._value).getTime()) {
                     fldDom.clsAdd('kijs-value');
                 } else {
                     fldDom.clsRemove('kijs-value');
                 }
 
                 // range start
-                if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(this._rangeFrom).getTime()) {
+                if (this._selectRange && rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(rangeFrom).getTime()) {
                     fldDom.clsAdd('kijs-range-start');
                 } else {
                     fldDom.clsRemove('kijs-range-start');
                 }
 
                 // range end
-                if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(rangeTo).getTime()) {
+                if (this._selectRange && rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() === kijs.Date.getDatePart(rangeTo).getTime()) {
                     fldDom.clsAdd('kijs-range-end');
                 } else {
                     fldDom.clsRemove('kijs-range-end');
                 }
 
                 // range between
-                if (this._rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() > kijs.Date.getDatePart(this._rangeFrom).getTime()
+                if (this._selectRange && rangeFrom && rangeTo && kijs.Date.getDatePart(day).getTime() > kijs.Date.getDatePart(rangeFrom).getTime()
                         && kijs.Date.getDatePart(day).getTime() < kijs.Date.getDatePart(rangeTo).getTime()) {
                     fldDom.clsAdd('kijs-range-between');
                 } else {
                     fldDom.clsRemove('kijs-range-between');
                 }
 
-               // Wochen-Nummer schreiben
-               if (x===1) {
-                   this._gridColumns[i].rows[0].dom.html = this._showWeekNumbers ? parseInt(kijs.Date.format(day, 'W')) : '';
-                   this._gridColumns[i].rows[0].dom.clsAdd('kijs-weekno');
-               }
+                // Wochen-Nummer schreiben
+                if (x === 1) {
+                    this._gridColumns[i].rows[0].dom.html = this._showWeekNumbers ? parseInt(kijs.Date.format(day, 'W')) : '';
+                    this._gridColumns[i].rows[0].dom.clsAdd('kijs-weekno');
+                }
 
-               // 1 Tag addieren
-               day.setDate(day.getDate()+1);
-           }
+                // 1 Tag addieren
+                day.setDate(day.getDate()+1);
+            }
 
 
-       }
+        }
 
     }
 
@@ -540,7 +591,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (e.nodeEvent.deltaY < 0) {
             this._onPreviousBtnClick();
         } else {
-            this._onNextBtnClick()
+            this._onNextBtnClick();
         }
     }
 
@@ -550,9 +601,15 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
 
     _onTodayButtonClick(e) {
-        this._value = kijs.Date.getDatePart(new Date());
-        this.raiseEvent('dateSelected', {value: this.value});
-        this.raiseEvent('nowClick', {value: this.value});
+        if (this._selectRange) {
+            this._visibleMonthDate = new Date();
+            this._calculateCalendar();
+
+        } else {
+            this._value = kijs.Date.getDatePart(new Date());
+            this.raiseEvent('dateSelected', {value: this.value});
+            this.raiseEvent('nowClick', {value: this.value});
+        }
     }
 
     _onMonthSelectorClick(e) {

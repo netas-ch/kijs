@@ -27,7 +27,7 @@ kijs.Dom = class kijs_Dom {
     /**
      * Lesen einer Eigenschaft eines Nodes.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
-     * @param {HTMLElement} node
+     * @param {Node} node
      * @param {String} name
      * @returns {String|Null|Booelan|Undefined}
      */
@@ -50,7 +50,7 @@ kijs.Dom = class kijs_Dom {
     /**
      * Zuweisen einer Eigenschaft zu einem node.
      * Dabei werden Murgs-Attribute automatisch anders zugewiesen.
-     * @param {HTMLElement} node
+     * @param {Node} node
      * @param {String} name
      * @param {String|Null|Boolean|Undefined} value
      * @returns {undefined}
@@ -74,7 +74,7 @@ kijs.Dom = class kijs_Dom {
     /**
      * Überprüft ob ein Node über eine Eigenschaft verfügt.
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
-     * @param {HTMLElement} node
+     * @param {Node} node
      * @param {String} name
      * @returns {Boolean}
      */
@@ -110,7 +110,7 @@ kijs.Dom = class kijs_Dom {
      * }
      *
      * @param {String} eventName Name des DOM-Events
-     * @param {HTMLElement} node DOM-Node
+     * @param {Node} node DOM-Node
      * @param {Function|String} fn  Funktion oder Name des kijs-Events das ausgelöst werden soll
      * @param {kijs.Observable} context
      * @param {Boolean} [useCapture=false] false: Event wird in Bubbeling-Phase ausgelöst
@@ -161,7 +161,7 @@ kijs.Dom = class kijs_Dom {
 
     /**
      * Gibt die absolute Position eines HTMLElements bezogen zum Browserrand zurück
-     * @param {HTMLElement} node
+     * @param {Node} node
      * @returns {Object} im Format {x: 100, y: 80, w: 20, h: 40}
      */
     static getAbsolutePos(node) {
@@ -184,8 +184,8 @@ kijs.Dom = class kijs_Dom {
      *     tabIndex -1: nur via focus() Befehl fokussierbar
      *     tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
      *     tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
-     * @param {HTMLElement} node
-     * @returns {HTMLElement|null}
+     * @param {Node} node
+     * @returns {Node|null}
      */
     static getFirstFocusableNode(node) {
         let subNode = null;
@@ -246,7 +246,7 @@ kijs.Dom = class kijs_Dom {
     /**
      * Überprüft, ob ein Event-Listener auf ein HTMLElement existiert
      * @param {String} eventName Name des DOM-Events
-     * @param {HTMLElement} node DOM-Node
+     * @param {Node} node DOM-Node
      * @param {kijs.Observable} context
      * @param {Boolean} [useCapture=false] false: Event wird in Bubbeling-Phase ausgelöst
      *                                     true:  Event wird in Capturing-Phase ausgelöst
@@ -273,9 +273,28 @@ kijs.Dom = class kijs_Dom {
     }
 
     /**
+     * Gibt den index einer childNode in einer Node oder NodeList zurück
+     * @param {Node|NodeList} parentNode
+     * @param {Node} childNode
+     * @returns {Number} -1, wenn nicht gefunden
+     */
+    static indexOf(parentNode, childNode) {
+        let nodeList = parentNode instanceof NodeList ? parentNode : parentNode.childNodes;
+
+        if (nodeList) {
+            for (let i=0; i<nodeList.length; i++) {
+                if (nodeList[i] === childNode) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Fügt einen Node in den Dom ein, direkt nach einem anderen Knoten
-     * @param {HTMLElement} node
-     * @param {HTMLElement} targetNode
+     * @param {Node} node
+     * @param {Node} targetNode
      * @returns {undefined}
      */
     static insertNodeAfter(node, targetNode) {
@@ -284,8 +303,8 @@ kijs.Dom = class kijs_Dom {
 
     /**
      * Schaut, ob ein Node ein Kindknoten (oder Grosskind, etc.) von einem anderen Node ist (rekursiv).
-     * @param {HTMLElement} childNode
-     * @param {HTMLElement} parentNode
+     * @param {Node} childNode
+     * @param {Node} parentNode
      * @param {Boolean} [sameAlso=false] Soll bei childNode===parentNode auch true zurückgegeben werden?
      * @returns {Boolean}
      */
@@ -302,14 +321,19 @@ kijs.Dom = class kijs_Dom {
 
         return false;
     }
-    
+
     /**
      * Entfernt alle Unterelemente eines DOM-Elements
-     * @param {HTMLElement} node
+     * @param {Node} node
      */
     static removeAllChildNodes(node) {
-        while (node.hasChildNodes()) {
-            node.removeChild(node.lastChild);
+        if (node.replaceChildren) {
+            node.replaceChildren(); // faster (firefox 78+, chrome 86+, ..)
+
+        } else {
+            while (node.hasChildNodes()) {
+                node.removeChild(node.lastChild);
+            }
         }
     }
 
@@ -329,12 +353,12 @@ kijs.Dom = class kijs_Dom {
 
         context._nodeEventListeners = {};
     }
-    
-    
+
+
     /**
-     * Entfernt einen Event-Listener von einem HTMLElement
+     * Entfernt einen Event-Listener von einem Node
      * @param {String} eventName
-     * @param {HTMLElement} node
+     * @param {Node} node
      * @param {kijs.Observable} context
      * @param {Boolean} [useCapture=false] false: Event wird in Bubbeling-Phase ausgelöst
      *                                     true:  Event wird in Capturing-Phase ausgelöst
@@ -402,5 +426,5 @@ kijs.Dom = class kijs_Dom {
                 break;
         }
     }
-    
+
 };
