@@ -20,7 +20,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._data = [];
         this._facadeFnLoad = null;
         this._facadeFnArgs = {};
-        this._filters = [];
+        //this._filters = [];       // 24.11.2020 gkipfer: Filter-Funktion muss noch fertig gestellt und getestet werden.
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
@@ -157,7 +157,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
-    get filters() { return this._filters; }
+    /*get filters() { return this._filters; }
     set filters(val) {
         if (!val) {
             this._filters = [];
@@ -179,7 +179,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this._filters = val;
         }
 
-    }
+    }*/
 
     get focusable() { return this._focusable; }
     set focusable(val) {
@@ -224,13 +224,14 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Array|Object} filters
      * @returns {undefined}
      */
-    applyFilters(filters) {
+    /*applyFilters(filters) {
         this.filters = filters;
         if (this.isRendered) {
             this._createElements(this._data);
-            this.render();
+            // Current Element ermitteln und setzen
+            this.current = null;
         }
-    }
+    }*/
 
     /**
      * Fügt Daten hinzu
@@ -331,9 +332,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             this._rpc.do(this._facadeFnLoad, args, function(response) {
                 this.data = response.rows;
-                if (!kijs.isEmpty(response.selectFilters)) {
+                /*if (!kijs.isEmpty(response.selectFilters)) {
                     this.selectByFilters(response.selectFilters);
-                }
+                }*/
 
                 // Promise ausführen
                 resolve(this.data);
@@ -588,10 +589,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      */
     _createElements(data, removeElements = true) {
 
-        // index des aktuell selektierten Elements
-        let selectIndex = null;
+        // index des aktuellen Elements merken (Element mit Fokus)
+        let currentIndex = null;
         if (this._currentEl && this._currentEl instanceof kijs.gui.DataViewElement && kijs.isDefined(this._currentEl.index)) {
-            selectIndex = this._currentEl.index;
+            currentIndex = this._currentEl.index;
         }
 
         // Bestehende Elemente löschen
@@ -605,9 +606,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (this._filterMatch(data[i])) {
+            /*if (this._filterMatch(data[i])) {
                 continue;
-            }
+            }*/
 
             const newEl = this.createElement(data[i], i);
             newEl.index = i;
@@ -658,16 +659,23 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementDrop', e);
             }, this);
 
+
+            // Evtl. fokus setzen
+            if (newEl.index === currentIndex) {
+                this._currentEl = newEl;
+            }
+            
             newElements.push(newEl);
         }
 
         // neue Elemente einfügen
         this.add(newElements);
 
+
         // selektion wiederherstellen
-        if (selectIndex !== null) {
-            this.selectByIndex(selectIndex, !removeElements, !removeElements);
-        }
+        /*if (currentIndex !== null) {
+            this.selectByIndex(currentIndex, !removeElements, !removeElements);
+        }*/
     }
 
 
@@ -676,7 +684,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Object} record
      * @returns {Boolean}
      */
-    _filterMatch(record) {
+    /*_filterMatch(record) {
         let filterMatch = false;
 
         kijs.Array.each(this.filters, function(filter) {
@@ -707,7 +715,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
 
         return filterMatch;
-    }
+    }*/
 
     /**
      * Selektiert ein Element und berücksichtigt dabei die selectType und die tasten shift und ctrl
