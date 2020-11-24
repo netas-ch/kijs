@@ -247,6 +247,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Event-Weiterleitungen von this._dom
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
+        this._eventForwardsAdd('rightClick', this._dom);
         this._eventForwardsAdd('drag', this._dom);
         this._eventForwardsAdd('dragOver', this._dom);
         this._eventForwardsAdd('dragStart', this._dom);

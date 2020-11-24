@@ -216,6 +216,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             change: { nodeEventName: 'change', useCapture: false },
             click: { nodeEventName: 'click', useCapture: false },
             dblClick: { nodeEventName: 'dblclick', useCapture: false },
+            rightClick: { nodeEventName: 'contextmenu', useCapture: false },
             drag: { nodeEventName: 'drag', useCapture: false },
             dragEnd: { nodeEventName: 'dragend', useCapture: false },
             dragEnter: { nodeEventName: 'dragenter', useCapture: false },

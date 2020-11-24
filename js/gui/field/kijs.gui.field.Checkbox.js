@@ -16,6 +16,7 @@
  * changeVisibility
  * childElementAfterResize
  * dblClick
+ * rightClick
  * destruct
  * drag
  * dragEnd
