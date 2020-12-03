@@ -128,6 +128,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl.on('input', this._onTargetElInput, this);
             this._targetEl.on('keyDown', this._onElKeyDown, this);
 
+        } else if (val === null) {
+            this._targetEl = null;
+
         } else {
             throw new kijs.Error(`Unkown format on config "target"`);
 
@@ -142,7 +145,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {HTMLElement}
      */
     get targetNode() {
-        return this._targetEl[this._targetDomProperty].node;
+        return this._targetEl ? this._targetEl[this._targetDomProperty].node : null;
     }
 
 
@@ -233,12 +236,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._calculateWidth();
 
         // Ausrichten
-        this._adjustPositionToTarget(true);
+        if (this._targetEl) {
+            this._adjustPositionToTarget(true);
+        }
 
         // afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
 
-        this._targetEl.focus();
+        if (this._targetEl) {
+            this._targetEl.focus();
+        }
 
         // Listeners auf body/window zum ausblenden
         kijs.Dom.addEventListener('mousedown', document.body, this._onBodyMouseDown, this);

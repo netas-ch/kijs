@@ -590,6 +590,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
     /**
      * Richtet ein Element nach einem Ziel-Element aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
@@ -612,13 +613,44 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
-    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true) {
-        targetPos = targetPos || 'bl';
-        pos = pos || 'tl';
-
+    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true)  {
         if (targetNode instanceof kijs.gui.Element) {
             targetNode = targetNode.dom;
         }
+
+        // Position vom Element
+        const t = kijs.Dom.getAbsolutePos(targetNode);
+
+        return this.alignToRect(t, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset);
+    }
+
+
+    /**
+     * Richtet ein Element nach einem Ziel aus.
+     * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
+     * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
+     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * gewechselt werden (allowSwapX & allowSwapY)
+     * @param {Object} target Objekt mit x, y, w, h
+     * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
+     *                                   tl --- t --- tr
+     *                                   |             |
+     *                                   l      c      r
+     *                                   |             |
+     *                                   bl --- b --- br
+     *
+     * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
+     * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
+     * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
+     * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
+     * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
+     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
+     */
+    alignToRect(target, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true) {
+        targetPos = targetPos || 'bl';
+        pos = pos || 'tl';
+
 
         if (allowSwapX === undefined) {
             allowSwapX = true;
@@ -636,9 +668,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         const b = kijs.Dom.getAbsolutePos(document.body);
         const e = kijs.Dom.getAbsolutePos(this._node);
-        const t = kijs.Dom.getAbsolutePos(targetNode);
 
-        let rect = kijs.Graphic.alignRectToRect(e, t, targetPos, pos, offsetX, offsetY);
+        let rect = kijs.Graphic.alignRectToRect(e, target, targetPos, pos, offsetX, offsetY);
 
         const overlap = kijs.Graphic.rectsOverlap(rect, b);
         let posSwap, targetPosSwap;
