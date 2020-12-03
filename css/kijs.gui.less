@@ -1499,6 +1499,10 @@ div.kijs-datepicker {
                     color: white;
                 }
             }
+            &.kijs-no-select {
+                color: @badge-disabled-fontColor;
+                background-color: @field-disabled-bkgrndColor
+            }
             &.kijs-weekend {
                 background-color: @viewport-bkgrndColor;
             }
@@ -1618,7 +1622,7 @@ div.kijs-datepicker {
     }
 
     > div.kijs-headerbar-center {
-        cursor: pointer;
+            cursor: pointer;
     }
 }
 

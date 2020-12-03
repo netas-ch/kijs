@@ -216,6 +216,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             change: { nodeEventName: 'change', useCapture: false },
             click: { nodeEventName: 'click', useCapture: false },
             dblClick: { nodeEventName: 'dblclick', useCapture: false },
+            rightClick: { nodeEventName: 'contextmenu', useCapture: false },
             drag: { nodeEventName: 'drag', useCapture: false },
             dragEnd: { nodeEventName: 'dragend', useCapture: false },
             dragEnter: { nodeEventName: 'dragenter', useCapture: false },
@@ -891,7 +892,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|Null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
@@ -902,7 +903,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 this._node.focus();
                 return this._node;
 
-            // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+            // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
             } else {
                 const node = kijs.Dom.getFirstFocusableNode(this._node);
                 if (node) {

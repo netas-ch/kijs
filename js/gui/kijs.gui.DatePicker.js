@@ -14,9 +14,12 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         this._startWeekday = 1; // Erster Tag in der Ansicht (1=Montag)
         this._showWeekNumbers = true; // Wochennummern
+        this._hasDays = true; // Nur Monat und Jahr auswählen?
         this._weekSelect = false; // ganze Woche auswählen?
         this._showCalendar = true; // Kalender oder Monatswahl?
-        this._selectRange = false;
+        this._selectDateInPast = true; // Datum in der Vergangenheit auswählbar
+        this._selectDateInFuture = true; // Datum in der Zukunft auswählbar
+        this._selectRange = false; // Datum von-bis selektieren
 
         this._visibleMonthDate = kijs.Date.getFirstOfMonth(new Date()); // Sichtbarer Monat
 
@@ -187,7 +190,12 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             selectRange: true,
             rangeFrom: true,
             rangeTo: true,
-            value: { target: 'value' }
+            value: { target: 'value' },
+            weekSelect: true,
+            showCalendar: true,
+            hasDays: true,
+            selectDateInPast: true,
+            selectDateInFuture: true
         });
 
         // Config anwenden
@@ -258,6 +266,12 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
+    set selectDateInPast(val) { this._selectDateInPast = !!val; }
+    get selectDateInPast() { return this._selectDateInPast; }
+
+    set selectDateInFuture(val) { this._selectDateInFuture = !!val; }
+    get selectDateInFuture() { return this._selectDateInFuture; }
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -275,10 +289,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         // Picker berechnen
         this._calculateMonthYearPicker();
 
+        if (!this._hasDays) {
+            this._showCalendar = false;
+        }
+
         // Calendar Container
         if (this._showCalendar) {
-        this._yearMonthDom.unrender();
-        this._calendarDom.renderTo(this._dom.node);
+            this._yearMonthDom.unrender();
+            this._calendarDom.renderTo(this._dom.node);
 
             // Einzelne Elemente
             kijs.Array.each(this._gridColumns, function(column) {
@@ -392,36 +410,36 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             let fldDom = this._gridColumns[0].rows[i].dom;
             fldDom.clsAdd('kijs-head');
             if (i === 0)  {
-                fldDom.clsAdd('kijs-weekno');
-                fldDom.html = this._showWeekNumbers ? kijs.String.htmlentities_decode('&nbsp;') : '';
+               fldDom.clsAdd('kijs-weekno');
+               fldDom.html = this._showWeekNumbers ? kijs.String.htmlentities_decode('&nbsp;') : '';
 
             } else {
-                let wdNo = (i - 1) + this._startWeekday;
-                if (wdNo > 6) {
-                    wdNo -= 7;
-                }
-                fldDom.html = kijs.Date.weekdays_short[wdNo];
+               let wdNo = (i - 1) + this._startWeekday;
+               if (wdNo > 6) {
+                   wdNo -= 7;
+               }
+               fldDom.html = kijs.Date.weekdays_short[wdNo];
 
-                 if (wdNo === 0 || wdNo === 6) {
-                     fldDom.clsAdd('kijs-weekend');
-                 } else {
-                     fldDom.clsRemove('kijs-weekend');
-                 }
+                if (wdNo === 0 || wdNo === 6) {
+                    fldDom.clsAdd('kijs-weekend');
+                } else {
+                    fldDom.clsRemove('kijs-weekend');
+                }
             }
         }
 
-       day = kijs.Date.clone(firstDay);
+        day = kijs.Date.clone(firstDay);
 
-       // Kalender-Zeilen
+        // Kalender-Zeilen
         for (let i=1; i < this._gridColumns.length; i++) {
 
-            if (this._weekSelect) {
-                this._gridColumns[i].dom.clsAdd('kijs-weekselect');
-                this._gridColumns[i].dom.clsRemove('kijs-dayselect');
-            } else {
-                this._gridColumns[i].dom.clsAdd('kijs-dayselect');
-                this._gridColumns[i].dom.clsRemove('kijs-weekselect');
-            }
+           if (this._weekSelect) {
+               this._gridColumns[i].dom.clsAdd('kijs-weekselect');
+               this._gridColumns[i].dom.clsRemove('kijs-dayselect');
+           } else {
+               this._gridColumns[i].dom.clsAdd('kijs-dayselect');
+               this._gridColumns[i].dom.clsRemove('kijs-weekselect');
+           }
 
             // Kalender-Spalten
             for (let x=1; x<8; x++) {
@@ -435,9 +453,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
                 // Tag ausserhalb vom Monat?
                 if (day.getMonth() !== monthIndex) {
-                     fldDom.clsAdd('kijs-outofmonth');
+                    fldDom.clsAdd('kijs-outofmonth');
                 } else {
-                     fldDom.clsRemove('kijs-outofmonth');
+                    fldDom.clsRemove('kijs-outofmonth');
                 }
 
                 // aktueller Tag?
@@ -452,6 +470,19 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                     fldDom.clsAdd('kijs-weekend');
                 } else {
                     fldDom.clsRemove('kijs-weekend');
+                }
+
+                // Darf ein Datum in der Zukunft oder in der Vergangenheit nicht ausgewählt werden?
+                if (!this._selectDateInPast && kijs.Date.getDatePart(day).getTime() < kijs.Date.getDatePart(new Date()).getTime() ||
+                    !this._selectDateInFuture && kijs.Date.getDatePart(day).getTime() > kijs.Date.getDatePart(new Date()).getTime()) {
+                    fldDom.clsAdd('kijs-no-select');
+//                    this._gridColumns[i].rows[x].dom.off('click', this._onDateMouseClick, this);
+
+                } else {
+                    fldDom.clsRemove('kijs-no-select');
+
+                    // TODO: Die listener sollten nicht entfernt werden, sondern im Event nicht ausgeführt.
+//                    this._gridColumns[i].rows[x].dom.on('click', this._onDateMouseClick, this);
                 }
 
                 // selektiertes Datum?
@@ -490,12 +521,9 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 }
 
                 // 1 Tag addieren
-                day.setDate(day.getDate()+1);
+                 day.setDate(day.getDate()+1);
             }
-
-
         }
-
     }
 
     _getElementByDom(dom) {
@@ -536,6 +564,11 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._setYearPicker(this._visibleMonthDate.getFullYear());
         this._calculateCalendar();
         this._calculateMonthYearPicker();
+
+        if (!this._showCalendar) {
+            this.value.setMonth(this.value.getMonth()+1);
+            this.raiseEvent('dateChanged', {value: this.value});
+        }
     }
 
     _onPreviousBtnClick() {
@@ -543,6 +576,11 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._setYearPicker(this._visibleMonthDate.getFullYear());
         this._calculateCalendar();
         this._calculateMonthYearPicker();
+
+        if (!this._showCalendar) {
+            this.value.setMonth(this.value.getMonth()-1);
+            this.raiseEvent('dateChanged', {value: this.value});
+        }
     }
     _onDateMouseClick(e) {
         let dt = this._getElementByDom(e.dom);
@@ -596,8 +634,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
 
     _onHeaderBarClick() {
-        this._showCalendar = !this._showCalendar;
-        this.render();
+        if (this._hasDays) {
+            this._showCalendar = !this._showCalendar;
+            this.render();
+        }
     }
 
     _onTodayButtonClick(e) {
@@ -615,6 +655,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     _onMonthSelectorClick(e) {
         let m = this._getElementByDom(e.dom);
         if (m.month || m.month === 0) {
+            this.value.setMonth(m.month);
             this._visibleMonthDate.setMonth(m.month);
             this._calculateCalendar();
             this._calculateMonthYearPicker();
@@ -623,11 +664,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (this.inputField) {
             this.inputField.focus();
         }
+
+        this.raiseEvent('dateChanged', {value: this.value});
     }
 
     _onYearSelectorClick(e) {
         let y = this._getElementByDom(e.dom);
         if (y.year) {
+            this.value.setFullYear(y.year);
             this._visibleMonthDate.setFullYear(y.year);
             this._calculateCalendar();
             this._calculateMonthYearPicker();
@@ -636,6 +680,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (this.inputField) {
             this.inputField.focus();
         }
+
+        this.raiseEvent('dateChanged', {value: this.value});
     }
 
     _onYearSelectorUpClick() {
@@ -711,12 +757,19 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
 
         // Variablen (Objekte/Arrays) leeren
-        this._nextBtn = null;
-        this._previousBtn = null;
-        this._headerBar = null;
+        this._startWeekday = null;
+        this._showWeekNumbers = null;
+        this._hasDays = null;
+        this._weekSelect = null;
+        this._showCalendar = null;
+        this._selectDateInPast = null;
+        this._selectDateInFuture = null;
 
-        this._calendarDom = null;
-        this._todayBtn = null;
+        this._visibleMonthDate = null;
+
+        this._value = null;
+        this._rangeFrom = null;
+        this._rangeTo = null;
 
         // Basisklasse entladen
         super.destruct(true);

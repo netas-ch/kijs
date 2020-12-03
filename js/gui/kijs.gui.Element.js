@@ -247,6 +247,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Event-Weiterleitungen von this._dom
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
+        this._eventForwardsAdd('rightClick', this._dom);
         this._eventForwardsAdd('drag', this._dom);
         this._eventForwardsAdd('dragOver', this._dom);
         this._eventForwardsAdd('dragStart', this._dom);
@@ -571,7 +572,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null}                     HTML-Node, das den Fokus erhalten hat
      */

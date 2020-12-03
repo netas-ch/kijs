@@ -350,7 +350,7 @@ kit.App = class kit_App {
                                     waitMaskTargetDomProperty: 'innerDom',
                                     cls: 'kijs-flexcolumn',
                                     on: {
-                                        close: function() { console.log('close') },
+                                        close: function() { console.log('close'); }
                                     },
 //                                    innerStyle: {
 //                                        padding: '10px',

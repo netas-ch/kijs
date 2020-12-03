@@ -20,7 +20,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._data = [];
         this._facadeFnLoad = null;
         this._facadeFnArgs = {};
-        //this._filters = [];       // 24.11.2020 gkipfer: Filter-Funktion muss noch fertig gestellt und getestet werden.
+        this._filters = [];
         this._focusable = true;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
@@ -157,7 +157,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
-    /*get filters() { return this._filters; }
+    get filters() { return this._filters; }
     set filters(val) {
         if (!val) {
             this._filters = [];
@@ -178,8 +178,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             this._filters = val;
         }
-
-    }*/
+    }
 
     get focusable() { return this._focusable; }
     set focusable(val) {
@@ -224,14 +223,14 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Array|Object} filters
      * @returns {undefined}
      */
-    /*applyFilters(filters) {
+    applyFilters(filters) {
         this.filters = filters;
         if (this.isRendered) {
             this._createElements(this._data);
             // Current Element ermitteln und setzen
             this.current = null;
         }
-    }*/
+    }
 
     /**
      * Fügt Daten hinzu
@@ -664,7 +663,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             if (newEl.index === currentIndex) {
                 this._currentEl = newEl;
             }
-            
+
             newElements.push(newEl);
         }
 

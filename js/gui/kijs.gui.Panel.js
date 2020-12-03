@@ -61,6 +61,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         Object.assign(this._configMap, {
             // headerBar
             caption: { target: 'html', context: this._headerBarEl },
+            headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },
             headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },
             headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },
             iconChar: { target: 'iconChar', context: this._headerBarEl },
