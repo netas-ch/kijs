@@ -62,15 +62,15 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         });
 
         this._trimValue = true;
+        this._link = false;
+        this._linkType = 'auto';
 
         this._dom.clsAdd('kijs-field-display');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             htmlDisplayType: 'html',
-            submitValue: false,
-            link: false,
-            linkType: 'auto'
+            submitValue: false
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
@@ -128,6 +128,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // overwrite
     get value() {
         let val = this._inputDom.html;
+        if (this._trimValue && kijs.isString(val)) {
+            val = val.trim();
+        }
+
         return val === null ? '' : val;
     }
     set value(val) {
@@ -202,7 +206,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
 
         // Webseite
-        if (value.match(/^[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
+        if (value.match(/^(?:(?:http|https|ftp):\/\/)?[a-z0-9\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}(?:\/{1}(?:[a-z0-9_\-\.%\?\#=&\+])+)*$/i)) {
             return 'web';
         }
 

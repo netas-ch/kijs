@@ -26,6 +26,8 @@ kit.App = class kit_App {
     run() {
         let _this = this;
 
+        document.title = 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch'
+
         // ViewPort erstellen
         let viewport = new kijs.gui.ViewPort({
             cls: 'kijs-flexcolumn',
@@ -33,7 +35,7 @@ kit.App = class kit_App {
                 // TOP
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'kijs the new aera of multidevice apps',
+                    caption: 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch',
                     iconCls: 'icoWizard16',
                     collapsible: 'top',
                     collapsed: true,
@@ -887,13 +889,13 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Email',
-                                            value: 'info@kipferinformatik.ch',
+                                            value: 'info@netas.ch',
                                             link: true
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Webseite',
-                                            value: 'www.kipferinformatik.ch',
+                                            value: 'www.netas.ch',
                                             link: true
                                         },{
                                             xtype: 'kijs.gui.field.Text',
@@ -1703,10 +1705,10 @@ kit.App = class kit_App {
                             caption: 'set html',
                             on: {
                                 click: function(e) {
-                                    this.__testState = this.__testState || 0;
+                                    window.__testState = window.__testState || 0;
                                     let el = this.parent.elements[0];
                                     let html = 'Text mit <span style="color:#f00">Formatierung</span>';
-                                    switch (this.__testState) {
+                                    switch (window.__testState) {
                                         case 0:
                                             el.htmlDisplayType = 'html';
                                             el.html = html;
@@ -1723,9 +1725,9 @@ kit.App = class kit_App {
                                             this.caption = 'html';
                                             break;
                                     }
-                                    this.__testState++;
-                                    if (this.__testState > 2) {
-                                        this.__testState = 0;
+                                    window.__testState++;
+                                    if (window.__testState > 2) {
+                                        window.__testState = 0;
                                     }
                                 }
                             }
