@@ -528,7 +528,26 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Sortiert die Elemente mit einer Funktion. Der Funktion werden
+     * zwei Elemente zum Vergleich übergeben, die Funktion
+     * muss 1, 0 oder -1 zurückgeben, wenn a grösser, gleich oder kleiner b ist.
+     * @param {Function} compareFn
+     * @param {Object|null} context
+     * @returns {undefined}
+     */
+    sort(compareFn, context=null) {
+        if (kijs.isFunction(compareFn)) {
+            this._elements.sort((a, b) => {
+                return compareFn.call(context || this, a, b);
+            });
 
+            // elemente in der neuen Reihenfolge rendern.
+            if (this.isRendered) {
+                this._renderElements();
+            }
+        }
+    }
 
     // overwrite
     render(superCall) {

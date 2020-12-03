@@ -143,7 +143,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             spinIconCls: { target: 'iconCls', context: this._spinIconEl },
             spinIconColor: { target: 'iconColor', context: this._spinIconEl },
             spinIconVisible: { target: 'visible', context: this._spinIconEl },
-            
+
             validationFn: true,
             validationFnContext: true
         });
@@ -307,7 +307,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get inputWrapperDom() { return this._inputWrapperDom; }
 
     get isDirty() {
-        if (this._dom.clsHas('kijs-disabled')) {
+        if (this.disabled) {
             return false;
         } else {
             return this._originalValue !== this.value;
@@ -608,12 +608,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this._errors.push(kijs.getText('Dieses Feld darf maximal %1 Zeichen enthalten', '', this._maxLength));
             }
         }
-        
-        if (this._validationFn && kijs.isFunction(this._validationFn)) {
+
+        if (kijs.isFunction(this._validationFn)) {
             let error = this._validationFn.call(this._validationFnContext || this, value);
             if (error) {
                 if (kijs.isString(error)) {
                     this._errors.push(error);
+                    
                 } else if (kijs.isArray(error)) {
                     kijs.Array.each(error, function(e) {
                         this._errors.push(e);
