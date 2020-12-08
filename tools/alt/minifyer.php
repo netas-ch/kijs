@@ -1,8 +1,8 @@
 <?php
 require_once 'jsClassAnalyzer.php';
-require_once '../lib/jsmin/JSMin.php';
+require_once '../../lib/jsmin/JSMin.php';
 
-new minifyer('../js', 'kijs-min.js', 'kijs-debug.js');
+new minifyer('../../js', 'kijs-min.js', 'kijs-debug.js');
 
 
 /**

@@ -255,7 +255,6 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                         label: config.label,
                         value: config.value,
                         required: !!config.required,
-                        facadeFnArgs: config.facadeFnArgs ? config.facadeFnArgs : null,
                         labelStyle: {
                             marginRight: '4px'
                         },
@@ -272,6 +271,10 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                     }
                 ]
             });
+
+            if (config.facadeFnArgs) {
+                elements.down('field').facadeFnArgs = config.facadeFnArgs;
+            }
 
         } else {
             // Text
