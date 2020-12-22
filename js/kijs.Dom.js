@@ -328,12 +328,14 @@ kijs.Dom = class kijs_Dom {
      */
     static removeAllChildNodes(node) {
         if (node.replaceChildren) {
-            node.replaceChildren(); // faster (firefox 78+, chrome 86+, ..)
+            // faster (firefox 78+, chrome 86+, ..)
+            node.replaceChildren();
+        }
 
-        } else {
-            while (node.hasChildNodes()) {
-                node.removeChild(node.lastChild);
-            }
+        // Bugfix: replaceChildren funktioniert in Safari 14.0.1 nicht korrekt,
+        // daher das while auch ausführen, wenn replaceChildren ausgeführt wurde.
+        while (node.hasChildNodes()) {
+            node.removeChild(node.lastChild);
         }
     }
 
