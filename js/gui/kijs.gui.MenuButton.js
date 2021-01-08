@@ -12,7 +12,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     constructor(config={}) {
         super(false);
 
-        this._spinbox = new kijs.gui.SpinBox({
+        this._spinBoxEl = new kijs.gui.SpinBox({
             cls: ['kijs-flexcolumn', 'kijs-menubutton-spinbox'],
             parent: this,
             target: this,
@@ -24,6 +24,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            autoScroll: true
             // keine
         });
 
@@ -44,14 +45,14 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             direction: { target: 'direction', context: this},
             expandOnHover: { target: 'expandOnHover', context: this},
 
-            // Attribute für Container weiterreichen
-            autoScroll: { target: 'autoScroll', context: this._spinbox },
-            defaults: { target: 'defaults', context: this._spinbox, prio: 1},
+            // Attribute für SpinBoxEl weiterreichen
+            autoScroll: { target: 'autoScroll', context: this._spinBoxEl },
+            defaults: { target: 'defaults', context: this._spinBoxEl, prio: 1},
             elements: { target: 'elements', prio: 2},
-            html: { target: 'html', context: this._spinbox },
-            htmlDisplayType: { target: 'htmlDisplayType', context: this._spinbox },
-            innerCls: { target: 'innerCls', context: this._spinbox },
-            innerStyle : { target: 'innerStyle', context: this._spinbox }
+            html: { target: 'html', context: this._spinBoxEl },
+            htmlDisplayType: { target: 'htmlDisplayType', context: this._spinBoxEl },
+            innerCls: { target: 'innerCls', context: this._spinBoxEl },
+            innerStyle : { target: 'innerStyle', context: this._spinBoxEl }
         });
 
         // Config anwenden
@@ -99,31 +100,31 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
         switch (val) {
             case 'left':
-                this._spinbox.ownPos = 'tr';
-                this._spinbox.targetPos = 'tl';
-                this._spinbox.offsetX = -5;
+                this._spinBoxEl.ownPos = 'tr';
+                this._spinBoxEl.targetPos = 'tl';
+                this._spinBoxEl.offsetX = -5;
                 break;
             case 'right':
-                this._spinbox.ownPos = 'tl';
-                this._spinbox.targetPos = 'tr';
-                this._spinbox.offsetX = -5;
+                this._spinBoxEl.ownPos = 'tl';
+                this._spinBoxEl.targetPos = 'tr';
+                this._spinBoxEl.offsetX = -5;
                 break;
             case 'up':
-                this._spinbox.ownPos = 'bl';
-                this._spinbox.targetPos = 'tl';
-                this._spinbox.offsetX = 0;
+                this._spinBoxEl.ownPos = 'bl';
+                this._spinBoxEl.targetPos = 'tl';
+                this._spinBoxEl.offsetX = 0;
                 break;
             case 'down':
-                this._spinbox.ownPos = 'tl';
-                this._spinbox.targetPos = 'bl';
-                this._spinbox.offsetX = 0;
+                this._spinBoxEl.ownPos = 'tl';
+                this._spinBoxEl.targetPos = 'bl';
+                this._spinBoxEl.offsetX = 0;
                 break;
         }
     }
 
-    get elements() { return this._spinbox.elements; }
+    get elements() { return this._spinBoxEl.elements; }
     set elements(val) {
-        this._spinbox.removeAll();
+        this._spinBoxEl.removeAll();
         this.add(val);
     }
 
@@ -144,7 +145,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         this._expandOnHover = !!val;
     }
 
-    get spinbox() { return this._spinbox; }
+    get spinbox() { return this._spinBoxEl; }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -184,7 +185,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             }
         });
 
-        this._spinbox.add(newElements);
+        this._spinBoxEl.add(newElements);
     }
 
     /**
@@ -192,7 +193,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
      * @returns {undefined}
      */
     menuClose() {
-        this._spinbox.close();
+        this._spinBoxEl.close();
 
         // timeout löschen
         if (this._expandTimer) {
@@ -203,7 +204,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         let p = this.parent;
         while (p) {
             if (p instanceof kijs.gui.MenuButton) {
-                p.spinbox.ownerNodeRemove(this._spinbox);
+                p.spinbox.ownerNodeRemove(this._spinBoxEl);
             }
             p = p.parent;
         }
@@ -229,14 +230,14 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
      * @returns {undefined}
      */
     menuShow() {
-        this._spinbox.show();
+        this._spinBoxEl.show();
 
         // den übergeordneten MenuButtons mitteilen, dass beim Klick auf dieses Element
         // das Menu nicht geschlossen werden soll.
         let p = this.parent;
         while (p) {
             if (p instanceof kijs.gui.MenuButton) {
-                p.spinbox.ownerNodeAdd(this._spinbox);
+                p.spinbox.ownerNodeAdd(this._spinBoxEl);
             }
             p = p.parent;
         }
@@ -349,7 +350,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     // PROTECTED
     _onBtnClick() {
 
-        if (this._spinbox.dom.node) {
+        if (this._spinBoxEl.dom.node) {
             this.menuClose();
         } else {
             this.menuShow();
@@ -359,7 +360,7 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
     _onMouseEnter() {
         if (!this._expandTimer) {
             this._expandTimer = kijs.defer(function() {
-                if (!this._spinbox.dom.node) {
+                if (!this._spinBoxEl.dom.node) {
                     this.menuShow();
                 }
             }, 500, this);
@@ -398,12 +399,12 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._spinbox) {
-            this._spinbox.destruct();
+        if (this._spinBoxEl) {
+            this._spinBoxEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
-        this._spinbox = null;
+        this._spinBoxEl = null;
 
         // Basisklasse entladen
         super.destruct(true);

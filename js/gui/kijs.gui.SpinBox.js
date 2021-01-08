@@ -23,7 +23,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._allowSwapX = true;    // Swappen möglich auf X-Achse?
         this._allowSwapY = true;    // Swappen möglich auf Y-Achse?
 
-        this._autoSize = 'min';     // Grösse (ja nach Pos die Breite oder Höhe) an das targetEl anpassen.
+        this._autoSize = 'min';     // Grösse (je nach Pos die Breite oder Höhe) an das targetEl anpassen.
                                     // Werte: 'min' Grösse ist mind. wie beim targetEl
                                     //        'max' Grösse ist höchstens wie beim targetEl
                                     //        'fit' Grösse ist gleich wie beim targetEl
@@ -86,6 +86,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     get allowSwapY() { return this._allowSwapY; }
     set allowSwapY(val) { this._allowSwapY = !!val; }
 
+    // overwrite, damit overflow beim dom statt innerDom zugewiesen wird
+    get autoScroll() { return this._dom.clsHas('kijs-autoscroll'); }
+    set autoScroll(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-autoscroll');
+        } else {
+            this._dom.clsRemove('kijs-autoscroll');
+        }
+    }
+    
     get autoSize() { return this._autoSize; }
     set autoSize(val) {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
@@ -159,6 +169,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     }
 
     // overwrite
+    get width() { return super.width; }
     set width(val) {
         this._autoWidth = kijs.isNumeric(val) ? false : true;
         super.width = val;
@@ -232,8 +243,10 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // SpinBox anzeigen
         this.renderTo(document.body);
 
-        // Breite rechnen
-        this._calculateWidth();
+        // Workaround um die Breite zu rechnen.
+        // Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
+        // auch wenn der Inhalt keine definierte Breite hat (z.B. bei einem Menu).
+        this._widthWorkaround();
 
         // Ausrichten
         if (this._targetEl) {
@@ -349,27 +362,24 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
+
     /**
+     * Workaround um die Breite zu rechnen.
+     * Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
+     * auch wenn der Inhalt keine definierte Breite hat (z.B. bei einem Menu).
      * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese Fix ein.
-     * Dies wird benötigt, das Firefox die Scrollbar nicht in die Breite einrechnet.
      * @returns {undefined}
      */
-    _calculateWidth() {
-        if (this._autoWidth) {
-            this._dom.node.style.overflow = 'hidden';
+    _widthWorkaround() {
+        if (this._autoWidth && this.autoScroll) {
+            this.autoScroll = false;
             this._dom.width = null;
             let pos = kijs.Dom.getAbsolutePos(this._dom.node);
             let sbw = kijs.Dom.getScrollbarWidth();
             let w = pos.w + sbw + 10;
 
-            // Firefox macht die scrollbar innerhalb
-            // vom Container, deshalb benötigt er mehr Breite.
-            if (kijs.Navigator.isFirefox) {
-                w += 7;
-            }
-
             this._dom.width = w;
-            this._dom.node.style.overflow = 'auto';
+            this.autoScroll = true;
         }
     }
 

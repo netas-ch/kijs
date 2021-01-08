@@ -1126,18 +1126,16 @@ kit.App = class kit_App {
                                             iconChar: '&#xf0d8',
                                             on: {
                                                 click: function() {
-                                                    /*if (!this.menu) {
-                                                        this.menu = new kijs.gui.menu.Menu({
-                                                            targetEl: this,
-                                                            targetPos: 'tl',
-                                                            pos: 'bl',
-                                                            innerStyle: {
-                                                                padding: '10px'
-                                                            },
-                                                            html: 'Ich bin ein Menü mit etwas HTML-Inhalt<br>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.'
-                                                        });
-                                                    }
-                                                    this.menu.show();*/
+                                                    let spinBox = new kijs.gui.SpinBox({
+                                                        target: this,
+                                                        targetPos: 'tl',
+                                                        ownPos: 'bl',
+                                                        innerStyle: {
+                                                            padding: '10px'
+                                                        },
+                                                        html: 'Ich bin eine SpinBox mit etwas HTML-Inhalt<br>Bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla.'
+                                                    });
+                                                    spinBox.show();
                                                 }
                                             }
                                         },{
@@ -1300,7 +1298,7 @@ kit.App = class kit_App {
                                             },
                                             innerStyle: {
                                                 padding: '10px',
-                                                overflowY: 'auto'
+                                                /*overflowY: 'auto'*/
                                             }
                                         }
                                     ],
