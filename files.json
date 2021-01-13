@@ -63,6 +63,7 @@
    "js/gui/kijs.gui.FormPanel.js",
 
    "js/gui/kijs.gui.TimePicker.js",
+   "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",
 
    "js/gui/field/kijs.gui.field.js",
@@ -78,6 +79,7 @@
    "js/gui/field/kijs.gui.field.OptionGroup.js",
    "js/gui/field/kijs.gui.field.Combo.js",
    "js/gui/field/kijs.gui.field.Display.js",
+   "js/gui/field/kijs.gui.field.Month.js",
    "js/gui/field/kijs.gui.field.DateTime.js",
    "js/gui/field/kijs.gui.field.Range.js"
   ],

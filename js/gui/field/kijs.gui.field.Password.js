@@ -23,7 +23,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         this._disableBrowserSecurityWarning = false;
         this._passwordChar = '•';
-        this._trimValue = false;
+        this._valueTrim = false;
 
         this._value = null;
 
@@ -41,7 +41,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
             passwordChar: true,
-            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             placeholder: { target: 'placeholder' }
         });
 
@@ -132,8 +132,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
     }
 
-    get trimValue() { return this._trimValue; }
-    set trimValue(val) { this._trimValue = val; }
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
 
     // overwrite
     get value() {
@@ -145,7 +145,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             val = this._inputDom.nodeAttributeGet('value');
         }
 
-        if (this._trimValue && kijs.isString(val)) {
+        if (this._valueTrim && kijs.isString(val)) {
             val = val.trim();
         }
 

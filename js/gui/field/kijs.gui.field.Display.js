@@ -61,7 +61,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             }
         });
 
-        this._trimValue = true;
+        this._valueTrim = true;
         this._link = false;
         this._linkType = 'auto';
 
@@ -75,7 +75,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             link: true,                  // Weblink zum anklicken machen
             linkType: true,              // Art des Links: tel, mail, web (default: automatisch)
             htmlDisplayType: { target: 'htmlDisplayType', context: this._inputDom }
@@ -122,13 +122,13 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
 
-    get trimValue() { return this._trimValue; }
-    set trimValue(val) { this._trimValue = val; }
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
 
     // overwrite
     get value() {
         let val = this._inputDom.html;
-        if (this._trimValue && kijs.isString(val)) {
+        if (this._valueTrim && kijs.isString(val)) {
             val = val.trim();
         }
 

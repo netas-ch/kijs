@@ -791,6 +791,34 @@ kit.App = class kit_App {
                                                 }
                                             ]
                                         },{
+                                            xtype: 'kijs.gui.field.Month',
+                                            name: 'Monat',
+                                            label: 'Monat',
+                                            width: 260,
+                                            value: '2019-12-01',
+                                            minValue: '2020-11-01',
+                                            maxValue: '2022-03-30',
+                                            lastDayOfMonthAsValue: true,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.MonthPicker',
+                                            value: '2020-12-01',
+                                            minValue: '2021-02-01',
+                                            maxValue: '2022-03-30',
+                                            headerBarHide: false,
+                                            currentBtnHide: false,
+                                            okBtnHide: true,
+                                            cancelBtnHide: true,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value);
+                                                }
+                                            }
+                                        },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeitSec',
                                             label: 'Datum & Zeit & Sec',
