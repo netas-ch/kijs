@@ -30,6 +30,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            autoScroll: true,
             focusable: true,
             selectType: 'single'
         });

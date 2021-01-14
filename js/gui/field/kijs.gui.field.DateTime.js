@@ -97,8 +97,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
-            width: 383,
-            height: 260,
+            //width: 383,
+            //height: 260,
             cls: ['kijs-flexrow', 'kijs-spinbox-datetime'],
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
@@ -295,7 +295,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasDate) {
             this._spinBoxEl.add(this._datePicker);
-            this._spinBoxEl.width = 190;
+            //this._spinBoxEl.width = 190;
         } else {
             this._spinBoxEl.remove(this._datePicker);
         }
@@ -308,11 +308,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         if (this._hasTime) {
             this._spinBoxEl.add(this._timePicker);
-            this._spinBoxEl.width = 157 + (this._hasDate ? 190 + 3 : 0);
-            this._spinBoxEl.height = 260;
+            //this._spinBoxEl.width = 157 + (this._hasDate ? 190 + 3 : 0);
+            //this._spinBoxEl.height = 260;
         } else {
             this._spinBoxEl.remove(this._timePicker);
-            this._spinBoxEl.height = 230;
+            //this._spinBoxEl.height = 230;
         }
 
         this._timePicker.hasSeconds = !!this._hasSeconds;
@@ -377,33 +377,36 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
      * @returns {Date|Boolean}
      */
     _getDateTimeByString(dateTimeStr) {
-        let year=null, month=null, day=null, hour=0, minute=0, second=0, timeMatch = false, dateTimeAr, timeStr, dateStr;
+        let year=null, month=null, day=null;
+        let hour=0, minute=0, second=0;
+        let timeMatch=false, dateTimeArr, timeStr, dateStr;
+        
         dateTimeStr = kijs.toString(dateTimeStr);
 
-            if (dateTimeStr.includes(" ") && this._hasDate) {
-                dateTimeAr = dateTimeStr.split(" ");
-                dateStr = dateTimeAr[0];
+        // Falls die Eingabe Leerzeichen hat: 
+        // Der erste Teil als Datum (dateStr) nehmen, die weiteren Teile als Uhrzeit (timeStr)
+        if (dateTimeStr.includes(' ') && this._hasDate) {
+            dateTimeArr = dateTimeStr.split(' ');
+            dateStr = dateTimeArr[0];
 
-                if (dateTimeAr.length > 1) {
-                    kijs.Array.each(dateTimeAr, function(item, i) {
-
-                        if (i > 0) {
-                            timeStr = timeStr + dateTimeAr[i];
-                        }
-                    });
-
-                } else {
-                    timeStr = dateTimeAr[1];
-                }
+            if (dateTimeArr.length > 1) {
+                kijs.Array.each(dateTimeArr, function(item, i) {
+                    if (i > 0) {
+                        timeStr += dateTimeArr[i];
+                    }
+                });
 
             } else {
-                timeStr = dateTimeStr;
-                dateStr = dateTimeStr;
+                timeStr = dateTimeArr[1];
             }
+
+        } else {
+            timeStr = dateTimeStr;
+            dateStr = dateTimeStr;
+        }
 
         // Uhrzeit
         if (this._hasTime) {
-
             // Uhrzeit lesen (12:12)
             dateTimeStr = dateTimeStr.replace(/([0-9]{1,2}):([0-9]{1,2})(?::([0-9]{1,2}))?/, function(match, h, i, s) {
                 timeMatch = true;

@@ -58,13 +58,13 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             }
         });
 
-        this._trimValue = true;
+        this._valueTrim = true;
 
         this._dom.clsAdd('kijs-field-text');
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            trimValue: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             placeholder: { target: 'placeholder' }
         });
 
@@ -125,13 +125,13 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }
     }
 
-    get trimValue() { return this._trimValue; }
-    set trimValue(val) { this._trimValue = val; }
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
 
     // overwrite
     get value() {
         let val = this._inputDom.nodeAttributeGet('value');
-        if (this._trimValue && kijs.isString(val)) {
+        if (this._valueTrim && kijs.isString(val)) {
             val = val.trim();
         }
         return val === null ? '' : val;

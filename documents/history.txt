@@ -1,0 +1,36 @@
+Version 1.2.0
+================================================================================
+Neue Klassen
+-------------
+ - kijs.gui.MonthPicker
+ - kijs.gui.field.Month
+
+Änderungen
+----------
+1. kijs.gui.DatePicker
+
+2. Neue Funktionen in kijs.Date
+- kijs.Date.getSqlDate(date);
+- kijs.Date.getSqlDateTime(date);
+- kijs.Date.getSqlTime(time);
+
+
+Anpassungen, die an Projekten vorgenommen werden müssen
+-------------------------------------------------------
+
+1. Eigenschaft "trimValue" umbenennen zu "valueTrim"
+
+Betrifft: 
+- kijs.gui.field.Display
+- kijs.gui.field.Memo
+- kijs.gui.field.Password
+- kijs.gui.field.Text
+
+
+2. Eigenschaften "selectDateInPast" und "selectDateInFuture" gibt es nicht mehr.
+Bitte dafür neu die Eigenschaften "minValue" und "maxValue" verwenden.
+Beispiel: minValue:new Date()
+
+Betrifft:
+   - kijs.gui.field.DateTime
+   - kijs.gui.DatePicker

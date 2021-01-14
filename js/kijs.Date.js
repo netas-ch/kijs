@@ -482,6 +482,18 @@ kijs.Date = class kijs_Date {
         }
         return 52;
     }
+    
+    static getSqlDate(date) {
+        return kijs.isEmpty(date) ? '' : this.format(date, 'Y-m-d');
+    }
+    
+    static getSqlDateTime(date) {
+        return kijs.isEmpty(date) ? '' : this.format(date, 'Y-m-d H:i:s');
+    }
+    
+    static getSqlTime(time) {
+        return kijs.isEmpty(time) ? '' : this.format(time, 'H:i:s');
+    }
 
     /**
      * Gibt das Datum des letzten Tags (Sonntag) einer Kalenderwoche nach ISO-8601 zurück

@@ -698,7 +698,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
                 // Kann in der Höhe die Position gewechselt werden? (t->b und b->t)
                 if (posSwap) {
-                    rectSwap = kijs.Graphic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX, offsetY*swapOffsetFactor);
+                    rectSwap = kijs.Graphic.alignRectToRect(e, target, targetPosSwap, posSwap, offsetX, offsetY*swapOffsetFactor);
                     overlapSwap = kijs.Graphic.rectsOverlap(rectSwap, b);
 
                     if (overlapSwap.fitY) {
@@ -747,7 +747,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
                 // Kann in der Breite die Position gewechselt werden? (l->r und r->l)
                 if (posSwap) {
-                    rectSwap = kijs.Graphic.alignRectToRect(e, t, targetPosSwap, posSwap, offsetX*swapOffsetFactor, offsetY);
+                    rectSwap = kijs.Graphic.alignRectToRect(e, target, targetPosSwap, posSwap, offsetX*swapOffsetFactor, offsetY);
                     overlapSwap = kijs.Graphic.rectsOverlap(rectSwap, b);
 
                     if (overlapSwap.fitX) {

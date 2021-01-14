@@ -872,8 +872,6 @@ button.kijs-button.kijs-trigger {
    * Menu-Button
    ****************** */
 div.kijs-menubutton-spinbox {
-    overflow: auto;
-
     .kijs-container-inner > * {
         margin: 0;
         border-radius: 0;
@@ -1146,7 +1144,6 @@ div.kijs-tree {
 
     &.kijs-tree-root > .kijs-container-inner {
         height: 100%;
-        overflow: auto;
 
         > div {
             flex-shrink: 0;
@@ -1352,9 +1349,6 @@ div.kijs-listview {
     align-items: stretch;
     border: 1px solid @field-borderColor;
 
-    > .kijs-container-inner {
-        overflow-y: auto;
-    }
     .kijs-dataviewelement {
         border: 1px solid transparent;
         padding: 0 4px 0 4px;
@@ -1454,6 +1448,107 @@ div.kijs-listview {
         }
     }
 }
+
+
+
+/* ******************
+   * MonthPicker
+   ****************** */
+div.kijs-monthpicker {
+    width: 184px;
+    border: 1px solid @panel-borderColor;
+    
+    &.kijs-borderless {
+        border: none;
+    }
+
+    .kijs-monthpicker-yearmonthdiv {
+        display: flex;
+        flex-direction: row;
+        margin: 4px 0 0 0;
+        
+        font-family: @default-fontFamily;
+        font-size: @field-fontSize;
+        
+        .kijs-monthpicker-monthdiv {
+            flex: 2;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-right: 1px solid @panel-borderColor;
+            
+            > div {
+                width: 40%;
+                text-align: center;
+                padding: 2px 6px;
+                margin: 2px;
+                border: 1px solid transparent;
+                
+                &:hover {
+                    background-color: @item-focus-bkgrndColor;
+                }
+                
+                &.kijs-disabled {
+                    color: @button-disabled-fontColor;
+                    &:hover { background-color: initial; }
+                }
+                
+                &.kijs-selected {
+                    border: 1px solid @item-selected-borderColor;
+                }
+            }
+        }
+        
+        .kijs-monthpicker-yeardiv {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            
+            > .kijs-button {
+                height: 16px;
+                margin: 2px 0;
+                padding: 0 8px;
+                line-height: 12px;
+            }
+            
+            .kijs-monthpicker-yearinnerdiv {
+                > div {
+                    text-align: center;
+                    padding: 2px 6px;
+                    margin: 2px;
+                    border: 1px solid transparent;
+                    
+                    &:hover {
+                        background-color: @item-focus-bkgrndColor;
+                    }
+                    
+                    &.kijs-disabled {
+                        color: @button-disabled-fontColor;
+                        &:hover { background-color: initial; }
+                    }
+                                        
+                    &.kijs-selected {
+                        border: 1px solid @item-selected-borderColor;
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    .kijs-monthpicker-footerdiv {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        
+        .kijs-button {
+            flex: none;
+            margin: 10px 4px;
+        }
+    }
+}
+
 
 
 /* ******************
@@ -1615,7 +1710,7 @@ div.kijs-datepicker {
     }
 
     > button.kijs-button {
-        margin-top: 10px;
+        margin: 10px 0;
         left: 50%;
         width: 100px;
         margin-left: -50px;
@@ -1635,6 +1730,70 @@ div.kijs-datepicker {
     border-right: 1px solid white;
 }
 
+
+
+  /* ******************
+   * TimePicker
+   ****************** */
+div.kijs-timepicker {
+    height: 100%;
+    min-width: 157px;
+    display: flex;
+    flex-direction: column;
+
+    .kijs-inputcontainer {
+        flex: none;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        height: 45px;
+
+        input, span {
+            font-size: 32px;
+            line-height: 32px;
+        }
+
+        input {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            width: 36px;
+            border: 0;
+        }
+
+        input::selection {
+            background: #fff;
+        }
+        input::-moz-selection {
+            background: #fff;
+        }
+
+        input:focus {
+            color: #2B8BD9;
+        }
+    }
+
+    .kijs-canvascontainer {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        canvas {
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+    }
+
+    >button.kijs-button {
+        flex: none;
+        margin: 10px 0;
+        left: 50%;
+        width: 100px;
+        margin-left: -50px;
+    }
+}
 
 
 /* ******************
@@ -1885,6 +2044,52 @@ div.kijs-field-password {
             background-color: @field-disabled-bkgrndColor;
         }
     }
+}
+
+
+
+/* ******************
+   * Field Month
+   ****************** */
+div.kijs-field-month {
+
+    > .kijs-inputwrapper {
+        height: 25px;
+
+        > input {
+            display: block;
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            border: 1px solid @field-borderColor;
+            padding: 2px 4px;
+            font-family: @default-fontFamily;
+            font-size: @field-fontSize;
+            line-height: 17px;
+
+            &:focus {
+                border: 1px solid @field-focus-borderColor;
+            }
+        }
+    }
+
+    > .kijs-icon {
+        height: 25px;
+    }
+
+    &.kijs-error  > .kijs-inputwrapper > input {
+        background-color: @field-error-bkgrndColor;
+    }
+
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > input {
+            background-color: @field-disabled-bkgrndColor;
+        }
+    }
+}
+
+.kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
+    height: 100%;
 }
 
 
@@ -2614,7 +2819,7 @@ div.kijs-grid {
     }
 }
 
-  /* ******************
+/* ******************
    * Icon Filter
    ****************** */
 .kijs-filter-icon-checkboxgroup {
@@ -2629,101 +2834,6 @@ div.kijs-grid {
         width: 20px;
     }
 }
-
-
-  /* ******************
-   * Menu
-   ****************** */
-div.kijs-menu {
-    position: absolute;
-    display: block;
-    z-index: 30100;
-    /*border-radius: 4px;*/
-    border: 1px solid @panel-borderColor;
-    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-    font-family: @default-fontFamily;
-    font-size: 13px;
-    background-color: @viewport-bkgrndColor;
-    overflow: auto;
-    opacity: 1;
-    transition: none;
-    visibility: visible;
-
-    &.kijs-hidden {
-        visibility: hidden;
-        opacity: 0;
-        transition: 0.2s;
-    }
-}
-
-
-
-  /* ******************
-   * TimePicker
-   ****************** */
-div.kijs-timepicker {
-    height: 100%;
-    min-width: 157px;
-    display: flex;
-    flex-direction: column;
-
-    .kijs-inputcontainer {
-        flex: none;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        height: 45px;
-
-        input, span {
-            font-size: 40px;
-            line-height: 40px;
-        }
-
-        input {
-            display: inline-block;
-            margin: 0;
-            padding: 0;
-            width: 45px;
-            border: 0;
-        }
-
-        input::selection {
-            background: #fff;
-        }
-        input::-moz-selection {
-            background: #fff;
-        }
-
-        input:focus {
-            color: #2B8BD9;
-        }
-    }
-
-    .kijs-canvascontainer {
-        flex: 1;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        canvas {
-            margin: 0;
-            padding: 0;
-            position: relative;
-        }
-    }
-
-    >button.kijs-button {
-        flex: none;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        left: 50%;
-        width: 100px;
-        margin-left: -50px;
-    }
-}
-
-
-
 
 
 /* ******************
