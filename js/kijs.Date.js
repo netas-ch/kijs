@@ -364,6 +364,10 @@ kijs.Date = class kijs_Date {
             hours = parseInt(sqlDate.substr(11,2));
             minutes = parseInt(sqlDate.substr(14,2));
             seconds = parseInt(sqlDate.substr(17,2));
+
+            if (!seconds) {
+                seconds = 0;
+            }
         }
 
         return new Date(year, month-1, day, hours, minutes, seconds, 0);
@@ -598,4 +602,3 @@ kijs.Date = class kijs_Date {
         }
     }
 };
-
