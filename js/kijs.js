@@ -171,19 +171,21 @@ window.kijs = class kijs {
     /**
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden
      * @param {String} [parameterName] Den Parameter, der gesucht wird. Ohne Argument werden alle zurückgegeben.
-     * @returns {String|Object}
+     * @returns {String|Object|undefined}
      */
     static getGetParameter(parameterName) {
         const params = {};
-        if ('search' in window.location) {
+        if ('search' in window.location && window.location.search && window.location.search.length > 1) {
             const pt = window.location.search.substr(1).split('&');
             for (let i=0; i<pt.length; i++) {
-                let tmp = pt[i].split('=');
-                params[tmp[0]] = tmp.length === 2 ? tmp[1] : null;
+                let tmp = pt[i].split('='), key, val;
+                key = decodeURIComponent(tmp[0]);
+                val = tmp.length === 2 ? decodeURIComponent(tmp[1]) : null;
+                params[key] = val;
             };
         }
 
-        if (parameterName === undefined) {
+        if (!kijs.isDefined(parameterName)) {
             return params;
         } else {
             return params[parameterName];
