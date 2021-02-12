@@ -85,8 +85,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker = new kijs.gui.MonthPicker({
             headerBarHide: true,
             currentBtnHide: false,
-            okBtnHide: true,
-            cancelBtnHide: true,
+            closeBtnHide: true,
             cls: ['kijs-borderless'],
             on: {
                 monthClick: this._onMonthPickerMonthClick,
@@ -100,14 +99,9 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this,
             autoSize: 'none',
-            //cls: ['kijs-flexrow', 'kijs-spinbox-month'],
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            openOnInput: false,
-            parent: this,
-            elements: [
-                this._monthPicker
-            ]
+            parent: this
         });
         this._spinBoxEl.add(this._monthPicker);
         

@@ -65,6 +65,7 @@
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",
+   "js/gui/kijs.gui.DatePicker2.js",
 
    "js/gui/field/kijs.gui.field.js",
    "js/gui/field/kijs.gui.field.Field.js",

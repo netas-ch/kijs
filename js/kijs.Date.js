@@ -248,6 +248,16 @@ kijs.Date = class kijs_Date {
 
         return ret;
     }
+    
+    /**
+     * Gibt die Anzahl Tage zwischen zwei Datum zurück (date2 - date1)
+     * @param {Date} date1
+     * @param {Date} date2
+     * @return {Number}
+     */
+    static diff(date1, date2) {
+        return Math.round((date2-date1)/(1000*60*60*24));
+    }
 
     /**
      * Gibt ein formatierter Datumsstring zurück.
@@ -360,16 +370,16 @@ kijs.Date = class kijs_Date {
         let minutes = 0;
         let seconds = 0;
 
-        if (sqlDate.length > 10) {
+        if (sqlDate.length >= 13) {
             hours = parseInt(sqlDate.substr(11,2));
-            minutes = parseInt(sqlDate.substr(14,2));
-            seconds = parseInt(sqlDate.substr(17,2));
-
-            if (!seconds) {
-                seconds = 0;
-            }
         }
-
+        if (sqlDate.length >= 16) {
+            minutes = parseInt(sqlDate.substr(14,2));
+        }
+        if (sqlDate.length >= 19) {
+            seconds = parseInt(sqlDate.substr(17,2));
+        }
+        
         return new Date(year, month-1, day, hours, minutes, seconds, 0);
     }
 
@@ -483,14 +493,29 @@ kijs.Date = class kijs_Date {
         return 52;
     }
     
+    /**
+     * Gibt das Datum als SQL-String im Format "Y-m-d" zurück
+     * @param {Date} date
+     * @return {String}
+     */
     static getSqlDate(date) {
         return kijs.isEmpty(date) ? '' : this.format(date, 'Y-m-d');
     }
     
+    /**
+     * Gibt das Datum mit Uhrzeit als SQL-String im Format "Y-m-d H:i:s" zurück
+     * @param {Date} date
+     * @return {String}
+     */
     static getSqlDateTime(date) {
         return kijs.isEmpty(date) ? '' : this.format(date, 'Y-m-d H:i:s');
     }
     
+    /*
+     * Gibt die Uhrzeit als SQL-String im Format "H:i:s" zurück
+     * @param {Time} time
+     * @return {String}
+     */
     static getSqlTime(time) {
         return kijs.isEmpty(time) ? '' : this.format(time, 'H:i:s');
     }

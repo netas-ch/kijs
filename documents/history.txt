@@ -10,6 +10,7 @@ Neue Klassen
 1. kijs.gui.DatePicker
 
 2. Neue Funktionen in kijs.Date
+- kijs.Date.diff(date1, date2);
 - kijs.Date.getSqlDate(date);
 - kijs.Date.getSqlDateTime(date);
 - kijs.Date.getSqlTime(time);

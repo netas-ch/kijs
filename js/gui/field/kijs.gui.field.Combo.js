@@ -45,7 +45,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             target: this,
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            openOnInput: true,
             elements: [
                 this._listViewEl
             ],
@@ -116,7 +115,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
         // Listeners
-        //this.on('input', this._onInput, this);
+        this._inputDom.on('input', this._onInputInput, this);
         this._inputDom.on('keyUp', this._onInputKeyUp, this);
         this._inputDom.on('keyDown', this._onInputKeyDown, this);
         this._inputDom.on('change', this._onInputChange, this);
@@ -508,9 +507,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this.load(null, this.value !== '');
     }
 
+    _onInputInput(e) {
+        this._spinBoxEl.show();
+    }
+    
     _onInputKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
-
         if (this._listViewEl.getSelected()) {
             this._listViewEl._onKeyDown(e);
 

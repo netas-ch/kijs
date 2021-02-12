@@ -455,6 +455,34 @@ kit.App = class kit_App {
                                     },
                                     elements: [
                                         {
+                                            xtype: 'kijs.gui.DatePicker',
+                                            selectRange: true,
+                                            name: 'Datum',
+                                            label: 'Datum',
+                                            width:240,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.DatePicker2',
+                                            mode: 'day',
+                                            value: '2020-12-08',
+                                            endValue: '2020-12-14',
+                                            minValue: '2020-12-05',
+                                            maxValue: '2020-12-20',
+                                            weekNumbersHide: false,
+                                            headerBarHide: false,
+                                            todayBtnHide: false,
+                                            emptyBtnHide: false,
+                                            closeBtnHide: true,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value);
+                                                }
+                                            }
+                                        },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
@@ -811,8 +839,7 @@ kit.App = class kit_App {
                                             maxValue: '2022-03-30',
                                             headerBarHide: false,
                                             currentBtnHide: false,
-                                            okBtnHide: true,
-                                            cancelBtnHide: true,
+                                            closeBtnHide: true,
                                             on: {
                                                 change: function(e) {
                                                     console.log('change: ' + e.element.value);

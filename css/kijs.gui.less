@@ -358,6 +358,10 @@ div.kijs-spinbox {
     &.kijs-pos-left {
         box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.1);
     }
+    
+    &.kijs-borderless {
+        border: none;
+    }
 }
 
 
@@ -1480,8 +1484,8 @@ div.kijs-monthpicker {
             > div {
                 width: 40%;
                 text-align: center;
-                padding: 2px 6px;
-                margin: 2px;
+                padding: 0px 2px;
+                margin: 1px;
                 border: 1px solid transparent;
                 
                 &:hover {
@@ -1502,6 +1506,7 @@ div.kijs-monthpicker {
         .kijs-monthpicker-yeardiv {
             flex: 1;
             display: flex;
+            flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
             
@@ -1515,8 +1520,8 @@ div.kijs-monthpicker {
             .kijs-monthpicker-yearinnerdiv {
                 > div {
                     text-align: center;
-                    padding: 2px 6px;
-                    margin: 2px;
+                    padding: 0px 2px;
+                    margin: 1px;
                     border: 1px solid transparent;
                     
                     &:hover {
@@ -1538,6 +1543,127 @@ div.kijs-monthpicker {
     }
     
     .kijs-monthpicker-footerdiv {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        
+        .kijs-button {
+            flex: none;
+            margin: 10px 4px;
+            outline: none; /* damit im Chrome der Schwarze Rand vom Fokus nicht angezeigt wird */
+        }
+    }
+}
+
+
+
+/* ******************
+   * DatePicker2
+   ****************** */
+div.kijs-datepicker2 {
+    width: 184px;
+    border: 1px solid @panel-borderColor;
+    
+    &.kijs-borderless {
+        border: none;
+    }
+
+    .kijs-datepicker2-calendardiv {
+        flex: 1;
+        margin: 0;
+
+        > div {
+            display: flex;
+            flex-direction: row;
+            padding: 0 0 0 5px;
+            
+            > div {
+                flex: 1;
+                width: 22px;
+                height: 22px;
+                margin: 0;
+                padding: 5px 5px 0 0;
+                border: 0;
+                font-family: @default-fontFamily;
+                font-size: @default-fontSize;
+                line-height: @default-fontSize;
+                text-align: right;
+                background-color: @panel-bkgrndColor;
+                
+                &.kijs-none {
+                    /*display: none;*/
+                }
+                
+                &.kijs-head {
+                    padding: 5px 4px 0 0;
+                    color: @item-label-fontColor;
+                    font-weight: bold;
+                }
+                &.kijs-outofmonth {
+                    color: @item-label-fontColor;
+                }
+                &.kijs-today {
+                    color: @today-fontColor;
+
+                    &.kijs-range-start, &.kijs-range-end {
+                        color: white;
+                    }
+                }
+                &.kijs-weekend {
+                    background-color: @viewport-bkgrndColor;
+                }
+                &.kijs-weekno {
+                    font-size: @item-label-fontSize;
+                    color: @item-label-fontColor;
+                }
+                &.kijs-value {
+                    padding: 4px 4px 0 0;
+                    background-color: @item-selected-bkgrndColor;
+                    color: @item-selected-fontColor;
+                    border: 1px solid @item-selected-borderColor;
+                }
+                &.kijs-range {
+                    padding: 4px 5px 0 0;
+                    background-color: @item-selected-bkgrndColor;
+                    color: @item-selected-fontColor;
+                    border-top: 1px solid @item-selected-borderColor;
+                    border-bottom: 1px solid @item-selected-borderColor;
+                }
+                &.kijs-rangestart {
+                    padding: 4px 5px 0 0;
+                    border-left: 1px solid @item-selected-borderColor;
+                }
+                &.kijs-rangeend {
+                    padding: 4px 4px 0 0;
+                    border-right: 1px solid @item-selected-borderColor;
+                }
+
+                /*&:hover {
+                    background-color: @item-focus-bkgrndColor;
+                }
+
+                &.kijs-disabled {
+                    color: @button-disabled-fontColor;
+                    &:hover { background-color: initial; }
+                }
+
+                &.kijs-selected {
+                    border: 1px solid @item-selected-borderColor;
+                }*/
+                
+                &.kijs-day:hover {
+                    background-color: @item-focus-bkgrndColor;
+                }
+                &.kijs-disabled {
+                    color: @badge-disabled-fontColor;
+                    background-color: @field-disabled-bkgrndColor
+                    &:hover { background-color: @field-disabled-bkgrndColor; }
+                }
+            }
+        }
+    }
+    
+    .kijs-datepicker2-footerdiv {
         display: flex;
         flex-direction: row;
         justify-content: center;

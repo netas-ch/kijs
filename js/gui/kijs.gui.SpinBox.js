@@ -34,8 +34,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
         this._ownerNodes = [this._dom]; // Events auf diesen kijs.gui.Dom oder HTMLNodes werden ignoriert, die SpinBox wird nicht geschlossen
 
-        this._openOnInput = true;   // Soll beim Texteingeben in Inputfield die SpinBox automatisch geöffnet werden?
-
         this._preventHide = false;  // das Ausblenden der SpinBox verhindern
 
         this._targetEl = null;              // Zielelement (kijs.gui.Element)
@@ -59,7 +57,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             offsetX: true,
             offsetY: true,
             ownPos: true,
-            openOnInput: true,
             targetPos: true,
             target: { target: 'target' },
             targetDomProperty: true,
@@ -67,7 +64,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         });
 
         // Listener
-        this.on('keyDown', this._onElKeyDown, this);
+        this.on('keyDown', this._onKeyDown, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -120,23 +117,18 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
-    get openOnInput() { return this._openOnInput; }
-    set openOnInput(val) { this._openOnInput = val; }
-
     get target() {
         return this._targetEl;
     }
     set target(val) {
         // Evtl. Listeners vom alten _targetEl entfernen
         if (!kijs.isEmpty(this._targetEl)) {
-            this._targetEl.off('input', this._onTargetElInput, this);
-            this._targetEl.off('keyDown', this._onElKeyDown, this);
+            this._targetEl.off('keyDown', this._onTargetElKeyDown, this);
         }
 
         if (val instanceof kijs.gui.Element) {
             this._targetEl = val;
-            this._targetEl.on('input', this._onTargetElInput, this);
-            this._targetEl.on('keyDown', this._onElKeyDown, this);
+            this._targetEl.on('keyDown', this._onTargetElKeyDown, this);
 
         } else if (val === null) {
             this._targetEl = null;
@@ -240,6 +232,10 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {undefined}
      */
     show() {
+        if (this.isRendered) {
+            return;
+        }
+        
         // SpinBox anzeigen
         this.renderTo(document.body);
 
@@ -391,6 +387,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
         this._preventHide = false;
     }
+    
+    _onKeyDown(e) {
+        switch (e.nodeEvent.keyCode) {
+            case kijs.keys.ESC:
+            case kijs.keys.F4:
+            case kijs.keys.TAB:
+                this.close();
+                break;
+        }   
+    }
 
     _onWindowResize(e) {
         if (!this._preventHide) {
@@ -421,13 +427,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._preventHide = true;
     }
 
-    _onTargetElInput(e) {
-        if (this._openOnInput && !this.isRendered) {
-            this.show();
-        }
-    }
-
-    _onElKeyDown(e) {
+    _onTargetElKeyDown(e) {
         switch (e.nodeEvent.keyCode) {
             case kijs.keys.ESC:
             case kijs.keys.TAB:
@@ -441,22 +441,13 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                     this.show();
                 }
                 break;
-
+                
             case kijs.keys.DOWN_ARROW:
-                if (!this.isRendered) {
-                    this.show();
-                }
-                break;
-
-            default:
-                if (kijs.isString(e.nodeEvent.key) && e.nodeEvent.key.length === 1) {
-                    if (!this.isRendered) {
-                        this.show();
-                    }
-                }
+                this.show();
                 break;
         }
     }
+
 
 
     // --------------------------------------------------------------

@@ -18,14 +18,13 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._headerBarFormat = 'F Y';  // Anzeige Format für die HeaderBar
         this._lastDayOfMonthAsValue = false;   // Soll beim Abfragen des Value oder Date der letzte Tag des Monats zurückgegeben werden?
         
-        this._date = null; //kijs.Date.getFirstOfMonth(new Date()); // Standardwert = Date Object mit Datum vom 1. Tag des Monats
+        this._date = null;
         this._startYear = (new Date()).getFullYear() - 1;
 
         this._headerBarHide = false;
         this._currentBtnHide = false;
         this._emptyBtnHide = false;
-        this._okBtnHide = true;
-        this._cancelBtnHide = true;
+        this._closeBtnHide = true;
         
         // HeaderBar mit Buttons Previous und Next
         this._previousBtn = new kijs.gui.Button({
@@ -103,7 +102,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         
         // Button Aktueller Monat
         this._currentBtn = new kijs.gui.Button({
-            html: kijs.getText('Aktueller Monat'),
+            html: kijs.getText('Akt. Monat'),
             on: {
                 click: this._onCurrentBtnClick,
                 context: this
@@ -111,7 +110,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         });
         this._currentBtn.dom.nodeAttributeSet('tabIndex', -1);
 
-        // Button Leer Lassen
+        // Button Leeren
         this._emptyBtn = new kijs.gui.Button({
             html: kijs.getText('Leeren'),
             on: {
@@ -121,19 +120,12 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         });
         this._emptyBtn.dom.nodeAttributeSet('tabIndex', -1);
 
-        // Button OK
-        this._okBtn = new kijs.gui.Button({
-            html: kijs.getText('OK')
+        // Button Schliessen
+        this._closeBtn = new kijs.gui.Button({
+            html: kijs.getText('Schliessen')
         });
-        this._okBtn.dom.nodeAttributeSet('tabIndex', -1);
+        this._closeBtn.dom.nodeAttributeSet('tabIndex', -1);
         
-        // Button Abbrechen
-        this._cancelBtn = new kijs.gui.Button({
-            html: kijs.getText('Abbrechen')
-        });
-        this._cancelBtn.dom.nodeAttributeSet('tabIndex', -1);
-
-
         this._dom.clsAdd('kijs-monthpicker');
 
         // Standard-config-Eigenschaften mergen
@@ -151,14 +143,12 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             headerBarHide: true,                // HeaderBar ausblenden
             currentBtnHide: true,               // Aktueller Monat Button ausblenden
             emptyBtnHide: true,                 // Leer lassen Button ausblenden
-            okBtnHide: true,                    // OK Button ausblenden
-            cancelBtnHide: true,                // Abbrechen Button ausblenden
+            closeBtnHide: true,                 // Schliessen Button ausblenden
             value: { target: 'value' }          // (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
         });
 
         // Events weiterleiten
-        this._eventForwardsAdd('cancelClick', this._cancelBtn);
-        this._eventForwardsAdd('okClick', this._okBtn);
+        this._eventForwardsAdd('closeClick', this._closeBtn, 'click');
         
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -172,17 +162,17 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get cancelBtnHide() { return this._cancelBtnHide; }
-    set cancelBtnHide(val) { this._cancelBtnHide = val; }
+    get closeBtnHide() { return this._closeBtnHide; }
+    set closeBtnHide(val) { this._closeBtnHide = !!val; }
     
     get currentBtnHide() { return this._currentBtnHide; }
-    set currentBtnHide(val) { this._currentBtnHide = val; }
+    set currentBtnHide(val) { this._currentBtnHide = !!val; }
 
     get emptyBtnHide() { return this._emptyBtnHide; }
-    set emptyBtnHide(val) { this._emptyBtnHide = val; }
+    set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
     get headerBarHide() { return this._headerBarHide; }
-    set headerBarHide(val) { this._headerBarHide = val; }
+    set headerBarHide(val) { this._headerBarHide = !!val; }
 
     get date() {
         if (kijs.isEmpty(this._date)) {
@@ -239,9 +229,6 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     set minValue(val) {
         this.minDate = val;
     }
-    
-    get okBtnHide() { return this._okBtnHide; }
-    set okBtnHide(val) { this._okBtnHide = val; }
 
     get value() {
         let date = this.date;
@@ -263,6 +250,23 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    focus(alsoSetIfNoTabIndex=false) {
+        // Wenn möglich den Fokus auf einen Button setzen
+        if (!this._closeBtnHide) {
+            this._closeBtn.focus(true);
+            
+        } else if (!this._currentBtnHide) {
+            this._currentBtn.focus(true);
+            
+        } else if (!this._emptyBtnHide) {
+            this._emptyBtn.focus(true);
+            
+        } else {
+            super.focus(alsoSetIfNoTabIndex);
+        }
+    }
+    
     // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
@@ -306,18 +310,15 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     
         this._calculate(true);
         
-        // CurrentBtn, OkBtn, CancelBtn
+        // currentBtn, emptyBtn, closeBtn
         if (!this._currentBtnHide) {
             this._currentBtn.renderTo(this._footerDivDom.node);
         }
         if (!this._emptyBtnHide) {
             this._emptyBtn.renderTo(this._footerDivDom.node);
         }
-        if (!this._okBtnHide) {
-            this._okBtn.renderTo(this._footerDivDom.node);
-        }
-        if (!this._cancelBtnHide) {
-            this._cancelBtn.renderTo(this._footerDivDom.node);
+        if (!this._closeBtnHide) {
+            this._closeBtn.renderTo(this._footerDivDom.node);
         }
         
         // Event afterRender auslösen
@@ -329,6 +330,10 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     
     // PROTECTED
     _calculate(scrollIntoView) {
+        if (!this.isRendered) {
+            return;
+        }
+        
         if (scrollIntoView) {
             if (kijs.isEmpty(this._date)) {
                 this._startYear = (new Date()).getFullYear() - 1;
@@ -601,12 +606,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._emptyBtn.destruct();
         }
         
-        if (this._okBtn) {
-            this._okBtn.destruct();
-        }
-        
-        if (this._cancelBtn) {
-            this._cancelBtn.destruct();
+        if (this._closeBtn) {
+            this._closeBtn.destruct();
         }
         
         if (this._yearsScrollUpBtn) {
@@ -649,8 +650,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._headerBar = null;
         this._currentBtn = null;
         this._emptyBtn = null;
-        this._okBtn = null;
-        this._cancelBtn = null;
+        this._closeBtn = null;
         this._yearsScrollUpBtn = null;
         this._yearsScrollDownBtn = null;
         

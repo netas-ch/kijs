@@ -102,7 +102,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             cls: ['kijs-flexrow', 'kijs-spinbox-datetime'],
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            openOnInput: false,
             parent: this,
             elements: [
                 this._datePicker,
