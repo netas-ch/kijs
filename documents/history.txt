@@ -28,6 +28,14 @@ Neue Klassen
 
    Beim Abfragen der Werte wird nun auch die values Eigenschaft der einzelnen Felder abgefragt.
 
+5. Anpassungen an SpinBox
+   Fehler beim ermitteln der Breite der SpinBox behoeben
+   
+   Wenn eine SpinBox eine weitere SpinBox enthält und in der Untergeordneten auf etwas geklickt wird, 
+   wird nun die übergeordnete SpinBox nicht mehr geschlossen.
+   Das gleiche Problem bestand bereits früher beim kijs.gui.MenuButton. Den code dafür habe ich dort nun entfernt,$
+   weil die Spinbox das nun selbstständig löst.
+
 
 Anpassungen, die an Projekten vorgenommen werden müssen
 -------------------------------------------------------
