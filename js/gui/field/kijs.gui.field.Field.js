@@ -48,6 +48,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
+        // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in 
+        // der abgeleiteten Klasse überschrieben werden
+        this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
+        
         this._labelHide = false;
 
         this._inputId = kijs.uniqId('kijs_-_input_');
@@ -455,6 +459,37 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get value() { return null; }
     set value(val) {}
 
+    /**
+     * Gibt einen Record zurück mit den Werten des Felds
+     * Format {name: value}
+     * Beispiel nur ein Wert: {value:'2021-02-01'}
+     * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
+     * @return {undefined}
+     */
+    get values() {
+        let ret = {};
+        kijs.Array.each(this._valuesMapping, function(map) {
+            const fieldName = this[map.nameProperty];
+            if (!kijs.isEmpty(fieldName)) {
+                ret[fieldName] = this[map.valueProperty];
+            }
+        }, this);
+        
+        return ret;
+    }
+    /**
+     * Holt die Werte für das Feld aus dem übergebenen Records
+     * @param {Object} val
+     */
+    set values(val) {
+        kijs.Array.each(this._valuesMapping, function(map) {
+            const fieldName = this[map.nameProperty];
+            if (!kijs.isEmpty(fieldName)) {
+                this[map.valueProperty] = val[fieldName];
+            }
+        }, this);
+    }
+    
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -514,6 +549,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      */
     reset() {
         this.value = this._originalValue;
+    }
+    
+    /**
+     * Setzt die Fehleranzeige zurück
+     * @return {undefined}
+     */
+    resetErrors() {
+        this._dom.clsRemove('kijs-error');
+        this._errorIconEl.visible = false;
     }
 
     /**

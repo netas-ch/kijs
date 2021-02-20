@@ -456,20 +456,20 @@ kit.App = class kit_App {
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.DatePicker',
-                                            selectRange: true,
+                                            mode: 'range',
                                             name: 'Datum',
                                             label: 'Datum',
                                             width:240,
                                             on: {
                                                 change: function(e) {
-                                                    console.log('change: ' + e.element.value);
+                                                    console.log('change: ' + e.element.date + ' | ' + e.element.dateEnd);
                                                 }
                                             }
                                         },{
-                                            xtype: 'kijs.gui.DatePicker2',
-                                            mode: 'day',
+                                            xtype: 'kijs.gui.DatePicker',
+                                            mode: 'date',
                                             value: '2020-12-08',
-                                            endValue: '2020-12-14',
+                                            valueEnd: '2020-12-14',
                                             minValue: '2020-12-05',
                                             maxValue: '2020-12-20',
                                             weekNumbersHide: false,
@@ -846,45 +846,104 @@ kit.App = class kit_App {
                                                 }
                                             }
                                         },{
+                                            xtype: 'kijs.gui.TimePicker',
+                                            value: '14:00',
+                                            headerBarHide: false,
+                                            currentBtnHide: false,
+                                            closeBtnHide: true,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
+                                        },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeitSec',
                                             label: 'Datum & Zeit & Sec',
-                                            hasSeconds: true,
-                                            readOnly: false,
-                                            width: 290,
-                                            value: 1571314912
+                                            mode: 'dateTime',
+                                            minutesHide: false,
+                                            secondsHide: false,
+                                            timeRequired: true,
+                                            width: 280,
+                                            value: '2021-02-17 15:45:12',
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeit',
                                             label: 'Datum & Zeit',
-                                            readOnly: false,
-                                            width: 290,
-                                            value: 1571314912,
+                                            mode: 'dateTime',
+                                            minValue: '2021-02-01',
+                                            maxValue: '2021-03-31',
+                                            width: 330,
                                             elements:[
                                                 {
                                                     xtype: 'kijs.gui.Button',
-                                                    caption: 'Ganztägig',
+                                                    iconChar: '&#xf00d',
+                                                    tooltip: 'Feld leeren',
                                                     on: {
-                                                        click: function(e) {
-                                                            e.element.parent.hasTime = !e.element.parent.hasTime;
-                                                        },
-                                                        context: this
+                                                        click: function() {
+                                                            this.parent.value = '';
+                                                            this.parent.valueEnd = '';
+                                                        }
                                                     }
                                                 }
-                                            ]
+                                            ],
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Datum',
                                             label: 'Datum',
-                                            hasTime: false,
+                                            mode: 'date',
                                             width: 240,
-                                            value: 1565301600
+                                            date: 1565301600,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
                                         },{
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Uhrzeit',
                                             label: 'Uhrzeit',
-                                            hasDate: false,
-                                            width: 200
+                                            mode: 'time',
+                                            width: 200,
+                                            value: '13',
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.field.DateTime',
+                                            name: 'Woche',
+                                            label: 'Woche',
+                                            mode: 'week',
+                                            width: 240,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.field.DateTime',
+                                            name: 'rangeStart',
+                                            nameEnd: 'rangeEnd',
+                                            label: 'von/bis',
+                                            mode: 'range',
+                                            width: 320,
+                                            on: {
+                                                change: function(e) {
+                                                    console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
+                                                }
+                                            }
                                         },{
                                             xtype: 'kijs.gui.field.Password',
                                             name: 'Passwort',
@@ -1139,42 +1198,44 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.MenuButton',
                                             caption: 'Menü',
                                             iconChar: '&#xf135',
-                                            elements: [{
-                                                caption:'Hallo 1'
-                                            },{
-                                                caption:'Hallo 3',
-                                                iconChar: '&#xf135'
-                                            }, '-', {
-                                                xtype: 'kijs.gui.MenuButton',
-                                                caption:'MULTI',
-                                                elements: (function(){
-                                                    let steps=150, p = [];
-                                                    for (let i=0; i<steps; i++) {
-                                                        p.push({
-                                                            caption: 'El ' + i + ' von ' + steps
-                                                        });
-                                                    }
-                                                    return p;
-                                                })()
-                                            },{
-                                                xtype: 'kijs.gui.MenuButton',
-                                                caption:'ENDLESS',
-                                                elements: (function(){
-                                                    let steps=20, p = [{
-                                                            caption:'ÄTSCH NICHTS DA'
-                                                        }];
-                                                    for (let i=0; i<steps; i++) {
-                                                        p = [{
-                                                                caption: 'Stufe ' + i + ' von ' + steps
-                                                            },{
-                                                                xtype: 'kijs.gui.MenuButton',
-                                                                caption:'Nächste Stufe',
-                                                                elements:p
+                                            elements: [
+                                                {
+                                                    caption:'Hallo 1'
+                                                },{
+                                                    caption:'Hallo 3',
+                                                    iconChar: '&#xf135'
+                                                }, '-', {
+                                                    xtype: 'kijs.gui.MenuButton',
+                                                    caption:'MULTI',
+                                                    elements: (function(){
+                                                        let steps=150, p = [];
+                                                        for (let i=0; i<steps; i++) {
+                                                            p.push({
+                                                                caption: 'El ' + i + ' von ' + steps
+                                                            });
+                                                        }
+                                                        return p;
+                                                    })()
+                                                },{
+                                                    xtype: 'kijs.gui.MenuButton',
+                                                    caption:'ENDLESS',
+                                                    elements: (function(){
+                                                        let steps=20, p = [{
+                                                                caption:'ÄTSCH NICHTS DA'
                                                             }];
-                                                    }
-                                                    return p;
-                                                })()
-                                            }]
+                                                        for (let i=0; i<steps; i++) {
+                                                            p = [{
+                                                                    caption: 'Stufe ' + i + ' von ' + steps
+                                                                },{
+                                                                    xtype: 'kijs.gui.MenuButton',
+                                                                    caption:'Nächste Stufe',
+                                                                    elements:p
+                                                                }];
+                                                        }
+                                                        return p;
+                                                    })()
+                                                }
+                                            ]
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Menü',
@@ -1452,7 +1513,7 @@ kit.App = class kit_App {
                                             width: 188,
                                             elements:[{
                                                     xtype: 'kijs.gui.DatePicker',
-                                                    selectRange: true
+                                                    mode: 'range'
                                             }]
                                         });
                                         window.show();
@@ -1470,11 +1531,21 @@ kit.App = class kit_App {
                                             collapsible: 'top',
                                             maximized: false,
                                             modal: true,
-                                            height: 270,
-                                            width: 160,
-                                            elements:[{
-                                                    xtype: 'kijs.gui.TimePicker'
-                                            }]
+                                            height: 400,
+                                            width: 260,
+                                            elements:[
+                                                {
+                                                    xtype: 'kijs.gui.TimePicker',
+                                                    minutesHide: false,
+                                                    secondsHide: false,
+                                                    inputHide: false,
+                                                    on: {
+                                                        change: function(e) {
+                                                            console.log('change: ' + e.element.value);
+                                                        }
+                                                    }
+                                                }
+                                            ]
                                         });
                                         window.show();
                                     }}

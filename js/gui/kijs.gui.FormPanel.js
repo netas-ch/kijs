@@ -67,20 +67,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
-
+        
         // Evtl. Daten aus Formular holen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
                 if (field.submitValue !== false) {
-                    data[field.name] = field.value;
+                    // Bestehendes Recordset mit Daten aus dem Feld ergänzen
+                    Object.assign(this._data, field.values);
                 } else {
                     // Wert soll nicht übermittelt werden.
                     delete this._data[field.name];
                 }
             }, this);
         }
-        // Bestehendes Recordset mit Daten aus Formular ergänzen
-        Object.assign(this._data, data);
         return this._data;
     }
     set data(val) {
@@ -93,10 +92,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Evtl. Daten in Formular einfüllen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
-                if (field.name in this._data) {
-                    field.value = this._data[field.name];
-                    field.isDirty = false;
-                }
+                field.values = this._data;
+                field.isDirty = false;
             }, this);
         }
     }

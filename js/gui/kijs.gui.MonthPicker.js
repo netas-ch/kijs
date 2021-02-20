@@ -196,6 +196,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
     }
 
+    get headerBar() { return this._headerBar; }
+
     get headerBarFormat() { return this._headerBarFormat; }
     set headerBarFormat(val) { this._headerBarFormat = val; }
 
@@ -285,6 +287,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         // HeaderBar rendern
         if (!this._headerBarHide) {
             this._headerBar.renderTo(this._dom.node);
+        } else {
+            this._headerBar.unrender();
         }
         
         // DIV's rendern
@@ -313,12 +317,18 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         // currentBtn, emptyBtn, closeBtn
         if (!this._currentBtnHide) {
             this._currentBtn.renderTo(this._footerDivDom.node);
+        } else {
+            this._currentBtn.unrender();
         }
         if (!this._emptyBtnHide) {
             this._emptyBtn.renderTo(this._footerDivDom.node);
+        } else {
+            this._emptyBtn.unrender();
         }
         if (!this._closeBtnHide) {
             this._closeBtn.renderTo(this._footerDivDom.node);
+        } else {
+            this._closeBtn.unrender();
         }
         
         // Event afterRender auslösen
@@ -434,7 +444,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
         
         if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
         this.raiseEvent('currentClick');
     }
@@ -446,7 +456,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
         
         if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
         this.raiseEvent('emptyClick');
     }
@@ -468,7 +478,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._calculate(true);
 
             if (!kijs.Date.compare(this._date, curDate)) {
-                this.raiseEvent('change');
+                this.raiseEvent('change', {value: this.value});
             }
             this.raiseEvent('monthClick');
         }
@@ -491,7 +501,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
         
         if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
     }
     
@@ -509,7 +519,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
         
         if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
     }
     
@@ -539,7 +549,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._calculate(true);
 
             if (!kijs.Date.compare(this._date, curDate)) {
-                this.raiseEvent('change');
+                this.raiseEvent('change', {value: this.value});
             }
             this.raiseEvent('yearClick');
         }

@@ -78,6 +78,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId
+            },
+            on: {
+                change: this._onInputDomChange,
+                input: this._onInputDomInput,
+                context: this
             }
         });
         this._dom.clsAdd('kijs-field-month');
@@ -136,10 +141,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);
-
-        // Listeners
-        this.on('blur', this._onBlur, this);
-        this.on('input', this._onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -235,9 +236,9 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
+        this._monthPicker.unrender();
         this._spinBoxEl.unrender();
         this._inputDom.unrender();
-        this._monthPicker.unrender();
         
         super.unrender(true);
     }
@@ -316,7 +317,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     
     // overwrite
     _validationRules(value) {
-        
         if (!kijs.isEmpty(value)) {
             const date = kijs.Date.create(value);
             
@@ -342,21 +342,22 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
 
     // LISTENERS
-    _onBlur() {
-        // Beim Verlassen des Feldes den angezeigten Wert aktualisieren
+    _onInputDomChange() {
         this._updateInputValue();
-        // und validieren
+        
         this.validate();
         
         if (!kijs.Date.compare(this._monthPicker.date, this._lastDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
         this._lastDate = this._monthPicker.date;
     }
     
-    _onInput(e) {
+    _onInputDomInput(e) {
         const rawValue = this._inputDom.nodeAttributeGet('value');
         const date = this._parseStringToMonth(rawValue);
+        
+        this.resetErrors();
         
         this._monthPicker.date = date;
     }
@@ -364,8 +365,10 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     _onMonthPickerChange(e) {
         this._updateInputValue();
         
+        this.validate();
+        
         if (!kijs.Date.compare(this._monthPicker.date, this._lastDate)) {
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
         this._lastDate = this._monthPicker.date;
     }
@@ -414,7 +417,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._inputDom = null;
         this._spinBoxEl = null;
         this._monthPicker = null;
-        this._lastDate = null;
         
         // Basisklasse entladen
         super.destruct(true);

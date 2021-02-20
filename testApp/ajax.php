@@ -26,7 +26,9 @@
                         'Feld 3'=>'Text von RPC 3',
                         'Anrede'=>'m',
                         'editor'=>'bla();',
-                        'Bemerkungen'=>"Meine Bemerkung\nvon RPC"
+                        'Bemerkungen'=>"Meine Bemerkung\nvon RPC",
+                        'rangeStart'=>'2021-01-10',
+                        'rangeEnd'=>'2021-01-20'
                     );
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();

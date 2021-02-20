@@ -156,7 +156,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     _onInputNodeBlur() {
         if (this.value !== this._oldValue) {
             this._oldValue = this.value;
-            this.raiseEvent('change');
+            this.raiseEvent('change', {value: this.value});
         }
     }
 

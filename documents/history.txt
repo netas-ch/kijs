@@ -8,17 +8,29 @@ Neue Klassen
 Änderungen
 ----------
 1. kijs.gui.DatePicker
+    Überarbeitet
 
-2. Neue Funktionen in kijs.Date
+2. kijs.gui.field.DateTime
+    Überarbeitet. Viele Eigenschaften verändert.
+    Hat neu eine mode Eigenschaft ('range', 'week', 'date', 'dateTime', 'time')
+
+3. Neue Funktionen in kijs.Date
 - kijs.Date.diff(date1, date2);
 - kijs.Date.getSqlDate(date);
 - kijs.Date.getSqlDateTime(date);
 - kijs.Date.getSqlTime(time);
 
+4. Neue Eigenschaft "values" bei Formularfeldern
+   Das FormPanel setzt nun nicht mehr die value-Eigenschaft der Felder, sondern 
+   übergibt den ganzen Record an die neue "values" Eigenschaft.
+   Das Feld nimmt sich selbstständig die benötigten Werte aus dem Record.
+   Siehe dazu die Modulvariable "this._valuesMapping" im kijs.gui.field.Field und kijs.gui.field.DateTime
+
+   Beim Abfragen der Werte wird nun auch die values Eigenschaft der einzelnen Felder abgefragt.
+
 
 Anpassungen, die an Projekten vorgenommen werden müssen
 -------------------------------------------------------
-
 1. Eigenschaft "trimValue" umbenennen zu "valueTrim"
 
 Betrifft: 
@@ -35,3 +47,5 @@ Beispiel: minValue:new Date()
 Betrifft:
    - kijs.gui.field.DateTime
    - kijs.gui.DatePicker
+
+

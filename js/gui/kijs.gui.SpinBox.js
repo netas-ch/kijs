@@ -176,6 +176,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {undefined}
      */
     close() {
+        // bei allen übergeordneten Spinboxes die aktuelle Spinbox wieder rausnehmen.
+        // Siehe dazu auch den Kommentar in der Funktion show()
+        let p = this.parent;
+        while (p) {
+            if (p instanceof kijs.gui.SpinBox) {
+                p.ownerNodeRemove(this);
+            }
+            p = p.parent;
+        }
+
         this.unrender();
         this.raiseEvent('close');
     }
@@ -248,7 +258,17 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (this._targetEl) {
             this._adjustPositionToTarget(true);
         }
-
+        
+        // allen übergeordneten Spinboxes mitteilen, dass beim Klick auf dieses Element
+        // die Spnbox nicht geschlossen werden soll.
+        let p = this.parent;
+        while (p) {
+            if (p instanceof kijs.gui.SpinBox) {
+                p.ownerNodeAdd(this);
+            }
+            p = p.parent;
+        }
+        
         // afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
 

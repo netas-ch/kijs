@@ -200,14 +200,6 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
             window.clearTimeout(this._expandTimer);
             this._expandTimer = null;
         }
-
-        let p = this.parent;
-        while (p) {
-            if (p instanceof kijs.gui.MenuButton) {
-                p.spinbox.ownerNodeRemove(this._spinBoxEl);
-            }
-            p = p.parent;
-        }
     }
 
     /**
@@ -231,16 +223,6 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
      */
     menuShow() {
         this._spinBoxEl.show();
-
-        // den übergeordneten MenuButtons mitteilen, dass beim Klick auf dieses Element
-        // das Menu nicht geschlossen werden soll.
-        let p = this.parent;
-        while (p) {
-            if (p instanceof kijs.gui.MenuButton) {
-                p.spinbox.ownerNodeAdd(this._spinBoxEl);
-            }
-            p = p.parent;
-        }
     }
 
      /**
@@ -349,7 +331,6 @@ kijs.gui.MenuButton = class kijs_gui_MenuButton extends kijs.gui.Button {
 
     // PROTECTED
     _onBtnClick() {
-
         if (this._spinBoxEl.dom.node) {
             this.menuClose();
         } else {
