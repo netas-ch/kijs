@@ -106,8 +106,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         Object.assign(this._configMap, {
             nameEnd: true,
             mode: true,                         // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
-            hasTime: true,                      // Enthält das Feld die Uhrzeit?
-            hasDate: true,                      // Enthält das Feld das Datum?
             secondsHide: { target: 'secondsHide', context: this._timePicker },   // Sekunden auch erfassen?
             minutesHide: { target: 'minutesHide', context: this._timePicker },   // Minuten auch erfassen?
             timeRequired: true,                 // Muss die Zeit eingegeben werden?
@@ -389,12 +387,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     set value(val) {
         let arr;
         let ok = kijs.isString(val);
-                
+
         // Splitten nach ' '
         if (ok) {
             arr = val.split(' ');
         }
-        
+
         // index des Datums und Uhrzeit ermitteln
         let dateIndex = null;
         let timeIndex = null;
@@ -406,7 +404,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             timeIndex = 0;
         }
-        
+
         // Anzahl Bestandteile des Strings überprüfen
         if (timeIndex === 1) {
             // Der String darf aus ein bis zwei Bestandteilen bestehen
@@ -419,7 +417,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 ok = false;
             }
         }
-        
+
         // Datum
         if (ok && dateIndex !== null && arr.length >= dateIndex+1) {
             this._datePicker.value = arr[dateIndex];
@@ -436,9 +434,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             this._timePicker.value = '';
         }
-        
+
         this._lastValue = this.value;
-        
+
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
     

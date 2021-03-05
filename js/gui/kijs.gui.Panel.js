@@ -118,6 +118,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get caption() { return this._headerBarEl.html; }
+    set caption(val) { this._headerBarEl.html = val; }
+
     get closable() { return !!this._closeButtonEl;}
     set closable(val) {
         if (val) {
@@ -468,6 +471,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this._collapseButtonEl.iconChar = this._getCollapseIconChar();
         }
 
+        // Event werfen
+        this.raiseEvent('collapse');
+
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;
 
@@ -510,6 +516,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                     break;
             }
         }
+
+        // Event werfen
+        this.raiseEvent('expand');
 
         // afterResize-Event wieder aktivieren
         this._preventAfterResize = prevAfterRes;

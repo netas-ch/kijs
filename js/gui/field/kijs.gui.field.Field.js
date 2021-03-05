@@ -484,7 +484,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set values(val) {
         kijs.Array.each(this._valuesMapping, function(map) {
             const fieldName = this[map.nameProperty];
-            if (!kijs.isEmpty(fieldName)) {
+            if (!kijs.isEmpty(fieldName) && val.hasOwnProperty(fieldName)) {
                 this[map.valueProperty] = val[fieldName];
             }
         }, this);
