@@ -986,13 +986,13 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 33',
                                             label: 'Feld 33',
-                                            labelHtmlDisplayType : 'html',
                                             value: 'Hallo Welt 33'
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Mein Label',
-                                            value: 'Mein Text<b>t</b>'
+                                            value: 'Mein Text ist <b style="color:red">rot</b>',
+                                            htmlDisplayType: 'html'
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
@@ -1261,6 +1261,15 @@ kit.App = class kit_App {
                                             on: {
                                                 click: function() {
                                                     this.upX('kijs.gui.FormPanel').load();
+                                                }
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            name: 'btnSave',
+                                            caption: 'RPC Save',
+                                            on: {
+                                                click: function() {
+                                                    this.upX('kijs.gui.FormPanel').save();
                                                 }
                                             }
                                         },{

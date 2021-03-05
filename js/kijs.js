@@ -174,22 +174,8 @@ window.kijs = class kijs {
      * @returns {String|Object|undefined}
      */
     static getGetParameter(parameterName) {
-        const params = {};
-        if ('search' in window.location && window.location.search && window.location.search.length > 1) {
-            const pt = window.location.search.substr(1).split('&');
-            for (let i=0; i<pt.length; i++) {
-                let tmp = pt[i].split('='), key, val;
-                key = decodeURIComponent(tmp[0]);
-                val = tmp.length === 2 ? decodeURIComponent(tmp[1]) : null;
-                params[key] = val;
-            };
-        }
-
-        if (!kijs.isDefined(parameterName)) {
-            return params;
-        } else {
-            return params[parameterName];
-        }
+        console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.getGetParameter"`);
+        return kijs.Navigator.getGetParameter(parameterName);
     }
 
     /**

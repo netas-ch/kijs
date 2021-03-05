@@ -21,7 +21,7 @@ Neue Klassen
 - kijs.Date.getSqlTime(time);
 
 4. Neue Eigenschaft "values" bei Formularfeldern
-   Das FormPanel setzt nun nicht mehr die value-Eigenschaft der Felder, sondern 
+   Das FormPanel setzt nun nicht mehr die value-Eigenschaft der Felder, sondern
    übergibt den ganzen Record an die neue "values" Eigenschaft.
    Das Feld nimmt sich selbstständig die benötigten Werte aus dem Record.
    Siehe dazu die Modulvariable "this._valuesMapping" im kijs.gui.field.Field und kijs.gui.field.DateTime
@@ -30,18 +30,23 @@ Neue Klassen
 
 5. Anpassungen an SpinBox
    Fehler beim ermitteln der Breite der SpinBox behoeben
-   
-   Wenn eine SpinBox eine weitere SpinBox enthält und in der Untergeordneten auf etwas geklickt wird, 
+
+   Wenn eine SpinBox eine weitere SpinBox enthält und in der Untergeordneten auf etwas geklickt wird,
    wird nun die übergeordnete SpinBox nicht mehr geschlossen.
    Das gleiche Problem bestand bereits früher beim kijs.gui.MenuButton. Den code dafür habe ich dort nun entfernt,$
    weil die Spinbox das nun selbstständig löst.
 
+6. "kijs.getGetParameter" -> nun "kijs.Navigator.getGetParameter"
+
+7. default htmlDisplayType vom kijs.gui.field.Display ist neu "code".
+
+8. Neue Funktion für Browser-Sprache zu ermitteln: kijs.Navigator.getLanguageId
 
 Anpassungen, die an Projekten vorgenommen werden müssen
 -------------------------------------------------------
 1. Eigenschaft "trimValue" umbenennen zu "valueTrim"
 
-Betrifft: 
+Betrifft:
 - kijs.gui.field.Display
 - kijs.gui.field.Memo
 - kijs.gui.field.Password
@@ -56,4 +61,5 @@ Betrifft:
    - kijs.gui.field.DateTime
    - kijs.gui.DatePicker
 
+3. "kijs.getGetParameter" -> ändern zu "kijs.Navigator.getGetParameter"
 

@@ -210,17 +210,57 @@ kijs.Navigator = class kijs_Navigator {
     /**
      * Fragt alle 'GET' Parameter in der URL ab.
      */
-    static getGetParams() {
-        let params = {};
-        if (location.search && location.search.length > 2) {
-            kijs.Array.each(location.search.substr(1).split('&'), function(p) {
-                let tmp = p.split('=');
-                if (tmp.length === 2) {
-                    params[tmp[0]] = decodeURIComponent(tmp[1]);
-                }
-            });
+    static getGetParameter(parameterName) {
+        const params = {};
+        if ('search' in window.location && window.location.search && window.location.search.length > 1) {
+            const pt = window.location.search.substr(1).split('&');
+            for (let i=0; i<pt.length; i++) {
+                let tmp = pt[i].split('='), key, val;
+                key = decodeURIComponent(tmp[0]);
+                val = tmp.length === 2 ? decodeURIComponent(tmp[1]) : null;
+                params[key] = val;
+            };
         }
-        return params;
+
+        if (!kijs.isDefined(parameterName)) {
+            return params;
+        } else {
+            return params[parameterName];
+        }
+    }
+
+    static getGetParams(parameterName) {
+        console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.Navigator.getGetParams"`);
+        return kijs.Navigator.getGetParameter(parameterName);
+    }
+
+    /**
+     * Gibt den Code der Browser-Hauptsprache zurück.
+     * @returns {String} languageId Bsp: 'de'
+     */
+    static getLanguageId() {
+        let lang = kijs.Navigator.getLanguages().shift();
+        return lang ? lang.languageId : null;
+    }
+
+    /**
+     * Gibt ein Array mit den Browsersprachen zurück
+     * @return {Array} languages
+     */
+    static getLanguages() {
+        let languages = [];
+        if (navigator.languages) {
+            for (let i=0;i<navigator.languages.length; i++) {
+                let lang = kijs.toString(navigator.languages[i]);
+                if (lang.match(/[a-z]{2,6}\-[a-z]{2,6}/i)) {
+                    let tmp = lang.split('-');
+                    languages.push({languageId: tmp[0].toLowerCase(), localization: tmp[1].toLowerCase(), prio: i+1});
+                } else {
+                    languages.push({languageId: lang.toLowerCase(), localization: null, prio: i+1});
+                }
+            }
+        }
+        return languages;
     }
 
     static _browserVersion(ua, browser) {
