@@ -238,16 +238,16 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get isEmpty() { return kijs.isEmpty(this.value); }
 
     get maxDate() { return this._datePicker.maxDate; }
-    set maxDate(val) { this._datPicker.maxDate = val; }
+    set maxDate(val) { this._datePicker.maxDate = val; }
     
     get maxValue() { return this._datePicker.maxValue; }
-    set maxValue(val) { this._datPicker.maxalue = val; }
+    set maxValue(val) { this._datePicker.maxalue = val; }
 
     get minDate() { return this._datePicker.minDate; }
-    set minDate(val) { this._datPicker.minDate = val; }
+    set minDate(val) { this._datePicker.minDate = val; }
     
     get minValue() { return this._datePicker.minValue; }
-    set minValue(val) { this._datPicker.minValue = val; }
+    set minValue(val) { this._datePicker.minValue = val; }
     
     get mode() { 
         return this._mode; 
@@ -539,7 +539,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     
     /**
-     * Ermittelt den Wert für dier Anzeige (display) im entsprechenden Format.
+     * Ermittelt den Wert für die Anzeige (display) im entsprechenden Format.
      * Falls keine Format definiert wurde, wird aufgrund der Einstellungen eines definiert
      * @return {String}
      */
@@ -1037,7 +1037,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         
         // Uhrzeit validieren
         if (this._hasTime()) {
-            if (this._timeRequired && kijs.isEmpty(time)) {
+            if (this._required && this._timeRequired && kijs.isEmpty(time)) {
                 this._errors.push(kijs.getText('Die Uhrzeit darf nicht leer sein'));
             }
         }
