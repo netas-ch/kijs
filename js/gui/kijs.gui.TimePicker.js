@@ -171,6 +171,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        // Damit nach dem Rendern die Input-Felder auch den Wert enthalten
+        this.on('afterRender', this._updateInputFields, this);
     }
 
 

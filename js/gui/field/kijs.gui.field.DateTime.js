@@ -1033,6 +1033,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 }
                 
             }
+        } else if (this._hasDate() && this._required && kijs.isEmpty(date)) {
+            this._errors.push(kijs.getText('Das Datum darf nicht leer sein'));
         }
         
         // Uhrzeit validieren
