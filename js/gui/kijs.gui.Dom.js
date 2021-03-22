@@ -1077,8 +1077,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     renderTo(targetNode, insert, insertPosition='before') {
-        const firstRender = !this.isRendered;
-
         this.render();
 
         if (insert) {
@@ -1116,6 +1114,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      */
     unrender() {
         if (this._node) {
+            // Damit beim erneuten Rendern die Werte wieder vorhanden sind
+            kijs.Object.each(this._nodeAttribute, function (key) {
+                this._nodeAttribute[key] = this.nodeAttributeGet(key);
+            }, this);
+
             // Node-Event-Listeners entfernen
             if (!kijs.isEmpty(this._nodeEventListeners)) {
                 kijs.Dom.removeAllEventListenersFromContext(this);
@@ -1151,7 +1154,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * Weist die Eigenschaften dem DOM-Node zu.
-     * @param {String} [name=null] Name der Eigenschaft, die angewendet werden soll oder Null für alle
      * @returns {undefined}
      */
     _nodeAttributeApply() {
