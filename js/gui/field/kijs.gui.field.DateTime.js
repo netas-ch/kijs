@@ -411,11 +411,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             if (ok && (arr.length < 1 || arr.length > 2)) {
                 ok = false;
             }
-        } else {
-            // Der String muss aus einem Bestandteil bestehen
-            if (ok && arr.length !== 1) {
-                ok = false;
-            }
         }
 
         // Datum
