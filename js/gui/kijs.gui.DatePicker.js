@@ -199,6 +199,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             this._monthPicker.date = new Date();
         } else {
             this._date = kijs.Date.getDatePart(kijs.Date.create(val));
+            if (this._mode === 'week') {
+                // Sicherstellen, dass die Woche mit dem Montag beginnt
+                if (this._date.getDay() !== 1) {
+                    this._date = kijs.Date.getMonday(this._date);
+                }
+                // Enddatum auch gleich setzen
+                this._dateEnd = kijs.Date.addDays(this._date, 6);
+            }
             this._monthPicker.date = this._date;
         }
         this._calculate();

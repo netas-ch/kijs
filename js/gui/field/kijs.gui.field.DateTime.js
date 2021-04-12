@@ -105,7 +105,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             nameEnd: true,
-            mode: true,                         // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
+            mode: { target: 'mode' },           // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
             secondsHide: { target: 'secondsHide', context: this._timePicker },   // Sekunden auch erfassen?
             minutesHide: { target: 'minutesHide', context: this._timePicker },   // Minuten auch erfassen?
             timeRequired: true,                 // Muss die Zeit eingegeben werden?
@@ -118,6 +118,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             displayWeekPrefix: true,            // Präfix für die Anzeige der Woche (nur bei mode='week')
             valueDateFormat: true,              // Format für den Datums-Teil des value (leer=auto)
             valueTimeFormat: true,              // Format für den Uhrzeit-Teil des value (leer=auto)
+            emptyBtnHide: { target: 'emptyBtnHide', context: this._datePicker },
             date: { target: 'date' },           // Date Object
             dateEnd: { target: 'dateEnd' },     // Date Object
             value: { target: 'value' },         // Datum als SQL-String
@@ -175,7 +176,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         
         if (kijs.isEmpty(datetime)) {
             this._datePicker.date = null;
-            this._timePicker = '';
+            this._timePicker.value = '';
         } else {
             if (this._hasDate()) {
                 this._datePicker.date = kijs.Date.getDatePart(datetime);
@@ -204,7 +205,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     set dateEnd(val) {
         const date = kijs.Date.create(val);
         
-        this._timePicker = '';
+        this._timePicker.value = '';
         if (kijs.isEmpty(date)) {
             this._datePicker.dateEnd = null;
         } else {
