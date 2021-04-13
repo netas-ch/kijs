@@ -17,11 +17,11 @@ kijs.Object = class kijs_Object {
      * @returns {undefined}
      */
     static assignConfig(object, config, configMap) {
-        
+
         // 1. Shortcuts auflösen, Standardwerte übernehmen und configs in temporäres Array 'tmpConfigs' übernehmen
         let tmpConfigs = [];
         kijs.Object.each(config, function(cfgKey, cfgVal){
-            
+
             if (!configMap.hasOwnProperty(cfgKey)) {
                 // Bei unbekannten Config-Eigenschaften kein Fehler ausgeben (wird bei der Zuweisung der defaults vom ki.gui.Container verwendet)
                 if (config.skipUnknownConfig || cfgKey === 'skipUnknownConfig') {
@@ -30,7 +30,7 @@ kijs.Object = class kijs_Object {
                     throw new kijs.Error(`Unkown config "${cfgKey}"`);
                 }
             }
-            
+
             // fn und target ermitteln
             // -----------------------
             let prio = Number.MIN_VALUE;
@@ -38,7 +38,7 @@ kijs.Object = class kijs_Object {
             let target = '_' + cfgKey;
             let context = object;
             let map = configMap[cfgKey];
-                    
+
             // True
             if (map === true) {
                 // Standards nehmen
@@ -66,9 +66,9 @@ kijs.Object = class kijs_Object {
                 }
             } else {
                 throw new kijs.Error(`Unkown format on configMap "${cfgKey}"`);
-                
+
             }
-            
+
             tmpConfigs.push({
                 prio: prio,
                 key: cfgKey,
@@ -78,15 +78,15 @@ kijs.Object = class kijs_Object {
                 value: cfgVal
             });
         }, this);
-        
+
         // 2. Sortieren nach Priorität je grösser die Zahl desto später wird die Eigenschaft zugewiesen
         tmpConfigs.sort(function(a, b) {
             return a.prio - b.prio;
         });
-                
+
         // 3. Eigenschjaften in der Reihenfolge ihrer Priorität zuweisen
         kijs.Array.each(tmpConfigs, function(cfg) {
-            
+
             // Je nach fn den Wert zuweisen
             // ----------------------------
             switch (cfg.fn) {
@@ -155,7 +155,7 @@ kijs.Object = class kijs_Object {
                         }
                     }
                     break;
-                
+
                 // Objekt mergen (ganze Hierarchie)
                 case 'assignDeep':
                     if (kijs.isObject(cfg.context[cfg.target])) {
@@ -205,17 +205,17 @@ kijs.Object = class kijs_Object {
         }, this);
         tmpConfigs = null;
     }
-    
+
     /**
     * Kopiert alle Eigenschaften des source-Objekts in das target-Objekt (rekursiv)
     * @param {Object} target Ziel-Objekt
     * @param {Object} source Quell-Objekt
-    * @param {boolean} [overwrite=true] Sollen bereits existierende Objekte überschrieben werden?
+    * @param {Boolean} [overwrite=true] Sollen bereits existierende Objekte überschrieben werden?
     * @return {Object} Erweiteres Ziel-Objekt
     */
     static assignDeep(target, source, overwrite=true) {
         kijs.Object.each(source, function(key, val){
-            
+
             // Object -> mergen oder überschreiben mit Klon
             if (kijs.isObject(val)) {
                 if (kijs.isObject(target[key])) {
@@ -223,25 +223,25 @@ kijs.Object = class kijs_Object {
                 } else {
                     target[key] = kijs.Object.clone(val);
                 }
-                
+
             // Array -> überschreiben per Klon
             } else if (kijs.isArray(val)) {
                 if (overwrite || target[key] === undefined) {
                     target[key] = kijs.Array.clone(val);
                 }
-                
+
             // alles andere (inkl. Funktionen) -> überschreiben
             } else {
                 if (overwrite || target[key] === undefined) {
                     target[key] = val;
                 }
-                
+
             }
         }, this);
 
         return target;
     }
-    
+
     /**
      * Klont das übergebene Objekt
      * @param {Object} object
@@ -250,7 +250,29 @@ kijs.Object = class kijs_Object {
     static clone(object) {
         return JSON.parse(JSON.stringify(object));
     }
-    
+
+    /**
+     * Zählt die Anzahl Attribute in einem Objekt
+     * @param {Object} object
+     * @param {Boolean} [ownPropertysOnly=false]  count only own propertys, ignore inherited propertys
+     * @returns {Number}
+     */
+    static count(object, ownPropertysOnly=false) {
+        if (ownPropertysOnly) {
+            let cnt=0;
+            if (kijs.isObject(object)) {
+                for (let key in object) {
+                    if (object.hasOwnProperty(key)) {
+                        cnt++;
+                    }
+                }
+            }
+            return cnt;
+        } else {
+            return kijs.isObject(object) ? Object.keys(object).length : 0;
+        }
+    }
+
     /**
      * Durchläuft ein Objekt ruft pro Element die callback-Funktion auf.
      * Die Iteration kann durch die Rückgabe von false gestoppt werden.

@@ -64,7 +64,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
      * Bringt ein Element in den Vordergrund
      * @param el
      * @param setFocus // Setzt den Fokus auf das erste Element
-     * @returns {boolean}
+     * @returns {Boolean}
      */
     setActive(el, setFocus=true) {
         // Ist das Element schon zuoberst?

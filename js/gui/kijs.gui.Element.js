@@ -85,12 +85,12 @@
  * up                                   Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
  *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
  *   name          String
- *  Return:        kijs_gui_Element|Null
+ *  Return:        kijs_gui_Element|null
  *
  * upX                                  Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
  *  Args:                               dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
  *   name          String
- *  Return:        kijs_gui_Element|Null
+ *  Return:        kijs_gui_Element|null
  *
  *
  * EIGENSCHAFTEN
@@ -115,11 +115,11 @@
  *
  * name
  *
- * next         kijs.gui.Element|Null (readonly)   Gibt das nächste element im elements-Array zurück
+ * next         kijs.gui.Element|null (readonly)   Gibt das nächste element im elements-Array zurück
  *
- * parent       kijs.gui.Element|Null (readonly)   Verweis auf das übergeordnete Element
+ * parent       kijs.gui.Element|null (readonly)   Verweis auf das übergeordnete Element
  *
- * previous     kijs.gui.Element|Null (readonly)   Gibt das vorherige element im elements-Array zurück
+ * previous     kijs.gui.Element|null (readonly)   Gibt das vorherige element im elements-Array zurück
  *
  * style        (readonly)
  *

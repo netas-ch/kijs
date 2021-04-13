@@ -714,8 +714,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Selektiert ein Element und berücksichtigt dabei die selectType und die tasten shift und ctrl
      * @param {kijs.gui.Element} el
-     * @param {boolean} shift   // Shift gedrückt?
-     * @param {boolean} ctrl    // Ctrl gedrückt?
+     * @param {Boolean} shift   // Shift gedrückt?
+     * @param {Boolean} ctrl    // Ctrl gedrückt?
      * @returns {undefined}
      */
     _selectEl(el, shift, ctrl) {

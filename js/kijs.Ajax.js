@@ -25,7 +25,7 @@ kijs.Ajax = class kijs_Ajax {
     *     {Object} context             Kontext für die Callback Funktion
     *     {Object} [headers]           Objekt mit heders die mitgesendet werden
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
-    *     {boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
+    *     {Boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
     * @returns {XMLHttpRequest}
     */

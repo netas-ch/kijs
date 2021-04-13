@@ -99,7 +99,7 @@
  * nodeAttributeSet                         Fügt eine Eigenschaft zum DOM-Node hinzu
  *  Args:
  *   name           String
- *   value          String|Null
+ *   value          String|null
  *
  * nodeAttributeHas                         Überprüft, ob der DOM-Node eine Eigenschaft bestimmte hat
  *  Args:
@@ -894,7 +894,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
      *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
-     * @returns {HTMLElement|Null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
+     * @returns {HTMLElement|null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
     focus(alsoSetIfNoTabIndex=false) {
         if (this._node) {
@@ -919,7 +919,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     /**
      * Gibt den Wert eine Eigenschaft des DOM-Nodes zurück
      * @param {String} name
-     * @returns {String|Null|Boolean|Undefined}
+     * @returns {String|null|Boolean|undefined}
      */
     nodeAttributeGet(name) {
         if (kijs.isEmpty(name)) {
@@ -941,7 +941,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     /**
      * Fügt eine Eigenschaft zum DOM-Node hinzu
      * @param {String} name
-     * @param {String|Null|Boolean|Undefined} value
+     * @param {String|null|Boolean|undefined} value
      * @returns {undefined}
      */
     nodeAttributeSet(name, value) {

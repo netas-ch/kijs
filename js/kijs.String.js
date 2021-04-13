@@ -204,7 +204,7 @@ kijs.String = class kijs_String {
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text
      * @param {Number} length maximlae Länge
-     * @param {boolean} [useWordBoundary=false] Nur bei Leerzeichen abschneiden
+     * @param {Boolean} [useWordBoundary=false] Nur bei Leerzeichen abschneiden
      * @param {String} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
      * @returns {String}
      */
@@ -224,7 +224,7 @@ kijs.String = class kijs_String {
      * https://stackoverflow.com/a/51506718
      * @param {String} text
      * @param {Number} length Anzahl Zeichen pro Zeile
-     * @param {boolean} [useWordBoundary=true] Nur bei Leerzeichen Umbrüche einfügen
+     * @param {Boolean} [useWordBoundary=true] Nur bei Leerzeichen Umbrüche einfügen
      * @returns {String}
      */
     static wrap(text, length, useWordBoundary=true) {

@@ -29,7 +29,7 @@ kijs.Dom = class kijs_Dom {
      * Dabei werden Murgs-Attribute automatisch anders gelesen.
      * @param {Node} node
      * @param {String} name
-     * @returns {String|Null|Booelan|Undefined}
+     * @returns {String|null|Boolean|undefined}
      */
     /*static getAttribute(node, name) {
         // Murgs-Attribute
@@ -52,7 +52,7 @@ kijs.Dom = class kijs_Dom {
      * Dabei werden Murgs-Attribute automatisch anders zugewiesen.
      * @param {Node} node
      * @param {String} name
-     * @param {String|Null|Boolean|Undefined} value
+     * @param {String|null|Boolean|undefined} value
      * @returns {undefined}
      */
     /*static setAttribute(node, name, value) {

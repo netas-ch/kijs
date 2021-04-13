@@ -371,7 +371,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     /**
      * Lädt alle Daten im Grid neu.
-     * @param {boolean} restoreSelection
+     * @param {Boolean} restoreSelection
      * @returns {Promise}
      */
     reload(restoreSelection = true) {
@@ -894,8 +894,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Selektiert eine Zeile und berücksichtigt dabei die selectType und die Tasten shift und ctrl
      * @param {kijs.gui.grid.Row} row
-     * @param {boolean} shift   // Shift gedrückt?
-     * @param {boolean} ctrl    // Ctrl gedrückt?
+     * @param {Boolean} shift   // Shift gedrückt?
+     * @param {Boolean} ctrl    // Ctrl gedrückt?
      * @returns {undefined}
      */
     _selectRow(row, shift, ctrl) {
@@ -982,7 +982,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Deselektiert ein oder mehrere Zeilen
      * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
-     * @param {boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     unSelect(rows, preventSelectionChange) {
@@ -1003,7 +1003,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * Selektiert alle Zeilen zwischen row1 und row2
      * @param {kijs.gui.grid.Row} row1
      * @param {kijs.gui.grid.Row} row2
-     * @param {boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
     selectBetween(row1, row2, preventSelectionChange) {

@@ -99,9 +99,9 @@ kijs.Number = class kijs_String {
 
     /**
      * Gibt eine Zufallszahl zwischen min und max (inklusiv) zurück
-     * @param {number} min
-     * @param {number} max
-     * @returns {number}
+     * @param {Number} min
+     * @param {Number} max
+     * @returns {Number}
      */
     static random(min, max) {
         if (!kijs.isNumber(min)) {

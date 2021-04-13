@@ -92,12 +92,12 @@
  * down                                 Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
  *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
  *   name       String
- *  Return: kijs.gui.Element|Null
+ *  Return: kijs.gui.Element|null
  *
  * downX                                Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
  *  Args:                               dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
  *   xtype      String
- *  Return: kijs.gui.Element|Null
+ *  Return: kijs.gui.Element|null
  *
  *
  * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
