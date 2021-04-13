@@ -167,6 +167,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         this._defaults = {};
         this._elements = [];
+        this._disabledEl = null;
 
         this._dom.clsAdd('kijs-container');
         this._innerDom.clsAdd('kijs-container-inner');
@@ -210,6 +211,23 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
     get defaults() { return this._defaults; }
     set defaults(val) { this._defaults = val; }
+
+    get disabled() { return !kijs.isEmpty(this._disabledEl); }
+    set disabled(val) {
+        if (val) {
+            if (kijs.isEmpty(this._disabledEl)) {
+                this._disabledEl = new kijs.gui.Mask({
+                    target: this
+                });
+                this._disabledEl.show();
+            }
+        } else {
+            if (!kijs.isEmpty(this._disabledEl)) {
+                this._disabledEl.destruct();
+                this._disabledEl = null;
+            }
+        }
+    }
 
     get elements() { return this._elements; }
 
@@ -560,6 +578,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
+        // Maske
+        if (!kijs.isEmpty(this._disabledEl)) {
+            this._disabledEl.show();
+        }
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -571,6 +594,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
+        }
+
+        // Maske
+        if (!kijs.isEmpty(this._disabledEl)) {
+            this._disabledEl.unrender();
         }
 
         kijs.Array.each(this._elements, function(el) {
@@ -674,6 +702,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
             // Event auslösen.
             this.raiseEvent('destruct');
+        }
+
+        // Maske
+        if (!kijs.isEmpty(this._disabledEl)) {
+            this._disabledEl.destruct();
+            this._disabledEl = null;
         }
 
         // Elemente/DOM-Objekte entladen
