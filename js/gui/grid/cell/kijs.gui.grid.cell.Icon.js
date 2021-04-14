@@ -37,12 +37,12 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             iconChar: true,   // Alias für html
-            iconCls: { target: this._iconCls },
+            iconCls: { target: 'iconCls' },
             iconColor: { target: 'iconColor' },
             iconCharField: true,
             iconClsField: true,
             iconColorField: true,
-            caption: { target: 'caption' }
+            caption: true
         });
 
         // Config anwenden
@@ -63,6 +63,9 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
     set caption(val) { this._caption = val; }
     get caption() { return this._caption; }
 
+    set iconCls(val) { this._addIconCls(val); }
+    get iconCls() { return this._iconCls; }
+
     set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
     get iconColor() { return this._iconColor; }
 
@@ -81,14 +84,23 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
            this._dom.style.color = this._iconColor;
         }
 
-        let value = null;
-        if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
-           value = this.row.dataRow[this.columnConfig.iconCharField];
-        } else if (!value && this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
-           value = this.row.dataRow[this.columnConfig.iconClsField];
+        if (this.row && this.row.dataRow) {
+
+            // Icon hinzufügen
+            if (kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
+                let value = this.row.dataRow[this.columnConfig.iconCharField];
+                this._setDomHtml(value);
+            }
+
+            // CSS-Klasse hinzufügen
+            if (kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
+                let cls = this.row.dataRow[this.columnConfig.iconClsField];
+                this._addIconCls(cls);
+            }
+
+            // Caption zuweisen
+            this._caption = this.row.dataRow[this.columnConfig.valueField];
         }
-        this._caption = this.row.dataRow[this.columnConfig.valueField];
-        this._setDomHtml(value);
     }
 
     /**
@@ -110,10 +122,12 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         this._dom.html = this._icon;
     }
 
-    _iconCls(val) {
-        if (kijs.isEmpty(val)) {
-            val = null;
-        }
+    /**
+     * Icon Klasse hinzufügen
+     * @param val
+     * @private
+     */
+    _addIconCls(val) {
         if (!kijs.isString && !val) {
             throw new kijs.Error(`config "iconCls" is not a string`);
         }
