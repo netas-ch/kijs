@@ -298,6 +298,12 @@
                             $col->resizable = $y === 7 ? false : true; // H
                             $col->sortable = $y === 8 ? false : true; // I
 
+                            // Filter mit checkbox
+                            if ($y === 0) {
+                                $col->filterConfig = new stdClass();
+                                $col->filterConfig->checkboxFilterValues = ['A1', 'A2', 'A3'];
+                            }
+
                             if ($y === 9) {
                                 $col->width = 300;
                             }

@@ -2,22 +2,28 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        
+        <link rel="shortcut icon" href="../favicon.ico">
 <?php
     // Base-URL ermittlen
     $baseUrl = '';
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
-    
+
     // CSS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
 
     // JS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
-?>   
+?>
         <script type="text/javascript" src="js/kit.App.js"></script>
 
         <style>
+            .icoKijs16 {
+                background-image: url('../favicon.ico');
+                background-size: 16px;
+                height: 16px;
+                width: 16px;
+            }
             .icoWizard16 {
                 background-image: url('../images/icoWizard16.png');
                 height: 16px;
@@ -43,7 +49,7 @@
             });
         </script>
 
-        <title>kijs TestApp</title>
+        <title>kijs</title>
     </head>
     <body>
     </body>

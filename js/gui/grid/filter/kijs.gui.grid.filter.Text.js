@@ -35,7 +35,8 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            placeholder: {target: 'placeholder'}
+            placeholder: {target: 'placeholder'},
+            compare: true
         });
 
         // Config anwenden
@@ -57,7 +58,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         });
     }
 
-    get isFiltered() { return this._searchField.value !== ''; }
+    get isFiltered() { return super.isFiltered || this._searchField.value !== ''; }
 
     get placeholder() { return this._searchField.placeholder; }
     set placeholder(val) { this._searchField.placeholder = val; }
@@ -73,31 +74,34 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
     // overwrite
     _getMenuButtons() {
-        return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
-            name: 'btn_compare_begin',
-            caption : kijs.getText('Feldanfang'),
-            iconChar: '&#xf046', //  fa-check-square-o
-            on: {
-                click: this._onCompareBtnClick,
-                context: this
-            }
-        },{
-            caption : kijs.getText('Beliebiger Teil'),
-            name: 'btn_compare_part',
-            iconChar: '&#xf096', // fa-square-o
-            on: {
-                click: this._onCompareBtnClick,
-                context: this
-            }
-        },{
-            caption : kijs.getText('Ganzes Feld'),
-            name: 'btn_compare_full',
-            iconChar: '&#xf096', // fa-square-o
-            on: {
-                click: this._onCompareBtnClick,
-                context: this
-            }
-        }]);
+        return kijs.Array.concat(this._getDefaultMenuButtons(),
+            ['-',{
+                name: 'btn_compare_begin',
+                caption : kijs.getText('Feldanfang'),
+                iconChar: this._compare === 'begin' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                on: {
+                    click: this._onCompareBtnClick,
+                    context: this
+                }
+            },{
+                caption : kijs.getText('Beliebiger Teil'),
+                name: 'btn_compare_part',
+                iconChar: this._compare === 'part' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                on: {
+                    click: this._onCompareBtnClick,
+                    context: this
+                }
+            },{
+                caption : kijs.getText('Ganzes Feld'),
+                name: 'btn_compare_full',
+                iconChar: this._compare === 'full' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                on: {
+                    click: this._onCompareBtnClick,
+                    context: this
+                }
+            }],
+            this._getCheckboxMenuButtons()
+        );
     }
 
     _onCompareBtnClick(e) {

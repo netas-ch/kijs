@@ -49,7 +49,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         });
     }
 
-    get isFiltered() { return this._compare !== null; }
+    get isFiltered() { return super.isFiltered || this._compare !== null; }
 
     // --------------------------------------------------------------
     // MEMBERS

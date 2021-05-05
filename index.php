@@ -3,20 +3,20 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        
+        <link rel="shortcut icon" href="./favicon.ico">
 <?php
     // Base-URL ermittlen
     $baseUrl = '';
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
-    
+
     // CSS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
 
     // JS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
-?>   
-        
+?>
+
         <script type="text/javascript" src="tests/kijs.Test.js"></script>
 
         <script type="text/javascript" src="tests/test_01_class.js"></script>

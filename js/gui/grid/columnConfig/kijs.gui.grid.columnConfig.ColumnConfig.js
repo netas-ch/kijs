@@ -131,7 +131,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         } else if (kijs.isObject(val)) {
             this._filterConfig = val;
             if (!this._filterConfig.xtype) {
-                this._filterConfig.xtype = this._cellXtype;
+                this._filterConfig.xtype = this._filterXtype;
             }
             this._filterConfig.columnConfig = this;
         }

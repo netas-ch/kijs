@@ -36,7 +36,7 @@ kit.App = class kit_App {
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch',
-                    iconCls: 'icoWizard16',
+                    iconCls: 'icoKijs16',
                     collapsible: 'top',
                     collapsed: true,
                     height: 300,
@@ -455,34 +455,6 @@ kit.App = class kit_App {
                                     },
                                     elements: [
                                         {
-                                            xtype: 'kijs.gui.DatePicker',
-                                            mode: 'range',
-                                            name: 'Datum',
-                                            label: 'Datum',
-                                            width:240,
-                                            on: {
-                                                change: function(e) {
-                                                    console.log('change: ' + e.element.date + ' | ' + e.element.dateEnd);
-                                                }
-                                            }
-                                        },{
-                                            xtype: 'kijs.gui.DatePicker',
-                                            mode: 'date',
-                                            value: '2020-12-08',
-                                            valueEnd: '2020-12-14',
-                                            minValue: '2020-12-05',
-                                            maxValue: '2020-12-20',
-                                            weekNumbersHide: false,
-                                            headerBarHide: false,
-                                            todayBtnHide: false,
-                                            emptyBtnHide: false,
-                                            closeBtnHide: true,
-                                            on: {
-                                                change: function(e) {
-                                                    console.log('change: ' + e.element.value);
-                                                }
-                                            }
-                                        },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
@@ -1434,6 +1406,7 @@ kit.App = class kit_App {
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Disable/Enable',
+                                            tooltip: 'Disable/Enable dataview',
                                             on: {click: function() {
                                                 let dataView = this.upX('kijs.gui.Panel').downX('kijs.gui.DataView');
                                                 dataView.disabled = !dataView.disabled;
@@ -1473,7 +1446,7 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Confirm',
-                                            on: {click: function() {
+                                            on: {click: function(e) {
                                                 kijs.gui.MsgBox.confirm('Test', 'Confirm!', function(e) {
                                                     kijs.gui.MsgBox.alert('Es wurde geklickt auf ', e.btn);
                                                 });

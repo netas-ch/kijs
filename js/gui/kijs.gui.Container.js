@@ -664,7 +664,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         // Ungültige Übergabe
         } else {
-            throw new kijs.Error(`kijs.gui.Container: invalid element.`);
+            throw new kijs.Error(`kijs.gui.Container: invalid element: ` + typeof obj);
         }
 
         return obj;

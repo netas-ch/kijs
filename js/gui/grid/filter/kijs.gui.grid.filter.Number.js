@@ -26,7 +26,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-
+            compare: true
         });
 
         // Config anwenden
@@ -57,7 +57,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_equal',
             caption : kijs.getText('Gleich'),
-            iconChar: '&#xf046', //  fa-check-square-o
+            iconChar: this._compare === 'equal' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -65,7 +65,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             name: 'btn_compare_unequal',
             caption : kijs.getText('Ungleich'),
-            iconChar: '&#xf096', // fa-square-o
+            iconChar: this._compare === 'unequal' ? '&#xf046' : '&#xf096', // fa-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -73,7 +73,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             caption : kijs.getText('Kleiner als'),
             name: 'btn_compare_smaller',
-            iconChar: '&#xf096', // fa-square-o
+            iconChar: this._compare === 'smaller' ? '&#xf046' : '&#xf096', // fa-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -81,7 +81,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             caption : kijs.getText('Grösser als'),
             name: 'btn_compare_bigger',
-            iconChar: '&#xf096', // fa-square-o
+            iconChar: this._compare === 'bigger' ? '&#xf046' : '&#xf096', // fa-square-o
             on: {
                 click: this._onCompareBtnClick,
                 context: this

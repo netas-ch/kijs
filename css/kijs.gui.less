@@ -358,7 +358,7 @@ div.kijs-spinbox {
     &.kijs-pos-left {
         box-shadow: -3px 3px 3px rgba(0, 0, 0, 0.1);
     }
-    
+
     &.kijs-borderless {
         border: none;
     }
@@ -1461,7 +1461,7 @@ div.kijs-listview {
 div.kijs-monthpicker {
     width: 184px;
     border: 1px solid @panel-borderColor;
-    
+
     &.kijs-borderless {
         border: none;
     }
@@ -1470,83 +1470,83 @@ div.kijs-monthpicker {
         display: flex;
         flex-direction: row;
         margin: 4px 0 0 0;
-        
+
         font-family: @default-fontFamily;
         font-size: @field-fontSize;
-        
+
         .kijs-monthpicker-monthdiv {
             flex: 2;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             border-right: 1px solid @panel-borderColor;
-            
+
             > div {
                 width: 40%;
                 text-align: center;
                 padding: 0px 2px;
                 margin: 1px;
                 border: 1px solid transparent;
-                
+
                 &:hover {
                     background-color: @item-focus-bkgrndColor;
                 }
-                
+
                 &.kijs-disabled {
                     color: @button-disabled-fontColor;
                     &:hover { background-color: initial; }
                 }
-                
+
                 &.kijs-selected {
                     border: 1px solid @item-selected-borderColor;
                 }
             }
         }
-        
+
         .kijs-monthpicker-yeardiv {
             flex: 1;
             display: flex;
             flex-direction: row;
             flex-wrap: wrap;
             justify-content: center;
-            
+
             > .kijs-button {
                 height: 16px;
                 margin: 2px 0;
                 padding: 0 8px;
                 line-height: 12px;
             }
-            
+
             .kijs-monthpicker-yearinnerdiv {
                 > div {
                     text-align: center;
                     padding: 0px 2px;
                     margin: 1px;
                     border: 1px solid transparent;
-                    
+
                     &:hover {
                         background-color: @item-focus-bkgrndColor;
                     }
-                    
+
                     &.kijs-disabled {
                         color: @button-disabled-fontColor;
                         &:hover { background-color: initial; }
                     }
-                                        
+
                     &.kijs-selected {
                         border: 1px solid @item-selected-borderColor;
                     }
                 }
             }
         }
-        
+
     }
-    
+
     .kijs-monthpicker-footerdiv {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        
+
         .kijs-button {
             flex: none;
             margin: 10px 4px;
@@ -1563,7 +1563,7 @@ div.kijs-monthpicker {
 div.kijs-datepicker {
     width: 184px;
     border: 1px solid @panel-borderColor;
-    
+
     &.kijs-borderless {
         border: none;
     }
@@ -1576,7 +1576,7 @@ div.kijs-datepicker {
             display: flex;
             flex-direction: row;
             padding: 0 0 0 5px;
-            
+
             > div {
                 flex: 1;
                 width: 22px;
@@ -1589,11 +1589,11 @@ div.kijs-datepicker {
                 line-height: @default-fontSize;
                 text-align: right;
                 background-color: @panel-bkgrndColor;
-                
+
                 &.kijs-none {
                     /*display: none;*/
                 }
-                
+
                 &.kijs-head {
                     padding: 5px 4px 0 0;
                     color: @item-label-fontColor;
@@ -1650,7 +1650,7 @@ div.kijs-datepicker {
                 &.kijs-selected {
                     border: 1px solid @item-selected-borderColor;
                 }*/
-                
+
                 &.kijs-day:hover {
                     background-color: @item-focus-bkgrndColor;
                 }
@@ -1662,12 +1662,12 @@ div.kijs-datepicker {
             }
         }
     }
-    
+
     .kijs-datepicker-footerdiv {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        
+
         .kijs-button {
             flex: none;
             margin: 10px 4px;
@@ -1686,7 +1686,7 @@ div.kijs-datepicker {
 div.kijs-timepicker {
     width: 140px;
     border: 1px solid @panel-borderColor;
-    
+
     .kijs-timepicker-inputdiv {
         display: flex;
         flex-direction: row;
@@ -1740,7 +1740,7 @@ div.kijs-timepicker {
         display: flex;
         flex-direction: row;
         justify-content: center;
-        
+
         .kijs-button {
             flex: none;
             margin: 2px 4px 10px 4px;
@@ -2089,16 +2089,16 @@ div.kijs-field-datetime {
 
 .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
     height: 100%;
-    
+
     > div.kijs-datepicker {
         border: 0 none transparent;
     }
-    
+
     > .kijs-separator {
         width: 1px;
         background-color: @panel-borderColor;
     }
-    
+
     > div.kijs-timepicker {
         border: 0 none transparent;
     }
@@ -2786,20 +2786,36 @@ div.kijs-grid {
 }
 
 /* ******************
-   * Icon Filter
+   * Filter
    ****************** */
-.kijs-filter-icon-checkboxgroup {
+.kijs-filter-icon-checkboxgroup, .kijs-filter-checkboxgroup {
     background-color: @button-bkgrndColor;
 
-    div.kijs-display-checkboxes::before {
-        padding: 3px 10px 3px 3px;
-        color: @buttonGroup-button-fontColor;
-    }
+    > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+        cursor: pointer;
 
-    .kijs-icon {
-        width: 20px;
+        &.kijs-display-checkboxes::before {
+            padding: 3px 7px 3px 3px;
+            color: @buttonGroup-button-fontColor;
+        }
+
+        .kijs-icon {
+            width: 20px;
+
+            &:empty {
+                display: none;
+            }
+        }
+
+        &:hover {
+            background-color: @buttonGroup-button-focus-bkgrndColor;
+            > * {
+                color: @buttonGroup-button-focus-fontColor;
+            }
+        }
     }
 }
+
 
 
 /* ******************

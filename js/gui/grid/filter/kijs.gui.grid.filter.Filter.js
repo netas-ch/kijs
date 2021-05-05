@@ -22,6 +22,8 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._columnConfig;
         this._filter = {};
 
+        this._checkboxFilterGroup = null;
+
         this._searchContainer = new kijs.gui.Dom();
         this._removeFilterIcon = new kijs.gui.Dom({
             cls: 'kijs-grid-filter-reset'
@@ -30,7 +32,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._menuButton = new kijs.gui.MenuButton({
             parent: this,
             icon2Char: '&#xf0b0', // fa-filter
-            elements: this._getMenuButtons()
+            elements: []
         });
 
 
@@ -41,7 +43,8 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true
+            columnConfig: true,
+            checkboxFilterValues: { target: 'checkboxFilterValues' }
         });
 
         // Config anwenden
@@ -59,10 +62,42 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     get filter() {
         return {
             type: '',
-            valueField: this._columnConfig.valueField
+            valueField: this._columnConfig.valueField,
+            checkboxFilter: this.checkboxFilterValues
         };
     }
-    get isFiltered() { return false; }
+    get isFiltered() { return !!(this.checkboxFilterValues.length > 0); }
+
+    get checkboxFilterValues() { return this._checkboxFilterGroup ? this._checkboxFilterGroup.value : []; }
+    set checkboxFilterValues(val) {
+
+        // convert data to array
+        if (!kijs.isArray(val)) {
+            val = [val];
+        }
+        let data = [];
+        kijs.Array.each(val, (arrVal) => {
+            if (kijs.isString(arrVal)) {
+                data.push({caption: arrVal, value: arrVal});
+            } else if (kijs.isObject(arrVal) && kijs.isDefined(arrVal.caption) && kijs.isDefined(arrVal.value)) {
+                data.push(arrVal);
+            }
+        });
+
+        // checkboxgruppe
+        if (this._checkboxFilterGroup === null) {
+            this._checkboxFilterGroup = new kijs.gui.field.CheckboxGroup({
+                cls: 'kijs-filter-checkboxgroup',
+                on: {
+                    change: this._applyToGrid,
+                    context: this
+                }
+            });
+        }
+
+        // Daten hinzufügen
+        this._checkboxFilterGroup.data = data;
+    }
 
 
     // --------------------------------------------------------------
@@ -71,13 +106,22 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
     reset() {
         // Filter zurücksetzen
+        if (this._checkboxFilterGroup !== null) {
+            this._checkboxFilterGroup.checkedAll = false;
+        }
+
         // muss in abgeleiteter Klasse überschrieben werden
+
         this._applyToGrid();
     }
 
     // wendet den Filter auf das grid an.
     _applyToGrid() {
         this.raiseEvent('filter', this.filter);
+    }
+
+    _getCheckboxMenuButtons() {
+        return this._checkboxFilterGroup !== null ? ['-', this._checkboxFilterGroup] : [];
     }
 
     _getDefaultMenuButtons() {
@@ -105,8 +149,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     }
 
     _getMenuButtons() {
-        return this._getDefaultMenuButtons();
+        return kijs.Array.concat(this._getDefaultMenuButtons(), this._getCheckboxMenuButtons());
     }
+
+
 
     // Overwrite
     render(superCall) {
@@ -115,6 +161,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._searchContainer.renderTo(this._dom.node);
         this._removeFilterIcon.renderTo(this._dom.node);
 
+        this._menuButton.elements = this._getMenuButtons();
         this._menuButton.renderTo(this._removeFilterIcon.node);
 
         // breite
