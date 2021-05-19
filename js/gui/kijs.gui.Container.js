@@ -688,6 +688,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @returns {undefined}
      */
     _onChildElementAfterResize(e) {
+
+        // Endlosschlaufe verhindern: wenn der Event von dieser Klasse ausgelöst wurde,
+        // den Event nicht erneut auslösen
+        if (e.raiseElement === this) {
+            return;
+        }
+
         this.raiseEvent('childElementAfterResize', {childElement: e.element});
     }
 
