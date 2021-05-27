@@ -3,7 +3,7 @@
 // --------------------------------------------------------------
 // kijs.gui.Window
 // --------------------------------------------------------------
-// Das Fenster kann mit der Mehtode .show() angezeigt werden.
+// Das Fenster kann mit der Methode .show() angezeigt werden.
 // Es wird dann in das target gerendert.
 // Als target kann der document.body oder ein kijs.gui.Element angegeben
 // werden.
