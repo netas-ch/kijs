@@ -114,6 +114,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             columnConfigs:  { fn: 'function', target: this.columnConfigAdd, context: this },
             primaryKeys:    { target: 'primaryKeys' },
             data:           { target: 'data' },
+            remoteDataStep: { target: 'remoteDataStep' },
 
             editable: true,
             focusable: true,
@@ -246,6 +247,17 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._primaryKeys = val;
     }
     get primaryKeys() { return this._primaryKeys; }
+
+    get remoteDataStep() { return this._remoteDataStep; }
+    set remoteDataStep(val) {
+        if (!kijs.isInteger(val)) {
+            val = 50;
+        }
+        this._remoteDataStep = val;
+        if (this._remoteDataLoaded === 0) {
+            this._remoteDataLimit = val;
+        }
+    }
 
     get rows() { return this._rows; }
 
