@@ -465,6 +465,7 @@ kit.App = class kit_App {
                                             spinIconVisible: true,
                                             elements: [{
                                                 xtype: 'kijs.gui.Button',
+                                                cls: 'kijs-inline',
                                                 iconChar: '&#xf111',
                                                 on: {
                                                     click: function() {
@@ -1056,7 +1057,8 @@ kit.App = class kit_App {
                                             helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!',
                                             elements: [{
                                                 xtype: 'kijs.gui.Button',
-                                                iconChar: '&#xf00d'
+                                                iconChar: '&#xf00d',
+                                                cls: 'kijs-inline'
                                             }]
                                         },{
                                             xtype: 'kijs.gui.field.ListView',
@@ -1119,6 +1121,7 @@ kit.App = class kit_App {
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Load',
+                                                    cls: 'kijs-inline',
                                                     on: {
                                                         click: function() {
                                                             this.parent.load();

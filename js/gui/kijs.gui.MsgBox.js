@@ -236,45 +236,50 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         }
 
         if (config.fieldXtype) {
-            // Beschrieb und Textfeld
-            elements.push({
-                xtype: 'kijs.gui.Container',
-                htmlDisplayType: 'html',
-                cls: 'kijs-msgbox-inner',
-                elements:[
-                    {
-                        xtype: 'kijs.gui.Element',
-                        html: config.msg,
-                        htmlDisplayType: 'html',
-                        style: {
-                            marginBottom: '4px'
-                        }
-                    },{
-                        xtype: config.fieldXtype,
-                        name: 'field',
-                        label: config.label,
-                        value: config.value,
-                        required: !!config.required,
-                        labelStyle: {
-                            marginRight: '4px'
-                        },
-                        on: {
-                            enterPress: function(e) {
-                                if (config.fieldXtype) {
-                                    btn = 'ok';
-                                    value = e.element.upX('kijs.gui.Window').down('field').value;
-                                    e.element.upX('kijs.gui.Window').destruct();
-                                }
+            // Beschrieb und Feld
+            let element = new kijs.gui.Container(
+                {
+                    htmlDisplayType: 'html',
+                    cls: 'kijs-msgbox-inner',
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Element',
+                            html: config.msg,
+                            htmlDisplayType: 'html',
+                            style: {
+                                marginBottom: '4px'
+                            }
+                        },{
+                            xtype: config.fieldXtype,
+                            name: 'field',
+                            label: config.label,
+                            value: config.value,
+                            required: !!config.required,
+                            labelStyle: {
+                                marginRight: '4px'
                             },
-                            context: this
+                            on: {
+                                enterPress: function(e) {
+                                    if (config.fieldXtype) {
+                                        btn = 'ok';
+                                        value = e.element.upX('kijs.gui.Window').down('field').value;
+                                        e.element.upX('kijs.gui.Window').destruct();
+                                    }
+                                },
+                                context: this
+                            }
                         }
-                    }
-                ]
-            });
+                    ]
+                }
+            );
 
-            if (config.facadeFnArgs) {
-                elements.down('field').facadeFnArgs = config.facadeFnArgs;
+            // Wenn Argumente vorhanden sind, diese dem Feld mitgeben
+            if (config.hasOwnProperty('facadeFnArgs') && config.facadeFnArgs) {
+                element.down('field').facadeFnArgs = config.facadeFnArgs;
             }
+
+            // Element zu Elements hinzufügen
+            elements.push(element);
 
         } else {
             // Text

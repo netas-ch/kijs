@@ -737,6 +737,7 @@ button.kijs-button {
     background-color: @button-bkgrndColor;
     border: 1px solid @button-borderColor;
     cursor: pointer;
+    outline: none;
 
     > .kijs-icon {
         color: @button-icon-fontColor;
@@ -1278,6 +1279,7 @@ div.kijs-dataview {
         background-color: @item-bkgrndColor;
         border: 1px solid @item-borderColor;
         border-radius: 4px;
+        outline: none;
 
         font-family: @default-fontFamily;
         font-size: @item-fontSize;
@@ -1358,6 +1360,7 @@ div.kijs-listview {
         padding: 0 4px 0 4px;
         white-space: nowrap;
         overflow-x: hidden;
+        outline: none;
 
         &:focus,
         &:hover {
@@ -1834,6 +1837,10 @@ div.kijs-field {
         position: relative;
         display: block;
         flex: 1 1 auto;
+
+        > input {
+            outline: none;
+        }
     }
 
     > .kijs-container-inner {
@@ -1845,7 +1852,22 @@ div.kijs-field {
             display: block;
             margin: 0 0 0 2px;
             padding: 0 4px;
-            height: 100%;
+            height: 25px;
+
+            &.kijs-inline {
+                margin: 0 0 0 0;
+                border-radius: 0px;
+                background-color: transparent;
+                border-top: 1px solid @field-borderColor;
+                border-right: 1px solid @field-borderColor;
+                border-bottom: 1px solid @field-borderColor;
+                border-left: 0;
+                color: @button-icon-fontColor;
+
+                &:hover {
+                    background-color: @viewport-bkgrndColor;
+                }
+            }
         }
     }
 
@@ -2123,9 +2145,38 @@ div.kijs-field-memo {
         font-size: @field-fontSize;
         line-height: 17px;
         resize: none;
+        outline: none;
 
         &:focus {
             border: 1px solid @field-focus-borderColor;
+        }
+    }
+
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        flex: none;
+
+        > .kijs-button {
+            display: block;
+            margin: 0 0 0 2px;
+            padding: 0 4px;
+            height: 100%;
+
+            &.kijs-inline {
+                margin: 0 0 0 0;
+                border-radius: 0px;
+                background-color: transparent;
+                border-top: 1px solid @field-borderColor;
+                border-right: 1px solid @field-borderColor;
+                border-bottom: 1px solid @field-borderColor;
+                border-left: 0;
+                color: @button-icon-fontColor;
+
+                &:hover {
+                    background-color: @viewport-bkgrndColor;
+                }
+            }
         }
     }
 
@@ -2153,6 +2204,34 @@ div.kijs-field-listview {
 
             &:focus {
                 border: 1px solid @field-focus-borderColor;
+            }
+        }
+    }
+
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: row;
+        flex: none;
+
+        > .kijs-button {
+            display: block;
+            margin: 0 0 0 2px;
+            padding: 0 4px;
+            height: 100%;
+
+            &.kijs-inline {
+                margin: 0 0 0 0;
+                border-radius: 0px;
+                background-color: transparent;
+                border-top: 1px solid @field-borderColor;
+                border-right: 1px solid @field-borderColor;
+                border-bottom: 1px solid @field-borderColor;
+                border-left: 0;
+                color: @button-icon-fontColor;
+
+                &:hover {
+                    background-color: @viewport-bkgrndColor;
+                }
             }
         }
     }
@@ -2400,26 +2479,28 @@ div.kijs-field-checkbox {
    ****************** */
 div.kijs-field-editor {
     > .kijs-inputwrapper {
-        border: 1px solid @field-borderColor;
+        outline: none;
 
         > div {
             height: 100%;
+            border: 1px solid @field-borderColor;
 
             .ace_scrollbar-v {
                 overflow-y: auto;
             }
+
             .ace_scrollbar-h {
                 overflow-x: auto;
+            }
+
+            &.ace_focus {
+                border: 1px solid @field-focus-borderColor;
             }
         }
     }
 
     &.kijs-error > .kijs-inputwrapper > div {
         background-color: @field-error-bkgrndColor;
-
-        &.ace_focus {
-            border: 1px solid @field-focus-borderColor;
-        }
     }
 
     &.kijs-disabled, &.kijs-readonly {
