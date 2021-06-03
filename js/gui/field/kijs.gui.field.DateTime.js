@@ -36,14 +36,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
-        this._lastValue = null;          // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
-        this._lastValueEnd = null;       // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._lastValue = null;         // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._lastValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
-                id: this._inputId
+                id: this._inputId,
+                autocomplete: 'off'     // Deaktiviert die Browservorschläge
             },
             on: {
                 change: this._onInputDomChange,
