@@ -17,6 +17,14 @@ kit.App = class kit_App {
             rpcConfig.url = config.ajaxUrl;
         }
         this._rpc = new kijs.gui.Rpc(rpcConfig);
+
+        this._uploadDialog = new kijs.UploadDialog({
+            fileExtensions: 'sql',
+            contentTypes: 'image/*'
+        });
+        new kijs.gui.UploadWindow({
+            uploadDialog: this._uploadDialog
+        });
     }
 
 
@@ -59,16 +67,9 @@ kit.App = class kit_App {
                             iconChar: '&#xf0ee',
                             on: {
                                 click: function() {
-                                    let uploadDialog = new kijs.UploadDialog({
-                                        fileExtensions: 'sql',
-                                        contentTypes: 'image/*'
-                                    });
-                                    uploadDialog.showFileSelectDialog();
-
-                                    let uploadWin = new kijs.gui.UploadWindow({
-                                        uploadDialog: uploadDialog
-                                    });
-                                }
+                                    this._uploadDialog.showFileSelectDialog();
+                                },
+                                context: this
                             }
                         }
                     ],

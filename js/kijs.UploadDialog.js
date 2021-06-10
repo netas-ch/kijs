@@ -39,6 +39,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadId = 1;
         this._uploadResponses = {};
 
+        this._observePaste = false;
+        this._pasteCb = null;
+
         this._filenameHeader = 'X-Filename';
         this._pathnameHeader = 'X-Filepath';
 
@@ -70,13 +73,19 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             maxFilesize: true,
             sanitizeFilename: true,
             dropZones: { target: 'dropZone' },
-            contentTypes: { target: 'contentTypes' }
+            contentTypes: { target: 'contentTypes' },
+            observePaste: { target: 'observePaste' }
         };
 
         // Config anwenden
         if (kijs.isObject(config)) {
             this.applyConfig(config, true);
         }
+
+        // Paste überwachen (Dateien ab Chrome 91)
+        this._pasteCb = this._onFilePaste.bind(this);
+        window.addEventListener('paste', this._pasteCb);
+
     }
 
 
@@ -131,6 +140,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     get multiple() { return this._multiple; }
     set multiple(val) { this._multiple = !!val; }
+
+    get observePaste() { return this._observePaste; }
+    set observePaste(val) { this._observePaste = !!val; }
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -279,6 +291,36 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadFiles(e.nodeEvent.dataTransfer.files);
     }
 
+    _onFilePaste(e) {
+        console.log('paste', e);
+        if (!this._observePaste || !kijs.isArray(this._dropZones)) {
+            return;
+        }
+
+        // Wenn die Klasse mit einer DropZone verknüft ist, nur pasten wenn gerendert
+        if (this._dropZones.length > 0) {
+            let rendered = false;
+            kijs.Array.each(this._dropZones, function(dz) {
+                if (dz.rendered) {
+                    rendered = true;
+                }
+            }, this);
+
+            if (!rendered) {
+                return;
+            }
+        }
+
+        // Dateien aus Zwischenablage lesen
+        let files = e.clipboardData ? e.clipboardData.files : null;
+        if (!files || !files.length || files.length === 0) {
+            return;
+        }
+
+        e.preventDefault();
+        this._uploadFiles(files);
+    }
+
     _uploadFiles(fileList) {
         this._uploadResponses = {};
         if (fileList) {
@@ -377,7 +419,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     destruct() {
         this._dropZones = null;
         this._contentTypes = null;
-        this._contentTypes = null;
         this._currentUploadIds = null;
         this._directory = null;
         this._dropZones = null;
@@ -391,5 +432,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._pathnameHeader = null;
         this._validMediaTypes = null;
         super.destruct();
+
+        // remove paste listener
+        if (this._pasteCb) {
+            window.removeEventListener('paste', this._pasteCb);
+            this._pasteCb = null;
+        }
     }
 };
