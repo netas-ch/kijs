@@ -63,7 +63,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             spinIconVisible: true,
             minChars: 'auto',
             valueField: 'value',
-            captionField: 'caption'
+            captionField: 'caption',
+            iconCharField: 'iconChar'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
