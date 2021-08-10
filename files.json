@@ -69,6 +69,8 @@
    "js/gui/field/kijs.gui.field.js",
    "js/gui/field/kijs.gui.field.Field.js",
    "js/gui/field/kijs.gui.field.Text.js",
+   "js/gui/field/kijs.gui.field.Email.js",
+   "js/gui/field/kijs.gui.field.Phone.js",
    "js/gui/field/kijs.gui.field.Number.js",
    "js/gui/field/kijs.gui.field.Memo.js",
    "js/gui/field/kijs.gui.field.Password.js",

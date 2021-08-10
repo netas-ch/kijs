@@ -8,6 +8,10 @@
 @default-fontColor: #000;
 @default-fontSize: 11px;
 
+/* Scrollbar */
+@scrollbar-color: #888;
+@scrollbar-background-color: #ddd;
+@scrollbar-hover-color: #aaa;
 
 /* Button */
 @button-bkgrndColor: #f6f6f6;
@@ -180,6 +184,28 @@
 
 
 /* ******************
+   * Scrollbar
+   ****************** */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: @scrollbar-background-color;
+}
+
+::-webkit-scrollbar-thumb {
+    background: @scrollbar-color;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: @scrollbar-hover-color;
+}
+
+
+
+/* ******************
    * Ergänzungen für alle Elemente
    ****************** */
 /* Schatten für Elemente */
@@ -191,8 +217,6 @@
 .kijs-autoscroll, div.kijs-autoscroll {
     overflow-y: auto;
 }
-
-
 
 
 

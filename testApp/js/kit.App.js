@@ -1033,6 +1033,15 @@ kit.App = class kit_App {
                                                 }
                                             ]
                                         },{
+                                            xtype: 'kijs.gui.field.Phone',
+                                            name: 'phone',
+                                            label: 'Telefon',
+                                            defaultCountryCallingCode: '+41'
+                                        },{
+                                            xtype: 'kijs.gui.field.Email',
+                                            name: 'email',
+                                            label: 'Email'
+                                        },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',
                                             label: 'Land',
