@@ -1,12 +1,12 @@
 /* global kijs, this, HTMLElement */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.columnWindow
+// kijs.gui.grid.ColumnWindow
 // --------------------------------------------------------------
 
 
 // --------------------------------------------------------------
-kijs.gui.grid.columnWindow = class kijs_gui_grid_columnWindow extends kijs.gui.Window {
+kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.Window {
 
 
     // --------------------------------------------------------------

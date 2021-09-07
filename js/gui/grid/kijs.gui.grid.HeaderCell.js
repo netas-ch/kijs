@@ -68,7 +68,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     iconChar: '&#xf0db', // fa-columns
                     on: {
                         click: function() {
-                            (new kijs.gui.grid.columnWindow({parent: this})).show();
+                            (new kijs.gui.grid.ColumnWindow({parent: this})).show();
                             this._menuButtonEl.menuCloseAll();
                         },
                         context: this
