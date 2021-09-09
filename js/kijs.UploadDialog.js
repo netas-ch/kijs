@@ -292,12 +292,12 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     _onFilePaste(e) {
-        console.log('paste', e);
+
         if (!this._observePaste || !kijs.isArray(this._dropZones)) {
             return;
         }
 
-        // Wenn die Klasse mit einer DropZone verknüft ist, nur pasten wenn gerendert
+        // Wenn die Klasse mit einer DropZone verknüpft ist, nur pasten wenn gerendert
         if (this._dropZones.length > 0) {
             let rendered = false;
             kijs.Array.each(this._dropZones, function(dz) {
