@@ -3,7 +3,21 @@
 // --------------------------------------------------------------
 // kit.App
 // --------------------------------------------------------------
-kit = {};
+kit = {__elements:[]};
+kit.getCountPerElement = function(element, type) {
+    for (var i = 0; i < kit.__elements.length; i++) {
+        if (kit.__elements[i].el === element && kit.__elements[i].type === type) {
+            kit.__elements[i].cnt++;
+            return kit.__elements[i].cnt;
+        }
+    }
+    kit.__elements.push({
+        type: type,
+        el: element,
+        cnt: 1
+    });
+    return 1;
+};
 kit.App = class kit_App {
 
     // --------------------------------------------------------------
@@ -15,14 +29,16 @@ kit.App = class kit_App {
             cls: 'kijs-flexcolumn',
             on: {
                 afterResize: function() {
-                    if (!this.__count) {
-                        this.__count = 0;
-                    }
-                    this.__count++;
-                    this.elements[0].elements[2].html = 'viewPort afterResize: ' + this.__count;
+                    this.elements[0].elements[2].html = 'viewPort afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                },
+                afterRender: function() {
+                    this.elements[0].elements[2].html = 'viewPort render: ' + kit.getCountPerElement(this, 'render');
+                },
+                unrender: function() {
+                    this.elements[0].elements[2].html = 'viewPort unrender: ' + kit.getCountPerElement(this, 'unrender');
                 }
             },
-            elements: [                
+            elements: [
                 // TOP
                 {
                     xtype: 'kijs.gui.Panel',
@@ -51,11 +67,15 @@ kit.App = class kit_App {
                             width: 300,
                             on: {
                                 afterResize: function() {
-                                    if (!this.__count) {
-                                        this.__count = 0;
-                                    }
-                                    this.__count++;
-                                    this.headerBar.caption = 'afterResize: ' + this.__count;
+                                    this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                },
+                                afterRender: function() {
+                                    console.log('render');
+                                    this.caption += ' R' + kit.getCountPerElement(this, 'render');
+                                },
+                                unrender: function() {
+                                    console.log('unrender');
+                                    this.caption += 'U' + kit.getCountPerElement(this, 'unrender');
                                 }
                             },
                             elements:[
@@ -73,11 +93,13 @@ kit.App = class kit_App {
                                                 width: 200,
                                                 on: {
                                                     afterResize: function() {
-                                                        if (!this.__count) {
-                                                            this.__count = 0;
-                                                        }
-                                                        this.__count++;
-                                                        this.headerBar.caption = 'afterResize: ' + this.__count;
+                                                        this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                                    },
+                                                    afterRender: function() {
+                                                        console.log('render');
+                                                    },
+                                                    unrender: function() {
+                                                        console.log('unrender');
                                                     }
                                                 }
                                             }).show();
@@ -95,11 +117,13 @@ kit.App = class kit_App {
                                                 width: 200,
                                                 on: {
                                                     afterResize: function() {
-                                                        if (!this.__count) {
-                                                            this.__count = 0;
-                                                        }
-                                                        this.__count++;
-                                                        this.headerBar.caption = 'afterResize: ' + this.__count;
+                                                        this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                                    },
+                                                    afterRender: function() {
+                                                        console.log('render');
+                                                    },
+                                                    unrender: function() {
+                                                        console.log('unrender');
                                                     }
                                                 }
                                             }).show();
@@ -119,22 +143,26 @@ kit.App = class kit_App {
                             },
                             on: {
                                 afterResize: function() {
-                                    if (!this.__count) {
-                                        this.__count = 0;
-                                    }
-                                    this.__count++;
-                                    this.headerBar.caption = 'afterResize: ' + this.__count;
+                                    this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                },
+                                afterRender: function() {
+                                    console.log('render');
+                                },
+                                unrender: function() {
+                                    console.log('unrender');
                                 }
                             }
                         }
                     ],
                     on: {
                         afterResize: function() {
-                            if (!this.__count) {
-                                this.__count = 0;
-                            }
-                            this.__count++;
-                            this.headerBar.caption = 'afterResize: ' + this.__count;
+                            this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                        },
+                        afterRender: function() {
+                            console.log('render');
+                        },
+                        unrender: function() {
+                            console.log('unrender');
                         }
                     }
                 },{
@@ -159,11 +187,13 @@ kit.App = class kit_App {
                             cls: 'kijs-flexcolumn',
                             on: {
                                 afterResize: function() {
-                                    if (!this.__count) {
-                                        this.__count = 0;
-                                    }
-                                    this.__count++;
-                                    this.headerBar.caption = 'afterResize: ' + this.__count;
+                                    this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                },
+                                afterRender: function() {
+                                    console.log('render');
+                                },
+                                unrender: function() {
+                                    console.log('unrender');
                                 }
                             }
                         },{
@@ -208,11 +238,13 @@ kit.App = class kit_App {
                                     },
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'Header L: afterResize: ' + this.__count;
+                                            this.caption = 'Header L: afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 },{
@@ -226,11 +258,13 @@ kit.App = class kit_App {
                                     width: 200,
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'Header R: afterResize: ' + this.__count;
+                                            this.caption = 'Header R: afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 }
@@ -244,11 +278,13 @@ kit.App = class kit_App {
                                     width: 300,
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'afterResize: ' + this.__count;
+                                            this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 },{
@@ -263,11 +299,13 @@ kit.App = class kit_App {
                                     },
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'afterResize: ' + this.__count;
+                                            this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 }
@@ -289,11 +327,13 @@ kit.App = class kit_App {
                                     },
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'Footer L: afterResize: ' + this.__count;
+                                            this.caption = 'Footer L: afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 },{
@@ -307,11 +347,13 @@ kit.App = class kit_App {
                                     width: 200,
                                     on: {
                                         afterResize: function() {
-                                            if (!this.__count) {
-                                                this.__count = 0;
-                                            }
-                                            this.__count++;
-                                            this.headerBar.caption = 'Footer R: afterResize: ' + this.__count;
+                                            this.caption = 'Footer R: afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                        },
+                                        afterRender: function() {
+                                            console.log('render');
+                                        },
+                                        unrender: function() {
+                                            console.log('unrender');
                                         }
                                     }
                                 }
@@ -324,11 +366,13 @@ kit.App = class kit_App {
                             ],
                             on: {
                                 afterResize: function() {
-                                    if (!this.__count) {
-                                        this.__count = 0;
-                                    }
-                                    this.__count++;
-                                    this.headerBar.caption = 'afterResize: ' + this.__count;
+                                    this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                },
+                                afterRender: function() {
+                                    console.log('render');
+                                },
+                                unrender: function() {
+                                    console.log('unrender');
                                 }
                             }
 
@@ -352,11 +396,13 @@ kit.App = class kit_App {
                             ],
                             on: {
                                 afterResize: function() {
-                                    if (!this.__count) {
-                                        this.__count = 0;
-                                    }
-                                    this.__count++;
-                                    this.headerBar.caption = 'afterResize: ' + this.__count;
+                                    this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                                },
+                                afterRender: function() {
+                                    console.log('render');
+                                },
+                                unrender: function() {
+                                    console.log('unrender');
                                 }
                             }
                         }
@@ -374,11 +420,13 @@ kit.App = class kit_App {
                     height: 100,
                     on: {
                         afterResize: function() {
-                            if (!this.__count) {
-                                this.__count = 0;
-                            }
-                            this.__count++;
-                            this.headerBar.caption = 'afterResize: ' + this.__count;
+                            this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
+                        },
+                        afterRender: function() {
+                            console.log('render');
+                        },
+                        unrender: function() {
+                            console.log('unrender');
                         }
                     }
                 }
@@ -386,13 +434,13 @@ kit.App = class kit_App {
         });
         viewport.render();
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
 
     }
-    
+
 };

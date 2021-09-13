@@ -361,6 +361,9 @@ kit.App = class kit_App {
 //                                    },
                                     elements: [{
                                         xtype: 'kijs.gui.grid.Grid',
+                                         style: {
+                                             flex: 1
+                                         },
 //                                        columnConfigs: (function(){
 //                                            let cols = [{caption:'Vorname', valueField:'vorname'}];
 //                                            for (let i=0; i<26; i++) {

@@ -108,7 +108,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         // Span caption rendern (kijs.guiDom)
         if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._captionDom.isRendered) {
             this._captionDom.unrender();
         }
 

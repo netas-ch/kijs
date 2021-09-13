@@ -296,14 +296,14 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._inputWrapperDom.node);
-        } else {
+        } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();
         }
 
         // Span caption rendern (kijs.guiDom)
         if (!this._captionHide) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
-        } else {
+        } else if (this._captionDom.isRendered) {
             this._captionDom.unrender();
         }
 

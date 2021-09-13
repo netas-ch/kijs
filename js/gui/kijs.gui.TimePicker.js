@@ -31,13 +31,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             minute: 20,                 // Distanz vom Kreisrand für Minuten
             second: 20                  // Distanz vom Kreisrand für Sekunden
         };
-        
+
         this._headerBarHide = false;
         this._inputHide = false;
         this._nowBtnHide = false;
         this._emptyBtnHide = false;
         this._closeBtnHide = true;
-        
+
         this._headerBar = new kijs.gui.PanelBar({
             cls: 'kijs-headerbar-center'
         });
@@ -61,7 +61,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
         });
         this._inputSeparator1 = new kijs.gui.Dom({
-            nodeTagName: 'span', 
+            nodeTagName: 'span',
             html: this._separator
         });
         this._inputMinuteDom = new kijs.gui.Dom({
@@ -79,7 +79,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
         });
         this._inputSeparator2 = new kijs.gui.Dom({
-            nodeTagName: 'span', 
+            nodeTagName: 'span',
             html: this._separator
         });
         this._inputSecondDom = new kijs.gui.Dom({
@@ -139,7 +139,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             html: kijs.getText('Schliessen')
         });
         this._closeBtn.dom.nodeAttributeSet('tabIndex', -1);
-        
+
         this._dom.clsAdd('kijs-timepicker');
 
 
@@ -162,7 +162,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             separator: true,
             clockColor: true
         });
-        
+
         // Events weiterleiten
         this._eventForwardsAdd('closeClick', this._closeBtn, 'click');
 
@@ -196,7 +196,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
     get minutesHide() { return this._minutesHide; }
     set minutesHide(val) { this._minutesHide = !!val; }
-    
+
     get nowBtnHide() { return this._nowBtnHide; }
     set nowBtnHide(val) { this._nowBtnHide = !!val; }
 
@@ -221,7 +221,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._empty = kijs.isEmpty(val);
         val = kijs.toString(val);
         val = val.split(this._separator);
-        
+
         this._hour = val[0] ? parseInt(val[0]) : 0;
         this._minute = val[1] && !this._minutesHide ? parseInt(val[1]) : 0;
         this._second = val[2] && !this._secondsHide ? parseInt(val[2]) : 0;
@@ -270,7 +270,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         // HeaderBar rendern
         if (!this._headerBarHide) {
             this._headerBar.renderTo(this._dom.node);
-        } else {
+        } else if (this._headerBar.isRendered) {
             this._headerBar.unrender();
         }
 
@@ -295,7 +295,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         } else {
             this._inputDivDom.unrender();
         }
-        
+
         // Canvas für timepicker
         this._canvasDivDom.renderTo(this._dom.node);
         this._canvasDom.renderTo(this._canvasDivDom.node);
@@ -305,21 +305,21 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Footer
         this._footerDivDom.renderTo(this._dom.node);
-        
+
         // nowBtn, emptyBtn, closeBtn
         if (!this._nowBtnHide) {
             this._nowBtn.renderTo(this._footerDivDom.node);
-        } else {
+        } else if (this._nowBtn.isRendered) {
             this._nowBtn.unrender();
         }
         if (!this._emptyBtnHide) {
             this._emptyBtn.renderTo(this._footerDivDom.node);
-        } else {
+        } else if (this._emptyBtn.isRendered) {
             this._emptyBtn.unrender();
         }
         if (!this._closeBtnHide) {
             this._closeBtn.renderTo(this._footerDivDom.node);
-        } else {
+        } else if (this._closeBtn.isRendered) {
             this._closeBtn.unrender();
         }
 
@@ -352,7 +352,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         super.unrender(true);
     }
 
-    
+
     // PROTECTED
     _addTextToArc(text, fontSize, degree, distance) {
         let coords = this._degreeToCoordinates(degree, distance);
@@ -362,7 +362,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         let measure = this._canvas.measureText(text);
         this._canvas.fillText(text, coords.x - (measure.width /2), coords.y + (fontSize / 2));
     }
-    
+
     _calculate(pointerPos=null) {
         // Grösse einstellen.
         this._canvasSize = Math.min(this._canvasDivDom.width, this._canvasDivDom.height);
@@ -439,7 +439,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     _degreeBySecond(second) {
         return {degree: second / 60 * 360, distance: this._distance.second};
     }
-    
+
     _degreeToCoordinates(degree, distance) {
         degree = degree+90;
         // h = c * sinus(degree)
@@ -500,14 +500,14 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas.arc(coords.x, coords.y, 12, 0, Math.PI*2); // Kreis
         this._canvas.fill();
     }
-    
+
     _drawSeconds() {
         for (let i=0; i<12; i++) {
             let text = i!==0 ? i*5 : '00';
             this._addTextToArc(text, 15, (i*30), this._distance.second);
         }
     }
-    
+
     _updateInputFields() {
         if (this._inputHourDom.isRendered) {
             this._inputHourDom.nodeAttributeSet('value', this._empty ? '' : this._zeroPad(this._hour));
@@ -519,8 +519,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this._inputSecondDom.nodeAttributeSet('value', this._empty ? '' : this._zeroPad(this._second));
         }
     }
-    
-    
+
+
 
     // EVENTS
     /**
@@ -569,7 +569,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY;
         let dg = this._coordinatesToDegree(x, y);
         let inputFinished = false;
-        
+
         // ausserhalb kreis
         if (dg.distance < 0) {
             return;
@@ -579,7 +579,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         dg.degree = Math.round(dg.degree / 30) * 30;
 
         this._empty = false;
-        
+
         // Stunde
         if (this._clockMode === 1) {
             let hour = 12 / 360 * dg.degree;
@@ -599,7 +599,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 } else {
                     this._inputMinuteDom.focus();
                 }
-                
+
             } else {
                 if (this._minutesHide) {
                     this._clockMode = 1;
@@ -620,7 +620,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 } else {
                     this._inputSecondDom.focus();
                 }
-                
+
             } else {
                 if (this._secondsHide) {
                     inputFinished = true;
@@ -629,7 +629,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                     this._clockMode = 3;
                 }
             }
-            
+
 
         // Sekunde
         } else if (this._clockMode === 3) {
@@ -642,7 +642,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
             inputFinished = true;
         }
-        
+
         if (inputFinished) {
             if (this._inputHourDom.isRendered) {
                 this._inputHourDom.focus();
@@ -650,10 +650,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 this._clockMode = 1;
             }
         }
-        
+
         // Input Felder aktualisieren
         this._updateInputFields();
-        
+
         // Events
         if (curValue !== this.value) {
             this.raiseEvent('change', {value: this.value});
@@ -662,10 +662,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this.raiseEvent('inputFinished');
         }
     }
-    
+
     _onEmptyBtnClick(e) {
         const curValue = this.value;
-        
+
         this.value = '';
 
         // Event
@@ -674,7 +674,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
         this.raiseEvent('emptyClick');
     }
-    
+
     /**
      * Nach dem Ändern Zeit übernehmen
      * @param {Object} e
@@ -684,7 +684,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         const curValue = this.value;
         const fld = e.context;
         let inputFinished = false;
-        
+
         this._empty = kijs.isEmpty(fld.node.value);
         if (this._empty) {
             this._hour = 0;
@@ -712,10 +712,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // zeichnen
         this._calculate();
-        
+
         // Input Felder aktualisieren
         this._updateInputFields();
-        
+
         // Events
         if (curValue !== this.value) {
             this.raiseEvent('change', {value: this.value});
@@ -724,7 +724,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this.raiseEvent('inputFinished');
         }
     }
-    
+
     /**
      * Beim Klick ins Zeitfeld wird alles selektiert, dass überschrieben werden kann.
      * @param {Object} e
@@ -823,7 +823,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
         }
     }
-    
+
     /**
      * Die aktuelle Zeit übernehmen
      * @returns {undefined}
@@ -901,11 +901,11 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         if (this._nowBtn) {
             this._nowBtn.destruct();
         }
-        
+
         if (this._emptyBtn) {
             this._emptyBtn.destruct();
         }
-        
+
         if (this._closeBtn) {
             this._closeBtn.destruct();
         }
@@ -924,7 +924,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._nowBtn = null;
         this._emptyBtn = null;
         this._closeBtn = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }

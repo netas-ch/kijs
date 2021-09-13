@@ -606,28 +606,28 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         // HeaderBar rendern (kijs.gui.Bar)
         if (!this._headerBarEl.isEmpty) {
             this._headerBarEl.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._headerBarEl.isRendered) {
             this._headerBarEl.unrender();
         }
 
         // Header rendern (kijs.gui.Container)
         if (!this._headerEl.isEmpty) {
             this._headerEl.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._headerEl.isRendered) {
             this._headerEl.unrender();
         }
 
         // Footer rendern (kijs.gui.Container)
         if (!this._footerEl.isEmpty) {
             this._footerEl.renderTo(this._dom.node);
-        } else {
+        } else if (this._footerEl.isRendered) {
             this._footerEl.unrender();
         }
 
         // FooterBar rendern (kijs.gui.Bar)
         if (!this._footerBarEl.isEmpty) {
             this._footerBarEl.renderTo(this._dom.node);
-        } else {
+        } else if (this._footerBarEl.isRendered) {
             this._footerBarEl.unrender();
         }
 

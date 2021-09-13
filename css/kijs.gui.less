@@ -233,10 +233,8 @@ div.kijs-container-inner {
     position: relative;
     flex: 1 1 auto;
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none;  /* Safari */
+    user-select: none;
 
     -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
 }
@@ -360,10 +358,8 @@ div.kijs-spinbox {
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     background-color: @panel-bkgrndColor;
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none;  /* Safari */
+    user-select: none;
 
     &.kijs-pos-top {
         margin-top: 1px;
@@ -546,10 +542,8 @@ div.kijs-window {
     max-width: 100%;
     max-height: 100%;
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none;  /* Safari */
+    user-select: none;
 }
 
 
@@ -572,10 +566,8 @@ div.kijs-mask {
     left: 0;
     bottom: 0;
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none;  /* Safari  */
+    user-select: none;
 
     > .kijs-icon {
         color: #F5F5F5;
@@ -957,10 +949,8 @@ div.kijs-panelbar {
     padding: 0 3px; /* 0 3px 0 0 */
     background-color: @bar-bkgrndColor;
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
-    user-select: none;          /* Likely future */
+    -webkit-user-select: none;  /* Safari */
+    user-select: none;
 
     font-family: @default-fontFamily;
     font-size: @default-fontSize;
@@ -1098,8 +1088,6 @@ div.kijs-panel {
 
             > .kijs-container-inner {
                 order: 20;
-                -webkit-writing-mode: tb-rl;
-                -ms-writing-mode: tb-rl;
                 writing-mode: tb-rl;
                 margin: 4px auto 0 auto;
             }
@@ -1852,8 +1840,6 @@ div.kijs-field {
 
         /* selektion von Text erlauben */
         -webkit-user-select: text;
-        -moz-user-select: text;
-        -ms-user-select: text;
         user-select: text;
     }
 
@@ -2556,10 +2542,11 @@ div.kijs-field-editor {
    ****************** */
 div.kijs-field-quilleditor {
 
-    > .kijs-inputwrapper{
+    > .kijs-inputwrapper {
         display: flex;
         flex-direction: column;
         user-select: text;
+        -webkit-user-select: text;
 
         .quilleditor {
             flex: 1;
@@ -2616,8 +2603,6 @@ div.kijs-field-display {
         padding: 3px 0 0 0;
 
         -webkit-user-select: text;
-        -moz-user-select: text;
-        -ms-user-select: text;
         user-select: text;
     }
 

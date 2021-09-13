@@ -48,10 +48,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
-        // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in 
+        // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in
         // der abgeleiteten Klasse überschrieben werden
         this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
-        
+
         this._labelHide = false;
 
         this._inputId = kijs.uniqId('kijs_-_input_');
@@ -474,7 +474,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 ret[fieldName] = this[map.valueProperty];
             }
         }, this);
-        
+
         return ret;
     }
     /**
@@ -489,7 +489,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }, this);
     }
-    
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -521,7 +521,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Label rendern (kijs.guiDom)
         if (!this._labelHide) {
             this._labelDom.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._labelDom.isRendered) {
             this._labelDom.unrender();
         }
 
@@ -550,7 +550,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     reset() {
         this.value = this._originalValue;
     }
-    
+
     /**
      * Setzt die Fehleranzeige zurück
      * @return {undefined}
@@ -658,7 +658,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             if (error) {
                 if (kijs.isString(error)) {
                     this._errors.push(error);
-                    
+
                 } else if (kijs.isArray(error)) {
                     kijs.Array.concat(this._errors, error);
                 }

@@ -331,7 +331,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         // HeaderBar rendern
         if (!this._headerBarHide) {
             this._headerBar.renderTo(this._dom.node);
-        } else {
+        } else if (this._headerBar.isRendered) {
             this._headerBar.unrender();
         }
 

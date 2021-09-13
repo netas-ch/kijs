@@ -154,21 +154,21 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         // Span icon rendern (icon kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();
         }
 
         // ToolsLeft rendern (kijs.gui.Container)
         if (!this._containerLeftEl.isEmpty) {
             this._containerLeftEl.renderTo(this._dom.node, this._innerDom.node);
-        } else {
+        } else if (this._containerLeftEl.isRendered) {
             this._containerLeftEl.unrender();
         }
 
         // ToolsRight rendern (kijs.gui.Container)
         if (!this._containerRightEl.isEmpty) {
             this._containerRightEl.renderTo(this._dom.node);
-        } else {
+        } else if (this._containerRightEl.isRendered) {
             this._containerRightEl.unrender();
         }
 

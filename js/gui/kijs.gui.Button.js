@@ -265,28 +265,28 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
-        } else {
+        } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();
         }
 
         // Span caption rendern (kijs.guiDom)
         if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._dom.node);
-        } else {
+        } else if (this._captionDom.isRendered) {
             this._captionDom.unrender();
         }
 
         // Div badge rendern (kijs.guiDom)
         if (!this._badgeDom.isEmpty) {
             this._badgeDom.renderTo(this._dom.node);
-        } else {
+        } else if (this._badgeDom.isRendered) {
             this._badgeDom.unrender();
         }
 
         // Span icon2 rendern (kijs.gui.Icon)
         if (!this._icon2El.isEmpty) {
             this._icon2El.renderTo(this._dom.node);
-        } else {
+        } else if (this._icon2El.isRendered) {
             this._icon2El.unrender();
         }
 

@@ -224,7 +224,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
-        } else {
+        } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();
         }
 

@@ -1182,7 +1182,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Daten laden
         if (this._autoLoad) {
-            this._remoteLoad();
+            kijs.defer(function() {
+                this._remoteLoad();
+            }, 30, this);
         }
     }
 
