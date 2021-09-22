@@ -1323,8 +1323,8 @@ kit.App = class kit_App {
                                 },{
                                     xtype: 'kijs.gui.FormPanel',
                                     rpc: this._rpc,
-                                    facadeFnLoad: 'test.load',
-                                    facadeFnSave: 'test.save',
+                                    facadeFnLoad: 'form.load',
+                                    facadeFnSave: 'form.save',
                                     shadow: true,
                                     style: {
                                         marginTop: '10px'

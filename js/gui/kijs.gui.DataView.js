@@ -22,7 +22,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._facadeFnArgs = {};
         this._filters = [];
         this._focusable = true;
-        this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._rpc = null;               // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
 
         this._dom.clsRemove('kijs-container');
@@ -191,23 +191,25 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    get rpc() { return this._rpc;}
+    get rpc() {
+        if (!this._rpc) {
+
+            // Sucht nach einem FormPanel oberhalb
+            let formPanel = this.upX('kijs.gui.FormPanel');
+
+            // Wenn ein FormPanel gefunden wurde und dort eine RPC-Instance vorhanden ist, wird diese genommen
+            if (formPanel && formPanel.rpc) {
+                this._rpc = formPanel.rpc;
+            }
+        }
+        return this._rpc;
+    }
     set rpc(val) {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
 
-        } else if (kijs.isString(val)) {
-            if (this._rpc) {
-                this._rpc.url = val;
-            } else {
-                this._rpc = new kijs.gui.Rpc({
-                    url: val
-                });
-            }
-
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
-
         }
     }
 
@@ -330,7 +332,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
             }
 
-            this._rpc.do(this._facadeFnLoad, args, function(response) {
+            this.rpc.do(this._facadeFnLoad, args, function(response) {
                 this.data = response.rows;
                 if (!kijs.isEmpty(response.selectFilters)) {
                     this.selectByFilters(response.selectFilters);

@@ -43,6 +43,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._spinBoxEl = new kijs.gui.SpinBox({
             autoScroll: true,
+            parent: this,
             target: this,
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],

@@ -24,7 +24,7 @@ kijs.Rpc = class kijs_Rpc {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             defer: true,        // millisekunden, in denen auf weitere RPC gewartet wird
-            timeout: true,      // millisekunden, nach denenen der RPC abgebrochen wird
+            timeout: true,      // millisekunden, nach denen der RPC abgebrochen wird
             url: true,          // server URL
             parameters: true    // optionale GET-Parameter
         };
