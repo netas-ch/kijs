@@ -60,6 +60,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             cls: 'kijs-inputwrapper'
         });
 
+        // Muss in der abgeleiteten Klasse überschrieben werden
+        this._inputDom = new kijs.gui.Dom();
+
         this._labelDom = new kijs.gui.Dom({
             cls: 'kijs-label',
             nodeTagName: 'label',
@@ -113,7 +116,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disabled: { target: 'disabled' },   // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            disabled: { target: 'disabled' },           // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
 
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
@@ -166,6 +170,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
+    set autocomplete(val) {
+        let value = '';
+        if (!val || val === 'off') {
+            value = 'off';
+        }
+
+        // De-/aktiviert die Browservorschläge
+        this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+
+
+
     get disabled() { return this._dom.clsHas('kijs-disabled'); }
     set disabled(val) {
         if (val) {

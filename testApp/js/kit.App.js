@@ -963,7 +963,8 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 33',
                                             label: 'Feld 33',
-                                            value: 'Hallo Welt 33'
+                                            value: 'Hallo Welt 33',
+                                            autocomplete: false
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',

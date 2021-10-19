@@ -61,12 +61,9 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         this._maxValue = null;
         this._thousandsSeparator = '';
 
-        // Deaktiviert die Browservorschläge
-        this._inputDom.nodeAttributeSet('autocomplete', 'off');
-
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            autocomplete: false
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften

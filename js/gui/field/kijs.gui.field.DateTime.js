@@ -43,8 +43,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
-                id: this._inputId,
-                autocomplete: 'off'     // Deaktiviert die Browservorschläge
+                id: this._inputId
             },
             on: {
                 change: this._onInputDomChange,
@@ -99,6 +98,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            autocomplete: false,
             spinIconVisible: true,
             spinIconChar: '&#xf073'             // calendar
         });

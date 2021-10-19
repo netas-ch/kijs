@@ -29,8 +29,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
-                id: this._inputId,
-                autocomplete: 'off'     // Deaktiviert die Browservorschläge
+                id: this._inputId
             }
         });
 
@@ -60,6 +59,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            autocomplete: false,
             autoScroll: true,
             spinIconVisible: true,
             minChars: 'auto',
