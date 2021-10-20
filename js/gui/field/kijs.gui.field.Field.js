@@ -173,7 +173,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = '';
-        if (!val || val === 'off') {
+
+        if (kijs.isString(val)) {
+            value = val;
+        } else if (val === false) {
             value = 'off';
         }
 

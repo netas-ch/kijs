@@ -96,7 +96,7 @@ window.kijs = class kijs {
     }
 
     // Specifies the maximum time between mouse clicks that are interpreted as a double-click.
-    // Windows default: 500ms
+    // Windows default: 600ms
     static get doubleClickSpeed() { return 600; }
 
 
