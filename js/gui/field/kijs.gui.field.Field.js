@@ -184,8 +184,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
-
-
     get disabled() { return this._dom.clsHas('kijs-disabled'); }
     set disabled(val) {
         if (val) {
@@ -269,7 +267,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this.render();
         }
     }
-
 
     get helpIcon() { return this._helpIconEl; }
     /**
@@ -497,6 +494,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         return ret;
     }
+
     /**
      * Holt die Werte für das Feld aus dem übergebenen Records
      * @param {Object} val
