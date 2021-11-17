@@ -55,7 +55,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         this._defaultCountryCallingCode = null;
         this._formatValue = true;
         this._replaceLeadingZeros = true;
-        this._showLinkButton = true;
+        this._showLinkButton = false;
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {

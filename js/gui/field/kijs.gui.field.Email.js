@@ -50,7 +50,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
     constructor(config={}) {
         super(false);
 
-        this._showLinkButton = true;
+        this._showLinkButton = false;
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -90,13 +90,17 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         super._validationRules(value);
 
         // Email validieren
-        if (!this._errors && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        if (kijs.isEmpty(this._errors) && value && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
             this._errors.push(kijs.getText('Falsches Emailformat'));
         }
     }
 
 
     // LISTENERS
+    _onInput() {
+        // nichts
+    }
+    
     _onLinkButtonClick() {
         if (this.value) {
             window.open('mailto:' + this.value);
