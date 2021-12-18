@@ -25,6 +25,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
+            closable: false,
             fn: fn,
             context: context,
             buttons: [
@@ -53,6 +54,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
+            closable: true,
             fn: fn,
             context: context,
             icon: {
@@ -89,6 +91,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
+            closable: false,
             fn: fn,
             context: context,
             icon: {
@@ -123,6 +126,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
+            closable: false,
             fn: fn,
             context: context,
             icon: {
@@ -159,7 +163,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
-
+            
+            closable: true,
             fieldXtype: 'kijs.gui.field.Text',
             label: label,
             value: value,
@@ -192,6 +197,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *     caption: 'Testmeldung',
      *     msg: 'Hallo Welt!',
      *
+     *     closable: true, // Soll das Fenster ein X zum Schliessen haben?
+     *     
      *     // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
      *     fieldXtype: 'kijs.gui.field.Text',
      *     label: 'Wert',
@@ -321,6 +328,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         const win = new kijs.gui.Window({
             caption: config.caption,
             iconChar: config.iconChar ? config.iconChar : '',
+            closable: config.hasOwnProperty('closable') ? !!config.closable : true,
             collapsible: false,
             resizable: false,
             maximizable: false,
@@ -359,6 +367,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
+            closable: true,
             fn: fn,
             context: context,
             icon: {
