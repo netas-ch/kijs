@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.column.Column
+// kijs.gui.grid.columnConfig.Column
 // --------------------------------------------------------------
 /**
  * EVENTS

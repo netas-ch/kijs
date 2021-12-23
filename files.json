@@ -97,6 +97,7 @@
 
    "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.js",
    "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.ColumnConfig.js",
+   "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Button.js",
    "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Text.js",
    "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Date.js",
    "js/gui/grid/columnConfig/kijs.gui.grid.columnConfig.Number.js",
@@ -105,6 +106,7 @@
 
    "js/gui/grid/cell/kijs.gui.grid.cell.js",
    "js/gui/grid/cell/kijs.gui.grid.cell.Cell.js",
+   "js/gui/grid/cell/kijs.gui.grid.cell.Button.js",
    "js/gui/grid/cell/kijs.gui.grid.cell.Text.js",
    "js/gui/grid/cell/kijs.gui.grid.cell.Date.js",
    "js/gui/grid/cell/kijs.gui.grid.cell.Number.js",
@@ -113,6 +115,7 @@
 
    "js/gui/grid/filter/kijs.gui.grid.filter.js",
    "js/gui/grid/filter/kijs.gui.grid.filter.Filter.js",
+   "js/gui/grid/filter/kijs.gui.grid.filter.Button.js",
    "js/gui/grid/filter/kijs.gui.grid.filter.Text.js",
    "js/gui/grid/filter/kijs.gui.grid.filter.Number.js",
    "js/gui/grid/filter/kijs.gui.grid.filter.Date.js",
