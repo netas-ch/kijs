@@ -193,7 +193,7 @@ foreach ($requests as $request) {
                 $formData = $request->requestData->formData;
 
                 if (!property_exists($formData, 'Anrede')) {
-                    throw new Exception("Das Feld 'Anrede' ist nicht vorhanden.");
+                    throw new \Exception("Das Feld 'Anrede' ist nicht vorhanden.");
                 }
 
                 if ($formData->Vorname === 'Susanne' && $formData->Anrede !== 'w') {
@@ -276,9 +276,15 @@ foreach ($requests as $request) {
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Icon';
                     $col->caption = 'Icon';
-                    $col->valueField = 'vorname';
                     $col->iconCharField = 'icon';
                     $col->iconColorField = 'color';
+                    $response->responseData->columns[] = $col;
+                    unset ($col);
+
+                    $col = new stdClass();
+                    $col->xtype = 'kijs.gui.grid.columnConfig.Button';
+                    $col->caption = 'Button';
+                    $col->valueField = 'buttonConfig';
                     $response->responseData->columns[] = $col;
                     unset ($col);
 
@@ -335,6 +341,14 @@ foreach ($requests as $request) {
                         $row->{'field_' . strtolower(substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1))} = substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1) . $rwId;
                     }
 
+
+                    $button = new stdClass();
+                    $button->caption = 'Testbutton ' . $rwId;
+                    $button->iconChar = '&#xf0e2';
+                    $button->on = new stdClass();
+                    //$button->on->click = 'testfunction';
+
+                    $row->buttonConfig = $button;
                     $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
                     $row->number = $rwId;
                     $row->date = time() + (3600 * 24 * $rwId);

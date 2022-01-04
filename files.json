@@ -39,6 +39,7 @@
    "js/gui/kijs.gui.Button.js",
    "js/gui/kijs.gui.ButtonGroup.js",
    "js/gui/kijs.gui.MenuButton.js",
+   "js/gui/kijs.gui.TabButton.js",
 
    "js/gui/kijs.gui.Tree.js",
    "js/gui/kijs.gui.PanelBar.js",
@@ -61,6 +62,7 @@
    "js/gui/kijs.gui.DataView.js",
    "js/gui/kijs.gui.ListView.js",
    "js/gui/kijs.gui.FormPanel.js",
+   "js/gui/kijs.gui.TabPanel.js",
 
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
