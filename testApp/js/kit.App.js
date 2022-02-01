@@ -9,7 +9,7 @@ kit.App = class kit_App {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
-    constructor(config={}) {
+    constructor(config = {}) {
 
         // RPC-Instanz
         var rpcConfig = {};
@@ -54,26 +54,26 @@ kit.App = class kit_App {
                     headerBarStyle: {
                         fontSize: '16px'
                     },
-                    headerBarElements:[
+                    headerBarElements: [
                         {
                             xtype: 'kijs.gui.Button',
                             iconChar: '&#xf059'
-                        },{
+                        }, {
                             xtype: 'kijs.gui.Button',
                             iconChar: '&#xf059',
                             disabled: true
-                        },{
+                        }, {
                             xtype: 'kijs.gui.Button',
                             iconChar: '&#xf0ee',
                             on: {
-                                click: function() {
+                                click: function () {
                                     this._uploadDialog.showFileSelectDialog();
                                 },
                                 context: this
                             }
                         }
                     ],
-                    elements:[
+                    elements: [
                         {
                             xtype: 'kijs.gui.DropZone',
                             height: 150,
@@ -92,11 +92,47 @@ kit.App = class kit_App {
                             html: 'Drop Zone',
                             contentTypes: 'image',
                             on: {
-                                drop: function(e) { console.log(e); }
+                                drop: function (e) {
+                                    console.log(e);
+                                }
                             }
                         }
                     ]
-                },{
+                }, {
+                    xtype: 'kijs.gui.TabPanel',
+                    caption: 'TabPanel',
+                    height: 200,
+                    draggable: true,
+                    data: [
+                        { caption: 'Testtab 1', name: 'Testtab1', iconChar: '&#xf26e', elements: [
+                                {
+                                    xtype: 'kijs.gui.field.DateTime'
+                                }
+                            ]
+                        },
+                        { caption: 'Testtab 2', iconChar: '&#xf2bb', elements: [
+                                {
+                                    xtype: 'kijs.gui.field.Display',
+                                    value: 'Test'
+                                }
+                            ] },
+                        { caption: 'Testtab 3', elements: [
+                                {
+                                    xtype: 'kijs.gui.field.Text'
+                                }
+                            ]},
+                        { caption: 'Testtab 4', iconChar: '&#xf0a8', closable: true },
+                        { caption: 'Testtab 5', closable: true }
+                    ],
+                    on: {
+                        tabClick: function (e) {
+                            if (e.raiseElement.name === 'Testtab1') {
+                                e.element.addTab({caption: 'Testtab ADD', iconChar: '&#xf02e', closable: true});
+                            }
+                        },
+                        context: this
+                    }
+                }, {
                     xtype: 'kijs.gui.Container',
                     cls: 'kijs-flexrow',
                     style: {
@@ -106,6 +142,17 @@ kit.App = class kit_App {
                     elements: [
                         // LEFT
                         {
+                            xtype: 'kijs.gui.TabPanel',
+                            mode: 'vertical',
+                            draggable: true,
+                            data: [
+                                { caption: 'Testtab 1', iconChar: '&#xf26e' },
+                                { caption: 'Testtab 2', iconChar: '&#xf2bb' },
+                                { caption: 'Testtab 3', iconChar: '&#xf0a8', closable: true },
+                                { caption: 'Testtab 4'},
+                                { caption: 'Testtab 5', closable: true }
+                            ]
+                        }, {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Navigation',
                             iconChar: '&#xf110',
@@ -116,7 +163,7 @@ kit.App = class kit_App {
                                 flex: "none"
                             },
                             cls: 'kijs-flexcolumn',
-                            elements:[
+                            elements: [
                                 {
                                     xtype: 'kijs.gui.ContainerStack',
                                     name: 'testcontainerstack',
@@ -126,7 +173,7 @@ kit.App = class kit_App {
                                             name: 'testcontainerstackpanel_1',
                                             caption: 'Panel 1',
                                             cls: 'kijs-flexcolumn',
-                                            defaults:{
+                                            defaults: {
                                                 /*style: {
                                                     margin: '4px 4px 0 4px'
                                                 }*/
@@ -170,12 +217,12 @@ kit.App = class kit_App {
                                                     }
                                                 }*/
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Panel',
                                             name: 'testcontainerstackpanel_2',
                                             caption: 'Panel 2',
                                             cls: 'kijs-flexcolumn',
-                                            defaults:{
+                                            defaults: {
                                                 style: {
                                                     margin: '4px 4px 0 4px'
                                                 }
@@ -187,69 +234,69 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'fade');
                                                         }
                                                     }
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideLeft 1s',
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
                                                         }
                                                     }
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideRight',
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideRight');
                                                         }
                                                     }
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideTop',
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideTop');
                                                         }
                                                     }
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'slideBottom',
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideBottom');
                                                         }
                                                     }
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Add panel',
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let testcontainerstack = this.up('testcontainerstack');
                                                             testcontainerstack.add({
                                                                 xtype: 'kijs.gui.Panel',
                                                                 name: 'addedpanel',
                                                                 caption: 'Neues Panel',
                                                                 cls: 'kijs-flexcolumn',
-                                                                defaults:{
+                                                                defaults: {
                                                                     style: {
                                                                         margin: '4px 4px 0 4px'
                                                                     }
@@ -260,7 +307,7 @@ kit.App = class kit_App {
                                                                     iconChar: '&#xf0d0',
                                                                     tooltip: 'test',
                                                                     on: {
-                                                                        click: function() {
+                                                                        click: function () {
                                                                             let testcontainerstack = this.up('testcontainerstack');
                                                                             testcontainerstack.remove(this.up('addedpanel'));
                                                                         }
@@ -276,7 +323,7 @@ kit.App = class kit_App {
                                     ]
                                 }
                             ]
-                        },{
+                        }, {
                             xtype: 'kijs.gui.Splitter',
                             targetPos: 'left'
                         },
@@ -294,7 +341,7 @@ kit.App = class kit_App {
                                 padding: '10px',
                                 overflowY: 'auto'
                             },
-                            headerBarElements:[
+                            headerBarElements: [
                                 {
                                     xtype: 'kijs.gui.Button',
                                     iconChar: '&#xf085',
@@ -304,7 +351,7 @@ kit.App = class kit_App {
                             headerElements: [
                                 {
                                     xtype: 'kijs.gui.ButtonGroup',
-                                    rowSizes:[2],
+                                    rowSizes: [2],
                                     caption: 'Funktionen',
                                     width: 400,
                                     height: 135,
@@ -314,24 +361,24 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Neu',
                                             iconChar: '&#xf055'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Duplizieren',
                                             iconChar: '&#xf0c5'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Aktionen',
                                             iconChar: '&#xf0e7'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Löschen',
                                             iconChar: '&#xf1f8'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Address Load',
                                             iconChar: '&#xf0e7',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     const addressPanel = this.upX('kijs.gui.Panel').down('addressPanel');
                                                     addressPanel.load();
                                                 }
@@ -353,7 +400,9 @@ kit.App = class kit_App {
                                     waitMaskTargetDomProperty: 'innerDom',
                                     cls: 'kijs-flexcolumn',
                                     on: {
-                                        close: function() { console.log('close'); }
+                                        close: function () {
+                                            console.log('close');
+                                        }
                                     },
 //                                    innerStyle: {
 //                                        padding: '10px',
@@ -361,9 +410,9 @@ kit.App = class kit_App {
 //                                    },
                                     elements: [{
                                         xtype: 'kijs.gui.grid.Grid',
-                                         style: {
-                                             flex: 1
-                                         },
+                                        style: {
+                                            flex: 1
+                                        },
 //                                        columnConfigs: (function(){
 //                                            let cols = [{caption:'Vorname', valueField:'vorname'}];
 //                                            for (let i=0; i<26; i++) {
@@ -381,8 +430,12 @@ kit.App = class kit_App {
                                         editable: false,
                                         filterVisible: true,
                                         on: {
-                                            rowClick: function(e){ console.log(e); },
-                                            rowDblClick: function(e){ console.log(e); }
+                                            rowClick: function (e) {
+                                                console.log(e);
+                                            },
+                                            rowDblClick: function (e) {
+                                                console.log(e);
+                                            }
                                         }
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){
@@ -398,7 +451,7 @@ kit.App = class kit_App {
 //                                            return rows;
 //                                        })()
                                     }]
-                                },{
+                                }, {
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Quill Editor',
                                     shadow: true,
@@ -428,9 +481,9 @@ kit.App = class kit_App {
                                         }
                                     */],
                                     style: {
-                                        marginTop:'10px'
+                                        marginTop: '10px'
                                     }
-                                },{
+                                }, {
                                     xtype: 'kijs.gui.FormPanel',
                                     name: 'addressPanel',
                                     caption: 'Adresse',
@@ -445,7 +498,7 @@ kit.App = class kit_App {
                                     facadeFnLoad: 'address.load',
                                     facadeFnSave: 'address.save',
                                     style: {
-                                        marginTop:'10px'
+                                        marginTop: '10px'
                                     },
                                     innerStyle: {
                                         padding: '10px',
@@ -472,12 +525,12 @@ kit.App = class kit_App {
                                                 cls: 'kijs-inline',
                                                 iconChar: '&#xf111',
                                                 on: {
-                                                    click: function() {
+                                                    click: function () {
                                                         this.up('ServerSortCombo').value = 3084;
                                                     }
                                                 }
                                             }]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
@@ -490,12 +543,12 @@ kit.App = class kit_App {
                                                 xtype: 'kijs.gui.Button',
                                                 iconChar: '&#xf111',
                                                 on: {
-                                                    click: function() {
+                                                    click: function () {
                                                         this.up('ServerSortCombo').value = 3084;
                                                     }
                                                 }
                                             }]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Test',
                                             label: 'Kein Force',
@@ -506,7 +559,7 @@ kit.App = class kit_App {
                                             spinIconVisible: false,
                                             forceSelection: false,
                                             showPlaceholder: false
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',
                                             label: 'Remote',
@@ -516,7 +569,7 @@ kit.App = class kit_App {
                                             value: 'CH',
                                             valueField: 'value',
                                             captionField: 'caption'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'localcombo',
                                             label: 'Local',
@@ -526,30 +579,30 @@ kit.App = class kit_App {
                                                 {value: 2, caption: 'Datensatz 2'},
                                                 {value: 3, caption: 'Datensatz 3'}
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Range',
                                             name: 'myrange',
                                             label: 'Range',
                                             min: 1,
                                             max: 10,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log(e.element.value);
                                                 },
                                                 context: this
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Color',
                                             name: 'mycolor',
                                             label: 'Color',
                                             value: 'rgb(0, 0, 255)',
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log(e.element.value);
                                                 },
                                                 context: this
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'Checkbox',
                                             label: 'Checkbox',
@@ -559,7 +612,7 @@ kit.App = class kit_App {
                                             //value: false,
                                             width: 250,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log('input:' + this.value);
                                                 }
                                             },
@@ -569,13 +622,13 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.upX('kijs.gui.field.Checkbox').checked = 2;
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'CheckboxIcon',
                                             label: '... mit Icon',
@@ -583,7 +636,7 @@ kit.App = class kit_App {
                                             caption: 'Caption',
                                             checked: 1,
                                             width: 250
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'CheckboxColor',
                                             label: '... mit Farbe',
@@ -591,7 +644,7 @@ kit.App = class kit_App {
                                             iconColor: '#ff8800',
                                             caption: 'Caption',
                                             width: 250
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'CheckboxOption',
                                             label: '... als Option',
@@ -605,7 +658,7 @@ kit.App = class kit_App {
                                             value: 'Ein',
                                             width: 250,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log('input:' + this.value);
                                                 }
                                             },
@@ -615,7 +668,7 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let chkBox = this.upX('kijs.gui.field.Checkbox');
                                                             console.log(chkBox.value);
                                                             chkBox.checked = 2;
@@ -624,25 +677,25 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             label: 'CheckboxGroup Fix',
                                             checkedAll: true,
                                             data: [
-                                                { caption: 'Januar', value: 1},
-                                                { caption: 'Februar', value: 2},
-                                                { caption: 'März', value: 3},
-                                                { caption: 'April', value: 4},
-                                                { caption: 'Mai', value: 5},
-                                                { caption: 'Juni', value: 6},
-                                                { caption: 'Juli', value: 7},
-                                                { caption: 'August', value: 8},
-                                                { caption: 'September', value: 9},
-                                                { caption: 'Oktober', value: 10},
-                                                { caption: 'November', value: 11},
-                                                { caption: 'Dezember', value: 12}
+                                                {caption: 'Januar', value: 1},
+                                                {caption: 'Februar', value: 2},
+                                                {caption: 'März', value: 3},
+                                                {caption: 'April', value: 4},
+                                                {caption: 'Mai', value: 5},
+                                                {caption: 'Juni', value: 6},
+                                                {caption: 'Juli', value: 7},
+                                                {caption: 'August', value: 8},
+                                                {caption: 'September', value: 9},
+                                                {caption: 'Oktober', value: 10},
+                                                {caption: 'November', value: 11},
+                                                {caption: 'Dezember', value: 12}
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroup',
                                             label: 'CheckboxGroup',
@@ -652,13 +705,13 @@ kit.App = class kit_App {
                                             iconColorField: 'Color',
                                             helpText: 'Hilfe Text!',
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
-                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }
+                                                {id: 1, Bezeichnung: 'blau', Icon: '&#xf111', Color: '#0088ff'},
+                                                {id: 2, Bezeichnung: 'grün', Icon: '&#xf111', Color: '#88ff00'},
+                                                {id: 3, Bezeichnung: 'pink', Icon: '&#xf111', Color: '#ff0088'}
                                             ],
-                                            value: [2,3],
+                                            value: [2, 3],
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log(e);
                                                 }
                                             },
@@ -668,7 +721,7 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             console.log(this.parent);
                                                             let val = this.parent.value;
                                                             if (kijs.isEmpty(val)) {
@@ -688,7 +741,7 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.CheckboxGroup',
                                             name: 'CheckboxGroupInline',
                                             label: 'CheckboxGroup Inline',
@@ -703,11 +756,11 @@ kit.App = class kit_App {
                                             autoLoad: true,
                                             value: ['#0f0', '#ff0'],
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log(e);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.OptionGroup',
                                             name: 'OptionGroupInline',
                                             label: 'OptionGroup Inline',
@@ -718,30 +771,30 @@ kit.App = class kit_App {
                                             iconColorField: 'Color',
                                             required: true,
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
-                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' }
+                                                {id: 1, Bezeichnung: 'blau', Icon: '&#xf111', Color: '#0088ff'},
+                                                {id: 2, Bezeichnung: 'grün', Icon: '&#xf111', Color: '#88ff00'},
+                                                {id: 3, Bezeichnung: 'pink', Icon: '&#xf111', Color: '#ff0088'}
                                             ],
                                             //value: 2,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log('oldValue:' + e.oldValue + ' value:' + e.value);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.OptionGroup',
                                             name: 'OptionGroup',
                                             label: 'OptionGroup',
                                             valueField: 'id',
                                             captionField: 'caption',
                                             data: [
-                                                {id:1, caption:'Wert A'},
-                                                {id:2, caption:'Wert B'},
-                                                {id:3, caption:'Wert C'}
+                                                {id: 1, caption: 'Wert A'},
+                                                {id: 2, caption: 'Wert B'},
+                                                {id: 3, caption: 'Wert C'}
                                             ],
                                             value: 2,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log('input:' + this.value);
                                                 }
                                             },
@@ -751,7 +804,7 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let val = this.parent.value;
                                                             val++;
                                                             if (val > 3) {
@@ -763,17 +816,17 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.OptionGroup',
                                             name: 'OptionGroupInline',
                                             label: 'OptionGroup Inline',
                                             valueField: 'id',
                                             captionField: 'id',
                                             cls: 'kijs-inline',
-                                            data: [{id:1}, {id:2}, {id:3}],
+                                            data: [{id: 1}, {id: 2}, {id: 3}],
                                             value: 2,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log('input:' + this.value);
                                                 }
                                             },
@@ -783,7 +836,7 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'test',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             let val = this.parent.value;
                                                             val++;
                                                             if (val > 3) {
@@ -795,7 +848,7 @@ kit.App = class kit_App {
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Month',
                                             name: 'Monat',
                                             label: 'Monat',
@@ -805,11 +858,11 @@ kit.App = class kit_App {
                                             maxValue: '2022-03-30',
                                             lastDayOfMonthAsValue: true,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.MonthPicker',
                                             value: '2020-12-01',
                                             minValue: '2021-02-01',
@@ -818,22 +871,22 @@ kit.App = class kit_App {
                                             currentBtnHide: false,
                                             closeBtnHide: true,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.TimePicker',
                                             value: '14:00',
                                             headerBarHide: false,
                                             currentBtnHide: false,
                                             closeBtnHide: true,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeitSec',
                                             label: 'Datum & Zeit & Sec',
@@ -844,11 +897,11 @@ kit.App = class kit_App {
                                             width: 280,
                                             value: '2021-02-17 15:45:12',
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'DatumUhrzeit',
                                             label: 'Datum & Zeit',
@@ -856,13 +909,13 @@ kit.App = class kit_App {
                                             minValue: '2021-02-01',
                                             maxValue: '2021-03-31',
                                             width: 330,
-                                            elements:[
+                                            elements: [
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf00d',
                                                     tooltip: 'Feld leeren',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.value = '';
                                                             this.parent.valueEnd = '';
                                                         }
@@ -870,11 +923,11 @@ kit.App = class kit_App {
                                                 }
                                             ],
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Datum',
                                             label: 'Datum',
@@ -882,11 +935,11 @@ kit.App = class kit_App {
                                             width: 240,
                                             date: 1565301600,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Uhrzeit',
                                             label: 'Uhrzeit',
@@ -894,22 +947,22 @@ kit.App = class kit_App {
                                             width: 200,
                                             value: '13',
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'Woche',
                                             label: 'Woche',
                                             mode: 'week',
                                             width: 240,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.DateTime',
                                             name: 'rangeStart',
                                             nameEnd: 'rangeEnd',
@@ -917,22 +970,22 @@ kit.App = class kit_App {
                                             mode: 'range',
                                             width: 320,
                                             on: {
-                                                change: function(e) {
+                                                change: function (e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Password',
                                             name: 'Passwort',
                                             label: 'Passwort',
                                             //disableBrowserSecurityWarning: 'auto',
                                             width: 200,
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     this.parent.down('Feld 1').value = this.value;
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Number',
                                             name: 'Nummer',
                                             label: 'Nummer',
@@ -940,11 +993,11 @@ kit.App = class kit_App {
                                             thousandsSeparator: '\'',
                                             alwaysDisplayDecimals: true,
                                             width: 200
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 1',
                                             label: 'Feld <b>1</b>',
-                                            labelHtmlDisplayType : 'html',
+                                            labelHtmlDisplayType: 'html',
                                             value: 'Hallo Welt 1',
                                             helpText: 'Hilfe Text!',
                                             elements: [
@@ -953,55 +1006,55 @@ kit.App = class kit_App {
                                                     iconChar: '&#xf0d0',
                                                     tooltip: 'Feld leeren',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.value = '';
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 33',
                                             label: 'Feld 33',
                                             value: 'Hallo Welt 33',
                                             autocomplete: false
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Mein Label',
                                             value: 'Mein Text ist <b style="color:red">rot</b>',
                                             htmlDisplayType: 'html'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Telefon',
                                             value: '+41 31 552 00 13',
                                             link: true
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Email',
                                             value: 'info@netas.ch',
                                             link: true
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Webseite',
                                             value: 'www.netas.ch',
                                             link: true
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 2',
                                             label: 'Feld <b>2</b>',
-                                            labelHtmlDisplayType : 'code',
+                                            labelHtmlDisplayType: 'code',
                                             value: 'Hallo Welt 2',
-                                            elements:[
+                                            elements: [
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf0d0',
                                                     caption: 'neuer Wert',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.value = 'neuer Wert';
                                                         }
                                                     }
@@ -1011,9 +1064,9 @@ kit.App = class kit_App {
                                             name: 'Feld 3',
                                             label: 'Feld <b>3</b>',
                                             labelWidth: 120,
-                                            labelHtmlDisplayType : 'text',
+                                            labelHtmlDisplayType: 'text',
                                             style: {marginBottom: '4px'}
-                                        }),{
+                                        }), {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Anrede',
                                             label: 'Anrede',
@@ -1030,22 +1083,22 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     iconChar: '&#xf00d',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.value = '';
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'phone',
                                             label: 'Telefon',
                                             defaultCountryCallingCode: '+41'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Email',
                                             name: 'email',
                                             label: 'Email'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',
                                             label: 'Land',
@@ -1055,7 +1108,7 @@ kit.App = class kit_App {
                                             value: 'CH',
                                             valueField: 'value',
                                             captionField: 'caption'
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Editor',
                                             name: 'editor',
                                             label: 'Editor',
@@ -1063,7 +1116,7 @@ kit.App = class kit_App {
                                             //theme: 'monokai',
                                             value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
                                             height: 100
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
                                             label: 'Bemerkungen (test)',
@@ -1074,7 +1127,7 @@ kit.App = class kit_App {
                                                 iconChar: '&#xf00d',
                                                 cls: 'kijs-inline'
                                             }]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.ListView',
                                             label: 'ListView',
                                             valueField: 'id',
@@ -1091,26 +1144,26 @@ kit.App = class kit_App {
                                                 marginBottom: '4px'
                                             },
                                             data: [
-                                                {id:1, Bezeichnung:'blau', Icon:'&#xf111', Color:'#0088ff' },
-                                                {id:2, Bezeichnung:'grün', Icon:'&#xf111', Color:'#88ff00' },
-                                                {id:3, Bezeichnung:'pink', Icon:'&#xf111', Color:'#ff0088' },
-                                                {id:4, Bezeichnung:'türkis', Icon:'&#xf111', Color:'#00ff88' },
-                                                {id:5, Bezeichnung:'orange', Icon:'&#xf111', Color:'#ff8800' },
-                                                {id:6, Bezeichnung:'viollet', Icon:'&#xf111', Color:'#8800ff' },
-                                                {id:7, Bezeichnung:'dunkelgrau', Icon:'&#xf111', Color:'#666666' },
-                                                {id:8, Bezeichnung:'grau', Icon:'&#xf111', Color:'#999999' },
-                                                {id:9, Bezeichnung:'hellgrau', Icon:'&#xf111', Color:'#bbbbbb' },
-                                                {id:10, Bezeichnung:'weiss', Icon:'&#xf111', Color:'#ffffff' },
-                                                {id:11, Bezeichnung:'schwarz', Icon:'&#xf111', Color:'#000000' }
+                                                {id: 1, Bezeichnung: 'blau', Icon: '&#xf111', Color: '#0088ff'},
+                                                {id: 2, Bezeichnung: 'grün', Icon: '&#xf111', Color: '#88ff00'},
+                                                {id: 3, Bezeichnung: 'pink', Icon: '&#xf111', Color: '#ff0088'},
+                                                {id: 4, Bezeichnung: 'türkis', Icon: '&#xf111', Color: '#00ff88'},
+                                                {id: 5, Bezeichnung: 'orange', Icon: '&#xf111', Color: '#ff8800'},
+                                                {id: 6, Bezeichnung: 'viollet', Icon: '&#xf111', Color: '#8800ff'},
+                                                {id: 7, Bezeichnung: 'dunkelgrau', Icon: '&#xf111', Color: '#666666'},
+                                                {id: 8, Bezeichnung: 'grau', Icon: '&#xf111', Color: '#999999'},
+                                                {id: 9, Bezeichnung: 'hellgrau', Icon: '&#xf111', Color: '#bbbbbb'},
+                                                {id: 10, Bezeichnung: 'weiss', Icon: '&#xf111', Color: '#ffffff'},
+                                                {id: 11, Bezeichnung: 'schwarz', Icon: '&#xf111', Color: '#000000'}
                                             ],
-                                            value: [2,3],
+                                            value: [2, 3],
                                             on: {
-                                                input: function(e) {
+                                                input: function (e) {
                                                     console.log(e.oldValue);
                                                     console.log(e.value);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.ListView',
                                             label: 'ListView remote',
                                             valueField: 'color',
@@ -1127,7 +1180,7 @@ kit.App = class kit_App {
                                                 marginBottom: '4px'
                                             },
                                             on: {
-                                                selectionChange: function(e) {
+                                                selectionChange: function (e) {
                                                     console.log(this.value);
                                                 }
                                             },
@@ -1137,13 +1190,13 @@ kit.App = class kit_App {
                                                     caption: 'Load',
                                                     cls: 'kijs-inline',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.load();
                                                         }
                                                     }
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.field.ListView',
                                             label: 'ListView remote',
                                             valueField: 'color',
@@ -1162,7 +1215,7 @@ kit.App = class kit_App {
                                                 marginBottom: '4px'
                                             },
                                             on: {
-                                                selectionChange: function(e) {
+                                                selectionChange: function (e) {
                                                     console.log(this.value);
                                                 }
                                             },
@@ -1171,7 +1224,7 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Load',
                                                     on: {
-                                                        click: function() {
+                                                        click: function () {
                                                             this.parent.load();
                                                         }
                                                     }
@@ -1189,48 +1242,48 @@ kit.App = class kit_App {
                                             iconChar: '&#xf135',
                                             elements: [
                                                 {
-                                                    caption:'Hallo 1'
-                                                },{
-                                                    caption:'Hallo 3',
+                                                    caption: 'Hallo 1'
+                                                }, {
+                                                    caption: 'Hallo 3',
                                                     iconChar: '&#xf135'
                                                 }, '-', {
                                                     xtype: 'kijs.gui.MenuButton',
-                                                    caption:'MULTI',
-                                                    elements: (function(){
-                                                        let steps=150, p = [];
-                                                        for (let i=0; i<steps; i++) {
+                                                    caption: 'MULTI',
+                                                    elements: (function () {
+                                                        let steps = 150, p = [];
+                                                        for (let i = 0; i < steps; i++) {
                                                             p.push({
                                                                 caption: 'El ' + i + ' von ' + steps
                                                             });
                                                         }
                                                         return p;
                                                     })()
-                                                },{
+                                                }, {
                                                     xtype: 'kijs.gui.MenuButton',
-                                                    caption:'ENDLESS',
-                                                    elements: (function(){
-                                                        let steps=20, p = [{
-                                                                caption:'ÄTSCH NICHTS DA'
-                                                            }];
-                                                        for (let i=0; i<steps; i++) {
+                                                    caption: 'ENDLESS',
+                                                    elements: (function () {
+                                                        let steps = 20, p = [{
+                                                            caption: 'ÄTSCH NICHTS DA'
+                                                        }];
+                                                        for (let i = 0; i < steps; i++) {
                                                             p = [{
-                                                                    caption: 'Stufe ' + i + ' von ' + steps
-                                                                },{
-                                                                    xtype: 'kijs.gui.MenuButton',
-                                                                    caption:'Nächste Stufe',
-                                                                    elements:p
-                                                                }];
+                                                                caption: 'Stufe ' + i + ' von ' + steps
+                                                            }, {
+                                                                xtype: 'kijs.gui.MenuButton',
+                                                                caption: 'Nächste Stufe',
+                                                                elements: p
+                                                            }];
                                                         }
                                                         return p;
                                                     })()
                                                 }
                                             ]
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Menü',
                                             iconChar: '&#xf0d8',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     let spinBox = new kijs.gui.SpinBox({
                                                         target: this,
                                                         targetPos: 'tl',
@@ -1243,77 +1296,85 @@ kit.App = class kit_App {
                                                     spinBox.show();
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnLoad',
                                             caption: 'RPC Load',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     this.upX('kijs.gui.FormPanel').load();
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnSave',
                                             caption: 'RPC Save',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     this.upX('kijs.gui.FormPanel').save();
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Validieren',
                                             badgeText: 'test',
                                             tooltip: 'Da darfst Du nicht draufdrücken!',
-                                            on: {click: function() {
-                                                this.tooltip = 'Nein, er hat es tatsächlich getan!';
-                                                this.parent.parent.validate();
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    this.tooltip = 'Nein, er hat es tatsächlich getan!';
+                                                    this.parent.parent.validate();
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnReadOnly',
                                             caption: 'ReadOnly',
                                             badgeText: '7',
-                                            on: {click: function() {
-                                                this.parent.parent.readOnly = true;
+                                            on: {
+                                                click: function () {
+                                                    this.parent.parent.readOnly = true;
 
-                                                this.disabled = true;
-                                                this.parent.down('btnEnable').disabled = false;
-                                            }}
-                                        },{
+                                                    this.disabled = true;
+                                                    this.parent.down('btnEnable').disabled = false;
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnDisable',
                                             caption: 'Deaktivieren',
-                                            on: {click: function() {
-                                                this.parent.parent.disabled = true;
+                                            on: {
+                                                click: function () {
+                                                    this.parent.parent.disabled = true;
 
-                                                this.disabled = true;
-                                                this.parent.down('btnEnable').disabled = false;
-                                            }}
-                                        },{
+                                                    this.disabled = true;
+                                                    this.parent.down('btnEnable').disabled = false;
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnEnable',
                                             caption: 'Aktivieren',
                                             disabled: true,
-                                            on: {click: function() {
-                                                kijs.Array.each(this.parent.parent.elements, function(element) {
-                                                    if (element instanceof kijs.gui.field.Field) {
-                                                        element.readOnly = false;
-                                                    }
-                                                }, this);
-                                                this.parent.parent.disabled = false;
-                                                this.disabled = true;
-                                                this.parent.down('btnReadOnly').disabled = false;
-                                                this.parent.down('btnDisable').disabled = false;
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    kijs.Array.each(this.parent.parent.elements, function (element) {
+                                                        if (element instanceof kijs.gui.field.Field) {
+                                                            element.readOnly = false;
+                                                        }
+                                                    }, this);
+                                                    this.parent.parent.disabled = false;
+                                                    this.disabled = true;
+                                                    this.parent.down('btnReadOnly').disabled = false;
+                                                    this.parent.down('btnDisable').disabled = false;
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnRpc',
                                             caption: 'RPC',
                                             on: {
-                                                click: function() {
-                                                    _this._rpc.do('test.test', 'data', function(response){
+                                                click: function () {
+                                                    _this._rpc.do('test.test', 'data', function (response) {
                                                         // nix
                                                     }, _this, true, this.parent.parent, 'innerDom');
                                                 }
@@ -1321,7 +1382,7 @@ kit.App = class kit_App {
                                         }
                                     ]
 
-                                },{
+                                }, {
                                     xtype: 'kijs.gui.FormPanel',
                                     rpc: this._rpc,
                                     facadeFnLoad: 'form.load',
@@ -1341,10 +1402,12 @@ kit.App = class kit_App {
                                         style: {marginBottom: '4px'}
                                     },
                                     on: {
-                                        afterSave: function(e) {
-                                            kijs.gui.CornerTipContainer.show('Info', 'Speichern erfolgreich.' , 'info');
+                                        afterSave: function (e) {
+                                            kijs.gui.CornerTipContainer.show('Info', 'Speichern erfolgreich.', 'info');
                                         },
-                                        enterPress: function(e) { console.log("Panel: enterPress"); }
+                                        enterPress: function (e) {
+                                            console.log("Panel: enterPress");
+                                        }
                                     },
                                     elements: [
                                         {
@@ -1355,7 +1418,7 @@ kit.App = class kit_App {
                                             helpText: 'Bitte geben Sie hier Ihre Bemerkungen ein!',
                                             height: 100,
                                             on: {
-                                                enterPress: function(e) {
+                                                enterPress: function (e) {
                                                     console.log('Memo: enterPress');
                                                 }
                                             }
@@ -1370,22 +1433,22 @@ kit.App = class kit_App {
                                             name: 'btnLoad',
                                             caption: 'Load',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     this.parent.parent.load(1);
                                                 }
                                             }
-                                        },{
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             name: 'btnSave',
                                             caption: 'Save',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     this.parent.parent.save(1);
                                                 }
                                             }
                                         }
                                     ]
-                                },{
+                                }, {
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel 2',
                                     closable: true,
@@ -1424,55 +1487,67 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Disable/Enable',
                                             tooltip: 'Disable/Enable dataview',
-                                            on: {click: function() {
-                                                let dataView = this.upX('kijs.gui.Panel').downX('kijs.gui.DataView');
-                                                dataView.disabled = !dataView.disabled;
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    let dataView = this.upX('kijs.gui.Panel').downX('kijs.gui.DataView');
+                                                    dataView.disabled = !dataView.disabled;
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Alert',
-                                            on: {click: function() {
-                                                kijs.gui.MsgBox.alert('Test', 'Alert! Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans...', function(e, el) {
-                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
-                                                });
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    kijs.gui.MsgBox.alert('Test', 'Alert! Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans... Hans geht fischen. So fischt Hans...', function (e, el) {
+                                                        kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
+                                                    });
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Info',
-                                            on: {click: function() {
-                                                kijs.gui.MsgBox.info('Test', 'Info!', function(e) {
-                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
-                                                });
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    kijs.gui.MsgBox.info('Test', 'Info!', function (e) {
+                                                        kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
+                                                    });
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Warning',
-                                            on: {click: function() {
-                                                kijs.gui.MsgBox.warning('Test', 'Warning!', function(e) {
-                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
-                                                });
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    kijs.gui.MsgBox.warning('Test', 'Warning!', function (e) {
+                                                        kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
+                                                    });
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Error',
-                                            on: {click: function() {
-                                                kijs.gui.MsgBox.error('Test', 'Error!', function(e) {
-                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
-                                                });
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function () {
+                                                    kijs.gui.MsgBox.error('Test', 'Error!', function (e) {
+                                                        kijs.gui.MsgBox.alert('Es wurde geklickt auf', e.btn);
+                                                    });
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Confirm',
-                                            on: {click: function(e) {
-                                                kijs.gui.MsgBox.confirm('Test', 'Confirm!', function(e) {
-                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf ', e.btn);
-                                                });
-                                            }}
-                                        },{
+                                            on: {
+                                                click: function (e) {
+                                                    kijs.gui.MsgBox.confirm('Test', 'Confirm!', function (e) {
+                                                        kijs.gui.MsgBox.alert('Es wurde geklickt auf ', e.btn);
+                                                    });
+                                                }
+                                            }
+                                        }, {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'CornerTip',
                                             on: {
-                                                click: function() {
+                                                click: function () {
                                                     if (!this.___cornerTipIcon || this.___cornerTipIcon === 'error') {
                                                         this.___cornerTipIcon = 'alert';
                                                     } else if (this.___cornerTipIcon === 'alert') {
@@ -1499,264 +1574,288 @@ kit.App = class kit_App {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Datumsbereich',
                                     iconChar: '&#xf017',
-                                    on: {click: function() {
-                                        let window = new kijs.gui.Window({
-                                            target: this.parent.parent.down('addressPanel'),
-                                            targetDomProperty: 'innerDom',
-                                            caption: 'Datumsbereich',
-                                            iconChar: '&#xf017',
-                                            collapsible: 'top',
-                                            maximized: false,
-                                            modal: true,
-                                            height: 290,
-                                            width: 188,
-                                            elements:[{
+                                    on: {
+                                        click: function () {
+                                            let window = new kijs.gui.Window({
+                                                target: this.parent.parent.down('addressPanel'),
+                                                targetDomProperty: 'innerDom',
+                                                caption: 'Datumsbereich',
+                                                iconChar: '&#xf017',
+                                                collapsible: 'top',
+                                                maximized: false,
+                                                modal: true,
+                                                height: 290,
+                                                width: 188,
+                                                elements: [{
                                                     xtype: 'kijs.gui.DatePicker',
                                                     mode: 'range'
-                                            }]
-                                        });
-                                        window.show();
-                                    }}
-                                },{
+                                                }]
+                                            });
+                                            window.show();
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Uhrzeit',
                                     iconChar: '&#xf017',
-                                    on: {click: function() {
-                                        let window = new kijs.gui.Window({
-                                            target: this.parent.parent.down('addressPanel'),
-                                            targetDomProperty: 'innerDom',
-                                            caption: 'Fenster',
-                                            iconChar: '&#xf017',
-                                            collapsible: 'top',
-                                            maximized: false,
-                                            modal: true,
-                                            height: 400,
-                                            width: 260,
-                                            elements:[
-                                                {
-                                                    xtype: 'kijs.gui.TimePicker',
-                                                    minutesHide: false,
-                                                    secondsHide: false,
-                                                    inputHide: false,
-                                                    on: {
-                                                        change: function(e) {
-                                                            console.log('change: ' + e.element.value);
+                                    on: {
+                                        click: function () {
+                                            let window = new kijs.gui.Window({
+                                                target: this.parent.parent.down('addressPanel'),
+                                                targetDomProperty: 'innerDom',
+                                                caption: 'Fenster',
+                                                iconChar: '&#xf017',
+                                                collapsible: 'top',
+                                                maximized: false,
+                                                modal: true,
+                                                height: 400,
+                                                width: 260,
+                                                elements: [
+                                                    {
+                                                        xtype: 'kijs.gui.TimePicker',
+                                                        minutesHide: false,
+                                                        secondsHide: false,
+                                                        inputHide: false,
+                                                        on: {
+                                                            change: function (e) {
+                                                                console.log('change: ' + e.element.value);
+                                                            }
                                                         }
                                                     }
-                                                }
-                                            ]
-                                        });
-                                        window.show();
-                                    }}
-                                },{
+                                                ]
+                                            });
+                                            window.show();
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Progress Bar',
                                     iconChar: '&#xf0ae',
-                                    on: {click: function() {
-                                        let pgWin = new kijs.gui.Window({
-                                            caption: 'Progressbar',
-                                            iconChar: '&#xf2d0',
-                                            collapsible: 'top',
-                                            modal: false,
+                                    on: {
+                                        click: function () {
+                                            let pgWin = new kijs.gui.Window({
+                                                caption: 'Progressbar',
+                                                iconChar: '&#xf2d0',
+                                                collapsible: 'top',
+                                                modal: false,
 //                                            height: 200,
-                                            width: 250,
-                                            innerStyle: {
-                                                padding: '10px'
-                                            },
-                                            elements:[
-                                                {
-                                                    xtype: 'kijs.gui.ProgressBar',
-                                                    name: 'myprogressbar',
-                                                    showPercent: true
-                                                },{
-                                                    xtype: 'kijs.gui.ProgressBar',
-                                                    name: 'myprogressbar2',
-                                                    caption: 'Caption',
-                                                    bottomCaption: 'Bottom Caption',
-                                                    style: {
-                                                        marginTop:'10px'
+                                                width: 250,
+                                                innerStyle: {
+                                                    padding: '10px'
+                                                },
+                                                elements: [
+                                                    {
+                                                        xtype: 'kijs.gui.ProgressBar',
+                                                        name: 'myprogressbar',
+                                                        showPercent: true
+                                                    }, {
+                                                        xtype: 'kijs.gui.ProgressBar',
+                                                        name: 'myprogressbar2',
+                                                        caption: 'Caption',
+                                                        bottomCaption: 'Bottom Caption',
+                                                        style: {
+                                                            marginTop: '10px'
+                                                        }
                                                     }
-                                                }
-                                            ],
-                                            footerStyle: {
+                                                ],
+                                                footerStyle: {
 //                                                padding: '10px'
-                                            },
-                                            footerElements:[
-                                                {
-                                                    xtype: 'kijs.gui.Button',
-                                                    caption: 'OK',
-                                                    isDefault: true,
-                                                    on: {click: function() {
-                                                        pgWin.destruct();
-                                                    }}
-                                                }
-                                            ]
-                                        });
-                                        pgWin.show();
-                                        let perc = 0, perc1= 0;
-                                        window.setInterval(function(){
-                                            if (!pgWin || !pgWin.dom) return;
-                                            pgWin.down('myprogressbar').percent = perc;
-                                            pgWin.down('myprogressbar2').percent = perc1;
-                                            perc += 6;
-                                            perc1 += 1;
-                                            if (perc > 100)  perc -= 99;
-                                            if (perc1 > 100)  perc1 = 1;
-                                        },900);
-                                    }}
-                                },{
+                                                },
+                                                footerElements: [
+                                                    {
+                                                        xtype: 'kijs.gui.Button',
+                                                        caption: 'OK',
+                                                        isDefault: true,
+                                                        on: {
+                                                            click: function () {
+                                                                pgWin.destruct();
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            });
+                                            pgWin.show();
+                                            let perc = 0, perc1 = 0;
+                                            window.setInterval(function () {
+                                                if (!pgWin || !pgWin.dom) return;
+                                                pgWin.down('myprogressbar').percent = perc;
+                                                pgWin.down('myprogressbar2').percent = perc1;
+                                                perc += 6;
+                                                perc1 += 1;
+                                                if (perc > 100) perc -= 99;
+                                                if (perc1 > 100) perc1 = 1;
+                                            }, 900);
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Fenster',
                                     iconChar: '&#xf2d0',
-                                    on: {click: function() {
-                                        let window = new kijs.gui.Window({
-                                            caption: 'Fenster',
-                                            iconChar: '&#xf2d0',
-                                            collapsible: 'top',
-                                            modal: false,
-                                            height: 200,
-                                            width: 250,
-                                            innerStyle: {
-                                                padding: '10px'
-                                            },
-                                            elements:[
-                                                {
-                                                    xtype: 'kijs.gui.field.Memo',
-                                                    value: 'Bemerkungsfeld',
-                                                    style: {
-                                                        height: '100%'
-                                                    }
-                                                }
-                                            ],
-                                            footerStyle: {
-//                                                padding: '10px'
-                                            },
-                                            footerElements:[
-                                                {
-                                                    xtype: 'kijs.gui.Button',
-                                                    caption: 'OK',
-                                                    isDefault: true,
-                                                    on: {click: function() {
-                                                        kijs.gui.MsgBox.warning('Warnung', 'Wirklich schliessen?', function(e) {
-                                                            if (e.btn === 'ok') {
-                                                                window.close();
-                                                            }
-                                                        });
-                                                    }}
-                                                },{
-                                                    xtype: 'kijs.gui.Button',
-                                                    caption: 'Mask',
-                                                    isDefault: true,
-                                                    on: {
-                                                        click: function() {
-                                                            let waitMask = new kijs.gui.Mask({
-                                                                displayWaitIcon: true,
-                                                                target: window
-                                                            });
-                                                            waitMask.show();
-                                                        }
-                                                    }
-                                                }
-                                            ]
-                                        });
-                                        window.show();
-                                    }}
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'Fenster modal',
-                                    iconChar: '&#xf2d0',
-                                    on: {click: function() {
-                                        let window = new kijs.gui.Window({
-                                            caption: 'Fenster',
-                                            iconChar: '&#xf2d0',
-                                            collapsible: 'top',
-                                            modal: true,
-                                            height: 160,
-                                            width: 210,
-                                            innerStyle: {
-                                                padding: '10px'
-                                            },
-                                            elements: [
-                                                {
-                                                    xtype: 'kijs.gui.Button',
-                                                    caption: 'weiteres Fenster',
-                                                    iconChar: '&#xf2d0'
-                                                }
-                                            ]
-                                        });
-                                        window.show();
-                                        window.elements[0].on('click', function() {
-                                            let window2 = new kijs.gui.Window({
+                                    on: {
+                                        click: function () {
+                                            let window = new kijs.gui.Window({
                                                 caption: 'Fenster',
                                                 iconChar: '&#xf2d0',
                                                 collapsible: 'top',
-                                                //modal: true,
-                                                target: window.dom.node.parentNode,
-                                                height: 160,
-                                                width: 210
+                                                modal: false,
+                                                height: 200,
+                                                width: 250,
+                                                innerStyle: {
+                                                    padding: '10px'
+                                                },
+                                                elements: [
+                                                    {
+                                                        xtype: 'kijs.gui.field.Memo',
+                                                        value: 'Bemerkungsfeld',
+                                                        style: {
+                                                            height: '100%'
+                                                        }
+                                                    }
+                                                ],
+                                                footerStyle: {
+//                                                padding: '10px'
+                                                },
+                                                footerElements: [
+                                                    {
+                                                        xtype: 'kijs.gui.Button',
+                                                        caption: 'OK',
+                                                        isDefault: true,
+                                                        on: {
+                                                            click: function () {
+                                                                kijs.gui.MsgBox.warning('Warnung', 'Wirklich schliessen?', function (e) {
+                                                                    if (e.btn === 'ok') {
+                                                                        window.close();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    }, {
+                                                        xtype: 'kijs.gui.Button',
+                                                        caption: 'Mask',
+                                                        isDefault: true,
+                                                        on: {
+                                                            click: function () {
+                                                                let waitMask = new kijs.gui.Mask({
+                                                                    displayWaitIcon: true,
+                                                                    target: window
+                                                                });
+                                                                waitMask.show();
+                                                            }
+                                                        }
+                                                    }
+                                                ]
                                             });
-                                            window2.show();
-                                        }, this);
-                                    }}
-                                },{
+                                            window.show();
+                                        }
+                                    }
+                                }, {
+                                    xtype: 'kijs.gui.Button',
+                                    caption: 'Fenster modal',
+                                    iconChar: '&#xf2d0',
+                                    on: {
+                                        click: function () {
+                                            let window = new kijs.gui.Window({
+                                                caption: 'Fenster',
+                                                iconChar: '&#xf2d0',
+                                                collapsible: 'top',
+                                                modal: true,
+                                                height: 160,
+                                                width: 210,
+                                                innerStyle: {
+                                                    padding: '10px'
+                                                },
+                                                elements: [
+                                                    {
+                                                        xtype: 'kijs.gui.Button',
+                                                        caption: 'weiteres Fenster',
+                                                        iconChar: '&#xf2d0'
+                                                    }
+                                                ]
+                                            });
+                                            window.show();
+                                            window.elements[0].on('click', function () {
+                                                let window2 = new kijs.gui.Window({
+                                                    caption: 'Fenster',
+                                                    iconChar: '&#xf2d0',
+                                                    collapsible: 'top',
+                                                    //modal: true,
+                                                    target: window.dom.node.parentNode,
+                                                    height: 160,
+                                                    width: 210
+                                                });
+                                                window2.show();
+                                            }, this);
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Fenster modal mit target+maximiert',
                                     iconChar: '&#xf2d0',
-                                    on: {click: function() {
-                                        let window = new kijs.gui.Window({
-                                            target: this.parent.parent.down('addressPanel'),
-                                            targetDomProperty: 'innerDom',
-                                            caption: 'Fenster',
-                                            iconChar: '&#xf2d0',
-                                            collapsible: 'top',
-                                            maximized: true,
-                                            modal: true,
-                                            height: 170,
-                                            width: 220
-                                        });
-                                        window.show();
-                                    }}
-                                },{
+                                    on: {
+                                        click: function () {
+                                            let window = new kijs.gui.Window({
+                                                target: this.parent.parent.down('addressPanel'),
+                                                targetDomProperty: 'innerDom',
+                                                caption: 'Fenster',
+                                                iconChar: '&#xf2d0',
+                                                collapsible: 'top',
+                                                maximized: true,
+                                                modal: true,
+                                                height: 170,
+                                                width: 220
+                                            });
+                                            window.show();
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Lademaske',
                                     iconChar: '&#xf1ce',
-                                    on: {click: function() {
-                                        let addressPanel = this.parent.parent.down('addressPanel');
-                                        addressPanel.displayWaitMask = !addressPanel.displayWaitMask;
-                                    }}
-                                },{
+                                    on: {
+                                        click: function () {
+                                            let addressPanel = this.parent.parent.down('addressPanel');
+                                            addressPanel.displayWaitMask = !addressPanel.displayWaitMask;
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Lochmaske',
                                     iconChar: '&#xf192',
-                                    on: {click: function() {
-                                        let addressPanel = this.parent.parent.down('addressPanel');
-                                        let maske = new kijs.gui.ApertureMask({
-                                            target: addressPanel
-                                        });
-                                        maske.show();
+                                    on: {
+                                        click: function () {
+                                            let addressPanel = this.parent.parent.down('addressPanel');
+                                            let maske = new kijs.gui.ApertureMask({
+                                                target: addressPanel
+                                            });
+                                            maske.show();
 
-                                        // maske nach 3s wieder entfernen
-                                        kijs.defer(function() {
-                                            maske.hide();
-                                        }, 3000, this);
-                                    }}
-                                },{
+                                            // maske nach 3s wieder entfernen
+                                            kijs.defer(function () {
+                                                maske.hide();
+                                            }, 3000, this);
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Neu laden',
                                     iconChar: '&#xf021',
-                                    on: {click: function() {
-                                        location.reload();
-                                    }}
-                                },{
+                                    on: {
+                                        click: function () {
+                                            location.reload();
+                                        }
+                                    }
+                                }, {
                                     xtype: 'kijs.gui.Button',
                                     caption: 'Schliessen',
                                     iconChar: '&#xf00d',
-                                    on: {click: function() {
-                                        viewport.destruct();
-                                    }}
+                                    on: {
+                                        click: function () {
+                                            viewport.destruct();
+                                        }
+                                    }
                                 }
                             ],
-                            footerBarElements:[
+                            footerBarElements: [
                                 {
                                     xtype: 'kijs.gui.Button',
                                     iconChar: '&#xf085',
@@ -1769,7 +1868,7 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Splitter',
                             targetPos: 'right'
-                        },{
+                        }, {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Vorschau',
                             iconChar: '&#xf2c8',
@@ -1779,20 +1878,20 @@ kit.App = class kit_App {
                             style: {
                                 flex: "none"
                             },
-                            headerBarElements:[
+                            headerBarElements: [
                                 {
                                     xtype: 'kijs.gui.Button',
                                     iconChar: '&#xf02f',
                                     badgeText: '5',
                                     on: {
-                                        click: function(e) {
+                                        click: function (e) {
                                             let editor = this.upX('kijs.gui.Panel').down('editor');
                                             console.log(editor.value);
                                         }
                                     }
                                 }
                             ],
-                            elements:[
+                            elements: [
                                 {
                                     xtype: 'kijs.gui.field.Editor',
                                     name: 'editor',
@@ -1811,7 +1910,7 @@ kit.App = class kit_App {
                 {
                     xtype: 'kijs.gui.Splitter',
                     targetPos: 'bottom'
-                },{
+                }, {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel Süd',
                     collapsible: 'bottom',
@@ -1823,11 +1922,11 @@ kit.App = class kit_App {
                             style: {
                                 margin: '4px 0 0 4px'
                             }
-                        },{
+                        }, {
                             xtype: 'kijs.gui.Button',
                             caption: 'set html',
                             on: {
-                                click: function(e) {
+                                click: function (e) {
                                     window.__testState = window.__testState || 0;
                                     let el = this.parent.elements[0];
                                     let html = 'Text mit <span style="color:#f00">Formatierung</span>';
@@ -1863,24 +1962,28 @@ kit.App = class kit_App {
     }
 
 
-    rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
+    rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName = 'dom', ignoreWarnings, fnBeforeDisplayError) {
         this._rpc.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, ignoreWarnings, fnBeforeDisplayError);
     }
 
-    createTreeRecursive(maxDeep, maxSubitem=15, currentDeep=0) {
+    createTreeRecursive(maxDeep, maxSubitem = 15, currentDeep = 0) {
         if (currentDeep > maxDeep) {
             return [];
         }
         let treeElements = [];
         let random = kijs.Number.random(0, maxSubitem);
-        for (var i=0; i<random; i++) {
+        for (var i = 0; i < random; i++) {
             treeElements.push({
                 caption: 'Baum ' + currentDeep + '-' + i,
-                elements: this.createTreeRecursive(maxDeep, maxSubitem, currentDeep+1)
+                elements: this.createTreeRecursive(maxDeep, maxSubitem, currentDeep + 1)
             });
         }
 
         return treeElements;
+    }
+
+    testfunction(e) {
+        console.log(e);
     }
 
 

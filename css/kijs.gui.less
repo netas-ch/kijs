@@ -428,7 +428,7 @@ div.kijs-splitter-overlay-horizontal {
     position: absolute;
     width: 5px;
     height: 100%;
-    background-color:@splitter-overlay-bkgrndColor;
+    background-color: @splitter-overlay-bkgrndColor;
     opacity: 0.8;
     cursor: ew-resize;
 }
@@ -443,7 +443,7 @@ div.kijs-splitter-overlay-vertical {
     position: absolute;
     height: 5px;
     width: 100%;
-    background-color:@splitter-overlay-bkgrndColor;
+    background-color: @splitter-overlay-bkgrndColor;
     opacity: 0.8;
     cursor: ns-resize;
 }
@@ -456,7 +456,7 @@ div.kijs-panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color:@panel-bkgrndColor;
+    background-color: @panel-bkgrndColor;
     transition: 0.2s;
 
     &:focus {
@@ -921,21 +921,184 @@ div.kijs-menubutton-spinbox {
             display: none;
         }
     }
+
     button.kijs-button > .kijs-caption {
         flex: 1;
     }
+
     button.kijs-button > .kijs-caption:first-child {
         margin-left: 22px;
     }
+
     button.kijs-button > .kijs-icon {
         width: 18px;
     }
+
     button.kijs-button > .kijs-icon2 {
         text-align: right;
     }
 }
 
 
+/* ******************
+   * Tab
+   ****************** */
+button.kijs-tab {
+    position: relative;
+    border-radius: 0 8px 0 0;
+    padding: 3px 8px;
+    background-color: @tab-bkgrndColor;
+    border: 1px solid @tab-borderColor;
+    cursor: pointer;
+    outline: none;
+
+    > .kijs-icon {
+        color: @tab-icon-fontColor;
+    }
+
+    > .kijs-icon2 {
+        margin-left: 4px;
+    }
+
+    > .kijs-icon:not(:empty) + .kijs-caption:not(:empty) {
+        margin-left: 4px;
+    }
+
+    > .kijs-caption {
+        font-family: @default-fontFamily;
+        font-size: @tab-fontSize;
+        color: @tab-fontColor;
+    }
+
+    > .kijs-badge {
+        position: absolute;
+        display: inline-block;
+        top: -2px;
+        right: -2px;
+        height: 14px;
+        min-width: 14px;
+        border-radius: 50%;
+        padding: 0;
+        font-family: @default-fontFamily;
+        font-size: @badge-fontSize;
+        line-height: 14px;
+        color: @badge-fontColor;
+        text-align: center;
+        background-color: @badge-bkgrndColor;
+        box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+
+    > .kijs-tab-closeIcon {
+        border: none;
+        margin: 0 0 0 8px;
+        padding: 0;
+        background-color: transparent;
+    }
+
+    &.kijs-vertical {
+        display: flex;
+        padding: 8px 3px;
+        border-radius: 0 0 0 8px;
+        flex-direction: column-reverse;
+
+        > .kijs-caption {
+            writing-mode: tb-rl;
+            transform: rotate(180deg);
+            margin: 0 auto 4px auto;
+        }
+
+        > .kijs-icon {
+            margin: auto;
+        }
+
+        > .kijs-icon2 {
+            margin-bottom: 4px;
+        }
+
+        > .kijs-tab-closeIcon {
+            margin: 0 auto 8px auto;
+        }
+    }
+
+    &.kijs-active {
+        background-color: @tab-focus-bkgrndColor;
+        border: 1px solid @tab-focus-borderColor;
+    }
+
+    &:hover {
+        background-color: @tab-focus-bkgrndColor;
+        border: 1px solid @tab-focus-borderColor;
+    }
+
+    &:focus {
+        border: 1px solid @tab-focus-borderColor;
+    }
+
+    &:hover > .kijs-caption,
+    &:focus > .kijs-caption {
+        color: @tab-focus-fontColor;
+    }
+
+    &.kijs-default {
+        box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.8);
+    }
+
+    &.kijs-disabled {
+        background-color: @tab-bkgrndColor;
+        border: 1px solid @tab-borderColor;
+        cursor: auto;
+
+        > .kijs-caption,
+        > .kijs-icon {
+            color: @tab-disabled-fontColor;
+        }
+
+        > .kijs-badge {
+            background-color: @badge-disabled-bkgrndColor;
+            color: @badge-disabled-fontColor;
+        }
+    }
+}
+
+
+/* ******************
+   * TabPanel
+   ****************** */
+div.kijs-tabpanel {
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: column;
+
+        > .kijs-tabpanel-button-container {
+
+            > .kijs-container-inner {
+                display: flex;
+            }
+        }
+
+        > .kijs-tabpanel-container {
+            border: 1px solid @tab-borderColor;
+        }
+    }
+
+    &.kijs-vertical {
+        > .kijs-container-inner {
+            flex-direction: row;
+
+            > .kijs-tabpanel-button-container {
+
+                > .kijs-container-inner {
+                    flex-direction: column;
+                }
+            }
+
+            > .kijs-tabpanel-container {
+
+            }
+        }
+    }
+}
 
 
 /* ******************
@@ -2947,7 +3110,7 @@ div.kijs-grid {
 div.kijs-tooltip {
     position: fixed;
     display: block;
-    z-index: 40101;
+    z-index: 50200;
     border-radius: 4px;
     padding: 4px;
     border: 1px solid @panel-borderColor;
