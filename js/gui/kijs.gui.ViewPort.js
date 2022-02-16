@@ -94,21 +94,12 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     render(superCall) {
         super.render(true);
 
-        // innerDOM Rendern
-        this._innerDom.render();
-        this._dom.node.appendChild(this._innerDom.node);
-
-        // elements im innerDOM rendern
-        kijs.Array.each(this._elements, function(el) {
-            el.renderTo(this._innerDom.node);
-        }, this);
-
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
 
-        // afterResize-Event zeitversetzt auslösen
+        // afterResize-Event auslösen
         this._raiseAfterResizeEvent(true);
     }
 
