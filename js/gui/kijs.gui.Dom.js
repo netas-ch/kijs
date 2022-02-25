@@ -949,19 +949,22 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return;
         }
 
-        if (kijs.isEmpty(value)) {
+        if (kijs.isEmpty(value) || value === false) {
             if (this._nodeAttribute.hasOwnProperty(name)) {
                 delete this._nodeAttribute[name];
             }
         } else {
-            this._nodeAttribute[name] = value;
+            this._nodeAttribute[name] = kijs.toString(value);
         }
 
         if (this._node) {
-            this._node[name] = value;
-            // Kleiner murgs, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
-            if (kijs.isEmpty(value)) {
+
+            // attribute entfernen falls leer oder false.
+            if (kijs.isEmpty(value) || value === false) {
                 this._node.removeAttribute(name);
+
+            } else {
+                this._node[name] = kijs.toString(value);
             }
         }
     }

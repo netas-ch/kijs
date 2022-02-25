@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '1.2.2'; }
+    static get version() { return '1.2.3'; }
 
     static get keys() {
         return {
@@ -401,7 +401,7 @@ window.kijs = class kijs {
             return '';
 
         } else if (kijs.isBoolean(value)) {
-            return value ? '1' : '0';
+            return value ? '1' : ''; // Achtung: '0' wird zu true ausgewertet.
 
         } else if (kijs.isFunction(value.toString)) {
             return value.toString();
