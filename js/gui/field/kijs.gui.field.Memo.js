@@ -75,7 +75,9 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     get inputDom() { return this._inputDom; }
 
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
-    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
+    set placeholder(val) {
+        this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val));
+    }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -100,7 +102,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         return val === null ? '' : val;
     }
     set value(val) {
-        this._inputDom.nodeAttributeSet('value', val);
+        this._inputDom.nodeAttributeSet('value', kijs.toString(val));
         this.validate();
     }
 

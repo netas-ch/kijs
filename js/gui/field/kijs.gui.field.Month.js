@@ -10,15 +10,15 @@
  * value                    aktueller Wert als SQL-String (siehe auch "valueFormat")
  * displayFormat            Format der Darstellung im Feld. Default="H Y"
  * valueFormat              Format des SQL-Strings default:'Y-m-d (gilt für value, minValue und maxValue)
- * lastDayOfMonthAsValue    als date oder value wird normalerweise der 1. Tag des Monats zurückgegeben, 
+ * lastDayOfMonthAsValue    als date oder value wird normalerweise der 1. Tag des Monats zurückgegeben,
  *                          falls der letzte Tag gewünscht wird, lastDayOfMonthAsValue=true setzen.
  * emptyBtnHide             damit kann die "Leeren"-Schaltfläche ausgeblendet werden.
  * minDate, maxDate         min- und max Datum als JavaScript Date-Objekt oder null, für keine Einschränkung.
  *                          Beim minDate wird fix der 1. Tag des Monats genommen, bei maxDate der letzte Tag des Monats.
  * minValue, maxValue       gleich wie minDate und maxDate, hier aber als SQL-String (siehe auch "valueFormat").
- * year2000Threshold        Wenn zweistellige Jahreszahlen eingegeben werden, können sie automatisch in vierstellige 
+ * year2000Threshold        Wenn zweistellige Jahreszahlen eingegeben werden, können sie automatisch in vierstellige
  *                          umgewandelt werden. Dazu kann hier der Schwellwert angegeben werden. Default=30. Keine Umwandlung=Null
- *                          
+ *
  * EVENTS
  * ----------
  * blur
@@ -66,13 +66,13 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         this._lastDate = null;          // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
-        
-        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden, 
+
+        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
                                         // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
                                         // Null=Umwandlung ausgeschaltet.
-        
+
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
             nodeTagName: 'input',
@@ -109,7 +109,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             parent: this
         });
         this._spinBoxEl.add(this._monthPicker);
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             spinIconVisible: true,
@@ -161,7 +161,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._updateInputValue();
         this._lastDate = val;
     }
-    
+
     // overwrite
     get disabled() { return super.disabled; }
     set disabled(val) {
@@ -172,7 +172,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('disabled', false);
         }
     }
-    
+
     get displayFormat() { return this._monthPicker.headerBarFormat; }
     set displayFormat(val) { this._monthPicker.headerBarFormat = val; }
 
@@ -186,9 +186,9 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
     get lastDayOfMonthAsValue() { return this._monthPicker.lastDayOfMonthAsValue; }
     set lastDayOfMonthAsValue(val) { this._monthPicker.lastDayOfMonthAsValue = !!val; }
-    
+
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
-    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', val); }
+    set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -208,7 +208,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     set value(val) {
         this.date = val;
     }
-    
+
     get valueFormat() { return this._monthPicker.valueFormat; }
     set valueFormat(val) { this._monthPicker.valueFormat = val; }
 
@@ -239,33 +239,33 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker.unrender();
         this._spinBoxEl.unrender();
         this._inputDom.unrender();
-        
+
         super.unrender(true);
     }
-      
-    
+
+
     // PROTECTED
     _parseStringToMonth(strInput) {
         let year = null;
         let monthIndex = null; // 0=Jan, 1=Feb, ...
         let index;
-        
+
         const months = kijs.Date.months;
         const monthsShort = kijs.Date.months_short;
-        
+
         // String in Bestandteile (Wörter) aufteilen
         strInput = kijs.toString(strInput).trim();
         let arr = strInput.split(' ');
-        
+
         // Der String darf aus ein oder zwei Bestandteilen bestehen
         if (arr.length < 1 || arr.length > 2) {
             return null;
         }
-        
+
         // Bestandteile duchgehen und versuchen den Monat und das Jahr zu ermitteln
         for (let i=0; i<arr.length; i++) {
             let str = arr[i];
-            
+
             // Handelt es sich um eine Jahreszahl?
             if (kijs.isNumeric(str)) {
                 if (kijs.isEmpty(year)) {
@@ -282,7 +282,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                     return null;
                 }
             }
-            
+
             // Handelt es sich um einen Monatsnamen
             index = months.findIndex(month => month.toLowerCase() === str.toLowerCase());
             if (index === -1) {
@@ -296,47 +296,47 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                 }
             }
         }
-        
+
         // Das Jahr ist optional
         if (kijs.isEmpty(year)) {
             year = (new Date()).getFullYear();
         }
-        
+
         // Der Monat nicht
         if (kijs.isEmpty(monthIndex)) {
             return null;
         }
-        
+
         return new Date(year, monthIndex, 1);
     }
-    
+
     _updateInputValue() {
         let val = kijs.isEmpty(this._monthPicker.date) ? '' : kijs.Date.format(this._monthPicker.date, this._monthPicker.headerBarFormat);
         this._inputDom.nodeAttributeSet('value', val);
     }
-    
+
     // overwrite
     _validationRules(value) {
         if (!kijs.isEmpty(value)) {
             const date = kijs.Date.create(value);
-            
+
             // Min. value
             if (this._monthPicker.minDate !== null && date < this._monthPicker.minDate) {
                 this._errors.push(
-                        kijs.getText('Der minimale Wert für dieses Feld ist %1', 
-                        '', 
+                        kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                        '',
                         kijs.Date.format(this._monthPicker.minDate, this._monthPicker.headerBarFormat)));
             }
 
             // Max. value
             if (this._monthPicker.maxDate !== null && date > this._monthPicker.maxDate) {
                 this._errors.push(
-                        kijs.getText('Der maximale Wert für dieses Feld ist %1', 
-                        '', 
+                        kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                        '',
                         kijs.Date.format(this._monthPicker.maxDate, this._monthPicker.headerBarFormat)));
             }
         }
-        
+
         super._validationRules(value);
     }
 
@@ -344,51 +344,51 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // LISTENERS
     _onInputDomChange() {
         this._updateInputValue();
-        
+
         this.validate();
-        
+
         if (!kijs.Date.compare(this._monthPicker.date, this._lastDate)) {
             this.raiseEvent('change', {value: this.value});
         }
         this._lastDate = this._monthPicker.date;
     }
-    
+
     _onInputDomInput(e) {
         const rawValue = this._inputDom.nodeAttributeGet('value');
         const date = this._parseStringToMonth(rawValue);
-        
+
         this.resetErrors();
-        
+
         this._monthPicker.date = date;
     }
-    
+
     _onMonthPickerChange(e) {
         this._updateInputValue();
-        
+
         this.validate();
-        
+
         if (!kijs.Date.compare(this._monthPicker.date, this._lastDate)) {
             this.raiseEvent('change', {value: this.value});
         }
         this._lastDate = this._monthPicker.date;
     }
-    
+
     _onMonthPickerEmptyClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
-    
+
     _onMonthPickerCurrentClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
-    
+
     _onMonthPickerMonthClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
 
-    
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -417,7 +417,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._inputDom = null;
         this._spinBoxEl = null;
         this._monthPicker = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }

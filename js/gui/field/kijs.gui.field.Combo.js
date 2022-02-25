@@ -97,7 +97,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             data: { prio: 1000, target: 'data' },
             value: { prio: 1001, target: 'value' },
-            
+
             // Attribute für SpinBoxEl weiterreichen
             autoScroll: { target: 'autoScroll', context: this._spinboxEl }
         });
@@ -243,7 +243,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
 
-        this._inputDom.nodeAttributeSet('value', this._caption);
+        this._inputDom.nodeAttributeSet('value', kijs.toString(this._caption));
     }
 
     get oldValue() { return this._oldValue; }
@@ -419,7 +419,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Es wurde eine Übereinstimmung gefunden
             if (matchVal) {
-                this._inputDom.nodeAttributeSet('value', matchVal);
+                this._inputDom.nodeAttributeSet('value', kijs.toString(matchVal));
 
                 // Differenz selektieren
                 if (matchVal.length !== inputVal.length) {
@@ -513,7 +513,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _onInputInput(e) {
         this._spinBoxEl.show();
     }
-    
+
     _onInputKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
         if (this._listViewEl.getSelected()) {

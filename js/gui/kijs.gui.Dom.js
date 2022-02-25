@@ -939,7 +939,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Fügt eine Eigenschaft zum DOM-Node hinzu
+     * Fügt eine Eigenschaft zum DOM-Node hinzu, oder löscht sie.
      * @param {String} name
      * @param {String|null|Boolean|undefined} value
      * @returns {undefined}
@@ -949,7 +949,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return;
         }
 
-        if (kijs.isEmpty(value) || value === false) {
+        if (!kijs.isDefined(value) || value === false) {
             if (this._nodeAttribute.hasOwnProperty(name)) {
                 delete this._nodeAttribute[name];
             }
@@ -959,8 +959,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         if (this._node) {
 
-            // attribute entfernen falls leer oder false.
-            if (kijs.isEmpty(value) || value === false) {
+            // attribute entfernen falls false oder undefiniert.
+            if (!kijs.isDefined(value) || value === false) {
                 this._node.removeAttribute(name);
 
             } else {
