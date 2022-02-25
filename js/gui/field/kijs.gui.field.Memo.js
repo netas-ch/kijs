@@ -81,7 +81,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
+        if (val) {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);

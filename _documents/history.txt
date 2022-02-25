@@ -1,3 +1,12 @@
+Version 1.2.3
+================================================================================
+
+Fehlerbehebungen
+----------------
+ - Memofeld nach "disablen" nicht mehr schreibbar behoben
+
+
+
 Version 1.2.0
 ================================================================================
 Neue Klassen
@@ -63,3 +72,19 @@ Betrifft:
 
 3. "kijs.getGetParameter" -> ändern zu "kijs.Navigator.getGetParameter"
 
+Version 1.1.3
+================================================================================
+* toolTip in tooltip umbenannt (Muss in Projekten ersetzt werden, toolTip = DEPRECATED)
+* kijs.Grafic in kijs.Graphic umbenannt (Muss in Projekten ersetzt werden!)
+* Neue Funktionen für Manipulation von Farben in kijs.Graphic
+
+
+Version 1.1.2
+================================================================================
+* Dateien werden neu in der "files.json" aufgeführt.
+  Es gibt verschiedene Module, deren zugehörigen Dateien aufgeführt sind.
+
+
+Version 1.0.1
+================================================================================
+Release kgweb
