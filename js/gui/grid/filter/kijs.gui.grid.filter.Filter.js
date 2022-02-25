@@ -38,7 +38,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-
+            // keine
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
