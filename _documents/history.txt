@@ -1,3 +1,10 @@
+Version 1.2.4
+================================================================================
+Grid-Remote-Loading optimiert. Neu mit remoteDataStartIndex.
+Text-Filter vom Grid lädt nun Daten nicht neu, wenn mit Enter gefiltert wird und danach das Change-Event beim Verlieren des Fokus neu laden will.
+Daten neu Laden (z.B. nach Filter change) setzt nun Scrolling zurück.
+
+
 Version 1.2.3
 ================================================================================
 

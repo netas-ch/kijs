@@ -154,8 +154,8 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     }
 
     _onFilter(e) {
-        // Filter verzögert zurücksetzen, da der "filter"
-        // event gleich mehrmals von mehreren Filter kommen kann.
+        // Filter verzögert zurücksetzen, da der "Filter"
+        // Event gleich mehrmals von mehreren Filtern kommen kann.
         if (this._filterReloadDefer) {
             window.clearTimeout(this._filterReloadDefer);
             this._filterReloadDefer = null;
