@@ -149,7 +149,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._html = undefined;
         this._htmlDisplayType = 'html', // Darstellung der Eigenschaft 'html'. Default: 'html'
                                         // html: als html-Inhalt (innerHtml)
-                                        // code: Tags werden als als Text angezeigt
+                                        // code: Tags werden als Text angezeigt
                                         // text: Tags werden entfernt
 
         this._node = null;
@@ -1030,8 +1030,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     render() {
+
         // Node erstellen und Events abfragen
-        if (!this._node) {
+        if (!this._node) { // !TODO wenn bereits vorhanden, passiert nichts?
             this._node = document.createElement(this._nodeTagName);
 
             // Styles mergen

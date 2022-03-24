@@ -154,12 +154,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     set current(cRow) {
+
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
+
             // Falls es schon ein gültiges Current-Zeile gibt, dieses nehmen
             if (this._currentRow && kijs.Array.contains(this._rows, this._currentRow)) {
                 cRow = this._currentRow;
             }
+
             // Sonst die erste selektierte Zeile
             if (!cRow) {
                 let sel = this.getSelected();
@@ -170,6 +173,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     cRow = sel;
                 }
             }
+
             // Sonst halt die erste Zeile
             if (!cRow) {
                 cRow = this._rows[0];
@@ -268,6 +272,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
         this._selectType = val;
     }
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -382,6 +387,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * TODO Wir müssten nur einzelne Rows updaten können.
      * Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
+     * Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad():
      *
      * Lädt die Daten im Grid neu.
      * @param {Boolean} restoreSelection
@@ -392,7 +398,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         let selected = this.getSelectedIds();
         return this._remoteLoad(resetData).then((response) => {
 
-            // selektion wiederherstellen
+            // Selektion wiederherstellen
             if (selected && restoreSelection) {
                 this.selectByIds(selected, false, true);
             }
@@ -413,9 +419,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         let renderStartOffset = this._rows.length,
-                newRows = 0,
-                rowPos=0,
-                offsets=[];
+            newRows = 0,
+            rowPos=0,
+            offsets=[];
 
         kijs.Array.each(rows, function(row) {
             let currentPos = null;
@@ -429,10 +435,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 currentPos = this._rows.length-1;
 
             } else {
+
                 // row per primary key suchen
                 let pRow = this._getRowByPrimaryKey(row);
 
                 if (pRow) {
+
                     // bestehende row updaten
                     pRow.updateDataRow(row);
 
@@ -803,7 +811,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return rowMatch;
     }
 
-    _remoteLoad(force=false, loadNextData=false) {
+    _remoteLoad(resetData=false, loadNextData=false) {
         return new Promise((resolve) => {
             if (
                 this._facadeFnLoad
@@ -811,7 +819,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 && !this._isLoading
                 && (
                     !this._remoteDataLoaded // Erster Aufruf
-                    || force                // Alles neu laden
+                    || resetData            // Alles neu laden
                     || !loadNextData        // Reload der letzten geladenen Daten
                     || this._remoteDataLastRowCnt === this._remoteDataStep // Letzter Aufruf hatte nicht die letzten Rows, sonst wären es weniger als _remoteDataStep
                 )
@@ -824,10 +832,18 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 args.filter = this._filter.getFilters();
 
                 // alle Daten neu laden
-                if (force) {
+                if (resetData) {
                     this._remoteDataStartIndex = 0;
                 } else if (loadNextData) {
                     this._remoteDataStartIndex += this._remoteDataStep;
+                } else {
+
+                    // Bei normalem Reload (Update) alle bisher geladenen Daten neu laden.
+                    // Dazu muss _remoteDataStep angepasst werden und alle weiteren Requests laden auch so viele Daten.
+                    // TODO Besser ist es nur den / die geänderten Daten neu zu laden. Siehe this.reload().
+                    // Das Grid aktualisiert dann nur diese Zeilen (ist schon so).
+                    this._remoteDataStep += this._remoteDataStartIndex;
+                    this._remoteDataStartIndex = 0;
                 }
 
                 args.start = this._remoteDataStartIndex;
@@ -843,7 +859,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // RPC ausführen
                 this._rpc.do(this._facadeFnLoad, args, function(response) {
-                        this._remoteProcess(response, args, force);
+                        this._remoteProcess(response, args, resetData);
 
                         // Promise auflösen
                         resolve(response);
@@ -860,7 +876,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         });
     }
 
-    _remoteProcess(response, args, force) {
+    _remoteProcess(response, args, resetData) {
 
         // columns
         if (kijs.isArray(response.columns)) {
@@ -875,8 +891,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.primaryKeys = response.primaryKeys;
         }
 
-        // force?
-        if (force) {
+        if (resetData) {
             this.rowsRemoveAll();
         }
 
@@ -981,6 +996,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     _setIntersectionObserver() {
+
         // Der Intersection Observer beobachtet die Scroll-Position und wirft ein Event, wenn
         // das Scrolling gegen das Ende der Seite kommt.
         if (window.IntersectionObserver) {
@@ -1107,6 +1123,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _onRowDblClick(e) {
+
         // Event weiterreichen
         this.raiseEvent('rowDblClick', e);
     }
@@ -1203,6 +1220,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     // overwrite
     unrender(superCall) {
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -1255,6 +1273,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // --------------------------------------------------------------
     destruct(superCall) {
         if (!superCall) {
+
             // unrendern
             this.unrender(superCall);
 

@@ -93,6 +93,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      * @returns {undefined}
      */
     setValue(value, silent=false, markDirty=true, updateDataRow=true) {
+
         // HTML aktualisieren
         this._setDomHtml(value);
 
@@ -212,7 +213,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
-        // dirty  zeilen: Klasse hinzufügen
+        // Dirty-Zeilen: Klasse hinzufügen
         if (this.isDirty) {
             this._dom.clsAdd('kijs-grid-cell-dirty');
         } else {
@@ -227,6 +228,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     // overwrite
     unrender(superCall) {
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -241,6 +243,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     destruct(superCall) {
         if (!superCall) {
+
             // unrendern
             this.unrender(superCall);
 
@@ -250,7 +253,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
 
         // Variablen (Objekte/Arrays) leeren
-
 
         // Basisklasse entladen
         super.destruct(true);
