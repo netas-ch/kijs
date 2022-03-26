@@ -522,13 +522,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     scrollTo(scrollTop, scrollLeft) {
         if (kijs.isInteger(scrollTop)) {
-            this._leftContainerDom.node.scrollTop = scrollTop;
-            this._rightContainerDom.node.scrollTop = scrollTop;
+            if (this._leftContainerDom && this._leftContainerDom.node && this._leftContainerDom.node.scrollTop) {
+                this._leftContainerDom.node.scrollTop = scrollTop;
+            }
+            if (this._rightContainerDom && this._rightContainerDom.node && this._rightContainerDom.node.scrollTop) {
+                this._rightContainerDom.node.scrollTop = scrollTop;
+            }
         }
 
         if (kijs.isInteger(scrollLeft)) {
-            this._headerContainerDom.node.scrollLeft = scrollLeft;
-            this._footerContainerDom.node.scrollLeft = scrollLeft;
+            if (this._headerContainerDom && this._headerContainerDom.node && this._headerContainerDom.node.scrollTop) {
+                this._headerContainerDom.node.scrollLeft = scrollLeft;
+            }
+            if (this._footerContainerDom && this._footerContainerDom.node && this._footerContainerDom.node.scrollTop) {
+                this._footerContainerDom.node.scrollLeft = scrollLeft;
+            }
         }
     }
 
