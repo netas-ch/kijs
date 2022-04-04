@@ -538,12 +538,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._spinBoxEl.close();
 
             if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
-                let newVal = dataViewElement.dataRow[this.valueField];
-                let changed = newVal !== this.value;
+                let newVal = dataViewElement.dataRow[this.valueField],
+                    oldVal = this.value,
+                    changed = newVal !== this.value;
                 this.value = newVal;
 
                 if (changed) {
-                    this.raiseEvent('change', {value: this.value});
+                    this.raiseEvent('change', {value: this.value, oldVal: oldVal});
                 }
             }
 
@@ -600,7 +601,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             return;
         }
 
-        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='', changed=false;
+        let inputVal = this._inputDom.nodeAttributeGet('value'),
+            match = false,
+            matchVal = '',
+            oldVal = this.value,
+            changed = false;
+
         inputVal = kijs.toString(inputVal).trim();
 
         // Leerer Wert = feld löschen
@@ -641,7 +647,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // change-event
         if (changed) {
-            this.raiseEvent('change', {value: this.value});
+            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
         }
     }
 
@@ -664,12 +670,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.close();
 
         if (this.value !== this._listViewEl.value) {
+            let oldVal = this.value;
             this.value = this._listViewEl.value;
 
             // validieren
             this.validate();
 
-            this.raiseEvent('change', {value: this.value});
+            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
         }
     }
 

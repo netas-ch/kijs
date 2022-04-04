@@ -79,7 +79,7 @@ kijs.Rpc = class kijs_Rpc {
      * @param {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      * @param {Function} fn                         Callback-Funktion
      * @param {Object} context                      Kontext für die Callback-Funktion
-     * @param {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
+     * @param {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an dieselbe facadeFn abgebrochen
      * @param {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      * @param {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                              die in der Callback-Fn dann wieder zur Verfügung stehen.
