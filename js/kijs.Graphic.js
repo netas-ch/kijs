@@ -243,7 +243,7 @@ kijs.Graphic = class kijs_Graphic {
             return kijs.Graphic.colorHSVtoRGB(color);
         }
 
-        throw new Error('kijs.Graphic: invalid argument for color');
+        throw new kijs.Error('kijs.Graphic: invalid argument for color');
     }
 
     /**

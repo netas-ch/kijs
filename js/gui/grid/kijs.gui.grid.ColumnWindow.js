@@ -85,6 +85,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         this.add({
             xtype: 'kijs.gui.field.CheckboxGroup',
             name: 'fields',
+            labelHide: true,
             valueField: 'valueField',
             captionField: 'caption',
             data: data,

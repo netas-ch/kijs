@@ -123,6 +123,8 @@
  *
  * style        (readonly)
  *
+ * userData     Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
+ *
  * tooltip
  *
  * top          Number                  Y-Koordinate
@@ -188,6 +190,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._parentEl = null;
         this._visible = true;
         this._lastSize = null;    // Grösse beim letzten Aufruf vom afterResize-Event
+        this._userData = null;    // Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
 
         this._waitMaskEl = null;        // Instanz der Lademaske
         this._waitMaskCount = 0;        // Anzahl Lademasken die angezeigt werden sollen.
@@ -237,6 +240,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             tooltip: { target: 'tooltip' },
             toolTip: { target: 'toolTip' }, // DEPRECATED
             top: { target: 'top' },
+            userData: { target: 'userData' },
             visible : true,
             displayWaitMask: { target: 'displayWaitMask' },
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
@@ -465,6 +469,15 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }, this);
 
         return upperEl;
+    }
+
+    get userData() { return this._userData; }
+    set userData(val) {
+        if (val === null || kijs.isObject(val)) {
+            this._userData = val;
+        } else {
+            throw new kijs.Error(`userData must be object or null`);
+        }
     }
 
     get visible() {
@@ -1011,6 +1024,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwards = null;
         this._configMap = null;
         this._lastSize = null;
+        this._userData = null;
         this._waitMaskEl = null;
 
         // Basisklasse entladen
