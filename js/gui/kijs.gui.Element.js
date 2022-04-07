@@ -471,14 +471,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         return upperEl;
     }
 
-    get userData() { return this._userData }
+    get userData() { return this._userData; }
     set userData(val) {
-        if (!kijs.isEmpty(val)) {
-            if (kijs.isObject(val)) {
-                this._userData = val;
-            } else {
-                throw new kijs.Error(`userData must be type of object`);
-            }
+        if (val === null || kijs.isObject(val)) {
+            this._userData = val;
+        } else {
+            throw new kijs.Error(`userData must be object or null`);
         }
     }
 
