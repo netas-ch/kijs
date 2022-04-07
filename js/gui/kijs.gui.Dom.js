@@ -334,6 +334,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    get hasFocus() {
+        return this._node === document.activeElement;
+    }
+
     /**
      * Wurde die Eigenschaft "left" manuell zugewiesen?
      * @returns {Boolean}

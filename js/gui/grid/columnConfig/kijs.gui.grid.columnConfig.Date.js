@@ -21,6 +21,9 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         this._cellXtype = 'kijs.gui.grid.cell.Date';
         this._filterXtype = 'kijs.gui.grid.filter.Date';
 
+        // Editor
+        this._editorXtype = 'kijs.gui.field.Date';
+
         this._hasTime = false;
         this._format = null;
 

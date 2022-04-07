@@ -2700,6 +2700,20 @@ div.kijs-grid {
                 padding: 2px 0 0 0;
             }
 
+            /* Textfelder im Grid */
+            &.kijs-celledit {
+                padding: 0;
+
+                > div.kijs-field {
+                    height: 100%;
+                    width: 100%;
+
+                    div.kijs-inputwrapper, span.kijs-icon-spindown {
+                        height: 100%;
+                    }
+                }
+            }
+
         }
     }
 

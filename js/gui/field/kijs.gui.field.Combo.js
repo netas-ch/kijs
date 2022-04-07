@@ -104,7 +104,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Event-Weiterleitungen von this._inputDom
         this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('blur', this._inputDom);
         this._eventForwardsAdd('keyDown', this._inputDom);
         this._eventForwardsAdd('afterLoad', this._listViewEl);
 
@@ -118,15 +117,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
         // Listeners
+        this._inputDom.on('blur', this._onInputBlur, this);
+        this._inputDom.on('change', this._onInputChange, this);
         this._inputDom.on('input', this._onInputInput, this);
         this._inputDom.on('keyUp', this._onInputKeyUp, this);
         this._inputDom.on('keyDown', this._onInputKeyDown, this);
-        this._inputDom.on('change', this._onInputChange, this);
-        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
-        this._listViewEl.on('click', this._onListViewClick, this);
         this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
+        this._listViewEl.on('click', this._onListViewClick, this);
+        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
+        this._spinBoxEl.on('close', this._onSpinBoxClose, this);
         this._spinBoxEl.on('show', this._onSpinBoxShow, this);
-        //this._listViewEl.on('selectionChange', this._onListViewSelectionChange, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -244,6 +244,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         this._inputDom.nodeAttributeSet('value', kijs.toString(this._caption));
+    }
+
+    // overwrite
+    get valueDisplay() {
+        return this._caption;
     }
 
     get oldValue() { return this._oldValue; }
@@ -510,6 +515,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this.load(null, this.value !== '');
     }
 
+    _onInputBlur() {
+
+        // blur nur ausführen, wenn Trigger nicht offen ist und Feld kein Focus hat
+        kijs.defer(function() {
+            if (this._spinBoxEl && this._inputDom && !this._spinBoxEl.isRendered && !this._inputDom.hasFocus) {
+               this.raiseEvent('blur');
+            }
+        }, 200, this);
+    }
+
     _onInputInput(e) {
         this._spinBoxEl.show();
     }
@@ -686,6 +701,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _onSpinBoxShow() {
         this._setScrollPositionToSelection();
+    }
+
+    _onSpinBoxClose() {
+        this._inputDom.focus();
+        this._onInputBlur();
     }
 
     // overwrite

@@ -477,6 +477,20 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set value(val) {}
 
     /**
+     * gibt den angezeigten Wert zurück. (z.B. Combo-Anzeigewert)
+     * bei einem Textfeld entspricht dies dem value.
+     * @returns {String}
+     */
+    get valueDisplay() { return this.value; }
+
+    /**
+     * gibt den angezeigten Wert als HTML zurück. (z.B. Combo-Anzeigewert)
+     * bei einem Textfeld entspricht dies dem value.
+     * @returns {String}
+     */
+    get valueDisplayHtml() { return kijs.String.htmlspecialchars(this.value); }
+
+    /**
      * Gibt einen Record zurück mit den Werten des Felds
      * Format {name: value}
      * Beispiel nur ein Wert: {value:'2021-02-01'}

@@ -20,6 +20,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         // default xtype
         this._cellXtype = 'kijs.gui.grid.cell.Number';
         this._filterXtype = 'kijs.gui.grid.filter.Number';
+        this._editorXtype = 'kijs.gui.field.Number';
 
         this._decimalPrecision = null;
         this._decimalPoint = '.';
@@ -59,5 +60,31 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
             unitBefore: this._unitBefore,
             unitAfter: this._unitAfter
         };
+    }
+
+    /**
+     * Gibt die Argumente für den Celleditor zurück
+     * @returns {Object}
+     */
+    get editorConfig() {
+        let editorConfig = super.editorConfig;
+        if (!kijs.isObject(editorConfig)) {
+            editorConfig = {};
+        }
+        // config für Nummerfeld übernehmen
+        if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
+            editorConfig.decimalPrecision = this._decimalPrecision;
+        }
+        if (this._decimalPoint !== null && !kijs.isDefined(editorConfig.decimalPoint)) {
+            editorConfig.decimalPoint = this._decimalPoint;
+        }
+        if (this._decimalThousandSep !== null && !kijs.isDefined(editorConfig.decimalThousandSep)) {
+            editorConfig.decimalThousandSep = this._decimalThousandSep;
+        }
+        return editorConfig;
+    }
+
+    set editorConfig(val) {
+        super.editorConfig = val;
     }
 };

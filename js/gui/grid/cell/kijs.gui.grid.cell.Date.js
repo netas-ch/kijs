@@ -17,8 +17,6 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
     constructor(config={}) {
         super(false);
 
-        // default xtype
-        this._editorXType = 'kijs.gui.field.Date';
         this._hasTime = false;
         this._format = null;
 

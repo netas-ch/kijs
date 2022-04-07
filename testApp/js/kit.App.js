@@ -980,7 +980,7 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
-                                            label: 'Email',
+                                            label: 'E-Mail',
                                             value: 'info@netas.ch',
                                             link: true
                                         },{
@@ -1044,7 +1044,7 @@ kit.App = class kit_App {
                                         },{
                                             xtype: 'kijs.gui.field.Email',
                                             name: 'email',
-                                            label: 'Email'
+                                            label: 'E-Mail'
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',

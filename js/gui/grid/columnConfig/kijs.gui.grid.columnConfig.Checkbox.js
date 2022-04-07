@@ -21,6 +21,8 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
         this._cellXtype = 'kijs.gui.grid.cell.Checkbox';
         this._filterXtype = 'kijs.gui.grid.filter.Checkbox';
 
+        this._editorXtype = null;
+
         this._disabled = false;
 
         // Standard-config-Eigenschaften mergen

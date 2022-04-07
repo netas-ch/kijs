@@ -240,6 +240,7 @@ foreach ($requests as $request) {
                     $col = new stdClass();
                     $col->caption = 'Vorname';
                     $col->valueField = 'vorname';
+                    $col->editable = true;
                     $response->responseData->columns[] = $col;
                     unset ($col);
 
@@ -289,6 +290,21 @@ foreach ($requests as $request) {
                     $response->responseData->columns[] = $col;
                     unset ($col);
 
+
+                    $col = new stdClass();
+                    $col->caption = 'Combo';
+                    $col->valueField = 'combovalue';
+                    $col->displayField = 'combodisplay';
+                    $col->editable = true;
+                    $col->editorXtype = 'kijs.gui.field.Combo';
+                    $col->editorConfig = new stdClass();
+                    $col->editorConfig->data = [
+                        ['value' => 1, 'caption' => 'Datensatz 1'],
+                        ['value' => 2, 'caption' => 'Datensatz 2'],
+                        ['value' => 3, 'caption' => 'Datensatz 3']
+                    ];
+                    $response->responseData->columns[] = $col;
+                    unset ($col);
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Checkbox';

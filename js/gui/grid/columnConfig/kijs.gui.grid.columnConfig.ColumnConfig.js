@@ -23,22 +23,27 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         }
 
         this._caption = '';
-        this._editable = false;
         this._visible = true;
         this._hideable = true;
         this._resizable = true;
         this._sortable = true;
         this._valueField = '';
+        this._displayField = '';
         this._width = 100;
 
         // xtypes
         this._cellXtype = null;
         this._filterXtype = null;
         this._headerCellXtype = null;
+        this._editorXtype = null;
+
+        // Editable?
+        this._editable = false;
 
         // Configs
         this._cellConfig = null;
         this._filterConfig = null;
+        this._editorConfig = null;
         this._defaultConfig = {};
 
         // grid
@@ -55,6 +60,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             cellXtype: true,
             filterXtype: true,
             headerCellXtype: true,
+            editorXtype: true,
 
             caption: {target: 'caption' },
             editable: true,
@@ -63,10 +69,12 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             resizable: true,
             sortable: true,
             valueField: true,
+            displayField: true,
             width: true,
 
             cellConfig: {target: 'cellConfig' },
-            filterConfig: {target: 'filterConfig' }
+            filterConfig: {target: 'filterConfig' },
+            editorConfig: {target: 'editorConfig' }
 
         };
 
@@ -116,6 +124,16 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     set editable(val) {
         this._editable = !!val;
         this.raiseEvent('change', {columnConfig: this, editable: !!val});
+    }
+
+    get editorXtype() { return this._editorXtype; }
+    set editorXtype(val) {
+        this._editorXtype = kijs.isString(val) ? val : null;
+    }
+
+    get editorConfig() { return this._editorConfig; }
+    set editorConfig(val) {
+        this._editorConfig = kijs.isObject(val) ? val : null;
     }
 
     get filterConfig() {
@@ -188,7 +206,11 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this.raiseEvent('change', {columnConfig: this, sortable: !!val});
     }
 
-    get valueField() { return this._valueField; }
+    get displayField() { return this._displayField ? this._displayField : this._valueField; }
+    set displayField(val) { this._displayField = val; }
+
+    get valueField() { return this._valueField ? this._valueField : this._displayField; }
+    set valueField(val) { this._valueField = val; }
 
     get width() { return this._width; }
     set width(val) {

@@ -20,9 +20,6 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         // value
         this._numValue = null;
 
-        // default xtype
-        this._editorXType = 'kijs.gui.field.Number';
-
         // Nummer-Einstellungen
         this._decimalPrecision = null;
         this._decimalPoint = '.';
