@@ -1,3 +1,15 @@
+Version 1.2.4
+================================================================================
+Grid
+- Grid-Remote-Loading optimiert. Reload ohne resetData lädt nun alle Rows im Grid neu und selektiert die letzte Zeile erneut.
+- Daten neu Laden (z.B. nach Filter change) setzt nun Scrolling zurück.
+- Text-Filter lädt nun Daten nicht neu, wenn mit Enter gefiltert wird und danach das Change-Event beim Verlieren des Fokus neu laden will.
+Combo
+- onChange mit oldVal
+Anderes
+- Maske weniger schwarz
+
+
 Version 1.2.3
 ================================================================================
 

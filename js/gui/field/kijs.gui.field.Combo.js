@@ -97,14 +97,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             data: { prio: 1000, target: 'data' },
             value: { prio: 1001, target: 'value' },
-            
+
             // Attribute für SpinBoxEl weiterreichen
             autoScroll: { target: 'autoScroll', context: this._spinboxEl }
         });
 
         // Event-Weiterleitungen von this._inputDom
         this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('blur', this._inputDom);
         this._eventForwardsAdd('keyDown', this._inputDom);
         this._eventForwardsAdd('afterLoad', this._listViewEl);
 
@@ -118,15 +117,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
         // Listeners
+        this._inputDom.on('blur', this._onInputBlur, this);
+        this._inputDom.on('change', this._onInputChange, this);
         this._inputDom.on('input', this._onInputInput, this);
         this._inputDom.on('keyUp', this._onInputKeyUp, this);
         this._inputDom.on('keyDown', this._onInputKeyDown, this);
-        this._inputDom.on('change', this._onInputChange, this);
-        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
-        this._listViewEl.on('click', this._onListViewClick, this);
         this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
+        this._listViewEl.on('click', this._onListViewClick, this);
+        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
+        this._spinBoxEl.on('close', this._onSpinBoxClose, this);
         this._spinBoxEl.on('show', this._onSpinBoxShow, this);
-        //this._listViewEl.on('selectionChange', this._onListViewSelectionChange, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -243,7 +243,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
 
-        this._inputDom.nodeAttributeSet('value', this._caption);
+        this._inputDom.nodeAttributeSet('value', kijs.toString(this._caption));
+    }
+
+    // overwrite
+    get valueDisplay() {
+        return this._caption;
     }
 
     get oldValue() { return this._oldValue; }
@@ -419,7 +424,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Es wurde eine Übereinstimmung gefunden
             if (matchVal) {
-                this._inputDom.nodeAttributeSet('value', matchVal);
+                this._inputDom.nodeAttributeSet('value', kijs.toString(matchVal));
 
                 // Differenz selektieren
                 if (matchVal.length !== inputVal.length) {
@@ -510,10 +515,20 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this.load(null, this.value !== '');
     }
 
+    _onInputBlur() {
+
+        // blur nur ausführen, wenn Trigger nicht offen ist und Feld kein Focus hat
+        kijs.defer(function() {
+            if (this._spinBoxEl && this._inputDom && !this._spinBoxEl.isRendered && !this._inputDom.hasFocus) {
+               this.raiseEvent('blur');
+            }
+        }, 200, this);
+    }
+
     _onInputInput(e) {
         this._spinBoxEl.show();
     }
-    
+
     _onInputKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
         if (this._listViewEl.getSelected()) {
@@ -538,12 +553,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._spinBoxEl.close();
 
             if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
-                let newVal = dataViewElement.dataRow[this.valueField];
-                let changed = newVal !== this.value;
+                let newVal = dataViewElement.dataRow[this.valueField],
+                    oldVal = this.value,
+                    changed = newVal !== this.value;
                 this.value = newVal;
 
                 if (changed) {
-                    this.raiseEvent('change', {value: this.value});
+                    this.raiseEvent('change', {value: this.value, oldVal: oldVal});
                 }
             }
 
@@ -600,7 +616,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             return;
         }
 
-        let inputVal = this._inputDom.nodeAttributeGet('value'), match=false, matchVal='', changed=false;
+        let inputVal = this._inputDom.nodeAttributeGet('value'),
+            match = false,
+            matchVal = '',
+            oldVal = this.value,
+            changed = false;
+
         inputVal = kijs.toString(inputVal).trim();
 
         // Leerer Wert = feld löschen
@@ -641,7 +662,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // change-event
         if (changed) {
-            this.raiseEvent('change', {value: this.value});
+            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
         }
     }
 
@@ -664,12 +685,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.close();
 
         if (this.value !== this._listViewEl.value) {
+            let oldVal = this.value;
             this.value = this._listViewEl.value;
 
             // validieren
             this.validate();
 
-            this.raiseEvent('change', {value: this.value});
+            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
         }
     }
 
@@ -679,6 +701,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _onSpinBoxShow() {
         this._setScrollPositionToSelection();
+    }
+
+    _onSpinBoxClose() {
+        this._inputDom.focus();
+        this._onInputBlur();
     }
 
     // overwrite

@@ -651,6 +651,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {undefined}
      */
     render(superCall) {
+
         // DOM Rendern
         this._dom.render();
 

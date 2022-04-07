@@ -17,11 +17,15 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     constructor(config={}) {
         super(false);
 
+        this._applyFilter = true;
         this._compare = 'begin'; // full, part
         this._searchField = new kijs.gui.field.Text({
             on: {
                 change: function() {
-                    this._applyToGrid();
+                    if (this._applyFilter) {
+                        this._applyToGrid();
+                    }
+                    this._applyFilter = true;
                 },
                 keyDown: this._onKeyDown,
                 context: this
@@ -129,6 +133,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         if (e.nodeEvent.key === 'Enter') {
             e.nodeEvent.preventDefault();
             this._applyToGrid();
+            this._applyFilter = false;
         }
     }
 

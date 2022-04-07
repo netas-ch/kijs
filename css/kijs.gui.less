@@ -575,7 +575,7 @@ div.kijs-mask {
     align-items: center;
     justify-content: center;
     z-index: 60000;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
     flex-direction: column;
 
     top: 0;
@@ -2894,6 +2894,20 @@ div.kijs-grid {
                 font-family: FontAwesome;
                 font-size: 14px;
                 padding: 2px 0 0 0;
+            }
+
+            /* Textfelder im Grid */
+            &.kijs-celledit {
+                padding: 0;
+
+                > div.kijs-field {
+                    height: 100%;
+                    width: 100%;
+
+                    div.kijs-inputwrapper, span.kijs-icon-spindown {
+                        height: 100%;
+                    }
+                }
             }
 
         }

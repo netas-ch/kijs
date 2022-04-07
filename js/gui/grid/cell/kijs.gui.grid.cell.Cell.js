@@ -22,8 +22,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         this._originalValue = null;
         this._columnConfig = null;
-        this._editorXType = 'kijs.gui.field.Text';
-        this._editorArgs = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -32,9 +30,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true,
-            editorXType: true,
-            editorArgs: true
+            columnConfig: true
         });
 
         // Config anwenden
@@ -93,6 +89,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      * @returns {undefined}
      */
     setValue(value, silent=false, markDirty=true, updateDataRow=true) {
+
         // HTML aktualisieren
         this._setDomHtml(value);
 
@@ -170,24 +167,33 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // EVENTS
 
     _onDblClick(e) {
-        if (this.row.grid.editable) {
+        if (this._columnConfig.editable) {
             // editor starten
-            let editor = kijs.getObjectFromNamespace(this._editorXType);
+            let editor = kijs.getObjectFromNamespace(this._columnConfig.editorXtype);
 
             if (!editor) {
                 throw new kijs.Error('invalid xtype for cell editor');
             }
 
             let eArgs = this._getEditorArgs();
-            if (kijs.isObject(this._editorArgs)) {
-                eArgs = Object.assign(eArgs, this._editorArgs);
+            if (kijs.isObject(this._columnConfig.editorConfig)) {
+                eArgs = Object.assign(eArgs, this._columnConfig.editorConfig);
             }
 
             let edInst = new editor(eArgs);
 
+            // Nach dem rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
+            edInst.on('afterRender', function() {
+                kijs.defer(function() {
+                    edInst.focus();
+                }, 100, this);
+            }, this);
+
             // Inhalt Löschen und Textfeld in dom rendern
             kijs.Dom.removeAllChildNodes(this._dom.node);
             edInst.renderTo(this._dom.node);
+
+            this.dom.clsAdd('kijs-celledit');
 
         }
     }
@@ -195,10 +201,34 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     _onFieldBlur(e) {
         let fld = e.element;
 
-        let val = fld.value;
-        fld.unrender();
+        kijs.defer(function() {
+            let val = fld.value,
+                valDsp = fld.valueDisplay,
+                valDspHtml = fld.valueDisplayHtml;
+            fld.unrender();
 
-        this.setValue(val);
+            this.dom.clsRemove('kijs-celledit');
+
+            // Cell-Value setzen
+            if (this.htmlDisplayType === 'html') {
+                this.setValue(valDspHtml);
+            } else {
+                this.setValue(valDsp);
+            }
+
+            // in Row setzen
+            let dtRw = this.row.dataRow;
+
+            if (kijs.isObject(dtRw)) {
+                dtRw[this._columnConfig.valueField] = val;
+
+                // falls der Wert eines abweichenden Displayfield gespeichert werden soll.
+                if (this._columnConfig.displayField !== this._columnConfig.valueField) {
+                    dtRw[this._columnConfig.displayField] = valDsp;
+                }
+            }
+
+        }, 200, this);
     }
 
 
@@ -212,7 +242,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
-        // dirty  zeilen: Klasse hinzufügen
+        // Dirty-Zeilen: Klasse hinzufügen
         if (this.isDirty) {
             this._dom.clsAdd('kijs-grid-cell-dirty');
         } else {
@@ -227,6 +257,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     // overwrite
     unrender(superCall) {
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -241,6 +272,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     destruct(superCall) {
         if (!superCall) {
+
             // unrendern
             this.unrender(superCall);
 
@@ -250,7 +282,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
 
         // Variablen (Objekte/Arrays) leeren
-
 
         // Basisklasse entladen
         super.destruct(true);

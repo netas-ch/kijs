@@ -73,7 +73,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
     get isDirty() {
         let isDirty = false;
         kijs.Array.each(this._cells, function(cell) {
-            if (cell.isDirty) {
+            if (cell.cell && cell.cell.isDirty) {
                 isDirty = true;
                 return false;
             }
@@ -114,31 +114,49 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
     // --------------------------------------------------------------
 
     /**
+     * Sucht eine Cell anhand der Cell-Config
+     * @param {Object} config
+     * @returns {kijs.gui.grid.cell.Cell|null} die Cell oder null, wenn nicht gefunden.
+     */
+    getCellByConfig(config) {
+        let cell = null;
+
+        for (let i = 0; i < this._cells.length; i++) {
+            if (this._cells[i].columnConfig === config) {
+                if (this._cells[i].cell) {
+                    cell = this._cells[i].cell;
+                }
+                break;
+            }
+        }
+
+        return cell;
+    }
+
+    /**
      * Aktualisiert die DataRow. Falls an der Row etwas geändert hat,
-     * wird die Zeile neu gerendert.
+     * wird die Zeile aktualisiert.
+     *
      * @param {Object} newDataRow
      * @returns {undefined}
      */
     updateDataRow(newDataRow) {
-        let isChanged = false;
+        let cell = null;
 
         // Wenn bereits gerendert, vergleichen und falls geändert neu rendern
         if (this.isRendered) {
             kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
                 if (newDataRow[columnConfig.valueField] !== this.dataRow[columnConfig.valueField]) {
-                    isChanged = true;
-                    return false;
+                    cell = this.getCellByConfig(columnConfig);
+                    if (cell) {
+                        cell.setValue(newDataRow[columnConfig.valueField], true, false, false);
+                    }
                 }
             }, this);
         }
 
         // aktualisieren
         this.dataRow = newDataRow;
-
-        // rendern
-        if (isChanged) {
-            this.render();
-        }
     }
 
     // PROTECTED
@@ -148,14 +166,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         // Prüfen, ob für jede columnConfig eine cell existiert.
         // Wenn nicht, in Array schreiben.
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
-            let exist = false;
-            for (let i=0; i<this._cells.length; i++) {
-                if (this._cells[i].columnConfig === columnConfig) {
-                    exist = true;
-                    break;
-                }
-            }
-            if (!exist) {
+            if (!this.getCellByConfig(columnConfig)) {
                 newColumnConfigs.push(columnConfig);
             }
         }, this);

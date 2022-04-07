@@ -172,7 +172,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
-        let value = '';
+        let value = 'on';
 
         if (kijs.isString(val)) {
             value = val;
@@ -475,6 +475,20 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // Muss überschrieben werden
     get value() { return null; }
     set value(val) {}
+
+    /**
+     * gibt den angezeigten Wert zurück. (z.B. Combo-Anzeigewert)
+     * bei einem Textfeld entspricht dies dem value.
+     * @returns {String}
+     */
+    get valueDisplay() { return this.value; }
+
+    /**
+     * gibt den angezeigten Wert als HTML zurück. (z.B. Combo-Anzeigewert)
+     * bei einem Textfeld entspricht dies dem value.
+     * @returns {String}
+     */
+    get valueDisplayHtml() { return kijs.String.htmlspecialchars(this.value); }
 
     /**
      * Gibt einen Record zurück mit den Werten des Felds

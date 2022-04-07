@@ -33,20 +33,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
-        this._autoLoad = true;        // Datensätze nach dem Rendern automatisch vom Server laden
-        this._remoteDataLoaded = 0;   // Anzahl geladene Datensätze
-        this._remoteDataLimit = 50;   // Anzahl Datensätze, die geladen werden
-        this._remoteDataStep = 50;    // Anzahl Datensätze, die pro request hinzugefügt werden.
-        this._remoteDataTotal = null; // Anzahl verfügbare Datensätze
-        this._getRemoteMetaData = true;  // Metadaten laden?
-        this._isLoading = false;      // wird zurzeit geladen?
-        this._remoteSort = null;      // Remote-Sortierung
+        this._autoLoad = true;              // Datensätze nach dem Rendern automatisch vom Server laden
+        this._remoteDataLoaded = 0;         // Anzahl im Grid geladener Datensätze
+        this._remoteDataStartIndex = 0;     // Start-Index für Datensätze, die als nächstes geladen werden
+        this._remoteDataStep = 100;         // Anzahl Datensätze, die pro request hinzugefügt werden.
+        this._remoteDataTotal = null;       // Falls von Server verfügbar die total verfügbaren Datensätze, sonst die bisher geladenen
+        this._remoteDataLastRowCnt = 0;     // Anzahl Datensätze des letzten Remote-Loads
+        this._getRemoteMetaData = true;     // Metadaten laden?
+        this._isLoading = false;            // wird zurzeit geladen?
+        this._remoteSort = null;            // Remote-Sortierung
 
-        this._lastSelectedRow = null; // letzte Zeile, die selektiert wurde
-        this._currentRow = null;      // Zeile, welche zurzeit fokusiert ist
-        this._selectType = 'single';  // multiselect: single|multi|simple|none
-        this._focusable = true;       // ob das grid focusiert weden kann
-        this._editable = false;       // editierbare zeilen?
+        this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
+        this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
+        this._selectType = 'single';        // multiselect: single|multi|simple|none
+        this._focusable = true;             // ob das grid focusiert weden kann
+        this._editable = false;             // editierbare zeilen?
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)
@@ -153,12 +154,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     set current(cRow) {
+
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
+
             // Falls es schon ein gültiges Current-Zeile gibt, dieses nehmen
             if (this._currentRow && kijs.Array.contains(this._rows, this._currentRow)) {
                 cRow = this._currentRow;
             }
+
             // Sonst die erste selektierte Zeile
             if (!cRow) {
                 let sel = this.getSelected();
@@ -169,6 +173,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     cRow = sel;
                 }
             }
+
             // Sonst halt die erste Zeile
             if (!cRow) {
                 cRow = this._rows[0];
@@ -251,12 +256,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get remoteDataStep() { return this._remoteDataStep; }
     set remoteDataStep(val) {
         if (!kijs.isInteger(val)) {
-            val = 50;
+            val = 100;
         }
         this._remoteDataStep = val;
-        if (this._remoteDataLoaded === 0) {
-            this._remoteDataLimit = val;
-        }
     }
 
     get rows() { return this._rows; }
@@ -270,6 +272,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
         this._selectType = val;
     }
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -346,14 +349,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      */
     getSelectedIds() {
         let rows = this.getSelected(),
-                hasPrimarys = this._primaryKeys.length > 0,
-                multiPrimarys = this._primaryKeys.length > 1;
+            hasPrimarys = this._primaryKeys.length > 0,
+            multiPrimarys = this._primaryKeys.length > 1;
 
         if (!kijs.isArray(rows)) {
             rows = [rows];
         }
 
-        // Falls keine Primarys vorhanden sind, werden die rows zurückgegeben.
+        // Falls keine Primaries vorhanden sind, werden die rows zurückgegeben.
         if (!hasPrimarys) {
             return rows;
 
@@ -382,15 +385,20 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Lädt alle Daten im Grid neu.
+     * TODO Wir müssten nur einzelne Rows updaten können.
+     * Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
+     * Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad():
+     *
+     * Lädt die Daten im Grid neu.
      * @param {Boolean} restoreSelection
+     * @param {Boolean} resetData Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
      * @returns {Promise}
      */
-    reload(restoreSelection = true) {
+    reload(restoreSelection = true, resetData = true) {
         let selected = this.getSelectedIds();
-        return this._remoteLoad(true).then((response) => {
+        return this._remoteLoad(resetData).then((response) => {
 
-            // selektion wiederherstellen
+            // Selektion wiederherstellen
             if (selected && restoreSelection) {
                 this.selectByIds(selected, false, true);
             }
@@ -411,9 +419,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         let renderStartOffset = this._rows.length,
-                newRows = 0,
-                rowPos=0,
-                offsets=[];
+            newRows = 0,
+            rowPos=0,
+            offsets=[];
 
         kijs.Array.each(rows, function(row) {
             let currentPos = null;
@@ -427,10 +435,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 currentPos = this._rows.length-1;
 
             } else {
+
                 // row per primary key suchen
                 let pRow = this._getRowByPrimaryKey(row);
 
                 if (pRow) {
+
                     // bestehende row updaten
                     pRow.updateDataRow(row);
 
@@ -502,8 +512,31 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     rowsRemoveAll() {
+        this._remoteDataLoaded = 0;
+        this._remoteDataStartIndex = 0;
         while (this._rows.length > 0) {
             this.rowsRemove(this._rows[0]);
+        }
+        this.scrollTo(0);
+    }
+
+    scrollTo(scrollTop, scrollLeft) {
+        if (kijs.isInteger(scrollTop)) {
+            if (this._leftContainerDom && this._leftContainerDom.node && this._leftContainerDom.node.scrollTop) {
+                this._leftContainerDom.node.scrollTop = scrollTop;
+            }
+            if (this._rightContainerDom && this._rightContainerDom.node && this._rightContainerDom.node.scrollTop) {
+                this._rightContainerDom.node.scrollTop = scrollTop;
+            }
+        }
+
+        if (kijs.isInteger(scrollLeft)) {
+            if (this._headerContainerDom && this._headerContainerDom.node && this._headerContainerDom.node.scrollTop) {
+                this._headerContainerDom.node.scrollLeft = scrollLeft;
+            }
+            if (this._footerContainerDom && this._footerContainerDom.node && this._footerContainerDom.node.scrollTop) {
+                this._footerContainerDom.node.scrollLeft = scrollLeft;
+            }
         }
     }
 
@@ -631,9 +664,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Selektiert Datensätze Anhand der ID
+     * Selektiert Datensätze anhand der ID
      * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
-     * @param {Boolean} [keepExisting=false]  Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [keepExisting=false]  Soll die bestehende Selektion belassen werden?
      * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
@@ -786,9 +819,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return rowMatch;
     }
 
-    _remoteLoad(force=false) {
+    _remoteLoad(resetData=false, loadNextData=false) {
         return new Promise((resolve) => {
-            if (this._facadeFnLoad && this._rpc && !this._isLoading && (this._remoteDataLoaded < this._remoteDataLimit || force)) {
+            if (
+                this._facadeFnLoad
+                && this._rpc
+                && !this._isLoading
+                && (
+                    !this._remoteDataLoaded // Erster Aufruf
+                    || resetData            // Alles neu laden
+                    || !loadNextData        // Reload der letzten geladenen Daten
+                    || this._remoteDataLastRowCnt === this._remoteDataStep // Letzter Aufruf hatte nicht die letzten Rows, sonst wären es weniger als _remoteDataStep
+                )
+            ) {
                 this._isLoading = true;
 
                 let args = {};
@@ -797,33 +840,34 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 args.filter = this._filter.getFilters();
 
                 // alle Daten neu laden
-                if (force) {
-                    args.start = 0;
-                    args.limit = this._remoteDataLimit;
-
-                // Nächste Daten laden
+                if (resetData) {
+                    this._remoteDataStartIndex = 0;
+                } else if (loadNextData) {
+                    this._remoteDataStartIndex += this._remoteDataStep;
                 } else {
-                    args.start = this._remoteDataLoaded;
-                    args.limit = this._remoteDataLimit - this._remoteDataLoaded;
 
-                    // Falls alle vorhandenen Daten geladen sind, brechen wir ab.
-                    if (this._remoteDataTotal !== null && this._remoteDataLoaded >= this._remoteDataTotal) {
-                        this._isLoading = false;
-                        return;
-                    }
+                    // Bei normalem Reload (Update) alle bisher geladenen Daten neu laden.
+                    // Dazu muss _remoteDataStep angepasst werden und alle weiteren Requests laden auch so viele Daten.
+                    // TODO Besser ist es nur den / die geänderten Daten neu zu laden. Siehe this.reload().
+                    // Das Grid aktualisiert dann nur diese Zeilen (ist schon so).
+                    this._remoteDataStep += this._remoteDataStartIndex;
+                    this._remoteDataStartIndex = 0;
                 }
+
+                args.start = this._remoteDataStartIndex;
+                args.limit = this._remoteDataStep;
 
                 if (kijs.isObject(this._facadeFnArgs)) {
                     args = Object.assign(args, this._facadeFnArgs);
                 }
 
-                // Lademaske wird angezeigt, wenn das erste mal geladen  wird, oder
+                // Lademaske wird angezeigt, wenn das erste Mal geladen wird, oder
                 // wenn sämtliche Datensätze neu geladen werden.
-                let showWaitMask = force || this._remoteDataLoaded === 0;
+                let showWaitMask = this._remoteDataStartIndex === 0;
 
                 // RPC ausführen
                 this._rpc.do(this._facadeFnLoad, args, function(response) {
-                        this._remoteProcess(response, args, force);
+                        this._remoteProcess(response, args, resetData);
 
                         // Promise auflösen
                         resolve(response);
@@ -840,7 +884,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         });
     }
 
-    _remoteProcess(response, args, force) {
+    _remoteProcess(response, args, resetData) {
 
         // columns
         if (kijs.isArray(response.columns)) {
@@ -855,38 +899,29 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.primaryKeys = response.primaryKeys;
         }
 
-        // force?
-        if (force) {
+        if (resetData) {
             this.rowsRemoveAll();
-            this._remoteDataLoaded = 0;
         }
 
         // rows
+        let addedRowsCnt = 0;
         if (kijs.isArray(response.rows)) {
-            let addedRowsCnt = 0;
 
             // Datensätze hinzufügen
             if (response.rows.length > 0) {
+                this._remoteDataLastRowCnt = response.rows.length;
                 addedRowsCnt = this.rowsAdd(response.rows, args.start);
             }
 
             // Anzahl DS zählen
             this._remoteDataLoaded += addedRowsCnt;
-
-            // Falls mehr Datensätze zurückgegeben wurden als angefragt,
-            // limit erhöhen
-            if (this._remoteDataLoaded > this._remoteDataLimit) {
-                this._remoteDataLimit = this._remoteDataLoaded;
-            }
         }
 
         // Total Datensätze
         if (kijs.isInteger(response.count)) {
             this._remoteDataTotal = response.count;
-        } else {
-            if (response.rows && response.rows.length < args.limit) {
-                this._remoteDataTotal = args.start + response.rows.length;
-            }
+        } else if (response.rows && response.rows.length) {
+            this._remoteDataTotal = args.start + response.rows.length;
         }
 
         this.raiseEvent('afterLoad', response);
@@ -969,6 +1004,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     _setIntersectionObserver() {
+
         // Der Intersection Observer beobachtet die Scroll-Position und wirft ein Event, wenn
         // das Scrolling gegen das Ende der Seite kommt.
         if (window.IntersectionObserver) {
@@ -1095,6 +1131,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _onRowDblClick(e) {
+
         // Event weiterreichen
         this.raiseEvent('rowDblClick', e);
     }
@@ -1119,8 +1156,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (intersections.length > 0) {
             kijs.Array.each(intersections, function(intersection) {
                 if (intersection.isIntersecting) {
-                    this._remoteDataLimit += this._remoteDataStep;
-                    this._remoteLoad();
+                    this._remoteLoad(false, true);
                 }
             }, this);
         }
@@ -1183,13 +1219,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Daten laden
         if (this._autoLoad) {
             kijs.defer(function() {
-                this._remoteLoad();
+                if (this._remoteDataLoaded === 0) {
+                    this._remoteLoad(true);
+                }
             }, 30, this);
         }
     }
 
     // overwrite
     unrender(superCall) {
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -1242,6 +1281,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // --------------------------------------------------------------
     destruct(superCall) {
         if (!superCall) {
+
             // unrendern
             this.unrender(superCall);
 
