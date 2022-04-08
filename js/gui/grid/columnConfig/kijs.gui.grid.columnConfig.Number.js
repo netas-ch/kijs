@@ -23,8 +23,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         this._editorXtype = 'kijs.gui.field.Number';
 
         this._decimalPrecision = null;
-        this._decimalPoint = '.';
-        this._decimalThousandSep = '\'';
+        this._decimalSeparator = '.';
+        this._thousandsSeparator = '\'';
 
         this._numberStyles = [];
 
@@ -39,8 +39,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             decimalPrecision: true,
-            decimalPoint: true,
-            decimalThousandSep: true,
+            decimalSeparator: true,
+            thousandsSeparator: true,
             numberStyles: true,
             unitBefore: true,
             unitAfter: true
@@ -54,8 +54,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
 
         this.cellConfig = {
             decimalPrecision: this._decimalPrecision,
-            decimalPoint: this._decimalPoint,
-            decimalThousandSep: this._decimalThousandSep,
+            decimalSeparator: this._decimalSeparator,
+            thousandsSeparator: this._thousandsSeparator,
             numberStyles: this._numberStyles,
             unitBefore: this._unitBefore,
             unitAfter: this._unitAfter
@@ -68,18 +68,22 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
      */
     get editorConfig() {
         let editorConfig = super.editorConfig;
-        if (!kijs.isObject(editorConfig)) {
-            editorConfig = {};
-        }
-        // config für Nummerfeld übernehmen
-        if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
-            editorConfig.decimalPrecision = this._decimalPrecision;
-        }
-        if (this._decimalPoint !== null && !kijs.isDefined(editorConfig.decimalPoint)) {
-            editorConfig.decimalPoint = this._decimalPoint;
-        }
-        if (this._decimalThousandSep !== null && !kijs.isDefined(editorConfig.decimalThousandSep)) {
-            editorConfig.decimalThousandSep = this._decimalThousandSep;
+
+        if (this._editorXtype === 'kijs.gui.field.Number') {
+            if (!kijs.isObject(editorConfig)) {
+                editorConfig = {};
+            }
+            // config für Nummerfeld übernehmen
+            if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
+                editorConfig.decimalPrecision = this._decimalPrecision;
+            }
+            if (this._decimalSeparator !== null && !kijs.isDefined(editorConfig.decimalSeparator)) {
+                editorConfig.decimalSeparator = this._decimalSeparator;
+            }
+            if (this._thousandsSeparator !== null && !kijs.isDefined(editorConfig.thousandsSeparator)) {
+                editorConfig.thousandsSeparator = this._thousandsSeparator;
+            }
+            
         }
         return editorConfig;
     }

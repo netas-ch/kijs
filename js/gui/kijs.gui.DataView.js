@@ -799,8 +799,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     _onKeyDown(e) {
         if (!this.disabled) {
-            switch (e.nodeEvent.keyCode) {
-                case kijs.keys.LEFT_ARROW:
+            switch (e.nodeEvent.code) {
+                case 'ArrowLeft':
                     if (this._currentEl) {
                         const prev = this._currentEl.previous;
                         if (prev) {
@@ -817,7 +817,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     e.nodeEvent.preventDefault();
                     break;
 
-                case kijs.keys.UP_ARROW:
+                case 'ArrowUp':
                     if (this._currentEl && this._elements) {
                         let found = false;
 
@@ -845,7 +845,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     e.nodeEvent.preventDefault();
                     break;
 
-                case kijs.keys.RIGHT_ARROW:
+                case 'ArrowRight':
                     if (this._currentEl) {
                         const next = this._currentEl.next;
                         if (next) {
@@ -862,7 +862,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     e.nodeEvent.preventDefault();
                     break;
 
-                case kijs.keys.DOWN_ARROW:
+                case 'ArrowDown':
                     if (this._currentEl && this._elements) {
                         let found = false;
                         kijs.Array.each(this._elements, function(el) {
@@ -888,7 +888,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     e.nodeEvent.preventDefault();
                     break;
 
-                case kijs.keys.SPACE:
+                case 'Space':
                     this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
                     break;
 

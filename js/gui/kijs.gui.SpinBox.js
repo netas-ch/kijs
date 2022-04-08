@@ -92,7 +92,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._dom.clsRemove('kijs-autoscroll');
         }
     }
-    
+
     get autoSize() { return this._autoSize; }
     set autoSize(val) {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
@@ -245,7 +245,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (this.isRendered) {
             return;
         }
-        
+
         // SpinBox anzeigen
         this.renderTo(document.body);
 
@@ -258,7 +258,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (this._targetEl) {
             this._adjustPositionToTarget(true);
         }
-        
+
         // allen übergeordneten Spinboxes mitteilen, dass beim Klick auf dieses Element
         // die Spnbox nicht geschlossen werden soll.
         let p = this.parent;
@@ -268,7 +268,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             }
             p = p.parent;
         }
-        
+
         // afterResize-Event zeitversetzt auslösen
         this._raiseAfterResizeEvent(true);
 
@@ -407,15 +407,15 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
         this._preventHide = false;
     }
-    
+
     _onKeyDown(e) {
-        switch (e.nodeEvent.keyCode) {
-            case kijs.keys.ESC:
-            case kijs.keys.F4:
-            case kijs.keys.TAB:
+        switch (e.nodeEvent.code) {
+            case 'Escape':
+            case 'F4':
+            case 'Tab':
                 this.close();
                 break;
-        }   
+        }
     }
 
     _onWindowResize(e) {
@@ -448,21 +448,21 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     }
 
     _onTargetElKeyDown(e) {
-        switch (e.nodeEvent.keyCode) {
-            case kijs.keys.ESC:
-            case kijs.keys.TAB:
+        switch (e.nodeEvent.code) {
+            case 'Escape':
+            case 'Tab':
                 this.close();
                 break;
 
-            case kijs.keys.F4:
+            case 'F4':
                 if (this.isRendered) {
                     this.close();
                 } else {
                     this.show();
                 }
                 break;
-                
-            case kijs.keys.DOWN_ARROW:
+
+            case 'ArrowDown':
                 this.show();
                 break;
         }

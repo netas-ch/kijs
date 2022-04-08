@@ -308,6 +308,24 @@ foreach ($requests as $request) {
                     unset ($col);
 
                     $col = new stdClass();
+                    $col->xtype = 'kijs.gui.grid.columnConfig.Number';
+                    $col->caption = 'Zahl 1';
+                    $col->valueField = 'number1';
+                    $col->editable = true;
+                    $col->clicksToEdit = 1;
+                    $response->responseData->columns[] = $col;
+                    unset ($col);
+
+                    $col = new stdClass();
+                    $col->xtype = 'kijs.gui.grid.columnConfig.Number';
+                    $col->caption = 'Zahl 2';
+                    $col->valueField = 'number2';
+                    $col->editable = true;
+                    $col->clicksToEdit = 1;
+                    $response->responseData->columns[] = $col;
+                    unset ($col);
+
+                    $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Checkbox';
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
@@ -354,6 +372,8 @@ foreach ($requests as $request) {
 
                     $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
                     $row->number = $rwId;
+                    $row->number1 = $rwId*2;
+                    $row->number2 = null;
                     $row->date = time() + (3600 * 24 * $rwId);
                     $row->icon = '&#x' . dechex(61440 + $rwId);
                     $row->color = '#' . dechex($rwId * 100);

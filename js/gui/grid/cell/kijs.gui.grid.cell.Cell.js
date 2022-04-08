@@ -65,6 +65,9 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     get row() { return this.parent; }
 
+    get rowIndex() { return this.row.rowIndex; }
+    get cellIndex() { return this.row.grid.columnConfigs.indexOf(this._columnConfig); }
+
     get value() { return this._dom.html; }
     set value(val) { this.setValue(val); }
 
@@ -155,34 +158,42 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
-    stopCellEdit() {
+    stopCellEdit(cancelEdit=false) {
         if (this._cellEditor) {
 
             // value lesen und Editor schliessen
             let val = this._cellEditor.value,
                 valDsp = this._cellEditor.valueDisplay,
                 valDspHtml = this._cellEditor.valueDisplayHtml;
+        
             this._cellEditor.unrender();
             this._cellEditor = null;
 
             this.dom.clsRemove('kijs-celledit');
 
-            // Cell-Value setzen
-            if (this.htmlDisplayType === 'html') {
-                this.setValue(valDspHtml, false, true, false);
+
+            if (cancelEdit) {
+                this.setValue(this.value, true, false, false);
+
             } else {
-                this.setValue(valDsp, false, true, false);
-            }
 
-            // in Row setzen
-            let dtRw = this.row.dataRow;
+                // Cell-Value setzen
+                if (this.htmlDisplayType === 'html') {
+                    this.setValue(valDspHtml, false, true, false);
+                } else {
+                    this.setValue(valDsp, false, true, false);
+                }
 
-            if (kijs.isObject(dtRw)) {
-                dtRw[this._columnConfig.valueField] = val;
+                // in Row setzen
+                let dtRw = this.row.dataRow;
 
-                // falls der Wert eines abweichenden Displayfield gespeichert werden soll.
-                if (this._columnConfig.displayField !== this._columnConfig.valueField) {
-                    dtRw[this._columnConfig.displayField] = this.htmlDisplayType === 'html' ? valDspHtml : valDsp;
+                if (kijs.isObject(dtRw)) {
+                    dtRw[this._columnConfig.valueField] = val;
+
+                    // falls der Wert eines abweichenden Displayfield gespeichert werden soll.
+                    if (this._columnConfig.displayField !== this._columnConfig.valueField) {
+                        dtRw[this._columnConfig.displayField] = this.htmlDisplayType === 'html' ? valDspHtml : valDsp;
+                    }
                 }
             }
         }
@@ -201,7 +212,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             parent: this,
             on: {
                 blur: this._onFieldBlur,
-                keyDown: function(e) { e.nodeEvent.stopPropagation(); }, // keyDown event stoppen, damit grid keyDown nicht nimmt.
+                keyDown: this._onFieldKeyDown,
                 click: function(e) { e.nodeEvent.stopPropagation(); }, // click event stoppen, damit row focus nicht nimmt.
                 context: this
             }
@@ -248,6 +259,25 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         kijs.defer(function() {
             this.stopCellEdit();
         }, 200, this);
+    }
+
+    _onFieldKeyDown(e) {
+        // keyDown event stoppen, damit grid keyDown nicht nimmt.
+        e.nodeEvent.stopPropagation();
+
+        // Mit Tab-Taste ins nächste editierbare Feld springen.
+        if (e.nodeEvent.key === 'Tab' && e.nodeEvent.ctrlKey === false) {
+            this.stopCellEdit();
+            this.row.grid.startCellEdit(this, e.nodeEvent.shiftKey === true);
+
+        } else if (e.nodeEvent.key === 'Enter') {
+            this.stopCellEdit();
+            this.row.grid.startCellEdit([this.rowIndex+1, this.cellIndex]);
+
+        } else if (e.nodeEvent.key === 'Escape') {
+            this.stopCellEdit(true);
+            this.row.focus();
+        }
     }
 
 

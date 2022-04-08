@@ -51,7 +51,6 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         super(false);
 
         this._inputDom = new kijs.gui.Dom({
-            disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId

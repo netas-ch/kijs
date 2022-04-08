@@ -573,6 +573,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         kijs.Array.each(rows, function(row) {
             row.selected = true;
+            row.focus();
         }, this);
 
         // SelectionChange auslösen
@@ -751,6 +752,56 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // store laden
         this._remoteLoad(true);
+    }
+
+    /**
+     * Startet das editieren.
+     * @param {null|Int|Array|kijs.gui.grid.cell.Cell} offset  Int: Row-Index; Array: [RowIndex, CellIndex].
+     * @param {Boolean} reverse
+     * @returns {kijs.gui.grid.cell.Cell|null} Die cell oder null, falls keine gefunden.
+     */
+    startCellEdit(offset=null, reverse=false) {
+        let cellToEdit = null;
+        let offsetMatch = offset === null;
+
+        kijs.Array.each(this.rows, function(row, rowIndex) {
+            kijs.Array.each(row.cells, function(cell, cellIndex) {
+
+                // wird ein Int angegeben, ist der offset die row-nummer
+                if (kijs.isInteger(offset) && offset === rowIndex) {
+                    offsetMatch = true;
+                }
+
+                // Wird ein Array [1, 2] angegeben, wird nach [RowIndex, CellIndex] gesucht.
+                if (kijs.isArray(offset) && offset.length === 2
+                        && kijs.isInteger(offset[0]) && kijs.isInteger(offset[1])
+                        && ((offset[0] === rowIndex && cellIndex >= offset[1]) || rowIndex > offset[0])) {
+                    offsetMatch = true;
+                }
+
+                // edit starten falls cell gefunden.
+                if (offsetMatch && cell.columnConfig.editable) {
+                    this.select(row);
+                    this.current = row;
+                    cell.startCellEdit();
+                    cellToEdit = cell;
+                    return false;
+                }
+
+                // offset ist eine cell: nächste cell bearbeiten
+                if (!offsetMatch && offset === cell) {
+                    offsetMatch = true;
+                }
+
+            }, this, reverse);
+
+            if (cellToEdit) {
+                return false;
+            }
+
+        }, this, reverse);
+
+        return cellToEdit;
     }
 
     // PROTECTED
@@ -1087,16 +1138,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
 
     _onKeyDown(e) {
-        let keyCode=e.nodeEvent.keyCode, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
+        let kCode=e.nodeEvent.code, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
         if (!this.disabled) {
             let targetRow = null;
 
             if (this._currentRow) {
-                switch (keyCode) {
-                    case kijs.keys.DOWN_ARROW: targetRow = this._currentRow.next; break;
-                    case kijs.keys.UP_ARROW: targetRow = this._currentRow.previous; break;
-                    case kijs.keys.SPACE: targetRow = this._currentRow; break;
+                switch (kCode) {
+                    case 'ArrowDown': targetRow = this._currentRow.next; break;
+                    case 'ArrowUp': targetRow = this._currentRow.previous; break;
+                    case 'Space': targetRow = this._currentRow; break;
                 }
             }
 
@@ -1106,7 +1157,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     targetRow.focus();
                 }
 
-                if (this.selectType !== 'simple' || shift || ctrl || keyCode === kijs.keys.SPACE) {
+                if (this.selectType !== 'simple' || shift || ctrl || kCode === 'Space') {
                     this._selectRow(this._currentRow, shift, ctrl);
                 }
 

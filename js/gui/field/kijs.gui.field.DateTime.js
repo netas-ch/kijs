@@ -10,27 +10,27 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-        
+
         // overwrite
         this._valuesMapping = [
             { nameProperty: 'name' , valueProperty: 'value' },
             { nameProperty: 'nameEnd' , valueProperty: 'valueEnd' }
         ];
-        
+
         this._nameEnd = '';
-        
+
         this._mode = 'date';             // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
-        
+
         this._timeRequired = false;
-        
+
         this._displayDateFormat = '';   // Anzeigeformat für Datums-Teil (leer=auto)
         this._displayTimeFormat = '';   // Anzeigeformat für Uhrzeit-Teil (leer=auto)
         this._displayWeekFormat = 'W Y'; // Anzeigeformat für die Woche (nur bei mode='week')
         this._displayWeekPrefix = 'KW '; // Präfix für die Anzeige der Woche (nur bei mode='week')
         this._valueDateFormat = '';     // Format für den Datums-Teil des value (leer=auto)
         this._valueTimeFormat = '';     // Format für den Uhrzeit-Teil des value (leer=auto)
-        
-        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden, 
+
+        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
                                         // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
                                         // Null=Umwandlung ausgeschaltet.
 
@@ -40,7 +40,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._lastValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
 
         this._inputDom = new kijs.gui.Dom({
-            disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId
@@ -137,7 +136,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -154,27 +153,27 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // Gibt das Datum zurück. Falls nur eine Uhrzeit existiert, wird das Datum vom 01.01.1970 genommen
     get date() {
         let date = null;
-        
+
         if (this._hasDate()) {
             date = this._datePicker.date;
         }
-        
+
         if (this._hasTime() && !kijs.isEmpty(this._timePicker.value)) {
             if (kijs.isEmpty(date)) {
                 date = kijs.Date.getDatePart(new Date('1970-01-01'));
             }
-            
+
             // Datum und Uhrzeit zusammenfügen
             let sqlDate = kijs.Date.getSqlDate(date);
             sqlDate += ' ' + this._timePicker.value;
             date = kijs.Date.create(sqlDate);
         }
-        
+
         return date;
     }
     set date(val) {
         const datetime = kijs.Date.create(val);
-        
+
         if (kijs.isEmpty(datetime)) {
             this._datePicker.date = null;
             this._timePicker.value = '';
@@ -184,18 +183,18 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             } else {
                 this._datePicker.date = null;
             }
-            
+
             if (this._hasTime()) {
                 this._timePicker.value = kijs.Date.format(datetime, 'H:i:s');
             } else {
                 this._timePicker.value = '';
             }
         }
-        
+
         this._lastValue = this.value;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
-    
+
     get dateEnd() {
         let date = null;
         if (this._hasDate()) {
@@ -205,7 +204,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     set dateEnd(val) {
         const date = kijs.Date.create(val);
-        
+
         this._timePicker.value = '';
         if (kijs.isEmpty(date)) {
             this._datePicker.dateEnd = null;
@@ -216,11 +215,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 this._datePicker.dateEnd = null;
             }
         }
-        
+
         this._lastValueEnd = this.valueEnd;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
-    
+
     // overwrite
     get datePicker() { return this._datePicker; }
 
@@ -241,31 +240,31 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     get maxDate() { return this._datePicker.maxDate; }
     set maxDate(val) { this._datePicker.maxDate = val; }
-    
+
     get maxValue() { return this._datePicker.maxValue; }
     set maxValue(val) { this._datePicker.maxalue = val; }
 
     get minDate() { return this._datePicker.minDate; }
     set minDate(val) { this._datePicker.minDate = val; }
-    
+
     get minValue() { return this._datePicker.minValue; }
     set minValue(val) { this._datePicker.minValue = val; }
-    
-    get mode() { 
-        return this._mode; 
+
+    get mode() {
+        return this._mode;
     }
     set mode(val) {
         if (!kijs.Array.contains(['date','time','dateTime','week','range'], val)) {
             throw new kijs.Error('unknown mode');
         }
-        
+
         this._mode = val;
         this._createSpinBoxElements();
     }
-    
+
     get nameEnd() { return this._nameEnd; }
     set nameEnd(val) { this._nameEnd = val; }
-    
+
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -289,7 +288,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const valTime = this._timePicker.value;
         let ret = '';
         let format = '';
-        
+
         let datetime = null;
         let dateFormat = '';
         let timeFormat = '';
@@ -383,7 +382,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 ret = null;
             }
         }
-        
+
         return ret;
     }
     set value(val) {
@@ -436,19 +435,19 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
-    
+
     get valueEnd() {
         let date = null;
         let dateFormat = this._valueDateFormat;
-        
+
         if (this._hasDate()) {
             date = this._datePicker.dateEnd;
         }
-        
+
         if (kijs.isEmpty(dateFormat)) {
             dateFormat = 'Y-m-d';
         }
-        
+
         if (kijs.isEmpty(date)) {
             return null;
         } else {
@@ -498,30 +497,30 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
-        
+
         // spinIcon
         if (this._useDefaultSpinIcon && !hasDate) {
             this.spinIconChar = '&#xf017'; // clock
         }
-        
+
         if (hasDate) {
             this._spinBoxEl.add(this._datePicker);
         } else {
             this._spinBoxEl.remove(this._datePicker);
         }
-        
+
         if (hasDate && hasTime) {
             this._spinBoxEl.add(this._seperatorEl);
         } else {
             this._spinBoxEl.remove(this._seperatorEl);
         }
-        
+
         if (hasTime) {
             this._spinBoxEl.add(this._timePicker);
         } else {
             this._spinBoxEl.remove(this._timePicker);
         }
-        
+
         switch (this._mode) {
             case 'range':
             case 'week':
@@ -534,7 +533,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 break;
         }
     }
-    
+
     /**
      * Ermittelt den Wert für die Anzeige (display) im entsprechenden Format.
      * Falls keine Format definiert wurde, wird aufgrund der Einstellungen eines definiert
@@ -544,7 +543,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const valDateStart = this._datePicker.date;
         const valDateEnd = this._datePicker.dateEnd;
         const valTime = this._timePicker.value;
-        
+
         let ret = '';
         let format = '';
 
@@ -569,7 +568,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     ret += kijs.Date.format(valDateEnd, format);
                 }
                 break;
-                
+
             // week
             case 'week':
                 format = this._displayWeekFormat;
@@ -587,7 +586,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     }
                 }
                 break;
-                
+
             // date, time und dateTime
             case 'date':
             case 'time':
@@ -595,7 +594,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 let datetime = null;
                 let dateFormat = '';
                 let timeFormat = '';
-                
+
                 // Startdatum (und evtl. -Uhrzeit)
                 // Wenn noch eine Uhrzeit verwendet wird: mit Uhrzeit ergänzen
                 if (this._hasTime()) {
@@ -655,7 +654,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                         timeFormat = this._displayTimeFormat;
                     }
                 }
-                
+
                 // Datums- und Uhrzeitformat zusammenfügen
                 if (dateFormat && timeFormat) {
                     format = dateFormat + ' ' + timeFormat;
@@ -671,10 +670,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
             break;
         }
-        
+
         return ret;
     }
-    
+
     /**
      * Wird der DatePicker angezeigt?
      * @return {unresolved}
@@ -682,7 +681,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _hasDate() {
         return this._mode === 'date' || this._mode === 'dateTime' || this._mode === 'week' || this._mode === 'range';
     }
-    
+
     /**
      * Wird der TimePicker angezeigt?
      * @return {unresolved}
@@ -690,10 +689,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _hasTime() {
         return this._mode === 'time' || this._mode === 'dateTime';
     }
-    
+
     _parseString(strInput) {
         let seperators, arr, matches, date, dateEnd, time, year, week, ok;
-        
+
         switch (this._mode) {
             case 'date':
                 this._datePicker.value = this._parseStringToDate(strInput);
@@ -755,12 +754,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
             case 'week':
                 ok = true;
-                
+
                 matches = strInput.match(/^[^0-9]*([0-9]{1,2})[^0-9]?([0-9]{2,4})?/);
                 if (!matches) {
                     ok = false;
                 }
-                
+
                 if (ok) {
                     // Wochen-Nr.
                     week = parseInt(matches[1]);
@@ -778,7 +777,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     }
                     date = kijs.Date.getFirstOfWeek(week, year);
                 }
-                
+
                 if (ok) {
                     this._datePicker.value = date;
                     this._datePicker.valueEnd = kijs.Date.getSunday(date);
@@ -795,7 +794,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 date = null;
                 dateEnd = null;
                 ok = true;
-                
+
                 // Zulässige Trennzeichen durch #|@# ersetzen
                 for (let i=0; i<seperators.length; i++) {
                     strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
@@ -821,7 +820,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                         ok = false;
                     }
                 }
-                
+
                 // Datum bis
                 if (ok) {
                     dateEnd = this._parseStringToDate(arr[1]);
@@ -829,7 +828,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                         ok = false;
                     }
                 }
-                
+
                 if (ok) {
                     this._datePicker.value = date;
                     this._datePicker.valueEnd = dateEnd;
@@ -842,26 +841,26 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 break;
         }
     }
-    
+
     _parseStringToDate(strInput) {
         const seperators = ['.', '/', ','];
         let day = null;
         let month = null;
         let year = null;
-        
+
         // Zulässige Trennzeichen durch #|@# ersetzen
         for (let i=0; i<seperators.length; i++) {
             strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
         }
-        
+
         // Splitten nach #|@#
         const arr = strInput.split('#|@#');
-        
+
         // Der String darf aus ein bis drei Bestandteilen bestehen
         if (arr.length < 1 || arr.length > 3) {
             return null;
         }
-        
+
         // Tag
         if (arr.length >= 1) {
             if (!kijs.isNumeric(arr[0])) {
@@ -872,7 +871,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 return null;
             }
         }
-        
+
         // Monat
         if (arr.length >= 2 && !kijs.isEmpty(arr[1])) {
             if (!kijs.isNumeric(arr[1])) {
@@ -885,14 +884,14 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             month = (new Date()).getMonth() + 1;
         }
-        
+
         // Jahr
         if (arr.length >= 3 && !kijs.isEmpty(arr[2])) {
             if (!kijs.isNumeric(arr[2])) {
                 return null;
             }
             year = parseInt(arr[2]);
-            
+
             // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
             if (!kijs.isEmpty(this._year2000Threshold) && year >= 10 && year <= 99) {
                 if (year >= this._year2000Threshold) {
@@ -904,30 +903,30 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             year = (new Date()).getFullYear();
         }
-        
+
         // Daraus nun ein Datum erstellen
         return new Date(year, month-1, day);
     }
-   
+
     _parseStringToTime(strInput) {
         const seperators = [':', '.'];
         let hours = null;
         let minutes = null;
         let seconds = null;
-        
+
         // Zulässige Trennzeichen durch #|@# ersetzen
         for (let i=0; i<seperators.length; i++) {
             strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
         }
-        
+
         // Splitten nach #|@#
         const arr = strInput.split('#|@#');
-        
+
         // Der String darf aus ein bis drei Bestandteilen bestehen
         if (arr.length < 1 || arr.length > 3) {
             return '';
         }
-        
+
         // Stunden
         if (arr.length >= 1) {
             if (!kijs.isNumeric(arr[0])) {
@@ -941,7 +940,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 hours = 0;
             }
         }
-        
+
         // Minuten
         if (arr.length >= 2) {
             if (!kijs.isNumeric(arr[1])) {
@@ -954,7 +953,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             minutes = 0;
         }
-        
+
         // Sekunden
         if (arr.length >= 3) {
             if (!kijs.isNumeric(arr[2])) {
@@ -967,7 +966,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         } else {
             seconds = 0;
         }
-        
+
         // Uhrzeit als String zurückgeben
         return this._zeroPad(hours) + ':' + this._zeroPad(minutes) + ':' + this._zeroPad(seconds);
     }
@@ -978,72 +977,72 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const dateEnd = this._datePicker.dateEnd;
         const time = this._timePicker.value;
         const dateFormat = this._displayDateFormat ? this._displayDateFormat : 'd.m.Y';
-        
+
         // Datum validieren
         if ((!kijs.isEmpty(date) || !kijs.isEmpty(dateEnd)) && this._hasDate()) {
-            
+
             // Start- und Enddatum validieren
             if (this._mode === 'range' || this._mode === 'week') {
-                
+
                 // Es fehlt das Start- oder Enddatum
                 if (kijs.isEmpty(date) || kijs.isEmpty(dateEnd)) {
                     this._errors.push(kijs.getText('Es fehlt das Start- oder Enddatum'));
                 }
-                
+
                 // Min. value
                 if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate)
                         || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.minDate) && dateEnd < this._datePicker.minDate) ) {
-                    
+
                     this._errors.push(
-                            kijs.getText('Der minimale Wert für dieses Feld ist %1', 
-                            '', 
+                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                            '',
                             kijs.Date.format(this._datePicker.minDate, dateFormat)));
                 }
-                
+
                 // Max. value
                 if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate)
                         || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.maxDate) && dateEnd < this._datePicker.maxDate) ) {
-                    
+
                     this._errors.push(
-                            kijs.getText('Der maximale Wert für dieses Feld ist %1', 
-                            '', 
+                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                            '',
                             kijs.Date.format(this._datePicker.maxDate, dateFormat)));
                 }
-                
+
             // nur Startdatum validieren
             } else {
-                
+
                 // Min. value
                 if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate) {
                     this._errors.push(
-                            kijs.getText('Der minimale Wert für dieses Feld ist %1', 
-                            '', 
+                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                            '',
                             kijs.Date.format(this._datePicker.minDate, dateFormat)));
                 }
-                
+
                 // Max. value
                 if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate) {
                     this._errors.push(
-                            kijs.getText('Der maximale Wert für dieses Feld ist %1', 
-                            '', 
+                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                            '',
                             kijs.Date.format(this._datePicker.maxDate, dateFormat)));
                 }
-                
+
             }
         } else if (this._hasDate() && this._required && kijs.isEmpty(date)) {
             this._errors.push(kijs.getText('Das Datum darf nicht leer sein'));
         }
-        
+
         // Uhrzeit validieren
         if (this._hasTime()) {
             if (this._required && this._timeRequired && kijs.isEmpty(time)) {
                 this._errors.push(kijs.getText('Die Uhrzeit darf nicht leer sein'));
             }
         }
-                
+
         super._validationRules(value);
     }
-    
+
     /**
      * Ergänzt die 0 einer Zahl.
      * @param {Integer|String} number
@@ -1057,7 +1056,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
         return number;
     }
-    
+
 
     // LISTENERS
     _onDatePickerChange(e) {
@@ -1066,31 +1065,31 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     _onDatePickerEmptyClick(e) {
         this._timePicker.value = '';
-        
+
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
-        
+
         this._spinBoxEl.close();
     }
-    
+
     _onDatePickerInputFinished(e) {
         if (!this._hasTime()) {
             this._spinBoxEl.close();
         }
     }
-    
+
     _onDatePickerTodayClick(e) {
         if (!this._hasTime()) {
             this._spinBoxEl.close();
         }
     }
-    
+
     _onInputDomChange(e) {
         this._parseString(e.nodeEvent.target.value);
-        
+
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
-        
+
         this.validate();
-        
+
         // Falls etwas geändert hat: Change Event auslösen
         const value = this.value;
         const valueEnd = this.valueEnd;
@@ -1100,14 +1099,14 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._lastValueEnd = valueEnd;
         }
     }
-    
+
     _onInputDomInput(e) {
         this.resetErrors();
     }
-    
+
     _onSpinBoxElClose(e) {
         this.validate();
-        
+
         // Falls etwas geändert hat: Change Event auslösen
         const value = this.value;
         const valueEnd = this.valueEnd;
@@ -1117,18 +1116,18 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._lastValueEnd = valueEnd;
         }
     }
-    
+
     _onTimePickerChange(e) {
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
-    
+
     _onTimePickerEmptyClick(e) {
         this._spinBoxEl.close();
     }
     _onTimePickerInputFinished(e) {
         this._spinBoxEl.close();
     }
-    
+
     _onTimePickerNowClick(e) {
         if (!this._hasDate() || !kijs.isEmpty(this._datePicker.date)) {
             this._spinBoxEl.close();
@@ -1172,7 +1171,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._seperatorEl = null;
         this._timePicker = null;
         this._spinBoxEl = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }

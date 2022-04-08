@@ -74,7 +74,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                                         // Null=Umwandlung ausgeschaltet.
 
         this._inputDom = new kijs.gui.Dom({
-            disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId

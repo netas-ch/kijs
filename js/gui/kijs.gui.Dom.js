@@ -77,7 +77,7 @@
  *
  * keyEventAdd                              Erstellt einen Tastendruck-Listener
  *  Args:
- *   keys       Number|Array                Tastencode der Taste, oder Array mit Tastencodes. Bsp: [kijs.KeyMap.keys.ENTER, 65, 66]
+ *   keys       Number|Array                Bezeichnung der Tasten. Bsp: ['Enter', 'A', 'Tab', 'Space']
  *   fn         Function|String             Funktion oder Name des kijs-Events das ausgelöst werden soll
  *   context     [kijs.gui.Element|kijs.gui.Dom]  Kontext
  *   modifier    [Object]                   Muss eine Modifier-Taste gedrückt sein? null=egal
@@ -87,7 +87,7 @@
  *
  * keyEventStopBubbeling                    Stoppt das Bubbeling der KeyDown-Events
  *  Args:
- *   keys           Array                   Array mit KeyCodes Bsp: [kijs.KeyMap.ENTER, kijs.KeyMap.ESC]
+ *   keys           Array                   Array mit Keys. Bsp: ['Enter', 'Escape']
  *   modifier       [modifier]              Muss eine Modifier-Taste gedrückt sein?
  *                                          modifier = {shift:false, ctrl:false, alt:false}]
  *
@@ -168,6 +168,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                         // }
 
         this._defaultConfig = {};
+        this._doubleClickSpeed = 600;
 
         this._disabled = false;
 
@@ -232,7 +233,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             mouseMove: { nodeEventName: 'mousemove', useCapture: false },
             mouseUp: { nodeEventName: 'mouseup', useCapture: false },
             scroll: { nodeEventName: 'scroll', useCapture: false },
-            singleClick: { nodeEventName: 'click', useCapture: false, interrupt: kijs.doubleClickSpeed },
+            singleClick: { nodeEventName: 'click', useCapture: false, interrupt: this._doubleClickSpeed },
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
             touchEnd: { nodeEventName: 'touchend', useCapture: false },
             touchMove: { nodeEventName: 'touchmove', useCapture: false },
@@ -245,7 +246,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             keyUp: { nodeEventName: 'keyup', useCapture: false },
             enterPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: [kijs.keys.ENTER],        // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Enter'],        // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -253,7 +254,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             enterEscPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: [kijs.keys.ENTER, kijs.keys.ESC], // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Enter', 'Escape'], // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -261,7 +262,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             escPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: [kijs.keys.ESC],          // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Escape'],          // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -269,7 +270,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             spacePress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: [kijs.keys.SPACE],        // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Space'],        // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -1227,7 +1228,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             // Tastencode muss übereinstimmen, wenn vorhanden
             if (!kijs.isEmpty(val.keys)) {
                 const keys = kijs.isArray(val.keys) ? val.keys : [val.keys];
-                if (!kijs.Array.contains(keys, e.nodeEvent.keyCode)) {
+
+                // nodeEvent.key enthält bsp.  'Control'     oder ' '     oder '1'          (=Zeichen, das geschrieben wird)
+                // nodeEvent.code enthält bsp. 'ControlLeft' oder 'Space' oder 'Numpad1'    (=Taste, die gedrückt wird)
+                if (!kijs.Array.contains(keys, e.nodeEvent.key) && !kijs.Array.contains(keys, e.nodeEvent.code)) {
                     return;
                 }
             }

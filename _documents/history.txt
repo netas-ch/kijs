@@ -1,3 +1,14 @@
+Version 1.2.5
+================================================================================
+Änderungen
+----------
+Grid
+ - Der Parameter `decimalThousandSep` heisst neu gleich wie beim Nummernfeld: `thousandsSeparator`
+ - Editable: Navigation mit Enter und Tab
+
+Anderes
+ - kijs.keys entfernt, da keyCodes deprecated sind und nicht mehr verwendet werden sollten.
+
 Version 1.2.4
 ================================================================================
 Grid

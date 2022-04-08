@@ -22,8 +22,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
 
         // Nummer-Einstellungen
         this._decimalPrecision = null;
-        this._decimalPoint = '.';
-        this._decimalThousandSep = '\'';
+        this._decimalSeparator = '.';
+        this._thousandsSeparator = '\'';
 
         this._numberStyles = [];
         this._unitBefore = '';
@@ -37,8 +37,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             decimalPrecision: true,
-            decimalPoint: true,
-            decimalThousandSep: true,
+            decimalSeparator: true,
+            thousandsSeparator: true,
             numberStyles: {target: 'numberStyles'},
             unitBefore: true,
             unitAfter: true
@@ -91,8 +91,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         eArgs.allowDecimals = this._decimalPrecision > 0;
         eArgs.alwaysDisplayDecimals = this._decimalPrecision > 0;
         eArgs.decimalPrecision = this._decimalPrecision;
-        eArgs.decimalSeparator = this._decimalPoint;
-        eArgs.thousandsSeparator = this._decimalThousandSep;
+        eArgs.decimalSeparator = this._decimalSeparator;
+        eArgs.thousandsSeparator = this._thousandsSeparator;
 
         return eArgs;
     }
@@ -106,7 +106,7 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         let num = parseFloat(value);
 
         if (kijs.isNumber(num)) {
-            this._dom.html = this._unitBefore + kijs.Number.format(num, this._decimalPrecision, this._decimalPoint, this._decimalThousandSep) + this._unitAfter;
+            this._dom.html = this._unitBefore + kijs.Number.format(num, this._decimalPrecision, this._decimalSeparator, this._thousandsSeparator) + this._unitAfter;
 
             // styles anwenden
             let numberStyle = this._getNumberStyle(num);
