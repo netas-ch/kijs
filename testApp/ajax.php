@@ -296,6 +296,7 @@ foreach ($requests as $request) {
                     $col->valueField = 'combovalue';
                     $col->displayField = 'combodisplay';
                     $col->editable = true;
+                    $col->clicksToEdit = 1;
                     $col->editorXtype = 'kijs.gui.field.Combo';
                     $col->editorConfig = new stdClass();
                     $col->editorConfig->data = [

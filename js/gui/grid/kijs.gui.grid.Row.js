@@ -146,10 +146,10 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         // Wenn bereits gerendert, vergleichen und falls geändert neu rendern
         if (this.isRendered) {
             kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
-                if (newDataRow[columnConfig.valueField] !== this.dataRow[columnConfig.valueField]) {
+                if (newDataRow[columnConfig.displayField] !== this.dataRow[columnConfig.displayField]) {
                     cell = this.getCellByConfig(columnConfig);
                     if (cell) {
-                        cell.setValue(newDataRow[columnConfig.valueField], true, false, false);
+                        cell.setValue(newDataRow[columnConfig.displayField], true, false, false);
                     }
                 }
             }, this);

@@ -39,6 +39,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
         // Editable?
         this._editable = false;
+        this._clicksToEdit = 2;
 
         // Configs
         this._cellConfig = null;
@@ -64,6 +65,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
             caption: {target: 'caption' },
             editable: true,
+            clicksToEdit: true,
             visible: true,
             hideable: true,
             resizable: true,
@@ -119,6 +121,9 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             this._cellConfig = val;
         }
     }
+
+    get clicksToEdit() { return this._clicksToEdit; }
+    set clicksToEdit(val) { this._clicksToEdit = val === 1 ? 1 : 2; }
 
     get editable() { return this._editable; }
     set editable(val) {
