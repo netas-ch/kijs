@@ -53,10 +53,10 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
-    get isDirty() { return this._originalValue !== this.value; }
+    get isDirty() { return kijs.toString(this._originalValue) !== kijs.toString(this.value); }
     set isDirty(val) {
         if (val === false) {
-            this._originalValue = this.value;
+            this._originalValue = kijs.toString(this.value);
         } else {
             this._originalValue = null;
         }
@@ -164,6 +164,16 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             this._cellEditor.renderTo(this._dom.node);
 
             this.dom.clsAdd('kijs-celledit');
+
+            // Event auf dem Grid aufrufen
+            this.row.grid.raiseEvent('startCellEdit', {cell: this});
+
+            // falls bei einer anderen cell der edit gestartet wird, diesen hier beenden
+            this.row.grid.once('startCellEdit', function(e) {
+                if (e.cell !== this) {
+                    this.stopCellEdit();
+                }
+            }, this);
         }
     }
 
@@ -204,6 +214,9 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
                 } else {
                     this.setValue(valDsp, true, true, false);
                 }
+
+                // Event auf dem Grid aufrufen
+                this.row.grid.raiseEvent('stopCellEdit', {cell: this});
 
                 // Änderung: Event aufrufen
                 if (kijs.toString(val) !== kijs.toString(this._cellEditorValue)) {

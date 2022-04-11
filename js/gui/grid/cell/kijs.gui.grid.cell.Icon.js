@@ -69,6 +69,9 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
     set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
     get iconColor() { return this._iconColor; }
 
+    set isDirty(val) {}
+    get isDirty() { return false; }
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
