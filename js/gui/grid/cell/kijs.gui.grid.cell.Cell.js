@@ -23,6 +23,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         this._originalValue = null;
         this._columnConfig = null;
         this._cellEditor = null;
+        this._cellEditorValue = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -95,6 +96,8 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      */
     setValue(value, silent=false, markDirty=true, updateDataRow=true) {
 
+        let changed = kijs.toString(value) !== kijs.toString(this._dom.html);
+
         // HTML aktualisieren
         this._setDomHtml(value);
 
@@ -107,8 +110,11 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             this.isDirty = false;
         }
 
-        if (!silent) {
-            this.raiseEvent('change', {value: this.value});
+        // change event bei cell, row und grid aufrufen.
+        if (!silent && changed) {
+            this.raiseEvent('change', {value: value});
+            this.row.raiseEvent('change', {value: value, cell: this});
+            this.row.grid.raiseEvent('change', {value: value, row: this.row, cell: this});
         }
 
         if (this.isRendered) {
@@ -141,6 +147,9 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
                 eArgs = Object.assign(eArgs, this._columnConfig.editorConfig);
             }
 
+            // value speichern, um Änderungen nachzuverfolgen
+            this._cellEditorValue = eArgs.value;
+
             this._cellEditor = new editor(eArgs);
 
             // Nach dem rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
@@ -165,7 +174,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             let val = this._cellEditor.value,
                 valDsp = this._cellEditor.valueDisplay,
                 valDspHtml = this._cellEditor.valueDisplayHtml;
-        
+
             this._cellEditor.unrender();
             this._cellEditor = null;
 
@@ -176,13 +185,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
                 this.setValue(this.value, true, false, false);
 
             } else {
-
-                // Cell-Value setzen
-                if (this.htmlDisplayType === 'html') {
-                    this.setValue(valDspHtml, false, true, false);
-                } else {
-                    this.setValue(valDsp, false, true, false);
-                }
 
                 // in Row setzen
                 let dtRw = this.row.dataRow;
@@ -195,6 +197,21 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
                         dtRw[this._columnConfig.displayField] = this.htmlDisplayType === 'html' ? valDspHtml : valDsp;
                     }
                 }
+
+                // Cell-Value setzen
+                if (this.htmlDisplayType === 'html') {
+                    this.setValue(valDspHtml, true, true, false);
+                } else {
+                    this.setValue(valDsp, true, true, false);
+                }
+
+                // Änderung: Event aufrufen
+                if (kijs.toString(val) !== kijs.toString(this._cellEditorValue)) {
+                    this.raiseEvent('change', {value: val, valueDisplay: valDsp});
+                    this.row.raiseEvent('change', {value: val, valueDisplay: valDsp, cell: this});
+                    this.row.grid.raiseEvent('change', {value: val, valueDisplay: valDsp, row: this.row, cell: this});
+                }
+                this._cellEditorValue = null;
             }
         }
     }

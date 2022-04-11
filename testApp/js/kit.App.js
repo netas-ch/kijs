@@ -382,7 +382,8 @@ kit.App = class kit_App {
                                         filterVisible: true,
                                         on: {
                                             rowClick: function(e){ console.log(e); },
-                                            rowDblClick: function(e){ console.log(e); }
+                                            rowDblClick: function(e){ console.log(e); },
+                                            change: function(e){ console.log('change!');console.log(e); }
                                         }
 //                                        primaryKeys:'field_a'
 //                                        data:(function(){

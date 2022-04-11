@@ -24,7 +24,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._splitterMove = false;
 
         // drag events
-        this._dom.nodeAttributeSet('draggable', true);
+        this._dom.nodeAttributeSet('draggable', false);
         kijs.DragDrop.addDragEvents(this, this._dom);
         kijs.DragDrop.addDropEvents(this, this._dom);
 
