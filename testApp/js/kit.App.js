@@ -378,7 +378,6 @@ kit.App = class kit_App {
                                         facadeFnLoad: 'grid.load',
                                         rpc: this._rpc,
                                         filterable: true,
-                                        editable: false,
                                         filterVisible: true,
                                         on: {
                                             rowClick: function(e){ console.log(e); },

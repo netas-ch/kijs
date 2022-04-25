@@ -526,6 +526,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    
     /**
      * Fügt Fehler aus einer externen Validation hinzu
      * @param {String|Array} errors
@@ -543,6 +544,22 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Fehler anzeigen, falls vorhanden
         this._displayErrors();
+    }
+
+    /**
+     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
+     * @param {Boolean} alsoSetIfNoTabIndex
+     * @param {Boolean} selectText
+     * @returns {undefined}
+     * @overwrite
+     */
+    focus(alsoSetIfNoTabIndex=false, selectText=false) {
+        super.focus(alsoSetIfNoTabIndex);
+        if (selectText) {
+            if (this._inputDom.node && kijs.isFunction(this._inputDom.node.select)) {
+                this._inputDom.node.select();
+            }
+        }
     }
 
     // overwrite

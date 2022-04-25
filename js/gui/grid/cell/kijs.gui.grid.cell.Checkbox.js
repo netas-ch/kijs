@@ -50,7 +50,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
 
     // Overwrite
     get value() { return this._checked; }
-    set value(val) { super.value = val; }
+    set value(val) { this.setValue(val); }
 
     get disabled() { return this._disabled; }
     set disabled(val) {
@@ -80,16 +80,6 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
         return super.setValue(value, silent, markDirty, updateDataRow);
     }
 
-    // Overwrite
-    _getEditorArgs() {
-        let eArgs = super._getEditorArgs();
-
-        eArgs.hasTime = this._hasTime;
-        eArgs.displayFormat = this._format;
-
-        return eArgs;
-    }
-
     /**
      * icon rendern
      * @param {String|Number} value
@@ -109,8 +99,8 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
             return;
         }
 
-        let value = this.value;
-        this.value = !(value === true || value === 1 || value === '1');
+        // value invertieren
+        this.setValue(!this._checked);
     }
 
     /**

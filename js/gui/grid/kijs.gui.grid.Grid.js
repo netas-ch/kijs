@@ -47,7 +47,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
         this._selectType = 'single';        // multiselect: single|multi|simple|none
         this._focusable = true;             // ob das grid focusiert weden kann
-        this._editable = false;             // editierbare zeilen?
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)
@@ -117,7 +116,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             data:           { target: 'data' },
             remoteDataStep: { target: 'remoteDataStep' },
 
-            editable: true,
             focusable: true,
             filterable: true,
             filterVisible: { target: 'filterVisible' },
@@ -212,9 +210,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return dataRows;
     }
 
-    get editable() { return this._editable; }
-    set editable(val) { this._editable = !!val; }
-
     get facadeFnArgs() { return this._facadeFnArgs; }
     set facadeFnArgs(val) { this._facadeFnArgs = val; }
 
@@ -303,6 +298,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
+     * Setzt alle dirty-records zurück.
+     * @returns {undefined}
+     */
+    commit() {
+        kijs.Array.each(this._rows, function(row) {
+            row.commit();
+        }, this);
+    }
+
+    /**
      * Gibt eine columnConfig anhand ihres valueField-Wertes zurück
      * @param {String} valueField
      * @returns {kijs.gui.grid.columnConfig.ColumnConfig|null}
@@ -317,6 +322,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
 
         return cC;
+    }
+
+    /**
+     * Gibt die rows zurück, welche das dirty-flag haben.
+     * @returns {Array}
+     */
+    getDirtyRows() {
+        let dirtyRows = [];
+        kijs.Array.each(this._rows, function(row) {
+            if (row.isDirty) {
+                dirtyRows.push(row);
+            }
+        }, this);
+
+        return dirtyRows;
     }
 
     /**
@@ -336,7 +356,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             return null;
 
         } else if (this._selectType === 'single') {
-            return ret.length ? ret[0] : [];
+            return ret.length ? ret[0] : null;
 
         } else {
             return ret;
@@ -1269,6 +1289,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Daten laden
         if (this._autoLoad) {
+            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
             kijs.defer(function() {
                 if (this._remoteDataLoaded === 0) {
                     this._remoteLoad(true);

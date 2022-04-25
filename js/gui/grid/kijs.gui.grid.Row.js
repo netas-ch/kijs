@@ -114,6 +114,18 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
     // --------------------------------------------------------------
 
     /**
+     * Setzt alle 'dirty' records zurück.
+     * @returns {undefined}
+     */
+    commit() {
+        kijs.Array.each(this._cells, function(cell) {
+            if (cell.cell) {
+                cell.cell.isDirty = false;
+            }
+        }, this);
+    }
+
+    /**
      * Sucht eine Cell anhand der Cell-Config
      * @param {Object} config
      * @returns {kijs.gui.grid.cell.Cell|null} die Cell oder null, wenn nicht gefunden.
