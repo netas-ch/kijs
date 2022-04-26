@@ -131,8 +131,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         let style = {};
 
         kijs.Array.each(this._numberStyles, function(numberStyle) {
-            let from = kijs.isNumber(numberStyle.from) ? numberStyle.from : Number.MIN_VALUE,
-                to = kijs.isNumber(numberStyle.to) ? numberStyle.to : Number.MAX_VALUE;
+            let from = kijs.isNumber(numberStyle.from) ? numberStyle.from : Number.MIN_SAFE_INTEGER,
+                to = kijs.isNumber(numberStyle.to) ? numberStyle.to : Number.MAX_SAFE_INTEGER;
 
             if (number >= from && number <= to) {
                 for (let key in numberStyle) {

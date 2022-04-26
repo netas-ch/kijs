@@ -307,7 +307,7 @@ kit.App = class kit_App {
                                     rowSizes:[2],
                                     caption: 'Funktionen',
                                     width: 400,
-                                    height: 135,
+                                    height: 80,
                                     columns: 3,
                                     elements: [
                                         {

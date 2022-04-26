@@ -322,6 +322,13 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
+        // Editable-Zeilen: Klasse hinzufügen
+        if (this._columnConfig.editable) {
+            this._dom.clsAdd('kijs-grid-cell-editable');
+        } else {
+            this._dom.clsRemove('kijs-grid-cell-editable');
+        }
+
         // Dirty-Zeilen: Klasse hinzufügen
         if (this.isDirty) {
             this._dom.clsAdd('kijs-grid-cell-dirty');

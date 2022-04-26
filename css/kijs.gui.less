@@ -1120,22 +1120,12 @@ div.kijs-buttongroup {
     }
 
     > .kijs-container-inner {
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        align-content: stretch;
+        display: grid;
+        padding: 3px;
 
-        > table {
-            flex: 1;
-            border-collapse: collapse;
-            border: 4px solid transparent;
-            border-spacing: 0;
-            margin: 2px 0;
-            padding: 0;
-            width: 100%;
+        > div {
 
             .kijs-button {
-                display: inline-block;
                 height: 100%;
                 width: 100%;
                 margin: 0;
@@ -2764,13 +2754,14 @@ div.kijs-grid {
                 flex: 1;
             }
             .kijs-button {
-                visibility: hidden;
+                opacity: 0;
                 flex: none;
-                width: 15px;
+                width: 0px;
                 margin: 0;
                 padding: 0;
                 background-color: transparent;
                 border: 0;
+                transition: opacity 0.5s, width 0.5s ease-in;
 
                 .kijs-icon {
                     margin: -2px 0 0 0;
@@ -2779,7 +2770,9 @@ div.kijs-grid {
             }
 
             &:hover .kijs-button {
-                visibility: visible;
+                width: 15px;
+                opacity: 1;
+                transition: opacity 0.5s;
             }
 
             .kijs-splitter {

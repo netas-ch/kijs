@@ -21,10 +21,6 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
             nodeTagName: 'span'
         });
 
-        this._tableDom = new kijs.gui.Dom({
-           nodeTagName: 'table'
-        });
-
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-buttongroup');
 
@@ -190,32 +186,61 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     _renderElements() {
         let matrix = this._getTableMatrix();
 
-        // tabelle ausgeben
-        this._tableDom.renderTo(this._innerDom.node);
-        kijs.Dom.removeAllChildNodes(this._tableDom.node);
+        kijs.Dom.removeAllChildNodes(this._innerDom.node);
 
-        // Spalten erstellen
+        // Grid-Grösse berechnen (Anzahl Rows und Columns)
+        let maxR=0, maxC=0;
+
+        // durchgehen und zählen
         for (let iR=0; iR<matrix.length; iR++) {
-            let tr = document.createElement('tr');
             for (let iC=0; iC<matrix[iR].length; iC++) {
                 if (kijs.isInteger(matrix[iR][iC])) {
                     let elId = matrix[iR][iC];
-                    let td = document.createElement('td');
                     let cS = this.colSizes[elId];
                     let rS = this.rowSizes[elId];
 
-                    if (cS > 1) {
-                        td.setAttribute('colspan', cS);
-                    }
-                    if (rS > 1) {
-                        td.setAttribute('rowspan', rS);
-                    }
-
-                    tr.appendChild(td);
-                    this.elements[elId].renderTo(td);
+                    maxR = Math.max(maxR, (iR+rS));
+                    maxC = Math.max(maxC, (iC+cS));
                 }
             }
-            this._tableDom.node.appendChild(tr);
+        }
+
+        let gtr='', gtc=''; // CSS: grid-template-rows, grid-template-columns
+
+        // Spalten
+        for (let iR=0; iR<maxR; iR++) {
+            gtr += '[kijs-row' + iR + '] auto ';
+        }
+        gtr += '[kijs-row' + maxR + ']';
+
+        // Zeilen
+        for (let iC=0; iC<maxC; iC++) {
+            gtc += '[kijs-col' + iC + '] auto ';
+        }
+        gtc += '[kijs-col' + maxC + ']';
+
+        this._innerDom.style.gridTemplateRows = gtr;
+        this._innerDom.style.gridTemplateColumns = gtc;
+
+        // Spalten durchgehen
+        for (let iR=0; iR<matrix.length; iR++) {
+
+            // Zeilen
+            for (let iC=0; iC<matrix[iR].length; iC++) {
+
+                if (kijs.isInteger(matrix[iR][iC])) {
+                    let elId = matrix[iR][iC];
+                    let cS = this.colSizes[elId];
+                    let rS = this.rowSizes[elId];
+
+                    let cellContainer = document.createElement('div');
+                    cellContainer.style.gridRow = 'kijs-row' + iR + ' / kijs-row' + (iR+rS);
+                    cellContainer.style.gridColumn = 'kijs-col' + iC + ' / kijs-col' + (iC+cS);
+
+                    this.elements[elId].renderTo(cellContainer);
+                    this._innerDom.node.appendChild(cellContainer);
+                }
+            }
         }
     }
 

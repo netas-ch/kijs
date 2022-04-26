@@ -108,7 +108,7 @@ kijs.Number = class kijs_String {
             min = 0;
         }
         if (!kijs.isNumber(max)) {
-            max = Number.MAX_VALUE;
+            max = Number.MAX_SAFE_INTEGER;
         }
         min = Math.ceil(min);
         max = Math.floor(max);
