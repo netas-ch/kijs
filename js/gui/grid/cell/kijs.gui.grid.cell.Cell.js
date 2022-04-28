@@ -128,9 +128,9 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      * @returns {undefined}
      */
     loadFromDataRow() {
-        let vF = this._columnConfig.valueField;
-        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[vF])) {
-            this.setValue(this.row.dataRow[vF], true, false, false);
+        let dF = this._columnConfig.displayField;
+        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[dF])) {
+            this.setValue(this.row.dataRow[dF], true, false, false);
         }
     }
 
