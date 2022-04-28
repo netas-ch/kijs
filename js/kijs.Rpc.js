@@ -159,7 +159,8 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
    _receive(response, request, errorMsg) {
-        // Antworten für die einzelnen Requests durchgehen
+
+       // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<request.postData.length; i++) {
             let subResponse = kijs.isArray(response) ? response[i] : null;
 
