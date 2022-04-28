@@ -8,6 +8,7 @@ Combo
 - onChange mit oldVal
 Anderes
 - Maske weniger schwarz
+- File-Upload decodiert neu Pfad und Dateiname. !!! ANPASSUNG PHP NÖTIG (urldecode) !!!
 
 
 Version 1.2.3
