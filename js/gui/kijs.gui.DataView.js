@@ -608,9 +608,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            /*if (this._filterMatch(data[i])) {
+            if (this._filterMatch(data[i])) {
                 continue;
-            }*/
+            }
 
             const newEl = this.createElement(data[i], i);
             newEl.index = i;
@@ -674,13 +674,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.add(newElements);
     }
 
-
     /**
      * Prüft, ob ein Filter auf einen Record matcht
      * @param {Object} record
      * @returns {Boolean}
      */
-    /*_filterMatch(record) {
+    _filterMatch(record) {
         let filterMatch = false;
 
         kijs.Array.each(this.filters, function(filter) {
@@ -711,7 +710,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
 
         return filterMatch;
-    }*/
+    }
 
     /**
      * Selektiert ein Element und berücksichtigt dabei die selectType und die tasten shift und ctrl
