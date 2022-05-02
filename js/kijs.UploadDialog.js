@@ -341,8 +341,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
             filetype = file.type || 'application/octet-stream';
 
-        headers[this._filenameHeader] = filename;
-        headers[this._pathnameHeader] = filedir;
+        headers[this._filenameHeader] = encodeURIComponent(filename);
+        headers[this._pathnameHeader] = encodeURIComponent(filedir);
         headers['Content-Type'] = filetype;
 
         kijs.Ajax.request({

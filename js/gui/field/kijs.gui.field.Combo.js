@@ -410,7 +410,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 }
             }, this);
 
-            // Suchen
+            // Beginn suchen
             if (matchVal === '') {
                 kijs.Array.each(this._listViewEl.data, function(row) {
                     let caption = row[this.captionField];
@@ -423,6 +423,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         matchVal = caption;
                         return false;
                     }
+
                 }, this);
             }
 
@@ -437,12 +438,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
 
         } else {
+
             // Filter des Dropdowns zurücksetzen
             this._listViewEl.applyFilters(null);
         }
