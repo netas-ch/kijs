@@ -232,11 +232,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     close() {
 
         // Untermenu Schliessen
-        kijs.Array.each(this.elements, function(element) {
-            if (element instanceof kijs.gui.Button && element.menu) {
-                element.menu.close();
-            }
-        }, this);
+        this.closeSubMenus();
 
         // selber schliessen
         super.close();
@@ -258,6 +254,20 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         }
 
         topMostMenu.close();
+    }
+
+    /**
+     * Schliesst alle Untermenus
+     * @param {kijs.gui.Menu|kijs.gui.Button|null} exeption Instanz, welche nicht geschlossen werden soll.
+     * @returns {undefined}
+     */
+    closeSubMenus(exeption=null) {
+        // Untermenu Schliessen
+        kijs.Array.each(this.elements, function(element) {
+            if (element instanceof kijs.gui.Button && element.menu && element.menu !== exeption && element !== exeption) {
+                element.menu.close();
+            }
+        }, this);
     }
 
      /**
@@ -286,6 +296,22 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
         // löschen
         super.remove(removeElements);
+    }
+
+    /**
+     * Zeigt das Menu an
+     * @param {Number|null} x X-Koordinate (null, falls an target ausgerichtet werden soll)
+     * @param {Number|null} y Y-Koordinate (null, falls an target ausgerichtet werden soll)
+     * @returns {undefined}
+     */
+    show(x=null, y=null) {
+        super.show(x, y);
+
+        // Falls dieses Menu ein Untermenu ist: beim Öffnen
+        // alle andere Untermenus ausser dieses schliessen
+        if (this._button && this._button.parent instanceof kijs.gui.Menu) {
+            this._button.parent.closeSubMenus(this);
+        }
     }
 
     unrender(superCall) {
