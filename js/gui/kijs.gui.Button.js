@@ -20,6 +20,8 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._icon2El = new kijs.gui.Icon({ parent: this, cls:'kijs-icon2' });
 
+        this._menu = null;
+
         this._badgeDom = new kijs.gui.Dom({
             cls: 'kijs-badge',
             nodeTagName: 'span'
@@ -54,6 +56,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             icon2Cls: { target: 'iconCls', context: this._icon2El },
             icon2Color: { target: 'iconColor', context: this._icon2El },
             isDefault: { target: 'isDefault' },
+
+            menuElements: { target: 'menuElements', prio: 200 },
+            menuCloseOnClick: { target: 'menuCloseOnClick', prio: 201 },
+            menuDirection: { target: 'menuDirection', prio: 200 },
+            menuExpandOnHover: { target: 'menuExpandOnHover', prio: 200 },
 
             disabled: { prio: 100, target: 'disabled' }
         });
@@ -241,23 +248,43 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._icon2El.isEmpty && this._badgeDom.isEmpty; }
 
 
+    get menu() { return this._menu; }
+    set menu(val) {
+        if (!val instanceof kijs.gui.Menu) {
+            throw new kijs.Error(`invalid value for kijs.gui.Button::menu`);
+        }
+        this._menu = val;
+    }
 
-
-    // TODO: Instanz eines Menüs. Beim Klicken, wird dieses geöffnet
-        /*if (this.menu) {
-            if (kijs.isEmpty(this.menu.targetEl)) {
-                this.menu.targetEl = this;
-            }
-            this.on('click', function(e, el){
-                this.menu.show();
-            }, this);
-        }*/
-
+    set menuElements(val) { this._createMenu().add(val); }
+    set menuCloseOnClick(val) { this._createMenu().closeOnClick = val; }
+    set menuDirection(val) { this._createMenu().direction = val; }
+    set menuExpandOnHover(val) { this._createMenu().expandOnHover = val; }
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    /**
+     * Erstellt die Instanz vom Menu.
+     * @returns {kijs.gui.Menu}
+     */
+    _createMenu() {
+        if (!this._menu) {
+            this._menu = new kijs.gui.Menu({
+                parent: this,
+                button: this
+            });
+        }
+
+        if (!this.icon2Char) {
+            this.icon2Char = this._menu.getIconChar();
+        }
+
+        return this._menu;
+    }
+
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -307,6 +334,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._icon2El.unrender();
         this._captionDom.unrender();
         this._badgeDom.unrender();
+
+        if (this._menu) {
+            this._menu.unrender();
+        }
+
         super.unrender(true);
     }
 
@@ -336,11 +368,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         if (this._icon2El) {
             this._icon2El.destruct();
         }
+        if (this._menu) {
+            this._menu.destruct();
+        }
 
         // Variablen (Objekte/Arrays) leeren
         this._badgeDom = null;
         this._captionDom = null;
         this._iconEl = null;
+        this._menu = null;
 
         // Basisklasse entladen
         super.destruct(true);

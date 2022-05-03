@@ -29,10 +29,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             cls: 'kijs-grid-filter-reset'
         });
 
-        this._menuButton = new kijs.gui.MenuButton({
+        this._menuButton = new kijs.gui.Button({
             parent: this,
             icon2Char: '&#xf0b0', // fa-filter
-            elements: []
+            menuElements: []
         });
 
 
@@ -131,7 +131,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             on: {
                 click: function() {
                     this.reset();
-                    this._menuButton.menuCloseAll();
+                    this._menuButton.menu.close();
                 },
                 context: this
             }
@@ -141,7 +141,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             on: {
                 click: function() {
                     this.parent.reset();
-                    this._menuButton.menuCloseAll();
+                    this._menuButton.menu.close();
                 },
                 context: this
             }
@@ -161,7 +161,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._searchContainer.renderTo(this._dom.node);
         this._removeFilterIcon.renderTo(this._dom.node);
 
-        this._menuButton.elements = this._getMenuButtons();
+        this._menuButton.menu.add(this._getMenuButtons());
         this._menuButton.renderTo(this._removeFilterIcon.node);
 
         // breite

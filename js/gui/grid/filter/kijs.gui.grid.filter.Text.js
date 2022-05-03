@@ -109,7 +109,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     }
 
     _onCompareBtnClick(e) {
-        this._menuButton.menuCloseAll();
+        this._menuButton.menu.close();
 
         if (e.element.name === 'btn_compare_begin') {
             this._compare = 'begin';

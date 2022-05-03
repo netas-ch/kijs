@@ -457,6 +457,47 @@ kit.App = class kit_App {
                                         maxLength: 50,
                                         style: {marginBottom: '4px'}
                                     },
+                                    on: {
+                                        rightClick: function(e) {
+                                            e.nodeEvent.preventDefault();
+
+                                            let menu = new kijs.gui.Menu({
+                                                closeOnClick: true,
+                                                elements: [{
+                                                    caption:'Windows',
+                                                    iconChar: '&#xf17a',
+                                                    on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Windows!'); }}
+                                                },{
+                                                    caption:'Apple',
+                                                    iconChar: '&#xf179',
+                                                    on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Apple!'); }}
+                                                },{
+                                                    caption:'Weitere',
+                                                    iconChar: '&#xf055',
+                                                    menuElements: [{
+                                                        caption:'Linux',
+                                                        iconChar: '&#xf17c',
+                                                        on: {click:() => {
+                                                                kijs.gui.MsgBox.alert('You choose:', 'Linux!');
+                                                            }}
+                                                    },{
+                                                        caption:'Android',
+                                                        iconChar: '&#xf17b',
+                                                        on: {click:() => {
+                                                                kijs.gui.MsgBox.alert('You choose:', 'Android!');
+                                                            }}
+                                                    },{
+                                                        caption:'iOS',
+                                                        iconChar: '&#xf179',
+                                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'iOS!'); }}
+                                                    }]
+                                                }]
+                                            });
+                                            menu.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
+
+                                        },
+                                        context: this
+                                    },
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.field.Combo',
@@ -1184,19 +1225,19 @@ kit.App = class kit_App {
                                     },
                                     footerElements: [
                                         {
-                                            xtype: 'kijs.gui.MenuButton',
+                                            xtype: 'kijs.gui.Button',
                                             caption: 'Menü',
                                             iconChar: '&#xf135',
-                                            elements: [
+                                            menuElements: [
                                                 {
                                                     caption:'Hallo 1'
                                                 },{
                                                     caption:'Hallo 3',
                                                     iconChar: '&#xf135'
                                                 }, '-', {
-                                                    xtype: 'kijs.gui.MenuButton',
+                                                    xtype: 'kijs.gui.Button',
                                                     caption:'MULTI',
-                                                    elements: (function(){
+                                                    menuElements: (function(){
                                                         let steps=150, p = [];
                                                         for (let i=0; i<steps; i++) {
                                                             p.push({
@@ -1206,9 +1247,9 @@ kit.App = class kit_App {
                                                         return p;
                                                     })()
                                                 },{
-                                                    xtype: 'kijs.gui.MenuButton',
+                                                    xtype: 'kijs.gui.Button',
                                                     caption:'ENDLESS',
-                                                    elements: (function(){
+                                                    menuElements: (function(){
                                                         let steps=20, p = [{
                                                                 caption:'ÄTSCH NICHTS DA'
                                                             }];
@@ -1216,9 +1257,9 @@ kit.App = class kit_App {
                                                             p = [{
                                                                     caption: 'Stufe ' + i + ' von ' + steps
                                                                 },{
-                                                                    xtype: 'kijs.gui.MenuButton',
+                                                                    xtype: 'kijs.gui.Button',
                                                                     caption:'Nächste Stufe',
-                                                                    elements:p
+                                                                    menuElements:p
                                                                 }];
                                                         }
                                                         return p;

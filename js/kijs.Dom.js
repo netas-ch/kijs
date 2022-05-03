@@ -410,15 +410,13 @@ kijs.Dom = class kijs_Dom {
 
         switch (htmlDisplayType) {
             case 'code':
-                this.removeAllChildNodes(node);
-                node.appendChild(document.createTextNode(html));
+                node.textContent = html;
                 break;
 
             case 'text':
-                //node.textContent = html;
                 let d = document.createElement('div');
                 d.innerHTML = html;
-                node.innerHTML = d.textContent || d.innerText || '';
+                node.textContent = d.innerText || d.textContent || '';
                 d = null;
                 break;
 

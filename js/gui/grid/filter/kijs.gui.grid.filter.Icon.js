@@ -36,7 +36,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-        
+
         this.parent.grid.on('afterLoad', this._onAfterLoad, this);
     }
 
@@ -63,7 +63,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         }
         super.reset();
     }
-    
+
     // Private
     _checkIcons() {
         let icons = [];
@@ -107,7 +107,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         }
         return [icons, iconsCheck, dataCnt];
     }
-  
+
     // Events
 
     _onAfterLoad() {;
@@ -132,8 +132,8 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                     context: this
                 }
             });
-            this._menuButton.add(['-', this._checkboxGroup]);
-        
+            this._menuButton.menu.add(['-', this._checkboxGroup]);
+
         } else if (this._checkboxGroup && icons.length > 0 ) {
 
             // Daten hinzufügen
@@ -143,12 +143,12 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
             // CheckboxGroup entfernen
             } else {
-                this._menuButton.remove(['-', this._checkboxGroup]);
+                this._menuButton.menu.remove(['-', this._checkboxGroup]);
                 this._checkboxGroup = null;
             }
         }
     }
-    
+
     _onFilterChange() {
        this._applyToGrid();
     }
@@ -167,7 +167,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         super.render(true);
 
         this._searchField.renderTo(this._searchContainer.node);
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');

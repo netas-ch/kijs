@@ -33,7 +33,7 @@ kijs.Object = class kijs_Object {
 
             // fn und target ermitteln
             // -----------------------
-            let prio = Number.MIN_VALUE;
+            let prio = Number.MIN_SAFE_INTEGER;
             let fn = 'replace';
             let target = '_' + cfgKey;
             let context = object;

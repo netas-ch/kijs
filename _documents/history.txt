@@ -1,3 +1,15 @@
+Version 1.2.6
+================================================================================
+Änderungen
+----------
+ - kijs.gui.MenuButton entfernt. Es kann neu ein Menu in allen Buttons gemacht werden.
+    > !!! ANPASSUNG !!! kijs.gui.MenuButton mit kijs.gui.Button ersetzen, elements in menuElements verschieben
+
+Neue Klassen
+-------------
+ - kijs.gui.Menu für Kontextmenu und Dropdown-Menu
+
+
 Version 1.2.5
 ================================================================================
 Änderungen
@@ -8,6 +20,7 @@ Grid
 
 Anderes
  - kijs.keys entfernt, da keyCodes deprecated sind und nicht mehr verwendet werden sollten.
+
 
 Version 1.2.4
 ================================================================================

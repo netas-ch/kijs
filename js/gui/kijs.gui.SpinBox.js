@@ -239,9 +239,11 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
     /**
      * Zeigt die SpinBox an
+     * @param {Number|null} x X-Koordinate (null, falls an target ausgerichtet werden soll)
+     * @param {Number|null} y Y-Koordinate (null, falls an target ausgerichtet werden soll)
      * @returns {undefined}
      */
-    show() {
+    show(x=null, y=null) {
         if (this.isRendered) {
             return;
         }
@@ -255,8 +257,8 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._widthWorkaround();
 
         // Ausrichten
-        if (this._targetEl) {
-            this._adjustPositionToTarget(true);
+        if ((kijs.isNumber(x) && kijs.isNumber(y)) || this._targetEl) {
+            this._adjustPositionToTarget(x, y, true);
         }
 
         // allen übergeordneten Spinboxes mitteilen, dass beim Klick auf dieses Element
@@ -310,10 +312,12 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // PROTECTED
     /**
      * Richtet die SpinBox am Target aus
+     * @param {Number|null} [x=null]            // X-Koordinate
+     * @param {Number|null} [y=null]            // Y-Koordinate
      * @param {Boolean} [preventEvents=false]   // Das Auslösen des afterResize-Event verhindern?
      * @returns {undefined}
      */
-    _adjustPositionToTarget(preventEvents=false) {
+    _adjustPositionToTarget(x=null, y=null, preventEvents=false) {
         // afterResize-Event deaktivieren
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
@@ -323,7 +327,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             // Breite anpassen
             if ( (this._targetPos.indexOf('t') !== -1 || this._targetPos.indexOf('b') !== -1) &&
                     (this._ownPos.indexOf('t') !== -1 || this._ownPos.indexOf('b') !== -1) ) {
-                const width = this._targetEl.spinBoxWidth;
+                const width = this._targetEl ? this._targetEl.spinBoxWidth : 0;
                 switch (this._autoSize) {
                     case 'min': this.style.minWidth = width + 'px'; break;
                     case 'max': this.style.maxWidth = width + 'px'; break;
@@ -333,7 +337,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             // Höhe anpassen
             } else if ( (this._targetPos.indexOf('l') !== -1 || this._targetPos.indexOf('r') !== -1) &&
                     (this._ownPos.indexOf('l') !== -1 || this._ownPos.indexOf('r') !== -1) ) {
-                let height = this._targetEl.spinBoxHeight;
+                let height = this._targetEl ? this._targetEl.spinBoxHeight : 0;
                 switch (this._autoSize) {
                     case 'min': this.style.minHeight = height + 'px'; break;
                     case 'max': this.style.maxHeight = height + 'px'; break;
@@ -342,16 +346,31 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             }
         }
 
-        // Aurichten
-        const positions = this._dom.alignToTarget(
-            this.targetNode,
-            this._targetPos,
-            this._ownPos,
-            this._allowSwapX,
-            this._allowSwapY,
-            this._offsetX,
-            this._offsetY
-        );
+        // Aurichten an X, Y
+        let positions = null;
+        if (kijs.isNumber(x) && kijs.isNumber(y)) {
+            positions = this._dom.alignToRect(
+                {x: x, y: y, w: 0, h: 0},
+                this._targetPos,
+                this._ownPos,
+                this._allowSwapX,
+                this._allowSwapY,
+                this._offsetX,
+                this._offsetY
+            );
+
+        // Ausrichten an Node
+        } else {
+            positions = this._dom.alignToTarget(
+                this.targetNode,
+                this._targetPos,
+                this._ownPos,
+                this._allowSwapX,
+                this._allowSwapY,
+                this._offsetX,
+                this._offsetY
+            );
+        }
 
         // Je nach Position eine CSS-Klasse zuweisen
         let cls = '';

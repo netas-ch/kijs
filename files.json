@@ -38,7 +38,7 @@
    "js/gui/kijs.gui.Icon.js",
    "js/gui/kijs.gui.Button.js",
    "js/gui/kijs.gui.ButtonGroup.js",
-   "js/gui/kijs.gui.MenuButton.js",
+   "js/gui/kijs.gui.Menu.js",
 
    "js/gui/kijs.gui.Tree.js",
    "js/gui/kijs.gui.PanelBar.js",

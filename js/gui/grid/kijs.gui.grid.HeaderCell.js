@@ -38,16 +38,16 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._sortDom = new kijs.gui.Dom({nodeTagName:'span', cls:'kijs-sort', htmlDisplayType: 'code'});
 
         // DOM für Menu
-        this._menuButtonEl = new kijs.gui.MenuButton({
+        this._menuButtonEl = new kijs.gui.Button({
             parent: this,
-            elements: [{
+            menuElements: [{
                     name    : 'btn-sort-asc',
                     caption : kijs.getText('Aufsteigend sortieren'),
                     iconChar: '&#xf15d', // fa-sort-alpha-asc
                     on: {
                         click: function() {
                             this.header.grid.sort(this.columnConfig.valueField, 'ASC');
-                            this._menuButtonEl.menuCloseAll();
+                            this._menuButtonEl.menu.close();
                         },
                         context: this
                     }
@@ -58,7 +58,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     on: {
                         click: function() {
                             this.header.grid.sort(this.columnConfig.valueField, 'DESC');
-                            this._menuButtonEl.menuCloseAll();
+                            this._menuButtonEl.menu.close();
                         },
                         context: this
                     }
@@ -69,7 +69,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     on: {
                         click: function() {
                             (new kijs.gui.grid.ColumnWindow({parent: this})).show();
-                            this._menuButtonEl.menuCloseAll();
+                            this._menuButtonEl.menu.close();
                         },
                         context: this
                     }
@@ -80,7 +80,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                     on: {
                         click: function() {
                             this.parent.grid.filter.visible = !this.parent.grid.filter.visible;
-                            this._menuButtonEl.menuCloseAll();
+                            this._menuButtonEl.menu.close();
                         },
                         context: this
                     }
@@ -185,7 +185,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         let c = this._columnConfig.caption;
         this.setCaption(c, false);
 
-        this._menuButtonEl.spinbox.down('btn-filters').visible = !!this.parent.grid.filterable;
+        this._menuButtonEl.menu.down('btn-filters').visible = !!this.parent.grid.filterable;
     }
 
     // PROTECTED

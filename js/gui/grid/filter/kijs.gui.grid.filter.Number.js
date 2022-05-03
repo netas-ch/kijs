@@ -90,7 +90,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
     }
 
     _onCompareBtnClick(e) {
-        this._menuButton.menuCloseAll();
+        this._menuButton.menu.close();
 
         if (e.element.name === 'btn_compare_equal') {
             this._compare = 'equal';
