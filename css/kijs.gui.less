@@ -2725,17 +2725,14 @@ div.kijs-grid {
     .kijs-headercontainer {
         background-color: @grid-header-bkgrndColor;
 
-
         tr.kijs-grid-header td {
             display: flex;
             flex-direction: row;
             padding-right: 0;
 
-
             &.kijs-hidden {
                 display: none;
             }
-
 
             .kijs-caption {
                 flex: 1;
@@ -2757,6 +2754,11 @@ div.kijs-grid {
 
             &:hover .kijs-button {
                 visibility: visible;
+            }
+
+            span.kijs-tooltip-icon {
+                font-size: 11px;
+                margin: 1px 4px 0 0;
             }
 
             .kijs-splitter {

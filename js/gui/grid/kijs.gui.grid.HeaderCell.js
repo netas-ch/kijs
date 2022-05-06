@@ -37,6 +37,18 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._captionDom = new kijs.gui.Dom({nodeTagName:'span', htmlDisplayType: 'code'});
         this._sortDom = new kijs.gui.Dom({nodeTagName:'span', cls:'kijs-sort', htmlDisplayType: 'code'});
 
+        this._helpIconEl = null;
+        this._helpIconEl = new kijs.gui.Icon({
+            parent  : this,
+            iconChar: '&#xf29C',
+            iconCls : 'kijs-icon-help kijs-tooltip-icon',
+            visible : false,
+            tooltip : new kijs.gui.Tooltip({
+                cls: 'kijs-help',
+                followPointer: false
+            })
+        });
+
         // DOM für Menu
         this._menuButtonEl = new kijs.gui.MenuButton({
             parent: this,
@@ -107,7 +119,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             columnConfig: true,
-            sort: { target: 'sort' }
+            sort: { target: 'sort' },
+
+            helpIcon: { target: 'helpIcon' },
+            helpIconChar: { target: 'helpIconChar', context: this._helpIconEl },
+            helpIconCls: { target: 'helpIconCls', context: this._helpIconEl },
+            helpIconColor: { target: 'helpIconColor', context: this._helpIconEl },
+            helpText: { target: 'helpText' }
         });
 
         // Config anwenden
@@ -128,6 +146,66 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     set columnConfig(val) { this._columnConfig = val; }
 
     get header() { return this.parent; }
+
+    get helpIcon() { return this._helpIconEl; }
+    /**
+     * Icon zuweisen
+     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     */
+    set helpIcon(val) {
+        if (kijs.isEmpty(val)) {
+
+            // Icon zurücksetzen?
+            this._helpIconEl.iconChar = null;
+            this._helpIconEl.iconCls = null;
+            this._helpIconEl.iconColor = null;
+
+        } else if (val instanceof kijs.gui.Icon) {
+
+            // kijs.gui.Icon Instanz
+            this._helpIconEl.destruct();
+            this._helpIconEl = val;
+            if (this.isRendered) {
+                this.render();
+            }
+
+        } else if (kijs.isObject(val)) {
+
+            // Config Objekt
+            this._helpIconEl.applyConfig(val);
+            if (this.isRendered) {
+                this._helpIconEl.render();
+            }
+
+        } else {
+            throw new kijs.Error(`config "helpIcon" is not valid.`);
+        }
+    }
+
+    get helpIconChar() { return this._helpIconEl.iconChar; }
+    set helpIconChar(val) {
+        this._helpIconEl.iconChar = val;
+    }
+
+    get helpIconCls() { return this._helpIconEl.iconCls; }
+    set helpIconCls(val) {
+        this._helpIconEl.iconCls = val;
+    }
+
+    get helpIconColor() { return this._helpIconEl.iconColor; }
+    set helpIconColor(val) {
+        this._helpIconEl.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get helpText() { return this._helpIconEl.tooltip.html; }
+    set helpText(val) {
+        this._helpIconEl.tooltip.html = val;
+        this._helpIconEl.visible = !kijs.isEmpty(this._helpIconEl.tooltip.html);
+    }
+
     get index() {
         if (this.header) {
             return this.header.cells.indexOf(this);
@@ -182,8 +260,17 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
      * @returns {undefined}
      */
     loadFromColumnConfig() {
+
+        // Caption
         let c = this._columnConfig.caption;
         this.setCaption(c, false);
+
+        // Tooltip
+        if (this._columnConfig.tooltip) {
+            this.helpText = this._columnConfig.tooltip;
+        } else {
+            this.helpText = '';
+        }
 
         this._menuButtonEl.spinbox.down('btn-filters').visible = !!this.parent.grid.filterable;
     }
@@ -301,6 +388,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // caption dom
         this._captionDom.renderTo(this._captionContainerDom.node);
 
+        // Help icon rendern (kijs.gui.Icon)
+        this._helpIconEl.renderTo(this._dom.node);
+
         // sort dom
         this._sortDom.renderTo(this._captionContainerDom.node);
 
@@ -331,6 +421,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         this._captionDom.unrender();
         this._captionContainerDom.unrender();
+        this._helpIconEl.unrender();
         this._menuButtonEl.unrender();
         this._splitterDom.unrender();
 
@@ -359,6 +450,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._captionDom = null;
         this._menuButtonEl = null;
         this._splitterDom = null;
+
+        this._helpIconEl.destruct();
+        this._helpIconEl = null;
 
         // Basisklasse entladen
         super.destruct(true);
