@@ -82,7 +82,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
      loadFromDataRow() {
         super.loadFromDataRow();
 
-        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
+        if (this.row && this.row.dataRow && this.columnConfig.iconColorField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
            this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
            this._dom.style.color = this._iconColor;
         }

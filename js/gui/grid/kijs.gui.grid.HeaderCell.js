@@ -186,6 +186,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this.setCaption(c, false);
 
         this._menuButtonEl.menu.down('btn-filters').visible = !!this.parent.grid.filterable;
+        this._menuButtonEl.menu.down('btn-sort-asc').visible = !!this._columnConfig.sortable;
+        this._menuButtonEl.menu.down('btn-sort-desc').visible = !!this._columnConfig.sortable;
     }
 
     // PROTECTED
