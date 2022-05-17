@@ -22,6 +22,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._columnConfig = null;
         this._initialPos = 0;
         this._splitterMove = false;
+        this._sort = null;
 
         // drag events
         this._dom.nodeAttributeSet('draggable', false);
@@ -36,6 +37,18 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._captionContainerDom = new kijs.gui.Dom({cls:'kijs-caption'});
         this._captionDom = new kijs.gui.Dom({nodeTagName:'span', htmlDisplayType: 'code'});
         this._sortDom = new kijs.gui.Dom({nodeTagName:'span', cls:'kijs-sort', htmlDisplayType: 'code'});
+
+        this._helpIconEl = null;
+        this._helpIconEl = new kijs.gui.Icon({
+            parent  : this,
+            iconChar: '&#xf29C',
+            iconCls : 'kijs-icon-help kijs-tooltip-icon',
+            visible : false,
+            tooltip : new kijs.gui.Tooltip({
+                cls: 'kijs-help',
+                followPointer: false
+            })
+        });
 
         // DOM für Menu
         this._menuButtonEl = new kijs.gui.Button({
@@ -107,7 +120,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             columnConfig: true,
-            sort: { target: 'sort' }
+            sort: { target: 'sort' },
+
+            helpIcon: { target: 'helpIcon' },
+            helpIconChar: { target: 'iconChar', context: this._helpIconEl },
+            helpIconCls: { target: 'iconCls', context: this._helpIconEl },
+            helpIconColor: { target: 'iconColor', context: this._helpIconEl },
+            helpText: { target: 'helpText' }
         });
 
         // Config anwenden
@@ -128,6 +147,62 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     set columnConfig(val) { this._columnConfig = val; }
 
     get header() { return this.parent; }
+
+    get helpIcon() { return this._helpIconEl; }
+    /**
+     * Icon zuweisen
+     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     */
+    set helpIcon(val) {
+        if (kijs.isEmpty(val)) {
+
+            // Icon zurücksetzen?
+            this._helpIconEl.iconChar = null;
+            this._helpIconEl.iconCls = null;
+            this._helpIconEl.iconColor = null;
+
+        } else if (val instanceof kijs.gui.Icon) {
+
+            // kijs.gui.Icon Instanz
+            this._helpIconEl.destruct();
+            this._helpIconEl = val;
+            if (this.isRendered) {
+                this.render();
+            }
+
+        } else if (kijs.isObject(val)) {
+
+            // Config Objekt
+            this._helpIconEl.applyConfig(val);
+            if (this.isRendered) {
+                this._helpIconEl.render();
+            }
+
+        } else {
+            throw new kijs.Error(`config "helpIcon" is not valid.`);
+        }
+    }
+
+    get helpIconChar() { return this._helpIconEl.iconChar; }
+    set helpIconChar(val) { this._helpIconEl.iconChar = val; }
+
+    get helpIconCls() { return this._helpIconEl.iconCls; }
+    set helpIconCls(val) { this._helpIconEl.iconCls = val; }
+
+    get helpIconColor() { return this._helpIconEl.iconColor; }
+    set helpIconColor(val) {
+        this._helpIconEl.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
+    get helpText() { return this._helpIconEl.tooltip.html; }
+    set helpText(val) {
+        this._helpIconEl.tooltip.html = val;
+        this._helpIconEl.visible = !kijs.isEmpty(this._helpIconEl.tooltip.html);
+    }
+
     get index() {
         if (this.header) {
             return this.header.cells.indexOf(this);
@@ -135,21 +210,19 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         return null;
     }
 
-    get sort() {
-        if (this._sortDom.html === String.fromCharCode(0xf0dd)) {
-            return 'DESC';
-        } else if (this._sortDom.html === String.fromCharCode(0xF0de)) {
-            return 'ASC';
-        }
-        return null;
-    }
+    get sort() { return this._sort; }
     set sort(val) {
         if (val === 'DESC') {
-            this._sortDom.html = String.fromCharCode(0xf0dd); // fa-sort-desc
+            this._sortDom.html = String.fromCodePoint(0xf0d7); // fa-caret-desc
+            this._sort = val;
+
         } else if (val === 'ASC') {
-            this._sortDom.html = String.fromCharCode(0xF0de); // fa-sort-asc
+            this._sortDom.html = String.fromCodePoint(0xf0d8); // fa-caret-up
+            this._sort = val;
+
         } else {
             this._sortDom.html = '';
+            this._sort = null;
         }
     }
 
@@ -182,8 +255,17 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
      * @returns {undefined}
      */
     loadFromColumnConfig() {
+
+        // Caption
         let c = this._columnConfig.caption;
         this.setCaption(c, false);
+
+        // Tooltip
+        if (this._columnConfig.tooltip) {
+            this.helpText = this._columnConfig.tooltip;
+        } else {
+            this.helpText = '';
+        }
 
         this._menuButtonEl.menu.down('btn-filters').visible = !!this.parent.grid.filterable;
         this._menuButtonEl.menu.down('btn-sort-asc').visible = !!this._columnConfig.sortable;
@@ -306,6 +388,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // sort dom
         this._sortDom.renderTo(this._captionContainerDom.node);
 
+        // Help icon rendern (kijs.gui.Icon)
+        this._helpIconEl.renderTo(this._dom.node);
+
         // dropdown
         this._menuButtonEl.renderTo(this._dom.node);
 
@@ -333,6 +418,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         this._captionDom.unrender();
         this._captionContainerDom.unrender();
+        this._helpIconEl.unrender();
         this._menuButtonEl.unrender();
         this._splitterDom.unrender();
 
@@ -354,11 +440,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         this._captionDom.destruct();
         this._captionContainerDom.destruct();
+        this._helpIconEl.destruct();
         this._menuButtonEl.destruct();
         this._splitterDom.destruct();
 
         // Variablen (Objekte/Arrays) leeren
         this._captionDom = null;
+        this._helpIconEl = null;
         this._menuButtonEl = null;
         this._splitterDom = null;
 

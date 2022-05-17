@@ -58,6 +58,39 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
 
+    /**
+     * Setzt bei allen columns das richtige Sort-Icon
+     * @param {Array|Object} sort
+     * @returns {undefined}
+     */
+    setSortIcons(sort) {
+        if (kijs.isObject(sort) && sort.field && sort.direction) {
+            sort = [sort];
+        }
+
+        if (!kijs.isArray(sort)) {
+            return;
+        }
+
+        let sortedCells = [];
+        kijs.Array.each(this._cells, function(headerCell) {
+            kijs.Array.each(sort, function(srt) {
+                if (srt.field === headerCell.cell.columnConfig.displayField) {
+                    headerCell.cell.sort = srt.direction;
+                    sortedCells.push(headerCell.cell);
+                }
+            }, this);
+        }, this);
+
+        // icon von header, welche nicht sortiert wurden, entfernen
+        kijs.Array.each(this._cells, function(headerCell) {
+            if (!kijs.Array.contains(sortedCells, headerCell.cell)) {
+                headerCell.cell.sort = '';
+            }
+        });
+
+    }
+
     _createCells() {
         let newColumnConfigs = [];
 

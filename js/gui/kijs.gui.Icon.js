@@ -55,12 +55,12 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     }
 
     get iconChar() {
-            let chr = kijs.toString(this._dom.html);
-            if (chr.length === 1) {
-                return '&#x' + chr.codePointAt(0).toString(16);
-            }
-            return chr;
+        let chr = kijs.toString(this._dom.html);
+        if (chr.length === 1) {
+            return '&#x' + chr.codePointAt(0).toString(16);
         }
+        return chr;
+    }
     set iconChar(val) { this._dom.html = kijs.String.htmlentities_decode(val); }
 
     get iconCls() { return this._iconCls; }

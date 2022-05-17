@@ -33,6 +33,7 @@ Combo
 Anderes
 - Maske weniger schwarz
 - File-Upload decodiert neu Pfad und Dateiname. !!! ANPASSUNG PHP NÖTIG (urldecode) !!!
+- Tooltip für Tabellenspalten
 
 
 Version 1.2.3

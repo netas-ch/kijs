@@ -372,6 +372,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             hasPrimarys = this._primaryKeys.length > 0,
             multiPrimarys = this._primaryKeys.length > 1;
 
+        // keine Rows selektiert
+        if (!rows) {
+            return [];
+        }
+
+        // single type: Es kommt ein Objekt
         if (!kijs.isArray(rows)) {
             rows = [rows];
         }
@@ -753,6 +759,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             throw new kijs.Error('invalid value for sort direction');
         }
 
+        // entsprechende columnConfig finden
         let columnConfig = null;
         kijs.Array.each(this._columnConfigs, function(cC) {
             if (cC.valueField === field) {
@@ -995,9 +1002,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this._remoteDataTotal = args.start + response.rows.length;
         }
 
-        this.raiseEvent('afterLoad', response);
+        // Sortierungs-Icon in Header-Bar
+        this._header.setSortIcons(kijs.isObject(response.sort) ? response.sort : this._remoteSort);
 
         this._isLoading = false;
+
+        // event
+        this.raiseEvent('afterLoad', response);
     }
 
     _renderRows(offset=0) {

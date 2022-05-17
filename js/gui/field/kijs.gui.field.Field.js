@@ -136,7 +136,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             helpIconChar: { target: 'helpIconChar', context: this._helpIconEl },
             helpIconCls: { target: 'helpIconCls', context: this._helpIconEl },
             helpIconColor: { target: 'helpIconColor', context: this._helpIconEl },
-
             helpText: { target: 'helpText' },
 
             isDirty: { target: 'isDirty', prio: 1001 },
