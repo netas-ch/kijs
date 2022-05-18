@@ -107,7 +107,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         // Falls Filter noch nicht vorhanden, neue Filter erstellen.
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
             let filterConfig = columnConfig.filterConfig;
-            let constr = kijs.getObjectFromNamespace(filterConfig.xtype);
+            let constr = kijs.getClassFromXtype(filterConfig.xtype);
 
             if (!constr) {
                 throw new kijs.Error('invalid filter xtype for column ' + columnConfig.caption);

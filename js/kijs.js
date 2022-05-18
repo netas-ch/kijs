@@ -79,6 +79,26 @@ window.kijs = class kijs {
             return 0;
         }
     }
+    
+    /**
+     * Erstellt eine Klasse/Objekt aus einem Namespace (xtype, iconMap)
+     * @param {String} xtype    Beispiel: 'kijs.gui.Element'
+     * @returns {kijs.gui.Element|Object|null}
+     */
+    static getClassFromXtype(xtype) {
+        const parts = xtype.split('.');
+        let parent = window;
+        
+        for (let i=0; i<parts.length; i++) {
+            let part = parts[i];
+            if (!parent[part]) {
+                console.log(part);
+                return null;
+            }
+            parent = parent[part];
+        }
+        return parent;
+    }
 
     /**
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden

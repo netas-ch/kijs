@@ -313,7 +313,7 @@ kit.App = class kit_App {
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Neu',
-                                            iconChar: '&#xf055'
+                                            iconMap: 'kijs.iconMap.Fa.fa-circle-plus'
                                         },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'Duplizieren',

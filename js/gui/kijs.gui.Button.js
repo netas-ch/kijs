@@ -48,10 +48,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             icon: { target: 'icon' },
+            iconMap: { target: 'iconMap', context: this._iconEl },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             icon2: { target: 'icon2' },
+            icon2Map: { target: 'iconMap', context: this._icon2El },
             icon2Char: { target: 'iconChar', context: this._icon2El },
             icon2Cls: { target: 'iconCls', context: this._icon2El },
             icon2Color: { target: 'iconColor', context: this._icon2El },
@@ -171,6 +173,13 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             this.render();
         }
     }
+    
+    set iconMap(val) {
+        this._iconEl.iconMap = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
 
     get icon2() { return this._icon2El; }
@@ -228,6 +237,13 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     get icon2Color() { return this._icon2El.iconColor; }
     set icon2Color(val) {
         this._icon2El.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
+    set icon2Map(val) {
+        this._iconEl2.iconMap = val;
         if (this.isRendered) {
             this.render();
         }

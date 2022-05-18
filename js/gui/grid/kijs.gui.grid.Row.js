@@ -186,7 +186,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         // Falls cell noch nicht vorhanden, neue cell erstellen.
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
             let cellConfig = columnConfig.cellConfig;
-            let constr = kijs.getObjectFromNamespace(cellConfig.xtype);
+            let constr = kijs.getClassFromXtype(cellConfig.xtype);
 
             if (!constr) {
                 throw new kijs.Error('invalid cell xtype for column ' + columnConfig.caption);

@@ -846,7 +846,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Standard-Objekt übergeben: instanz von xType erstellen und config übergeben
         if (kijs.isObject(configOrInstance) && configOrInstance.constructor === window.Object) {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
-            let constructor = kijs.getObjectFromNamespace(configOrInstance.xtype);
+            let constructor = kijs.getClassFromXtype(configOrInstance.xtype);
             if (constructor === false) {
                 throw new kijs.Error('invalid xtype ' + configOrInstance.xtype);
             }

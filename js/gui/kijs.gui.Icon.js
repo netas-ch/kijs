@@ -27,6 +27,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },
+            iconMap: { target: 'iconMap' },
             iconChar: { target: 'iconChar' },
             iconCls: { target: 'iconCls' },
             iconColor: { target: 'iconColor' },
@@ -83,10 +84,26 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     get iconColor() { return this._dom.style.color; }
     set iconColor(val) { this._dom.style.color = val; }
 
-    get isEmpty() {
-        return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
+    set iconMap(val) {
+        if (kijs.isString(val)) {
+            const obj = kijs.getClassFromXtype(val);
+            if (kijs.isEmpty(obj)) {
+                throw new kijs.Error(`Unknown iconMap "${val}".`);
+            }
+            val = obj;
+        }
+        
+        if (kijs.isDefined(val.char)) {
+            this.iconChar = val.char;
+        }
+        if (kijs.isDefined(val.cls)) {
+            this.iconCls = val.cls;
+        }
+        if (kijs.isDefined(val.style)) {
+            Object.assign(this.style, val.style);
+        }
     }
-
+    
     get iconSize() { return this._iconSize; }
     set iconSize(val) {
         if (val && !kijs.isInteger(val)) {
@@ -114,5 +131,9 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
                 this.style.backgroundSize = val + 'px ' + val + 'px';
             }
         }
+    }
+    
+    get isEmpty() {
+        return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
     }
 };

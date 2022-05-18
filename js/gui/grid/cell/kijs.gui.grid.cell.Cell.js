@@ -137,7 +137,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     startCellEdit() {
         if (this._columnConfig.editorXtype) {
             // editor starten
-            let editor = kijs.getObjectFromNamespace(this._columnConfig.editorXtype);
+            let editor = kijs.getClassFromXtype(this._columnConfig.editorXtype);
 
             if (!editor) {
                 throw new kijs.Error('invalid xtype for cell editor');

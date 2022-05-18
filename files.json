@@ -25,6 +25,9 @@
   ],
 
   "gui":[
+   "js/iconMap/kijs.iconMap.js",
+   "js/iconMap/kijs.iconMap.Fa.js",
+   
    "js/gui/kijs.gui.js",
    "js/gui/kijs.gui.Dom.js",
    "js/gui/kijs.gui.Tooltip.js",

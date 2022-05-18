@@ -651,7 +651,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             }
 
             // Konstruktor ermitteln
-            const constr = kijs.gui.getClassFromXtype(obj.xtype);
+            const constr = kijs.getClassFromXtype(obj.xtype);
             if (!kijs.isFunction(constr)) {
                 throw new kijs.Error(`Unknown xtype "${obj.xtype}".`);
             }
