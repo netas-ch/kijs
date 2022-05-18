@@ -111,28 +111,6 @@ window.kijs = class kijs {
     }
 
     /**
-     * Gibt das Objekt/Funktion eines Namespaces zurück.
-     * Falls der Namespace nicht existiert wird false zurückgegeben.
-     * @param {String} name - Name des Namespace. Beispiel: 'kijs.gui.field'
-     * @returns {Function|Object|false}
-     */
-    static getObjectFromNamespace(name) {
-        const parts = name.split('.');
-        let parent = window;
-        let part;
-
-        for (let i=0; i<parts.length; i++) {
-            part = parts[i];
-            if (!parent[part]) {
-                return false;
-            }
-            parent = parent[part];
-        }
-
-        return parent;
-    }
-
-    /**
      * Text für Übersetzung zurückgeben
      * @param {String} key
      * @param {String} variant
