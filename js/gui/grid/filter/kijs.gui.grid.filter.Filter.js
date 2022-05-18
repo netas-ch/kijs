@@ -60,11 +60,14 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
     get columnConfig() { return this._columnConfig; }
     get filter() {
-        return {
+        let flt = {
             type: '',
-            valueField: this._columnConfig.valueField,
-            checkboxFilter: this.checkboxFilterValues
+            valueField: this._columnConfig.valueField
         };
+        if (this._checkboxFilterGroup) {
+            flt.checkboxFilter = this.checkboxFilterValues;
+        }
+        return flt;
     }
     get isFiltered() { return !!(this.checkboxFilterValues.length > 0); }
 

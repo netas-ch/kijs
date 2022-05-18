@@ -27,6 +27,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this._hideable = true;
         this._resizable = true;
         this._sortable = true;
+        this._tooltip = '';
         this._valueField = '';
         this._displayField = '';
         this._width = 100;
@@ -70,6 +71,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             hideable: true,
             resizable: true,
             sortable: true,
+            tooltip: true,
             valueField: true,
             displayField: true,
             width: true,
@@ -209,6 +211,12 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     set sortable(val) {
         this._sortable = !!val;
         this.raiseEvent('change', {columnConfig: this, sortable: !!val});
+    }
+
+    get tooltip() { return this._tooltip };
+    set tooltip(val) {
+        this._tooltip = val;
+        this.raiseEvent('change', {columnConfig: this, tooltip: val});
     }
 
     get displayField() { return this._displayField ? this._displayField : this._valueField; }

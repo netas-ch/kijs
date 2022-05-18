@@ -113,10 +113,12 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         if (kijs.isArray(val)) {
             kijs.Array.each(val, function(v) {
-                filters.push({
-                    field: this._valueField,
-                    value: v
-                });
+                if (!kijs.isEmpty(v)) {
+                    filters.push({
+                        field: this._valueField,
+                        value: v
+                    });
+                }
             }, this);
         } else if (!kijs.isEmpty(val)) {
             filters = {

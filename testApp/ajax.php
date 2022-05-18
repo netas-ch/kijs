@@ -277,7 +277,6 @@ foreach ($requests as $request) {
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Icon';
                     $col->caption = 'Icon';
-                    $col->valueField = 'vorname';
                     $col->iconCharField = 'icon';
                     $col->iconColorField = 'color';
                     $response->responseData->columns[] = $col;
@@ -295,6 +294,7 @@ foreach ($requests as $request) {
                     $col->caption = 'Combo';
                     $col->valueField = 'combovalue';
                     $col->displayField = 'combodisplay';
+                    $col->tooltip = 'Franz fährt im komplett verwahrlosten Taxi quer durch Bayern';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
                     $col->editorXtype = 'kijs.gui.field.Combo';
@@ -309,10 +309,11 @@ foreach ($requests as $request) {
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Number';
-                    $col->caption = 'Zahl 1';
+                    $col->caption = 'Zahl 1 NS';
                     $col->valueField = 'number1';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
+                    $col->sortable = false;
                     $response->responseData->columns[] = $col;
                     unset ($col);
 
@@ -375,7 +376,7 @@ foreach ($requests as $request) {
                     $row->number1 = $rwId*2;
                     $row->number2 = null;
                     $row->date = time() + (3600 * 24 * $rwId);
-                    $row->icon = '&#x' . dechex(61440 + $rwId);
+                    $row->icon = '&#x' . dechex(61440 + $rwId) . ';';
                     $row->color = '#' . dechex($rwId * 100);
                     $row->checkbox = $rwId % 2 === 0;
 
