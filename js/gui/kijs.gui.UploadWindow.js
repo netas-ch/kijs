@@ -37,7 +37,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             caption: kijs.getText('Upload'),
-            iconChar: '&#xf093',
+            iconMap: 'kijs.iconMap.Fa.upload',
             uploadDialog: null,
             closable: false,
             maximizable: false,
@@ -146,7 +146,6 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                 marginBottom: '10px'
             }
         });
-
 
         this._uploads.push({
             progressBar: progressBar,

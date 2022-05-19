@@ -215,12 +215,12 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
      * Gibt das Icon fürs öffen für die entsprechende Richtung zurück
      * @returns {String}
      */
-    getIconChar() {
+    getIconMap() {
         switch (this._direction) {
-            case 'left': return '&#xf104';
-            case 'right': return '&#xf105';
-            case 'up': return '&#xf106';
-            case 'down': return '&#xf107';
+            case 'left': return 'kijs.iconMap.Fa.angle-left';
+            case 'right': return 'kijs.iconMap.Fa.angle-right';
+            case 'up': return 'kijs.iconMap.Fa.angle-up';
+            case 'down': return 'kijs.iconMap.Fa.angle-down';
         }
         return '';
     }

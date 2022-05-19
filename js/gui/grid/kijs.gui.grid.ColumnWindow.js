@@ -21,7 +21,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             caption: 'Spalten',
-            iconChar: '&#xf0db', // fa-columns
+            iconMap: 'kijs.iconMap.Fa.table-columns',
             closable: true,
             maximizable: false,
             autoScroll: true,

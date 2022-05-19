@@ -110,10 +110,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             caption: caption,
             msg: msg,
             icon: {
-                iconChar: '&#xf06a',
-                style: {
-                    color: '#be6280'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-exclamation',
+                iconColor: '#be6280'
             }
         });
     }
@@ -133,10 +131,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             caption: caption,
             msg: msg,
             icon: {
-                iconChar: '&#xf05a',
-                style: {
-                    color: '#4398dd'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-info',
+                iconColor: '#4398dd'
             }
         });
     }
@@ -149,7 +145,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      *     msg = 'Hallo Welt!'
      *     iconChar: '',
      *     icon: {
-     *         iconChar: '&#xf071',
+     *         iconChar: 0xf071,
      *         style: {
      *             color: '#ff9900'
      *         }
@@ -180,7 +176,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         // CornerTip erstellen
         const tip = new kijs.gui.Panel({
             caption: config.caption,
-            iconChar: config.iconChar ? config.iconChar : '',
+            iconMap: config.iconMap ? config.iconMap : '',
             closable: true,
             shadow: true,
             elements: elements,
@@ -218,10 +214,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             caption: caption,
             msg: msg,
             icon: {
-                iconChar: '&#xf071',
-                style: {
-                    color: '#ff9900'
-                }
+                iconMap: 'kijs.iconMap.Fa.triangle-exclamation',
+                iconColor: '#ff9900'
             }
         });
     }

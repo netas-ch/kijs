@@ -38,17 +38,17 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._nodeDom = new kijs.gui.Dom({cls: 'kijs-node'});
         this._elementsDom = new kijs.gui.Dom({cls: 'kijs-expandcontainer'});
         this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treecaption', htmlDisplayType: 'code'});
-        this._expandIconDom = new kijs.gui.Dom({cls: 'kijs-expandicon'});
 
         this._iconEl = new kijs.gui.Icon();
+        this._expandIconEl = new kijs.gui.Icon({cls: 'kijs-expandicon', iconMap: 'kijs.iconMap.Fa.angle-right'});
         this._expandedIconEl = new kijs.gui.Icon({cls: 'kijs-expandedicon'});
-        this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon', iconCls: 'kijs-pulse', iconChar: '&#xf110'});
+        this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon', iconCls: 'kijs-pulse', iconMap: 'kijs.iconMap.Fa.spinner'});
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-tree');
 
         // Events
-        this._expandIconDom.on('click', this._onExpandClick, this);
+        this._expandIconEl.on('click', this._onExpandClick, this);
 
         this._iconEl.on('dblClick', this._onNodeDblClick, this);
         this._expandedIconEl.on('dblClick', this._onNodeDblClick, this);
@@ -69,7 +69,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             autoScroll: true,
           //  waitMaskTarget           : this,
           //  waitMaskTargetDomProperty: 'dom',
-            expandIconChar           : '&#xf105',
             folderIcon               : 'auto'
         });
 
@@ -95,17 +94,22 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             caption                   : { target: 'html', context: this._treeCaptionDom },
 
             // Pfeil-Icon im Baum
-            expandIconChar            : { target: 'expandIconChar' },
+            expandIconChar            : { target: 'iconChar', context: this._iconEl },
+            expandIconCls             : { target: 'iconCls', context: this._iconEl },
+            expandIconColor           : { target: 'iconColor', context: this._iconEl },
+            expandIconMap             : { target: 'iconMap', context: this._iconEl },
 
             // icon bei geschlossenem Baum
             iconChar                  : { target: 'iconChar', context: this._iconEl },
             iconCls                   : { target: 'iconCls', context: this._iconEl },
             iconColor                 : { target: 'iconColor', context: this._iconEl },
+            iconMap                   : { target: 'iconMap', context: this._iconEl },
 
             // icon bei offenen Baum
             expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl },
             expandedIconCls           : { target: 'iconCls', context: this._expandedIconEl },
             expandedIconColor         : { target: 'iconColor', context: this._expandedIconEl },
+            expandedMconMap           : { target: 'iconMap', context: this._expandedIconEl },
 
             // setzt das 'iconChar' und das 'expandedIconChar' auf ein Ordner-Symbol.
             folderIcon                : { target: 'folderIcon', prio: 10 },
@@ -157,9 +161,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
     }
 
-    get expandIconChar() { return kijs.String.htmlentities(this._expandIconDom.html); }
-    set expandIconChar(val) { this._expandIconDom.html = kijs.String.htmlentities_decode(val); }
-
     get facadeFnLoad() {
         if (this._facadeFnLoad) {
             return this._facadeFnLoad;
@@ -186,12 +187,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
 
         if (val) {
-            this._iconEl.iconChar = '&#xf114';
-            this._expandedIconEl.iconChar = '&#xf115';
+            this._iconEl.iconMap = 'kijs.iconMap.Fa.folder';
+            this._expandedIconEl.iconMap = 'kijs.iconMap.Fa.folder-open';
         }
     }
     get folderIcon() {
-        return (this._iconEl.iconChar === '&#xf114' && this._expandedIconEl.iconChar === '&#xf115');
+        return (this._iconEl.iconChar === kijs.iconMap.Fa.folder.char && this._expandedIconEl.iconChar === kijs.iconMap.Fa['folder-open'].char);
     }
 
     get leaf() { return this.elements.length === 0 && this._leaf; }
@@ -641,9 +642,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         // leerer ordner
         if (this.leaf) {
-            this._expandIconDom.clsAdd('kijs-leaf');
+            this._expandIconEl.dom.clsAdd('kijs-leaf');
         } else {
-            this._expandIconDom.clsRemove('kijs-leaf');
+            this._expandIconEl.dom.clsRemove('kijs-leaf');
         }
 
         // Event afterRender auslösen
@@ -665,7 +666,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         this._nodeDom.unrender();
         this._elementsDom.unrender();
-        this._expandIconDom.unrender();
+        this._expandIconEl.unrender();
         this._iconEl.unrender();
         this._expandedIconEl.unrender();
         this._spinnerIconEl.unrender();
@@ -700,7 +701,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                 el.renderTo(this._elementsDom.node);
             }, this);
 
-            this._expandIconDom.renderTo(this._nodeDom.node);
+            this._expandIconEl.renderTo(this._nodeDom.node);
             this._iconEl.renderTo(this._nodeDom.node);
             this._expandedIconEl.renderTo(this._nodeDom.node);
             this._spinnerIconEl.renderTo(this._nodeDom.node);
@@ -723,7 +724,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         this._nodeDom.destruct();
         this._elementsDom.destruct();
-        this._expandIconDom.destruct();
+        this._expandIconEl.destruct();
         this._iconEl.destruct();
         this._expandedIconEl.destruct();
         this._spinnerIconEl.destruct();

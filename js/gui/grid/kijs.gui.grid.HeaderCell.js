@@ -38,10 +38,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._captionDom = new kijs.gui.Dom({nodeTagName:'span', htmlDisplayType: 'code'});
         this._sortDom = new kijs.gui.Dom({nodeTagName:'span', cls:'kijs-sort', htmlDisplayType: 'code'});
 
-        this._helpIconEl = null;
         this._helpIconEl = new kijs.gui.Icon({
             parent  : this,
-            iconChar: '&#xf29C',
+            iconChar: 0xf29C,
             iconCls : 'kijs-icon-help kijs-tooltip-icon',
             visible : false,
             tooltip : new kijs.gui.Tooltip({
@@ -56,7 +55,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             menuElements: [{
                     name    : 'btn-sort-asc',
                     caption : kijs.getText('Aufsteigend sortieren'),
-                    iconChar: '&#xf15d', // fa-sort-alpha-asc
+                    iconMap: 'kijs.iconMap.Fa.arrow-down-a-z',
                     on: {
                         click: function() {
                             this.header.grid.sort(this.columnConfig.valueField, 'ASC');
@@ -67,7 +66,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                 },{
                     name    : 'btn-sort-desc',
                     caption : kijs.getText('Absteigend sortieren'),
-                    iconChar: '&#xf15e', // fa-sort-alpha-desc
+                    iconMap: 'kijs.iconMap.Fa.arrow-down-z-a',
                     on: {
                         click: function() {
                             this.header.grid.sort(this.columnConfig.valueField, 'DESC');
@@ -78,7 +77,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                 },{
                     name    : 'btn-columns',
                     caption : kijs.getText('Spalten') + '...',
-                    iconChar: '&#xf0db', // fa-columns
+                    iconMap: 'kijs.iconMap.Fa.table-columns',
                     on: {
                         click: function() {
                             (new kijs.gui.grid.ColumnWindow({parent: this})).show();
@@ -89,7 +88,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                 },{
                     name    : 'btn-filters',
                     caption : kijs.getText('Filter') + '...',
-                    iconChar: '&#xf0b0', // fa-filter
+                    iconMap: 'kijs.iconMap.Fa.filter',
                     on: {
                         click: function() {
                             this.parent.grid.filter.visible = !this.parent.grid.filter.visible;
@@ -126,6 +125,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             helpIconChar: { target: 'iconChar', context: this._helpIconEl },
             helpIconCls: { target: 'iconCls', context: this._helpIconEl },
             helpIconColor: { target: 'iconColor', context: this._helpIconEl },
+            helpIconMap: { target: 'iconMap', context: this._helpIconEl },
             helpText: { target: 'helpText' }
         });
 
@@ -190,12 +190,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     set helpIconCls(val) { this._helpIconEl.iconCls = val; }
 
     get helpIconColor() { return this._helpIconEl.iconColor; }
-    set helpIconColor(val) {
-        this._helpIconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set helpIconColor(val) { this._helpIconEl.iconColor = val; }
+
+    get helpIconMap() { return this._helpIconEl.iconMap; }
+    set helpIconMap(val) { this._helpIconEl.iconMap = val; }
 
     get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
@@ -213,11 +211,11 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     get sort() { return this._sort; }
     set sort(val) {
         if (val === 'DESC') {
-            this._sortDom.html = String.fromCodePoint(0xf0d7); // fa-caret-desc
+            this._sortDom.html = String.fromCodePoint(0xf0d7); // caret-down
             this._sort = val;
 
         } else if (val === 'ASC') {
-            this._sortDom.html = String.fromCodePoint(0xf0d8); // fa-caret-up
+            this._sortDom.html = String.fromCodePoint(0xf0d8); // caret-up
             this._sort = val;
 
         } else {

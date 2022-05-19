@@ -27,10 +27,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disabled: { target: 'disabled' },
-            iconMap: { target: 'iconMap' },
-            iconChar: { target: 'iconChar' },
-            iconCls: { target: 'iconCls' },
-            iconColor: { target: 'iconColor' },
+            iconMap: { target: 'iconMap', prio: 1 },
+            iconChar: { target: 'iconChar', prio: 2 },
+            iconCls: { target: 'iconCls', prio: 2 },
+            iconColor: { target: 'iconColor', prio: 2 },
             iconSize: { target: 'iconSize', prio: 2 }
         });
 
@@ -57,12 +57,22 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
     get iconChar() {
         let chr = kijs.toString(this._dom.html);
-        if (chr.length === 1) {
-            return '&#x' + chr.codePointAt(0).toString(16);
+        if (chr.length > 0) {
+            return chr.codePointAt(0);
         }
-        return chr;
+        return '';
     }
-    set iconChar(val) { this._dom.html = kijs.String.htmlentities_decode(val); }
+    set iconChar(val) {
+        if (kijs.isString(val) && val.substr(0,2) === '&#') {
+            console.warn('DEPRECATED: set iconChar with HTML entity instead of Number');
+            this._dom.html = kijs.String.htmlentities_decode(val);
+
+        } else if (!kijs.isInteger(val)) {
+            val = parseInt(val);
+        }
+
+        this._dom.html = kijs.isInteger(val) ? String.fromCodePoint(val) : '';
+    }
 
     get iconCls() { return this._iconCls; }
     set iconCls(val) {
@@ -85,25 +95,31 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     set iconColor(val) { this._dom.style.color = val; }
 
     set iconMap(val) {
-        if (kijs.isString(val)) {
+        if (kijs.isString(val) && val) {
             const obj = kijs.getClassFromXtype(val);
             if (kijs.isEmpty(obj)) {
                 throw new kijs.Error(`Unknown iconMap "${val}".`);
             }
             val = obj;
         }
-        
+
+        if (kijs.isEmpty(val)) {
+            this.iconChar = '';
+        }
         if (kijs.isDefined(val.char)) {
             this.iconChar = val.char;
         }
         if (kijs.isDefined(val.cls)) {
             this.iconCls = val.cls;
         }
+        if (kijs.isDefined(val.color)) {
+            this.iconColor = val.color;
+        }
         if (kijs.isDefined(val.style)) {
             Object.assign(this.style, val.style);
         }
     }
-    
+
     get iconSize() { return this._iconSize; }
     set iconSize(val) {
         if (val && !kijs.isInteger(val)) {
@@ -132,7 +148,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             }
         }
     }
-    
+
     get isEmpty() {
         return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
     }

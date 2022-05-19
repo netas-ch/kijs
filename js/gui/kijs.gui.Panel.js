@@ -67,6 +67,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             iconChar: { target: 'iconChar', context: this._headerBarEl },
             iconCls: { target: 'iconCls', context: this._headerBarEl },
             iconColor: { target: 'iconColor', context: this._headerBarEl },
+            iconMap: { target: 'iconMap', context: this._headerBarEl },
 
             // header
             headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
@@ -126,7 +127,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (val) {
             if (!this._closeButtonEl) {
                 this.closeButton = {
-                    iconChar: '&#xf00d'
+                    iconMap: 'kijs.iconMap.Fa.xmark'
                 };
             }
         } else {
@@ -197,7 +198,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (val) {
             if (!this._collapseButtonEl) {
                 this.collapseButton = {
-                    iconChar: this._getCollapseIconChar()
+                    iconMap: this._getCollapseIconMap()
                 };
             }
         } else {
@@ -307,7 +308,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (val) {
             if (!this._maximizeButtonEl) {
                 this.maximizeButton = new kijs.gui.Button({
-                    iconChar: this._getMaximizeIconChar()
+                    iconMap: this._getMaximizeIconMap()
                 });
             }
         } else {
@@ -468,7 +469,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // das richtige Icon in den Button
         if (this._collapseButtonEl) {
-            this._collapseButtonEl.iconChar = this._getCollapseIconChar();
+            this._collapseButtonEl.iconMap = this._getCollapseIconMap();
         }
 
         // Event werfen
@@ -495,7 +496,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // das richtige Icon in den Button
         if (this._collapseButtonEl) {
-            this._collapseButtonEl.iconChar = this._getCollapseIconChar();
+            this._collapseButtonEl.iconMap = this._getCollapseIconMap();
         }
 
         // Übergebene Grösse wiederherstellen
@@ -588,7 +589,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // das richtige Icon in den Button
         if (this._maximizeButtonEl) {
-            this._maximizeButtonEl.iconChar = this._getMaximizeIconChar();
+            this._maximizeButtonEl.iconMap = this._getMaximizeIconMap();
         }
 
         // afterResize-Event wieder aktivieren
@@ -680,7 +681,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // das richtige Icon in den Button
         if (this._maximizeButtonEl) {
-            this._maximizeButtonEl.iconChar = this._getMaximizeIconChar();
+            this._maximizeButtonEl.iconMap = this._getMaximizeIconMap();
         }
 
         // afterResize-Event wieder aktivieren
@@ -713,41 +714,35 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
      * Gibt das Icon für den Maximieren-Knopf zurück
      * @returns {String}
      */
-    _getMaximizeIconChar() {
-        let char = '';
-
+    _getMaximizeIconMap() {
         if (this.maximized) {
-            char = '&#xf2d2';   // restore
+            return 'kijs.iconMap.Fa.window-restore';
         } else {
-            char = '&#xf2d0';   // maximize
+            return 'kijs.iconMap.Fa.window-maximize';
         }
-
-        return char;
     }
 
     /**
      * Gibt das Icon für den Collapse-Knopf zurück
      * @returns {undefined}
      */
-    _getCollapseIconChar() {
-        let char = '';
-
+    _getCollapseIconMap() {
         if (this.collapsed) {
             switch (this._collapsible) {
-                case 'top': char = '&#xf0d7'; break;   // carret-down
-                case 'right': char = '&#xf0d9'; break; // carret-left
-                case 'bottom': char = '&#xf0d8'; break;// carret-up
-                case 'left': char = '&#xf0da'; break;  // carret-right
+                case 'top': return 'kijs.iconMap.Fa.caret-down';
+                case 'right': return 'kijs.iconMap.Fa.caret-left';
+                case 'bottom': return 'kijs.iconMap.Fa.caret-up';
+                case 'left': return 'kijs.iconMap.Fa.caret-right';
             }
         } else {
             switch (this._collapsible) {
-                case 'top': char = '&#xf0d8'; break;   // carret-up
-                case 'right': char = '&#xf0da'; break; // carret-right
-                case 'bottom': char = '&#xf0d7'; break;// carret-down
-                case 'left': char = '&#xf0d9'; break;  // carret-left
+                case 'top': return 'kijs.iconMap.Fa.caret-up';
+                case 'right': return 'kijs.iconMap.Fa.caret-right';
+                case 'bottom': return 'kijs.iconMap.Fa.caret-down';
+                case 'left': return 'kijs.iconMap.Fa.caret-left';
             }
         }
-        return char;
+        return '';
     }
 
     // LISTENERS

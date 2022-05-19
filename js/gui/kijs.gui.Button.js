@@ -151,36 +151,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) {
-        this._iconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconChar(val) { this._iconEl.iconChar = val; }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) {
-        this._iconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconCls(val) { this._iconEl.iconCls = val; }
 
     get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) {
-        this._iconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
-    
-    set iconMap(val) {
-        this._iconEl.iconMap = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconColor(val) { this._iconEl.iconColor = val; }
 
+    set iconMap(val) { this._iconEl.iconMap = val; }
 
     get icon2() { return this._icon2El; }
     /**
@@ -219,35 +198,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
     get icon2Char() { return this._icon2El.iconChar; }
-    set icon2Char(val) {
-        this._icon2El.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set icon2Char(val) { this._icon2El.iconChar = val; }
 
     get icon2Cls() { return this._icon2El.iconCls; }
-    set icon2Cls(val) {
-        this._icon2El.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set icon2Cls(val) { this._icon2El.iconCls = val; }
 
     get icon2Color() { return this._icon2El.iconColor; }
-    set icon2Color(val) {
-        this._icon2El.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
-    
-    set icon2Map(val) {
-        this._iconEl2.iconMap = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set icon2Color(val) { this._icon2El.iconColor = val; }
+
+    set icon2Map(val) { this._icon2El.iconMap = val; }
 
     get isDefault() {
         return this._dom.clsHas('kijs-default');
@@ -295,7 +254,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
 
         if (!this.icon2Char) {
-            this.icon2Char = this._menu.getIconChar();
+            this.icon2Map = this._menu.getIconMap();
         }
 
         return this._menu;

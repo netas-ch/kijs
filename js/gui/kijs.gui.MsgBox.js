@@ -58,10 +58,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             fn: fn,
             context: context,
             icon: {
-                iconChar: '&#xf059',
-                style: {
-                    color: '#4398dd'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-question',
+                iconColor: '#4398dd'
             },
             buttons: [
                 {
@@ -95,10 +93,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             fn: fn,
             context: context,
             icon: {
-                iconChar: '&#xf06a',
-                style: {
-                    color: '#be6280'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-exclamation',
+                iconColor: '#be6280'
             },
             buttons: [
                 {
@@ -130,10 +126,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             fn: fn,
             context: context,
             icon: {
-                iconChar: '&#xf05a',
-                style: {
-                    color: '#4398dd'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-info',
+                iconColor: '#4398dd'
             },
             buttons: [
                 {
@@ -163,7 +157,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         this.show({
             caption: caption,
             msg: msg,
-            
+
             closable: true,
             fieldXtype: 'kijs.gui.field.Text',
             label: label,
@@ -172,10 +166,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             fn: fn,
             context: context,
             icon: {
-                iconChar: '&#xf059',
-                style: {
-                    color: '#4398dd'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-question',
+                iconColor: '#4398dd'
             },
             buttons: [
                 {
@@ -198,7 +190,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *     msg: 'Hallo Welt!',
      *
      *     closable: true, // Soll das Fenster ein X zum Schliessen haben?
-     *     
+     *
      *     // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
      *     fieldXtype: 'kijs.gui.field.Text',
      *     label: 'Wert',
@@ -208,9 +200,9 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *         alert('Es wurde geklickt auf: ' + e.btn);
      *     },
      *     context: this,
-     *     iconChar: '',
+     *     iconMap: '',
      *     icon: {
-     *         iconChar: '&#xf071',
+     *         iconMap: 'kijs.iconMap.Fa.circle-question',
      *         style: {
      *             color: '#ff9900'
      *         }
@@ -327,7 +319,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         // Fenster erstellen
         const win = new kijs.gui.Window({
             caption: config.caption,
-            iconChar: config.iconChar ? config.iconChar : '',
+            iconMap: config.iconMap ? config.iconMap : '',
             closable: config.hasOwnProperty('closable') ? !!config.closable : true,
             collapsible: false,
             resizable: false,
@@ -371,10 +363,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             fn: fn,
             context: context,
             icon: {
-                iconChar: '&#xf071',
-                style: {
-                    color: '#ff9900'
-                }
+                iconMap: 'kijs.iconMap.Fa.circle-exclamation',
+                iconColor: '#ff9900'
             },
             buttons: [
                 {

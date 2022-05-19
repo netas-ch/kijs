@@ -36,7 +36,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // HeaderBar mit Buttons Previous und Next
         this._previousBtn = new kijs.gui.Button({
-            iconChar: '&#xf137', // fa-chevron-circle-left
+            iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
             on: {
                 click: this._onPreviousBtnClick,
                 context: this
@@ -45,7 +45,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._previousBtn.dom.nodeAttributeSet('tabIndex', -1);
 
         this._nextBtn = new kijs.gui.Button({
-            iconChar: '&#xf138', // fa-chevron-circle-right
+            iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
             on: {
                 click: this._onNextBtnClick,
                 context: this

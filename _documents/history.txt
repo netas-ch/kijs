@@ -4,6 +4,8 @@ Version 1.2.6
 ----------
  - kijs.gui.MenuButton entfernt. Es kann neu ein Menu in allen Buttons gemacht werden.
     > !!! ANPASSUNG !!! kijs.gui.MenuButton mit kijs.gui.Button ersetzen, elements in menuElements verschieben
+ - iconChar: Neu sollte nicht mehr das HTML-Entity angegeben werden, sondern der Hex-Wert als Zahl.
+    > FA-Icons sollten neu mit iconMap: 'kijs.iconMap.Fa.icon-name-hier' eingebunden werden.
 
 Neue Klassen
 -------------

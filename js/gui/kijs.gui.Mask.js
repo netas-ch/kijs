@@ -49,6 +49,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
+            iconMap: { target: 'iconMap', context: this._iconEl },
             target: { target: 'target' }, // kijs.gui.Element oder body
             text: { target: 'html', context: this._textEl },
             targetDomProperty: true
@@ -66,11 +67,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get displayWaitIcon() {
-        return this._iconEl.iconChar === '&#xf110';
+        return this._iconEl.iconChar === kijs.iconMap.Fa.spinner.char;
     }
     set displayWaitIcon(val) {
         if (val) {
-            this.iconChar = '&#xf110';
+            this.iconMap = 'kijs.iconMap.Fa.spinner';
             this._iconEl.dom.clsAdd('kijs-pulse');
         } else {
             this.iconChar = null;
@@ -114,28 +115,16 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) {
-        this._iconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconChar(val) { this._iconEl.iconChar = val; }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) {
-        this._iconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconCls(val) { this._iconEl.iconCls = val; }
 
     get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) {
-        this._iconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconColor(val) { this._iconEl.iconColor = val; }
+
+    get iconMap() { return this._iconEl.iconMap; }
+    set iconMap(val) { this._iconEl.iconMap = val; }
 
     // overwrite
     get isEmpty() { return this._iconEl.isEmpty; }

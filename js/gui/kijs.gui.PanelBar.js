@@ -39,6 +39,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
+            iconMap: { target: 'iconMap', context: this._iconEl },
 
             elementsLeft: { fn: 'function', target: this._containerLeftEl.add, context: this._containerLeftEl },
             elementsRight: { fn: 'function', target: this._containerRightEl.add, context: this._containerRightEl }
@@ -105,28 +106,16 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) {
-        this._iconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconChar(val) { this._iconEl.iconChar = val; }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) {
-        this._iconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconCls(val) { this._iconEl.iconCls = val; }
 
     get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) {
-        this._iconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconColor(val) { this._iconEl.iconColor = val; }
+
+    get iconMap() { return this._iconEl.iconMap; }
+    set iconMap(val) { this._iconEl.iconMap = val; }
 
     // overwrite
     get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
