@@ -82,7 +82,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
             ['-',{
                 name: 'btn_compare_begin',
                 caption : kijs.getText('Feldanfang'),
-                iconChar: this._compare === 'begin' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                iconMap: this._compare === 'begin' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
                     click: this._onCompareBtnClick,
                     context: this
@@ -90,7 +90,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
             },{
                 caption : kijs.getText('Beliebiger Teil'),
                 name: 'btn_compare_part',
-                iconChar: this._compare === 'part' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                iconMap: this._compare === 'part' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
                     click: this._onCompareBtnClick,
                     context: this
@@ -98,7 +98,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
             },{
                 caption : kijs.getText('Ganzes Feld'),
                 name: 'btn_compare_full',
-                iconChar: this._compare === 'full' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+                iconMap: this._compare === 'full' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
                     click: this._onCompareBtnClick,
                     context: this
@@ -121,9 +121,9 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
         kijs.Array.each(e.element.parent.elements, function(element) {
             if (element.name === e.element.name) {
-                element.iconChar = '&#xf046';
+                element.iconMap = 'kijs.iconMap.Fa.square-check';
             } else if (kijs.Array.contains(['btn_compare_begin', 'btn_compare_part', 'btn_compare_full'], element.name)) {
-                element.iconChar = '&#xf096';
+                element.iconMap = 'kijs.iconMap.Fa.square';
             }
         });
     }

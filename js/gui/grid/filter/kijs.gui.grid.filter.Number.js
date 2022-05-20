@@ -57,7 +57,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_equal',
             caption : kijs.getText('Gleich'),
-            iconChar: this._compare === 'equal' ? '&#xf046' : '&#xf096', //  fa-check-square-o / fa-square-o
+            iconMap: this._compare === 'equal' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -65,7 +65,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             name: 'btn_compare_unequal',
             caption : kijs.getText('Ungleich'),
-            iconChar: this._compare === 'unequal' ? '&#xf046' : '&#xf096', // fa-square-o
+            iconMap: this._compare === 'unequal' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -73,7 +73,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             caption : kijs.getText('Kleiner als'),
             name: 'btn_compare_smaller',
-            iconChar: this._compare === 'smaller' ? '&#xf046' : '&#xf096', // fa-square-o
+            iconMap: this._compare === 'smaller' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -81,7 +81,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         },{
             caption : kijs.getText('Grösser als'),
             name: 'btn_compare_bigger',
-            iconChar: this._compare === 'bigger' ? '&#xf046' : '&#xf096', // fa-square-o
+            iconMap: this._compare === 'bigger' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this._onCompareBtnClick,
                 context: this
@@ -104,9 +104,9 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
         kijs.Array.each(e.element.parent.elements, function(element) {
             if (element.name === e.element.name) {
-                element.iconChar = '&#xf046';
+                element.iconMap = 'kijs.iconMap.Fa.square-check';
             } else if (kijs.Array.contains(['btn_compare_equal', 'btn_compare_unequal', 'btn_compare_smaller', 'btn_compare_bigger'], element.name)) {
-                element.iconChar = '&#xf096';
+                element.iconMap = 'kijs.iconMap.Fa.square';
             }
         });
     }

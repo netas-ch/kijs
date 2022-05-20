@@ -62,9 +62,9 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
     _applyToGrid() {
         if (this._compare === 'checked') {
-            this._searchContainer.html = String.fromCharCode(0xf046);
+            this._searchContainer.html = String.fromCharCode(kijs.iconMap.Fa['square-check'].char);
         } else if (this._compare === 'unchecked') {
-            this._searchContainer.html = String.fromCharCode(0xf096);
+            this._searchContainer.html = String.fromCharCode(kijs.iconMap.Fa['square'].char);
         } else {
             this._searchContainer.html = '';
         }
@@ -77,7 +77,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_checked',
             caption : kijs.getText('Alle angewählten'),
-            iconChar: '&#xf096', //  fa-square-o
+            iconMap: 'kijs.iconMap.Fa.square-check', //  fa-square-o
             on: {
                 click: this._onFilterChange,
                 context: this
@@ -85,7 +85,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         },{
             caption : kijs.getText('Alle nicht angewählten'),
             name: 'btn_compare_unchecked',
-            iconChar: '&#xf096', // fa-square-o
+            iconMap: 'kijs.iconMap.Fa.square-check', // fa-square-o
             on: {
                 click: this._onFilterChange,
                 context: this
@@ -102,9 +102,9 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
         kijs.Array.each(e.element.parent.elements, function(element) {
             if (element.name === e.element.name) {
-                element.iconChar = '&#xf046';
+                element.iconMap = 'kijs.iconMap.Fa.square-check';
             } else if (kijs.Array.contains(['btn_compare_checked', 'btn_compare_unchecked'], element.name)) {
-                element.iconChar = '&#xf096';
+                element.iconMap = 'kijs.iconMap.Fa.square';
             }
         });
 

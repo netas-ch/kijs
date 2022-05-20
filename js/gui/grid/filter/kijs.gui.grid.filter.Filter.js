@@ -31,7 +31,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
         this._menuButton = new kijs.gui.Button({
             parent: this,
-            icon2Char: '&#xf0b0', // fa-filter
+            icon2Map: 'kijs.iconMap.Fa.filter', // fa-filter
             menuElements: []
         });
 
@@ -130,7 +130,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     _getDefaultMenuButtons() {
         return [{
             caption : kijs.getText('Filter löschen'),
-            iconChar: '&#xf00d', // fa-times
+            iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
             on: {
                 click: function() {
                     this.reset();
@@ -140,7 +140,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             }
         },{
             caption : kijs.getText('Alle Filter löschen'),
-            iconChar: '&#xf00d', // fa-times
+            iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
             on: {
                 click: function() {
                     this.parent.reset();
