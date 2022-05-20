@@ -106,15 +106,20 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
     _setDomHtml(value) {
         this._originalIcon = value;
 
-        if (kijs.isInteger(value)){
-            value = String.fromCodePoint(value);
+        if (kijs.isString(value) && value.substr(0,2) === '&#') {
+            value = kijs.String.htmlentities_decode(value).codePointAt(0);
+        }
 
-        } else if (kijs.isString(value)) {
-            value = kijs.String.htmlentities_decode(value);
+        if (kijs.isString(value) && parseInt(value) !== Number.NaN) {
+            value = parseInt(value);
+        }
+
+        if (!kijs.isNumber(value)) {
+            value = null;
         }
 
         this._icon = value;
-        this._dom.html = this._icon;
+        this._dom.html = kijs.isInteger(value) ? String.fromCodePoint(value) : '';
     }
 
     /**

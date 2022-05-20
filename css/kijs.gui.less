@@ -773,7 +773,7 @@ div.kijs-resizer-overlay {
    ****************** */
 span.kijs-icon {
     display: inline-block;
-    font: normal normal normal 16px/1 FontAwesome;
+    font: normal normal normal 16px/1 'Font Awesome 6 Free';
     background-repeat: no-repeat;
     background-position: center center;
 
@@ -1429,7 +1429,7 @@ div.kijs-listview {
 
             &:before {
                 display: inline-block;
-                font: normal normal normal 15px/1 FontAwesome;
+                font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f096';
                 min-width: 15px;
                 margin-right: 2px;
@@ -1438,6 +1438,10 @@ div.kijs-listview {
             &.kijs-selected:before {
                 content: '\f046';
             }
+
+            > div.kijs-container-inner {
+                display: inline-block;
+            }
         }
 
         &.kijs-display-options {
@@ -1445,7 +1449,7 @@ div.kijs-listview {
 
             &:before {
                 display: inline-block;
-                font: normal normal normal 15px/1 FontAwesome;
+                font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f10c';
                 min-width: 15px;
                 margin-right: 2px;
@@ -1454,22 +1458,27 @@ div.kijs-listview {
             &.kijs-selected:before {
                 content: '\f05d';
             }
+
+            > div.kijs-container-inner {
+                display: inline-block;
+            }
         }
 
-        > .kijs-icon {
-            margin-right: 4px;
-        }
+        > .kijs-container-inner {
 
-        > .kijs-caption {
-            font-family: @default-fontFamily;
-            font-size: @item-fontSize;
-            line-height: 15px;
-            vertical-align: top;
-            color: @item-fontColor;
-        }
+            > .kijs-icon {
+                margin-right: 4px;
+            }
 
-        > div > .value {
-            display: inline-block;
+            > .kijs-caption {
+                font-family: @default-fontFamily;
+                font-size: @item-fontSize;
+                line-height: 15px;
+                color: @item-fontColor;
+            }
+            > div > .value {
+                display: inline-block;
+            }
         }
     }
 
@@ -2721,7 +2730,7 @@ div.kijs-grid {
 
             &.kijs-grid-cell-checkbox {
                 text-align: center;
-                font-family: FontAwesome;
+                font-family: 'Font Awesome 6 Free';
                 font-size: 14px;
                 padding: 2px 0 0 0;
             }
@@ -2734,7 +2743,7 @@ div.kijs-grid {
 
             &.kijs-grid-cell-icon {
                 text-align: center;
-                font-family: FontAwesome;
+                font-family: 'Font Awesome 6 Free';
                 font-size: 14px;
                 padding: 2px 0 0 0;
             }
@@ -2834,7 +2843,7 @@ div.kijs-grid {
 
             span.kijs-sort {
                 color: #555;
-                font-family: FontAwesome;
+                font-family: 'Font Awesome 6 Free';
                 padding-left: 5px;
             }
 
@@ -2886,7 +2895,7 @@ div.kijs-grid {
                 }
 
                 div.kijs-icon {
-                    font-family: FontAwesome;
+                    font-family: 'Font Awesome 6 Free';
                     text-align: center;
                     font-size: 14px;
                     padding: 4px 0 4px 18px;

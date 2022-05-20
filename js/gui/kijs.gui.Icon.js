@@ -65,7 +65,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     set iconChar(val) {
         if (kijs.isString(val) && val.substr(0,2) === '&#') {
             console.warn('DEPRECATED: set iconChar with HTML entity instead of Number');
-            this._dom.html = kijs.String.htmlentities_decode(val);
+            val = kijs.String.htmlentities_decode(val).codePointAt(0);
 
         } else if (!kijs.isInteger(val)) {
             val = parseInt(val);

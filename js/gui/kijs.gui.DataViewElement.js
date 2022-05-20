@@ -3,7 +3,7 @@
 // --------------------------------------------------------------
 // kijs.gui.DataViewElement
 // --------------------------------------------------------------
-kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Element {
+kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -16,6 +16,7 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Eleme
         this._index = null;
         this._selected = false;
 
+        this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataviewelement');
         this._dom.htmlDisplayType = 'html';
 

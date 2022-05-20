@@ -18,6 +18,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._iconCharField = null;
         this._iconClsField = null;
         this._iconColorField = null;
+        this._iconMapField = null;
         this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
@@ -37,6 +38,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             iconCharField: true,
             iconClsField: true,
             iconColorField: true,
+            iconMapField: true,
             showCheckBoxes: true,
             tooltipField: true,
             valueField: true,
@@ -75,6 +77,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
+
+    get iconMapField() { return this._iconMapField; }
+    set iconMapField(val) { this._iconMapField = val; }
 
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
@@ -137,28 +142,35 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     createElement(dataRow, index) {
         let html = '';
 
-        // Icon/Color
-        html += '<span class="kijs-icon';
-        if (!kijs.isEmpty(this._iconClsField) && !kijs.isEmpty(dataRow[this._iconClsField])) {
-            html += ' ' + dataRow[this._iconClsField];
-        }
-        html += '"';
+        let iconArgs = {parent: this};
 
+        // Icon/Cls
+        if (!kijs.isEmpty(this._iconClsField) && !kijs.isEmpty(dataRow[this._iconClsField])) {
+            iconArgs.iconCls = dataRow[this._iconClsField];
+        }
         if (!kijs.isEmpty(this._iconColorField) && !kijs.isEmpty(dataRow[this._iconColorField])) {
-            html += ' style="color:' + dataRow[this._iconColorField] + '"';
+            iconArgs.iconColor = dataRow[this._iconColorField];
         }
-        html += '>';
         if (!kijs.isEmpty(this._iconCharField) && !kijs.isEmpty(dataRow[this._iconCharField])) {
-            html += dataRow[this._iconCharField];
+            iconArgs.iconChar = dataRow[this._iconCharField];
         }
-        html += '</span>';
+        if (!kijs.isEmpty(this._iconMapField) && !kijs.isEmpty(dataRow[this._iconMapField])) {
+            iconArgs.iconMap = dataRow[this._iconMapField];
+        }
+
+        let icon = new kijs.gui.Icon(iconArgs);
 
         // Caption
-        html += '<span class="kijs-caption">';
+        let caption = '';
         if (!kijs.isEmpty(this._captionField) && !kijs.isEmpty(dataRow[this._captionField])) {
-            html += dataRow[this._captionField];
+            caption = dataRow[this._captionField];
         }
-        html += '</span>';
+        let captionDom = new kijs.gui.Element({
+            htmlDisplayType: 'code',
+            nodeTagName: 'span',
+            html: caption,
+            cls: 'kijs-caption'
+        });
 
         // Tooltip
         let tooltip = '';
@@ -184,7 +196,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         let dve = new kijs.gui.DataViewElement({
             dataRow: dataRow,
-            html: html,
+            elements: [icon, captionDom],
             tooltip: tooltip,
             cls: cls
         });

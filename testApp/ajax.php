@@ -39,12 +39,12 @@ foreach ($requests as $request) {
             try {
                 $rows = array();
 
-                $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconChar' => '&#xf111');
-                $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconChar' => '&#xf111');
-                $rows[] = array('Bez' => 'blau', 'color' => '#00f', 'iconChar' => '&#xf111');
-                $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconChar' => '&#xf111');
-                $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconChar' => '&#xf111');
-                $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconChar' => '&#xf111');
+                $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'blau', 'color' => '#00f', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconChar' => 0xf111);
                 $response->responseData->rows = $rows;
 
                 //sleep(1);
