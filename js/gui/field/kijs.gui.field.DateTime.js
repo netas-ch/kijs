@@ -47,6 +47,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             on: {
                 change: this._onInputDomChange,
                 input: this._onInputDomInput,
+                dblClick: this._onInputDomDblClick,
                 context: this
             }
         });
@@ -99,7 +100,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         Object.assign(this._defaultConfig, {
             autocomplete: false,
             spinIconVisible: true,
-            spinIconChar: '&#xf073'             // calendar
+            spinIconMap: 'kijs.iconMap.Fa.calendar',
+            virtualKeyboardPolicy: 'manual'      // Mobile: Tastatur nicht automatisch öffnen
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
@@ -500,7 +502,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         // spinIcon
         if (this._useDefaultSpinIcon && !hasDate) {
-            this.spinIconChar = '&#xf017'; // clock
+            this.spinIconMap = 'kijs.iconMap.Fa.clock';
         }
 
         if (hasDate) {
@@ -1102,6 +1104,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     _onInputDomInput(e) {
         this.resetErrors();
+    }
+
+    _onInputDomDblClick() {
+
+        // Mobile: Tastatur anzeigen beim Doppelklick
+        // Funktioniert nur in Chrome
+        if ('virtualKeyboard' in window.navigator) {
+            window.navigator.virtualKeyboard.show();
+        }
     }
 
     _onSpinBoxElClose(e) {

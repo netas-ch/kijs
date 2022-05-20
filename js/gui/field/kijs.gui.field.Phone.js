@@ -57,6 +57,11 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         this._replaceLeadingZeros = true;
         this._showLinkButton = false;
 
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            inputMode: 'tel'
+        });
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             defaultCountryCallingCode: true,    // Standard Landesvorwahl welche entfernt wird
@@ -100,7 +105,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     _createElements() {
         return new kijs.gui.Button(
             {
-                iconChar: '&#xf095',
+                iconMap: 'kijs.iconMap.Fa.phone',
                 on: {
                     click: this._onLinkButtonClick,
                     context: this

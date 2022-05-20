@@ -52,11 +52,11 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         this._checked = 0;                          // 0=checked, 1=unchecked, 2=indeterminated
 
-        this._checkedIconChar = '&#xf046';          // Radio-Style: '&#xf05d' oder '&#xf111'
+        this._checkedIconMap = 'kijs.iconMap.Fa.square-check';
         this._checkedIconCls = null;
-        this._determinatedIconChar = '&#xf147';
+        this._determinatedIconMap = 'kijs.iconMap.Fa.square-minus';
         this._determinatedIconCls = null;
-        this._uncheckedIconChar = '&#xf096';        // Radio-Style: '&#xf10c'
+        this._uncheckedIconMap = 'kijs.iconMap.Fa.square';
         this._uncheckedIconCls = null;
 
         this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
@@ -98,17 +98,18 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             captionWidth: { target: 'captionWidth' },
 
-            checkedIconChar: true,
+            checkedIconMap: true,
             checkedIconCls: true,
-            determinatedIconChar: true,
+            determinatedIconMap: true,
             determinatedIconCls: true,
-            uncheckedIconChar: true,
+            uncheckedIconMap: true,
             uncheckedIconCls: true,
 
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
+            iconMap: { target: 'iconMap', context: this._iconEl },
 
             threeState: { prio: 1001, target: '_threeState' },
 
@@ -217,28 +218,16 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) {
-        this._iconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconChar(val) { this._iconEl.iconChar = val; }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) {
-        this._iconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconCls(val) { this._iconEl.iconCls = val; }
 
     get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) {
-        this._iconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set iconColor(val) { this._iconEl.iconColor = val; }
+
+    get iconMap() { return this._iconEl.iconMap; }
+    set iconMap(val) { this._iconEl.iconMap = val; }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
 
@@ -329,31 +318,31 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
     // PROTECTED
     _updateCheckboxIcon() {
-        let cls, iconChar, iconCls;
+        let cls, iconMap, iconCls;
 
         switch (this._checked) {
             case 0:
                 cls = 'kijs-unchecked';
-                iconChar = this._uncheckedIconChar;
+                iconMap = this._uncheckedIconMap;
                 iconCls = this._uncheckedIconCls;
                 break;
 
             case 1:
                 cls = 'kijs-checked';
-                iconChar = this._checkedIconChar;
+                iconMap = this._checkedIconMap;
                 iconCls = this._checkedIconCls;
                 break;
 
             case 2:
                 cls = 'kijs-determinated';
-                iconChar = this._determinatedIconChar;
+                iconMap = this._determinatedIconMap;
                 iconCls = this._determinatedIconCls;
                 break;
         }
 
         this._dom.clsRemove(['kijs-checked', 'kijs-determinated', 'kijs-unchecked']);
         this._dom.clsAdd(cls);
-        this._checkboxIconEl.iconChar = iconChar;
+        this._checkboxIconEl.iconMap = iconMap;
         this._checkboxIconEl.iconCls = iconCls;
     }
 

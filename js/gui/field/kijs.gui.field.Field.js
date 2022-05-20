@@ -74,14 +74,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._spinIconEl = new kijs.gui.Icon({
             parent: this,
-            iconChar: '&#xf0d7',
+            iconMap: 'kijs.iconMap.Fa.caret-down',
             cls: 'kijs-icon-spindown',
             visible: false
         });
 
         this._errorIconEl = new kijs.gui.Icon({
             parent: this,
-            iconChar: '&#xf05a',
+            iconMap: 'kijs.iconMap.Fa.circle-info',
             cls: 'kijs-icon-error',
             tooltip: new kijs.gui.Tooltip({ cls: 'kijs-error' }),
             visible: false
@@ -91,7 +91,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._helpIconEl = new kijs.gui.Icon({
             parent: this,
-            iconChar: '&#xf059',
+            iconMap: 'kijs.iconMap.Fa.circle-question',
             cls: 'kijs-icon-help',
             tooltip: new kijs.gui.Tooltip({ cls: 'kijs-help' }),
             visible: false
@@ -128,17 +128,21 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             value: { target: 'value', prio: 1000 },
 
             errorIcon: { target: 'errorIcon' },
-            errorIconChar: { target: 'errorIconChar', context: this._errorIconEl },
-            errorIconCls: { target: 'errorIconCls', context: this._errorIconEl },
-            errorIconColor: { target: 'errorIconColor', context: this._errorIconEl },
+            errorIconChar: { target: 'iconChar', context: this._errorIconEl },
+            errorIconCls: { target: 'iconCls', context: this._errorIconEl },
+            errorIconColor: { target: 'iconColor', context: this._errorIconEl },
+            errorIconMap: { target: 'iconMap', context: this._errorIconEl },
 
             helpIcon: { target: 'helpIcon' },
-            helpIconChar: { target: 'helpIconChar', context: this._helpIconEl },
-            helpIconCls: { target: 'helpIconCls', context: this._helpIconEl },
-            helpIconColor: { target: 'helpIconColor', context: this._helpIconEl },
+            helpIconChar: { target: 'iconChar', context: this._helpIconEl },
+            helpIconCls: { target: 'iconCls', context: this._helpIconEl },
+            helpIconColor: { target: 'iconColor', context: this._helpIconEl },
+            helpIconMap: { target: 'iconMap', context: this._helpIconEl },
             helpText: { target: 'helpText' },
 
             isDirty: { target: 'isDirty', prio: 1001 },
+
+            inputMode: { target: 'inputMode' },
 
             maxLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
@@ -149,10 +153,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             spinIconChar: { target: 'iconChar', context: this._spinIconEl },
             spinIconCls: { target: 'iconCls', context: this._spinIconEl },
             spinIconColor: { target: 'iconColor', context: this._spinIconEl },
+            spinIconMap: { target: 'iconMap', context: this._spinIconEl },
             spinIconVisible: { target: 'visible', context: this._spinIconEl },
 
             validationFn: true,
-            validationFnContext: true
+            validationFnContext: true,
+
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Listeners
@@ -244,28 +251,16 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get errorIconChar() { return this._errorIconEl.iconChar; }
-    set errorIconChar(val) {
-        this._errorIconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set errorIconChar(val) { this._errorIconEl.iconChar = val; }
 
     get errorIconCls() { return this._errorIconEl.iconCls; }
-    set errorIconCls(val) {
-        this._errorIconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set errorIconCls(val) { this._errorIconEl.iconCls = val; }
 
     get errorIconColor() { return this._errorIconEl.iconColor; }
-    set errorIconColor(val) {
-        this._errorIconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set errorIconColor(val) { this._errorIconEl.iconColor = val;}
+
+    get errorIconMap() { return this._errorIconEl.iconMap; }
+    set errorIconMap(val) { this._errorIconEl.iconMap = val;}
 
     get helpIcon() { return this._helpIconEl; }
     /**
@@ -301,22 +296,16 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get helpIconChar() { return this._helpIconEl.iconChar; }
-    set helpIconChar(val) {
-        this._helpIconEl.iconChar = val;
-    }
+    set helpIconChar(val) { this._helpIconEl.iconChar = val; }
 
     get helpIconCls() { return this._helpIconEl.iconCls; }
-    set helpIconCls(val) {
-        this._helpIconEl.iconCls = val;
-    }
+    set helpIconCls(val) { this._helpIconEl.iconCls = val; }
 
     get helpIconColor() { return this._helpIconEl.iconColor; }
-    set helpIconColor(val) {
-        this._helpIconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set helpIconColor(val) { this._helpIconEl.iconColor = val; }
+
+    get helpIconMap() { return this._helpIconEl.iconMap; }
+    set helpIconMap(val) { this._helpIconEl.iconMap = val; }
 
     get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
@@ -325,6 +314,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
+
+    get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
+    set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
     get isDirty() {
         if (this.disabled) {
@@ -436,36 +428,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get spinIconChar() { return this._spinIconEl.iconChar; }
-    set spinIconChar(val) {
-        this._spinIconEl.iconChar = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set spinIconChar(val) { this._spinIconEl.iconChar = val; }
 
     get spinIconCls() { return this._spinIconEl.iconCls; }
-    set spinIconCls(val) {
-        this._spinIconEl.iconCls = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set spinIconCls(val) { this._spinIconEl.iconCls = val; }
 
     get spinIconColor() { return this._spinIconEl.iconColor; }
-    set spinIconColor(val) {
-        this._spinIconEl.iconColor = val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set spinIconColor(val) { this._spinIconEl.iconColor = val; }
+
+    get spinIconMap() { return this._spinIconEl.iconMap; }
+    set spinIconMap(val) { this._spinIconEl.iconMap = val; }
 
     get spinIconVisible() { return !!this._spinIconEl.visible; }
-    set spinIconVisible(val) {
-        this._spinIconEl.visible = !!val;
-        if (this.isRendered) {
-            this.render();
-        }
-    }
+    set spinIconVisible(val) { this._spinIconEl.visible = !!val; }
 
     // false, falls der Wert vom Feld nicht übermittelt werden soll.
     get submitValue() { return this._submitValue; }
@@ -521,11 +496,17 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }, this);
     }
 
+    /**
+     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
+     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     */
+    get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
+    set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    
+
     /**
      * Fügt Fehler aus einer externen Validation hinzu
      * @param {String|Array} errors

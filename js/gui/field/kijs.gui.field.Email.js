@@ -52,6 +52,11 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
         this._showLinkButton = false;
 
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            inputMode: 'email'
+        });
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             showLinkButton: true
@@ -64,7 +69,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         }
 
         if (this._showLinkButton) {
-            this.add(this._createElements());
+            this.add(this._createLinkButton());
         }
     }
 
@@ -73,10 +78,10 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
     // MEMBERS
     // --------------------------------------------------------------
 
-    _createElements() {
+    _createLinkButton() {
         return new kijs.gui.Button(
             {
-                iconChar: '&#xf0e0',
+                iconMap: 'kijs.iconMap.Fa.envelope',
                 on: {
                     click: this._onLinkButtonClick,
                     context: this
@@ -90,9 +95,13 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         super._validationRules(value);
 
         // Email validieren
-        if (kijs.isEmpty(this._errors) && value && !value.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-            this._errors.push(kijs.getText('Falsches Emailformat'));
+        if (kijs.isEmpty(this._errors) && value && !this._isValidEmail(value)) {
+            this._errors.push(kijs.getText('Ungültige E-Mail-Adresse'));
         }
+    }
+
+    _isValidEmail(val) {
+        return !!kijs.toString(val).match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
     }
 
 
@@ -100,9 +109,9 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
     _onInput() {
         // nichts
     }
-    
+
     _onLinkButtonClick() {
-        if (this.value) {
+        if (this._isValidEmail(this.value)) {
             window.open('mailto:' + this.value);
         }
     }

@@ -63,7 +63,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            autocomplete: false
+            autocomplete: false,
+            inputMode: 'decimal'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
