@@ -206,6 +206,12 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
+    hide() {
+        this.visible = false;
+        if (this._modalMaskEl) {
+            this._modalMaskEl.unrender();
+        }
+    }
 
     // overwrite
     restore() {
@@ -245,8 +251,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
              new kijs.gui.LayerManager().setActive(this._modalMaskEl);
         }
 
-        // Fenster anzeigen
-        this.renderTo(this.parentNode);
+        if (!this.isChildOf(this.parentNode)) {
+
+            // Fenster anzeigen
+            this.renderTo(this.parentNode);
+        } else {
+            this.visible = true;
+        }
 
         if (!this.maximized) {
             // evtl. Fenster zentrieren
