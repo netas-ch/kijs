@@ -39,10 +39,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._elementsDom = new kijs.gui.Dom({cls: 'kijs-expandcontainer'});
         this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treecaption', htmlDisplayType: 'code'});
 
-        this._iconEl = new kijs.gui.Icon();
+        this._iconEl = new kijs.gui.Icon({cls: 'fa-regular'});
         this._expandIconEl = new kijs.gui.Icon({cls: 'kijs-expandicon', iconMap: 'kijs.iconMap.Fa.angle-right'});
-        this._expandedIconEl = new kijs.gui.Icon({cls: 'kijs-expandedicon'});
-        this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon', iconCls: 'kijs-pulse', iconMap: 'kijs.iconMap.Fa.spinner'});
+        this._expandedIconEl = new kijs.gui.Icon({cls: 'kijs-expandedicon fa-regular'});
+        this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon kijs-pulse fa-solid', iconMap: 'kijs.iconMap.Fa.spinner'});
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-tree');

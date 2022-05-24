@@ -27,7 +27,7 @@
   "gui":[
    "js/iconMap/kijs.iconMap.js",
    "js/iconMap/kijs.iconMap.Fa.js",
-   
+
    "js/gui/kijs.gui.js",
    "js/gui/kijs.gui.Dom.js",
    "js/gui/kijs.gui.Tooltip.js",
@@ -139,11 +139,12 @@
 
  "fonts":{
   "gui":[
-    "fonts/fontawesome-webfont.eot",
-    "fonts/fontawesome-webfont.woff2",
-    "fonts/fontawesome-webfont.woff",
-    "fonts/fontawesome-webfont.ttf",
-    "fonts/fontawesome-webfont.svg"
+    "fonts/font-awesome-6-1-1/fa-regular-400.ttf",
+    "fonts/font-awesome-6-1-1/fa-regular-400.woff2",
+    "fonts/font-awesome-6-1-1/fa-brands-400.ttf",
+    "fonts/font-awesome-6-1-1/fa-brands-400.woff2",
+    "fonts/font-awesome-6-1-1/fa-solid-900.ttf",
+    "fonts/font-awesome-6-1-1/fa-solid-900.woff2"
   ]
  }
 
