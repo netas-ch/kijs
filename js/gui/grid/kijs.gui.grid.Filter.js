@@ -137,6 +137,17 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         });
     }
 
+    _filterHasFocus() {
+        let hasFocus = false;
+        kijs.Array.each(this.filters, function(filter) {
+            if (filter.hasFocus()) {
+                hasFocus = true;
+                return false;
+            }
+        }, this);
+        return hasFocus;
+    }
+
     // EVENTS
     _onColumnConfigChange(e) {
         if ('visible' in e || 'width' in e) {
@@ -154,6 +165,8 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     }
 
     _onFilter(e) {
+        let forceReload = !!e.forceReload;
+
         // Filter verzögert zurücksetzen, da der "Filter"
         // Event gleich mehrmals von mehreren Filtern kommen kann.
         if (this._filterReloadDefer) {
@@ -161,9 +174,12 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             this._filterReloadDefer = null;
         }
 
+        // Es wird nur neu gefiltert, wenn entweder force gewählt wurde oder kein Filterfeld den Focus hat.
         this._filterReloadDefer = kijs.defer(function() {
-            this.grid.reload();
-        }, 20, this);
+            if (forceReload || !this._filterHasFocus()) {
+                this.grid.reload();
+            }
+        }, 50, this);
     }
 
     // Overwrite

@@ -262,6 +262,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get errorIconMap() { return this._errorIconEl.iconMap; }
     set errorIconMap(val) { this._errorIconEl.iconMap = val;}
 
+    get hasFocus() { return this._inputDom.hasFocus; }
+
     get helpIcon() { return this._helpIconEl; }
     /**
      * Icon zuweisen

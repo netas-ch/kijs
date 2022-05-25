@@ -118,9 +118,13 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._applyToGrid();
     }
 
+    hasFocus() {
+        return !!this._menuButton.menu.isRendered;
+    }
+
     // wendet den Filter auf das grid an.
-    _applyToGrid() {
-        this.raiseEvent('filter', this.filter);
+    _applyToGrid(forceReload=false) {
+        this.raiseEvent('filter', {filter: this.filter, forceReload: forceReload});
     }
 
     _getCheckboxMenuButtons() {

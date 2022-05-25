@@ -71,6 +71,14 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     // MEMBERS
     // --------------------------------------------------------------
 
+    hasFocus() {
+        if (super.hasFocus() || this._searchField.hasFocus) {
+            return true;
+        }
+
+        return false;
+    }
+
     reset() {
         this._searchField.value = '';
         super.reset();
@@ -132,7 +140,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         e.nodeEvent.stopPropagation();
         if (e.nodeEvent.key === 'Enter') {
             e.nodeEvent.preventDefault();
-            this._applyToGrid();
+            this._applyToGrid(true);
             this._applyFilter = false;
         }
     }
