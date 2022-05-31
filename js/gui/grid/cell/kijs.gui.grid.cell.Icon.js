@@ -85,15 +85,21 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         if (this.row && this.row.dataRow) {
 
             // Icon hinzufügen
-            if (kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
+            if (this.columnConfig.iconCharField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
                 let value = this.row.dataRow[this.columnConfig.iconCharField];
                 this._setDomHtml(value);
             }
 
             // CSS-Klasse hinzufügen
-            if (kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
+            if (this.columnConfig.iconClsField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconClsField])) {
                 let cls = this.row.dataRow[this.columnConfig.iconClsField];
                 this._addIconCls(cls);
+            }
+
+            // Tooltip hinzufügen
+            if (this.columnConfig.tooltipField && kijs.isDefined(this.row.dataRow[this.columnConfig.tooltipField])) {
+                let tooltip = this.row.dataRow[this.columnConfig.tooltipField];
+                this._dom.tooltip = kijs.String.nl2br(kijs.String.htmlspecialchars(tooltip));
             }
         }
     }
@@ -110,8 +116,18 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
             value = kijs.String.htmlentities_decode(value).codePointAt(0);
         }
 
-        if (kijs.isString(value) && parseInt(value) !== Number.NaN) {
+        if (kijs.isString(value) && !isNaN(parseInt(value))) {
             value = parseInt(value);
+        }
+
+        if (kijs.isString(value) && value.substr(0, 4) === 'kijs') {
+            let iconMap = kijs.getClassFromXtype(value);
+            if (kijs.isInteger(iconMap.char)) {
+                value = iconMap.char;
+            }
+            if (kijs.isDefined(iconMap.cls)) {
+                this._addIconCls(iconMap.cls);
+            }
         }
 
         if (!kijs.isNumber(value)) {
@@ -128,7 +144,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
      * @private
      */
     _addIconCls(val) {
-        if (!kijs.isString && !val) {
+        if (!kijs.isString(val) && val) {
             throw new kijs.Error(`config "iconCls" is not a string`);
         }
         if (this._iconCls) {

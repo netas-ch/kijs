@@ -140,6 +140,15 @@ kijs.String = class kijs_String {
     }
 
     /**
+     * Fügt vor allen Zeilenumbrüchen eines Strings HTML-Zeilenumbrüche ein
+     * @param {String} text
+     * @returns {String}
+     */
+    static nl2br(text) {
+        return kijs.toString(text).replace(/(?:\r\n|\n\r|\n|\r)/g, "<br />\n");
+    }
+
+    /**
      * Ergänzt eine Zahl mit vorangestellten Nullen
      * @param {String} text
      * @param {Number} length
