@@ -104,6 +104,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         } else {
             if (!kijs.isEmpty(this._modalMaskEl)) {
                 this._modalMaskEl.destruct();
+                this._modalMaskEl = null;
             }
         }
     }
@@ -177,6 +178,15 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
+    // overwrite
+    get visible() { return super.visible; }
+    set visible(val) {
+        super.visible = val;
+        if (this._modalMaskEl) {
+            this._modalMaskEl.visible = val;
+        }
+    }
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -203,13 +213,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
        // Evtl. afterResize-Event zeitversetzt auslösen
         if (!preventEvents && this._hasSizeChanged()) {
             this._raiseAfterResizeEvent(true);
-        }
-    }
-
-    hide() {
-        this.visible = false;
-        if (this._modalMaskEl) {
-            this._modalMaskEl.unrender();
         }
     }
 
@@ -247,17 +250,17 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     show() {
         // Evtl. Maske für modale Anzeige einblenden
         if (this._modalMaskEl) {
-            this._modalMaskEl.renderTo(this.parentNode);
-             new kijs.gui.LayerManager().setActive(this._modalMaskEl);
+            if (!this._modalMaskEl.isRendered) {
+                this._modalMaskEl.renderTo(this.parentNode);
+            }
+            new kijs.gui.LayerManager().setActive(this._modalMaskEl);
         }
 
-        if (!this.isChildOf(this.parentNode)) {
-
-            // Fenster anzeigen
+        // Fenster rendern und anzeigen
+        if (!this.isRendered) {
             this.renderTo(this.parentNode);
-        } else {
-            this.visible = true;
         }
+        this.visible = true;
 
         if (!this.maximized) {
             // evtl. Fenster zentrieren

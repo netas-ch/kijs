@@ -1555,7 +1555,21 @@ kit.App = class kit_App {
                                             elements:[{
                                                     xtype: 'kijs.gui.DatePicker',
                                                     mode: 'range'
-                                            }]
+                                            }],
+                                            on: {
+                                               afterRender: function(e) {
+                                                   let window = e.element;
+                                                   kijs.defer(function() {
+                                                        console.log('jetzt');
+                                                       window.footer.add({
+                                                           xtype: 'kijs.gui.Button',
+                                                           caption: 'TESTBUTTON'
+                                                       });
+                                                       window.render();
+                                                   }, 4000, this);
+                                               }
+                                           }
+
                                         });
                                         window.show();
                                     }}
@@ -1723,6 +1737,10 @@ kit.App = class kit_App {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'weiteres Fenster',
                                                     iconChar: 0xf2d0
+                                                },{
+                                                    xtype: 'kijs.gui.Button',
+                                                    caption: 'Ausblenden für 2 Sekunden',
+                                                    iconMap: 'kijs.iconMap.Fa.hourglass'
                                                 }
                                             ]
                                         });
@@ -1739,6 +1757,15 @@ kit.App = class kit_App {
                                             });
                                             window2.show();
                                         }, this);
+
+                                        window.elements[1].on('click', function() {
+                                            window.visible = false;
+                                            kijs.defer(function() {
+                                                window.show();
+                                            }, 2000, this);
+                                        }, this);
+
+
                                     }}
                                 },{
                                     xtype: 'kijs.gui.Button',

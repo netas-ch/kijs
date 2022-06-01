@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '1.2.6'; }
+    static get version() { return '1.2.7'; }
 
 
     // --------------------------------------------------------------
@@ -79,7 +79,7 @@ window.kijs = class kijs {
             return 0;
         }
     }
-    
+
     /**
      * Erstellt eine Klasse/Objekt aus einem Namespace (xtype, iconMap)
      * @param {String} xtype    Beispiel: 'kijs.gui.Element'
@@ -88,7 +88,7 @@ window.kijs = class kijs {
     static getClassFromXtype(xtype) {
         const parts = xtype.split('.');
         let parent = window;
-        
+
         for (let i=0; i<parts.length; i++) {
             let part = parts[i];
             if (!parent[part]) {

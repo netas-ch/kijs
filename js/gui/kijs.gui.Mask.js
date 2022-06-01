@@ -168,6 +168,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._targetElement.on('changeVisibility', this._onTargetElChangeVisibility, this);
             this._targetElement.on('destruct', this._onTargetElDestruct, this);
 
+            // Falls das target ein z-index hat, übernehmen wir diesen für diese Maske und rechnen + 2
+            if (!isNaN(parseInt(this._targetElement.dom.style.zIndex))) {
+                this._dom.style.zIndex = parseInt(this._targetElement.dom.style.zIndex) + 2;
+            }
+
         // Target ist der Body
         } else if (val === document.body || kijs.isEmpty(val)) {
             this._targetElement = document.body;

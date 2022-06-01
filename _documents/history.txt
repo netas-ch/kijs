@@ -1,3 +1,16 @@
+Version 1.2.7
+================================================================================
+Neue Features
+-------------
+ - der icon-column kann als icon ein iconMap übergeben werden
+ - der icon-column kann ein tooltip definiert werden
+ - Grid-Filter: Das Grid wird erst dann neu geladen, wenn alle Filter kein Fokus mehr haben
+
+
+Fehlerbehebungen
+----------------
+ - kijs.gui.Window.visible = false blendet die Modal-Maske auch aus
+
 Version 1.2.6
 ================================================================================
 Änderungen
