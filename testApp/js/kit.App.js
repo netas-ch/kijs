@@ -57,6 +57,22 @@ kit.App = class kit_App {
                     headerBarElements:[
                         {
                             xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.mortar-pestle',
+                            tooltip: 'CSS Theme toggle',
+                            on: {
+                                click: function () {
+                                    let oldTheme = kijs.cssTheme;
+                                    let newTheme = 'light';
+                                    if (oldTheme === newTheme) {
+                                        newTheme = 'dark';
+                                    }
+
+                                    kijs.cssTheme = newTheme;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.circle-question'
                         },{
                             xtype: 'kijs.gui.Button',

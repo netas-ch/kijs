@@ -11,6 +11,31 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     static get version() { return '1.2.7'; }
 
+    static get cssTheme() {
+        let theme = document.querySelector('html').dataset.theme;
+
+        if (theme) {
+            return theme.substring(6);
+        }
+
+        return null;
+    }
+    static set cssTheme(val) {
+        if (val !== 'auto' && val !== 'light' && val !== 'dark') {
+            throw new kijs.Error(`invalid css theme.`);
+        }
+
+        let theme;
+        if (val === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'dark';
+        } else {
+            theme = val;
+        }
+
+        // Theme setzen
+        document.querySelector('html').dataset.theme = 'theme-' + theme;
+        console.log(document.querySelector('html').dataset.theme);
+    }
 
     // --------------------------------------------------------------
     // STATICS

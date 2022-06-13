@@ -37,6 +37,8 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        kijs.cssTheme = 'auto';
     }
 
     // --------------------------------------------------------------
