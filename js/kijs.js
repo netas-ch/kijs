@@ -21,20 +21,20 @@ window.kijs = class kijs {
         return null;
     }
     static set cssTheme(val) {
-        if (val !== 'auto' && val !== 'light' && val !== 'dark') {
+        if (!kijs.Array.contains(['auto', 'light', 'dark'], val)) {
             throw new kijs.Error(`invalid css theme.`);
         }
 
-        let theme;
-        if (val === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            theme = 'dark';
-        } else {
-            theme = val;
+        if (val === 'auto') {
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                val = 'dark';
+            } else {
+                val = 'light';
+            }
         }
-
+        
         // Theme setzen
-        document.querySelector('html').dataset.theme = 'theme-' + theme;
-        console.log(document.querySelector('html').dataset.theme);
+        document.querySelector('html').dataset.theme = 'theme-' + val;
     }
 
     // --------------------------------------------------------------

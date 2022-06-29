@@ -41,10 +41,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         kijs.cssTheme = 'auto';
     }
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     set disableContextMenu(val) {
         if (val === true) {
             // Standardmässig öffnet der Browser das Kontextmenu
@@ -88,6 +88,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     get disableDrop() {
         return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
     }
+
 
     // --------------------------------------------------------------
     // MEMBERS
