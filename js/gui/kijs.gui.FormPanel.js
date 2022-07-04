@@ -121,6 +121,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
 
         kijs.Array.each(this.fields, function(element) {
+                console.log(element.xtype);
             if (element instanceof kijs.gui.field.Field) {
                 element.disabled = !!value;
             }

@@ -1,3 +1,52 @@
+Version 1.3.0
+================================================================================
+Neue Features
+-------------
+Themes (light und dark)
+ - Das theme kann im viewport über die config theme gesetzt werden:
+   'light', 'dark' oder null=auto. Default=null
+ - Falls kein Viewport verwendet wird, kann das Theme auch über
+   kijs.Dom.themeSet(...) gesetzt werden.
+
+Neues Design
+ - Das Standard-Design wurde überarbeitet. Es werden etwas weniger Farben verwendet.
+ - Die Farben sind etwas lebendiger.
+ - Neue Schriftart: Roboto
+ - Darkmode
+ - Bitte die kijs.theme.default.css vor der bestehenden kijs.gui.css einbinden !!!!
+
+Eigene Designs
+ - Neu kann relativ einfach ein eigenes Design erstellt werden.
+ - Es müssen neu immer zwei CSS-Dateien eingebunden werden. Zuerst die des
+   gewünschten Designs (z.B. kijs.theme.default.css) und dann die kijs.gui.css.
+- Designanpassungen sollten immer in der kijs.theme.xxx.css gemacht werden.
+- Pro Design müssen immer beide Themes (light und dark) definiert werden.
+- Ein kijs.theme.xxx.css ist in die zwei themes light und dark unterteilt. 
+  Darunter gibt es dann folgenden Aufbau:
+    - Farbschema-Variablen mit den Akzentfarben und 10 Graustufen
+    - Zuweisung der Farbschema-Variablen zu den Detailvariablen
+    - Falls neben Farbanpassungen noch weitere Anpassungen nötig sind, können
+      diese am Ende der Datei gemacht werden
+- Das Design kann im betrieb durch austauschen der CSS-Datei gewechselt werden.
+  Dafür kann die Funktion kijs.Dom.cssFileReplace(...) verwendet werden.
+-- In der Test-App kann zwischen den Designs Standard, Alt und Joel gewechselt werden.
+
+Neue Eigenschaft bei Fields: disableFlex
+ - Ist disableFlex=true, dann wird das Feld nicht automatisch über die ganze breite 
+   angezeigt, dies macht Sinn bei Feldern mit fixer Breite.
+ - Bei folgenden Feldern ist der Standardwert true: 
+   Checkbox, ChekboxGroup, Color, DateTime, Month, OptionGroup, Range, Switch
+   Bei allen anderen false.
+ - Bitte bei allen Fields mit disableFlex=true die Eigenschaft "width" entfernen !!!!!
+
+kijs.gui.field.Switch
+ - Neues Feld. Funktioniert wie eine Checkbox, sieht aber aus wie ein Slide-Button
+ - Bitte neue Datei einbinden !!!!
+
+Viele kleinere Designanpassungen
+
+
+
 Version 1.2.7
 ================================================================================
 Neue Features
@@ -10,6 +59,8 @@ Neue Features
 Fehlerbehebungen
 ----------------
  - kijs.gui.Window.visible = false blendet die Modal-Maske auch aus
+
+
 
 Version 1.2.6
 ================================================================================
@@ -26,6 +77,7 @@ Neue Klassen
  - kijs.gui.Menu für Kontextmenu und Dropdown-Menu
 
 
+
 Version 1.2.5
 ================================================================================
 Änderungen
@@ -36,6 +88,7 @@ Grid
 
 Anderes
  - kijs.keys entfernt, da keyCodes deprecated sind und nicht mehr verwendet werden sollten.
+
 
 
 Version 1.2.4
@@ -50,6 +103,7 @@ Anderes
 - Maske weniger schwarz
 - File-Upload decodiert neu Pfad und Dateiname. !!! ANPASSUNG PHP NÖTIG (urldecode) !!!
 - Tooltip für Tabellenspalten
+
 
 
 Version 1.2.3
@@ -126,6 +180,8 @@ Betrifft:
 
 3. "kijs.getGetParameter" -> ändern zu "kijs.Navigator.getGetParameter"
 
+
+
 Version 1.1.3
 ================================================================================
 * toolTip in tooltip umbenannt (Muss in Projekten ersetzt werden, toolTip = DEPRECATED)
@@ -133,10 +189,12 @@ Version 1.1.3
 * Neue Funktionen für Manipulation von Farben in kijs.Graphic
 
 
+
 Version 1.1.2
 ================================================================================
 * Dateien werden neu in der "files.json" aufgeführt.
   Es gibt verschiedene Module, deren zugehörigen Dateien aufgeführt sind.
+
 
 
 Version 1.0.1

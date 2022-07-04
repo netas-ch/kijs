@@ -20,13 +20,15 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             disableDrop: true,
-            disableContextMenu: false
+            disableContextMenu: false,
+            theme: null
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disableDrop: { target: 'disableDrop' },
-            disableContextMenu: { target: 'disableContextMenu' }
+            disableContextMenu: { target: 'disableContextMenu' },
+            theme: { target: 'theme'}         // 'dark', 'light' oder null=auto oder einen benutzerdefiniertes Farbschema
         });
 
         // onResize überwachen
@@ -39,10 +41,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         }
     }
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     set disableContextMenu(val) {
         if (val === true) {
             // Standardmässig öffnet der Browser das Kontextmenu
@@ -61,7 +63,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     get disableContextMenu() {
         return kijs.Dom.hasEventListener('contextmenu', document.body, this);
     }
-
+    
     set disableDrop(val) {
         if (val === true) {
             // Standardmässig öffnet der Browser das Dokument, wenn
@@ -86,6 +88,19 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     get disableDrop() {
         return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
     }
+    
+    get theme() {
+        return kijs.Dom.themeGet();
+    }
+    
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    set theme(val) {
+        kijs.Dom.themeSet(val);
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
 
     // --------------------------------------------------------------
     // MEMBERS

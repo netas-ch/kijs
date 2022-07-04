@@ -1,152 +1,117 @@
-@viewport-bkgrndColor: #f6f6f6;
-@splitter-overlay-bkgrndColor: #b4b4b4;
-@today-fontColor: #2B8BD9;
+/* ******************
+   * kijs GUI Style
+   ****************** */
 
 
-/* Default */
-@default-fontFamily: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-@default-fontColor: #000;
-@default-fontSize: 11px;
+/* ******************
+   * Roboto (http://fontfacekit.github.io/roboto/)
+   ****************** */
+/* Thin */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal; }
 
-/* Scrollbar */
-@scrollbar-color: #888;
-@scrollbar-background-color: #ddd;
-@scrollbar-hover-color: #aaa;
+/* Thin Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic; }
 
-/* Button */
-@button-bkgrndColor: #f6f6f6;
-@button-borderColor: #f6f6f6;
-@button-fontColor: #000;
-@button-fontSize: 11px;
+/* Light */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/../fonts/roboto/Roboto-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal; }
 
-@button-icon-fontColor: #555;
+/* Light Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic; }
 
-@button-focus-bkgrndColor: #ddd;
-@button-focus-borderColor: #ddd;
-@button-focus-fontColor: #000;
-
-@button-disabled-fontColor: #888;
-
-
-/* Toolbox-Button in einer Bar */
-@bar-button-icon-fontColor: #f0f0f0;
-@bar-button-icon-disabled-fontColor: #cfcfcf;
-
-
-/* Button im Panel-Header */
-@buttonGroup-button-fontColor: #555;
-
-@buttonGroup-button-bkgrndColor: #f6f6f6;
-@buttonGroup-button-borderColor: transparent;
-
-@buttonGroup-button-focus-bkgrndColor: #d2d2d2;
-@buttonGroup-button-focus-fontColor: #333;
-
-
-/* Buttons im Panel-Footer */
-@footer-button-bkgrndColor: #f6f6f6;
-@footer-button-borderColor: #aaa;
-
-@footer-button-focus-bkgrndColor: #ccc;
-@footer-button-focus-borderColor: #aaa;
-
-@footer-button-disabled-bkgrndColor: #f6f6f6;
-@footer-button-disabled-borderColor: #aaa;
+/* Regular */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal; }
 
 
-/* Buttons im Window-Footer */
-@window-footer-button-bkgrndColor: #4398dd;
-@window-footer-button-borderColor: #4398dd;
-@window-footer-button-fontColor: #333;
-
-@window-footer-button-focus-fontColor : #000;
-
-
-/* Badge */
-@badge-bkgrndColor: #f4aa56;
-@badge-fontColor: #000;
-@badge-fontSize: 10px;
-@badge-disabled-bkgrndColor: #bdbcbc;
-@badge-disabled-fontColor: #888;
+/* Italic */
+@font-face {
+  font-family: Roboto;
+  src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic; }
 
 
-/* Panel */
-@panel-bkgrndColor: #fff;
-@panel-borderColor: #d2d2d2;
 
+/* Medium */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal; }
 
-/* Bar */
-@bar-fontColor: #fff;
-@bar-bkgrndColor: #4398dd;
+/* Medium Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic; }
 
-@headerBar-fontSize: 14px;
-@footerBar-fontSize: 11px;
+/* Bold */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal; }
 
+/* Bold Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic; }
 
-/* MsgBox */
-@msgbox-fontColor: #000;
-@msgbox-fontSize: 12px;
+/* Black */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal; }
 
-
-/* Field */
-@field-fontSize: 12px;
-@field-borderColor: #aaa;
-@field-focus-borderColor: #4398dd;
-
-@field-disabled-bkgrndColor: #efefef;
-@field-disabled-fontColor: #888;
-
-@field-error-bkgrndColor: #ffdaec;
-
-/* Range */
-@range-bkgrndColor: #aaa;
-@range-btnColor: #555;
-
-/* Item */
-@item-bkgrndColor: #fff;
-@item-borderColor: #f6f6f6;
-@item-fontColor: #000;
-@item-fontSize: 11px;
-
-@item-focus-bkgrndColor: #f6f6f6;
-@item-focus-borderColor: #f6f6f6;
-@item-focus-fontColor: #000;
-
-@item-selected-bkgrndColor: #d9ecfc;
-@item-selected-borderColor: #4398dd;
-@item-selected-fontColor: #000;
-
-@item-disabled-bkgrndColor: #efefef;
-@item-disabled-borderColor: #dcdcdc;
-@item-disabled-fontColor: #000;
-
-@item-selected-disabled-bkgrndColor: #efefef;
-@item-selected-disabled-borderColor: #aaa;
-@item-selected-disabled-fontColor: #000;
-
-@item-label-fontColor: #888;
-@item-label-disabled-fontColor: #888;
-@item-label-fontSize: 10px;
-
-
-/* Help/Error Icon */
-@icon-error-bkgrndColor: #F3E2EB;
-@icon-error-borderColor: #BE6280;
-@icon-error-fontColor: #BE6280;
-
-@icon-help-bkgrndColor: #DCE6EF;
-@icon-help-borderColor: #6295BE;
-@icon-help-fontColor: #6295BE;
-
-
-/* Drag & Drop */
-@dragover-ok-borderColor: #f4aa56;
-@dragover-forbidden-borderColor: #FB4F42;
-
-/* Grid */
-@grid-header-bkgrndColor: #f6f6f6;
-@grid-border-color: #eee;
-
+/* Black Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic; }
 
 
 /* ******************
@@ -158,8 +123,8 @@
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-solid-900.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-solid-900.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-solid-900.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-solid-900.ttf') format('truetype');
 }
 
 /* fa-regular */
@@ -168,8 +133,8 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-regular-400.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-regular-400.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-regular-400.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-regular-400.ttf') format('truetype');
 }
 
 /* fa-brands */
@@ -178,8 +143,8 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-brands-400.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-brands-400.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-brands-400.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-brands-400.ttf') format('truetype');
 }
 
 .fa-solid, span.kijs-icon.fa-solid {
@@ -217,28 +182,6 @@
 
 
 /* ******************
-   * Scrollbar
-   ****************** */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: @scrollbar-background-color;
-}
-
-::-webkit-scrollbar-thumb {
-    background: @scrollbar-color;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: @scrollbar-hover-color;
-}
-
-
-
-/* ******************
    * Ergänzungen für alle Elemente
    ****************** */
 /* Schatten für Elemente */
@@ -265,7 +208,9 @@ div.kijs-container {
 div.kijs-container-inner {
     position: relative;
     flex: 1 1 auto;
-
+    
+    font-family: var(--default-fontFamily);
+    
     -webkit-user-select: none;  /* Safari */
     user-select: none;
 
@@ -288,7 +233,7 @@ div.kijs-container.kijs-containerstack {
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: @panel-bkgrndColor;
+            background-color: var(--panel-bkgrndColor);
             display: flex;
             flex-direction: column;
 
@@ -365,15 +310,15 @@ div.kijs-container.kijs-containerstack {
    * DropZone
    ****************** */
 div.kijs-container.kijs-dropzone {
-    border-color: @panel-bkgrndColor;
+    border-color: var(--panel-bkgrndColor);
     transition: border-color 0.6s linear;
 
     &.kijs-dragover {
-        border: 2px dashed @dragover-ok-borderColor;
+        border: 2px dashed var(--dragover-ok-borderColor);
     }
 
     &.kijs-dragover-forbidden {
-        border-color: @dragover-forbidden-borderColor;
+        border-color: var(--dragover-forbidden-borderColor);
         cursor: no-drop;
     }
 }
@@ -387,9 +332,9 @@ div.kijs-spinbox {
     z-index: 50100;
     max-width: 100%;
     max-height: 100%;
-    border: 1px solid @field-borderColor;
+    border: 1px solid var(--field-borderColor);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
-    background-color: @panel-bkgrndColor;
+    background-color: var(--panel-bkgrndColor);
 
     -webkit-user-select: none;  /* Safari */
     user-select: none;
@@ -443,7 +388,7 @@ div.kijs-accordion > .kijs-container-inner > .kijs-panel {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    background-color: @viewport-bkgrndColor;
+    background-color: var(--viewport-bkgrndColor);
     background-image: none;
 }
 
@@ -453,7 +398,7 @@ div.kijs-accordion > .kijs-container-inner > .kijs-panel {
    ****************** */
 div.kijs-splitter-horizontal {
     width: 5px;
-    background-color: @viewport-bkgrndColor;
+    background-color: var(--viewport-bkgrndColor);
     cursor: ew-resize;
 }
 
@@ -461,14 +406,14 @@ div.kijs-splitter-overlay-horizontal {
     position: absolute;
     width: 5px;
     height: 100%;
-    background-color:@splitter-overlay-bkgrndColor;
+    background-color:var(--splitter-overlay-bkgrndColor);
     opacity: 0.8;
     cursor: ew-resize;
 }
 
 div.kijs-splitter-vertical {
     height: 5px;
-    background-color: @viewport-bkgrndColor;
+    background-color: var(--viewport-bkgrndColor);
     cursor: ns-resize;
 }
 
@@ -476,7 +421,7 @@ div.kijs-splitter-overlay-vertical {
     position: absolute;
     height: 5px;
     width: 100%;
-    background-color:@splitter-overlay-bkgrndColor;
+    background-color:var(--splitter-overlay-bkgrndColor);
     opacity: 0.8;
     cursor: ns-resize;
 }
@@ -489,27 +434,27 @@ div.kijs-panel {
     position: relative;
     display: flex;
     flex-direction: column;
-    background-color:@panel-bkgrndColor;
+    background-color:var(--panel-bkgrndColor);
     transition: 0.2s;
 
     &:focus {
         /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
-        /*border: 1px solid @item-selected-borderColor;*/
+        /*border: 1px solid var(--item-selected-borderColor);*/
     }
 
     > .kijs-header {
         flex: none;
-        border-left: 1px solid @panel-borderColor;
-        border-right: 1px solid @panel-borderColor;
-        border-bottom: 1px solid @panel-borderColor;
-        background-color: @viewport-bkgrndColor;
+        border-left: 1px solid var(--panel-borderColor);
+        border-right: 1px solid var(--panel-borderColor);
+        border-bottom: 1px solid var(--panel-borderColor);
+        background-color: var(--viewport-bkgrndColor);
     }
     > .kijs-footer {
         flex: none;
-        border-top: 1px solid @panel-borderColor;
-        border-left: 1px solid @panel-borderColor;
-        border-right: 1px solid @panel-borderColor;
-        background-color: @viewport-bkgrndColor;
+        border-top: 1px solid var(--panel-borderColor);
+        border-left: 1px solid var(--panel-borderColor);
+        border-right: 1px solid var(--panel-borderColor);
+        background-color: var(--viewport-bkgrndColor);
     }
     > .kijs-footer > .kijs-container-inner {
         text-align: right;
@@ -553,15 +498,15 @@ div.kijs-panel {
 
     /* bei Schatten auch diverse Linien anzeigen */
     &.kijs-shadow > .kijs-container-inner {
-        border-left: 1px solid @panel-borderColor;
-        border-right: 1px solid @panel-borderColor;
+        border-left: 1px solid var(--panel-borderColor);
+        border-right: 1px solid var(--panel-borderColor);
     }
     &.kijs-shadow > div:first-child:not(.kijs-panelbar) {
-        border-top: 1px solid @panel-borderColor;
+        border-top: 1px solid var(--panel-borderColor);
     }
 
     &.kijs-shadow > div:last-child:not(.kijs-panelbar):not(.kijs-resizer) {
-        border-bottom: 1px solid @panel-borderColor;
+        border-bottom: 1px solid var(--panel-borderColor);
     }
 }
 
@@ -611,7 +556,7 @@ div.kijs-mask {
         margin-top: 20px;
         color: #F5F5F5;
         font-size: 17px;
-        font-family: @default-fontFamily;
+        font-family: var(--default-fontFamily);
     }
     > .kijs-mask-text:empty {
         display: none;
@@ -657,9 +602,10 @@ div.kijs-msgbox {
     > .kijs-container-inner {
         display: flex;
         flex-direction: row;
-        font-family: @default-fontFamily;
-        font-size: @msgbox-fontSize;
-        color: @msgbox-fontColor;
+        font-family: var(--default-fontFamily);
+        font-size: var(--msgbox-fontSize);
+        line-height: var(--msgbox-lineHeight);
+        color: var(--msgbox-fontColor);
     }
     > .kijs-container-inner > .kijs-icon {
         flex: none;
@@ -708,9 +654,9 @@ div.kijs-cornertipcontainer {
     .kijs-panel > .kijs-container-inner {
         display: flex;
         flex-direction: row;
-        font-family: @default-fontFamily;
-        font-size: @default-fontSize;
-        color: @default-fontColor;
+        font-family: var(--default-fontFamily);
+        font-size: var(--default-fontSize);
+        color: var(--default-fontColor);
     }
     .kijs-panel > .kijs-container-inner > .kijs-icon {
         flex: none;
@@ -784,13 +730,14 @@ button.kijs-button {
     margin: 0 4px;
     border-radius: 6px;
     padding: 3px 8px;
-    background-color: @button-bkgrndColor;
-    border: 1px solid @button-borderColor;
+    background-color: var(--button-bkgrndColor);
+    border: 1px solid var(--button-borderColor);
+    color: var(--default-fontColor);
     cursor: pointer;
     outline: none;
 
     > .kijs-icon {
-        color: @button-icon-fontColor;
+        color: var(--button-icon-fontColor);
     }
 
     > .kijs-icon2 {
@@ -802,9 +749,9 @@ button.kijs-button {
     }
 
     > .kijs-caption {
-        font-family: @default-fontFamily;
-        font-size: @button-fontSize;
-        color: @button-fontColor;
+        font-family: var(--default-fontFamily);
+        font-size: var(--button-fontSize);
+        color: var(--button-fontColor);
     }
 
     > .kijs-badge {
@@ -816,26 +763,26 @@ button.kijs-button {
         min-width: 14px;
         border-radius: 50%;
         padding: 0;
-        font-family: @default-fontFamily;
-        font-size: @badge-fontSize;
-        line-height: 14px;
-        color: @badge-fontColor;
+        font-family: var(--default-fontFamily);
+        font-size: var(--badge-fontSize);
+        line-height: var(--badge-lineHeight);
+        color: var(--badge-fontColor);
         text-align: center;
-        background-color: @badge-bkgrndColor;
+        background-color: var(--badge-bkgrndColor);
         box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         z-index: 1;
     }
 
     &:hover {
-        background-color: @button-focus-bkgrndColor;
-        border: 1px solid @button-focus-borderColor;
+        background-color: var(--button-focus-bkgrndColor);
+        border: 1px solid var(--button-focus-borderColor);
     }
     &:focus {
-        border: 1px solid @button-focus-borderColor;
+        border: 1px solid var(--button-focus-borderColor);
     }
     &:hover > .kijs-caption,
     &:focus > .kijs-caption {
-        color: @button-focus-fontColor;
+        color: var(--button-focus-fontColor);
     }
 
     &.kijs-default {
@@ -843,18 +790,18 @@ button.kijs-button {
     }
 
     &.kijs-disabled {
-        background-color: @button-bkgrndColor;
-        border: 1px solid @button-borderColor;
+        background-color: var(--button-bkgrndColor);
+        border: 1px solid var(--button-borderColor);
         cursor: auto;
 
         > .kijs-caption,
         > .kijs-icon {
-            color: @button-disabled-fontColor;
+            color: var(--button-disabled-fontColor);
         }
 
         > .kijs-badge {
-            background-color: @badge-disabled-bkgrndColor;
-            color: @badge-disabled-fontColor;
+            background-color: var(--badge-disabled-bkgrndColor);
+            color: var(--badge-disabled-fontColor);
         }
     }
 }
@@ -862,21 +809,21 @@ button.kijs-button {
 /* Buttons im Fuss eines Panels haben einen Rahmen */
 div.kijs-panel {
     > .kijs-footer .kijs-button {
-        border:1px solid @footer-button-borderColor;
-        background-color: @footer-button-bkgrndColor;
+        border:1px solid var(--footer-button-borderColor);
+        background-color: var(--footer-button-bkgrndColor);
         margin-top: 5px;
         margin-bottom: 5px;
     }
 
     > .kijs-footer .kijs-button:hover,
     > .kijs-footer .kijs-button:focus {
-        background-color: @footer-button-focus-bkgrndColor;
-        border: 1px solid @footer-button-focus-borderColor;
+        background-color: var(--footer-button-focus-bkgrndColor);
+        border: 1px solid var(--footer-button-focus-borderColor);
     }
 
     > .kijs-footer .kijs-button.kijs-disabled {
-        border:1px solid @footer-button-disabled-borderColor;
-        background-color: @footer-button-disabled-bkgrndColor;
+        border:1px solid var(--footer-button-disabled-borderColor);
+        background-color: var(--footer-button-disabled-bkgrndColor);
         cursor: auto;
     }
 
@@ -888,22 +835,22 @@ div.kijs-panel {
 /* Buttons im Fuss eines Fensters sind blau */
 div.kijs-window {
     > .kijs-footer .kijs-button {
-        background-color: @window-footer-button-bkgrndColor;
-        border: 1px solid @window-footer-button-borderColor;
+        background-color: var(--window-footer-button-bkgrndColor);
+        border: 1px solid var(--window-footer-button-borderColor);
     }
 
     > .kijs-footer .kijs-button > * {
-        color: @window-footer-button-fontColor;
+        color: var(--window-footer-button-fontColor);
     }
 
     > .kijs-footer .kijs-button:hover,
     > .kijs-footer .kijs-button:focus {
-        background-color: @window-footer-button-bkgrndColor;
+        background-color: var(--window-footer-button-bkgrndColor);
         border: 1px solid rgba(0, 0, 0, 0.5);
     }
     > .kijs-footer .kijs-button:hover > *,
     > .kijs-footer .kijs-button:focus > * {
-        color: @window-footer-button-focus-fontColor;
+        color: var(--window-footer-button-focus-fontColor);
     }
 }
 
@@ -917,9 +864,9 @@ button.kijs-button.kijs-trigger {
     margin: 0;
     padding: 0 2px 0 1px;
     border-radius: 0;
-    border-top: 1px solid @field-borderColor;
-    border-right: 1px solid @field-borderColor;
-    border-bottom: 1px solid @field-borderColor;
+    border-top: 1px solid var(--field-borderColor);
+    border-right: 1px solid var(--field-borderColor);
+    border-bottom: 1px solid var(--field-borderColor);
 }
 
 
@@ -933,7 +880,7 @@ div.kijs-menu-spinbox {
     }
 
     .kijs-container-inner > div.separator {
-        background-color: @button-bkgrndColor;
+        background-color: var(--button-bkgrndColor);
 
         > hr {
             padding: 0;
@@ -941,8 +888,8 @@ div.kijs-menu-spinbox {
             width: 96%;
             margin: 0 0 0 2%;
             border: 0;
-            background-color: @field-borderColor;
-            color: @field-borderColor;
+            background-color: var(--field-borderColor);
+            color: var(--field-borderColor);
         }
     }
 
@@ -954,18 +901,21 @@ div.kijs-menu-spinbox {
         &.kijs-hidden {
             display: none;
         }
-    }
-    button.kijs-button > .kijs-caption {
-        flex: 1;
-    }
-    button.kijs-button > .kijs-caption:first-child {
-        margin-left: 22px;
-    }
-    button.kijs-button > .kijs-icon {
-        width: 18px;
-    }
-    button.kijs-button > .kijs-icon2 {
-        text-align: right;
+        
+        > .kijs-caption {
+            flex: 1;
+        }
+        > .kijs-caption:first-child {
+            margin-left: 22px;
+        }
+        
+        > .kijs-icon {
+            width: 18px;
+        }
+        
+        > .kijs-icon2 {
+            text-align: right;
+        }
     }
 }
 
@@ -981,22 +931,22 @@ div.kijs-panelbar {
     flex-direction: row;
     height: 30px;
     padding: 0 3px; /* 0 3px 0 0 */
-    background-color: @bar-bkgrndColor;
+    background-color: var(--bar-bkgrndColor);
 
     -webkit-user-select: none;  /* Safari */
     user-select: none;
 
-    font-family: @default-fontFamily;
-    font-size: @default-fontSize;
+    font-family: var(--default-fontFamily);
+    font-size: var(--default-fontSize);
     text-align: left;
-    color: @bar-fontColor;
+    color: var(--bar-fontColor);
 
     > .kijs-icon {
         flex: none;
         margin: 0 0 0 3px;
         line-height: 30px;
         height: auto;
-        color: @bar-fontColor;
+        color: var(--bar-fontColor);
     }
 
     > .kijs-container-left, > .kijs-container-right {
@@ -1014,22 +964,21 @@ div.kijs-panelbar {
 
             > .kijs-caption, > .kijs-icon {
                 line-height: 30px;
-                color: @bar-button-icon-fontColor;
+                color: var(--bar-button-icon-fontColor);
             }
 
             > .kijs-badge {
                 top: 0;
                 right: -3px;
-                padding: 3px;
-                font-size: 8px;
-                line-height: 8px;
+                font-size: var(--badge-fontSize);
+                line-height: var(--badge-lineHeight);
             }
 
             &:hover,
             &:focus {
                 > .kijs-caption,
                 > .kijs-icon {
-                    color: @bar-fontColor;
+                    color: var(--bar-fontColor);
                 }
             }
 
@@ -1038,7 +987,7 @@ div.kijs-panelbar {
 
                 > .kijs-caption,
                 > .kijs-icon{
-                    color: @bar-button-icon-disabled-fontColor;
+                    color: var(--bar-button-icon-disabled-fontColor);
                 }
             }
         }
@@ -1053,7 +1002,7 @@ div.kijs-panelbar {
     }
 
     &.kijs-headerbar {
-        font-size: @headerBar-fontSize;
+        font-size: var(--headerBar-fontSize);
 
         > .kijs-container-inner {
             text-align: left;
@@ -1061,7 +1010,7 @@ div.kijs-panelbar {
     }
 
     &.kijs-headerbar-center {
-        font-size: @headerBar-fontSize;
+        font-size: var(--headerBar-fontSize);
 
         > .kijs-container-inner {
             text-align: center;
@@ -1069,7 +1018,7 @@ div.kijs-panelbar {
     }
 
     &.kijs-footerbar {
-        font-size: @footerBar-fontSize;
+        font-size: var(--footerBar-fontSize);
 
         > .kijs-container-inner {
             text-align: right;
@@ -1141,16 +1090,16 @@ div.kijs-panel {
 div.kijs-buttongroup {
     display: flex;
     flex-direction: column-reverse;
-    border-right: 1px solid @panel-borderColor;
+    border-right: 1px solid var(--panel-borderColor);
 
     > .kijs-caption {
         flex: none;
         margin: 2px 0;
-        font-size: 11px;
-        line-height: 11px;
-        font-family: @default-fontFamily;
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
+        font-family: var(--default-fontFamily);
         text-align: center;
-        color: @buttonGroup-button-fontColor;
+        color: var(--buttonGroup-button-fontColor);
     }
 
     > .kijs-container-inner {
@@ -1164,13 +1113,13 @@ div.kijs-buttongroup {
                 width: 100%;
                 margin: 0;
                 padding: 5px;
-                background-color: @buttonGroup-button-bkgrndColor;
+                background-color: var(--buttonGroup-button-bkgrndColor);
 
                 &:hover,
                 &:focus {
-                    background-color: @buttonGroup-button-focus-bkgrndColor;
+                    background-color: var(--buttonGroup-button-focus-bkgrndColor);
                     > * {
-                        color: @buttonGroup-button-focus-fontColor;
+                        color: var(--buttonGroup-button-focus-fontColor);
                     }
                 }
             }
@@ -1236,9 +1185,10 @@ div.kijs-tree {
                 justify-content: center;
                 align-items: center;
                 margin: 4px 0;
-                font-size: @default-fontSize;
-                line-height: 11px;
-                font-family: @default-fontFamily;
+                color: var(--default-fontColor);
+                font-size: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
+                font-family: var(--default-fontFamily);
                 white-space: nowrap;
             }
         }
@@ -1275,7 +1225,7 @@ div.kijs-tree {
         > .kijs-node {
             > .kijs-icon, > .kijs-treecaption {
                 font-weight: bold;
-                color: @item-selected-fontColor;
+                color: var(--item-selected-fontColor);
             }
         }
     }
@@ -1312,32 +1262,32 @@ div.kijs-dataview {
         width: 200px;
         margin: 4px;
         padding: 2px 4px 6px 4px;
-        background-color: @item-bkgrndColor;
-        border: 1px solid @item-borderColor;
+        background-color: var(--item-bkgrndColor);
+        border: 1px solid var(--item-borderColor);
         border-radius: 4px;
         outline: none;
 
-        font-family: @default-fontFamily;
-        font-size: @item-fontSize;
-        color: @item-fontColor;
+        font-family: var(--default-fontFamily);
+        font-size: var(--item-fontSize);
+        color: var(--item-fontColor);
 
         * {
-            font-family: @default-fontFamily;
-            font-size: @item-fontSize;
-            color: @item-fontColor;
+            font-family: var(--default-fontFamily);
+            font-size: var(--item-fontSize);
+            color: var(--item-fontColor);
         }
         &:focus,
         &:hover {
-            background-color: @item-focus-bkgrndColor;
-            border-color: @item-focus-borderColor;
-            color: @item-focus-fontColor;
+            background-color: var(--item-focus-bkgrndColor);
+            border-color: var(--item-focus-borderColor);
+            color: var(--item-focus-fontColor);
         }
 
         > div > .label {
             display: inline-block;
             width: 50px;
-            font-size: @item-label-fontSize;
-            color: @item-label-fontColor;
+            font-size: var(--item-label-fontSize);
+            color: var(--item-label-fontColor);
         }
 
         > div > .value {
@@ -1345,35 +1295,35 @@ div.kijs-dataview {
         }
 
         &.kijs-selected {
-            background-color: @item-selected-bkgrndColor;
-            border-color: @item-selected-borderColor;
-            color: @item-selected-fontColor;
+            color: var(--item-selected-fontColor);
+            background-color: var(--item-selected-bkgrndColor);
+            border-color: var(--item-selected-borderColor);
         }
     }
 
     &.kijs-disabled {
-        background-color: @field-disabled-bkgrndColor;
+        background-color: var(--field-disabled-bkgrndColor);
 
         .kijs-dataviewelement {
-            background-color: @item-disabled-bkgrndColor;
-            border-color: @item-disabled-borderColor;
-            color: @item-disabled-fontColor;
+            background-color: var(--item-disabled-bkgrndColor);
+            border-color: var(--item-disabled-borderColor);
+            color: var(--item-disabled-fontColor);
 
             * {
-                color: @item-disabled-fontColor;
+                color: var(--item-disabled-fontColor);
             }
 
             > div > .label {
-                color: @item-label-disabled-fontColor;
+                color: var(--item-label-disabled-fontColor);
             }
 
             &.kijs-selected {
-                background-color: @item-selected-disabled-bkgrndColor;
-                border-color: @item-selected-disabled-borderColor;
-                color: @item-selected-disabled-fontColor;
+                background-color: var(--item-selected-disabled-bkgrndColor);
+                border-color: var(--item-selected-disabled-borderColor);
+                color: var(--item-selected-disabled-fontColor);
 
                 * {
-                    color: @item-selected-disabled-fontColor;
+                    color: var(--item-selected-disabled-fontColor);
                 }
             }
         }
@@ -1389,7 +1339,8 @@ div.kijs-listview {
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    border: 1px solid @field-borderColor;
+    border: 1px solid var(--field-borderColor);
+    background-color: var(--field-bkgrndColor);
 
     .kijs-dataviewelement {
         border: 1px solid transparent;
@@ -1400,27 +1351,30 @@ div.kijs-listview {
 
         &:focus,
         &:hover {
-            background-color: @item-focus-bkgrndColor;
-            border-color: @item-focus-borderColor;
-            color: @item-focus-fontColor;
+            background-color: var(--item-focus-bkgrndColor);
+            border-color: var(--item-focus-borderColor);
+            color: var(--item-focus-fontColor);
         }
 
         &.kijs-selected {
-            border-color: @item-selected-borderColor;
+            border-color: var(--item-selected-borderColor);
+
             &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                background-color: @item-selected-bkgrndColor;
+                background-color: var(--item-selected-bkgrndColor);
             }
         }
 
         &.kijs-display-checkboxes {
+            color: var(--field-fontColor);
             border-color: transparent;
 
             &:before {
                 display: inline-block;
+                min-width: 15px;
+                margin: 3px 4px 0 0;
+                vertical-align: top;
                 font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f096';
-                min-width: 15px;
-                margin-right: 2px;
             }
 
             &.kijs-selected:before {
@@ -1433,14 +1387,16 @@ div.kijs-listview {
         }
 
         &.kijs-display-options {
+            color: var(--field-fontColor);
             border-color: transparent;
 
             &:before {
                 display: inline-block;
+                min-width: 15px;
+                margin: 3px 4px 0 0;
+                vertical-align: top;
                 font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f10c';
-                min-width: 15px;
-                margin-right: 2px;
             }
 
             &.kijs-selected:before {
@@ -1459,10 +1415,13 @@ div.kijs-listview {
             }
 
             > .kijs-caption {
-                font-family: @default-fontFamily;
-                font-size: @item-fontSize;
-                line-height: 15px;
-                color: @item-fontColor;
+                display: inline-block;
+                vertical-align: top;
+                margin: 3px 4px 0 0;
+                font-family: var(--default-fontFamily);
+                font-size: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
+                color: var(--item-fontColor);
             }
             > div > .value {
                 display: inline-block;
@@ -1471,13 +1430,13 @@ div.kijs-listview {
     }
 
     &.kijs-disabled {
-        background-color: @field-disabled-bkgrndColor;
+        background-color: var(--field-disabled-bkgrndColor);
 
         div.kijs-dataviewelement {
             background-color: transparent;
 
             &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                border-color: @item-selected-disabled-borderColor;
+                border-color: var(--item-selected-disabled-borderColor);
                 background-color: transparent;
             }
         }
@@ -1492,10 +1451,10 @@ div.kijs-listview {
 
         .kijs-placeholder {
             border: 1px solid transparent;
-            font-family: @default-fontFamily;
-            font-size: @default-fontSize;
-            color: @default-fontColor;
-            background-color: @field-disabled-bkgrndColor;
+            font-family: var(--default-fontFamily);
+            font-size: var(--default-fontSize);
+            color: var(--default-fontColor);
+            background-color: var(--field-disabled-bkgrndColor);
             font-style: italic;
         }
     }
@@ -1508,7 +1467,7 @@ div.kijs-listview {
    ****************** */
 div.kijs-monthpicker {
     width: 184px;
-    border: 1px solid @panel-borderColor;
+    border: 1px solid var(--panel-borderColor);
 
     &.kijs-borderless {
         border: none;
@@ -1519,15 +1478,16 @@ div.kijs-monthpicker {
         flex-direction: row;
         margin: 4px 0 0 0;
 
-        font-family: @default-fontFamily;
-        font-size: @field-fontSize;
-
+        font-family: var(--default-fontFamily);
+        font-size: var(--field-fontSize);
+        color: var(--default-fontColor);
+        
         .kijs-monthpicker-monthdiv {
             flex: 2;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            border-right: 1px solid @panel-borderColor;
+            border-right: 1px solid var(--panel-borderColor);
 
             > div {
                 width: 40%;
@@ -1537,16 +1497,16 @@ div.kijs-monthpicker {
                 border: 1px solid transparent;
 
                 &:hover {
-                    background-color: @item-focus-bkgrndColor;
+                    background-color: var(--item-focus-bkgrndColor);
                 }
 
                 &.kijs-disabled {
-                    color: @button-disabled-fontColor;
+                    color: var(--button-disabled-fontColor);
                     &:hover { background-color: initial; }
                 }
 
                 &.kijs-selected {
-                    border: 1px solid @item-selected-borderColor;
+                    border: 1px solid var(--item-selected-borderColor);
                 }
             }
         }
@@ -1562,7 +1522,7 @@ div.kijs-monthpicker {
                 height: 16px;
                 margin: 2px 0;
                 padding: 0 8px;
-                line-height: 12px;
+                line-height: var(--default-lineHeight);
             }
 
             .kijs-monthpicker-yearinnerdiv {
@@ -1573,16 +1533,16 @@ div.kijs-monthpicker {
                     border: 1px solid transparent;
 
                     &:hover {
-                        background-color: @item-focus-bkgrndColor;
+                        background-color: var(--item-focus-bkgrndColor);
                     }
 
                     &.kijs-disabled {
-                        color: @button-disabled-fontColor;
+                        color: var(--button-disabled-fontColor);
                         &:hover { background-color: initial; }
                     }
 
                     &.kijs-selected {
-                        border: 1px solid @item-selected-borderColor;
+                        border: 1px solid var(--item-selected-borderColor);
                     }
                 }
             }
@@ -1598,6 +1558,7 @@ div.kijs-monthpicker {
         .kijs-button {
             flex: none;
             margin: 10px 4px;
+            color: var(--default-fontColor);
             outline: none; /* damit im Chrome der Schwarze Rand vom Fokus nicht angezeigt wird */
         }
     }
@@ -1610,7 +1571,7 @@ div.kijs-monthpicker {
    ****************** */
 div.kijs-datepicker {
     width: 184px;
-    border: 1px solid @panel-borderColor;
+    border: 1px solid var(--panel-borderColor);
 
     &.kijs-borderless {
         border: none;
@@ -1632,11 +1593,12 @@ div.kijs-datepicker {
                 margin: 0;
                 padding: 5px 5px 0 0;
                 border: 0;
-                font-family: @default-fontFamily;
-                font-size: @default-fontSize;
-                line-height: @default-fontSize;
+                font-family: var(--default-fontFamily);
+                font-size: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
+                color: var(--default-fontColor);
                 text-align: right;
-                background-color: @panel-bkgrndColor;
+                background-color: var(--panel-bkgrndColor);
 
                 &.kijs-none {
                     /*display: none;*/
@@ -1644,68 +1606,68 @@ div.kijs-datepicker {
 
                 &.kijs-head {
                     padding: 5px 4px 0 0;
-                    color: @item-label-fontColor;
+                    color: var(--item-label-fontColor);
                     font-weight: bold;
                 }
                 &.kijs-outofmonth {
-                    color: @item-label-fontColor;
+                    color: var(--item-label-fontColor);
                 }
                 &.kijs-today {
-                    color: @today-fontColor;
+                    color: var(--today-fontColor);
 
                     &.kijs-range-start, &.kijs-range-end {
-                        color: white;
+                        color: var(--default-fontColor);
                     }
                 }
                 &.kijs-weekend {
-                    background-color: @viewport-bkgrndColor;
+                    background-color: var(--viewport-bkgrndColor);
                 }
                 &.kijs-weekno {
-                    font-size: @item-label-fontSize;
-                    color: @item-label-fontColor;
+                    font-size: var(--item-label-fontSize);
+                    color: var(--item-label-fontColor);
                 }
                 &.kijs-value {
                     padding: 4px 4px 0 0;
-                    background-color: @item-selected-bkgrndColor;
-                    color: @item-selected-fontColor;
-                    border: 1px solid @item-selected-borderColor;
+                    background-color: var(--item-selected-bkgrndColor);
+                    color: var(--item-selected-fontColor);
+                    border: 1px solid var(--item-selected-borderColor);
                 }
                 &.kijs-range {
                     padding: 4px 5px 0 0;
-                    background-color: @item-selected-bkgrndColor;
-                    color: @item-selected-fontColor;
-                    border-top: 1px solid @item-selected-borderColor;
-                    border-bottom: 1px solid @item-selected-borderColor;
+                    background-color: var(--item-selected-bkgrndColor);
+                    color: var(--item-selected-fontColor);
+                    border-top: 1px solid var(--item-selected-borderColor);
+                    border-bottom: 1px solid var(--item-selected-borderColor);
                 }
                 &.kijs-rangestart {
                     padding: 4px 5px 0 0;
-                    border-left: 1px solid @item-selected-borderColor;
+                    border-left: 1px solid var(--item-selected-borderColor);
                 }
                 &.kijs-rangeend {
                     padding: 4px 4px 0 0;
-                    border-right: 1px solid @item-selected-borderColor;
+                    border-right: 1px solid var(--item-selected-borderColor);
                 }
 
                 /*&:hover {
-                    background-color: @item-focus-bkgrndColor;
+                    background-color: var(--item-focus-bkgrndColor);
                 }
 
                 &.kijs-disabled {
-                    color: @button-disabled-fontColor;
+                    color: var(--button-disabled-fontColor);
                     &:hover { background-color: initial; }
                 }
 
                 &.kijs-selected {
-                    border: 1px solid @item-selected-borderColor;
+                    border: 1px solid var(--item-selected-borderColor);
                 }*/
 
                 &.kijs-day:hover {
-                    background-color: @item-focus-bkgrndColor;
+                    background-color: var(--item-focus-bkgrndColor);
                 }
                 &.kijs-disabled {
-                    color: @badge-disabled-fontColor;
-                    background-color: @field-disabled-bkgrndColor;
-                    &:hover { background-color: @field-disabled-bkgrndColor; }
+                    color: var(--badge-disabled-fontColor);
+                    background-color: var(--field-disabled-bkgrndColor);
+                    &:hover { background-color: var(--field-disabled-bkgrndColor); }
                 }
             }
         }
@@ -1733,7 +1695,7 @@ div.kijs-datepicker {
    ****************** */
 div.kijs-timepicker {
     width: 140px;
-    border: 1px solid @panel-borderColor;
+    border: 1px solid var(--panel-borderColor);
 
     .kijs-timepicker-inputdiv {
         display: flex;
@@ -1752,7 +1714,9 @@ div.kijs-timepicker {
             padding: 0;
             width: 22px;
             border: 0;
-            border-bottom: 1px solid @field-borderColor;
+            border-bottom: 1px solid var(--field-borderColor);
+            background-color: var(--field-bkgrndColor);
+            color: var(--default-fontColor);
         }
 
         input::selection {
@@ -1764,7 +1728,7 @@ div.kijs-timepicker {
 
         input:focus {
             color: #2B8BD9;
-            border-bottom: 1px solid @field-focus-borderColor;
+            border-bottom: 1px solid var(--field-focus-borderColor);
             outline: none;
         }
     }
@@ -1791,6 +1755,7 @@ div.kijs-timepicker {
 
         .kijs-button {
             flex: none;
+            color: var(--default-fontColor);
             margin: 2px 4px 10px 4px;
         }
     }
@@ -1803,20 +1768,24 @@ div.kijs-timepicker {
 div.kijs-progressbar {
 
     .kijs-progressbar-caption-bottom, .kijs-progressbar-caption {
-        font-family: @default-fontFamily;
-        font-size: @default-fontSize;
-        line-height: 17px;
+        font-family: var(--default-fontFamily);
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
     }
 
     .kijs-progressbar-caption {
         padding: 0 0 2px 0;
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
+        color: var(--default-fontColor);
     }
 
     .kijs-progressbar-caption-bottom {
         padding: 2px 0 0 0;
-        font-size: 11px;
-        line-height: 12px;
-
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
+        color: var(--default-fontColor);
+        
         .error {
             padding: 0;
             color: red;
@@ -1826,8 +1795,8 @@ div.kijs-progressbar {
     .kijs-progressbar-field {
         position: relative;
         padding: 3px;
-        border: 1px solid @field-borderColor;
-        background-color: white;
+        border: 1px solid var(--field-borderColor);
+        background-color: var(--panel-bkgrndColor);
         min-height: 14px;
 
         .kijs-progressbar-bar {
@@ -1836,7 +1805,7 @@ div.kijs-progressbar {
             bottom: 0;
             left: 0;
             width: 0;
-            background-color: @bar-bkgrndColor;
+            background-color: var(--bar-bkgrndColor);
             transition: width 2s;
         }
 
@@ -1844,10 +1813,10 @@ div.kijs-progressbar {
             position: relative;
             display: inline;
             margin: 0;
-            font-family: @default-fontFamily;
-            font-size: @default-fontSize;
-            line-height: 15px;
-            color: white;
+            font-family: var(--default-fontFamily);
+            font-size: var(--default-fontSize);
+            line-height: var(--default-lineHeight);
+            color: var(--bar-fontColor);
             opacity: 0;
             transition: opacity 2s;
         }
@@ -1862,14 +1831,16 @@ div.kijs-progressbar {
 div.kijs-field {
     display: flex;
     flex-direction: row;
-
+    min-height: 25px;
+    
     > .kijs-label {
         display: block;
         flex: none;
-        font-family: @default-fontFamily;
-        font-size: @field-fontSize;
-        line-height: 17px;
-        padding: 3px 0 0 0;
+        color: var(--field-label-fontColor);
+        font-family: var(--default-fontFamily);
+        font-size: var(--field-fontSize);
+        line-height: var(--field-lineHeight);
+        padding: 3px 0 3px 0;
 
         /* selektion von Text erlauben */
         -webkit-user-select: text;
@@ -1883,7 +1854,8 @@ div.kijs-field {
 
         > input {
             outline: none;
-            background-color: white;
+            color: var(--field-fontColor);
+            background-color: var(--field-bkgrndColor);
         }
     }
 
@@ -1900,19 +1872,18 @@ div.kijs-field {
             &.kijs-inline {
                 margin: 0 0 0 0;
                 border-radius: 0px;
-                background-color: white;
-                border-top: 1px solid @field-borderColor;
-                border-right: 1px solid @field-borderColor;
-                border-bottom: 1px solid @field-borderColor;
+                border-top: 1px solid var(--field-borderColor);
+                border-right: 1px solid var(--field-borderColor);
+                border-bottom: 1px solid var(--field-borderColor);
                 border-left: 0;
-                color: @button-icon-fontColor;
+                color: var(--button-icon-fontColor);
 
                 &.kijs-default {
                     box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
                 }
 
                 &:hover {
-                    background-color: @viewport-bkgrndColor;
+                    background-color: var(--viewport-bkgrndColor);
                 }
             }
         }
@@ -1924,15 +1895,15 @@ div.kijs-field {
         margin: 0 0 0 0;
         padding: 2px 4px;
         height: 100%;
-        border-top: 1px solid @field-borderColor;
-        border-right: 1px solid @field-borderColor;
-        border-bottom: 1px solid @field-borderColor;
-        background-color: white;
-        color: @button-icon-fontColor;
+        border-top: 1px solid var(--field-borderColor);
+        border-right: 1px solid var(--field-borderColor);
+        border-bottom: 1px solid var(--field-borderColor);
+        background-color: transparent;
+        color: var(--button-icon-fontColor);
         cursor: pointer;
 
         &:hover {
-            background-color: @viewport-bkgrndColor;
+            background-color: var(--viewport-bkgrndColor);
         }
 
         &.kijs-hidden {
@@ -1940,12 +1911,22 @@ div.kijs-field {
         }
 
         &.kijs-disabled {
-            background-color: @field-disabled-bkgrndColor;
-            color: @field-disabled-fontColor;
+            background-color: var(--field-disabled-bkgrndColor);
+            color: var(--field-disabled-fontColor);
             cursor: default;
         }
     }
-
+    
+    &.kijs-disableFlex {
+        > .kijs-inputwrapper {
+            flex: none;
+        }
+        
+        > .kijs-spacer {
+            flex: 1;
+        }
+    }
+    
     &.kijs-label-ontop {
         flex-wrap: wrap;
 
@@ -1960,14 +1941,14 @@ div.kijs-field {
 
 .kijs-icon-error {
     margin: 2px 0 0 2px;
-    color: @icon-error-fontColor;
+    color: var(--icon-error-fontColor);
     cursor: default;
     height: 20px;
 }
 
 .kijs-icon-help {
     margin: 2px 0 0 2px;
-    color: @icon-help-fontColor;
+    color: var(--icon-help-fontColor);
     cursor: default;
     height: 20px;
 }
@@ -1986,25 +1967,25 @@ div.kijs-field-text {
             height: 100%;
             width: 100%;
             margin: 0;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2018,7 +1999,7 @@ div.kijs-field-color {
         height: 25px;
 
         > input {
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             border-radius: 2px;
             padding: 1px;
             width: 25px;
@@ -2027,7 +2008,7 @@ div.kijs-field-color {
             cursor: pointer;
 
             &:hover, &:focus {
-                background-color: @button-focus-bkgrndColor;
+                background-color: var(--button-focus-bkgrndColor);
             }
         }
     }
@@ -2047,25 +2028,25 @@ div.kijs-field-password {
             height: 100%;
             width: 100%;
             margin: 0;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2085,14 +2066,14 @@ div.kijs-field-month {
             height: 100%;
             width: 100%;
             margin: 0;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
@@ -2102,12 +2083,12 @@ div.kijs-field-month {
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2125,20 +2106,20 @@ div.kijs-field-datetime {
 
     > .kijs-inputwrapper {
         height: 25px;
-
+        
         > input {
             display: block;
             height: 100%;
             width: 100%;
             margin: 0;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
@@ -2148,13 +2129,25 @@ div.kijs-field-datetime {
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
+    }
+    
+    &.kijs-disableFlex {
+        > .kijs-inputwrapper {
+            flex: none;
+            width: 170px;
+        }
+        &.kijs-date > .kijs-inputwrapper { width: 80px; }
+        &.kijs-time > .kijs-inputwrapper { width: 80px; }
+        &.kijs-dateTime > .kijs-inputwrapper { width: 130px; }
+        &.kijs-week > .kijs-inputwrapper { width: 80px; }
+        &.kijs-range > .kijs-inputwrapper { width: 170px; }
     }
 }
 
@@ -2167,7 +2160,7 @@ div.kijs-field-datetime {
 
     > .kijs-separator {
         width: 1px;
-        background-color: @panel-borderColor;
+        background-color: var(--panel-borderColor);
     }
 
     > div.kijs-timepicker {
@@ -2188,17 +2181,18 @@ div.kijs-field-memo {
         height: 100%;
         width: 100%;
         margin: 0;
-        border: 1px solid @field-borderColor;
-        background-color: white;
+        color: var(--field-fontColor);
+        border: 1px solid var(--field-borderColor);
+        background-color: var(--field-bkgrndColor);
         padding: 2px 4px;
-        font-family: @default-fontFamily;
-        font-size: @field-fontSize;
-        line-height: 17px;
+        font-family: var(--default-fontFamily);
+        font-size: var(--field-fontSize);
+        line-height: var(--field-lineHeight);
         resize: none;
         outline: none;
 
         &:focus {
-            border: 1px solid @field-focus-borderColor;
+            border: 1px solid var(--field-focus-borderColor);
         }
     }
 
@@ -2212,35 +2206,16 @@ div.kijs-field-memo {
             margin: 0 0 0 2px;
             padding: 0 4px;
             height: 100%;
-
-            &.kijs-inline {
-                margin: 0 0 0 0;
-                border-radius: 0px;
-                background-color: white;
-                border-top: 1px solid @field-borderColor;
-                border-right: 1px solid @field-borderColor;
-                border-bottom: 1px solid @field-borderColor;
-                border-left: 0;
-                color: @button-icon-fontColor;
-
-                &.kijs-default {
-                    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
-                }
-
-                &:hover {
-                    background-color: @viewport-bkgrndColor;
-                }
-            }
         }
     }
 
     &.kijs-error  > .kijs-inputwrapper > textarea {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > textarea {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2253,13 +2228,13 @@ div.kijs-field-memo {
 div.kijs-field-listview {
 
     > .kijs-inputwrapper {
-        background-color: white;
+        background-color: var(--field-bkgrndColor);
 
         > .kijs-listview {
             height: 100%;
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
@@ -2274,36 +2249,17 @@ div.kijs-field-listview {
             margin: 0 0 0 2px;
             padding: 0 4px;
             height: 100%;
-
-            &.kijs-inline {
-                margin: 0 0 0 0;
-                border-radius: 0px;
-                background-color: white;
-                border-top: 1px solid @field-borderColor;
-                border-right: 1px solid @field-borderColor;
-                border-bottom: 1px solid @field-borderColor;
-                border-left: 0;
-                color: @button-icon-fontColor;
-
-                &.kijs-default {
-                    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
-                }
-
-                &:hover {
-                    background-color: @viewport-bkgrndColor;
-                }
-            }
         }
     }
 
     &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
-        background-color: @icon-error-bkgrndColor;
+        background-color: var(--icon-error-bkgrndColor);
     }
 
     &.kijs-disabled,
     &.kijs-readonly {
         > .kijs-inputwrapper > .kijs-listview {
-            border-color: @field-borderColor;
+            border-color: var(--field-borderColor);
         }
     }
 }
@@ -2319,15 +2275,16 @@ div.kijs-field-checkboxgroup{
     > .kijs-inputwrapper {
         > .kijs-listview {
             height: 100%;
-            background-color: transparent;
+            background-color: var(--field-bkgrndColor);
             border-color: transparent;
 
             .kijs-dataviewelement {
+                padding: 0 4px 0 0px;
                 background-color: transparent;
 
                 &:focus,
                 &:hover {
-                    color: @field-focus-borderColor;
+                    color: var(--field-focus-borderColor);
                 }
 
             }
@@ -2337,16 +2294,16 @@ div.kijs-field-checkboxgroup{
     }
 
     &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
-        background-color: @icon-error-bkgrndColor;
+        background-color: var(--icon-error-bkgrndColor);
     }
 
     &.kijs-disabled,
     &.kijs-readonly {
         > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
-            color: @field-disabled-fontColor;
+            color: var(--field-disabled-fontColor);
 
             > .kijs-caption {
-                color: @field-disabled-fontColor;
+                color: var(--field-disabled-fontColor);
             }
         }
     }
@@ -2381,14 +2338,14 @@ div.kijs-field-combo {
             height: 100%;
             width: 100%;
             margin: 0;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
             padding: 2px 4px;
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
 
             &:focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
@@ -2398,12 +2355,12 @@ div.kijs-field-combo {
     }
 
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2430,7 +2387,7 @@ div.kijs-field-range {
             width: 100%;
             height: 1px;
             margin: 0;
-            background: @range-bkgrndColor;
+            background: var(--range-bkgrndColor);
             outline: none;
         }
 
@@ -2441,7 +2398,7 @@ div.kijs-field-range {
             width: 15px;
             height: 15px;
             border-radius: 15px;
-            background: @range-btnColor;
+            background: var(--range-btnColor);
             cursor: pointer;
         }
 
@@ -2450,40 +2407,40 @@ div.kijs-field-range {
             height: 15px;
             border: 0;
             border-radius: 15px;
-            background-color: @range-btnColor;
+            background-color: var(--range-btnColor);
             cursor: pointer;
         }
 
         > input:hover::-webkit-slider-thumb {
-            background-color: @field-focus-borderColor;
+            background-color: var(--field-focus-borderColor);
         }
 
         > input:hover::-moz-range-thumb {
-            background-color: @field-focus-borderColor;
+            background-color: var(--field-focus-borderColor);
         }
     }
-
+    
     &.kijs-error  > .kijs-inputwrapper > input {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled > .kijs-inputwrapper , &.kijs-readonly > .kijs-inputwrapper {
         > input {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
 
         > input::-webkit-slider-thumb {
-            background-color: @field-disabled-fontColor;
+            background-color: var(--field-disabled-fontColor);
             cursor: default;
         }
 
         > input:hover::-webkit-slider-thumb {
-            background-color: @field-disabled-fontColor;
+            background-color: var(--field-disabled-fontColor);
             cursor: default;
         }
 
         > input::-moz-range-thumb {
-            background-color: @field-disabled-fontColor;
+            background-color: var(--field-disabled-fontColor);
             cursor: default;
         }
     }
@@ -2496,39 +2453,44 @@ div.kijs-field-range {
 div.kijs-field-checkbox {
     > .kijs-inputwrapper {
         > .kijs-checkbox-input {
+            display: inline-block;
             height: 15px;
             width: 15px;
-            margin-right: 2px;
+            margin: 4px 4px 0 0;
             font-size: 15px;
-            line-height: 15px;
-            color: @button-icon-fontColor;
-            vertical-align: bottom;
+            line-height: var(--field-lineHeight);
+            color: var(--button-icon-fontColor);
+            vertical-align: top;
         }
 
         > .kijs-checkbox-icon {
-            margin-right: 4px;
+            margin: 0 4px 0 0;
             height: 15px;
             width: 15px;
             vertical-align: top;
         }
 
         > .kijs-caption {
-            font-family: @default-fontFamily;
-            font-size: @field-fontSize;
-            line-height: 17px;
+            display: inline-block;
+            margin: 3px 4px 0 0;
+            color: var(--field-fontColor);
+            font-family: var(--default-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
             vertical-align: top;
+            color: var(--field-fontColor);
         }
 
         &:focus {
             > .kijs-checkbox-input {
-                color: @field-focus-borderColor;
+                color: var(--field-focus-borderColor);
             }
         }
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > * {
-                color: @field-disabled-fontColor;
+                color: var(--field-disabled-fontColor);
         }
     }
 }
@@ -2543,7 +2505,15 @@ div.kijs-field-editor {
 
         > div {
             height: 100%;
-            border: 1px solid @field-borderColor;
+            border: 1px solid var(--field-borderColor);
+
+            .ace_gutter {
+                background-color: var(--field-bkgrndColor);
+            }
+
+            .ace_content {
+                background-color: var(--field-bkgrndColor);
+            }
 
             .ace_scrollbar-v {
                 overflow-y: auto;
@@ -2554,21 +2524,105 @@ div.kijs-field-editor {
             }
 
             &.ace_focus {
-                border: 1px solid @field-focus-borderColor;
+                border: 1px solid var(--field-focus-borderColor);
             }
         }
     }
 
     &.kijs-error > .kijs-inputwrapper > div {
-        background-color: @field-error-bkgrndColor;
+        background-color: var(--field-error-bkgrndColor);
     }
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > div {
-            background-color: @field-disabled-bkgrndColor;
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
+
+
+/* ******************
+   * Switch
+   ****************** */
+div.kijs-field-switch {
+    > .kijs-inputwrapper {
+        > .kijs-toggleBorder {
+            display: inline-block;
+            height: 20px;
+            width: 34px;
+            margin-right: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--field-borderColor);
+            vertical-align: top;
+            background-color: var(--field-bkgrndColor);
+            
+            > .kijs-togglePoint {
+                display: inline-block;
+                height: 20px;
+                width: 20px;
+                border-radius: 10px;
+                background-color: var(--field-item-bkgrndColor);
+                transition: margin-left 0.2s;
+            }
+            
+            &:focus {
+                border-color: var(--field-focus-borderColor);
+            }
+            &:hover {
+                > .kijs-togglePoint {
+                    background-color: var(--field-item-focus-bkgrndColor);
+                }
+            }
+        }
+        
+        > .kijs-icon {
+            margin: 2px 4px 0 0;
+            height: 15px;
+            width: 15px;
+            vertical-align: top;
+            color: var(--button-icon-fontColor);
+        }
+
+        > .kijs-caption {
+            display: inline-block;
+            margin: 3px 4px 0 0;
+            font-family: var(--field-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
+            vertical-align: top;
+            color: var(--field-fontColor);
+        }
+    }
+    
+    &.kijs-checked {
+        > .kijs-inputwrapper {
+            > .kijs-toggleBorder {
+                background-color: var(--okColor);
+
+                > .kijs-togglePoint {
+                    margin-left: 14px;
+                }
+            }
+        }
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper {
+            > * {
+                color: var(--field-disabled-fontColor);
+            }
+            
+            > .kijs-toggleBorder {
+                background-color: var(--field-bkgrndColor);
+                
+                > .kijs-togglePoint {
+                    background-color: var(--field-disabled-fontColor);
+                }
+            }
+        }
+    }
+}
+
 
 
 /* ******************
@@ -2590,13 +2644,13 @@ div.kijs-field-quilleditor {
             .ql-toolbar {
                 overflow: visible;
                 border: none;
-                border-bottom: 1px solid @panel-borderColor;
+                border-bottom: 1px solid var(--panel-borderColor);
             }
 
             .ql-container {
                 z-index: -1;
                 border: none;
-                border-bottom: 1px solid @panel-borderColor;
+                border-bottom: 1px solid var(--panel-borderColor);
 
                 .ql-editor {
                     overflow-y: auto;
@@ -2610,8 +2664,8 @@ div.kijs-field-quilleditor {
         .ql-container,
         .ql-toolbar {
             pointer-events: none;
-            color: @field-disabled-fontColor;
-            background-color: @field-disabled-bkgrndColor;
+            color: var(--field-disabled-fontColor);
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 
@@ -2619,8 +2673,8 @@ div.kijs-field-quilleditor {
         .ql-container,
         .ql-toolbar {
             pointer-events: none;
-            color: @field-disabled-fontColor;
-            background-color: @field-disabled-bkgrndColor;
+            color: var(--field-disabled-fontColor);
+            background-color: var(--field-disabled-bkgrndColor);
         }
     }
 }
@@ -2631,9 +2685,10 @@ div.kijs-field-quilleditor {
    ****************** */
 div.kijs-field-display {
     .kijs-inputwrapper {
-        font-family: @default-fontFamily;
-        font-size: @field-fontSize;
-        line-height: 17px;
+        color: var(--field-fontColor);
+        font-family: var(--default-fontFamily);
+        font-size: var(--field-fontSize);
+        line-height: var(--field-lineHeight);
         padding: 3px 0 0 0;
 
         -webkit-user-select: text;
@@ -2642,7 +2697,7 @@ div.kijs-field-display {
 
     &.kijs-disabled, &.kijs-readonly {
         > .kijs-inputwrapper > * {
-                color: @field-disabled-fontColor;
+            color: var(--field-disabled-fontColor);
         }
         .kijs-link {
             cursor: default;
@@ -2667,13 +2722,13 @@ div.kijs-field-display {
 /* ******************
    * Grid
    ****************** */
-
 div.kijs-grid {
     position: relative;
     display: flex;
     flex-direction: column;
-    font-family: @default-fontFamily;
-    font-size: @default-fontSize;
+    color: var(--default-fontColor);
+    font-family: var(--default-fontFamily);
+    font-size: var(--default-fontSize);
 
     table {
         border-collapse: collapse;
@@ -2683,19 +2738,18 @@ div.kijs-grid {
             display: flex;
             flex-direction: row;
             align-items: center;
-            border-bottom: 1px solid @grid-border-color;
+            border-bottom: 1px solid var(--grid-border-color);
             outline: none;
 
             &.kijs-current {
-                background-color: @item-focus-bkgrndColor;
+                background-color: var(--item-focus-bkgrndColor);
             }
             &:hover {
-                background-color: @item-focus-bkgrndColor;
+                background-color: var(--item-focus-bkgrndColor);
             }
             &.kijs-selected {
-                background-color: @item-selected-bkgrndColor;
+                background-color: var(--item-selected-bkgrndColor);
             }
-
         }
 
         tr td {
@@ -2705,8 +2759,9 @@ div.kijs-grid {
             white-space: nowrap;
             height: 19px;
             padding: 3px 6px;
-            font-family: @default-fontFamily;
-            font-size: @default-fontSize;
+            color: var(--default-fontColor);
+            font-family: var(--default-fontFamily);
+            font-size: var(--default-fontSize);
 
             &.kijs-hidden {
                 display: none;
@@ -2723,10 +2778,10 @@ div.kijs-grid {
                 padding: 2px 0 0 0;
             }
             &.kijs-grid-cell-checkbox:hover {
-                color: @field-focus-borderColor;
+                color: var(--field-focus-borderColor);
             }
             &.kijs-grid-cell-checkbox.kijs-disabled {
-                color: @field-disabled-fontColor;
+                color: var(--field-disabled-fontColor);
             }
 
             &.kijs-grid-cell-icon {
@@ -2739,7 +2794,7 @@ div.kijs-grid {
 
             /* Daten verändert: rotes Dreieck oben links */
             &.kijs-grid-cell-dirty {
-                background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=");
+                background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
                 background-repeat: no-repeat;
                 background-position: top left;
             }
@@ -2782,7 +2837,7 @@ div.kijs-grid {
 
     .kijs-headercontainer {
         flex: 1;
-        background-color: @grid-header-bkgrndColor;
+        background-color: var(--grid-header-bkgrndColor);
 
         tr.kijs-grid-header td {
             display: flex;
@@ -2826,7 +2881,7 @@ div.kijs-grid {
             .kijs-splitter {
                 flex: none;
                 width: 3px;
-                border-right: 1px solid @splitter-overlay-bkgrndColor;
+                border-right: 1px solid var(--splitter-overlay-bkgrndColor);
                 cursor: col-resize;
                 margin: 0 0 0 2px;
             }
@@ -2845,7 +2900,7 @@ div.kijs-grid {
         }
 
         tr.kijs-grid-filter {
-            background-color: white;
+            background-color: var(--field-bkgrndColor);
             transition: max-height 0.5s;
             max-height: 25px;
 
@@ -2871,7 +2926,7 @@ div.kijs-grid {
 
                     input {
                         flex: 1;
-                        border:  0; /* 1px solid @grid-border-color;*/
+                        border:  0; /* 1px solid var(--grid-border-color);*/
                         outline: none;
                         padding: 0;
                         font-size: 11px;
@@ -2879,8 +2934,9 @@ div.kijs-grid {
                         background-color: transparent;
 
                         &::placeholder {
-                             transition: opacity 0.5s;
-                             opacity: 0;
+                            transition: opacity 0.5s;
+                            opacity: 0;
+                            color: var(--default-fontColor);
                         }
                     }
                 }
@@ -2897,7 +2953,7 @@ div.kijs-grid {
                     width: 20px;
                     margin: 2px 0;
                     padding: 0 4px;
-                    border-right: 1px solid @splitter-overlay-bkgrndColor;
+                    border-right: 1px solid var(--splitter-overlay-bkgrndColor);
 
                     .kijs-button {
                         flex: none;
@@ -2909,7 +2965,7 @@ div.kijs-grid {
 
                         .kijs-icon {
                             transition: color 0.5s;
-                            color: @grid-border-color;
+                            color: var(--grid-border-color);
                             font-size: 12px;
                             margin: -2px 0 0 0;
 
@@ -2919,7 +2975,7 @@ div.kijs-grid {
 
                 &:hover {
                     .kijs-button .kijs-icon {
-                        color: @button-icon-fontColor;
+                        color: var(--button-icon-fontColor);
                     }
 
                     div.kijs-field-text input::placeholder {
@@ -2950,24 +3006,25 @@ div.kijs-grid {
         position: absolute;
         width: 5px;
         height: 100%;
-        background-color: @splitter-overlay-bkgrndColor;
+        background-color: var(--splitter-overlay-bkgrndColor);
         opacity: 0.8;
         cursor: ew-resize;
     }
 }
 
+
 /* ******************
    * Filter
    ****************** */
 .kijs-filter-icon-checkboxgroup, .kijs-filter-checkboxgroup {
-    background-color: @button-bkgrndColor;
+    background-color: var(--button-bkgrndColor);
 
     > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
         cursor: pointer;
 
         &.kijs-display-checkboxes::before {
             padding: 3px 7px 3px 3px;
-            color: @buttonGroup-button-fontColor;
+            color: var(--buttonGroup-button-fontColor);
         }
 
         .kijs-icon {
@@ -2979,9 +3036,9 @@ div.kijs-grid {
         }
 
         &:hover {
-            background-color: @buttonGroup-button-focus-bkgrndColor;
+            background-color: var(--buttonGroup-button-focus-bkgrndColor);
             > * {
-                color: @buttonGroup-button-focus-fontColor;
+                color: var(--buttonGroup-button-focus-fontColor);
             }
         }
     }
@@ -2998,10 +3055,11 @@ div.kijs-tooltip {
     z-index: 50101;
     border-radius: 4px;
     padding: 4px;
-    border: 1px solid @panel-borderColor;
-    font-family: @default-fontFamily;
-    font-size: @default-fontSize;
-    background-color: @viewport-bkgrndColor;
+    color: var(--default-fontColor);
+    border: 1px solid var(--panel-borderColor);
+    font-family: var(--default-fontFamily);
+    font-size: var(--default-fontSize);
+    background-color: var(--viewport-bkgrndColor);
     max-width: 400px;
 
     ul {
@@ -3010,12 +3068,12 @@ div.kijs-tooltip {
     }
 
     &.kijs-error {
-        border: 1px solid @icon-error-borderColor;
-        background-color: @icon-error-bkgrndColor;
+        border: 1px solid var(--icon-error-borderColor);
+        background-color: var(--icon-error-bkgrndColor);
     }
     &.kijs-help {
-        border: 1px solid @icon-help-borderColor;
-        background-color: @icon-help-bkgrndColor;
+        border: 1px solid var(--icon-help-borderColor);
+        background-color: var(--icon-help-bkgrndColor);
     }
 }
 
@@ -3027,7 +3085,7 @@ div.kijs-tooltip {
 body > div.kijs-dragdrop-marker {
     z-index: 20201;
     position: absolute;
-    background-color: @dragover-ok-borderColor;
+    background-color: var(--dragover-ok-borderColor);
 
     &.top, &.bottom { height: 2px }
     &.left, &.right { width: 2px }

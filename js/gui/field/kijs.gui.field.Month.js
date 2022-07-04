@@ -111,6 +111,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            disableFlex: true,
             spinIconVisible: true,
             spinIconMap: 'kijs.iconMap.Fa.calendar-days'
         });

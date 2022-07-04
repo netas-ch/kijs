@@ -53,8 +53,13 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
         this._inputDom.nodeAttributeSet('type', 'range');
         this._dom.clsRemove('kijs-field-text');
         this._dom.clsAdd('kijs-field-range');
-
-       // Mapping für die Zuweisung der Config-Eigenschaften
+        
+         // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            disableFlex: true
+        });
+        
+        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             min: { target: 'min' },
             max: { target: 'max' },

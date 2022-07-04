@@ -43,11 +43,12 @@ kit.App = class kit_App {
                 // TOP
                 {
                     xtype: 'kijs.gui.Panel',
+                    name: 'mainPanel',
                     caption: 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch',
                     iconCls: 'icoKijs16',
                     collapsible: 'top',
                     collapsed: true,
-                    height: 300,
+                    height: 210,
                     style: {
                         margin: '0 0 4px 0'
                     },
@@ -56,6 +57,124 @@ kit.App = class kit_App {
                     },
                     headerBarElements:[
                         {
+                            xtype: 'kijs.gui.Button',
+                            name: 'btnTheme',
+                            iconMap: 'kijs.iconMap.Fa.palette',
+                            tooltip: 'Design wählen',
+                            on: {
+                                click: function(e) {
+                                    const spinBox = new kijs.gui.SpinBox({
+                                        target: e.element,
+                                        ownerNodes: e.element,
+                                        elements: [
+                                            {
+                                                xtype: 'kijs.gui.field.OptionGroup',
+                                                name: 'cssFile',
+                                                label: 'Design',
+                                                labelWidth: 74,
+                                                valueField: 'id',
+                                                captionField: 'Bezeichnung',
+                                                style: {
+                                                    margin: '10px'
+                                                },
+                                                data: [
+                                                    {id:'kijs.theme.default.css', Bezeichnung:'Standard' },
+                                                    {id:'kijs.theme.old.css', Bezeichnung:'Alt' },
+                                                    {id:'kijs.theme.joel.css', Bezeichnung:'Joel' }
+                                                ],
+                                                value: this._currentDesign ? this._currentDesign : 'kijs.theme.default.css',
+                                                on: {
+                                                    input: function(e) {
+                                                        this._currentDesign = e.value;
+                                                        kijs.Dom.cssFileReplace(e.oldValue, e.value);
+                                                        if (viewport.isRendered) {
+                                                            viewport.render();
+                                                        }
+                                                    },
+                                                    context: this
+                                                }
+                                            },{
+                                                xtype: 'kijs.gui.field.Switch',
+                                                name: 'darkMode',
+                                                label: 'Dark mode',
+                                                labelWidth: 74,
+                                                value: kijs.Dom.themeGet() === 'dark',
+                                                style: {
+                                                    margin: '10px'
+                                                },
+                                                on: {
+                                                    input: function(e) {
+                                                        if (e.value) {
+                                                            viewport.theme = 'dark';
+                                                        } else {
+                                                            viewport.theme = 'light';
+                                                        }
+                                                    },
+                                                    context: this
+                                                }
+                                            }
+                                        ]
+                                    });
+                                    spinBox.show();
+                                },
+                                context: this
+                            }
+                            
+                            /*menu: {
+                                elements: [
+                                    {
+                                        xtype: 'kijs.gui.field.OptionGroup',
+                                        name: 'cssFile',
+                                        label: 'Design',
+                                        labelWidth: 74,
+                                        valueField: 'id',
+                                        captionField: 'Bezeichnung',
+                                        style: {
+                                            margin: '10px'
+                                        },
+                                        data: [
+                                            {id:'kijs.theme.default.css', Bezeichnung:'Standard' },
+                                            {id:'kijs.theme.old.css', Bezeichnung:'Alt' },
+                                            {id:'kijs.theme.joel.css', Bezeichnung:'Joel' }
+                                        ],
+                                        value: 'kijs.theme.default.css',
+                                        on: {
+                                            input: function(e) {
+                                                kijs.Dom.cssFileReplace(e.oldValue, e.value);
+                                            }
+                                        }
+                                    },{
+                                        xtype: 'kijs.gui.field.Checkbox',
+                                        name: 'darkMode',
+                                        label: 'Dark mode',
+                                        labelWidth: 74,
+                                        style: {
+                                            margin: '10px'
+                                        },
+                                        on: {
+                                            input: function(e) {
+                                                if (e.value) {
+                                                    viewport.theme = 'dark';
+                                                } else {
+                                                    viewport.theme = 'light';
+                                                }
+                                                
+                                                // Bei ACE-Editoren auch das theme wechseln
+                                                viewport.down('centerPanel').down('editor').render();
+                                                viewport.down('rightPanel').down('editor').render();
+                                            }
+                                        }
+                                    }
+                                ],
+                                on: {
+                                    show: function(e) {
+                                        const elDarkmode = viewport.down('mainPanel').headerBar.containerRightEl.down('btnTheme').menu.down('darkMode');
+                                        elDarkmode.value = kijs.Dom.themeGet() === 'dark';
+                                    },
+                                    context: this
+                                }
+                            }*/
+                        },{
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.circle-question'
                         },{
@@ -84,10 +203,10 @@ kit.App = class kit_App {
                                 fontFamily: '"Open Sans", "Helvetica Neue", helvetica, arial, verdana, sans-serif',
                                 fontSize: '50px',
                                 fontWeight: 'bold',
-                                color: '#fff',
+                                color: 'var(--panel-bkgrndColor)',
                                 textAlign: 'center',
                                 verticalAlign: 'center',
-                                backgroundImage: 'repeating-linear-gradient(45deg, #fff 0%, #fff 0.1%, #eee 0.1%, #eee 2%, #fff 2%)'
+                                backgroundImage: 'repeating-linear-gradient(45deg, var(--panel-bkgrndColor) 0%, var(--panel-bkgrndColor) 0.1%, var(--panel-borderColor) 0.1%, var(--panel-borderColor) 2%, var(--panel-bkgrndColor) 2%)'
                             },
                             html: 'Drop Zone',
                             contentTypes: 'image',
@@ -283,6 +402,7 @@ kit.App = class kit_App {
                         // CENTER
                         {
                             xtype: 'kijs.gui.Panel',
+                            name: 'centerPanel',
                             caption: 'Formular',
                             iconMap: 'kijs.iconMap.Fa.gamepad',
                             footerCaption: 'FooterBar',
@@ -347,6 +467,7 @@ kit.App = class kit_App {
                                     caption: 'Tabelle',
                                     closable: true,
                                     collapsible: 'top',
+                                    collapsed: true,
                                     resizable: true,
                                     height: 200,
                                     shadow: true,
@@ -463,35 +584,39 @@ kit.App = class kit_App {
 
                                             let menu = new kijs.gui.Menu({
                                                 closeOnClick: true,
-                                                elements: [{
-                                                    caption:'Windows',
-                                                    iconMap: 'kijs.iconMap.Fa.windows',
-                                                    on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Windows!'); }}
-                                                },{
-                                                    caption:'Apple',
-                                                    iconMap: 'kijs.iconMap.Fa.apple',
-                                                    on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Apple!'); }}
-                                                },{
-                                                    caption:'Weitere',
-                                                    iconMap: 'kijs.iconMap.Fa.angles-right',
-                                                    menuElements: [{
-                                                        caption:'Linux',
-                                                        iconMap: 'kijs.iconMap.Fa.linux',
-                                                        on: {click:() => {
-                                                                kijs.gui.MsgBox.alert('You choose:', 'Linux!');
-                                                            }}
+                                                elements: [
+                                                    {
+                                                        caption:'Windows',
+                                                        iconMap: 'kijs.iconMap.Fa.windows',
+                                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Windows!'); }}
                                                     },{
-                                                        caption:'Android',
-                                                        iconMap: 'kijs.iconMap.Fa.android',
-                                                        on: {click:() => {
-                                                                kijs.gui.MsgBox.alert('You choose:', 'Android!');
-                                                            }}
-                                                    },{
-                                                        caption:'iOS',
+                                                        caption:'Apple',
                                                         iconMap: 'kijs.iconMap.Fa.apple',
-                                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'iOS!'); }}
-                                                    }]
-                                                }]
+                                                        on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Apple!'); }}
+                                                    },{
+                                                        caption:'Weitere',
+                                                        iconMap: 'kijs.iconMap.Fa.angles-right',
+                                                        menuElements: [
+                                                            {
+                                                                caption:'Linux',
+                                                                iconMap: 'kijs.iconMap.Fa.linux',
+                                                                on: {click:() => {
+                                                                        kijs.gui.MsgBox.alert('You choose:', 'Linux!');
+                                                                    }}
+                                                            },{
+                                                                caption:'Android',
+                                                                iconMap: 'kijs.iconMap.Fa.android',
+                                                                on: {click:() => {
+                                                                        kijs.gui.MsgBox.alert('You choose:', 'Android!');
+                                                                    }}
+                                                            },{
+                                                                caption:'iOS',
+                                                                iconMap: 'kijs.iconMap.Fa.apple',
+                                                                on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'iOS!'); }}
+                                                            }
+                                                        ]
+                                                    }
+                                                ]
                                             });
                                             menu.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
 
@@ -500,6 +625,18 @@ kit.App = class kit_App {
                                     },
                                     elements: [
                                         {
+                                            xtype: 'kijs.gui.field.Switch',
+                                            name: 'switch1',
+                                            label: 'Label',
+                                            caption: 'Captionxc vsdf gdfg dfgh dfgsdfg sdfgdf gsdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfg sdfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh dfgh',
+                                            iconMap: 'kijs.iconMap.Fa.palette'
+                                        },{
+                                            xtype: 'kijs.gui.field.Switch',
+                                            name: 'switch2',
+                                            label: 'Labelds sdf sdf sdf sdf sdf sdfg sdfg ',
+                                            caption: 'caption',
+                                            iconMap: 'kijs.iconMap.Fa.palette'
+                                        },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
@@ -598,7 +735,6 @@ kit.App = class kit_App {
                                             threeState: true,
                                             require: true,
                                             //value: false,
-                                            width: 250,
                                             on: {
                                                 input: function(e) {
                                                     console.log('input:' + this.value);
@@ -622,16 +758,14 @@ kit.App = class kit_App {
                                             label: '... mit Icon',
                                             iconCls: 'icoWizard16',
                                             caption: 'Caption',
-                                            checked: 1,
-                                            width: 250
+                                            checked: 1
                                         },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'CheckboxColor',
                                             label: '... mit Farbe',
                                             iconMap: 'kijs.iconMap.Fa.stamp',
                                             iconColor: '#ff8800',
-                                            caption: 'Caption',
-                                            width: 250
+                                            caption: 'Caption'
                                         },{
                                             xtype: 'kijs.gui.field.Checkbox',
                                             name: 'CheckboxOption',
@@ -644,7 +778,6 @@ kit.App = class kit_App {
                                             valueDeterminated: 'wedernoch',
                                             valueUnchecked: 'Aus',
                                             value: 'Ein',
-                                            width: 250,
                                             on: {
                                                 input: function(e) {
                                                     console.log('input:' + this.value);
@@ -840,7 +973,6 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Month',
                                             name: 'Monat',
                                             label: 'Monat',
-                                            width: 260,
                                             value: '2019-12-01',
                                             minValue: '2020-11-01',
                                             maxValue: '2022-03-30',
@@ -882,7 +1014,6 @@ kit.App = class kit_App {
                                             minutesHide: false,
                                             secondsHide: false,
                                             timeRequired: true,
-                                            width: 280,
                                             value: '2021-02-17 15:45:12',
                                             on: {
                                                 change: function(e) {
@@ -896,7 +1027,6 @@ kit.App = class kit_App {
                                             mode: 'dateTime',
                                             minValue: '2021-02-01',
                                             maxValue: '2021-03-31',
-                                            width: 330,
                                             elements:[
                                                 {
                                                     xtype: 'kijs.gui.Button',
@@ -920,7 +1050,6 @@ kit.App = class kit_App {
                                             name: 'Datum',
                                             label: 'Datum',
                                             mode: 'date',
-                                            width: 240,
                                             date: 1565301600,
                                             on: {
                                                 change: function(e) {
@@ -932,7 +1061,6 @@ kit.App = class kit_App {
                                             name: 'Uhrzeit',
                                             label: 'Uhrzeit',
                                             mode: 'time',
-                                            width: 200,
                                             value: '13',
                                             on: {
                                                 change: function(e) {
@@ -944,7 +1072,6 @@ kit.App = class kit_App {
                                             name: 'Woche',
                                             label: 'Woche',
                                             mode: 'week',
-                                            width: 240,
                                             on: {
                                                 change: function(e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
@@ -956,7 +1083,6 @@ kit.App = class kit_App {
                                             nameEnd: 'rangeEnd',
                                             label: 'von/bis',
                                             mode: 'range',
-                                            width: 320,
                                             on: {
                                                 change: function(e) {
                                                     console.log('change: ' + e.element.value + ' | ' + e.element.valueEnd);
@@ -967,7 +1093,6 @@ kit.App = class kit_App {
                                             name: 'Passwort',
                                             label: 'Passwort',
                                             //disableBrowserSecurityWarning: 'auto',
-                                            width: 200,
                                             on: {
                                                 input: function(e) {
                                                     this.parent.down('Feld 1').value = this.value;
@@ -979,8 +1104,7 @@ kit.App = class kit_App {
                                             label: 'Nummer',
                                             allowBlank: true,
                                             thousandsSeparator: '\'',
-                                            alwaysDisplayDecimals: true,
-                                            width: 200
+                                            alwaysDisplayDecimals: true
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 1',
@@ -988,6 +1112,7 @@ kit.App = class kit_App {
                                             labelHtmlDisplayType : 'html',
                                             value: 'Hallo Welt 1',
                                             helpText: 'Hilfe Text!',
+                                            width: 300,
                                             elements: [
                                                 {
                                                     xtype: 'kijs.gui.Button',
@@ -1127,7 +1252,6 @@ kit.App = class kit_App {
                                             showCheckBoxes: true,
                                             selectType: 'simple',
                                             helpText: 'Hilfe Text!',
-                                            width: 270,
                                             height: 200,
                                             style: {
                                                 marginBottom: '4px'
@@ -1840,6 +1964,7 @@ kit.App = class kit_App {
                             targetPos: 'right'
                         },{
                             xtype: 'kijs.gui.Panel',
+                            name: 'rightPanel',
                             caption: 'Vorschau',
                             iconMap: 'kijs.iconMap.Fa.magnifying-glass',
                             collapsible: 'right',

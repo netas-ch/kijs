@@ -99,6 +99,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
+            disableFlex: true,
             spinIconVisible: true,
             spinIconMap: 'kijs.iconMap.Fa.calendar',
             virtualKeyboardPolicy: 'manual'      // Mobile: Tastatur nicht automatisch öffnen
@@ -261,6 +262,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         this._mode = val;
+        
+        this._dom.clsRemove(['kijs-date','kijs-time','kijs-dateTime','kijs-week','kijs-range']);
+        this._dom.clsAdd('kijs-' + val);
+        
         this._createSpinBoxElements();
     }
 

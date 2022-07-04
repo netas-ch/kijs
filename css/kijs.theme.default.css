@@ -1,0 +1,238 @@
+/* ******************
+   * kijs Default Theme
+   ****************** */
+
+
+/* LIGHT Farbeschema*/
+/* ---------------- */
+:root {
+    --accentColor: #1f90f2;
+    --accentColor2: #d9ecfc;
+    --accentColor3: #ff9900;
+    
+    --errorColor: #c23c45;
+    --errorColorLight: #f4d9d9;
+
+    --helpColor: #1f90f2;
+    --helpColorLight: #d9ecfc;
+
+    --okColor: #61c259;
+    
+    --grey0: #fff;
+    --grey1: #fff;
+    --grey2: #f6f6f6;
+    --grey3: #efefef;
+    --grey4: #ddd;
+    --grey5: #ccc;
+    --grey6: #aaa;
+    --grey7: #888;
+    --grey8: #555;
+    --grey9: #000;
+}
+
+
+/* DARK Farbeschema*/
+/* --------------- */
+:root[data-theme='dark'] {
+    --accentColor: #2299ff;
+    --accentColor2: #2D2D38;
+    --accentColor3: #ff9900;
+    
+    --errorColor: #be6280;
+    --errorColorLight: #6a3446;
+
+    --helpColor: #6295be;
+    --helpColorLight: #405d75;
+    
+    --okColor: #0da100;
+    
+    --grey0: #000;
+    --grey1: #2d2d2d;
+    --grey2: #333;
+    --grey3: #444;
+    --grey4: #555;
+    --grey5: #666;
+    --grey6: #777;
+    --grey7: #888;
+    --grey8: #bbb;
+    --grey9: #fff;
+}
+
+
+/* Farbzuweisungen */
+/* --------------- */
+:root {
+    /* Farbzuweisungen */
+    --viewport-bkgrndColor: var(--grey2);
+    --splitter-overlay-bkgrndColor: var(--grey5);
+
+
+    /* Default */
+    --default-fontFamily: 'Roboto', sans-serif;
+    --default-fontColor: var(--grey9);
+    --default-fontSize: 11px;
+    --default-lineHeight: 14px;
+
+
+    /* Button */
+    --button-bkgrndColor: var(--grey2);
+    --button-borderColor: var(--grey2);
+    --button-fontColor: var(--grey9);
+    --button-fontSize: 11px;
+
+    --button-icon-fontColor: var(--grey8);
+
+    --button-focus-bkgrndColor: var(--grey4);
+    --button-focus-borderColor: var(--grey4);
+    --button-focus-fontColor: var(--grey9);
+
+    --button-disabled-fontColor: var(--grey7);
+
+
+    /* Toolbox-Button in einer Bar */
+    --bar-button-icon-fontColor: var(--grey2);
+    --bar-button-icon-disabled-fontColor: var(--grey5);
+
+
+    /* Button im Panel-Header */
+    --buttonGroup-button-fontColor: var(--grey8);
+
+    --buttonGroup-button-bkgrndColor: var(--grey2);
+    --buttonGroup-button-borderColor: transparent;
+
+    --buttonGroup-button-focus-bkgrndColor: var(--grey4);
+    --buttonGroup-button-focus-fontColor: var(--grey9);
+
+
+    /* Buttons im Panel-Footer */
+    --footer-button-bkgrndColor: var(--grey2);
+    --footer-button-borderColor: var(--grey6);
+
+    --footer-button-focus-bkgrndColor: var(--grey4);
+    --footer-button-focus-borderColor: var(--grey6);
+
+    --footer-button-disabled-bkgrndColor: var(--grey2);
+    --footer-button-disabled-borderColor: var(--grey6);
+
+
+    /* Buttons im Window-Footer */
+    --window-footer-button-bkgrndColor: var(--accentColor);
+    --window-footer-button-borderColor: var(--accentColor);
+    --window-footer-button-fontColor: var(--grey9);
+
+    --window-footer-button-focus-fontColor: var(--grey9);
+
+    
+    /* Badge */
+    --badge-bkgrndColor: var(--accentColor3);
+    --badge-fontColor: var(--grey9);
+    --badge-fontSize: 10px;
+    --badge-lineHeight: 14px;
+    --badge-disabled-bkgrndColor: var(--grey5);
+    --badge-disabled-fontColor: var(--grey7);
+
+
+    /* Panel */
+    --panel-bkgrndColor: var(--grey1);
+    --panel-borderColor: var(--grey4);
+
+
+    /* Bar */
+    --bar-fontColor: var(--grey0);
+    --bar-bkgrndColor: var(--accentColor);
+
+    --headerBar-fontSize: 14px;
+    --footerBar-fontSize: 11px;
+
+
+    /* MsgBox */
+    --msgbox-fontColor: var(--grey9);
+    --msgbox-fontSize: 12px;
+    --msgbox-lineHeight: 14px;
+
+
+    /* Field */
+    --field-fontSize: 12px;
+    --field-lineHeight: 13px;
+    --field-fontColor: var(--grey9);
+    --field-bkgrndColor: var(--grey1);
+    --field-borderColor: var(--grey6);
+    --field-focus-borderColor: var(--accentColor);
+    --field-label-fontColor: var(--grey9);
+
+    --field-item-bkgrndColor: var(--grey8);
+    --field-item-focus-bkgrndColor: var(--accentColor);
+
+    --field-disabled-bkgrndColor: var(--grey3);
+    --field-disabled-fontColor: var(--grey7);
+
+    --field-error-bkgrndColor: var(--errorColorLight);
+    
+    /* Range */
+    --range-bkgrndColor: var(--grey6);
+    --range-btnColor: var(--grey8);
+
+    /* Item */
+    --item-bkgrndColor: var(--grey1);
+    --item-borderColor: var(--grey2);
+    --item-fontColor: var(--grey9);
+    --item-fontSize: 11px;
+
+    --item-focus-bkgrndColor: var(--grey2);
+    --item-focus-borderColor: var(--grey2);
+    --item-focus-fontColor: var(--grey9);
+
+    --item-selected-bkgrndColor: var(--accentColor2);
+    --item-selected-borderColor: var(--accentColor);
+    --item-selected-fontColor: var(--grey9);
+
+    --item-disabled-bkgrndColor: var(--grey3);
+    --item-disabled-borderColor: var(--grey4);
+    --item-disabled-fontColor: var(--grey9);
+
+    --item-selected-disabled-bkgrndColor: var(--grey3);
+    --item-selected-disabled-borderColor: var(--grey6);
+    --item-selected-disabled-fontColor: var(--grey9);
+
+    --item-label-fontColor: var(--grey7);
+    --item-label-disabled-fontColor: var(--grey7);
+    --item-label-fontSize: 10px;
+
+    /* Clock */
+    --clock-bkgrndColor: var(--grey3);
+    --clock-fontColor: var(--grey9);
+    --clock-pointer-bkgrndColor: var(--accentColor);
+    
+
+    /* Help/Error Icon */
+    --icon-error-bkgrndColor: var(--errorColorLight);
+    --icon-error-borderColor: var(--errorColor);
+    --icon-error-fontColor: var(--errorColor);
+
+    --icon-help-bkgrndColor: var(--helpColorLight);
+    --icon-help-borderColor: var(--helpColor);
+    --icon-help-fontColor: var(--helpColor);
+
+
+    /* Drag & Drop */
+    --dragover-ok-borderColor: var(--accentColor3);
+    --dragover-forbidden-borderColor: var(--errorColor);
+
+    /* Grid */
+    --grid-header-bkgrndColor: var(--grey2);
+    --grid-border-color: var(--grey4);
+}
+
+
+/* DARK Farbzuweisungen*/
+/* ------------------- */
+:root[data-theme='dark'] {
+    --viewport-bkgrndColor: #282828;
+    --bar-fontColor: var(--grey9);
+    --bar-bkgrndColor: #4a4a4a;
+    --badge-fontColor: var(--grey0);
+    
+    /* Toolbox-Button in einer Bar */
+    --bar-button-icon-fontColor: var(--grey8);
+    --bar-button-icon-disabled-fontColor: var(--grey6);
+}

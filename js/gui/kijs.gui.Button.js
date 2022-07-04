@@ -20,7 +20,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._icon2El = new kijs.gui.Icon({ parent: this, cls:'kijs-icon2' });
 
-        this._menu = null;
+        this._menuEl = null;
 
         this._badgeDom = new kijs.gui.Dom({
             cls: 'kijs-badge',
@@ -58,7 +58,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             icon2Cls: { target: 'iconCls', context: this._icon2El },
             icon2Color: { target: 'iconColor', context: this._icon2El },
             isDefault: { target: 'isDefault' },
-
+            menu: { target: 'menu' },
             menuElements: { target: 'menuElements', prio: 200 },
             menuCloseOnClick: { target: 'menuCloseOnClick', prio: 201 },
             menuDirection: { target: 'menuDirection', prio: 200 },
@@ -223,14 +223,34 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._icon2El.isEmpty && this._badgeDom.isEmpty; }
 
 
-    get menu() { return this._menu; }
+    get menu() { return this._menuEl; }
     set menu(val) {
-        if (!val instanceof kijs.gui.Menu) {
-            throw new kijs.Error(`invalid value for kijs.gui.Button::menu`);
-        }
-        this._menu = val;
-    }
+        // Menu zurücksetzen?
+        if (kijs.isEmpty(val)) {
+            this._menuEl.destruct();
+            this._menuEl = null;
 
+        // kijs.gui.Menu Instanz
+        } else if (val instanceof kijs.gui.Menu) {
+            if (this._menuEl) {
+                this._menuEl.destruct();
+            }
+            this._menuEl = val;
+            this._createMenu();
+
+        // Config Objekt
+        } else if (kijs.isObject(val)) {
+            if (!this._menuEl) {
+                this._createMenu();
+            }
+            this._menuEl.applyConfig(val);
+
+        } else {
+            throw new kijs.Error(`config "menzu" is not valid.`);
+
+        }
+    }
+    
     set menuElements(val) { this._createMenu().add(val); }
     set menuCloseOnClick(val) { this._createMenu().closeOnClick = val; }
     set menuDirection(val) { this._createMenu().direction = val; }
@@ -246,18 +266,21 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
      * @returns {kijs.gui.Menu}
      */
     _createMenu() {
-        if (!this._menu) {
-            this._menu = new kijs.gui.Menu({
+        if (this._menuEl) {
+            this._menuEl.parent = this;
+            this._menuEl.button = this;
+        } else {
+            this._menuEl = new kijs.gui.Menu({
                 parent: this,
                 button: this
             });
         }
 
         if (!this.icon2Char) {
-            this.icon2Map = this._menu.getIconMap();
+            this.icon2Map = this._menuEl.getIconMap();
         }
 
-        return this._menu;
+        return this._menuEl;
     }
 
     // Overwrite
@@ -310,8 +333,8 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._captionDom.unrender();
         this._badgeDom.unrender();
 
-        if (this._menu) {
-            this._menu.unrender();
+        if (this._menuEl) {
+            this._menuEl.unrender();
         }
 
         super.unrender(true);
@@ -343,15 +366,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         if (this._icon2El) {
             this._icon2El.destruct();
         }
-        if (this._menu) {
-            this._menu.destruct();
+        if (this._menuEl) {
+            this._menuEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
         this._badgeDom = null;
         this._captionDom = null;
         this._iconEl = null;
-        this._menu = null;
+        this._menuEl = null;
 
         // Basisklasse entladen
         super.destruct(true);

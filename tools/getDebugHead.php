@@ -47,7 +47,7 @@ foreach ($modules as $module) {
                 case 'css':
                     // .less-Files in .php-Files umwandeln
                     if (substr($file, strlen('.less')*-1) === '.less') {
-                        $file = substr($file, 0, strlen('.less')*-1) . '.php';
+                        $file = substr($file, 0, strlen('.less')*-1) . '.css';
                     }
                     
                     $return .= '<link rel="stylesheet" type="text/css" href="' . $baseUrl . $file . '">' . "\n";
