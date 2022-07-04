@@ -34,7 +34,7 @@ kit.App = class kit_App {
     run() {
         let _this = this;
 
-        document.title = 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch'
+        document.title = 'kijs ' + kijs.version + ' - JavaScript GUI library by netas.ch';
 
         // ViewPort erstellen
         let viewport = new kijs.gui.ViewPort({
@@ -119,61 +119,6 @@ kit.App = class kit_App {
                                 },
                                 context: this
                             }
-                            
-                            /*menu: {
-                                elements: [
-                                    {
-                                        xtype: 'kijs.gui.field.OptionGroup',
-                                        name: 'cssFile',
-                                        label: 'Design',
-                                        labelWidth: 74,
-                                        valueField: 'id',
-                                        captionField: 'Bezeichnung',
-                                        style: {
-                                            margin: '10px'
-                                        },
-                                        data: [
-                                            {id:'kijs.theme.default.css', Bezeichnung:'Standard' },
-                                            {id:'kijs.theme.old.css', Bezeichnung:'Alt' },
-                                            {id:'kijs.theme.joel.css', Bezeichnung:'Joel' }
-                                        ],
-                                        value: 'kijs.theme.default.css',
-                                        on: {
-                                            input: function(e) {
-                                                kijs.Dom.cssFileReplace(e.oldValue, e.value);
-                                            }
-                                        }
-                                    },{
-                                        xtype: 'kijs.gui.field.Checkbox',
-                                        name: 'darkMode',
-                                        label: 'Dark mode',
-                                        labelWidth: 74,
-                                        style: {
-                                            margin: '10px'
-                                        },
-                                        on: {
-                                            input: function(e) {
-                                                if (e.value) {
-                                                    viewport.theme = 'dark';
-                                                } else {
-                                                    viewport.theme = 'light';
-                                                }
-                                                
-                                                // Bei ACE-Editoren auch das theme wechseln
-                                                viewport.down('centerPanel').down('editor').render();
-                                                viewport.down('rightPanel').down('editor').render();
-                                            }
-                                        }
-                                    }
-                                ],
-                                on: {
-                                    show: function(e) {
-                                        const elDarkmode = viewport.down('mainPanel').headerBar.containerRightEl.down('btnTheme').menu.down('darkMode');
-                                        elDarkmode.value = kijs.Dom.themeGet() === 'dark';
-                                    },
-                                    context: this
-                                }
-                            }*/
                         },{
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.circle-question'
