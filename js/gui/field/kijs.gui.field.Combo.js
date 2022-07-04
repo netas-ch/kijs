@@ -268,21 +268,22 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
 
-        // Flag setzen
-        this._firstLoaded = true;
-
         if (this._remoteSort) {
             args.query = kijs.toString(query);
             args.value = this.value;
 
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
-                this._listViewEl.load(args).then(() => {
+                this._listViewEl.load(args).then((response) => {
 
                     // Nach dem Laden das value neu setzen,
-                    // damit das Label erscheint
+                    // damit das Label erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
+
+                    // value mit dem RPC zurückgeben (mit change-event)
+                    } else if (query === null && kijs.isDefined(response.value) && response.value !== null && this._isValueInStore(response.value)) {
+                        this.setValue(response.value);
                     }
                 });
 
@@ -291,11 +292,26 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
 
-        } else {
+        } else if (!this._firstLoaded || forceLoad) {
 
             // alle Datensätze laden
-            this._listViewEl.load(args);
+            this._listViewEl.load(args).then((response) => {
+
+                // Nach dem Laden das value neu setzen,
+                // damit das Label erscheint (ohne change-event)
+                if (query === null && this._isValueInStore(this.value)) {
+                    this.value = this._value;
+
+                // value mit dem RPC zurückgeben (mit change-event)
+                } else if (query === null && kijs.isDefined(response.value) && response.value !== null && this._isValueInStore(response.value)) {
+                    this.setValue(response.value);
+                }
+
+            });
         }
+
+        // Flag setzen
+        this._firstLoaded = true;
     }
 
     // overwrite
@@ -310,7 +326,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.raiseEvent('afterRender');
         }
     }
-
 
     // overwrite
     unrender(superCall) {

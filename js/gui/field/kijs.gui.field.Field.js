@@ -616,6 +616,20 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
+     * Setzt das value und ruft das change-event auf.
+     * Mit dem setter wird das change-event nicht aufgerufen.
+     * @param {Mixed} value
+     * @returns {undefined}
+     */
+    setValue(value) {
+        let oldVal = this.value;
+        if (kijs.toString(value) !== kijs.toString(oldVal)) {
+            this.value = value;
+            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
+        }
+    }
+
+    /**
      * Zeigt eine individuelle Fehlermeldung an. Wenn keine Meldung
      * übergeben wird, wird die Fehlermeldung zurückgesetzt.
      * Diese Methode hat keinen Einfluss auf die 'validate' Methode; ein

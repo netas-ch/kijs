@@ -59,6 +59,8 @@ Neue Features
 Fehlerbehebungen
 ----------------
  - kijs.gui.Window.visible = false blendet die Modal-Maske auch aus
+ - LayerManager aktualisiert, wenn ein Element unrendert
+ - kijs.gui.Mask übernimmt z-index von Target
 
 
 

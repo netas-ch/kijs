@@ -339,7 +339,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
 
                 // Promise ausführen
-                resolve(this.data);
+                resolve(response);
 
                 this.raiseEvent('afterLoad', {response: response});
             }, this, true, this, 'dom', false);
