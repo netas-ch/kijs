@@ -23,7 +23,6 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas = null;            // canvas context objekt
         this._canvasSize  = null;       // Grösse des Canvas
         this._clockRadius = null;       // Radius der Uhr
-        this._clockColor = '#f6f6f6';   // Farbe des Ziffernblattes
         this._clockMode = 1;            // 1=Stunde 2=Minute 3=Sekunde
         this._distance = {
             hourAm: 32,                 // Distanz vom Kreisrand für Stunden 1-12
@@ -159,8 +158,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             value: { target: 'value' },
             secondsHide: true,                  // Sekunden auch erfassen?
             minutesHide: true,                  // Minuten auch erfassen?
-            separator: true,
-            clockColor: true
+            separator: true
         });
 
         // Events weiterleiten
@@ -357,7 +355,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     _addTextToArc(text, fontSize, degree, distance) {
         let coords = this._degreeToCoordinates(degree, distance);
         this._canvas.font = fontSize+'px Arial,sans-serif';
-        this._canvas.fillStyle = '#000';
+        this._canvas.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-fontColor');
 
         let measure = this._canvas.measureText(text);
         this._canvas.fillText(text, coords.x - (measure.width /2), coords.y + (fontSize / 2));
@@ -459,7 +457,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     _drawBackground() {
         // Kreis für Uhr zeichnen
         this._canvas.beginPath();
-        this._canvas.fillStyle = this._clockColor;
+        this._canvas.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-bkgrndColor');
         this._canvas.arc(
                 (this._canvasSize / 2),
                 (this._canvasSize / 2),
@@ -490,13 +488,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     _drawPointer(degree, distance) {
         let coords = this._degreeToCoordinates(degree, distance);
         this._canvas.beginPath();
-        this._canvas.strokeStyle = '#d9e7fd';
+        this._canvas.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-pointer-bkgrndColor');
         this._canvas.lineWidth = 2.0;
         this._canvas.moveTo(this._clockRadius, this._clockRadius);
         this._canvas.lineTo(coords.x, coords.y);
         this._canvas.stroke();
         this._canvas.beginPath();
-        this._canvas.fillStyle = '#d9e7fd';
+        this._canvas.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-pointer-bkgrndColor');
         this._canvas.arc(coords.x, coords.y, 12, 0, Math.PI*2); // Kreis
         this._canvas.fill();
     }

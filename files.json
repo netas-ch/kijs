@@ -78,6 +78,7 @@
    "js/gui/field/kijs.gui.field.Memo.js",
    "js/gui/field/kijs.gui.field.Password.js",
    "js/gui/field/kijs.gui.field.ListView.js",
+   "js/gui/field/kijs.gui.field.Switch.js",
    "js/gui/field/kijs.gui.field.Checkbox.js",
    "js/gui/field/kijs.gui.field.CheckboxGroup.js",
    "js/gui/field/kijs.gui.field.Color.js",
@@ -125,6 +126,7 @@
 
   "editor":[
    "lib/ace/ace.js",
+   "lib/ace/theme-ambiance.js",
    "js/gui/field/kijs.gui.field.Editor.js"
   ]
  },
@@ -132,7 +134,8 @@
 
  "css":{
   "gui":[
-   "css/kijs.gui.less"
+   "css/kijs.theme.default.css",
+   "css/kijs.gui.css"
   ]
  },
 

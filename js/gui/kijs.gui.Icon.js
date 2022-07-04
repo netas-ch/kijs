@@ -102,7 +102,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             }
             val = obj;
         }
-
+        
         if (kijs.isEmpty(val)) {
             this.iconChar = '';
         }

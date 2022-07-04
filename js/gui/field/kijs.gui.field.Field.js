@@ -47,7 +47,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-
+        
         // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in
         // der abgeleiteten Klasse überschrieben werden
         this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
@@ -98,7 +98,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         });
 
         this._spinBoxEl = null;
-
+        
+        // Bei disableFlex=true, wird der Restliche Platz mit diesem leeren DIV gefüllt
+        this._spacerDom = new kijs.gui.Dom({
+            cls: 'kiis-spacer'
+        });   
+        
         this._maxLength = null;
         this._required = false;
         this._submitValue = true;
@@ -118,7 +123,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
             disabled: { target: 'disabled' },           // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
-
+            
+            disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
+            
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,
@@ -212,6 +219,18 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         kijs.Array.each(buttons, function(button) {
             button.disabled = val;
         }, this);
+    }
+    
+    get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
+    set disableFlex(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-disableFlex');
+        } else {
+            this._dom.clsRemove('kijs-disableFlex');
+        }
+        if (this.isRendered) {
+            this.render();
+        }
     }
 
     get errorIcon() { return this._errorIconEl; }
@@ -567,7 +586,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Error icon rendern (kijs.gui.Icon)
         this._errorIconEl.renderTo(this._dom.node);
-
+        
+        // Bei disableFlex=true, wird der Restliche Platz mit diesem leeren DIV gefüllt
+        if (this.disableFlex) {
+            this._spacerDom.renderTo(this._dom.node);
+        }
+        
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -625,6 +649,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl.unrender();
         this._errorIconEl.unrender();
         this._helpIconEl.unrender();
+        this._spacerDom.unrender();
         super.unrender(true);
     }
 
@@ -744,6 +769,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._helpIconEl) {
             this._helpIconEl.destruct();
         }
+        if (this._spacerDom) {
+            this._spacerDom.destruct();
+        }
 
         // Variablen (Objekte/Arrays) leeren
         this._errors = null;
@@ -753,6 +781,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
+        this._spacerDom = null;
         this._validationFn = null;
         this._validationFnContext = null;
 

@@ -1,315 +1,117 @@
 /* ******************
-   * Variablen
+   * kijs GUI Style
    ****************** */
 
-:root[data-theme='theme-light'] {
-    --viewport-bkgrndColor: #f6f6f6;
-    --splitter-overlay-bkgrndColor: #b4b4b4;
-    --today-fontColor: #2B8BD9;
 
-
-    /* Default */
-    --default-fontFamily: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-    --default-fontColor: #000;
-    --default-fontSize: 11px;
-
-    /* Scrollbar */
-    --scrollbar-color: #888;
-    --scrollbar-background-color: #ddd;
-    --scrollbar-hover-color: #aaa;
-
-    /* Button */
-    --button-bkgrndColor: #f6f6f6;
-    --button-borderColor: #f6f6f6;
-    --button-fontColor: #000;
-    --button-fontSize: 11px;
-
-    --button-icon-fontColor: #555;
-
-    --button-focus-bkgrndColor: #ddd;
-    --button-focus-borderColor: #ddd;
-    --button-focus-fontColor: #000;
-
-    --button-disabled-fontColor: #888;
-
-
-    /* Toolbox-Button in einer Bar */
-    --bar-button-icon-fontColor: #f0f0f0;
-    --bar-button-icon-disabled-fontColor: #cfcfcf;
-
-
-    /* Button im Panel-Header */
-    --buttonGroup-button-fontColor: #555;
-
-    --buttonGroup-button-bkgrndColor: #f6f6f6;
-    --buttonGroup-button-borderColor: transparent;
-
-    --buttonGroup-button-focus-bkgrndColor: #d2d2d2;
-    --buttonGroup-button-focus-fontColor: #333;
-
-
-    /* Buttons im Panel-Footer */
-    --footer-button-bkgrndColor: #f6f6f6;
-    --footer-button-borderColor: #aaa;
-
-    --footer-button-focus-bkgrndColor: #ccc;
-    --footer-button-focus-borderColor: #aaa;
-
-    --footer-button-disabled-bkgrndColor: #f6f6f6;
-    --footer-button-disabled-borderColor: #aaa;
-
-
-    /* Buttons im Window-Footer */
-    --window-footer-button-bkgrndColor: #38393a;
-    --window-footer-button-borderColor: #38393a;
-    --window-footer-button-fontColor: #333;
-
-    --window-footer-button-focus-fontColor: #000;
-
-
-    /* Badge */
-    --badge-bkgrndColor: #f4aa56;
-    --badge-fontColor: #000;
-    --badge-fontSize: 10px;
-    --badge-disabled-bkgrndColor: #bdbcbc;
-    --badge-disabled-fontColor: #888;
-
-
-    /* Panel */
-    --panel-bkgrndColor: #fff;
-    --panel-borderColor: #d2d2d2;
-
-
-    /* Bar */
-    --bar-fontColor: #fff;
-    --bar-bkgrndColor: #4398dd;
-
-    --headerBar-fontSize: 14px;
-    --footerBar-fontSize: 11px;
-
-
-    /* MsgBox */
-    --msgbox-fontColor: #000;
-    --msgbox-fontSize: 12px;
-
-
-    /* Field */
-    --field-fontSize: 12px;
-    --field-fontColor: #000;
-    --field-background-color: #fff;
-    --field-borderColor: #aaa;
-    --field-focus-borderColor: #38393a;
-    --field-label-fontColor: #000;
-
-    --field-disabled-bkgrndColor: #efefef;
-    --field-disabled-fontColor: #888;
-
-    --field-error-bkgrndColor: #ffdaec;
-
-    /* Range */
-    --range-bkgrndColor: #aaa;
-    --range-btnColor: #555;
-
-    /* Item */
-    --item-bkgrndColor: #fff;
-    --item-borderColor: #f6f6f6;
-    --item-fontColor: #000;
-    --item-fontSize: 11px;
-
-    --item-focus-bkgrndColor: #f6f6f6;
-    --item-focus-borderColor: #f6f6f6;
-    --item-focus-fontColor: #000;
-
-    --item-selected-bkgrndColor: #d9ecfc;
-    --item-selected-borderColor: #38393a;
-    --item-selected-fontColor: #000;
-
-    --item-disabled-bkgrndColor: #efefef;
-    --item-disabled-borderColor: #dcdcdc;
-    --item-disabled-fontColor: #000;
-
-    --item-selected-disabled-bkgrndColor: #efefef;
-    --item-selected-disabled-borderColor: #aaa;
-    --item-selected-disabled-fontColor: #000;
-
-    --item-label-fontColor: #888;
-    --item-label-disabled-fontColor: #888;
-    --item-label-fontSize: 10px;
-
-
-    /* Help/Error Icon */
-    --icon-error-bkgrndColor: #F3E2EB;
-    --icon-error-borderColor: #BE6280;
-    --icon-error-fontColor: #BE6280;
-
-    --icon-help-bkgrndColor: #DCE6EF;
-    --icon-help-borderColor: #6295BE;
-    --icon-help-fontColor: #6295BE;
-
-
-    /* Drag & Drop */
-    --dragover-ok-borderColor: #f4aa56;
-    --dragover-forbidden-borderColor: #FB4F42;
-
-    /* Grid */
-    --grid-header-bkgrndColor: #f6f6f6;
-    --grid-border-color: #eee;
-}
-
-:root[data-theme='theme-dark'] {
-    --viewport-bkgrndColor: #121212;
-    --splitter-overlay-bkgrndColor: #b4b4b4;
-    --today-fontColor: #2B8BD9;
-
-
-    /* Default */
-    --default-fontFamily: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-    --default-fontColor: #fff;
-    --default-fontSize: 11px;
-
-    /* Scrollbar */
-    --scrollbar-color: #444;
-    --scrollbar-background-color: #2c2c2c;
-    --scrollbar-hover-color: #38393a;
-
-    /* Button */
-    --button-bkgrndColor: #121212;
-    --button-borderColor: #121212;
-    --button-fontColor: #fff;
-    --button-fontSize: 11px;
-
-    --button-icon-fontColor: #ddd;
-
-    --button-focus-bkgrndColor: #020202;
-    --button-focus-borderColor: #020202;
-    --button-focus-fontColor: #fff;
-
-    --button-disabled-fontColor: #888;
-
-
-    /* Toolbox-Button in einer Bar */
-    --bar-button-icon-fontColor: #f0f0f0;
-    --bar-button-icon-disabled-fontColor: #cfcfcf;
-
-
-    /* Button im Panel-Header */
-    --buttonGroup-button-fontColor: #555;
-
-    --buttonGroup-button-bkgrndColor: #121212;
-    --buttonGroup-button-borderColor: transparent;
-
-    --buttonGroup-button-focus-bkgrndColor: #d2d2d2;
-    --buttonGroup-button-focus-fontColor: #333;
-
-
-    /* Buttons im Panel-Footer */
-    --footer-button-bkgrndColor: #121212;
-    --footer-button-borderColor: #aaa;
-
-    --footer-button-focus-bkgrndColor: #ccc;
-    --footer-button-focus-borderColor: #aaa;
-
-    --footer-button-disabled-bkgrndColor: #121212;
-    --footer-button-disabled-borderColor: #aaa;
-
-
-    /* Buttons im Window-Footer */
-    --window-footer-button-bkgrndColor: #38393a;
-    --window-footer-button-borderColor: #38393a;
-    --window-footer-button-fontColor: #333;
-
-    --window-footer-button-focus-fontColor: #fff;
-
-
-    /* Badge */
-    --badge-bkgrndColor: #f4aa56;
-    --badge-fontColor: #fff;
-    --badge-fontSize: 10px;
-    --badge-disabled-bkgrndColor: #bdbcbc;
-    --badge-disabled-fontColor: #888;
-
-
-    /* Panel */
-    --panel-bkgrndColor: #121212;
-    --panel-borderColor: #2c2c2c;
-
-
-    /* Bar */
-    --bar-fontColor: #fff;
-    --bar-bkgrndColor: #38393a;
-
-    --headerBar-fontSize: 14px;
-    --footerBar-fontSize: 11px;
-
-
-    /* MsgBox */
-    --msgbox-fontColor: #fff;
-    --msgbox-fontSize: 12px;
-
-
-    /* Field */
-    --field-fontSize: 12px;
-    --field-fontColor: #fff;
-    --field-background-color: #666;
-    --field-borderColor: #aaa;
-    --field-focus-borderColor: #38393a;
-    --field-label-fontColor: #fff;
-
-    --field-disabled-bkgrndColor: #efefef;
-    --field-disabled-fontColor: #888;
-
-    --field-error-bkgrndColor: #ffdaec;
-
-    /* Range */
-    --range-bkgrndColor: #aaa;
-    --range-btnColor: #555;
-
-    /* Item */
-    --item-bkgrndColor: #666;
-    --item-borderColor: #121212;
-    --item-fontColor: #fff;
-    --item-fontSize: 11px;
-
-    --item-focus-bkgrndColor: #121212;
-    --item-focus-borderColor: #121212;
-    --item-focus-fontColor: #666;
-
-    --item-selected-bkgrndColor: #9bd0ff;
-    --item-selected-borderColor: #38393a;
-    --item-selected-fontColor: #666;
-
-    --item-disabled-bkgrndColor: #efefef;
-    --item-disabled-borderColor: #dcdcdc;
-    --item-disabled-fontColor: #666;
-
-    --item-selected-disabled-bkgrndColor: #efefef;
-    --item-selected-disabled-borderColor: #aaa;
-    --item-selected-disabled-fontColor: #666;
-
-    --item-label-fontColor: #888;
-    --item-label-disabled-fontColor: #888;
-    --item-label-fontSize: 10px;
-
-
-    /* Help/Error Icon */
-    --icon-error-bkgrndColor: #F3E2EB;
-    --icon-error-borderColor: #BE6280;
-    --icon-error-fontColor: #BE6280;
-
-    --icon-help-bkgrndColor: #DCE6EF;
-    --icon-help-borderColor: #6295BE;
-    --icon-help-fontColor: #6295BE;
-
-
-    /* Drag & Drop */
-    --dragover-ok-borderColor: #f4aa56;
-    --dragover-forbidden-borderColor: #FB4F42;
-
-    /* Grid */
-    --grid-header-bkgrndColor: #121212;
-    --grid-border-color: #eee;
-}
-
+/* ******************
+   * Roboto (http://fontfacekit.github.io/roboto/)
+   ****************** */
+/* Thin */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Thin.woff') format('woff');
+  font-weight: 100;
+  font-style: normal; }
+
+/* Thin Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-ThinItalic.woff') format('woff');
+  font-weight: 100;
+  font-style: italic; }
+
+/* Light */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/../fonts/roboto/Roboto-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal; }
+
+/* Light Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic; }
+
+/* Regular */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal; }
+
+
+/* Italic */
+@font-face {
+  font-family: Roboto;
+  src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic; }
+
+
+
+/* Medium */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal; }
+
+/* Medium Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic; }
+
+/* Bold */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal; }
+
+/* Bold Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BoldItalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic; }
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic; }
+
+/* Black */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal; }
+
+/* Black Italic */
+@font-face {
+  font-family: Roboto;
+  src: url('../fonts/roboto/Roboto-BlackItalic.woff') format('woff');
+  font-weight: 900;
+  font-style: italic; }
 
 
 /* ******************
@@ -321,8 +123,8 @@
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-solid-900.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-solid-900.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-solid-900.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-solid-900.ttf') format('truetype');
 }
 
 /* fa-regular */
@@ -331,8 +133,8 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-regular-400.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-regular-400.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-regular-400.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-regular-400.ttf') format('truetype');
 }
 
 /* fa-brands */
@@ -341,8 +143,8 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url("../fonts/font-awesome-6-1-1/fa-brands-400.woff2") format("woff2"),
-         url("../fonts/font-awesome-6-1-1/fa-brands-400.ttf") format("truetype");
+    src: url('../fonts/font-awesome-6-1-1/fa-brands-400.woff2') format('woff2'),
+         url('../fonts/font-awesome-6-1-1/fa-brands-400.ttf') format('truetype');
 }
 
 .fa-solid, span.kijs-icon.fa-solid {
@@ -380,28 +182,6 @@
 
 
 /* ******************
-   * Scrollbar
-   ****************** */
-::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-}
-
-::-webkit-scrollbar-track {
-    background: var(--scrollbar-background-color);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-color);
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-hover-color);
-}
-
-
-
-/* ******************
    * Ergänzungen für alle Elemente
    ****************** */
 /* Schatten für Elemente */
@@ -428,7 +208,9 @@ div.kijs-container {
 div.kijs-container-inner {
     position: relative;
     flex: 1 1 auto;
-
+    
+    font-family: var(--default-fontFamily);
+    
     -webkit-user-select: none;  /* Safari */
     user-select: none;
 
@@ -822,6 +604,7 @@ div.kijs-msgbox {
         flex-direction: row;
         font-family: var(--default-fontFamily);
         font-size: var(--msgbox-fontSize);
+        line-height: var(--msgbox-lineHeight);
         color: var(--msgbox-fontColor);
     }
     > .kijs-container-inner > .kijs-icon {
@@ -949,6 +732,7 @@ button.kijs-button {
     padding: 3px 8px;
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
+    color: var(--default-fontColor);
     cursor: pointer;
     outline: none;
 
@@ -981,7 +765,7 @@ button.kijs-button {
         padding: 0;
         font-family: var(--default-fontFamily);
         font-size: var(--badge-fontSize);
-        line-height: 14px;
+        line-height: var(--badge-lineHeight);
         color: var(--badge-fontColor);
         text-align: center;
         background-color: var(--badge-bkgrndColor);
@@ -1117,18 +901,21 @@ div.kijs-menu-spinbox {
         &.kijs-hidden {
             display: none;
         }
-    }
-    button.kijs-button > .kijs-caption {
-        flex: 1;
-    }
-    button.kijs-button > .kijs-caption:first-child {
-        margin-left: 22px;
-    }
-    button.kijs-button > .kijs-icon {
-        width: 18px;
-    }
-    button.kijs-button > .kijs-icon2 {
-        text-align: right;
+        
+        > .kijs-caption {
+            flex: 1;
+        }
+        > .kijs-caption:first-child {
+            margin-left: 22px;
+        }
+        
+        > .kijs-icon {
+            width: 18px;
+        }
+        
+        > .kijs-icon2 {
+            text-align: right;
+        }
     }
 }
 
@@ -1183,9 +970,8 @@ div.kijs-panelbar {
             > .kijs-badge {
                 top: 0;
                 right: -3px;
-                padding: 3px;
-                font-size: 8px;
-                line-height: 8px;
+                font-size: var(--badge-fontSize);
+                line-height: var(--badge-lineHeight);
             }
 
             &:hover,
@@ -1309,8 +1095,8 @@ div.kijs-buttongroup {
     > .kijs-caption {
         flex: none;
         margin: 2px 0;
-        font-size: 11px;
-        line-height: 11px;
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
         font-family: var(--default-fontFamily);
         text-align: center;
         color: var(--buttonGroup-button-fontColor);
@@ -1399,9 +1185,9 @@ div.kijs-tree {
                 justify-content: center;
                 align-items: center;
                 margin: 4px 0;
-                line-height: 11px;
                 color: var(--default-fontColor);
                 font-size: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
                 font-family: var(--default-fontFamily);
                 white-space: nowrap;
             }
@@ -1554,7 +1340,7 @@ div.kijs-listview {
     flex-direction: column;
     align-items: stretch;
     border: 1px solid var(--field-borderColor);
-    background-color: var(--field-background-color);
+    background-color: var(--field-bkgrndColor);
 
     .kijs-dataviewelement {
         border: 1px solid transparent;
@@ -1584,10 +1370,11 @@ div.kijs-listview {
 
             &:before {
                 display: inline-block;
+                min-width: 15px;
+                margin: 3px 4px 0 0;
+                vertical-align: top;
                 font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f096';
-                min-width: 15px;
-                margin-right: 2px;
             }
 
             &.kijs-selected:before {
@@ -1605,10 +1392,11 @@ div.kijs-listview {
 
             &:before {
                 display: inline-block;
+                min-width: 15px;
+                margin: 3px 4px 0 0;
+                vertical-align: top;
                 font: normal normal normal 15px/1 'Font Awesome 6 Free';
                 content: '\f10c';
-                min-width: 15px;
-                margin-right: 2px;
             }
 
             &.kijs-selected:before {
@@ -1627,9 +1415,12 @@ div.kijs-listview {
             }
 
             > .kijs-caption {
+                display: inline-block;
+                vertical-align: top;
+                margin: 3px 4px 0 0;
                 font-family: var(--default-fontFamily);
-                font-size: var(--item-fontSize);
-                line-height: 15px;
+                font-size: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
                 color: var(--item-fontColor);
             }
             > div > .value {
@@ -1689,7 +1480,8 @@ div.kijs-monthpicker {
 
         font-family: var(--default-fontFamily);
         font-size: var(--field-fontSize);
-
+        color: var(--default-fontColor);
+        
         .kijs-monthpicker-monthdiv {
             flex: 2;
             display: flex;
@@ -1730,7 +1522,7 @@ div.kijs-monthpicker {
                 height: 16px;
                 margin: 2px 0;
                 padding: 0 8px;
-                line-height: 12px;
+                line-height: var(--default-lineHeight);
             }
 
             .kijs-monthpicker-yearinnerdiv {
@@ -1803,7 +1595,8 @@ div.kijs-datepicker {
                 border: 0;
                 font-family: var(--default-fontFamily);
                 font-size: var(--default-fontSize);
-                line-height: var(--default-fontSize);
+                line-height: var(--default-lineHeight);
+                color: var(--default-fontColor);
                 text-align: right;
                 background-color: var(--panel-bkgrndColor);
 
@@ -1823,7 +1616,7 @@ div.kijs-datepicker {
                     color: var(--today-fontColor);
 
                     &.kijs-range-start, &.kijs-range-end {
-                        color: white;
+                        color: var(--default-fontColor);
                     }
                 }
                 &.kijs-weekend {
@@ -1922,6 +1715,8 @@ div.kijs-timepicker {
             width: 22px;
             border: 0;
             border-bottom: 1px solid var(--field-borderColor);
+            background-color: var(--field-bkgrndColor);
+            color: var(--default-fontColor);
         }
 
         input::selection {
@@ -1975,18 +1770,22 @@ div.kijs-progressbar {
     .kijs-progressbar-caption-bottom, .kijs-progressbar-caption {
         font-family: var(--default-fontFamily);
         font-size: var(--default-fontSize);
-        line-height: 17px;
+        line-height: var(--default-lineHeight);
     }
 
     .kijs-progressbar-caption {
         padding: 0 0 2px 0;
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
+        color: var(--default-fontColor);
     }
 
     .kijs-progressbar-caption-bottom {
         padding: 2px 0 0 0;
-        font-size: 11px;
-        line-height: 12px;
-
+        font-size: var(--default-fontSize);
+        line-height: var(--default-lineHeight);
+        color: var(--default-fontColor);
+        
         .error {
             padding: 0;
             color: red;
@@ -1997,7 +1796,7 @@ div.kijs-progressbar {
         position: relative;
         padding: 3px;
         border: 1px solid var(--field-borderColor);
-        background-color: white;
+        background-color: var(--panel-bkgrndColor);
         min-height: 14px;
 
         .kijs-progressbar-bar {
@@ -2016,8 +1815,8 @@ div.kijs-progressbar {
             margin: 0;
             font-family: var(--default-fontFamily);
             font-size: var(--default-fontSize);
-            line-height: 15px;
-            color: white;
+            line-height: var(--default-lineHeight);
+            color: var(--bar-fontColor);
             opacity: 0;
             transition: opacity 2s;
         }
@@ -2032,15 +1831,16 @@ div.kijs-progressbar {
 div.kijs-field {
     display: flex;
     flex-direction: row;
-
+    min-height: 25px;
+    
     > .kijs-label {
         display: block;
         flex: none;
         color: var(--field-label-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--field-fontSize);
-        line-height: 17px;
-        padding: 3px 0 0 0;
+        line-height: var(--field-lineHeight);
+        padding: 3px 0 3px 0;
 
         /* selektion von Text erlauben */
         -webkit-user-select: text;
@@ -2055,7 +1855,7 @@ div.kijs-field {
         > input {
             outline: none;
             color: var(--field-fontColor);
-            background-color: var(--field-background-color);
+            background-color: var(--field-bkgrndColor);
         }
     }
 
@@ -2072,7 +1872,6 @@ div.kijs-field {
             &.kijs-inline {
                 margin: 0 0 0 0;
                 border-radius: 0px;
-                background-color: white;
                 border-top: 1px solid var(--field-borderColor);
                 border-right: 1px solid var(--field-borderColor);
                 border-bottom: 1px solid var(--field-borderColor);
@@ -2099,7 +1898,7 @@ div.kijs-field {
         border-top: 1px solid var(--field-borderColor);
         border-right: 1px solid var(--field-borderColor);
         border-bottom: 1px solid var(--field-borderColor);
-        background-color: white;
+        background-color: transparent;
         color: var(--button-icon-fontColor);
         cursor: pointer;
 
@@ -2117,7 +1916,17 @@ div.kijs-field {
             cursor: default;
         }
     }
-
+    
+    &.kijs-disableFlex {
+        > .kijs-inputwrapper {
+            flex: none;
+        }
+        
+        > .kijs-spacer {
+            flex: 1;
+        }
+    }
+    
     &.kijs-label-ontop {
         flex-wrap: wrap;
 
@@ -2162,7 +1971,7 @@ div.kijs-field-text {
             padding: 2px 4px;
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
 
             &:focus {
                 border: 1px solid var(--field-focus-borderColor);
@@ -2223,7 +2032,7 @@ div.kijs-field-password {
             padding: 2px 4px;
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
 
             &:focus {
                 border: 1px solid var(--field-focus-borderColor);
@@ -2261,7 +2070,7 @@ div.kijs-field-month {
             padding: 2px 4px;
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
 
             &:focus {
                 border: 1px solid var(--field-focus-borderColor);
@@ -2297,7 +2106,7 @@ div.kijs-field-datetime {
 
     > .kijs-inputwrapper {
         height: 25px;
-
+        
         > input {
             display: block;
             height: 100%;
@@ -2307,7 +2116,7 @@ div.kijs-field-datetime {
             padding: 2px 4px;
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
 
             &:focus {
                 border: 1px solid var(--field-focus-borderColor);
@@ -2327,6 +2136,18 @@ div.kijs-field-datetime {
         > .kijs-inputwrapper > input {
             background-color: var(--field-disabled-bkgrndColor);
         }
+    }
+    
+    &.kijs-disableFlex {
+        > .kijs-inputwrapper {
+            flex: none;
+            width: 170px;
+        }
+        &.kijs-date > .kijs-inputwrapper { width: 80px; }
+        &.kijs-time > .kijs-inputwrapper { width: 80px; }
+        &.kijs-dateTime > .kijs-inputwrapper { width: 130px; }
+        &.kijs-week > .kijs-inputwrapper { width: 80px; }
+        &.kijs-range > .kijs-inputwrapper { width: 170px; }
     }
 }
 
@@ -2362,11 +2183,11 @@ div.kijs-field-memo {
         margin: 0;
         color: var(--field-fontColor);
         border: 1px solid var(--field-borderColor);
-        background-color: var(--field-background-color);
+        background-color: var(--field-bkgrndColor);
         padding: 2px 4px;
         font-family: var(--default-fontFamily);
         font-size: var(--field-fontSize);
-        line-height: 17px;
+        line-height: var(--field-lineHeight);
         resize: none;
         outline: none;
 
@@ -2385,25 +2206,6 @@ div.kijs-field-memo {
             margin: 0 0 0 2px;
             padding: 0 4px;
             height: 100%;
-
-            &.kijs-inline {
-                margin: 0 0 0 0;
-                border-radius: 0px;
-                background-color: white;
-                border-top: 1px solid var(--field-borderColor);
-                border-right: 1px solid var(--field-borderColor);
-                border-bottom: 1px solid var(--field-borderColor);
-                border-left: 0;
-                color: var(--button-icon-fontColor);
-
-                &.kijs-default {
-                    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
-                }
-
-                &:hover {
-                    background-color: var(--viewport-bkgrndColor);
-                }
-            }
         }
     }
 
@@ -2426,7 +2228,7 @@ div.kijs-field-memo {
 div.kijs-field-listview {
 
     > .kijs-inputwrapper {
-        background-color: var(--field-background-color);
+        background-color: var(--field-bkgrndColor);
 
         > .kijs-listview {
             height: 100%;
@@ -2447,25 +2249,6 @@ div.kijs-field-listview {
             margin: 0 0 0 2px;
             padding: 0 4px;
             height: 100%;
-
-            &.kijs-inline {
-                margin: 0 0 0 0;
-                border-radius: 0px;
-                background-color: white;
-                border-top: 1px solid var(--field-borderColor);
-                border-right: 1px solid var(--field-borderColor);
-                border-bottom: 1px solid var(--field-borderColor);
-                border-left: 0;
-                color: var(--button-icon-fontColor);
-
-                &.kijs-default {
-                    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
-                }
-
-                &:hover {
-                    background-color: var(--viewport-bkgrndColor);
-                }
-            }
         }
     }
 
@@ -2492,10 +2275,11 @@ div.kijs-field-checkboxgroup{
     > .kijs-inputwrapper {
         > .kijs-listview {
             height: 100%;
-            background-color: var(--field-background-color);
+            background-color: var(--field-bkgrndColor);
             border-color: transparent;
 
             .kijs-dataviewelement {
+                padding: 0 4px 0 0px;
                 background-color: transparent;
 
                 &:focus,
@@ -2558,7 +2342,7 @@ div.kijs-field-combo {
             padding: 2px 4px;
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
 
             &:focus {
                 border: 1px solid var(--field-focus-borderColor);
@@ -2635,7 +2419,7 @@ div.kijs-field-range {
             background-color: var(--field-focus-borderColor);
         }
     }
-
+    
     &.kijs-error  > .kijs-inputwrapper > input {
         background-color: var(--field-error-bkgrndColor);
     }
@@ -2669,28 +2453,32 @@ div.kijs-field-range {
 div.kijs-field-checkbox {
     > .kijs-inputwrapper {
         > .kijs-checkbox-input {
+            display: inline-block;
             height: 15px;
             width: 15px;
-            margin-right: 2px;
+            margin: 4px 4px 0 0;
             font-size: 15px;
-            line-height: 15px;
+            line-height: var(--field-lineHeight);
             color: var(--button-icon-fontColor);
-            vertical-align: bottom;
+            vertical-align: top;
         }
 
         > .kijs-checkbox-icon {
-            margin-right: 4px;
+            margin: 0 4px 0 0;
             height: 15px;
             width: 15px;
             vertical-align: top;
         }
 
         > .kijs-caption {
+            display: inline-block;
+            margin: 3px 4px 0 0;
             color: var(--field-fontColor);
             font-family: var(--default-fontFamily);
             font-size: var(--field-fontSize);
-            line-height: 17px;
+            line-height: var(--field-lineHeight);
             vertical-align: top;
+            color: var(--field-fontColor);
         }
 
         &:focus {
@@ -2720,11 +2508,11 @@ div.kijs-field-editor {
             border: 1px solid var(--field-borderColor);
 
             .ace_gutter {
-                background-color: var(--field-background-color);
+                background-color: var(--field-bkgrndColor);
             }
 
             .ace_content {
-                background-color: var(--field-background-color);
+                background-color: var(--field-bkgrndColor);
             }
 
             .ace_scrollbar-v {
@@ -2751,6 +2539,90 @@ div.kijs-field-editor {
         }
     }
 }
+
+
+/* ******************
+   * Switch
+   ****************** */
+div.kijs-field-switch {
+    > .kijs-inputwrapper {
+        > .kijs-toggleBorder {
+            display: inline-block;
+            height: 20px;
+            width: 34px;
+            margin-right: 4px;
+            border-radius: 10px;
+            border: 1px solid var(--field-borderColor);
+            vertical-align: top;
+            background-color: var(--field-bkgrndColor);
+            
+            > .kijs-togglePoint {
+                display: inline-block;
+                height: 20px;
+                width: 20px;
+                border-radius: 10px;
+                background-color: var(--field-item-bkgrndColor);
+                transition: margin-left 0.2s;
+            }
+            
+            &:focus {
+                border-color: var(--field-focus-borderColor);
+            }
+            &:hover {
+                > .kijs-togglePoint {
+                    background-color: var(--field-item-focus-bkgrndColor);
+                }
+            }
+        }
+        
+        > .kijs-icon {
+            margin: 2px 4px 0 0;
+            height: 15px;
+            width: 15px;
+            vertical-align: top;
+            color: var(--button-icon-fontColor);
+        }
+
+        > .kijs-caption {
+            display: inline-block;
+            margin: 3px 4px 0 0;
+            font-family: var(--field-fontFamily);
+            font-size: var(--field-fontSize);
+            line-height: var(--field-lineHeight);
+            vertical-align: top;
+            color: var(--field-fontColor);
+        }
+    }
+    
+    &.kijs-checked {
+        > .kijs-inputwrapper {
+            > .kijs-toggleBorder {
+                background-color: var(--okColor);
+
+                > .kijs-togglePoint {
+                    margin-left: 14px;
+                }
+            }
+        }
+    }
+    
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper {
+            > * {
+                color: var(--field-disabled-fontColor);
+            }
+            
+            > .kijs-toggleBorder {
+                background-color: var(--field-bkgrndColor);
+                
+                > .kijs-togglePoint {
+                    background-color: var(--field-disabled-fontColor);
+                }
+            }
+        }
+    }
+}
+
 
 
 /* ******************
@@ -2816,7 +2688,7 @@ div.kijs-field-display {
         color: var(--field-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--field-fontSize);
-        line-height: 17px;
+        line-height: var(--field-lineHeight);
         padding: 3px 0 0 0;
 
         -webkit-user-select: text;
@@ -2850,7 +2722,6 @@ div.kijs-field-display {
 /* ******************
    * Grid
    ****************** */
-
 div.kijs-grid {
     position: relative;
     display: flex;
@@ -2923,7 +2794,7 @@ div.kijs-grid {
 
             /* Daten verändert: rotes Dreieck oben links */
             &.kijs-grid-cell-dirty {
-                background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=");
+                background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
                 background-repeat: no-repeat;
                 background-position: top left;
             }
@@ -3029,7 +2900,7 @@ div.kijs-grid {
         }
 
         tr.kijs-grid-filter {
-            background-color: var(--field-background-color);
+            background-color: var(--field-bkgrndColor);
             transition: max-height 0.5s;
             max-height: 25px;
 
@@ -3140,6 +3011,7 @@ div.kijs-grid {
         cursor: ew-resize;
     }
 }
+
 
 /* ******************
    * Filter

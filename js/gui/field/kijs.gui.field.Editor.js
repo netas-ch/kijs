@@ -69,7 +69,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     }
 
     get theme() { return this._theme; }
-    set theme(val) { this._theme = val; }
+    set theme(val) { 
+        this._theme = val;
+        if (this._aceEditor) {
+            this._aceEditor.setTheme('ace/theme/' + val);
+        }
+    }
 
     // overwrite
     get value() {
@@ -123,6 +128,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
 
         if (this._theme) {
             this._aceEditor.setTheme('ace/theme/' + this._theme);
+        } else {
+            if (kijs.Dom.themeGet() === 'dark') {
+                this._aceEditor.setTheme('ace/theme/ambiance');
+            } else {
+                this._aceEditor.setTheme('');
+            }
         }
         if (this._mode) {
             this._aceEditor.session.setMode('ace/mode/' + this._mode);

@@ -90,6 +90,88 @@ kijs.Dom = class kijs_Dom {
         }
     }*/
 
+    
+    /**
+     * Fügt eine CSS Datei hinzu
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @returns {Promise}
+     */
+    static cssFileAdd(src, srcReference='', before=false) {
+        return new Promise(function (resolve, reject) {
+            let nodeReference = null;
+            if (srcReference) {
+                nodeReference = document.querySelector('link[href*="' + srcReference + '"]');
+            }
+           
+            let node = document.createElement('link');
+            node.href = src;
+            node.rel = 'stylesheet';
+            
+            node.onload = () => resolve(node);
+            node.onerror = () => reject(new Error(`Style load error for ${src}`));
+
+            if (nodeReference) {
+                if (before) {
+                    document.head.insertBefore(node, nodeReference);
+                } else if (nodeReference.nextElementSibling) {
+                    document.head.insertBefore(node, nodeReference.nextElementSibling);
+                } else {
+                    nodeReference = null;
+                }
+            }
+            
+            if (!nodeReference) {
+                document.head.append(node);
+            }
+        });
+    }
+    
+    /**
+     * Gibt zurück, ob sich eine CSS-Datei im DOM befindet
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @returns {Boolean}
+     */
+    static cssFileHas(src) {
+        return !!document.querySelector('link[href*="' + src + '"]');
+    }
+    
+    /**
+     * Entfernt eine CSS Datei
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @returns {undefined}
+     */
+    static cssFileRemove(src) {
+        let node = document.querySelector('link[href*="' + src + '"]');
+        if (node) {
+            node.parentNode.removeChild(node);
+        }
+    }
+    
+    /**
+     * Ersetzt eine CSS-Datei durch eine andere
+     * @param {String} srcOld   Beispiel: 'kijs.theme.derault.css'
+     * @param {String} srcNew   Beispiel: 'kijs.theme.myTheme.css'
+     * @param {Boolean} [sameBaseDir=true]
+     * @returns {undefined}
+     */
+    static cssFileReplace(srcOld, srcNew, sameBaseDir=true) {
+        let node = document.querySelector('link[href*="' + srcOld + '"]');
+        if (node) {
+            
+            if (sameBaseDir) {
+                let baseDir = node.href;
+                baseDir = baseDir.split('?')[0];                            // remove any ?query
+                baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
+                srcNew = baseDir + srcNew;
+            }
+            
+            node.href = srcNew;
+        }
+    }
+
+
 
     /**
      * Erstellt einen Event-Listener auf ein HTMLElement
@@ -242,7 +324,7 @@ kijs.Dom = class kijs_Dom {
 
         return this.__scrollbarWidth;
     }
-
+    
     /**
      * Überprüft, ob ein Event-Listener auf ein HTMLElement existiert
      * @param {String} eventName Name des DOM-Events
@@ -355,8 +437,8 @@ kijs.Dom = class kijs_Dom {
 
         context._nodeEventListeners = {};
     }
-
-
+    
+    
     /**
      * Entfernt einen Event-Listener von einem Node
      * @param {String} eventName
@@ -425,6 +507,24 @@ kijs.Dom = class kijs_Dom {
                 node.innerHTML = html;
                 break;
         }
+    }
+    
+
+    // Aktuelles Farbschema zurückgeben
+    static themeGet() {
+        return document.querySelector('html').dataset.theme;
+    }
+
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    static themeSet(theme) {
+        if (theme === null) {
+            if (!!window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                theme = 'dark';
+            } else {
+                theme = 'light';
+            }
+        }
+        document.querySelector('html').dataset.theme = theme;
     }
 
 };

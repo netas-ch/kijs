@@ -9,33 +9,8 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '1.2.7'; }
+    static get version() { return '1.3.0'; }
 
-    static get cssTheme() {
-        let theme = document.querySelector('html').dataset.theme;
-
-        if (theme) {
-            return theme.substring(6);
-        }
-
-        return null;
-    }
-    static set cssTheme(val) {
-        if (!kijs.Array.contains(['auto', 'light', 'dark'], val)) {
-            throw new kijs.Error(`invalid css theme.`);
-        }
-
-        if (val === 'auto') {
-            if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                val = 'dark';
-            } else {
-                val = 'light';
-            }
-        }
-        
-        // Theme setzen
-        document.querySelector('html').dataset.theme = 'theme-' + val;
-    }
 
     // --------------------------------------------------------------
     // STATICS
