@@ -147,7 +147,14 @@
     "fonts/font-awesome-6-1-1/fa-brands-400.ttf",
     "fonts/font-awesome-6-1-1/fa-brands-400.woff2",
     "fonts/font-awesome-6-1-1/fa-solid-900.ttf",
-    "fonts/font-awesome-6-1-1/fa-solid-900.woff2"
+    "fonts/font-awesome-6-1-1/fa-solid-900.woff2",
+
+    "fonts/roboto/Roboto-Medium.woff",
+    "fonts/roboto/Roboto-MediumItalic.woff",
+    "fonts/roboto/Roboto-Bold.woff",
+    "fonts/roboto/Roboto-BoldItalic.woff",
+    "fonts/roboto/Roboto-Black.woff",
+    "fonts/roboto/Roboto-BlackItalic.woff"
   ]
  }
 
