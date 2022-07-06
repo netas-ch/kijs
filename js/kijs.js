@@ -92,7 +92,6 @@ window.kijs = class kijs {
         for (let i=0; i<parts.length; i++) {
             let part = parts[i];
             if (!parent[part]) {
-                console.log(part);
                 return null;
             }
             parent = parent[part];
