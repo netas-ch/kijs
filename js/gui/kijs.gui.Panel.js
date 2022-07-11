@@ -70,14 +70,18 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             iconMap: { target: 'iconMap', context: this._headerBarEl },
 
             // header
-            headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
             headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
+            headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
             headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
+            headerInnerCls: { fn: 'function', target: this._headerEl.innerDom.clsAdd, context: this._headerEl.innerDom },
+            headerInnerStyle: { fn: 'assign', target: 'style', context: this._headerEl.innerDom },
 
             // footer
-            footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
             footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
+            footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
             footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
+            footerInnerCls: { fn: 'function', target: this._footerEl.innerDom.clsAdd, context: this._footerEl.innerDom },
+            footerInnerStyle: { fn: 'assign', target: 'style', context: this._footerEl.innerDom },
 
             // footerBar
             footerCaption: { target: 'html', context: this._footerBarEl },
