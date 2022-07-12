@@ -149,10 +149,20 @@
     "fonts/font-awesome-6-1-1/fa-solid-900.ttf",
     "fonts/font-awesome-6-1-1/fa-solid-900.woff2",
 
-    "fonts/roboto/Roboto-Medium.woff",
-    "fonts/roboto/Roboto-MediumItalic.woff",
+    "fonts/roboto/Roboto-Regular.woff",
+    "fonts/roboto/Roboto-Italic.woff",
     "fonts/roboto/Roboto-Bold.woff",
     "fonts/roboto/Roboto-BoldItalic.woff",
+
+    "fonts/roboto/Roboto-Thin.woff",
+    "fonts/roboto/Roboto-ThinItalic.woff",
+
+    "fonts/roboto/Roboto-Light.woff",
+    "fonts/roboto/Roboto-LightItalic.woff",
+
+    "fonts/roboto/Roboto-Medium.woff",
+    "fonts/roboto/Roboto-MediumItalic.woff",
+
     "fonts/roboto/Roboto-Black.woff",
     "fonts/roboto/Roboto-BlackItalic.woff"
   ]
