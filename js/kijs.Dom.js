@@ -151,7 +151,7 @@ kijs.Dom = class kijs_Dom {
     
     /**
      * Ersetzt eine CSS-Datei durch eine andere
-     * @param {String} srcOld   Beispiel: 'kijs.theme.derault.css'
+     * @param {String} srcOld   Beispiel: 'kijs.theme.default.css'
      * @param {String} srcNew   Beispiel: 'kijs.theme.myTheme.css'
      * @param {Boolean} [sameBaseDir=true]
      * @returns {undefined}
