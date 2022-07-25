@@ -730,7 +730,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                     this._errors.push(error);
 
                 } else if (kijs.isArray(error)) {
-                    kijs.Array.concat(this._errors, error);
+                    this._errors = kijs.Array.concat(this._errors, error);
                 }
             }
         }
