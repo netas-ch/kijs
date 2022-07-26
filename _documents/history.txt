@@ -1,3 +1,11 @@
+Version 1.3.1
+================================================================================
+Neue Features
+-------------
+ - RPC-Funktionen und MsgBox-Funktionen geben ein Promise (statt undefined) zurück,
+   welches mit await abgewartet werden kann.
+
+
 Version 1.3.0
 ================================================================================
 Neue Features
@@ -21,7 +29,7 @@ Eigene Designs
    gewünschten Designs (z.B. kijs.theme.default.css) und dann die kijs.gui.css.
 - Designanpassungen sollten immer in der kijs.theme.xxx.css gemacht werden.
 - Pro Design müssen immer beide Themes (light und dark) definiert werden.
-- Ein kijs.theme.xxx.css ist in die zwei themes light und dark unterteilt. 
+- Ein kijs.theme.xxx.css ist in die zwei themes light und dark unterteilt.
   Darunter gibt es dann folgenden Aufbau:
     - Farbschema-Variablen mit den Akzentfarben und 10 Graustufen
     - Zuweisung der Farbschema-Variablen zu den Detailvariablen
@@ -32,9 +40,9 @@ Eigene Designs
 -- In der Test-App kann zwischen den Designs Standard, Alt und Joel gewechselt werden.
 
 Neue Eigenschaft bei Fields: disableFlex
- - Ist disableFlex=true, dann wird das Feld nicht automatisch über die ganze breite 
+ - Ist disableFlex=true, dann wird das Feld nicht automatisch über die ganze breite
    angezeigt, dies macht Sinn bei Feldern mit fixer Breite.
- - Bei folgenden Feldern ist der Standardwert true: 
+ - Bei folgenden Feldern ist der Standardwert true:
    Checkbox, ChekboxGroup, Color, DateTime, Month, OptionGroup, Range, Switch
    Bei allen anderen false.
  - Bitte bei allen Fields mit disableFlex=true die Eigenschaft "width" entfernen !!!!!

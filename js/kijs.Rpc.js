@@ -84,46 +84,50 @@ kijs.Rpc = class kijs_Rpc {
      * @param {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                              die in der Callback-Fn dann wieder zur Verfügung stehen.
      *                                              z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
-     * @returns {undefined}
+     * @returns {Promise}
      */
     do(facadeFn, requestData, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
-        if (!facadeFn) {
-            throw new kijs.Error('RPC call without facade function');
-        }
-        if (this._deferId) {
-            clearTimeout(this._deferId);
-        }
+        return new Promise((pResolve, pReject) => {
+            if (!facadeFn) {
+                throw new kijs.Error('RPC call without facade function');
+            }
+            if (this._deferId) {
+                clearTimeout(this._deferId);
+            }
 
-        if (cancelRunningRpcs) {
-            for (let i=0; i<this._queue.length; i++) {
-                if (this._queue[i].facadeFn === facadeFn && this._queue[i].context === context && this._queue[i].fn === fn) {
-                    switch (this._queue[i].state) {
-                        case 1: // queue
-                            this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
-                            this._receive([{tid: this._queue[i].tid}], {postData:[this._queue[i]]});
-                            break;
+            if (cancelRunningRpcs) {
+                for (let i=0; i<this._queue.length; i++) {
+                    if (this._queue[i].facadeFn === facadeFn && this._queue[i].context === context && this._queue[i].fn === fn) {
+                        switch (this._queue[i].state) {
+                            case 1: // queue
+                                this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
+                                this._receive([{tid: this._queue[i].tid}], {postData:[this._queue[i]]});
+                                break;
 
-                        case 2: // transmitted
-                            this._queue[i].state = kijs.Rpc.states.CANCELED_AFTER_TRANSMIT;
-                            break;
+                            case 2: // transmitted
+                                this._queue[i].state = kijs.Rpc.states.CANCELED_AFTER_TRANSMIT;
+                                break;
+                        }
                     }
                 }
             }
-        }
 
-        this._queue.push({
-            facadeFn: facadeFn,
-            requestData: requestData,
-            type: 'rpc',
-            tid: this._createTid(),
-            fn: fn,
-            context: context,
-            rpcParams: rpcParams,
-            responseArgs: responseArgs,
-            state: kijs.Rpc.states.QUEUE
+            this._queue.push({
+                facadeFn: facadeFn,
+                requestData: requestData,
+                type: 'rpc',
+                tid: this._createTid(),
+                fn: fn,
+                context: context,
+                rpcParams: rpcParams,
+                responseArgs: responseArgs,
+                state: kijs.Rpc.states.QUEUE,
+                promiseResolve: pResolve,
+                promiseReject: pReject
+            });
+
+            this._deferId = kijs.defer(this._transmit, this.defer, this);
         });
-
-        this._deferId = kijs.defer(this._transmit, this.defer, this);
     }
 
 
@@ -193,6 +197,14 @@ kijs.Rpc = class kijs_Rpc {
             // callback-fn ausführen
             if (subRequest.fn && kijs.isFunction(subRequest.fn)) {
                 subRequest.fn.call(subRequest.context || this, subResponse, subRequest);
+            }
+
+            // Promise
+            if (subRequest.promiseResolve && !subResponse.errorMsg && !subResponse.canceled) {
+                subRequest.promiseResolve({response: subResponse, request: subRequest});
+
+            } else if (subRequest.promiseReject && subResponse.errorMsg) {
+                subRequest.promiseReject({response: subResponse, request: subRequest});
             }
         }
     }

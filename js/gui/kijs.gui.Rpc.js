@@ -26,7 +26,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @param {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird.
      *                                          Wird z.B. verwendet um bei Formularen die Fehler bei den einzelnen Feldern
      *                                          anzuzeigen.
-     * @returns {undefined}
+     * @returns {Promise}
      */
     // overwrite (Vorsicht andere Argumente!)
     do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty='dom', ignoreWarnings, fnBeforeMessages) {
@@ -45,7 +45,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
             waitMask.show();
         }
 
-        super.do(facadeFn, data, function(response, request) {
+        return super.do(facadeFn, data, function(response, request) {
             // Lademaske entfernen
             if (request.responseArgs && request.responseArgs.waitMask) {
                 if (request.responseArgs.waitMask.target instanceof kijs.gui.Element) {
@@ -54,6 +54,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     request.responseArgs.waitMask.destruct();
                 }
             }
+
+            // der Reject Promise wird beim kijs.gui.Rpc nie ausgelöst, da Fehler direkt ins gui angezeigt werden.
+            request.promiseReject = null;
 
             if (!response.canceled) {
 
@@ -103,6 +106,12 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 // callback-fn ausführen
                 if (fn && kijs.isFunction(fn)) {
                     fn.call(context || this, response.responseData || null);
+                }
+
+                // Promise auslösen
+                if (request.promiseResolve) {
+                    request.promiseResolve(response.responseData);
+                    request.promiseResolve = null;
                 }
             }
 

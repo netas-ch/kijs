@@ -15,14 +15,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} msg
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static alert(caption, msg, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
             closable: false,
@@ -44,14 +44,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} msg
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static confirm(caption, msg, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
             closable: true,
@@ -79,14 +79,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} msg
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static error(caption, msg, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
             closable: false,
@@ -112,14 +112,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} msg
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static info(caption, msg, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
             closable: false,
@@ -147,14 +147,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} value
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static prompt(caption, msg, label, value, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
 
@@ -218,129 +218,134 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *     ]
      * }
      * @param {Object} config
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static show(config) {
-        let btn = 'none';
-        let value = null;
-        const elements = [];
-        const footerElements = [];
+        return new Promise((resolve) => {
+            let btn = 'none';
+            let value = null;
+            const elements = [];
+            const footerElements = [];
 
-        // Icon
-        if (config.icon) {
-            if (!(config.icon instanceof kijs.gui.Icon)) {
-                config.icon.xtype = 'kijs.gui.Icon';
+            // Icon
+            if (config.icon) {
+                if (!(config.icon instanceof kijs.gui.Icon)) {
+                    config.icon.xtype = 'kijs.gui.Icon';
+                }
+                elements.push(config.icon);
             }
-            elements.push(config.icon);
-        }
 
-        if (config.fieldXtype) {
-            // Beschrieb und Feld
-            let element = new kijs.gui.Container(
-                {
-                    htmlDisplayType: 'html',
-                    cls: 'kijs-msgbox-inner',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Element',
-                            html: config.msg,
-                            htmlDisplayType: 'html',
-                            style: {
-                                marginBottom: '4px'
-                            }
-                        },{
-                            xtype: config.fieldXtype,
-                            name: 'field',
-                            label: config.label,
-                            value: config.value,
-                            required: !!config.required,
-                            labelStyle: {
-                                marginRight: '4px'
-                            },
-                            on: {
-                                enterPress: function(e) {
-                                    if (config.fieldXtype) {
-                                        btn = 'ok';
-                                        value = e.element.upX('kijs.gui.Window').down('field').value;
-                                        e.element.upX('kijs.gui.Window').destruct();
-                                    }
+            if (config.fieldXtype) {
+                // Beschrieb und Feld
+                let element = new kijs.gui.Container(
+                    {
+                        htmlDisplayType: 'html',
+                        cls: 'kijs-msgbox-inner',
+                        elements:[
+                            {
+                                xtype: 'kijs.gui.Element',
+                                html: config.msg,
+                                htmlDisplayType: 'html',
+                                style: {
+                                    marginBottom: '4px'
+                                }
+                            },{
+                                xtype: config.fieldXtype,
+                                name: 'field',
+                                label: config.label,
+                                value: config.value,
+                                required: !!config.required,
+                                labelStyle: {
+                                    marginRight: '4px'
                                 },
-                                context: this
+                                on: {
+                                    enterPress: function(e) {
+                                        if (config.fieldXtype) {
+                                            btn = 'ok';
+                                            value = e.element.upX('kijs.gui.Window').down('field').value;
+                                            e.element.upX('kijs.gui.Window').destruct();
+                                        }
+                                    },
+                                    context: this
+                                }
                             }
-                        }
-                    ]
-                }
-            );
+                        ]
+                    }
+                );
 
-            // Wenn Argumente vorhanden sind, diese dem Feld mitgeben
-            if (config.hasOwnProperty('facadeFnArgs') && config.facadeFnArgs) {
-                element.down('field').facadeFnArgs = config.facadeFnArgs;
+                // Wenn Argumente vorhanden sind, diese dem Feld mitgeben
+                if (config.hasOwnProperty('facadeFnArgs') && config.facadeFnArgs) {
+                    element.down('field').facadeFnArgs = config.facadeFnArgs;
+                }
+
+                // Element zu Elements hinzufügen
+                elements.push(element);
+
+            } else {
+                // Text
+                elements.push({
+                    xtype: 'kijs.gui.Element',
+                    html: config.msg,
+                    htmlDisplayType: 'html',
+                    cls: 'kijs-msgbox-inner'
+                });
             }
 
-            // Element zu Elements hinzufügen
-            elements.push(element);
+            // Buttons
+            kijs.Array.each(config.buttons, function(button) {
+                if (!(button instanceof kijs.gui.Button)) {
+                    button.xtype = 'kijs.gui.Button';
+                    if (!button.on) {
+                        button.on = {};
+                    }
+                    if (!button.on.click) {
+                        button.on.click = function() {
+                            btn = button.name;
+                            if (config.fieldXtype) {
+                                value = this.upX('kijs.gui.Window').down('field').value;
 
-        } else {
-            // Text
-            elements.push({
-                xtype: 'kijs.gui.Element',
-                html: config.msg,
-                htmlDisplayType: 'html',
-                cls: 'kijs-msgbox-inner'
+                                if (!this.upX('kijs.gui.Window').down('field').validate()) {
+                                    return;
+                                }
+                            }
+
+                            this.upX('kijs.gui.Window').destruct();
+                        };
+                    }
+                }
+
+                footerElements.push(button);
+            }, this);
+
+            // Fenster erstellen
+            const win = new kijs.gui.Window({
+                caption: config.caption,
+                iconMap: config.iconMap ? config.iconMap : '',
+                closable: config.hasOwnProperty('closable') ? !!config.closable : true,
+                collapsible: false,
+                resizable: false,
+                maximizable: false,
+                modal: true,
+                cls: 'kijs-msgbox',
+                elements: elements,
+                footerElements: footerElements
             });
-        }
 
-        // Buttons
-        kijs.Array.each(config.buttons, function(button) {
-            if (!(button instanceof kijs.gui.Button)) {
-                button.xtype = 'kijs.gui.Button';
-                if (!button.on) {
-                    button.on = {};
-                }
-                if (!button.on.click) {
-                    button.on.click = function() {
-                        btn = button.name;
-                        if (config.fieldXtype) {
-                            value = this.upX('kijs.gui.Window').down('field').value;
-
-                            if (!this.upX('kijs.gui.Window').down('field').validate()) {
-                                return;
-                            }
-                        }
-
-                        this.upX('kijs.gui.Window').destruct();
-                    };
-                }
-            }
-
-            footerElements.push(button);
-        }, this);
-
-        // Fenster erstellen
-        const win = new kijs.gui.Window({
-            caption: config.caption,
-            iconMap: config.iconMap ? config.iconMap : '',
-            closable: config.hasOwnProperty('closable') ? !!config.closable : true,
-            collapsible: false,
-            resizable: false,
-            maximizable: false,
-            modal: true,
-            cls: 'kijs-msgbox',
-            elements: elements,
-            footerElements: footerElements
-        });
-
-        // Listener
-        if (config.fn) {
+            // Listener
             win.on('destruct', function(e){
                 e.btn = btn;
                 e.value = value;
-                config.fn.call(config.context, e);
-            });
-        }
+                if (config.fn) {
+                    config.fn.call(config.context, e);
+                }
 
-        // Fenster anzeigen
-        win.show();
+                // Promise auflösen
+                resolve(e);
+            });
+
+            // Fenster anzeigen
+            win.show();
+        });
     }
 
     /**
@@ -349,14 +354,14 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      * @param {String} msg
      * @param {Function} fn
      * @param {Object} context
-     * @returns {undefined}
+     * @returns {Promise}
      */
     static warning(caption, msg, fn, context) {
         if (kijs.isArray(msg)) {
             msg = this._convertArrayToHtml(msg);
         }
 
-        this.show({
+        return this.show({
             caption: caption,
             msg: msg,
             closable: true,

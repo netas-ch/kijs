@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '1.3.0'; }
+    static get version() { return '1.3.1'; }
 
 
     // --------------------------------------------------------------
@@ -128,7 +128,7 @@ window.kijs = class kijs {
         if (args !== null) {
             args = kijs.isArray(args) ? args : [args];
 
-            for (var i=args.length; i>0; i--) {
+            for (let i=args.length; i>0; i--) {
                 text = kijs.String.replaceAll(text, '%' + i, args[i-1]);
             }
         }
@@ -342,5 +342,14 @@ window.kijs = class kijs {
         }
         kijs.__uniqId++;
         return 'kijs-' + (prefix ? prefix + '-' : '') + kijs.__uniqId;
+    }
+
+    /**
+     * Kleine Hilfsfunktion, um ein Timeout in einer Async-Funktion zu nutzen.
+     * @param {Number} ms Miliseconds
+     * @returns {Promise}
+     */
+    static wait(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 };

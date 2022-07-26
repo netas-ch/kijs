@@ -9,6 +9,34 @@ kijs.Array = class kijs_Array {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
+
+    /**
+     * Wandelt ein ArrayBuffer in Base64 um
+     * @param {ArrayBuffer} buf
+     * @returns {String}
+     */
+    static arrayBufferToBase64(buf) {
+        const bufView = new Uint8Array(buf);
+        var binary = '';
+        for (let i=0; i<bufView.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    /**
+     * Wandelt base64 in ein ArrayBuffer um
+     * @param {String} base64
+     * @returns {ArrayBuffer}
+     */
+    static base64ToArrayBuffer(base64) {
+        const bin_str = window.atob(base64), buf = new ArrayBuffer(bin_str.length), bufView = new Uint8Array(buf);
+        for (let i=0; i<bin_str.length; i++) {
+            bufView[i] = bin_str.charCodeAt(i);
+        }
+        return buf;
+    }
+
     /**
      * Leert ein Array
      * @param {Array} array

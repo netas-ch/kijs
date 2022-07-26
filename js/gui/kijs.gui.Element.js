@@ -321,7 +321,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     get isAppended() { return !!this._dom.isAppended; }
 
-    get isRendered() { return !!this._dom.isRendered; }
+    get isRendered() { return !!(this._dom && this._dom.isRendered); }
 
     get node() { return this._dom.node; }
     get nodeTagName() { return this._dom.nodeTagName; }
