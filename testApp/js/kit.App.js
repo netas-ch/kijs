@@ -1132,9 +1132,9 @@ kit.App = class kit_App {
                                             valueField: 'value',
                                             captionField: 'caption',
                                             data: [
-                                                {caption: 'Herr', value: 'm'},
-                                                {caption: 'Frau', value: 'w'},
-                                                {caption: 'Familie', value: 'f'}
+                                                {caption: 'Herr', value: 'm', iconMap: 'kijs.iconMap.Fa.person' },
+                                                {caption: 'Frau', value: 'w', iconMap: 'kijs.iconMap.Fa.person-dress'},
+                                                {caption: 'Familie', value: 'f', iconMap: 'kijs.iconMap.Fa.people-group'}
                                             ],
                                             elements: [
                                                 {

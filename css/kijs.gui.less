@@ -213,7 +213,7 @@ div.kijs-container-inner {
 
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
-    
+
     -webkit-user-select: none;  /* Safari */
     user-select: none;
 
@@ -1004,28 +1004,25 @@ div.kijs-panelbar {
         text-align: left;
     }
 
-    &.kijs-headerbar {
+    &.kijs-headerbar  > .kijs-container-inner {
+        color: var(--bar-fontColor);
+        font-family: var(--default-fontFamily);
         font-size: var(--headerBar-fontSize);
-
-        > .kijs-container-inner {
-            text-align: left;
-        }
+        text-align: left;
     }
 
-    &.kijs-headerbar-center {
+    &.kijs-headerbar-center > .kijs-container-inner {
+        color: var(--bar-fontColor);
+        font-family: var(--default-fontFamily);
         font-size: var(--headerBar-fontSize);
-
-        > .kijs-container-inner {
-            text-align: center;
-        }
+        text-align: center;
     }
 
-    &.kijs-footerbar {
+    &.kijs-footerbar > .kijs-container-inner {
+        color: var(--bar-fontColor);
+        font-family: var(--default-fontFamily);
         font-size: var(--footerBar-fontSize);
-
-        > .kijs-container-inner {
-            text-align: right;
-        }
+        text-align: right;
     }
 }
 
@@ -1415,6 +1412,10 @@ div.kijs-listview {
 
             > .kijs-icon {
                 margin-right: 4px;
+
+                &:empty {
+                    display: none;
+                }
             }
 
             > .kijs-caption {
@@ -1447,9 +1448,22 @@ div.kijs-listview {
 
     /* Listview vom combo wird geflext, damit es mit 'order' sortiert werden kann */
     &.kijs-field-combo {
-        .kijs-container-inner {
+        > .kijs-container-inner {
             display: flex;
             flex-direction: column;
+        }
+
+        div.kijs-dataviewelement {
+            > .kijs-container-inner {
+                display: flex;
+                flex-direction: row;
+
+                > .kijs-caption {
+                    flex: 1;
+                    padding-bottom: 3px;
+                }
+            }
+
         }
 
         .kijs-placeholder {
@@ -1882,7 +1896,7 @@ div.kijs-field {
                 color: var(--button-icon-fontColor);
 
                 &.kijs-default {
-                    box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.8);
+                    box-shadow: none;
                 }
 
                 &:hover {

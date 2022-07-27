@@ -37,10 +37,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         Object.assign(this._configMap, {
             iconChar: true,   // Alias für html
             iconCls: { target: 'iconCls' },
-            iconColor: { target: 'iconColor' },
-            iconCharField: true,
-            iconClsField: true,
-            iconColorField: true
+            iconColor: { target: 'iconColor' }
         });
 
         // Config anwenden
@@ -77,14 +74,21 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
      loadFromDataRow() {
         super.loadFromDataRow();
 
-        if (this.row && this.row.dataRow && this.columnConfig.iconColorField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
-           this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
-           this._dom.style.color = this._iconColor;
-        }
-
         if (this.row && this.row.dataRow) {
 
-            // Icon hinzufügen
+            // icon Farbe
+            if (this.columnConfig.iconColorField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconColorField])) {
+               this._iconColor = this.row.dataRow[this.columnConfig.iconColorField];
+               this._dom.style.color = this._iconColor;
+            }
+
+            // iconMap
+            if (this.columnConfig.iconMapField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconMapField])) {
+                let value = this.row.dataRow[this.columnConfig.iconMapField];
+                this._setDomHtml(value);
+            }
+
+            // iconChar
             if (this.columnConfig.iconCharField && kijs.isDefined(this.row.dataRow[this.columnConfig.iconCharField])) {
                 let value = this.row.dataRow[this.columnConfig.iconCharField];
                 this._setDomHtml(value);

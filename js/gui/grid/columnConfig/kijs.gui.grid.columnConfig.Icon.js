@@ -22,6 +22,7 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
         this._filterXtype = 'kijs.gui.grid.filter.Icon';
         this._iconCharField = null;
         this._iconClsField = null;
+        this._iconMapField = null;
         this._iconColorField = null;
         this._tooltipField = null;
 
@@ -34,6 +35,7 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
         Object.assign(this._configMap, {
             iconCharField:  true,
             iconClsField:  true,
+            iconMapField:  true,
             iconColorField: true,
             tooltipField: true
         });
@@ -57,6 +59,9 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
 
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
+
+    get iconMapField() { return this._iconMapField; }
+    set iconMapField(val) { this._iconMapField = val; }
 
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }

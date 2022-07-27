@@ -65,7 +65,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minChars: 'auto',
             valueField: 'value',
             captionField: 'caption',
-            iconCharField: 'iconChar'
+            iconCharField: 'iconChar',
+            iconMapField: 'iconMap'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
@@ -89,6 +90,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
+            iconMapField: { target: 'iconMapField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },
             valueField: { target: 'valueField', context: this._listViewEl },
 
