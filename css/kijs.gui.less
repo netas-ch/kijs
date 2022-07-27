@@ -203,6 +203,8 @@ div.kijs-container {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    font-family: var(--default-fontFamily);
+    color: var(--default-fontColor);
 }
 
 div.kijs-container-inner {
@@ -810,7 +812,7 @@ button.kijs-button {
 /* Buttons im Fuss eines Panels haben einen Rahmen */
 div.kijs-panel {
     > .kijs-footer .kijs-button {
-        border:1px solid var(--footer-button-borderColor);
+        border: 1px solid var(--footer-button-borderColor);
         background-color: var(--footer-button-bkgrndColor);
         margin-top: 5px;
         margin-bottom: 5px;
@@ -823,7 +825,7 @@ div.kijs-panel {
     }
 
     > .kijs-footer .kijs-button.kijs-disabled {
-        border:1px solid var(--footer-button-disabled-borderColor);
+        border: 1px solid var(--footer-button-disabled-borderColor);
         background-color: var(--footer-button-disabled-bkgrndColor);
         cursor: auto;
     }

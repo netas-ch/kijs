@@ -455,7 +455,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             }
         }, this);
 
-        // Evtl. untergeordnete Container rekursiv duchsuchen
+        // Evtl. untergeordnete Container rekursiv durchsuchen
         if (!breakOnFirst || kijs.isEmpty(ret)) {
             if (deep && deep!==0) {
                 if (deep>0) {

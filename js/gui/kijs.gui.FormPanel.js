@@ -398,7 +398,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             let el = parent.elements[i];
             if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
                 ret.push(el);
-            } else if (el instanceof kijs.gui.Container) {
+            }
+
+            if (el instanceof kijs.gui.Container) {
                 ret = ret.concat(this.searchFields(el));
             }
         }
