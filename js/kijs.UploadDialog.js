@@ -11,6 +11,7 @@
  *
  *  * EVENTS
  * ----------
+ * fileSelected -- wird ausgeführt, wenn eine Datei ausgewählt wurde
  * failUpload   -- MIME nicht erlaubt
  * startUpload  -- Upload wird gestartet
  * progress     -- Fortschritt beim Upload
@@ -341,24 +342,30 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
             filetype = file.type || 'application/octet-stream';
 
-        headers[this._filenameHeader] = encodeURIComponent(filename);
-        headers[this._pathnameHeader] = encodeURIComponent(filedir);
-        headers['Content-Type'] = filetype;
+        // event
+        this.raiseEvent('fileSelected', this, filename, filedir, filetype, file);
 
-        kijs.Ajax.request({
-            url: this._ajaxUrl,
-            method: 'POST',
-            format: 'json',
-            headers: headers,
-            postData: file,
-            fn: this._onEndUpload,
-            progressFn: this._onProgress,
-            context: this,
-            uploadId: uploadId
-        });
+        // Upload 
+        if (this._ajaxUrl) {
+            headers[this._filenameHeader] = encodeURIComponent(filename);
+            headers[this._pathnameHeader] = encodeURIComponent(filedir);
+            headers['Content-Type'] = filetype;
 
-        this._currentUploadIds.push(uploadId);
-        this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
+            kijs.Ajax.request({
+                url: this._ajaxUrl,
+                method: 'POST',
+                format: 'json',
+                headers: headers,
+                postData: file,
+                fn: this._onEndUpload,
+                progressFn: this._onProgress,
+                context: this,
+                uploadId: uploadId
+            });
+
+            this._currentUploadIds.push(uploadId);
+            this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
+        }
     }
 
     _onEndUpload(val, config, error) {

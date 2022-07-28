@@ -19,7 +19,7 @@ kijs.Array = class kijs_Array {
         const bufView = new Uint8Array(buf);
         var binary = '';
         for (let i=0; i<bufView.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
+            binary += String.fromCharCode(bufView[i]);
         }
         return window.btoa(binary);
     }
