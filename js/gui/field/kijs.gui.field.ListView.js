@@ -15,6 +15,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._oldValue = [];
+        this._rpc = null;               // Instanz von kijs.gui.Rpc
 
         this._listView = new kijs.gui.ListView({});
 
@@ -31,7 +32,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
             facadeFnLoad: { target: 'facadeFnLoad', context: this._listView },
             facadeFnArgs: { target: 'facadeFnArgs', context: this._listView },
-            rpc: { target: 'rpc', context: this._listView },
+            rpc: { target: 'rpc' },
 
             captionField: { target: 'captionField', context: this._listView },
             iconCharField: { target: 'iconCharField', context: this._listView },
@@ -97,8 +98,29 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
     }
 
-    get rpc() { return this._listView.rpc; }
-    set rpc(val) { this._listView.rpc = val; }
+    get rpc() {
+
+        if (!this._rpc) {
+
+            // Sucht nach einem FormPanel oberhalb
+            let formPanel = this.upX('kijs.gui.FormPanel');
+
+            // Wenn ein FormPanel gefunden wurde und dort eine RPC-Instance vorhanden ist, wird diese genommen
+            if (formPanel && formPanel.rpc) {
+                this._rpc = formPanel.rpc;
+            }
+        }
+        return this._rpc;
+    }
+    set rpc(val) {
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+            this._listView.rpc = val;
+
+        } else {
+            throw new kijs.Error(`Unkown format on config "rpc"`);
+        }
+    }
 
     // overwrite
     get value() { return this._listView.value; }
@@ -135,6 +157,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     render(superCall) {
         super.render(true);
 
+        this._listView.rpc = this.rpc;
         this._listView.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
@@ -188,11 +211,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     }
 
     // LISTENERS
-    _onAfterFirstRenderTo(e) {
-        this.load();
-    }
-
-    _onListViewSelectionChange(e) {
+    _onListViewSelectionChange() {
         const val = this.value;
 
         this.raiseEvent(['input', 'change'], { oldValue: this._oldValue, value: val });
@@ -222,6 +241,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         // Variablen (Objekte/Arrays) leeren
         this._listView = null;
         this._oldValue = null;
+        this._rpc = null;
 
         // Basisklasse entladen
         super.destruct(true);
