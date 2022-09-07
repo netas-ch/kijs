@@ -160,7 +160,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     render(superCall) {
         super.render(true);
 
-        this._listView.rpc = this.rpc;
+        if (this.rpc) {
+            this._listView.rpc = this.rpc;
+        }
         this._listView.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
