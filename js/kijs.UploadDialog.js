@@ -73,7 +73,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             pathnameHeader: true,
             maxFilesize: true,
             sanitizeFilename: true,
-            dropZones: { target: 'dropZone' },
+            dropZones: { target: 'dropZones' },
             contentTypes: { target: 'contentTypes' },
             observePaste: { target: 'observePaste' }
         };
