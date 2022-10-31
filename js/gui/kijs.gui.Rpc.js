@@ -29,7 +29,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @returns {Promise}
      */
     // overwrite (Vorsicht andere Argumente!)
-    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty='dom', ignoreWarnings, fnBeforeMessages) {
+    do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty='dom', ignoreWarnings=false, fnBeforeMessages=null) {
         // Lademaske anzeigen
         let waitMask;
         if (waitMaskTarget === 'none') {
@@ -85,6 +85,10 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                             this.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomProperty, true);
                         }
                     }, this);
+
+                    // promise nicht auslösen
+                    request.promiseResolve = null;
+
                     return;
                 }
 
@@ -110,7 +114,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                 // Promise auslösen
                 if (request.promiseResolve) {
-                    request.promiseResolve(response.responseData);
+                    request.promiseResolve(response.responseData || null);
                     request.promiseResolve = null;
                 }
             }

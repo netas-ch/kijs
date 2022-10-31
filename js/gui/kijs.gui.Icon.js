@@ -102,21 +102,23 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             }
             val = obj;
         }
-        
+
         if (kijs.isEmpty(val)) {
             this.iconChar = '';
-        }
-        if (kijs.isDefined(val.char)) {
-            this.iconChar = val.char;
-        }
-        if (kijs.isDefined(val.cls)) {
-            this.iconCls = val.cls;
-        }
-        if (kijs.isDefined(val.color)) {
-            this.iconColor = val.color;
-        }
-        if (kijs.isDefined(val.style)) {
-            Object.assign(this.style, val.style);
+            
+        } else {
+            if (kijs.isDefined(val.char)) {
+                this.iconChar = val.char;
+            }
+            if (kijs.isDefined(val.cls)) {
+                this.iconCls = val.cls;
+            }
+            if (kijs.isDefined(val.color)) {
+                this.iconColor = val.color;
+            }
+            if (kijs.isDefined(val.style)) {
+                Object.assign(this.style, val.style);
+            }
         }
     }
 

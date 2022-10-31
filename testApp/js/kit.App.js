@@ -1582,6 +1582,14 @@ kit.App = class kit_App {
                                             }}
                                         },{
                                             xtype: 'kijs.gui.Button',
+                                            caption: 'Prompt',
+                                            on: {click: function(e) {
+                                                kijs.gui.MsgBox.prompt('Test', 'Confirm!', 'Eingabe', 'Wert!', function(e) {
+                                                    kijs.gui.MsgBox.alert('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                                                });
+                                            }}
+                                        },{
+                                            xtype: 'kijs.gui.Button',
                                             caption: 'CornerTip',
                                             on: {
                                                 click: function() {
