@@ -30,6 +30,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._resizeDeferHandle = null;   // intern
         this._dragInitialPos = null;      // intern
 
+        this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren falls das Virtual Keyboard eingeblendet wird.
+
         this._modalMaskEl = null;
 
         this._draggable = false;
@@ -60,7 +62,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             modal: { target: 'modal' },     // Soll das Fenster modal geöffnet werden (alles Andere wird mit einer halbtransparenten Maske verdeckt)?
             resizeDelay: true,
             target: { target: 'target' },
-            targetDomProperty: true
+            targetDomProperty: true,
+            moveWhenVirtualKeyboard: true
         });
 
         // Listeners
@@ -71,6 +74,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        // Virtual Keyboard API (Nur in Chrome mit SSL)
+        if (this._moveWhenVirtualKeyboard && 'virtualKeyboard' in navigator) {
+            navigator.virtualKeyboard.overlaysContent = true;
+            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this._onVirtualKeyboardGemoetryChange, this);
+        }
+
     }
 
 
@@ -194,9 +204,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     /**
      * Zentriert das Fenster auf dem Bildschirm
      * @param {Boolean} [preventEvents=false]   // Das Auslösen des afterResize-Event verhindern?
+     * @param {Number} [offsetX=0]              // X-Offset
+     * @param {Number} [offsetY=0]              // Y-Offset
      * @returns {undefined}
      */
-    center(preventEvents=false) {
+    center(preventEvents=false, offsetX=0, offsetY=0) {
         const targetNode = this.targetNode;
 
         // afterResize-Event deaktivieren
@@ -204,8 +216,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._preventAfterResize = true;
 
         // Zentrieren
-        this.left = targetNode.offsetLeft + (targetNode.offsetWidth - this.width) / 2;
-        this.top = targetNode.offsetTop + (targetNode.offsetHeight - this.height) / 2;
+        this.left = targetNode.offsetLeft + ((targetNode.offsetWidth - this.width) / 2) + offsetX;
+        this.top = targetNode.offsetTop + ((targetNode.offsetHeight - this.height) / 2) + offsetY;
 
        // afterResize-Event wieder zulassen
        this._preventAfterResize = prevAfterRes;
@@ -458,6 +470,25 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this.destruct();
     }
 
+    // Fenster neu zentrieren wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
+    _onVirtualKeyboardGemoetryChange(e) {
+
+        if (this.isRendered && this._moveWhenVirtualKeyboard && e.nodeEvent.target) {
+            const { x, y, width, height } = e.nodeEvent.target.boundingRect;
+            
+            // Tastatur geschlossen: Fenster zentrieren
+            if (width === 0 && height === 0) {
+                this.center();
+
+            // Falls möglich, Fenster so zentrieren, dass es nicht von der Tastatur verdeckt wird.
+            } else {
+                this.center(false, 0, height * -1);
+            }
+
+        }
+
+    }
+
     _onWindowResize(e) {
          // Sicherstellen, dass das Fenster im Target platz hat
         this._adjustPositionToTarget(true);
@@ -484,6 +515,10 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
         kijs.Dom.removeEventListener('mouseMove', document, this);
         kijs.Dom.removeEventListener('mouseUp', document, this);
+
+        if ('virtualKeyboard' in navigator) {
+            kijs.Dom.removeEventListener('geometrychange', navigator.virtualKeyboard, this);
+        }
 
         // Event-Listeners entfernen
         if (this._targetX instanceof kijs.gui.Element) {

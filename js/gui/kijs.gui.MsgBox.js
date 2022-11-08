@@ -328,7 +328,8 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 modal: true,
                 cls: 'kijs-msgbox',
                 elements: elements,
-                footerElements: footerElements
+                footerElements: footerElements,
+                moveWhenVirtualKeyboard: true
             });
 
             // Listener
