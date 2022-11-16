@@ -333,7 +333,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
         this._helpIconEl.tooltip = val;
-        this._helpIconEl.visible = !kijs.isEmpty(this._helpIconEl.tooltip.html);
+        this._helpIconEl.visible = this._helpIconEl.tooltip && !kijs.isEmpty(this._helpIconEl.tooltip.html);
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
@@ -367,9 +367,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._labelHide = val;
         if (this.isRendered) {
             if (val) {
-                this._labelDom.renderTo(this._dom.node, this._inputWrapperDom.node);
-            } else {
                 this._labelDom.unrender();
+            } else {
+                this._labelDom.renderTo(this._dom.node, this._inputWrapperDom.node);
             }
         }
     }

@@ -6044,7 +6044,7 @@ kijs.gui.grid.filter = class kijs_gui_grid_filter {
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.UploadDialog
+// kijs.FileUpload
 // --------------------------------------------------------------
 
 /**
@@ -6061,7 +6061,7 @@ kijs.gui.grid.filter = class kijs_gui_grid_filter {
  * endUpload    -- alle Uploads in der Schlange abgeschlossen
  *
  */
-kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
+kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
 
 
     // --------------------------------------------------------------
@@ -6161,7 +6161,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // --------------------------------------------------------------
 
     /**
-     * Verbindet eine Dropzone mit dem UploadDialog. Wird eine
+     * Verbindet eine Dropzone mit dem FileUpload. Wird eine
      * Datei auf die Dropzone gezogen, wird sie mit der Upload-Funktion
      * von dieser Klasse hochgeladen.
      * @param {kijs.gui.DropZone|Array} dropZones
@@ -6202,7 +6202,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      * @param {Boolean} [directory] Soll statt einer Datei ein ganzer Ordner hochgeladen werden?
      * @returns {undefined}
      */
-    showFileSelectDialog(multiple=null, directory=null) {
+    showFileOpenDialog(multiple=null, directory=null) {
         multiple = multiple === null ? this._multiple : multiple;
         directory = directory === null ? this._directory : directory;
 
@@ -11721,8 +11721,8 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
 
         this._percent = 0;
         this._showPercent = true;
-        this._uploadDialog = null;
-        this._uploadDialogId = null;
+        this._fileUpload = null;
+        this._fileUploadId = null;
 
         this._captionDom = new kijs.gui.Dom();
         this._bottomCaptionDom = new kijs.gui.Dom();
@@ -11751,8 +11751,8 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
             caption: { target: 'html', context: this._captionDom },
             bottomCaption: { target: 'html', context: this._bottomCaptionDom },
             percent: { target: 'percent' },
-            uploadDialog: { target: 'uploadDialog' },
-            uploadDialogId: { target: 'uploadDialogId' }
+            fileUpload: { target: 'fileUpload' },
+            fileUploadId: { target: 'fileUploadId' }
         });
 
         // Config anwenden
@@ -11776,11 +11776,11 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     get percent() { return this._percent; }
     set percent(val) { this.setProgress(val); }
 
-    get uploadDialog() { return this._uploadDialog; }
-    set uploadDialog(val) { this.bindUploadDialog(val); }
+    get fileUpload() { return this._fileUpload; }
+    set fileUpload(val) { this.bindFileUpload(val); }
 
-    get uploadDialogId() { return this._uploadDialogId; }
-    set uploadDialogId(val) { this._uploadDialogId = val; }
+    get fileUploadId() { return this._fileUploadId; }
+    set fileUploadId(val) { this._fileUploadId = val; }
 
 
     // --------------------------------------------------------------
@@ -11790,27 +11790,27 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     /**
      * Binden einen kijs.Uploaddialog an die Progressbar, um den Upload-Fortschritt
      * anzuzeigen.
-     * @param {kijs.UploadDialog} uploadDialog
+     * @param {kijs.FileUpload} fileUpload
      * @param {Int} [uploadId] ID vom Upload. Wenn null übergeben wird, wird der erste genommen.
      * @returns {undefined}
      */
-    bindUploadDialog(uploadDialog, uploadId=null) {
-        if (!(uploadDialog instanceof kijs.UploadDialog)) {
-            throw new kijs.Error('Upload Dialog must be of type kijs.UploadDialog');
+    bindFileUpload(fileUpload, uploadId=null) {
+        if (!(fileUpload instanceof kijs.FileUpload)) {
+            throw new kijs.Error('Upload Dialog must be of type kijs.FileUpload');
         }
 
         // Events entfernen, wenn bereits eine Klasse verknüpft war.
-        if (this._uploadDialog instanceof kijs.UploadDialog) {
-            this._uploadDialog.off(null, null, this);
+        if (this._fileUpload instanceof kijs.FileUpload) {
+            this._fileUpload.off(null, null, this);
         }
 
-        this._uploadDialog = uploadDialog;
+        this._fileUpload = fileUpload;
         if (uploadId !== null) {
-            this._uploadDialogId = uploadId;
+            this._fileUploadId = uploadId;
         }
 
-        uploadDialog.on('progress', this._onUploadDialogProgress, this);
-        uploadDialog.on('upload', this._onUploadDialogUpload, this);
+        fileUpload.on('progress', this._onFileUploadProgress, this);
+        fileUpload.on('upload', this._onFileUploadUpload, this);
     }
 
     /**
@@ -11881,19 +11881,19 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     }
 
 
-    _onUploadDialogProgress(ud, e, id, percent) {
-        if (this._uploadDialogId === null) {
-            this._uploadDialogId = id;
+    _onFileUploadProgress(ud, e, id, percent) {
+        if (this._fileUploadId === null) {
+            this._fileUploadId = id;
         }
 
-        if (kijs.isInteger(percent) && this._uploadDialogId === id) {
+        if (kijs.isInteger(percent) && this._fileUploadId === id) {
             this.setProgress(percent);
         }
     }
 
     // Upload fertig
-    _onUploadDialogUpload(ud, resp, error, id) {
-        if (this._uploadDialogId === id) {
+    _onFileUploadUpload(ud, resp, error, id) {
+        if (this._fileUploadId === id) {
             this.setProgress(100);
         }
     }
@@ -11912,8 +11912,8 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         }
 
         // Events entfernen
-        if (this._uploadDialog instanceof kijs.UploadDialog) {
-            this._uploadDialog.off(null, null, this);
+        if (this._fileUpload instanceof kijs.FileUpload) {
+            this._fileUpload.off(null, null, this);
         }
 
         this._captionDom.destruct();
@@ -26325,7 +26325,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 /* global kijs, this, HTMLElement */
 
 // --------------------------------------------------------------
-// kijs.gui.UploadWindow
+// kijs.gui.FileUpload
 // --------------------------------------------------------------
 // Das Fenster kann mit der Mehtode .show() angezeigt werden.
 // Es wird dann in das target gerendert.
@@ -26342,7 +26342,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
 // Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
 // --------------------------------------------------------------
-kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
+kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.gui.Window {
 
 
     // --------------------------------------------------------------
@@ -26351,7 +26351,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     constructor(config={}) {
         super(false);
 
-        this._uploadDialog = null;   // intern
+        this._fileUpload = null;   // intern
         this._uploads = [];          // intern
         this._autoClose = true;      // intern
         this._uploadRunning = true;  // intern
@@ -26362,7 +26362,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         Object.assign(this._defaultConfig, {
             caption: kijs.getText('Upload'),
             iconChar: '&#xf093',
-            uploadDialog: null,
+            fileUpload: null,
             closable: false,
             maximizable: false,
             resizable: false,
@@ -26394,7 +26394,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            uploadDialog: { target: 'uploadDialog' },
+            fileUpload: { target: 'fileUpload' },
             autoClose: true
         });
 
@@ -26413,23 +26413,23 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
 
-    get uploadDialog() { return this._uploadDialog; }
-    set uploadDialog(val) {
+    get fileUpload() { return this._fileUpload; }
+    set fileUpload(val) {
         // falls bereits verknüpft, events entfernen
-        if (this._uploadDialog instanceof kijs.UploadDialog) {
-            this._uploadDialog.off(null, null, this);
+        if (this._fileUpload instanceof kijs.FileUpload) {
+            this._fileUpload.off(null, null, this);
         }
 
-        this._uploadDialog = val;
+        this._fileUpload = val;
         if (kijs.isDefined(val)) {
-            if (!(val instanceof kijs.UploadDialog)) {
-                throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');
+            if (!(val instanceof kijs.FileUpload)) {
+                throw new kijs.Error('fileUpload must be of type kijs.FileUpload');
             }
 
-            this._uploadDialog.on('startUpload', this._onStartUpload, this);
-            this._uploadDialog.on('failUpload', this._onFailUpload, this);
-            this._uploadDialog.on('upload', this._onUpload, this);
-            this._uploadDialog.on('endUpload', this._onEndUpload, this);
+            this._fileUpload.on('startUpload', this._onStartUpload, this);
+            this._fileUpload.on('failUpload', this._onFailUpload, this);
+            this._fileUpload.on('upload', this._onUpload, this);
+            this._fileUpload.on('endUpload', this._onEndUpload, this);
         }
     }
 
@@ -26443,12 +26443,12 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
      * @param {Boolean} directory Soll statt eine Datei ein Verzeichnis hochgeladen werden?
      * @returns {undefined}
      */
-    showFileSelectDialog(multiple=null, directory=null) {
-        if (!(this._uploadDialog instanceof kijs.UploadDialog)) {
-            this._uploadDialog = new kijs.UploadDialog();
+    showFileOpenDialog(multiple=null, directory=null) {
+        if (!(this._fileUpload instanceof kijs.FileUpload)) {
+            this._fileUpload = new kijs.FileUpload();
         }
 
-        this._uploadDialog.showFileSelectDialog(multiple, directory);
+        this._fileUpload.showFileOpenDialog(multiple, directory);
     }
 
     // PROTECTED
@@ -26464,8 +26464,8 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     _onStartUpload(ud, filename, filedir, filetype, uploadId) {
         let progressBar = new kijs.gui.ProgressBar({
             caption: kijs.String.htmlspecialchars(filename),
-            uploadDialog: this._uploadDialog,
-            uploadDialogId: uploadId,
+            fileUpload: this._fileUpload,
+            fileUploadId: uploadId,
             style: {
                 marginBottom: '10px'
             }

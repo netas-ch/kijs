@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Range
 // --------------------------------------------------------------
+
+// TODO: Besser direkt von kijs.gui.field.Field erben?
+// TODO: Vertikale Schieber?
+// TODO: Wert anzeigen
+// TODO: der default von disableFlex sollte false sein
+
 /**
  * EVENTS
  * ----------

@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Email
 // --------------------------------------------------------------
+
+// TODO: Es wird beim verlassen des Feldes nicht die Email validiert
+// TODO: Beim klick auf den linkButton wird ein Browser-Fenster geöffnet
+// TODO: Besser direkt von kijs.gui.field.Field erben?
+
 /**
  * EVENTS
  * ----------

@@ -86,6 +86,8 @@ kijs.Ajax = class kijs_Ajax {
         // fortschritt überwachen
         if (kijs.isFunction(config.progressFn)) {
             xmlhttp.onprogress = function(oEvent) {
+                // TODO: Events sollten nur ein Argument haben !!!!!!!!!!!
+                // TODO: raiseEvent benutzen, dafür muss Klasse erben von kijs.Observable
                 config.progressFn.call(config.context || this, oEvent, config);
             };
         }
@@ -117,6 +119,8 @@ kijs.Ajax = class kijs_Ajax {
                         val = kijs.Ajax.parseXml(xmlhttp.responseXML);
                         break;
                 }
+                // TODO: Events sollten nur ein Argument haben !!!!!!!!!!!
+                // TODO: raiseEvent benutzen, dafür muss Klasse erben von kijs.Observable
                 config.fn.call(config.context || this, val, config, null);
             } else {
                 let error = '';
@@ -133,6 +137,8 @@ kijs.Ajax = class kijs_Ajax {
                 } else {
                     error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden') + '.';
                 }
+                // TODO: Events sollten nur ein Argument haben !!!!!!!!!!!
+                // TODO: raiseEvent benutzen, dafür muss Klasse erben von kijs.Observable
                 config.fn.call(config.context || this, val, config, error);
             }
         };

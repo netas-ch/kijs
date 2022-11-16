@@ -60,9 +60,14 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
         this._dom.clsAdd('kijs-field-color');
 
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            disableFlex: true
+        });
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disableFlex: true
+
         });
 
         // Event-Weiterleitungen von this._inputDom

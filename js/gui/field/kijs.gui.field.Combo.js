@@ -19,10 +19,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._oldValue = null;
         this._value = '';
         this._keyUpDefer = null;
-        this._remoteSort = false;
+        this._remoteSort = false;   // TODO: umbenennen nach remoteFilter
         this._forceSelection = true;
         this._firstLoaded = false;
-        this._showPlaceholder = true;
+        this._showPlaceholder = true; // TODO: umbenennen nach placeholder, wo ein Text übergeben werden kann, wie in kijs.gui.field.Text?
         this._selectFirst = false;
 
         this._inputDom = new kijs.gui.Dom({

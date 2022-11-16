@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Phone
 // --------------------------------------------------------------
+
+// TODO: Besser direkt von kijs.gui.field.Field erben?
+// TODO: Beim klick auf den linkButton wird ein Browser-Fenster geöffnet
+// TODO: Wenn eine Nummer nicht zum Format passt, nicht die Nummer ändern, sondern einen Validierungsfehler anzeigen
+
 /**
  * EVENTS
  * ----------
@@ -89,13 +94,13 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get defaultCountryCallingCode() { return this._defaultCountryCallingCode; }
-    set defaultCountryCallingCode(val) { this._defaultCountryCallingCode = val }
+    set defaultCountryCallingCode(val) { this._defaultCountryCallingCode = val; }
 
     get showLinkButton() { return this._showLinkButton; }
-    set showLinkButton(val) { this._showLinkButton = !!val }
+    set showLinkButton(val) { this._showLinkButton = !!val; }
 
     get replaceLeadingZeros() { return this._replaceLeadingZeros; }
-    set replaceLeadingZeros(val) { this._replaceLeadingZeros = !!val }
+    set replaceLeadingZeros(val) { this._replaceLeadingZeros = !!val; }
 
 
     // --------------------------------------------------------------

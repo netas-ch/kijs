@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.UploadWindow
 // --------------------------------------------------------------
+
+// TODO: Umbenennen zu kijs.gui.FileUpload !!!!!
+// TODO: Sollte von kijs.FileUpload erben !!!!!
+
+
 // Das Fenster kann mit der Mehtode .show() angezeigt werden.
 // Es wird dann in das target gerendert.
 // Als target kann der document.body oder ein kijs.gui.Element angegeben
@@ -119,6 +124,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
      * @param {Boolean} directory Soll statt eine Datei ein Verzeichnis hochgeladen werden?
      * @returns {undefined}
      */
+    // TODO: Umbenennen zu showFileOpenDialog !!!!!
     showFileSelectDialog(multiple=null, directory=null) {
         if (!(this._uploadDialog instanceof kijs.UploadDialog)) {
             this._uploadDialog = new kijs.UploadDialog();

@@ -92,13 +92,14 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get contentTypes() { return this._contentTypes; }
     set contentTypes(val) {
         if (!kijs.isArray(val)) {
             val = [val];
         }
-
+        
+        this._contentTypes = [];
+        
         kijs.Array.each(val, function(contentType) {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
@@ -108,11 +109,11 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         }, this);
     }
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-
+    // PROTECTED
     _checkMime(dataTransferItems) {
         for (let i=0; i<dataTransferItems.length; i++) {
             if (dataTransferItems[i].type) {
@@ -125,7 +126,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         return true;
     }
 
-    // EVENTS
+
+    // LISTENERS
     _onDragEnter(e) {
         this._dom.clsAdd(this._dragOverCls);
         this.raiseEvent('dragEnter', e);
@@ -167,10 +169,10 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         this.raiseEvent('drop', e);
     }
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-
     destruct(superCall) {
         if (!superCall) {
             // unrender

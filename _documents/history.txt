@@ -1,9 +1,36 @@
+Version 1.4.1
+================================================================================
+Neue Features
+-------------
+Showcase App (http://localhost/kijs/showcase/)
+ - Zu jeder gui-Klasse gibt es eine Testseite
+ - Weitere Testseiten können im Ordner kijs/showcase/js erstellt werden.
+   sie werden automatisch eingebunden.
+ - Das testApp sollte nun nicht mehr für Tests verwendet werden.
+   Es existiert weiterhin als Beispiel-App.
+
+kijs.Dom
+ - Neue Funktionen: jsFileAdd(), jsFileHas(), jsFileRemove()
+ - Die Funktion cssFileReplace() gibt neu ein Promise zurück
+
+kijs.gui.field.ListView
+ - Neuer Getter/Setter selectType
+
+Änderungen
+----------
+kijs.gui.ApertureMask
+ - Die Funktion _updatePosition() ist jetzt nicht mehr public.
+   Stattdessen render() benutzen!
+
+
+
 Version 1.3.1
 ================================================================================
 Neue Features
 -------------
  - RPC-Funktionen und MsgBox-Funktionen geben ein Promise (statt undefined) zurück,
    welches mit await abgewartet werden kann.
+
 
 
 Version 1.3.0

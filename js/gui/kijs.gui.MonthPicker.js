@@ -575,9 +575,15 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
-        this._headerBar.unrender();
-        this._yearMonthDivDom.unrender();
-        this._footerDivDom.unrender();
+        if (this._headerBar) {
+            this._headerBar.unrender();
+        }
+        if (this._yearMonthDivDom) {
+            this._yearMonthDivDom.unrender();
+        }
+        if (this._footerDivDom) {
+            this._footerDivDom.unrender();
+        }
 
         super.unrender(true);
     }

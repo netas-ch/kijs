@@ -90,88 +90,6 @@ kijs.Dom = class kijs_Dom {
         }
     }*/
 
-    
-    /**
-     * Fügt eine CSS Datei hinzu
-     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
-     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
-     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
-     * @returns {Promise}
-     */
-    static cssFileAdd(src, srcReference='', before=false) {
-        return new Promise(function (resolve, reject) {
-            let nodeReference = null;
-            if (srcReference) {
-                nodeReference = document.querySelector('link[href*="' + srcReference + '"]');
-            }
-           
-            let node = document.createElement('link');
-            node.href = src;
-            node.rel = 'stylesheet';
-            
-            node.onload = () => resolve(node);
-            node.onerror = () => reject(new Error(`Style load error for ${src}`));
-
-            if (nodeReference) {
-                if (before) {
-                    document.head.insertBefore(node, nodeReference);
-                } else if (nodeReference.nextElementSibling) {
-                    document.head.insertBefore(node, nodeReference.nextElementSibling);
-                } else {
-                    nodeReference = null;
-                }
-            }
-            
-            if (!nodeReference) {
-                document.head.append(node);
-            }
-        });
-    }
-    
-    /**
-     * Gibt zurück, ob sich eine CSS-Datei im DOM befindet
-     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
-     * @returns {Boolean}
-     */
-    static cssFileHas(src) {
-        return !!document.querySelector('link[href*="' + src + '"]');
-    }
-    
-    /**
-     * Entfernt eine CSS Datei
-     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
-     * @returns {undefined}
-     */
-    static cssFileRemove(src) {
-        let node = document.querySelector('link[href*="' + src + '"]');
-        if (node) {
-            node.parentNode.removeChild(node);
-        }
-    }
-    
-    /**
-     * Ersetzt eine CSS-Datei durch eine andere
-     * @param {String} srcOld   Beispiel: 'kijs.theme.default.css'
-     * @param {String} srcNew   Beispiel: 'kijs.theme.myTheme.css'
-     * @param {Boolean} [sameBaseDir=true]
-     * @returns {undefined}
-     */
-    static cssFileReplace(srcOld, srcNew, sameBaseDir=true) {
-        let node = document.querySelector('link[href*="' + srcOld + '"]');
-        if (node) {
-            
-            if (sameBaseDir) {
-                let baseDir = node.href;
-                baseDir = baseDir.split('?')[0];                            // remove any ?query
-                baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
-                srcNew = baseDir + srcNew;
-            }
-            
-            node.href = srcNew;
-        }
-    }
-
-
 
     /**
      * Erstellt einen Event-Listener auf ein HTMLElement
@@ -239,6 +157,96 @@ kijs.Dom = class kijs_Dom {
             node.addEventListener(eventName, delegate, useCapture);
         }
     }
+
+
+    /**
+     * Fügt eine CSS Datei hinzu
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @returns {Promise}
+     */
+    static cssFileAdd(src, srcReference='', before=false) {
+        return new Promise((resolve, reject) => {
+            let nodeReference = null;
+            if (srcReference) {
+                nodeReference = document.querySelector('link[href*="' + srcReference + '"]');
+            }
+           
+            let node = document.createElement('link');
+            node.href = src;
+            node.rel = 'stylesheet';
+            
+            node.onload = () => resolve(node);
+            node.onerror = () => reject(new Error(`CSS-File load error for "${src}"`));
+
+            if (nodeReference) {
+                if (before) {
+                    document.head.insertBefore(node, nodeReference);
+                } else if (nodeReference.nextElementSibling) {
+                    document.head.insertBefore(node, nodeReference.nextElementSibling);
+                } else {
+                    nodeReference = null;
+                }
+                
+            } else {
+                document.head.append(node);
+                
+            }
+        });
+    }
+    
+    /**
+     * Gibt zurück, ob sich eine CSS-Datei im DOM befindet
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @returns {Boolean}
+     */
+    static cssFileHas(src) {
+        return !!document.querySelector('link[href*="' + src + '"]');
+    }
+    
+    /**
+     * Entfernt eine CSS Datei
+     * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
+     * @returns {undefined}
+     */
+    static cssFileRemove(src) {
+        let node = document.querySelector('link[href*="' + src + '"]');
+        if (node) {
+            node.parentNode.removeChild(node);
+        }
+    }
+    
+    /**
+     * Ersetzt eine CSS-Datei durch eine andere
+     * @param {String} srcOld   Beispiel: 'kijs.theme.default.css'
+     * @param {String} srcNew   Beispiel: 'kijs.theme.myTheme.css'
+     * @param {Boolean} [sameBaseDir=true]
+     * @returns {Promise}
+     */
+    static cssFileReplace(srcOld, srcNew, sameBaseDir=true) {
+        return new Promise((resolve, reject) => {
+            let node = document.querySelector('link[href*="' + srcOld + '"]');
+            
+            if (node) {
+                if (sameBaseDir) {
+                    let baseDir = node.href;
+                    baseDir = baseDir.split('?')[0];                            // remove any ?query
+                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
+                    srcNew = baseDir + srcNew;
+                }
+
+                node.href = srcNew;
+                node.onload = () => resolve(node);
+                node.onerror = () => reject(new Error(`CSS-File load error for "${srcNew}"`));
+                 
+            } else {
+                reject(new Error(`CSS-File "${srcOld}" not found`));
+                
+            }
+        });
+    }
+
 
 
     /**
@@ -403,6 +411,97 @@ kijs.Dom = class kijs_Dom {
 
         return false;
     }
+    
+    /**
+     * Fügt eine Javascript Datei hinzu
+     * @param {String} src Beispiel: 'myFile.js'
+     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'myPreviousFile.js'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @returns {Promise}
+     */
+    static jsFileAdd(src, srcReference='', before=false) {
+        return new Promise((resolve, reject) => {
+            let nodeReference = null;
+            if (srcReference) {
+                nodeReference = document.querySelector('script[src*="' + srcReference + '"]');
+            }
+           
+            let node = document.createElement('script');
+            node.src = src;
+            node.type = 'text/javascript';
+            
+            node.onload = () => resolve(node);
+            node.onerror = () => reject(new Error(`Script-File load error for "${src}"`));
+
+            if (nodeReference) {
+                if (before) {
+                    document.head.insertBefore(node, nodeReference);
+                } else if (nodeReference.nextElementSibling) {
+                    document.head.insertBefore(node, nodeReference.nextElementSibling);
+                } else {
+                    nodeReference = null;
+                }
+                
+            } else {
+                document.head.append(node);
+                
+            }
+        });
+    }
+    
+    /**
+     * Gibt zurück, ob sich eine Javascript-Datei im DOM befindet
+     * @param {String} src Beispiel: 'myFile.js'
+     * @returns {Boolean}
+     */
+    static jsFileHas(src) {
+        return !!document.querySelector('script[src*="' + src + '"]');
+    }
+    
+    /**
+     * Entfernt eine Javascript Datei
+     * @param {String} src Beispiel: 'myFile.js'
+     * @returns {undefined}
+     */
+    static jsFileRemove(src) {
+        let node = document.querySelector('script[src*="' + src + '"]');
+        if (node) {
+            node.parentNode.removeChild(node);
+        }
+    }
+    
+    /**
+     * Ersetzt eine Javascript-Datei durch eine andere
+     * @param {String} srcOld   Beispiel: 'myOldFile.js'
+     * @param {String} srcNew   Beispiel: 'myFile.js'
+     * @param {Boolean} [sameBaseDir=true]
+     * @returns {Promise}
+     */
+    static jsFileReplace(srcOld, srcNew, sameBaseDir=true) {
+        return new Promise((resolve, reject) => {
+            let node = document.querySelector('script[src*="' + srcOld + '"]');
+            
+            if (node) {
+                if (sameBaseDir) {
+                    let baseDir = node.src;
+                    baseDir = baseDir.split('?')[0];                            // remove any ?query
+                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
+                    srcNew = baseDir + srcNew;
+                }
+
+                node.src = srcNew;
+                node.onload = () => resolve(node);
+                node.onerror = () => reject(new Error(`Script-File load error for "${srcNew}"`));
+                 
+            } else {
+                reject(new Error(`Script-File "${srcOld}" not found`));
+                
+            }
+        });
+    }
+    
+    
+    
 
     /**
      * Entfernt alle Unterelemente eines DOM-Elements

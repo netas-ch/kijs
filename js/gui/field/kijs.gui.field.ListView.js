@@ -36,6 +36,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
             captionField: { target: 'captionField', context: this._listView },
             iconCharField: { target: 'iconCharField', context: this._listView },
+            iconMapField: { target: 'iconMapField', context: this._listView },
             iconClsField: { target: 'iconClsField', context: this._listView },
             iconColorField: { target: 'iconColorField', context: this._listView },
             tooltipField: { target: 'tooltipField', context: this._listView },
@@ -100,7 +101,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         super.readOnly = !!val;
         this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
     }
-
+    
     get rpc() {
 
         if (!this._rpc) {
@@ -125,6 +126,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         }
     }
 
+    get selectType() { return this._listView.selectType; }
+    set selectType(val) { this._listView.selectType = val; }
+    
     // overwrite
     get value() { return this._listView.value; }
     set value(val) {

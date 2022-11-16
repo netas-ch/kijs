@@ -141,8 +141,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             weekNumbersHide: true,              // Wochennummern ausblenden?
             valueFormat: true,                  // Format, mit dem der value ausgeliefert wird
             headerBarFormat: true,              // Anzeige Format für die HeaderBar
-            minValue: { target: 'minValue' },   // Kleinster zu wählender Monat     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
-            maxValue: { target: 'maxValue' },   // Grösster zu wählender Monat      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
+            minValue: { target: 'minValue' },   // Kleinster zu wählender Wert     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
+            maxValue: { target: 'maxValue' },   // Grösster zu wählender Wert      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
             headerBarHide: true,                // HeaderBar ausblenden
             todayBtnHide: true,                 // Heute Button ausblenden
             emptyBtnHide: true,                 // Leer lassen Button ausblenden
@@ -377,14 +377,28 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._headerBar.unrender();
-        this._calendarDivDom.unrender();
-        this._todayBtn.unrender();
-        this._emptyBtn.unrender();
-        this._closeBtn.unrender();
-        this._footerDivDom.unrender();
-        this._spinBoxEl.unrender();
+        
+        if (this._headerBar) {
+            this._headerBar.unrender();
+        }
+        if (this._calendarDivDom) {
+            this._calendarDivDom.unrender();
+        }
+        if (this._todayBtn) {
+            this._todayBtn.unrender();
+        }
+        if (this._emptyBtn) {
+            this._emptyBtn.unrender();
+        }
+        if (this._closeBtn) {
+            this._closeBtn.unrender();
+        }
+        if (this._footerDivDom) {
+            this._footerDivDom.unrender();
+        }
+        if (this._spinBoxEl) {
+            this._spinBoxEl.unrender();
+        }
 
         super.unrender(true);
     }

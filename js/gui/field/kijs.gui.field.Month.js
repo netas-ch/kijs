@@ -116,7 +116,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             spinIconMap: 'kijs.iconMap.Fa.calendar-days'
         });
 
-       // Mapping für die Zuweisung der Config-Eigenschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             year2000Threshold: true,
             emptyBtnHide: { target: 'maxDate', context: this._monthPicker },

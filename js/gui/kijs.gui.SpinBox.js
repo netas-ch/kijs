@@ -327,7 +327,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             // Breite anpassen
             if ( (this._targetPos.indexOf('t') !== -1 || this._targetPos.indexOf('b') !== -1) &&
                     (this._ownPos.indexOf('t') !== -1 || this._ownPos.indexOf('b') !== -1) ) {
-                const width = this._targetEl ? this._targetEl.spinBoxWidth : 0;
+                
+                let width = 0;
+                if (this._targetEl) {
+                    if (this._targetEl.hasOwnProperty('spinBoxWidth')) {
+                        width = this._targetEl.spinBoxWidth;
+                    } else {
+                        width = this._targetEl.width;
+                    }
+                }
+                
                 switch (this._autoSize) {
                     case 'min': this.style.minWidth = width + 'px'; break;
                     case 'max': this.style.maxWidth = width + 'px'; break;
@@ -337,7 +346,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             // Höhe anpassen
             } else if ( (this._targetPos.indexOf('l') !== -1 || this._targetPos.indexOf('r') !== -1) &&
                     (this._ownPos.indexOf('l') !== -1 || this._ownPos.indexOf('r') !== -1) ) {
-                let height = this._targetEl ? this._targetEl.spinBoxHeight : 0;
+                
+                let height = 0;
+                if (this._targetEl) {
+                    if (this._targetEl.hasOwnProperty('spinBoxHeight')) {
+                        height = this._targetEl.spinBoxHeight;
+                    } else {
+                        height = this._targetEl.height;
+                    }
+                }
+                
                 switch (this._autoSize) {
                     case 'min': this.style.minHeight = height + 'px'; break;
                     case 'max': this.style.maxHeight = height + 'px'; break;

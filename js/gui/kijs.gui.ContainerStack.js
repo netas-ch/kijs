@@ -387,15 +387,7 @@ kijs.gui.ContainerStack = class kijs_gui_ContainerStack extends kijs.gui.Contain
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-
-        // Elemente/DOM-Objekte entladen
-        kijs.Array.each(this._innerDomStack, function(dom) {
-           dom.destruct();
-        }, this);
-
-        // Variablen (Objekte/Arrays) leeren
-        this._innerDomStack = null;
-
+        
         // Basisklasse entladen
         super.destruct(true);
     }

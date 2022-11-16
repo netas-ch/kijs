@@ -408,7 +408,7 @@ win.show();}
 static warning(caption,msg,fn,context){if(kijs.isArray(msg)){msg=this._convertArrayToHtml(msg);}
 this.show({caption:caption,msg:msg,fn:fn,context:context,icon:{iconChar:'&#xf071',style:{color:'#ff9900'}},buttons:[{name:'ok',caption:kijs.getText('OK'),isDefault:true},{name:'cancel',caption:kijs.getText('Abbrechen')}]});}
 static _convertArrayToHtml(messages){if(messages.length===1){return messages[0];}
-let ret='<ul>';kijs.Array.each(messages,function(msg){ret+='<li>'+msg+'</li>';},this);ret+='</ul>';return ret;}};kijs.gui.field=class kijs_gui_field{};kijs.gui.grid=class kijs_gui_grid{};kijs.gui.grid.cell=class kijs_gui_grid_cell{};kijs.gui.grid.columnConfig=class kijs_gui_grid_columnConfig{};kijs.gui.grid.filter=class kijs_gui_grid_filter{};kijs.UploadDialog=class kijs_UploadDialog extends kijs.Observable{constructor(config={}){super(false);this._ajaxUrl='index.php';this._contentTypes=[];this._currentUploadIds=[];this._directory=false;this._dropZones=[];this._maxFilesize=null;this._multiple=true;this._sanitizeFilename=false;this._uploadId=1;this._uploadResponses={};this._filenameHeader='X-Filename';this._pathnameHeader='X-Filepath';this._validMediaTypes=['application','audio','example','image','message','model','multipart','text','video'];config=Object.assign({},{},config);this._configMap={ajaxUrl:true,directory:{target:'directory'},multiple:{target:'multiple'},filenameHeader:true,pathnameHeader:true,maxFilesize:true,sanitizeFilename:true,dropZones:{target:'dropZone'},contentTypes:{target:'contentTypes'}};if(kijs.isObject(config)){this.applyConfig(config,true);}}
+let ret='<ul>';kijs.Array.each(messages,function(msg){ret+='<li>'+msg+'</li>';},this);ret+='</ul>';return ret;}};kijs.gui.field=class kijs_gui_field{};kijs.gui.grid=class kijs_gui_grid{};kijs.gui.grid.cell=class kijs_gui_grid_cell{};kijs.gui.grid.columnConfig=class kijs_gui_grid_columnConfig{};kijs.gui.grid.filter=class kijs_gui_grid_filter{};kijs.FileUpload=class kijs_FileUpload extends kijs.Observable{constructor(config={}){super(false);this._ajaxUrl='index.php';this._contentTypes=[];this._currentUploadIds=[];this._directory=false;this._dropZones=[];this._maxFilesize=null;this._multiple=true;this._sanitizeFilename=false;this._uploadId=1;this._uploadResponses={};this._filenameHeader='X-Filename';this._pathnameHeader='X-Filepath';this._validMediaTypes=['application','audio','example','image','message','model','multipart','text','video'];config=Object.assign({},{},config);this._configMap={ajaxUrl:true,directory:{target:'directory'},multiple:{target:'multiple'},filenameHeader:true,pathnameHeader:true,maxFilesize:true,sanitizeFilename:true,dropZones:{target:'dropZone'},contentTypes:{target:'contentTypes'}};if(kijs.isObject(config)){this.applyConfig(config,true);}}
 get contentTypes(){return this._contentTypes;}
 set contentTypes(val){if(!kijs.isArray(val)){val=[val];}
 this._contentTypes=[];kijs.Array.each(val,function(contentType){let parts=contentType.toLowerCase().split('/',2);if(!kijs.Array.contains(this._validMediaTypes,parts[0])){throw new kijs.Error('invalid content type "'+contentType+'"');}
@@ -424,7 +424,7 @@ bindDropZones(dropZones){if(!kijs.isArray(dropZones)){dropZones=[dropZones];}
 kijs.Array.each(dropZones,function(dropZone){if(!(dropZone instanceof kijs.gui.DropZone)){throw new kijs.Error('added zone not of type kijs.gui.DropZone');}
 if(!kijs.Array.contains(this._dropZones,dropZone)){dropZone.off(null,null,this);dropZone.on('drop',this._onDropZoneDrop,this);this._dropZones.push(dropZone);}},this);}
 applyConfig(config={}){kijs.Object.assignConfig(this,config,this._configMap);}
-showFileSelectDialog(multiple=null,directory=null){multiple=multiple===null?this._multiple:multiple;directory=directory===null?this._directory:directory;let input=document.createElement('input');input.setAttribute('type','file');if(multiple){input.setAttribute('multiple','multiple');}
+showFileOpenDialog(multiple=null,directory=null){multiple=multiple===null?this._multiple:multiple;directory=directory===null?this._directory:directory;let input=document.createElement('input');input.setAttribute('type','file');if(multiple){input.setAttribute('multiple','multiple');}
 if(directory){input.setAttribute('directory','directory');input.setAttribute('webkitdirectory','webkitdirectory');input.setAttribute('mozdirectory','mozdirectory');}
 if(this._contentTypes.length>0){input.setAttribute('accept',this._contentTypes.join(','));}
 kijs.Dom.addEventListener('change',input,function(e){if(e.nodeEvent.target&&e.nodeEvent.target.files){this._uploadFiles(e.nodeEvent.target.files);}},this);input.click();}
@@ -965,21 +965,21 @@ destruct(superCall){if(!superCall){this.unrender(superCall);this.raiseEvent('des
 if(this._targetX instanceof kijs.gui.Element){this._targetX.off(null,null,this);}
 if(this._iconEl){this._iconEl.destruct();}
 if(this._textEl){this._textEl.destruct();}
-super.destruct(true);this._iconEl=null;this._targetX=null;}};kijs.gui.ProgressBar=class kijs_gui_ProgressBar extends kijs.gui.Element{constructor(config={}){super(false);this._percent=0;this._showPercent=true;this._uploadDialog=null;this._uploadDialogId=null;this._captionDom=new kijs.gui.Dom();this._bottomCaptionDom=new kijs.gui.Dom();this._fieldDom=new kijs.gui.Dom();this._barDom=new kijs.gui.Dom();this._textDom=new kijs.gui.Dom();this._dom.clsAdd('kijs-progressbar');this._captionDom.clsAdd('kijs-progressbar-caption');this._bottomCaptionDom.clsAdd('kijs-progressbar-caption-bottom');this._fieldDom.clsAdd('kijs-progressbar-field');this._barDom.clsAdd('kijs-progressbar-bar');this._textDom.clsAdd('kijs-progressbar-text');Object.assign(this._defaultConfig,{percent:0,showPercent:true});Object.assign(this._configMap,{showPercent:true,caption:{target:'html',context:this._captionDom},bottomCaption:{target:'html',context:this._bottomCaptionDom},percent:{target:'percent'},uploadDialog:{target:'uploadDialog'},uploadDialogId:{target:'uploadDialogId'}});if(kijs.isObject(config)){config=Object.assign({},this._defaultConfig,config);this.applyConfig(config,true);}}
+super.destruct(true);this._iconEl=null;this._targetX=null;}};kijs.gui.ProgressBar=class kijs_gui_ProgressBar extends kijs.gui.Element{constructor(config={}){super(false);this._percent=0;this._showPercent=true;this._fileUpload=null;this._fileUploadId=null;this._captionDom=new kijs.gui.Dom();this._bottomCaptionDom=new kijs.gui.Dom();this._fieldDom=new kijs.gui.Dom();this._barDom=new kijs.gui.Dom();this._textDom=new kijs.gui.Dom();this._dom.clsAdd('kijs-progressbar');this._captionDom.clsAdd('kijs-progressbar-caption');this._bottomCaptionDom.clsAdd('kijs-progressbar-caption-bottom');this._fieldDom.clsAdd('kijs-progressbar-field');this._barDom.clsAdd('kijs-progressbar-bar');this._textDom.clsAdd('kijs-progressbar-text');Object.assign(this._defaultConfig,{percent:0,showPercent:true});Object.assign(this._configMap,{showPercent:true,caption:{target:'html',context:this._captionDom},bottomCaption:{target:'html',context:this._bottomCaptionDom},percent:{target:'percent'},fileUpload:{target:'fileUpload'},fileUploadId:{target:'fileUploadId'}});if(kijs.isObject(config)){config=Object.assign({},this._defaultConfig,config);this.applyConfig(config,true);}}
 get caption(){return this._captionDom.html;}
 set caption(val){this._captionDom.html=val;}
 get bottomCaption(){return this._bottomCaptionDom.html;}
 set bottomCaption(val){this._bottomCaptionDom.html=val;}
 get percent(){return this._percent;}
 set percent(val){this.setProgress(val);}
-get uploadDialog(){return this._uploadDialog;}
-set uploadDialog(val){this.bindUploadDialog(val);}
-get uploadDialogId(){return this._uploadDialogId;}
-set uploadDialogId(val){this._uploadDialogId=val;}
-bindUploadDialog(uploadDialog,uploadId=null){if(!(uploadDialog instanceof kijs.UploadDialog)){throw new kijs.Error('Upload Dialog must be of type kijs.UploadDialog');}
-if(this._uploadDialog instanceof kijs.UploadDialog){this._uploadDialog.off(null,null,this);}
-this._uploadDialog=uploadDialog;if(uploadId!==null){this._uploadDialogId=uploadId;}
-uploadDialog.on('progress',this._onUploadDialogProgress,this);uploadDialog.on('upload',this._onUploadDialogUpload,this);}
+get fileUpload(){return this._fileUpload;}
+set fileUpload(val){this.bindFileUpload(val);}
+get fileUploadId(){return this._fileUploadId;}
+set fileUploadId(val){this._fileUploadId=val;}
+bindFileUpload(fileUpload,uploadId=null){if(!(fileUpload instanceof kijs.FileUpload)){throw new kijs.Error('Upload Dialog must be of type kijs.FileUpload');}
+if(this._fileUpload instanceof kijs.FileUpload){this._fileUpload.off(null,null,this);}
+this._fileUpload=fileUpload;if(uploadId!==null){this._fileUploadId=uploadId;}
+fileUpload.on('progress',this._onFileUploadProgress,this);fileUpload.on('upload',this._onFileUploadUpload,this);}
 setProgress(percent){percent=window.parseInt(percent);if(window.isNaN(percent)||percent<0||percent>100){throw new kijs.Error('percent must be numeric between 0 and 100');}
 this._percent=percent;this._textDom.html=this._showPercent?this._percent+'%':'';if(this._barDom.node){this._barDom.node.style.width=this._percent+'%';}
 if(this._showPercent&&this._textDom.node){if(this._barDom.width>=this._textDom.width+3||this._percent===100){this._textDom.node.style.opacity=1;}else{this._textDom.node.style.opacity=0;}}}
@@ -988,11 +988,11 @@ this._barDom.node.style.width=this._percent+'%';if(this._showPercent&&(this._bar
 if(!superCall){this.raiseEvent('afterRender');}}
 unrender(superCall){if(!superCall){this.raiseEvent('unrender');}
 this._barDom.unrender();this._textDom.unrender();super.unrender(true);}
-_onUploadDialogProgress(ud,e,id,percent){if(this._uploadDialogId===null){this._uploadDialogId=id;}
-if(kijs.isInteger(percent)&&this._uploadDialogId===id){this.setProgress(percent);}}
-_onUploadDialogUpload(ud,resp,error,id){if(this._uploadDialogId===id){this.setProgress(100);}}
+_onFileUploadProgress(ud,e,id,percent){if(this._fileUploadId===null){this._fileUploadId=id;}
+if(kijs.isInteger(percent)&&this._fileUploadId===id){this.setProgress(percent);}}
+_onFileUploadUpload(ud,resp,error,id){if(this._fileUploadId===id){this.setProgress(100);}}
 destruct(superCall){if(!superCall){this.unrender(superCall);this.raiseEvent('destruct');}
-if(this._uploadDialog instanceof kijs.UploadDialog){this._uploadDialog.off(null,null,this);}
+if(this._fileUpload instanceof kijs.FileUpload){this._fileUpload.off(null,null,this);}
 this._captionDom.destruct();this._bottomCaptionDom.destruct();this._fieldDom.destruct();this._barDom.destruct();this._textDom.destruct();this._captionDom=null;this._bottomCaptionDom=null;this._fieldDom=null;this._barDom=null;this._textDom=null;super.destruct(true);}};kijs.gui.Resizer=class kijs_gui_Resizer extends kijs.gui.Element{constructor(config={}){super(false);this._initialPos=null;this._targetEl=null;this._targetMaxHeight=null;this._targetMaxWidth=null;this._targetMinHeight=null;this._targetMinWidth=null;this._overlayDom=new kijs.gui.Dom({cls:'kijs-resizer-overlay'});this._dom.clsAdd('kijs-resizer');Object.assign(this._defaultConfig,{});Object.assign(this._configMap,{target:{target:'_targetEl'},targetMaxHeight:true,targetMaxWidth:true,targetMinHeight:true,targetMinWidth:true});this.on('mouseDown',this._onMouseDown,this);if(kijs.isObject(config)){config=Object.assign({},this._defaultConfig,config);this.applyConfig(config,true);}}
 get target(){return this._targetEl;}
 get targetMaxHeight(){return this._targetMaxHeight;}
@@ -2420,16 +2420,16 @@ this._inputDom=null;super.destruct(true);}};kijs.gui.grid.filter.Number=class ki
 get filter(){return Object.assign(super.filter,{type:'number',search:this._searchField.value,compare:this._compare});}
 _getMenuButtons(){return kijs.Array.concat(this._getDefaultMenuButtons(),['-',{name:'btn_compare_equal',caption:kijs.getText('Gleich'),iconChar:'&#xf046',on:{click:this._onCompareBtnClick,context:this}},{name:'btn_compare_unequal',caption:kijs.getText('Ungleich'),iconChar:'&#xf096',on:{click:this._onCompareBtnClick,context:this},},{caption:kijs.getText('Kleiner als'),name:'btn_compare_smaller',iconChar:'&#xf096',on:{click:this._onCompareBtnClick,context:this}},{caption:kijs.getText('Grösser als'),name:'btn_compare_bigger',iconChar:'&#xf096',on:{click:this._onCompareBtnClick,context:this}}]);}
 _onCompareBtnClick(e){this._menuButton.menuCloseAll();if(e.element.name==='btn_compare_equal'){this._compare='equal';}else if(e.element.name==='btn_compare_unequal'){this._compare='unequal';}else if(e.element.name==='btn_compare_smaller'){this._compare='smaller';}else if(e.element.name==='btn_compare_bigger'){this._compare='bigger';}
-kijs.Array.each(e.element.parent.elements,function(element){if(element.name===e.element.name){element.iconChar='&#xf046';}else if(kijs.Array.contains(['btn_compare_equal','btn_compare_unequal','btn_compare_smaller','btn_compare_bigger'],element.name)){element.iconChar='&#xf096';}});}};kijs.gui.UploadWindow=class kijs_gui_UploadWindow extends kijs.gui.Window{constructor(config={}){super(false);this._uploadDialog=null;this._uploads=[];this._autoClose=true;this._uploadRunning=true;this._dom.clsAdd('kijs-uploadwindow');Object.assign(this._defaultConfig,{caption:kijs.getText('Upload'),iconChar:'&#xf093',uploadDialog:null,closable:false,maximizable:false,resizable:false,modal:true,width:250,autoClose:true,innerStyle:{padding:'10px'},footerStyle:{padding:'10px'},footerElements:[{xtype:'kijs.gui.Button',caption:'OK',isDefault:true,on:{click:function(){if(this._uploadRunning!==true&&this._dom.node){this.unrender();}},context:this}}]});Object.assign(this._configMap,{uploadDialog:{target:'uploadDialog'},autoClose:true});this.on('mouseDown',this._onMouseDown,this);if(kijs.isObject(config)){config=Object.assign({},this._defaultConfig,config);this.applyConfig(config,true);}}
-get uploadDialog(){return this._uploadDialog;}
-set uploadDialog(val){if(this._uploadDialog instanceof kijs.UploadDialog){this._uploadDialog.off(null,null,this);}
-this._uploadDialog=val;if(kijs.isDefined(val)){if(!(val instanceof kijs.UploadDialog)){throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');}
-this._uploadDialog.on('startUpload',this._onStartUpload,this);this._uploadDialog.on('failUpload',this._onFailUpload,this);this._uploadDialog.on('upload',this._onUpload,this);this._uploadDialog.on('endUpload',this._onEndUpload,this);}}
-showFileSelectDialog(multiple=null,directory=null){if(!(this._uploadDialog instanceof kijs.UploadDialog)){this._uploadDialog=new kijs.UploadDialog();}
-this._uploadDialog.showFileSelectDialog(multiple,directory);}
+kijs.Array.each(e.element.parent.elements,function(element){if(element.name===e.element.name){element.iconChar='&#xf046';}else if(kijs.Array.contains(['btn_compare_equal','btn_compare_unequal','btn_compare_smaller','btn_compare_bigger'],element.name)){element.iconChar='&#xf096';}});}};kijs.gui.FileUpload=class kijs_gui_FileUpload extends kijs.gui.Window{constructor(config={}){super(false);this._fileUpload=null;this._uploads=[];this._autoClose=true;this._uploadRunning=true;this._dom.clsAdd('kijs-uploadwindow');Object.assign(this._defaultConfig,{caption:kijs.getText('Upload'),iconChar:'&#xf093',fileUpload:null,closable:false,maximizable:false,resizable:false,modal:true,width:250,autoClose:true,innerStyle:{padding:'10px'},footerStyle:{padding:'10px'},footerElements:[{xtype:'kijs.gui.Button',caption:'OK',isDefault:true,on:{click:function(){if(this._uploadRunning!==true&&this._dom.node){this.unrender();}},context:this}}]});Object.assign(this._configMap,{fileUpload:{target:'fileUpload'},autoClose:true});this.on('mouseDown',this._onMouseDown,this);if(kijs.isObject(config)){config=Object.assign({},this._defaultConfig,config);this.applyConfig(config,true);}}
+get fileUpload(){return this._fileUpload;}
+set fileUpload(val){if(this._fileUpload instanceof kijs.FileUpload){this._fileUpload.off(null,null,this);}
+this._fileUpload=val;if(kijs.isDefined(val)){if(!(val instanceof kijs.FileUpload)){throw new kijs.Error('fileUpload must be of type kijs.FileUpload');}
+this._fileUpload.on('startUpload',this._onStartUpload,this);this._fileUpload.on('failUpload',this._onFailUpload,this);this._fileUpload.on('upload',this._onUpload,this);this._fileUpload.on('endUpload',this._onEndUpload,this);}}
+showFileOpenDialog(multiple=null,directory=null){if(!(this._fileUpload instanceof kijs.FileUpload)){this._fileUpload=new kijs.FileUpload();}
+this._fileUpload.showFileOpenDialog(multiple,directory);}
 _getUploadProgressBar(uploadId){for(let i=0;i<this._uploads.length;i++){if(this._uploads[i].uploadId===uploadId){return this._uploads[i].progressBar;}}
 return null;}
-_onStartUpload(ud,filename,filedir,filetype,uploadId){let progressBar=new kijs.gui.ProgressBar({caption:kijs.String.htmlspecialchars(filename),uploadDialog:this._uploadDialog,uploadDialogId:uploadId,style:{marginBottom:'10px'}});this._uploads.push({progressBar:progressBar,uploadId:uploadId});this.add(progressBar);if(!this._dom.node){this.show();}
+_onStartUpload(ud,filename,filedir,filetype,uploadId){let progressBar=new kijs.gui.ProgressBar({caption:kijs.String.htmlspecialchars(filename),fileUpload:this._fileUpload,fileUploadId:uploadId,style:{marginBottom:'10px'}});this._uploads.push({progressBar:progressBar,uploadId:uploadId});this.add(progressBar);if(!this._dom.node){this.show();}
 this.center();this._uploadRunning=true;}
 _onFailUpload(ud,filename,filetype){this._autoClose=false;}
 _onUpload(ud,response,errorMsg,uploadId){let pg=this._getUploadProgressBar(uploadId);if(errorMsg&&pg){this._autoClose=false;pg.bottomCaption='<span class="error">'+kijs.String.htmlspecialchars(errorMsg)+'</span>';}}

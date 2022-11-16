@@ -338,15 +338,32 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._headerBar.unrender();
-        this._inputHourDom.unrender();
-        this._inputMinuteDom.unrender();
-        this._inputSecondDom.unrender();
-        this._inputDivDom.unrender();
-        this._canvasDom.unrender();
-        this._canvasDivDom.unrender();
-        this._footerDivDom.unrender();
+        
+        if (this._headerBar) {
+            this._headerBar.unrender();
+        }
+        if (this._inputHourDom) {
+            this._inputHourDom.unrender();
+        }
+        if (this._inputMinuteDom) {
+            this._inputMinuteDom.unrender();
+        }
+        if (this._inputSecondDom) {
+            this._inputSecondDom.unrender();
+        }
+        if (this._inputDivDom) {
+            this._inputDivDom.unrender();
+        }
+        if (this._canvasDom) {
+            this._canvasDom.unrender();
+        }
+        if (this._canvasDivDom) {
+            this._canvasDivDom.unrender();
+        }
+        if (this._footerDivDom) {
+            this._footerDivDom.unrender();
+        }
+        
         super.unrender(true);
     }
 

@@ -566,6 +566,8 @@ div.kijs-mask {
     }
 }
 
+
+
 /* ******************
    * ApertureMask
    ****************** */
@@ -574,7 +576,6 @@ div.kijs-aperturemask {
     z-index: 9000;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
-    transition: opacity 0.2s linear;
 
     &.top {
         top: 0;
@@ -591,6 +592,9 @@ div.kijs-aperturemask {
         left: 0;
         top: 0;
         bottom:0;
+    }
+    &.animated {
+        transition: opacity 0.2s linear;
     }
 }
 
@@ -1002,24 +1006,22 @@ div.kijs-panelbar {
         margin: 0 0 0 6px;
         line-height: 30px;
         text-align: left;
+        color: var(--bar-fontColor);
     }
 
     &.kijs-headerbar  > .kijs-container-inner {
-        color: var(--bar-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--headerBar-fontSize);
         text-align: left;
     }
 
     &.kijs-headerbar-center > .kijs-container-inner {
-        color: var(--bar-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--headerBar-fontSize);
         text-align: center;
     }
 
     &.kijs-footerbar > .kijs-container-inner {
-        color: var(--bar-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--footerBar-fontSize);
         text-align: right;
@@ -2292,7 +2294,7 @@ div.kijs-field-checkboxgroup{
     > .kijs-inputwrapper {
         > .kijs-listview {
             height: 100%;
-            background-color: var(--field-bkgrndColor);
+            background-color: transparent;
             border-color: transparent;
 
             .kijs-dataviewelement {

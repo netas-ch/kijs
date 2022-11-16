@@ -719,8 +719,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._dom.unrender();
+        
+        if (this._dom) {
+            this._dom.unrender();
+        }
     }
 
     /**

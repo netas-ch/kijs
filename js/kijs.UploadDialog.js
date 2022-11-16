@@ -4,6 +4,9 @@
 // kijs.UploadDialog
 // --------------------------------------------------------------
 
+// TODO: Umbenennen zu kijs.FileUpload !!!!!
+
+
 /**
  * Die Klasse öffnet ein Fenster zum Auswählen einer Datei zum Upload
  * oder nimmt die Datei über eine Dropzone entgegen. Nach Auswahl wird
@@ -191,6 +194,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      * @param {Boolean} [directory] Soll statt einer Datei ein ganzer Ordner hochgeladen werden?
      * @returns {undefined}
      */
+    // TODO: Umbenennen zu showFileOpenDialog !!!!!
     showFileSelectDialog(multiple=null, directory=null) {
         multiple = multiple === null ? this._multiple : multiple;
         directory = directory === null ? this._directory : directory;

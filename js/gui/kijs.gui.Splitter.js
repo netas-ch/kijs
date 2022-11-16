@@ -120,7 +120,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
         const newPos = {
             x: xAbs - parentPos.x,
-            y: yAbs - parentPos.x
+            y: yAbs - parentPos.y
         };
 
         if (this.direction === 'horizontal') {

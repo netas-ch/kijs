@@ -220,11 +220,10 @@ kit.App = class kit_App {
                                                     style: {
                                                         flex: 1
                                                     }
-                                                }/*,
+                                                },
                                                 {
                                                     xtype: 'kijs.gui.Button',
                                                     caption: 'Wechsel zu 2',
-                                                    iconChar: 0xf0d0,
                                                     tooltip: 'test',
                                                     on: {
                                                         click: function() {
@@ -232,7 +231,7 @@ kit.App = class kit_App {
                                                             testcontainerstack.activateAnimated('testcontainerstackpanel_2');
                                                         }
                                                     }
-                                                }*/
+                                                }
                                             ]
                                         },{
                                             xtype: 'kijs.gui.Panel',
