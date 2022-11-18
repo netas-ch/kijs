@@ -313,4 +313,64 @@ kijs.Graphic = class kijs_Graphic {
         };
     }
 
+    // FUNKTIONEN ZUR MANIPULATION VON BILDER
+    // --------------------------------------
+
+    /**
+     * Konvertiert ein Bild in ein anderes Dateiformat.
+     * @param {Blob} sourceImage (jpg, png, gif, svg, etc.)
+     * @param {String} targetType Mime der Zieldatei, default image/png.
+     * @returns {Promise} Mit dem Blob der neuen Datei.
+     */
+    static imageConvert(sourceImage, targetType='image/png') {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(sourceImage);
+
+            img.onload = () => {
+                try {
+                    if ('OffscreenCanvas' in window) {
+                        const osc = new OffscreenCanvas(img.width, img.height);
+                        const ctx = osc.getContext('2d');
+
+                        if (targetType === 'image/jpeg') {
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, img.width, img.height);
+                        }
+                        ctx.drawImage(img, 0, 0);
+
+                        osc.convertToBlob({type: targetType}).then((blob) => {
+                            resolve(blob);
+                        }).catch((err) => {
+                            reject(err);
+                        });
+
+                    } else {
+                        const cvs = document.createElement('canvas');
+                        cvs.width = img.width;
+                        cvs.height = img.height;
+                        const ctx = cvs.getContext('2d');
+
+                        if (targetType === 'image/jpeg') {
+                            ctx.fillStyle = 'white';
+                            ctx.fillRect(0, 0, img.width, img.height);
+                        }
+                        ctx.drawImage(img, 0, 0);
+
+                        cvs.toBlob((blob) => {
+                            resolve(blob);
+                        }, targetType);
+                    }
+                    
+                } catch (e) {
+                    reject(e);
+                }
+            };
+
+            img.onerror = (e) => {
+                reject(e);
+            };
+        });
+    }
+
 };
