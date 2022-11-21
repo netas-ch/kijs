@@ -626,6 +626,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementDblClick', e);
             }, this);
 
+            // rightClick-Event
+            newEl.on('rightClick', function(e) {
+                return this.raiseEvent('elementRightClick', e);
+            }, this);
+
             // focus-Event
             newEl.on('focus', function(e) {
                 return this.raiseEvent('elementFocus', e);
