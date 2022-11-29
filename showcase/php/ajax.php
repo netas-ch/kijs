@@ -156,6 +156,39 @@ foreach ($requests as $request) {
             $response->responseData->tree = $nodes;
             break;
         
+        case 'rpc.simple':
+            $response->responseData = $request->requestData;
+            break;
+        
+        case 'rpc.delay':
+            sleep(1);
+            $response->responseData = $request->requestData;
+            break;
+        
+        case 'rpc.infoMsg':
+            $response->infoMsg = 'Ich bin eine infoMsg';
+            $response->responseData = $request->requestData;
+            break;
+        
+        case 'rpc.cornerTipMsg':
+            $response->cornerTipMsg = 'Ich bin eine cornerTipMsg';
+            $response->responseData = $request->requestData;
+            break;
+        
+        case 'rpc.warningMsg':
+            $ignoreWarnings = $request->ignoreWarnings ?? false;
+            if ($ignoreWarnings) {
+                $response->responseData = $request->requestData;
+            } else {
+                $response->warningMsg = 'Sind Sie sicher?';
+            }
+            break;
+        
+        case 'rpc.errorMsg':
+            $response->errorMsg = 'Ich bin eine errorMsg';
+            $response->responseData = $request->requestData;
+            break;
+        
         case 'tree.load':
             $tree = array();
             $nodeId = $request->requestData->nodeId;

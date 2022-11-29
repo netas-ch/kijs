@@ -61,6 +61,7 @@ kijs.Rpc = class kijs_Rpc {
     get timeout() { return this._timeout; }
     set timeout(val) { this._timeout = parseInt(val); }
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -75,29 +76,51 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Führt einen RPC aus.
-     * @param {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
-     * @param {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
-     * @param {Function} fn                         Callback-Funktion
-     * @param {Object} context                      Kontext für die Callback-Funktion
-     * @param {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an dieselbe facadeFn abgebrochen
-     * @param {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
-     * @param {Mixed} [responseArgs]                Hier können Daten übergeben werden,
-     *                                              die in der Callback-Fn dann wieder zur Verfügung stehen.
-     *                                              z.B. die loadMask, damit sie in der Callback-FN wieder entfernt werden kann.
+     * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
+     *     {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
+     *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
+     *     {Function} fn                         Callback-Funktion
+     *     {Object} context                      Kontext für die Callback-Funktion
+     *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an dieselbe facadeFn abgebrochen
+     *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
+     *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
+     *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
+     *                                           z.B. die loadMask, damit sie in der Callback-FN wieder entfernt 
+     *                                           werden kann.
      * @returns {Promise}
      */
-    do(facadeFn, requestData, fn, context, cancelRunningRpcs, rpcParams, responseArgs) {
-        return new Promise((pResolve, pReject) => {
-            if (!facadeFn) {
+    do(config) {
+        return new Promise((resolve) => {
+
+            // DEPRECATED: Rückwärtskompatibilität
+            if (kijs.isString(config)) {
+                config = {
+                    facadeFn: arguments[0],
+                    requestData: arguments[1],
+                    fn: arguments[2],
+                    context: arguments[3],
+                    cancelRunningRpcs: arguments[4],
+                    rpcParams: arguments[5],
+                    responseArgs: arguments[6]
+                };
+                console.warn('DEPRECATED: kijs.Rpc.do(), please use only 1 argument (config)');
+            }
+            
+            // Validierung / Pflichtfelder
+            if (!kijs.isObject(config)) {
+                throw new kijs.Error('RPC call without config object');
+            }
+            if (!config.facadeFn) {
                 throw new kijs.Error('RPC call without facade function');
             }
+
             if (this._deferId) {
                 clearTimeout(this._deferId);
             }
 
-            if (cancelRunningRpcs) {
+            if (config.cancelRunningRpcs) {
                 for (let i=0; i<this._queue.length; i++) {
-                    if (this._queue[i].facadeFn === facadeFn && this._queue[i].context === context && this._queue[i].fn === fn) {
+                    if (this._queue[i].facadeFn === config.facadeFn) {
                         switch (this._queue[i].state) {
                             case 1: // queue
                                 this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
@@ -113,17 +136,16 @@ kijs.Rpc = class kijs_Rpc {
             }
 
             this._queue.push({
-                facadeFn: facadeFn,
-                requestData: requestData,
+                facadeFn: config.facadeFn,
+                requestData: config.requestData,
                 type: 'rpc',
                 tid: this._createTid(),
-                fn: fn,
-                context: context,
-                rpcParams: rpcParams,
-                responseArgs: responseArgs,
+                fn: config.fn,
+                context: config.context,
+                rpcParams: config.rpcParams,
+                responseArgs: config.responseArgs,
                 state: kijs.Rpc.states.QUEUE,
-                promiseResolve: pResolve,
-                promiseReject: pReject
+                promiseResolve: resolve
             });
 
             this._deferId = kijs.defer(this._transmit, this.defer, this);
@@ -157,19 +179,19 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Interne callback-Funktion für den Ajax-Request
-     * @param {Array} response Array mit den Antworten (subResponses) auf die einzelnen subRequests
-     * @param {Object} request Request der gesendet wurde
-     * @param {String} errorMsg Falls ein übertragungsfehler vorliegt, wird hier der Fehlertext übergeben
+     * @param {Object} ajaxData Objekt mit folgenden Eigenschaften
+     *     {Array} response Array mit den Antworten (subResponses) auf die einzelnen subRequests
+     *     {Object} request Request der gesendet wurde
+     *     {String} errorMsg Falls ein übertragungsfehler vorliegt, wird hier der Fehlertext übergeben
      * @returns {undefined}
      */
-   _receive(response, request, errorMsg) {
-
+   _receive(ajaxData) {
        // Antworten für die einzelnen Requests durchgehen
-        for (let i=0; i<request.postData.length; i++) {
-            let subResponse = kijs.isArray(response) ? response[i] : null;
+        for (let i=0; i<ajaxData.request.postData.length; i++) {
+            let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;
 
             // Passenden subRequest aus Queue holen
-            let subRequest = this._getByTid(request.postData[i].tid);
+            let subRequest = this._getByTid(ajaxData.request.postData[i].tid);
 
             if (!kijs.isObject(subResponse)) {
                 subResponse = {
@@ -178,8 +200,8 @@ kijs.Rpc = class kijs_Rpc {
             }
 
             // Behandlung von Übertragungsfehlern
-            if (errorMsg) {
-                subResponse.errorMsg = errorMsg;
+            if (ajaxData.errorMsg) {
+                subResponse.errorMsg = ajaxData.errorMsg;
             }
             if (!subResponse.errorMsg && subResponse.tid !== subRequest.tid) {
                 subResponse.errorMsg = 'Die RPC-Antwort passt nicht zum Request';
@@ -196,15 +218,16 @@ kijs.Rpc = class kijs_Rpc {
 
             // callback-fn ausführen
             if (subRequest.fn && kijs.isFunction(subRequest.fn)) {
-                subRequest.fn.call(subRequest.context || this, subResponse, subRequest);
+                subRequest.fn.call(subRequest.context || this, { response: subResponse, request: subRequest });
             }
-
+            
             // Promise
-            if (subRequest.promiseResolve && !subResponse.errorMsg && !subResponse.canceled) {
-                subRequest.promiseResolve({response: subResponse, request: subRequest});
-
-            } else if (subRequest.promiseReject && subResponse.errorMsg) {
-                subRequest.promiseReject({response: subResponse, request: subRequest});
+            if (subRequest.promiseResolve && !subResponse.canceled) {
+                if (subResponse.errorMsg) {
+                    subRequest.promiseResolve({ response: subResponse, request: subRequest, errorMsg: subResponse.errorMsg });
+                } else {
+                    subRequest.promiseResolve({ response: subResponse, request: subRequest });
+                }
             }
         }
     }
@@ -224,7 +247,7 @@ kijs.Rpc = class kijs_Rpc {
         }
         this._queue = newQueue;
     }
-
+    
     /**
      * Übermittelt die subRequests in der queue an den Server
      * @returns {undefined}
