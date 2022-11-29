@@ -40,6 +40,13 @@ kijs.gui.Rpc
  - Bei der Funktion do() gibt es beim promise kein reject mehr. Falls es einen Fehler gab, 
    hat das Argument bei resolve eine Eigenschaft "errorMsg".
 
+kijs.gui.DataView
+ - Argument umbenannt bei Event afterLoad "response" heisst neu "responseData"
+
+kijs.gui.FormPanel
+ - Argument umbenannt bei Event afterLoad "response" heisst neu "responseData"
+
+
 
 Version 1.3.1
 ================================================================================

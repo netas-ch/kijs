@@ -332,17 +332,23 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
             }
 
-            this.rpc.do(this._facadeFnLoad, args, function(response) {
-                this.data = response.rows;
-                if (!kijs.isEmpty(response.selectFilters)) {
-                    this.selectByFilters(response.selectFilters);
+            this.rpc.do({
+                facadeFn: this._facadeFnLoad,
+                data: args,
+                cancelRunningRpcs: true, 
+                waitMaskTarget: this, 
+                waitMaskTargetDomProperty: 'dom'
+            }).then((responseData) => {
+                this.data = responseData.rows;
+                if (!kijs.isEmpty(responseData.selectFilters)) {
+                    this.selectByFilters(responseData.selectFilters);
                 }
 
                 // Promise ausführen
-                resolve(response);
+                resolve(responseData);
 
-                this.raiseEvent('afterLoad', {response: response});
-            }, this, true, this, 'dom', false);
+                this.raiseEvent('afterLoad', {responseData: responseData});
+            });
         });
     }
 

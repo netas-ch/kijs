@@ -276,7 +276,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
-                this._listViewEl.load(args).then((response) => {
+                this._listViewEl.load(args).then((responseData) => {
 
                     // Nach dem Laden das value neu setzen,
                     // damit das Label erscheint (ohne change-event)
@@ -284,8 +284,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         this.value = this._value;
 
                     // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(response.value) && response.value !== null && this._isValueInStore(response.value)) {
-                        this.setValue(response.value);
+                    } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
+                        this.setValue(responseData.value);
                     }
                 });
 
@@ -297,7 +297,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else if (!this._firstLoaded || forceLoad) {
 
             // alle Datensätze laden
-            this._listViewEl.load(args).then((response) => {
+            this._listViewEl.load(args).then((responseData) => {
 
                 // Nach dem Laden das value neu setzen,
                 // damit das Label erscheint (ohne change-event)
@@ -305,8 +305,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     this.value = this._value;
 
                 // value mit dem RPC zurückgeben (mit change-event)
-                } else if (query === null && kijs.isDefined(response.value) && response.value !== null && this._isValueInStore(response.value)) {
-                    this.setValue(response.value);
+                } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
+                    this.setValue(responseData.value);
                 }
 
             });
@@ -699,8 +699,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         // Spinbox Nachricht anhängen
-        if (e.response && e.response.spinboxMessage) {
-            this._addPlaceholder(e.response.spinboxMessage);
+        if (e.responseData && e.responseData.spinboxMessage) {
+            this._addPlaceholder(e.responseData.spinboxMessage);
         }
     }
 

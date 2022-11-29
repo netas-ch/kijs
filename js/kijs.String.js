@@ -188,11 +188,11 @@ kijs.String = class kijs_String {
      * @returns {String}
      */
     static repeat(text, multiplier) {
-        let response = '';
+        let ret = '';
         for (let i=0; i<multiplier; i++) {
-            response += kijs.toString(text);
+            ret += kijs.toString(text);
         }
-        return response;
+        return ret;
     }
 
     /**

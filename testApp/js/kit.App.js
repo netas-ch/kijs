@@ -1424,9 +1424,17 @@ kit.App = class kit_App {
                                             caption: 'RPC',
                                             on: {
                                                 click: function() {
-                                                    _this._rpc.do('test.test', 'data', function(response){
-                                                        // nix
-                                                    }, _this, true, this.parent.parent, 'innerDom');
+                                                    _this._rpc.do({
+                                                        facadeFn: 'test.test',
+                                                        data: 'data', 
+                                                        fn: function(responseData){
+                                                            // nix
+                                                        }, 
+                                                        context: _this, 
+                                                        cancelRunningRpcs: true, 
+                                                        waitMaskTarget: this.parent.parent, 
+                                                        waitMaskTargetDomProperty: 'innerDom'
+                                                    });
                                                 }
                                             }
                                         }
@@ -2009,10 +2017,6 @@ kit.App = class kit_App {
         viewport.render();
     }
 
-
-    rpc(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName='dom', ignoreWarnings, fnBeforeDisplayError) {
-        this._rpc.do(facadeFn, data, fn, context, cancelRunningRpcs, waitMaskTarget, waitMaskTargetDomPropertyName, ignoreWarnings, fnBeforeDisplayError);
-    }
 
     createTreeRecursive(maxDeep, maxSubitem=15, currentDeep=0) {
         if (currentDeep > maxDeep) {

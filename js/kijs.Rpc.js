@@ -124,7 +124,10 @@ kijs.Rpc = class kijs_Rpc {
                         switch (this._queue[i].state) {
                             case 1: // queue
                                 this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
-                                this._receive([{tid: this._queue[i].tid}], {postData:[this._queue[i]]});
+                                this._receive({
+                                    response: [{tid: this._queue[i].tid}], 
+                                    request: {postData:[this._queue[i]]}
+                                });
                                 break;
 
                             case 2: // transmitted
@@ -186,6 +189,7 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
    _receive(ajaxData) {
+       console.log(ajaxData);
        // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;

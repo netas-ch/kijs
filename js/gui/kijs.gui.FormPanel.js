@@ -274,21 +274,27 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 }
                 args = Object.assign(args, this._rpcArgs);
 
-                this._rpc.do(this._facadeFnLoad, args, function(response) {
-
+                this._rpc.do({
+                    facadeFn: this._facadeFnLoad,
+                    data: args, 
+                    cancelRunningRpcs: true, 
+                    waitMaskTarget: this,
+                    waitMaskTargetDomProperty: 'dom', 
+                    fnBeforeMessages: this._onRpcBeforeMessages
+                }).then((responseData) => {
                     // Formular
-                    if (response.form) {
+                    if (responseData.form) {
                         this.removeAll();
-                        this.add(response.form);
+                        this.add(responseData.form);
                     }
 
-                    if (searchFields || response.form || kijs.isEmpty(this._fields)) {
+                    if (searchFields || responseData.form || kijs.isEmpty(this._fields)) {
                         this.searchFields();
                     }
 
                     // Formulardaten in Formular einfüllen
-                    if (response.formData) {
-                        this.data = response.formData;
+                    if (responseData.formData) {
+                        this.data = responseData.formData;
                     }
 
                     // Validierung zurücksetzen?
@@ -300,11 +306,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     this.isDirty = false;
 
                     // load event
-                    this.raiseEvent('afterLoad', {response: response});
+                    this.raiseEvent('afterLoad', {responseData: responseData});
 
                     // promise ausführen
-                    resolve(response);
-                }, this, true, this, 'dom', false, this._onRpcBeforeMessages);
+                    resolve(responseData);
+                });
             }
         });
     }
@@ -370,16 +376,20 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             // Wenn die lokale Validierung ok ist, an den Server senden
             if (ok) {
-                this._rpc.do(this.facadeFnSave, args, function(response) {
-
+                this._rpc.do({
+                    facadeFn: this.facadeFnSave,
+                    data: args, 
+                    cancelRunningRpcs: false, 
+                    waitMaskTarget: waitMaskTarget, 
+                    waitMaskTargetDomProperty: 'dom', 
+                    fnBeforeMessages: this._onRpcBeforeMessages
+                }).then((responseData) => {
                     // 'dirty' zurücksetzen
                     this.isDirty = false;
-
                     // event
-                    this.raiseEvent('afterSave', {response: response});
-                    resolve(response);
-
-                }, this, false, waitMaskTarget, 'dom', false, this._onRpcBeforeMessages);
+                    this.raiseEvent('afterSave', {responseData: responseData});
+                    resolve(responseData);
+                });
             } else {
                 kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
             }

@@ -422,14 +422,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      */
     reload(restoreSelection = true, resetData = true) {
         let selected = this.getSelectedIds();
-        return this._remoteLoad(resetData).then((response) => {
+        return this._remoteLoad(resetData).then((responseData) => {
 
             // Selektion wiederherstellen
             if (selected && restoreSelection) {
                 this.selectByIds(selected, false, true);
             }
 
-            return response;
+            return responseData;
         });
     }
 
@@ -944,37 +944,34 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 let showWaitMask = this._remoteDataStartIndex === 0;
 
                 // RPC ausführen
-                this._rpc.do(this._facadeFnLoad, args, function(response) {
-                        this._remoteProcess(response, args, resetData);
-
-                        // Promise auflösen
-                        resolve(response);
-
-                    },
-                    this,                                           // Context
-                    true,                                           // Cancel running
-                    showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
-                    this._waitMaskTargetDomProperty,                // Wait Mask Target Dom Property
-                    false,                                          // Ignore Warnings
-                    this._facadeFnBeforeMsgFn
-                );
+                this._rpc.do({
+                    facadeFn: this._facadeFnLoad,
+                    data: args, 
+                    cancelRunningRpcs: true,                                           // Cancel running
+                    waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
+                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,                // Wait Mask Target Dom Property
+                    fnBeforeMessages: this._facadeFnBeforeMsgFn
+                }).then((responseData) => {
+                    this._remoteProcess(responseData, args, resetData);
+                    resolve(responseData);
+                });
             }
         });
     }
 
-    _remoteProcess(response, args, resetData) {
+    _remoteProcess(responseData, args, resetData) {
 
         // columns
-        if (kijs.isArray(response.columns)) {
+        if (kijs.isArray(responseData.columns)) {
             kijs.Array.clear(this._columnConfigs);
-            this.columnConfigAdd(response.columns);
+            this.columnConfigAdd(responseData.columns);
 
             this._getRemoteMetaData = false;
         }
 
         // primary keys
-        if (response.primaryKeys) {
-            this.primaryKeys = response.primaryKeys;
+        if (responseData.primaryKeys) {
+            this.primaryKeys = responseData.primaryKeys;
         }
 
         if (resetData) {
@@ -983,12 +980,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // rows
         let addedRowsCnt = 0;
-        if (kijs.isArray(response.rows)) {
+        if (kijs.isArray(responseData.rows)) {
 
             // Datensätze hinzufügen
-            if (response.rows.length > 0) {
-                this._remoteDataLastRowCnt = response.rows.length;
-                addedRowsCnt = this.rowsAdd(response.rows, args.start);
+            if (responseData.rows.length > 0) {
+                this._remoteDataLastRowCnt = responseData.rows.length;
+                addedRowsCnt = this.rowsAdd(responseData.rows, args.start);
             }
 
             // Anzahl DS zählen
@@ -996,19 +993,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         // Total Datensätze
-        if (kijs.isInteger(response.count)) {
-            this._remoteDataTotal = response.count;
-        } else if (response.rows && response.rows.length) {
-            this._remoteDataTotal = args.start + response.rows.length;
+        if (kijs.isInteger(responseData.count)) {
+            this._remoteDataTotal = responseData.count;
+        } else if (responseData.rows && responseData.rows.length) {
+            this._remoteDataTotal = args.start + responseData.rows.length;
         }
 
         // Sortierungs-Icon in Header-Bar
-        this._header.setSortIcons(kijs.isObject(response.sort) ? response.sort : this._remoteSort);
+        this._header.setSortIcons(kijs.isObject(responseData.sort) ? responseData.sort : this._remoteSort);
 
         this._isLoading = false;
 
         // event
-        this.raiseEvent('afterLoad', response);
+        this.raiseEvent('afterLoad', responseData);
     }
 
     _renderRows(offset=0) {

@@ -417,20 +417,21 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                 // spinner icon aktivieren
                 this.loadSpinner = true;
 
-                // maske?
-                let loadMask = (!this._rootVisible && this.isRoot) ? this : 'none';
-
-                this.rpc.do(this.facadeFnLoad, args, function (response) {
+                this.rpc.do({
+                    facadeFn: this.facadeFnLoad,
+                    data: args,
+                    waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
+                }).then((responseData) => {
                     this.loadSpinner = false;
 
                     // alle unterelemente entfernen und destructen
                     this.removeAll(false, true);
 
-                    if (response.tree) {
-                        this.add(response.tree);
+                    if (responseData.tree) {
+                        this.add(responseData.tree);
                     }
-                    resolve(response);
-                }, this, false, loadMask);
+                    resolve(responseData);
+                });
             } else {
                 resolve(null);
             }
@@ -466,12 +467,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {unresolved}
      */
     _raiseRootEvent(...args) {
-        let response = this.raiseEvent.apply(this, args);
+        let ret = this.raiseEvent.apply(this, args);
 
         if (!this.isRoot) {
             this.getRootNode().raiseEvent.apply(this.getRootNode(), args);
         }
-        return response;
+        return ret;
     }
 
     /**
@@ -631,10 +632,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 // verschieben über rpc melden
                 if (this.facadeFnSave && this.rpc) {
-                    this.rpc.do(this.facadeFnSave, {
-                        movedId: eventData.movedId,
-                        targetId: eventData.targetId,
-                        position: eventData.position
+                    this.rpc.do({
+                        facadeFn: this.facadeFnSave,
+                        data: {
+                            movedId: eventData.movedId,
+                            targetId: eventData.targetId,
+                            position: eventData.position
+                        }
                     });
                 }
 
