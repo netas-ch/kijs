@@ -89,6 +89,7 @@ kijs.Ajax = class kijs_Ajax {
                 xmlhttp.onprogress = function(e) {
                     config.progressFn.call(config.context || this, {
                         nodeEventName : 'onprogress',
+                        ajaxConfig: config,
                         useCapture: false,
                         nodeEvent: e,
                         context: config.context

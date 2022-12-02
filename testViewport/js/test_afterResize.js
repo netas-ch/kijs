@@ -51,10 +51,10 @@ kit.App = class kit_App {
                     headerBarElements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            iconChar: '&#xf059'
+                            iconMap: 'kijs.iconMap.Fa.circle-question'
                         },{
                             xtype: 'kijs.gui.Button',
-                            iconChar: '&#xf059',
+                            iconMap: 'kijs.iconMap.Fa.location-crosshairs',
                             disabled: true
                         }
                     ],
@@ -180,7 +180,7 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
-                            iconChar: '&#xf110',
+                            iconMap: 'kijs.iconMap.Fa.compass',
                             iconCls: 'kijs-pulse',
                             collapsible: 'left',
                             width: 180,
@@ -204,7 +204,7 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
-                            iconChar: '&#xf2bc',
+                            iconMap: 'kijs.iconMap.Fa.map',
                             footerCaption: 'FooterBar',
                             cls: 'kijs-flexrow',
                             style: {
@@ -218,7 +218,7 @@ kit.App = class kit_App {
                             headerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    iconChar: '&#xf085'
+                                    iconMap: 'kijs.iconMap.Fa.location-pin'
                                 }
                             ],
                             headerCls: 'kijs-flexrow',
@@ -361,7 +361,7 @@ kit.App = class kit_App {
                             footerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    iconChar: '&#xf085'
+                                    iconMap: 'kijs.iconMap.Fa.location-crosshairs'
                                 }
                             ],
                             on: {
@@ -384,14 +384,14 @@ kit.App = class kit_App {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
-                            iconChar: '&#xf2c8',
+                            iconMap: 'kijs.iconMap.Fa.helicopter',
                             collapsible: 'right',
                             width: 240,
                             cls: 'kijs-flexrow',
                             headerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
-                                    iconChar: '&#xf02f'
+                                    iconMap: 'kijs.iconMap.Fa.hand-holding-medical'
                                 }
                             ],
                             on: {

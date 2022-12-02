@@ -25,17 +25,17 @@
                 width: 16px;
             }
             .icoWizard16 {
-                background-image: url('../images/icoWizard16.png');
+                background-image: url('img/icoWizard16.png');
                 height: 16px;
                 width: 16px;
             }
             .icoFolder32 {
-                background-image: url('../images/icoFolder32.png');
+                background-image: url('img/icoFolder32.png');
                 height: 32px;
                 width: 32px;
             }
             .icoFolderOpen32 {
-                background-image: url('../images/icoFolderOpen32.png');
+                background-image: url('img/icoFolderOpen32.png');
                 height: 32px;
                 width: 32px;
             }

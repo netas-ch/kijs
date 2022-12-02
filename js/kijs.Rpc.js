@@ -85,7 +85,7 @@ kijs.Rpc = class kijs_Rpc {
      *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
-     *                                           z.B. die loadMask, damit sie in der Callback-FN wieder entfernt 
+     *                                           z.B. die loadMask, damit sie in der Callback-fn wieder entfernt 
      *                                           werden kann.
      * @returns {Promise}
      */
@@ -189,7 +189,6 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
    _receive(ajaxData) {
-       console.log(ajaxData);
        // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;

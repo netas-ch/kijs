@@ -25,7 +25,7 @@ kijs.gui.ApertureMask
 kijs.Ajax
  - Die Funktion request() gibt nicht mehr den XMLHttpRequest zurück, sondern ein Promise
  - Die callbackFn fn hat neu nur noch ein Argument { response: ..., request: ..., errorMsg: ... }
- - Die progressFn hat neu nur noch ein Argument { nodeEventName: 'onprogress', useCapture: false, nodeEvent: ..., context: ... }
+ - Die progressFn hat neu nur noch ein Argument { nodeEventName: 'onprogress', ajaxConfig: ..., useCapture: false, nodeEvent: ..., context: ... }
 
 kijs.Rpc
  - Die Funktion do(config) hat neu nur noch ein Argument (config). Die alten Argumente werden noch 

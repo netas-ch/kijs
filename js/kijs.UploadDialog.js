@@ -5,6 +5,7 @@
 // --------------------------------------------------------------
 
 // TODO: Umbenennen zu kijs.FileUpload !!!!!
+// TODO: Events sollten nur ein Argument (e) haben!
 
 
 /**
@@ -391,19 +392,19 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
         if (this._currentUploadIds.length === 0) {
-            this.raiseEvent('endUpload', this, this._uploadResponses);
+            this.raiseEvent('endUpload', this, this._uploadResponses);   // TODO: Events sollten nur ein Argument (e) haben!
         }
     }
 
-    _onProgress(e, config) {
+    _onProgress(e) {
         let percent = null;
 
-        if (e.lengthComputable && e.total > 0) {
-            percent = Math.round(100 / e.total * e.loaded);
+        if (e.nodeEvent.lengthComputable && e.nodeEvent.total > 0) {
+            percent = Math.round(100 / e.nodeEvent.total * e.nodeEvent.loaded);
             percent = Math.min(100, Math.max(0, percent)); // Wert zwischen 0-100
         }
 
-        this.raiseEvent('progress', this, e, config.uploadId, percent);
+        this.raiseEvent('progress', this, e.nodeEvent, e.ajaxConfig.uploadId, percent);   // TODO: Events sollten nur ein Argument (e) haben!
     }
 
 

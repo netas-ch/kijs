@@ -6,6 +6,17 @@
 kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
 
+    // TODO: disabled und readOnly haben keine Auswirkungen auf Felder in Containern.
+    // TODO: Beim Aufruf von save() werden fieldErrors nicht angezeigt.
+    // TODO: Dynamisches Laden von ganzen Formularen mit load() testen
+    // TODO: Neues Feld für Überschriften
+    // TODO: Neuer Container für die Verwendung von Feldern nebeneinander
+    //       - Es muss eine Spaltenzahl angegeben werden können. Der Container hat dann soviele Spalten (Untercontainer)
+    //       - Standardwerte müssen an untergeordnete Elemente weitergegeben werden
+    // TODO: Abstände zwischen Feldern müssen automatisch gemacht werden, 
+    //       es sollten keine Style-Eigenschaften verwendet werden müssen.
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -397,7 +408,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     /**
-     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields
+     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields (rekursiv)
      * @param {kijs.gui.Container} [parent=this]
      * @returns {Array}
      */
