@@ -32,9 +32,6 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *     {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske
      *                                                          angezeigt werden soll.
      *     {Boolean} [ignoreWarnings=false]  Sollen Warnungen ignoriert werden?
-     *     {Function} [fnBeforeMessages]     Callback-Funktion, die vor der Ausgabe von Meldungsfenstern ausgeführt wird.
-     *                                          Wird z.B. verwendet um bei Formularen die Fehler bei den einzelnen Feldern
-     *                                          anzuzeigen.
      * @returns {Promise}
      */
     // overwrite (Vorsicht andere Argumente!)
@@ -49,8 +46,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 cancelRunningRpcs: arguments[4],
                 waitMaskTarget: arguments[5],
                 waitMaskTargetDomProperty: arguments[6],
-                ignoreWarnings: arguments[7],
-                fnBeforeMessages: arguments[8]
+                ignoreWarnings: arguments[7]
             };
             console.warn('DEPRECATED: kijs.gui.Rpc.do(), please use only 1 argument (config)');
         }
@@ -109,12 +105,6 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 }
 
                 if (!rpcData.response.canceled) {
-
-                    // Evtl. callback-fnBeforeMessages ausführen
-                    if (config.fnBeforeMessages && kijs.isFunction(config.fnBeforeMessages)) {
-                        config.fnBeforeMessages.call(config.context || this, rpcData.response || null);
-                    }
-
                     // Fehler --> FehlerMsg + Abbruch
                     // rpcData.response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                     if (rpcData.response.errorMsg) {
