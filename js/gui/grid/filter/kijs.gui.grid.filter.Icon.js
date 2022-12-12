@@ -110,7 +110,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
     // Events
 
-    _onAfterLoad() {;
+    _onAfterLoad(e) {;
         let checkIcons = this._checkIcons();
         let icons = checkIcons[0];
         let iconsCheck = checkIcons[1];

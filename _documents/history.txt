@@ -58,6 +58,7 @@ Grundsätzliches zur Benennung von Argumenten ab Version 1.4.1
 - Listeners haben immer nur ein Argument e
 - Fehler haben immer nur ein Argument ex
 
+- afterLoad und afterSave events haben neu nur noch ein Argument e
 
 
 Änderungen
