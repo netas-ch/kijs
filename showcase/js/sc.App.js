@@ -180,8 +180,8 @@ sc.App = class sc_App {
                                         this._viewport.render();
                                     }
                                 })
-                                .catch((error) => {
-                                    throw error;
+                                .catch((ex) => {
+                                    throw ex;
                                 });
                         },
                         context: this
@@ -260,8 +260,8 @@ sc.App = class sc_App {
                         }
                         
                     })
-                    .catch((error) => {
-                        throw error;
+                    .catch((ex) => {
+                        throw ex;
                     });
             }
         }

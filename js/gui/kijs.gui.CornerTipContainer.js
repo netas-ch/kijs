@@ -43,7 +43,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      * Zeigt einen CornerTip an und erstellt dafür eine Singleton-Instanz
      * @param {String} caption
      * @param {String} html
-     * @param {String} [icon='alert'] 'alert', 'info' oder 'error'
+     * @param {String} [icon='alert'] 'alert', 'info', 'errorNotice' oder 'error'
      * @returns {undefined}
      */
     static show(caption, html, icon='alert') {
@@ -60,6 +60,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             case 'info': instance.info(caption, html); break;
             case 'warning': instance.warning(caption, html); break;
             case 'error': instance.error(caption, html); break;
+            case 'errorNotice': instance.errorNotice(caption, html); break;
             default:
                 throw new kijs.Error(`Unknown value on argument "icon"`);
         }
@@ -96,7 +97,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
 
     /**
-     * Zeigt ein CornerTip mit einem Fehler-Symbol
+     * Zeigt ein CornerTip mit einem "unerwarteten Fehler"-Symbol
      * @param {String} caption
      * @param {String} msg
      * @returns {undefined}
@@ -111,6 +112,27 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             msg: msg,
             icon: {
                 iconMap: 'kijs.iconMap.Fa.circle-exclamation',
+                iconColor: '#be6280'
+            }
+        });
+    }
+    
+    /**
+     * Zeigt ein CornerTip mit einem Fehler-Symbol
+     * @param {String} caption
+     * @param {String} msg
+     * @returns {undefined}
+     */
+    errorNotice(caption, msg) {
+        if (kijs.isArray(msg)) {
+            msg = this._convertArrayToHtml(msg);
+        }
+
+        this.show({
+            caption: caption,
+            msg: msg,
+            icon: {
+                iconMap: 'kijs.iconMap.Fa.triangle-exclamation',
                 iconColor: '#be6280'
             }
         });

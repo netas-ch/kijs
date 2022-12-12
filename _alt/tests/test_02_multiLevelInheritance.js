@@ -225,7 +225,7 @@ function test_02_multiLevelInheritance(target) {
     try {
         let vehicle = new kijs.Vehicle('vehicle 1', 'vehicle 2');
     }
-    catch(exception){ 
+    catch(ex){ 
         tx.addResult('ERROR');
     }
     

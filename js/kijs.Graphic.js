@@ -341,8 +341,8 @@ kijs.Graphic = class kijs_Graphic {
 
                         osc.convertToBlob({type: targetType}).then((blob) => {
                             resolve(blob);
-                        }).catch((err) => {
-                            reject(err);
+                        }).catch((ex) => {
+                            reject(ex);
                         });
 
                     } else {

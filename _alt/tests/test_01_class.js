@@ -199,7 +199,7 @@ function test_01_class(target) {
     try {
         kijs.Car.machineType = 'Car modified';
     }
-    catch(exception) {
+    catch(ex) {
         
     }
     tx.addResult(kijs.Car.getStaticMachineType2());
@@ -243,7 +243,7 @@ function test_01_class(target) {
     try {
         kijs.Car.machineType = 'Car Modified';
     }
-    catch(exception) {
+    catch(ex) {
         
     }
     tx.addResult(kijs.Car.getStaticMachineType2());
@@ -296,7 +296,7 @@ function test_01_class(target) {
             }
         });
     }
-    catch(exception){ 
+    catch(ex){ 
         tx.addResult('ERROR');
     }
 

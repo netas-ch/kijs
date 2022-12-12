@@ -7,7 +7,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
 
     // TODO: disabled und readOnly haben keine Auswirkungen auf Felder in Containern.
-    // TODO: Beim Aufruf von save() werden fieldErrors nicht angezeigt.
     // TODO: Dynamisches Laden von ganzen Formularen mit load() testen
     // TODO: Neues Feld für Überschriften
     // TODO: Neuer Container für die Verwendung von Feldern nebeneinander
@@ -291,21 +290,22 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     cancelRunningRpcs: true, 
                     waitMaskTarget: this,
                     waitMaskTargetDomProperty: 'dom', 
-                    fnBeforeMessages: this._onRpcBeforeMessages
-                }).then((responseData) => {
+                    context: this
+                    
+                }).then((e) => {
                     // Formular
-                    if (responseData.form) {
+                    if (e.responseData.form) {
                         this.removeAll();
-                        this.add(responseData.form);
+                        this.add(e.responseData.form);
                     }
 
-                    if (searchFields || responseData.form || kijs.isEmpty(this._fields)) {
+                    if (searchFields || e.responseData.form || kijs.isEmpty(this._fields)) {
                         this.searchFields();
                     }
 
                     // Formulardaten in Formular einfüllen
-                    if (responseData.formData) {
-                        this.data = responseData.formData;
+                    if (e.responseData.formData) {
+                        this.data = e.responseData.formData;
                     }
 
                     // Validierung zurücksetzen?
@@ -317,10 +317,14 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     this.isDirty = false;
 
                     // load event
-                    this.raiseEvent('afterLoad', {responseData: responseData});
+                    this.raiseEvent('afterLoad', e);
 
                     // promise ausführen
-                    resolve(responseData);
+                    resolve(e);
+                    
+                }).catch((ex) => {
+                    reject(ex);
+                    
                 });
             }
         });
@@ -380,30 +384,53 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }
 
             // Zuerst lokal validieren
-            let ok = this.validate();
+            if (!this.validate()) {
+                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
+                return;
+            }
 
             // formData ermitteln
             args.formData = this.data;
 
-            // Wenn die lokale Validierung ok ist, an den Server senden
-            if (ok) {
-                this._rpc.do({
-                    facadeFn: this.facadeFnSave,
-                    data: args, 
-                    cancelRunningRpcs: false, 
-                    waitMaskTarget: waitMaskTarget, 
-                    waitMaskTargetDomProperty: 'dom', 
-                    fnBeforeMessages: this._onRpcBeforeMessages
-                }).then((responseData) => {
+            // an den Server senden
+            this._rpc.do({
+                facadeFn: this.facadeFnSave,
+                data: args, 
+                cancelRunningRpcs: false, 
+                waitMaskTarget: waitMaskTarget, 
+                waitMaskTargetDomProperty: 'dom', 
+                context: this
+                
+            }).then((e) => {
+                // Evtl. Fehler bei den entsprechenden Feldern anzeigen
+                if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
+                    if (!kijs.isEmpty(this._fields)) {
+                        kijs.Array.each(this._fields, function(field) {
+                            if (e.responseData.fieldErrors[field.name]) {
+                                field.addValidateErrors(e.responseData.fieldErrors[field.name]);
+                            }
+                        }, this);
+                    }
+
+                    if (kijs.isEmpty(e.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
+                        e.errorMsg = this._errorMsg;
+                    }
+                }
+                
+                // Falls alles OK
+                if(kijs.isEmpty(e.errorMsg)) {
                     // 'dirty' zurücksetzen
                     this.isDirty = false;
+                
                     // event
-                    this.raiseEvent('afterSave', {responseData: responseData});
-                    resolve(responseData);
-                });
-            } else {
-                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
-            }
+                    this.raiseEvent('afterSave', e);
+                }
+                
+                resolve(e);
+                
+            }).catch((ex) => {
+                reject(ex);
+            });
         });
     }
 
@@ -473,31 +500,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }, this);
     }
 
+
     // EVENTS
-    /**
-     * callback-fnBeforeMessages, die eventuelle Fehler direkt im Formular anzeigt
-     * @param {Object} response
-     * @returns {undefined}
-     */
-    _onRpcBeforeMessages(response) {
-        if (response.responseData && !kijs.isEmpty(response.responseData.fieldErrors)) {
-            // Fehler bei den entsprechenden Feldern anzeigen
-            if (!kijs.isEmpty(this._fields)) {
-                kijs.Array.each(this._fields, function(field) {
-                    if (response.responseData.fieldErrors[field.name]) {
-                        field.addValidateErrors(response.responseData.fieldErrors[field.name]);
-                    }
-                }, this);
-            }
-
-            if (kijs.isEmpty(response.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
-                response.errorMsg = this._errorMsg;
-            }
-        }
-    }
-
     _onAfterFirstRenderTo(e) {
-        this.load();
+        this.load().catch(() => {});
     }
 
 

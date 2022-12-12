@@ -48,6 +48,14 @@ sc.CornerTipContainer = class sc_CornerTipContainer {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
+                    caption: 'errorNotice',
+                    on: {
+                        click: function() {
+                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'errorNotice');
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
                     caption: 'error',
                     on: {
                         click: function() {

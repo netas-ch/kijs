@@ -277,7 +277,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
                 this._listViewEl.load(args).then((responseData) => {
-
                     // Nach dem Laden das value neu setzen,
                     // damit das Label erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
@@ -287,7 +286,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
                         this.setValue(responseData.value);
                     }
-                });
+                }).catch(() => {});
 
             } else {
                 this._listViewEl.data = [];
@@ -295,21 +294,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
         } else if (!this._firstLoaded || forceLoad) {
-
             // alle Datensätze laden
-            this._listViewEl.load(args).then((responseData) => {
+            this._listViewEl.load(args)
+                .then((responseData) => {
+                    // Nach dem Laden das value neu setzen,
+                    // damit das Label erscheint (ohne change-event)
+                    if (query === null && this._isValueInStore(this.value)) {
+                        this.value = this._value;
 
-                // Nach dem Laden das value neu setzen,
-                // damit das Label erscheint (ohne change-event)
-                if (query === null && this._isValueInStore(this.value)) {
-                    this.value = this._value;
-
-                // value mit dem RPC zurückgeben (mit change-event)
-                } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
-                    this.setValue(responseData.value);
-                }
-
-            });
+                    // value mit dem RPC zurückgeben (mit change-event)
+                    } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
+                        this.setValue(responseData.value);
+                    }
+                }).catch(() => {});
         }
 
         // Flag setzen

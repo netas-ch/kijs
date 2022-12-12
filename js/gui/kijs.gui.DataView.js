@@ -318,7 +318,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {Promise}
      */
     load(args) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             // Standardargumente anhängen
             if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
                 if (kijs.isObject(args)) {
@@ -338,16 +338,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 cancelRunningRpcs: true, 
                 waitMaskTarget: this, 
                 waitMaskTargetDomProperty: 'dom'
-            }).then((responseData) => {
-                this.data = responseData.rows;
-                if (!kijs.isEmpty(responseData.selectFilters)) {
-                    this.selectByFilters(responseData.selectFilters);
+                
+            }).then((e) => {
+                this.data = e.responseData.rows;
+                if (!kijs.isEmpty(e.responseData.selectFilters)) {
+                    this.selectByFilters(e.responseData.selectFilters);
                 }
-
+                
                 // Promise ausführen
-                resolve(responseData);
-
-                this.raiseEvent('afterLoad', {responseData: responseData});
+                resolve(e);
+                
+                this.raiseEvent('afterLoad', e);
+                
+            }).catch((ex) => {
+                reject(ex);
+                
             });
         });
     }
@@ -787,7 +792,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     // EVENTS
     _onAfterFirstRenderTo(e) {
-        this.load();
+        this.load().catch(() => {});
     }
 
     _onElementClick(e) {

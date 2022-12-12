@@ -177,8 +177,7 @@ sc.ApertureMask = class sc_ApertureMask {
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'testResize',
-                    caption: 'test resize panel',
-                    value: true
+                    caption: 'test resize panel'
                 }
             ]
         });
@@ -193,7 +192,7 @@ sc.ApertureMask = class sc_ApertureMask {
     _test(target) {
         const duration = this._content.down('duration').value;
         const animated = !!this._content.down('animated').value;
-        const testResizePanel = !!this._content.down('duration').value;
+        const testResizePanel = !!this._content.down('testResize').value;
         
         const mask = new kijs.gui.ApertureMask({
             target: target,

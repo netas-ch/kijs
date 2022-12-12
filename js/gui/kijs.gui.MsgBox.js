@@ -74,7 +74,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
     }
 
     /**
-     * Zeigt ein Meldungsfenster mit OK-Schaltfläche und einem Fehler-Symbol
+     * Zeigt ein Meldungsfenster mit OK-Schaltfläche und einem "unerwarteten Fehler"-Symbol
      * @param {String} caption
      * @param {String} msg
      * @param {Function} fn
@@ -94,6 +94,39 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             context: context,
             icon: {
                 iconMap: 'kijs.iconMap.Fa.circle-exclamation',
+                iconColor: '#be6280'
+            },
+            buttons: [
+                {
+                    name: 'ok',
+                    caption: kijs.getText('OK'),
+                    isDefault: true
+                }
+            ]
+        });
+    }
+    
+    /**
+     * Zeigt ein Meldungsfenster mit OK-Schaltfläche und einem Fehler-Symbol
+     * @param {String} caption
+     * @param {String} msg
+     * @param {Function} fn
+     * @param {Object} context
+     * @returns {Promise}
+     */
+    static errorNotice(caption, msg, fn, context) {
+        if (kijs.isArray(msg)) {
+            msg = this._convertArrayToHtml(msg);
+        }
+
+        return this.show({
+            caption: caption,
+            msg: msg,
+            closable: false,
+            fn: fn,
+            context: context,
+            icon: {
+                iconMap: 'kijs.iconMap.Fa.triangle-exclamation',
                 iconColor: '#be6280'
             },
             buttons: [

@@ -1,4 +1,9 @@
 <?php
+
+// Eigene Exception
+class ki_Exception_Notice extends Exception {}
+
+
 $responses = array();
 
 $requests = json_decode(file_get_contents("php://input"));
@@ -412,6 +417,7 @@ foreach ($requests as $request) {
             break;
         
         case 'rpc.simple':
+            $response->errorMsg = 'Ich bin eine errorMsg';
             $response->responseData = $request->requestData;
             break;
         
@@ -422,11 +428,13 @@ foreach ($requests as $request) {
         
         case 'rpc.infoMsg':
             $response->infoMsg = 'Ich bin eine infoMsg';
+            //$response->infoTitle = 'Eigener Titel';
             $response->responseData = $request->requestData;
             break;
         
         case 'rpc.cornerTipMsg':
             $response->cornerTipMsg = 'Ich bin eine cornerTipMsg';
+            //$response->cornerTipTitle = 'Eigener Titel';
             $response->responseData = $request->requestData;
             break;
         
@@ -436,12 +444,36 @@ foreach ($requests as $request) {
                 $response->responseData = $request->requestData;
             } else {
                 $response->warningMsg = 'Sind Sie sicher?';
+               // $response->warningTitle = 'Eigener Titel';
             }
             break;
         
         case 'rpc.errorMsg':
             $response->errorMsg = 'Ich bin eine errorMsg';
+            //$response->errorTitle = 'Eigener Titel';
             $response->responseData = $request->requestData;
+            break;
+        
+        case 'rpc.errorNotice':
+            try {
+                $response->responseData = $request->requestData;
+                throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+                $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+            }
+            break;
+        
+        case 'rpc.error':
+            try {
+                $response->responseData = $request->requestData;
+                throw new Exception('Fehler! Schrecklich!!!');
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+                $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+            }
             break;
         
         case 'tree.load':

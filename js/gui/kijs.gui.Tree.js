@@ -421,17 +421,24 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     facadeFn: this.facadeFnLoad,
                     data: args,
                     waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
-                }).then((responseData) => {
+                    
+                }).then((e) => {
                     this.loadSpinner = false;
-
+                    
                     // alle unterelemente entfernen und destructen
                     this.removeAll(false, true);
-
-                    if (responseData.tree) {
-                        this.add(responseData.tree);
+                    
+                    if (e.responseData.tree) {
+                        this.add(e.responseData.tree);
                     }
-                    resolve(responseData);
+                    resolve(e.responseData);
+                    
+                }).catch((ex) => {
+                    this.loadSpinner = false;
+                    this.removeAll(false, true);
+                    reject(ex);
                 });
+                
             } else {
                 resolve(null);
             }
@@ -648,12 +655,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 // node A nur neu laden, wenn sie kein Kind von B ist.
                 if (nodeA instanceof kijs.gui.Tree && !nodeA.isChildOf(nodeB)) {
-                    nodeA.load(null, true);
+                    nodeA.load(null, true).catch(() => {});
                 }
 
                 // Node B nur neu laden, wenn sie kein Kind von A ist
                 if (nodeB !== nodeA && nodeB instanceof kijs.gui.Tree && !nodeB.isChildOf(nodeA)) {
-                    nodeB.load(null, true);
+                    nodeB.load(null, true).catch(() => {});
                 }
 
             // Elemente verschieben im Dom
@@ -695,7 +702,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
 
         if (this._autoLoad && this.isRemote && this.isRoot) {
-            this.load();
+            this.load().catch(() => {});
         }
     }
 

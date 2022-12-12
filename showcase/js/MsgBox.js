@@ -63,6 +63,16 @@ sc.MsgBox = class sc_MsgBox {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
+                    caption: 'errorNotice',
+                    on: {
+                        click: function() {
+                            kijs.gui.MsgBox.errorNotice('Test', 'ErrorNotice!').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
                     caption: 'error',
                     on: {
                         click: function() {

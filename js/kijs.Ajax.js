@@ -11,7 +11,8 @@ kijs.Ajax = class kijs_Ajax {
     // --------------------------------------------------------------
     /**
     * Führt einen Ajax Request aus
-    *
+    * Es wird immer ein Promise zurückgegeben. Bei diesem wird dann immer (auch im Fehlerfall) resolve ausgeführt.
+    * 
     * @param {Object} config
     *  config Eigenschaften:
     *     {String} url

@@ -31,10 +31,10 @@ sc.FormPanel = class sc_FormPanel {
                 {
                     xtype: 'kijs.gui.FormPanel',
                     caption: 'Formular',
-                    rpc: this._app.rpc,
-                    autoLoad: false,
-                    facadeFnLoad: 'form.load',
-                    facadeFnSave: 'form.save',
+                    //rpc: this._app.rpc,
+                    //autoLoad: false,
+                    //facadeFnLoad: 'form.load',
+                    //facadeFnSave: 'form.save',
                     shadow: true,
                     collapsible: 'top',
                     closable: true,
@@ -226,6 +226,88 @@ sc.FormPanel = class sc_FormPanel {
                             helpText: 'Hier können Sie die Bermerkungen eintragen'
                         }
                     ],
+                    
+                    footerElements: [
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Validieren',
+                            on: {
+                                click: function() {
+                                    this.upX('kijs.gui.FormPanel').validate();
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            name: 'btnReadOnly',
+                            caption: 'ReadOnly',
+                            on: {
+                                click: function() {
+                                    this.parent.parent.readOnly = true;
+                                    this.disabled = true;
+                                    this.parent.down('btnEnable').disabled = false;
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            name: 'btnDisable',
+                            caption: 'Deaktivieren',
+                            on: {
+                                click: function() {
+                                    this.upX('kijs.gui.FormPanel').disabled = true;
+                                    this.disabled = true;
+                                    this.parent.down('btnEnable').disabled = false;
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            name: 'btnEnable',
+                            caption: 'Aktivieren',
+                            disabled: true,
+                            on: {
+                                click: function() {
+                                    kijs.Array.each(this.parent.parent.elements, function(element) {
+                                        if (element instanceof kijs.gui.field.Field) {
+                                            element.readOnly = false;
+                                        }
+                                    }, this);
+                                    this.upX('kijs.gui.FormPanel').disabled = false;
+                                    this.disabled = true;
+                                    this.parent.down('btnReadOnly').disabled = false;
+                                    this.parent.down('btnDisable').disabled = false;
+                                }
+                            }
+                        }
+                    ]
+                },
+                
+                {
+                    xtype: 'kijs.gui.FormPanel',
+                    caption: 'Formular mit definition über RPC',
+                    rpc: this._app.rpc,
+                    autoLoad: true,
+                    facadeFnLoad: 'form.load',
+                    facadeFnSave: 'form.save',
+                    shadow: true,
+                    collapsible: 'top',
+                    closable: true,
+                    resizable: true,
+                    autoScroll: true,
+                    width: 600,
+                    style: {
+                        marginTop: '10px'
+                    },
+                    innerStyle: {
+                        padding: '10px'
+                    },
+                    defaults: {
+                        labelWidth: 100,
+                        style: { maxWidth: '500px', marginBottom: '4px' },
+                        required: true,
+                        defaults: {
+                            labelWidth: 100,
+                            required: true
+                        }
+                    },
                     
                     footerElements: [
                         {

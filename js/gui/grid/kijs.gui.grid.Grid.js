@@ -29,7 +29,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._facadeFnLoad = null;
         this._facadeFnSave = null;
         this._facadeFnArgs = null;
-        this._facadeFnBeforeMsgFn = null;
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
@@ -107,7 +106,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             facadeFnLoad              : true,
             facadeFnSave              : true,
             facadeFnArgs              : true,
-            facadeFnBeforeMsgFn       : true,
             waitMaskTarget            : true,
             waitMaskTargetDomProperty : true,
 
@@ -898,7 +896,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _remoteLoad(resetData=false, loadNextData=false) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             if (
                 this._facadeFnLoad
                 && this._rpc
@@ -947,13 +945,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._rpc.do({
                     facadeFn: this._facadeFnLoad,
                     data: args, 
-                    cancelRunningRpcs: true,                                           // Cancel running
+                    cancelRunningRpcs: true,                                        // Cancel running
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
-                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,                // Wait Mask Target Dom Property
-                    fnBeforeMessages: this._facadeFnBeforeMsgFn
-                }).then((responseData) => {
-                    this._remoteProcess(responseData, args, resetData);
-                    resolve(responseData);
+                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property
+                }).then((e) => {
+                    this._remoteProcess(e.responseData, args, resetData);
+                    resolve(e.responseData);
+                }).catch((ex) => {
+                    reject(ex);
                 });
             }
         });

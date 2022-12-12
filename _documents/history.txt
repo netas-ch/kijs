@@ -16,35 +16,116 @@ kijs.Dom
 kijs.gui.field.ListView
  - Neuer Getter/Setter selectType
 
+kijs.gui.MsgBox
+- Neue Statische Funktion kijs.gui.MsgBox.errorNotice() 
+  Funnktioniert gleich wie kijs.gui.MsgBox.error(). Es wird aber ein anderes Icon angezeigt (Dreieck statt Kreis).
+
+kijs.gui.CornerTipContainer
+- Neue Funktion errorNotice()
+- Neues Icon 'errorNotice' bei der statischen Funktion kijs.gui.CornerTipContainer.show();
+
+
+
+Grundsätzliches zur Fehlerbehandlung ab Version 1.4.1
+----------
+Es wird neu zwischen zwei Fehlertypen (errorType) unterschieden:
+- errorNotice
+  Benutzerfehler, der für uns Entwickler NICHT wichtig ist und deshalb auch nicht geloggt werden muss.
+  z.B. wenn ein Pflichtfeld nicht ausgefüllt wurde.
+  errorNotice-Meldungen haben als Icon ein rotes Dreieck mit Ausrufezeichen.
+
+- error
+  Unerwarteter Fehler, der für uns Entwickler wichtig ist und deshalb in der regel geloggt wird.
+  error-Meldungen haben als Icon einen roten Kreis mit Ausrufezeichen.
+
+Beispiel Fehlerbehandlung in PHP:
+    try {
+        throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
+        throw new Exception('Fehler! Schrecklich!!!');
+    } catch (Exception $ex) {
+        $response->errorMsg = $ex->getMessage();
+        $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+        //$response->errorTitle = 'Mein eigener Fehlertitel'; // optional
+    }
+
+    Damit in PHP ki_Exception_Notice geworfen werden kann muss folgende Klasse in PHP deklariert sein:
+    class ki_Exception_Notice extends Exception {}
+
+
+
+Grundsätzliches zur Benennung von Argumenten ab Version 1.4.1
+----------
+- Listeners haben immer nur ein Argument e
+- Fehler haben immer nur ein Argument ex
+
+
+
 Änderungen
 ----------
+RPC response.errorMsg,response.errorMsg .warningMsg, .infoMsg, .cornerTipMsg
+ - Bisher konnte bei diesen Eigenschaften anstelle eines Strings auch ein Objekt 
+   {msg:'...', title:'...', cancelCb: false} übergeben werden.
+   Neu können nur noch Strings übergeben werden.
+ - Für einen individuelle Titel gibt es neue Eigenschaften im response:
+   - errorTitle
+   - warningTitle
+   - infoTitle
+   - cornerTipTitle
+ - cancelCb gibt es nicht mehr, weil
+   - beim verwenden einer Callback-Fn, diese nun immer aufgerufen wird (auch im Fehlerfall).
+   - beim verwenden des Promise, immer entweder resolve (auch bei errorNotice) oder reject (nur bei error) aufgerufen wird
+
 kijs.gui.ApertureMask
  - Die Funktion _updatePosition() ist jetzt nicht mehr public.
    Stattdessen render() benutzen!
 
 kijs.Ajax
  - Die Funktion request() gibt nicht mehr den XMLHttpRequest zurück, sondern ein Promise
+   Beim Promise gibt es kein reject. Es wird immer resolve ausgeführt.
  - Die callbackFn fn hat neu nur noch ein Argument { response: ..., request: ..., errorMsg: ... }
  - Die progressFn hat neu nur noch ein Argument { nodeEventName: 'onprogress', ajaxConfig: ..., useCapture: false, nodeEvent: ..., context: ... }
 
 kijs.Rpc
  - Die Funktion do(config) hat neu nur noch ein Argument (config). Die alten Argumente werden noch 
    eine Zeitlang unterstützt, sollten aber angepasst werden. In der Console wird eine DEPRECATED-Meldung angezeigt.
- - Bei der Funktion do() gibt es beim promise kein reject mehr. Falls es einen Fehler gab, 
-   hat das Argument bei resolve eine Eigenschaft "errorMsg".
  - Die callbackFn fn hat neu nur noch ein Argument { response: ..., request: ... }
+ - Falls config.fn übergeben wurde wird immer diese fn ausgeführt (auch im Fehlerfall).
+   Dann wird auch kein Promise, sondern Null zurückgegeben.
+ - Wird KEINE fn übergeben, so wird ein Promise zurückgegeben. Im Fehlerfall wird unterschieden zwischen errorType:
+   - 'errorNotice' (default): Es wird resolve ausgeführt. Die errorMsg befindet sich dann unter e.response.errorMsg.
+   - 'error':                 Es wird reject ausgeführt mit einem Error Objekt als Argument
 
 kijs.gui.Rpc
  - Die Funktion do(config) hat neu nur noch ein Argument (config). Die alten Argumente werden noch 
    eine Zeitlang unterstützt, sollten aber angepasst werden. In der Console wird eine DEPRECATED-Meldung angezeigt.
- - Bei der Funktion do() gibt es beim promise kein reject mehr. Falls es einen Fehler gab, 
-   hat das Argument bei resolve eine Eigenschaft "errorMsg".
+- Die callbackFn fn hat neu ein anderes Argument!!!!!! ACHTUNG! 
+  Bisher: responseData
+  Neu: { responseData: ..., requestData: ..., errorType: ..., errorMsg: ... }
+- Die callbackFn wird nun immer ausgeführt! Auch in einem Fehlerfall!!!!! ACHTUNG!
+  Um den gleichen Effekt wie früher zu haben muss der Inhalt der CallbackFn in ein
+  if(kijs.isEmpty(rpcData.errorMsg)) {
+      ...
+  }
+- Das Promise wird nur noch zurückgegeben, wenn keine callbackFn übergeben wurde
+- Bei der Funktion do() gibt es beim Promise nun ein reject. Dieses wird nur ausgelöst, wenn
+  keine callbackFn angegeben wurde, ein Fehler mit errorType='error' vom Server gemeldet wurde.
+  Eine MsgBox wird zwar von kijs.gui.Rpc angezeigt, die Ladeanzeige wird auch entfernt.
+  Das reject muss aber trotzdem bei jedem Aufruf abgefangen werden, damit kein Javascript-Fehler entsteht.
+  Minimale Fehlerbehandlung: .catch(() => {});
+  Oder, wenn die übergeordnete Funktion async ist und await verwendet wird, können Fehler mit einem
+  normalen try{} catch{} abgefangen werden.
+- das Argument bei load() fnBeforeMessages gibt es nicht mehr. Es wird nicht mehr benötigt,
+  weil die Load Funktion nun immer eine Antwort zurückgibt.
 
 kijs.gui.DataView
  - Argument umbenannt bei Event afterLoad "response" heisst neu "responseData"
 
 kijs.gui.FormPanel
  - Argument umbenannt bei Event afterLoad "response" heisst neu "responseData"
+
+kijs.gui.grid.Grid
+ - Die config "facadeFnBeforeMsgFn" gibt es nicht mehr.
+
 
 
 

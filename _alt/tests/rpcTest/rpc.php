@@ -1,4 +1,7 @@
 <?php
+    // Eigene Exception
+    class ki_Exception_Notice extends Exception {}
+
     $responses = array();
     
     $requests = json_decode(file_get_contents("php://input"));
@@ -16,6 +19,29 @@
                     
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();
+                    $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+                }
+                break;
+            
+            case 'myFacade.myErrorNoticeFunction':
+                try {
+                    $response->responseData = $request->requestData;
+                    throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
+                    
+                } catch (Exception $ex) {
+                    $response->errorMsg = $ex->getMessage();
+                    $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+                }
+                break;
+            
+            case 'myFacade.myErrorFunction':
+                try {
+                    $response->responseData = $request->requestData;
+                    throw new Exception('Fehler! Schrecklich!!!');
+                    
+                } catch (Exception $ex) {
+                    $response->errorMsg = $ex->getMessage();
+                    $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
                 }
                 break;
             
@@ -35,6 +61,7 @@
                     
                 } catch (Exception $ex) {
                     $response->errorMsg = $ex->getMessage();
+                    $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
                 }
                 break;
             
