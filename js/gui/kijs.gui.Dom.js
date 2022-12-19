@@ -170,8 +170,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._defaultConfig = {};
         this._doubleClickSpeed = 600;
 
-        this._disabled = false;
-
         this._nodeAttribute = {};
 
         this._left = undefined;
@@ -290,21 +288,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get disabled() {
-        if (this._node) {
-            return !!this._node.disabled;
-        } else {
-            return this._disabled;
-        }
+        return !!this.nodeAttributeGet('disabled');
     }
     set disabled(val) {
-        this._disabled = !!val;
-
-        if (this._node) {
-            this._node.disabled = !!val;
-        }
-        if (this._tooltip) {
-            this._tooltip.disabled = !!val;
-        }
+        this.nodeAttributeSet('disabled', !!val);
     }
 
     /**
@@ -1061,9 +1048,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
             // nodeAttribute
             this._nodeAttributeApply();
-
-            // disabled
-            this.disabled = this._disabled;
         }
 
         // HTML
