@@ -263,6 +263,25 @@ kijs.Navigator = class kijs_Navigator {
         return languages;
     }
 
+    /**
+     * Öffnet einen Link (http, tel, mailto, etc.) in einem neuen Fenster. Achtung nur nach Klick ausführen, sonst kommt der Popup-Blocker!
+     * Wenn ein tel oder mailto Link ein anderes Programm öffnet, und das Fenster blank bleibt, wird es automatisch wieder geschlossen.
+     * @param {String} href
+     * @param {String|null} target
+     * @returns {WindowProxy|null}
+     */
+    static openLink(href, target=null) {
+        const handle = window.open(href, target);
+        if (handle) {
+            handle.setTimeout(() => {
+                if (handle && handle.location && handle.location.href === 'about:blank') {
+                    handle.close();
+                }
+            }, 500);
+        }
+        return handle;
+    }
+
     static _browserVersion(ua, browser) {
         let re = new RegExp(browser + '/([0-9\\.]+)', 'i');
         let match = ua.match(re);

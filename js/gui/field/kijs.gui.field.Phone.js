@@ -211,7 +211,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     _onLinkButtonClick() {
         if (this.value) {
             let val = this.value.replace(/(?!^\+)[^0-9]+/g, '');
-            window.open('tel:' + val);
+            kijs.Navigator.openLink('tel:' + val);
         }
     }
 
