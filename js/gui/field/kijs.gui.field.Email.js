@@ -117,7 +117,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
     _onLinkButtonClick() {
         if (this._isValidEmail(this.value)) {
-            window.open('mailto:' + this.value);
+            kijs.Navigator.openLink('mailto:' + this.value);
         }
     }
 
