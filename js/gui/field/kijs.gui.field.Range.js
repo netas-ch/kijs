@@ -103,9 +103,9 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
     set readOnly(val) {
         super.readOnly = !!val;
         if (val) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+            this._inputDom.disabled = true;
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            this._inputDom.disabled = false;
         }
     }
 };
