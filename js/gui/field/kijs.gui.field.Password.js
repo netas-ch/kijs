@@ -103,9 +103,9 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     set disabled(val) {
         super.disabled = !!val;
         if (val) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+            this._inputDom.disabled = true;
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            this._inputDom.disabled = false;
         }
     }
 

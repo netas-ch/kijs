@@ -231,9 +231,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     set disabled(val) {
         super.disabled = !!val;
         if (val) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+            this._inputDom.disabled = true;
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            this._inputDom.disabled = false;
         }
     }
 

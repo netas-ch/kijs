@@ -292,6 +292,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     set disabled(val) {
         this.nodeAttributeSet('disabled', !!val);
+        if (this._tooltip) {
+            this._tooltip.disabled = !!val;
+        }
     }
 
     /**

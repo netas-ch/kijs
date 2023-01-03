@@ -102,9 +102,9 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     set disabled(val) {
         super.disabled = !!val;
         if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.nodeAttributeSet('disabled', true);
+            this._inputDom.disabled = true;
         } else {
-            this._inputDom.nodeAttributeSet('disabled', false);
+            this._inputDom.disabled = false;
         }
     }
 
