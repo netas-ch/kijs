@@ -273,6 +273,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     get collapseHeight() { return this._collapseHeight; }
     set collapseHeight(val) { this._collapseHeight = val; }
 
+    get collapseWidth() { return this._collapseWidth; }
+    set collapseWidth(val) { this._collapseWidth = val; }
+
     get draggable() { return false; }
 
     get footer() { return this._footerEl; }

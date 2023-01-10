@@ -15,7 +15,7 @@ kijs.DragDrop = class kijs_DragDrop {
     // --------------------------------------------------------------
 
     /**
-     * Fügt dem element einen 'ddStart'-Event hinzu.
+     * Fügt dem Element einen 'ddStart'-Event hinzu.
      * sofern der ddStart-Event nicht false zurückgibt, wird das DragDrop gestartet.
      * @param {kijs.Observable} element
      * @param {HTMLElement|kijs.gui.Dom} dom

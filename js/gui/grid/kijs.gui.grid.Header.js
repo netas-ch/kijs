@@ -137,6 +137,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         });
     }
 
+    // LISTENERS
     _onColumnConfigChange(e) {
         if ('visible' in e || 'width' in e || 'caption' in e || 'resizable' in e || 'sortable' in e) {
             kijs.Array.each(this.cells, function(cell) {

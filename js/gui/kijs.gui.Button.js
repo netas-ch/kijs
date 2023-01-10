@@ -227,8 +227,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     set menu(val) {
         // Menu zurücksetzen?
         if (kijs.isEmpty(val)) {
-            this._menuEl.destruct();
-            this._menuEl = null;
+            if (this._menuEl) {
+                this._menuEl.destruct();
+                this._menuEl = null;
+            }
 
         // kijs.gui.Menu Instanz
         } else if (val instanceof kijs.gui.Menu) {
@@ -246,8 +248,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             this._menuEl.applyConfig(val);
 
         } else {
-            throw new kijs.Error(`config "menzu" is not valid.`);
-
+            throw new kijs.Error(`config "menu" is not valid.`);
         }
     }
     
