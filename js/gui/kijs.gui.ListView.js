@@ -53,8 +53,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             this.applyConfig(config, true);
         }
 
-        this.applyConfig(config);
-
         // Events
         this.on('afterLoad', this._onAfterLoad, this);
     }
@@ -140,8 +138,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // overwrite
     createElement(dataRow, index) {
-        let html = '';
-
         let iconArgs = {parent: this};
 
         // Icon/Cls
