@@ -429,6 +429,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this.selectByIds(selected, false, true);
             }
 
+            if (
+                !this._tableDom.node.height
+                && !this._tableDom.node.scrollWidth
+                && this._header.node.scrollWidth
+            ) {
+
+                // Falls keine Zeilen vorhanden sind, lässt sich die Tabelle nicht mehr scrollen.
+                // Also geben wir der leeren Tabelle eine Grösse, damit man dort scrollen kann.
+                this._tableDom.width = this._header.node.scrollWidth;
+                this._tableDom.height = 200;
+            } else {
+                this._tableDom.width = null;
+                this._tableDom.height = null;
+            }
+
             return response;
         });
     }
