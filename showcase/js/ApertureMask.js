@@ -18,7 +18,7 @@ sc.ApertureMask = class sc_ApertureMask {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ApertureMask',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -37,7 +37,7 @@ sc.ApertureMask = class sc_ApertureMask {
                     maximizable: true,
                     maximized: false,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 500,
                     cls: 'kijs-flexrow',
 

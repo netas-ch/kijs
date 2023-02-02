@@ -18,7 +18,7 @@ sc.ButtonGroup = class sc_ButtonGroup {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ButtonGroup',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -37,7 +37,7 @@ sc.ButtonGroup = class sc_ButtonGroup {
                     maximizable: true,
                     maximized: false,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 500,
                     height: 400,
                     

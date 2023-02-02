@@ -127,6 +127,36 @@ kijs.gui.FormPanel
 kijs.gui.grid.Grid
  - Die config "facadeFnBeforeMsgFn" gibt es nicht mehr.
 
+kijs.gui.Container (und alle verebten Klassen)
+ - Neue Eigenschaften: scrollableX und scrollableY
+   Mögliche Werte: - false (keine Scrollbar)
+                   - true (Scrollbar immer sichtbar)
+                   - auto (automatisch sichtbar, wenn nötig)
+ - Die Config/Eigenschaft autoScroll gibt es nicht mehr 
+   ==> "autoScroll": true bitte ersetzen durch durch "scrollableY": "auto"
+ - Die Config/Eigenschaft "disabled" gibt es beim Container nicht mehr. 
+   Diese Eigenschaft gibt es nur bei Formularen, Formularfeldern, Buttons und Icons. 
+   Wenn ein ganzes Formular auf Disabled gestellt werden soll, kann dafür die
+   "disabled"-Eigenschaft des kijs.gui.FormPanel verwendet werden. 
+   Um trotzdem eine Maske über ein ganzes Panel zu legen kann dafür folgender Code verwendet werden:
+   (Vorsicht, die Elemente darunter können aber mit der Tastatur immer noch bedient werden!)
+        let mask = new kijs.gui.Mask({
+            target: myPanel
+        });
+        mask.show();
+ - Methode getElements() umbenannt zu getElementsRec()
+
+kijs.gui.ContainerScrollable
+NEU! Funktioniert wie der Container, anstelle von Scrollbars werden Scroll-Buttons angezeigt.
+
+
+Änderungen im CSS
+-----------------
+- Die CSS-Klasse "kijs-autoscroll" gibt es nicht mehr. 
+  ==> Bitte direkt die JS-Eigenschaft "scrollableY" von kijs.gui.Container benutzen
+
+
+
 
 
 

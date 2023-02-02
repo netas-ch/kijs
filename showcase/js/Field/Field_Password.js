@@ -18,7 +18,7 @@ sc.Field_Password = class sc_Field_Password {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Password',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

@@ -18,7 +18,7 @@ sc.Field_Number = class sc_Field_Number {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Number',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

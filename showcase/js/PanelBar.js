@@ -18,7 +18,7 @@ sc.PanelBar = class sc_PanelBar {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.PanelBar',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

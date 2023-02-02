@@ -18,7 +18,7 @@ sc.MsgBox = class sc_MsgBox {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.MsgBox',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

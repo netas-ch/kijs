@@ -18,7 +18,7 @@ sc.Field_Combo = class sc_Field_Combo {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Combo',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

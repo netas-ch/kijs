@@ -23,7 +23,7 @@ sc.ProgressBar = class sc_ProgressBar {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ProgressBar',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

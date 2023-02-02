@@ -18,7 +18,7 @@ sc.CornerTipContainer = class sc_CornerTipContainer {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.CornerTipContainer',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

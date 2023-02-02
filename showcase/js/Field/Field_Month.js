@@ -18,7 +18,7 @@ sc.Field_Month = class sc_Field_Month {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Month',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

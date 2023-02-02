@@ -32,6 +32,12 @@
  *                                              html: 'Hallo Welt'
  *                                          })
  *                                      ]
+ * 
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
+ *                                        
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  *
  * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
@@ -108,6 +114,12 @@
  *
  * isEmpty      Boolean (readonly)
  *
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
+ *                                        
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
+ *
  *
  * EVENTS
  * ----------
@@ -167,7 +179,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         this._defaults = {};
         this._elements = [];
-        this._disabledEl = null;
 
         this._dom.clsAdd('kijs-container');
         this._innerDom.clsAdd('kijs-container-inner');
@@ -179,7 +190,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoScroll: { target: 'autoScroll' },
+            scrollableX: { target: 'scrollableX' },
+            scrollableY: { target: 'scrollableY' },
             defaults: true,
             html: { target: 'html', context: this._innerDom },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._innerDom },
@@ -200,34 +212,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoScroll() { return this._innerDom.clsHas('kijs-autoscroll'); }
-    set autoScroll(val) {
-        if (val) {
-            this._innerDom.clsAdd('kijs-autoscroll');
-        } else {
-            this._innerDom.clsRemove('kijs-autoscroll');
-        }
-    }
-
     get defaults() { return this._defaults; }
     set defaults(val) { this._defaults = val; }
-
-    get disabled() { return !kijs.isEmpty(this._disabledEl); }
-    set disabled(val) {
-        if (val) {
-            if (kijs.isEmpty(this._disabledEl)) {
-                this._disabledEl = new kijs.gui.Mask({
-                    target: this
-                });
-                this._disabledEl.show();
-            }
-        } else {
-            if (!kijs.isEmpty(this._disabledEl)) {
-                this._disabledEl.destruct();
-                this._disabledEl = null;
-            }
-        }
-    }
 
     get elements() { return this._elements; }
 
@@ -259,7 +245,47 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     get isEmpty() { return this._innerDom.isEmpty && kijs.isEmpty(this._elements); }
 
 
-
+    get scrollableX() {
+        if (this._innerDom.clsHas('kijs-scrollable-x-enable')) {
+            return true;
+        } else if (this._innerDom.clsHas('kijs-scrollable-x-auto')) {
+            return 'auto';
+        } else {
+            return false;
+        }
+    }
+    set scrollableX(val) {
+        this._innerDom.clsRemove('kijs-scrollable-x-enable');
+        this._innerDom.clsRemove('kijs-scrollable-x-auto');
+        
+        if (val === 'auto') {
+            this._innerDom.clsAdd('kijs-scrollable-x-auto');
+        } else if(val) {
+            this._innerDom.clsAdd('kijs-scrollable-x-enable');
+        }
+    }
+    
+    get scrollableY() {
+        if (this._innerDom.clsHas('kijs-scrollable-y-enable')) {
+            return true;
+        } else if (this._innerDom.clsHas('kijs-scrollable-y-auto')) {
+            return 'auto';
+        } else {
+            return false;
+        }
+    }
+    set scrollableY(val) {
+        this._innerDom.clsRemove('kijs-scrollable-y-enable');
+        this._innerDom.clsRemove('kijs-scrollable-y-auto');
+            
+        if (val === 'auto') {
+            this._innerDom.clsAdd('kijs-scrollable-y-auto');
+        } else if(val) {
+            this._innerDom.clsAdd('kijs-scrollable-y-enable');
+        }
+    }
+    
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -335,42 +361,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         } else {
             return null;
         }
-    }
-
-    /**
-     * Gibt alle Unterelemente als flaches Array zurück
-     * @param {Number} [deep]         default=-1    Gewünschte Suchtiefe
-     *                                              0=nur im aktuellen Container
-     *                                              1=im aktuellen Container und in deren untergeordneten
-     *                                              2=im aktuellen Container, deren untergeordneten und deren untergeordneten
-     *                                              n=...
-     *                                              -1=unendlich
-     * @returns {Array}
-     */
-    getElements(deep=-1) {
-        let ret = [];
-
-        // elements im aktuellen Container
-        kijs.Array.each(this._elements, function(el) {
-            ret.push(el);
-        }, this);
-
-        // rekursiv unterelemente hinzufügen
-        if (deep !== 0) {
-            if (deep>0) {
-                deep--;
-            }
-            kijs.Array.each(this._elements, function(el) {
-                if (kijs.isFunction(el.getElements)) {
-                    let retSub = el.getElements(deep);
-                    if (!kijs.isEmpty(retSub)) {
-                        ret = ret.concat(retSub);
-                    }
-                }
-            }, this);
-        }
-
-        return ret;
     }
 
     /**
@@ -478,6 +468,42 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Rückgabe
         return ret;
     }
+    
+    /**
+     * Gibt alle Unterelemente als flaches Array zurück
+     * @param {Number} [deep]         default=-1    Gewünschte Suchtiefe
+     *                                              0=nur im aktuellen Container
+     *                                              1=im aktuellen Container und in deren untergeordneten
+     *                                              2=im aktuellen Container, deren untergeordneten und deren untergeordneten
+     *                                              n=...
+     *                                              -1=unendlich
+     * @returns {Array}
+     */
+    getElementsRec(deep=-1) {
+        let ret = [];
+
+        // elements im aktuellen Container werden zuerst zurückgegeben
+        kijs.Array.each(this._elements, function(el) {
+            ret.push(el);
+        }, this);
+
+        // Evtl. untergeordnete Container rekursiv duchsuchen
+        if (deep !== 0) {
+            if (deep>0) {
+                deep--;
+            }
+            kijs.Array.each(this._elements, function(el) {
+                if (kijs.isFunction(el.getElementsRec)) {
+                    let retSub = el.getElementsRec(deep);
+                    if (!kijs.isEmpty(retSub)) {
+                        ret = ret.concat(retSub);
+                    }
+                }
+            }, this);
+        }
+
+        return ret;
+    }
 
     /**
      * Überprüft ob ein untergeordnetes Element existiert
@@ -578,11 +604,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
-        // Maske
-        if (!kijs.isEmpty(this._disabledEl)) {
-            this._disabledEl.show();
-        }
-
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -594,11 +615,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
-        }
-
-        // Maske
-        if (!kijs.isEmpty(this._disabledEl)) {
-            this._disabledEl.unrender();
         }
 
         kijs.Array.each(this._elements, function(el) {
@@ -688,7 +704,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @returns {undefined}
      */
     _onChildElementAfterResize(e) {
-
         // Endlosschlaufe verhindern: wenn der Event von dieser Klasse ausgelöst wurde,
         // den Event nicht erneut auslösen
         if (e.raiseElement === this) {
@@ -709,12 +724,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
             // Event auslösen.
             this.raiseEvent('destruct');
-        }
-
-        // Maske
-        if (!kijs.isEmpty(this._disabledEl)) {
-            this._disabledEl.destruct();
-            this._disabledEl = null;
         }
 
         // Elemente/DOM-Objekte entladen

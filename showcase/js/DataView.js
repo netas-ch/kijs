@@ -26,7 +26,7 @@ sc.DataView = class sc_DataView {
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'DataView local',
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
                         flex: 1
@@ -38,12 +38,12 @@ sc.DataView = class sc_DataView {
                             selectType: 'multi',
                             data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
                             waitMaskTargetDomProperty: 'innerDom',
+                            //scrollableY: 'auto',
                             style: {
                                 flex: 1
                             },
                             innerStyle: {
                                 padding: '10px'
-                                //overflowY: 'auto'
                             }
                         }
                     ]
@@ -52,7 +52,7 @@ sc.DataView = class sc_DataView {
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'DataView RPC',
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
                         flex: 1
@@ -105,12 +105,12 @@ sc.DataView = class sc_DataView {
                             autoLoad: true,
                             facadeFnLoad: 'dataview.load',
                             waitMaskTargetDomProperty: 'innerDom',
+                            //scrollableY: 'auto',
                             style: {
                                 flex: 1
                             },
                             innerStyle: {
                                 padding: '10px'
-                                //overflowY: 'auto'
                             }
                         }
                     ]

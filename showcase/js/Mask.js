@@ -18,7 +18,7 @@ sc.Mask = class sc_Mask {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Mask',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -37,7 +37,7 @@ sc.Mask = class sc_Mask {
                     maximizable: true,
                     maximized: false,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 500,
                     cls: 'kijs-flexrow',
 

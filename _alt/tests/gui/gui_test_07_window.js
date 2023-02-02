@@ -24,7 +24,7 @@ function gui_test_07_window() {
         caption: 'Mein Fenster',
         iconCls: 'icoWizard16',
         collapsible: 'top',
-        autoScroll: true,
+        scrollableY: 'auto',
         //target: testCont,
         modal: true,
         width: 400,

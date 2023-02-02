@@ -34,14 +34,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         });
 
         this._listViewEl = new kijs.gui.ListView({
-            autoScroll: false,
+            scrollableY: false,
             cls: 'kijs-field-combo',
             autoLoad: false,
             focusable: false
         });
 
         this._spinBoxEl = new kijs.gui.SpinBox({
-            autoScroll: true,
+            scrollableY: 'auto',
             parent: this,
             target: this,
             targetDomProperty: 'inputWrapperDom',
@@ -60,7 +60,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
-            autoScroll: true,
+            scrollableY: 'auto',
             spinIconVisible: true,
             minChars: 'auto',
             valueField: 'value',
@@ -101,7 +101,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             value: { prio: 1001, target: 'value' },
 
             // Attribute für SpinBoxEl weiterreichen
-            autoScroll: { target: 'autoScroll', context: this._spinboxEl }
+            scrollableX: { target: 'scrollableX', context: this._spinboxEl },
+            scrollableY: { target: 'scrollableY', context: this._spinboxEl }
         });
 
         // Event-Weiterleitungen von this._inputDom

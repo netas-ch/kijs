@@ -18,7 +18,7 @@ sc.Tree = class sc_Tree {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Tree',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

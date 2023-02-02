@@ -20,7 +20,7 @@ sc.Button = class sc_Button {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Button',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

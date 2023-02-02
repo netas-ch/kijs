@@ -18,7 +18,7 @@ sc.Field_Editor = class sc_Field_Editor {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Editor',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

@@ -19,7 +19,7 @@ sc.SpinBox = class sc_SpinBox {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.SpinBox',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

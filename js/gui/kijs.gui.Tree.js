@@ -66,7 +66,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            autoScroll: true,
+            scrollableY: 'auto',
           //  waitMaskTarget           : this,
           //  waitMaskTargetDomProperty: 'dom',
             folderIcon               : 'auto'
@@ -501,7 +501,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     }
 
                     element.xtype = element.xtype ? element.xtype : 'kijs.gui.Tree';
-                    element.autoScroll = false;
+                    element.scrollableY = false;
                     element.draggable = element.draggable ? element.draggable : this.getRootNode().draggable;
 
                     //element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;

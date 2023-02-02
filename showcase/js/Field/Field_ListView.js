@@ -18,7 +18,7 @@ sc.Field_ListView = class sc_Field_ListView {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.ListView',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

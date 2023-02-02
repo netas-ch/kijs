@@ -20,7 +20,7 @@ sc.Grid_Grid = class sc_Grid_Grid {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.grid.Grid',
-            //autoScroll: true,
+            //scrollableY: 'auto',
             cls: 'kijs-flexcolumn',
             style: {
                 flex: 1

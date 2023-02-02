@@ -18,7 +18,7 @@ sc.Field_Memo = class sc_Field_Memo {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Memo',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

@@ -18,7 +18,7 @@ sc.Field_Color = class sc_Field_Color {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Color',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

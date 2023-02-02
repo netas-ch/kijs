@@ -33,6 +33,8 @@
    "js/gui/kijs.gui.Tooltip.js",
    "js/gui/kijs.gui.Element.js",
    "js/gui/kijs.gui.Container.js",
+   "js/gui/kijs.gui.ContainerScrollable.js",
+   "js/gui/kijs.gui.Toolbar.js",
    "js/gui/kijs.gui.ContainerStack.js",
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",

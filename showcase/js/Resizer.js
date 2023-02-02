@@ -19,7 +19,7 @@ sc.Resizer = class sc_Resizer {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Resizer',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

@@ -18,7 +18,7 @@ sc.Field_DateTime = class sc_Field_DateTime {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.DateTime',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

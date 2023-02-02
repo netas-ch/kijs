@@ -18,7 +18,7 @@ sc.Field_Email = class sc_Field_Email {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Email',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

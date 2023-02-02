@@ -486,7 +486,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * Fügt für alle Unterelemente listeners hinzu.
      */
     _observChilds() {
-        kijs.Array.each(this.getElements(), function(el) {
+        kijs.Array.each(this.getElementsRec(), function(el) {
             if (el instanceof kijs.gui.Container && !(el instanceof kijs.gui.field.Field)) {
                 if (!el.hasListener('add', this._onChildAdd, this)) {
                     el.on('add', this._onChildAdd, this);

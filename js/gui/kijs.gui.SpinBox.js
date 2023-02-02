@@ -83,16 +83,6 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     get allowSwapY() { return this._allowSwapY; }
     set allowSwapY(val) { this._allowSwapY = !!val; }
 
-    // overwrite, damit overflow beim dom statt innerDom zugewiesen wird
-    get autoScroll() { return this._dom.clsHas('kijs-autoscroll'); }
-    set autoScroll(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-autoscroll');
-        } else {
-            this._dom.clsRemove('kijs-autoscroll');
-        }
-    }
-
     get autoSize() { return this._autoSize; }
     set autoSize(val) {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
@@ -114,6 +104,48 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._ownPos = val;
         } else {
             throw new kijs.Error(`Unkown format on config "pos"`);
+        }
+    }
+    
+    // overwrite, damit overflow beim dom statt innerDom zugewiesen wird
+    get scrollableX() {
+        if (this._dom.clsHas('kijs-scrollable-x-enable')) {
+            return true;
+        } else if (this._dom.clsHas('kijs-scrollable-x-auto')) {
+            return 'auto';
+        } else {
+            return false;
+        }
+    }
+    set scrollableX(val) {
+        this._dom.clsRemove('kijs-scrollable-x-enable');
+        this._dom.clsRemove('kijs-scrollable-x-auto');
+        
+        if (val === 'auto') {
+            this._dom.clsAdd('kijs-scrollable-x-auto');
+        } else if(val) {
+            this._dom.clsAdd('kijs-scrollable-x-enable');
+        }
+    }
+    
+    // overwrite, damit overflow beim dom statt innerDom zugewiesen wird
+    get scrollableY() {
+        if (this._dom.clsHas('kijs-scrollable-y-enable')) {
+            return true;
+        } else if (this._dom.clsHas('kijs-scrollable-y-auto')) {
+            return 'auto';
+        } else {
+            return false;
+        }
+    }
+    set scrollableY(val) {
+        this._dom.clsRemove('kijs-scrollable-y-enable');
+        this._dom.clsRemove('kijs-scrollable-y-auto');
+            
+        if (val === 'auto') {
+            this._dom.clsAdd('kijs-scrollable-y-auto');
+        } else if(val) {
+            this._dom.clsAdd('kijs-scrollable-y-enable');
         }
     }
 
@@ -424,15 +456,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {undefined}
      */
     _widthWorkaround() {
-        if (this._autoWidth && this.autoScroll) {
-            this.autoScroll = false;
+        if (this._autoWidth && this.scrollableY) {
+            let currentScrollableY = this.scrollableY;
+            this.scrollableY = false;
             this._dom.width = null;
             let pos = kijs.Dom.getAbsolutePos(this._dom.node);
             let sbw = kijs.Dom.getScrollbarWidth();
             let w = pos.w + sbw + 10;
 
             this._dom.width = w;
-            this.autoScroll = true;
+            this.scrollableY = currentScrollableY;
         }
     }
 

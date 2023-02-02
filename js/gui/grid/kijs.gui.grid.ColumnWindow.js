@@ -24,7 +24,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             iconMap: 'kijs.iconMap.Fa.table-columns',
             closable: true,
             maximizable: false,
-            autoScroll: true,
+            scrollableY: 'auto',
             resizable: false,
             modal: true,
             width: 200,

@@ -18,7 +18,7 @@ sc.Container = class sc_Container {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Container',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

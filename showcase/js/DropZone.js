@@ -18,7 +18,7 @@ sc.DropZone = class sc_DropZone {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DropZone',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -37,7 +37,7 @@ sc.DropZone = class sc_DropZone {
                     maximizable: true,
                     maximized: false,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 500,
                     height: 400,
                     cls: 'kijs-flexrow',

@@ -30,7 +30,7 @@ function gui_test_06_panel() {
         maximizable: true,
         maximized: false,
         resizable: true,
-        autoScroll: true,
+        scrollableY: 'auto',
         width: 500,
         defaults: {
             xtype: 'kijs.gui.Element',

@@ -190,10 +190,11 @@
 }
 
 /* Scrollbar automatisch einblenden für container-inner */
-.kijs-autoscroll, div.kijs-autoscroll {
-    overflow-y: auto;
-}
+.kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+.kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
 
+.kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+.kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
 /* ******************
@@ -219,6 +220,122 @@ div.kijs-container-inner {
 
     -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
 }
+
+/* ******************
+   * ContainerScrollable
+   ****************** */
+div.kijs-containerscrollable {
+    display: grid;
+    grid-template-rows: 1fr;
+    grid-template-columns: 1fr;
+    font-family: var(--default-fontFamily);
+    color: var(--default-fontColor);
+    
+    > .kijs-container-inner {
+        flex: none;
+        grid-row: 1;
+        grid-column: 1;
+    }
+    
+    &.kijs-scrollable-x-enable {
+        grid-template-columns: 20px 1fr 20px;
+        
+        > .kijs-container-inner {
+            grid-column: 2;
+            /*overflow-x: hidden;*/
+        }
+    }
+    
+    &.kijs-scrollable-y-enable {
+        grid-template-rows: 20px 1fr 20px;
+        
+        > .kijs-container-inner {
+            grid-row: 2;
+            /*overflow-y: hidden;*/
+        }
+    }
+    
+    > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+    > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        
+        border-radius: 6px;
+        background-color: var(--button-bkgrndColor);
+        border: 1px solid var(--button-borderColor);
+        cursor: pointer;
+        
+        > .kijs-icon {
+            color: var(--button-icon-fontColor);
+        }
+        
+        &:hover {
+            background-color: var(--button-focus-bkgrndColor);
+            border: 1px solid var(--button-focus-borderColor);
+        }
+        &:focus {
+            border: 1px solid var(--button-focus-borderColor);
+        }
+
+        &.kijs-disabled {
+            background-color: var(--button-bkgrndColor);
+            border: 1px solid var(--button-borderColor);
+            cursor: auto;
+
+            > .kijs-icon {
+                color: var(--button-disabled-fontColor);
+            }
+        }
+    }
+    
+    /* nur kijs-scrollable-y-enable */
+    > .kijs-btn-scrollup {
+        grid-row: 1;
+        grid-column: 1;
+        margin-bottom: 2px;
+    }
+    > .kijs-btn-scrolldown {
+        grid-row: 3;
+        grid-column: 1;
+        margin-top: 2px;
+    }
+    
+    /* nur kijs-scrollable-x-enable */
+    > .kijs-btn-scrollleft {
+        grid-row: 1;
+        grid-column: 1;
+        margin-right: 2px;
+    }
+    > .kijs-btn-scrollright {
+        grid-row: 1;
+        grid-column: 3;
+        margin-left: 2px;
+    }
+    
+    /* kijs-scrollable-x-enable und kijs-scrollable-y-enable */
+    &.kijs-scrollable-x-enable.kijs-scrollable-y-enable {
+        > .kijs-btn-scrollup {
+            grid-row: 1;
+            grid-column: 2;
+        }
+        > .kijs-btn-scrolldown {
+            grid-row: 3;
+            grid-column: 2;
+        }
+        > .kijs-btn-scrollleft {
+            grid-row: 2;
+            grid-column: 1;
+        }
+        > .kijs-btn-scrollright {
+            grid-row: 2;
+            grid-column: 3;
+        }
+    }
+}
+
+
 
 
 

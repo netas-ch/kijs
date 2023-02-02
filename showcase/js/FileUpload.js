@@ -18,7 +18,7 @@ sc.FileUpload = class sc_FileUpload {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.FileUpload',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

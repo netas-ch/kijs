@@ -1,5 +1,12 @@
 /* global kijs, this */
 
+
+// TODO: Es gibt zwei unterschiedliche Möglichkeiten um zu Filtern 
+// - selectByFilters()
+// - this.filters (Entfernen: Ist nicht dokumentiert)
+// Es sollte nur eine Möglichkeit geben!
+
+
 // --------------------------------------------------------------
 // kijs.gui.DataView
 // --------------------------------------------------------------
@@ -30,7 +37,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            autoScroll: true,
+            scrollableY: 'auto',
             focusable: true,
             selectType: 'single'
         });

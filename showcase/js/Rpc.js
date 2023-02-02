@@ -18,7 +18,7 @@ sc.Rpc = class sc_Rpc {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Rpc',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

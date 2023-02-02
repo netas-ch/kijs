@@ -23,7 +23,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            autoScroll: true,
+            scrollableY: 'auto',
             direction: 'auto',
             expandOnHover: 'auto',
             cls: ['kijs-flexcolumn', 'kijs-menu-spinbox']

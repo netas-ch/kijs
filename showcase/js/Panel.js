@@ -18,7 +18,7 @@ sc.Panel = class sc_Panel {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Panel',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -37,7 +37,7 @@ sc.Panel = class sc_Panel {
                     maximizable: true,
                     maximized: false,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 500,
                     defaults: {
                         xtype: 'kijs.gui.Element',

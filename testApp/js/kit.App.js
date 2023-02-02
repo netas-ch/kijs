@@ -350,13 +350,13 @@ kit.App = class kit_App {
                             caption: 'Formular',
                             iconMap: 'kijs.iconMap.Fa.gamepad',
                             footerCaption: 'FooterBar',
+                            scrollableY: 'auto',
                             style: {
                                 flex: 1,
                                 minWidth: '40px'
                             },
                             innerStyle: {
-                                padding: '10px',
-                                overflowY: 'auto'
+                                padding: '10px'
                             },
                             headerBarElements:[
                                 {
@@ -417,12 +417,12 @@ kit.App = class kit_App {
                                     shadow: true,
                                     waitMaskTargetDomProperty: 'innerDom',
                                     cls: 'kijs-flexcolumn',
+                                    //scrollableY: 'auto',
                                     on: {
                                         close: function() { console.log('close'); }
                                     },
 //                                    innerStyle: {
-//                                        padding: '10px',
-//                                        overflowY: 'auto'
+//                                        padding: '10px'
 //                                    },
                                     elements: [{
                                         xtype: 'kijs.gui.grid.Grid',
@@ -509,12 +509,12 @@ kit.App = class kit_App {
                                     waitMaskTargetDomProperty: 'innerDom',
                                     facadeFnLoad: 'address.load',
                                     facadeFnSave: 'address.save',
+                                    scrollableY: 'auto',
                                     style: {
                                         marginTop:'10px'
                                     },
                                     innerStyle: {
-                                        padding: '10px',
-                                        overflowY: 'auto'
+                                        padding: '10px'
                                     },
                                     defaults: {
                                         labelWidth: 120,
@@ -1446,12 +1446,12 @@ kit.App = class kit_App {
                                     facadeFnLoad: 'form.load',
                                     facadeFnSave: 'form.save',
                                     shadow: true,
+                                    scrollableY: 'auto',
                                     style: {
                                         marginTop: '10px'
                                     },
                                     innerStyle: {
-                                        padding: '10px',
-                                        overflowY: 'auto'
+                                        padding: '10px'
                                     },
                                     defaults: {
                                         labelWidth: 100,
@@ -1526,12 +1526,12 @@ kit.App = class kit_App {
                                             autoLoad: true,
                                             facadeFnLoad: 'dataview.load',
                                             waitMaskTargetDomProperty: 'innerDom',
+                                            //scrollableY: 'auto',
                                             style: {
                                                 flex: 1
                                             },
                                             innerStyle: {
-                                                padding: '10px',
-                                                /*overflowY: 'auto'*/
+                                                padding: '10px'
                                             }
                                         }
                                     ],

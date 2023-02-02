@@ -20,7 +20,7 @@ sc.Window = class sc_Window {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Window',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

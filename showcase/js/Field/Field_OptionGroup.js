@@ -18,7 +18,7 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.OptionGroup',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

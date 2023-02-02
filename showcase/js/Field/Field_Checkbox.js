@@ -18,7 +18,7 @@ sc.Field_Checkbox = class sc_Field_Checkbox {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Checkbox',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

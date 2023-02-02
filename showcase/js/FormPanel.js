@@ -20,7 +20,7 @@ sc.FormPanel = class sc_FormPanel {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.FormPanel',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
@@ -39,7 +39,7 @@ sc.FormPanel = class sc_FormPanel {
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 600,
                     innerStyle: {
                         padding: '10px'
@@ -291,7 +291,7 @@ sc.FormPanel = class sc_FormPanel {
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
-                    autoScroll: true,
+                    scrollableY: 'auto',
                     width: 600,
                     style: {
                         marginTop: '10px'

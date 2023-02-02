@@ -207,13 +207,13 @@ kit.App = class kit_App {
                             iconMap: 'kijs.iconMap.Fa.map',
                             footerCaption: 'FooterBar',
                             cls: 'kijs-flexrow',
+                            scrollableY: 'auto',
                             style: {
                                 flex: 1,
                                 minWidth: '40px'
                             },
                             innerStyle: {
-                                padding: '10px',
-                                overflowY: 'auto'
+                                padding: '10px'
                             },
                             headerBarElements:[
                                 {

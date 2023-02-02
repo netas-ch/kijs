@@ -18,7 +18,7 @@ sc.Menu = class sc_Menu {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Menu',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

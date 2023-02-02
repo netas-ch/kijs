@@ -18,7 +18,7 @@ sc.Field_Display = class sc_Field_Display {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Display',
-            autoScroll: true,
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },

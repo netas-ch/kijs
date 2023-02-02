@@ -1,5 +1,10 @@
 /* global kijs, this */
 
+
+// TODO: Eigenschaft "checkedValues" entfernen. Der Name ist verwirrend und es besteht eine grosse 
+// Ähnlichkeit zu value. Evtl. dafür neue Funktionen: checkAll(), uncheckAll() oder noch besser die 
+// Filter des zugrundeliegenden DataView verwenden.
+
 // --------------------------------------------------------------
 // kijs.gui.field.CheckboxGroup
 // --------------------------------------------------------------
