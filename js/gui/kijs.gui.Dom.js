@@ -469,7 +469,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         if (!this._node) {
             this._style = val;
         } else {
-            throw new kijs.Error(`Property "style" can not be set. The node has allready been rendered.`);
+            throw new kijs.Error(`Property "style" can not be set. The node has already been rendered.`);
         }
     }
 

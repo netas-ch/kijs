@@ -214,7 +214,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     }
 
     _onMouseUp(e) {
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
