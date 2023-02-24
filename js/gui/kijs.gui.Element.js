@@ -903,7 +903,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Falls sich seit dem letzten aufruf dieser Funktion die Grösse geändert hat: das afterResize-Event auslösen
+     * Falls sich seit dem letzten Aufruf dieser Funktion die Grösse geändert hat: das afterResize-Event auslösen
      * @param {Boolean} [useDelay=false]
      * @param {Object} [e={}]   Falls das Event nur weitergereicht wird, kann hier das
      *                          e-Arg des vorherigen Events übergeben werden
@@ -942,8 +942,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     // LISTENERS
     /**
-     * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte
-     * Hier werden die Events, die in (this._eventForwards) zum weiterleiten gekennzeichnet sind weitergeleitet
+     * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte.
+     * Hier werden die Events, die in (this._eventForwards) zum Weiterleiten gekennzeichnet sind weitergeleitet.
      * @param {Object} e
      * @returns {Boolean}
      */

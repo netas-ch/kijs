@@ -356,7 +356,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
 
     _onSplitterMouseUp(e) {
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen des Listeners, gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 

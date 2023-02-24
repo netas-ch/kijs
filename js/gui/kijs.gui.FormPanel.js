@@ -46,8 +46,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             rpcArgs: true
         });
 
-        // Listeners auf Kindelemente
-        this.on('add', this._observChilds, this);
+        // Beim Hinzufügen oder Löschen von Kindelementen Felder neu suchen
+        this.on('add', () => { this.searchFields(); }, this);
+        this.on('remove', () => { this.searchFields(); }, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -418,7 +419,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 }
                 
                 // Falls alles OK
-                if(kijs.isEmpty(e.errorMsg)) {
+                if (kijs.isEmpty(e.errorMsg)) {
                     // 'dirty' zurücksetzen
                     this.isDirty = false;
                 
@@ -450,10 +451,40 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             if (el instanceof kijs.gui.Container) {
                 ret = ret.concat(this.searchFields(el));
+
+                // untergeordnete Container überwachen, bei neuen oder gelöschten Felder array neu aufbauen
+                if (el !== this) {
+                    if (!el.hasListener('add', this._onChildAdd, this)) {
+                        el.on('add', this._onChildAdd, this);
+                    }
+                    if (!el.hasListener('remove', this._onChildRemove, this)) {
+                        el.on('remove', this._onChildRemove, this);
+                    }
+                }
             }
+
+            // Felder auf den Change-Event überwachen
+            if (el instanceof kijs.gui.field.Field) {
+                if (!el.hasListener('change', this._onChildChange, this)) {
+                    el.on('change', this._onChildChange, this);
+                }
+            }
+
         }
 
         if (parent === this) {
+
+            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
+            if (!kijs.isEmpty(this._fields)) {
+                this._fields.forEach((oldField) => {
+                    if (ret.indexOf(oldField) === -1) {
+                        oldField.off('change', this._onChildChange, this);
+                        oldField.off('add', this._onChildAdd, this);
+                        oldField.off('remove', this._onChildRemove, this);
+                    }
+                })
+            }
+
             this._fields = ret;
         }
 
@@ -482,33 +513,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     // PROTECTED
 
-    /**
-     * Fügt für alle Unterelemente listeners hinzu.
-     */
-    _observChilds() {
-        kijs.Array.each(this.getElementsRec(), function(el) {
-            if (el instanceof kijs.gui.Container && !(el instanceof kijs.gui.field.Field)) {
-                if (!el.hasListener('add', this._onChildAdd, this)) {
-                    el.on('add', this._onChildAdd, this);
-                }
-
-            } else if (el instanceof kijs.gui.field.Field) {
-                if (!el.hasListener('change', this._onChildChange, this)) {
-                    el.on('change', this._onChildChange, this);
-                }
-            }
-        }, this);
-    }
-
+ 
 
     // EVENTS
     _onAfterFirstRenderTo(e) {
         this.load().catch(() => {});
     }
 
-
     _onChildAdd() {
-        this._observChilds();
+        this.searchFields();
+    }
+
+    _onChildRemove() {
+        this.searchFields();
     }
 
     _onChildChange(e) {

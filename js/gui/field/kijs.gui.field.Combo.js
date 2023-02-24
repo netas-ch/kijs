@@ -160,6 +160,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set valueField(val) { this._listViewEl.valueField = val; }
 
     // overwrite
+    get data() {
+        return this._listViewEl.data;
+    }
+
     set data(val) {
         this._listViewEl.data = val;
         if (this._selectFirst) {

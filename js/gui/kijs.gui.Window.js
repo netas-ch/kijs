@@ -30,7 +30,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._resizeDeferHandle = null;   // intern
         this._dragInitialPos = null;      // intern
 
-        this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren falls das Virtual Keyboard eingeblendet wird.
+        this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren, falls das Virtual Keyboard eingeblendet wird.
 
         this._modalMaskEl = null;
 
