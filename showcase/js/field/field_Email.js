@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Password = class sc_Field_Password {
+sc.field_Email = class sc_field_Email {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Password = class sc_Field_Password {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Password',
+            caption: 'kijs.gui.field.Email',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -102,6 +102,7 @@ sc.Field_Password = class sc_Field_Password {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'valueTrim',
+                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('valueTrim', e.element.value);
@@ -157,7 +158,7 @@ sc.Field_Password = class sc_Field_Password {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Password'
+                    xtype: 'kijs.gui.field.Email'
                 },
                 
                 {
@@ -165,9 +166,9 @@ sc.Field_Password = class sc_Field_Password {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Password',
+                    xtype: 'kijs.gui.field.Email',
                     label: 'Label',
-                    disableBrowserSecurityWarning: 'auto',
+                    showLinkButton: true,
                     on: {
                         focus:  console.log,
                      

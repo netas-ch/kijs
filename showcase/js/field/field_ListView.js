@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_DateTime = class sc_Field_DateTime {
+sc.field_ListView = class sc_field_ListView {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_DateTime = class sc_Field_DateTime {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.DateTime',
+            caption: 'kijs.gui.field.ListView',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,7 +43,6 @@ sc.Field_DateTime = class sc_Field_DateTime {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
-                    value: 1,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -101,6 +100,27 @@ sc.Field_DateTime = class sc_Field_DateTime {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    label: 'selectType',
+                    cls: 'kijs-inline',
+                    valueField: 'id',
+                    captionField: 'id',
+                    required: true,
+                    data: [
+                        {id:'none' },
+                        {id:'single' },
+                        {id:'multi' },
+                        {id:'simple' }
+                    ],
+                    value: 'single',
+                    on: {
+                        input: function(e) {
+                            this._updateProperty('value', null);
+                            this._updateProperty('selectType', e.value);
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -140,20 +160,34 @@ sc.Field_DateTime = class sc_Field_DateTime {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.DateTime'
+                    xtype: 'kijs.gui.field.ListView',
+                    valueField: 'value',
+                    captionField: 'caption',
+                    data: [
+                        { caption: 'Apple', value: 1},
+                        { caption: 'Linux', value: 2},
+                        { caption: 'Windows', value: 3}
+                    ]
                 },
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mode: \'date\'',
+                    html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum',
-                    mode: 'date',
-                    date: new Date(),
-                    minValue: kijs.Date.addDays(new Date(), -15),
-                    maxValue: kijs.Date.addDays(new Date(), 15),
+                    xtype: 'kijs.gui.field.ListView',
+                    label: 'Label',
+                    captionField: 'caption',
+                    valueField: 'value',
+                    iconMapField: 'iconMap',
+                    iconColorField: '',
+                    value: 2,
+                    //showCheckBoxes: true,
+                    data: [
+                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                    ],
                     on: {
                         focus:  console.log,
                      
@@ -172,72 +206,23 @@ sc.Field_DateTime = class sc_Field_DateTime {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mode: \'dateTime\'',
+                    html: 'inline und mit RPC',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Zeit & Sec',
-                    mode: 'dateTime',
-                    minutesHide: false,
-                    secondsHide: false,
-                    timeRequired: true,
-                    date: new Date(),
-                    minValue: kijs.Date.addDays(new Date(), -15),
-                    maxValue: kijs.Date.addDays(new Date(), 15)
-                },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Zeit',
-                    mode: 'dateTime',
-                    minutesHide: false,
-                    secondsHide: true,
-                    timeRequired: false
-                },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Datum & Stunden',
-                    mode: 'dateTime',
-                    minutesHide: true,
-                    secondsHide: true,
-                    timeRequired: false,
-                    date: new Date()
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'time\'',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Uhrzeit',
-                    mode: 'time',
-                    value: '13'
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'week\'',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    label: 'Woche',
-                    mode: 'week'
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'range\'',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.DateTime',
-                    name: 'rangeStart',
-                    nameEnd: 'rangeEnd',
-                    label: 'von/bis',
-                    mode: 'range'
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.MonthPicker<br>kijs.gui.TimePicker<br>kijs.gui.field.Month',
-                    style: { margin: '10px 0 4px 0'}
+                    xtype: 'kijs.gui.field.ListView',
+                    label: 'ListView remote',
+                    valueField: 'color',
+                    //checkedAll: true,
+                    captionField: 'Bez',
+                    iconCharField: 'iconChar',
+                    iconColorField: 'color',
+                    rpc: this._app.rpc,
+                    facadeFnLoad: 'colors.load',
+                    autoLoad: true,
+                    showCheckBoxes: false,
+                    value: ['#0f0', '#ff0'],
+                    minSelectCount: 2,
+                    maxSelectCount: 3
                 }
             ]
         });

@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Text = class sc_Field_Text {
+sc.field_DateTime = class sc_field_DateTime {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Text = class sc_Field_Text {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Text',
+            caption: 'kijs.gui.field.DateTime',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,6 +43,7 @@ sc.Field_Text = class sc_Field_Text {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
+                    value: 1,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -100,25 +101,6 @@ sc.Field_Text = class sc_Field_Text {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -158,16 +140,20 @@ sc.Field_Text = class sc_Field_Text {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Text'
+                    xtype: 'kijs.gui.field.DateTime'
                 },
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    html: 'mode: \'date\'',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Label',
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Datum',
+                    mode: 'date',
+                    date: new Date(),
+                    minValue: kijs.Date.addDays(new Date(), -15),
+                    maxValue: kijs.Date.addDays(new Date(), 15),
                     on: {
                         focus:  console.log,
                      
@@ -182,6 +168,76 @@ sc.Field_Text = class sc_Field_Text {
 
                         context: this
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'mode: \'dateTime\'',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Datum & Zeit & Sec',
+                    mode: 'dateTime',
+                    minutesHide: false,
+                    secondsHide: false,
+                    timeRequired: true,
+                    date: new Date(),
+                    minValue: kijs.Date.addDays(new Date(), -15),
+                    maxValue: kijs.Date.addDays(new Date(), 15)
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Datum & Zeit',
+                    mode: 'dateTime',
+                    minutesHide: false,
+                    secondsHide: true,
+                    timeRequired: false
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Datum & Stunden',
+                    mode: 'dateTime',
+                    minutesHide: true,
+                    secondsHide: true,
+                    timeRequired: false,
+                    date: new Date()
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'mode: \'time\'',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Uhrzeit',
+                    mode: 'time',
+                    value: '13'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'mode: \'week\'',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    label: 'Woche',
+                    mode: 'week'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'mode: \'range\'',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    name: 'rangeStart',
+                    nameEnd: 'rangeEnd',
+                    label: 'von/bis',
+                    mode: 'range'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.MonthPicker<br>kijs.gui.TimePicker<br>kijs.gui.field.Month',
+                    style: { margin: '10px 0 4px 0'}
                 }
             ]
         });

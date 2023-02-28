@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Switch = class sc_Field_Switch {
+sc.field_OptionGroup = class sc_field_OptionGroup {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Switch = class sc_Field_Switch {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Switch',
+            caption: 'kijs.gui.field.OptionGroup',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -140,7 +140,12 @@ sc.Field_Switch = class sc_Field_Switch {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Switch'
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    data: [
+                        { caption: 'Apple', value: 1},
+                        { caption: 'Linux', value: 2},
+                        { caption: 'Windows', value: 3}
+                    ]
                 },
                 
                 {
@@ -148,9 +153,18 @@ sc.Field_Switch = class sc_Field_Switch {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Switch',
+                    xtype: 'kijs.gui.field.OptionGroup',
                     label: 'Label',
-                    caption: 'Caption',
+                    captionField: 'caption',
+                    valueField: 'value',
+                    iconMapField: 'iconMap',
+                    iconColorField: '',
+                    value: 2,
+                    data: [
+                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                    ],
                     on: {
                         focus:  console.log,
                      
@@ -165,6 +179,24 @@ sc.Field_Switch = class sc_Field_Switch {
 
                         context: this
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'inline und mit RPC',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    label: 'OptionGroup Inline',
+                    cls: 'kijs-inline',
+                    valueField: 'color',
+                    captionField: 'Bez',
+                    iconCharField: 'iconChar',
+                    iconColorField: 'color',
+                    rpc: this._app.rpc,
+                    facadeFnLoad: 'colors.load',
+                    autoLoad: true,
+                    value: '#0f0'
                 }
             ]
         });

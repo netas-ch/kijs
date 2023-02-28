@@ -1,0 +1,163 @@
+/* ******************
+   * kijs Default Theme
+   ****************** */
+
+/* LIGHT */
+/* ----- */
+:root {
+    --viewport-bkgrndColor: #f6f6f6;
+    --splitter-overlay-bkgrndColor: #b4b4b4;
+
+    --okColor: #0da100;
+    
+    /* Default */
+    --default-fontFamily: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
+    --default-fontColor: #000;
+    --default-fontSize: 11px;
+
+
+    /* Button */
+    --button-bkgrndColor: #f6f6f6;
+    --button-borderColor: #f6f6f6;
+    --button-fontColor: #000;
+    --button-fontSize: 11px;
+
+    --button-icon-fontColor: #555;
+
+    --button-focus-bkgrndColor: #ddd;
+    --button-focus-borderColor: #ddd;
+    --button-focus-fontColor: #000;
+
+    --button-disabled-fontColor: #888;
+
+
+    /* Toolbox-Button in einer Bar */
+    --bar-button-icon-fontColor: #f0f0f0;
+    --bar-button-icon-disabled-fontColor: #cfcfcf;
+
+
+    /* Button im Panel-Header */
+    --buttonGroup-button-fontColor: #555;
+
+    --buttonGroup-button-bkgrndColor: #f6f6f6;
+    --buttonGroup-button-borderColor: transparent;
+
+    --buttonGroup-button-focus-bkgrndColor: #d2d2d2;
+    --buttonGroup-button-focus-fontColor: #333;
+
+
+    /* Buttons im Panel-Footer */
+    --footer-button-bkgrndColor: #f6f6f6;
+    --footer-button-borderColor: #aaa;
+
+    --footer-button-focus-bkgrndColor: #ccc;
+    --footer-button-focus-borderColor: #aaa;
+
+    --footer-button-disabled-bkgrndColor: #f6f6f6;
+    --footer-button-disabled-borderColor: #aaa;
+
+
+    /* Buttons im Window-Footer */
+    --window-footer-button-bkgrndColor: #38393a;
+    --window-footer-button-borderColor: #38393a;
+    --window-footer-button-fontColor: #333;
+
+    --window-footer-button-focus-fontColor: #000;
+
+
+    /* Badge */
+    --badge-bkgrndColor: #f4aa56;
+    --badge-fontColor: #000;
+    --badge-fontSize: 10px;
+    --badge-lineHeight: 14px;
+    --badge-disabled-bkgrndColor: #bdbcbc;
+    --badge-disabled-fontColor: #888;
+
+
+    /* Panel */
+    --panel-bkgrndColor: #fff;
+    --panel-borderColor: #d2d2d2;
+
+
+    /* Bar */
+    --bar-fontColor: #fff;
+    --bar-bkgrndColor: #4398dd;
+
+    --headerBar-fontSize: 14px;
+    --footerBar-fontSize: 11px;
+
+
+    /* MsgBox */
+    --msgbox-fontColor: #000;
+    --msgbox-fontSize: 12px;
+
+
+    /* Field */
+    --field-fontSize: 12px;
+    --field-fontColor: #000;
+    --field-bkgrndColor: #fff;
+    --field-borderColor: #aaa;
+    --field-focus-borderColor: #38393a;
+    --field-label-fontColor: #000;
+    
+    --field-item-bkgrndColor: #555;
+    --field-item-focus-bkgrndColor: #38393a;
+
+    --field-disabled-bkgrndColor: #efefef;
+    --field-disabled-fontColor: #888;
+
+    --field-error-bkgrndColor: #ffdaec;
+
+    /* Range */
+    --range-bkgrndColor: #aaa;
+    --range-btnColor: #555;
+
+    /* Item */
+    --item-bkgrndColor: #fff;
+    --item-borderColor: #f6f6f6;
+    --item-fontColor: #000;
+    --item-fontSize: 11px;
+
+    --item-focus-bkgrndColor: #f6f6f6;
+    --item-focus-borderColor: #f6f6f6;
+    --item-focus-fontColor: #000;
+
+    --item-selected-bkgrndColor: #d9ecfc;
+    --item-selected-borderColor: #38393a;
+    --item-selected-fontColor: #000;
+
+    --item-disabled-bkgrndColor: #efefef;
+    --item-disabled-borderColor: #dcdcdc;
+    --item-disabled-fontColor: #000;
+
+    --item-selected-disabled-bkgrndColor: #efefef;
+    --item-selected-disabled-borderColor: #aaa;
+    --item-selected-disabled-fontColor: #000;
+
+    --item-label-fontColor: #888;
+    --item-label-disabled-fontColor: #888;
+    --item-label-fontSize: 10px;
+
+    /* Clock */
+    --clock-bkgrndColor: #f6f6f6;
+    --clock-fontColor: #000;
+    --clock-pointer-bkgrndColor: #d9e7fd;
+
+    /* Help/Error Icon */
+    --icon-error-bkgrndColor: #F3E2EB;
+    --icon-error-borderColor: #BE6280;
+    --icon-error-fontColor: #BE6280;
+
+    --icon-help-bkgrndColor: #DCE6EF;
+    --icon-help-borderColor: #6295BE;
+    --icon-help-fontColor: #6295BE;
+
+
+    /* Drag & Drop */
+    --dragover-ok-borderColor: #f4aa56;
+    --dragover-forbidden-borderColor: #FB4F42;
+
+    /* Grid */
+    --grid-header-bkgrndColor: #f6f6f6;
+    --grid-border-color: #eee;
+}

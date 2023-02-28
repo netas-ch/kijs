@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Combo = class sc_Field_Combo {
+sc.field_CheckboxGroup = class sc_field_CheckboxGroup {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Combo = class sc_Field_Combo {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Combo',
+            caption: 'kijs.gui.field.CheckboxGroup',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,6 +43,7 @@ sc.Field_Combo = class sc_Field_Combo {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
+                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -101,11 +102,10 @@ sc.Field_Combo = class sc_Field_Combo {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'spinIconVisible',
-                    value: true,
+                    caption: 'checkedAll',
                     on: {
                         change: function(e) {
-                            this._updateProperty('spinIconVisible', e.element.value);
+                            this._updateProperty('checkedAll', e.element.value);
                         },
                         context: this
                     }
@@ -149,7 +149,7 @@ sc.Field_Combo = class sc_Field_Combo {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Combo',
+                    xtype: 'kijs.gui.field.CheckboxGroup',
                     data: [
                         { caption: 'Apple', value: 1},
                         { caption: 'Linux', value: 2},
@@ -162,13 +162,14 @@ sc.Field_Combo = class sc_Field_Combo {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Combo',
+                    xtype: 'kijs.gui.field.CheckboxGroup',
                     label: 'Label',
                     captionField: 'caption',
                     valueField: 'value',
                     iconMapField: 'iconMap',
                     iconColorField: '',
-                    value: 2,
+                    value: [2,3],
+                    //checkedAll: true,
                     data: [
                         { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
@@ -192,34 +193,9 @@ sc.Field_Combo = class sc_Field_Combo {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'RPC',
+                    html: 'inline und mit RPC',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'Server Sort',
-                    facadeFnLoad: 'combo.load',
-                    rpc: this._app.rpc,
-                    autoLoad: true,
-                    remoteSort: true
-                },{
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'Local Sort',
-                    facadeFnLoad: 'combo.load',
-                    rpc: this._app.rpc,
-                    autoLoad: true,
-                    remoteSort: false
-                },{
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'Kein Force',
-                    facadeFnLoad: 'combo.load',
-                    autoLoad: true,
-                    remoteSort: true,
-                    rpc: this._app.rpc,
-                    forceSelection: false,
-                    showPlaceholder: false
-                }/*,
-                                        
-                {
                     xtype: 'kijs.gui.field.CheckboxGroup',
                     label: 'CheckboxGroup Inline',
                     cls: 'kijs-inline',
@@ -232,7 +208,7 @@ sc.Field_Combo = class sc_Field_Combo {
                     facadeFnLoad: 'colors.load',
                     autoLoad: true,
                     value: ['#0f0', '#ff0']
-                }*/
+                }
             ]
         });
         

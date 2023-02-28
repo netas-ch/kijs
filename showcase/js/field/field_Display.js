@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Number = class sc_Field_Number {
+sc.field_Display = class sc_field_Display {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Number = class sc_Field_Number {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Number',
+            caption: 'kijs.gui.field.Display',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -110,15 +110,6 @@ sc.Field_Number = class sc_Field_Number {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -158,7 +149,8 @@ sc.Field_Number = class sc_Field_Number {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Number'
+                    xtype: 'kijs.gui.field.Display',
+                    value: 'meinText'
                 },
                 
                 {
@@ -166,15 +158,11 @@ sc.Field_Number = class sc_Field_Number {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Number',
+                    xtype: 'kijs.gui.field.Display',
                     label: 'Label',
-                    //allowDecimals: false,
-                    alwaysDisplayDecimals: true,
-                    //decimalPrecision: 4,
-                    //decimalSeparator: ',',
-                    minValue:0,
-                    maxValue:100,
-                    thousandsSeparator: '\'',
+                    value: 'mein <b>fetter</b> Text',
+                    htmlDisplayType: 'html',
+                    link: false,
                     on: {
                         focus:  console.log,
                      
@@ -189,6 +177,11 @@ sc.Field_Number = class sc_Field_Number {
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Hyperlink',
+                    value: 'https://www.netas.ch',
+                    link: true
                 }
             ]
         });

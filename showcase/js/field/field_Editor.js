@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Phone = class sc_Field_Phone {
+sc.field_Editor = class sc_field_Editor {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Phone = class sc_Field_Phone {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Phone',
+            caption: 'kijs.gui.field.Editor',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -100,25 +100,6 @@ sc.Field_Phone = class sc_Field_Phone {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -158,7 +139,7 @@ sc.Field_Phone = class sc_Field_Phone {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Phone'
+                    xtype: 'kijs.gui.field.Editor'
                 },
                 
                 {
@@ -166,12 +147,12 @@ sc.Field_Phone = class sc_Field_Phone {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Phone',
+                    xtype: 'kijs.gui.field.Editor',
                     label: 'Label',
-                    defaultCountryCallingCode: '+41',
-                    //formatValue: false,
-                    //replaceLeadingZeros: false,
-                    showLinkButton: true,
+                    mode: 'javascript',
+                    //theme: 'monokai',
+                    value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
+                    height: 100,
                     on: {
                         focus:  console.log,
                      

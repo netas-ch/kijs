@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_ListView = class sc_Field_ListView {
+sc.field_Phone = class sc_field_Phone {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_ListView = class sc_Field_ListView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.ListView',
+            caption: 'kijs.gui.field.Phone',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -100,23 +100,21 @@ sc.Field_ListView = class sc_Field_ListView {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'selectType',
-                    cls: 'kijs-inline',
-                    valueField: 'id',
-                    captionField: 'id',
-                    required: true,
-                    data: [
-                        {id:'none' },
-                        {id:'single' },
-                        {id:'multi' },
-                        {id:'simple' }
-                    ],
-                    value: 'single',
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'valueTrim',
+                    value: true,
                     on: {
-                        input: function(e) {
-                            this._updateProperty('value', null);
-                            this._updateProperty('selectType', e.value);
+                        change: function(e) {
+                            this._updateProperty('valueTrim', e.element.value);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'placeholder',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
                         },
                         context: this
                     }
@@ -160,14 +158,7 @@ sc.Field_ListView = class sc_Field_ListView {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.ListView',
-                    valueField: 'value',
-                    captionField: 'caption',
-                    data: [
-                        { caption: 'Apple', value: 1},
-                        { caption: 'Linux', value: 2},
-                        { caption: 'Windows', value: 3}
-                    ]
+                    xtype: 'kijs.gui.field.Phone'
                 },
                 
                 {
@@ -175,19 +166,12 @@ sc.Field_ListView = class sc_Field_ListView {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.ListView',
+                    xtype: 'kijs.gui.field.Phone',
                     label: 'Label',
-                    captionField: 'caption',
-                    valueField: 'value',
-                    iconMapField: 'iconMap',
-                    iconColorField: '',
-                    value: 2,
-                    //showCheckBoxes: true,
-                    data: [
-                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
-                    ],
+                    defaultCountryCallingCode: '+41',
+                    //formatValue: false,
+                    //replaceLeadingZeros: false,
+                    showLinkButton: true,
                     on: {
                         focus:  console.log,
                      
@@ -202,27 +186,6 @@ sc.Field_ListView = class sc_Field_ListView {
 
                         context: this
                     }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'inline und mit RPC',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.ListView',
-                    label: 'ListView remote',
-                    valueField: 'color',
-                    //checkedAll: true,
-                    captionField: 'Bez',
-                    iconCharField: 'iconChar',
-                    iconColorField: 'color',
-                    rpc: this._app.rpc,
-                    facadeFnLoad: 'colors.load',
-                    autoLoad: true,
-                    showCheckBoxes: false,
-                    value: ['#0f0', '#ff0'],
-                    minSelectCount: 2,
-                    maxSelectCount: 3
                 }
             ]
         });

@@ -70,15 +70,16 @@
     /* Default */
     --default-fontFamily: 'Roboto', sans-serif;
     --default-fontColor: var(--grey9);
-    --default-fontSize: 11px;
-    --default-lineHeight: 14px;
+    --default-fontSize: 12px;
+    --default-lineHeight: 13px;
 
 
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: var(--grey2);
     --button-fontColor: var(--grey9);
-    --button-fontSize: 11px;
+    --button-fontSize: 12px;
+    --button-lineHeight: 13px;
 
     --button-icon-fontColor: var(--grey8);
 
@@ -127,7 +128,7 @@
     --badge-bkgrndColor: var(--accentColor3);
     --badge-fontColor: var(--grey9);
     --badge-fontSize: 10px;
-    --badge-lineHeight: 14px;
+    --badge-lineHeight: 13px;
     --badge-disabled-bkgrndColor: var(--grey5);
     --badge-disabled-fontColor: var(--grey7);
 
@@ -142,13 +143,13 @@
     --bar-bkgrndColor: var(--accentColor);
 
     --headerBar-fontSize: 14px;
-    --footerBar-fontSize: 11px;
+    --footerBar-fontSize: 12px;
 
 
     /* MsgBox */
     --msgbox-fontColor: var(--grey9);
     --msgbox-fontSize: 12px;
-    --msgbox-lineHeight: 14px;
+    --msgbox-lineHeight: 13px;
 
 
     /* Field */
@@ -176,7 +177,8 @@
     --item-bkgrndColor: var(--grey1);
     --item-borderColor: var(--grey2);
     --item-fontColor: var(--grey9);
-    --item-fontSize: 11px;
+    --item-fontSize: 12px;
+    --item-lineHeight: 13px;
 
     --item-focus-bkgrndColor: var(--grey2);
     --item-focus-borderColor: var(--grey2);

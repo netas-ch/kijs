@@ -3,7 +3,7 @@
 // --------------------------------------------------------------
 // kijs.gui.Toolbar
 // --------------------------------------------------------------
-kijs.gui.Toolbar = class kijs_gui_PanelBar extends kijs.gui.Container {
+kijs.gui.Toolbar = class kijs_gui_Toolbar extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------

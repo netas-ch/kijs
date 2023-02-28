@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Memo = class sc_Field_Memo {
+sc.field_Switch = class sc_field_Switch {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Memo = class sc_Field_Memo {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Memo',
+            caption: 'kijs.gui.field.Switch',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,6 +43,7 @@ sc.Field_Memo = class sc_Field_Memo {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
+                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -100,25 +101,6 @@ sc.Field_Memo = class sc_Field_Memo {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -158,7 +140,7 @@ sc.Field_Memo = class sc_Field_Memo {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Memo'
+                    xtype: 'kijs.gui.field.Switch'
                 },
                 
                 {
@@ -166,8 +148,9 @@ sc.Field_Memo = class sc_Field_Memo {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Memo',
+                    xtype: 'kijs.gui.field.Switch',
                     label: 'Label',
+                    caption: 'Caption',
                     on: {
                         focus:  console.log,
                      

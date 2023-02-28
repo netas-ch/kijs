@@ -1,8 +1,8 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Iban = class sc_Field_Iban {
-
+sc.field_Combo = class sc_field_Combo {
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,14 +10,14 @@ sc.Field_Iban = class sc_Field_Iban {
         this._app = config.app;
         this._content = null;
     }
-
-
+    
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Iban',
+            caption: 'kijs.gui.field.Combo',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +25,11 @@ sc.Field_Iban = class sc_Field_Iban {
             innerStyle: {
                 padding: '10px'
             },
-
+            
             headerInnerStyle:{
                 padding: '10px'
             },
-
+            
             headerElements:[
                 {
                     xtype: 'kijs.gui.field.Switch',
@@ -101,30 +101,11 @@ sc.Field_Iban = class sc_Field_Iban {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
+                    caption: 'spinIconVisible',
                     value: true,
                     on: {
                         change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'formatValue',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('formatValue', e.element.value ? true : false);
+                            this._updateProperty('spinIconVisible', e.element.value);
                         },
                         context: this
                     }
@@ -134,19 +115,6 @@ sc.Field_Iban = class sc_Field_Iban {
                     on: {
                         click: function(e) {
                             this._callFunction('validate');
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'value setzen',
-                    on: {
-                        click: function(e) {
-                            kijs.Array.each(this._content.elements, function(el) {
-                                if (el instanceof kijs.gui.field.Field) {
-                                    el.value = 'CH9709000000300097000';
-                                }
-                            }, this);
                         },
                         context: this
                     }
@@ -174,49 +142,108 @@ sc.Field_Iban = class sc_Field_Iban {
                     }
                 }
             ],
-
+            
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Iban'
+                    xtype: 'kijs.gui.field.Combo',
+                    data: [
+                        { caption: 'Apple', value: 1},
+                        { caption: 'Linux', value: 2},
+                        { caption: 'Windows', value: 3}
+                    ]
                 },
-
+                
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Iban',
+                    xtype: 'kijs.gui.field.Combo',
                     label: 'Label',
+                    captionField: 'caption',
+                    valueField: 'value',
+                    iconMapField: 'iconMap',
+                    iconColorField: '',
+                    value: 2,
+                    data: [
+                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                    ],
                     on: {
                         focus:  console.log,
-
+                     
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-
+                        
                         blur:  console.log,
                         input:  console.log,
 
                         context: this
                     }
-                }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'RPC',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.Combo',
+                    label: 'Server Sort',
+                    facadeFnLoad: 'combo.load',
+                    rpc: this._app.rpc,
+                    autoLoad: true,
+                    remoteSort: true
+                },{
+                    xtype: 'kijs.gui.field.Combo',
+                    label: 'Local Sort',
+                    facadeFnLoad: 'combo.load',
+                    rpc: this._app.rpc,
+                    autoLoad: true,
+                    remoteSort: false
+                },{
+                    xtype: 'kijs.gui.field.Combo',
+                    label: 'Kein Force',
+                    facadeFnLoad: 'combo.load',
+                    autoLoad: true,
+                    remoteSort: true,
+                    rpc: this._app.rpc,
+                    forceSelection: false,
+                    showPlaceholder: false
+                }/*,
+                                        
+                {
+                    xtype: 'kijs.gui.field.CheckboxGroup',
+                    label: 'CheckboxGroup Inline',
+                    cls: 'kijs-inline',
+                    valueField: 'color',
+                    //checkedAll: true,
+                    captionField: 'Bez',
+                    iconCharField: 'iconChar',
+                    iconColorField: 'color',
+                    rpc: this._app.rpc,
+                    facadeFnLoad: 'colors.load',
+                    autoLoad: true,
+                    value: ['#0f0', '#ff0']
+                }*/
             ]
         });
-
+        
         return this._content;
     }
-
+    
     run() {
 
     }
-
-
+    
+    
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -225,7 +252,7 @@ sc.Field_Iban = class sc_Field_Iban {
             }
         }, this);
     }
-
+    
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -233,9 +260,9 @@ sc.Field_Iban = class sc_Field_Iban {
             }
         }, this);
     }
-
-
-
+    
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

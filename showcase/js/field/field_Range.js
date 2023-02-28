@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Email = class sc_Field_Email {
+sc.field_Range = class sc_field_Range {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Email = class sc_Field_Email {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Email',
+            caption: 'kijs.gui.field.Range',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,6 +43,7 @@ sc.Field_Email = class sc_Field_Email {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
+                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -100,25 +101,6 @@ sc.Field_Email = class sc_Field_Email {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'placeholder',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -158,7 +140,7 @@ sc.Field_Email = class sc_Field_Email {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Email'
+                    xtype: 'kijs.gui.field.Range'
                 },
                 
                 {
@@ -166,9 +148,11 @@ sc.Field_Email = class sc_Field_Email {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Email',
+                    xtype: 'kijs.gui.field.Range',
                     label: 'Label',
-                    showLinkButton: true,
+                    min: 10,
+                    max: 90,
+                    step: 5,
                     on: {
                         focus:  console.log,
                      

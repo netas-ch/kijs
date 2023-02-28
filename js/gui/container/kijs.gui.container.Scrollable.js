@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.ContainerScrollable
+// kijs.gui.container.Scrollable
 // --------------------------------------------------------------
 /**
  * Wie kijs.gui.Container, jedoch werden anstelle von Scrollbars Scroll-Buttons angezeigt.
@@ -40,7 +40,7 @@
  * ----------
  * 
  */
-kijs.gui.ContainerScrollable = class kijs_gui_ContainerScrollable extends kijs.gui.Container {
+kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -130,7 +130,7 @@ kijs.gui.ContainerScrollable = class kijs_gui_ContainerScrollable extends kijs.g
         });
         
         this._dom.clsRemove('kijs-container');
-        this._dom.clsAdd('kijs-containerscrollable');
+        this._dom.clsAdd('kijs-container-scrollable');
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -576,6 +576,10 @@ kijs.gui.ContainerScrollable = class kijs_gui_ContainerScrollable extends kijs.g
     
     // Schaltflächen aktivieren/dekativieren
     _updateButtons() {
+        if (!this._innerDom) {
+            return;
+        }
+        
         if (this._innerDom.node.scrollTop <= 0) {
             this._btnUpDom.clsAdd('kijs-disabled');
         } else {

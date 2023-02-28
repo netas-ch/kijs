@@ -1,8 +1,8 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Range = class sc_Field_Range {
-    
+sc.field_Iban = class sc_field_Iban {
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,14 +10,14 @@ sc.Field_Range = class sc_Field_Range {
         this._app = config.app;
         this._content = null;
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Range',
+            caption: 'kijs.gui.field.Iban',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +25,11 @@ sc.Field_Range = class sc_Field_Range {
             innerStyle: {
                 padding: '10px'
             },
-            
+
             headerInnerStyle:{
                 padding: '10px'
             },
-            
+
             headerElements:[
                 {
                     xtype: 'kijs.gui.field.Switch',
@@ -43,7 +43,6 @@ sc.Field_Range = class sc_Field_Range {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
-                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -101,11 +100,53 @@ sc.Field_Range = class sc_Field_Range {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'valueTrim',
+                    value: true,
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('valueTrim', e.element.value);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'placeholder',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'formatValue',
+                    value: true,
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('formatValue', e.element.value ? true : false);
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
                         click: function(e) {
                             this._callFunction('validate');
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'value setzen',
+                    on: {
+                        click: function(e) {
+                            kijs.Array.each(this._content.elements, function(el) {
+                                if (el instanceof kijs.gui.field.Field) {
+                                    el.value = 'CH9709000000300097000';
+                                }
+                            }, this);
                         },
                         context: this
                     }
@@ -133,35 +174,32 @@ sc.Field_Range = class sc_Field_Range {
                     }
                 }
             ],
-            
+
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Range'
+                    xtype: 'kijs.gui.field.Iban'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Range',
+                    xtype: 'kijs.gui.field.Iban',
                     label: 'Label',
-                    min: 10,
-                    max: 90,
-                    step: 5,
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         input:  console.log,
 
@@ -170,15 +208,15 @@ sc.Field_Range = class sc_Field_Range {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -187,7 +225,7 @@ sc.Field_Range = class sc_Field_Range {
             }
         }, this);
     }
-    
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -195,9 +233,9 @@ sc.Field_Range = class sc_Field_Range {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

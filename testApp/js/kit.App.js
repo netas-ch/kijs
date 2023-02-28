@@ -182,8 +182,9 @@ kit.App = class kit_App {
                             cls: 'kijs-flexcolumn',
                             elements:[
                                 {
-                                    xtype: 'kijs.gui.ContainerStack',
+                                    xtype: 'kijs.gui.container.Stack',
                                     name: 'testcontainerstack',
+                                    style: { flex: 1 },
                                     elements: [
                                         {
                                             xtype: 'kijs.gui.Panel',
@@ -228,7 +229,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_2');
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_2');
                                                         }
                                                     }
                                                 }
@@ -252,7 +253,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'fade');
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_1', 'fade');
                                                         }
                                                     }
                                                 },{
@@ -263,7 +264,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
                                                         }
                                                     }
                                                 },{
@@ -274,7 +275,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideRight');
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_1', 'slideRight');
                                                         }
                                                     }
                                                 },{
@@ -285,7 +286,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideTop');
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_1', 'slideTop');
                                                         }
                                                     }
                                                 },{
@@ -296,7 +297,7 @@ kit.App = class kit_App {
                                                     on: {
                                                         click: function() {
                                                             let testcontainerstack = this.up('testcontainerstack');
-                                                            testcontainerstack.activateAnimated('testcontainerstackpanel_1', 'slideBottom');
+                                                            testcontainerstack.setCurrentAnimated('testcontainerstackpanel_1', 'slideBottom');
                                                         }
                                                     }
                                                 },{
@@ -330,7 +331,7 @@ kit.App = class kit_App {
                                                                     }
                                                                 }]
                                                             }, 0);
-                                                            testcontainerstack.activateAnimated('addedpanel', 'fade');
+                                                            testcontainerstack.setCurrentAnimated('addedpanel', 'fade');
                                                         }
                                                     }
                                                 }

@@ -1,5 +1,9 @@
 /* global kijs, this, HTMLElement */
 
+// TODO: Sollte von kijs.gui.Mask erben? // Namen wäre dann kijs.gui.mask.Aperture?
+// Info: In Ext heisst dieses Element Ext.ux.Spotlight
+
+
 // --------------------------------------------------------------
 // kijs.gui.ApertureMask
 // --------------------------------------------------------------

@@ -1,5 +1,7 @@
 /* global kijs, this */
 
+// TODO: Funktion load() zum laden der Elements via RPC
+
 // --------------------------------------------------------------
 // kijs.gui.Container
 // --------------------------------------------------------------

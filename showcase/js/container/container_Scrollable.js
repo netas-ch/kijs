@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.ContainerScrollable = class sc_ContainerScrollable {
+sc.container_Scrollable = class sc_container_Scrollable {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.ContainerScrollable = class sc_ContainerScrollable {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.ContainerScrollable',
+            caption: 'kijs.gui.container.Scrollable',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -36,7 +36,7 @@ sc.ContainerScrollable = class sc_ContainerScrollable {
                     html: 'scrollableX=true',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.ContainerScrollable',
+                    xtype: 'kijs.gui.container.Scrollable',
                     scrollableX: true,
                     innerStyle: {
                         border: '1px solid #333',
@@ -64,7 +64,7 @@ sc.ContainerScrollable = class sc_ContainerScrollable {
                     html: 'scrollableX="auto" (click on buttons to make them wider/smaller)',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.ContainerScrollable',
+                    xtype: 'kijs.gui.container.Scrollable',
                     scrollableX: 'auto',
                     style: {
                         maxWidth: '500px',
@@ -99,7 +99,7 @@ sc.ContainerScrollable = class sc_ContainerScrollable {
                     html: 'scrollableY=true',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.ContainerScrollable',
+                    xtype: 'kijs.gui.container.Scrollable',
                     scrollableY: true,
                     width: 200,
                     height: 200,
@@ -140,7 +140,7 @@ sc.ContainerScrollable = class sc_ContainerScrollable {
                     },
                     elements:[
                         {
-                            xtype: 'kijs.gui.ContainerScrollable',
+                            xtype: 'kijs.gui.container.Scrollable',
                             html: '<div style="width:800px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>',
                             scrollableX: 'auto',
                             scrollableY: 'auto',

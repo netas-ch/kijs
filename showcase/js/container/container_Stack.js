@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.ContainerStack = class sc_ContainerStack {
+sc.container_Stack = class sc_container_Stack {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,18 +17,88 @@ sc.ContainerStack = class sc_ContainerStack {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.ContainerStack',
-            cls: 'kijs-flexcolumn',
+            caption: 'kijs.gui.container.Stack',
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
             innerStyle: {
                 padding: '10px'
             },
+            
+            headerInnerStyle:{
+                padding: '10px 10px 0 10px'
+            },
+            
             elements:[
                 {
-                    xtype: 'kijs.gui.ContainerStack',
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Wizard',
+                    cls: 'kijs-flexcolumn',
+                    height: 200,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.container.Stack',
+                            cls: 'kijs-flexcolumn',
+                            style: { flex: 1 },
+                            currentName: 's3',
+                            defaults:{
+                                xtype: 'kijs.gui.Container',
+                                innerStyle: { padding:'10px' }
+                            },
+                            elements: [
+                                { name: 's1', html:'Seite 1', style:{backgroundColor:'#f99'} },
+                                { name: 's2', html:'Seite 2', style:{backgroundColor:'#9f9'} },
+                                { name: 's3', html:'Seite 3', style:{backgroundColor:'#99f'} },
+                                { name: 's4', html:'Seite 4', style:{backgroundColor:'#ff9'} },
+                                { name: 's5', html:'Seite 5', style:{backgroundColor:'#9ff'} }
+                            ]
+                        }
+                    ],
+                    footerElements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'zurück',
+                            iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    let i = cStack.currentIndex;
+                                    i--;
+                                    if (i < 0) {
+                                        i = cStack.elements.length - 1;
+                                    }
+                                    cStack.setCurrentAnimated(i, 'slideRight').then((e) => {
+                                        console.log(e);
+                                    });
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'weiter',
+                            iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    let i = cStack.currentIndex;
+                                    i++;
+                                    if (i >= cStack.elements.length) {
+                                        i = 0;
+                                    }
+                                    cStack.setCurrentAnimated(i, 'slideLeft').then((e) => {
+                                        console.log(e);
+                                    });
+                                }
+                            }
+                        }
+                    ]
+                },
+                
+                {
+                    xtype: 'kijs.gui.container.Stack',
                     name: 'testcontainerstack',
+                    height: 200,
+                    style: { marginTop: '10px', border: '1px solid #333' },
                     elements: [
                         {
                             xtype: 'kijs.gui.Panel',
@@ -52,7 +122,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_2');
+                                            el.setCurrentAnimated('testcontainerstackpanel_2');
                                         }
                                     }
                                 }
@@ -76,7 +146,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_1', 'fade');
+                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'fade');
                                         }
                                     }
                                 },{
@@ -87,7 +157,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
+                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
                                         }
                                     }
                                 },{
@@ -98,7 +168,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_1', 'slideRight');
+                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideRight');
                                         }
                                     }
                                 },{
@@ -109,7 +179,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_1', 'slideTop');
+                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideTop');
                                         }
                                     }
                                 },{
@@ -120,7 +190,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                     on: {
                                         click: function() {
                                             const el = this.up('testcontainerstack');
-                                            el.activateAnimated('testcontainerstackpanel_1', 'slideBottom');
+                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideBottom');
                                         }
                                     }
                                 },{
@@ -154,7 +224,7 @@ sc.ContainerStack = class sc_ContainerStack {
                                                     }
                                                 }]
                                             }, 0);
-                                            el.activateAnimated('addedpanel', 'fade');
+                                            el.setCurrentAnimated('addedpanel', 'fade');
                                         }
                                     }
                                 }
@@ -169,7 +239,7 @@ sc.ContainerStack = class sc_ContainerStack {
     }
     
     run() {
-
+        
     }
 
 

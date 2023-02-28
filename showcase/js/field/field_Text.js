@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_OptionGroup = class sc_Field_OptionGroup {
+sc.field_Text = class sc_field_Text {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.OptionGroup',
+            caption: 'kijs.gui.field.Text',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,7 +43,6 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
-                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -101,6 +100,25 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'valueTrim',
+                    value: true,
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('valueTrim', e.element.value);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'placeholder',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -140,12 +158,7 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    data: [
-                        { caption: 'Apple', value: 1},
-                        { caption: 'Linux', value: 2},
-                        { caption: 'Windows', value: 3}
-                    ]
+                    xtype: 'kijs.gui.field.Text'
                 },
                 
                 {
@@ -153,18 +166,8 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.OptionGroup',
+                    xtype: 'kijs.gui.field.Text',
                     label: 'Label',
-                    captionField: 'caption',
-                    valueField: 'value',
-                    iconMapField: 'iconMap',
-                    iconColorField: '',
-                    value: 2,
-                    data: [
-                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
-                    ],
                     on: {
                         focus:  console.log,
                      
@@ -179,24 +182,6 @@ sc.Field_OptionGroup = class sc_Field_OptionGroup {
 
                         context: this
                     }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'inline und mit RPC',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'OptionGroup Inline',
-                    cls: 'kijs-inline',
-                    valueField: 'color',
-                    captionField: 'Bez',
-                    iconCharField: 'iconChar',
-                    iconColorField: 'color',
-                    rpc: this._app.rpc,
-                    facadeFnLoad: 'colors.load',
-                    autoLoad: true,
-                    value: '#0f0'
                 }
             ]
         });

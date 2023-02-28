@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Checkbox = class sc_Field_Checkbox {
+sc.field_Checkbox = class sc_field_Checkbox {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

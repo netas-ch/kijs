@@ -2,6 +2,15 @@
    * kijs GUI Style
    ****************** */
 
+/* TODO: Gross-/Kleinschreibung verwenden. Es würde so besser lesbar und würde
+         besser mit den JavaScript Bezeichnungen übereinstimmen.
+         Beispiel: div.kijs-containerscrollable --> dann div.kijs-containerScrollable
+
+         Regeln:
+         1. Bezeichnung möglichst gleich wie in Javascript
+         2. . durch - ersetzen
+*/
+
 
 /* ******************
    * Roboto (http://fontfacekit.github.io/roboto/)
@@ -222,9 +231,9 @@ div.kijs-container-inner {
 }
 
 /* ******************
-   * ContainerScrollable
+   * Container Scrollable
    ****************** */
-div.kijs-containerscrollable {
+div.kijs-container-scrollable {
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
@@ -336,27 +345,30 @@ div.kijs-containerscrollable {
 }
 
 
-
-
-
 /* ******************
-   * ContainerStack
+   * Container Stack
    ****************** */
-div.kijs-container.kijs-containerstack {
-    flex: 1;
-
+div.kijs-container-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    font-family: var(--default-fontFamily);
+    color: var(--default-fontColor);
+    
     > .kijs-container-inner {
-        height: 100%;
-        overflow: hidden;
-
-        .kijs-containerstack-element {
+        position: relative;
+        flex: 1 1 auto;
+        font-family: var(--default-fontFamily);
+        color: var(--default-fontColor);
+        -webkit-user-select: none;  /* Safari */
+        user-select: none;
+        -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
+        
+        > * {
             position: absolute;
             width: 100%;
             height: 100%;
-            background-color: var(--panel-bkgrndColor);
-            display: flex;
-            flex-direction: column;
-
+            
             &.kijs-animation-fade {
                 animation: kijs-containerstack-fade 1s;
             }
@@ -875,6 +887,7 @@ button.kijs-button {
     > .kijs-caption {
         font-family: var(--default-fontFamily);
         font-size: var(--button-fontSize);
+        line-height: var(--button-lineHeight);
         color: var(--button-fontColor);
     }
 
@@ -1388,11 +1401,13 @@ div.kijs-dataview {
 
         font-family: var(--default-fontFamily);
         font-size: var(--item-fontSize);
+        line-height: var(--item-lineHeight);
         color: var(--item-fontColor);
 
         * {
             font-family: var(--default-fontFamily);
             font-size: var(--item-fontSize);
+            line-height: var(--item-lineHeight);
             color: var(--item-fontColor);
         }
         &:focus,

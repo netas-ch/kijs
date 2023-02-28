@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Editor = class sc_Field_Editor {
+sc.field_Memo = class sc_field_Memo {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Editor = class sc_Field_Editor {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Editor',
+            caption: 'kijs.gui.field.Memo',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -100,6 +100,25 @@ sc.Field_Editor = class sc_Field_Editor {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'valueTrim',
+                    value: true,
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('valueTrim', e.element.value);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'placeholder',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -139,7 +158,7 @@ sc.Field_Editor = class sc_Field_Editor {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Editor'
+                    xtype: 'kijs.gui.field.Memo'
                 },
                 
                 {
@@ -147,12 +166,8 @@ sc.Field_Editor = class sc_Field_Editor {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Editor',
+                    xtype: 'kijs.gui.field.Memo',
                     label: 'Label',
-                    mode: 'javascript',
-                    //theme: 'monokai',
-                    value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
-                    height: 100,
                     on: {
                         focus:  console.log,
                      

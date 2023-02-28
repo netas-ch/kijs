@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Color = class sc_Field_Color {
+sc.field_Password = class sc_field_Password {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Color = class sc_Field_Color {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Color',
+            caption: 'kijs.gui.field.Password',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,7 +43,6 @@ sc.Field_Color = class sc_Field_Color {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
-                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -101,6 +100,24 @@ sc.Field_Color = class sc_Field_Color {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'valueTrim',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('valueTrim', e.element.value);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Switch',
+                    caption: 'placeholder',
+                    on: {
+                        change: function(e) {
+                            this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -140,7 +157,7 @@ sc.Field_Color = class sc_Field_Color {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Color'
+                    xtype: 'kijs.gui.field.Password'
                 },
                 
                 {
@@ -148,9 +165,9 @@ sc.Field_Color = class sc_Field_Color {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Color',
+                    xtype: 'kijs.gui.field.Password',
                     label: 'Label',
-                    value: 'rgb(0, 0, 255)',
+                    disableBrowserSecurityWarning: 'auto',
                     on: {
                         focus:  console.log,
                      

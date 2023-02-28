@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Month = class sc_Field_Month {
+sc.field_Month = class sc_field_Month {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

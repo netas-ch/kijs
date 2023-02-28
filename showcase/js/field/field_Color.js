@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.sc = {};
-sc.Field_Display = class sc_Field_Display {
+sc.field_Color = class sc_field_Color {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.Field_Display = class sc_Field_Display {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Display',
+            caption: 'kijs.gui.field.Color',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -43,6 +43,7 @@ sc.Field_Display = class sc_Field_Display {
                 },{
                     xtype: 'kijs.gui.field.Switch',
                     caption: 'disableFlex',
+                    value: true,
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -100,16 +101,6 @@ sc.Field_Display = class sc_Field_Display {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.field.Switch',
-                    caption: 'valueTrim',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('valueTrim', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Validate',
                     on: {
@@ -149,8 +140,7 @@ sc.Field_Display = class sc_Field_Display {
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Display',
-                    value: 'meinText'
+                    xtype: 'kijs.gui.field.Color'
                 },
                 
                 {
@@ -158,11 +148,9 @@ sc.Field_Display = class sc_Field_Display {
                     html: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.field.Display',
+                    xtype: 'kijs.gui.field.Color',
                     label: 'Label',
-                    value: 'mein <b>fetter</b> Text',
-                    htmlDisplayType: 'html',
-                    link: false,
+                    value: 'rgb(0, 0, 255)',
                     on: {
                         focus:  console.log,
                      
@@ -177,11 +165,6 @@ sc.Field_Display = class sc_Field_Display {
 
                         context: this
                     }
-                },{
-                    xtype: 'kijs.gui.field.Display',
-                    label: 'Hyperlink',
-                    value: 'https://www.netas.ch',
-                    link: true
                 }
             ]
         });

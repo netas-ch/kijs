@@ -2,162 +2,238 @@
    * kijs Default Theme
    ****************** */
 
-/* LIGHT */
-/* ----- */
-:root {
-    --viewport-bkgrndColor: #f6f6f6;
-    --splitter-overlay-bkgrndColor: #b4b4b4;
 
+/* LIGHT Farbeschema*/
+/* ---------------- */
+:root {
+    --accentColor: #1f90f2;
+    --accentColor2: #d9ecfc;
+    --accentColor3: #ff9900;
+    
+    --errorColor: #c23c45;
+    --errorColorLight: #f4d9d9;
+
+    --helpColor: #1f90f2;
+    --helpColorLight: #d9ecfc;
+
+    --okColor: #61c259;
+    
+    --grey0: #fff;
+    --grey1: #fff;
+    --grey2: #f6f6f6;
+    --grey3: #efefef;
+    --grey4: #ddd;
+    --grey5: #ccc;
+    --grey6: #aaa;
+    --grey7: #888;
+    --grey8: #555;
+    --grey9: #000;
+}
+
+
+/* DARK Farbeschema*/
+/* --------------- */
+:root[data-theme='dark'] {
+    --accentColor: #2299ff;
+    --accentColor2: #2D2D38;
+    --accentColor3: #ff9900;
+    
+    --errorColor: #be6280;
+    --errorColorLight: #6a3446;
+
+    --helpColor: #6295be;
+    --helpColorLight: #405d75;
+    
     --okColor: #0da100;
     
+    --grey0: #000;
+    --grey1: #2d2d2d;
+    --grey2: #333;
+    --grey3: #444;
+    --grey4: #555;
+    --grey5: #666;
+    --grey6: #777;
+    --grey7: #888;
+    --grey8: #bbb;
+    --grey9: #fff;
+}
+
+
+/* Farbzuweisungen */
+/* --------------- */
+:root {
+    /* Farbzuweisungen */
+    --viewport-bkgrndColor: var(--grey2);
+    --splitter-overlay-bkgrndColor: var(--grey5);
+
+
     /* Default */
-    --default-fontFamily: 'Open Sans', 'Helvetica Neue', helvetica, arial, verdana, sans-serif;
-    --default-fontColor: #000;
+    --default-fontFamily: 'Roboto', sans-serif;
+    --default-fontColor: var(--grey9);
     --default-fontSize: 11px;
+    --default-lineHeight: 14px;
 
 
     /* Button */
-    --button-bkgrndColor: #f6f6f6;
-    --button-borderColor: #f6f6f6;
-    --button-fontColor: #000;
+    --button-bkgrndColor: var(--grey2);
+    --button-borderColor: var(--grey2);
+    --button-fontColor: var(--grey9);
     --button-fontSize: 11px;
+    --button-lineHeight: normal;
+    
+    --button-icon-fontColor: var(--grey8);
 
-    --button-icon-fontColor: #555;
+    --button-focus-bkgrndColor: var(--grey4);
+    --button-focus-borderColor: var(--grey4);
+    --button-focus-fontColor: var(--grey9);
 
-    --button-focus-bkgrndColor: #ddd;
-    --button-focus-borderColor: #ddd;
-    --button-focus-fontColor: #000;
-
-    --button-disabled-fontColor: #888;
+    --button-disabled-fontColor: var(--grey7);
 
 
     /* Toolbox-Button in einer Bar */
-    --bar-button-icon-fontColor: #f0f0f0;
-    --bar-button-icon-disabled-fontColor: #cfcfcf;
+    --bar-button-icon-fontColor: var(--grey2);
+    --bar-button-icon-disabled-fontColor: var(--grey5);
 
 
     /* Button im Panel-Header */
-    --buttonGroup-button-fontColor: #555;
+    --buttonGroup-button-fontColor: var(--grey8);
 
-    --buttonGroup-button-bkgrndColor: #f6f6f6;
+    --buttonGroup-button-bkgrndColor: var(--grey2);
     --buttonGroup-button-borderColor: transparent;
 
-    --buttonGroup-button-focus-bkgrndColor: #d2d2d2;
-    --buttonGroup-button-focus-fontColor: #333;
+    --buttonGroup-button-focus-bkgrndColor: var(--grey4);
+    --buttonGroup-button-focus-fontColor: var(--grey9);
 
 
     /* Buttons im Panel-Footer */
-    --footer-button-bkgrndColor: #f6f6f6;
-    --footer-button-borderColor: #aaa;
+    --footer-button-bkgrndColor: var(--grey2);
+    --footer-button-borderColor: var(--grey6);
 
-    --footer-button-focus-bkgrndColor: #ccc;
-    --footer-button-focus-borderColor: #aaa;
+    --footer-button-focus-bkgrndColor: var(--grey4);
+    --footer-button-focus-borderColor: var(--grey6);
 
-    --footer-button-disabled-bkgrndColor: #f6f6f6;
-    --footer-button-disabled-borderColor: #aaa;
+    --footer-button-disabled-bkgrndColor: var(--grey2);
+    --footer-button-disabled-borderColor: var(--grey6);
 
 
     /* Buttons im Window-Footer */
-    --window-footer-button-bkgrndColor: #38393a;
-    --window-footer-button-borderColor: #38393a;
-    --window-footer-button-fontColor: #333;
+    --window-footer-button-bkgrndColor: var(--accentColor);
+    --window-footer-button-borderColor: var(--accentColor);
+    --window-footer-button-fontColor: var(--grey9);
 
-    --window-footer-button-focus-fontColor: #000;
+    --window-footer-button-focus-fontColor: var(--grey9);
 
-
+    
     /* Badge */
-    --badge-bkgrndColor: #f4aa56;
-    --badge-fontColor: #000;
+    --badge-bkgrndColor: var(--accentColor3);
+    --badge-fontColor: var(--grey9);
     --badge-fontSize: 10px;
     --badge-lineHeight: 14px;
-    --badge-disabled-bkgrndColor: #bdbcbc;
-    --badge-disabled-fontColor: #888;
+    --badge-disabled-bkgrndColor: var(--grey5);
+    --badge-disabled-fontColor: var(--grey7);
 
 
     /* Panel */
-    --panel-bkgrndColor: #fff;
-    --panel-borderColor: #d2d2d2;
+    --panel-bkgrndColor: var(--grey1);
+    --panel-borderColor: var(--grey4);
 
 
     /* Bar */
-    --bar-fontColor: #fff;
-    --bar-bkgrndColor: #4398dd;
+    --bar-fontColor: var(--grey0);
+    --bar-bkgrndColor: var(--accentColor);
 
     --headerBar-fontSize: 14px;
     --footerBar-fontSize: 11px;
 
 
     /* MsgBox */
-    --msgbox-fontColor: #000;
+    --msgbox-fontColor: var(--grey9);
     --msgbox-fontSize: 12px;
+    --msgbox-lineHeight: 14px;
 
 
     /* Field */
     --field-fontSize: 12px;
-    --field-fontColor: #000;
-    --field-bkgrndColor: #fff;
-    --field-borderColor: #aaa;
-    --field-focus-borderColor: #38393a;
-    --field-label-fontColor: #000;
+    --field-lineHeight: 13px;
+    --field-fontColor: var(--grey9);
+    --field-bkgrndColor: var(--grey1);
+    --field-borderColor: var(--grey6);
+    --field-focus-borderColor: var(--accentColor);
+    --field-label-fontColor: var(--grey9);
+
+    --field-item-bkgrndColor: var(--grey8);
+    --field-item-focus-bkgrndColor: var(--accentColor);
+
+    --field-disabled-bkgrndColor: var(--grey3);
+    --field-disabled-fontColor: var(--grey7);
+
+    --field-error-bkgrndColor: var(--errorColorLight);
     
-    --field-item-bkgrndColor: #555;
-    --field-item-focus-bkgrndColor: #38393a;
-
-    --field-disabled-bkgrndColor: #efefef;
-    --field-disabled-fontColor: #888;
-
-    --field-error-bkgrndColor: #ffdaec;
-
     /* Range */
-    --range-bkgrndColor: #aaa;
-    --range-btnColor: #555;
+    --range-bkgrndColor: var(--grey6);
+    --range-btnColor: var(--grey8);
 
     /* Item */
-    --item-bkgrndColor: #fff;
-    --item-borderColor: #f6f6f6;
-    --item-fontColor: #000;
+    --item-bkgrndColor: var(--grey1);
+    --item-borderColor: var(--grey2);
+    --item-fontColor: var(--grey9);
     --item-fontSize: 11px;
 
-    --item-focus-bkgrndColor: #f6f6f6;
-    --item-focus-borderColor: #f6f6f6;
-    --item-focus-fontColor: #000;
+    --item-focus-bkgrndColor: var(--grey2);
+    --item-focus-borderColor: var(--grey2);
+    --item-focus-fontColor: var(--grey9);
 
-    --item-selected-bkgrndColor: #d9ecfc;
-    --item-selected-borderColor: #38393a;
-    --item-selected-fontColor: #000;
+    --item-selected-bkgrndColor: var(--accentColor2);
+    --item-selected-borderColor: var(--accentColor);
+    --item-selected-fontColor: var(--grey9);
 
-    --item-disabled-bkgrndColor: #efefef;
-    --item-disabled-borderColor: #dcdcdc;
-    --item-disabled-fontColor: #000;
+    --item-disabled-bkgrndColor: var(--grey3);
+    --item-disabled-borderColor: var(--grey4);
+    --item-disabled-fontColor: var(--grey9);
 
-    --item-selected-disabled-bkgrndColor: #efefef;
-    --item-selected-disabled-borderColor: #aaa;
-    --item-selected-disabled-fontColor: #000;
+    --item-selected-disabled-bkgrndColor: var(--grey3);
+    --item-selected-disabled-borderColor: var(--grey6);
+    --item-selected-disabled-fontColor: var(--grey9);
 
-    --item-label-fontColor: #888;
-    --item-label-disabled-fontColor: #888;
+    --item-label-fontColor: var(--grey7);
+    --item-label-disabled-fontColor: var(--grey7);
     --item-label-fontSize: 10px;
 
     /* Clock */
-    --clock-bkgrndColor: #f6f6f6;
-    --clock-fontColor: #000;
-    --clock-pointer-bkgrndColor: #d9e7fd;
+    --clock-bkgrndColor: var(--grey3);
+    --clock-fontColor: var(--grey9);
+    --clock-pointer-bkgrndColor: var(--accentColor);
+    
 
     /* Help/Error Icon */
-    --icon-error-bkgrndColor: #F3E2EB;
-    --icon-error-borderColor: #BE6280;
-    --icon-error-fontColor: #BE6280;
+    --icon-error-bkgrndColor: var(--errorColorLight);
+    --icon-error-borderColor: var(--errorColor);
+    --icon-error-fontColor: var(--errorColor);
 
-    --icon-help-bkgrndColor: #DCE6EF;
-    --icon-help-borderColor: #6295BE;
-    --icon-help-fontColor: #6295BE;
+    --icon-help-bkgrndColor: var(--helpColorLight);
+    --icon-help-borderColor: var(--helpColor);
+    --icon-help-fontColor: var(--helpColor);
 
 
     /* Drag & Drop */
-    --dragover-ok-borderColor: #f4aa56;
-    --dragover-forbidden-borderColor: #FB4F42;
+    --dragover-ok-borderColor: var(--accentColor3);
+    --dragover-forbidden-borderColor: var(--errorColor);
 
     /* Grid */
-    --grid-header-bkgrndColor: #f6f6f6;
-    --grid-border-color: #eee;
+    --grid-header-bkgrndColor: var(--grey2);
+    --grid-border-color: var(--grey4);
+}
+
+
+/* DARK Farbzuweisungen*/
+/* ------------------- */
+:root[data-theme='dark'] {
+    --viewport-bkgrndColor: #282828;
+    --bar-fontColor: var(--grey9);
+    --bar-bkgrndColor: #4a4a4a;
+    --badge-fontColor: var(--grey0);
+    
+    /* Toolbox-Button in einer Bar */
+    --bar-button-icon-fontColor: var(--grey8);
+    --bar-button-icon-disabled-fontColor: var(--grey6);
 }

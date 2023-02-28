@@ -14,7 +14,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     //       - Standardwerte müssen an untergeordnete Elemente weitergegeben werden
     // TODO: Abstände zwischen Feldern müssen automatisch gemacht werden, 
     //       es sollten keine Style-Eigenschaften verwendet werden müssen.
-
+    // TODO: Das automatische Aufrufen von searchFields bei den Listeners "add" und "remove"
+    //       wieder entfernen. Diese Funktion solle aus performancegründen manuell
+    //       aufgerufen werden
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
