@@ -448,6 +448,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 if (!el.hasListener('change', this._onChildChange, this)) {
                     el.on('change', this._onChildChange, this);
                 }
+                if (!el.hasListener('blur', this._onChildBlur, this)) {
+                    el.on('blur', this._onChildBlur, this);
+                }
             }
         }, this);
     }
@@ -482,6 +485,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     _onChildAdd() {
         this._observChilds();
+    }
+
+    _onChildBlur(e) {
+        this.raiseEvent('blur', e);
     }
 
     _onChildChange(e) {
