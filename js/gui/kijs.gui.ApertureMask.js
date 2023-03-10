@@ -49,7 +49,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
 
         // window onResize überwachen
-        kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
+        kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
     }
 
 
@@ -79,7 +79,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     set target(val) {
 
         // resize-Listener vom target entfernen
-        if (this._target && this._target instanceof kijs.gui.Element) {
+        if (this._target && (this._target instanceof kijs.gui.Element)) {
             this._target.off('afterResize', null, this);
         }
 
@@ -88,7 +88,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             this._target = val;
             
             // resize-Listener zum target hinzufügen
-            this._target.on('afterResize', this._onTargetElAfterResize, this);
+            this._target.on('afterResize', this.#onTargetElAfterResize, this);
             
         // target ist kijs.gui.Dom
         } else if (val instanceof kijs.gui.Dom) {
@@ -243,15 +243,16 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
     }
 
-
+    
+    // PRIVATE
     // LISTENERS
-    _onTargetElAfterResize() {
+    #onTargetElAfterResize() {
         if (this.isRendered) {
             this._updatePosition();
         }
     }
 
-    _onWindowResize() {
+    #onWindowResize() {
         if (this.isRendered) {
             this._updatePosition();
         }
@@ -274,7 +275,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         kijs.Dom.removeEventListener('resize', window, this);
 
         // Listeners entfernen
-        if (this._target && this._target instanceof kijs.gui.Element) {
+        if (this._target && (this._target instanceof kijs.gui.Element)) {
             this._target.off(null, null, this);
         }
 

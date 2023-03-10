@@ -110,8 +110,8 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._eventForwardsAdd('blur', this._inputDom);
 
         // Listeners
-        this._inputDom.on('click', this._onClick, this);
-        this._inputDom.on('spacePress', this._onSpacePress, this);
+        this._inputDom.on('click', this.#onClick, this);
+        this._inputDom.on('spacePress', this.#onSpacePress, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -121,6 +121,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -128,6 +129,8 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     set caption(val) {
         this._captionDom.html = val;
     }
+
+    get captionDom() { return this._captionDom; }
 
     get captionHide() { return this._captionHide; }
     set captionHide(val) {
@@ -140,8 +143,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             }
         }
     }
-
-    get captionDom() { return this._captionDom; }
 
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
@@ -242,6 +243,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     set valueUnchecked(val) { this._valueUnchecked = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -325,8 +327,9 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onClick(e) {
+    #onClick(e) {
         if (!this.readOnly && !this.disabled) {
             const oldChecked = this._checked;
             const oldValue = this.value;
@@ -341,7 +344,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         }
     }
 
-    _onSpacePress(e) {
+    #onSpacePress(e) {
         if (!this.readOnly && !this.disabled) {
             const oldChecked = this._checked;
             const oldValue = this.value;
@@ -396,4 +399,5 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

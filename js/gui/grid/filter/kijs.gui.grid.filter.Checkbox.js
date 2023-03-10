@@ -1,13 +1,8 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Checkbox
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs.gui.grid.filter.Filter {
 
 
@@ -37,11 +32,12 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
             this.applyConfig(config, true);
         }
     }
+    
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'checkbox',
@@ -51,15 +47,18 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
 
     get isFiltered() { return super.isFiltered || this._compare !== null; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     reset() {
         this._compare = '';
         super.reset();
     }
 
+
+    // PROTECTED
     _applyToGrid() {
         if (this._compare === 'checked') {
             this._searchContainer.html = String.fromCharCode(kijs.iconMap.Fa['square-check'].char);
@@ -79,7 +78,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
             caption : kijs.getText('Alle angewählten'),
             iconMap: 'kijs.iconMap.Fa.square-check', //  fa-square-o
             on: {
-                click: this._onFilterChange,
+                click: this.#onFilterChange,
                 context: this
             }
         },{
@@ -87,13 +86,16 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
             name: 'btn_compare_unchecked',
             iconMap: 'kijs.iconMap.Fa.square-check', // fa-square-o
             on: {
-                click: this._onFilterChange,
+                click: this.#onFilterChange,
                 context: this
             }
         }]);
     }
 
-    _onFilterChange(e) {
+
+    // PRIVATE
+    // LISTENERS
+    #onFilterChange(e) {
         if (e.element.name === 'btn_compare_checked') {
             this._compare = 'checked';
         } else if (e.element.name === 'btn_compare_unchecked') {
@@ -109,5 +111,28 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         });
 
         this._applyToGrid();
+    }
+    
+    
+    
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+        
+        // Elemente/DOM-Objekte entladen
+        
+        // Variablen (Objekte/Arrays) leeren
+        
+        // Basisklasse entladen
+        super.destruct(true);
     }
 };

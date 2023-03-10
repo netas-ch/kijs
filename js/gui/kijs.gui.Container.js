@@ -203,6 +203,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             elements: { prio: 1000, fn: 'function', target: this.add, context: this }
         });
 
+        // Event-Weiterleitungen von this._innerDom
+        this._eventForwardsAdd('scroll', this._innerDom);
+        this._eventForwardsAdd('scrollEnd', this._innerDom);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -295,9 +299,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Fügt ein oder mehrere Elemente hinzu.
      * @param {Object|Array} elements
      * @param {Number} [index=null] Position an der Eingefügt werden soll null=am Schluss
+     * @param {Boolean} [preventRender=false]
      * @returns {undefined}
      */
-    add(elements, index=null) {
+    add(elements, index=null, preventRender=false) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -306,7 +311,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         for (let i=0,len=elements.length; i<len; i++) {
             let el = this._getInstanceForAdd(elements[i]);
             if (el && !kijs.Array.contains(this._elements, el)) {
-                el.on('afterResize', this._onChildElementAfterResize, this);
+                el.on('afterResize', this.#onChildElementAfterResize, this);
                 newElements.push(el);
             }
         }
@@ -327,7 +332,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this._innerDom.node) {
+        if (this._innerDom.node && !preventRender) {
             this.render();
         }
 
@@ -540,16 +545,16 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         if (this.raiseEvent('beforeRemove', {elements: removeElements}) === false) {
             return;
         }
-
+        
         // löschen
         kijs.Array.each(removeElements, function(el) {
-            el.off(null, null, this);
             if (destruct && el.destruct) {
                 el.destruct();
 
             } else if (el.isRendered && el.unrender) {
                 el.unrender();
             }
+            el.off(null, null, this);
             kijs.Array.remove(this._elements, el);
         }, this);
 
@@ -673,7 +678,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             if (!kijs.isFunction(constr)) {
                 throw new kijs.Error(`Unknown xtype "${obj.xtype}".`);
             }
-
+            
             // Parent zuweisen
             obj.parent = this;
 
@@ -683,6 +688,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Ungültige Übergabe
         } else {
             throw new kijs.Error(`kijs.gui.Container: invalid element: ` + typeof obj);
+            
         }
 
         return obj;
@@ -699,13 +705,15 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
 
+    // PRVATE
     // LISTENERS
     /**
      * Listener der aufgerufen wird, wenn sich die Grösse eines untergeordneten Elements ändert
+     * PRIVATE! Bitte diese Funktion nicht vererben, sondern Listener verwenden!
      * @param {Object} e
      * @returns {undefined}
      */
-    _onChildElementAfterResize(e) {
+    #onChildElementAfterResize(e) {
         // Endlosschlaufe verhindern: wenn der Event von dieser Klasse ausgelöst wurde,
         // den Event nicht erneut auslösen
         if (e.raiseElement === this) {

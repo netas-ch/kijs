@@ -61,6 +61,7 @@
  */
 kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -79,8 +80,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                 id: this._inputId
             },
             on: {
-                change: this._onInputDomChange,
-                input: this._onInputDomInput,
+                change: this.#onInputDomChange,
+                input: this.#onInputDomInput,
                 context: this
             }
         });
@@ -92,10 +93,10 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             closeBtnHide: true,
             cls: ['kijs-borderless'],
             on: {
-                monthClick: this._onMonthPickerMonthClick,
-                currentClick: this._onMonthPickerCurrentClick,
-                emptyClick: this._onMonthPickerEmptyClick,
-                change: this._onMonthPickerChange,
+                monthClick: this.#onMonthPickerMonthClick,
+                currentClick: this.#onMonthPickerCurrentClick,
+                emptyClick: this.#onMonthPickerEmptyClick,
+                change: this.#onMonthPickerChange,
                 context: this
             }
         });
@@ -148,6 +149,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -341,8 +343,9 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onInputDomChange() {
+    #onInputDomChange() {
         this._updateInputValue();
 
         this.validate();
@@ -353,7 +356,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._lastDate = this._monthPicker.date;
     }
 
-    _onInputDomInput(e) {
+    #onInputDomInput(e) {
         const rawValue = this._inputDom.nodeAttributeGet('value');
         const date = this._parseStringToMonth(rawValue);
 
@@ -362,7 +365,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker.date = date;
     }
 
-    _onMonthPickerChange(e) {
+    #onMonthPickerChange(e) {
         this._updateInputValue();
 
         this.validate();
@@ -373,17 +376,17 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._lastDate = this._monthPicker.date;
     }
 
-    _onMonthPickerEmptyClick(e) {
+    #onMonthPickerEmptyClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
 
-    _onMonthPickerCurrentClick(e) {
+    #onMonthPickerCurrentClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
 
-    _onMonthPickerMonthClick(e) {
+    #onMonthPickerMonthClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
@@ -421,4 +424,5 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

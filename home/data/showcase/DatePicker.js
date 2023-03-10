@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.DatePicker = class sc_DatePicker {
+window.home.sc = {};
+home.sc.DatePicker = class home_sc_DatePicker {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

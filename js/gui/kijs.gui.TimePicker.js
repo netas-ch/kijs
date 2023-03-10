@@ -52,10 +52,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 maxLength: 2
             },
             on: {
-                change: this._onInputChange,
-                click: this._onInputClick,
-                focus: this._onInputFocus,
-                keyUp: this._onInputKeyUp,
+                change: this.#onInputChange,
+                click: this.#onInputClick,
+                focus: this.#onInputFocus,
+                keyUp: this.#onInputKeyUp,
                 context: this
             }
         });
@@ -70,10 +70,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 maxLength: 2
             },
             on: {
-                change: this._onInputChange,
-                click: this._onInputClick,
-                focus: this._onInputFocus,
-                keyUp: this._onInputKeyUp,
+                change: this.#onInputChange,
+                click: this.#onInputClick,
+                focus: this.#onInputFocus,
+                keyUp: this.#onInputKeyUp,
                 context: this
             }
         });
@@ -88,10 +88,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
                 maxLength: 2
             },
             on: {
-                change: this._onInputChange,
-                click: this._onInputClick,
-                focus: this._onInputFocus,
-                keyUp: this._onInputKeyUp,
+                change: this.#onInputChange,
+                click: this.#onInputClick,
+                focus: this.#onInputFocus,
+                keyUp: this.#onInputKeyUp,
                 context: this
             }
         });
@@ -103,9 +103,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvasDom = new kijs.gui.Dom({
             nodeTagName: 'canvas',
             on: {
-                mouseMove: this._onCanvasMouseMove,
-                mouseLeave: this._onCanvasMouseLeave,
-                click: this._onCanvasMouseClick,
+                mouseMove: this.#onCanvasMouseMove,
+                mouseLeave: this.#onCanvasMouseLeave,
+                click: this.#onCanvasMouseClick,
                 context: this
             }
         });
@@ -115,9 +115,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Button Jetzt
         this._nowBtn = new kijs.gui.Button({
-            html: kijs.getText('Jetzt'),
+            caption: kijs.getText('Jetzt'),
             on: {
-                click: this._onNowBtnClick,
+                click: this.#onNowBtnClick,
                 context: this
             }
         });
@@ -125,9 +125,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Button Leeren
         this._emptyBtn = new kijs.gui.Button({
-            html: kijs.getText('Leeren'),
+            caption: kijs.getText('Leeren'),
             on: {
-                click: this._onEmptyBtnClick,
+                click: this.#onEmptyBtnClick,
                 context: this
             }
         });
@@ -135,7 +135,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Button Schliessen
         this._closeBtn = new kijs.gui.Button({
-            html: kijs.getText('Schliessen')
+            caption: kijs.getText('Schliessen')
         });
         this._closeBtn.dom.nodeAttributeSet('tabIndex', -1);
 
@@ -535,51 +535,29 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
-
-
-    // EVENTS
     /**
-     * Beim bewegen der Maus wird die Kelle darunter angezeigt.
-     * @param {Object} e
-     * @returns {undefined}
+     * Ergänzt die 0 einer Zahl.
+     * @param {Integer|String} number
+     * @param {Integer} lenght
+     * @returns {String}
      */
-    _onCanvasMouseMove(e) {
-        let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY, pointerPos = {};
-        let dg = this._coordinatesToDegree(x, y);
-
-        // auf 30 grad runden
-        pointerPos.degree = Math.round(dg.degree / 30) * 30;
-
-        if (this._clockMode === 1) {
-            pointerPos.distance = dg.distance > ((this._distance.hourAm+this._distance.hourPm)/2) ? this._distance.hourAm : this._distance.hourPm;
-
-        } else if (this._clockMode === 2) {
-            pointerPos.distance = this._distance.minute;
-
-        } else if (this._clockMode ===  3) {
-            pointerPos.distance = this._distance.second;
-
-        } else {
-            throw new kijs.Error('invalid clock mode');
+    _zeroPad(number, lenght=2) {
+        number = kijs.toString(number);
+        while (number.length < lenght) {
+            number = '0' + number;
         }
-
-        this._calculate(pointerPos);
+        return number;
     }
 
-    /**
-     * Kelle zurücksetzen
-     * @returns {undefined}
-     */
-    _onCanvasMouseLeave() {
-        this._calculate();
-    }
 
+    // PRIVATE
+    // LISTENERS
     /**
      * Beim Klick wird die Uhrzeit übernommen.
      * @param {Object} e
      * @returns {undefined}
      */
-    _onCanvasMouseClick(e) {
+    #onCanvasMouseClick(e) {
         const curValue = this.value;
         let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY;
         let dg = this._coordinatesToDegree(x, y);
@@ -677,8 +655,44 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this.raiseEvent('inputFinished');
         }
     }
+    
+    /**
+     * Kelle zurücksetzen
+     * @returns {undefined}
+     */
+    #onCanvasMouseLeave() {
+        this._calculate();
+    }
+    
+    /**
+     * Beim bewegen der Maus wird die Kelle darunter angezeigt.
+     * @param {Object} e
+     * @returns {undefined}
+     */
+    #onCanvasMouseMove(e) {
+        let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY, pointerPos = {};
+        let dg = this._coordinatesToDegree(x, y);
 
-    _onEmptyBtnClick(e) {
+        // auf 30 grad runden
+        pointerPos.degree = Math.round(dg.degree / 30) * 30;
+
+        if (this._clockMode === 1) {
+            pointerPos.distance = dg.distance > ((this._distance.hourAm+this._distance.hourPm)/2) ? this._distance.hourAm : this._distance.hourPm;
+
+        } else if (this._clockMode === 2) {
+            pointerPos.distance = this._distance.minute;
+
+        } else if (this._clockMode ===  3) {
+            pointerPos.distance = this._distance.second;
+
+        } else {
+            throw new kijs.Error('invalid clock mode');
+        }
+
+        this._calculate(pointerPos);
+    }
+
+    #onEmptyBtnClick(e) {
         const curValue = this.value;
 
         this.value = '';
@@ -695,7 +709,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onInputChange(e) {
+    #onInputChange(e) {
         const curValue = this.value;
         const fld = e.context;
         let inputFinished = false;
@@ -745,7 +759,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onInputClick(e) {
+    #onInputClick(e) {
         e.context.node.select();
     }
 
@@ -754,7 +768,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onInputFocus(e) {
+    #onInputFocus(e) {
         let fld = e.context;
         if (fld === this._inputHourDom) {
             this._clockMode = 1;
@@ -775,7 +789,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onInputKeyUp(e) {
+    #onInputKeyUp(e) {
         const fld = e.context;
         let type;
         if (fld === this._inputHourDom) {
@@ -839,11 +853,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
-    /**
-     * Die aktuelle Zeit übernehmen
-     * @returns {undefined}
-     */
-    _onNowBtnClick(e) {
+    // Die aktuelle Zeit übernehmen
+    #onNowBtnClick(e) {
         const curValue = this.value;
         let time = new Date();
         this.value =  '' + time.getHours() + this._separator + time.getMinutes() + this._separator + time.getSeconds();
@@ -855,24 +866,11 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this.raiseEvent('nowClick');
     }
 
-    /**
-     * Ergänzt die 0 einer Zahl.
-     * @param {Integer|String} number
-     * @param {Integer} lenght
-     * @returns {String}
-     */
-    _zeroPad(number, lenght=2) {
-        number = kijs.toString(number);
-        while (number.length < lenght) {
-            number = '0' + number;
-        }
-        return number;
-    }
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-
     destruct(superCall) {
         if (!superCall) {
             // unrendern

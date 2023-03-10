@@ -76,7 +76,7 @@
 
     /* Button */
     --button-bkgrndColor: var(--grey2);
-    --button-borderColor: var(--grey2);
+    --button-borderColor: var(--grey4);
     --button-fontColor: var(--grey9);
     --button-fontSize: 12px;
     --button-lineHeight: 13px;
@@ -123,6 +123,22 @@
 
     --window-footer-button-focus-fontColor: var(--grey9);
 
+    
+    /* Tab */
+    --tabBar-bkgrndColor: var(--grey2);
+    
+    --tabButton-bkgrndColor: var(--grey3);
+    --tabButton-borderColor: var(--grey4);
+    --tabButton-fontColor: var(--grey9);
+    
+    --tabButton-current-bkgrndColor: var(--grey1);
+    --tabButton-current-borderColor: var(--grey4);
+    --tabButton--currentfontColor: var(--accentColor);
+    
+    --tabButton-focus-bkgrndColor: var(--grey3);
+    --tabButton-focus-borderColor: var(--grey4);
+    --tabButton-focus-fontColor: var(--accentColor);
+    
     
     /* Badge */
     --badge-bkgrndColor: var(--accentColor3);

@@ -5,6 +5,7 @@
 // --------------------------------------------------------------
 kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -18,7 +19,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._oldCaption = null;
         this._oldValue = null;
         this._value = '';
-        this._keyUpDefer = null;
+        this._keyUpDeferId = null;
         this._remoteSort = false;   // TODO: umbenennen nach remoteFilter
         this._forceSelection = true;
         this._firstLoaded = false;
@@ -55,7 +56,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         });
 
         this._dom.clsAdd('kijs-field-combo');
-
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -117,20 +117,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 //        this._eventForwardsAdd('enterEscPress', this._inputDom);
 //        this._eventForwardsAdd('escPress', this._inputDom);
 
-
-
         // Listeners
-        this._inputDom.on('blur', this._onInputBlur, this);
-        this._inputDom.on('change', this._onInputChange, this);
-        this._inputDom.on('input', this._onInputInput, this);
-        this._inputDom.on('keyUp', this._onInputKeyUp, this);
-        this._inputDom.on('keyDown', this._onInputKeyDown, this);
-        this._listViewEl.on('afterLoad', this._onListViewAfterLoad, this);
-        this._listViewEl.on('click', this._onListViewClick, this);
-        this._spinBoxEl.on('click', this._onSpinBoxClick, this);
-        this._spinBoxEl.on('close', this._onSpinBoxClose, this);
-        this._spinBoxEl.on('show', this._onSpinBoxShow, this);
-
+        this._inputDom.on('blur', this.#onInputBlur, this);
+        this._inputDom.on('change', this.#onInputChange, this);
+        this._inputDom.on('input', this.#onInputInput, this);
+        this._inputDom.on('keyUp', this.#onInputKeyUp, this);
+        this._inputDom.on('keyDown', this.#onInputKeyDown, this);
+        this._listViewEl.on('afterLoad', this.#onListViewAfterLoad, this);
+        this._listViewEl.on('click', this.#onListViewClick, this);
+        this._spinBoxEl.on('click', this.#onSpinBoxClick, this);
+        this._spinBoxEl.on('close', this.#onSpinBoxClose, this);
+        this._spinBoxEl.on('show', this.#onSpinBoxShow, this);
+        this._spinIconEl.on('click', this.#onSpinButtonClick, this);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -139,31 +138,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
     set autoLoad(val) {
         if (val) {
-            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         } else {
-            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         }
     }
 
     get captionField() { return this._listViewEl.captionField; }
     set captionField(val) { this._listViewEl.captionField = val; }
 
-    get valueField() { return this._listViewEl.valueField; }
-    set valueField(val) { this._listViewEl.valueField = val; }
-
     // overwrite
     get data() {
         return this._listViewEl.data;
     }
-
     set data(val) {
         this._listViewEl.data = val;
         if (this._selectFirst) {
@@ -190,6 +186,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
     set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
 
+    // overwrite
+    get isEmpty() { return kijs.isEmpty(this.value); }
+
     get inputDom() { return this._inputDom; }
 
     get minChars() { return this._minChars; }
@@ -211,8 +210,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    // overwrite
-    get isEmpty() { return kijs.isEmpty(this.value); }
+    get oldValue() { return this._oldValue; }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -258,7 +256,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         return this._caption;
     }
 
-    get oldValue() { return this._oldValue; }
+    get valueField() { return this._listViewEl.valueField; }
+    set valueField(val) { this._listViewEl.valueField = val; }
+
 
 
     // --------------------------------------------------------------
@@ -333,6 +333,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // overwrite
     unrender(superCall) {
+        // timer abbrechen
+        if (this._keyUpDeferId) {
+            window.clearTimeout(this._keyUpDeferId);
+            this._keyUpDeferId = null;
+        }
+        
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -471,7 +477,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _setScrollPositionToSelection() {
         let sel = this._listViewEl.getSelected();
-        if (kijs.isObject(sel) && sel instanceof kijs.gui.DataViewElement) {
+        if (kijs.isObject(sel) && (sel instanceof kijs.gui.DataViewElement)) {
             if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
                 let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
 
@@ -491,7 +497,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // overwrite
     _validationRules(value) {
-
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -534,14 +539,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onAfterFirstRenderTo(e) {
+    #onAfterFirstRenderTo(e) {
         // forceLoad, wenn value vorhanden ist (damit label geladen wird)
         this.load(null, this.value !== '');
     }
 
-    _onInputBlur() {
-
+    #onInputBlur() {
         // blur nur ausführen, wenn Trigger nicht offen ist und Feld kein Focus hat
         kijs.defer(function() {
             if (this._spinBoxEl && this._inputDom && !this._spinBoxEl.isRendered && !this._inputDom.hasFocus) {
@@ -549,92 +554,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }, 200, this);
     }
-
-    _onInputInput(e) {
-        this._spinBoxEl.show();
-    }
-
-    _onInputKeyDown(e) {
-        // event beim listView ausführen, damit selektion geändert werden kann.
-        if (this._listViewEl.getSelected()) {
-            this._listViewEl._onKeyDown(e);
-
-        } else if (e.nodeEvent.key === 'ArrowDown') {
-            let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
-            if (indx !== null) {
-                this._listViewEl.selectByIndex(indx);
-            }
-        }
-
-        // Scroll
-        if (e.nodeEvent.key === 'ArrowDown' || e.nodeEvent.key === 'ArrowUp') {
-            // scrollen
-            this._setScrollPositionToSelection();
-        }
-
-        // wenn Enter gedrückt wird, listview schliessen und ausgewählten Datensatz übernehmen.
-        if (e.nodeEvent.key === 'Enter') {
-            let dataViewElement = this._listViewEl.getSelected();
-            this._spinBoxEl.close();
-
-            if (dataViewElement && dataViewElement instanceof kijs.gui.DataViewElement) {
-                let newVal = dataViewElement.dataRow[this.valueField],
-                    oldVal = this.value,
-                    changed = newVal !== this.value;
-                this.value = newVal;
-
-                if (changed) {
-                    this.raiseEvent('change', {value: this.value, oldVal: oldVal});
-                }
-            }
-
-            // event stoppen
-            e.nodeEvent.stopPropagation();
-
-        // Esc: Schliessen
-        } else if (e.nodeEvent.key === 'Escape') {
-            this._spinBoxEl.close();
-
-            // Selektion zurücksetzen
-            this._listViewEl.value = this.value;
-
-            // event stoppen
-            e.nodeEvent.stopPropagation();
-        }
-    }
-
-    _onInputKeyUp(e) {
-        // Steuerbefehle ignorieren
-        let specialKeys = [
-            'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
-            'Delete', 'Insert', 'Home', 'End', 'Alt', 'NumpadEnter',
-            'AltGraph', 'ContextMenu', 'Control', 'Shift',
-            'Enter', 'CapsLock', 'Tab', 'OS', 'Escape', 'Space'
-        ];
-        if (kijs.Array.contains(specialKeys, e.nodeEvent.code) || kijs.Array.contains(specialKeys, e.nodeEvent.key)) {
-            return;
-        }
-
-        // bestehendes Defer löschen
-        if (this._keyUpDefer) {
-            window.clearTimeout(this._keyUpDefer);
-            this._keyUpDefer = null;
-        }
-
-        // neues Defer schreiben
-        this._keyUpDefer = kijs.defer(function() {
-            if (this._remoteSort) {
-                this.load(null, false, this._inputDom.nodeAttributeGet('value'));
-
-            } else {
-                this._setProposal(e.nodeEvent.key);
-            }
-        }, this._remoteSort ? 1000 : 500, this);
-
-    }
-
-    _onInputChange(e) {
-
+    
+    #onInputChange(e) {
         // change event nicht berücksichtigen, wenn die spinbox
         // offen ist.
         if (this._spinBoxEl.isRendered) {
@@ -691,7 +612,89 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    _onListViewAfterLoad(e) {
+    #onInputInput(e) {
+        this._spinBoxEl.show();
+    }
+
+    #onInputKeyDown(e) {
+        // event beim listView ausführen, damit selektion geändert werden kann.
+        if (this._listViewEl.getSelected()) {
+            this._listViewEl.handleKeyDown(e.nodeEvent);
+
+        } else if (e.nodeEvent.key === 'ArrowDown') {
+            let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
+            if (indx !== null) {
+                this._listViewEl.selectByIndex(indx);
+            }
+        }
+
+        // Scroll
+        if (e.nodeEvent.key === 'ArrowDown' || e.nodeEvent.key === 'ArrowUp') {
+            // scrollen
+            this._setScrollPositionToSelection();
+        }
+
+        // wenn Enter gedrückt wird, listview schliessen und ausgewählten Datensatz übernehmen.
+        if (e.nodeEvent.key === 'Enter') {
+            let dataViewElement = this._listViewEl.getSelected();
+            this._spinBoxEl.close();
+
+            if (dataViewElement && (dataViewElement instanceof kijs.gui.DataViewElement)) {
+                let newVal = dataViewElement.dataRow[this.valueField],
+                    oldVal = this.value,
+                    changed = newVal !== this.value;
+                this.value = newVal;
+
+                if (changed) {
+                    this.raiseEvent('change', {value: this.value, oldVal: oldVal});
+                }
+            }
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
+
+        // Esc: Schliessen
+        } else if (e.nodeEvent.key === 'Escape') {
+            this._spinBoxEl.close();
+
+            // Selektion zurücksetzen
+            this._listViewEl.value = this.value;
+
+            // event stoppen
+            e.nodeEvent.stopPropagation();
+        }
+    }
+
+    #onInputKeyUp(e) {
+        // Steuerbefehle ignorieren
+        let specialKeys = [
+            'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
+            'Delete', 'Insert', 'Home', 'End', 'Alt', 'NumpadEnter',
+            'AltGraph', 'ContextMenu', 'Control', 'Shift',
+            'Enter', 'CapsLock', 'Tab', 'OS', 'Escape', 'Space'
+        ];
+        if (kijs.Array.contains(specialKeys, e.nodeEvent.code) || kijs.Array.contains(specialKeys, e.nodeEvent.key)) {
+            return;
+        }
+
+        // bestehendes Defer löschen
+        if (this._keyUpDeferId) {
+            window.clearTimeout(this._keyUpDeferId);
+            this._keyUpDeferId = null;
+        }
+
+        // neues Defer schreiben
+        this._keyUpDeferId = kijs.defer(function() {
+            if (this._remoteSort) {
+                this.load(null, false, this._inputDom.nodeAttributeGet('value'));
+
+            } else {
+                this._setProposal(e.nodeEvent.key);
+            }
+        }, this._remoteSort ? 1000 : 500, this);
+    }
+
+    #onListViewAfterLoad(e) {
         if (!this._remoteSort) {
             this.value = this._value;
         }
@@ -706,7 +709,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    _onListViewClick(e) {
+    #onListViewClick(e) {
         this._spinBoxEl.close();
 
         if (this.value !== this._listViewEl.value) {
@@ -720,28 +723,29 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    _onSpinBoxClick() {
+    #onSpinBoxClick() {
         this._inputDom.focus();
     }
+    
+    #onSpinBoxClose() {
+        this._inputDom.focus();
+        this.#onInputBlur();
+    }
 
-    _onSpinBoxShow() {
+    #onSpinBoxShow() {
         this._setScrollPositionToSelection();
     }
 
-    _onSpinBoxClose() {
-        this._inputDom.focus();
-        this._onInputBlur();
-    }
-
     // overwrite
-    _onSpinButtonClick(e) {
-        super._onSpinButtonClick(e);
+    #onSpinButtonClick(e) {
+        //super.#onSpinButtonClick(e);
         this._listViewEl.applyFilters();
 
         if (this._listViewEl.data.length === 0 && this._remoteSort) {
             this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -769,4 +773,5 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

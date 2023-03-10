@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.FileUpload = class sc_FileUpload {
+window.home.sc = {};
+home.sc.FileUpload = class home_sc_FileUpload {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

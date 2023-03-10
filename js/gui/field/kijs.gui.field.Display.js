@@ -44,6 +44,7 @@
  */
 kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -57,7 +58,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                 cls: 'kijs-displayvalue'
             },
             on: {
-                click: this._onDomClick,
+                click: this.#onDomClick,
                 context: this
             }
         });
@@ -89,6 +90,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -106,10 +108,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     get htmlDisplayType() { return this._inputDom.htmlDisplayType; }
     set htmlDisplayType(val) { this._inputDom.htmlDisplayType = val; }
 
+    get inputDom() { return this._inputDom; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._inputDom.html); }
-
-    get inputDom() { return this._inputDom; }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -121,9 +123,6 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
-
-    get valueTrim() { return this._valueTrim; }
-    set valueTrim(val) { this._valueTrim = !!val; }
 
     // overwrite
     get value() {
@@ -138,6 +137,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._inputDom.html = val;
         this._setLinkClass();
     }
+    
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
 
 
 
@@ -159,7 +161,6 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._setLinkClass();
     }
 
-
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -178,15 +179,8 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         return true;
     }
 
-    _setLinkClass() {
-        let autoLinkType = this._getLinkType(this.value);
-        if (this._link && ((this._linkType === 'auto' && autoLinkType !== false) || this._linkType === autoLinkType)) {
-            this._inputDom.clsAdd('kijs-link');
-        } else {
-            this._inputDom.clsRemove('kijs-link');
-        }
-    }
 
+    // PROTECTED
     /**
      * Prüft, ob ein Wert ein Link ist.
      * @param {String} value
@@ -212,7 +206,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         return false;
     }
-
+    
     /**
      * Öffnet ein Link (beim Klick)
      * @param {String} link
@@ -233,13 +227,26 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             window.open('http://' + link, '_blank');
         }
     }
+    
+    _setLinkClass() {
+        let autoLinkType = this._getLinkType(this.value);
+        if (this._link && ((this._linkType === 'auto' && autoLinkType !== false) || this._linkType === autoLinkType)) {
+            this._inputDom.clsAdd('kijs-link');
+        } else {
+            this._inputDom.clsRemove('kijs-link');
+        }
+    }
 
-    _onDomClick() {
+    
+    // PRIVATE
+    // LISTENERS
+    #onDomClick() {
         if (this._link && !this.disabled && !this.readOnly) {
             let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
             this._openLink(kijs.toString(this.value), linkType);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -265,4 +272,5 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

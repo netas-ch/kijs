@@ -50,6 +50,7 @@
  */
 kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -62,7 +63,7 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
         
          // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            disableFlex: true
+            // nix
         });
         
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -78,23 +79,20 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
             this.applyConfig(config, true);
         }
     }
+    
 
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     // overwrite
     get isEmpty() { return false; }
-
-    set min(val) { this._inputDom.nodeAttributeSet('min', val); }
-    get min() { return this._inputDom.nodeAttributeGet('min'); }
 
     set max(val) { this._inputDom.nodeAttributeSet('max', val); }
     get max() { return this._inputDom.nodeAttributeGet('max'); }
 
-    set step(val) { this._inputDom.nodeAttributeSet('step', val); }
-    get step() { return this._inputDom.nodeAttributeGet('step'); }
+    set min(val) { this._inputDom.nodeAttributeSet('min', val); }
+    get min() { return this._inputDom.nodeAttributeGet('min'); }
 
     // overwrite
     // 'range' kennt das HTML-Attribut readOnly nicht,
@@ -108,4 +106,8 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
             this._inputDom.disabled = false;
         }
     }
+
+    set step(val) { this._inputDom.nodeAttributeSet('step', val); }
+    get step() { return this._inputDom.nodeAttributeGet('step'); }
+
 };

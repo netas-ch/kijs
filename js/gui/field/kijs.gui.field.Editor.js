@@ -5,6 +5,7 @@
 // --------------------------------------------------------------
 kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -27,7 +28,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         });
 
         // Listeners
-        this.on('input', this._onInput, this);
+        this.on('input', this.#onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -35,6 +36,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -95,6 +97,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -114,10 +117,10 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
                 this._aceEditor.on('change', () => { this.raiseEvent('input'); });
-                this._aceEditor.getSession().on('changeAnnotation', () => { this._onAnnotationChange() });
+                this._aceEditor.getSession().on('changeAnnotation', () => { this.#onAnnotationChange() });
 
-                kijs.Dom.addEventListener('focus', inputNode, this._onInputNodeFocus, this);
-                kijs.Dom.addEventListener('blur', inputNode, this._onInputNodeBlur, this);
+                kijs.Dom.addEventListener('focus', inputNode, this.#onInputNodeFocus, this);
+                kijs.Dom.addEventListener('blur', inputNode, this.#onInputNodeBlur, this);
             }, 200, this);
         } else {
             this._inputWrapperDom.node.appendChild(this._aceEditorNode);
@@ -149,28 +152,6 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     }
 
 
-    // LISTENERS
-    _onAnnotationChange() {
-        if (this._value) {
-            this.validate();
-        }
-    }
-
-    _onInput() {
-        this.validate();
-    }
-
-    _onInputNodeFocus() {
-        this._oldValue = this._value;
-    }
-
-    _onInputNodeBlur() {
-        if (this.value !== this._oldValue) {
-            this._oldValue = this.value;
-            this.raiseEvent('change', {value: this.value});
-        }
-    }
-
     // PROTECTED
     // overwrite
     _validationRules(value) {
@@ -186,6 +167,31 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
             }
         }
     }
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onAnnotationChange() {
+        if (this._value) {
+            this.validate();
+        }
+    }
+
+    #onInput() {
+        this.validate();
+    }
+
+    #onInputNodeFocus() {
+        this._oldValue = this._value;
+    }
+
+    #onInputNodeBlur() {
+        if (this.value !== this._oldValue) {
+            this._oldValue = this.value;
+            this.raiseEvent('change', {value: this.value});
+        }
+    }
+
 
 
     // --------------------------------------------------------------
@@ -217,4 +223,5 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

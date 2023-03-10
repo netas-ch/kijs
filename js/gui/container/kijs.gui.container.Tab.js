@@ -1,62 +1,22 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.container.Stack
+// kijs.gui.container.Tab
 // --------------------------------------------------------------
 /**
- * Container Element, dass untergeordnete Elemente beinhalten kann.
- * Es wird jeweils nur ein Element angezeigt. 
- * Die Elemente können mit den currentEl, currentIndex und currentName
- * gewechselt werden.
- * Mit der Funktion setCurrentAnimated() können sie auch animiert gewechselt werden.
+ * Tab Container. 
+ * Es künnen nur kijs.gui.container.tab.Container hinzugefügt werden (xtype kann 
+ * auch weggelassen werden).
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element
  *  kijs.gui.Container
  *   kijs.gui.container.Stack
+ *    kijs.gui.container.Tab
  *
- * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
- * ----------------
- * defaultAnimation    String [optional]    Typ der Animation. Gültige Werte:
- *                                              none:           Keine Animation
- *                                              fade:           Überblenden (default)
- *                                              slideLeft:      Ausfahren nach Links
- *                                              slideRight:     Ausfahren nach Rechts
- *                                              slideTop:       Ausfahren nach oben
- *                                              slideBottom:    Ausfahren nach unten
- *
- * defaultDuration     Integer [optional]   Dauer der Animation in Milisekunden (default: 1000).
- * 
- * currentEl           kijs.gui.Element [optional] Element, das als erstes angezeigt wird
- * currentIndex        Integer [optional]          Element, das als erstes angezeigt wird (default: 0)
- * currentName         String [optional]           Element, das als erstes angezeigt wird
- * 
- *
- * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
- * ----------
- * setCurrentAnimated                       Wechselt das Element mit einer Animation
- *  Args: element   Mixed                   Element, das angezeigt werden soll.
- *                                              String = Name des Elements
- *                                              Int = Index des Elements
- *                                              Object = Verweis auf das Element
- *        animation String [optional]       Art der Animation
- *        duration  Integer [optional]      Dauer der Animation in Milisekunden
- *
- *
- * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
- * -------------
- *  currentEl           kijs.gui.Element    Gibt das zurzeit aktive Element zurück oder setzt es
- *  currentIndex        Integer [optional]  Gibt das zurzeit aktive Element zurück oder setzt es
- *  currentName         String [optional]   Gibt das zurzeit aktive Element zurück oder setzt es
- *  defaultAnimation String                 Gibt die Standardanimation zurück oder setzt sie
- *  defaultDuration  Integer                Gibt die Standarddauer zurück oder setzt sie
- *
- *
- * EVENTS
- * ----------
  *
  */
-kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Container {
+kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container.Stack {
     
     
     // --------------------------------------------------------------
@@ -65,33 +25,33 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     constructor(config={}) {
         super(false);
         
-        this._afterAnimationDefer = null;
-        this._animationTypes = [
-            'none',
-            'fade',
-            'slideLeft',   // gegen links fahren
-            'slideRight',  // gegen rechts fahren
-            'slideTop',    // gegen oben fahren
-            'slideBottom'  // gegen unten fahren
-        ];
-        this._currentIndex = 0;     // Index des aktuellen (sichtbaren) Elements
-        this._defaultAnimation = 'fade';
-        this._defaultDuration = 500;
-        this._topZIndex = 1;
+        this._tabBarEl = new kijs.gui.container.tab.Bar({
+            parent: this,
+            on: {
+                context: this
+            }
+        });
         
-        this._dom.clsRemove('kijs-container');
-        this._dom.clsAdd('kijs-container-stack');
+        this._tabBarPos = 'top';
+        
+        this._dom.clsRemove('kijs-container-stack');
+        this._dom.clsAdd('kijs-container-tab');
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            animation: 'fade',
+            animationDuration: 300,
+            tabBarPos: 'top',
+            tabBarScrollableX: 'auto',
+            tabBarScrollableY: 'auto'
         });
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            currentEl:    { prio: 1001, target: 'currentEl' },
-            currentIndex: { prio: 1001, target: 'currentIndex' },
-            currentName:  { prio: 1001, target: 'currentName' }
+            tabBarPos: { target: 'tabBarPos' }, // Position der TabBar 'top', 'left', 
+                                                // 'bottom' oder 'right' (default: 'top')
+            tabBarScrollableX: { target: 'scrollableX', context: this._tabBarEl },
+            tabBarScrollableY: { target: 'scrollableY', context: this._tabBarEl }
         });
         
         // Config anwenden
@@ -105,41 +65,24 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // Aktueller Container ermitteln/setzen
-    get currentEl() { return this._elements[this._currentIndex]; }
-    set currentEl(val) {
-        let index = this._getElIndex(val);
+    get tabBarPos() { return this._tabBarPos; }
+    set tabBarPos(val) {
         
-        if (index === null) {
-            throw new kijs.Error(`currentEl does not exist in elements.`);
-        } else {
-            this.currentIndex = index;
-        }
-    }
-    
-    // Aktueller Container ermitteln/setzen via Index
-    get currentIndex() { return this._currentIndex; }
-    set currentIndex(val) {
-        if (!this._elements[val]) {
-            throw new kijs.Error(`currentIndex does not exist in elements.`);
+        if (!kijs.Array.contains(['top','right','bottom','left'], val)) {
+            throw new kijs.Error(`unknown tabBarPos.`);
         }
         
-        this._currentIndex = val;
-        this._updateElementsVisibility();
-        // und neu rendern
-        if (this._elements[val].isRendered) {
-            this._elements[val].render();
-        }
-    }
-    
-    // Aktueller Container ermitteln/setzen via Name
-    get currentName() { return this._elements[this._currentIndex].name; }
-    set currentName(val) {
-        let elements = this.getElementsByName(val, 0, true);
-        if (elements.length === 0) {
-            throw new kijs.Error(`currentName does not exist in elements.`);
-        } else {
-            this.currentEl = elements[0];
+        let oldTabParPos = this._tabBarPos;
+        this._tabBarPos = val;
+        
+        // bestehende CSS-Klassen entfernen
+        this._dom.clsRemove(['kijs-pos-top','kijs-pos-right','kijs-pos-bottom','kijs-pos-left']);
+        
+        // neue hinzufügen
+        this._dom.clsAdd('kijs-pos-' + val.toLowerCase());
+        
+        if (val !== oldTabParPos) {
+            this._tabBarEl.render();
         }
     }
     
@@ -148,148 +91,112 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    add(elements, index=null) {
-        super.add(elements, index);
-        this._updateElementsVisibility();
+    add(elements, index=null, preventRender=false) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+        
+        const newElements = [];
+        const newTabBarButtons = [];
+        kijs.Array.each(elements, function(el) {
+            
+            // Es dürfen nur kijs.gui.container.tab.Container hinzugefügt werden
+            if ((el instanceof kijs.gui.Element)) {
+                if (!(el instanceof kijs.gui.container.tab.Container)) {
+                    throw new kijs.Error(`Element must be an instance of kijs.gui.container.tab.Container.`);
+                }
+                
+            // Falls eine Config übergeben wird den xtype checken.
+            // Falls kein xtype angegeben wurde, kijs.gui.container.tab.Container
+            // als Standard nehmen.
+            } else {
+                if (el.xtype) {
+                    if (el.xtype !== 'kijs.gui.container.tab.Container') {
+                        throw new kijs.Error(`Element must be an instance of kijs.gui.container.tab.Container.`);
+                    }
+                } else {
+                    el.xtype = 'kijs.gui.container.tab.Container';
+                }
+                
+                // element erstellen
+                el = this._getInstanceForAdd(el);
+            }
+            
+            newElements.push(el);
+            
+            // Button für tabBar erstellen
+            el.tabButtonEl.on('click', this.#onTabButtonElClick, this);
+            el.tabButtonEl.icon2.on('click', this.#onTabButtonElCloseClick, this);
+            newTabBarButtons.push(el.tabButtonEl);
+        }, this);
+        
+        // Buttons zu tabBar hinzufügen
+        this._tabBarEl.add(newTabBarButtons, index, true);
+        
+        // Elemente hinzufügen
+        super.add(newElements, index, preventRender);
     }
     
     // overwrite
     remove(elements, preventRender=false, destruct=false) {
+        
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+        
+        // tabBarButton auch entfernen
+        kijs.Array.each(elements, function(el) {
+            this._tabBarEl.remove(el.tabButtonEl, false, true);
+        }, this);
+        
         super.remove(elements, preventRender, destruct);
-        this._updateElementsVisibility();
     }
     
     // overwrite
     render(superCall) {
-        this._updateElementsVisibility();
         super.render(true);
+        
+        // TabBar rendern (kijs.gui.container.tab.Bar)
+        this._tabBarEl.renderTo(this._dom.node, this._innerDom.node);
     }
     
-    /**
-     * Aktuelles Element wechseln und dabei eine Animation abspeielen
-     * @param {Integer|String|kijs.gui.Element} el
-     * @param {String} animation
-     * @param {Integer} duration
-     * @returns {Promise}
-     */
-    setCurrentAnimated(el, animation=null, duration=null) {
-        return new Promise((resolve, reject) => {
-            let currentEl = this._elements[this._currentIndex];
-
-            // Argumente
-            if (!animation) {
-                animation = this._defaultAnimation;
-            }
-            if (!duration) {
-                duration = this._defaultDuration;
-            }
-            if (animation === 'none') {
-                duration = 0;
-            }
-
-            if (!kijs.Array.contains(this._animationTypes, animation)) {
-                throw new kijs.Error(`animation type not valid.`);
-            }
-
-            // by index
-            if (kijs.isInteger(el)) {
-                el = this._elements[el];
-
-            // by name
-            } else if (kijs.isString(el)) {
-                el = this.getElementsByName(el, 0, true).shift();
-
-            }
-
-            if (!el || !kijs.Array.contains(this._elements, el)) {
-                throw new kijs.Error(`el does not exist in elements.`);
-            }
-
-            // Wenn das Element bereits aktuell ist, ist keine Animation nötig
-            if (currentEl === el) {
-                return;
-            }
-
-            // Bei Dauer = 0 ist keine Animation nötig
-            if (duration === 0) {
-                this.currentEl = el;
-                return;
-            }
-
-            // Falls bereits eine Animation läuft: Abbrechen
-            this._cleanUp();
-            if (this._afterAnimationDefer) {
-                window.clearTimeout(this._afterAnimationDefer);
-            }
-
-            // Altes Element für Animation vorbereiten
-            currentEl.dom.clsAdd('kijs-animation-' + animation.toLowerCase() + '-out');
-            currentEl.style.animationDuration = duration+ 'ms';
-
-            // Neues Element für Animation vorbereiten
-            el.dom.clsAdd('kijs-animation-' + animation.toLowerCase());
-            el.style.animationDuration = duration + 'ms';
-            el.style.zIndex = 1;
-            el.visible = true;
-
-            this._currentIndex = this._getElIndex(el);
-
-            // Animation abwarten
-            this._afterAnimationDefer = kijs.defer(function() {
-                this._afterAnimationDefer = null;
-
-                // Aufräumen und Sichtbarkeit aktualisieren
-                this._updateElementsVisibility();
-                this._cleanUp();
-
-                // und neu rendern
-                if (el.isRendered) {
-                    el.render();
-                }
-                
-                // promise ausführen
-                resolve({
-                    oldElement: currentEl,
-                    element: el
-                });
-                
-            }, duration, this);
-        });
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+        
+        if (this._tabBarEl) {
+            this._tabBarEl.unrender();
+        }
+        
+        super.unrender(true);
     }
     
     
     // PROTECTED
-    // Entfernt CSS-Klassen, zIndex und animationDuration der Animation
-    _cleanUp() {
-        const animationClasses = [
-            'kijs-animation-fade',
-            'kijs-animation-fade-out',
-            'kijs-animation-slideleft',
-            'kijs-animation-slideleft-out',
-            'kijs-animation-slideright',
-            'kijs-animation-slideright-out',
-            'kijs-animation-slidetop',
-            'kijs-animation-slidetop-out',
-            'kijs-animation-slidebottom',
-            'kijs-animation-slidebottom-out'
-        ];
+    // Ermittelt das Element zu einem TabButton
+    _getElFromTabButton(elButton) {
+        let ret = null;
         
-        for (let i=0; i<this._elements.length; i++) {
-            // Animations-Klassen entfernen
-            this._elements[i].dom.clsRemove(animationClasses);
-            
-            // zIndex zurücketzen
-            this._elements[i].style.zIndex = 0;
-            this._elements[i].style.animationDuration = '0s';
-        }
+        kijs.Array.each(this._elements, function(el) {
+            if (el.tabButtonEl === elButton) {
+                ret = el;
+                return false;
+            }
+        }, this);
+        
+        return ret;
     }
     
-    // Ermittelt den Index eines 
-    _getElIndex(el) {
+    
+    // Ermittelt den Index eines TabButtons
+    _getTabButtonElIndex(el) {
         let index = null;
         
-        for (let i=0; i<this._elements.length; i++) {
-            if (this._elements[i] === el) {
+        for (let i=0; i<this._tabBarEl.elements.length; i++) {
+            if (this._tabBarEl.elements[i] === el) {
                 index = i;
                 break;
             }
@@ -298,11 +205,44 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return index;
     }
     
-    // nur das currentEl ist sichtbar, alle anderen werden ausgeblendet
-    _updateElementsVisibility() {
-        for (let i=0; i<this._elements.length; i++) {
-            this._elements[i].visible = i === this._currentIndex;
+    // overwrite
+    _setCurrent(element) {
+        super._setCurrent(element);
+        
+        // Aktueller TabButton hervorheben
+        kijs.Array.each(this._tabBarEl.elements, function(el) {
+            if (element && el === element.tabButtonEl) {
+                el.dom.clsAdd('kijs-current');
+            } else {
+                el.dom.clsRemove('kijs-current');
+            }
+        }, this);
+        
+        // In den sichtbaren bereich scrollen, wenn nötig
+        if (element && element.tabButtonEl && element.tabButtonEl.isRendered) {
+            element.tabButtonEl.dom.scrollIntoView();
         }
+    }
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onTabButtonElClick(e) {
+        let el = this._getElFromTabButton(e.element);
+        
+        // Element wechseln
+        this.setCurrentAnimated(el);
+    }
+    
+    #onTabButtonElCloseClick(e) {
+        let el = this._getElFromTabButton(e.element.parent);
+        
+        // Tab schliessen
+        this.remove(el, false, true);
+        
+        // bubbeling verhindern, damit nicht das click-Event des Buttons 
+        // auch noch ausgelöst wird
+        e.nodeEvent.stopPropagation();
     }
     
     
@@ -318,8 +258,13 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             this.raiseEvent('destruct');
         }
         
+        // Elemente/DOM-Objekte entladen
+        if (this._tabBarEl) {
+            this._tabBarEl.destruct();
+        }
+        
         // Variablen (Objekte/Arrays) leeren
-        this._animationTypes = null;
+        this._tabBarEl = null;
         
         // Basisklasse entladen
         super.destruct(true);

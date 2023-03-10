@@ -50,7 +50,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         });
 
         // Listeners
-        this._listView.on('selectionChange', this._onListViewSelectionChange, this);
+        this._listView.on('selectionChange', this.#onListViewSelectionChange, this);
         this._eventForwardsAdd('ddOver', this._listView);
         this._eventForwardsAdd('ddDrop', this._listView.dom);
 
@@ -62,20 +62,18 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get autoLoad() { return this._listView.autoLoad; }
     set autoLoad(val) { this._listView.autoLoad = val; }
 
-    get data() { return this._listView.data; }
-    set data(val) { this._listView.data = val; }
-
     get captionField() { return this._listView.captionField; }
     set captionField(val) { this._listView.captionField = val; }
 
-    get valueField() { return this._listView.valueField; }
-    set valueField(val) { this._listView.valueField = val; }
+    get data() { return this._listView.data; }
+    set data(val) { this._listView.data = val; }
 
     // overwrite
     get disabled() { return super.disabled; }
@@ -136,12 +134,14 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._oldValue = this._listView.value;
     }
 
+    get valueField() { return this._listView.valueField; }
+    set valueField(val) { this._listView.valueField = val; }
+
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Fügt Daten hinzu
      * @param {Array} data
@@ -219,8 +219,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         }
     }
 
+
+    // PRIVATE
     // LISTENERS
-    _onListViewSelectionChange() {
+    #onListViewSelectionChange() {
         const val = this.value;
 
         this.raiseEvent(['input', 'change'], { oldValue: this._oldValue, value: val });
@@ -228,6 +230,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         this.validate();
     }
+
 
 
     // --------------------------------------------------------------

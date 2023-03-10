@@ -79,9 +79,6 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
             autoClose: true
         });
 
-        // Listeners
-        this.on('mouseDown', this._onMouseDown, this);
-
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -107,10 +104,10 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                 throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');
             }
 
-            this._uploadDialog.on('startUpload', this._onStartUpload, this);
-            this._uploadDialog.on('failUpload', this._onFailUpload, this);
-            this._uploadDialog.on('upload', this._onUpload, this);
-            this._uploadDialog.on('endUpload', this._onEndUpload, this);
+            this._uploadDialog.on('startUpload', this.#onStartUpload, this);
+            this._uploadDialog.on('failUpload', this.#onFailUpload, this);
+            this._uploadDialog.on('upload', this.#onUpload, this);
+            this._uploadDialog.on('endUpload', this.#onEndUpload, this);
         }
     }
 
@@ -143,7 +140,10 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         return null;
     }
 
-    _onStartUpload(ud, filename, filedir, filetype, uploadId) {
+
+    // PRIVATE
+    // LISTENERS
+    #onStartUpload(ud, filename, filedir, filetype, uploadId) {
         let progressBar = new kijs.gui.ProgressBar({
             caption: kijs.String.htmlspecialchars(filename),
             uploadDialog: this._uploadDialog,
@@ -170,11 +170,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadRunning = true;
     }
 
-    _onFailUpload(ud, filename, filetype) {
+    #onFailUpload(ud, filename, filetype) {
         this._autoClose = false;
     }
 
-    _onUpload(ud, response, errorMsg, uploadId) {
+    #onUpload(ud, response, errorMsg, uploadId) {
         let pg = this._getUploadProgressBar(uploadId);
         if (errorMsg && pg) {
             this._autoClose = false;
@@ -182,7 +182,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         }
     }
 
-    _onEndUpload() {
+    #onEndUpload() {
         // uploads fertig
         this._uploadRunning = false;
         if (this._autoClose) {

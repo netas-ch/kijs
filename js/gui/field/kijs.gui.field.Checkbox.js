@@ -127,8 +127,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._eventForwardsAdd('blur', this._inputWrapperDom);
 
         // Listeners
-        this._inputWrapperDom.on('click', this._onClick, this);
-        this._inputWrapperDom.on('spacePress', this._onSpacePress, this);
+        this._inputWrapperDom.on('click', this.#onClick, this);
+        this._inputWrapperDom.on('spacePress', this.#onSpacePress, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -138,6 +138,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -145,6 +146,9 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     set caption(val) {
         this._captionDom.html = val;
     }
+
+    get captionDom() { return this._captionDom; }
+
 
     get captionHide() { return this._captionHide; }
     set captionHide(val) {
@@ -158,13 +162,13 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
     }
 
-    get captionDom() { return this._captionDom; }
-
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }
+
+    get checkboxIcon() { return this._checkboxIconEl; }
 
     get checked() { return this._checked; }
     set checked(val) {
@@ -179,8 +183,6 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
         this._updateCheckboxIcon();
     }
-
-    get checkboxIcon() { return this._checkboxIconEl; }
 
     get icon() { return this._iconEl; }
     /**
@@ -272,6 +274,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     set valueUnchecked(val) { this._valueUnchecked = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -359,8 +362,9 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onClick(e) {
+    #onClick(e) {
         if (!this.readOnly && !this.disabled) {
             const oldChecked = this._checked;
             const oldValue = this.value;
@@ -385,7 +389,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
     }
 
-    _onSpacePress(e) {
+    #onSpacePress(e) {
         if (!this.readOnly && !this.disabled) {
             const oldChecked = this._checked;
             const oldValue = this.value;
@@ -410,6 +414,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         // Bildlauf der Space-Taste verhindern
         e.nodeEvent.preventDefault();
     }
+
 
 
     // --------------------------------------------------------------
@@ -445,4 +450,5 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

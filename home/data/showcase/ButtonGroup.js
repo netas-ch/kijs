@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.ButtonGroup = class sc_ButtonGroup {
+window.home.sc = {};
+home.sc.ButtonGroup = class home_sc_ButtonGroup {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -41,14 +41,14 @@ sc.ButtonGroup = class sc_ButtonGroup {
                     width: 500,
                     height: 400,
                     
-                    headerCls: 'kijs-flexrow',
+                    //headerCls: 'kijs-flexrow',
                     
                     headerElements: [
                         {
                             xtype: 'kijs.gui.ButtonGroup',
                             rowSizes:[2],
                             caption: 'Funktionen',
-                            width: 350,
+                            width: 250,
                             height: 80,
                             columns: 3,
                             elements: [
@@ -96,8 +96,7 @@ sc.ButtonGroup = class sc_ButtonGroup {
 
                     elements: [],
 
-                    footerCaption: 'Meine FooterBar',
-                    footerStyle: { padding: '10px' },
+                    footerBarCaption: 'Meine FooterBar',
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',

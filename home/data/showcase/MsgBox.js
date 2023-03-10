@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.MsgBox = class sc_MsgBox {
+window.home.sc = {};
+home.sc.MsgBox = class home_sc_MsgBox {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -19,6 +19,7 @@ sc.MsgBox = class sc_MsgBox {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.MsgBox',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
@@ -28,8 +29,7 @@ sc.MsgBox = class sc_MsgBox {
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Message Box standard:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Message Box standard:'
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'alert',
@@ -106,7 +106,7 @@ sc.MsgBox = class sc_MsgBox {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Message Box mit Callback Function:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'alert',
@@ -122,7 +122,7 @@ sc.MsgBox = class sc_MsgBox {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Message Box individuell:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'show',

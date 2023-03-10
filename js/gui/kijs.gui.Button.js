@@ -34,7 +34,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            disableFlex: true
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -47,6 +47,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
+            disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             icon: { target: 'icon' },
             iconMap: { target: 'iconMap', context: this._iconEl },
             iconChar: { target: 'iconChar', context: this._iconEl },
@@ -114,6 +115,18 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._dom.disabled = val;
     }
 
+    get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
+    set disableFlex(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-disableFlex');
+        } else {
+            this._dom.clsRemove('kijs-disableFlex');
+        }
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -159,6 +172,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { this._iconEl.iconColor = val; }
 
+    get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
     get icon2() { return this._icon2El; }
@@ -286,8 +300,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
 
     // Overwrite
     render(superCall) {
+        // falls der Button keine caption hat, wird er mit kleineren Rändern angezeigt.
+        if (this._captionDom.isEmpty) {
+            this._dom.clsAdd('kijs-small');
+        } else {
+            this._dom.clsRemove('kijs-small');
+        }
+        
         super.render(true);
-
+        
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._dom.node);
@@ -328,12 +349,19 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._iconEl.unrender();
-        this._icon2El.unrender();
-        this._captionDom.unrender();
-        this._badgeDom.unrender();
-
+        
+        if (this._iconEl) {
+            this._iconEl.unrender();
+        }
+        if (this._icon2El) {
+            this._icon2El.unrender();
+        }
+        if (this._captionDom) {
+            this._captionDom.unrender();
+        }
+        if (this._badgeDom) {
+            this._badgeDom.unrender();
+        }
         if (this._menuEl) {
             this._menuEl.unrender();
         }

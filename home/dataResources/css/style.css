@@ -1,0 +1,24 @@
+/* CSS für Home-App dataResources */
+
+/* Icons */
+.icoWizard16 {
+    background-image: url('../img/icoWizard16.png');
+    height: 16px;
+    width: 16px;
+}
+.icoFolder32 {
+    background-image: url('../img/icoFolder32.png');
+    height: 32px;
+    width: 32px;
+}
+.icoFolderOpen32 {
+    background-image: url('../img/icoFolderOpen32.png');
+    height: 32px;
+    width: 32px;
+}
+
+/* Paper Background */
+.paperBkgrnd {
+    background: url('../img/paperBkgrnd.png');
+    background-repeat: repeat;
+}

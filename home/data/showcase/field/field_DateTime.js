@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.field_DateTime = class sc_field_DateTime {
+window.home.sc = {};
+home.sc.field_DateTime = class home_sc_field_DateTime {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -27,13 +27,13 @@ sc.field_DateTime = class sc_field_DateTime {
             },
             
             headerInnerStyle:{
-                padding: '10px'
+                gap: '6px'
             },
             
             headerElements:[
                 {
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disabled',
+                    label: 'disabled',
                     on: {
                         change: function(e) {
                             this._updateProperty('disabled', e.element.value);
@@ -42,7 +42,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disableFlex',
+                    label: 'disableFlex',
                     value: 1,
                     on: {
                         change: function(e) {
@@ -52,7 +52,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelHide',
+                    label: 'labelHide',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelHide', e.element.value);
@@ -61,7 +61,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelWidth = 120',
+                    label: 'labelWidth = 120',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelWidth', e.element.value ? 120 : null);
@@ -70,7 +70,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'readOnly',
+                    label: 'readOnly',
                     on: {
                         change: function(e) {
                             this._updateProperty('readOnly', e.element.value);
@@ -79,7 +79,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'required',
+                    label: 'required',
                     on: {
                         change: function(e) {
                             this._updateProperty('required', e.element.value);
@@ -89,7 +89,7 @@ sc.field_DateTime = class sc_field_DateTime {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'showHelp',
+                    label: 'showHelp',
                     on: {
                         change: function(e) {
                             let value = '';

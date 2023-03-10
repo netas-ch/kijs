@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.Header
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
 
@@ -38,10 +33,11 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get cells() {
         let cells = [];
         for (let i=0; i<this._cells.length; i++) {
@@ -57,6 +53,26 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // Overwrite
+    render(superCall) {
+        super.render(true);
+
+        // cells erstellen
+        this._createCells();
+
+        // cells sortieren
+        this._sortCells();
+
+        // cells rendern
+        kijs.Array.each(this.cells, function(cell) {
+            cell.renderTo(this._dom.node);
+        }, this);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
 
     /**
      * Setzt bei allen columns das richtige Sort-Icon
@@ -90,7 +106,24 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         });
 
     }
+    
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
 
+        // cells unrendern
+        kijs.Array.each(this.cells, function(cell) {
+            cell.unrender();
+        }, this);
+
+        super.unrender(true);
+    }
+
+
+    // PROTECTED
     _createCells() {
         let newColumnConfigs = [];
 
@@ -117,7 +150,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             });
 
             // change listener
-            columnConfig.on('change', this._onColumnConfigChange, this);
+            columnConfig.on('change', this.#onColumnConfigChange, this);
 
             cell.loadFromColumnConfig();
 
@@ -137,8 +170,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         });
     }
 
+
+    // PRIVATE
     // LISTENERS
-    _onColumnConfigChange(e) {
+    #onColumnConfigChange(e) {
         if ('visible' in e || 'width' in e || 'caption' in e || 'resizable' in e || 'sortable' in e) {
             kijs.Array.each(this.cells, function(cell) {
                 if (e.columnConfig === cell.columnConfig) {
@@ -157,41 +192,6 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }
     }
 
-    // Overwrite
-    render(superCall) {
-        super.render(true);
-
-        // cells erstellen
-        this._createCells();
-
-        // cells sortieren
-        this._sortCells();
-
-        // cells rendern
-        kijs.Array.each(this.cells, function(cell) {
-            cell.renderTo(this._dom.node);
-        }, this);
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        // cells unrendern
-        kijs.Array.each(this.cells, function(cell) {
-            cell.unrender();
-        }, this);
-
-        super.unrender(true);
-    }
 
 
     // --------------------------------------------------------------
@@ -220,4 +220,5 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

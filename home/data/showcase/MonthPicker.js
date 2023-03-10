@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.MonthPicker = class sc_MonthPicker {
+window.home.sc = {};
+home.sc.MonthPicker = class home_sc_MonthPicker {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

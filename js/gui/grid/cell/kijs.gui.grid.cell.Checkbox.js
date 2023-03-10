@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Checkbox
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui.grid.cell.Cell {
 
 
@@ -41,17 +36,14 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
         }
 
         // Events
-        this._dom.on('click', this._onClick, this);
+        this._dom.on('click', this.#onClick, this);
     }
+
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-    // Overwrite
-    get value() { return this._checked; }
-    set value(val) { this.setValue(val); }
-
     get disabled() { return this._disabled; }
     set disabled(val) {
         if (val) {
@@ -61,11 +53,16 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
         }
         this._disabled = !!val;
     }
+    
+    // Overwrite
+    get value() { return this._checked; }
+    set value(val) { this.setValue(val); }
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Setzt das value der Zelle.
      * @param {String} value
@@ -80,6 +77,8 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
         return super.setValue(value, silent, markDirty, updateDataRow);
     }
 
+
+    // PROTECTED
     /**
      * icon rendern
      * @param {String|Number} value
@@ -93,8 +92,10 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
         }
     }
 
-
-    _onClick() {
+    
+    // PRIVATE
+    // LISTENERS
+    #onClick() {
         if (this._disabled) {
             return;
         }
@@ -107,7 +108,31 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
      * overwrite
      * prevent edit
      */
-    _onDblClick() {
+    #onDblClick() {
         return;
     }
+    
+    
+    
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    destruct(superCall) {
+        if (!superCall) {
+
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+
+        // Elemente/DOM-Objekte entladen
+        
+        // Variablen (Objekte/Arrays) leeren
+
+        // Basisklasse entladen
+        super.destruct(true);
+    }
+    
 };

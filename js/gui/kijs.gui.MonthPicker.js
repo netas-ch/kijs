@@ -30,7 +30,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._previousBtn = new kijs.gui.Button({
             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
             on: {
-                click: this._onPreviousBtnClick,
+                click: this.#onPreviousBtnClick,
                 context: this
             }
         });
@@ -39,7 +39,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._nextBtn = new kijs.gui.Button({
             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
             on: {
-                click: this._onNextBtnClick,
+                click: this.#onNextBtnClick,
                 context: this
             }
         });
@@ -56,7 +56,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._yearDivDom = new kijs.gui.Dom({
             cls: 'kijs-monthpicker-yeardiv',
             on: {
-                wheel: this._onYearDivDomWheel,
+                wheel: this.#onYearDivDomWheel,
                 context: this
             }
         });
@@ -76,9 +76,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Jahre Scroll-Button up
         this._yearsScrollUpBtn = new kijs.gui.Button({
-            html: '▴',
+            caption: '▴',
             on: {
-                click: this._onYearsScrollUpBtnClick,
+                click: this.#onYearsScrollUpBtnClick,
                 context: this
             }
         });
@@ -86,9 +86,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Jahre Scroll-Button down
         this._yearsScrollDownBtn = new kijs.gui.Button({
-            html: '▾',
+            caption: '▾',
             on: {
-                click: this._onYearsScrollDownBtnClick,
+                click: this.#onYearsScrollDownBtnClick,
                 context: this
             }
         });
@@ -102,9 +102,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Button Aktueller Monat
         this._currentBtn = new kijs.gui.Button({
-            html: kijs.getText('Akt. Monat'),
+            caption: kijs.getText('Akt. Monat'),
             on: {
-                click: this._onCurrentBtnClick,
+                click: this.#onCurrentBtnClick,
                 context: this
             }
         });
@@ -112,9 +112,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Button Leeren
         this._emptyBtn = new kijs.gui.Button({
-            html: kijs.getText('Leeren'),
+            caption: kijs.getText('Leeren'),
             on: {
-                click: this._onEmptyBtnClick,
+                click: this.#onEmptyBtnClick,
                 context: this
             }
         });
@@ -122,7 +122,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Button Schliessen
         this._closeBtn = new kijs.gui.Button({
-            html: kijs.getText('Schliessen')
+            caption: kijs.getText('Schliessen')
         });
         this._closeBtn.dom.nodeAttributeSet('tabIndex', -1);
 
@@ -168,12 +168,6 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     get currentBtnHide() { return this._currentBtnHide; }
     set currentBtnHide(val) { this._currentBtnHide = !!val; }
 
-    get emptyBtnHide() { return this._emptyBtnHide; }
-    set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
-
-    get headerBarHide() { return this._headerBarHide; }
-    set headerBarHide(val) { this._headerBarHide = !!val; }
-
     get date() {
         if (kijs.isEmpty(this._date)) {
             return null;
@@ -195,39 +189,37 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
         this._calculate(true);
     }
+    
+    get emptyBtnHide() { return this._emptyBtnHide; }
+    set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
     get headerBar() { return this._headerBar; }
 
     get headerBarFormat() { return this._headerBarFormat; }
     set headerBarFormat(val) { this._headerBarFormat = val; }
 
+    get headerBarHide() { return this._headerBarHide; }
+    set headerBarHide(val) { this._headerBarHide = !!val; }
+
     get lastDayOfMonthAsValue() { return this._lastDayOfMonthAsValue; }
     set lastDayOfMonthAsValue(val) { this._lastDayOfMonthAsValue = !!val; }
 
-    get maxDate() {
-        return this._maxDate;
-    }
+    get maxDate() { return this._maxDate; }
     set maxDate(val) {
         this._maxDate = kijs.isEmpty(val) ? null : kijs.Date.getLastOfMonth(kijs.Date.create(val));
     }
-
-    get minDate() {
-        return this._minDate;
+    
+    get maxValue() {  return kijs.Date.format(this.maxDate, this._valueFormat); }
+    set maxValue(val) {
+        this.maxDate = val;
     }
+    
+    get minDate() { return this._minDate; }
     set minDate(val) {
         this._minDate = kijs.isEmpty(val) ? null : kijs.Date.getFirstOfMonth(kijs.Date.create(val));
     }
 
-    get maxValue() {
-        return kijs.Date.format(this.maxDate, this._valueFormat);
-    }
-    set maxValue(val) {
-        this.maxDate = val;
-    }
-
-    get minValue() {
-        return kijs.Date.format(this.minDate, this._valueFormat);
-    }
+    get minValue() { return kijs.Date.format(this.minDate, this._valueFormat); }
     set minValue(val) {
         this.minDate = val;
     }
@@ -336,6 +328,26 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this.raiseEvent('afterRender');
         }
     }
+    
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        if (this._headerBar) {
+            this._headerBar.unrender();
+        }
+        if (this._yearMonthDivDom) {
+            this._yearMonthDivDom.unrender();
+        }
+        if (this._footerDivDom) {
+            this._footerDivDom.unrender();
+        }
+
+        super.unrender(true);
+    }
 
 
     // PROTECTED
@@ -412,8 +424,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._monthsDom.push(new kijs.gui.Dom({
                 html: kijs.Date.months_short[i],
                 on: {
-                    click: this._onMonthDomClick,
-                    dblClick: this._onMonthDomDblClick,
+                    click: this.#onMonthDomClick,
+                    dblClick: this.#onMonthDomDblClick,
                     context: this
                 }
             }));
@@ -426,8 +438,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._yearsDom.push(new kijs.gui.Dom({
                 html: this._startYear + i,
                 on: {
-                    click: this._onYearDomClick,
-                    dblClick: this._onYearDomDblClick,
+                    click: this.#onYearDomClick,
+                    dblClick: this.#onYearDomDblClick,
                     context: this
                 }
             }));
@@ -435,8 +447,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
 
 
-    // EVENTS
-    _onCurrentBtnClick(e) {
+    // PRIVATE
+    // LISTENERS
+    #onCurrentBtnClick(e) {
         const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
         let date = kijs.Date.getFirstOfMonth(new Date());
 
@@ -449,7 +462,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this.raiseEvent('currentClick');
     }
 
-    _onEmptyBtnClick(e) {
+    #onEmptyBtnClick(e) {
         const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
 
         this._date = null;
@@ -461,7 +474,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this.raiseEvent('emptyClick');
     }
 
-    _onMonthDomClick(e) {
+    #onMonthDomClick(e) {
         if (!e.dom.clsHas('kijs-disabled')) {
             const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
             const monthIndex = this._monthsDom.indexOf(e.dom);
@@ -483,11 +496,11 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this.raiseEvent('monthClick');
         }
     }
-    _onMonthDomDblClick(e) {
+    #onMonthDomDblClick(e) {
         this.raiseEvent('monthDblClick');
     }
 
-    _onNextBtnClick(e) {
+    #onNextBtnClick(e) {
         const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
         let date = null;
 
@@ -505,7 +518,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    _onPreviousBtnClick(e) {
+    #onPreviousBtnClick(e) {
         const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
         let date = null;
 
@@ -523,16 +536,16 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    _onYearDivDomWheel(e) {
+    #onYearDivDomWheel(e) {
         if (e.nodeEvent.deltaY < 0) {
-            this._onYearsScrollUpBtnClick();
+            this.#onYearsScrollUpBtnClick();
         } else {
-            this._onYearsScrollDownBtnClick();
+            this.#onYearsScrollDownBtnClick();
         }
         e.nodeEvent.preventDefault();
     }
 
-    _onYearDomClick(e) {
+    #onYearDomClick(e) {
         if (!e.dom.clsHas('kijs-disabled')) {
             const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
             const year = parseInt(e.dom.html);
@@ -554,39 +567,20 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this.raiseEvent('yearClick');
         }
     }
-    _onYearDomDblClick(e) {
+    #onYearDomDblClick(e) {
         this.raiseEvent('yearDblClick');
     }
 
-    _onYearsScrollDownBtnClick(e) {
+    #onYearsScrollDownBtnClick(e) {
         this._startYear++;
         this._calculate(false);
     }
 
-    _onYearsScrollUpBtnClick(e) {
+    #onYearsScrollUpBtnClick(e) {
         this._startYear--;
         this._calculate(false);
     }
 
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        if (this._headerBar) {
-            this._headerBar.unrender();
-        }
-        if (this._yearMonthDivDom) {
-            this._yearMonthDivDom.unrender();
-        }
-        if (this._footerDivDom) {
-            this._footerDivDom.unrender();
-        }
-
-        super.unrender(true);
-    }
 
 
     // --------------------------------------------------------------

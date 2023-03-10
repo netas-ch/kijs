@@ -1,6 +1,5 @@
 /* global kijs, this */
 
-
 // TODO: Es gibt zwei unterschiedliche Möglichkeiten um zu Filtern 
 // - selectByFilters()
 // - this.filters (Entfernen: Ist nicht dokumentiert)
@@ -64,9 +63,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         // Events
-        this.on('keyDown', this._onKeyDown, this);
-        this.on('elementClick', this._onElementClick, this);
-        //this.on('elementFocus', this._onElementFocus, this);
+        this.on('keyDown', this.#onKeyDown, this);
+        this.on('elementClick', this.#onElementClick, this);
+        //this.on('elementFocus', this.#onElementFocus, this);
     }
 
 
@@ -74,13 +73,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
     set autoLoad(val) {
         if (val) {
-            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         } else {
-            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         }
     }
 
@@ -224,24 +223,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set selectType(val) { this._selectType = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-    /**
-     * Wendet Filter auf das DataView an.
-     * @param {Array|Object} filters
-     * @returns {undefined}
-     */
-    applyFilters(filters) {
-        this.filters = filters;
-        if (this.isRendered) {
-            this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
-        }
-    }
-
     /**
      * Fügt Daten hinzu
      * @param {type} data
@@ -256,8 +241,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         this._createElements(data, false);
     }
-
-
+    
+    /**
+     * Wendet Filter auf das DataView an.
+     * @param {Array|Object} filters
+     * @returns {undefined}
+     */
+    applyFilters(filters) {
+        this.filters = filters;
+        if (this.isRendered) {
+            this._createElements(this._data);
+            // Current Element ermitteln und setzen
+            this.current = null;
+        }
+    }
+    
     /**
      * Entfernt alle Selektionen
      * @param {Boolean} [preventSelectionChange=false]    Soll das SelectionChange-Event verhindert werden?
@@ -319,6 +317,107 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    // wird von kijs.gui.Combo verwendet
+    // TODO: schönere Lösung?
+    handleKeyDown(nodeEvent) {
+        if (!this.disabled) {
+            switch (nodeEvent.code) {
+                case 'ArrowLeft':
+                    if (this._currentEl) {
+                        const prev = this._currentEl.previous;
+                        if (prev) {
+                            this.current = prev;
+                            if (this._focusable) {
+                                prev.focus();
+                            }
+                        }
+
+                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowUp':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this, true);
+
+
+                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowRight':
+                    if (this._currentEl) {
+                        const next = this._currentEl.next;
+                        if (next) {
+                            this.current = next;
+                            if (this._focusable) {
+                                next.focus();
+                            }
+                        }
+
+                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowDown':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this);
+
+                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'Space':
+                    this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                    break;
+
+            }
+        }
+    }
+    
     /**
      * Füllt das Dataview mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -400,6 +499,42 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Selektiert alle Elemente zwischen el1 und el2
+     * @param {kijs.gui.Element} el1
+     * @param {kijs.gui.Element} el2
+     * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectBetween(el1, el2, preventSelectionChange=false) {
+        let found = false;
+        let elements = [];
+
+        // Alle Elemente zwischen dem vorher selektierten Element und dem aktuellen Element selektieren
+        kijs.Array.each(this._elements, function(el) {
+            if (!found) {
+                if (el === el1) {
+                    found = 'el1';
+                } else if (el === el2) {
+                    found = 'el2';
+                }
+            }
+
+            if (found) {
+                elements.push(el);
+            }
+
+            if ((found==='el1' && el===el2) || (found==='el2' && el===el1)) {
+                return false;
+            }
+        }, this);
+
+
+        if (!kijs.isEmpty(elements)) {
+            this.select(elements, true, preventSelectionChange);
+        }
+    }
+    
     /**
      * Selektiert ein oder mehrere Elemente
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
@@ -508,42 +643,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Selektiert alle Elemente zwischen el1 und el2
-     * @param {kijs.gui.Element} el1
-     * @param {kijs.gui.Element} el2
-     * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
-     */
-    selectBetween(el1, el2, preventSelectionChange=false) {
-        let found = false;
-        let elements = [];
-
-        // Alle Elemente zwischen dem vorher selektierten Element und dem aktuellen Element selektieren
-        kijs.Array.each(this._elements, function(el) {
-            if (!found) {
-                if (el === el1) {
-                    found = 'el1';
-                } else if (el === el2) {
-                    found = 'el2';
-                }
-            }
-
-            if (found) {
-                elements.push(el);
-            }
-
-            if ((found==='el1' && el===el2) || (found==='el2' && el===el1)) {
-                return false;
-            }
-        }, this);
-
-
-        if (!kijs.isEmpty(elements)) {
-            this.select(elements, true, preventSelectionChange);
-        }
-    }
-
-    /**
      * Element festlegen, welches über die Tabulator-Taste den Fokus erhält
      * Setzt den tabIndex des Elements auf 0
      * und bei allen anderen Elementen auf undefined
@@ -611,7 +710,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // index des aktuellen Elements merken (Element mit Fokus)
         let currentIndex = null;
-        if (this._currentEl && this._currentEl instanceof kijs.gui.DataViewElement && kijs.isDefined(this._currentEl.index)) {
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.DataViewElement) && kijs.isDefined(this._currentEl.index)) {
             currentIndex = this._currentEl.index;
         }
 
@@ -797,12 +896,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
 
-    // EVENTS
-    _onAfterFirstRenderTo(e) {
+    // PRIVATE
+    // LISTENERS
+    #onAfterFirstRenderTo(e) {
         this.load().catch(() => {});
     }
 
-    _onElementClick(e) {
+    #onElementClick(e) {
         if (!this.disabled) {
             this.current = e.raiseElement;
             if (this._focusable) {
@@ -812,111 +912,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    /*_onElementFocus(e) {
+    /*#onElementFocus(e) {
         if (!this.disabled) {
             // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
             //this.setFocusableElement(e.raiseElement);
         }
     }*/
 
-    _onKeyDown(e) {
-        if (!this.disabled) {
-            switch (e.nodeEvent.code) {
-                case 'ArrowLeft':
-                    if (this._currentEl) {
-                        const prev = this._currentEl.previous;
-                        if (prev) {
-                            this.current = prev;
-                            if (this._focusable) {
-                                prev.focus();
-                            }
-                        }
-
-                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                        }
-                    }
-                    e.nodeEvent.preventDefault();
-                    break;
-
-                case 'ArrowUp':
-                    if (this._currentEl && this._elements) {
-                        let found = false;
-
-                        kijs.Array.each(this._elements, function(el) {
-                            if (found) {
-                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
-                                    this.current = el;
-                                    if (this._focusable) {
-                                        el.focus();
-                                    }
-                                    return false;
-                                }
-                            } else {
-                                if (el === this._currentEl) {
-                                    found = true;
-                                }
-                            }
-                        }, this, true);
-
-
-                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                        }
-                    }
-                    e.nodeEvent.preventDefault();
-                    break;
-
-                case 'ArrowRight':
-                    if (this._currentEl) {
-                        const next = this._currentEl.next;
-                        if (next) {
-                            this.current = next;
-                            if (this._focusable) {
-                                next.focus();
-                            }
-                        }
-
-                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                        }
-                    }
-                    e.nodeEvent.preventDefault();
-                    break;
-
-                case 'ArrowDown':
-                    if (this._currentEl && this._elements) {
-                        let found = false;
-                        kijs.Array.each(this._elements, function(el) {
-                            if (found) {
-                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
-                                    this.current = el;
-                                    if (this._focusable) {
-                                        el.focus();
-                                    }
-                                    return false;
-                                }
-                            } else {
-                                if (el === this._currentEl) {
-                                    found = true;
-                                }
-                            }
-                        }, this);
-
-                        if (e.nodeEvent.shiftKey || (!e.nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                        }
-                    }
-                    e.nodeEvent.preventDefault();
-                    break;
-
-                case 'Space':
-                    this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
-                    break;
-
-            }
-        }
+    #onKeyDown(e) {
+        this.handleKeyDown(e.nodeEvent);
     }
+
 
 
     // --------------------------------------------------------------

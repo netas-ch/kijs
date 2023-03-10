@@ -83,7 +83,7 @@ window.kijs = class kijs {
     /**
      * Erstellt eine Klasse/Objekt aus einem Namespace (xtype, iconMap)
      * @param {String} xtype    Beispiel: 'kijs.gui.Element'
-     * @returns {kijs.gui.Element|Object|null}
+     * @returns {kijs.gui.Element|null}
      */
     static getClassFromXtype(xtype) {
         const parts = xtype.split('.');

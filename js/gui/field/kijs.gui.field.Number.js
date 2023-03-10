@@ -47,6 +47,7 @@
  */
 kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -82,7 +83,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         });
 
         // Listeners
-        this.on('blur', this._onBlur, this);
+        this.on('blur', this.#onBlur, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -92,10 +93,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get allowDecimals() { return this._allowDecimals; }
     set allowDecimals(val) { this._allowDecimals = !!val; }
 
@@ -133,10 +134,34 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         }
     }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    render(superCall) {
+        super.render(true);
 
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+
+
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        super.unrender(true);
+    }
+    
+    
+    // PROTECTED
     _validationRules(originalValue) {
         super._validationRules(originalValue);
 
@@ -176,34 +201,15 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         }
     }
 
-    // EVENTS
-    _onBlur() {
+
+    // PRIVATE
+    // LISTENERS
+    #onBlur() {
         // Beim verlassen des Feldes zahl auf eingestelltes Format ändern.
         let val = this.value;
         if (super.value !== val) {
             this.value = val;
         }
-    }
-
-    // overwrite
-    render(superCall) {
-        super.render(true);
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
-
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        super.unrender(true);
     }
 
 
@@ -223,4 +229,5 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Text 
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

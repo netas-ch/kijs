@@ -183,7 +183,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     constructor(config={}) {
         super(false);
 
-        this._afterResizeDeferHandle = null;   // intern
+        this._afterResizeDeferId = null;   // intern
         this._afterResizeDelay = 300;    // delay beim Aufruf des afterResize-Events
         this._dom = new kijs.gui.Dom();
         this._name = null;
@@ -238,7 +238,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
             tooltip: { target: 'tooltip' },
-            toolTip: { target: 'toolTip' }, // DEPRECATED
             top: { target: 'top' },
             userData: { target: 'userData' },
             visible : true,
@@ -403,13 +402,13 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     set parent(val) {
         if (val !== this._parentEl) {
             if (this._parentEl) {
-                this._parentEl.off('afterResize', this._onParentAfterResize, this);
-                this._parentEl.off('childElementAfterResize', this._onParentChildElementAfterResize, this);
+                this._parentEl.off('afterResize', this.#onParentAfterResize, this);
+                this._parentEl.off('childElementAfterResize', this.#onParentChildElementAfterResize, this);
             }
 
             this._parentEl = val;
-            this._parentEl.on('afterResize', this._onParentAfterResize, this);
-            this._parentEl.on('childElementAfterResize', this._onParentChildElementAfterResize, this);
+            this._parentEl.on('afterResize', this.#onParentAfterResize, this);
+            this._parentEl.on('childElementAfterResize', this.#onParentChildElementAfterResize, this);
             this.applyConfig();
         }
     }
@@ -439,9 +438,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     get style() { return this._dom.style; }
-
-    get toolTip() { console.warn('DEPRECATED: element.toolTip, please use element.tooltip'); return this.tooltip; }
-    set toolTip(val) { console.warn('DEPRECATED: element.toolTip, please use element.tooltip'); this.tooltip = val;  };
 
     get tooltip() { return this._dom.tooltip; }
     set tooltip(val) { this._dom.tooltip = val; };
@@ -600,7 +596,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {Boolean}
      */
     isChildOf(element) {
-        if (this.parent && this.parent instanceof kijs.gui.Element) {
+        if (this.parent && (this.parent instanceof kijs.gui.Element)) {
             if (this.parent === element) {
                 return true;
             } else {
@@ -619,7 +615,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         kijs.Array.each(names, function(name) {
             if (this._eventForwards[name]) {
                 kijs.Array.each(this._eventForwards[name], function(forward) {
-                    forward.target.on(forward.targetEventName, this._onForwardEvent, this);
+                    forward.target.on(forward.targetEventName, this.#onForwardEvent, this);
                 }, this);
             }
         }, this);
@@ -675,7 +671,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
      * @param {HTMLElement} targetNode
-     * @param {HTMLElement} [insert] - Falls das Element statt angehängt eingefügt werden soll.
+     * @param {HTMLElement} [insert] - true=vorher oder nachher einfügen, false=als Kind anhängen
      * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
      * @returns {undefined}
      */
@@ -684,8 +680,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         this.render();
 
+        // vorher oder nachher einfügen
         if (insert) {
-
             // Element vor dem insert-Element einfügen
             if (insertPosition === 'before') {
                 targetNode.insertBefore(this._dom.node, insert);
@@ -698,7 +694,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 throw new kijs.Error('invalid insert position for renderTo');
             }
 
-        // Element anhängen
+        // als Kind-Element anhängen
         } else {
             targetNode.appendChild(this._dom.node);
         }
@@ -715,6 +711,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {undefined}
      */
     unrender(superCall) {
+        // timer abbrechen
+        if (this._afterResizeDeferId) {
+            window.clearTimeout(this._afterResizeDeferId);
+            this._afterResizeDeferId = null;
+        }
+        
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -819,7 +821,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             //console.log(forward.target);
             if (forward.target instanceof kijs.gui.Element) {
                 console.log('test');
-                forward.target.on(forward.targetEventName, this._onForwardEvent, this);
+                forward.target.on(forward.targetEventName, this.#onForwardEvent, this);
             }*/
         }
     }
@@ -916,13 +918,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         // Aufruf mit Verzögerung
         if (useDelay) {
-            if (this._afterResizeDeferHandle) {
-                window.clearTimeout(this._afterResizeDeferHandle);
+            if (this._afterResizeDeferId) {
+                window.clearTimeout(this._afterResizeDeferId);
+                this._afterResizeDeferId = null;
             }
 
-            this._afterResizeDeferHandle = kijs.defer(function(){
-                this._afterResizeDeferHandle = null;
-
+            this._afterResizeDeferId = kijs.defer(function(){
                 if (this._hasSizeChanged()) {
                     this._lastSize = { h: this.height, w: this.width };
                     this.raiseEvent('afterResize', e);
@@ -940,6 +941,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
 
+    // PRIVATE
     // LISTENERS
     /**
      * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte.
@@ -947,14 +949,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Object} e
      * @returns {Boolean}
      */
-    _onForwardEvent(e) {
+    #onForwardEvent(e) {
         let ret = true;
 
         // Vorhandene Weiterleitungen durchgehen und bei Übereinstimmung das Event weiterleiten
         kijs.Object.each(this._eventForwards, function(eventName, forwards) {
 
             kijs.Array.each(forwards, function(forward) {
-                const eventContextProperty = forward.target instanceof kijs.gui.Dom ? 'context' : 'element';
+                const eventContextProperty = (forward.target instanceof kijs.gui.Dom) ? 'context' : 'element';
                 if (forward.target === e[eventContextProperty] && forward.targetEventName === e.eventName) {
                     e.element = this;
                     if (this.raiseEvent(eventName, e) === false) {
@@ -972,7 +974,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onParentAfterResize(e) {
+    #onParentAfterResize(e) {
         // Falls die eigene Grösse geändert hat: das eigene afterResize-Event auslösen
         this._raiseAfterResizeEvent(false, e);
     }
@@ -982,7 +984,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onParentChildElementAfterResize(e) {
+    #onParentChildElementAfterResize(e) {
         // Falls die eigene Grösse geändert hat: das eigene afterResize-Event auslösen
         this._raiseAfterResizeEvent(false, e);
     }
@@ -994,10 +996,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     destruct(superCall) {
         // atferResize-Events verhindern
         this._preventAfterResize = true;
-        if (this._afterResizeDeferHandle) {
-            window.clearTimeout(this._afterResizeDeferHandle);
-        }
-
+            
         if (!superCall) {
             // unrender
             this.unrender(superCall);
@@ -1018,9 +1017,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (this._waitMaskEl) {
             this._waitMaskEl.destruct;
         }
-
+        
         // Variablen (Objekte/Arrays) leeren
-        this._afterResizeDeferHandle = null;
+        this._afterResizeDeferId = null;
         this._dom = null;
         this._parentEl = null;
         this._eventForwards = null;

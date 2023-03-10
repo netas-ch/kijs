@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.FormPanel = class sc_FormPanel {
+window.home.sc = {};
+home.sc.FormPanel = class home_sc_FormPanel {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -41,12 +41,12 @@ sc.FormPanel = class sc_FormPanel {
                     resizable: true,
                     scrollableY: 'auto',
                     width: 600,
+                    cls: 'kijs-flexform',
                     innerStyle: {
                         padding: '10px'
                     },
                     defaults: {
                         labelWidth: 100,
-                        style: { maxWidth: '500px', marginBottom: '4px' },
                         required: true,
                         defaults: {
                             labelWidth: 100,
@@ -57,7 +57,8 @@ sc.FormPanel = class sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Adresse',
-                            style: { fontWeight: 'bold' }
+                            style: { fontWeight: 'bold' },
+                            labelWidth: 0
                         },{
                             xtype: 'kijs.gui.field.Combo',
                             name: 'Anrede',
@@ -72,7 +73,7 @@ sc.FormPanel = class sc_FormPanel {
                             ]
                         },{
                             xtype: 'kijs.gui.Container',
-                            cls: 'kijs-flexrow',
+                            cls: 'kijs-flexline',
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Text',
@@ -123,7 +124,8 @@ sc.FormPanel = class sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Kontakt',
-                            style: { fontWeight: 'bold' }
+                            style: { fontWeight: 'bold' },
+                            labelWidth: 0
                         },{
                             xtype: 'kijs.gui.Container',
                             cls: 'kijs-flexrow',
@@ -167,7 +169,8 @@ sc.FormPanel = class sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Weitere Angaben',
-                            style: { fontWeight: 'bold' }
+                            style: { fontWeight: 'bold' },
+                            labelWidth: 0
                         },{
                             xtype: 'kijs.gui.Container',
                             cls: 'kijs-flexrow',
@@ -217,7 +220,8 @@ sc.FormPanel = class sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Bemerkungen',
-                            style: { fontWeight: 'bold' }
+                            style: { fontWeight: 'bold' },
+                            labelWidth: 0
                         },{
                             xtype: 'kijs.gui.field.Memo',
                             name: 'Bemerkungen',
@@ -293,6 +297,7 @@ sc.FormPanel = class sc_FormPanel {
                     resizable: true,
                     scrollableY: 'auto',
                     width: 600,
+                    cls: 'kijs-flexform',
                     style: {
                         marginTop: '10px'
                     },
@@ -301,7 +306,6 @@ sc.FormPanel = class sc_FormPanel {
                     },
                     defaults: {
                         labelWidth: 100,
-                        style: { maxWidth: '500px', marginBottom: '4px' },
                         required: true,
                         defaults: {
                             labelWidth: 100,

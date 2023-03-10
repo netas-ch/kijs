@@ -45,9 +45,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 id: this._inputId
             },
             on: {
-                change: this._onInputDomChange,
-                input: this._onInputDomInput,
-                dblClick: this._onInputDomDblClick,
+                change: this.#onInputDomChange,
+                input: this.#onInputDomInput,
+                dblClick: this.#onInputDomDblClick,
                 context: this
             }
         });
@@ -55,10 +55,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._datePicker = new kijs.gui.DatePicker({
             on: {
-                change: this._onDatePickerChange,
-                inputFinished: this._onDatePickerInputFinished,
-                todayClick: this._onDatePickerTodayClick,
-                emptyClick: this._onDatePickerEmptyClick,
+                change: this.#onDatePickerChange,
+                inputFinished: this.#onDatePickerInputFinished,
+                todayClick: this.#onDatePickerTodayClick,
+                emptyClick: this.#onDatePickerEmptyClick,
                 context: this
             }
         });
@@ -70,10 +70,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._timePicker = new kijs.gui.TimePicker({
             inputHide: false,
             on: {
-                change: this._onTimePickerChange,
-                inputFinished: this._onTimePickerInputFinished,
-                nowClick: this._onTimePickerNowClick,
-                emptyClick: this._onTimePickerEmptyClick,
+                change: this.#onTimePickerChange,
+                inputFinished: this.#onTimePickerInputFinished,
+                nowClick: this.#onTimePickerNowClick,
+                emptyClick: this.#onTimePickerEmptyClick,
                 context: this
             }
         });
@@ -91,7 +91,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 this._timePicker
             ],
             on: {
-                close: this._onSpinBoxElClose,
+                close: this.#onSpinBoxElClose,
                 context: this
             }
         });
@@ -466,6 +466,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -481,7 +482,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this.raiseEvent('afterRender');
         }
     }
-
 
     // overwrite
     unrender(superCall) {
@@ -500,7 +500,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
 
-    // Protected
+    // PROTECTED
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
@@ -1065,12 +1065,13 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onDatePickerChange(e) {
+    #onDatePickerChange(e) {
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
-    _onDatePickerEmptyClick(e) {
+    #onDatePickerEmptyClick(e) {
         this._timePicker.value = '';
 
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
@@ -1078,19 +1079,19 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._spinBoxEl.close();
     }
 
-    _onDatePickerInputFinished(e) {
+    #onDatePickerInputFinished(e) {
         if (!this._hasTime()) {
             this._spinBoxEl.close();
         }
     }
 
-    _onDatePickerTodayClick(e) {
+    #onDatePickerTodayClick(e) {
         if (!this._hasTime()) {
             this._spinBoxEl.close();
         }
     }
 
-    _onInputDomChange(e) {
+    #onInputDomChange(e) {
         this._parseString(e.nodeEvent.target.value);
 
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
@@ -1106,21 +1107,20 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._lastValueEnd = valueEnd;
         }
     }
-
-    _onInputDomInput(e) {
-        this.resetErrors();
-    }
-
-    _onInputDomDblClick() {
-
+    
+    #onInputDomDblClick() {
         // Mobile: Tastatur anzeigen beim Doppelklick
         // Funktioniert nur in Chrome
         if ('virtualKeyboard' in window.navigator) {
             window.navigator.virtualKeyboard.show();
         }
     }
+    
+    #onInputDomInput(e) {
+        this.resetErrors();
+    }
 
-    _onSpinBoxElClose(e) {
+    #onSpinBoxElClose(e) {
         this.validate();
 
         // Falls etwas geändert hat: Change Event auslösen
@@ -1133,18 +1133,18 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
     }
 
-    _onTimePickerChange(e) {
+    #onTimePickerChange(e) {
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
-    _onTimePickerEmptyClick(e) {
+    #onTimePickerEmptyClick(e) {
         this._spinBoxEl.close();
     }
-    _onTimePickerInputFinished(e) {
+    #onTimePickerInputFinished(e) {
         this._spinBoxEl.close();
     }
 
-    _onTimePickerNowClick(e) {
+    #onTimePickerNowClick(e) {
         if (!this._hasDate() || !kijs.isEmpty(this._datePicker.date)) {
             this._spinBoxEl.close();
         }
@@ -1191,4 +1191,5 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

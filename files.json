@@ -37,8 +37,12 @@
    "js/gui/container/kijs.gui.container.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
+    
+   "js/gui/container/tab/kijs.gui.container.tab.js",
+   "js/gui/container/tab/kijs.gui.container.tab.Bar.js",
+   "js/gui/container/tab/kijs.gui.container.tab.Container.js",
+   "js/gui/container/kijs.gui.container.Tab.js",
    
-   "js/gui/kijs.gui.Toolbar.js",
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",
    "js/gui/kijs.gui.ViewPort.js",

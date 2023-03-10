@@ -36,6 +36,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     }
 
 
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -67,6 +68,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -74,10 +76,10 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     set dismissDelay(val) { this._dismissDelay = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
      /**
      * Zeigt ein normaler CornerTip
      * @param {String} caption
@@ -94,7 +96,6 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             msg: msg
         });
     }
-
 
     /**
      * Zeigt ein CornerTip mit einem "unerwarteten Fehler"-Symbol
@@ -203,7 +204,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             shadow: true,
             elements: elements,
             on: {
-                destruct: this._onCornerTipDestruct,
+                destruct: this.#onCornerTipDestruct,
                 context: this
             }
         });
@@ -258,8 +259,9 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onCornerTipDestruct(e) {
+    #onCornerTipDestruct(e) {
         this.remove(e.element);
     }
 

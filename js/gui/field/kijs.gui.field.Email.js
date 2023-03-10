@@ -49,6 +49,7 @@
  */
 kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -79,22 +80,27 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
+    // PROTECTED
     _createLinkButton() {
         return new kijs.gui.Button(
             {
                 iconMap: 'kijs.iconMap.Fa.envelope',
                 on: {
-                    click: this._onLinkButtonClick,
+                    click: this.#onLinkButtonClick,
                     context: this
                 }
             }
         );
     }
 
+    _isValidEmail(val) {
+        return !!kijs.toString(val).match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
+    }
+    
     // overwrite
     _validationRules(value) {
         super._validationRules(value);
@@ -105,21 +111,15 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         }
     }
 
-    _isValidEmail(val) {
-        return !!kijs.toString(val).match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
-    }
 
-
+    // PRIVATE
     // LISTENERS
-    _onInput() {
-        // nichts
-    }
-
-    _onLinkButtonClick() {
+    #onLinkButtonClick() {
         if (this._isValidEmail(this.value)) {
             kijs.Navigator.openLink('mailto:' + this.value);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -140,4 +140,5 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

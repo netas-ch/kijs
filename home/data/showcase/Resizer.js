@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Resizer = class sc_Resizer {
+window.home.sc = {};
+home.sc.Resizer = class home_sc_Resizer {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -36,7 +36,7 @@ sc.Resizer = class sc_Resizer {
                     width: 150,
                     height: 100,
                     elements: []/*,
-                    footerCaption: 'Meine FooterBar'*/
+                    footerBarCaption: 'Meine FooterBar'*/
                 }
                 
                 
@@ -55,7 +55,7 @@ sc.Resizer = class sc_Resizer {
             width: 200,
             height: 100,
             elements: []/*,
-            footerCaption: 'Meine FooterBar'*/
+            footerBarCaption: 'Meine FooterBar'*/
         });
         this._win.show();
     }

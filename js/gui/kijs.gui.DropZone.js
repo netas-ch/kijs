@@ -81,12 +81,13 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         }
 
         // Events für DOM mappen
-        this._dom.on('dragEnter', this._onDragEnter, this);
-        this._dom.on('dragOver', this._onDragOver, this);
-        this._dom.on('dragLeave', this._onDragLeave, this);
-        this._dom.on('drop', this._onDrop, this);
+        this._dom.on('dragEnter', this.#onDragEnter, this);
+        this._dom.on('dragOver', this.#onDragOver, this);
+        this._dom.on('dragLeave', this.#onDragLeave, this);
+        this._dom.on('drop', this.#onDrop, this);
 
     }
+
 
 
     // --------------------------------------------------------------
@@ -110,6 +111,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -127,13 +129,20 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onDragEnter(e) {
+    #onDragEnter(e) {
         this._dom.clsAdd(this._dragOverCls);
         this.raiseEvent('dragEnter', e);
     }
+    
+    #onDragLeave(e) {
+        this._dom.clsRemove(this._dragOverCls);
+        this._dom.clsRemove(this._dragOverForbiddenCls);
+        this.raiseEvent('dragLeave', e);
+    }
 
-    _onDragOver(e) {
+    #onDragOver(e) {
         e.nodeEvent.preventDefault();
 
         // 'forbidden' Klasse, falls ungültiger Dateityp
@@ -147,13 +156,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         this.raiseEvent('dragOver', e);
     }
 
-    _onDragLeave(e) {
-        this._dom.clsRemove(this._dragOverCls);
-        this._dom.clsRemove(this._dragOverForbiddenCls);
-        this.raiseEvent('dragLeave', e);
-    }
-
-    _onDrop(e) {
+    #onDrop(e) {
         e.nodeEvent.preventDefault();
         this._dom.clsRemove(this._dragOverCls);
         this._dom.clsRemove(this._dragOverForbiddenCls);
@@ -168,6 +171,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         e.validMime = valid;
         this.raiseEvent('drop', e);
     }
+
 
 
     // --------------------------------------------------------------

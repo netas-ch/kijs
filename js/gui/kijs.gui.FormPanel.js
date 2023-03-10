@@ -17,6 +17,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // TODO: Das automatische Aufrufen von searchFields bei den Listeners "add" und "remove"
     //       wieder entfernen. Diese Funktion solle aus performancegründen manuell
     //       aufgerufen werden
+    // TODO: BUG: Wenn ein neues Formularfeld hinzugefügt wird, ist das Feld dirty 
+    //       (checkbox, combo, ?).
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -60,17 +62,18 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
     set autoLoad(val) {
         if (val) {
-            this.on('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         } else {
-            this.off('afterFirstRenderTo', this._onAfterFirstRenderTo, this);
+            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         }
     }
 
@@ -127,7 +130,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }, this);
         return disabledCnt > (fieldCnt/2);
     }
-
     set disabled(value) {
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
@@ -140,6 +142,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }, this);
     }
 
+    get facadeFnLoad() { return this._facadeFnLoad; }
+    set facadeFnLoad(val) { this._facadeFnLoad = val; }
+
+    get facadeFnSave() { return this._facadeFnSave; }
+    set facadeFnSave(val) { this._facadeFnSave = val; }
+
     get fields() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -147,13 +155,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return this._fields;
     }
-
-    get facadeFnLoad() { return this._facadeFnLoad; }
-    set facadeFnLoad(val) { this._facadeFnLoad = val; }
-
-    get facadeFnSave() { return this._facadeFnSave; }
-    set facadeFnSave(val) { this._facadeFnSave = val; }
-
+    
     get isDirty() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -167,7 +169,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return false;
     }
-
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -213,7 +214,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             return false;
         }
     }
-
     set readOnly(value){
         if (kijs.isEmpty(this.fields)){
             this.searchFields();
@@ -239,18 +239,18 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     url: val
                 });
             }
-
+            
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
-
+            
         }
     }
+
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Löscht allen inhalt aus dem Formular
      * @returns {undefined}
@@ -366,6 +366,62 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     /**
+     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields (rekursiv)
+     * @param {kijs.gui.Container} [parent=this]
+     * @returns {Array}
+     */
+    searchFields(parent=this) {
+        let ret = [];
+
+        for (let i=0; i<parent.elements.length; i++) {
+            let el = parent.elements[i];
+            if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
+                ret.push(el);
+            }
+
+            if (el instanceof kijs.gui.Container) {
+                ret = ret.concat(this.searchFields(el));
+
+                // untergeordnete Container überwachen, bei neuen oder gelöschten Felder array neu aufbauen
+                if (el !== this) {
+                    if (!el.hasListener('add', this.#onChildAdd, this)) {
+                        el.on('add', this.#onChildAdd, this);
+                    }
+                    if (!el.hasListener('remove', this.#onChildRemove, this)) {
+                        el.on('remove', this.#onChildRemove, this);
+                    }
+                }
+            }
+
+            // Felder auf den Change-Event überwachen
+            if (el instanceof kijs.gui.field.Field) {
+                if (!el.hasListener('change', this.#onChildChange, this)) {
+                    el.on('change', this.#onChildChange, this);
+                }
+            }
+
+        }
+
+        if (parent === this) {
+
+            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
+            if (!kijs.isEmpty(this._fields)) {
+                this._fields.forEach((oldField) => {
+                    if (ret.indexOf(oldField) === -1) {
+                        oldField.off('change', this.#onChildChange, this);
+                        oldField.off('add', this.#onChildAdd, this);
+                        oldField.off('remove', this.#onChildRemove, this);
+                    }
+                })
+            }
+
+            this._fields = ret;
+        }
+
+        return ret;
+    }
+    
+    /**
      * Sendet die Formulardaten an den Server
      * @param {type} searchFields
      * @param {type} args
@@ -438,62 +494,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     /**
-     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields (rekursiv)
-     * @param {kijs.gui.Container} [parent=this]
-     * @returns {Array}
-     */
-    searchFields(parent=this) {
-        let ret = [];
-
-        for (let i=0; i<parent.elements.length; i++) {
-            let el = parent.elements[i];
-            if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
-                ret.push(el);
-            }
-
-            if (el instanceof kijs.gui.Container) {
-                ret = ret.concat(this.searchFields(el));
-
-                // untergeordnete Container überwachen, bei neuen oder gelöschten Felder array neu aufbauen
-                if (el !== this) {
-                    if (!el.hasListener('add', this._onChildAdd, this)) {
-                        el.on('add', this._onChildAdd, this);
-                    }
-                    if (!el.hasListener('remove', this._onChildRemove, this)) {
-                        el.on('remove', this._onChildRemove, this);
-                    }
-                }
-            }
-
-            // Felder auf den Change-Event überwachen
-            if (el instanceof kijs.gui.field.Field) {
-                if (!el.hasListener('change', this._onChildChange, this)) {
-                    el.on('change', this._onChildChange, this);
-                }
-            }
-
-        }
-
-        if (parent === this) {
-
-            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
-            if (!kijs.isEmpty(this._fields)) {
-                this._fields.forEach((oldField) => {
-                    if (ret.indexOf(oldField) === -1) {
-                        oldField.off('change', this._onChildChange, this);
-                        oldField.off('add', this._onChildAdd, this);
-                        oldField.off('remove', this._onChildRemove, this);
-                    }
-                })
-            }
-
-            this._fields = ret;
-        }
-
-        return ret;
-    }
-
-    /**
      * Validiert das Formular (Validierung nur im JavaScript)
      * @returns {Boolean}
      */
@@ -512,27 +512,26 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return ret;
     }
-
-    // PROTECTED
-
  
-
+ 
+    // LISTENERS
     // EVENTS
-    _onAfterFirstRenderTo(e) {
+    #onAfterFirstRenderTo(e) {
         this.load().catch(() => {});
     }
 
-    _onChildAdd() {
+    #onChildAdd() {
         this.searchFields();
     }
 
-    _onChildRemove() {
+    #onChildRemove() {
         this.searchFields();
     }
 
-    _onChildChange(e) {
+    #onChildChange(e) {
         this.raiseEvent('change', e);
     }
+
 
 
     // --------------------------------------------------------------

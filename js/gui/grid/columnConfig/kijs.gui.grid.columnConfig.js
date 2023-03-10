@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.column (Static)
+// kijs.gui.grid.column (namespace)
 // --------------------------------------------------------------
-kijs.gui.grid.columnConfig = class kijs_gui_grid_columnConfig {
-
-};
+kijs.gui.grid.columnConfig = {};

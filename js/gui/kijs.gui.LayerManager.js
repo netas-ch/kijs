@@ -41,56 +41,10 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    /**
-     * Gibt das oberste Element zurück
-     * @param {HTMLElement} parentNode
-     * @returns {kijs.gui.Element|null}
-     */
-    getActive(parentNode) {
-        const parentProp =  this._parents.get(parentNode);
-
-        if (parentProp && parentProp.activeEl) {
-            return parentProp.activeEl;
-        } else {
-            return null;
-        }
-    }
-
-
-    /**
-     * Bringt ein Element in den Vordergrund
-     * @param el
-     * @param setFocus // Setzt den Fokus auf das erste Element
-     * @returns {Boolean}
-     */
-    setActive(el, setFocus=true) {
-        // Ist das Element schon zuoberst?
-        if (el === this.getActive(el.parentNode)) {
-            return false;
-        }
-
-        // falls das Element schon drin ist: entfernen
-        this.removeElement(el, true);
-
-        // und am Ende wieder anfügen
-        this.addElement(el);
-
-        // z-indexe den Elementen neu zuweisen
-        this._assignZIndexes(el.parentNode);
-
-        // Oberstes sichtbares Element aktualisieren und Fokus setzen
-        const parentProp =  this._parents.get(el.parentNode);
-        parentProp.activeEl = this._getTopVisibleElement(el.parentNode);
-        if (parentProp.activeEl && setFocus) {
-            parentProp.activeEl.focus();
-        }
-
-        return true;
-    }
-
     /**
      * Fügt eine Element an
      * @param {kijs.gui.Element} el
@@ -114,12 +68,27 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         parentProp.stack.push(el);
 
         // Listeners erstellen, damit wenn, dass Element entladen wird alles neu geordnet wird
-        el.on('destruct', this._onElementDestruct, this);
+        el.on('destruct', this.#onElementDestruct, this);
         // Wenn die Sichtbarkeit ändert, wird ein anderes element aktiviert
-        el.on('changeVisibility', this._onElementChangeVisibility, this);
-        el.on('unrender', this._onElementChangeVisibility, this);
+        el.on('changeVisibility', this.#onElementChangeVisibility, this);
+        el.on('unrender', this.#onElementChangeVisibility, this);
     }
+    
+    /**
+     * Gibt das oberste Element zurück
+     * @param {HTMLElement} parentNode
+     * @returns {kijs.gui.Element|null}
+     */
+    getActive(parentNode) {
+        const parentProp =  this._parents.get(parentNode);
 
+        if (parentProp && parentProp.activeEl) {
+            return parentProp.activeEl;
+        } else {
+            return null;
+        }
+    }
+    
     /**
      * Entfernt ein Element aus dem LayerManager
      * @param {kijs.gui.Element} el
@@ -151,8 +120,8 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         }
 
         // Listeners entfernen
-        el.off('destruct', this._onElementDestruct, this);
-        el.off('changeVisibility', this._onElementChangeVisibility, this);
+        el.off('destruct', this.#onElementDestruct, this);
+        el.off('changeVisibility', this.#onElementChangeVisibility, this);
 
         // falls was geändert hat
         if (parentProp && changed && !preventReorder) {
@@ -167,6 +136,37 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         }
 
         return changed;
+    }
+
+    /**
+     * Bringt ein Element in den Vordergrund
+     * @param el
+     * @param setFocus // Setzt den Fokus auf das erste Element
+     * @returns {Boolean}
+     */
+    setActive(el, setFocus=true) {
+        // Ist das Element schon zuoberst?
+        if (el === this.getActive(el.parentNode)) {
+            return false;
+        }
+
+        // falls das Element schon drin ist: entfernen
+        this.removeElement(el, true);
+
+        // und am Ende wieder anfügen
+        this.addElement(el);
+
+        // z-indexe den Elementen neu zuweisen
+        this._assignZIndexes(el.parentNode);
+
+        // Oberstes sichtbares Element aktualisieren und Fokus setzen
+        const parentProp =  this._parents.get(el.parentNode);
+        parentProp.activeEl = this._getTopVisibleElement(el.parentNode);
+        if (parentProp.activeEl && setFocus) {
+            parentProp.activeEl.focus();
+        }
+
+        return true;
     }
 
 
@@ -212,12 +212,9 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onElementDestruct(e) {
-        this.removeElement(e.element);
-    }
-
-    _onElementChangeVisibility(e) {
+    #onElementChangeVisibility(e) {
         const el = e.element;
         const parentProp =  this._parents.get(el.parentNode);
 
@@ -231,6 +228,11 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
             parentProp.activeEl.focus();
         }
     }
+    
+    #onElementDestruct(e) {
+        this.removeElement(e.element);
+    }
+
 
 
     // --------------------------------------------------------------

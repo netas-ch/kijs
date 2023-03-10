@@ -268,7 +268,7 @@ kijs.Date = class kijs_Date {
      */
     static format(date, format) {
         return kijs.toString(format).replace(/[a-zA-Z]/g, (letter) => {
-            return this.__formatReplace(letter, date);
+            return this.#formatReplace(letter, date);
         });
     }
 
@@ -583,7 +583,7 @@ kijs.Date = class kijs_Date {
 
 
     // PRIVATE
-    static __formatReplace(letter, date) {
+    static #formatReplace(letter, date) {
         switch (letter) {
             // Tag
             // d  Tag des Monats, 2-stellig mit führender Null  01 bis 31

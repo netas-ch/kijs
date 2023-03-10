@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui (Static)
+// kijs.gui.field (namespace)
 // --------------------------------------------------------------
-kijs.gui.field = class kijs_gui_field {
-    
-};
+kijs.gui.field = {};

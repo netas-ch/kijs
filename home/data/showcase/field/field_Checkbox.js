@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.field_Checkbox = class sc_field_Checkbox {
+window.home.sc = {};
+home.sc.field_Checkbox = class home_sc_field_Checkbox {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -27,13 +27,13 @@ sc.field_Checkbox = class sc_field_Checkbox {
             },
             
             headerInnerStyle:{
-                padding: '10px'
+                gap: '6px'
             },
             
             headerElements:[
                 {
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disabled',
+                    label: 'disabled',
                     on: {
                         change: function(e) {
                             this._updateProperty('disabled', e.element.value);
@@ -42,7 +42,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disableFlex',
+                    label: 'disableFlex',
                     value: true,
                     on: {
                         change: function(e) {
@@ -52,7 +52,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelHide',
+                    label: 'labelHide',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelHide', e.element.value);
@@ -61,7 +61,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelWidth = 120',
+                    label: 'labelWidth = 120',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelWidth', e.element.value ? 120 : null);
@@ -70,7 +70,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'readOnly',
+                    label: 'readOnly',
                     on: {
                         change: function(e) {
                             this._updateProperty('readOnly', e.element.value);
@@ -79,7 +79,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'required',
+                    label: 'required',
                     on: {
                         change: function(e) {
                             this._updateProperty('required', e.element.value);
@@ -89,7 +89,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'showHelp',
+                    label: 'showHelp',
                     on: {
                         change: function(e) {
                             let value = '';
@@ -102,7 +102,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'threeState',
+                    label: 'threeState',
                     on: {
                         change: function(e) {
                             this._updateProperty('threeState', e.element.value);
@@ -182,6 +182,10 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
+                    label: 'Checkbox',
+                    helpText: 'Info'
+                },{
+                    xtype: 'kijs.gui.field.Checkbox',
                     name: 'CheckboxIcon',
                     label: '... mit Icon',
                     iconCls: 'icoWizard16',
@@ -193,7 +197,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     label: '... mit Farbe',
                     iconMap: 'kijs.iconMap.Fa.stamp',
                     iconColor: '#ff8800',
-                    caption: 'Caption'
+                    helpText: 'Info'
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
                     name: 'CheckboxOption',
@@ -206,6 +210,7 @@ sc.field_Checkbox = class sc_field_Checkbox {
                     valueDeterminated: 'wedernoch',
                     valueUnchecked: 'Aus',
                     value: 'Ein',
+                    helpText: 'Info',
                     elements: [
                         {
                             xtype: 'kijs.gui.Button',

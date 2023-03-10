@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.grid_Grid = class sc_grid_Grid {
+window.home.sc = {};
+home.sc.grid_Grid = class home_sc_grid_Grid {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

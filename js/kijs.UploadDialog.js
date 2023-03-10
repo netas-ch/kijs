@@ -88,7 +88,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }
 
         // Paste überwachen (Dateien ab Chrome 91)
-        this._pasteCb = this._onFilePaste.bind(this);
+        this._pasteCb = this.#onFilePaste.bind(this);
         window.addEventListener('paste', this._pasteCb);
 
     }
@@ -174,7 +174,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
                 // Events entfernen und wieder setzen.
                 dropZone.off(null, null, this);
-                dropZone.on('drop', this._onDropZoneDrop, this);
+                dropZone.on('drop', this.#onDropZoneDrop, this);
                 this._dropZones.push(dropZone);
             }
         }, this);
@@ -226,6 +226,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         // öffnen
         input.click();
     }
+
 
     // PROTECTED
     /**
@@ -292,13 +293,98 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         return filename;
     }
+    
+    /**
+     * Schneidet den Dateinamen vom Pfad ab,
+     * gibt das Verzeichnis zurück.
+     * @param {String} name
+     * @param {String} path
+     * @returns {String}
+     */
+    _getRelativeDir(name, path) {
+        if (path && path.substr(path.length - name.length) === name) {
+            return path.substr(0, path.length - name.length - 1);
+        }
+        return '';
+    }
+    
+    _uploadFile(file) {
+        let uploadId = this._uploadId++,
+            headers = {},
+            filename = this._getFilename(file.name),
+            filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
+            filetype = file.type || 'application/octet-stream';
 
-    _onDropZoneDrop(e) {
+        // event
+        this.raiseEvent('fileSelected', this, filename, filedir, filetype, file);
+
+        // Upload 
+        if (this._ajaxUrl) {
+            headers[this._filenameHeader] = encodeURIComponent(filename);
+            headers[this._pathnameHeader] = encodeURIComponent(filedir);
+            headers['Content-Type'] = filetype;
+
+            kijs.Ajax.request({
+                url: this._ajaxUrl,
+                method: 'POST',
+                format: 'json',
+                headers: headers,
+                postData: file,
+                fn: this.#onEndUpload,
+                progressFn: this.#onProgress,
+                context: this,
+                uploadId: uploadId
+            });
+
+            this._currentUploadIds.push(uploadId);
+            this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
+        }
+    }
+    
+    _uploadFiles(fileList) {
+        this._uploadResponses = {};
+        if (fileList) {
+            for (let i=0; i<fileList.length; i++) {
+                if (this._checkMime(fileList[i])) {
+                    this._uploadFile(fileList[i]);
+                } else {
+                    this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
+                }
+            }
+        }
+    }
+
+
+    // PRIVATE
+    // LISTENERS
+    #onDropZoneDrop(e) {
         this._uploadFiles(e.nodeEvent.dataTransfer.files);
     }
 
-    _onFilePaste(e) {
+    #onEndUpload(val, config, error) {
+        kijs.Array.remove(this._currentUploadIds, config.uploadId);
 
+        // Fehlermeldung vom server
+        if (!val || !val.success) {
+            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
+        }
+
+        // Antwort vom Server
+        let uploadResponse = val ? (val.upload || null) : null;
+
+        // Responses in Objekt sammeln
+        this._uploadResponses[config.uploadId] = uploadResponse;
+
+        // Event werfen
+        this.raiseEvent('upload', this, uploadResponse, error, config.uploadId);
+
+        // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
+        if (this._currentUploadIds.length === 0) {
+            this.raiseEvent('endUpload', this, this._uploadResponses);   // TODO: Events sollten nur ein Argument (e) haben!
+        }
+    }
+    
+    #onFilePaste(e) {
         if (!this._observePaste || !kijs.isArray(this._dropZones)) {
             return;
         }
@@ -327,76 +413,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadFiles(files);
     }
 
-    _uploadFiles(fileList) {
-        this._uploadResponses = {};
-        if (fileList) {
-            for (let i=0; i<fileList.length; i++) {
-                if (this._checkMime(fileList[i])) {
-                    this._uploadFile(fileList[i]);
-                } else {
-                    this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
-                }
-            }
-        }
-    }
-
-    _uploadFile(file) {
-        let uploadId = this._uploadId++,
-            headers = {},
-            filename = this._getFilename(file.name),
-            filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
-            filetype = file.type || 'application/octet-stream';
-
-        // event
-        this.raiseEvent('fileSelected', this, filename, filedir, filetype, file);
-
-        // Upload 
-        if (this._ajaxUrl) {
-            headers[this._filenameHeader] = encodeURIComponent(filename);
-            headers[this._pathnameHeader] = encodeURIComponent(filedir);
-            headers['Content-Type'] = filetype;
-
-            kijs.Ajax.request({
-                url: this._ajaxUrl,
-                method: 'POST',
-                format: 'json',
-                headers: headers,
-                postData: file,
-                fn: this._onEndUpload,
-                progressFn: this._onProgress,
-                context: this,
-                uploadId: uploadId
-            });
-
-            this._currentUploadIds.push(uploadId);
-            this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
-        }
-    }
-
-    _onEndUpload(val, config, error) {
-        kijs.Array.remove(this._currentUploadIds, config.uploadId);
-
-        // Fehlermeldung vom server
-        if (!val || !val.success) {
-            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
-        }
-
-        // Antwort vom Server
-        let uploadResponse = val ? (val.upload || null) : null;
-
-        // Responses in Objekt sammeln
-        this._uploadResponses[config.uploadId] = uploadResponse;
-
-        // Event werfen
-        this.raiseEvent('upload', this, uploadResponse, error, config.uploadId);
-
-        // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
-        if (this._currentUploadIds.length === 0) {
-            this.raiseEvent('endUpload', this, this._uploadResponses);   // TODO: Events sollten nur ein Argument (e) haben!
-        }
-    }
-
-    _onProgress(e) {
+    #onProgress(e) {
         let percent = null;
 
         if (e.nodeEvent.lengthComputable && e.nodeEvent.total > 0) {
@@ -408,26 +425,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
 
-    /**
-     * Schneidet den Dateinamen vom Pfad ab,
-     * gibt das Verzeichnis zurück.
-     * @param {String} name
-     * @param {String} path
-     * @returns {String}
-     */
-    _getRelativeDir(name, path) {
-        if (path && path.substr(path.length - name.length) === name) {
-            return path.substr(0, path.length - name.length - 1);
-        }
-        return '';
-    }
-
-
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-
     destruct() {
         this._dropZones = null;
         this._contentTypes = null;

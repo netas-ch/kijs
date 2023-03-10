@@ -43,13 +43,14 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             this.applyConfig(config, true);
         }
 
-        this._listView.on('afterLoad', this._onAfterLoad, this);
+        this._listView.on('afterLoad', this.#onAfterLoad, this);
     }
+
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     // Alle Checkboxen auswählen / sind ausgewählt
     get checkedAll () { return this.value.length === this.data.length; }
     set checkedAll (val) {
@@ -102,11 +103,12 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }
     }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // Protected
-
+    // PROTECTED
     _checkAll(val) {
         let ids = [];
 
@@ -118,8 +120,10 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this.value = ids;
     }
 
-    // Events
-    _onAfterLoad(e) {
+    
+    // PRIVATE
+    // LISTENERS
+    #onAfterLoad(e) {
         if (this._checkedAll) {
             this._checkAll(true);
         }
@@ -128,4 +132,27 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
 
         this.raiseEvent('afterLoad', e);
     }
+    
+    
+    
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+
+        // Elemente/DOM-Objekte entladen
+
+        // Variablen (Objekte/Arrays) leeren
+
+        // Basisklasse entladen
+        super.destruct(true);
+    }
+
 };

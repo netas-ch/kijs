@@ -74,7 +74,7 @@
             <p>&nbsp;</p>
             <p><a href="testViewPort/test_afterResize.php">ViewPort afterResize Events</a></p>
             <p><a href="../testApp">Test-App</a></p>
-            <p><a href="../showcase">Showcase</a></p>
+            <p><a href="../home">Showcase</a></p>
             <section id="todo" onclick="toggleTodosVisibility();">
                 <h1>To-Do</h1>
                 <section id="todoInner">

@@ -1,13 +1,8 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Number
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui.grid.filter.Text {
 
 
@@ -36,10 +31,11 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'number',
@@ -48,10 +44,12 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         });
     }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
+    // PROTECTED
     // overwrite
     _getMenuButtons() {
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
@@ -59,7 +57,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
             caption : kijs.getText('Gleich'),
             iconMap: this._compare === 'equal' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
-                click: this._onCompareBtnClick,
+                click: this.#onCompareBtnClick,
                 context: this
             }
         },{
@@ -67,7 +65,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
             caption : kijs.getText('Ungleich'),
             iconMap: this._compare === 'unequal' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
-                click: this._onCompareBtnClick,
+                click: this.#onCompareBtnClick,
                 context: this
             },
         },{
@@ -75,7 +73,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
             name: 'btn_compare_smaller',
             iconMap: this._compare === 'smaller' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
-                click: this._onCompareBtnClick,
+                click: this.#onCompareBtnClick,
                 context: this
             }
         },{
@@ -83,13 +81,16 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
             name: 'btn_compare_bigger',
             iconMap: this._compare === 'bigger' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
-                click: this._onCompareBtnClick,
+                click: this.#onCompareBtnClick,
                 context: this
             }
         }]);
     }
 
-    _onCompareBtnClick(e) {
+
+    // PRIVATE
+    // LISTENERS
+    #onCompareBtnClick(e) {
         this._menuButton.menu.close();
 
         if (e.element.name === 'btn_compare_equal') {
@@ -111,4 +112,26 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         });
     }
 
+
+
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+        
+        // Elemente/DOM-Objekte entladen
+        
+        // Variablen (Objekte/Arrays) leeren
+        
+        // Basisklasse entladen
+        super.destruct(true);
+    }
 };

@@ -17,7 +17,7 @@
  *
  * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
  * ----------------
- * defaultAnimation    String [optional]    Typ der Animation. Gültige Werte:
+ * animation           String [optional]     Standard Animation. Gültige Werte:
  *                                              none:           Keine Animation
  *                                              fade:           Überblenden (default)
  *                                              slideLeft:      Ausfahren nach Links
@@ -25,7 +25,7 @@
  *                                              slideTop:       Ausfahren nach oben
  *                                              slideBottom:    Ausfahren nach unten
  *
- * defaultDuration     Integer [optional]   Dauer der Animation in Milisekunden (default: 1000).
+ * animationDuration   Integer [optional]   Dauer der Animation in Milisekunden (default: 1000).
  * 
  * currentEl           kijs.gui.Element [optional] Element, das als erstes angezeigt wird
  * currentIndex        Integer [optional]          Element, das als erstes angezeigt wird (default: 0)
@@ -48,8 +48,8 @@
  *  currentEl           kijs.gui.Element    Gibt das zurzeit aktive Element zurück oder setzt es
  *  currentIndex        Integer [optional]  Gibt das zurzeit aktive Element zurück oder setzt es
  *  currentName         String [optional]   Gibt das zurzeit aktive Element zurück oder setzt es
- *  defaultAnimation String                 Gibt die Standardanimation zurück oder setzt sie
- *  defaultDuration  Integer                Gibt die Standarddauer zurück oder setzt sie
+ *  animation           String              Gibt die Standardanimation zurück oder setzt sie
+ *  animationDuration   Integer             Gibt die Standarddauer zurück oder setzt sie
  *
  *
  * EVENTS
@@ -65,33 +65,32 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     constructor(config={}) {
         super(false);
         
-        this._afterAnimationDefer = null;
-        this._animationTypes = [
-            'none',
-            'fade',
-            'slideLeft',   // gegen links fahren
-            'slideRight',  // gegen rechts fahren
-            'slideTop',    // gegen oben fahren
-            'slideBottom'  // gegen unten fahren
-        ];
-        this._currentIndex = 0;     // Index des aktuellen (sichtbaren) Elements
-        this._defaultAnimation = 'fade';
-        this._defaultDuration = 500;
-        this._topZIndex = 1;
+        this._afterAnimationDeferId = null;
+        this._animation = 'fade';
+        this._animationDuration = 500;
+
+        this._currentEl = null;     // Aktuelles (sichtbaren) Element
+        this._elHistory = [];       // Auflistung der Elemente, die als letztes
+                                    // angeklickt wurden.
+                                    // Mit Hilfe dieser Auflistung kann beim 
+                                    // Löschen eines Elements das vorher 
+                                    // selektierte wieder ausgewählt werden.
         
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-container-stack');
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            currentIndex: 0
         });
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             currentEl:    { prio: 1001, target: 'currentEl' },
             currentIndex: { prio: 1001, target: 'currentIndex' },
-            currentName:  { prio: 1001, target: 'currentName' }
+            currentName:  { prio: 1001, target: 'currentName' },
+            animation:    { target: 'animation' },
+            animationDuration: true
         });
         
         // Config anwenden
@@ -105,35 +104,55 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // Aktueller Container ermitteln/setzen
-    get currentEl() { return this._elements[this._currentIndex]; }
-    set currentEl(val) {
-        let index = this._getElIndex(val);
-        
-        if (index === null) {
-            throw new kijs.Error(`currentEl does not exist in elements.`);
+    get animation() { return this._animation; }
+    set animation(val) {
+        if (this._validateAnimation(val)) {
+            this._animation = val;
         } else {
-            this.currentIndex = index;
+            throw new kijs.Error(`unknown animation.`);
+        }
+    }
+    
+    get animationDuration() { return this._animationDuration; }
+    set animationDuration(val) {
+        this._animationDuration = val;
+    }
+    
+    // Aktueller Container ermitteln/setzen
+    get currentEl() { return this._currentEl; }
+    set currentEl(val) {
+        if (!this.hasChild(val)) {
+            throw new kijs.Error(`currentEl does not exist in elements.`);
+        }
+        
+        this._setCurrent(val);
+        
+        this._updateElementsVisibility();
+        
+        // und neu rendern
+        if (val.isRendered) {
+           val.render();
         }
     }
     
     // Aktueller Container ermitteln/setzen via Index
-    get currentIndex() { return this._currentIndex; }
+    get currentIndex() { return this._getElIndex(this._currentEl); }
     set currentIndex(val) {
         if (!this._elements[val]) {
             throw new kijs.Error(`currentIndex does not exist in elements.`);
-        }
-        
-        this._currentIndex = val;
-        this._updateElementsVisibility();
-        // und neu rendern
-        if (this._elements[val].isRendered) {
-            this._elements[val].render();
+        } else {
+            this.currentEl = this._elements[val];
         }
     }
     
     // Aktueller Container ermitteln/setzen via Name
-    get currentName() { return this._elements[this._currentIndex].name; }
+    get currentName() { 
+        if (this._currentEl) {
+            return this._currentEl.name;
+        } else {
+            return null;
+        }
+    }
     set currentName(val) {
         let elements = this.getElementsByName(val, 0, true);
         if (elements.length === 0) {
@@ -150,13 +169,42 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // overwrite
     add(elements, index=null) {
         super.add(elements, index);
-        this._updateElementsVisibility();
     }
     
     // overwrite
     remove(elements, preventRender=false, destruct=false) {
+        if (!kijs.isArray(elements)) {
+            elements = [elements];
+        }
+        
+        // zu löschenden Elemente merken
+        let elementsToDelete = kijs.Array.clone(elements);
+                
+        // Elemente auch aus elHistory entfernen
+        kijs.Array.each(elementsToDelete, function(i) {
+            this._elHistoryRemove(i);
+        }, this);
+        
         super.remove(elements, preventRender, destruct);
-        this._updateElementsVisibility();
+        
+        // Falls das aktuelle Element gelöscht wurde, das vorherige aktivieren
+        if (kijs.Array.contains(elementsToDelete, this._currentEl)) {
+            if (this._elements.length) {
+                // Wenn noch eines in der History ist: dieses nehmen
+                if (this._elHistory.length) {
+                    this.currentEl = this._elHistory[this._elHistory.length-1];
+                    
+                // sonst das Element mit Index 1 nehmen
+                } else {
+                    this.currentIndex = 0;
+                }
+                
+                
+            } else {
+                // es gibt keine Elemente
+                this._currentEl = null;
+            }
+        }
     }
     
     // overwrite
@@ -174,39 +222,28 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
      */
     setCurrentAnimated(el, animation=null, duration=null) {
         return new Promise((resolve, reject) => {
-            let currentEl = this._elements[this._currentIndex];
-
+            let oldEl = this._currentEl;
+            
             // Argumente
             if (!animation) {
-                animation = this._defaultAnimation;
+                animation = this._animation;
             }
             if (!duration) {
-                duration = this._defaultDuration;
+                duration = this._animationDuration;
             }
             if (animation === 'none') {
                 duration = 0;
             }
 
-            if (!kijs.Array.contains(this._animationTypes, animation)) {
-                throw new kijs.Error(`animation type not valid.`);
+            if (!this._validateAnimation(animation)) {
+                throw new kijs.Error(`unknown animation.`);
             }
 
-            // by index
-            if (kijs.isInteger(el)) {
-                el = this._elements[el];
-
-            // by name
-            } else if (kijs.isString(el)) {
-                el = this.getElementsByName(el, 0, true).shift();
-
-            }
-
-            if (!el || !kijs.Array.contains(this._elements, el)) {
-                throw new kijs.Error(`el does not exist in elements.`);
-            }
+            // Element aus Index, Name oder Element ermitteln
+            el = this._getElFromIndexNameEl(el);
 
             // Wenn das Element bereits aktuell ist, ist keine Animation nötig
-            if (currentEl === el) {
+            if (oldEl === el) {
                 return;
             }
 
@@ -218,25 +255,27 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
 
             // Falls bereits eine Animation läuft: Abbrechen
             this._cleanUp();
-            if (this._afterAnimationDefer) {
-                window.clearTimeout(this._afterAnimationDefer);
+            if (this._afterAnimationDeferId) {
+                window.clearTimeout(this._afterAnimationDeferId);
+                this._afterAnimationDeferId = null;
             }
-
+            
             // Altes Element für Animation vorbereiten
-            currentEl.dom.clsAdd('kijs-animation-' + animation.toLowerCase() + '-out');
-            currentEl.style.animationDuration = duration+ 'ms';
+            oldEl.dom.clsAdd(this._getAnimationCls(animation, 'out'));
+            oldEl.style.animationDuration = duration+ 'ms';
 
             // Neues Element für Animation vorbereiten
-            el.dom.clsAdd('kijs-animation-' + animation.toLowerCase());
+            el.dom.clsAdd(this._getAnimationCls(animation, 'in'));
             el.style.animationDuration = duration + 'ms';
             el.style.zIndex = 1;
             el.visible = true;
 
-            this._currentIndex = this._getElIndex(el);
+            // Das Change Event kommt sofort. Das Promise dann erst nach der Animation
+            this._setCurrent(el);
 
             // Animation abwarten
-            this._afterAnimationDefer = kijs.defer(function() {
-                this._afterAnimationDefer = null;
+            this._afterAnimationDeferId = kijs.defer(function() {
+                this._afterAnimationDeferId = null;
 
                 // Aufräumen und Sichtbarkeit aktualisieren
                 this._updateElementsVisibility();
@@ -249,12 +288,28 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
                 
                 // promise ausführen
                 resolve({
-                    oldElement: currentEl,
-                    element: el
+                    currentEl: el,
+                    oldEl: oldEl
                 });
                 
             }, duration, this);
         });
+    }
+    
+    // overwrite
+    unrender(superCall) {
+        // timer abbrechen
+        if (this._afterAnimationDeferId) {
+            window.clearTimeout(this._afterAnimationDeferId);
+            this._afterAnimationDeferId = null;
+        }
+        
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+        
+        super.unrender(true);
     }
     
     
@@ -262,16 +317,16 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // Entfernt CSS-Klassen, zIndex und animationDuration der Animation
     _cleanUp() {
         const animationClasses = [
-            'kijs-animation-fade',
-            'kijs-animation-fade-out',
-            'kijs-animation-slideleft',
-            'kijs-animation-slideleft-out',
-            'kijs-animation-slideright',
-            'kijs-animation-slideright-out',
-            'kijs-animation-slidetop',
-            'kijs-animation-slidetop-out',
-            'kijs-animation-slidebottom',
-            'kijs-animation-slidebottom-out'
+            'kijs-fade-in',
+            'kijs-slide-in-top',
+            'kijs-slide-in-right',
+            'kijs-slide-in-bottom',
+            'kijs-slide-in-left',
+            'kijs-fade-out',
+            'kijs-slide-out-top',
+            'kijs-slide-out-right',
+            'kijs-slide-out-bottom',
+            'kijs-slide-out-left'
         ];
         
         for (let i=0; i<this._elements.length; i++) {
@@ -284,7 +339,55 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Ermittelt den Index eines 
+    // Fügt einen neues Element zur Element History hinzu
+    _elHistoryAdd(el) {
+        // Falls das element bereits im Array ist: entfernen
+        this._elHistory = kijs.Array.remove(this._elHistory, el);
+        
+        // Neues Element am Ende anfügen
+        this._elHistory.push(el);
+    }
+    
+    // Entfernt ein Element aus der Element History.
+    _elHistoryRemove(el) {
+        this._elHistory = kijs.Array.remove(this._elHistory, el);
+    }
+    
+    _getAnimationCls(animation, dir) {
+        let ret = null;
+        
+        switch (animation) {
+            case 'none':        ret = '';                           break;
+            case 'fade':        ret = `kijs-fade-${dir}`;            break;
+            case 'slideTop':    ret = `kijs-slide-${dir}-top`;       break;
+            case 'slideRight':  ret = `kijs-slide-${dir}-right`;     break;
+            case 'slideBottom': ret = `kijs-slide-${dir}-bottom`;    break;
+            case 'slideLeft':   ret = `kijs-slide-${dir}-left`;      break;
+        }
+        
+        return ret;
+    }
+    
+    // Gibt ein Element anhand eines Index, eines Namens oder einem Element zurück
+    _getElFromIndexNameEl(el) {
+        // by index
+        if (kijs.isInteger(el)) {
+            el = this._elements[el];
+
+        // by name
+        } else if (kijs.isString(el)) {
+            el = this.getElementsByName(el, 0, true).shift();
+
+        }
+
+        if (!el || !kijs.Array.contains(this._elements, el)) {
+            throw new kijs.Error(`el does not exist in elements.`);
+        }
+        
+        return el;
+    }
+    
+    // Ermittelt den Index eines Elements
     _getElIndex(el) {
         let index = null;
         
@@ -298,11 +401,29 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return index;
     }
     
+    // Setzt das aktuelle Element und wirft das change-Event
+    _setCurrent(element) {
+        if (element !== this._currentEl) {
+            let oldEl = this._currentEl;
+            
+            this._elHistoryAdd(element);
+            this._currentEl = element;
+            if (this.isRendered) {
+                this.raiseEvent('change', {currentEl: element, oldEl: oldEl});
+            }
+        }
+    }
+    
     // nur das currentEl ist sichtbar, alle anderen werden ausgeblendet
     _updateElementsVisibility() {
         for (let i=0; i<this._elements.length; i++) {
-            this._elements[i].visible = i === this._currentIndex;
+            this._elements[i].visible = this._elements[i] === this._currentEl;
         }
+    }
+    
+    // Überprüft, ob eine animation gültig ist
+    _validateAnimation(animation) {
+        return this._getAnimationCls(animation, 'in') !== null;
     }
     
     
@@ -319,7 +440,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
         
         // Variablen (Objekte/Arrays) leeren
-        this._animationTypes = null;
+        this._currentEl = null;
         
         // Basisklasse entladen
         super.destruct(true);

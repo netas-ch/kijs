@@ -1,10 +1,11 @@
-/* global kijs */
+/* global kijs, marked */
 
 // --------------------------------------------------------------
-// sc.App
+// home.App
 // --------------------------------------------------------------
-window.sc = {};
-sc.App = class sc_App {
+window.home = {};
+home.App = class home_App {
+
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -14,31 +15,41 @@ sc.App = class sc_App {
         this._content = null;
         this._header = null;
         this._navigation = null;
+        this._tabShowcase = null;
+        this._tabTest = null;
+        this._tabDocu = null;
+        
         this._viewport = null;
         
-        this._currentContentCls = null;
-        
-        // RPC-Instanz
-        var rpcConfig = {};
-        if (config.ajaxUrl) {
-            rpcConfig.url = config.ajaxUrl;
+        // RPC-Instanz für das App
+        let appRpcConfig = {};
+        if (config.appAjaxUrl) {
+            appRpcConfig.url = config.appAjaxUrl;
         }
-        this._rpc = new kijs.gui.Rpc(rpcConfig);
+        this._rpcApp = new kijs.gui.Rpc(appRpcConfig);
         
+        // RPC-Instanz für den Inhalt (data)
+        let dataRpcConfig = {};
+        if (config.dataAjaxUrl) {
+            dataRpcConfig.url = config.dataAjaxUrl;
+        }
+        this._rpcData = new kijs.gui.Rpc(dataRpcConfig);
     }
+    
     
     
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get rpc() { return this._rpc; }
+    get rpc() { return this._rpcData; }
+
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     run() {
-        document.title = 'kijs ' + kijs.version + ' - Showcase';
+        document.title = 'kijs ' + kijs.version + ' - Home';
         
         this._header = this._createHeader();
         this._navigation = this._createNavigation();
@@ -51,17 +62,23 @@ sc.App = class sc_App {
     
     // PROTECTED
     _createContent() {
-        return new kijs.gui.Container({
-            cls: 'kijs-flexrow',
+        return new kijs.gui.container.Tab({
             style: {
                 flex: 1
             },
+            on: {
+                change: this.#onContentTabChange,
+                context: this
+            },
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
+                    tabIconMap: 'kijs.iconMap.Fa.house',
+                    tabTooltip: 'Home',
+                    tabClosable: true,
+                    scrollableY: 'auto',
                     style:{
                         flex: 1,
-                        background: '#fff url(img/background.jpg) scroll no-repeat 0% 0%'
+                        background: '#fff url(app/background.jpg) scroll no-repeat 0% 0%'
                     },
                     html: '<div style="margin: 420px 0 0 370px"><a href="../testApp">Test-App</a><br><a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a></div>'
                 }
@@ -71,7 +88,7 @@ sc.App = class sc_App {
     
     _createHeader() {
         return new kijs.gui.PanelBar({
-            html: 'kijs ' + kijs.version + ' - Showcase',
+            html: 'kijs ' + kijs.version + ' - Home',
             iconCls: 'icoKijs16',
             style: {
                 fontSize: '16px',
@@ -84,7 +101,7 @@ sc.App = class sc_App {
                     iconMap: 'kijs.iconMap.Fa.palette',
                     tooltip: 'Design wählen',
                     on: {
-                        click: this._onBtnThemeClick,
+                        click: this.#onBtnThemeClick,
                         context: this
                     }
                 }
@@ -93,6 +110,72 @@ sc.App = class sc_App {
     }
     
     _createNavigation() {
+        this._tabShowcase = new kijs.gui.container.tab.Container({
+            //tabCaption: 'Showcase',
+            tabIconMap: 'kijs.iconMap.Fa.eye',
+            tabTooltip: 'Showcase',
+            cls: 'kijs-flexcolumn',
+            elements: [
+                {
+                    xtype: 'kijs.gui.Tree',
+                    name: 'treeShowcase',
+                    rpc: this._rpcApp,
+                    facadeFnLoad: 'naviShowcase.load',
+                    style: {
+                        flex: 1
+                    },
+                    on: {
+                        select: this.#onTreeNodeSelect,
+                        context: this
+                    }
+                }
+            ]
+        });
+        
+        this._tabTest = new kijs.gui.container.tab.Container({
+            //tabCaption: 'Tests',
+            tabIconMap: 'kijs.iconMap.Fa.code',
+            tabTooltip: 'Tests',
+            cls: 'kijs-flexcolumn',
+            elements: [
+                {
+                    xtype: 'kijs.gui.Tree',
+                    name: 'treeTest',
+                    rpc: this._rpcApp,
+                    facadeFnLoad: 'naviTest.load',
+                    style: {
+                        flex: 1
+                    },
+                    on: {
+                        select: this.#onTreeNodeSelect,
+                        context: this
+                    }
+                }
+            ]
+        });
+        
+        this._tabDocu = new kijs.gui.container.tab.Container({
+            //tabCaption: 'Doku',
+            tabIconMap: 'kijs.iconMap.Fa.book',
+            tabTooltip: 'Dokumentation',
+            cls: 'kijs-flexcolumn',
+            elements: [
+                {
+                    xtype: 'kijs.gui.Tree',
+                    name: 'treeDocu',
+                    rpc: this._rpcApp,
+                    facadeFnLoad: 'naviDocu.load',
+                    style: {
+                        flex: 1
+                    },
+                    on: {
+                        select: this.#onTreeNodeSelect,
+                        context: this
+                    }
+                }
+            ]
+        });
+        
         return new kijs.gui.Panel({
             caption: 'Navigation',
             collapsible: 'left',
@@ -103,17 +186,15 @@ sc.App = class sc_App {
             },
             elements:[
                 {
-                    xtype: 'kijs.gui.Tree',
-                    caption: 'Element 1',
-                    rpc: this._rpc,
-                    facadeFnLoad: 'navigation.load',
-                    style: {
+                    xtype: 'kijs.gui.container.Tab',
+                    style:{
                         flex: 1
                     },
-                    on: {
-                        select: this._onTreeNodeSelect,
-                        context: this
-                    }
+                    elements:[
+                        this._tabShowcase,
+                        this._tabTest,
+                        this._tabDocu
+                    ]
                 }
             ]
         });
@@ -149,8 +230,9 @@ sc.App = class sc_App {
     }
     
     
+    // PRIVATE
     // LISTENERS
-    _onBtnThemeClick(e) {
+    #onBtnThemeClick(e) {
         const spinBox = new kijs.gui.SpinBox({
             target: e.element,
             ownerNodes: e.element,
@@ -211,80 +293,134 @@ sc.App = class sc_App {
         spinBox.show();
     }
     
-    _onTreeNodeSelect(e) {
-        const node = this._navigation.downX('kijs.gui.Tree').getSelected();
+    #onContentTabChange(e) {
+        // TODO: im tree den passenden Node selektieren
+    }
+    
+    #onContentTabContainerDestruct(e) {
+        if (e.element.userData && e.element.userData.destruct) {
+            e.element.userData.destruct();
+        }
+    }
+
+    #onTreeNodeSelect(e) {
+        let node = null;
         
-        const isFolder = !node.leaf;
-        
-        // Aktuelle Klassen entladen
-        this._content.removeAll(true, true);
-        if(this._currentContentCls) {
-            this._currentContentCls.destruct();
-            this._currentContentCls = null;
+        switch (e.element.name) {
+            case 'treeDocu':
+                node = this._tabDocu.downX('kijs.gui.Tree').getSelected();
+                break;
+                
+            case 'treeShowcase':
+                node = this._tabShowcase.downX('kijs.gui.Tree').getSelected();
+                break;
+                
+            case 'treeTest':
+                node = this._tabTest.downX('kijs.gui.Tree').getSelected();
+                break;
+                
         }
 
-        // Neue Klasse laden
-        if (isFolder) {
+        // Ordner: Auf-/Zuklappen
+        if (!node.leaf) {
             if (node.expanded) {
                 node.collapse();
             } else {
                 node.expand();
             }
             
+        // Datei
         } else {
-            const nodeId = node.nodeId;
-            const caption = node.caption;
-            const className = kijs.String.replaceAll(caption, ' ', '_');
-            const jsFilePath = 'js/' + nodeId;
             
-            // Wurde die Datei bereits geladen?
-            if (window.sc[className]) {
-                this._currentContentCls = new window.sc[className]({app: this});
-                this._content.add(this._currentContentCls.getContent());
-                if (this._currentContentCls.run) {
-                    this._currentContentCls.run();
-                }
+            // Wenn die Datei bereits offen ist: selektieren
+            if (this._content.down(node.userData.path)) {
+                this._content.currentName = node.userData.path;
                 
-            // Wenn nicht: laden
+            // sonst öffnen
             } else {
-                this._content.displayWaitMask = true;
+                // Neues Tab erstellen
+                let tabCont = new kijs.gui.container.tab.Container({
+                    name: node.userData.path,
+                    tabCaption: node.userData.caption,
+                    tabClosable: true,
+                    on: {
+                        destruct: this.#onContentTabContainerDestruct,
+                        context: this
+                    }
+                });
+                if (node.userData.iconMap) {
+                    tabCont.tabButtonEl.iconMap = node.userData.iconMap;
+                }
+                this._content.add(tabCont);
+                this._content.currentName = node.userData.path;
 
-                kijs.Dom.jsFileAdd(jsFilePath)
-                    .then((node) => {
-                        this._content.displayWaitMask = false;
-
-                        this._currentContentCls = new window.sc[className]({app: this});
-                        this._content.add(this._currentContentCls.getContent());
-                        if (this._currentContentCls.run) {
-                            this._currentContentCls.run();
-                        }
+                switch (node.userData.filetype) {
+                    case 'html':
+                        tabCont.scrollableY = 'auto';
+                        tabCont.innerDom.clsAdd('markdown');
+                        tabCont.html = node.userData.html;
+                        break;
                         
-                    })
-                    .catch((ex) => {
-                        throw ex;
-                    });
-            }
-        }
-        
-    }
+                    case 'js':
+                        tabCont.displayWaitMask = true;
+                        tabCont.dom.clsAdd('kijs-flexrow');
+                        kijs.Dom.jsFileAdd(node.userData.path)
+                            .then((nde) => {
+                                tabCont.displayWaitMask = false;
+                                tabCont.userData = new window.home[node.userData.namespace][node.userData.className]({app: this});
+                                tabCont.add(tabCont.userData.getContent());
+                                if (tabCont.userData.run) {
+                                    tabCont.userData.run();
+                                }
+                            })
+                            .catch((ex) => {
+                                throw ex;
+                            });
+                        break;
+                        
+                    case 'md':
+                        tabCont.scrollableY = 'auto';
+                        //tabCont.innerDom.clsAdd('markdown');
+                        //tabCont.html = marked.parse(node.userData.markdown);
+                        tabCont.html = '<div class="markdown">' + 
+                                marked.parse(node.userData.markdown) + '</div>';
+                        
+                        /*tabCont.add({
+                            xtype: 'kijs.gui.field.Editor',
+                            style: {
+                                flex: 1
+                            },
+                            mode: 'markdown',
+                            value: node.userData.markdown,
+                            readOnly: true
+                        });*/
+                        break;
 
+                }
+            }
+            
+        }
+    }
+    
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
-        if (this._currentContentCls) {
-            this._currentContentCls.destruct();
-        }
-        
         this._viewport.destruct();
-        this._rpc.destruct();
+        this._rpcApp.destruct();
+        this._rpcData.destruct();
         
-        this._currentContentCls = null;
         this._header = null;
+        this._tabShowcase = null;
+        this._tabTest = null;
+        this._tabDocu = null;
         this._navigation = null;
         this._content = null;
         this._viewport = null;
-        this._rpc = null;
+        this._rpcApp = null;
+        this._rpcData = null;
     }
 
 };

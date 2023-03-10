@@ -350,7 +350,7 @@ kit.App = class kit_App {
                             name: 'centerPanel',
                             caption: 'Formular',
                             iconMap: 'kijs.iconMap.Fa.gamepad',
-                            footerCaption: 'FooterBar',
+                            footerBarCaption: 'FooterBar',
                             scrollableY: 'auto',
                             style: {
                                 flex: 1,

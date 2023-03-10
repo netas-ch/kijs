@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Filter (Abstract)
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui.Element {
 
 
@@ -53,27 +48,14 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             this.applyConfig(config, true);
         }
     }
+    
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-    get columnConfig() { return this._columnConfig; }
-    get filter() {
-        let flt = {
-            type: '',
-            valueField: this._columnConfig.valueField
-        };
-        if (this._checkboxFilterGroup) {
-            flt.checkboxFilter = this.checkboxFilterValues;
-        }
-        return flt;
-    }
-    get isFiltered() { return !!(this.checkboxFilterValues.length > 0); }
-
     get checkboxFilterValues() { return this._checkboxFilterGroup ? this._checkboxFilterGroup.value : []; }
     set checkboxFilterValues(val) {
-
         // convert data to array
         if (!kijs.isArray(val)) {
             val = [val];
@@ -101,11 +83,53 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         // Daten hinzufügen
         this._checkboxFilterGroup.data = data;
     }
+    
+    get columnConfig() { return this._columnConfig; }
+    
+    get filter() {
+        let flt = {
+            type: '',
+            valueField: this._columnConfig.valueField
+        };
+        if (this._checkboxFilterGroup) {
+            flt.checkboxFilter = this.checkboxFilterValues;
+        }
+        return flt;
+    }
+    
+    get isFiltered() { return !!(this.checkboxFilterValues.length > 0); }
+
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    hasFocus() {
+        return !!this._menuButton.menu.isRendered;
+    }
+    
+    // Overwrite
+    render(superCall) {
+        super.render(true);
+
+        this._searchContainer.renderTo(this._dom.node);
+        this._removeFilterIcon.renderTo(this._dom.node);
+
+        this._menuButton.menu.removeAll();
+        this._menuButton.menu.add(this._getMenuButtons());
+        this._menuButton.renderTo(this._removeFilterIcon.node);
+
+        // breite
+        this._dom.width = this._columnConfig.width;
+
+        // sichtbar?
+        this.visible = this._columnConfig.visible;
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
 
     reset() {
         // Filter zurücksetzen
@@ -118,10 +142,21 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._applyToGrid();
     }
 
-    hasFocus() {
-        return !!this._menuButton.menu.isRendered;
-    }
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
 
+        this._searchContainer.unrender();
+        this._removeFilterIcon.unrender();
+
+        super.unrender(true);
+    }
+    
+    
+    // PROTECTED
     // wendet den Filter auf das grid an.
     _applyToGrid(forceReload=false) {
         this.raiseEvent('filter', {filter: this.filter, forceReload: forceReload});
@@ -161,46 +196,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
 
 
-    // Overwrite
-    render(superCall) {
-        super.render(true);
-
-        this._searchContainer.renderTo(this._dom.node);
-        this._removeFilterIcon.renderTo(this._dom.node);
-
-        this._menuButton.menu.removeAll();
-        this._menuButton.menu.add(this._getMenuButtons());
-        this._menuButton.renderTo(this._removeFilterIcon.node);
-
-        // breite
-        this._dom.width = this._columnConfig.width;
-
-        // sichtbar?
-        this.visible = this._columnConfig.visible;
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        this._searchContainer.unrender();
-        this._removeFilterIcon.unrender();
-
-        super.unrender(true);
-    }
-
-
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern
@@ -209,7 +208,8 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-
+        
+        // Elemente/DOM-Objekte entladen
         this._searchContainer.destruct();
         this._removeFilterIcon.destruct();
 

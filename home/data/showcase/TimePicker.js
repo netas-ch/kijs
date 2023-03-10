@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.TimePicker = class sc_TimePicker {
+window.home.sc = {};
+home.sc.TimePicker = class home_sc_TimePicker {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

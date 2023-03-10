@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.CornerTipContainer = class sc_CornerTipContainer {
+window.home.sc = {};
+home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -19,6 +19,7 @@ sc.CornerTipContainer = class sc_CornerTipContainer {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.CornerTipContainer',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },

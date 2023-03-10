@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.container_Stack = class sc_container_Stack {
+window.home.sc = {};
+home.sc.container_Stack = class home_sc_container_Stack {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -26,10 +26,6 @@ sc.container_Stack = class sc_container_Stack {
                 padding: '10px'
             },
             
-            headerInnerStyle:{
-                padding: '10px 10px 0 10px'
-            },
-            
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -39,24 +35,42 @@ sc.container_Stack = class sc_container_Stack {
                     elements:[
                         {
                             xtype: 'kijs.gui.container.Stack',
-                            cls: 'kijs-flexcolumn',
                             style: { flex: 1 },
                             currentName: 's3',
                             defaults:{
                                 xtype: 'kijs.gui.Container',
                                 innerStyle: { padding:'10px' }
                             },
+                            on: {
+                                change: function(e) {
+                                    console.log(e);
+                                },
+                                context: this
+                            },
                             elements: [
-                                { name: 's1', html:'Seite 1', style:{backgroundColor:'#f99'} },
-                                { name: 's2', html:'Seite 2', style:{backgroundColor:'#9f9'} },
-                                { name: 's3', html:'Seite 3', style:{backgroundColor:'#99f'} },
-                                { name: 's4', html:'Seite 4', style:{backgroundColor:'#ff9'} },
-                                { name: 's5', html:'Seite 5', style:{backgroundColor:'#9ff'} }
+                                { name:'s1', html:'Seite 1', style:{backgroundColor:'#f99'} },
+                                { name:'s2', html:'Seite 2', style:{backgroundColor:'#9f9'} },
+                                { name:'s3', html:'Seite 3', style:{backgroundColor:'#99f'} },
+                                { name:'s4', html:'Seite 4', style:{backgroundColor:'#ff9'} },
+                                { name:'s5', html:'Seite 5', style:{backgroundColor:'#9ff'} }
                             ]
                         }
                     ],
                     footerElements:[
                         {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element hinzufügen',
+                            iconMap: 'kijs.iconMap.Fa.circle-plus',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    cStack.add({
+                                          html: 'My new Element'
+                                    });
+                                    cStack.currentIndex = cStack.elements.length - 1;
+                                }
+                            }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'zurück',
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
@@ -69,7 +83,7 @@ sc.container_Stack = class sc_container_Stack {
                                         i = cStack.elements.length - 1;
                                     }
                                     cStack.setCurrentAnimated(i, 'slideRight').then((e) => {
-                                        console.log(e);
+                                        console.log('animation end');
                                     });
                                 }
                             }
@@ -86,7 +100,7 @@ sc.container_Stack = class sc_container_Stack {
                                         i = 0;
                                     }
                                     cStack.setCurrentAnimated(i, 'slideLeft').then((e) => {
-                                        console.log(e);
+                                        console.log('animation end');
                                     });
                                 }
                             }
@@ -97,19 +111,19 @@ sc.container_Stack = class sc_container_Stack {
                 {
                     xtype: 'kijs.gui.container.Stack',
                     name: 'testcontainerstack',
-                    height: 200,
+                    height: 230,
                     style: { marginTop: '10px', border: '1px solid #333' },
+                    defaults:{
+                        innerStyle: {
+                            padding: '4px'
+                        }
+                    },
                     elements: [
                         {
                             xtype: 'kijs.gui.Panel',
                             name: 'testcontainerstackpanel_1',
                             caption: 'Panel 1',
                             cls: 'kijs-flexcolumn',
-                            defaults:{
-                                /*style: {
-                                    margin: '4px 4px 0 4px'
-                                }*/
-                            },
                             style: {
                                 flex: 1
                             },

@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.field_ListView = class sc_field_ListView {
+window.home.sc = {};
+home.sc.field_ListView = class home_sc_field_ListView {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -27,13 +27,13 @@ sc.field_ListView = class sc_field_ListView {
             },
             
             headerInnerStyle:{
-                padding: '10px'
+                gap: '6px'
             },
             
             headerElements:[
                 {
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disabled',
+                    label: 'disabled',
                     on: {
                         change: function(e) {
                             this._updateProperty('disabled', e.element.value);
@@ -42,7 +42,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'disableFlex',
+                    label: 'disableFlex',
                     on: {
                         change: function(e) {
                             this._updateProperty('disableFlex', e.element.value);
@@ -51,7 +51,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelHide',
+                    label: 'labelHide',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelHide', e.element.value);
@@ -60,7 +60,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'labelWidth = 120',
+                    label: 'labelWidth = 120',
                     on: {
                         change: function(e) {
                             this._updateProperty('labelWidth', e.element.value ? 120 : null);
@@ -69,7 +69,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'readOnly',
+                    label: 'readOnly',
                     on: {
                         change: function(e) {
                             this._updateProperty('readOnly', e.element.value);
@@ -78,7 +78,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'required',
+                    label: 'required',
                     on: {
                         change: function(e) {
                             this._updateProperty('required', e.element.value);
@@ -88,7 +88,7 @@ sc.field_ListView = class sc_field_ListView {
                     }
                 },{
                     xtype: 'kijs.gui.field.Switch',
-                    caption: 'showHelp',
+                    label: 'showHelp',
                     on: {
                         change: function(e) {
                             let value = '';
@@ -206,7 +206,7 @@ sc.field_ListView = class sc_field_ListView {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'inline und mit RPC',
+                    html: 'mit RPC',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -223,6 +223,48 @@ sc.field_ListView = class sc_field_ListView {
                     value: ['#0f0', '#ff0'],
                     minSelectCount: 2,
                     maxSelectCount: 3
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'ListView local:',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.field.ListView',
+                    label: 'ListView local',
+                    valueField: 'id',
+                    captionField: 'Bezeichnung',
+                    iconMapField: 'Icon',
+                    iconColorField: 'Color',
+                    tooltipField: 'Color',
+                    showCheckBoxes: true,
+                    selectType: 'simple',
+                    helpText: 'Hilfe Text!',
+                    required: true,
+                    width: 350,
+                    style: {
+                        marginBottom: '4px'
+                    },
+                    data: [
+                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.circle', Color:'#0088ff' }, 
+                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.circle', Color:'#88ff00' }, 
+                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.circle', Color:'#ff0088' },
+                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.circle', Color:'#00ff88' }, 
+                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.circle', Color:'#ff8800' }, 
+                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.circle', Color:'#8800ff' },
+                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#666666' }, 
+                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.circle', Color:'#999999' }, 
+                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#bbbbbb' }, 
+                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.circle', Color:'#ffffff' }, 
+                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.circle', Color:'#000000' }
+                    ],
+                    value: [2,3],
+                    on: {
+                        input: function(e) {
+                            console.log(e.oldValue);
+                            console.log(e.value);
+                        }
+                    }
                 }
             ]
         });

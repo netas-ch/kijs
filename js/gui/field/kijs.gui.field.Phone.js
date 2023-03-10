@@ -49,6 +49,7 @@
  */
 kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -76,7 +77,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         });
 
         // Listeners
-        this.on('change', this._onChange, this);
+        this.on('change', this.#onChange, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -90,36 +91,25 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get defaultCountryCallingCode() { return this._defaultCountryCallingCode; }
     set defaultCountryCallingCode(val) { this._defaultCountryCallingCode = val; }
 
+    get replaceLeadingZeros() { return this._replaceLeadingZeros; }
+    set replaceLeadingZeros(val) { this._replaceLeadingZeros = !!val; }
+
     get showLinkButton() { return this._showLinkButton; }
     set showLinkButton(val) { this._showLinkButton = !!val; }
 
-    get replaceLeadingZeros() { return this._replaceLeadingZeros; }
-    set replaceLeadingZeros(val) { this._replaceLeadingZeros = !!val; }
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-    _createElements() {
-        return new kijs.gui.Button(
-            {
-                iconMap: 'kijs.iconMap.Fa.phone',
-                on: {
-                    click: this._onLinkButtonClick,
-                    context: this
-                }
-            }
-        );
-    }
-
-    // Protected
+    // PROTECTED
     _checkFormat(val) {
         let format = null;
         let delimiter = ' ';
@@ -169,6 +159,18 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
         return val;
     }
+    
+    _createElements() {
+        return new kijs.gui.Button(
+            {
+                iconMap: 'kijs.iconMap.Fa.phone',
+                on: {
+                    click: this.#onLinkButtonClick,
+                    context: this
+                }
+            }
+        );
+    }
 
     // Formatiert die Nummer
     _format(val, format, delimiter) {
@@ -191,8 +193,9 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onChange() {
+    #onChange() {
         let val = this.value;
 
         if (this._replaceLeadingZeros) {
@@ -208,12 +211,13 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         this.value = val;
     }
 
-    _onLinkButtonClick() {
+    #onLinkButtonClick() {
         if (this.value) {
             let val = this.value.replace(/(?!^\+)[^0-9]+/g, '');
             kijs.Navigator.openLink('tel:' + val);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -237,4 +241,5 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

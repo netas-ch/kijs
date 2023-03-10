@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.iconMap (Static)
+// kijs.iconMap (namespace)
 // --------------------------------------------------------------
-kijs.iconMap = class kijs_iconMap {
-    
-};
+kijs.iconMap = {};

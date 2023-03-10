@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.container_Scrollable = class sc_container_Scrollable {
+window.home.sc = {};
+home.sc.container_Scrollable = class home_sc_container_Scrollable {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -113,7 +113,7 @@ sc.container_Scrollable = class sc_container_Scrollable {
                         xtype: 'kijs.gui.Button',
                         caption: 'test',
                         style: {
-                            flex: 1,
+                            flex: 'none',
                             marginBottom: '4px'
                         }
                     },

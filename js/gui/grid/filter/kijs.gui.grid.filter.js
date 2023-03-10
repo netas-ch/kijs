@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.grid.filter (Static)
+// kijs.gui.grid.filter (namespace)
 // --------------------------------------------------------------
-kijs.gui.grid.filter = class kijs_gui_grid_filter {
-
-};
+kijs.gui.grid.filter = {};

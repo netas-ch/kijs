@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.Row
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
 
@@ -40,10 +35,11 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get cells() {
         let cells = [];
         for (let i=0; i<this._cells.length; i++) {
@@ -61,11 +57,11 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         }
     }
 
-    get grid() { return this.parent; }
-
     get dataRow() { return this._dataRow; }
     set dataRow(val) { this._dataRow = val; }
 
+    get grid() { return this.parent; }
+    
     get impair() {
         return this.rowIndex % 2 === 0;
     }
@@ -109,10 +105,12 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
             this._dom.clsRemove('kijs-selected');
         }
     }
+    
+    
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Setzt alle 'dirty' records zurück.
      * @returns {undefined}
@@ -143,94 +141,6 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         }
 
         return cell;
-    }
-
-    /**
-     * Aktualisiert die DataRow. Falls an der Row etwas geändert hat,
-     * wird die Zeile aktualisiert.
-     *
-     * @param {Object} newDataRow
-     * @returns {undefined}
-     */
-    updateDataRow(newDataRow) {
-        let cell = null;
-
-        // Wenn bereits gerendert, vergleichen und falls geändert neu rendern
-        if (this.isRendered) {
-            kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
-                if (newDataRow[columnConfig.displayField] !== this.dataRow[columnConfig.displayField]) {
-                    cell = this.getCellByConfig(columnConfig);
-                    if (cell) {
-                        cell.setValue(newDataRow[columnConfig.displayField], true, false, false);
-                    }
-                }
-            }, this);
-        }
-
-        // aktualisieren
-        this.dataRow = newDataRow;
-    }
-
-    // PROTECTED
-    _createCells() {
-        let newColumnConfigs = [];
-
-        // Prüfen, ob für jede columnConfig eine cell existiert.
-        // Wenn nicht, in Array schreiben.
-        kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
-            if (!this.getCellByConfig(columnConfig)) {
-                newColumnConfigs.push(columnConfig);
-            }
-        }, this);
-
-        // Falls cell noch nicht vorhanden, neue cell erstellen.
-        kijs.Array.each(newColumnConfigs, function(columnConfig) {
-            let cellConfig = columnConfig.cellConfig;
-            let constr = kijs.getClassFromXtype(cellConfig.xtype);
-
-            if (!constr) {
-                throw new kijs.Error('invalid cell xtype for column ' + columnConfig.caption);
-            }
-
-            // change listener
-            columnConfig.on('change', this._onColumnConfigChange, this);
-
-            cellConfig.parent = this;
-            delete cellConfig.xtype;
-
-            let cell = new constr(cellConfig);
-            cell.loadFromDataRow();
-
-            this._cells.push({columnConfig: columnConfig, cell: cell});
-        }, this);
-    }
-
-    _sortCells() {
-        this._cells.sort(function(a, b) {
-            if (a.columnConfig.position < b.columnConfig.position) {
-                return -1;
-            }
-            if (a.columnConfig.position > b.columnConfig.position) {
-                return 1;
-            }
-            return 0;
-        });
-    }
-
-    // EVENTS
-    _onColumnConfigChange(e) {
-        if ('visible' in e || 'width' in e) {
-            kijs.Array.each(this.cells, function(cell) {
-                if (e.columnConfig === cell.columnConfig) {
-                    cell.render();
-                    return false;
-                }
-            }, this);
-
-        }
-        if ('position' in e) {
-            this.render();
-        }
     }
 
     // Overwrite
@@ -268,7 +178,99 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
         super.unrender(true);
     }
+    
+    /**
+     * Aktualisiert die DataRow. Falls an der Row etwas geändert hat,
+     * wird die Zeile aktualisiert.
+     *
+     * @param {Object} newDataRow
+     * @returns {undefined}
+     */
+    updateDataRow(newDataRow) {
+        let cell = null;
 
+        // Wenn bereits gerendert, vergleichen und falls geändert neu rendern
+        if (this.isRendered) {
+            kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
+                if (newDataRow[columnConfig.displayField] !== this.dataRow[columnConfig.displayField]) {
+                    cell = this.getCellByConfig(columnConfig);
+                    if (cell) {
+                        cell.setValue(newDataRow[columnConfig.displayField], true, false, false);
+                    }
+                }
+            }, this);
+        }
+
+        // aktualisieren
+        this.dataRow = newDataRow;
+    }
+
+
+    // PROTECTED
+    _createCells() {
+        let newColumnConfigs = [];
+
+        // Prüfen, ob für jede columnConfig eine cell existiert.
+        // Wenn nicht, in Array schreiben.
+        kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
+            if (!this.getCellByConfig(columnConfig)) {
+                newColumnConfigs.push(columnConfig);
+            }
+        }, this);
+
+        // Falls cell noch nicht vorhanden, neue cell erstellen.
+        kijs.Array.each(newColumnConfigs, function(columnConfig) {
+            let cellConfig = columnConfig.cellConfig;
+            let constr = kijs.getClassFromXtype(cellConfig.xtype);
+
+            if (!constr) {
+                throw new kijs.Error('invalid cell xtype for column ' + columnConfig.caption);
+            }
+
+            // change listener
+            columnConfig.on('change', this.#onColumnConfigChange, this);
+
+            cellConfig.parent = this;
+            delete cellConfig.xtype;
+
+            let cell = new constr(cellConfig);
+            cell.loadFromDataRow();
+
+            this._cells.push({columnConfig: columnConfig, cell: cell});
+        }, this);
+    }
+
+    _sortCells() {
+        this._cells.sort(function(a, b) {
+            if (a.columnConfig.position < b.columnConfig.position) {
+                return -1;
+            }
+            if (a.columnConfig.position > b.columnConfig.position) {
+                return 1;
+            }
+            return 0;
+        });
+    }
+
+
+    // PRIVATE
+    // LISTENERS
+    #onColumnConfigChange(e) {
+        if ('visible' in e || 'width' in e) {
+            kijs.Array.each(this.cells, function(cell) {
+                if (e.columnConfig === cell.columnConfig) {
+                    cell.render();
+                    return false;
+                }
+            }, this);
+
+        }
+        if ('position' in e) {
+            this.render();
+        }
+    }
+
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -284,7 +286,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
         // cells destructen
         kijs.Array.each(this.cells, function(cell) {
-            cell.columnConfig.off('change', this._onColumnConfigChange, this);
+            cell.columnConfig.off('change', this.#onColumnConfigChange, this);
             cell.destruct();
         }, this);
 
@@ -295,4 +297,5 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

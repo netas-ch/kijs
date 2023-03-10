@@ -182,7 +182,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._style = {};
 
         this._tooltip = null;
-
+        
+        this._scrollEndDeferId = null;
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -205,8 +207,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             nodeTagName: true,
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
-            tooltip: { target: 'tooltip' },
-            toolTip: { target: 'toolTip' } // DEPRECATED
+            tooltip: { target: 'tooltip' }
         };
 
         // Mapping das aussagt, welche DOM-Node-Events bei welchem kijs-Event abgefragt werden sollen
@@ -231,6 +232,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             mouseMove: { nodeEventName: 'mousemove', useCapture: false },
             mouseUp: { nodeEventName: 'mouseup', useCapture: false },
             scroll: { nodeEventName: 'scroll', useCapture: false },
+            scrollEnd: { nodeEventName: 'scrollend', useCapture: false },
             singleClick: { nodeEventName: 'click', useCapture: false, interrupt: this._doubleClickSpeed },
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
             touchEnd: { nodeEventName: 'touchend', useCapture: false },
@@ -244,7 +246,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             keyUp: { nodeEventName: 'keyup', useCapture: false },
             enterPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: ['Enter'],        // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Enter'],                // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -252,7 +254,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             enterEscPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: ['Enter', 'Escape'], // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Enter', 'Escape'],      // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -260,7 +262,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             escPress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: ['Escape'],          // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Escape'],               // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -268,7 +270,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             },
             spacePress: {
                 nodeEventName: 'keydown',       // Node-Event Name
-                keys: ['Space'],        // Bei welchen Tasten soll das Event ausgelöst werden?
+                keys: ['Space'],                // Bei welchen Tasten soll das Event ausgelöst werden?
                 shiftKey: null,                 // Muss dazu shift gedrückt werden? (null=egal)
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
@@ -305,9 +307,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     set disableEnterBubbeling(val) {
         this._disableEnterBubbeling = val;
         if (val) {
-            this.on('enterPress', this._onKeyPressStopBubbeling, this);
+            this.on('enterPress', this.#onKeyPressStopBubbeling, this);
         } else {
-            this.off('enterPress', this._onKeyPressStopBubbeling, this);
+            this.off('enterPress', this.#onKeyPressStopBubbeling, this);
         }
     }
 
@@ -319,26 +321,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     set disableEscBubbeling(val) {
         this._disableEscBubbeling = val;
         if (val) {
-            this.on('escPress', this._onKeyPressStopBubbeling, this);
+            this.on('escPress', this.#onKeyPressStopBubbeling, this);
         } else {
-            this.off('escPress', this._onKeyPressStopBubbeling, this);
+            this.off('escPress', this.#onKeyPressStopBubbeling, this);
         }
     }
 
     get hasFocus() {
         return this._node === document.activeElement;
-    }
-
-    /**
-     * Wurde die Eigenschaft "left" manuell zugewiesen?
-     * @returns {Boolean}
-     */
-    get hasLeft() {
-        if (this._node) {
-            return !kijs.isEmpty(this._node.style.left);
-        } else {
-            return !kijs.isEmpty(this._left);
-        }
     }
 
     /**
@@ -350,6 +340,18 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._node.style.height);
         } else {
             return !kijs.isEmpty(this._height);
+        }
+    }
+    
+    /**
+     * Wurde die Eigenschaft "left" manuell zugewiesen?
+     * @returns {Boolean}
+     */
+    get hasLeft() {
+        if (this._node) {
+            return !kijs.isEmpty(this._node.style.left);
+        } else {
+            return !kijs.isEmpty(this._left);
         }
     }
 
@@ -473,9 +475,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
-    get toolTip() { console.warn('DEPRECATED: Dom.toolTip, please use Dom.tooltip'); return this.tooltip; }
-    set toolTip(val) { console.warn('DEPRECATED: Dom.toolTip, please use Dom.tooltip'); this.tooltip = val;  };
-
     get tooltip() { return this._tooltip; }
     set tooltip(val) {
         if (kijs.isEmpty(val)) {
@@ -582,45 +581,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
 
 
-
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-    /**
-     * Richtet ein Element nach einem Ziel-Element aus.
-     * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
-     * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
-     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
-     * gewechselt werden (allowSwapX & allowSwapY)
-     * @param {kijs.gui.Element|HTMLElement} targetNode
-     * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
-     *                                   tl --- t --- tr
-     *                                   |             |
-     *                                   l      c      r
-     *                                   |             |
-     *                                   bl --- b --- br
-     *
-     * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
-     * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
-     * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
-     * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
-     * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
-     * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
-     */
-    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true)  {
-        if (targetNode instanceof kijs.gui.Element) {
-            targetNode = targetNode.dom;
-        }
-
-        // Position vom Element
-        const t = kijs.Dom.getAbsolutePos(targetNode);
-
-        return this.alignToRect(t, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset);
-    }
-
-
     /**
      * Richtet ein Element nach einem Ziel aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
@@ -791,6 +754,39 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
+     * Richtet ein Element nach einem Ziel-Element aus.
+     * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
+     * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
+     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * gewechselt werden (allowSwapX & allowSwapY)
+     * @param {kijs.gui.Element|HTMLElement} targetNode
+     * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
+     *                                   tl --- t --- tr
+     *                                   |             |
+     *                                   l      c      r
+     *                                   |             |
+     *                                   bl --- b --- br
+     *
+     * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
+     * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
+     * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
+     * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
+     * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
+     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
+     */
+    alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true)  {
+        if (targetNode instanceof kijs.gui.Element) {
+            targetNode = targetNode.dom;
+        }
+
+        // Position vom Element
+        const t = kijs.Dom.getAbsolutePos(targetNode);
+
+        return this.alignToRect(t, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset);
+    }
+    
+    /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
      * @returns {undefined}
@@ -934,6 +930,19 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
+     * Überprüft, ob der DOM-Node eine bestimmte Eigenschaft hat
+     * @param {String} name
+     * @returns {Boolean}
+     */
+    nodeAttributeHas(name) {
+        if (this._node) {
+            return kijs.isEmpty(this._nodeAttribute[name]);
+        } else {
+            return !!this._nodeAttribute.hasOwnProperty(name);
+        }
+    }
+    
+    /**
      * Fügt eine Eigenschaft zum DOM-Node hinzu, oder löscht sie.
      * @param {String} name
      * @param {String|null|Boolean|undefined} value
@@ -964,26 +973,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
-    /**
-     * Überprüft, ob der DOM-Node eine bestimmte Eigenschaft hat
-     * @param {String} name
-     * @returns {Boolean}
-     */
-    nodeAttributeHas(name) {
-        if (this._node) {
-            return kijs.isEmpty(this._nodeAttribute[name]);
-        } else {
-            return !!this._nodeAttribute.hasOwnProperty(name);
-        }
-    }
-
     // overwrite
-    on(names, callback, context) {
+    off(names, callback, context) {
         // Anzahl kijs-Events ermitteln
         const eventsCountBefore = Object.keys(this._events).length;
 
         // Aufruf der Basisfunktion
-        super.on(names, callback, context);
+        super.off(names, callback, context);
 
         // Anzahl kijs-Events ermitteln
         const eventsCountAfter = Object.keys(this._events).length;
@@ -993,14 +989,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._nodeEventListenersAppy();
         }
     }
-
+    
     // overwrite
-    off(names, callback, context) {
+    on(names, callback, context) {
         // Anzahl kijs-Events ermitteln
         const eventsCountBefore = Object.keys(this._events).length;
 
         // Aufruf der Basisfunktion
-        super.off(names, callback, context);
+        super.on(names, callback, context);
 
         // Anzahl kijs-Events ermitteln
         const eventsCountAfter = Object.keys(this._events).length;
@@ -1025,7 +1021,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     render() {
-
         // Node erstellen und Events abfragen
         if (!this._node) { // !TODO wenn bereits vorhanden, passiert nichts?
             this._node = document.createElement(this._nodeTagName);
@@ -1103,13 +1098,18 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._node.scrollIntoView();
     }
 
-
     /**
      * Node aus DOM entfernen, falls vorhanden
      * @returns {undefined}
      */
     unrender() {
         if (this._node) {
+            // timer abbrechen
+            if (this._scrollEndDeferId) {
+                clearTimeout(this._scrollEndDeferId);
+                this._scrollEndDeferId = null;
+            }
+            
             // Damit beim erneuten Rendern die Werte wieder vorhanden sind
             kijs.Object.each(this._nodeAttribute, function (key) {
                 this._nodeAttribute[key] = this.nodeAttributeGet(key);
@@ -1134,7 +1134,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._tooltip.unrender();
         }
     }
-
 
 
     // PROTECTED
@@ -1180,11 +1179,36 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (this._eventMap[kijsEvent]) {
                 const nodeEventName = this._eventMap[kijsEvent].nodeEventName;
                 const useCapture = !!this._eventMap[kijsEvent].useCapture;
-
-                // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
-                if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
-                    kijs.Dom.addEventListener(nodeEventName, this._node, this._onNodeEvent, this, useCapture);
+                
+                // unterstützt der Browser das Event?
+                if ('on'+nodeEventName in this._node) {
+                    
+                    // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
+                    if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
+                        kijs.Dom.addEventListener(nodeEventName, this._node, this.#onNodeEvent, this, useCapture);
+                    }
+                    
+                // Event wird nicht unterstützt
+                } else {
+                    // Workaround vorhanden?
+                    switch (nodeEventName) {
+                        case 'scrollend':
+                            console.log('scrollEnd Workaround');
+                            // nodeEvent im eventMap überschreiben
+                            this._eventMap[kijsEvent].nodeEventName = 'scroll';
+                            
+                            // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
+                            if (!kijs.Dom.hasEventListener('scroll', this, this)) {
+                                kijs.Dom.addEventListener('scroll', this._node, this.#onScroll, this);
+                            }
+                            break;
+                            
+                        default:
+                            throw new kijs.Error(`kijsEvent "${kijsEvent}" is not supported by the browser`);
+                    }
+                    
                 }
+                
             } else {
                 throw new kijs.Error(`kijsEvent "${kijsEvent}" is not mapped`);
             }
@@ -1192,8 +1216,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onKeyPressStopBubbeling(e) {
+    #onKeyPressStopBubbeling(e) {
         e.nodeEvent.stopPropagation();
     }
 
@@ -1202,7 +1227,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Object} e
      * @returns {Boolean}
      */
-    _onNodeEvent(e) {
+    #onNodeEvent(e) {
         let ret = true;
 
         // kijs-Events ermitteln, die aufgrund des DOM-Node-Events ausgelöst werden sollen
@@ -1264,7 +1289,26 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         return ret;
     }
 
-
+    
+    // PRIVATE
+    // Workaround zum Erzeugen des Events scrollEnd, das noch nicht von allen 
+    // Browsern unterstützt wird.
+    #onScroll(e) {
+        // bestehender timer abbrechen
+        clearTimeout(this._scrollEndDeferId);
+        this._scrollEndDeferId = null;
+        
+        // und neuer starten
+        this._scrollEndDeferId = kijs.defer(function() {
+            // falls dieser nicht mehr abgebrochen wurde, kann nun das 
+            // scrollEnd Event ausgelöst werden.
+            e.dom = this;
+            e.eventName = 'scrollEnd';
+            this.raiseEvent('scrollEnd', e);
+        }, 100, this);
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -1287,7 +1331,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._nodeEventListeners = null;
         this._style = null;
         this._tooltip = null;
-
+        this._scrollEndDeferId = null;
+        
         // Basisklasse entladen
         super.destruct();
     }

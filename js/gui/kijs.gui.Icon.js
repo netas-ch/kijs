@@ -94,6 +94,22 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     get iconColor() { return this._dom.style.color; }
     set iconColor(val) { this._dom.style.color = val; }
 
+    get iconMap() {
+        let ret = {};
+        if (this.iconChar) {
+            ret.char = this.iconChar;
+        }
+        if (this.iconCls) {
+            ret.cls = this.iconCls;
+        }
+        if (this.iconColor) {
+            ret.color = this.iconColor;
+        }
+        if (this.iconStyle) {
+            ret.style = this.iconStyle;
+        }
+        return ret;
+    }
     set iconMap(val) {
         if (kijs.isString(val) && val) {
             const obj = kijs.getClassFromXtype(val);

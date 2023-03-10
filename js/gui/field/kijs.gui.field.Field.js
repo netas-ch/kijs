@@ -99,7 +99,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._spinBoxEl = null;
         
-        // Bei disableFlex=true, wird der Restliche Platz mit diesem leeren DIV gefüllt
+        // Bei disableFlex=true, wird der restliche Platz mit diesem leeren DIV gefüllt
         this._spacerDom = new kijs.gui.Dom({
             cls: 'kiis-spacer'
         });   
@@ -172,7 +172,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         });
 
         // Listeners
-        this._spinIconEl.on('click', this._onSpinButtonClick, this);
+        this._spinIconEl.on('click', this.#onSpinButtonClick, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -180,6 +180,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -362,6 +363,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._labelDom.html = val;
     }
 
+    get labelDom() { return this._labelDom; }
+
     get labelHide() { return this._labelHide; }
     set labelHide(val) {
         this._labelHide = val;
@@ -373,8 +376,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }
     }
-
-    get labelDom() { return this._labelDom; }
 
     get labelHtmlDisplayType() { return this._labelDom.htmlDisplayType; }
     set labelHtmlDisplayType(val) { this._labelDom.htmlDisplayType = val; }
@@ -526,10 +527,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
     set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Fügt Fehler aus einer externen Validation hinzu
      * @param {String|Array} errors
@@ -565,6 +567,24 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zeigt eine individuelle Fehlermeldung an. Wenn keine Meldung
+     * übergeben wird, wird die Fehlermeldung zurückgesetzt.
+     * Diese Methode hat keinen Einfluss auf die 'validate' Methode; ein
+     * Formular kann trotz Fehlermeldung abgesendet werden.
+     * @param msg {string|null} [msg] Anzuzeigende Nachricht
+     * @returns {undefined}
+     */
+    markInvalid(msg=null) {
+        this._errors = [];
+
+        if (kijs.isString(msg) && msg) {
+            this._errors.push(msg);
+        }
+
+        this._displayErrors();
+    }
+    
     // overwrite
     render(superCall) {
         // dom mit elements rendern (innerDom)
@@ -630,25 +650,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this.raiseEvent('change', {value: this.value, oldVal: oldVal});
         }
     }
-
-    /**
-     * Zeigt eine individuelle Fehlermeldung an. Wenn keine Meldung
-     * übergeben wird, wird die Fehlermeldung zurückgesetzt.
-     * Diese Methode hat keinen Einfluss auf die 'validate' Methode; ein
-     * Formular kann trotz Fehlermeldung abgesendet werden.
-     * @param msg {string|null} [msg] Anzuzeigende Nachricht
-     * @returns {undefined}
-     */
-    markInvalid(msg=null) {
-        this._errors = [];
-
-        if (kijs.isString(msg) && msg) {
-            this._errors.push(msg);
-        }
-
-        this._displayErrors();
-    }
-
 
     // overwrite
     unrender(superCall) {
@@ -746,8 +747,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onSpinButtonClick(e) {
+    #onSpinButtonClick(e) {
         if (this.disabled || this.readOnly) {
              return;
         }
@@ -759,6 +761,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }
     }
+    
 
 
     // --------------------------------------------------------------
@@ -811,4 +814,5 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

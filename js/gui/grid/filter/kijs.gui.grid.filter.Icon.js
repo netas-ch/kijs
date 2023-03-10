@@ -1,16 +1,11 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Icon
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.grid.filter.Filter {
 
-
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -37,13 +32,14 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
             this.applyConfig(config, true);
         }
 
-        this.parent.grid.on('afterLoad', this._onAfterLoad, this);
+        this.parent.grid.on('afterLoad', this.#onAfterLoad, this);
     }
+    
+    
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'icon',
@@ -53,10 +49,23 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
     get isFiltered() { return this._checkboxGroup ? this._checkboxGroup.value ? true : false : false; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    render(superCall) {
+        super.render(true);
 
+        this._searchField.renderTo(this._searchContainer.node);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+    
     reset() {
         if (this._checkboxGroup) {
             this._checkboxGroup.checkedAll = true;
@@ -64,7 +73,8 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         super.reset();
     }
 
-    // Private
+
+    // PROTECTED
     _checkIcons() {
         let icons = [];
         let iconsCheck = [];
@@ -108,9 +118,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         return [icons, iconsCheck, dataCnt];
     }
 
-    // Events
 
-    _onAfterLoad(e) {;
+    // PRIVATE
+    // LISTENERS
+    #onAfterLoad(e) {;
         let checkIcons = this._checkIcons();
         let icons = checkIcons[0];
         let iconsCheck = checkIcons[1];
@@ -128,7 +139,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                 cls: 'kijs-filter-icon-checkboxgroup',
                 checkedAll: true,
                 on: {
-                    change: this._onFilterChange,
+                    change: this.#onFilterChange,
                     context: this
                 }
             });
@@ -149,11 +160,11 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         }
     }
 
-    _onFilterChange() {
+    #onFilterChange() {
        this._applyToGrid();
     }
 
-    _onKeyDown(e) {
+    #onKeyDown(e) {
         e.nodeEvent.stopPropagation();
         if (e.nodeEvent.key === 'Enter') {
             e.nodeEvent.preventDefault();
@@ -162,15 +173,34 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
     }
 
 
+
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
     // overwrite
-    render(superCall) {
-        super.render(true);
-
-        this._searchField.renderTo(this._searchContainer.node);
-
-        // Event afterRender auslösen
+    destruct(superCall) {
         if (!superCall) {
-            this.raiseEvent('afterRender');
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
         }
+        
+        // Elemente/DOM-Objekte entladen
+        if (this._searchField) {
+            this._searchField.destruct();
+        }
+        if (this._checkboxGroup) {
+            this._checkboxGroup.destruct();
+        }
+        
+        // Variablen (Objekte/Arrays) leeren
+        this._searchField = null;
+        this._checkboxGroup = null;
+        
+        // Basisklasse entladen
+        super.destruct(true);
     }
+    
 };

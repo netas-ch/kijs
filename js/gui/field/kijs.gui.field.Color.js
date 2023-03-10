@@ -44,6 +44,7 @@
  */
 kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -84,7 +85,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         this._eventForwardsAdd('escPress', this._inputDom);
 
         // Listeners
-        this.on('input', this._onInput, this);
+        this.on('input', this.#onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -107,13 +108,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             this._inputDom.disabled = false;
         }
     }
+    
+    get inputDom() { return this._inputDom; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-
-    get inputDom() { return this._inputDom; }
-
-
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -125,7 +124,6 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('readOnly', false);
         }
     }
-
 
     // overwrite
     get value() {
@@ -146,16 +144,6 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-    /**
-     * Konvertiert eingaben in das Hex-Format (#FF00FF)
-     * @param {String|Array|Object} value
-     * @returns {String}
-     */
-    _valueToHex(value) {
-        return '#' + kijs.Graphic.colorGetHex(value);
-    }
-
     // overwrite
     render(superCall) {
         super.render(true);
@@ -169,7 +157,6 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         }
     }
 
-
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -182,10 +169,23 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     }
 
 
+    // PROTECTED
+    /**
+     * Konvertiert eingaben in das Hex-Format (#FF00FF)
+     * @param {String|Array|Object} value
+     * @returns {String}
+     */
+    _valueToHex(value) {
+        return '#' + kijs.Graphic.colorGetHex(value);
+    }
+    
+    
+    // PRIVATE
     // LISTENERS
-    _onInput(e) {
+    #onInput(e) {
         this.validate();
     }
+
 
 
     // --------------------------------------------------------------
@@ -211,4 +211,5 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

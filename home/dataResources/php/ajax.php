@@ -410,12 +410,6 @@ foreach ($requests as $request) {
             }
             break;
         
-        case 'navigation.load':
-            $nodeId = $request->requestData->nodeId;
-            $nodes = _readNavigationTree($nodeId);
-            $response->responseData->tree = $nodes;
-            break;
-        
         case 'rpc.simple':
             $response->errorMsg = 'Ich bin eine errorMsg';
             $response->responseData = $request->requestData;
@@ -588,52 +582,4 @@ function _getIcon($id) {
     $cnt = count($icons);
     return $icons[$id % $cnt];
 
-}
-
-function _readNavigationTree($nodeId) {
-    $rootDir = '../js';
-    $extension = '.js';
-    $excludeFiles = ['.', '..', 'sc.App.js'];
-    
-    $nodes = [];
-    
-    $handle = opendir($rootDir . '/' . $nodeId);
-    
-    if ($handle) {
-        while ( ($filename = readdir($handle)) !== false ) {
-            $path = $nodeId ? $nodeId . '/' . $filename : $filename;
-                    
-            // Unbenötigte Dateien ignorieren
-            if (in_array($filename, $excludeFiles)) {
-                continue;
-            }
-            
-            // Verzeichnis
-            if (is_dir($rootDir . '/' . $path)) {
-                $node = new stdClass();
-                $node->caption = str_replace('_', ' ', $filename);
-                $node->nodeId = $path;
-                $node->leaf = false;
-                $nodes[] = $node;
-                
-            // js-Datei
-            } else {
-                if (!str_ends_with($filename, $extension)) {
-                    continue;
-                }
-                
-                $node = new stdClass();
-                $node->caption = str_replace('_', ' ', substr($filename, 0, strlen($extension) * -1));
-                $node->nodeId = $path;
-                $node->iconMap = 'kijs.iconMap.Fa.file';
-                $node->leaf = true;
-                $nodes[] = $node;
-                
-            }
-        }
-
-        closedir($handle);
-    }
-    
-    return $nodes;
 }

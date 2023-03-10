@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.ListView = class sc_ListView {
+window.home.sc = {};
+home.sc.ListView = class home_sc_ListView {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -36,11 +36,10 @@ sc.ListView = class sc_ListView {
                     captionField: 'Bezeichnung',
                     iconMapField: 'Icon',
                     //iconColorField: 'Color',
-                    tooltipField: 'Color',
+                    //tooltipField: 'Color',
                     showCheckBoxes: false,
                     selectType: 'single',
                     width: 200,
-                    height: 200,
                     style: {
                         marginBottom: '4px'
                     },
@@ -56,6 +55,35 @@ sc.ListView = class sc_ListView {
                         {id:9, Bezeichnung:'WordPress', Icon:'kijs.iconMap.Fa.wordpress' }, 
                         {id:10, Bezeichnung:'Slack', Icon:'kijs.iconMap.Fa.slack' }, 
                         {id:11, Bezeichnung:'Figma', Icon:'kijs.iconMap.Fa.figma' }
+                    ],
+                    value: 5,
+                    on: {
+                        selectionChange: function(e) {
+                            console.log(this.value);
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.ListView',
+                    valueField: 'id',
+                    captionField: 'Bezeichnung',
+                    iconMapField: 'Icon',
+                    showCheckBoxes: false,
+                    selectType: 'single',
+                    width: 200,
+                    height: 100,
+                    style: {
+                        marginBottom: '4px'
+                    },
+                    data: [
+                        {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
+                        {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
+                        {id:3, Bezeichnung:'Instagram' },
+                        {id:4, Bezeichnung:'TikTok' }, 
+                        {id:5, Bezeichnung:'LinkedIn' }, 
+                        {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github' },
+                        {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' }, 
+                        {id:8, Bezeichnung:'YouTube' }, 
+                        {id:9, Bezeichnung:'WordPress' }
                     ],
                     value: 5,
                     on: {
@@ -106,7 +134,6 @@ sc.ListView = class sc_ListView {
                     showCheckBoxes: true,
                     selectType: 'simple',
                     width: 200,
-                    height: 200,
                     style: {
                         marginBottom: '4px'
                     },
@@ -127,49 +154,6 @@ sc.ListView = class sc_ListView {
                     on: {
                         selectionChange: function(e) {
                             console.log(this.value);
-                        }
-                    }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ListView als Formularfeld:',
-                    style: { margin: '10px 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.ListView',
-                    label: 'kijs.gui.field.ListView',
-                    labelWidth: 150,
-                    valueField: 'id',
-                    captionField: 'Bezeichnung',
-                    iconMapField: 'Icon',
-                    iconColorField: 'Color',
-                    tooltipField: 'Color',
-                    showCheckBoxes: true,
-                    selectType: 'simple',
-                    helpText: 'Hilfe Text!',
-                    required: true,
-                    width: 350,
-                    style: {
-                        marginBottom: '4px'
-                    },
-                    data: [
-                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.circle', Color:'#0088ff' }, 
-                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.circle', Color:'#88ff00' }, 
-                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.circle', Color:'#ff0088' },
-                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.circle', Color:'#00ff88' }, 
-                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.circle', Color:'#ff8800' }, 
-                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.circle', Color:'#8800ff' },
-                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#666666' }, 
-                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.circle', Color:'#999999' }, 
-                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#bbbbbb' }, 
-                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.circle', Color:'#ffffff' }, 
-                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.circle', Color:'#000000' }
-                    ],
-                    value: [2,3],
-                    on: {
-                        input: function(e) {
-                            console.log(e.oldValue);
-                            console.log(e.value);
                         }
                     }
                 }

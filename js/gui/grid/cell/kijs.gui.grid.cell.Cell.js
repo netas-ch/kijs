@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Cell (Abstract)
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element {
 
 
@@ -42,14 +37,15 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
 
         // Events
-        this._dom.on('dblClick', this._onDblClick, this);
-        this._dom.on('click', this._onClick, this);
+        this._dom.on('dblClick', this.#onDblClick, this);
+        this._dom.on('click', this.#onClick, this);
     }
+
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
@@ -75,10 +71,21 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     set value(val) { this.setValue(val); }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
+    /**
+     * Lädt das value von der dataRow
+     * @returns {undefined}
+     */
+    loadFromDataRow() {
+        let dF = this._columnConfig.displayField;
+        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[dF])) {
+            this.setValue(this.row.dataRow[dF], true, false, false);
+        }
+    }
+    
     /**
      * Setzt den Wert auf den Standardwert zurück
      * @param {Boolean} [silent=false] true, falls kein change-event ausgelöst werden soll.
@@ -86,6 +93,36 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      */
     resetValue(silent=false) {
         this.setValue(this.originalValue, silent);
+    }
+
+    // Overwrite
+    render(superCall) {
+        super.render(true);
+
+        // breite
+        this._dom.width = this._columnConfig.width;
+
+        // sichtbar?
+        this.visible = this._columnConfig.visible;
+
+        // Editable-Zeilen: Klasse hinzufügen
+        if (this._columnConfig.editable) {
+            this._dom.clsAdd('kijs-grid-cell-editable');
+        } else {
+            this._dom.clsRemove('kijs-grid-cell-editable');
+        }
+
+        // Dirty-Zeilen: Klasse hinzufügen
+        if (this.isDirty) {
+            this._dom.clsAdd('kijs-grid-cell-dirty');
+        } else {
+            this._dom.clsRemove('kijs-grid-cell-dirty');
+        }
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
     }
 
     /**
@@ -120,17 +157,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         if (this.isRendered) {
             this.render();
-        }
-    }
-
-    /**
-     * Lädt das value von der dataRow
-     * @returns {undefined}
-     */
-    loadFromDataRow() {
-        let dF = this._columnConfig.displayField;
-        if (this.row && this.row.dataRow && kijs.isDefined(this.row.dataRow[dF])) {
-            this.setValue(this.row.dataRow[dF], true, false, false);
         }
     }
 
@@ -229,9 +255,25 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             }
         }
     }
+    
+    // overwrite
+    unrender(superCall) {
+
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        if (this._cellEditor) {
+            this._cellEditor.unrender();
+            this._cellEditor = null;
+        }
+
+        super.unrender(true);
+    }
+
 
     // PROTECTED
-
     /**
      * Argumente, welche dem Editor beim Instanzieren übergeben werden.
      * @returns {Object}
@@ -242,8 +284,8 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             value: this.row.dataRow[this._columnConfig.valueField],
             parent: this,
             on: {
-                blur: this._onFieldBlur,
-                keyDown: this._onFieldKeyDown,
+                blur: this.#onFieldBlur,
+                keyDown: this.#onFieldKeyDown,
                 click: function(e) { e.nodeEvent.stopPropagation(); }, // click event stoppen, damit row focus nicht nimmt.
                 context: this
             }
@@ -272,27 +314,28 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
-    // EVENTS
-
-    _onClick() {
+    
+    // PRIVATE
+    // LISTENERS
+    #onClick() {
         if (this._columnConfig.editable && !this._cellEditor && this._columnConfig.clicksToEdit === 1) {
             this.startCellEdit();
         }
     }
 
-    _onDblClick() {
+    #onDblClick() {
         if (this._columnConfig.editable && !this._cellEditor && this._columnConfig.clicksToEdit === 2) {
             this.startCellEdit();
         }
     }
 
-    _onFieldBlur() {
+    #onFieldBlur() {
         kijs.defer(function() {
             this.stopCellEdit();
         }, 200, this);
     }
 
-    _onFieldKeyDown(e) {
+    #onFieldKeyDown(e) {
         // keyDown event stoppen, damit grid keyDown nicht nimmt.
         e.nodeEvent.stopPropagation();
 
@@ -312,52 +355,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     }
 
 
-    // Overwrite
-    render(superCall) {
-        super.render(true);
-
-        // breite
-        this._dom.width = this._columnConfig.width;
-
-        // sichtbar?
-        this.visible = this._columnConfig.visible;
-
-        // Editable-Zeilen: Klasse hinzufügen
-        if (this._columnConfig.editable) {
-            this._dom.clsAdd('kijs-grid-cell-editable');
-        } else {
-            this._dom.clsRemove('kijs-grid-cell-editable');
-        }
-
-        // Dirty-Zeilen: Klasse hinzufügen
-        if (this.isDirty) {
-            this._dom.clsAdd('kijs-grid-cell-dirty');
-        } else {
-            this._dom.clsRemove('kijs-grid-cell-dirty');
-        }
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
-    // overwrite
-    unrender(superCall) {
-
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        if (this._cellEditor) {
-            this._cellEditor.unrender();
-            this._cellEditor = null;
-        }
-
-        super.unrender(true);
-    }
-
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -371,10 +368,13 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-
+        
+        // Elemente/DOM-Objekte entladen
+        
         // Variablen (Objekte/Arrays) leeren
 
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

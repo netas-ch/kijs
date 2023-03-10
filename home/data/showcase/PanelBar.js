@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.PanelBar = class sc_PanelBar {
+window.home.sc = {};
+home.sc.PanelBar = class home_sc_PanelBar {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -84,7 +84,7 @@ sc.PanelBar = class sc_PanelBar {
                     style: {
                         marginBottom: '10px'
                     },
-                    iconCls: 'icoWizard16',
+                    /*iconCls: 'icoWizard16',*/
                     elementsRight: [
                         {
                             xtype: 'kijs.gui.Button',

@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.container_Stack = class sc_container_Stack {
+window.home.sc = {};
+home.sc.container_Tab = class home_sc_container_Tab {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -17,7 +17,7 @@ sc.container_Stack = class sc_container_Stack {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Stack',
+            caption: 'kijs.gui.container.Tab',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -26,52 +26,133 @@ sc.container_Stack = class sc_container_Stack {
                 padding: '10px'
             },
             
-            headerInnerStyle:{
-                padding: '10px 10px 0 10px'
-            },
+            headerElements:[
+                {
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    label: 'animation:',
+                    cls: 'kijs-inline',
+                    valueField: 'id',
+                    captionField: 'id',
+                    required: true,
+                    data: [
+                        { id:'none' },
+                        { id:'fade' },
+                        { id:'slideTop' },
+                        { id:'slideRight' },
+                        { id:'slideBottom' },
+                        { id:'slideLeft' }
+                    ],
+                    value: 'fade',
+                    on: {
+                        input: function(e) {
+                            this._content.elements[0].elements[0].animation = e.value;
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    label: 'tabBarPos:',
+                    cls: 'kijs-inline',
+                    valueField: 'id',
+                    captionField: 'id',
+                    required: true,
+                    data: [
+                        { id:'top' },
+                        { id:'right' },
+                        { id:'bottom' },
+                        { id:'left' }
+                    ],
+                    value: 'top',
+                    on: {
+                        input: function(e) {
+                            this._content.down('tab').tabBarPos = e.value;
+                        },
+                        context: this
+                    }
+                }
+            ],
             
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Wizard',
+                    caption: 'Tab',
                     cls: 'kijs-flexcolumn',
                     height: 200,
+                    width: 600,
+                    shadow: true,
+                    collapsible: 'top',
+                    resizable: true,
                     elements:[
                         {
-                            xtype: 'kijs.gui.container.Stack',
-                            cls: 'kijs-flexcolumn',
+                            xtype: 'kijs.gui.container.Tab',
+                            name: 'tab',
+                            //tabBarScrollableX: true,
+                            //tabBarScrollableY: false,
                             style: { flex: 1 },
                             currentName: 's3',
                             defaults:{
-                                xtype: 'kijs.gui.Container',
-                                innerStyle: { padding:'10px' }
+                                innerStyle: { padding:'10px' },
+                                tabClosable: true,
+                                tabWidth: 90
+                            },
+                            on: {
+                                change: function(e) {
+                                    console.log(e);
+                                },
+                                context: this
                             },
                             elements: [
-                                { name: 's1', html:'Seite 1', style:{backgroundColor:'#f99'} },
-                                { name: 's2', html:'Seite 2', style:{backgroundColor:'#9f9'} },
-                                { name: 's3', html:'Seite 3', style:{backgroundColor:'#99f'} },
-                                { name: 's4', html:'Seite 4', style:{backgroundColor:'#ff9'} },
-                                { name: 's5', html:'Seite 5', style:{backgroundColor:'#9ff'} }
+                                { name:'s1', tabCaption:'Seite 1', tabIconMap:'kijs.iconMap.Fa.house', html:'Seite 1', innerStyle:{ color:'#f99'} },
+                                { name:'s2', tabCaption:'Seite 2', tabIconMap:'kijs.iconMap.Fa.user', html:'Seite 2', innerStyle:{ color:'#9f9'} },
+                                { name:'s3', tabCaption:'Seite 3', tabIconMap:'kijs.iconMap.Fa.phone', html:'Seite 3', innerStyle:{ color:'#99f'} },
+                                { name:'s4', tabCaption:'Seite 4', tabIconMap:'kijs.iconMap.Fa.envelope', html:'Seite 4', innerStyle:{ color:'#f9f'} },
+                                { name:'s5', tabCaption:'Seite 5', tabIconMap:'kijs.iconMap.Fa.location-dot', html:'Seite 5', innerStyle:{ color:'#9ff'} }
                             ]
                         }
                     ],
                     footerElements:[
                         {
                             xtype: 'kijs.gui.Button',
+                            caption: 'Tab hinzufügen',
+                            iconMap: 'kijs.iconMap.Fa.circle-plus',
+                            on: {
+                                click: function(e) {
+                                    const tab = this._content.down('tab');
+                                    tab.add({
+                                        tabCaption: 'My new Tab',
+                                        html: 'My new Tab',
+                                        innerStyle: { color: this._getRandomColor() }
+                                    });
+                                    tab.currentIndex = tab.elements.length - 1;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Aktiviere das letzte Tab',
+                            iconMap: 'kijs.iconMap.Fa.circle-plus',
+                            on: {
+                                click: function(e) {
+                                    const tab = this._content.down('tab');
+                                    tab.currentIndex = tab.elements.length - 1;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
                             caption: 'zurück',
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
                             on: {
                                 click: function(e) {
-                                    const cStack = this.parent.parent.elements[0];
-                                    let i = cStack.currentIndex;
+                                    const tab = this._content.down('tab');
+                                    let i = tab.currentIndex;
                                     i--;
                                     if (i < 0) {
-                                        i = cStack.elements.length - 1;
+                                        i = tab.elements.length - 1;
                                     }
-                                    cStack.setCurrentAnimated(i, 'slideRight').then((e) => {
-                                        console.log(e);
-                                    });
-                                }
+                                    tab.setCurrentAnimated(i, 'slideRight');
+                                },
+                                context: this
                             }
                         },{
                             xtype: 'kijs.gui.Button',
@@ -79,159 +160,20 @@ sc.container_Stack = class sc_container_Stack {
                             iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
                             on: {
                                 click: function(e) {
-                                    const cStack = this.parent.parent.elements[0];
-                                    let i = cStack.currentIndex;
+                                    const tab = this._content.down('tab');
+                                    let i = tab.currentIndex;
                                     i++;
-                                    if (i >= cStack.elements.length) {
+                                    if (i >= tab.elements.length) {
                                         i = 0;
                                     }
-                                    cStack.setCurrentAnimated(i, 'slideLeft').then((e) => {
-                                        console.log(e);
-                                    });
-                                }
+                                    tab.setCurrentAnimated(i, 'slideLeft');
+                                },
+                                context: this
                             }
                         }
                     ]
-                },
-                
-                {
-                    xtype: 'kijs.gui.container.Stack',
-                    name: 'testcontainerstack',
-                    height: 200,
-                    style: { marginTop: '10px', border: '1px solid #333' },
-                    elements: [
-                        {
-                            xtype: 'kijs.gui.Panel',
-                            name: 'testcontainerstackpanel_1',
-                            caption: 'Panel 1',
-                            cls: 'kijs-flexcolumn',
-                            defaults:{
-                                /*style: {
-                                    margin: '4px 4px 0 4px'
-                                }*/
-                            },
-                            style: {
-                                flex: 1
-                            },
-                            elements: [
-                                {
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'Wechsel zu 2',
-                                    iconMap: 'kijs.iconMap.Fa.caret-right',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_2');
-                                        }
-                                    }
-                                }
-                            ]
-                        },{
-                            xtype: 'kijs.gui.Panel',
-                            name: 'testcontainerstackpanel_2',
-                            caption: 'Panel 2',
-                            cls: 'kijs-flexcolumn',
-                            defaults:{
-                                style: {
-                                    margin: '4px 4px 0 4px'
-                                }
-                            },
-                            elements: [
-                                {
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'fade',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'fade');
-                                        }
-                                    }
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'slideLeft 1s',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideLeft', 1000);
-                                        }
-                                    }
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'slideRight',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideRight');
-                                        }
-                                    }
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'slideTop',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideTop');
-                                        }
-                                    }
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'slideBottom',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.setCurrentAnimated('testcontainerstackpanel_1', 'slideBottom');
-                                        }
-                                    }
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'Add panel',
-                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                    tooltip: 'test',
-                                    on: {
-                                        click: function() {
-                                            const el = this.up('testcontainerstack');
-                                            el.add({
-                                                xtype: 'kijs.gui.Panel',
-                                                name: 'addedpanel',
-                                                caption: 'Neues Panel',
-                                                cls: 'kijs-flexcolumn',
-                                                defaults:{
-                                                    style: {
-                                                        margin: '4px 4px 0 4px'
-                                                    }
-                                                },
-                                                elements: [{
-                                                    xtype: 'kijs.gui.Button',
-                                                    caption: 'Remove panel',
-                                                    iconMap: 'kijs.iconMap.Fa.caret-left',
-                                                    tooltip: 'test',
-                                                    on: {
-                                                        click: function() {
-                                                            const el = this.up('testcontainerstack');
-                                                            el.remove(this.up('addedpanel'));
-                                                        }
-                                                    }
-                                                }]
-                                            }, 0);
-                                            el.setCurrentAnimated('addedpanel', 'fade');
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    ]
                 }
+                
             ]
         });
         
@@ -241,8 +183,18 @@ sc.container_Stack = class sc_container_Stack {
     run() {
         
     }
-
-
+    
+    
+    // PROTECTED
+    _getRandomColor() {
+        return '#' + kijs.Graphic.colorGetHex([
+            Math.floor(Math.random() * 200),
+            Math.floor(Math.random() * 200),
+            Math.floor(Math.random() * 200)
+        ]);
+    }
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

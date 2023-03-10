@@ -3,11 +3,6 @@
 // --------------------------------------------------------------
 // kijs.Fi.grid.Filter
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
 
@@ -21,7 +16,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         this._dom.nodeTagName = 'tr';
 
         this._filters = [];
-        this._filterReloadDefer = null;
+        this._filterReloadDeferId = null;
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -40,11 +35,12 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             this.applyConfig(config, true);
         }
     }
+    
+    
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filters() {
         let filters = [];
         for (let i=0; i<this._filters.length; i++) {
@@ -55,10 +51,11 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
     get grid() { return this.parent; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Gibt die Filter-Objekte als Array  zurück, welche auf dem Server angewendet werden.
      * @returns {undefined}
@@ -74,6 +71,27 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         return filters;
     }
+    
+    // Overwrite
+    render(superCall) {
+        super.render(true);
+
+        // filters erstellen
+        this._createFilters();
+
+        // filters sortieren
+        this._sortFilters();
+
+        // filters rendern
+        kijs.Array.each(this.filters, function(filter) {
+            filter.renderTo(this._dom.node);
+        }, this);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
 
     /**
      * Setzt alle Filter zurück.
@@ -84,6 +102,28 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             filter.reset();
         }, this);
     }
+    
+    // overwrite
+    unrender(superCall) {
+        // timer abbrechen
+        if (this._filterReloadDeferId) {
+            window.clearTimeout(this._filterReloadDeferId);
+            this._filterReloadDeferId = null;
+        }
+        
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        // filters unrendern
+        kijs.Array.each(this.filters, function(filter) {
+            filter.unrender();
+        }, this);
+
+        super.unrender(true);
+    }
+
 
     // PROTECTED
     _createFilters() {
@@ -114,27 +154,15 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             }
 
             // change listener
-            columnConfig.on('change', this._onColumnConfigChange, this);
+            columnConfig.on('change', this.#onColumnConfigChange, this);
 
             filterConfig.parent = this;
             delete filterConfig.xtype;
 
             let filter = new constr(filterConfig);
-            filter.on('filter', this._onFilter, this);
+            filter.on('filter', this.#onFilter, this);
             this._filters.push({columnConfig: columnConfig, filter: filter});
         }, this);
-    }
-
-    _sortFilters() {
-        this._filters.sort(function(a, b) {
-            if (a.columnConfig.position < b.columnConfig.position) {
-                return -1;
-            }
-            if (a.columnConfig.position > b.columnConfig.position) {
-                return 1;
-            }
-            return 0;
-        });
     }
 
     _filterHasFocus() {
@@ -147,9 +175,23 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         }, this);
         return hasFocus;
     }
+    
+    _sortFilters() {
+        this._filters.sort(function(a, b) {
+            if (a.columnConfig.position < b.columnConfig.position) {
+                return -1;
+            }
+            if (a.columnConfig.position > b.columnConfig.position) {
+                return 1;
+            }
+            return 0;
+        });
+    }
 
-    // EVENTS
-    _onColumnConfigChange(e) {
+
+    // PRIVATE
+    // LISTENERS
+    #onColumnConfigChange(e) {
         if ('visible' in e || 'width' in e) {
             kijs.Array.each(this.filters, function(filter) {
                 if (e.columnConfig === filter.columnConfig) {
@@ -164,61 +206,26 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         }
     }
 
-    _onFilter(e) {
+    #onFilter(e) {
         let forceReload = !!e.forceReload;
 
         // Filter verzögert zurücksetzen, da der "Filter"
         // Event gleich mehrmals von mehreren Filtern kommen kann.
-        if (this._filterReloadDefer) {
-            window.clearTimeout(this._filterReloadDefer);
-            this._filterReloadDefer = null;
+        if (this._filterReloadDeferId) {
+            window.clearTimeout(this._filterReloadDeferId);
+            this._filterReloadDeferId = null;
         }
 
         // Es wird nur neu gefiltert, wenn entweder force gewählt wurde oder kein Filterfeld den Focus hat.
-        this._filterReloadDefer = kijs.defer(function() {
+        this._filterReloadDeferId = kijs.defer(function() {
             if (forceReload || !this._filterHasFocus()) {
                 this.grid.reload();
             }
         }, 50, this);
     }
 
-    // Overwrite
-    render(superCall) {
-        super.render(true);
 
-        // filters erstellen
-        this._createFilters();
-
-        // filters sortieren
-        this._sortFilters();
-
-        // filters rendern
-        kijs.Array.each(this.filters, function(filter) {
-            filter.renderTo(this._dom.node);
-        }, this);
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        // filters unrendern
-        kijs.Array.each(this.filters, function(filter) {
-            filter.unrender();
-        }, this);
-
-        super.unrender(true);
-    }
-
-
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -233,7 +240,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         // filters destructen
         kijs.Array.each(this.filters, function(filter) {
-            filter.columnConfig.off('change', this._onColumnConfigChange, this);
+            filter.columnConfig.off('change', this.#onColumnConfigChange, this);
             filter.destruct();
         }, this);
 
@@ -246,4 +253,5 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

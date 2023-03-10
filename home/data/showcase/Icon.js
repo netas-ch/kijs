@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Icon = class sc_Icon {
+window.home.sc = {};
+home.sc.Icon = class home_sc_Icon {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

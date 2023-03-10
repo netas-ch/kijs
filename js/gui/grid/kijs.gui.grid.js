@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.grid (Static)
+// kijs.gui.grid (namespace)
 // --------------------------------------------------------------
-kijs.gui.grid = class kijs_gui_grid {
-
-};
+kijs.gui.grid = {};

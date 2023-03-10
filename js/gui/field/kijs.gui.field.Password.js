@@ -57,8 +57,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._eventForwardsAdd('escPress', this._inputDom);
 
         // Listeners
-        this._inputDom.on('input', this._onDomInput, this);
-        this.on('input', this._onInput, this);
+        this._inputDom.on('input', this.#onDomInput, this);
+        this.on('input', this.#onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -66,6 +66,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -82,16 +83,16 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this._inputDom.nodeAttributeSet('type', 'text');
 
             // DOM-Events
-            this._inputDom.on('keyUp', this._onKeyUp, this);
-            this._inputDom.on('mouseUp', this._onMouseUp, this);
-            this._inputDom.on('input', this._onInput, this);
+            this._inputDom.on('keyUp', this.#onKeyUp, this);
+            this._inputDom.on('mouseUp', this.#onMouseUp, this);
+            this._inputDom.on('input', this.#onInput, this);
         } else {
             this._inputDom.nodeAttributeSet('type', 'password');
 
             // DOM-Events
-            this._inputDom.off('keyUp', this._onKeyUp, this);
-            this._inputDom.off('mouseUp', this._onMouseUp, this);
-            this._inputDom.off('input', this._onInput, this);
+            this._inputDom.off('keyUp', this.#onKeyUp, this);
+            this._inputDom.off('mouseUp', this.#onMouseUp, this);
+            this._inputDom.off('input', this.#onInput, this);
 
         }
 
@@ -109,10 +110,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
     }
 
+    get inputDom() { return this._inputDom; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-
-    get inputDom() { return this._inputDom; }
 
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }
@@ -130,9 +131,6 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this._inputDom.nodeAttributeSet('readonly', false);
         }
     }
-
-    get valueTrim() { return this._valueTrim; }
-    set valueTrim(val) { this._valueTrim = !!val; }
 
     // overwrite
     get value() {
@@ -166,6 +164,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
         this.validate();
     }
+    
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
+
 
 
     // --------------------------------------------------------------
@@ -183,7 +185,6 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this.raiseEvent('afterRender');
         }
     }
-
 
     // overwrite
     unrender(superCall) {
@@ -215,12 +216,9 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onInput(e) {
-        this.validate();
-    }
-
-    _onDomInput(e) {
+    #onDomInput(e) {
         if (this._disableBrowserSecurityWarning) {
             const val = this._inputDom.node.value;
             const len = val.length;
@@ -258,13 +256,18 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         return this.raiseEvent('input', e, this);
     }
 
-    _onKeyUp(e) {
+    #onInput(e) {
+        this.validate();
+    }
+
+    #onKeyUp(e) {
         this._reposCursor();
     }
 
-    _onMouseUp(e) {
+    #onMouseUp(e) {
         kijs.defer(this._reposCursor, 10, this);
     }
+
 
 
     // --------------------------------------------------------------
@@ -290,4 +293,5 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

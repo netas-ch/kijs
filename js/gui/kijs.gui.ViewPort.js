@@ -32,7 +32,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         });
 
         // onResize überwachen
-        kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
+        kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -119,8 +119,9 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     }
 
 
-    // PROTECTED
-    _onWindowResize(e) {
+    // PRIVATE
+    // LISTENERS
+    #onWindowResize(e) {
         this._raiseAfterResizeEvent(true, e);
     }
 

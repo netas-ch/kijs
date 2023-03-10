@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Window = class sc_Window {
+window.home.sc = {};
+home.sc.Window = class home_sc_Window {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -28,7 +28,15 @@ sc.Window = class sc_Window {
                 padding: '10px'
             },
             elements:[
-                
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Run',
+                    iconMap: 'kijs.iconMap.Fa.play',
+                    on: {
+                        click: this.run,
+                        context: this
+                    }
+                }
             ]
         });
         
@@ -183,8 +191,7 @@ sc.Window = class sc_Window {
                 }
             ],
 
-            footerCaption: 'Meine FooterBar',
-            footerStyle: { padding: '10px' },
+            footerBarCaption: 'Meine FooterBar',
             footerElements: [
                 {
                     xtype: 'kijs.gui.Button',

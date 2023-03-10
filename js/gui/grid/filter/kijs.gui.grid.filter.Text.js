@@ -1,13 +1,8 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Text
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.grid.filter.Filter {
 
 
@@ -27,7 +22,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
                     }
                     this._applyFilter = true;
                 },
-                keyDown: this._onKeyDown,
+                keyDown: this.#onKeyDown,
                 context: this
             }
         });
@@ -50,10 +45,11 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'text',
@@ -67,10 +63,11 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     get placeholder() { return this._searchField.placeholder; }
     set placeholder(val) { this._searchField.placeholder = val; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     hasFocus() {
         if (super.hasFocus() || this._searchField.hasFocus) {
             return true;
@@ -79,11 +76,25 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         return false;
     }
 
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        this._searchField.renderTo(this._searchContainer.node);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+    
     reset() {
         this._searchField.value = '';
         super.reset();
     }
 
+
+    // PROTECTED
     // overwrite
     _getMenuButtons() {
         return kijs.Array.concat(this._getDefaultMenuButtons(),
@@ -92,7 +103,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
                 caption : kijs.getText('Feldanfang'),
                 iconMap: this._compare === 'begin' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
-                    click: this._onCompareBtnClick,
+                    click: this.#onCompareBtnClick,
                     context: this
                 }
             },{
@@ -100,7 +111,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
                 name: 'btn_compare_part',
                 iconMap: this._compare === 'part' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
-                    click: this._onCompareBtnClick,
+                    click: this.#onCompareBtnClick,
                     context: this
                 }
             },{
@@ -108,7 +119,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
                 name: 'btn_compare_full',
                 iconMap: this._compare === 'full' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
                 on: {
-                    click: this._onCompareBtnClick,
+                    click: this.#onCompareBtnClick,
                     context: this
                 }
             }],
@@ -116,7 +127,10 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         );
     }
 
-    _onCompareBtnClick(e) {
+
+    // PRIVATE
+    // LISTENERS
+    #onCompareBtnClick(e) {
         this._menuButton.menu.close();
 
         if (e.element.name === 'btn_compare_begin') {
@@ -136,7 +150,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         });
     }
 
-    _onKeyDown(e) {
+    #onKeyDown(e) {
         e.nodeEvent.stopPropagation();
         if (e.nodeEvent.key === 'Enter') {
             e.nodeEvent.preventDefault();
@@ -144,19 +158,32 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
             this._applyFilter = false;
         }
     }
-
-
+    
+    
+    
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
     // overwrite
-    render(superCall) {
-        super.render(true);
-
-        this._searchField.renderTo(this._searchContainer.node);
-
-        // Event afterRender auslösen
+    destruct(superCall) {
         if (!superCall) {
-            this.raiseEvent('afterRender');
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
         }
+        
+        // Elemente/DOM-Objekte entladen
+        if (this._searchField) {
+            this._searchField.destruct();
+        }
+        
+        // Variablen (Objekte/Arrays) leeren
+        this._searchField = null;
+        
+        // Basisklasse entladen
+        super.destruct(true);
     }
-
-
+    
 };

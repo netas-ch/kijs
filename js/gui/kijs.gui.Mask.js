@@ -164,9 +164,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (val instanceof kijs.gui.Element) {
             this._targetElement = val;
 
-            this._targetElement.on('afterResize', this._onTargetElAfterResize, this);
-            this._targetElement.on('changeVisibility', this._onTargetElChangeVisibility, this);
-            this._targetElement.on('destruct', this._onTargetElDestruct, this);
+            this._targetElement.on('afterResize', this.#onTargetElAfterResize, this);
+            this._targetElement.on('changeVisibility', this.#onTargetElChangeVisibility, this);
+            this._targetElement.on('destruct', this.#onTargetElDestruct, this);
 
             // Falls das target ein z-index hat, übernehmen wir diesen für diese Maske und rechnen + 2
             if (!isNaN(parseInt(this._targetElement.dom.style.zIndex))) {
@@ -250,8 +250,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // falls das item noch nicht mit "renderTo" an einem Element angehängt wurde,
         // können wir noch nichts anzeigen. show nochmals nach renderTo ausführen.
-        if (this._targetElement instanceof kijs.gui.Element && !this._targetElement.isAppended) {
-            this._targetElement.once('afterFirstRenderTo', this._onceTargetAfterFirstRenderTo, this);
+        if ((this._targetElement instanceof kijs.gui.Element) && !this._targetElement.isAppended) {
+            this._targetElement.once('afterFirstRenderTo', this.#onceTargetAfterFirstRenderTo, this);
 
         } else if (this.parentNode) {
             this.renderTo(this.parentNode);
@@ -271,17 +271,18 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onceTargetAfterFirstRenderTo(e) {
+    #onceTargetAfterFirstRenderTo(e) {
         this.show();
     }
 
-    _onTargetElAfterResize(e) {
+    #onTargetElAfterResize(e) {
         // Maskierung positionieren
         this._updateMaskPosition();
     }
 
-    _onTargetElChangeVisibility(e) {
+    #onTargetElChangeVisibility(e) {
         // Maskierung positionieren
         this._updateMaskPosition();
 
@@ -289,7 +290,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this.visible = e.visible;
     }
 
-    _onTargetElDestruct(e) {
+    #onTargetElDestruct(e) {
         this.destruct();
     }
 

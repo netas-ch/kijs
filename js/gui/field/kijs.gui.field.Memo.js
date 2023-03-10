@@ -5,6 +5,7 @@
 // --------------------------------------------------------------
 kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -44,7 +45,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._eventForwardsAdd('escPress', this._inputDom);
 
         // Listeners
-        this.on('input', this._onInput, this);
+        this.on('input', this.#onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -52,6 +53,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -68,10 +70,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         }
     }
 
+    get inputDom() { return this._inputDom; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-
-    get inputDom() { return this._inputDom; }
 
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) {
@@ -89,9 +91,6 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         }
     }
 
-    get valueTrim() { return this._valueTrim; }
-    set valueTrim(val) { this._valueTrim = !!val; }
-
     // overwrite
     get value() {
         let val = this._inputDom.nodeAttributeGet('value');
@@ -104,6 +103,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
         this.validate();
     }
+    
+    get valueTrim() { return this._valueTrim; }
+    set valueTrim(val) { this._valueTrim = !!val; }
+
 
 
     // --------------------------------------------------------------
@@ -135,10 +138,12 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onInput(e) {
+    #onInput(e) {
         this.validate();
     }
+
 
 
     // --------------------------------------------------------------
@@ -164,4 +169,5 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

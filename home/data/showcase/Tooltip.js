@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Tooltip = class sc_Tooltip {
+window.home.sc = {};
+home.sc.Tooltip = class home_sc_Tooltip {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

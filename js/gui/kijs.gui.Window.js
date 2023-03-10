@@ -67,7 +67,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         });
 
         // Listeners
-        this.on('mouseDown', this._onMouseDown, this);
+        this.on('mouseDown', this.#onMouseDown, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -78,7 +78,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Virtual Keyboard API (Nur in Chrome mit SSL)
         if (this._moveWhenVirtualKeyboard && 'virtualKeyboard' in navigator) {
             navigator.virtualKeyboard.overlaysContent = true;
-            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this._onVirtualKeyboardGemoetryChange, this);
+            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this.#onVirtualKeyboardGemoetryChange, this);
         }
 
     }
@@ -90,9 +90,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     get draggable() { return this._draggable; }
     set draggable(val) {
         if (val && !this._draggable) {
-            this._headerBarEl.on('mouseDown', this._onHeaderBarMouseDown, this);
+            this._headerBarEl.on('mouseDown', this.#onHeaderBarMouseDown, this);
         } else if (!val && this._draggable) {
-            this._headerBarEl.off('mouseDown', this._onHeaderBarMouseDown, this);
+            this._headerBarEl.off('mouseDown', this.#onHeaderBarMouseDown, this);
             kijs.Dom.removeEventListener('mousemove', document, this);
             kijs.Dom.removeEventListener('mouseup', document, this);
         }
@@ -142,9 +142,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Evtl. Listeners vom alten _targetX entfernen
         if (!kijs.isEmpty(this._targetX)) {
             if (this._targetX instanceof kijs.gui.Element) {
-                this._targetX.off('afterResize', this._onTargetElAfterResize, this);
-                this._targetX.off('changeVisibility', this._onTargetElChangeVisibility, this);
-                this._targetX.off('destruct', this._onTargetElDestruct, this);
+                this._targetX.off('afterResize', this.#onTargetElAfterResize, this);
+                this._targetX.off('changeVisibility', this.#onTargetElChangeVisibility, this);
+                this._targetX.off('destruct', this.#onTargetElDestruct, this);
             } else if (this._targetX === document.body) {
                 kijs.Dom.removeEventListener('resize', window, this);
             }
@@ -154,9 +154,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         if (val instanceof kijs.gui.Element) {
             this._targetX = val;
 
-            this._targetX.on('afterResize', this._onTargetElAfterResize, this);
-            this._targetX.on('changeVisibility', this._onTargetElChangeVisibility, this);
-            this._targetX.on('destruct', this._onTargetElDestruct, this);
+            this._targetX.on('afterResize', this.#onTargetElAfterResize, this);
+            this._targetX.on('changeVisibility', this.#onTargetElChangeVisibility, this);
+            this._targetX.on('destruct', this.#onTargetElDestruct, this);
 
         // Target ist der Body
         } else if (val === document.body || val === null) {
@@ -165,7 +165,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             // onResize überwachen
             // Wenn der Browser langsam grösser gezogen wird, wird der event dauernd
             // ausgelöst, darum wird er verzögert weitergegeben.
-            kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
+            kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
 
         } else {
             throw new kijs.Error(`Unkown format on config "target"`);
@@ -366,9 +366,10 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
-
+    
+    // PRIVATE
     // LISTENERS
-    _onHeaderBarMouseDown(e) {
+    #onHeaderBarMouseDown(e) {
         this.toFront();
 
         if (this.maximized) {
@@ -388,11 +389,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         // mousemove und mouseup Listeners auf das document setzen
         // (Workaround, weil sonst manchmal der Resizer stehen bleibt)
-        kijs.Dom.addEventListener('mousemove', document, this._onDocumentMouseMove, this);
-        kijs.Dom.addEventListener('mouseup', document, this._onDocumentMouseUp, this);
+        kijs.Dom.addEventListener('mousemove', document, this.#onDocumentMouseMove, this);
+        kijs.Dom.addEventListener('mouseup', document, this.#onDocumentMouseUp, this);
     }
 
-    _onDocumentMouseMove(e) {
+    #onDocumentMouseMove(e) {
         if (kijs.isEmpty(this._dragInitialPos)) {
             return;
         }
@@ -430,7 +431,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this.top = y;
     }
 
-    _onDocumentMouseUp(e) {
+    #onDocumentMouseUp(e) {
         // Beim ersten auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
@@ -444,7 +445,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._dragInitialPos = null;
     }
 
-    _onMouseDown(e) {
+    #onMouseDown(e) {
         this.toFront();
     }
 
@@ -453,7 +454,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
      * @param {Object} e
      * @returns {undefined}
      */
-    _onTargetElAfterResize(e) {
+    #onTargetElAfterResize(e) {
         // Sicherstellen, dass das Fenster im Target platz hat
         this._adjustPositionToTarget(true);
 
@@ -461,17 +462,17 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._raiseAfterResizeEvent(false, e);
     }
 
-    _onTargetElChangeVisibility(e) {
+    #onTargetElChangeVisibility(e) {
         // Sichbarkeit ändern
         this.visible = e.visible;
     }
 
-    _onTargetElDestruct(e) {
+    #onTargetElDestruct(e) {
         this.destruct();
     }
 
     // Fenster neu zentrieren wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
-    _onVirtualKeyboardGemoetryChange(e) {
+    #onVirtualKeyboardGemoetryChange(e) {
 
         if (this.isRendered && this._moveWhenVirtualKeyboard && e.nodeEvent.target) {
             const { x, y, width, height } = e.nodeEvent.target.boundingRect;
@@ -489,7 +490,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
     }
 
-    _onWindowResize(e) {
+    #onWindowResize(e) {
          // Sicherstellen, dass das Fenster im Target platz hat
         this._adjustPositionToTarget(true);
 

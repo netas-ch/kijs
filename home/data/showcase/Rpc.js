@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Rpc = class sc_Rpc {
+window.home.sc = {};
+home.sc.Rpc = class home_sc_Rpc {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -19,6 +19,7 @@ sc.Rpc = class sc_Rpc {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Rpc',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },

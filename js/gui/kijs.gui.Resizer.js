@@ -41,7 +41,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         });
 
         // Listeners
-        this.on('mouseDown', this._onMouseDown, this);
+        this.on('mouseDown', this.#onMouseDown, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -163,8 +163,10 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         return ret;
     }
 
+
+    // PRIVATE
     // LISTENERS
-    _onMouseDown(e) {
+    #onMouseDown(e) {
         this._initialPos = {
             x: e.nodeEvent.clientX,
             y: e.nodeEvent.clientY,
@@ -183,11 +185,11 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         this._targetEl.dom.node.parentNode.appendChild(this._overlayDom.node);
 
         // mousemove und mouseup Listeners auf das document setzen
-        kijs.Dom.addEventListener('mousemove', document, this._onMouseMove, this);
-        kijs.Dom.addEventListener('mouseup', document, this._onMouseUp, this);
+        kijs.Dom.addEventListener('mousemove', document, this.#onMouseMove, this);
+        kijs.Dom.addEventListener('mouseup', document, this.#onMouseUp, this);
     }
 
-    _onMouseMove(e) {
+    #onMouseMove(e) {
         // Neue Grösse ermitteln
         let w = this._initialPos.w + (e.nodeEvent.clientX - this._initialPos.x);
         let h = this._initialPos.h + (e.nodeEvent.clientY - this._initialPos.y);
@@ -213,7 +215,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         this._overlayDom.height = h;
     }
 
-    _onMouseUp(e) {
+    #onMouseUp(e) {
         // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
@@ -245,6 +247,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
     }
+
 
 
     // --------------------------------------------------------------

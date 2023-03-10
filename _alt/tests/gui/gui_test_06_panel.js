@@ -174,7 +174,7 @@ function gui_test_06_panel() {
             }
         ],
         
-        footerCaption: 'Meine FooterBar',
+        footerBarCaption: 'Meine FooterBar',
         footerStyle: { padding: '10px' },
         footerElements: [
             {

@@ -316,16 +316,16 @@ kijs.Rpc = class kijs_Rpc {
         }
 
     }
-
-
-
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
-        // Bestehendes Timeout aufheben
+        // timer abbrechen
         if (this._deferId) {
             clearTimeout(this._deferId);
+            this._deferId = null;
         }
 
         // Variablen

@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.SpinBox = class sc_SpinBox {
+window.home.sc = {};
+home.sc.SpinBox = class home_sc_SpinBox {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

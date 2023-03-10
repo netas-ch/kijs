@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Element = class sc_Element {
+window.home.sc = {};
+home.sc.Element = class home_sc_Element {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

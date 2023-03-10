@@ -205,7 +205,7 @@ kit.App = class kit_App {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
                             iconMap: 'kijs.iconMap.Fa.map',
-                            footerCaption: 'FooterBar',
+                            footerBarCaption: 'FooterBar',
                             cls: 'kijs-flexrow',
                             scrollableY: 'auto',
                             style: {

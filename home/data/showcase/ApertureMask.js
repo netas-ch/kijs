@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.ApertureMask = class sc_ApertureMask {
+window.home.sc = {};
+home.sc.ApertureMask = class home_sc_ApertureMask {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -56,8 +56,7 @@ sc.ApertureMask = class sc_ApertureMask {
                         }
                     ],
 
-                    footerCaption: 'Meine FooterBar',
-                    footerStyle: { padding: '10px' },
+                    footerBarCaption: 'Meine FooterBar',
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',
@@ -91,75 +90,81 @@ sc.ApertureMask = class sc_ApertureMask {
                     html: 'ApertureMask für 3s anzeigen auf:',
                     style: { margin: '10px 0 4px 0'}
                 },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Content-Panel',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Panel',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.downX('kijs.gui.Panel'));
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Panel.innerDom',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.downX('kijs.gui.Panel').innerDom);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Element 1',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.downX('kijs.gui.Panel').down('element1'));
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Element 1.dom',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.downX('kijs.gui.Panel').down('element1').dom);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Element 2',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.down('element2'));
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Element 2.dom',
-                    iconMap: 'kijs.iconMap.Fa.crop-simple',
-                    on: {
-                        click: function(e) {
-                            this._test(this._content.down('element2').dom);
-                        },
-                        context: this
-                    }
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexline',
+                    elements: [
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Content-Panel',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Panel',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.downX('kijs.gui.Panel'));
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Panel.innerDom',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.downX('kijs.gui.Panel').innerDom);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element 1',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.downX('kijs.gui.Panel').down('element1'));
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element 1.dom',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.downX('kijs.gui.Panel').down('element1').dom);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element 2',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.down('element2'));
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element 2.dom',
+                            iconMap: 'kijs.iconMap.Fa.crop-simple',
+                            on: {
+                                click: function(e) {
+                                    this._test(this._content.down('element2').dom);
+                                },
+                                context: this
+                            }
+                        }
+                    ]
                 },
                 
                 {

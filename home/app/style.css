@@ -1,0 +1,161 @@
+/* CSS für Home-App */
+
+/* Icons */
+.icoKijs16 {
+    background-image: url('../../favicon.ico');
+    background-size: 16px;
+    height: 16px;
+    width: 16px;
+}
+
+
+
+/* markdown */
+div.markdown {
+    padding: 4px 10px;
+    background-color: var(--grey0);
+    max-width: 620px;
+    min-height: 100%;
+}
+
+div.markdown, div.markdown * {
+    font-size: 12px;
+    line-height: 14px;
+    color: var(--grey8);
+}
+
+.markdown h1 {
+    font-size: 22px;
+    font-weight: normal;
+    margin: 40px 0 0 0;
+}
+
+.markdown h2 {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 16px 0 0 0;
+    color: var(--accentColor);
+}
+
+.markdown h3 {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 13px 0 0 0;
+}
+
+.markdown h4 {
+    font-size: 12px;
+    font-weight: bold;
+    margin: 14px 0 0 0;
+    color: var(--accentColor);
+}
+
+.markdown h5 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 14px 0 0 0;
+    color: var(--accentColor);
+}
+
+.markdown h6 {
+    font-size: 12px;
+    font-weight: normal;
+    margin: 14px 0 0 0;
+    color: var(--grey6);
+}
+
+.markdown p {
+    margin: 12px 0 0 0;
+}
+
+.markdown a {
+    color: var(--grey7);
+}
+
+/* pre, code */
+.markdown pre {
+    font-family: Consolas, "Courier New";
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    margin: 4px 0 0 0 ;
+    padding: 4px;
+}
+
+.markdown code {
+    font-family: Consolas, "Courier New";
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0 2px;
+}
+.markdown pre code {
+    border: 0 none;
+    border-radius: 0;
+    padding: 0;
+}
+
+/* ul, ol */
+.markdown ul, .markdown ol {
+    margin: 0 0 0 0;
+}
+
+.markdown li {
+    margin: 0 0 4px 0;
+}
+
+/* table */
+.markdown table {
+    margin: 4px 0 0 0 ;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.markdown table th {
+    font-weight: normal;
+    color: var(--accentColor);
+}
+.markdown table th, .markdown table td {
+    border: 1px solid #aaa;
+    padding: 4px;
+}
+.markdown table tr:first-child th:first-child {
+  border-top-left-radius: 4px;
+}
+.markdown table tr:first-child th:last-child {
+  border-top-right-radius: 4px;
+}
+.markdown table tr:last-child td:first-child {
+  border-bottom-left-radius: 4px;
+}
+.markdown table tr:last-child td:last-child {
+  border-bottom-right-radius: 4px;
+}
+
+
+/* Direkt nach Überschriften kommt nur wenig margin */
+.markdown h1 + * {
+    margin-top: 14px;
+}
+.markdown h2 + * {
+    margin-top: 4px;
+}
+.markdown h3 + * {
+    margin-top: 2px;
+}
+.markdown h4 + * {
+    margin-top: 0;
+}
+.markdown h5 + * {
+    margin-top: 0;
+}
+.markdown h6 + * {
+    margin-top: 0;
+}
+
+/* bei h1 muss immer 40px margin sein */
+.markdown h1 {
+    margin: 40px 0 0 0;
+}
+
+/* ausser ist das oberste tag :) */
+.markdown h1:first-child {
+    margin-top: 20px;
+}

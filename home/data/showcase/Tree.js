@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Tree = class sc_Tree {
+window.home.sc = {};
+home.sc.Tree = class home_sc_Tree {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR

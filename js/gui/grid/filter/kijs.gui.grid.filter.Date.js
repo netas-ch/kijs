@@ -1,13 +1,8 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Date
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.grid.filter.Number {
 
 
@@ -34,14 +29,38 @@ kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.gri
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'date'
         });
+    }
+    
+    
+    
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+        
+        // Elemente/DOM-Objekte entladen
+        
+        // Variablen (Objekte/Arrays) leeren
+        
+        // Basisklasse entladen
+        super.destruct(true);
     }
 
 };

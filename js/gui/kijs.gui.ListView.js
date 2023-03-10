@@ -54,7 +54,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
 
         // Events
-        this.on('afterLoad', this._onAfterLoad, this);
+        this.on('afterLoad', this.#onAfterLoad, this);
     }
 
 
@@ -84,9 +84,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
     get tooltipField() { return this._tooltipField; }
     set tooltipField(val) { this._tooltipField = val; }
-
-    get valueField() { return this._valueField; }
-    set valueField(val) { this._valueField = val; }
 
     get value() {
         let val = null;
@@ -131,6 +128,10 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
         this.selectByFilters(filters, false, true);
     }
+
+    get valueField() { return this._valueField; }
+    set valueField(val) { this._valueField = val; }
+
 
 
     // --------------------------------------------------------------
@@ -201,20 +202,22 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         kijs.DragDrop.addDragEvents(dve, dve.dom);
         kijs.DragDrop.addDropEvents(dve, dve.dom);
 
-        dve.on('ddOver', this._onDdOver, this);
-        dve.on('ddDrop', this._onDdDrop, this);
+        dve.on('ddOver', this.#onDdOver, this);
+        dve.on('ddDrop', this.#onDdDrop, this);
 
         return dve;
     }
 
+
+    // PRIVATE
     // LISTENERS
-    _onAfterLoad(e) {
+    #onAfterLoad(e) {
         if (!kijs.isEmpty(this._value)) {
             this.value = this._value;
         }
     }
 
-    _onDdDrop(e) {
+    #onDdDrop(e) {
         let tIndex = this._elements.indexOf(e.targetElement);
         let sIndex = this._elements.indexOf(e.sourceElement);
         let pos = e.position.position;
@@ -238,7 +241,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         }
     }
 
-    _onDdOver(e) {
+    #onDdOver(e) {
         if (!this._ddSort || this._elements.indexOf(e.sourceElement) === -1 || this.raiseEvent('ddOver', e) === false) {
             // fremdes Element, kein Drop.
             e.position.allowAbove = false;
@@ -256,7 +259,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             e.position.allowRight = false;
         }
     }
-
 
 
 

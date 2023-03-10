@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.ProgressBar = class sc_ProgressBar {
+window.home.sc = {};
+home.sc.ProgressBar = class home_sc_ProgressBar {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -33,7 +33,7 @@ sc.ProgressBar = class sc_ProgressBar {
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Buttons:',
+                    html: 'ProgressBar:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.ProgressBar',

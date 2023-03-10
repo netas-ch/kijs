@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Button = class sc_Button {
+window.home.sc = {};
+home.sc.Button = class home_sc_Button {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -27,12 +27,47 @@ sc.Button = class sc_Button {
             innerStyle: {
                 padding: '10px'
             },
+            defaults:{
+                style: { marginBottom: '4px' }
+            },
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Buttons:',
                     style: { margin: '0 0 4px 0'}
-                },{
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    iconMap:'kijs.iconMap.Fa.house'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    iconMap:'kijs.iconMap.Fa.house',
+                    icon2Map:'kijs.iconMap.Fa.user'
+                },
+
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: '2 Icons',
+                    iconMap:'kijs.iconMap.Fa.house'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: '2 Icons',
+                    icon2Map:'kijs.iconMap.Fa.house'
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: '2 Icons',
+                    iconMap:'kijs.iconMap.Fa.house',
+                    icon2Map:'kijs.iconMap.Fa.user'
+                },
+                
+                {
                     xtype: 'kijs.gui.Button',
                     caption: 'Test Handler Funktion',
                     badgeText: 'Hallo',

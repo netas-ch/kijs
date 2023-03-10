@@ -71,12 +71,11 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get bottomCaption() { return this._bottomCaptionDom.html; }
+    set bottomCaption(val) { this._bottomCaptionDom.html = val;  }
 
     get caption() { return this._captionDom.html; }
     set caption(val) { this._captionDom.html = val;  }
-
-    get bottomCaption() { return this._bottomCaptionDom.html; }
-    set bottomCaption(val) { this._bottomCaptionDom.html = val;  }
 
     get percent() { return this._percent; }
     set percent(val) { this.setProgress(val); }
@@ -88,10 +87,10 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     set uploadDialogId(val) { this._uploadDialogId = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Binden einen kijs.Uploaddialog an die Progressbar, um den Upload-Fortschritt
      * anzuzeigen.
@@ -114,10 +113,35 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
             this._uploadDialogId = uploadId;
         }
 
-        uploadDialog.on('progress', this._onUploadDialogProgress, this);
-        uploadDialog.on('upload', this._onUploadDialogUpload, this);
+        uploadDialog.on('progress', this.#onUploadDialogProgress, this);
+        uploadDialog.on('upload', this.#onUploadDialogUpload, this);
     }
 
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        // innerDOM rendern
+        this._captionDom.renderTo(this._dom.node);
+        this._fieldDom.renderTo(this._dom.node);
+        this._bottomCaptionDom.renderTo(this._dom.node);
+        this._barDom.renderTo(this._fieldDom.node);
+        if (this._showPercent) {
+            this._textDom.renderTo(this._fieldDom.node);
+        }
+
+        this._barDom.node.style.width = this._percent + '%';
+
+        if (this._showPercent && (this._barDom.width >= this._textDom.width+3 || this._percent === 100)) {
+            this._textDom.node.style.opacity = 1;
+        }
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+    
     /**
      * aktualisiert den Balken
      * @param {int} percent Prozent zwischen 0-100
@@ -146,32 +170,6 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         }
     }
 
-
-    // overwrite
-    render(superCall) {
-        super.render(true);
-
-        // innerDOM rendern
-        this._captionDom.renderTo(this._dom.node);
-        this._fieldDom.renderTo(this._dom.node);
-        this._bottomCaptionDom.renderTo(this._dom.node);
-        this._barDom.renderTo(this._fieldDom.node);
-        if (this._showPercent) {
-            this._textDom.renderTo(this._fieldDom.node);
-        }
-
-        this._barDom.node.style.width = this._percent + '%';
-
-        if (this._showPercent && (this._barDom.width >= this._textDom.width+3 || this._percent === 100)) {
-            this._textDom.node.style.opacity = 1;
-        }
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -186,7 +184,9 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     }
 
 
-    _onUploadDialogProgress(ud, e, id, percent) {
+    // PRIVATE
+    // LISTENERS
+    #onUploadDialogProgress(ud, e, id, percent) {
         if (this._uploadDialogId === null) {
             this._uploadDialogId = id;
         }
@@ -197,11 +197,12 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     }
 
     // Upload fertig
-    _onUploadDialogUpload(ud, resp, error, id) {
+    #onUploadDialogUpload(ud, resp, error, id) {
         if (this._uploadDialogId === id) {
             this.setProgress(100);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -238,4 +239,5 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

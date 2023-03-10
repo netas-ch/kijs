@@ -25,17 +25,17 @@ kijs.DragDrop = class kijs_DragDrop {
         // Event von DOM-Element
         if (dom instanceof kijs.gui.Dom) {
             dom.on('dragStart', function(e) {
-                this._onDragStart(e.nodeEvent, element, dom);
+                this.#onDragStart(e.nodeEvent, element, dom);
             }, this);
 
             dom.on('dragEnd', function(e) {
-                this._onDragEnd(e.nodeEvent, element, dom);
+                this.#onDragEnd(e.nodeEvent, element, dom);
             }, this);
 
         // Event von HTML-Node
         } else {
-            dom.addEventListener('dragstart', this._onDragStart.bind(this, element, dom));
-            dom.addEventListener('dragend', this._onDragEnd.bind(this, element, dom));
+            dom.addEventListener('dragstart', this.#onDragStart.bind(this, element, dom));
+            dom.addEventListener('dragend', this.#onDragEnd.bind(this, element, dom));
         }
     }
 
@@ -49,34 +49,32 @@ kijs.DragDrop = class kijs_DragDrop {
         // Event von DOM-Element
         if (dom instanceof kijs.gui.Dom) {
             dom.on('dragEnter', function(e) {
-                this._onDragEnter(e.nodeEvent, element, dom);
+                this.#onDragEnter(e.nodeEvent, element, dom);
             }, this);
 
             dom.on('dragOver', function(e) {
-                this._onDragOver(e.nodeEvent, element, dom);
+                this.#onDragOver(e.nodeEvent, element, dom);
             }, this);
 
             dom.on('dragLeave', function(e) {
-                this._onDragLeave(e.nodeEvent, element, dom);
+                this.#onDragLeave(e.nodeEvent, element, dom);
             }, this);
 
             dom.on('drop', function(e) {
-                this._onDrop(e.nodeEvent, element, dom);
+                this.#onDrop(e.nodeEvent, element, dom);
             }, this);
 
         // Event von HTML-Node
         } else {
-            dom.addEventListener('dragenter', this._onDragEnter.bind(this, element, dom));
-            dom.addEventListener('dragover', this._onDragOver.bind(this, element, dom));
-            dom.addEventListener('dragleave', this._onDragLeave.bind(this, element, dom));
-            dom.addEventListener('drop', this._onDrop.bind(this, element, dom));
+            dom.addEventListener('dragenter', this.#onDragEnter.bind(this, element, dom));
+            dom.addEventListener('dragover', this.#onDragOver.bind(this, element, dom));
+            dom.addEventListener('dragleave', this.#onDragLeave.bind(this, element, dom));
+            dom.addEventListener('drop', this.#onDrop.bind(this, element, dom));
         }
     }
 
 
-
     // PROTECTED
-
     static _getDataFromNodeEvent(nodeEvent, targetElement, targetDom) {
         // eigener Transfer?
         if (nodeEvent.dataTransfer && kijs.Array.contains(nodeEvent.dataTransfer.types, 'application/kijs-dragdrop') && kijs.DragDrop._ddData) {
@@ -187,6 +185,27 @@ kijs.DragDrop = class kijs_DragDrop {
 
         return false;
     }
+    
+    /**
+     * Entfernt den Drag'n'Drop Marker
+     * @returns {undefined}
+     */
+    static _markTargetHide() {
+        if (kijs.DragDrop._ddMarker) {
+            if (kijs.DragDrop._ddMarker.top.parentNode === document.body) {
+                document.body.removeChild(kijs.DragDrop._ddMarker.top);
+            }
+            if (kijs.DragDrop._ddMarker.bottom.parentNode === document.body) {
+                document.body.removeChild(kijs.DragDrop._ddMarker.bottom);
+            }
+            if (kijs.DragDrop._ddMarker.left.parentNode === document.body) {
+                document.body.removeChild(kijs.DragDrop._ddMarker.left);
+            }
+            if (kijs.DragDrop._ddMarker.right.parentNode === document.body) {
+                document.body.removeChild(kijs.DragDrop._ddMarker.right);
+            }
+        }
+    }
 
     /**
      * Markiert das Ziel-Element mit einem Rahmen
@@ -255,27 +274,9 @@ kijs.DragDrop = class kijs_DragDrop {
         }
     }
 
-    /**
-     * Entfernt den Drag'n'Drop Marker
-     * @returns {undefined}
-     */
-    static _markTargetHide() {
-        if (kijs.DragDrop._ddMarker) {
-            if (kijs.DragDrop._ddMarker.top.parentNode === document.body) {
-                document.body.removeChild(kijs.DragDrop._ddMarker.top);
-            }
-            if (kijs.DragDrop._ddMarker.bottom.parentNode === document.body) {
-                document.body.removeChild(kijs.DragDrop._ddMarker.bottom);
-            }
-            if (kijs.DragDrop._ddMarker.left.parentNode === document.body) {
-                document.body.removeChild(kijs.DragDrop._ddMarker.left);
-            }
-            if (kijs.DragDrop._ddMarker.right.parentNode === document.body) {
-                document.body.removeChild(kijs.DragDrop._ddMarker.right);
-            }
-        }
-    }
 
+    // PRIVATE
+    // LISTENERS
     /**
      * Event vom Drag-Soruce
      * @param {DragEvent} nodeEvent
@@ -283,50 +284,13 @@ kijs.DragDrop = class kijs_DragDrop {
      * @param {kijs.gui.Dom|DomNode} dom
      * @returns {undefined}
      */
-    static _onDragStart(nodeEvent, element, dom) {
-        // Daten für Listener vorbereiten
-        kijs.DragDrop._ddData = {
-            nodeEvent       : nodeEvent,
-            data            : null,
-            sourceElement   : element,
-            sourceDom       : dom instanceof kijs.gui.Dom ? dom : null,
-            sourceNode      : dom instanceof kijs.gui.Dom ? dom.node : dom,
-            targetElement   : null,
-            targetDom       : null,
-            targetNode      : null,
-            markTarget      : true,
-            position        : {
-                allowOnto: true,
-                allowAbove: true,
-                allowBelow: true,
-                allowLeft: true,
-                allowRight: true,
-                margin: 8
-            }
-        };
-
-        if (element.raiseEvent('ddStart', kijs.DragDrop._ddData)) {
-            nodeEvent.dataTransfer.setData('application/kijs-dragdrop', '');
-
-        } else {
-            kijs.DragDrop._ddData = null;
-        }
-    }
-
-    /**
-     * Event vom Drag-Soruce
-     * @param {DragEvent} nodeEvent
-     * @param {kijs.Observable} element
-     * @param {kijs.gui.Dom|DomNode} dom
-     * @returns {undefined}
-     */
-    static _onDragEnd(nodeEvent, element, dom) {
+    static #onDragEnd(nodeEvent, element, dom) {
         this._markTargetHide();
         kijs.DragDrop._ddData = null;
         kijs.DragDrop._ddMarker = null;
     }
-
-
+    
+    
     /**
      * Event vom Drag-Target
      * @param {DragEvent} nodeEvent
@@ -334,8 +298,22 @@ kijs.DragDrop = class kijs_DragDrop {
      * @param {kijs.gui.Dom|DomNode} dom
      * @returns {undefined}
      */
-    static _onDragEnter(nodeEvent, element, dom) {
+    static #onDragEnter(nodeEvent, element, dom) {
         element.raiseEvent('ddEnter', this._getDataFromNodeEvent(nodeEvent, element, dom));
+        nodeEvent.preventDefault();
+        nodeEvent.stopPropagation();
+    }
+    
+    /**
+     * Event vom Drag-Target
+     * @param {DragEvent} nodeEvent
+     * @param {kijs.Observable} element
+     * @param {kijs.gui.Dom|DomNode} dom
+     * @returns {undefined}
+     */
+    static #onDragLeave(nodeEvent, element, dom) {
+        element.raiseEvent('ddLeave', this._getDataFromNodeEvent(nodeEvent, element, dom));
+        this._markTargetHide();
         nodeEvent.preventDefault();
         nodeEvent.stopPropagation();
     }
@@ -347,7 +325,7 @@ kijs.DragDrop = class kijs_DragDrop {
      * @param {kijs.gui.Dom|DomNode} dom
      * @returns {undefined}
      */
-    static _onDragOver(nodeEvent, element, dom) {
+    static #onDragOver(nodeEvent, element, dom) {
         let dropData = this._getDataFromNodeEvent(nodeEvent, element, dom);
         element.raiseEvent('ddOver', dropData);
 
@@ -380,17 +358,40 @@ kijs.DragDrop = class kijs_DragDrop {
     }
 
     /**
-     * Event vom Drag-Target
+     * Event vom Drag-Soruce
      * @param {DragEvent} nodeEvent
      * @param {kijs.Observable} element
      * @param {kijs.gui.Dom|DomNode} dom
      * @returns {undefined}
      */
-    static _onDragLeave(nodeEvent, element, dom) {
-        element.raiseEvent('ddLeave', this._getDataFromNodeEvent(nodeEvent, element, dom));
-        this._markTargetHide();
-        nodeEvent.preventDefault();
-        nodeEvent.stopPropagation();
+    static #onDragStart(nodeEvent, element, dom) {
+        // Daten für Listener vorbereiten
+        kijs.DragDrop._ddData = {
+            nodeEvent       : nodeEvent,
+            data            : null,
+            sourceElement   : element,
+            sourceDom       : dom instanceof kijs.gui.Dom ? dom : null,
+            sourceNode      : dom instanceof kijs.gui.Dom ? dom.node : dom,
+            targetElement   : null,
+            targetDom       : null,
+            targetNode      : null,
+            markTarget      : true,
+            position        : {
+                allowOnto: true,
+                allowAbove: true,
+                allowBelow: true,
+                allowLeft: true,
+                allowRight: true,
+                margin: 8
+            }
+        };
+
+        if (element.raiseEvent('ddStart', kijs.DragDrop._ddData)) {
+            nodeEvent.dataTransfer.setData('application/kijs-dragdrop', '');
+
+        } else {
+            kijs.DragDrop._ddData = null;
+        }
     }
 
     /**
@@ -400,7 +401,7 @@ kijs.DragDrop = class kijs_DragDrop {
      * @param {kijs.gui.Dom|DomNode} dom
      * @returns {undefined}
      */
-    static _onDrop(nodeEvent, element, dom) {
+    static #onDrop(nodeEvent, element, dom) {
         nodeEvent.preventDefault();
         let dropData = this._getDataFromNodeEvent(nodeEvent, element, dom);
         this._markTargetHide();

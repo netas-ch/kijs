@@ -16,18 +16,18 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             cls: 'kijs-headerbar',
             parent: this,
             on: {
-                click: this._onHeaderBarClick,
-                dblClick: this._onHeaderBarDblClick,
+                click: this.#onHeaderBarClick,
+                dblClick: this.#onHeaderBarDblClick,
                 context: this
             }
         });
 
-        this._headerEl = new kijs.gui.Container({
+        this._headerEl = new kijs.gui.container.Scrollable({
             cls: 'kijs-header',
             parent: this
         });
 
-        this._footerEl = new kijs.gui.Container({
+        this._footerEl = new kijs.gui.container.Scrollable({
             cls: 'kijs-footer',
             parent: this
         });
@@ -54,7 +54,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             collapseHeight: 50,
-            collapseWidth: 50
+            collapseWidth: 50,
+            headerScrollableX: 'auto',
+            headerScrollableY: false,
+            footerScrollableX: 'auto',
+            footerScrollableY: false
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -63,6 +67,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             caption: { target: 'html', context: this._headerBarEl },
             headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },
             headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },
+            headerBarDefaults: { target: 'defaults', context: this._headerBarEl },
             headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },
             iconChar: { target: 'iconChar', context: this._headerBarEl },
             iconCls: { target: 'iconCls', context: this._headerBarEl },
@@ -71,21 +76,28 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
             // header
             headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
+            headerDefaults: { target: 'defaults', context: this._headerEl },
             headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
             headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
             headerInnerCls: { fn: 'function', target: this._headerEl.innerDom.clsAdd, context: this._headerEl.innerDom },
             headerInnerStyle: { fn: 'assign', target: 'style', context: this._headerEl.innerDom },
-
+            headerScrollableX: { target: 'scrollableX', context: this._headerEl },
+            headerScrollableY: { target: 'scrollableY', context: this._headerEl },
+            
             // footer
             footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
+            footerDefaults: { target: 'defaults', context: this._footerEl },
             footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
             footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
             footerInnerCls: { fn: 'function', target: this._footerEl.innerDom.clsAdd, context: this._footerEl.innerDom },
             footerInnerStyle: { fn: 'assign', target: 'style', context: this._footerEl.innerDom },
+            footerScrollableX: { target: 'scrollableX', context: this._footerEl },
+            footerScrollableY: { target: 'scrollableY', context: this._footerEl },
 
             // footerBar
-            footerCaption: { target: 'html', context: this._footerBarEl },
+            footerBarCaption: { target: 'html', context: this._footerBarEl },
             footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
+            footerBarDefaults: { target: 'defaults', context: this._footerBarEl },
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
@@ -93,8 +105,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
             collapseHeight: true,
             collapseWidth: true,
-
-            collapsePos: { prio: 1001, target: 'collapsePos' },
+            
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
             collapsed: { prio: 1004, target: 'collapsed' },
@@ -109,8 +120,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         });
 
         // Listeners
-        this.on('enterPress', this._onEnterPress, this);
-        this.on('escPress', this._onEscPress, this);
+        this.on('enterPress', this.#onEnterPress, this);
+        this.on('escPress', this.#onEscPress, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -143,7 +154,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     get closeButton() { return this._closeButtonEl; }
     set closeButton(val) {
-
         // Button entfernen
         if (kijs.isEmpty(val)) {
             this._headerBarEl.containerRightEl.remove(this._closeButtonEl);
@@ -155,7 +165,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._headerBarEl.containerRightEl.remove(this._closeButtonEl);
             }
             this._closeButtonEl = val;
-            this._closeButtonEl.on('click', this._onCloseClick, this);
+            this._closeButtonEl.on('click', this.#onCloseClick, this);
             this._headerBarEl.containerRightEl.add(this._closeButtonEl);
 
         // Config-Objekt
@@ -164,7 +174,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._closeButtonEl.applyConfig(val);
             } else {
                 this._closeButtonEl = new kijs.gui.Button(val);
-                this._closeButtonEl.on('click', this._onCloseClick, this);
+                this._closeButtonEl.on('click', this.#onCloseClick, this);
                 this._headerBarEl.containerRightEl.add(this._closeButtonEl);
             }
 
@@ -177,44 +187,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-
-    get collapsible() {
-        if (this._collapseButtonEl) {
-            return this._collapsible;
-        } else {
-            return false;
-        }
-    }
-    set collapsible(val) {
-        const validePos = ['top', 'right', 'bottom', 'left'];
-
-        if (kijs.isEmpty(val) || val === false) {
-            val = false;
-            this._collapsible = false;
-        } else {
-            if (kijs.Array.contains(validePos, val)) {
-                this._collapsible = val;
-            } else {
-                throw new kijs.Error(`Unkown pos on config "collapsible"`);
-            }
-        }
-
-        if (val) {
-            if (!this._collapseButtonEl) {
-                this.collapseButton = {
-                    iconMap: this._getCollapseIconMap()
-                };
-            }
-        } else {
-            if (this._collapseButtonEl) {
-                this.collapseButton = null;
-            }
-        }
-    }
-
     get collapseButton() { return this._collapseButtonEl; }
     set collapseButton(val) {
-
         // Button entfernen
         if (kijs.isEmpty(val)) {
             this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
@@ -226,7 +200,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
             }
             this._collapseButtonEl = val;
-            this._collapseButtonEl.on('click', this._onCollapseClick, this);
+            this._collapseButtonEl.on('click', this.#onCollapseClick, this);
             this._headerBarEl.containerRightEl.add(this._collapseButtonEl);
 
         // Config-Objekt
@@ -235,7 +209,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._collapseButtonEl.applyConfig(val);
             } else {
                 this._collapseButtonEl = new kijs.gui.Button(val);
-                this._collapseButtonEl.on('click', this._onCollapseClick, this);
+                this._collapseButtonEl.on('click', this.#onCollapseClick, this);
                 this._headerBarEl.containerRightEl.add(this._collapseButtonEl);
             }
 
@@ -276,6 +250,40 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     get collapseWidth() { return this._collapseWidth; }
     set collapseWidth(val) { this._collapseWidth = val; }
 
+    get collapsible() {
+        if (this._collapseButtonEl) {
+            return this._collapsible;
+        } else {
+            return false;
+        }
+    }
+    set collapsible(val) {
+        const validePos = ['top', 'right', 'bottom', 'left'];
+
+        if (kijs.isEmpty(val) || val === false) {
+            val = false;
+            this._collapsible = false;
+        } else {
+            if (kijs.Array.contains(validePos, val)) {
+                this._collapsible = val;
+            } else {
+                throw new kijs.Error(`Unkown pos on config "collapsible"`);
+            }
+        }
+
+        if (val) {
+            if (!this._collapseButtonEl) {
+                this.collapseButton = {
+                    iconMap: this._getCollapseIconMap()
+                };
+            }
+        } else {
+            if (this._collapseButtonEl) {
+                this.collapseButton = null;
+            }
+        }
+    }
+    
     get draggable() { return false; }
 
     get footer() { return this._footerEl; }
@@ -338,7 +346,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._headerBarEl.containerRightEl.remove(this._maximizeButtonEl);
             }
             this._maximizeButtonEl = val;
-            this._maximizeButtonEl.on('click', this._onMaximizeClick, this);
+            this._maximizeButtonEl.on('click', this.#onMaximizeClick, this);
             this._headerBarEl.containerRightEl.add(this._maximizeButtonEl);
 
         // Config-Objekt
@@ -347,7 +355,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 this._maximizeButtonEl.applyConfig(val);
             } else {
                 this._maximizeButtonEl = new kijs.gui.Button(val);
-                this._maximizeButtonEl.on('click', this._onMaximizeClick, this);
+                this._maximizeButtonEl.on('click', this.#onMaximizeClick, this);
                 this._headerBarEl.containerRightEl.add(this._maximizeButtonEl);
             }
 
@@ -370,7 +378,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this.restore();
         }
     }
-
 
     get resizable() { return !!this._resizerEl; }
     set resizable(val) {
@@ -436,7 +443,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this.raiseEvent('close');
         }
 
-        if (this._parentEl && this._parentEl instanceof kijs.gui.Container && this._parentEl.hasChild(this)) {
+        if (this._parentEl && (this._parentEl instanceof kijs.gui.Container) && this._parentEl.hasChild(this)) {
             this._parentEl.remove(this);
         } else {
             this.unrender();
@@ -704,11 +711,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._headerBarEl.unrender();
-        this._headerEl.unrender();
-        this._footerEl.unrender();
-        this._footerBarEl.unrender();
+        
+        if (this._headerBarEl) {
+            this._headerBarEl.unrender();
+        }
+        if (this._headerEl) {
+            this._headerEl.unrender();
+        }
+        if (this._footerEl) {
+            this._footerEl.unrender();
+        }
+        if (this._footerBarEl) {
+            this._footerBarEl.unrender();
+        }
         if (this._resizerEl) {
             this._resizerEl.unrender();
         }
@@ -752,12 +767,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         return '';
     }
 
+
+    // PRIVATE
     // LISTENERS
-    _onCloseClick(e) {
+    #onCloseClick(e) {
         this.close();
     }
 
-    _onCollapseClick(e) {
+    #onCollapseClick(e) {
         if (this.collapsed) {
             this.expand();
         } else {
@@ -765,17 +782,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-    _onEscPress(e) {
-        if (this.closable) {
-            this.close();
-        }
-    }
-
-    _onEnterPress(e) {
+    #onEnterPress(e) {
         // Gibt es einen Button mit Eigenschaft isDefault?
         if (this._footerEl) {
             kijs.Array.each(this._footerEl.elements, function(el) {
-                if (el instanceof kijs.gui.Button && el.dom && el.isDefault) {
+                if ((el instanceof kijs.gui.Button) && el.dom && el.isDefault) {
 
                     // Wenn der Fokus nicht auf dem Element, Click-Event werfen
                     if (document.activeElement !== el.dom.node) {
@@ -786,8 +797,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }, this);
         }
     }
+    
+    #onEscPress(e) {
+        if (this.closable) {
+            this.close();
+        }
+    }
 
-    _onHeaderBarClick(e) {
+    #onHeaderBarClick(e) {
         // Ein Panel (draggable=false) kann per click auf die HeaderBar auf/zugeklappt werden.
         if (this.collapsible && !this.maximized && !this.draggable) {
             if (this.collapsed) {
@@ -798,7 +815,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-    _onHeaderBarDblClick(e) {
+    #onHeaderBarDblClick(e) {
         // Ein Fenster (draggable=true) kann per dblClick auf die HeaderBar maximiert werden.
         if (this.maximizable && this.draggable) {
             if (this.maximized) {
@@ -813,13 +830,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-    _onMaximizeClick(e) {
+    #onMaximizeClick(e) {
         if (this.maximized) {
             this.restore();
         } else {
             this.maximize();
         }
     }
+
 
 
     // --------------------------------------------------------------

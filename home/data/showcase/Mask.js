@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Mask = class sc_Mask {
+window.home.sc = {};
+home.sc.Mask = class home_sc_Mask {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -40,6 +40,10 @@ sc.Mask = class sc_Mask {
                     scrollableY: 'auto',
                     width: 500,
                     cls: 'kijs-flexrow',
+                    innerStyle: {
+                        padding: '10px',
+                        gap: '10px'
+                    },
 
                     elements: [
                         {
@@ -49,7 +53,6 @@ sc.Mask = class sc_Mask {
                             height: 50,
                             style: { 
                                 flex: 1,
-                                margin: '10px',
                                 border:'1px solid #f00',
                                 textAlign: 'center'
                             }
@@ -61,7 +64,6 @@ sc.Mask = class sc_Mask {
                             displayWaitMask: true,
                             style: { 
                                 flex: 1,
-                                margin: '10px',
                                 border:'1px solid #0f0',
                                 textAlign: 'center'
                             }
@@ -72,15 +74,13 @@ sc.Mask = class sc_Mask {
                             height: 50,
                             style: { 
                                 flex: 1,
-                                margin: '10px',
                                 border:'1px solid #00f',
                                 textAlign: 'center'
                             }
                         }
                     ],
 
-                    footerCaption: 'Meine FooterBar',
-                    footerStyle: { padding: '10px' },
+                    footerBarCaption: 'Meine FooterBar',
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',
@@ -116,30 +116,38 @@ sc.Mask = class sc_Mask {
                         { id:'elBlue', caption:'blau', color:'#00f', icon:'kijs.iconMap.Fa.circle' }
                     ],
                     value: 'elGreen'
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'addMask',
-                    iconMap: 'kijs.iconMap.Fa.plus',
-                    on: {
-                        click: function(e) {
-                            const targetEl = this._content.down(this._content.down('targetElName').value);
-                            targetEl.waitMaskAdd();
-                            targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'removeMask',
-                    iconMap: 'kijs.iconMap.Fa.minus',
-                    on: {
-                        click: function(e) {
-                            const targetEl = this._content.down(this._content.down('targetElName').value);
-                            targetEl.waitMaskRemove();
-                            targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
-                        },
-                        context: this
-                    }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexline',
+                    elements :[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'addMask',
+                            iconMap: 'kijs.iconMap.Fa.plus',
+                            on: {
+                                click: function(e) {
+                                    const targetEl = this._content.down(this._content.down('targetElName').value);
+                                    targetEl.waitMaskAdd();
+                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'removeMask',
+                            iconMap: 'kijs.iconMap.Fa.minus',
+                            on: {
+                                click: function(e) {
+                                    const targetEl = this._content.down(this._content.down('targetElName').value);
+                                    targetEl.waitMaskRemove();
+                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                },
+                                context: this
+                            }
+                        }
+                    ]
                 },
                 
                 

@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.DropZone = class sc_DropZone {
+window.home.sc = {};
+home.sc.DropZone = class home_sc_DropZone {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -81,7 +81,7 @@ sc.DropZone = class sc_DropZone {
                         }
                     ],
 
-                    footerCaption: 'Meine FooterBar'
+                    footerBarCaption: 'Meine FooterBar'
                 },
                 
                 {

@@ -148,31 +148,6 @@ kijs.Graphic = class kijs_Graphic {
 
 
     /**
-     * Gibt die Helligkeit einer Farbe zurück (0-100)
-     * @param {String|Object} color
-     * @returns {Number}
-     */
-    static colorGetBrightness(color) {
-        let hsv = kijs.Graphic.colorRGBtoHSV(kijs.Graphic.colorGet(color));
-        return Math.round(100 * hsv.v);
-    }
-
-    /**
-     * Gibt den Hex-String einer Farbe zurück.
-     * @param {String|Object} color
-     * @returns {String}
-     */
-    static colorGetHex(color) {
-        color = kijs.Graphic.colorGet(color);
-        let hex = '';
-        hex += kijs.String.padding(color.r.toString(16), 2, '0', 'left');
-        hex += kijs.String.padding(color.g.toString(16), 2, '0', 'left');
-        hex += kijs.String.padding(color.b.toString(16), 2, '0', 'left');
-        return hex.toUpperCase();
-    }
-
-
-    /**
      * Parst eine Farbe in einem beliebigen Format zu einem RGB-Objekt
      * @param {String|Array|Object} color
      * @returns {Object|null}
@@ -245,6 +220,32 @@ kijs.Graphic = class kijs_Graphic {
 
         throw new kijs.Error('kijs.Graphic: invalid argument for color');
     }
+    
+    
+    /**
+     * Gibt die Helligkeit einer Farbe zurück (0-100)
+     * @param {String|Object} color
+     * @returns {Number}
+     */
+    static colorGetBrightness(color) {
+        let hsv = kijs.Graphic.colorRGBtoHSV(kijs.Graphic.colorGet(color));
+        return Math.round(100 * hsv.v);
+    }
+
+    /**
+     * Gibt den Hex-String einer Farbe zurück.
+     * @param {String|Object} color
+     * @returns {String}
+     */
+    static colorGetHex(color) {
+        color = kijs.Graphic.colorGet(color);
+        let hex = '';
+        hex += kijs.String.padding(color.r.toString(16), 2, '0', 'left');
+        hex += kijs.String.padding(color.g.toString(16), 2, '0', 'left');
+        hex += kijs.String.padding(color.b.toString(16), 2, '0', 'left');
+        return hex.toUpperCase();
+    }
+
 
     /**
      * HSV in RGB konvertieren

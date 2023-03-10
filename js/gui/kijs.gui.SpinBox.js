@@ -64,7 +64,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         });
 
         // Listener
-        this.on('keyDown', this._onKeyDown, this);
+        this.on('keyDown', this.#onKeyDown, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -155,12 +155,12 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     set target(val) {
         // Evtl. Listeners vom alten _targetEl entfernen
         if (!kijs.isEmpty(this._targetEl)) {
-            this._targetEl.off('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.off('keyDown', this.#onTargetElKeyDown, this);
         }
 
         if (val instanceof kijs.gui.Element) {
             this._targetEl = val;
-            this._targetEl.on('keyDown', this._onTargetElKeyDown, this);
+            this._targetEl.on('keyDown', this.#onTargetElKeyDown, this);
 
         } else if (val === null) {
             this._targetEl = null;
@@ -239,9 +239,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             ownerNode = ownerNode.node;
         }
         if (ownerNode) {
-            kijs.Dom.addEventListener('mousedown', ownerNode, this._onNodeMouseDown, this);
-            kijs.Dom.addEventListener('resize', ownerNode, this._onNodeResize, this);
-            kijs.Dom.addEventListener('wheel', ownerNode, this._onNodeWheel, this);
+            kijs.Dom.addEventListener('mousedown', ownerNode, this.#onNodeMouseDown, this);
+            kijs.Dom.addEventListener('resize', ownerNode, this.#onNodeResize, this);
+            kijs.Dom.addEventListener('wheel', ownerNode, this.#onNodeWheel, this);
         }
     }
 
@@ -311,9 +311,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
 
         // Listeners auf body/window zum ausblenden
-        kijs.Dom.addEventListener('mousedown', document.body, this._onBodyMouseDown, this);
-        kijs.Dom.addEventListener('resize', window, this._onWindowResize, this);
-        kijs.Dom.addEventListener('wheel', window, this._onWindowWheel, this);
+        kijs.Dom.addEventListener('mousedown', document.body, this.#onBodyMouseDown, this);
+        kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
+        kijs.Dom.addEventListener('wheel', window, this.#onWindowWheel, this);
 
         // Listeners auf die _ownerNodes die das Ausblenden verhindern
         kijs.Array.each(this._ownerNodes, function(ownerNode) {
@@ -323,6 +323,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this.raiseEvent('show');
     }
 
+    // overwrite
     unrender(superCall) {
         // Event auslösen.
         if (!superCall) {
@@ -470,15 +471,16 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     }
 
 
+    // PRIVATE
     // LISTENERS
-    _onBodyMouseDown(e) {
+    #onBodyMouseDown(e) {
         if (!this._preventHide) {
             this.close();
         }
         this._preventHide = false;
     }
 
-    _onKeyDown(e) {
+    #onKeyDown(e) {
         switch (e.nodeEvent.code) {
             case 'Escape':
             case 'F4':
@@ -488,36 +490,22 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
-    _onWindowResize(e) {
-        if (!this._preventHide) {
-            this.close();
-        }
-        this._preventHide = false;
-    }
-
-    _onWindowWheel(e) {
-        if (!this._preventHide) {
-            this.close();
-        }
-        this._preventHide = false;
-    }
-
     // Wir nutzen das Bubbeling der Events um auszuschliessen, dass die Events vom Node kommen.
     // Das Event kommt zuerst beim Node und wir setzen _preventHide=true
     // Dann kommt das Event beim Body und wenn die Variable _preventHide!==true ist, kann ausgeblendet werden
-    _onNodeMouseDown(e) {
+    #onNodeMouseDown(e) {
         this._preventHide = true;
     }
 
-    _onNodeResize(e) {
+    #onNodeResize(e) {
         this._preventHide = true;
     }
 
-    _onNodeWheel(e) {
+    #onNodeWheel(e) {
         this._preventHide = true;
     }
 
-    _onTargetElKeyDown(e) {
+    #onTargetElKeyDown(e) {
         switch (e.nodeEvent.code) {
             case 'Escape':
             case 'Tab':
@@ -536,6 +524,20 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                 this.show();
                 break;
         }
+    }
+    
+    #onWindowResize(e) {
+        if (!this._preventHide) {
+            this.close();
+        }
+        this._preventHide = false;
+    }
+
+    #onWindowWheel(e) {
+        if (!this._preventHide) {
+            this.close();
+        }
+        this._preventHide = false;
     }
 
 

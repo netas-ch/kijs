@@ -3,9 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.ColumnWindow
 // --------------------------------------------------------------
-
-
-// --------------------------------------------------------------
 kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.Window {
 
 
@@ -14,7 +11,6 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     // --------------------------------------------------------------
     constructor(config={}) {
         super(false);
-
 
         this._dom.clsAdd('kijs-columnwindow');
 
@@ -41,7 +37,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
                     caption: 'OK',
                     isDefault: true,
                     on: {
-                        click: this._onOkClick,
+                        click: this.#onOkClick,
                         context: this
                     }
                 }
@@ -53,7 +49,6 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
 
         });
 
-
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -62,16 +57,17 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get grid() { return this.parent.header.grid; }
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     show() {
         let data = [];
         let values = [];
@@ -93,15 +89,45 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             ddSort: true
         });
 
-        this.down('fields').on('ddOver', this._onDdOver, this);
-        this.down('fields').on('change', this._onCheckChange, this);
+        this.down('fields').on('ddOver', this.#onDdOver, this);
+        this.down('fields').on('change', this.#onCheckChange, this);
 
         // anzeigen
         super.show();
     }
 
-    // EVENTS
-    _onOkClick() {
+
+    // PRIVATE
+    // LISTENERS
+    #onCheckChange(e) {
+        let unchecked = kijs.Array.diff(e.oldValue, e.value);
+
+        kijs.Array.each(unchecked, function(valueField) {
+            let columnConfig = this.grid.getColumnConfigByValueField(valueField);
+
+            // uncheck verhindern, hacken wieder setzen
+            if (!columnConfig.hideable) {
+                kijs.defer(function() {
+                    let flds = this.down('fields').value;
+                    flds.push(valueField);
+                    this.down('fields').value = flds;
+                },20, this);
+            }
+
+        }, this);
+    }
+    
+    #onDdOver(e) {
+        const vF = e.sourceElement ? e.sourceElement.dataRow.valueField : null;
+
+        // columnConfig Suchen und prüfen ob sortierbar
+        let columnConfig = this.grid.getColumnConfigByValueField(vF);
+        let allowDd = columnConfig ? columnConfig.sortable : false;
+
+        return allowDd;
+    }
+    
+    #onOkClick() {
         let flds = this.down('fields').value;
 
         // Sichtbarkeit übernehmen
@@ -125,33 +151,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         this.destruct();
     }
 
-    _onDdOver(e) {
-        const vF = e.sourceElement ? e.sourceElement.dataRow.valueField : null;
 
-        // columnConfig Suchen und prüfen ob sortierbar
-        let columnConfig = this.grid.getColumnConfigByValueField(vF);
-        let allowDd = columnConfig ? columnConfig.sortable : false;
-
-        return allowDd;
-    }
-
-    _onCheckChange(e) {
-        let unchecked = kijs.Array.diff(e.oldValue, e.value);
-
-        kijs.Array.each(unchecked, function(valueField) {
-            let columnConfig = this.grid.getColumnConfigByValueField(valueField);
-
-            // uncheck verhindern, hacken wieder setzen
-            if (!columnConfig.hideable) {
-                kijs.defer(function() {
-                    let flds = this.down('fields').value;
-                    flds.push(valueField);
-                    this.down('fields').value = flds;
-                },20, this);
-            }
-
-        }, this);
-    }
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -168,4 +168,5 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         // Basisklasse auch entladen
         super.destruct(true);
     }
+    
 };

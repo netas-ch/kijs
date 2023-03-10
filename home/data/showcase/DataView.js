@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.DataView = class sc_DataView {
+window.home.sc = {};
+home.sc.DataView = class home_sc_DataView {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -43,7 +43,7 @@ sc.DataView = class sc_DataView {
                                 flex: 1
                             },
                             innerStyle: {
-                                padding: '10px'
+                                padding: '4px'
                             }
                         }
                     ]
@@ -110,7 +110,7 @@ sc.DataView = class sc_DataView {
                                 flex: 1
                             },
                             innerStyle: {
-                                padding: '10px'
+                                padding: '4px'
                             }
                         }
                     ]

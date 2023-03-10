@@ -45,6 +45,7 @@
  */
 kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -65,9 +66,10 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
         }
 
         // Listeners
-        this.on('change', this._onChange, this);
-
+        this.on('change', this.#onChange, this);
     }
+
+
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
@@ -78,21 +80,12 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     get value() { return super.value; }
     set value(val) { super.value = this._formatValue ? this._formatIban(val) : val; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-
-    // overwrite
-    _validationRules(value) {
-        super._validationRules(value);
-
-        // IBAN validieren
-        if (!kijs.isEmpty(value) && !this._isValidIban(value)) {
-            this._errors.push(kijs.getText('Ungültige IBAN'));
-        }
-    }
-
+    // PROTECTED
     _formatIban(iban) {
         if (this._isValidIban(iban)) {
             iban = kijs.toString(iban).toUpperCase().replace(/\s/g, '');
@@ -146,7 +139,20 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
         return tmp / 1;
     }
 
-    _onChange() {
+    // overwrite
+    _validationRules(value) {
+        super._validationRules(value);
+
+        // IBAN validieren
+        if (!kijs.isEmpty(value) && !this._isValidIban(value)) {
+            this._errors.push(kijs.getText('Ungültige IBAN'));
+        }
+    }
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onChange() {
         if (this._formatValue) {
             let val = this.value, formated = this._formatIban(val);
 
@@ -155,6 +161,8 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
             }
         }
     }
+
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -174,4 +182,5 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

@@ -11,45 +11,26 @@
 
     // CSS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
-
+?>
+    <link rel="stylesheet" type="text/css" href="app/style.css">
+    <link rel="stylesheet" type="text/css" href="dataResources/css/style.css">
+<?php
     // JS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
 ?>
-        <script type="text/javascript" src="js/sc.App.js"></script>
-
-        <style>
-            .icoKijs16 {
-                background-image: url('../favicon.ico');
-                background-size: 16px;
-                height: 16px;
-                width: 16px;
-            }
-            .icoWizard16 {
-                background-image: url('img/icoWizard16.png');
-                height: 16px;
-                width: 16px;
-            }
-            .icoFolder32 {
-                background-image: url('img/icoFolder32.png');
-                height: 32px;
-                width: 32px;
-            }
-            .icoFolderOpen32 {
-                background-image: url('img/icoFolderOpen32.png');
-                height: 32px;
-                width: 32px;
-            }
-        </style>
+        <script type="text/javascript" src="app/marked.min.js"></script>
+        <script type="text/javascript" src="app/home.App.js"></script>
         <script type="text/javascript">
             kijs.isReady(function(){
-                let app = new sc.App({
-                    ajaxUrl: 'php/ajax.php'
+                let app = new home.App({
+                    appAjaxUrl: 'app/ajax.php',
+                    dataAjaxUrl: 'dataResources/php/ajax.php'
                 });
                 app.run();
             });
         </script>
 
-        <title>kijs - Showcase</title>
+        <title>kijs - Home</title>
     </head>
     <body>
     </body>

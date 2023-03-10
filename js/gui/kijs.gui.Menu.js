@@ -16,7 +16,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         this._direction = '';
         this._expandOnHover = false;
         this._closeOnClick = false;
-        this._expandTimer = null;
+        this._expandDeferId = null;
 
         // Button, von dem aus dieses Menu geöffnet wird
         this._button = null;
@@ -58,10 +58,10 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get button() { return this._button; }
     set button(val) {
         if (!(val instanceof kijs.gui.Button)) {
@@ -70,12 +70,12 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
         // change button?
         if (this._button !== null) {
-            this._button.off('click', this._onBtnClick, this);
+            this._button.off('click', this.#onBtnClick, this);
             this._button = null;
         }
 
         this._button = val;
-        this._button.on('click', this._onBtnClick, this);
+        this._button.on('click', this.#onBtnClick, this);
         this.target = this._button;
         this.ownerNodeAdd(this._button);
     }
@@ -89,10 +89,10 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
                 if (element instanceof kijs.gui.Button) {
 
                     // sub-buttons überwachen
-                    if (val && !element.hasListener('click', this._onSubButtonClick, this)) {
-                        element.on('click', this._onSubButtonClick, this);
+                    if (val && !element.hasListener('click', this.#onSubButtonClick, this)) {
+                        element.on('click', this.#onSubButtonClick, this);
                     } else if (!val) {
-                        element.off('click', this._onSubButtonClick, this);
+                        element.off('click', this.#onSubButtonClick, this);
                     }
 
                     // closeOnClick den Untermenus weitergeben
@@ -108,7 +108,6 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
     get direction() { return this._direction; }
     set direction(val) {
-
         // auto: Falls der Button nicht im Menu ist ist, nach unten, sonst nach rechts
         if (val === 'auto') {
             if (this._button && !this.upX('kijs.gui.Menu')) {
@@ -148,7 +147,6 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     get expandOnHover() { return this._expandOnHover; }
     set expandOnHover(val) {
         if (this._button) {
-
             // auto: falls in einem Untermenu ja, sonst nein.
             if (val === 'auto') {
                 val = this.upX('kijs.gui.Menu') !== null;
@@ -156,23 +154,24 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
             // listeners setzen
             if (val) {
-                this._button.on('mouseEnter', this._onBtnMouseEnter, this);
-                this._button.on('mouseLeave', this._onBtnMouseLeave, this);
+                this._button.on('mouseEnter', this.#onBtnMouseEnter, this);
+                this._button.on('mouseLeave', this.#onBtnMouseLeave, this);
 
             // listeners entfernen
             } else {
-                this._button.off('mouseEnter', this._onBtnMouseEnter, this);
-                this._button.off('mouseLeave', this._onBtnMouseLeave, this);
+                this._button.off('mouseEnter', this.#onBtnMouseEnter, this);
+                this._button.off('mouseLeave', this.#onBtnMouseLeave, this);
             }
 
             this._expandOnHover = !!val;
         }
     }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Fügt dem Menu neue Elemente hinzu.
      * @param {Object|Array} elements
@@ -212,25 +211,10 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     }
 
     /**
-     * Gibt das Icon fürs öffen für die entsprechende Richtung zurück
-     * @returns {String}
-     */
-    getIconMap() {
-        switch (this._direction) {
-            case 'left': return 'kijs.iconMap.Fa.angle-left';
-            case 'right': return 'kijs.iconMap.Fa.angle-right';
-            case 'up': return 'kijs.iconMap.Fa.angle-up';
-            case 'down': return 'kijs.iconMap.Fa.angle-down';
-        }
-        return '';
-    }
-
-    /**
      * Schliesst das Dropdownmenu und alle Untermenus
      * @returns {undefined}
      */
     close() {
-
         // Untermenu Schliessen
         this.closeSubMenus();
 
@@ -243,7 +227,6 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
      * @returns {undefined}
      */
     closeAll() {
-
         // alle Parents durchsuchen, beim höchsten vom Typ Menu 'Schliessen'
         let topMostMenu=this, p=this;
         while (p.parent) {
@@ -264,13 +247,27 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     closeSubMenus(exeption=null) {
         // Untermenu Schliessen
         kijs.Array.each(this.elements, function(element) {
-            if (element instanceof kijs.gui.Button && element.menu && element.menu !== exeption && element !== exeption) {
+            if ((element instanceof kijs.gui.Button) && element.menu && element.menu !== exeption && element !== exeption) {
                 element.menu.close();
             }
         }, this);
     }
+    
+    /**
+     * Gibt das Icon fürs öffen für die entsprechende Richtung zurück
+     * @returns {String}
+     */
+    getIconMap() {
+        switch (this._direction) {
+            case 'left': return 'kijs.iconMap.Fa.angle-left';
+            case 'right': return 'kijs.iconMap.Fa.angle-right';
+            case 'up': return 'kijs.iconMap.Fa.angle-up';
+            case 'down': return 'kijs.iconMap.Fa.angle-down';
+        }
+        return '';
+    }
 
-     /**
+    /**
      * Löscht ein oder mehrere untergeordnete Elemente
      * @param {Object|Array} elements
      * @returns {undefined}
@@ -309,29 +306,30 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
         // Falls dieses Menu ein Untermenu ist: beim Öffnen
         // alle andere Untermenus ausser dieses schliessen
-        if (this._button && this._button.parent instanceof kijs.gui.Menu) {
+        if (this._button && (this._button.parent instanceof kijs.gui.Menu)) {
             this._button.parent.closeSubMenus(this);
         }
     }
 
     unrender(superCall) {
+        // timer abbrechen
+        if (this._expandDeferId) {
+            window.clearTimeout(this._expandDeferId);
+            this._expandDeferId = null;
+        }
+        
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
         }
 
-        // timeout löschen
-        if (this._expandTimer) {
-            window.clearTimeout(this._expandTimer);
-            this._expandTimer = null;
-        }
-
         super.unrender(true);
     }
 
-    // PROTECTED
 
-    _onBtnClick() {
+    // PRIVATE
+    // LISTENERS
+    #onBtnClick() {
         if (this.dom.node) {
             this.close();
         } else {
@@ -339,9 +337,9 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         }
     }
 
-    _onBtnMouseEnter() {
-        if (!this._expandTimer) {
-            this._expandTimer = kijs.defer(function() {
+    #onBtnMouseEnter() {
+        if (!this._expandDeferId) {
+            this._expandDeferId = kijs.defer(function() {
                 if (!this.isRendered) {
                     this.show();
                 }
@@ -349,16 +347,16 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         }
     }
 
-    _onBtnMouseLeave() {
-        if (this._expandTimer) {
-            window.clearTimeout(this._expandTimer);
-            this._expandTimer = null;
+    #onBtnMouseLeave() {
+        if (this._expandDeferId) {
+            window.clearTimeout(this._expandDeferId);
+            this._expandDeferId = null;
         }
     }
 
-    _onSubButtonClick(e) {
+    #onSubButtonClick(e) {
         // Falls auf ein Button ohne Untermenu geklickt wird, schliessen
-        if (this._closeOnClick && e.element instanceof kijs.gui.Button && e.element.menu === null) {
+        if (this._closeOnClick && (e.element instanceof kijs.gui.Button) && e.element.menu === null) {
             this.closeAll();
         }
     }

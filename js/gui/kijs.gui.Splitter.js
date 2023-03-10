@@ -29,7 +29,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         });
 
         // Listeners
-        this.on('mouseDown', this._onMouseDown, this);
+        this.on('mouseDown', this.#onMouseDown, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -60,7 +60,6 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
                 throw new kijs.Error(`config missing "target"`);
             }
         }
-
         return this._targetEl;
     }
     set target(val) {
@@ -84,7 +83,6 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         this._overlayDom.clsRemove(['kijs-splitter-overlay-horizontal', 'kijs-splitter-overlay-vertical']);
         this._overlayDom.clsAdd('kijs-splitter-overlay-' + this.direction);
     }
-
 
 
 
@@ -130,9 +128,10 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         }
     }
 
-
+    
+    // PRIVATE
     // LISTENERS
-    _onMouseDown(e) {
+    #onMouseDown(e) {
         if (this.direction === 'horizontal') {
             this._initialPos = e.nodeEvent.clientX;
         } else {
@@ -147,16 +146,16 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         this._dom.node.parentNode.appendChild(this._overlayDom.node);
 
         // mousemove und mouseup Listeners auf das document setzen
-        kijs.Dom.addEventListener('mousemove', document, this._onMouseMove, this);
-        kijs.Dom.addEventListener('mouseup', document, this._onMouseUp, this);
+        kijs.Dom.addEventListener('mousemove', document, this.#onMouseMove, this);
+        kijs.Dom.addEventListener('mouseup', document, this.#onMouseUp, this);
     }
 
-    _onMouseMove(e) {
+    #onMouseMove(e) {
         // Overlay Positionieren
         this._updateOverlayPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
     }
 
-    _onMouseUp(e) {
+    #onMouseUp(e) {
         // Beim ersten auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);

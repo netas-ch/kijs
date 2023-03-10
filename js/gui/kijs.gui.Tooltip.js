@@ -123,7 +123,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             document.body.appendChild(this._dom.node);
 
             // listener auf body
-            kijs.Dom.addEventListener('mousemove', document.body, this._onMouseMoveOnBody, this);
+            kijs.Dom.addEventListener('mousemove', document.body, this.#onMouseMoveOnBody, this);
 
             // position aktualisieren
             updatePos = true;
@@ -187,11 +187,18 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
     // PROTECTED
     _bindEventsToTarget() {
-        this._target.on('mouseMove', this._onMouseMoveTarget, this);
-        this._target.on('mouseLeave', this._onMouseLeave, this);
+        this._target.on('mouseMove', this.#onMouseMoveTarget, this);
+        this._target.on('mouseLeave', this.#onMouseLeave, this);
     }
-
-    _onMouseMoveOnBody(e) {
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onMouseLeave(e) {
+        this.hide();
+    }
+    
+    #onMouseMoveOnBody(e) {
         if (this._target) {
             let mouseX = e.nodeEvent.clientX, mouseY = e.nodeEvent.clientY;
             let top = kijs.Dom.getAbsolutePos(this._target.node).y,
@@ -212,15 +219,12 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         }
     }
 
-    _onMouseMoveTarget(e) {
+    #onMouseMoveTarget(e) {
         if (!this.disabled) {
             this.show(e.nodeEvent.clientX, e.nodeEvent.clientY);
         }
     }
 
-    _onMouseLeave(e) {
-        this.hide();
-    }
 
 
     // --------------------------------------------------------------

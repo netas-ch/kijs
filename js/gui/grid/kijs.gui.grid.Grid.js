@@ -60,7 +60,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._middleDom = new kijs.gui.Dom({cls: 'kijs-center'});
         this._bottomDom = new kijs.gui.Dom({cls: 'kijs-bottom'});
 
-        this._tableContainerDom = new kijs.gui.Dom({cls: 'kijs-tablecontainer', on:{scroll: this._onTableScroll, context: this}});
+        this._tableContainerDom = new kijs.gui.Dom({cls: 'kijs-tablecontainer', on:{scroll: this.#onTableScroll, context: this}});
         this._tableDom = new kijs.gui.Dom({nodeTagName: 'table'});
 
         this._headerContainerDom = new kijs.gui.Dom({cls: 'kijs-headercontainer'});
@@ -121,7 +121,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                                                  // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                                  // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                                  // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
-
         });
 
         // Config anwenden
@@ -131,16 +130,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         // Events
-        this.on('keyDown', this._onKeyDown, this);
+        this.on('keyDown', this.#onKeyDown, this);
     }
 
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-    get columnConfigs() { return this._columnConfigs; }
-
     get current() { return this._currentRow; }
     /**
      * Setzt die aktuelle Zeile, die den Fokus erhalten wird.
@@ -193,6 +189,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
     }
 
+    get columnConfigs() { return this._columnConfigs; }
+
     set data(val) {
         if (!kijs.isArray(val)) {
             val = [val];
@@ -211,13 +209,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get facadeFnArgs() { return this._facadeFnArgs; }
     set facadeFnArgs(val) { this._facadeFnArgs = val; }
 
-    get firstRow() {
-        if (this._rows.length > 0) {
-            return this._rows[0];
-        }
-        return null;
-    }
-
     get filter() { return this._filter; }
 
     get filterable() { return this._filterable; }
@@ -225,6 +216,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get filterVisible() { return this._filter.visible; }
     set filterVisible(val) { this._filter.visible = !!val; }
+
+    get firstRow() {
+        if (this._rows.length > 0) {
+            return this._rows[0];
+        }
+        return null;
+    }
 
     get lastRow() {
         if (this._rows.length > 0) {
@@ -279,6 +277,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.unSelect(this._rows, preventSelectionChange);
     }
 
+    /**
+     * Setzt alle dirty-records zurück.
+     * @returns {undefined}
+     */
+    commit() {
+        kijs.Array.each(this._rows, function(row) {
+            row.commit();
+        }, this);
+    }
+    
     columnConfigAdd(columnConfigs) {
         if (!kijs.isArray(columnConfigs)) {
             columnConfigs = [columnConfigs];
@@ -293,16 +301,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (this.isRendered) {
             this.render();
         }
-    }
-
-    /**
-     * Setzt alle dirty-records zurück.
-     * @returns {undefined}
-     */
-    commit() {
-        kijs.Array.each(this._rows, function(row) {
-            row.commit();
-        }, this);
     }
 
     /**
@@ -409,7 +407,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * TODO Wir müssten nur einzelne Rows updaten können.
+     * TODO: Wir müssten nur einzelne Rows updaten können.
      * Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
      * Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad():
      *
@@ -444,6 +442,70 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             return responseData;
         });
+    }
+    
+    // Overwrite
+    render(superCall) {
+        super.render(true);
+
+        // Elemente in den haupt-dom
+        this._topDom.renderTo(this._dom.node);
+        this._middleDom.renderTo(this._dom.node);
+        this._bottomDom.renderTo(this._dom.node);
+
+        // header / filter
+        this._headerLeftContainerDom.renderTo(this._topDom.node);
+        this._headerContainerDom.renderTo(this._topDom.node);
+        this._headerRightContainerDom.renderTo(this._topDom.node);
+
+        // center (grid)
+        this._leftContainerDom.renderTo(this._middleDom.node);
+        this._tableContainerDom.renderTo(this._middleDom.node);
+        this._rightContainerDom.renderTo(this._middleDom.node);
+
+        // footer (summary)
+        this._footerLeftContainerDom.renderTo(this._bottomDom.node);
+        this._footerContainerDom.renderTo(this._bottomDom.node);
+        this._footerRightContainerDom.renderTo(this._bottomDom.node);
+
+        // header
+        this._headerLeftDom.renderTo(this._headerLeftContainerDom.node);
+        this._headerDom.renderTo(this._headerContainerDom.node);
+        this._headerRightDom.renderTo(this._headerRightContainerDom.node);
+
+        // center
+        this._leftDom.renderTo(this._leftContainerDom.node);
+        this._tableDom.renderTo(this._tableContainerDom.node);
+        this._rightDom.renderTo(this._rightContainerDom.node);
+
+        // bottom
+        this._footerLeftDom.renderTo(this._footerLeftContainerDom.node);
+        this._footerDom.renderTo(this._footerContainerDom.node);
+        this._footerRightDom.renderTo(this._footerRightContainerDom.node);
+
+        // header / filter
+        this._header.renderTo(this._headerDom.node);
+        this._filter.renderTo(this._headerDom.node);
+
+        // rows
+        this._renderRows();
+
+        // footer (TODO)
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+
+        // Daten laden
+        if (this._autoLoad) {
+            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
+            kijs.defer(function() {
+                if (this._remoteDataLoaded === 0) {
+                    this._remoteLoad(true);
+                }
+            }, 30, this);
+        }
     }
 
     /**
@@ -494,8 +556,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                         parent: this,
                         dataRow: row,
                         on: {
-                            click: this._onRowClick,
-                            dblClick: this._onRowDblClick,
+                            click: this.#onRowClick,
+                            dblClick: this.#onRowDblClick,
                             context: this
                         }
                     }));
@@ -620,6 +682,64 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: false } );
         }
     }
+    
+    /**
+     * Selektiert Datensätze anhand der ID
+     * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
+     * @param {Boolean} [keepExisting=false]  Soll die bestehende Selektion belassen werden?
+     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByIds(ids, keepExisting=false, preventEvent=false) {
+        let hasPrimarys = this._primaryKeys.length > 0,
+            multiPrimarys = this._primaryKeys.length > 1,
+            rows = [];
+
+        if (!kijs.isArray(ids)) {
+            ids = [ids];
+        }
+
+        // Keine Primarys, keine ID's
+        if (!hasPrimarys || !ids) {
+            return;
+        }
+
+        // Array mit ID's übergeben: umwandeln in Array mit Objekten
+        if (!multiPrimarys && !kijs.isObject(ids[0])) {
+            let pk = this._primaryKeys[0];
+            for (let i=0; i<ids.length; i++) {
+                let val = ids[i];
+                ids[i] = {};
+                ids[i][pk] = val;
+            }
+        }
+
+        // Zeilen holen
+        for (let i=0; i<ids.length; i++) {
+            if (kijs.isObject(ids[i])) {
+                let match=false;
+
+                kijs.Array.each(this._rows, function(row) {
+                    match = true;
+
+                    for (let idKey in ids[i]) {
+                        if (row.dataRow[idKey] !== ids[i][idKey]) {
+                            match = false;
+                        }
+                    }
+
+                    if (match) {
+                        rows.push(row);
+                    }
+
+                }, this);
+
+            }
+        }
+
+        this.select(rows, keepExisting, preventEvent);
+    }
+
 
     /**
      * Selektiert eine oder mehrere Zeilen
@@ -701,63 +821,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Element mit Fokus neu ermitteln
         this._currentRow = null;
         this.current = null;
-    }
-
-    /**
-     * Selektiert Datensätze anhand der ID
-     * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
-     * @param {Boolean} [keepExisting=false]  Soll die bestehende Selektion belassen werden?
-     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
-     * @returns {undefined}
-     */
-    selectByIds(ids, keepExisting=false, preventEvent=false) {
-        let hasPrimarys = this._primaryKeys.length > 0,
-            multiPrimarys = this._primaryKeys.length > 1,
-            rows = [];
-
-        if (!kijs.isArray(ids)) {
-            ids = [ids];
-        }
-
-        // Keine Primarys, keine ID's
-        if (!hasPrimarys || !ids) {
-            return;
-        }
-
-        // Array mit ID's übergeben: umwandeln in Array mit Objekten
-        if (!multiPrimarys && !kijs.isObject(ids[0])) {
-            let pk = this._primaryKeys[0];
-            for (let i=0; i<ids.length; i++) {
-                let val = ids[i];
-                ids[i] = {};
-                ids[i][pk] = val;
-            }
-        }
-
-        // Zeilen holen
-        for (let i=0; i<ids.length; i++) {
-            if (kijs.isObject(ids[i])) {
-                let match=false;
-
-                kijs.Array.each(this._rows, function(row) {
-                    match = true;
-
-                    for (let idKey in ids[i]) {
-                        if (row.dataRow[idKey] !== ids[i][idKey]) {
-                            match = false;
-                        }
-                    }
-
-                    if (match) {
-                        rows.push(row);
-                    }
-
-                }, this);
-
-            }
-        }
-
-        this.select(rows, keepExisting, preventEvent);
     }
 
     /**
@@ -844,6 +907,55 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return cellToEdit;
     }
 
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        // header / filter
+        this._header.unrender();
+        this._filter.unrender();
+
+        // bottom
+        this._footerLeftDom.unrender();
+        this._footerDom.unrender();
+        this._footerRightDom.unrender();
+
+        // center
+        this._leftDom.unrender();
+        this._tableDom.unrender();
+        this._rightDom.unrender();
+
+        // header
+        this._headerLeftDom.unrender();
+        this._headerDom.unrender();
+        this._headerRightDom.unrender();
+
+        // footer (summary)
+        this._footerLeftContainerDom.unrender();
+        this._footerContainerDom.unrender();
+        this._footerRightContainerDom.unrender();
+
+        // center (grid)
+        this._leftContainerDom.unrender();
+        this._tableContainerDom.unrender();
+        this._rightContainerDom.unrender();
+
+        // header / filter
+        this._headerLeftContainerDom.unrender();
+        this._headerContainerDom.unrender();
+        this._headerRightContainerDom.unrender();
+
+        this._topDom.unrender();
+        this._middleDom.unrender();
+        this._bottomDom.unrender();
+
+        super.unrender(true);
+    }
+    
+    
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -974,7 +1086,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _remoteProcess(e, args, resetData) {
-
         // columns
         if (kijs.isArray(e.responseData.columns)) {
             kijs.Array.clear(this._columnConfigs);
@@ -1030,7 +1141,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._setIntersectionObserver();
     }
 
-    // PROTECTED
     /**
      * Selektiert eine Zeile und berücksichtigt dabei die selectType und die Tasten shift und ctrl
      * @param {kijs.gui.grid.Row} row
@@ -1097,12 +1207,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     _setIntersectionObserver() {
-
         // Der Intersection Observer beobachtet die Scroll-Position und wirft ein Event, wenn
         // das Scrolling gegen das Ende der Seite kommt.
         if (window.IntersectionObserver) {
             if (!this._intersectionObserver || this._intersectionObserver.root !== this._tableContainerDom.node) {
-                this._intersectionObserver = new IntersectionObserver(this._onIntersect.bind(this), {
+                this._intersectionObserver = new IntersectionObserver(this.#onIntersect.bind(this), {
                     root: this._tableContainerDom.node,
                     rootMargin: '100px',
                     threshold: 0
@@ -1117,26 +1226,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     this._intersectionObserver.observe(this._rows[this._rows.length - 1].node);
                 }
             }
-        }
-    }
-
-    /**
-     * Deselektiert ein oder mehrere Zeilen
-     * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
-     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
-     */
-    unSelect(rows, preventSelectionChange) {
-        if (!kijs.isArray(rows)) {
-            rows = [rows];
-        }
-
-        kijs.Array.each(rows, function(row) {
-            row.selected = false;
-        }, this);
-
-        if (!preventSelectionChange) {
-            this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
         }
     }
 
@@ -1176,10 +1265,45 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
-    // EVENTS
+    /**
+     * Deselektiert ein oder mehrere Zeilen
+     * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    unSelect(rows, preventSelectionChange) {
+        if (!kijs.isArray(rows)) {
+            rows = [rows];
+        }
 
+        kijs.Array.each(rows, function(row) {
+            row.selected = false;
+        }, this);
 
-    _onKeyDown(e) {
+        if (!preventSelectionChange) {
+            this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
+        }
+    }
+    
+    
+    // PRIVATE
+    // LISTENERS
+    /**
+     * Wird ausgelöst, wenn die Scrollbar 200px von der letzten Zeile entfernt ist.
+     * @param {IntersectionObserverEntrys} intersections
+     * @returns {undefined}
+     */
+    #onIntersect(intersections) {
+        if (intersections.length > 0) {
+            kijs.Array.each(intersections, function(intersection) {
+                if (intersection.isIntersecting) {
+                    this._remoteLoad(false, true);
+                }
+            }, this);
+        }
+    }
+    
+    #onKeyDown(e) {
         let kCode=e.nodeEvent.code, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
         if (!this.disabled) {
@@ -1208,7 +1332,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
-    _onRowClick(e) {
+    #onRowClick(e) {
         let row = e.element, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
         if (!this.disabled) {
@@ -1223,13 +1347,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.raiseEvent('rowClick', e);
     }
 
-    _onRowDblClick(e) {
-
+    #onRowDblClick(e) {
         // Event weiterreichen
         this.raiseEvent('rowDblClick', e);
     }
 
-    _onTableScroll(e) {
+    #onTableScroll(e) {
         let scrollTop = e.dom.node.scrollTop;
         let scrollLeft = e.dom.node.scrollLeft;
 
@@ -1240,134 +1363,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._rightContainerDom.node.scrollTop = scrollTop;
     }
 
-    /**
-     * Wird ausgelöst, wenn die Scrollbar 200px von der letzten Zeile entfernt ist.
-     * @param {IntersectionObserverEntrys} intersections
-     * @returns {undefined}
-     */
-    _onIntersect(intersections) {
-        if (intersections.length > 0) {
-            kijs.Array.each(intersections, function(intersection) {
-                if (intersection.isIntersecting) {
-                    this._remoteLoad(false, true);
-                }
-            }, this);
-        }
-    }
-
-
-    // Overwrite
-    render(superCall) {
-        super.render(true);
-
-        // Elemente in den haupt-dom
-        this._topDom.renderTo(this._dom.node);
-        this._middleDom.renderTo(this._dom.node);
-        this._bottomDom.renderTo(this._dom.node);
-
-        // header / filter
-        this._headerLeftContainerDom.renderTo(this._topDom.node);
-        this._headerContainerDom.renderTo(this._topDom.node);
-        this._headerRightContainerDom.renderTo(this._topDom.node);
-
-        // center (grid)
-        this._leftContainerDom.renderTo(this._middleDom.node);
-        this._tableContainerDom.renderTo(this._middleDom.node);
-        this._rightContainerDom.renderTo(this._middleDom.node);
-
-        // footer (summary)
-        this._footerLeftContainerDom.renderTo(this._bottomDom.node);
-        this._footerContainerDom.renderTo(this._bottomDom.node);
-        this._footerRightContainerDom.renderTo(this._bottomDom.node);
-
-        // header
-        this._headerLeftDom.renderTo(this._headerLeftContainerDom.node);
-        this._headerDom.renderTo(this._headerContainerDom.node);
-        this._headerRightDom.renderTo(this._headerRightContainerDom.node);
-
-        // center
-        this._leftDom.renderTo(this._leftContainerDom.node);
-        this._tableDom.renderTo(this._tableContainerDom.node);
-        this._rightDom.renderTo(this._rightContainerDom.node);
-
-        // bottom
-        this._footerLeftDom.renderTo(this._footerLeftContainerDom.node);
-        this._footerDom.renderTo(this._footerContainerDom.node);
-        this._footerRightDom.renderTo(this._footerRightContainerDom.node);
-
-        // header / filter
-        this._header.renderTo(this._headerDom.node);
-        this._filter.renderTo(this._headerDom.node);
-
-        // rows
-        this._renderRows();
-
-        // footer (TODO)
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-
-        // Daten laden
-        if (this._autoLoad) {
-            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
-            kijs.defer(function() {
-                if (this._remoteDataLoaded === 0) {
-                    this._remoteLoad(true);
-                }
-            }, 30, this);
-        }
-    }
-
-    // overwrite
-    unrender(superCall) {
-
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        // header / filter
-        this._header.unrender();
-        this._filter.unrender();
-
-        // bottom
-        this._footerLeftDom.unrender();
-        this._footerDom.unrender();
-        this._footerRightDom.unrender();
-
-        // center
-        this._leftDom.unrender();
-        this._tableDom.unrender();
-        this._rightDom.unrender();
-
-        // header
-        this._headerLeftDom.unrender();
-        this._headerDom.unrender();
-        this._headerRightDom.unrender();
-
-        // footer (summary)
-        this._footerLeftContainerDom.unrender();
-        this._footerContainerDom.unrender();
-        this._footerRightContainerDom.unrender();
-
-        // center (grid)
-        this._leftContainerDom.unrender();
-        this._tableContainerDom.unrender();
-        this._rightContainerDom.unrender();
-
-        // header / filter
-        this._headerLeftContainerDom.unrender();
-        this._headerContainerDom.unrender();
-        this._headerRightContainerDom.unrender();
-
-        this._topDom.unrender();
-        this._middleDom.unrender();
-        this._bottomDom.unrender();
-
-        super.unrender(true);
-    }
 
 
     // --------------------------------------------------------------
@@ -1375,7 +1370,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // --------------------------------------------------------------
     destruct(superCall) {
         if (!superCall) {
-
             // unrendern
             this.unrender(superCall);
 

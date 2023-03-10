@@ -1,7 +1,7 @@
 /* global kijs */
 
-window.sc = {};
-sc.Panel = class sc_Panel {
+window.home.sc = {};
+home.sc.Panel = class home_sc_Panel {
     
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -39,6 +39,7 @@ sc.Panel = class sc_Panel {
                     resizable: true,
                     scrollableY: 'auto',
                     width: 500,
+                    
                     defaults: {
                         xtype: 'kijs.gui.Element',
                         height: 20,
@@ -163,8 +164,7 @@ sc.Panel = class sc_Panel {
                         }
                     ],
 
-                    footerCaption: 'Meine FooterBar',
-                    footerStyle: { padding: '10px' },
+                    footerBarCaption: 'Meine FooterBar',
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',

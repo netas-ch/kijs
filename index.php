@@ -1,2 +1,2 @@
 <?php 
-header('Location: showcase');
+header('Location: home');
