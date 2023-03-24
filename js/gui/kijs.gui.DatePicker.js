@@ -318,18 +318,18 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         
-        this._headerBar.changeDisabled(val, callFromParent);
-        this._monthPicker.changeDisabled(val, callFromParent);
+        this._headerBar.changeDisabled(!!val, true);
+        this._monthPicker.changeDisabled(!!val, true);
         
-        this._todayBtn.changeDisabled(val, callFromParent);
-        this._emptyBtn.changeDisabled(val, callFromParent);
-        this._closeBtn.changeDisabled(val, callFromParent);
+        this._todayBtn.changeDisabled(!!val, true);
+        this._emptyBtn.changeDisabled(!!val, true);
+        this._closeBtn.changeDisabled(!!val, true);
         
         if (this._itemsDom) {
             kijs.Array.each(this._itemsDom, function(dom) {
-                dom.changeDisabled(val, callFromParent);
+                dom.changeDisabled(!!val, true);
             }, this);
         }
     }

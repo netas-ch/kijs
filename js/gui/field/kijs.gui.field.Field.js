@@ -506,21 +506,21 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         
         // Icons auch aktivieren/deaktivieren
-        this._spinIconEl.disabled = val;
-        this._errorIconEl.disabled = val;
-        this._helpIconEl.disabled = val;
+        this._spinIconEl.changeDisabled(!!val, true);
+        this._errorIconEl.changeDisabled(!!val, true);
+        this._helpIconEl.changeDisabled(!!val, true);
 
         if (this._spinBoxEl) {
-            this._spinBoxEl.disabled = val;
+            this._spinBoxEl.changeDisabled(!!val, true);
         }
 
         // Buttons auch aktivieren/deaktivieren
         const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
         kijs.Array.each(buttons, function(button) {
-            button.disabled = val;
+            button.changeDisabled(!!val, true);
         }, this);
     }
 

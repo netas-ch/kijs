@@ -345,7 +345,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         kijs.Array.each(this._elements, function(el) {
             el.changeDisabled(!!val, true);
         }, this);

@@ -140,7 +140,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         this._inputDom.disabled = !!val;
     }
     

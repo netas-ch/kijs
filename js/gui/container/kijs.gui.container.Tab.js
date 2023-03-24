@@ -142,7 +142,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         this._tabBarEl.changeDisabled(!!val, true);
     }
 

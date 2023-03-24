@@ -136,7 +136,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         this._inputDom.disabled = !!val;
     }
     

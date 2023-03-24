@@ -424,11 +424,11 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._btnUpDom.changeDisabled(val, callFromParent);
-        this._btnLeftDom.changeDisabled(val, callFromParent);
-        this._btnRightDom.changeDisabled(val, callFromParent);
-        this._btnDownDom.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
+        this._btnUpDom.changeDisabled(!!val, true);
+        this._btnLeftDom.changeDisabled(!!val, true);
+        this._btnRightDom.changeDisabled(!!val, true);
+        this._btnDownDom.changeDisabled(!!val, true);
     }
     
     // overwrite

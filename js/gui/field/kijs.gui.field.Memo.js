@@ -104,8 +104,8 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // --------------------------------------------------------------$
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._inputDom.disabled = !!val;
+        super.changeDisabled(!!val, callFromParent);
+        this._inputDom.changeDisabled(!!val, true);
     }
     
     // overwrite

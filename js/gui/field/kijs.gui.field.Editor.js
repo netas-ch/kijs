@@ -91,7 +91,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         this._aceEditor.setReadOnly(!!val);
     }
     

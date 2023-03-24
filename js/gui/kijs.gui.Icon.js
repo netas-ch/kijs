@@ -169,8 +169,8 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._dom.disabled = !!val;
+        super.changeDisabled(!!val, callFromParent);
+        this._dom.changeDisabled(!!val, true);
     }
     
 };

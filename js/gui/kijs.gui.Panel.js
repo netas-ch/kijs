@@ -456,8 +456,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._innerDisabled = !!val;
+        super.changeDisabled(!!val, callFromParent);
         this._headerBarEl.changeDisabled(!!val, true);
         this._headerEl.changeDisabled(!!val, true);
         this._footerEl.changeDisabled(!!val, true);

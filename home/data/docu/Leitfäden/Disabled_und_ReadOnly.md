@@ -28,6 +28,23 @@ disabled.
 
 Elemente die disabled sind, haben die CSS Klasse ```kijs-disabled```.  
 
+Bei Panels können die einzelnen Bereich einzeln disabled werden:
+
+| Bereich      | config            | Getter/Setter      |
+|--------------|-------------------|--------------------|
+| Header Bar   | headerBarDisabled | headerBar.disabled |
+| Header       | headerDisabled    | header.disabled    |
+| Container    | innerDisabled     | innerDisabled      |
+| Footer       | footerDisabled    | footer.disabled    |
+| Footer Bar   | footerBarDisabled | footerBar.disabled |
+| ganzes Panel | disabled          | disabled           |
+
+Die Funktion ```changeDisabled(val, callFromParent)``` sollte nie direkt 
+aufgerufen werden. Sie wird intern verwendet. Stattdessen ```disable``` verwenden.  
+
+Der Getter/Setter ```disabled``` sollte nie überschrieben werden. Stattdessen die Funktion
+```changeDisabled(val, callFromParent)``` überschreiben.  
+
 
 readOnly
 --------

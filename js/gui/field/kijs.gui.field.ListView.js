@@ -148,8 +148,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._listView.disabled = !!val || this._dom.clsHas('kijs-readonly');
+        super.changeDisabled(!!val, callFromParent);
+        this._listView.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), true);
     }
 
     /**

@@ -165,8 +165,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
-        this._inputDom.disabled = !!val;
+        super.changeDisabled(!!val, callFromParent);
+        this._inputDom.changeDisabled(!!val, true);
     }
     
     // overwrite

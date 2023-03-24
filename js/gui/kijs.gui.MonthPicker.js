@@ -248,26 +248,26 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         
-        this._headerBar.changeDisabled(val, callFromParent);
+        this._headerBar.changeDisabled(!!val, true);
         
-        this._currentBtn.changeDisabled(val, callFromParent);
-        this._emptyBtn.changeDisabled(val, callFromParent);
-        this._closeBtn.changeDisabled(val, callFromParent);
+        this._currentBtn.changeDisabled(!!val, true);
+        this._emptyBtn.changeDisabled(!!val, true);
+        this._closeBtn.changeDisabled(!!val, true);
         
-        this._yearsScrollUpBtn.changeDisabled(val, callFromParent);
-        this._yearsScrollDownBtn.changeDisabled(val, callFromParent);
+        this._yearsScrollUpBtn.changeDisabled(!!val, true);
+        this._yearsScrollDownBtn.changeDisabled(!!val, true);
         
         if (this._yearsDom) {
             kijs.Array.each(this._yearsDom, function(dom) {
-                dom.changeDisabled(val, callFromParent);
+                dom.changeDisabled(!!val, true);
             }, this);
         }
         
         if (this._monthsDom) {
             kijs.Array.each(this._monthsDom, function(dom) {
-                dom.changeDisabled(val, callFromParent);
+                dom.changeDisabled(!!val, true);
             }, this);
         }
     }

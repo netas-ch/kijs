@@ -465,7 +465,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         this._inputDom.disabled = !!val;
     }
     

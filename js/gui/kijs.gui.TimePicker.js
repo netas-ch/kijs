@@ -265,17 +265,17 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
+        super.changeDisabled(!!val, callFromParent);
         
-        this._headerBar.changeDisabled(val, callFromParent);
+        this._headerBar.changeDisabled(!!val, true);
         
-        this._inputHourDom.changeDisabled(val, callFromParent);
-        this._inputMinuteDom.changeDisabled(val, callFromParent);
-        this._inputSecondDom.changeDisabled(val, callFromParent);
+        this._inputHourDom.changeDisabled(!!val, true);
+        this._inputMinuteDom.changeDisabled(!!val, true);
+        this._inputSecondDom.changeDisabled(!!val, true);
         
-        this._nowBtn.changeDisabled(val, callFromParent);
-        this._emptyBtn.changeDisabled(val, callFromParent);
-        this._closeBtn.changeDisabled(val, callFromParent);
+        this._nowBtn.changeDisabled(!!val, true);
+        this._emptyBtn.changeDisabled(!!val, true);
+        this._closeBtn.changeDisabled(!!val, true);
         
         this._calculate();
     }
