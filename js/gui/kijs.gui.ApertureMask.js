@@ -18,6 +18,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         
@@ -51,6 +52,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         // window onResize überwachen
         kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
     }
+
 
 
     // --------------------------------------------------------------
@@ -111,6 +113,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -157,7 +160,6 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             this.unrender();
         }
     }
-    
     
     render() {
         this._updatePosition();
@@ -259,9 +261,11 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall=false) {
         if (!superCall) {
             // unrender

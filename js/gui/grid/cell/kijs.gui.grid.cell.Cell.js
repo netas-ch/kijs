@@ -9,6 +9,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -46,6 +47,8 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get cellIndex() { return this.row.grid.columnConfigs.indexOf(this._columnConfig); }
+    
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
@@ -65,8 +68,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     get row() { return this.parent; }
 
     get rowIndex() { return this.row.rowIndex; }
-    get cellIndex() { return this.row.grid.columnConfigs.indexOf(this._columnConfig); }
-
+    
     get value() { return this._dom.html; }
     set value(val) { this.setValue(val); }
 
@@ -86,15 +88,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
     
-    /**
-     * Setzt den Wert auf den Standardwert zurück
-     * @param {Boolean} [silent=false] true, falls kein change-event ausgelöst werden soll.
-     * @returns {undefined}
-     */
-    resetValue(silent=false) {
-        this.setValue(this.originalValue, silent);
-    }
-
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -123,6 +116,15 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
+    }
+
+    /**
+     * Setzt den Wert auf den Standardwert zurück
+     * @param {Boolean} [silent=false] true, falls kein change-event ausgelöst werden soll.
+     * @returns {undefined}
+     */
+    resetValue(silent=false) {
+        this.setValue(this.originalValue, silent);
     }
 
     /**
@@ -359,6 +361,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
 

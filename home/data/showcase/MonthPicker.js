@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.MonthPicker = class home_sc_MonthPicker {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,12 +13,14 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.MonthPicker',
+            cls: 'kijs-flexform',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +28,11 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.MonthPicker'
                 },
@@ -37,7 +40,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit minValue und maxValue:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
                     minValue: kijs.Date.addDays(new Date(), -62),
@@ -57,7 +60,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ohne headerBar:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
                     value: new Date(),
@@ -68,7 +71,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.TimePicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 }
             ]
         });
@@ -79,7 +82,25 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
     run() {
 
     }
-
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -87,4 +108,5 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
     destruct() {
         this._content = null;
     }
+    
 };

@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Number
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.grid.cell.Cell {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -52,10 +48,10 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
     }
 
 
+
     // --------------------------------------------------------------
     // GETTER/SETTER
     // --------------------------------------------------------------
-
     get numberStyles() { return this._numberStyles; }
     set numberStyles(val) {
         if (!kijs.isArray(val)) {
@@ -67,10 +63,11 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
     get value() { return this._numValue; }
     set value(val) { super.value = val; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     // overwrite
     setValue(value, silent=false, markDirty=true, updateDataRow=true) {
         let num = parseFloat(value);
@@ -83,7 +80,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         super.setValue(this._numValue, silent, markDirty, updateDataRow);
     }
 
-    // PRIVATE
+
+    // PROTECTED
     // Overwrite
     _getEditorArgs() {
         let eArgs = super._getEditorArgs();
@@ -95,6 +93,30 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         eArgs.thousandsSeparator = this._thousandsSeparator;
 
         return eArgs;
+    }
+    
+    /**
+     * Gibt den Style für eine Nummer zurück
+     * @param {Number} number
+     * @returns {Object}
+     */
+    _getNumberStyle(number) {
+        let style = {};
+
+        kijs.Array.each(this._numberStyles, function(numberStyle) {
+            let from = kijs.isNumber(numberStyle.from) ? numberStyle.from : Number.MIN_SAFE_INTEGER,
+                to = kijs.isNumber(numberStyle.to) ? numberStyle.to : Number.MAX_SAFE_INTEGER;
+
+            if (number >= from && number <= to) {
+                for (let key in numberStyle) {
+                    if (key !== 'from' && key !== 'to') {
+                        style[key] = numberStyle[key];
+                    }
+                }
+            }
+        }, this);
+
+        return style;
     }
 
     /**
@@ -122,27 +144,4 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         }
     }
 
-    /**
-     * Gibt den Style für eine Nummer zurück
-     * @param {Number} number
-     * @returns {Object}
-     */
-    _getNumberStyle(number) {
-        let style = {};
-
-        kijs.Array.each(this._numberStyles, function(numberStyle) {
-            let from = kijs.isNumber(numberStyle.from) ? numberStyle.from : Number.MIN_SAFE_INTEGER,
-                to = kijs.isNumber(numberStyle.to) ? numberStyle.to : Number.MAX_SAFE_INTEGER;
-
-            if (number >= from && number <= to) {
-                for (let key in numberStyle) {
-                    if (key !== 'from' && key !== 'to') {
-                        style[key] = numberStyle[key];
-                    }
-                }
-            }
-        }, this);
-
-        return style;
-    }
 };

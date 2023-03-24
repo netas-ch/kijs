@@ -9,6 +9,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -262,15 +263,31 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     // PRIVATE
     // LISTENERS
     #onCornerTipDestruct(e) {
-        this.remove(e.element);
+        if (e.element) {
+            this.remove(e.element, true, true);
+        }
     }
 
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct() {
-        super.destruct();
-    }
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
 
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+
+        // Elemente/DOM-Objekte entladen
+
+        // Variablen (Objekte/Arrays) leeren
+
+        // Basisklasse entladen
+        super.destruct(true);
+    }
+    
 };

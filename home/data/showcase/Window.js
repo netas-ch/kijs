@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Window = class home_sc_Window {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.sc.Window = class home_sc_Window {
         this._win1 = null;
         this._win2 = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -27,6 +29,7 @@ home.sc.Window = class home_sc_Window {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Button',
@@ -47,7 +50,7 @@ home.sc.Window = class home_sc_Window {
         this._win1 = new kijs.gui.Window({
             caption: 'Mein Fenster',
             iconCls: 'icoWizard16',
-            modal: true,
+            //modal: true,
             width: 450,
             defaults: {
                 xtype: 'kijs.gui.Element',
@@ -84,6 +87,15 @@ home.sc.Window = class home_sc_Window {
 
             headerElements: [
                 {
+                    xtype: 'kijs.gui.field.Switch',
+                    label: 'modal',
+                    on: {
+                        change: function(e) {
+                            this._win1.modal = !!e.element.value;
+                        },
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     iconCls: 'icoWizard16',
                     caption: 'Toggle Text',
@@ -246,14 +258,62 @@ home.sc.Window = class home_sc_Window {
         
         this._win2 = new kijs.gui.Window({
             caption: 'Mein 2. Fenster',
+            headerElements:[
+                {
+                    xtype: 'kijs.gui.field.Switch',
+                    label: 'modal',
+                    on: {
+                        change: function(e) {
+                            this._win2.modal = !!e.element.value;
+                        },
+                        context: this
+                    }
+                }
+            ],
             html: 'Gugus',
             //target: testCont,
-            modal: true,
+            //modal: true,
             width: 400,
             height: 300
         });
         this._win2.show();
     }
+
+
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        if (this._win1) {
+                            this._win1.disabled = !!e.element.value;
+                        }
+                        if (this._win2) {
+                            this._win2.disabled = !!e.element.value;
+                        }
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'Top Win Caption',
+                on: {
+                    click: function(e) {
+                        const lm = new kijs.gui.LayerManager();
+                        const win = lm.getActive(document.body);
+                        if (win) {
+                            kijs.gui.CornerTipContainer.show('Test', win.headerBar.html);
+                        }
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+
 
 
     // --------------------------------------------------------------
@@ -272,4 +332,5 @@ home.sc.Window = class home_sc_Window {
         this._win2 = null;
         this._content = null;
     }
+    
 };

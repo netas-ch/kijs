@@ -140,10 +140,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
         this._cls = [];
+        this._disabledInitial = false;
         this._disableEnterBubbeling = false;
         this._disableEscBubbeling = false;
         this._html = undefined;
@@ -193,7 +195,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             cls: { fn: 'function', target: this.clsAdd },
-            disabled: true,
             disableEnterBubbeling: { target: 'disableEnterBubbeling' },
             disableEscBubbeling: { target: 'disableEscBubbeling' },
             eventMap: { fn: 'assign' },
@@ -207,7 +208,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             nodeTagName: true,
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
-            tooltip: { target: 'tooltip' }
+            tooltip: { target: 'tooltip' },
+            
+            disabled: { prio: 2000, target: 'disabled' }
         };
 
         // Mapping das aussagt, welche DOM-Node-Events bei welchem kijs-Event abgefragt werden sollen
@@ -286,17 +289,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get disabled() {
-        return !!this.nodeAttributeGet('disabled');
-    }
+    // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
+    get disabled() { return !!this.clsHas('kijs-disabled'); }
     set disabled(val) {
-        this.nodeAttributeSet('disabled', !!val);
-        if (this._tooltip) {
-            this._tooltip.disabled = !!val;
-        }
+        this.changeDisabled(val, false);
     }
 
     /**
@@ -795,7 +795,40 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         kijs.Object.assignConfig(this, config, this._configMap);
     }
 
-
+    /**
+     * Ändert die Eigenschaft disabled.
+     * Sollte nicht direkt aufgerufen werden.
+     * Bitte den Setter disabled verwenden.
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled 
+     *                                          des Elternelements kommt.
+     * @returns {undefined}
+     */
+    changeDisabled(val, callFromParent) {
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // disabled wieder der vorherige Wert zugewiesen.
+        if (callFromParent) {
+            if (!val) {
+                val = !!this._disabledInitial;
+            }
+            
+        } else {
+            this._disabledInitial = !!val;
+            
+        }
+        
+        this.nodeAttributeSet('disabled', !!val);
+        if (this._tooltip) {
+            this._tooltip.disabled = !!val;
+        }
+        
+        if (val) {
+            this.clsAdd('kijs-disabled');
+        } else {
+            this.clsRemove('kijs-disabled');
+        }
+    }
+    
     /**
      * Fügt eine oder mehrere CSS-Klassen hinzu
      * @param {String|Array} cls
@@ -1193,7 +1226,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                     // Workaround vorhanden?
                     switch (nodeEventName) {
                         case 'scrollend':
-                            console.log('scrollEnd Workaround');
                             // nodeEvent im eventMap überschreiben
                             this._eventMap[kijsEvent].nodeEventName = 'scroll';
                             
@@ -1313,6 +1345,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct() {
         // Unrender
         this.unrender();
@@ -1336,4 +1369,5 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // Basisklasse entladen
         super.destruct();
     }
+    
 };

@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Date
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.cell.Cell {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -46,6 +42,8 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
         }
     }
 
+
+    // PROTECTED
     // Overwrite
     _getEditorArgs() {
         let eArgs = super._getEditorArgs();
@@ -70,4 +68,5 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
             this._dom.html = value;
         }
     }
+    
 };

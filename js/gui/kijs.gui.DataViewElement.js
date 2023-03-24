@@ -9,6 +9,7 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -31,7 +32,6 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             dataRow: true,
-            disabled: { target: 'disabled', context: this._dom },
             index: true,
             selected: { target: 'selected' }
         });
@@ -44,14 +44,12 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get dataRow() { return this._dataRow; }
     set dataRow(val) { this._dataRow = val; }
-
-    get disabled() { return this._dom.disabled; }
-    set disabled(val) { this._dom.disabled = val; }
 
     get index() { return this._index; }
     set index(val) { this._index = val; }
@@ -65,9 +63,12 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
         }
     }
 
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -83,4 +84,5 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

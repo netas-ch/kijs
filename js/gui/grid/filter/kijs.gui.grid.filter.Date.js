@@ -9,6 +9,7 @@ kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.gri
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 

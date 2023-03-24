@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.DropZone = class home_sc_DropZone {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.DropZone = class home_sc_DropZone {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.DropZone = class home_sc_DropZone {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -119,6 +122,23 @@ home.sc.DropZone = class home_sc_DropZone {
     run() {
 
     }
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
 
         
 
@@ -128,4 +148,5 @@ home.sc.DropZone = class home_sc_DropZone {
     destruct() {
         this._content = null;
     }
+    
 };

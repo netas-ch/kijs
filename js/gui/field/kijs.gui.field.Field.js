@@ -45,6 +45,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         
@@ -99,11 +100,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._spinBoxEl = null;
         
-        // Bei disableFlex=true, wird der restliche Platz mit diesem leeren DIV gefüllt
-        this._spacerDom = new kijs.gui.Dom({
-            cls: 'kiis-spacer'
-        });   
-        
         this._maxLength = null;
         this._minLength = null;
         this._required = false;
@@ -111,6 +107,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._originalValue = null;
         this._validationFn = null;
         this._validationFnContext = null;
+        this._validationRegExps = [];
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
@@ -123,8 +120,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
-            disabled: { target: 'disabled' },           // deaktiviert das Feld mit den Buttons (siehe auch readOnly)
-            
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             
             label: { target: 'html', context: this._labelDom, prio: 2 },
@@ -167,6 +162,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
             validationFn: true,
             validationFnContext: true,
+            validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this },
 
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
@@ -200,30 +196,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
-    get disabled() { return this._dom.clsHas('kijs-disabled'); }
-    set disabled(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-disabled');
-        } else {
-            this._dom.clsRemove('kijs-disabled');
-        }
-
-        // Icons auch aktivieren/deaktivieren
-        this._spinIconEl.disabled = val;
-        this._errorIconEl.disabled = val;
-        this._helpIconEl.disabled = val;
-
-        if (this._spinBoxEl && 'disabled' in this._spinBoxEl) {
-            this._spinBoxEl.disabled = val;
-        }
-
-        // Buttons auch aktivieren/deaktivieren
-        const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
-        kijs.Array.each(buttons, function(button) {
-            button.disabled = val;
-        }, this);
-    }
-    
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -532,6 +504,26 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        
+        // Icons auch aktivieren/deaktivieren
+        this._spinIconEl.disabled = val;
+        this._errorIconEl.disabled = val;
+        this._helpIconEl.disabled = val;
+
+        if (this._spinBoxEl) {
+            this._spinBoxEl.disabled = val;
+        }
+
+        // Buttons auch aktivieren/deaktivieren
+        const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
+        kijs.Array.each(buttons, function(button) {
+            button.disabled = val;
+        }, this);
+    }
+
     /**
      * Fügt Fehler aus einer externen Validation hinzu
      * @param {String|Array} errors
@@ -551,6 +543,39 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._displayErrors();
     }
 
+    /**
+     * Fügt einen oder mehrere regulären Ausdruck zum validieren hinzu
+     * @param {Object|String|Array} regExps Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Vierstellige Zahl erforderlich' }
+     * @returns {undefined}
+     */
+    addValidationRegExp(regExps) {
+        if (!kijs.isArray(regExps)) {
+            regExps = [regExps];
+        }
+        
+        kijs.Array.each(regExps, function(regExp) {
+            let ok = true;
+            
+            if (typeof regExp !== 'object') {
+                ok = false;
+            }
+
+            if (ok) {
+                if (kijs.isRegExp(regExp.regExp)) {
+                    regExp.regExp = regExp.regExp.toString();
+                } else if (kijs.isString(regExp.regExp)) {
+                    ok = false;
+                }
+            }
+            
+            if (ok) {
+                this._validationRegExps.push(regExp);
+            } else {
+                throw new kijs.Error(`"validationRegExp" is not valid.`);
+            }
+        }, this);
+    }
+    
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} alsoSetIfNoTabIndex
@@ -609,11 +634,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Error icon rendern (kijs.gui.Icon)
         this._errorIconEl.renderTo(this._dom.node);
         
-        // Bei disableFlex=true, wird der Restliche Platz mit diesem leeren DIV gefüllt
-        if (this.disableFlex) {
-            this._spacerDom.renderTo(this._dom.node);
-        }
-        
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -666,7 +686,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl.unrender();
         this._errorIconEl.unrender();
         this._helpIconEl.unrender();
-        this._spacerDom.unrender();
         super.unrender(true);
     }
 
@@ -705,13 +724,28 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    // Konventiert einen String in einen Regulären Ausdruck (RegExp)
+    _stringToRegExp(str) {
+        if (str[0] !== '/') {
+            return false;
+        }
+        let i = str.lastIndexOf('/');
+        if (i <= 0) {
+            return false;
+        }
+        try {
+            return new RegExp(str.slice(1, i), str.slice(i+1));
+        } catch (error) {
+            return false;
+        }
+    }
+    
    /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
      * @returns {undefined}
      */
     _validationRules(value) {
-
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -732,7 +766,25 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this._errors.push(kijs.getText('Dieses Feld darf maximal %1 Zeichen enthalten', '', this._maxLength));
             }
         }
-
+        
+        // validationRegExps
+        if (this._validationRegExps) {
+            if (value !== null && value.toString() !== '') {
+                kijs.Array.each(this._validationRegExps, function(regExp) {
+                    let r = this._stringToRegExp(regExp.regExp);
+                    if (!r.exec(value.toString())) {
+                        if (!kijs.isEmpty(regExp.msg)) {
+                            this._errors.push(regExp.msg);
+                        } else {
+                            this._errors.push(kijs.getText('Dieses Feld hat einen ungültigen Wert'));
+                        }
+                        return;
+                    }
+                }, this);
+            }
+        }
+        
+        // validationFn
         if (kijs.isFunction(this._validationFn)) {
             let error = this._validationFn.call(this._validationFnContext || this, value);
             if (error) {
@@ -767,6 +819,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern
@@ -795,9 +848,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._helpIconEl) {
             this._helpIconEl.destruct();
         }
-        if (this._spacerDom) {
-            this._spacerDom.destruct();
-        }
 
         // Variablen (Objekte/Arrays) leeren
         this._errors = null;
@@ -807,10 +857,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
-        this._spacerDom = null;
         this._validationFn = null;
         this._validationFnContext = null;
-
+        this._validationRegExps = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

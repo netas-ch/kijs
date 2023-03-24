@@ -3,6 +3,7 @@
 window.home.test = {};
 home.test.Layout = class home_test_Layout {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.test.Layout = class home_test_Layout {
         
         this.__testState = 0;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -27,31 +29,7 @@ home.test.Layout = class home_test_Layout {
             innerStyle: {
                 padding: '10px'
             },
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'CSS-Klasse für Panel:',
-                    cls: 'kijs-inline',
-                    value: 'none',
-                    data: [
-                        { caption: 'keine', value: 'none' },
-                        { caption: 'kijs-flexRow', value: 'kijs-flexRow' },
-                        { caption: 'kijs-flexRowLine', value: 'kijs-flexRowLine' },
-                        { caption: 'kijs-flexCol', value: 'kijs-flexCol' },
-                        { caption: 'kijs-flexColLine', value: 'kijs-flexColLine' }
-                    ],
-                    on: {
-                        change: function(e) {
-                            let panel = this._content.down('myPanel');
-                            panel.dom.clsRemove(['kijs-flexRow', 'kijs-flexRowLine', 'kijs-flexCol', 'kijs-flexColLine']);
-                            if (e.element.value !== 'none') {
-                                panel.dom.clsAdd(e.element.value);
-                            }
-                        },
-                        context: this
-                    }
-                }
-            ],
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -94,10 +72,52 @@ home.test.Layout = class home_test_Layout {
     }
     
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'CSS-Klasse für Panel:',
+                value: 'kijs-flexform',
+                width: 230,
+                data: [
+                    { caption: 'keine', value: 'none' },
+                    { caption: 'kijs-flexrow', value: 'kijs-flexrow' },
+                    { caption: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
+                    { caption: 'kijs-flexform', value: 'kijs-flexform' },
+                    { caption: 'kijs-flexline', value: 'kijs-flexline' }
+                ],
+                on: {
+                    change: function(e) {
+                        let panel = this._content.down('myPanel');
+                        panel.dom.clsRemove(['kijs-flexrow', 'kijs-flexcolumn', 
+                            'kijs-flexform', 'kijs-flexline']);
+                        if (e.element.value !== 'none') {
+                            panel.dom.clsAdd(e.element.value);
+                        }
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

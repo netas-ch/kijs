@@ -9,6 +9,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -56,6 +57,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         // Events
         this.on('afterLoad', this.#onAfterLoad, this);
     }
+
 
 
     // --------------------------------------------------------------
@@ -265,6 +267,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

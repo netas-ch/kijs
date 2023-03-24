@@ -24,6 +24,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -35,7 +36,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._modalMaskEl = null;
 
         this._draggable = false;
-        //this._focusDelay = 300;    // Delay zwischen dem rendern und dem setzen vom Fokus
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
 
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
@@ -58,7 +58,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             draggable: { target: 'draggable' },
-            //focusDelay: true,
             modal: { target: 'modal' },     // Soll das Fenster modal geöffnet werden (alles Andere wird mit einer halbtransparenten Maske verdeckt)?
             resizeDelay: true,
             target: { target: 'target' },
@@ -82,6 +81,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
 
     }
+    
 
 
     // --------------------------------------------------------------
@@ -99,9 +99,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._draggable = !!val;
     }
 
-    //get focusDelay() { return this._focusDelay; }
-    //set focusDelay(val) { this._focusDelay = val; }
-
     get modal() { return !kijs.isEmpty(this._modalMaskEl); }
     set modal(val) {
         if (val) {
@@ -110,6 +107,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
                     target: this.target,
                     targetDomProperty: this.targetDomProperty
                 });
+                if (this.isRendered) {
+                    this.show();
+                }
             }
         } else {
             if (!kijs.isEmpty(this._modalMaskEl)) {
@@ -198,6 +198,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -227,7 +228,29 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             this._raiseAfterResizeEvent(true);
         }
     }
-
+    
+    // overwrite
+    close(preventDestruct, preventEvents, superCall) {
+        if (!superCall) {
+            if (!preventEvents) {
+                // beforeClose Event. Bei Rückgabe=false -> abbrechen
+                if (this.raiseEvent('beforeClose') === false) {
+                    return;
+                }
+            }
+        }
+        
+        if (preventDestruct) {
+            this.unrender();
+        } else {
+            this.destruct();
+        }
+        
+        if (!preventEvents) {
+            this.raiseEvent('close');
+        }
+    }
+    
     // overwrite
     restore() {
         if (!this.maximized) {
@@ -267,7 +290,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             }
             new kijs.gui.LayerManager().setActive(this._modalMaskEl);
         }
-
+        
         // Fenster rendern und anzeigen
         if (!this.isRendered) {
             this.renderTo(this.parentNode);
@@ -498,9 +521,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -544,4 +569,5 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Basisklasse auch entladen
         super.destruct(true);
     }
+    
 };

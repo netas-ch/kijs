@@ -35,10 +35,11 @@ kijs.Navigator = class kijs_Navigator {
 
     static get getParams() { return kijs.Navigator.getGetParams(); }
 
+
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-
     static getBrowserInfo(userAgent=null) {
         let ua = userAgent || window.navigator.userAgent;
 
@@ -208,11 +209,13 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Fragt alle 'GET' Parameter in der URL ab.
+     * Fragt 'GET' Parameter aus der URL ab.
+     * @param {String|Null} parameterName Null=alle
      */
     static getGetParameter(parameterName) {
         const params = {};
-        if ('search' in window.location && window.location.search && window.location.search.length > 1) {
+        if ('search' in window.location && window.location.search && 
+                window.location.search.length > 1) {
             const pt = window.location.search.substr(1).split('&');
             for (let i=0; i<pt.length; i++) {
                 let tmp = pt[i].split('='), key, val;
@@ -254,9 +257,17 @@ kijs.Navigator = class kijs_Navigator {
                 let lang = kijs.toString(navigator.languages[i]);
                 if (lang.match(/[a-z]{2,6}\-[a-z]{2,6}/i)) {
                     let tmp = lang.split('-');
-                    languages.push({languageId: tmp[0].toLowerCase(), localization: tmp[1].toLowerCase(), prio: i+1});
+                    languages.push({
+                        languageId: tmp[0].toLowerCase(), 
+                        localization: tmp[1].toLowerCase(), 
+                        prio: i+1
+                    });
                 } else {
-                    languages.push({languageId: lang.toLowerCase(), localization: null, prio: i+1});
+                    languages.push({
+                        languageId: lang.toLowerCase(), 
+                        localization: null, 
+                        prio: i+1
+                    });
                 }
             }
         }
@@ -264,8 +275,10 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Öffnet einen Link (http, tel, mailto, etc.) in einem neuen Fenster. Achtung nur nach Klick ausführen, sonst kommt der Popup-Blocker!
-     * Wenn ein tel oder mailto Link ein anderes Programm öffnet, und das Fenster blank bleibt, wird es automatisch wieder geschlossen.
+     * Öffnet einen Link (http, tel, mailto, etc.) in einem neuen Fenster. 
+     * Achtung nur nach Klick ausführen, sonst kommt der Popup-Blocker!
+     * Wenn ein tel oder mailto Link ein anderes Programm öffnet, und das 
+     * Fenster blank bleibt, wird es automatisch wieder geschlossen.
      * @param {String} href
      * @param {String|null} target
      * @returns {WindowProxy|null}
@@ -282,6 +295,8 @@ kijs.Navigator = class kijs_Navigator {
         return handle;
     }
 
+
+    // PROTECTED
     static _browserVersion(ua, browser) {
         let re = new RegExp(browser + '/([0-9\\.]+)', 'i');
         let match = ua.match(re);
@@ -291,4 +306,5 @@ kijs.Navigator = class kijs_Navigator {
         }
         return '';
     }
+    
 };

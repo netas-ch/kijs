@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Icon
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.cell.Cell {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -47,13 +43,12 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get icon() { return this._icon; }
-
-    get originalIcon() { return this._originalIcon; }
 
     set iconCls(val) { this._addIconCls(val); }
     get iconCls() { return this._iconCls; }
@@ -63,15 +58,16 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
 
     set isDirty(val) {}
     get isDirty() { return false; }
+    
+    get originalIcon() { return this._originalIcon; }
+    
+    
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-
     // Overwrite
-
-     loadFromDataRow() {
+    loadFromDataRow() {
         super.loadFromDataRow();
 
         if (this.row && this.row.dataRow) {
@@ -108,6 +104,26 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         }
     }
 
+
+    // PROTECTED
+    /**
+     * Icon Klasse hinzufügen
+     * @param val
+     * @private
+     */
+    _addIconCls(val) {
+        if (!kijs.isString(val) && val) {
+            throw new kijs.Error(`config "iconCls" is not a string`);
+        }
+        if (this._iconCls) {
+            this._dom.clsRemove(this._iconCls);
+        }
+        this._iconCls = val;
+        if (this._iconCls) {
+            this._dom.clsAdd(this._iconCls);
+        }
+    }
+    
     /**
      * Icon rendern
      * @param {String|Number} value
@@ -142,21 +158,4 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         this._dom.html = kijs.isInteger(value) ? String.fromCodePoint(value) : '';
     }
 
-    /**
-     * Icon Klasse hinzufügen
-     * @param val
-     * @private
-     */
-    _addIconCls(val) {
-        if (!kijs.isString(val) && val) {
-            throw new kijs.Error(`config "iconCls" is not a string`);
-        }
-        if (this._iconCls) {
-            this._dom.clsRemove(this._iconCls);
-        }
-        this._iconCls = val;
-        if (this._iconCls) {
-            this._dom.clsAdd(this._iconCls);
-        }
-    }
 };

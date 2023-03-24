@@ -1,5 +1,17 @@
 /* CSS für Home-App dataResources */
 
+/* LIGHT Farbeschema*/
+/* ---------------- */
+:root {
+    --paperBkgrnd: url(../img/paperBkgrnd.png);
+}
+
+/* DARK Farbeschema*/
+/* --------------- */
+:root[data-theme='dark'] {
+    --paperBkgrnd: url(../img/paperBkgrnd_dark.png);
+}
+
 /* Icons */
 .icoWizard16 {
     background-image: url('../img/icoWizard16.png');
@@ -19,6 +31,6 @@
 
 /* Paper Background */
 .paperBkgrnd {
-    background: url('../img/paperBkgrnd.png');
+    background: var(--paperBkgrnd);
     background-repeat: repeat;
 }

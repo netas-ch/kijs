@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Button = class home_sc_Button {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -14,6 +15,7 @@ home.sc.Button = class home_sc_Button {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -21,20 +23,18 @@ home.sc.Button = class home_sc_Button {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Button',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
             innerStyle: {
                 padding: '10px'
             },
-            defaults:{
-                style: { marginBottom: '4px' }
-            },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Buttons:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Buttons:'
                 },
                 
                 {
@@ -50,8 +50,10 @@ home.sc.Button = class home_sc_Button {
 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: '2 Icons',
-                    iconMap:'kijs.iconMap.Fa.house'
+                    caption: '2 Icons + disableFlex:false',
+                    iconMap:'kijs.iconMap.Fa.house',
+                    icon2Map:'kijs.iconMap.Fa.user',
+                    disableFlex: false
                 },
                 
                 {
@@ -110,7 +112,26 @@ home.sc.Button = class home_sc_Button {
                     tooltip: 'click to disable',
                     on: {
                         click: function() {
-                            this.disabled = !this.disabled;
+                            this.disabled = true;
+                            
+                            kijs.defer(function(){
+                                this.disabled = false;
+                            }, 1000, this);
+                        }
+                    }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Hide',
+                    tooltip: 'click to set visible=false',
+                    on: {
+                        click: function() {
+                            this.visible = false;
+                            
+                            kijs.defer(function(){
+                                this.visible = true;
+                            }, 1000, this);
                         }
                     }
                 },
@@ -191,6 +212,20 @@ home.sc.Button = class home_sc_Button {
                             this.icon.dom.clsToggle('kijs-spin');
                         }
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'smallPaddings: false',
+                    smallPaddings: false
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'smallPaddings: true',
+                    smallPaddings: true
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: "smallPaddings: 'auto'",
+                    smallPaddings: 'auto'
                 }
             ]
         });
@@ -201,7 +236,43 @@ home.sc.Button = class home_sc_Button {
     run() {
 
     }
-
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disableFlex',
+                value: true,
+                on: {
+                    change: function(e) {
+                        this._updateProperty('disableFlex', e.element.value);
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    _updateProperty(propertyName, value) {
+        kijs.Array.each(this._content.elements, function(el) {
+            if (el instanceof kijs.gui.Button) {
+                el[propertyName] = value;
+            }
+        }, this);
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -209,4 +280,5 @@ home.sc.Button = class home_sc_Button {
     destruct() {
         this._content = null;
     }
+    
 };

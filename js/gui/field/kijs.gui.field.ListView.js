@@ -9,6 +9,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -76,12 +77,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     set data(val) { this._listView.data = val; }
 
     // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        this._listView.disabled = val || this._dom.clsHas('kijs-readonly');
-    }
-
     get elements() { return this._listView.elements; }
 
     get facadeFnArgs() { return this._listView.facadeFnArgs; }
@@ -149,6 +144,12 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      */
     addData(data) {
         this._listView.addData(data);
+    }
+    
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._listView.disabled = !!val || this._dom.clsHas('kijs-readonly');
     }
 
     /**
@@ -236,6 +237,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

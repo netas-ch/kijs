@@ -1,5 +1,26 @@
 /* CSS für Home-App */
 
+
+/* LIGHT Farbeschema*/
+/* ---------------- */
+:root {
+    --tabHomeBackground: #fff url(background.jpg) scroll no-repeat 0% 0%;
+}
+
+/* DARK Farbeschema*/
+/* --------------- */
+:root[data-theme='dark'] {
+    --tabHomeBackground: #262626 url(background_dark.jpg) scroll no-repeat 0% 0%;
+}
+
+/* Home Panel */
+.tabHome {
+    background: var(--tabHomeBackground);
+}
+.tabHome a {
+    color: var(--grey8);
+}
+
 /* Icons */
 .icoKijs16 {
     background-image: url('../../favicon.ico');

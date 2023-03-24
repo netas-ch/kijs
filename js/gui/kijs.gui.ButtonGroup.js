@@ -9,13 +9,14 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
-
+        
         this._columns = 1;
         this._rowSizes = [];
         this._colSizes = [];
-
+        
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
             nodeTagName: 'span'
@@ -47,6 +48,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -94,6 +96,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -124,6 +127,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         this._captionDom.unrender();
         super.unrender(true);
     }
+
 
     // PROTECTED
     _getTableMatrix() {
@@ -180,9 +184,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         return matrix;
     }
 
-
-
-    // OVERWRITE
+    // overwrite
     _renderElements() {
         let matrix = this._getTableMatrix();
 
@@ -245,9 +247,11 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern
@@ -268,4 +272,5 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

@@ -9,6 +9,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -72,6 +73,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -198,6 +200,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         this._autoWidth = kijs.isNumeric(val) ? false : true;
         super.width = val;
     }
+
 
 
     // --------------------------------------------------------------
@@ -545,6 +548,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -567,4 +571,5 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

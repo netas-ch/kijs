@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Tooltip = class home_sc_Tooltip {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -111,10 +114,29 @@ home.sc.Tooltip = class home_sc_Tooltip {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

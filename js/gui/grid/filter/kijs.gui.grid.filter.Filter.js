@@ -9,6 +9,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -73,6 +74,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         if (this._checkboxFilterGroup === null) {
             this._checkboxFilterGroup = new kijs.gui.field.CheckboxGroup({
                 cls: 'kijs-filter-checkboxgroup',
+                disableFlex: false,
                 on: {
                     change: this._applyToGrid,
                     context: this
@@ -115,7 +117,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._searchContainer.renderTo(this._dom.node);
         this._removeFilterIcon.renderTo(this._dom.node);
 
-        this._menuButton.menu.removeAll();
+        this._menuButton.menu.removeAll(true, true);
         this._menuButton.menu.add(this._getMenuButtons());
         this._menuButton.renderTo(this._removeFilterIcon.node);
 
@@ -138,7 +140,6 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         }
 
         // muss in abgeleiteter Klasse überschrieben werden
-
         this._applyToGrid();
     }
 
@@ -167,27 +168,29 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     }
 
     _getDefaultMenuButtons() {
-        return [{
-            caption : kijs.getText('Filter löschen'),
-            iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
-            on: {
-                click: function() {
-                    this.reset();
-                    this._menuButton.menu.close();
-                },
-                context: this
+        return [
+            {
+                caption : kijs.getText('Filter löschen'),
+                iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
+                on: {
+                    click: function() {
+                        this.reset();
+                        this._menuButton.menu.close();
+                    },
+                    context: this
+                }
+            },{
+                caption : kijs.getText('Alle Filter löschen'),
+                iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
+                on: {
+                    click: function() {
+                        this.parent.reset();
+                        this._menuButton.menu.close();
+                    },
+                    context: this
+                }
             }
-        },{
-            caption : kijs.getText('Alle Filter löschen'),
-            iconMap: 'kijs.iconMap.Fa.filter-circle-xmark',
-            on: {
-                click: function() {
-                    this.parent.reset();
-                    this._menuButton.menu.close();
-                },
-                context: this
-            }
-        }];
+        ];
     }
 
     _getMenuButtons() {
@@ -220,4 +223,5 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

@@ -9,6 +9,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -229,6 +230,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

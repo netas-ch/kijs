@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -57,4 +53,5 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
             format: this._format
         };
     }
+    
 };

@@ -54,6 +54,7 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 

@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Splitter = class home_sc_Splitter {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.Splitter = class home_sc_Splitter {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -22,6 +24,7 @@ home.sc.Splitter = class home_sc_Splitter {
             style: {
                 flex: 1
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -102,10 +105,29 @@ home.sc.Splitter = class home_sc_Splitter {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

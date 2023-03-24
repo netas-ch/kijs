@@ -9,6 +9,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -134,4 +135,5 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

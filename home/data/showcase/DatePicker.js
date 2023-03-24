@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.DatePicker = class home_sc_DatePicker {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -19,17 +21,18 @@ home.sc.DatePicker = class home_sc_DatePicker {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DatePicker',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.DatePicker'
                 },
@@ -37,7 +40,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode:  \'date\' mit minValue und maxValue:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
                     mode: 'date',
@@ -48,7 +51,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode:  \'week\':',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
                     mode: 'week'
@@ -57,7 +60,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode:  \'range\':',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
                     mode: 'range'
@@ -65,8 +68,17 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.Element',
+                    html: 'weekNumbersHide: true:',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.DatePicker',
+                    weekNumbersHide: true
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
                     html: '<b>Siehe auch:</b><br>kijs.gui.TimePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 }
             ]
         });
@@ -77,6 +89,24 @@ home.sc.DatePicker = class home_sc_DatePicker {
     run() {
 
     }
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
 
 
     // --------------------------------------------------------------
@@ -85,4 +115,5 @@ home.sc.DatePicker = class home_sc_DatePicker {
     destruct() {
         this._content = null;
     }
+    
 };

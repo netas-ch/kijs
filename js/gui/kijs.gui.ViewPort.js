@@ -9,6 +9,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -42,9 +43,13 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get disableContextMenu() {
+        return kijs.Dom.hasEventListener('contextmenu', document.body, this);
+    }
     set disableContextMenu(val) {
         if (val === true) {
             // Standardmässig öffnet der Browser das Kontextmenu
@@ -59,11 +64,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
            throw new kijs.Error('invalid value for property "disableContextMenu" in kijs.gui.ViewPort');
         }
     }
-
-    get disableContextMenu() {
-        return kijs.Dom.hasEventListener('contextmenu', document.body, this);
-    }
     
+    get disableDrop() {
+        return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
+    }
     set disableDrop(val) {
         if (val === true) {
             // Standardmässig öffnet der Browser das Dokument, wenn
@@ -84,15 +88,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
            throw new kijs.Error('invalid value for property "disableDrop" in kijs.gui.ViewPort');
         }
     }
-
-    get disableDrop() {
-        return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
-    }
     
     get theme() {
         return kijs.Dom.themeGet();
     }
-    
     // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
     set theme(val) {
         kijs.Dom.themeSet(val);
@@ -100,6 +99,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             this.render();
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -126,9 +126,11 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

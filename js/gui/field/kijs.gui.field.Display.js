@@ -48,24 +48,21 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
+        this._value = '';
+        this._valueTrim = true;
+        this._clickableLinks = false;
+        
         this._inputDom = new kijs.gui.Dom({
-            htmlDisplayType: 'code',
+            nodeTagName: 'div',
+            htmlDisplayType: 'html',
             nodeAttribute: {
-                id: this._inputId,
-                cls: 'kijs-displayvalue'
-            },
-            on: {
-                click: this.#onDomClick,
-                context: this
+                id: this._inputId
             }
         });
-
-        this._valueTrim = true;
-        this._link = false;
-        this._linkType = 'auto';
 
         this._dom.clsAdd('kijs-field-display');
 
@@ -77,9 +74,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
-            link: true,                  // Weblink zum anklicken machen
-            linkType: true,              // Art des Links: tel, mail, web (default: automatisch)
-            htmlDisplayType: { target: 'htmlDisplayType', context: this._inputDom }
+            clickableLinks: true         // Weblink zum anklicken machen
         });
 
         // Config anwenden
@@ -94,48 +89,45 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
+    get clickableLinks() { return this._clickableLinks; }
+    set clickableLinks(val) { 
+        this._clickableLinks = !!val;
+        if (this.isRendered) {
+            this.value = this._value;
         }
     }
-
-    get htmlDisplayType() { return this._inputDom.htmlDisplayType; }
-    set htmlDisplayType(val) { this._inputDom.htmlDisplayType = val; }
-
+    
     get inputDom() { return this._inputDom; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._inputDom.html); }
 
     // overwrite
-    get readOnly() { return super.readOnly; }
-    set readOnly(val) {
-        super.readOnly = !!val;
-        if (val) {
-            this._inputDom.nodeAttributeSet('readonly', true);
-        } else {
-            this._inputDom.nodeAttributeSet('readonly', false);
-        }
-    }
-
-    // overwrite
     get value() {
-        let val = this._inputDom.html;
+        let val = this._value;
         if (this._valueTrim && kijs.isString(val)) {
             val = val.trim();
         }
-
-        return val === null ? '' : val;
+        return val;
     }
     set value(val) {
+        if (val === null) {
+            val = '';
+        }
+        this._value = val;
+        
+        // Sicherstellen, dass kein HTML-Code drin ist.
+        val = kijs.String.htmlspecialchars(val);
+        
+        // Hyperlinks einfügen
+        if (this._clickableLinks) {
+            val = this._linkify(val);
+        }
+        
+        // Zeilenumbrüche einfügen
+        val = this._insertLineBreaks(val);
+        
         this._inputDom.html = val;
-        this._setLinkClass();
     }
     
     get valueTrim() { return this._valueTrim; }
@@ -146,6 +138,12 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._inputDom.disabled = !!val;
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -158,7 +156,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             this.raiseEvent('afterRender');
         }
 
-        this._setLinkClass();
+        //this._setLinkClass();
     }
 
     // overwrite
@@ -181,77 +179,37 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
 
     // PROTECTED
-    /**
-     * Prüft, ob ein Wert ein Link ist.
-     * @param {String} value
-     * @returns {String|false} tel|mail|web
-     */
-    _getLinkType(value) {
-        value = kijs.toString(value);
-
-        // Telefon
-        if (value.match(/^\s*\+?[0-9\s]+$/i)) {
-            return 'tel';
-        }
-
-        // Email
-        if (value.match(/^[^@]+@[\w\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}$/i)) {
-            return 'mail';
-        }
-
-        // Webseite
-        if (value.match(/^(?:(?:http|https|ftp):\/\/)?[a-z0-9\-\.àáâãäåæçèéêëìíîïðñòóôõöøœùúûüýÿ]+\.[a-z]{2,}(?:\/{1}(?:[a-z0-9_\-\.%\?\#=&\+])+)*$/i)) {
-            return 'web';
-        }
-
-        return false;
+    // Ersetzt /n durch <br>
+    _insertLineBreaks(txt) {
+        return txt.replace(/\n/gim, '<br>');
     }
     
-    /**
-     * Öffnet ein Link (beim Klick)
-     * @param {String} link
-     * @param {String} type
-     * @returns {undefined}
-     */
-    _openLink(link, type) {
-        if (type === 'tel') {
-            window.open('tel:' + link.replace(/[^\+0-9]/i, ''), '_self');
+    // Ersetzt Links durch <a>-Tags
+    _linkify(txt) {
+        let pattern;
+        
+        // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
+        pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        txt = txt.replace(pattern, '<a href="$1" target="_blank">$1</a>');
 
-        } else if (type === 'mail') {
-            window.open('mailto:' + link, '_self');
+        // URLs beginnend mit 'www.'
+        // (without // before it, or it'd re-link the ones done above).
+        pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+        txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank">$2</a>');
 
-        }  else if (type === 'web' && link.match(/^(http|ftp)s?:\/\//i)) {
-            window.open(link, '_blank');
+        // E-Mailadressen
+        pattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        txt = txt.replace(pattern, '<a href="mailto:$1">$1</a>');
 
-        }  else if (type === 'web') {
-            window.open('http://' + link, '_blank');
-        }
+        return txt;
     }
     
-    _setLinkClass() {
-        let autoLinkType = this._getLinkType(this.value);
-        if (this._link && ((this._linkType === 'auto' && autoLinkType !== false) || this._linkType === autoLinkType)) {
-            this._inputDom.clsAdd('kijs-link');
-        } else {
-            this._inputDom.clsRemove('kijs-link');
-        }
-    }
-
     
-    // PRIVATE
-    // LISTENERS
-    #onDomClick() {
-        if (this._link && !this.disabled && !this.readOnly) {
-            let linkType = this._linkType === 'auto' ? this._getLinkType(this.value) : this._linkType;
-            this._openLink(kijs.toString(this.value), linkType);
-        }
-    }
-
-
-
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

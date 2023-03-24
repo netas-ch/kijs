@@ -174,6 +174,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -215,12 +216,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get defaults() { return this._defaults; }
     set defaults(val) { this._defaults = val; }
-
+    
     get elements() { return this._elements; }
 
     get firstChild() {
@@ -292,6 +294,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -340,6 +343,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         this.raiseEvent('add', {elements: newElements});
     }
 
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        kijs.Array.each(this._elements, function(el) {
+            el.changeDisabled(!!val, true);
+        }, this);
+    }
+    
     /**
      * Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
@@ -525,30 +536,32 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Löscht ein oder mehrere untergeordnete Elemente
      * @param {Object|Array} elements
      * @param {Boolean} [preventRender=false]
-     * @param {Boolean} [destruct=false]
+     * @param {Boolean} [preventDestruct=false]
+     * @param {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
+     * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
-    remove(elements, preventRender=false, destruct=false) {
-        if (!kijs.isArray(elements)) {
-            elements = [elements];
-        }
-
-        const removeElements = [];
-        for (let i=0,len=elements.length; i<len; i++) {
-            if (kijs.Array.contains(this._elements, elements[i])) {
-                removeElements.push(elements[i]);
+    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+        if (!superCall) {
+            if (!kijs.isArray(elements)) {
+                elements = [elements];
             }
-        }
-        elements = null;
-
-        // event ausführen
-        if (this.raiseEvent('beforeRemove', {elements: removeElements}) === false) {
-            return;
+            
+            if (!preventEvents) {
+                // beforeRemove Event. Bei Rückgabe=false -> abbrechen
+                if (this.raiseEvent('beforeRemove', {removeElements: elements}) === false) {
+                    return;
+                }
+            }
         }
         
         // löschen
-        kijs.Array.each(removeElements, function(el) {
-            if (destruct && el.destruct) {
+        kijs.Array.each(kijs.Array.clone(elements), function(el) {
+            if (!kijs.Array.contains(this._elements, el)) {
+                throw new kijs.Error(`el does not exist in elements.`);
+            }
+            
+            if (!preventDestruct && el.destruct) {
                 el.destruct();
 
             } else if (el.isRendered && el.unrender) {
@@ -564,18 +577,21 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
 
         // Gelöscht, Event auslösen.
-        this.raiseEvent('remove');
+        if (!preventEvents) {
+            this.raiseEvent('remove');
+        }
     }
 
     /**
      * Löscht alle untergeordeneten Elemente
      * @param {Boolean} [preventRender=false]
-     * @param {Boolean} [destruct=false]
+     * @param {Boolean} [preventDestruct=false]
+     * @param {Boolean} [preventEvents=false]   // Das Auslösen des beforeRemove-Events verhindern?
      * @returns {undefined}
      */
-    removeAll(preventRender=false, destruct=false) {
+    removeAll(preventRender, preventDestruct, preventEvents) {
         if (this._elements.length > 0) {
-            this.remove(this._elements, preventRender, destruct);
+            this.remove(this._elements, preventRender, preventDestruct, preventEvents);
         }
     }
 
@@ -623,13 +639,17 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        kijs.Array.each(this._elements, function(el) {
-            el.unrender();
-        }, this);
-
-        this._innerDom.unrender();
-
+        
+        if (this._elements) {
+            kijs.Array.each(this._elements, function(el) {
+                el.unrender();
+            }, this);
+        }
+        
+        if (this._innerDom) {
+            this._innerDom.unrender();
+        }
+        
         super.unrender(true);
     }
 
@@ -724,9 +744,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -756,4 +778,5 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column (Abstract)
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_ColumnConfig extends kijs.Observable {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -96,10 +92,11 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get caption() { return this._caption; }
     set caption(val) {
         this._caption = val;
@@ -127,20 +124,23 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get clicksToEdit() { return this._clicksToEdit; }
     set clicksToEdit(val) { this._clicksToEdit = val === 1 ? 1 : 2; }
 
+    get displayField() { return this._displayField ? this._displayField : this._valueField; }
+    set displayField(val) { this._displayField = val; }
+
     get editable() { return this._editable; }
     set editable(val) {
         this._editable = !!val;
         this.raiseEvent('change', {columnConfig: this, editable: !!val});
     }
 
-    get editorXtype() { return this._editorXtype; }
-    set editorXtype(val) {
-        this._editorXtype = kijs.isString(val) ? val : null;
-    }
-
     get editorConfig() { return this._editorConfig; }
     set editorConfig(val) {
         this._editorConfig = kijs.isObject(val) ? val : null;
+    }
+
+    get editorXtype() { return this._editorXtype; }
+    set editorXtype(val) {
+        this._editorXtype = kijs.isString(val) ? val : null;
     }
 
     get filterConfig() {
@@ -164,15 +164,6 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
 
     get grid() { return this._grid; }
     set grid(val) { this._grid = val; }
-
-    get visible() { return this._visible; }
-    set visible(val) {
-        if (!val && !this.hideable) {
-            return;
-        }
-        this._visible = !!val;
-        this.raiseEvent('change', {columnConfig: this, visible: !!val});
-    }
 
     get hideable() { return this._hideable; }
     set hideable(val) {
@@ -219,11 +210,17 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this.raiseEvent('change', {columnConfig: this, tooltip: val});
     }
 
-    get displayField() { return this._displayField ? this._displayField : this._valueField; }
-    set displayField(val) { this._displayField = val; }
-
     get valueField() { return this._valueField ? this._valueField : this._displayField; }
     set valueField(val) { this._valueField = val; }
+
+    get visible() { return this._visible; }
+    set visible(val) {
+        if (!val && !this.hideable) {
+            return;
+        }
+        this._visible = !!val;
+        this.raiseEvent('change', {columnConfig: this, visible: !!val});
+    }
 
     get width() { return this._width; }
     set width(val) {
@@ -235,10 +232,10 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -260,4 +257,5 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             this._preventAfterResize = prevAfterRes;
         }
     }
+    
 };

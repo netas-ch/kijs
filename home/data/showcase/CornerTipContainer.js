@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -26,6 +28,7 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -77,10 +80,29 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

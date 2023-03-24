@@ -9,6 +9,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -135,4 +136,5 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

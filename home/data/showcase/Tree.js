@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Tree = class home_sc_Tree {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,12 +13,14 @@ home.sc.Tree = class home_sc_Tree {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Tree',
+            cls: 'kijs-flexform',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +28,11 @@ home.sc.Tree = class home_sc_Tree {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Tree mit RPC:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Tree mit RPC:'
                 },{
                     xtype: 'kijs.gui.Tree',
                     caption: 'Element 1',
@@ -56,7 +59,7 @@ home.sc.Tree = class home_sc_Tree {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Tree local:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Tree',
                     caption: 'Element 1',
@@ -106,6 +109,22 @@ home.sc.Tree = class home_sc_Tree {
         return treeElements;
     }
     
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
     
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -113,4 +132,5 @@ home.sc.Tree = class home_sc_Tree {
     destruct() {
         this._content = null;
     }
+    
 };

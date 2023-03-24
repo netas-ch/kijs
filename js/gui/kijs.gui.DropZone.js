@@ -35,6 +35,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -132,44 +133,54 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // PRIVATE
     // LISTENERS
     #onDragEnter(e) {
-        this._dom.clsAdd(this._dragOverCls);
-        this.raiseEvent('dragEnter', e);
+        if (!this.disabled) {
+            this._dom.clsAdd(this._dragOverCls);
+            this.raiseEvent('dragEnter', e);
+        }
     }
     
     #onDragLeave(e) {
-        this._dom.clsRemove(this._dragOverCls);
-        this._dom.clsRemove(this._dragOverForbiddenCls);
-        this.raiseEvent('dragLeave', e);
+        if (!this.disabled) {
+            this._dom.clsRemove(this._dragOverCls);
+            this._dom.clsRemove(this._dragOverForbiddenCls);
+            this.raiseEvent('dragLeave', e);
+        }
     }
 
     #onDragOver(e) {
         e.nodeEvent.preventDefault();
-
-        // 'forbidden' Klasse, falls ungültiger Dateityp
-        if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
-            if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
-                this._dom.clsAdd(this._dragOverForbiddenCls);
+        
+        if (!this.disabled) {
+            // 'forbidden' Klasse, falls ungültiger Dateityp
+            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
+                if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
+                    this._dom.clsAdd(this._dragOverForbiddenCls);
+                }
             }
-        }
 
-        this._dom.clsAdd(this._dragOverCls);
-        this.raiseEvent('dragOver', e);
+            this._dom.clsAdd(this._dragOverCls);
+            this.raiseEvent('dragOver', e);
+        }
     }
 
     #onDrop(e) {
         e.nodeEvent.preventDefault();
-        this._dom.clsRemove(this._dragOverCls);
-        this._dom.clsRemove(this._dragOverForbiddenCls);
+        
+        if (!this.disabled) {
+            this._dom.clsRemove(this._dragOverCls);
+            this._dom.clsRemove(this._dragOverForbiddenCls);
 
-        let valid = true;
-        if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
-            if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
-                valid = false;
+            let valid = true;
+            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
+                if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
+                    valid = false;
+                }
             }
-        }
 
-        e.validMime = valid;
-        this.raiseEvent('drop', e);
+            e.validMime = valid;
+
+            this.raiseEvent('drop', e);
+        }
     }
 
 
@@ -177,6 +188,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

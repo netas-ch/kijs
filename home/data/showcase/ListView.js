@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.ListView = class home_sc_ListView {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,12 +13,14 @@ home.sc.ListView = class home_sc_ListView {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ListView und kijs.gui.field.ListView',
+            cls: 'kijs-flexform',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +28,11 @@ home.sc.ListView = class home_sc_ListView {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'ListView lokal:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'ListView lokal:'
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'id',
@@ -40,9 +43,6 @@ home.sc.ListView = class home_sc_ListView {
                     showCheckBoxes: false,
                     selectType: 'single',
                     width: 200,
-                    style: {
-                        marginBottom: '4px'
-                    },
                     data: [
                         {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
                         {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
@@ -71,9 +71,6 @@ home.sc.ListView = class home_sc_ListView {
                     selectType: 'single',
                     width: 200,
                     height: 100,
-                    style: {
-                        marginBottom: '4px'
-                    },
                     data: [
                         {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
                         {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
@@ -96,7 +93,7 @@ home.sc.ListView = class home_sc_ListView {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ListView mit RPC und Optionen:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'color',
@@ -110,9 +107,6 @@ home.sc.ListView = class home_sc_ListView {
                     showCheckBoxes: true,
                     selectType: 'single',
                     width: 200,
-                    style: {
-                        marginBottom: '4px'
-                    },
                     on: {
                         selectionChange: function(e) {
                             console.log(this.value);
@@ -123,7 +117,7 @@ home.sc.ListView = class home_sc_ListView {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ListView lokal mit Checkboxen:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'id',
@@ -134,21 +128,18 @@ home.sc.ListView = class home_sc_ListView {
                     showCheckBoxes: true,
                     selectType: 'simple',
                     width: 200,
-                    style: {
-                        marginBottom: '4px'
-                    },
                     data: [
-                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.circle', Color:'#0088ff' }, 
-                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.circle', Color:'#88ff00' }, 
-                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.circle', Color:'#ff0088' },
-                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.circle', Color:'#00ff88' }, 
-                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.circle', Color:'#ff8800' }, 
-                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.circle', Color:'#8800ff' },
-                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#666666' }, 
-                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.circle', Color:'#999999' }, 
-                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#bbbbbb' }, 
-                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.circle', Color:'#ffffff' }, 
-                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.circle', Color:'#000000' }
+                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' }, 
+                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' }, 
+                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff0088' },
+                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' }, 
+                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' }, 
+                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.droplet', Color:'#8800ff' },
+                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' }, 
+                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' }, 
+                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' }, 
+                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' }, 
+                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.droplet', Color:'#000000' }
                     ],
                     value: [2,3],
                     on: {
@@ -168,10 +159,29 @@ home.sc.ListView = class home_sc_ListView {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

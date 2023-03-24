@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.columnConfig.Column
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -47,25 +43,27 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
         }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-    get tooltipField() { return this._tooltipField; }
-    set tooltipField(val) { this._tooltipField = val; }
-
+    get displayField() { return super.displayField ? super.displayField : this._iconCharField; }
+    set displayField(val) { this.iconCharField = val; }
+    
     get iconCharField() { return this._iconCharField ? this._iconCharField : super.displayField; }
     set iconCharField(val) { this._iconCharField = val; }
 
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
-    get iconMapField() { return this._iconMapField; }
-    set iconMapField(val) { this._iconMapField = val; }
-
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
 
-    get displayField() { return super.displayField ? super.displayField : this._iconCharField; }
-    set displayField(val) { this.iconCharField = val; }
+    get iconMapField() { return this._iconMapField; }
+    set iconMapField(val) { this._iconMapField = val; }
+
+    get tooltipField() { return this._tooltipField; }
+    set tooltipField(val) { this._tooltipField = val; }
+
 };

@@ -9,6 +9,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -48,6 +49,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -74,7 +76,6 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             this._bindEventsToTarget();
         }
     }
-
 
 
 
@@ -230,6 +231,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -256,4 +258,5 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

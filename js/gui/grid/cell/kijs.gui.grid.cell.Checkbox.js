@@ -9,6 +9,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -26,7 +27,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disabled: {target: 'disabled'}
+            
         });
 
         // Config anwenden
@@ -44,16 +45,6 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get disabled() { return this._disabled; }
-    set disabled(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-disabled');
-        } else {
-            this._dom.clsRemove('kijs-disabled');
-        }
-        this._disabled = !!val;
-    }
-    
     // Overwrite
     get value() { return this._checked; }
     set value(val) { this.setValue(val); }
@@ -63,6 +54,12 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._disabled = !!val;
+    }
+
     /**
      * Setzt das value der Zelle.
      * @param {String} value
@@ -117,6 +114,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
 

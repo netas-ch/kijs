@@ -3,6 +3,7 @@
 window.home.test = {};
 home.test.ElementAlignment = class home_test_ElementAlignment {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
         
         this.__testState = 0;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -29,60 +31,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
             innerStyle: {
                 padding: '10px'
             },
-            
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'CSS-Klasse für Panel:',
-                    value: 'kijs-flexform',
-                    width: 230,
-                    data: [
-                        { caption: 'keine', value: 'none' },
-                        { caption: 'kijs-flexrow', value: 'kijs-flexrow' },
-                        { caption: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
-                        { caption: 'kijs-flexform', value: 'kijs-flexform' },
-                        { caption: 'kijs-flexline', value: 'kijs-flexline' }
-                    ],
-                    on: {
-                        change: function(e) {
-                            this._content.dom.clsRemove(['kijs-flexrow', 'kijs-flexcolumn', 
-                                'kijs-flexform', 'kijs-flexline']);
-                            if (e.element.value !== 'none') {
-                                this._content.dom.clsAdd(e.element.value);
-                            }
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'disableFlex:',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('disableFlex', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'labelWidth: 100px:',
-                    value: true,
-                    on: {
-                        change: function(e) {
-                            // labelWidth=100px
-                            if (e.element.value) {
-                                this._updateProperty('labelWidth', 100);
-                                
-                            // labelWidth=null
-                            } else {
-                                this._updateProperty('labelWidth', null);
-                                
-                            }
-                        },
-                        context: this
-                    }
-                }
-            ],
-            
+            headerElements: this._getHeaderElements(),
             defaults:{
                 labelWidth: 100
             },
@@ -218,6 +167,70 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
     
     
     // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disableFlex:',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('disableFlex', e.element.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'labelWidth: 100px:',
+                value: true,
+                on: {
+                    change: function(e) {
+                        // labelWidth=100px
+                        if (e.element.value) {
+                            this._updateProperty('labelWidth', 100);
+
+                        // labelWidth=null
+                        } else {
+                            this._updateProperty('labelWidth', null);
+
+                        }
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'CSS-Klasse für Panel:',
+                value: 'kijs-flexform',
+                width: 230,
+                data: [
+                    { caption: 'keine', value: 'none' },
+                    { caption: 'kijs-flexrow', value: 'kijs-flexrow' },
+                    { caption: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
+                    { caption: 'kijs-flexform', value: 'kijs-flexform' },
+                    { caption: 'kijs-flexline', value: 'kijs-flexline' }
+                ],
+                on: {
+                    change: function(e) {
+                        this._content.dom.clsRemove(['kijs-flexrow', 'kijs-flexcolumn', 
+                            'kijs-flexform', 'kijs-flexline']);
+                        if (e.element.value !== 'none') {
+                            this._content.dom.clsAdd(e.element.value);
+                        }
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.Element) {
@@ -228,6 +241,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
         }, this);
     }
     
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -235,4 +249,5 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
     destruct() {
         this._content = null;
     }
+    
 };

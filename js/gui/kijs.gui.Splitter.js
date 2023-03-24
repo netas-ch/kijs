@@ -8,6 +8,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -37,6 +38,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -184,6 +186,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

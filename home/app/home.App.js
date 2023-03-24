@@ -76,9 +76,9 @@ home.App = class home_App {
                     tabTooltip: 'Home',
                     tabClosable: true,
                     scrollableY: 'auto',
+                    cls: 'tabHome',
                     style:{
-                        flex: 1,
-                        background: '#fff url(app/background.jpg) scroll no-repeat 0% 0%'
+                        flex: 1
                     },
                     html: '<div style="margin: 420px 0 0 370px"><a href="../testApp">Test-App</a><br><a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a></div>'
                 }

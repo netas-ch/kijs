@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.TimePicker = class home_sc_TimePicker {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,12 +13,14 @@ home.sc.TimePicker = class home_sc_TimePicker {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.TimePicker',
+            cls: 'kijs-flexform',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -25,11 +28,11 @@ home.sc.TimePicker = class home_sc_TimePicker {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.TimePicker'
                 },
@@ -37,7 +40,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit minValue und maxValue:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.TimePicker',
                     value: kijs.Date.getSqlTime(new Date()),
@@ -55,7 +58,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ohne headerBar:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.TimePicker',
                     value: kijs.Date.getSqlTime(new Date()),
@@ -67,7 +70,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 {
                     xtype: 'kijs.gui.Element',
                     html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 }
             ]
         });
@@ -80,10 +83,29 @@ home.sc.TimePicker = class home_sc_TimePicker {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

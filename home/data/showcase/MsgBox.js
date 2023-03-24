@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.MsgBox = class home_sc_MsgBox {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -26,6 +28,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -175,6 +178,24 @@ home.sc.MsgBox = class home_sc_MsgBox {
 
     }
     
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -182,4 +203,5 @@ home.sc.MsgBox = class home_sc_MsgBox {
     destruct() {
         this._content = null;
     }
+    
 };

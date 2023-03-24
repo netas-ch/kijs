@@ -46,6 +46,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         
@@ -188,6 +189,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -416,9 +418,19 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     set scrollStep(val) { this._scrollStep = val; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._btnUpDom.changeDisabled(val, callFromParent);
+        this._btnLeftDom.changeDisabled(val, callFromParent);
+        this._btnRightDom.changeDisabled(val, callFromParent);
+        this._btnDownDom.changeDisabled(val, callFromParent);
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -586,31 +598,18 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             return;
         }
         
-        if (this._innerDom.node.scrollTop <= 0) {
-            this._btnUpDom.clsAdd('kijs-disabled');
-        } else {
-            this._btnUpDom.clsRemove('kijs-disabled');
+        if (this.disabled) {
+            return;
         }
         
-        if (this._innerDom.node.scrollLeft <= 0) {
-            this._btnLeftDom.clsAdd('kijs-disabled');
-        } else {
-            this._btnLeftDom.clsRemove('kijs-disabled');
-        }
-        
-        if (Math.abs(this._innerDom.node.scrollWidth - this._innerDom.node.clientWidth
-                - this._innerDom.node.scrollLeft) <= 1) {
-            this._btnRightDom.clsAdd('kijs-disabled');
-        } else {
-            this._btnRightDom.clsRemove('kijs-disabled');
-        }
-        
-        if (Math.abs(this._innerDom.node.scrollHeight - this._innerDom.node.clientHeight
-                - this._innerDom.node.scrollTop) <= 1) {
-            this._btnDownDom.clsAdd('kijs-disabled');
-        } else {
-            this._btnDownDom.clsRemove('kijs-disabled');
-        }
+        this._btnUpDom.disabled = this._innerDom.node.scrollTop <= 0;
+        this._btnLeftDom.disabled = this._innerDom.node.scrollLeft <= 0;
+        this._btnRightDom.disabled = Math.abs(this._innerDom.node.scrollWidth - 
+                this._innerDom.node.clientWidth - 
+                this._innerDom.node.scrollLeft) <= 1;
+        this._btnDownDom.disabled = Math.abs(this._innerDom.node.scrollHeight - 
+                this._innerDom.node.clientHeight - 
+                this._innerDom.node.scrollTop) <= 1;
     }
     
     
@@ -678,9 +677,11 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -731,4 +732,5 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

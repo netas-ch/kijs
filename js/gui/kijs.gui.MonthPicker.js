@@ -9,6 +9,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -159,6 +160,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -244,6 +246,32 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        
+        this._headerBar.changeDisabled(val, callFromParent);
+        
+        this._currentBtn.changeDisabled(val, callFromParent);
+        this._emptyBtn.changeDisabled(val, callFromParent);
+        this._closeBtn.changeDisabled(val, callFromParent);
+        
+        this._yearsScrollUpBtn.changeDisabled(val, callFromParent);
+        this._yearsScrollDownBtn.changeDisabled(val, callFromParent);
+        
+        if (this._yearsDom) {
+            kijs.Array.each(this._yearsDom, function(dom) {
+                dom.changeDisabled(val, callFromParent);
+            }, this);
+        }
+        
+        if (this._monthsDom) {
+            kijs.Array.each(this._monthsDom, function(dom) {
+                dom.changeDisabled(val, callFromParent);
+            }, this);
+        }
+    }
+    
     // overwrite
     focus(alsoSetIfNoTabIndex=false) {
         // Wenn möglich den Fokus auf einen Button setzen
@@ -380,11 +408,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             }
 
             // disabled
-            if ( (this._minDate && this._minDate > date) || (this._maxDate && this._maxDate < date) ) {
-                this._monthsDom[i].clsAdd('kijs-disabled');
-            } else {
-                this._monthsDom[i].clsRemove('kijs-disabled');
-            }
+            this._monthsDom[i].disabled = (this._minDate && this._minDate > date) 
+                    || (this._maxDate && this._maxDate < date);
         }
 
         // Jahre aktualisieren
@@ -402,11 +427,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             }
 
             // disabled
-            if ( (this._minDate && this._minDate.getFullYear() > year) || (this._maxDate && this._maxDate.getFullYear() < year) ) {
-                this._yearsDom[i].clsAdd('kijs-disabled');
-            } else {
-                this._yearsDom[i].clsRemove('kijs-disabled');
-            }
+            this._yearsDom[i].disabled = (this._minDate && this._minDate.getFullYear() > year) 
+                    || (this._maxDate && this._maxDate.getFullYear() < year);
         }
 
         if (!this._headerBarHide) {
@@ -475,7 +497,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
 
     #onMonthDomClick(e) {
-        if (!e.dom.clsHas('kijs-disabled')) {
+        if (!e.dom.disabled) {
             const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
             const monthIndex = this._monthsDom.indexOf(e.dom);
             let date = null;
@@ -497,7 +519,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
     #onMonthDomDblClick(e) {
-        this.raiseEvent('monthDblClick');
+        if (!this.disabled) {
+            this.raiseEvent('monthDblClick');
+        }
     }
 
     #onNextBtnClick(e) {
@@ -537,16 +561,18 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
 
     #onYearDivDomWheel(e) {
-        if (e.nodeEvent.deltaY < 0) {
-            this.#onYearsScrollUpBtnClick();
-        } else {
-            this.#onYearsScrollDownBtnClick();
+        if (!this.disabled) {
+            if (e.nodeEvent.deltaY < 0) {
+                this.#onYearsScrollUpBtnClick();
+            } else {
+                this.#onYearsScrollDownBtnClick();
+            }
         }
         e.nodeEvent.preventDefault();
     }
 
     #onYearDomClick(e) {
-        if (!e.dom.clsHas('kijs-disabled')) {
+        if (!e.dom.disabled) {
             const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
             const year = parseInt(e.dom.html);
             let date = null;
@@ -568,7 +594,9 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
     #onYearDomDblClick(e) {
-        this.raiseEvent('yearDblClick');
+        if (!this.disabled) {
+            this.raiseEvent('yearDblClick');
+        }
     }
 
     #onYearsScrollDownBtnClick(e) {
@@ -586,6 +614,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

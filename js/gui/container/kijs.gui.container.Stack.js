@@ -62,6 +62,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         
@@ -99,6 +100,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             this.applyConfig(config, true);
         }
     }
+    
     
     
     // --------------------------------------------------------------
@@ -163,6 +165,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -172,23 +175,29 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
     
     // overwrite
-    remove(elements, preventRender=false, destruct=false) {
-        if (!kijs.isArray(elements)) {
-            elements = [elements];
+    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+        if (!superCall) {
+            if (!kijs.isArray(elements)) {
+                elements = [elements];
+            }
+            
+            if (!preventEvents) {
+                // beforeRemove Event. Bei Rückgabe=false -> abbrechen
+                if (this.raiseEvent('beforeRemove', {removeElements: elements}) === false) {
+                    return;
+                }
+            }
         }
         
-        // zu löschenden Elemente merken
-        let elementsToDelete = kijs.Array.clone(elements);
-                
+        super.remove(elements, preventRender, preventDestruct, preventEvents, true);
+        
         // Elemente auch aus elHistory entfernen
-        kijs.Array.each(elementsToDelete, function(i) {
-            this._elHistoryRemove(i);
+        kijs.Array.each(elements, function(el) {
+            this._elHistoryRemove(el);
         }, this);
         
-        super.remove(elements, preventRender, destruct);
-        
         // Falls das aktuelle Element gelöscht wurde, das vorherige aktivieren
-        if (kijs.Array.contains(elementsToDelete, this._currentEl)) {
+        if (kijs.Array.contains(elements, this._currentEl)) {
             if (this._elements.length) {
                 // Wenn noch eines in der History ist: dieses nehmen
                 if (this._elHistory.length) {
@@ -198,8 +207,6 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
                 } else {
                     this.currentIndex = 0;
                 }
-                
-                
             } else {
                 // es gibt keine Elemente
                 this._currentEl = null;
@@ -427,9 +434,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
     
     
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -445,4 +454,5 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

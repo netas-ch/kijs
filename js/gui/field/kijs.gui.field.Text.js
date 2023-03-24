@@ -48,6 +48,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -57,13 +58,16 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                 id: this._inputId
             }
         });
-
+        
+        this._formatRegExps = [];
+        
         this._valueTrim = true;
 
         this._dom.clsAdd('kijs-field-text');
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
             valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             placeholder: { target: 'placeholder' }
         });
@@ -96,17 +100,6 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val || this._dom.clsHas('kijs-disabled')) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
-        }
-    }
-
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -123,6 +116,17 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             this._inputDom.nodeAttributeSet('readOnly', true);
         } else {
             this._inputDom.nodeAttributeSet('readOnly', false);
+        }
+    }
+
+    get validateRegExp() { return this._validateRegExp; }
+    set validateRegExp(val) {
+        if (kijs.isRegExp(val)) {
+            this._validateRegExp = val.toString();
+        } else if (kijs.isString(val)) {
+            this._validateRegExp = val;
+        } else {
+            throw new kijs.Error(`config "validateRegExp" is not valid.`);
         }
     }
 
@@ -148,6 +152,52 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._inputDom.disabled = !!val;
+    }
+    
+    /**
+     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * @param {Object|Array} regExps 
+     *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
+     *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
+     *                       sonst replace() 
+     * @returns {undefined}
+     */
+    addFormatRegExp(regExps) {
+        if (!kijs.isArray(regExps)) {
+            regExps = [regExps];
+        }
+        
+        kijs.Array.each(regExps, function(regExp) {
+            let ok = true;
+            
+            if (typeof regExp !== 'object') {
+                ok = false;
+            }
+
+            if (ok) {
+                if (kijs.isRegExp(regExp.regExp)) {
+                    regExp.regExp = regExp.regExp.toString();
+                } else if (!kijs.isString(regExp.regExp)) {
+                    ok = false;
+                }
+            }
+            
+            if (!kijs.isString(regExp.replace)) {
+                ok = false;
+            }
+
+            if (ok) {
+                this._formatRegExps.push(regExp);
+            } else {
+                throw new kijs.Error(`"formatRegExp" is not valid.`);
+            }
+        }, this);
+    }
+
+    // overwrite
     render(superCall) {
         super.render(true);
 
@@ -170,11 +220,34 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._inputDom.unrender();
         super.unrender(true);
     }
+    
+    
+    // PROTECTED
+    _applyFormatRegExp(value) {
+        if (this._formatRegExps) {
+            value = value.toString();
+            if (value !== '') {
+                kijs.Array.each(this._formatRegExps, function(regExp) {
+                    let r = this._stringToRegExp(regExp.regExp);
 
+                    // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
+                    if (kijs.String.contains(r.flags, 'g')) {
+                        value = value.replaceAll(r, regExp.replace);
+                    // sonst nur replace
+                    } else {
+                        value = value.replace(r, regExp.replace);
+                    }
+                }, this);
+            }
+        }
+        return value;
+    }
+    
     
     // PRIVATE
     // LISTENERS
     #onInput(e) {
+        this.value = this._applyFormatRegExp(this.value);
         this.validate();
     }
 
@@ -183,6 +256,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern
@@ -199,7 +273,8 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
-
+        this._formatRegExps = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

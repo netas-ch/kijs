@@ -49,6 +49,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -56,6 +57,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            disableFlex: true,
             formatValue: true
         });
 
@@ -101,7 +103,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
         }
         return iban;
     }
-
+    
     _isValidIban(value) {
         value = kijs.toString(value).toUpperCase().replace(/\s/g, '');
 
@@ -167,6 +169,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

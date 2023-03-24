@@ -15,6 +15,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -45,7 +46,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
-            disabled: { target: 'disabled'},
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
             facadeFnArgs: true,         // Objekt mit Argumenten für die FacadeFn
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
@@ -67,6 +67,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.on('elementClick', this.#onElementClick, this);
         //this.on('elementFocus', this.#onElementFocus, this);
     }
+
 
 
     // --------------------------------------------------------------
@@ -140,22 +141,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Current Element ermitteln und setzen
         this.current = null;
-    }
-
-    get disabled() { return this._dom.clsHas('kijs-disabled'); }
-    set disabled(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-disabled');
-        } else {
-            this._dom.clsRemove('kijs-disabled');
-        }
-
-        // Elements auch aktivieren/deaktivieren
-        kijs.Array.each(this._elements, function(el) {
-            if ('disabled' in el) {
-                el.disabled = !!val;
-            }
-        }, this);
     }
 
     get facadeFnArgs() { return this._facadeFnArgs; }
@@ -928,6 +913,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

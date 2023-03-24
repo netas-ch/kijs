@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.container_Tab = class home_sc_container_Tab {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,53 +27,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
             innerStyle: {
                 padding: '10px'
             },
-            
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'animation:',
-                    cls: 'kijs-inline',
-                    valueField: 'id',
-                    captionField: 'id',
-                    required: true,
-                    data: [
-                        { id:'none' },
-                        { id:'fade' },
-                        { id:'slideTop' },
-                        { id:'slideRight' },
-                        { id:'slideBottom' },
-                        { id:'slideLeft' }
-                    ],
-                    value: 'fade',
-                    on: {
-                        input: function(e) {
-                            this._content.elements[0].elements[0].animation = e.value;
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'tabBarPos:',
-                    cls: 'kijs-inline',
-                    valueField: 'id',
-                    captionField: 'id',
-                    required: true,
-                    data: [
-                        { id:'top' },
-                        { id:'right' },
-                        { id:'bottom' },
-                        { id:'left' }
-                    ],
-                    value: 'top',
-                    on: {
-                        input: function(e) {
-                            this._content.down('tab').tabBarPos = e.value;
-                        },
-                        context: this
-                    }
-                }
-            ],
-            
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -80,8 +36,16 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     height: 200,
                     width: 600,
                     shadow: true,
+                    closable: true,
                     collapsible: 'top',
                     resizable: true,
+                    on: {
+                        beforeClose: function(e) {
+                            this._closePanelTabsWithMsgBox(e.element, e.element.elements[0].elements, true);
+                            return false;
+                        },
+                        context: this
+                    },
                     elements:[
                         {
                             xtype: 'kijs.gui.container.Tab',
@@ -98,6 +62,10 @@ home.sc.container_Tab = class home_sc_container_Tab {
                             on: {
                                 change: function(e) {
                                     console.log(e);
+                                },
+                                beforeRemove(e) {
+                                    this._closePanelTabsWithMsgBox(e.element, e.removeElements, false);
+                                    return false;
                                 },
                                 context: this
                             },
@@ -186,6 +154,83 @@ home.sc.container_Tab = class home_sc_container_Tab {
     
     
     // PROTECTED
+    _closePanelTabsWithMsgBox(parentEl, elements, isPanel) {
+        let captions = [];
+        kijs.Array.each(elements, function(el) {
+            captions.push('<li>' + el.tabButtonEl.caption + '</li>');
+        }, this);
+
+        let msg = 'Sollen folgende Register wirklich geschlossen werden?' + "\n";
+        msg += '<ul>' + captions.join("\n") + '</ul>';
+
+        kijs.gui.MsgBox.warning('kijs', msg).then((e) => {
+            if (e.btn === 'ok') {
+                if (isPanel) {
+                    parentEl.close(true);
+                } else {
+                    parentEl.remove(elements, false, false, true);
+                }
+            }
+        });
+    }
+    
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.OptionGroup',
+                label: 'animation:',
+                cls: 'kijs-inline',
+                valueField: 'id',
+                captionField: 'id',
+                required: true,
+                data: [
+                    { id:'none' },
+                    { id:'fade' },
+                    { id:'slideTop' },
+                    { id:'slideRight' },
+                    { id:'slideBottom' },
+                    { id:'slideLeft' }
+                ],
+                value: 'fade',
+                on: {
+                    input: function(e) {
+                        this._content.elements[0].elements[0].animation = e.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.OptionGroup',
+                label: 'tabBarPos:',
+                cls: 'kijs-inline',
+                valueField: 'id',
+                captionField: 'id',
+                required: true,
+                data: [
+                    { id:'top' },
+                    { id:'right' },
+                    { id:'bottom' },
+                    { id:'left' }
+                ],
+                value: 'top',
+                on: {
+                    input: function(e) {
+                        this._content.down('tab').tabBarPos = e.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
     _getRandomColor() {
         return '#' + kijs.Graphic.colorGetHex([
             Math.floor(Math.random() * 200),
@@ -195,10 +240,12 @@ home.sc.container_Tab = class home_sc_container_Tab {
     }
     
     
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

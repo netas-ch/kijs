@@ -9,6 +9,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         this._weeksCount = 6; // Wir zeigen fix 6 Wochen an
@@ -315,6 +316,24 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        
+        this._headerBar.changeDisabled(val, callFromParent);
+        this._monthPicker.changeDisabled(val, callFromParent);
+        
+        this._todayBtn.changeDisabled(val, callFromParent);
+        this._emptyBtn.changeDisabled(val, callFromParent);
+        this._closeBtn.changeDisabled(val, callFromParent);
+        
+        if (this._itemsDom) {
+            kijs.Array.each(this._itemsDom, function(dom) {
+                dom.changeDisabled(val, callFromParent);
+            }, this);
+        }
+    }
+    
     // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
@@ -530,11 +549,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 }
 
                 // disabled
-                if ( (this._minDate && this._minDate > date) || (this._maxDate && this._maxDate < date) ) {
-                    dom.clsAdd('kijs-disabled');
-                } else {
-                    dom.clsRemove('kijs-disabled');
-                }
+                dom.disabled = (this._minDate && this._minDate > date) 
+                        || (this._maxDate && this._maxDate < date);
 
                 // Nur ein einzelnes Datum selektieren?
                 if (kijs.Date.compare(rangeStartDate, rangeEndDate)) {
@@ -722,14 +738,14 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     #onHeaderBarClick() {
         if (this._spinBoxEl.isRendered) {
             this._spinBoxEl.close();
-        } else {
+        } else if (!this.disabled) {
             this._spinBoxEl.show();
             this._monthPicker.focus();
         }
     }
 
     #onItemDomClick(e) {
-        if (e.dom.clsHas('kijs-day') && !e.dom.clsHas('kijs-disabled')) {
+        if (e.dom.clsHas('kijs-day') && !e.dom.disabled) {
             const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
             const curEndDate = kijs.isEmpty(this._dateEnd) ? null : kijs.Date.clone(this._dateEnd);
             let inputFinished = false;
@@ -769,7 +785,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
 
     #onItemDomDblClick(e) {
-        if (e.dom.clsHas('kijs-day') && !e.dom.clsHas('kijs-disabled')) {
+        if (e.dom.clsHas('kijs-day') && !e.dom.disabled) {
             this.raiseEvent('dayDblClick');
         }
     }
@@ -834,6 +850,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

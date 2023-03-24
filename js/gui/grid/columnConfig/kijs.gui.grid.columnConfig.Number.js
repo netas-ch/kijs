@@ -3,17 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -62,6 +58,11 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         };
     }
 
+
+
+    // --------------------------------------------------------------
+    // GETTERS / SETTERS
+    // --------------------------------------------------------------
     /**
      * Gibt die Argumente für den Celleditor zurück
      * @returns {Object}
@@ -87,8 +88,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         }
         return editorConfig;
     }
-
     set editorConfig(val) {
         super.editorConfig = val;
     }
+    
 };

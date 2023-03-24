@@ -9,6 +9,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -59,17 +60,6 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = val;
-        if (val) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
-        }
-    }
-
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -111,7 +101,13 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
     // --------------------------------------------------------------
     // MEMBERS
-    // --------------------------------------------------------------
+    // --------------------------------------------------------------$
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._inputDom.disabled = !!val;
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -149,6 +145,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

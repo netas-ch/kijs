@@ -10,6 +10,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -34,10 +35,13 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         if (kijs.isObject(config)) {
             if (kijs.isObject(config.defaults) && !kijs.isDefined(config.defaults.xtype)) {
                 config.defaults.xtype = 'kijs.gui.Button';
-
+                config.defaults.disableFlex = false;
+                config.defaults.smallPaddings = false;
             } else if (!kijs.isDefined(config.defaults)) {
                 config.defaults = {
-                    xtype: 'kijs.gui.Button'
+                    xtype: 'kijs.gui.Button',
+                    disableFlex: false,
+                    smallPaddings: false
                 };
             }
         }
@@ -172,11 +176,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    /**
-     * Fügt dem Menu neue Elemente hinzu.
-     * @param {Object|Array} elements
-     * @returns {undefined}
-     */
+    // overwerite
     add(elements) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
@@ -203,6 +203,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
             // Sonstiges Element
             } else {
                 newElements.push(element);
+                
             }
         });
 
@@ -268,34 +269,6 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     }
 
     /**
-     * Löscht ein oder mehrere untergeordnete Elemente
-     * @param {Object|Array} elements
-     * @returns {undefined}
-     */
-    remove(elements) {
-        if (!kijs.isArray(elements)) {
-            elements = [elements];
-        }
-
-        const removeElements = [];
-        for (let i=0,len=elements.length; i<len; i++) {
-            if (kijs.isString(elements[i])) {
-                for (let y=0; y<this.elements.length; y++) {
-                    if ((elements[i] === '-' && this.elements[y].name === '<hr>') || this.elements[y].name === elements[i]){
-                        removeElements.push(this.elements[y]);
-                    }
-                };
-            } else if (kijs.Array.contains(this.elements, elements[i])) {
-                removeElements.push(elements[i]);
-            }
-        }
-        elements = null;
-
-        // löschen
-        super.remove(removeElements);
-    }
-
-    /**
      * Zeigt das Menu an
      * @param {Number|null} x X-Koordinate (null, falls an target ausgerichtet werden soll)
      * @param {Number|null} y Y-Koordinate (null, falls an target ausgerichtet werden soll)
@@ -310,7 +283,8 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
             this._button.parent.closeSubMenus(this);
         }
     }
-
+    
+    // overwerite
     unrender(superCall) {
         // timer abbrechen
         if (this._expandDeferId) {
@@ -366,6 +340,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwerite
     destruct(superCall) {
         if (!superCall) {
             // unrender

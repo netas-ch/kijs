@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.DataView = class home_sc_DataView {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.DataView = class home_sc_DataView {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -22,6 +24,7 @@ home.sc.DataView = class home_sc_DataView {
             style: {
                 flex: 1
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -67,6 +70,16 @@ home.sc.DataView = class home_sc_DataView {
                                 click: function() {
                                     const dv = this._content.down('dataViewRpc');
                                     dv.disabled = !dv.disabled;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Disable/Enable first Child',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('dataViewRpc');
+                                    dv.elements[0].disabled = !dv.elements[0].disabled;
                                 },
                                 context: this
                             }
@@ -126,10 +139,29 @@ home.sc.DataView = class home_sc_DataView {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

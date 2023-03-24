@@ -25,6 +25,7 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -121,7 +122,24 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
 
     }
 
-        
+
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -129,4 +147,5 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
     destruct() {
         this._content = null;
     }
+    
 };

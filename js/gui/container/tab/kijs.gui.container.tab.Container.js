@@ -20,6 +20,7 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         
@@ -66,6 +67,7 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -85,10 +87,10 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-        
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -103,14 +105,12 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         super.unrender(true);
     }
     
-    // PROTECTED
-    
-    // LISTENERS
-    
+
     
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -132,4 +132,5 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

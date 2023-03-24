@@ -146,8 +146,12 @@ angezeigt.
 - das Argument bei ```load()``` ```fnBeforeMessages``` gibt es nicht mehr.  
   Es wird nicht mehr benötigt, weil die Load Funktion nun immer eine Antwort zurückgibt.
 
+### kijs.gui.Dom
+ - Neue Config, Getter, Setter ```disabled```
+
 ### kijs.gui.Element
- - Eigenschaft, Getter, Setter ```toolTip``` entfernt. => ```tooltip``` verwenden.
+ - Config, Getter, Setter ```toolTip``` entfernt. => ```tooltip``` verwenden.
+ - Neue Config, Getter, Setter ```disabled```
 
 ### kijs.gui.Button
 - Wird neu intern mit CSS display: flex aufgebaut.
@@ -155,6 +159,12 @@ angezeigt.
   untereinander angeordnet werden.
 - Hat ein Button eine Fixe Breite (oder eine Maximalbreite) und der Text darin
   ist zu breit, so wird er automatisch gekürzt und ... angehängt.
+- Neue Eigenschaft ```disableFlex```. Mit der gleichen Funktionalität wie die 
+  gleichnamige Eigenschaft bei Formularfeldern. Standard: ```true```
+- Neue Eigenschaft ```smallPaddings```. Sollen links/rechts nur kleine Abstände sein?
+  - ```true```
+  - ```false```
+  - ```'auto'``` (default) true = wenn Button hat keine Caption und disableFlex:false
 
 ### kijs.gui.Container
  - Neue Eigenschaften: 
@@ -168,13 +178,13 @@ angezeigt.
 
  - Die Config/Eigenschaft autoScroll gibt es nicht mehr  
    ==> ```autoScroll```: true bitte ersetzen durch durch ```scrollableY: 'auto'```  
- - Die Config/Eigenschaft ```disabled``` gibt es beim Container nicht mehr.  
-   Diese Eigenschaft gibt es nur bei Formularen, Formularfeldern, Buttons und Icons.  
-   Wenn ein ganzes Formular auf Disabled gestellt werden soll, kann dafür die
-   Eigenschaft ```disabled``` des kijs.gui.FormPanel verwendet werden.  
+
+ - Die Config/Eigenschaft ```disabled``` blendet nicht mehr eine Maske ein, 
+   sondern gibt das disabled auch an die Kinder weiter.
+   Dabei wird der vorherige disable-Wert der Kinder gemerkt, damit sie beim 
+   zurücksetzen (```disable: false```) wieder den gleichen Wert wie vorher erhalten.  
    Um trotzdem eine Maske über ein ganzes Panel zu legen kann dafür folgender 
    Code verwendet werden:  
-   *Vorsicht, die Elemente darunter können aber mit der Tastatur immer noch bedient werden!*  
 
         let mask = new kijs.gui.Mask({  
             target: myPanel  
@@ -183,31 +193,43 @@ angezeigt.
 
  - Methode getElements() umbenannt zu getElementsRec()
 
+ - Bei der Methode ```remove()``` haben die Argumente geändert.  
+   Früher:  ```remove(elements, preventRender=false, destruct=false)```  
+   Jetzt: ```remove(elements, preventRender=false, preventDestruct=false, preventEvents=false, superCall=false)```  
+   **Bitte berücksichtigen!** => Der Standard ist neu Destruct! Projekt durchsuchen nach ```remove(```  
+
+ - Bei der Methode ```removeAll()``` hat der Standardwert von ```destruct``` geändert.  
+   Früher:  ```removeAll(preventRender=false, destruct=false)```  
+   Jetzt: ```removeAll(preventRender=false, preventDestruct=false, preventEvents=false)```   
+   **Bitte berücksichtigen!** => Projekt durchsuchen nach ```removeAll(```  
+
+ **VORSICHT!** Der Standard bei remove() und removeAll() ist neu preventDestruct=false **!!!**  
+
 ### kijs.gui.container.Stack
-- **Umbenannt!** Heisst neu ```kijs.gui.container.Stack``` 
-  (früher: ```kijs.gui.ContainerStack```).  
-- ```defaultAnimation``` umbenannt zu ```animation``` 
-- ```defaultDuration``` umbenannt zu ```animationDuration``` 
-- ```activeEl``` umbenannt zu ```currentEl``` 
-- bei ```currentEl``` wird ein von ```kijs.gui.Container``` vererbtes Element erwartet.  
-  Eine Zahl ist nicht mehr erlaubt. ==> ```currentIndex``` verwenden.  
-  Ein String ist nicht mehr erlaubt. ==> ```currentName``` verwenden.  
-- neue Eigenschaft ```currentIndex```  
-- neue Eigenschaft ```currentName```  
-- ```activateAnimated()``` umbenannt zu ```setCurrentAnimated()```  
-- ```setCurrentAnimated()``` gibt neu ein Promise zurück  
-- Werden animierte Übergänge gewünscht, so muss die Funktion ```setCurrentAnimated()``` 
-  verwendet werden. Die Setter ```currentEl```, ```currentIndex``` und ```currentName``` 
-  wechseln ohne Animation.  
-- Die Standard-Animation ist neu ```'fade'``` 
-- ```flex: 1``` ist nicht mehr Standard im CSS und muss deshalb, wenn nötig mit 
-  ```style: { flex:1 }``` noch hinzugefügt werden.  
-- Bisher war jedes Element innerhalb zusätzlich noch in einem DIV.  
-  Dieses wird jetzt nicht mehr benötigt. Evtl. muss dies in eigenen CSS-Styles 
-  noch angepasst werden.  
+ - **Umbenannt!** Heisst neu ```kijs.gui.container.Stack``` 
+   (früher: ```kijs.gui.ContainerStack```).  
+ - ```defaultAnimation``` umbenannt zu ```animation``` 
+ - ```defaultDuration``` umbenannt zu ```animationDuration``` 
+ - ```activeEl``` umbenannt zu ```currentEl``` 
+ - bei ```currentEl``` wird ein von ```kijs.gui.Container``` vererbtes Element erwartet.  
+   Eine Zahl ist nicht mehr erlaubt. ==> ```currentIndex``` verwenden.  
+   Ein String ist nicht mehr erlaubt. ==> ```currentName``` verwenden.  
+ - neue Eigenschaft ```currentIndex```  
+ - neue Eigenschaft ```currentName```  
+ - ```activateAnimated()``` umbenannt zu ```setCurrentAnimated()```  
+ - ```setCurrentAnimated()``` gibt neu ein Promise zurück  
+ - Werden animierte Übergänge gewünscht, so muss die Funktion ```setCurrentAnimated()``` 
+   verwendet werden. Die Setter ```currentEl```, ```currentIndex``` und ```currentName``` 
+   wechseln ohne Animation.  
+ - Die Standard-Animation ist neu ```'fade'``` 
+ - ```flex: 1``` ist nicht mehr Standard im CSS und muss deshalb, wenn nötig mit 
+   ```style: { flex:1 }``` noch hinzugefügt werden.  
+ - Bisher war jedes Element innerhalb zusätzlich noch in einem DIV.  
+   Dieses wird jetzt nicht mehr benötigt. Evtl. muss dies in eigenen CSS-Styles 
+   noch angepasst werden.  
 
 ### kijs.gui.Panel
-- Der ```header``` und ```footer``` sind neu ```kijs.gui.container.Scroll```. 
+ - Der ```header``` und ```footer``` sind neu ```kijs.gui.container.Scroll```. 
    Elemente. (Früher waren es ```kijs.gui.Container``` Elemente). Sie besitzen 
    aber die gleichen Eigenschaften wie früher.  
    Der Unterschied ist, dass keine Scrollbars mehr angezeigt werden, sondern 
@@ -244,8 +266,20 @@ angezeigt.
         flex-direction: row;
         justify-content: right;
 
+ - Neues Event: ```beforeClose```   
+
+ - Bei der Methode ```close()``` haben die Argumente geändert.  
+   Früher:  ```close(preventEvent=false)```  
+   Jetzt: ```close(preventDestruct=false, preventEvents=false, superCall=false)```  
+   **Bitte berücksichtigen!** => Projekt durchsuchen nach ```close(```  
+
+ **VORSICHT!** Der Standard bei close() ist neu preventDestruct=false **!!!**  
+
+
 ### kijs.gui.FormPanel
  - Argument umbenannt bei Event afterLoad ```response``` heisst neu ```responseData```
+ - Felder mit ```disabled: true``` werden nicht mehr übermittelt.  
+   Felder mit ```readOnly: true``` aber immer noch.
 
 ### kijs.gui.DataView
  - Argument umbenannt bei Event afterLoad ```response``` heisst neu ```responseData```
@@ -253,20 +287,76 @@ angezeigt.
 ### kijs.gui.grid.Grid
  - Die config ```facadeFnBeforeMsgFn``` gibt es nicht mehr.  
 
+### kijs.gui.field.*
+ - Früher besassen alle Felder ein spacerDom. Dieser füllte bei ```disableFle:true``` 
+   den restlichen Platz rechts vom Feld aus.  
+   Diesen gibt es nun nicht mehr. Der gleiche Effekt wird mit der CSS-Eigenschaft 
+   ```align-self: start;``` erreicht. Diese wird bei ```disableFle:true``` automatisch 
+   zugewiesen. Die Änderung sollte deshalb rückwärtskompatibel sein.  
+ - Neue config ```validationRegExp```. Damit können Reguläre Ausdrücke zur Validierung 
+   definiert werden.  
+ - Neue Methode ```addValidationRegExp()```. Hinzufügen eins Regulären Ausdrucks 
+   zur Validierung.  
+
+### kijs.gui.field.Text
+ - Neue config ```formatRegExp```. Damit können Reguläre Ausdrücke zur Formatierung 
+   definiert werden. Die Formatierung wird direkt während der Eingabe angepasst.
+ - Neue Methode ```addFormatRegExp()```. Hinzufügen eins Regulären Ausdrucks 
+   zur Formatierung.  
+
+### kijs.gui.field.Number
+ - Neue config ```formatRegExp```. Damit können Reguläre Ausdrücke zur Formatierung 
+   definiert werden. Die Formatierung wird direkt während der Eingabe angepasst.
+ - Neue Methode ```addFormatRegExp()```. Hinzufügen eins Regulären Ausdrucks 
+   zur Formatierung.  
+ - Neue Eigenschaft ```allowedDecimalSeparators```. Array, mit möglichen 
+   Dezimaltrennzeichen, die beim Eingeben verwendet werden dürfen.
+ - Neue Eigenschaft ```allowedThousandsSeparators```. Array, mit möglichen 
+   Tausendertrennzeichen, die beim Eingeben verwendet werden dürfen.
+
+### kijs.gui.field.Checkbox
+ - Die config/getter/sett ```captionHide``` gibt es nicht mehr.
+
+### kijs.gui.field.Display
+ - Eigenschaft ```htmlDisplayType``` gibt es nicht mehr.
+ - Eigenschaft ```linkType``` gibt es nicht mehr.
+ - Eigenschaft ```links``` umbenannt zu ```clickableLinks```   
+   Damit werden neu alle Hyperlinks (http, https, www und email) durch klickbare 
+   Links ersetzt. Früher wurde der Link nur ersetzt, wenn im Feld sonst kein anderer 
+   Text war.
+
+### kijs.gui.field.Email
+ - Config ```showLinkButton``` umbenannt zu ```linkButtonVisible```  
+ - Neuer Getter ```linkButton```  
+ - hat neu die CSS Klasse ```kijs-field-email``` anstelle von ```kijs-field-text```  
+
+### kijs.gui.field.Switch
+ - Die config/getter/sett ```captionHide``` gibt es nicht mehr.
+
 
 Änderungen im CSS
 --------------------
-- Die CSS-Klasse ```kijs-autoscroll``` gibt es nicht mehr. 
-  ==> Bitte direkt die JS-Eigenschaft ```scrollableY``` von kijs.gui.Container benutzen
+### kijs-autoscroll
+- Die CSS-Klasse ```kijs-autoscroll``` gibt es nicht mehr.  
+  ==> Bitte dafür die Config ```scrollableY``` von kijs.gui.Container benutzen.
 
-- Schriftgrössen vereinheitlicht.
-  - ```defaultFontSize```, ```buttonFontSize``` und ```itemFontSize``` von 11px 
-    auf 12px erhöht.
+### Schriftgrössen vereinheitlicht.
+- ```defaultFontSize```, ```buttonFontSize``` und ```itemFontSize``` von 11px 
+  auf 12px erhöht.
 
-- Neue Variablen (bitte bei eigenen Templates auch einbauen)
-  ```--button-lineHeight: 13px;```
-  ```--item-lineHeight: 13px;```
+### Neue Variablen
+**Bitte bei eigenen Templates auch einbauen!**
+- ```--button-lineHeight: 13px;```  
+- ```--item-lineHeight: 13px;```  
+- ```--bar-disabled-bkgrndColor:```
+- ```--window-footer-button-focus-borderColor: var(--grey9);```  
 
+### Neue Standard CSS-Klassen für Container zum layouten
+Sie sind im Leitfaden *Layout* näher beschrieben.  
+- ```kijs-flexfit```
+- ```kijs-flexrowwrap```
+- ```kijs-flexform```
+- ```kijs-flexline```
 
 
 

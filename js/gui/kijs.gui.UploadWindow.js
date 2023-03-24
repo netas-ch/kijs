@@ -29,6 +29,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -87,10 +88,10 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get uploadDialog() { return this._uploadDialog; }
     set uploadDialog(val) {
         // falls bereits verknüpft, events entfernen
@@ -111,10 +112,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         }
     }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Zeigt das Fenster zur Dateiauswahl an.
      * @param {Boolean} multiple Dürfen mehrere Dateien ausgewählt werden?
@@ -129,6 +131,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         this._uploadDialog.showFileSelectDialog(multiple, directory);
     }
+
 
     // PROTECTED
     _getUploadProgressBar(uploadId) {
@@ -195,9 +198,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -210,4 +215,5 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         // Basisklasse auch entladen
         super.destruct(true);
     }
+    
 };

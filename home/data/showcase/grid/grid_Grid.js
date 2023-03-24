@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.grid_Grid = class home_sc_grid_Grid {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
     }
     
     // TODO: Beispiel mit Autoload in einem eigenen Tab
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
             style: {
                 flex: 1
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.grid.Grid',
@@ -79,6 +82,23 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
 
     }
     
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
 
 
     // --------------------------------------------------------------
@@ -87,4 +107,5 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
     destruct() {
         this._content = null;
     }
+    
 };

@@ -9,6 +9,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -42,19 +43,6 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (this._aceEditor) {
-            if (val || this._dom.clsHas('kijs-disabled')) {
-                this._aceEditor.setReadOnly(true);
-            } else {
-                this._aceEditor.setReadOnly(false);
-            }
-        }
-    }
-
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
@@ -101,6 +89,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._aceEditor.setReadOnly(!!val);
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -197,6 +191,7 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

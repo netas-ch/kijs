@@ -180,11 +180,13 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
         this._afterResizeDeferId = null;   // intern
         this._afterResizeDelay = 300;    // delay beim Aufruf des afterResize-Events
+        this._disabledInitial = false;
         this._dom = new kijs.gui.Dom();
         this._name = null;
         this._parentEl = null;
@@ -244,7 +246,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             displayWaitMask: { target: 'displayWaitMask' },
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
-            xtype: { fn: 'manual' }
+            xtype: { fn: 'manual' },
+            
+            disabled: { prio: 2000, target: 'disabled' }
         };
 
         // Event-Weiterleitungen von this._dom
@@ -294,6 +298,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     get afterResizeDelay() { return this._afterResizeDelay; }
     set afterResizeDelay(val) { this._afterResizeDelay = val; }
 
+    // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
+    get disabled() {  return this._dom.disabled; }
+    set disabled(val) {
+        this.changeDisabled(val, false);
+    }
+    
     get displayWaitMask() { return !kijs.isEmpty(this._waitMaskEl); }
     set displayWaitMask(val) {
         if (val) {
@@ -547,6 +557,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -576,6 +587,31 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         Object.seal(this);
     }
 
+    /**
+     * Ändert die Eigenschaft disabled.
+     * Sollte nicht direkt aufgerufen werden.
+     * Bitte den Setter disabled verwenden.
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled 
+     *                                          des Elterncontainers kommt.
+     * @returns {undefined}
+     */
+    changeDisabled(val, callFromParent) {
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // disabled wieder der vorherige Wert zugewiesen.
+        if (callFromParent) {
+            if (!val) {
+                val = !!this._disabledInitial;
+            }
+            
+        } else {
+            this._disabledInitial = !!val;
+            
+        }
+        
+        this._dom.disabled = !!val;
+    }
+    
     /**
      * Setzt den Fokus auf das Element
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
@@ -820,7 +856,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             // Verwendung erstellen.
             //console.log(forward.target);
             if (forward.target instanceof kijs.gui.Element) {
-                console.log('test');
                 forward.target.on(forward.targetEventName, this.#onForwardEvent, this);
             }*/
         }
@@ -990,9 +1025,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         // atferResize-Events verhindern
         this._preventAfterResize = true;
@@ -1031,4 +1068,5 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Basisklasse entladen
         super.destruct();
     }
+    
 };

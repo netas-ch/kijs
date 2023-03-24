@@ -21,6 +21,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -66,6 +67,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -208,6 +210,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

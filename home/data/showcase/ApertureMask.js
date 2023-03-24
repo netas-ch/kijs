@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.ApertureMask = class home_sc_ApertureMask {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -194,6 +197,23 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
 
     }
 
+
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+
     _test(target) {
         const duration = this._content.down('duration').value;
         const animated = !!this._content.down('animated').value;
@@ -222,6 +242,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
         }
     }
     
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -229,4 +250,5 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
     destruct() {
         this._content = null;
     }
+    
 };

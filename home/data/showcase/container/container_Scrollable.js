@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.container_Scrollable = class home_sc_container_Scrollable {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,11 +27,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
             innerStyle: {
                 padding: '10px'
             },
-            
-            headerInnerStyle:{
-                padding: '10px 10px 0 10px'
-            },
-            
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -164,6 +162,24 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
     run() {
         
     }
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+
 
 
     // --------------------------------------------------------------
@@ -172,4 +188,5 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
     destruct() {
         this._content = null;
     }
+    
 };

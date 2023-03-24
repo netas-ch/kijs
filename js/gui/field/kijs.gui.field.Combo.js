@@ -9,6 +9,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -167,19 +168,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
-        }
-
-        this._listViewEl.disabled = !!val;
-    }
-
     get facadeFnArgs() { return this._listViewEl.facadeFnArgs; }
     set facadeFnArgs(val) { this._listViewEl.facadeFnArgs = val; }
 
@@ -264,6 +252,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._listViewEl.disabled = !!val;
+    }
+    
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -751,6 +745,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

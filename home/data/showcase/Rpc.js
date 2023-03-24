@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Rpc = class home_sc_Rpc {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,25 +13,26 @@ home.sc.Rpc = class home_sc_Rpc {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Rpc',
-            scrollableY: 'auto',
             cls: 'kijs-flexform',
+            scrollableY: 'auto',
             style: {
                 flex: 1
             },
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'RPC:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'RPC:'
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'RPC mit Promise',
@@ -105,7 +107,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'RPCs automatisch zusammenfassen (RPCs innerhalb von 10ms werden zusammengefasst:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Sende 3 RPCs',
@@ -128,7 +130,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'RPC Meldungen:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'infoMsg',
@@ -179,7 +181,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Fehlerbehandlung (errorTypes):',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'errorNotice',
@@ -211,7 +213,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimale Fehlerbehandlung:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'error ohne Fehlerbehandlung',
@@ -259,7 +261,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'RPC mit individueller Lademaske:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'RPC verzögert mit Lademaske auf einem individuellen Element',
@@ -304,6 +306,24 @@ home.sc.Rpc = class home_sc_Rpc {
 
     }
     
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -311,4 +331,5 @@ home.sc.Rpc = class home_sc_Rpc {
     destruct() {
         this._content = null;
     }
+    
 };

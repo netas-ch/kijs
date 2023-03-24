@@ -9,6 +9,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -47,7 +48,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // DOM für Menu
         this._menuButtonEl = new kijs.gui.Button({
             parent: this,
-            menuElements: [{
+            disableFlex: false,
+            smallPaddings: false,
+            menuElements: [
+                {
                     name    : 'btn-sort-asc',
                     caption : kijs.getText('Aufsteigend sortieren'),
                     iconMap: 'kijs.iconMap.Fa.arrow-down-a-z',
@@ -91,7 +95,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
                         },
                         context: this
                     }
-                }]
+                }
+            ]
         });
 
         // DOM für Schieber
@@ -371,7 +376,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
     
     #onDdStart(e) {
-        console.log('ddstart');
         // wenn splitter nicht bewegt wird, drag starten
         if (this._splitterMove) {
             return false;
@@ -426,6 +430,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

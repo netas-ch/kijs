@@ -6,9 +6,8 @@
 kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
 
-    // TODO: disabled und readOnly haben keine Auswirkungen auf Felder in Containern.
+    // TODO: disabled hat keine Auswirkungen auf Felder in Containern.
     // TODO: Dynamisches Laden von ganzen Formularen mit load() testen
-    // TODO: Neues Feld für Überschriften
     // TODO: Neuer Container für die Verwendung von Feldern nebeneinander
     //       - Es muss eine Spaltenzahl angegeben werden können. Der Container hat dann soviele Spalten (Untercontainer)
     //       - Standardwerte müssen an untergeordnete Elemente weitergegeben werden
@@ -23,6 +22,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -87,7 +87,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Evtl. Daten aus Formular holen
         if (!kijs.isEmpty(this._fields)) {
             kijs.Array.each(this._fields, function(field) {
-                if (field.submitValue !== false) {
+                if (field.submitValue && !field.disabled) {
                     // Bestehendes Recordset mit Daten aus dem Feld ergänzen
                     Object.assign(this._data, field.values);
                 } else {
@@ -298,8 +298,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 }).then((e) => {
                     // Formular
                     if (e.responseData.form) {
-                        this.removeAll();
-                        this.add(e.responseData.form);
+                        this.removeAll(true);
+                        this.add(e.responseData.form, true);
                     }
 
                     if (searchFields || e.responseData.form || kijs.isEmpty(this._fields)) {
@@ -318,10 +318,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
                     // 'Dirty' zurücksetzen
                     this.isDirty = false;
+                    
+                    // rendern
+                    this.render();
 
                     // load event
                     this.raiseEvent('afterLoad', e);
-
+                    
                     // promise ausführen
                     resolve(e);
                     
@@ -412,7 +415,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                         oldField.off('add', this.#onChildAdd, this);
                         oldField.off('remove', this.#onChildRemove, this);
                     }
-                })
+                });
             }
 
             this._fields = ret;
@@ -537,6 +540,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

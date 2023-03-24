@@ -9,6 +9,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -49,6 +50,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -253,6 +255,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

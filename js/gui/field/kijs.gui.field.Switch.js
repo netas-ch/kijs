@@ -45,10 +45,9 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
-
-        this._captionHide = false;                  // caption ausblenden?
 
         this._checked = 0;                          // 0=checked, 1=unchecked
 
@@ -72,7 +71,8 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
-            nodeTagName: 'span'
+            nodeTagName: 'span',
+            htmlDisplayType: 'code'
         });
 
         this._dom.clsAdd('kijs-field-switch');
@@ -110,7 +110,8 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._eventForwardsAdd('blur', this._inputDom);
 
         // Listeners
-        this._inputDom.on('click', this.#onClick, this);
+        this._labelDom.on('click', this.#onClick, this);
+        this._inputWrapperDom.on('click', this.#onClick, this);
         this._inputDom.on('spacePress', this.#onSpacePress, this);
 
         // Config anwenden
@@ -131,18 +132,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
     get captionDom() { return this._captionDom; }
-
-    get captionHide() { return this._captionHide; }
-    set captionHide(val) {
-        this._captionHide = val;
-        if (this.isRendered) {
-            if (val) {
-                this._captionDom.renderTo(this._inputWrapperDom.node, this._inputDom.node);
-            } else {
-                this._captionDom.unrender();
-            }
-        }
-    }
 
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
@@ -266,7 +255,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         }
 
         // Span caption rendern (kijs.guiDom)
-        if (!this._captionHide) {
+        if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
         } else if (this._captionDom.isRendered) {
             this._captionDom.unrender();
@@ -361,9 +350,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

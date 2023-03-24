@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Menu = class home_sc_Menu {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.Menu = class home_sc_Menu {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.Menu = class home_sc_Menu {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -37,9 +40,11 @@ home.sc.Menu = class home_sc_Menu {
                     menuElements: [
                         {
                             caption:'Hallo 1'
-                        },{
+                        },
+                        'Text',
+                        {
                             caption:'Hallo 3',
-                            iconMap: 'kijs.iconMap.Fa.brain',
+                            iconMap: 'kijs.iconMap.Fa.brain'
                         }, '-', {
                             xtype: 'kijs.gui.Button',
                             caption:'MULTI',
@@ -137,7 +142,25 @@ home.sc.Menu = class home_sc_Menu {
     run() {
 
     }
-
+    
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -145,4 +168,5 @@ home.sc.Menu = class home_sc_Menu {
     destruct() {
         this._content = null;
     }
+    
 };

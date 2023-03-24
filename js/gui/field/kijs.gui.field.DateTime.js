@@ -5,9 +5,11 @@
 // --------------------------------------------------------------
 kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.Field {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -100,6 +102,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         Object.assign(this._defaultConfig, {
             autocomplete: false,
             disableFlex: true,
+            mode: 'date',
             spinIconVisible: true,
             spinIconMap: 'kijs.iconMap.Fa.calendar',
             virtualKeyboardPolicy: 'manual'      // Mobile: Tastatur nicht automatisch öffnen
@@ -148,6 +151,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._createSpinBoxElements();
     }
+
 
 
     // --------------------------------------------------------------
@@ -225,17 +229,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     // overwrite
     get datePicker() { return this._datePicker; }
-
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
-        }
-    }
 
     get inputDom() { return this._inputDom; }
 
@@ -471,6 +464,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._inputDom.disabled = !!val;
+    }
+    
+    // overwrite
     render(superCall) {
         super.render(true);
 
@@ -511,23 +510,31 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         if (hasDate) {
-            this._spinBoxEl.add(this._datePicker);
+            this._spinBoxEl.add(this._datePicker, null, true);
         } else {
-            this._spinBoxEl.remove(this._datePicker);
+            if (this._spinBoxEl.hasChild(this._datePicker)) {
+                this._spinBoxEl.remove(this._datePicker, true, true);
+            }
         }
 
         if (hasDate && hasTime) {
-            this._spinBoxEl.add(this._seperatorEl);
+            this._spinBoxEl.add(this._seperatorEl, null, true);
         } else {
-            this._spinBoxEl.remove(this._seperatorEl);
+            if (this._spinBoxEl.hasChild(this._seperatorEl)) {
+                this._spinBoxEl.remove(this._seperatorEl, true, true);
+            }
         }
 
         if (hasTime) {
-            this._spinBoxEl.add(this._timePicker);
+            this._spinBoxEl.add(this._timePicker, null, true);
         } else {
-            this._spinBoxEl.remove(this._timePicker);
+            if (this._spinBoxEl.hasChild(this._timePicker)) {
+                this._spinBoxEl.remove(this._timePicker, true, true);
+            }
         }
-
+        
+        this._spinBoxEl.render();
+        
         switch (this._mode) {
             case 'range':
             case 'week':
@@ -1155,6 +1162,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

@@ -28,12 +28,13 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
     // --------------------------------------------------------------
     // xy.Classname
     // --------------------------------------------------------------
-    xy.Button = class xy_Classname {
+    xy.Classname = class xy_Classname extends kijs.gui.Elements {
 
 
         // --------------------------------------------------------------
         // CONSTRUCTOR
         // --------------------------------------------------------------
+        // overwrite
         constructor(config={}) {
             super(false);
 
@@ -79,6 +80,7 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
         // --------------------------------------------------------------
         // DESTRUCTOR
         // --------------------------------------------------------------
+        // overwrite
         destruct(superCall) {
             if (!superCall) {
                 // unrendern

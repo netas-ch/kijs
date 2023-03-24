@@ -64,7 +64,7 @@ kijs.Number = class kijs_String {
 
         return ret;
     }
-
+    
     /**
      * Parst ein String zu einer Nummer und rundet auf die angegebenen Decimals.
      * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer  aufgerundet.
@@ -75,6 +75,7 @@ kijs.Number = class kijs_String {
      * @returns {Number}
      */
     static parse(number, decimals=0, decPoint='.', thousandsSep='\'') {
+        number = kijs.toString(number);
         if (thousandsSep !== '') {
             number = kijs.String.replaceAll(number, thousandsSep, '');
         }

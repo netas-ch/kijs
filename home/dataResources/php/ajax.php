@@ -19,12 +19,12 @@ foreach ($requests as $request) {
             try {
                 $rows = array();
 
-                $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconChar' => 0xf111);
-                $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconChar' => 0xf111);
-                $rows[] = array('Bez' => 'blau', 'color' => '#00f', 'iconChar' => 0xf111);
-                $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconChar' => 0xf111);
-                $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconChar' => 0xf111);
-                $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconChar' => 0xf111);
+                $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => 'blau', 'color' => '#00f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
+                $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 $response->responseData->rows = $rows;
 
                 //sleep(1);
@@ -395,12 +395,12 @@ foreach ($requests as $request) {
             try {
                 $rows = array();
 
-                $rows[] = array('caption'=>'rot', 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.circle');
-                $rows[] = array('caption'=>'grün', 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.circle');
-                $rows[] = array('caption'=>'blau', 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.circle');
-                $rows[] = array('caption'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.circle');
-                $rows[] = array('caption'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.circle');
-                $rows[] = array('caption'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.circle');
+                $rows[] = array('caption'=>'rot', 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('caption'=>'grün', 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('caption'=>'blau', 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('caption'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('caption'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('caption'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $response->responseData->rows = $rows;
 
                 //sleep(1);

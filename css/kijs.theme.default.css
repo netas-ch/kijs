@@ -70,6 +70,7 @@
     /* Default */
     --default-fontFamily: 'Roboto', sans-serif;
     --default-fontColor: var(--grey9);
+    --default-disabled-fontColor: var(--grey7);
     --default-fontSize: 12px;
     --default-lineHeight: 13px;
 
@@ -84,7 +85,7 @@
     --button-icon-fontColor: var(--grey8);
 
     --button-focus-bkgrndColor: var(--grey4);
-    --button-focus-borderColor: var(--grey4);
+    --button-focus-borderColor: var(--accentColor);
     --button-focus-fontColor: var(--grey9);
 
     --button-disabled-fontColor: var(--grey7);
@@ -110,7 +111,7 @@
     --footer-button-borderColor: var(--grey6);
 
     --footer-button-focus-bkgrndColor: var(--grey4);
-    --footer-button-focus-borderColor: var(--grey6);
+    --footer-button-focus-borderColor: var(--accentColor);
 
     --footer-button-disabled-bkgrndColor: var(--grey2);
     --footer-button-disabled-borderColor: var(--grey6);
@@ -121,9 +122,10 @@
     --window-footer-button-borderColor: var(--accentColor);
     --window-footer-button-fontColor: var(--grey9);
 
+    --window-footer-button-focus-borderColor: var(--grey9);
     --window-footer-button-focus-fontColor: var(--grey9);
 
-    
+   
     /* Tab */
     --tabBar-bkgrndColor: var(--grey2);
     
@@ -157,7 +159,9 @@
     /* Bar */
     --bar-fontColor: var(--grey0);
     --bar-bkgrndColor: var(--accentColor);
-
+    --bar-disabled-fontColor: var(--grey2);
+    --bar-disabled-bkgrndColor: var(--grey6);
+    
     --headerBar-fontSize: 14px;
     --footerBar-fontSize: 12px;
 
@@ -180,7 +184,7 @@
     --field-item-bkgrndColor: var(--grey8);
     --field-item-focus-bkgrndColor: var(--accentColor);
 
-    --field-disabled-bkgrndColor: var(--grey3);
+    --field-disabled-bkgrndColor: var(--grey2);
     --field-disabled-fontColor: var(--grey7);
 
     --field-error-bkgrndColor: var(--errorColorLight);
@@ -204,11 +208,11 @@
     --item-selected-borderColor: var(--accentColor);
     --item-selected-fontColor: var(--grey9);
 
-    --item-disabled-bkgrndColor: var(--grey3);
+    --item-disabled-bkgrndColor: var(--grey2);
     --item-disabled-borderColor: var(--grey4);
     --item-disabled-fontColor: var(--grey9);
 
-    --item-selected-disabled-bkgrndColor: var(--grey3);
+    --item-selected-disabled-bkgrndColor: var(--grey2);
     --item-selected-disabled-borderColor: var(--grey6);
     --item-selected-disabled-fontColor: var(--grey9);
 
@@ -220,6 +224,7 @@
     --clock-bkgrndColor: var(--grey3);
     --clock-fontColor: var(--grey9);
     --clock-pointer-bkgrndColor: var(--accentColor);
+    --clock-disabled-pointer-bkgrndColor: var(--grey6);
     
 
     /* Help/Error Icon */

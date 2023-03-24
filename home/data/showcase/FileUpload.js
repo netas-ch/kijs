@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.FileUpload = class home_sc_FileUpload {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -40,7 +42,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
 
     }
 
-        
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -48,4 +50,5 @@ home.sc.FileUpload = class home_sc_FileUpload {
     destruct() {
         this._content = null;
     }
+    
 };

@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.SpinBox = class home_sc_SpinBox {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,6 +12,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
         this._content = null;
         this._spinBox = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -26,6 +28,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -202,12 +205,30 @@ home.sc.SpinBox = class home_sc_SpinBox {
         this._updateSpinBox();
     }
     
+    
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
     _updateSpinBox() {
         this._spinBox.ownPos = this._content.down('ownPos').value;
         this._spinBox.targetPos = this._content.down('targetPos').value;
         this._spinBox.autoSize = this._content.down('autoSize').value;
         this._spinBox.show();
     }
+    
     
     
     // --------------------------------------------------------------
@@ -221,4 +242,5 @@ home.sc.SpinBox = class home_sc_SpinBox {
         this._spinBox = null;
         this._content = null;
     }
+    
 };

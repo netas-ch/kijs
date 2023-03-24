@@ -19,6 +19,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
         this._rpc = null;
@@ -293,7 +294,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         elements = this._recursiveSetProperties(elements);
         super.add(elements, index);
     }
-
+    
     /**
      * Klappt die Node zu.
      * @returns {undefined}
@@ -426,7 +427,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     this.loadSpinner = false;
                     
                     // alle unterelemente entfernen und destructen
-                    this.removeAll(false, true);
+                    this.removeAll();
                     
                     if (e.responseData.tree) {
                         this.add(e.responseData.tree);
@@ -435,7 +436,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     
                 }).catch((ex) => {
                     this.loadSpinner = false;
-                    this.removeAll(false, true);
+                    this.removeAll();
                     reject(ex);
                 });
                 
@@ -446,9 +447,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     }
 
     // overwrite
-    remove(elements, preventRender=false, destruct=false) {
-        super.remove(elements, preventRender, destruct);
-        if (this.elements.length === 0) {
+    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+        super.remove(elements, preventRender, preventDestruct, preventEvents, superCall);
+        
+        if (this._elements.length === 0) {
             this.collapse();
         }
     }
@@ -602,6 +604,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {undefined}
      */
     #onDdDrop(dropData) {
+        if (this.disabled) {
+            return;
+        }
         if (this.draggable) {
             let eventData = {
                 movedNode   : dropData.sourceElement,
@@ -644,7 +649,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             // Elemente verschieben im Dom
             } else {
                 // Node entfernen
-                eventData.movedNode.parent.remove(eventData.movedNode);
+                eventData.movedNode.parent.remove(eventData.movedNode, true, true);
 
                 // Node wieder einfügen.
                 if (eventData.position === 'onto') {
@@ -668,6 +673,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {undefined}
      */
     #onDdOver(dragData) {
+        if (this.disabled) {
+            return;
+        }
+        
         // Ein Ordner kann nicht in sein Kindordner gezogen werden
         if (!this.draggable || this.isChildOf(dragData.sourceElement)) {
             dragData.position.allowAbove = false;
@@ -694,6 +703,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @param {Object} dragData
      */
     #onDdStart(dragData) {
+        if (this.disabled) {
+            return;
+        }
         dragData.position.allowLeft = false;
         dragData.position.allowRight = false;
         dragData.position.allowAbove = false;
@@ -708,9 +720,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @private
      */
     #onExpandClick() {
-        if (this.loadSpinner) {
+        if (this.loadSpinner || this.disabled) {
             return;
         }
+        console.log('sdfsfsfd');
         if (this.expanded) {
             this.collapse();
         } else {
@@ -726,7 +739,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {undefined}
      */
     #onNodeDblClick() {
-        if (this.loadSpinner) {
+        if (this.loadSpinner || this.disabled) {
             return;
         }
         if (this.expanded) {
@@ -741,7 +754,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
     // Selektiert die Node
     #onNodeSingleClick() {
-        if (this.loadSpinner) {
+        if (this.loadSpinner || this.disabled) {
             return;
         }
         // alles deselektieren, nur aktuelle selektiert
@@ -755,6 +768,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern
@@ -775,4 +789,5 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

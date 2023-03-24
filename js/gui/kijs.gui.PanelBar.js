@@ -9,6 +9,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -64,6 +65,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -125,6 +127,7 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     get containerRightEl() { return this._containerRightEl; }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -181,9 +184,22 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     }
 
 
+    // PROTECTED
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        
+        this._iconEl.changeDisabled(val, callFromParent);
+        this._containerLeftEl.changeDisabled(val, callFromParent);
+        this._containerRightEl.changeDisabled(val, callFromParent);
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

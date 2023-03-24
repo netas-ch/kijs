@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.ProgressBar = class home_sc_ProgressBar {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -15,6 +16,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
         this._win = null;
         this._winIntervalId = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -30,6 +32,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
@@ -86,6 +89,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'OK',
                                             isDefault: true,
+                                            style: { minWidth:'80px' },
                                             on: {
                                                 click: function() {
                                                     this._win.destruct();
@@ -143,6 +147,24 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
     }
 
 
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -158,4 +180,5 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
         this._win = null;
         this._content = null;
     }
+    
 };

@@ -45,10 +45,9 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
-
-        this._captionHide = false;                  // caption ausblenden?
 
         this._checked = 0;                          // 0=checked, 1=unchecked, 2=indeterminated
 
@@ -79,7 +78,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
-            nodeTagName: 'span'
+            nodeTagName: 'span',
+            htmlDisplayType: 'code'
         });
 
         this._dom.clsAdd('kijs-field-checkbox');
@@ -127,6 +127,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._eventForwardsAdd('blur', this._inputWrapperDom);
 
         // Listeners
+        this._labelDom.on('click', this.#onClick, this);
         this._inputWrapperDom.on('click', this.#onClick, this);
         this._inputWrapperDom.on('spacePress', this.#onSpacePress, this);
 
@@ -148,19 +149,6 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     }
 
     get captionDom() { return this._captionDom; }
-
-
-    get captionHide() { return this._captionHide; }
-    set captionHide(val) {
-        this._captionHide = val;
-        if (this.isRendered) {
-            if (val) {
-                this._captionDom.renderTo(this._inputWrapperDom.node, this._inputDom.node);
-            } else {
-                this._captionDom.unrender();
-            }
-        }
-    }
 
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
@@ -294,7 +282,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
 
         // Span caption rendern (kijs.guiDom)
-        if (!this._captionHide) {
+        if (!this._captionDom.isEmpty) {
             this._captionDom.renderTo(this._inputWrapperDom.node);
         } else if (this._captionDom.isRendered) {
             this._captionDom.unrender();
@@ -420,6 +408,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

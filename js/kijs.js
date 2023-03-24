@@ -278,6 +278,15 @@ window.kijs = class kijs {
     static isReady(fn, context) {
         document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context || this), false);
     }
+    
+    /**
+     * Prüft, ob ein value vom Typ RegExp ist.
+     * @param {Object} value
+     * @returns {Boolean}
+     */
+    static isRegExp(value) {
+        return (typeof value === 'object') && (value instanceof RegExp);
+    }
 
     /**
      * Prüft, ob ein Wert eine Instanz von einem Standard-Objekt ist. (z.B. let obj = {};)

@@ -9,9 +9,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
-
+        
+        this._smallPaddings = 'auto';
+        
         this._captionDom = new kijs.gui.Dom({
             cls: 'kijs-caption',
             nodeTagName: 'span'
@@ -48,6 +51,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
+            smallPaddings: true,                    // false=breite Abstände, true=schmale Abstände, 'auto'=automatisch (default)
             icon: { target: 'icon' },
             iconMap: { target: 'iconMap', context: this._iconEl },
             iconChar: { target: 'iconChar', context: this._iconEl },
@@ -63,9 +67,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             menuElements: { target: 'menuElements', prio: 200 },
             menuCloseOnClick: { target: 'menuCloseOnClick', prio: 201 },
             menuDirection: { target: 'menuDirection', prio: 200 },
-            menuExpandOnHover: { target: 'menuExpandOnHover', prio: 200 },
-
-            disabled: { prio: 100, target: 'disabled' }
+            menuExpandOnHover: { target: 'menuExpandOnHover', prio: 200 }
         });
 
         // Config anwenden
@@ -76,9 +78,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get badgeDom() { return this._badgeDom; }
+
     get badgeText() { return this._badgeDom.html; }
     set badgeText(val) {
         this._badgeDom.html = val;
@@ -86,8 +91,6 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             this.render();
         }
     }
-
-    get badgeDom() { return this._badgeDom; }
 
     get badgeTextHtmlDisplayType() { return this._badgeDom.htmlDisplayType; }
     set badgeTextHtmlDisplayType(val) { this._badgeDom.htmlDisplayType = val; }
@@ -105,16 +108,6 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
-    get disabled() { return this._dom.disabled; }
-    set disabled(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-disabled');
-        } else {
-            this._dom.clsRemove('kijs-disabled');
-        }
-        this._dom.disabled = val;
-    }
-
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -127,6 +120,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
     
+    // overwrite
+    get html() { return this.caption; }
+    set html(val) { this.caption = val; }
+
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -236,7 +233,6 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // overwrite
     get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._icon2El.isEmpty && this._badgeDom.isEmpty; }
 
-
     get menu() { return this._menuEl; }
     set menu(val) {
         // Menu zurücksetzen?
@@ -271,40 +267,35 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     set menuDirection(val) { this._createMenu().direction = val; }
     set menuExpandOnHover(val) { this._createMenu().expandOnHover = val; }
 
+    get smallPaddings() { return this._smallPaddings; }
+    set smallPaddings(val) {
+        let changed = this._smallPaddings !== val;
+        this._smallPaddings = val;
+        if (changed && this.isRendered) {
+            this.render();
+        }
+    }
+    
+    
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
-    /**
-     * Erstellt die Instanz vom Menu.
-     * @returns {kijs.gui.Menu}
-     */
-    _createMenu() {
-        if (this._menuEl) {
-            this._menuEl.parent = this;
-            this._menuEl.button = this;
-        } else {
-            this._menuEl = new kijs.gui.Menu({
-                parent: this,
-                button: this
-            });
-        }
-
-        if (!this.icon2Char) {
-            this.icon2Map = this._menuEl.getIconMap();
-        }
-
-        return this._menuEl;
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._iconEl.changeDisabled(val, callFromParent);
+        this._icon2El.changeDisabled(val, callFromParent);
+        this._iconEl.changeDisabled(val, callFromParent);
     }
-
+    
     // Overwrite
     render(superCall) {
-        // falls der Button keine caption hat, wird er mit kleineren Rändern angezeigt.
-        if (this._captionDom.isEmpty) {
-            this._dom.clsAdd('kijs-small');
+        // Evtl. schmale Ränder anzeigen?
+        if (this._hasSmallPaddings()) {
+            this._dom.clsAdd('kijs-smallpaddings');
         } else {
-            this._dom.clsRemove('kijs-small');
+            this._dom.clsRemove('kijs-smallpaddings');
         }
         
         super.render(true);
@@ -370,9 +361,46 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
 
+    // PROTECTED
+    /**
+     * Erstellt die Instanz vom Menu.
+     * @returns {kijs.gui.Menu}
+     */
+    _createMenu() {
+        if (this._menuEl) {
+            this._menuEl.parent = this;
+            this._menuEl.button = this;
+        } else {
+            this._menuEl = new kijs.gui.Menu({
+                parent: this,
+                button: this
+            });
+        }
+
+        if (!this.icon2Char) {
+            this.icon2Map = this._menuEl.getIconMap();
+        }
+
+        return this._menuEl;
+    }
+    
+    // Sollen links/rechts nur schmale Paddings angezeigt werden?
+    _hasSmallPaddings() {
+        // 'auto' = falls der Button keine caption hat und nicht disableFlex hat, 
+        // wird er mit kleineren Paddings angezeigt.
+        if (this._smallPaddings === 'auto') {
+            return this._captionDom.isEmpty && this._dom.clsHas('kijs-disableFlex');
+        } else {
+            return !!this._smallPaddings;
+        }
+    }
+    
+    
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

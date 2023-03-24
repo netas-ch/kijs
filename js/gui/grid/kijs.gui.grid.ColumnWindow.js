@@ -9,6 +9,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -28,9 +29,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             innerStyle: {
                 padding: '10px'
             },
-            footerStyle: {
-                padding: '10px'
-            },
+
             footerElements:[
                 {
                     xtype: 'kijs.gui.Button',
@@ -129,12 +128,12 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     
     #onOkClick() {
         let flds = this.down('fields').value;
-
+        
         // Sichtbarkeit übernehmen
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
             columnConfig.visible = kijs.Array.contains(flds, columnConfig.valueField);
         }, this);
-
+        
         // Sortierung übernehmen
         let elements = this.down('fields').elements;
         for (let i=0; i<elements.length; i++) {
@@ -156,6 +155,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.Mask = class home_sc_Mask {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,6 +11,7 @@ home.sc.Mask = class home_sc_Mask {
         this._app = config.app;
         this._content = null;
     }
+    
     
     
     // --------------------------------------------------------------
@@ -25,6 +27,7 @@ home.sc.Mask = class home_sc_Mask {
             innerStyle: {
                 padding: '10px'
             },
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
@@ -111,9 +114,9 @@ home.sc.Mask = class home_sc_Mask {
                         margin: '15px'
                     },
                     data: [
-                        { id:'elRed', caption:'rot', color:'#f00', icon:'kijs.iconMap.Fa.circle' },
-                        { id:'elGreen', caption:'grün', color:'#0f0', icon:'kijs.iconMap.Fa.circle' },
-                        { id:'elBlue', caption:'blau', color:'#00f', icon:'kijs.iconMap.Fa.circle' }
+                        { id:'elRed', caption:'rot', color:'#f00', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elGreen', caption:'grün', color:'#0f0', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elBlue', caption:'blau', color:'#00f', icon:'kijs.iconMap.Fa.droplet' }
                     ],
                     value: 'elGreen'
                 },
@@ -194,10 +197,29 @@ home.sc.Mask = class home_sc_Mask {
     }
     
     
+    // PROTECTED
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
+    
+    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
+    
 };

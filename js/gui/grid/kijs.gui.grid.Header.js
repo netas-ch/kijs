@@ -9,6 +9,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -197,6 +198,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

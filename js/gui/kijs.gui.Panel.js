@@ -9,6 +9,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -44,6 +45,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         this._closeButtonEl = null;
         this._collapseButtonEl = null;
+        this._innerDisabled = false;
         this._maximizeButtonEl = null;
         this._collapsible = false;
         this._resizerEl = null;
@@ -65,46 +67,55 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         Object.assign(this._configMap, {
             // headerBar
             caption: { target: 'html', context: this._headerBarEl },
-            headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },
-            headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },
-            headerBarDefaults: { target: 'defaults', context: this._headerBarEl },
-            headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },
+            
+            collapseHeight: true,
+            collapseWidth: true,
+
             iconChar: { target: 'iconChar', context: this._headerBarEl },
             iconCls: { target: 'iconCls', context: this._headerBarEl },
             iconColor: { target: 'iconColor', context: this._headerBarEl },
             iconMap: { target: 'iconMap', context: this._headerBarEl },
+            
+            headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },
+            headerBarDefaults: { target: 'defaults', context: this._headerBarEl },
+            headerBarDisabled: { target: 'disabled', context: this._headerBarEl },
+            headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },
+            headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },
 
             // header
-            headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
-            headerDefaults: { target: 'defaults', context: this._headerEl },
             headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
-            headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
+            headerDefaults: { target: 'defaults', context: this._headerEl },
+            headerDisabled: { target: 'disabled', context: this._headerEl },
+            headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
             headerInnerCls: { fn: 'function', target: this._headerEl.innerDom.clsAdd, context: this._headerEl.innerDom },
             headerInnerStyle: { fn: 'assign', target: 'style', context: this._headerEl.innerDom },
             headerScrollableX: { target: 'scrollableX', context: this._headerEl },
             headerScrollableY: { target: 'scrollableY', context: this._headerEl },
+            headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
+            
+            // inner
+            innerDisabled: { target: 'innerDisabled' },
             
             // footer
-            footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
-            footerDefaults: { target: 'defaults', context: this._footerEl },
             footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
-            footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
+            footerDefaults: { target: 'defaults', context: this._footerEl },
+            footerDisabled: { target: 'disabled', context: this._footerEl },
+            footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
             footerInnerCls: { fn: 'function', target: this._footerEl.innerDom.clsAdd, context: this._footerEl.innerDom },
             footerInnerStyle: { fn: 'assign', target: 'style', context: this._footerEl.innerDom },
             footerScrollableX: { target: 'scrollableX', context: this._footerEl },
             footerScrollableY: { target: 'scrollableY', context: this._footerEl },
+            footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
 
             // footerBar
             footerBarCaption: { target: 'html', context: this._footerBarEl },
-            footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
             footerBarDefaults: { target: 'defaults', context: this._footerBarEl },
+            footerBarDisabled: { target: 'disabled', context: this._footerBarEl },
+            footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
             shadow: { target: 'shadow' },       // Soll ein Schatten angezeigt werden?
-
-            collapseHeight: true,
-            collapseWidth: true,
             
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -129,6 +140,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -318,6 +330,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    get innerDisabled() { return this._innerDisabled; }
+    set innerDisabled(val) {
+        this._innerDisabled = !!val;
+        kijs.Array.each(this._elements, function(el) {
+            el.changeDisabled(!!val, true);
+        }, this);
+    }
+
     get maximizable() { return !!this._maximizeButtonEl; }
     set maximizable(val) {
         if (val) {
@@ -430,23 +450,49 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._innerDisabled = !!val;
+        this._headerBarEl.changeDisabled(!!val, true);
+        this._headerEl.changeDisabled(!!val, true);
+        this._footerEl.changeDisabled(!!val, true);
+        this._footerBarEl.changeDisabled(!!val, true);
+    }
+    
     /**
      * Schliesst das Panel
-     * @param {bool} [preventEvent=false] Kein 'close' Event auslösen
+     * @param {Booelan} [preventDestruct=false] Kein 'close' Event auslösen
+     * @param {Booelan} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
+     * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
-    close(preventEvent=false) {
-        if (!preventEvent) {
-            this.raiseEvent('close');
+    close(preventDestruct, preventEvents, superCall) {
+        if (!superCall) {
+            if (!preventEvents) {
+                // beforeClose Event. Bei Rückgabe=false -> abbrechen
+                if (this.raiseEvent('beforeClose') === false) {
+                    return;
+                }
+            }
         }
-
+        
         if (this._parentEl && (this._parentEl instanceof kijs.gui.Container) && this._parentEl.hasChild(this)) {
-            this._parentEl.remove(this);
+            this._parentEl.remove(this, false, preventDestruct, preventEvents);
         } else {
-            this.unrender();
+            if (preventDestruct) {
+                this.unrender();
+            } else {
+                this.destruct();
+            }
+        }
+        
+        if (!preventEvents) {
+            this.raiseEvent('close');
         }
     }
 
@@ -843,6 +889,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

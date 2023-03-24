@@ -65,6 +65,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -163,18 +164,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._updateInputValue();
         this._lastDate = val;
     }
-
-    // overwrite
-    get disabled() { return super.disabled; }
-    set disabled(val) {
-        super.disabled = !!val;
-        if (val) {
-            this._inputDom.disabled = true;
-        } else {
-            this._inputDom.disabled = false;
-        }
-    }
-
+    
     get displayFormat() { return this._monthPicker.headerBarFormat; }
     set displayFormat(val) { this._monthPicker.headerBarFormat = val; }
 
@@ -219,6 +209,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._inputDom.disabled = !!val;
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -396,6 +392,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

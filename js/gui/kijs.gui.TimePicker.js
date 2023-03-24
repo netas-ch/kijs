@@ -9,6 +9,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -175,6 +176,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -261,6 +263,23 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        
+        this._headerBar.changeDisabled(val, callFromParent);
+        
+        this._inputHourDom.changeDisabled(val, callFromParent);
+        this._inputMinuteDom.changeDisabled(val, callFromParent);
+        this._inputSecondDom.changeDisabled(val, callFromParent);
+        
+        this._nowBtn.changeDisabled(val, callFromParent);
+        this._emptyBtn.changeDisabled(val, callFromParent);
+        this._closeBtn.changeDisabled(val, callFromParent);
+        
+        this._calculate();
+    }
+    
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -503,15 +522,19 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
 
     _drawPointer(degree, distance) {
+        const cStyle = getComputedStyle(document.documentElement);
+        const bkgrndColor = this.disabled
+                ? cStyle.getPropertyValue('--clock-disabled-pointer-bkgrndColor')
+                : cStyle.getPropertyValue('--clock-pointer-bkgrndColor');
         let coords = this._degreeToCoordinates(degree, distance);
         this._canvas.beginPath();
-        this._canvas.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-pointer-bkgrndColor');
+        this._canvas.strokeStyle = bkgrndColor;
         this._canvas.lineWidth = 2.0;
         this._canvas.moveTo(this._clockRadius, this._clockRadius);
         this._canvas.lineTo(coords.x, coords.y);
         this._canvas.stroke();
         this._canvas.beginPath();
-        this._canvas.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--clock-pointer-bkgrndColor');
+        this._canvas.fillStyle = bkgrndColor;
         this._canvas.arc(coords.x, coords.y, 12, 0, Math.PI*2); // Kreis
         this._canvas.fill();
     }
@@ -558,101 +581,103 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {undefined}
      */
     #onCanvasMouseClick(e) {
-        const curValue = this.value;
-        let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY;
-        let dg = this._coordinatesToDegree(x, y);
-        let inputFinished = false;
+        if (!this.disabled) {
+            const curValue = this.value;
+            let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY;
+            let dg = this._coordinatesToDegree(x, y);
+            let inputFinished = false;
 
-        // ausserhalb kreis
-        if (dg.distance < 0) {
-            return;
-        }
+            // ausserhalb kreis
+            if (dg.distance < 0) {
+                return;
+            }
 
-        // auf 30 grad runden
-        dg.degree = Math.round(dg.degree / 30) * 30;
+            // auf 30 grad runden
+            dg.degree = Math.round(dg.degree / 30) * 30;
 
-        this._empty = false;
+            this._empty = false;
 
-        // Stunde
-        if (this._clockMode === 1) {
-            let hour = 12 / 360 * dg.degree;
-            if (dg.distance < ((this._distance.hourAm+this._distance.hourPm)/2)) {
-                if (hour !== 0) {
+            // Stunde
+            if (this._clockMode === 1) {
+                let hour = 12 / 360 * dg.degree;
+                if (dg.distance < ((this._distance.hourAm+this._distance.hourPm)/2)) {
+                    if (hour !== 0) {
+                        hour += 12;
+                    }
+                } else if (hour === 0) {
                     hour += 12;
                 }
-            } else if (hour === 0) {
-                hour += 12;
-            }
 
-            this._hour = hour;
-            if (this._inputHourDom.isRendered) {
-                if (this._minutesHide) {
-                    inputFinished = true;
-                    this._inputHourDom.focus();
+                this._hour = hour;
+                if (this._inputHourDom.isRendered) {
+                    if (this._minutesHide) {
+                        inputFinished = true;
+                        this._inputHourDom.focus();
+                    } else {
+                        this._inputMinuteDom.focus();
+                    }
+
                 } else {
-                    this._inputMinuteDom.focus();
+                    if (this._minutesHide) {
+                        this._clockMode = 1;
+                        inputFinished = true;
+                    } else {
+                        this._clockMode = 2;
+                    }
                 }
 
-            } else {
-                if (this._minutesHide) {
-                    this._clockMode = 1;
-                    inputFinished = true;
-                } else {
-                    this._clockMode = 2;
-                }
-            }
+            // Minute
+            } else if (this._clockMode === 2) {
+                let min = 60 / 360 * dg.degree;
+                this._minute = min === 60 ? 0 : min;
+                if (this._inputMinuteDom.isRendered) {
+                    if (this._secondsHide) {
+                        inputFinished = true;
+                        this._inputMinuteDom.focus();
+                    } else {
+                        this._inputSecondDom.focus();
+                    }
 
-        // Minute
-        } else if (this._clockMode === 2) {
-            let min = 60 / 360 * dg.degree;
-            this._minute = min === 60 ? 0 : min;
-            if (this._inputMinuteDom.isRendered) {
-                if (this._secondsHide) {
-                    inputFinished = true;
-                    this._inputMinuteDom.focus();
                 } else {
+                    if (this._secondsHide) {
+                        inputFinished = true;
+                        this._clockMode = 2;
+                    } else {
+                        this._clockMode = 3;
+                    }
+                }
+
+
+            // Sekunde
+            } else if (this._clockMode === 3) {
+                let sec = 60 / 360 * dg.degree;
+                this._second = sec === 60 ? 0 : sec;
+                if (this._inputSecondDom.isRendered) {
                     this._inputSecondDom.focus();
-                }
-
-            } else {
-                if (this._secondsHide) {
-                    inputFinished = true;
-                    this._clockMode = 2;
                 } else {
                     this._clockMode = 3;
                 }
+                inputFinished = true;
             }
 
-
-        // Sekunde
-        } else if (this._clockMode === 3) {
-            let sec = 60 / 360 * dg.degree;
-            this._second = sec === 60 ? 0 : sec;
-            if (this._inputSecondDom.isRendered) {
-                this._inputSecondDom.focus();
-            } else {
-                this._clockMode = 3;
+            if (inputFinished) {
+                if (this._inputHourDom.isRendered) {
+                    this._inputHourDom.focus();
+                } else {
+                    this._clockMode = 1;
+                }
             }
-            inputFinished = true;
-        }
 
-        if (inputFinished) {
-            if (this._inputHourDom.isRendered) {
-                this._inputHourDom.focus();
-            } else {
-                this._clockMode = 1;
+            // Input Felder aktualisieren
+            this._updateInputFields();
+
+            // Events
+            if (curValue !== this.value) {
+                this.raiseEvent('change', {value: this.value});
             }
-        }
-
-        // Input Felder aktualisieren
-        this._updateInputFields();
-
-        // Events
-        if (curValue !== this.value) {
-            this.raiseEvent('change', {value: this.value});
-        }
-        if (inputFinished) {
-            this.raiseEvent('inputFinished');
+            if (inputFinished) {
+                this.raiseEvent('inputFinished');
+            }
         }
     }
     
@@ -661,7 +686,9 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {undefined}
      */
     #onCanvasMouseLeave() {
-        this._calculate();
+        if (!this.disabled) {
+            this._calculate();
+        }
     }
     
     /**
@@ -670,26 +697,30 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {undefined}
      */
     #onCanvasMouseMove(e) {
-        let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY, pointerPos = {};
-        let dg = this._coordinatesToDegree(x, y);
+        if (!this.disabled) {
+            let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY, pointerPos = {};
+            let dg = this._coordinatesToDegree(x, y);
 
-        // auf 30 grad runden
-        pointerPos.degree = Math.round(dg.degree / 30) * 30;
+            // auf 30 grad runden
+            pointerPos.degree = Math.round(dg.degree / 30) * 30;
 
-        if (this._clockMode === 1) {
-            pointerPos.distance = dg.distance > ((this._distance.hourAm+this._distance.hourPm)/2) ? this._distance.hourAm : this._distance.hourPm;
+            if (this._clockMode === 1) {
+                pointerPos.distance = dg.distance 
+                        > ((this._distance.hourAm+this._distance.hourPm)/2) 
+                        ? this._distance.hourAm : this._distance.hourPm;
 
-        } else if (this._clockMode === 2) {
-            pointerPos.distance = this._distance.minute;
+            } else if (this._clockMode === 2) {
+                pointerPos.distance = this._distance.minute;
 
-        } else if (this._clockMode ===  3) {
-            pointerPos.distance = this._distance.second;
+            } else if (this._clockMode ===  3) {
+                pointerPos.distance = this._distance.second;
 
-        } else {
-            throw new kijs.Error('invalid clock mode');
+            } else {
+                throw new kijs.Error('invalid clock mode');
+            }
+
+            this._calculate(pointerPos);
         }
-
-        this._calculate(pointerPos);
     }
 
     #onEmptyBtnClick(e) {
@@ -871,6 +902,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrendern

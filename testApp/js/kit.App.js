@@ -1087,19 +1087,19 @@ kit.App = class kit_App {
                                             name: 'displayfeld',
                                             label: 'Telefon',
                                             value: '+41 31 552 00 13',
-                                            link: true
+                                            clickableLinks: true
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'E-Mail',
                                             value: 'info@netas.ch',
-                                            link: true
+                                            clickableLinks: true
                                         },{
                                             xtype: 'kijs.gui.field.Display',
                                             name: 'displayfeld',
                                             label: 'Webseite',
                                             value: 'www.netas.ch',
-                                            link: true
+                                            clickableLinks: true
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Feld 2',

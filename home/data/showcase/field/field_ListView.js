@@ -3,6 +3,7 @@
 window.home.sc = {};
 home.sc.field_ListView = class home_sc_field_ListView {
     
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -12,6 +13,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
     }
     
     
+    
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -19,146 +21,18 @@ home.sc.field_ListView = class home_sc_field_ListView {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.ListView',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
             innerStyle: {
                 padding: '10px'
             },
-            
-            headerInnerStyle:{
-                gap: '6px'
-            },
-            
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'disabled',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('disabled', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'disableFlex',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('disableFlex', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'labelHide',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('labelHide', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'labelWidth = 120',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('labelWidth', e.element.value ? 120 : null);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'readOnly',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('readOnly', e.element.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'required',
-                    on: {
-                        change: function(e) {
-                            this._updateProperty('required', e.element.value);
-                            this._callFunction('validate');
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'showHelp',
-                    on: {
-                        change: function(e) {
-                            let value = '';
-                            if (e.element.value) {
-                                value = 'Dies ist ein Hilfetext';
-                            }
-                            this._updateProperty('helpText', value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'selectType',
-                    cls: 'kijs-inline',
-                    valueField: 'id',
-                    captionField: 'id',
-                    required: true,
-                    data: [
-                        {id:'none' },
-                        {id:'single' },
-                        {id:'multi' },
-                        {id:'simple' }
-                    ],
-                    value: 'single',
-                    on: {
-                        input: function(e) {
-                            this._updateProperty('value', null);
-                            this._updateProperty('selectType', e.value);
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Validate',
-                    on: {
-                        click: function(e) {
-                            this._callFunction('validate');
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Buttons hinzufügen',
-                    on: {
-                        click: function(e) {
-                            kijs.Array.each(this._content.elements, function(el) {
-                                if (el instanceof kijs.gui.field.Field) {
-                                    el.add(new kijs.gui.Button({
-                                        caption: 'value anzeigen',
-                                        iconMap: 'kijs.iconMap.Fa.wand-magic-sparkles',
-                                        on: {
-                                            click: function(e) {
-                                                kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
-                                            },
-                                            context: this
-                                        }
-                                    }));
-                                }
-                            }, this);
-                        },
-                        context: this
-                    }
-                }
-            ],
-            
+            headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     valueField: 'value',
@@ -173,7 +47,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     label: 'Label',
@@ -207,7 +81,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit RPC',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     label: 'ListView remote',
@@ -228,7 +102,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ListView local:',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     label: 'ListView local',
@@ -242,21 +116,18 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     helpText: 'Hilfe Text!',
                     required: true,
                     width: 350,
-                    style: {
-                        marginBottom: '4px'
-                    },
                     data: [
-                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.circle', Color:'#0088ff' }, 
-                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.circle', Color:'#88ff00' }, 
-                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.circle', Color:'#ff0088' },
-                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.circle', Color:'#00ff88' }, 
-                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.circle', Color:'#ff8800' }, 
-                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.circle', Color:'#8800ff' },
-                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#666666' }, 
-                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.circle', Color:'#999999' }, 
-                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.circle', Color:'#bbbbbb' }, 
-                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.circle', Color:'#ffffff' }, 
-                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.circle', Color:'#000000' }
+                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' }, 
+                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' }, 
+                        {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff0088' },
+                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' }, 
+                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' }, 
+                        {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.droplet', Color:'#8800ff' },
+                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' }, 
+                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' }, 
+                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' }, 
+                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' }, 
+                        {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.droplet', Color:'#000000' }
                     ],
                     value: [2,3],
                     on: {
@@ -286,6 +157,132 @@ home.sc.field_ListView = class home_sc_field_ListView {
         }, this);
     }
     
+    _getHeaderElements() {
+        return [
+            {
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disabled',
+                on: {
+                    change: function(e) {
+                        this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'disableFlex',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('disableFlex', e.element.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'labelHide',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('labelHide', e.element.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'labelWidth = 120',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('labelWidth', e.element.value ? 120 : null);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'readOnly',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('readOnly', e.element.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'required',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('required', e.element.value);
+                        this._callFunction('validate');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'showHelp',
+                on: {
+                    change: function(e) {
+                        let value = '';
+                        if (e.element.value) {
+                            value = 'Dies ist ein Hilfetext';
+                        }
+                        this._updateProperty('helpText', value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.OptionGroup',
+                label: 'selectType',
+                cls: 'kijs-inline',
+                valueField: 'id',
+                captionField: 'id',
+                required: true,
+                data: [
+                    {id:'none' },
+                    {id:'single' },
+                    {id:'multi' },
+                    {id:'simple' }
+                ],
+                value: 'single',
+                on: {
+                    input: function(e) {
+                        this._updateProperty('value', null);
+                        this._updateProperty('selectType', e.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'Validate',
+                on: {
+                    click: function(e) {
+                        this._callFunction('validate');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'Buttons hinzufügen',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                el.add(new kijs.gui.Button({
+                                    caption: 'value anzeigen',
+                                    iconMap: 'kijs.iconMap.Fa.wand-magic-sparkles',
+                                    on: {
+                                        click: function(e) {
+                                            kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
+                                        },
+                                        context: this
+                                    }
+                                }));
+                            }
+                        }, this);
+                    },
+                    context: this
+                }
+            }
+        ];
+    }
+    
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -302,4 +299,5 @@ home.sc.field_ListView = class home_sc_field_ListView {
     destruct() {
         this._content = null;
     }
+    
 };

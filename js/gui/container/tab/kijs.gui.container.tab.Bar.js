@@ -23,11 +23,9 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
-        
-        //this._dom.clsRemove('kijs-container');
-        //this._dom.clsAdd('kijs-container-scrollable');
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -48,23 +46,11 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     }
 
 
-    // --------------------------------------------------------------
-    // GETTERS / SETTERS
-    // --------------------------------------------------------------
-
-
-    // --------------------------------------------------------------
-    // MEMBERS
-    // --------------------------------------------------------------
-    
-    // PROTECTED
-    
-    // LISTENERS
-    
     
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -81,4 +67,5 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };

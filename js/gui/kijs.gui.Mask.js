@@ -26,6 +26,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -61,6 +62,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.applyConfig(config, true);
         }
     }
+
 
 
     // --------------------------------------------------------------
@@ -295,9 +297,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender
@@ -328,4 +332,5 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this._iconEl = null;
         this._targetElement = null;
     }
+    
 };

@@ -7,10 +7,10 @@
 kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Führt einen RPC aus
      * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt, auch im Fehlerfall.

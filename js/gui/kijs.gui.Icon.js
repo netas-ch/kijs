@@ -9,6 +9,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -26,7 +27,6 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disabled: { target: 'disabled' },
             iconMap: { target: 'iconMap', prio: 1 },
             iconChar: { target: 'iconChar', prio: 2 },
             iconCls: { target: 'iconCls', prio: 2 },
@@ -42,19 +42,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get disabled() { return this._dom.clsHas('kijs-disabled'); }
-    set disabled(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-disabled');
-        } else {
-            this._dom.clsRemove('kijs-disabled');
-        }
-        this._dom.disabled = !!val;
-    }
-
     get iconChar() {
         let chr = kijs.toString(this._dom.html);
         if (chr.length > 0) {
@@ -170,4 +161,16 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     get isEmpty() {
         return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
     }
+    
+    
+    
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._dom.disabled = !!val;
+    }
+    
 };
