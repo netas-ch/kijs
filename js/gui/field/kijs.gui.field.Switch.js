@@ -149,8 +149,12 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "checked" is not valid.`);
         }
         this._updateTogglePoint();
+        this._isDirty = false;
     }
 
+    // overwrite
+    get hasFocus() { return this._inputDom.hasFocus; }
+    
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -222,7 +226,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "value" is not valid.`);
         }
         this._updateTogglePoint();
-        this.validate();
+        this._isDirty = false;
     }
 
     get valueChecked() { return this._valueChecked; }
@@ -236,6 +240,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    focus(alsoSetIfNoTabIndex) {
+        return this._inputDom.focus(alsoSetIfNoTabIndex);
+    }
+    
     // overwrite
     render(superCall) {
         super.render(true);
@@ -324,12 +333,18 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             const oldValue = this.value;
 
             this._checked = this._checked ? 0 : 1;
+            this._isDirty = true;
 
             this._updateTogglePoint();
             this._inputDom.focus();
             this.validate();
-
-            this.raiseEvent(['input', 'change'], { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
+            
+            this.raiseEvent('change', { 
+                checked: this._checked, 
+                oldChecked: oldChecked, 
+                value: this.value, 
+                oldValue: oldValue 
+            });
         }
     }
 
@@ -339,11 +354,17 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             const oldValue = this.value;
 
             this._checked = this._checked ? 0 : 1;
+            this._isDirty = true;
 
             this._updateTogglePoint();
             this.validate();
-
-            this.raiseEvent(['input', 'change'], { oldChecked: oldChecked, checked: this._checked, oldValue: oldValue, value: this.value } );
+            
+            this.raiseEvent('change', { 
+                checked: this._checked, 
+                oldChecked: oldChecked, 
+                value: this.value, 
+                oldValue: oldValue 
+            });
         }
         // Bildlauf der Space-Taste verhindern
         e.nodeEvent.preventDefault();

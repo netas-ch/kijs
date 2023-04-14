@@ -273,19 +273,19 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
     
     // overwrite
-    focus(alsoSetIfNoTabIndex=false) {
+    focus(alsoSetIfNoTabIndex) {
         // Wenn möglich den Fokus auf einen Button setzen
         if (!this._closeBtnHide) {
-            this._closeBtn.focus(true);
+            return this._closeBtn.focus(true);
 
         } else if (!this._currentBtnHide) {
-            this._currentBtn.focus(true);
+            return this._currentBtn.focus(true);
 
         } else if (!this._emptyBtnHide) {
-            this._emptyBtn.focus(true);
+            return this._emptyBtn.focus(true);
 
         } else {
-            super.focus(alsoSetIfNoTabIndex);
+            return super.focus(alsoSetIfNoTabIndex);
         }
     }
 
@@ -472,33 +472,47 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onCurrentBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+        const oldDate = this.date;
+        const oldValue = this.value;
+        
         let date = kijs.Date.getFirstOfMonth(new Date());
 
         this._date = this.getNextValidDate(date);
         this._calculate(true);
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', { 
+                value: this.value,
+                oldValue: oldValue,
+                date: this.date,
+                oldDate: oldDate
+            });
         }
         this.raiseEvent('currentClick');
     }
 
     #onEmptyBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
-
+        const oldDate = this.date;
+        const oldValue = this.value;
+        
         this._date = null;
         this._calculate(true);
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', { 
+                value: this.value,
+                oldValue: oldValue,
+                date: this.date,
+                oldDate: oldDate
+            });
         }
         this.raiseEvent('emptyClick');
     }
 
     #onMonthDomClick(e) {
         if (!e.dom.disabled) {
-            const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+            const oldDate = this.date;
+            const oldValue = this.value;
             const monthIndex = this._monthsDom.indexOf(e.dom);
             let date = null;
 
@@ -512,8 +526,13 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._date = this.getNextValidDate(date);
             this._calculate(true);
 
-            if (!kijs.Date.compare(this._date, curDate)) {
-                this.raiseEvent('change', {value: this.value});
+            if (!kijs.Date.compare(this.date, oldDate)) {
+                this.raiseEvent('change', {
+                    value: this.value,
+                    oldValue: oldValue,
+                    date: this.date,
+                    oldDate: oldDate
+                });
             }
             this.raiseEvent('monthClick');
         }
@@ -525,7 +544,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     }
 
     #onNextBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+        const oldDate = this.date;
+        const oldValue = this.value;
         let date = null;
 
         if (kijs.isEmpty(this._date)) {
@@ -537,13 +557,19 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._date = this.getNextValidDate(date);
         this._calculate(true);
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', {
+                value: this.value,
+                oldValue: oldValue,
+                date: this.date,
+                oldDate: oldDate
+            });
         }
     }
 
     #onPreviousBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+        const oldDate = this.date;
+        const oldValue = this.value;
         let date = null;
 
         if (kijs.isEmpty(this._date)) {
@@ -555,8 +581,13 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._date = this.getNextValidDate(date);
         this._calculate(true);
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', {
+                value: this.value,
+                oldValue: oldValue,
+                date: this.date,
+                oldDate: oldDate
+            });
         }
     }
 
@@ -573,7 +604,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
     #onYearDomClick(e) {
         if (!e.dom.disabled) {
-            const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+            const oldDate = this.date;
+            const oldValue = this.value;
             const year = parseInt(e.dom.html);
             let date = null;
 
@@ -587,8 +619,13 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             this._date = this.getNextValidDate(date);
             this._calculate(true);
 
-            if (!kijs.Date.compare(this._date, curDate)) {
-                this.raiseEvent('change', {value: this.value});
+            if (!kijs.Date.compare(this.date, oldDate)) {
+                this.raiseEvent('change', {
+                    value: this.value,
+                    oldValue: oldValue,
+                    date: this.date,
+                    oldDate: oldDate
+                });
             }
             this.raiseEvent('yearClick');
         }

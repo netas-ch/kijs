@@ -1,7 +1,7 @@
 /* global kijs */
 
 window.home.sc = {};
-home.sc.field_Text = class home_sc_field_Text {
+home.sc.field_AceEditor = class home_sc_field_AceEditor {
     
     
     // --------------------------------------------------------------
@@ -19,7 +19,7 @@ home.sc.field_Text = class home_sc_field_Text {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Text',
+            caption: 'kijs.gui.field.AceEditor',
             scrollableY: 'auto',
             cls: 'kijs-flexform',
             style: {
@@ -34,7 +34,7 @@ home.sc.field_Text = class home_sc_field_Text {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:'
                 },{
-                    xtype: 'kijs.gui.field.Text'
+                    xtype: 'kijs.gui.field.AceEditor'
                 },
                 
                 {
@@ -42,8 +42,12 @@ home.sc.field_Text = class home_sc_field_Text {
                     html: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
-                    xtype: 'kijs.gui.field.Text',
+                    xtype: 'kijs.gui.field.AceEditor',
                     label: 'Label',
+                    mode: 'javascript',
+                    //theme: 'monokai',
+                    value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
+                    height: 100,
                     on: {
                         focus:  console.log,
                      
@@ -54,129 +58,11 @@ home.sc.field_Text = class home_sc_field_Text {
                         spacePress:  console.log,
                         
                         blur:  console.log,
-                        change:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
                     }
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'mit Button',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Button inline',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            cls: 'kijs-inline',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'mit 2 Buttons',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        },{
-                            xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.heart'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: '2 Buttons inline',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            cls: 'kijs-inline',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        },{
-                            xtype: 'kijs.gui.Button',
-                            cls: 'kijs-inline',
-                            iconMap: 'kijs.iconMap.Fa.heart'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Button mit caption',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Test',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Button mit caption inline',
-                    helpText: 'Hilfe',
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Test',
-                            cls: 'kijs-inline',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
-                        }
-                    ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'mit spinIcon',
-                    spinIconVisible: true
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Validierung',
-                    style: { margin: '10px 0 0 0'}
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Test',
-                    required: true,
-                    //value: 'sdfg',
-                    validationRegExp: { 
-                        regExp: /^Test$/,
-                        msg: 'Wert muss \'Test\' sein'
-                    }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Formatierung',
-                    style: { margin: '10px 0 0 0'}
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'Test',
-                    required: true,
-                    value: 'sdfg',
-                    helpText: 'nach 3 Zeichen wird eine Lücke eingefügt und es werden nur Grossbuchstaben verwendet.',
-                    formatRegExp: [
-                        { 
-                            regExp: /\s/g, // Whitespace entfernen
-                            replace: ''
-                        },{ 
-                            regExp: /(\S{3})/g, // alle 3 Zeichen eine Lücke einfügen
-                            replace: '$1 '
-                        },{ 
-                            regExp: /\s$/, // Whitespace am Ende entfernen
-                            replace: ''
-                        },{ 
-                            regExp: /(.*)/g, // Buchstaben in Grossbauchstaben umwandeln
-                            toUpperCase: true
-                        }
-                    ]
                 }
             ]
         });
@@ -265,25 +151,6 @@ home.sc.field_Text = class home_sc_field_Text {
                             value = 'Dies ist ein Hilfetext';
                         }
                         this._updateProperty('helpText', value);
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrimEnable',
-                value: true,
-                on: {
-                    change: function(e) {
-                        this._updateProperty('valueTrimEnable', e.element.value);
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.field.Switch',
-                label: 'placeholder',
-                on: {
-                    change: function(e) {
-                        this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
                     },
                     context: this
                 }

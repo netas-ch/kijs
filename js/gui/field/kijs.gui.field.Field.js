@@ -54,16 +54,22 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
 
         this._labelHide = false;
+        this._errors = [];
+        this._maxLength = null;
+        this._minLength = null;
+        this._required = false;
+        this._isDirty = false;  // Wurde der Wert verändert?
+        this._submitValueEnable = true;
+        this._validationFn = null;
+        this._validationFnContext = null;
+        this._validationRegExps = [];
 
         this._inputId = kijs.uniqId('kijs_-_input_');
 
         this._inputWrapperDom = new kijs.gui.Dom({
             cls: 'kijs-inputwrapper'
         });
-
-        // Muss in der abgeleiteten Klasse überschrieben werden
-        this._inputDom = new kijs.gui.Dom();
-
+        
         this._labelDom = new kijs.gui.Dom({
             cls: 'kijs-label',
             nodeTagName: 'label',
@@ -88,8 +94,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             visible: false
         });
 
-        this._errors = [];
-
         this._helpIconEl = new kijs.gui.Icon({
             parent: this,
             iconMap: 'kijs.iconMap.Fa.circle-question',
@@ -100,27 +104,18 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._spinBoxEl = null;
         
-        this._maxLength = null;
-        this._minLength = null;
-        this._required = false;
-        this._submitValue = true;
-        this._originalValue = null;
-        this._validationFn = null;
-        this._validationFnContext = null;
-        this._validationRegExps = [];
-
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            isDirty: false
+            // nix
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
+            isDirty: true,
             
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
@@ -128,8 +123,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             labelHtmlDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
-            value: { target: 'value', prio: 1000 },
-
+            
             errorIcon: { target: 'errorIcon' },
             errorIconChar: { target: 'iconChar', context: this._errorIconEl },
             errorIconCls: { target: 'iconCls', context: this._errorIconEl },
@@ -143,15 +137,13 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             helpIconMap: { target: 'iconMap', context: this._helpIconEl },
             helpText: { target: 'helpText' },
 
-            isDirty: { target: 'isDirty', prio: 1001 },
-
-            inputMode: { target: 'inputMode' },
+            value: { target: 'value', prio: 1000 },
 
             maxLength: true,
             minLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
             required: true,
-            submitValue: true,
+            submitValueEnable: true,    // Soll der Wert in einem FormPanel übermittelt werden?
 
             spinIcon: { target: 'spinIcon' },
             spinIconChar: { target: 'iconChar', context: this._spinIconEl },
@@ -182,20 +174,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
-    set autocomplete(val) {
-        let value = 'on';
-
-        if (kijs.isString(val)) {
-            value = val;
-        } else if (val === false) {
-            value = 'off';
-        }
-
-        // De-/aktiviert die Browservorschläge
-        this._inputDom.nodeAttributeSet('autocomplete', value);
-    }
-
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -255,9 +233,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get errorIconMap() { return this._errorIconEl.iconMap; }
     set errorIconMap(val) { this._errorIconEl.iconMap = val;}
-
-    get hasFocus() { return this._inputDom.hasFocus; }
-
+    
     get helpIcon() { return this._helpIconEl; }
     /**
      * Icon zuweisen
@@ -310,25 +286,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
-
-    get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
-    set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
-
-    get isDirty() {
-        if (this.disabled) {
-            return false;
-        } else {
-            return this._originalValue !== this.value;
-        }
-    }
-    set isDirty(val) {
-        if (val) { // mark as dirty
-            this._originalValue = this.value === null ? '' : null;
-
-        } else { // mark as not dirty
-            this._originalValue = this.value;
-        }
-    }
+    
+    get isDirty() { return this._isDirty; }
+    set isDirty(val) { this._isDirty = !!val; }
 
     get label() { return this._labelDom.html; }
     set label(val) {
@@ -439,12 +399,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set spinIconVisible(val) { this._spinIconEl.visible = !!val; }
 
     // false, falls der Wert vom Feld nicht übermittelt werden soll.
-    get submitValue() { return this._submitValue; }
-    set submitValue(val) { this._submitValue = !!val; }
+    get submitValueEnable() { return this._submitValueEnable; }
+    set submitValueEnable(val) { this._submitValueEnable = !!val; }
 
     // Muss überschrieben werden
     get value() { return null; }
-    set value(val) {}
+    set value(val) {
+        this._isDirty = false;
+    }
 
     /**
      * gibt den angezeigten Wert zurück. (z.B. Combo-Anzeigewert)
@@ -461,7 +423,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get valueDisplayHtml() { return kijs.String.htmlspecialchars(this.value); }
 
     /**
-     * Gibt einen Record zurück mit den Werten des Felds
+     * Gibt einen Objekt zurück mit den Werten des Felds
      * Format {name: value}
      * Beispiel nur ein Wert: {value:'2021-02-01'}
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
@@ -480,7 +442,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Holt die Werte für das Feld aus dem übergebenen Records
+     * Für Felder mit mehreren Werten: Damit können mehrere Werte gliechzeitig 
+     * zugewiesen werden.
+     * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
      * @param {Object} val
      */
     set values(val) {
@@ -490,59 +454,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this[map.valueProperty] = val[fieldName];
             }
         }, this);
+        this._isDirty = false;
     }
-
-    /**
-     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
-     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
-     */
-    get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
-    set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
 
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // overwrite
-    changeDisabled(val, callFromParent) {
-        super.changeDisabled(!!val, callFromParent);
-        
-        // Icons auch aktivieren/deaktivieren
-        this._spinIconEl.changeDisabled(!!val, true);
-        this._errorIconEl.changeDisabled(!!val, true);
-        this._helpIconEl.changeDisabled(!!val, true);
-
-        if (this._spinBoxEl) {
-            this._spinBoxEl.changeDisabled(!!val, true);
-        }
-
-        // Buttons auch aktivieren/deaktivieren
-        const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
-        kijs.Array.each(buttons, function(button) {
-            button.changeDisabled(!!val, true);
-        }, this);
-    }
-
-    /**
-     * Fügt Fehler aus einer externen Validation hinzu
-     * @param {String|Array} errors
-     */
-    addValidateErrors(errors) {
-        if (!errors) {
-            return;
-        }
-
-        if (!kijs.isArray(errors)) {
-            errors = [errors];
-        }
-
-        this._errors = this._errors.concat(errors);
-
-        // Fehler anzeigen, falls vorhanden
-        this._displayErrors();
-    }
-
     /**
      * Fügt einen oder mehrere regulären Ausdruck zum validieren hinzu
      * @param {Object|String|Array} regExps Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Vierstellige Zahl erforderlich' }
@@ -576,37 +495,64 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }, this);
     }
     
-    /**
-     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
-     * @param {Boolean} alsoSetIfNoTabIndex
-     * @param {Boolean} selectText
-     * @returns {undefined}
-     * @overwrite
-     */
-    focus(alsoSetIfNoTabIndex=false, selectText=false) {
-        super.focus(alsoSetIfNoTabIndex);
-        if (selectText) {
-            if (this._inputDom.node && kijs.isFunction(this._inputDom.node.select)) {
-                this._inputDom.node.select();
-            }
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(!!val, callFromParent);
+        
+        // Icons auch aktivieren/deaktivieren
+        this._spinIconEl.changeDisabled(!!val, true);
+        this._errorIconEl.changeDisabled(!!val, true);
+        this._helpIconEl.changeDisabled(!!val, true);
+
+        if (this._spinBoxEl) {
+            this._spinBoxEl.changeDisabled(!!val, true);
         }
+
+        // Buttons auch aktivieren/deaktivieren
+        const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
+        kijs.Array.each(buttons, function(button) {
+            button.changeDisabled(!!val, true);
+        }, this);
     }
-
+    
     /**
-     * Zeigt eine individuelle Fehlermeldung an. Wenn keine Meldung
-     * übergeben wird, wird die Fehlermeldung zurückgesetzt.
-     * Diese Methode hat keinen Einfluss auf die 'validate' Methode; ein
-     * Formular kann trotz Fehlermeldung abgesendet werden.
-     * @param msg {string|null} [msg] Anzuzeigende Nachricht
+     * Setz den Wert auf null
      * @returns {undefined}
      */
-    markInvalid(msg=null) {
-        this._errors = [];
-
-        if (kijs.isString(msg) && msg) {
-            this._errors.push(msg);
+    clear() {
+        kijs.Array.each(this._valuesMapping, function(map) {
+                this[map.valueProperty] = null;
+        }, this);
+        this._isDirty = false;
+    }
+    
+    /**
+     * Fügt Fehler aus einer externen Validation hinzu
+     * @param {String|Array} errors
+     */
+    errorsAdd(errors) {
+        if (!errors) {
+            return;
         }
 
+        if (!kijs.isArray(errors)) {
+            errors = [errors];
+        }
+
+        this._errors = this._errors.concat(errors);
+
+        // Fehler anzeigen, falls vorhanden
+        this._displayErrors();
+    }
+    
+    /**
+     * Setzt die Validierungsfehler zurück
+     * @returns {undefined}
+     */
+    errorsClear() {
+        this._errors = [];
+        
+        // Fehler anzeigen, falls vorhanden
         this._displayErrors();
     }
     
@@ -641,34 +587,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Setzt den Wert zurück.
-     * @returns {undefined}
-     */
-    reset() {
-        this.value = this._originalValue;
-    }
-
-    /**
      * Setzt die Fehleranzeige zurück
      * @return {undefined}
      */
     resetErrors() {
         this._dom.clsRemove('kijs-error');
         this._errorIconEl.visible = false;
-    }
-
-    /**
-     * Setzt das value und ruft das change-event auf.
-     * Mit dem setter wird das change-event nicht aufgerufen.
-     * @param {Mixed} value
-     * @returns {undefined}
-     */
-    setValue(value) {
-        let oldVal = this.value;
-        if (kijs.toString(value) !== kijs.toString(oldVal)) {
-            this.value = value;
-            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
-        }
     }
 
     // overwrite
@@ -691,14 +615,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     /**
      * Validiert den Inhalt des Felds
+     * @param {Boolean} [ignoreEmpty=false] nicht validieren, wenn das Feld leer ist.
      * @returns {Boolean}
      */
-    validate() {
+    validate(ignoreEmpty) {
         this._errors = [];
 
         // Validierungen anwenden
         if (this.visible && !this.readOnly && !this.disabled) {
-            this._validationRules(this.value);
+            this._validationRules(this.value, ignoreEmpty);
         }
 
         // Fehler anzeigen, falls vorhanden
@@ -743,9 +668,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
    /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
+     * @param {Boolean} [ignoreEmpty=false] nicht validieren, wenn das Feld leer ist.
      * @returns {undefined}
      */
-    _validationRules(value) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty) {
+            return true;
+        }
+        
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -768,7 +698,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
         
         // validationRegExps
-        if (this._validationRegExps) {
+        if (!kijs.isEmpty(this._validationRegExps)) {
             if (value !== null && value.toString() !== '') {
                 kijs.Array.each(this._validationRegExps, function(regExp) {
                     let r = this._stringToRegExp(regExp.regExp);
@@ -786,13 +716,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         
         // validationFn
         if (kijs.isFunction(this._validationFn)) {
-            let error = this._validationFn.call(this._validationFnContext || this, value);
-            if (error) {
-                if (kijs.isString(error)) {
-                    this._errors.push(error);
+            if (value !== null && value.toString() !== '') {
+                let error = this._validationFn.call(this._validationFnContext || this, value);
+                if (error) {
+                    if (kijs.isString(error)) {
+                        this._errors.push(error);
 
-                } else if (kijs.isArray(error)) {
-                    this._errors = kijs.Array.concat(this._errors, error);
+                    } else if (kijs.isArray(error)) {
+                        this._errors = kijs.Array.concat(this._errors, error);
+                    }
                 }
             }
         }

@@ -53,12 +53,6 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    reset() {
-        this._compare = '';
-        super.reset();
-    }
-
-
     // PROTECTED
     _applyToGrid() {
         if (this._compare === 'checked') {

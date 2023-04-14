@@ -11,10 +11,10 @@
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
 
     // CSS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor&fileType=css');
     
     // JS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor&fileType=js');
 ?>
 
         <script type="text/javascript" src="tests/kijs.Test.js"></script>

@@ -27,7 +27,8 @@
  *                                      code: Tags werden als als Text angezeigt
  *                                      text: Tags werden entfernt
  *
- * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. Bsp: { id: 123, for: 'meinFeld' }
+ * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. 
+ *                                      Bsp: { id: 123, for: 'meinFeld' }
  *
  * nodeTagName  String [optional]       Tag-Name des DOM-node. Default='div'
  *                                      Beispiel: nodeTagName='section'
@@ -96,9 +97,10 @@
  *   name           String
  *  Return: Boolean
  *
- * nodeAttributeSet                         Fügt eine Eigenschaft zum DOM-Node hinzu
+ * nodeAttributeSet                         Fügt eine oder mehrere Eigenschaften zum DOM-Node hinzu.
+ *                                          Bsp. mehrere: name: { tabIndex:-1, type:'button' }
  *  Args:
- *   name           String
+ *   name           String|Object
  *   value          String|null
  *
  * nodeAttributeHas                         Überprüft, ob der DOM-Node eine Eigenschaft bestimmte hat
@@ -830,6 +832,40 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
     /**
+     * Ändert die Eigenschaft disabled.
+     * Sollte nicht direkt aufgerufen werden.
+     * Bitte den Setter disabled verwenden.
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled 
+     *                                          des Elternelements kommt.
+     * @returns {undefined}
+     */
+    changeReadOnly(val, callFromParent) {
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // disabled wieder der vorherige Wert zugewiesen.
+        if (callFromParent) {
+            if (!val) {
+                val = !!this._disabledInitial;
+            }
+            
+        } else {
+            this._disabledInitial = !!val;
+            
+        }
+        
+        this.nodeAttributeSet('disabled', !!val);
+        if (this._tooltip) {
+            this._tooltip.disabled = !!val;
+        }
+        
+        if (val) {
+            this.clsAdd('kijs-disabled');
+        } else {
+            this.clsRemove('kijs-disabled');
+        }
+    }
+    
+    /**
      * Fügt eine oder mehrere CSS-Klassen hinzu
      * @param {String|Array} cls
      * @returns {undefined}
@@ -920,7 +956,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
-    focus(alsoSetIfNoTabIndex=false) {
+    focus(alsoSetIfNoTabIndex) {
         if (this._node) {
             // Darf der Node den Fokus erhalten?
             if (alsoSetIfNoTabIndex) {
@@ -977,12 +1013,20 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     
     /**
      * Fügt eine Eigenschaft zum DOM-Node hinzu, oder löscht sie.
-     * @param {String} name
+     * @param {String|Object} name oder Objekt mit mehreren:  { tabIndex:-1, type:'button' }
      * @param {String|null|Boolean|undefined} value
      * @returns {undefined}
      */
     nodeAttributeSet(name, value) {
         if (kijs.isEmpty(name)) {
+            return;
+        }
+
+        // falls ein Objekt mit mehreren Attributen übergeben wurde
+        if (kijs.isObject(name)) {
+            kijs.Object.each(name, function(key, value) {
+                this.nodeAttributeSet(key, value);
+            }, this);
             return;
         }
 

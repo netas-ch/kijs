@@ -273,6 +273,34 @@ kijs.Date = class kijs_Date {
     }
 
     /**
+     * Berechnet das Alter aus einem Geburtsdatum
+     * @param {String|Date|Number} birthday
+     * @param {String|Date|Number|Null} [curDate=Now]
+     * @returns {Number|Null}
+     */
+    static getAge(birthday, curDate) {
+        if (kijs.isEmpty(birthday)) {
+            return null;
+        } else {
+            birthday = kijs.Date.getDatePart(birthday);
+        }
+        
+        if (kijs.isEmpty(curDate)) {
+            curDate = Date.now();
+        } else {
+            curDate = kijs.Date.getDatePart(curDate);
+        }
+        
+        if (birthday > curDate) {
+            return null;
+        }
+        
+        const ageDifMs = curDate - birthday;
+        const ageDate = new Date(ageDifMs);
+        return Math.abs(ageDate.getUTCFullYear() - 1970);
+    }
+    
+    /**
      * Konvertiert ein Datum im Format 'd.m.Y' oder 'd.m.Y h:i:s' in ein Datum-Objekt
      * Die Uhrzeit kann hinten mit einem Leerzeichen getrennt angehängt werden. Sie muss mind. ein : enthalten,
      * damit sie als Uhrzeit erkannt wird.

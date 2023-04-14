@@ -65,6 +65,7 @@ home.sc.field_Display = class home_sc_field_Display {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
@@ -172,11 +173,11 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 value: true,
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }

@@ -16,7 +16,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         // DOM type
         this._dom.nodeTagName = 'td';
 
-        this._originalValue = null;
+        this._initialValue = null;
         this._columnConfig = null;
         this._cellEditor = null;
         this._cellEditorValue = null;
@@ -52,18 +52,18 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
-    get isDirty() { return kijs.toString(this._originalValue) !== kijs.toString(this.value); }
+    get isDirty() { return kijs.toString(this._initialValue) !== kijs.toString(this.value); }
     set isDirty(val) {
         if (val === false) {
-            this._originalValue = kijs.toString(this.value);
+            this._initialValue = kijs.toString(this.value);
             this._dom.clsRemove('kijs-grid-cell-dirty');
         } else {
-            this._originalValue = null;
+            this._initialValue = null;
             this._dom.clsAdd('kijs-grid-cell-dirty');
         }
     }
 
-    get originalValue() { return this._originalValue; }
+    get initialValue() { return this._initialValue; }
 
     get row() { return this.parent; }
 
@@ -124,7 +124,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
      * @returns {undefined}
      */
     resetValue(silent=false) {
-        this.setValue(this.originalValue, silent);
+        this.setValue(this.initialValue, silent);
     }
 
     /**

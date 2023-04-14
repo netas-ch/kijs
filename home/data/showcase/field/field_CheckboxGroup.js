@@ -70,6 +70,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

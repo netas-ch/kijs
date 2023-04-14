@@ -4,21 +4,8 @@
 // kijs.gui.FormPanel
 // --------------------------------------------------------------
 kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
-
-
-    // TODO: disabled hat keine Auswirkungen auf Felder in Containern.
-    // TODO: Dynamisches Laden von ganzen Formularen mit load() testen
-    // TODO: Neuer Container für die Verwendung von Feldern nebeneinander
-    //       - Es muss eine Spaltenzahl angegeben werden können. Der Container hat dann soviele Spalten (Untercontainer)
-    //       - Standardwerte müssen an untergeordnete Elemente weitergegeben werden
-    // TODO: Abstände zwischen Feldern müssen automatisch gemacht werden, 
-    //       es sollten keine Style-Eigenschaften verwendet werden müssen.
-    // TODO: Das automatische Aufrufen von searchFields bei den Listeners "add" und "remove"
-    //       wieder entfernen. Diese Funktion solle aus performancegründen manuell
-    //       aufgerufen werden
-    // TODO: BUG: Wenn ein neues Formularfeld hinzugefügt wird, ist das Feld dirty 
-    //       (checkbox, combo, ?).
-
+    
+    
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -29,11 +16,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._data = {};
         this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
         this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
-        this._fields = null;        // Array mit kijs.gui.field.Fields-Elementen
+        this._fields = [];          // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._rpcArgs = {};         // Standard RPC-Argumente
         this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.';
-
+        this._errorTitle = kijs.getText('Fehler') + '.';
+                
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -78,67 +66,35 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     get data() {
-        let data = {};
-
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
         // Evtl. Daten aus Formular holen
-        if (!kijs.isEmpty(this._fields)) {
-            kijs.Array.each(this._fields, function(field) {
-                if (field.submitValue && !field.disabled) {
-                    // Bestehendes Recordset mit Daten aus dem Feld ergänzen
-                    Object.assign(this._data, field.values);
-                } else {
-                    // Wert soll nicht übermittelt werden.
-                    delete this._data[field.name];
-                }
-            }, this);
-        }
+        kijs.Array.each(this._fields, function(field) {
+            if (field.submitValueEnable && !field.disabled) {
+                // Bestehendes Recordset mit Daten aus dem Feld ergänzen
+                Object.assign(this._data, field.values);
+            } else {
+                // Wert soll nicht übermittelt werden.
+                delete this._data[field.name];
+            }
+        }, this);
+        
         return this._data;
     }
     set data(val) {
         this._data = val;
 
-        if (this._fields === null) {
+        if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
-        // Evtl. Daten in Formular einfüllen
-        if (!kijs.isEmpty(this._fields)) {
-            kijs.Array.each(this._fields, function(field) {
-                field.values = this._data;
-                field.isDirty = false;
-            }, this);
-        }
-    }
-
-    get disabled() {
-        if (kijs.isEmpty(this.fields)){
-            this.searchFields();
-        }
-
-        let fieldCnt = 0, disabledCnt = 0;
-        kijs.Array.each(this.fields, function(element) {
-            if (element instanceof kijs.gui.field.Field) {
-                fieldCnt++;
-                if (element.disabled) {
-                    disabledCnt++;
-                }
-            }
-        }, this);
-        return disabledCnt > (fieldCnt/2);
-    }
-    set disabled(value) {
-        if (kijs.isEmpty(this.fields)){
-            this.searchFields();
-        }
-
-        kijs.Array.each(this.fields, function(element) {
-            if (element instanceof kijs.gui.field.Field) {
-                element.disabled = !!value;
-            }
+        // Daten in Formular einfüllen
+        kijs.Array.each(this._fields, function(field) {
+            field.values = this._data;
+            // Feld validieren, wenn nicht leer
+            field.validate(true);
         }, this);
     }
 
@@ -152,16 +108,16 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
-
         return this._fields;
     }
     
+    // gibt es ein Feld, dass verändert wurde?
     get isDirty() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
-        for (let i = 0; i < this._fields.length; i++) {
+        for (let i=0; i<this._fields.length; i++) {
             if (this._fields[i].isDirty) {
                 return true;
             }
@@ -169,6 +125,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return false;
     }
+    // setzt bei allen Felder isDirty auf true oder false
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -178,52 +135,51 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._fields[i].isDirty = !!val;
         }
     }
-
+    
+    // sind alle Felder leer?
     get isEmpty() {
-        let empty = true;
-
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
-        for (let i = 0; i < this._fields.length; i++) {
-            if (!this._fields[i].isEmpty) {
-                empty = false;
-            }
-        }
-
-        return empty;
-    }
-
-    get readOnly(){
-        if (kijs.isEmpty(this.fields)){
-            this.searchFields();
-        }
-
-        let readOnly = 0;
-        kijs.Array.each(this.fields, function(element) {
-            if (element instanceof kijs.gui.field.Field) {
-                if (element.readOnly){
-                    readOnly ++;
+        for (let i=0; i<this._fields.length; i++) {
+            if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
+                if (!this._fields[i].isEmpty) {
+                    return false;
                 }
             }
-        }, this);
-        if (readOnly > (this.fields.length / 2)){
-            return true;
-        } else {
-            return false;
         }
+
+        return true;
     }
-    set readOnly(value){
-        if (kijs.isEmpty(this.fields)){
+
+    // sind alle Felder readOnly?
+    get readOnly(){
+        if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
-        kijs.Array.each(this.fields, function(element) {
-            if (element instanceof kijs.gui.field.Field) {
-                element.readOnly = value;
+        for (let i=0; i<this._fields.length; i++) {
+            if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
+                if (!this._fields[i].readOnly) {
+                    return false;
+                }
             }
-        }, this);
+        }
+
+        return true;
+    }
+    // setzt bei allen Felder readOnly auf true oder false
+    set readOnly(val){
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
+                this._fields[i].readOnly = !!val;
+            }
+        }
     }
 
     get rpc() { return this._rpc;}
@@ -252,7 +208,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Löscht allen inhalt aus dem Formular
+     * Löscht allen Werte aus dem Formular
      * @returns {undefined}
      */
     clear() {
@@ -260,15 +216,31 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.searchFields();
         }
 
-        for (let i = 0; i < this._fields.length; i++) {
+        for (let i=0; i<this._fields.length; i++) {
             if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
-                this._fields[i].value = null;
+                this._fields[i].clear();
+                this._fields[i].errorsClear();
             }
         }
 
         this._data = {};
+        
+        // Validierungsfehler auch zurücksetzen
+        this.errorsClear();
+    }
 
-        this.resetValidation();
+    /**
+     * Setzt die Validierungsfehler zurück.
+     * @returns {undefined}
+     */
+    errorsClear() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].errorsClear();
+        }
     }
 
     /**
@@ -313,11 +285,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
                     // Validierung zurücksetzen?
                     if (resetValidation) {
-                        this.resetValidation();
+                        this.errorsClear();
                     }
-
-                    // 'Dirty' zurücksetzen
-                    this.isDirty = false;
                     
                     // rendern
                     this.render();
@@ -337,39 +306,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     }
 
     /**
-     * Setzt den Feldwert zurück.
-     * @returns {undefined}
-     */
-    reset() {
-        if (kijs.isEmpty(this._fields)) {
-            this.searchFields();
-        }
-
-        for (let i=0; i<this._fields.length; i++) {
-            this._fields[i].reset();
-        }
-
-        this.raiseEvent('change');
-    }
-
-    /**
-     * Setzt die Validierung zurück.
-     * @returns {undefined}
-     */
-    resetValidation() {
-        if (kijs.isEmpty(this._fields)) {
-            this.searchFields();
-        }
-
-        for (let i=0; i<this._fields.length; i++) {
-            if (kijs.isFunction(this._fields[i].markInvalid)) {
-                this._fields[i].markInvalid();
-            }
-        }
-    }
-
-    /**
-     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields (rekursiv)
+     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields
+     * (rekursiv)
      * @param {kijs.gui.Container} [parent=this]
      * @returns {Array}
      */
@@ -378,42 +316,29 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         for (let i=0; i<parent.elements.length; i++) {
             let el = parent.elements[i];
+            
+            // field
             if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
                 ret.push(el);
-            }
-
-            if (el instanceof kijs.gui.Container) {
+                
+                // change listener
+                if (!el.hasListener('change', this.#onFieldChange, this)) {
+                    el.on('change', this.#onFieldChange, this);
+                }
+                
+            // container
+            } else if (el instanceof kijs.gui.Container) {
                 ret = ret.concat(this.searchFields(el));
 
-                // untergeordnete Container überwachen, bei neuen oder gelöschten Felder array neu aufbauen
-                if (el !== this) {
-                    if (!el.hasListener('add', this.#onChildAdd, this)) {
-                        el.on('add', this.#onChildAdd, this);
-                    }
-                    if (!el.hasListener('remove', this.#onChildRemove, this)) {
-                        el.on('remove', this.#onChildRemove, this);
-                    }
-                }
             }
-
-            // Felder auf den Change-Event überwachen
-            if (el instanceof kijs.gui.field.Field) {
-                if (!el.hasListener('change', this.#onChildChange, this)) {
-                    el.on('change', this.#onChildChange, this);
-                }
-            }
-
         }
-
+        
         if (parent === this) {
-
             // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
             if (!kijs.isEmpty(this._fields)) {
                 this._fields.forEach((oldField) => {
                     if (ret.indexOf(oldField) === -1) {
-                        oldField.off('change', this.#onChildChange, this);
-                        oldField.off('add', this.#onChildAdd, this);
-                        oldField.off('remove', this.#onChildRemove, this);
+                        oldField.off('change', this.#onFieldChange, this);
                     }
                 });
             }
@@ -447,7 +372,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             // Zuerst lokal validieren
             if (!this.validate()) {
-                kijs.gui.MsgBox.error(kijs.getText('Fehler'), kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.');
+                kijs.gui.MsgBox.error(this._errorTitle, this._errorMsg);
                 return;
             }
 
@@ -469,11 +394,15 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     if (!kijs.isEmpty(this._fields)) {
                         kijs.Array.each(this._fields, function(field) {
                             if (e.responseData.fieldErrors[field.name]) {
-                                field.addValidateErrors(e.responseData.fieldErrors[field.name]);
+                                field.errorsAdd(e.responseData.fieldErrors[field.name]);
                             }
                         }, this);
                     }
 
+                    // Falls keine errorMsg übergeben wurde, die Standardmeldung nehmen
+                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._errorTitle)) {
+                        e.errorTitle = this._errorTitle;
+                    }
                     if (kijs.isEmpty(e.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
                         e.errorMsg = this._errorMsg;
                     }
@@ -483,7 +412,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 if (kijs.isEmpty(e.errorMsg)) {
                     // 'dirty' zurücksetzen
                     this.isDirty = false;
-                
+                    
                     // event
                     this.raiseEvent('afterSave', e);
                 }
@@ -523,15 +452,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this.load().catch(() => {});
     }
 
-    #onChildAdd() {
-        this.searchFields();
-    }
-
-    #onChildRemove() {
-        this.searchFields();
-    }
-
-    #onChildChange(e) {
+    #onFieldChange(e) {
         this.raiseEvent('change', e);
     }
 

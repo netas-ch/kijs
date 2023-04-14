@@ -1,9 +1,9 @@
 /* global kijs */
 
 window.home.sc = {};
-home.sc.field_Editor = class home_sc_field_Editor {
-    
-    
+home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,15 +11,15 @@ home.sc.field_Editor = class home_sc_field_Editor {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Editor',
+            caption: 'kijs.gui.field.SozVersNr',
             scrollableY: 'auto',
             cls: 'kijs-flexform',
             style: {
@@ -28,52 +28,76 @@ home.sc.field_Editor = class home_sc_field_Editor {
             innerStyle: {
                 padding: '10px'
             },
+
+            headerInnerStyle:{
+                gap: '6px'
+            },
             headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:'
                 },{
-                    xtype: 'kijs.gui.field.Editor'
+                    xtype: 'kijs.gui.field.SozVersNr'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
-                    xtype: 'kijs.gui.field.Editor',
+                    xtype: 'kijs.gui.field.SozVersNr',
                     label: 'Label',
-                    mode: 'javascript',
-                    //theme: 'monokai',
-                    value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
-                    height: 100,
+                    value: '756.1234.5678.97',
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.field.SozVersNr',
+                    label: 'ohne Punkte',
+                    value: '756.1234.5678.97',
+                    formatRegExp:[
+                        { 
+                            regExp: /\./g, // Punkte entfernen
+                            replace: ''
+                        }
+                    ]
+                },{
+                    xtype: 'kijs.gui.field.SozVersNr',
+                    label: 'nur Soz.vers.-Nr.',
+                    allowAhvNr: false,
+                    allowSozVersNr: true,
+                    value: '756.1234.5678.97'
+                },{
+                    xtype: 'kijs.gui.field.SozVersNr',
+                    label: 'nur AHV-Nr.',
+                    allowAhvNr: true,
+                    allowSozVersNr: false,
+                    value: '123.45.678.903'
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -97,6 +121,7 @@ home.sc.field_Editor = class home_sc_field_Editor {
             },{
                 xtype: 'kijs.gui.field.Switch',
                 label: 'disableFlex',
+                value: true,
                 on: {
                     change: function(e) {
                         this._updateProperty('disableFlex', e.element.value);
@@ -154,11 +179,53 @@ home.sc.field_Editor = class home_sc_field_Editor {
                     context: this
                 }
             },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'valueTrimEnable',
+                value: true,
+                on: {
+                    change: function(e) {
+                        this._updateProperty('valueTrimEnable', e.element.value);
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'placeholder',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'formatValue',
+                value: true,
+                on: {
+                    change: function(e) {
+                        this._updateProperty('formatValue', e.element.value ? true : false);
+                    },
+                    context: this
+                }
+            },{
                 xtype: 'kijs.gui.Button',
                 caption: 'Validate',
                 on: {
                     click: function(e) {
                         this._callFunction('validate');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'value setzen',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                el.value = '1234567890123';
+                            }
+                        }, this);
                     },
                     context: this
                 }
@@ -195,9 +262,9 @@ home.sc.field_Editor = class home_sc_field_Editor {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

@@ -678,7 +678,7 @@ kit.App = class kit_App {
                                             label: 'Checkbox',
                                             caption: 'Caption',
                                             threeState: true,
-                                            require: true,
+                                            required: true,
                                             //value: false,
                                             on: {
                                                 input: function(e) {
@@ -944,7 +944,8 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.TimePicker',
                                             value: '14:00',
                                             headerBarHide: false,
-                                            currentBtnHide: false,
+                                            nowBtnHide: false,
+                                            emptyBtnHide: false,
                                             closeBtnHide: true,
                                             on: {
                                                 change: function(e) {
@@ -1047,7 +1048,6 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Number',
                                             name: 'Nummer',
                                             label: 'Nummer',
-                                            allowBlank: true,
                                             thousandsSeparator: '\'',
                                             alwaysDisplayDecimals: true
                                         },{
@@ -1156,7 +1156,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Email',
                                             name: 'email',
                                             label: 'E-Mail',
-                                            showLinkButton: true
+                                            linkButtonVisible: true
                                         },{
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Land',
@@ -1168,7 +1168,7 @@ kit.App = class kit_App {
                                             valueField: 'value',
                                             captionField: 'caption'
                                         },{
-                                            xtype: 'kijs.gui.field.Editor',
+                                            xtype: 'kijs.gui.field.AceEditor',
                                             name: 'editor',
                                             label: 'Editor',
                                             mode: 'javascript',
@@ -1950,7 +1950,7 @@ kit.App = class kit_App {
                             ],
                             elements:[
                                 {
-                                    xtype: 'kijs.gui.field.Editor',
+                                    xtype: 'kijs.gui.field.AceEditor',
                                     name: 'editor',
                                     labelHide: true,
                                     mode: 'javascript',

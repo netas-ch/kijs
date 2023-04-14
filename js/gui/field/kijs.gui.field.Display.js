@@ -52,9 +52,13 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     constructor(config={}) {
         super(false);
 
-        this._value = '';
-        this._valueTrim = true;
         this._clickableLinks = false;
+        this._formatFn = null;
+        this._formatFnContext = null;
+        this._formatRegExps = [];
+        this._value = '';
+        this._valueTrimEnable = true;
+        
         
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'div',
@@ -68,13 +72,16 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            submitValue: false
+            submitValueEnable: false
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            valueTrim: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
-            clickableLinks: true         // Weblink zum anklicken machen
+            clickableLinks: true,         // Weblink zum anklicken machen
+            formatFn: true,
+            formatFnContext: true,
+            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
+            valueTrimEnable: true       // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
         });
 
         // Config anwenden
@@ -97,6 +104,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
     
+    // overwrite
+    get hasFocus() { return this._inputDom.hasFocus; }
+
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -104,19 +114,17 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
     // overwrite
     get value() {
-        let val = this._value;
-        if (this._valueTrim && kijs.isString(val)) {
+        let val = kijs.toString(this._value);
+        if (this._valueTrimEnable) {
             val = val.trim();
         }
         return val;
     }
     set value(val) {
-        if (val === null) {
-            val = '';
-        }
-        this._value = val;
+        val = kijs.toString(val);
+        val = this._formatRules(val);
         
-        // Sicherstellen, dass kein HTML-Code drin ist.
+         // Sicherstellen, dass kein HTML-Code drin ist.
         val = kijs.String.htmlspecialchars(val);
         
         // Hyperlinks einfügen
@@ -127,36 +135,97 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // Zeilenumbrüche einfügen
         val = this._insertLineBreaks(val);
         
+        this._isDirty = false;
+        
         this._inputDom.html = val;
     }
     
-    get valueTrim() { return this._valueTrim; }
-    set valueTrim(val) { this._valueTrim = !!val; }
+    get valueTrimEnable() { return this._valueTrimEnable; }
+    set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * @param {Object|Array} regExps 
+     *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
+     *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
+     *                       sonst replace() 
+     * @returns {undefined}
+     */
+    addFormatRegExp(regExps) {
+        if (!kijs.isArray(regExps)) {
+            regExps = [regExps];
+        }
+        
+        kijs.Array.each(regExps, function(regExp) {
+            let ok = true;
+            
+            if (typeof regExp !== 'object') {
+                ok = false;
+            }
+
+            if (ok) {
+                if (kijs.isRegExp(regExp.regExp)) {
+                    regExp.regExp = regExp.regExp.toString();
+                } else if (!kijs.isString(regExp.regExp)) {
+                    ok = false;
+                }
+            }
+            
+            if (ok) {
+                if (kijs.isString(regExp.replace) && (regExp.toUpperCase || regExp.toLowerCase)) {
+                    throw new kijs.Error(`"formatRegExp" must not have a "toUpperCase" or "toLowerCase" and a "replace" at the same time.`);
+                } else if (!kijs.isString(regExp.replace) && !regExp.toUpperCase && !regExp.toLowerCase) {
+                    ok = false;
+                }
+            }
+            
+            if (ok) {
+                this._formatRegExps.push(regExp);
+            } else {
+                throw new kijs.Error(`"formatRegExp" is not valid.`);
+            }
+        }, this);
+    }
+    
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._inputDom.disabled = !!val;
+        this._inputDom.changeDisabled(!!val, true);
+    }
+    
+    /**
+     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]
+     * @param {Boolean} [selectText=false]
+     * @returns {undefined}
+     * @overwrite
+     */
+    focus(alsoSetIfNoTabIndex, selectText) {
+        let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
+        if (selectText) {
+            if (nde) {
+                nde.select();
+            }
+        }
+        return nde;
     }
     
     // overwrite
     render(superCall) {
         super.render(true);
 
-        // Input rendern (kijs.guiDom)
+        // Input-DIV rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
-
-        //this._setLinkClass();
     }
 
     // overwrite
@@ -179,6 +248,71 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
 
     // PROTECTED
+    _applyReplaceRegExps(regExps, value) {
+        if (!kijs.isEmpty(regExps)) {
+            value = value.toString();
+            if (value !== '') {
+                kijs.Array.each(regExps, function(regExp) {
+                    let r = this._stringToRegExp(regExp.regExp);
+                    
+                    // in Grossbuchstaben umwandeln
+                    if (regExp.toUpperCase) {
+                        // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
+                        if (kijs.String.contains(r.flags, 'g')) {
+                            value = value.replaceAll(r, function(v) { return v.toUpperCase(); });
+                        // sonst nur replace
+                        } else {
+                            value = value.replace(r, function(v) { return v.toUpperCase(); });
+                        }
+                        
+                    // oder in Kleinbuchstaben umwandeln
+                    } else if (regExp.toUpperCase) {
+                        // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
+                        if (kijs.String.contains(r.flags, 'g')) {
+                            value = value.replaceAll(r, function(v) { return v.toLowerCase(); });
+                        // sonst nur replace
+                        } else {
+                            value = value.replace(r, function(v) { return v.toLowerCase(); });
+                        }
+                        
+                    // oder durch String ersetzen
+                    } else {
+                        // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
+                        if (kijs.String.contains(r.flags, 'g')) {
+                            value = value.replaceAll(r, regExp.replace);
+                        // sonst nur replace
+                        } else {
+                            value = value.replace(r, regExp.replace);
+                        }
+                        
+                    }
+                }, this);
+            }
+        }
+        return value;
+    }
+    
+    /**
+     * Diese Funktion ist zum Überschreiben gedacht
+     * @param {String} value
+     * @returns {undefined}
+     */
+    _formatRules(value) {
+        // formatRegExps
+        if (!kijs.isEmpty(this._formatRegExps)) {
+            value = this._applyReplaceRegExps(this._formatRegExps, value);
+        }
+        
+        // formatFn
+        if (kijs.isFunction(this._formatFn)) {
+            if (value !== null && value.toString() !== '') {
+                value = this._formatFn.call(this._formatFnContext || this, value);
+            }
+        }
+        
+        return value;
+    }
+    
     // Ersetzt /n durch <br>
     _insertLineBreaks(txt) {
         return txt.replace(/\n/gim, '<br>');
@@ -190,16 +324,16 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
         pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-        txt = txt.replace(pattern, '<a href="$1" target="_blank">$1</a>');
+        txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
 
         // URLs beginnend mit 'www.'
         // (without // before it, or it'd re-link the ones done above).
         pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
-        txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank">$2</a>');
+        txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');
 
         // E-Mailadressen
         pattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-        txt = txt.replace(pattern, '<a href="mailto:$1">$1</a>');
+        txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');
 
         return txt;
     }

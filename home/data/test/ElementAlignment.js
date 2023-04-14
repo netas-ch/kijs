@@ -42,6 +42,19 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     label: 'field.Text',
                     value: 'Test'
                 },{
+                    xtype: 'kijs.gui.field.Number',
+                    label: 'field.Number',
+                    value: 1
+                },{
+                    xtype: 'kijs.gui.field.Number',
+                    label: 'field.Number',
+                    spinButtonsVisible: true,
+                    value: 1
+                },{
+                    xtype: 'kijs.gui.field.Iban',
+                    label: 'field.Iban',
+                    value: 'DE07 1234 1234 1234 1234 12'
+                },{
                     xtype: 'kijs.gui.field.Display',
                     label: 'field.Display',
                     value: 'Test'
@@ -78,6 +91,10 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     label: 'field.Switch',
                     caption: 'caption',
                     helpText: 'Info'
+                },{
+                    xtype: 'kijs.gui.field.Url',
+                    label: 'field.Url',
+                    value: 'https://www.netas.ch'
                 },{
                     xtype: 'kijs.gui.field.Email',
                     label: 'field.Email',
@@ -149,7 +166,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     label: 'field.Range',
                     helpText: 'Info'
                 },{
-                    xtype: 'kijs.gui.field.Editor',
+                    xtype: 'kijs.gui.field.AceEditor',
                     label: 'field.Editor',
                     value: 'Text',
                     helpText: 'Info'
@@ -175,6 +192,15 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 on: {
                     change: function(e) {
                         this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'readOnly',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('readOnly', e.element.value);
                     },
                     context: this
                 }

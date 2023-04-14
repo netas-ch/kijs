@@ -1,9 +1,9 @@
 /* global kijs, this, ace */
 
 // --------------------------------------------------------------
-// kijs.gui.field.Editor
+// kijs.gui.field.AceEditor
 // --------------------------------------------------------------
-kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field {
+kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field.Field {
 
 
     // --------------------------------------------------------------
@@ -18,9 +18,9 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         this._mode = 'javascript';
         this._theme = null;
         this._value = null;
-        this._oldValue = null;
+        this._previousChangeValue = null;
 
-        this._dom.clsAdd('kijs-field-editor');
+        this._dom.clsAdd('kijs-field-aceeditor');
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
@@ -43,6 +43,8 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get hasFocus() { return this._aceEditorNode.firstChild === document.activeElement; }
+    
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
@@ -71,17 +73,31 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         if (this._aceEditor) {
             return this._aceEditor.getValue();
         } else {
-            return this._value;
+            return kijs.toString(this._value);
         }
     }
     set value(val) {
+        val = kijs.toString(val);
         this._value = val;
         if (this._aceEditor) {
             if (!val) {
                 val = '';
             }
             this._aceEditor.setValue(val, 1);
+            this._previousChangeValue = val;
+            this._isDirty = false;
         }
+    }
+
+    /**
+     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
+     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     */
+    get virtualKeyboardPolicy() {
+        return this._aceEditorNode.firstChild.virtualKeyboardPolicy;
+    }
+    set virtualKeyboardPolicy(val) {
+        this._aceEditorNode.firstChild.virtualKeyboardPolicy = val;
     }
 
 
@@ -93,6 +109,29 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._aceEditor.setReadOnly(!!val);
+    }
+    
+    /**
+     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]
+     * @param {Boolean} [selectText=false]
+     * @returns {undefined}
+     * @overwrite
+     */
+    focus(alsoSetIfNoTabIndex, selectText) {
+        let nde = this._aceEditorNode && this._aceEditorNode.firstChild ? 
+                this._aceEditorNode.firstChild : null;
+        
+        if (nde) {
+            if (alsoSetIfNoTabIndex) {
+                nde.focus();
+                if (selectText) {
+                    nde.select();
+                }
+                return nde;
+            }
+        }
+        return false;
     }
     
     // overwrite
@@ -113,7 +152,6 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
                 this._aceEditor.on('change', () => { this.raiseEvent('input'); });
                 this._aceEditor.getSession().on('changeAnnotation', () => { this.#onAnnotationChange() });
 
-                kijs.Dom.addEventListener('focus', inputNode, this.#onInputNodeFocus, this);
                 kijs.Dom.addEventListener('blur', inputNode, this.#onInputNodeBlur, this);
             }, 200, this);
         } else {
@@ -175,14 +213,12 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         this.validate();
     }
 
-    #onInputNodeFocus() {
-        this._oldValue = this._value;
-    }
 
     #onInputNodeBlur() {
-        if (this.value !== this._oldValue) {
-            this._oldValue = this.value;
-            this.raiseEvent('change', {value: this.value});
+        if (this.value !== this._previousChangeValue) {
+            this._isDirty = true;
+            this.raiseEvent('change', { value: this.value, oldValue: this._previousChangeValue });
+            this._previousChangeValue = this.value;
         }
     }
 
@@ -210,10 +246,6 @@ kijs.gui.field.Editor = class kijs_gui_field_Editor extends kijs.gui.field.Field
         // Variablen (Objekte/Arrays) leeren
         this._aceEditor = null;
         this._aceEditorNode = null;
-        this._mode = null;
-        this._theme = null;
-        this._value = null;
-        this._oldValue = null;
 
         // Basisklasse entladen
         super.destruct(true);

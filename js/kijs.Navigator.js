@@ -275,24 +275,21 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Öffnet einen Link (http, tel, mailto, etc.) in einem neuen Fenster. 
-     * Achtung nur nach Klick ausführen, sonst kommt der Popup-Blocker!
-     * Wenn ein tel oder mailto Link ein anderes Programm öffnet, und das 
-     * Fenster blank bleibt, wird es automatisch wieder geschlossen.
+     * Öffnet einen mailto oder tel Link, das dass kein neues Fenster geöffnet wird 
+     * und auch das beforeunload Event nicht ausgelöst wird.
      * @param {String} href
-     * @param {String|null} target
-     * @returns {WindowProxy|null}
+     * @returns {undefined}
      */
-    static openLink(href, target=null) {
-        const handle = window.open(href, target);
-        if (handle) {
-            handle.setTimeout(() => {
-                if (handle && handle.location && handle.location.href === 'about:blank') {
-                    handle.close();
-                }
-            }, 500);
-        }
-        return handle;
+    static openEmailPhoneLink(href) {
+        // kleiner Murgs, damit das Event window.onbeforeunload abgemurgst wird.
+        // Dafür werden im Listener kijs.Navigator.__onWindowBeforeUnload alle 
+        // anderen Listeners ausschaltet.
+        kijs.Navigator.__disableBeforeUnload = true;
+        
+        // Link öffnen
+        window.location.href = href;
+        
+        kijs.Navigator.__disableBeforeUnload = false;
     }
 
 
@@ -307,4 +304,19 @@ kijs.Navigator = class kijs_Navigator {
         return '';
     }
     
+    
+    // LISTENERS
+    // Listener, der verhindert, dass beim Aufruf von kijs.Navigator.openEmailPhoneLink()
+    // ein anderer beforeunload Listener aufgerufen werden kann.
+    static __onWindowBeforeUnload(nodeEvent) {
+        if (kijs.Navigator.__disableBeforeUnload) {
+            nodeEvent.stopImmediatePropagation();
+        }
+    }
+    
 };
+
+// Fügt den Listener kijs.Navigator.__onWindowBeforeUnload hinzu. 
+// Dies muss hier geschehen, damit er noch vor allen anderen Listener gesetzt
+// wird und dann auch aufgerufen wird.
+addEventListener("beforeunload", kijs.Navigator.__onWindowBeforeUnload);

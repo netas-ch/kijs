@@ -239,7 +239,7 @@ kijs.Graphic = class kijs_Graphic {
      */
     static colorGetHex(color) {
         color = kijs.Graphic.colorGet(color);
-        let hex = '';
+        let hex = '#';
         hex += kijs.String.padding(color.r.toString(16), 2, '0', 'left');
         hex += kijs.String.padding(color.g.toString(16), 2, '0', 'left');
         hex += kijs.String.padding(color.b.toString(16), 2, '0', 'left');

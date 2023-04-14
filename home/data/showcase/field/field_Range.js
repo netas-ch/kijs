@@ -57,6 +57,7 @@ home.sc.field_Range = class home_sc_field_Range {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

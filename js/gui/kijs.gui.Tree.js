@@ -723,7 +723,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this.loadSpinner || this.disabled) {
             return;
         }
-        console.log('sdfsfsfd');
+        
         if (this.expanded) {
             this.collapse();
         } else {

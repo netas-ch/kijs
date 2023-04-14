@@ -2621,7 +2621,19 @@ div.kijs-field {
                 border-bottom: 1px solid var(--field-borderColor);
                 border-left: 0;
                 color: var(--button-icon-fontColor);
-
+                
+                &.kijs-smallpaddings {
+                    width: 20px;
+                    margin: 0;
+                    padding: 0;
+                    justify-content: center;
+                    
+                    > .kijs-icon {
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+                
                 &.kijs-default {
                     box-shadow: none;
                 }
@@ -2704,10 +2716,20 @@ div.kijs-field {
 
 /* ******************
    * Field Text
+   * Field Iban
+   * Field SozVersNr
+   * Field Url
+   * Field Email
+   * Field Phone
    * Field Number
-   * Field E-Mail
    ****************** */
-div.kijs-field-text, div.kijs-field-number, div.kijs-field-email {
+div.kijs-field-text, 
+div.kijs-field-url, 
+div.kijs-field-email, 
+div.kijs-field-iban,
+div.kijs-field-sozversnr,
+div.kijs-field-phone,
+div.kijs-field-number {
     > .kijs-inputwrapper {
         > input {
             display: block;
@@ -2745,15 +2767,81 @@ div.kijs-field-text, div.kijs-field-number, div.kijs-field-email {
         }
     }
 }
+div.kijs-field-number > .kijs-container-inner > .kijs-spinners {
+    flex: none;
+    
+    > .kijs-container-inner {
+        display: flex;
+        flex-direction: column;
+
+        > .kijs-button {
+            height: 13px;
+            width: 12px;
+            /*margin: 0;*/
+            padding: 0;
+            border-top: 1px solid var(--field-borderColor);
+            border-right: 1px solid var(--field-borderColor);
+            border-bottom: 1px solid var(--field-borderColor);
+            border-left: 0;
+            border-radius: 0;
+            background-color: var(--button-bkgrndColor);
+            color: var(--button-icon-fontColor);
+            cursor: pointer;
+            
+            &:last-child {
+                height: 12px;
+                border-top: 0;
+            }
+            
+            > .kijs-icon {
+                margin: 0;
+                padding: 0 0 0 2px;
+                font-size: 11px;
+                line-height: 11px;
+            }
+            
+            &.kijs-default {
+                box-shadow: none;
+            }
+
+            &.kijs-hidden {
+                display: none;
+            }
+
+            &:hover {
+                background-color: var(--viewport-bkgrndColor);
+            }
+
+            &.kijs-disabled {
+                background-color: var(--field-disabled-bkgrndColor);
+                color: var(--field-disabled-fontColor);
+                cursor: default;
+            }
+        }
+    }
+}
+div.kijs-field-url,
+div.kijs-field-email {
+    &.kijs-disableFlex > .kijs-inputwrapper {
+        width: 160px;
+    }
+}
+div.kijs-field-phone {
+    &.kijs-disableFlex > .kijs-inputwrapper {
+        width: 140px;
+    }
+}
+div.kijs-field-sozversnr {
+    &.kijs-disableFlex > .kijs-inputwrapper {
+        width: 120px;
+    }
+}
 div.kijs-field-number.kijs-disableFlex > .kijs-inputwrapper {
     width: 80px;
 }
-div.kijs-field-email.kijs-disableFlex > .kijs-inputwrapper {
-    width: 159px;
-}
 
 
-
+    
 /* ******************
    * Field Color
    ****************** */
@@ -3292,6 +3380,7 @@ div.kijs-field-checkbox {
         flex-direction: row;
         align-items: center;
         height: 25px;
+        outline: none;
         
         > .kijs-checkbox-input {
             flex: none;
@@ -3479,9 +3568,9 @@ div.kijs-field-display {
 
 
 /* ******************
-   * Field Editor
+   * Field AceEditor
    ****************** */
-div.kijs-field-editor {
+div.kijs-field-aceeditor {
     > .kijs-inputwrapper {
         flex: 1;
         outline: none;

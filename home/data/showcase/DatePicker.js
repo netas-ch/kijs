@@ -45,7 +45,11 @@ home.sc.DatePicker = class home_sc_DatePicker {
                     xtype: 'kijs.gui.DatePicker',
                     mode: 'date',
                     minValue: kijs.Date.addDays(new Date(), -15),
-                    maxValue: kijs.Date.addDays(new Date(), 15)
+                    maxValue: kijs.Date.addDays(new Date(), 15),
+                    on: {
+                        change: console.log,
+                        context: this
+                    }
                 },
                 
                 {
@@ -54,7 +58,11 @@ home.sc.DatePicker = class home_sc_DatePicker {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
-                    mode: 'week'
+                    mode: 'week',
+                    on: {
+                        change: console.log,
+                        context: this
+                    }
                 },
                 
                 {
@@ -63,7 +71,11 @@ home.sc.DatePicker = class home_sc_DatePicker {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
-                    mode: 'range'
+                    mode: 'range',
+                    on: {
+                        change: console.log,
+                        context: this
+                    }
                 },
                 
                 {

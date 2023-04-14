@@ -69,6 +69,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

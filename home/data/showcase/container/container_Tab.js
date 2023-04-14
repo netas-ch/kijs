@@ -232,7 +232,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
     }
     
     _getRandomColor() {
-        return '#' + kijs.Graphic.colorGetHex([
+        return kijs.Graphic.colorGetHex([
             Math.floor(Math.random() * 200),
             Math.floor(Math.random() * 200),
             Math.floor(Math.random() * 200)

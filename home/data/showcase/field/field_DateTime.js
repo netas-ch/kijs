@@ -58,6 +58,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

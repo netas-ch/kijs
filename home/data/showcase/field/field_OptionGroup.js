@@ -69,6 +69,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

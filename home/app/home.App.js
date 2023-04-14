@@ -386,7 +386,7 @@ home.App = class home_App {
                                 marked.parse(node.userData.markdown) + '</div>';
                         
                         /*tabCont.add({
-                            xtype: 'kijs.gui.field.Editor',
+                            xtype: 'kijs.gui.field.AceEditor',
                             style: {
                                 flex: 1
                             },

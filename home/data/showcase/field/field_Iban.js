@@ -21,6 +21,7 @@ home.sc.field_Iban = class home_sc_field_Iban {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Iban',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
@@ -35,8 +36,7 @@ home.sc.field_Iban = class home_sc_field_Iban {
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Iban'
                 },
@@ -44,10 +44,11 @@ home.sc.field_Iban = class home_sc_field_Iban {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Iban',
                     label: 'Label',
+                    value: 'DE07123412341234123412',
                     on: {
                         focus:  console.log,
 
@@ -58,10 +59,21 @@ home.sc.field_Iban = class home_sc_field_Iban {
                         spacePress:  console.log,
 
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.field.Iban',
+                    label: 'ohne Leerzeichen',
+                    value: 'DE07123412341234123412',
+                    formatRegExp:[
+                        { 
+                            regExp: /\s/g, // Whitespace entfernen
+                            replace: ''
+                        }
+                    ]
                 }
             ]
         });
@@ -156,11 +168,11 @@ home.sc.field_Iban = class home_sc_field_Iban {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 value: true,
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }
@@ -199,7 +211,7 @@ home.sc.field_Iban = class home_sc_field_Iban {
                     click: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
                             if (el instanceof kijs.gui.field.Field) {
-                                el.value = 'CH9709000000300097000';
+                                el.value = 'CH1234567890123456789';
                             }
                         }, this);
                     },

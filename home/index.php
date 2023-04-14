@@ -10,13 +10,13 @@
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
 
     // CSS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor&fileType=css');
 ?>
     <link rel="stylesheet" type="text/css" href="app/style.css">
     <link rel="stylesheet" type="text/css" href="dataResources/css/style.css">
 <?php
     // JS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor&fileType=js');
 ?>
         <script type="text/javascript" src="app/marked.min.js"></script>
         <script type="text/javascript" src="app/home.App.js"></script>

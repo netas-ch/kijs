@@ -588,22 +588,22 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     // overwrite
-    focus(alsoSetIfNoTabIndex=false) {
+    focus(alsoSetIfNoTabIndex) {
         if (alsoSetIfNoTabIndex) {
             return super.focus(alsoSetIfNoTabIndex);
 
         } else {
             // Zuerst versuchen den Fokus auf ein Element im innerDom zu setzen
-            let node = this._innerDom.focus(false);
+            let nde = this._innerDom.focus(false);
             // dann auf eine Schaltfläche im footer
-            if (!node && !this._footerEl.isEmpty && this._footerEl.isRendered) {
-                node = this._footerEl.focus(alsoSetIfNoTabIndex);
+            if (!nde && !this._footerEl.isEmpty && this._footerEl.isRendered) {
+                nde = this._footerEl.focus(alsoSetIfNoTabIndex);
             }
             // falls nicht erfolgreich. Den Fokus direkt auf das Fenster setzen
-            if (!node) {
-                node = super.focus(alsoSetIfNoTabIndex);
+            if (!nde) {
+                nde = super.focus(alsoSetIfNoTabIndex);
             }
-            return node;
+            return nde;
         }
 
         // Darf der Node den Fokus erhalten?
@@ -612,11 +612,14 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
         } else {
-            const node = kijs.Dom.getFirstFocusableNode(this._node);
-            if (node) {
-                node.focus();
+            const nde = kijs.Dom.getFirstFocusableNode(this._node);
+            if (nde) {
+                nde.focus();
+                return nde;
             }
         }
+        
+        return false;
     }
 
     /**

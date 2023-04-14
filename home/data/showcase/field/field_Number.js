@@ -39,11 +39,19 @@ home.sc.field_Number = class home_sc_field_Number {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    html: 'Weitere Konfigurationen',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Number',
                     label: 'Label'
+                },{
+                    xtype: 'kijs.gui.field.Number',
+                    label: 'mit Spin-Buttons',
+                    spinButtonsVisible: true
+                    //spinStep: 1,
+                    //spinAcceleration: 20,
+                    //spinDelay: 400
+                    
                 },{
                     xtype: 'kijs.gui.field.Number',
                     label: 'mit Tausendertrennzeichen, Min- und Maxwert',
@@ -69,6 +77,7 @@ home.sc.field_Number = class home_sc_field_Number {
                     maxValue:100,
                     value: 1000.12345,
                     thousandsSeparator: '\'',
+                    spinButtonsVisible: true,
                     on: {
                         focus:  console.log,
                      
@@ -79,6 +88,7 @@ home.sc.field_Number = class home_sc_field_Number {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
@@ -177,11 +187,11 @@ home.sc.field_Number = class home_sc_field_Number {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 value: true,
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }

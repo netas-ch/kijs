@@ -21,6 +21,7 @@ home.sc.field_Email = class home_sc_field_Email {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Email',
             scrollableY: 'auto',
+            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },
@@ -35,8 +36,7 @@ home.sc.field_Email = class home_sc_field_Email {
             elements:[
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
-                    style: { margin: '0 0 4px 0'}
+                    html: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Email'
                 },
@@ -44,7 +44,7 @@ home.sc.field_Email = class home_sc_field_Email {
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
-                    style: { margin: '10px 0 4px 0'}
+                    style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Email',
                     label: 'Label',
@@ -65,6 +65,7 @@ home.sc.field_Email = class home_sc_field_Email {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
@@ -162,11 +163,11 @@ home.sc.field_Email = class home_sc_field_Email {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 value: true,
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }

@@ -19,7 +19,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         super(false);
 
         this._checkedAll = false;
-        this._originalValue = null;
 
         this._dom.clsRemove('kijs-field-listview');
         this._dom.clsAdd('kijs-field-checkboxgroup');
@@ -56,8 +55,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     get checkedAll () { return this.value.length === this.data.length; }
     set checkedAll (val) {
         this._checkedAll = !!val;
-
-        if (!this._autoLoad && this.data) {
+        if (this.data) {
            this._checkAll(val);
         }
     }
@@ -81,27 +79,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }, this);
 
         this.value = value;
-    }
-
-    get isDirty() {
-        if (kijs.isArray(this._originalValue) && this._originalValue.length !== this.value.length) {
-            return true;
-        }
-
-        if (kijs.isArray(this._originalValue) && kijs.isArray(this.value) && this.value.length
-            && this._originalValue.length && this._originalValue.every((val, index) => val !== this.value[index])) {
-            return true;
-        }
-
-        return false;
-    }
-    set isDirty(val) {
-        if (val) { // mark as dirty
-            this._originalValue = this.value === null ? [] : null;
-
-        } else { // mark as not dirty
-            this._originalValue = this.value;
-        }
     }
 
 
@@ -128,9 +105,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         if (this._checkedAll) {
             this._checkAll(true);
         }
-
-        this._originalValue = this.value;
-
         this.raiseEvent('afterLoad', e);
     }
     

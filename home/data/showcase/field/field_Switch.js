@@ -55,6 +55,7 @@ home.sc.field_Switch = class home_sc_field_Switch {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

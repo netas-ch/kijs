@@ -72,7 +72,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
             autoLoad: { target: 'autoLoad' },
+            inputMode: { target: 'inputMode' },
             remoteSort: true,
             showPlaceholder: true,
             forceSelection: true,
@@ -119,16 +121,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 //        this._eventForwardsAdd('escPress', this._inputDom);
 
         // Listeners
-        this._inputDom.on('blur', this.#onInputBlur, this);
-        this._inputDom.on('change', this.#onInputChange, this);
-        this._inputDom.on('input', this.#onInputInput, this);
-        this._inputDom.on('keyUp', this.#onInputKeyUp, this);
-        this._inputDom.on('keyDown', this.#onInputKeyDown, this);
-        this._listViewEl.on('afterLoad', this.#onListViewAfterLoad, this);
-        this._listViewEl.on('click', this.#onListViewClick, this);
-        this._spinBoxEl.on('click', this.#onSpinBoxClick, this);
-        this._spinBoxEl.on('close', this.#onSpinBoxClose, this);
-        this._spinBoxEl.on('show', this.#onSpinBoxShow, this);
+        this._inputDom.on('blur', this.#onInputDomBlur, this);
+        this._inputDom.on('change', this.#onInputDomChange, this);
+        this._inputDom.on('input', this.#onInputDomInput, this);
+        this._inputDom.on('keyUp', this.#onInputDomKeyUp, this);
+        this._inputDom.on('keyDown', this.#onInputDomKeyDown, this);
+        this._listViewEl.on('afterLoad', this.#onListViewElAfterLoad, this);
+        this._listViewEl.on('click', this.#onListViewElClick, this);
+        this._spinBoxEl.on('click', this.#onSpinBoxElClick, this);
+        this._spinBoxEl.on('close', this.#onSpinBoxElClose, this);
+        this._spinBoxEl.on('show', this.#onSpinBoxElShow, this);
         this._spinIconEl.on('click', this.#onSpinButtonClick, this);
         
         // Config anwenden
@@ -143,6 +145,20 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
+    set autocomplete(val) {
+        let value = 'on';
+
+        if (kijs.isString(val)) {
+            value = val;
+        } else if (val === false) {
+            value = 'off';
+        }
+
+        // De-/aktiviert die Browservorschläge
+        this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+
     get autoLoad() {
         return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
@@ -174,11 +190,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
     set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
 
+   // overwrite
+    get hasFocus() { return this._inputDom.hasFocus; }
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
     get inputDom() { return this._inputDom; }
 
+    get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
+    set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
+    
     get minChars() { return this._minChars; }
     set minChars(val) {
         if (val === 'auto') {
@@ -205,11 +227,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set readOnly(val) {
         super.readOnly = !!val;
         this._listViewEl.disabled = !!val;
-        if (val) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
-        } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
-        }
+        this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
     get rpc() { return this._listViewEl.rpc; }
@@ -224,7 +242,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._caption  = this._getCaptionFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
-
+        this._isDirty = false;
+        
         // falls das value nicht im store ist, vom server laden
         if (this._remoteSort) {
             if (!valueIsInStore && this._firstLoaded) {
@@ -247,6 +266,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get valueField() { return this._listViewEl.valueField; }
     set valueField(val) { this._listViewEl.valueField = val; }
 
+    /**
+     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
+     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     */
+    get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
+    set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
+
 
 
     // --------------------------------------------------------------
@@ -256,8 +282,26 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._listViewEl.disabled = !!val;
+        this._inputDom.changeDisabled(!!val, true);
     }
     
+    /**
+     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]
+     * @param {Boolean} [selectText=false]
+     * @returns {undefined}
+     * @overwrite
+     */
+    focus(alsoSetIfNoTabIndex, selectText) {
+        let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
+        if (selectText) {
+            if (nde) {
+                nde.select();
+            }
+        }
+        return nde;
+    }
+
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -283,7 +327,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
                     // value mit dem RPC zurückgeben (mit change-event)
                     } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
-                        this.setValue(responseData.value);
+                        if (kijs.toString(responseData.value) !== kijs.toString(this.value)) {
+                            this.value = responseData.value;
+                        }
+                        
                     }
                 }).catch(() => {});
 
@@ -303,7 +350,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
                     // value mit dem RPC zurückgeben (mit change-event)
                     } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
-                        this.setValue(responseData.value);
+                        if (kijs.toString(responseData.value) !== kijs.toString(this.value)) {
+                            this.value = responseData.value;
+                        }
                     }
                 }).catch(() => {});
         }
@@ -540,7 +589,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this.load(null, this.value !== '');
     }
 
-    #onInputBlur() {
+    #onInputDomBlur() {
         // blur nur ausführen, wenn Trigger nicht offen ist und Feld kein Focus hat
         kijs.defer(function() {
             if (this._spinBoxEl && this._inputDom && !this._spinBoxEl.isRendered && !this._inputDom.hasFocus) {
@@ -549,7 +598,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }, 200, this);
     }
     
-    #onInputChange(e) {
+    #onInputDomChange(e) {
         // change event nicht berücksichtigen, wenn die spinbox
         // offen ist.
         if (this._spinBoxEl.isRendered) {
@@ -602,15 +651,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // change-event
         if (changed) {
-            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
+            this._isDirty = true;
+            this.raiseEvent('change', { value: this.value, oldValue: oldVal });
         }
     }
 
-    #onInputInput(e) {
+    #onInputDomInput(e) {
         this._spinBoxEl.show();
     }
 
-    #onInputKeyDown(e) {
+    #onInputDomKeyDown(e) {
         // event beim listView ausführen, damit selektion geändert werden kann.
         if (this._listViewEl.getSelected()) {
             this._listViewEl.handleKeyDown(e.nodeEvent);
@@ -640,7 +690,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this.value = newVal;
 
                 if (changed) {
-                    this.raiseEvent('change', {value: this.value, oldVal: oldVal});
+                    this._isDirty = true;
+                    this.raiseEvent('change', {value: this.value, oldValue: oldVal});
                 }
             }
 
@@ -659,7 +710,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    #onInputKeyUp(e) {
+    #onInputDomKeyUp(e) {
         // Steuerbefehle ignorieren
         let specialKeys = [
             'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
@@ -688,7 +739,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }, this._remoteSort ? 1000 : 500, this);
     }
 
-    #onListViewAfterLoad(e) {
+    #onListViewElAfterLoad(e) {
         if (!this._remoteSort) {
             this.value = this._value;
         }
@@ -703,30 +754,31 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    #onListViewClick(e) {
+    #onListViewElClick(e) {
         this._spinBoxEl.close();
 
         if (this.value !== this._listViewEl.value) {
             let oldVal = this.value;
             this.value = this._listViewEl.value;
+            this._isDirty = true;
 
             // validieren
             this.validate();
-
-            this.raiseEvent('change', {value: this.value, oldVal: oldVal});
+            
+            this.raiseEvent('change', {value: this.value, oldValue: oldVal});
         }
     }
 
-    #onSpinBoxClick() {
+    #onSpinBoxElClick() {
         this._inputDom.focus();
     }
     
-    #onSpinBoxClose() {
+    #onSpinBoxElClose() {
         this._inputDom.focus();
-        this.#onInputBlur();
+        this.#onInputDomBlur();
     }
 
-    #onSpinBoxShow() {
+    #onSpinBoxElShow() {
         this._setScrollPositionToSelection();
     }
 

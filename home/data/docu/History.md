@@ -18,6 +18,9 @@ Es existiert weiterhin als Beispiel-App.
 
 Neue Features
 ----------------
+### kijs.Date
+ - Neue Funktion ```getAge()``` Berechnet das Alter aus einem Geburtsdatum.
+
 ### kijs.Dom
  - Neue Funktionen: 
    - ```jsFileAdd()```
@@ -26,8 +29,6 @@ Neue Features
 
  - Die Funktion ```cssFileReplace()``` gibt neu ein Promise zurück
 
-### kijs.gui.field.ListView
- - Neuer Getter/Setter ```selectType```
 
 ### kijs.gui.MsgBox
 - Neue Statische Funktion ```kijs.gui.MsgBox.errorNotice()```  
@@ -46,9 +47,20 @@ angezeigt.
 ### kijs.gui.container.Tab (NEU)
 - Funktioniert ähnlich wie ```kijs.gui.container.Stack```. Es werden aber Tabs angezeigt.
 
+### kijs.gui.field.Url (NEU)
+- Feld für Internetadressen aller Art mit Button zum öffnen des Links.
+
+### kijs.gui.field.SozVersNr (NEU)
+- Feld für die schweizer Sozialversicherungs-Nr. und AHV-Nr.
+
 
 Änderungen
 -------------
+### aceEditor (kijs.gui.field.AceEditor)
+ - kijs-Modul ```'editor'``` umbenannt zu ```'aceEditor'```. Bitte beim einbinden in 
+   die index.html berücksichtigen.  
+ - ```kijs.gui.field.Editor``` umbenannt zu ```kijs.gui.field.AceEditor```  
+
 ### Private Funktionen
  - kijs verwendet neu private Funktionen.
  - Sie sind an der Präfix ```#``` zu erkennen.
@@ -84,6 +96,14 @@ angezeigt.
 
 ### Ereignisse afterLoad und afterSave
 - ```afterLoad``` und ```afterSave``` events haben neu nur noch ein Argument ```e```
+
+### kijs.Graphic
+ - Die Funktion ```colorGetHex()``` gibt neu auch einen # zurück.  
+   Beispiel früher: ```'fafafa'``` neu: ```'#fafafa'```  
+
+### kijs.Navigator
+ - Die Funktion ```openLink()``` gibt es nicht mehr. Stattdessen bitte 
+   ```openemailPhoneLink(href)``` oder ```window.open(href, target)``` benutzen.
 
 ### kijs.gui.ApertureMask
  - Die Funktion ```_updatePosition()``` ist jetzt nicht mehr public.  
@@ -147,11 +167,12 @@ angezeigt.
   Es wird nicht mehr benötigt, weil die Load Funktion nun immer eine Antwort zurückgibt.
 
 ### kijs.gui.Dom
- - Neue Config, Getter, Setter ```disabled```
+ - Neue config/getter/setter ```disabled```
 
 ### kijs.gui.Element
- - Config, Getter, Setter ```toolTip``` entfernt. => ```tooltip``` verwenden.
- - Neue Config, Getter, Setter ```disabled```
+ - config/getter/setter ```toolTip``` entfernt. => ```tooltip``` verwenden.
+ - Neue config/getter/setter ```disabled```
+ - Neuer getter ```hasFocus```  
 
 ### kijs.gui.Button
 - Wird neu intern mit CSS display: flex aufgebaut.
@@ -159,15 +180,15 @@ angezeigt.
   untereinander angeordnet werden.
 - Hat ein Button eine Fixe Breite (oder eine Maximalbreite) und der Text darin
   ist zu breit, so wird er automatisch gekürzt und ... angehängt.
-- Neue Eigenschaft ```disableFlex```. Mit der gleichen Funktionalität wie die 
-  gleichnamige Eigenschaft bei Formularfeldern. Standard: ```true```
-- Neue Eigenschaft ```smallPaddings```. Sollen links/rechts nur kleine Abstände sein?
+- Neue config/getter/setter ```disableFlex```. Mit der gleichen Funktionalität wie die 
+  gleichnamige config/getter/setter bei Formularfeldern. Standard: ```true```
+- Neue config/getter/setter ```smallPaddings```. Sollen links/rechts nur kleine Abstände sein?
   - ```true```
   - ```false```
   - ```'auto'``` (default) true = wenn Button hat keine Caption und disableFlex:false
 
 ### kijs.gui.Container
- - Neue Eigenschaften: 
+ - Neue config/getter/setter: 
    - ```scrollableX``` (default: ```false```)
    - ```scrollableY``` (default: ```false```)
 
@@ -176,10 +197,10 @@ angezeigt.
     - ```true``` (Scrollbar/Scroll-Buttons immer sichtbar)
     - ```'auto'``` (automatisch sichtbar, wenn nötig)
 
- - Die Config/Eigenschaft autoScroll gibt es nicht mehr  
+ - Die config/getter/setter autoScroll gibt es nicht mehr  
    ==> ```autoScroll```: true bitte ersetzen durch durch ```scrollableY: 'auto'```  
 
- - Die Config/Eigenschaft ```disabled``` blendet nicht mehr eine Maske ein, 
+ - Die config/getter/setter ```disabled``` blendet nicht mehr eine Maske ein, 
    sondern gibt das disabled auch an die Kinder weiter.
    Dabei wird der vorherige disable-Wert der Kinder gemerkt, damit sie beim 
    zurücksetzen (```disable: false```) wieder den gleichen Wert wie vorher erhalten.  
@@ -214,12 +235,12 @@ angezeigt.
  - bei ```currentEl``` wird ein von ```kijs.gui.Container``` vererbtes Element erwartet.  
    Eine Zahl ist nicht mehr erlaubt. ==> ```currentIndex``` verwenden.  
    Ein String ist nicht mehr erlaubt. ==> ```currentName``` verwenden.  
- - neue Eigenschaft ```currentIndex```  
- - neue Eigenschaft ```currentName```  
+ - neue config/getter/setter ```currentIndex```  
+ - neue config/getter/setter ```currentName```  
  - ```activateAnimated()``` umbenannt zu ```setCurrentAnimated()```  
  - ```setCurrentAnimated()``` gibt neu ein Promise zurück  
  - Werden animierte Übergänge gewünscht, so muss die Funktion ```setCurrentAnimated()``` 
-   verwendet werden. Die Setter ```currentEl```, ```currentIndex``` und ```currentName``` 
+   verwendet werden. Die setter ```currentEl```, ```currentIndex``` und ```currentName``` 
    wechseln ohne Animation.  
  - Die Standard-Animation ist neu ```'fade'``` 
  - ```flex: 1``` ist nicht mehr Standard im CSS und muss deshalb, wenn nötig mit 
@@ -231,7 +252,7 @@ angezeigt.
 ### kijs.gui.Panel
  - Der ```header``` und ```footer``` sind neu ```kijs.gui.container.Scroll```. 
    Elemente. (Früher waren es ```kijs.gui.Container``` Elemente). Sie besitzen 
-   aber die gleichen Eigenschaften wie früher.  
+   aber die gleichen configs/getter/setter wie früher.  
    Der Unterschied ist, dass keine Scrollbars mehr angezeigt werden, sondern 
    Scroll-Buttons.  
    
@@ -253,6 +274,12 @@ angezeigt.
     - ```headerDefaults```
     - ```footerDefaults```
     - ```footerBarDefaults```
+    - ```disabled``` deaktiviert das ganze Panel
+    - ```headerBarDisabled``` deaktiviert die headerBar
+    - ```headerDisabled``` deaktiviert den header
+    - ```innerDisabled``` deaktiviert den inner Container
+    - ```footerDisabled``` deaktiviert den footer
+    - ```footerBarDisabled``` deaktiviert die footerBar
 
  - ```footerCaption``` umbenannt zu ```footerBarCaption```
  - Der header (container-inner) ist neu geflext mit folgenden CSS-Eigenschaften:
@@ -277,9 +304,22 @@ angezeigt.
 
 
 ### kijs.gui.FormPanel
- - Argument umbenannt bei Event afterLoad ```response``` heisst neu ```responseData```
+ - Argument umbenannt bei Event afterLoad ```response``` heisst neu ```responseData```  
  - Felder mit ```disabled: true``` werden nicht mehr übermittelt.  
-   Felder mit ```readOnly: true``` aber immer noch.
+   Felder mit ```readOnly: true``` aber immer noch.  
+ - config/getter/setter ```disabled``` verhaltet sich anders. Es werden nicht mehr 
+   nur die untergeordneten Felder disabled, sondern das ganze FormPanel, inkl. allen 
+   untergeordneten Elementen. Um nur den Content des FormPanels (ohne headerBar, 
+   header, footer, footerBar) zu disablen kann ```innerDisabled``` verwendet werden.  
+ - config/getter/setter ```readOnly``` verhält sich anders. Es wird nur ```true``` zurückgegeben, 
+   wenn alle untergeordneten Felder ```readOnly``` sind, sonst ```false```.  
+ - Methode ```resetValidation()``` umbenannt zu ```errorsClear()```.  
+ - Werden einem Formular neue Felder hinzugefügt oder entfernt, muss neu anschliessend 
+   die Funktion ```searchFields()``` ausgeführt werden, damit das Formular wieder 
+   weiss, welche Felder zu ihm gehören und welche nicht. Vorher wurde das automatisch 
+   gemacht. Aus performancegründen, muss man das nun manuell machen.  
+ - Methode ```reset()``` entfernt. Um das Formular zu leeren kann ```clear()``` benutzt 
+   werden. Um wieder ursprüngliche Werte zu laden, kann ```load()``` benutzt werden.  
 
 ### kijs.gui.DataView
  - Argument umbenannt bei Event afterLoad ```response``` heisst neu ```responseData```
@@ -297,41 +337,139 @@ angezeigt.
    definiert werden.  
  - Neue Methode ```addValidationRegExp()```. Hinzufügen eins Regulären Ausdrucks 
    zur Validierung.  
+ - Methode ```addValidateErrors()``` umbenannt zu ```errorsAdd()```  
+ - Neue Methode ```errorsClear()```. Setzt die Validierungsfehler zurück.  
+ - Neue Methode ```clear()```. Setzt den Wert auf Null zurück.
+ - Methode ```markInvalid()``` entfernt. Stattdessen ```errorsAdd()``` oder 
+   ```errorsClear()``` benutzen.  
+ - Methode ```setValue()``` entfernt. Um den gleichen Effekt zu haben, kann folgender 
+   Code benutzt werden:
+
+        if (kijs.toString(newValue) !== kijs.toString(myField.value)) {
+            this.value = newValue;
+            myField.raiseEvent('change');
+        }
+
+ - config/getter/setter ```submitValue``` umbenannt zu ```submitValueEnable```  
+ - config/getter/setter ```autocomplete``` ist nicht mehr bei allen Feldern vorhanden 
+   und der Standardwert ist überall ```false```.  
+   Nur noch vorhanden bei:  
+   - ```kijs.gui.field.Checkbox```
+   - ```kijs.gui.field.Color```
+   - ```kijs.gui.field.DateTime```
+   - ```kijs.gui.field.Email```
+   - ```kijs.gui.field.Iban```
+   - ```kijs.gui.field.Memo```
+   - ```kijs.gui.field.Month```
+   - ```kijs.gui.field.Number```
+   - ```kijs.gui.field.Phone```
+   - ```kijs.gui.field.Range```
+   - ```kijs.gui.field.Text```
+ - Das Event ```change``` haben nun alle Fields einheitlich. Im Argument ```e``` gibt es 
+   die Properties ```value``` und ```oldValue```.  
+ - ```isDirty``` funktioniert nun anders. Neu wird nicht mehr der alte Wert verglichen, 
+   sondern es wird beim ```change```-Event ein Flag gesetzt. Siehe dazu auch den 
+   Leitfaden ```isDirty```.  
+ - Methode ```reset()``` entfernt.  
 
 ### kijs.gui.field.Text
+ - Neue config ```formatFn``` und ```formatFnContext```. Damit kann eine eigene 
+   Funktion zur Formatierung definiert werden. Die Formatierung wird direkt während 
+   der Eingabe angepasst.  
  - Neue config ```formatRegExp```. Damit können Reguläre Ausdrücke zur Formatierung 
    definiert werden. Die Formatierung wird direkt während der Eingabe angepasst.
  - Neue Methode ```addFormatRegExp()```. Hinzufügen eins Regulären Ausdrucks 
    zur Formatierung.  
+ - config/getter/setter ```valueTrim``` umbenannt zu ```valueTrimEnable```
 
 ### kijs.gui.field.Number
+ - Neue config ```formatFn``` und ```formatFnContext```. Damit kann eine eigene 
+   Funktion zur Formatierung definiert werden. Die Formatierung wird direkt während 
+   der Eingabe angepasst.  
  - Neue config ```formatRegExp```. Damit können Reguläre Ausdrücke zur Formatierung 
    definiert werden. Die Formatierung wird direkt während der Eingabe angepasst.
  - Neue Methode ```addFormatRegExp()```. Hinzufügen eins Regulären Ausdrucks 
    zur Formatierung.  
- - Neue Eigenschaft ```allowedDecimalSeparators```. Array, mit möglichen 
-   Dezimaltrennzeichen, die beim Eingeben verwendet werden dürfen.
- - Neue Eigenschaft ```allowedThousandsSeparators```. Array, mit möglichen 
-   Tausendertrennzeichen, die beim Eingeben verwendet werden dürfen.
+ - Neue config/getter/setter ```allowedDecimalSeparators```. Array, mit möglichen 
+   Dezimaltrennzeichen, die beim Eingeben verwendet werden dürfen.  
+ - Neue config/getter/setter ```allowedThousandsSeparators```. Array, mit möglichen 
+   Tausendertrennzeichen, die beim Eingeben verwendet werden dürfen.  
+ - Neue configs/getter/setter zum Anzeigen von Spin-Buttons:  
+   - ```spinButtonsVisible``` Sichtbarkeit der Buttons (default: false)  
+   - ```spinStep```           Schrittgrösse (default: 1)  
+   - ```spinAcceleration```   Beschleunigung in % (default: 20)  
+   - ```spinDelay```          Intervall in ms (default: 400)  
 
 ### kijs.gui.field.Checkbox
  - Die config/getter/sett ```captionHide``` gibt es nicht mehr.
+ - Das Ereignis ```input``` gibt es nicht mehr. Stattdessen ```change```verwenden.
+
+### kijs.gui.field.ListView
+ - Neuer getter/setter ```selectType```
+ - Das Ereignis ```input``` gibt es nicht mehr. Stattdessen ```change```verwenden.
 
 ### kijs.gui.field.Display
- - Eigenschaft ```htmlDisplayType``` gibt es nicht mehr.
- - Eigenschaft ```linkType``` gibt es nicht mehr.
- - Eigenschaft ```links``` umbenannt zu ```clickableLinks```   
+ - config/getter/setter ```htmlDisplayType``` gibt es nicht mehr.
+ - config/getter/setter ```linkType``` gibt es nicht mehr.
+ - config/getter/setter ```links``` umbenannt zu ```clickableLinks```   
    Damit werden neu alle Hyperlinks (http, https, www und email) durch klickbare 
    Links ersetzt. Früher wurde der Link nur ersetzt, wenn im Feld sonst kein anderer 
    Text war.
+ - Neue config ```formatFn``` und ```formatFnContext```. Damit kann eine eigene 
+   Funktion zur Formatierung definiert werden. Die Formatierung wird direkt während 
+   der Eingabe angepasst. Die Funktion erwartet als Rückgabe true/false und hat 
+   zwei Argumente:  
+   - ```value``` Eingegebener Wert
+   - ```whileTyping``` true=Aufruf der Funktion während der Eingabe (input), 
+     false=Aufruf beim Verlassen des Felds (change) oder set value.
+ - Neue config ```formatRegExp```. Damit können Reguläre Ausdrücke zur Formatierung 
+   definiert werden. Die Formatierung wird direkt während der Eingabe angepasst.
+ - Neue Methode ```addFormatRegExp()```. Hinzufügen eins Regulären Ausdrucks 
+   zur Formatierung.  
+ - config/getter/setter ```valueTrim``` umbenannt zu ```valueTrimEnable```
 
+### kijs.gui.Field.Memo
+ - config/getter/setter ```valueTrim``` umbenannt zu ```valueTrimEnable```
+
+### kijs.gui.Field.Password
+ - config/getter/setter ```valueTrim``` umbenannt zu ```valueTrimEnable```  
+ - Standardwert für config ```disableBrowserSecurityWarning``` ist neu ```false```. 
+   Früher: ```'auto'```.  
 ### kijs.gui.field.Email
- - Config ```showLinkButton``` umbenannt zu ```linkButtonVisible```  
- - Neuer Getter ```linkButton```  
+ - Config ```showLinkButton``` umbenannt zu ```linkButtonVisible``` und default ist jetzt ```true```    
+ - Neuer getter ```linkButton```  
  - hat neu die CSS Klasse ```kijs-field-email``` anstelle von ```kijs-field-text```  
 
+### kijs.gui.field.Iban
+ - config/getter/setter ```formatValue``` gibt es nicht mehr.  
+   Falls eine unformatierte IBAN gewünscht wird, kann dies durch folgende config 
+   erreicht werden:  
+
+        formatRegExp:[
+            { 
+                regExp: /\s/g, // Whitespace entfernen
+                replace: ''
+            }
+        ]
+
+## kijs.gui.field.Phone
+- config ```showLinkButton``` umbenannt zu ```linkButtonVisible``` und default ist jetzt ```true```    
+- config/getter/setter ```replaceLeadingZeros``` entfernt.  
+- config ```formatValue``` entfernt. Es wird jetzt immer formatiert, falls eine 
+  Formatierungs-Regel zutrifft.  
+- Neue config/getter/setter ```internationalCallPrefix``` Default='00'  
+- Neue config ```formatRegExp``` damit können die bestehenden Regln zum Formatieren 
+  überschrieben werden.  
+- Neue Methode ```addFormatRegExp()```. Damit können weitere Formatierungs-Regeln 
+  hinzugefügt werden.  
+- config ```defaultCountryCallingCode``` aht neuen Standardwert ```'+41'```.  
+
 ### kijs.gui.field.Switch
- - Die config/getter/sett ```captionHide``` gibt es nicht mehr.
+ - Die config/getter/setter ```captionHide``` gibt es nicht mehr.
+
+### kijs.gui.field.Combo
+ - Beim Event ```change``` wurde die Eigenschaft ```e.oldVal``` umbenannt zu 
+   ```e.oldValue```.  
 
 
 Änderungen im CSS
@@ -552,7 +690,7 @@ Neue Klassen
 
 Anpassungen, die an Projekten vorgenommen werden müssen
 ---------------------------------------------------------
-### Eigenschaft ```trimValue``` umbenennen zu ```valueTrim```
+### Eigenschaft ```trimValue``` umbenennen zu ```valueTrimEnable```
 Betrifft:
 - kijs.gui.field.Display
 - kijs.gui.field.Memo

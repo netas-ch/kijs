@@ -29,7 +29,10 @@
  *
  * name         String [optional]       Element-Namen Siehe dazu auch kijs.gui.Container.getElementByName()
  *
- * nodeTagName   String [optional]       Tag-Name des DOM-node. Default='div'
+ * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. 
+ *                                      Bsp: { id: 123, for: 'meinFeld' }
+ *
+ * nodeTagName   String [optional]      Tag-Name des DOM-node. Default='div'
  *                                      Beispiel: nodeTagName='section'
  *
  * on           Object [optional]       Objekt mit Listener-Funktionen und optionalem context.
@@ -235,7 +238,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
             left: { target: 'left' },
             name: true,
-            nodeAttribute: { target: 'nodeAttribute', context: this._dom },
+            nodeAttribute: { fn: 'function', target: this._dom.nodeAttributeSet, context: this._dom },
             on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
@@ -334,6 +337,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     get node() { return this._dom.node; }
     get nodeTagName() { return this._dom.nodeTagName; }
+
+    get hasFocus() { return this._dom.hasFocus; }
 
     get height() { return this._dom.height; }
     set height(val) {
@@ -621,7 +626,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null}                     HTML-Node, das den Fokus erhalten hat
      */
-    focus(alsoSetIfNoTabIndex=false) {
+    focus(alsoSetIfNoTabIndex) {
         return this._dom.focus(alsoSetIfNoTabIndex);
     }
 

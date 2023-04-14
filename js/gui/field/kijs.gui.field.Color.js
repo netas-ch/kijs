@@ -52,11 +52,20 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        this._previousChangeValue = '';
+        this._defaultColor = '#ffffff'; // Standardfarbe wenn leer. 
+                                        // Weil das native Color-Field kann nicht leer sein.
+        
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
             nodeAttribute: {
                 type: 'color',
                 id: this._inputId
+            },
+            on: {
+                change: this.#onInputDomChange,
+                input: this.#onInputDomInput,
+                context: this
             }
         });
 
@@ -64,17 +73,17 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            autocomplete: false,
             disableFlex: true
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-
+            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browservorschläge
         });
 
         // Event-Weiterleitungen von this._inputDom
         this._eventForwardsAdd('blur', this._inputDom);
-        this._eventForwardsAdd('change', this._inputDom);
         this._eventForwardsAdd('focus', this._inputDom);
         this._eventForwardsAdd('input', this._inputDom);
 
@@ -84,9 +93,6 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);
-
-        // Listeners
-        this.on('input', this.#onInput, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -99,6 +105,23 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
+    set autocomplete(val) {
+        let value = 'on';
+
+        if (kijs.isString(val)) {
+            value = val;
+        } else if (val === false) {
+            value = 'off';
+        }
+
+        // De-/aktiviert die Browservorschläge
+        this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+   
+    // overwrite
+    get hasFocus() { return this._inputDom.hasFocus; }
+    
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -108,11 +131,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val) {
-            this._inputDom.nodeAttributeSet('readOnly', true);
-        } else {
-            this._inputDom.nodeAttributeSet('readOnly', false);
-        }
+        this._inputDom.disabled = val || this._dom.clsHas('kijs-disabled');
     }
 
     // overwrite
@@ -121,12 +140,17 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         return val === null ? '' : val;
     }
     set value(val) {
-        if (!val) {
-            val = 'fff';
+        val = kijs.toString(val);
+        
+        if (kijs.isEmpty(val)) {
+            val = this._defaultColor;
+        } else {
+            val = kijs.Graphic.colorGetHex(val);
         }
-        val = this._valueToHex(val);
+        
         this._inputDom.nodeAttributeSet('value', val);
-        this.validate();
+        this._previousChangeValue = val;
+        this._isDirty = false;
     }
 
 
@@ -137,9 +161,14 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._inputDom.disabled = !!val;
+        this._inputDom.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
     }
     
+    // overwrite
+    focus(alsoSetIfNoTabIndex) {
+        return this._inputDom.focus(alsoSetIfNoTabIndex);
+    }
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -165,20 +194,21 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     }
 
 
-    // PROTECTED
-    /**
-     * Konvertiert eingaben in das Hex-Format (#FF00FF)
-     * @param {String|Array|Object} value
-     * @returns {String}
-     */
-    _valueToHex(value) {
-        return '#' + kijs.Graphic.colorGetHex(value);
-    }
-    
-    
     // PRIVATE
     // LISTENERS
-    #onInput(e) {
+    #onInputDomChange(e) {
+        // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt wird.
+        let val = this.value;
+        let oldVal = this._previousChangeValue;
+        
+        // und das change event auslösen
+        if (val !== oldVal) {
+            this._isDirty = true;
+            this.raiseEvent('change', { oldValue: oldVal, value: val } );
+        }
+    }
+    
+    #onInputDomInput(e) {
         this.validate();
     }
 

@@ -3,50 +3,6 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Phone
 // --------------------------------------------------------------
-
-// TODO: Besser direkt von kijs.gui.field.Field erben?
-// TODO: Beim klick auf den linkButton wird ein Browser-Fenster geöffnet
-// TODO: Wenn eine Nummer nicht zum Format passt, nicht die Nummer ändern, sondern einen Validierungsfehler anzeigen
-
-/**
- * EVENTS
- * ----------
- * blur
- * input
- *
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * rightClick
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
- *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
- */
 kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
 
@@ -57,37 +13,66 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     constructor(config={}) {
         super(false);
 
+        this._defaultCountryCallingCode = '+41';
+        this._internationalCallPrefix = '00';
+        this._linkButtonVisible = true;
+        
+        this._linkButtonEl = new kijs.gui.Button({
+            iconMap: 'kijs.iconMap.Fa.phone',
+            cls: 'kijs-inline',
+            tooltip: kijs.getText('Anrufen'),
+            nodeAttribute: {
+                tabIndex: -1
+            },
+            on: {
+                click: this.#onLinkButtonClick,
+                context: this
+            }
+        });
+        this.add(this._linkButtonEl);
+        
         this._inputDom.nodeAttributeSet('type', 'tel');
-
-        this._defaultCountryCallingCode = null;
-        this._formatValue = true;
-        this._replaceLeadingZeros = true;
-        this._showLinkButton = false;
-
+        
+        this._dom.clsRemove('kijs-field-text');
+        this._dom.clsAdd('kijs-field-phone');
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            inputMode: 'tel'
+            disableFlex: true,
+            inputMode: 'tel',
+            formatRegExp:[  // Formatierung (kann mit config ersetzt werden)
+                { 
+                    regExp: /^\+41([89][0-9]{2})([0-9]{3})([0-9]{3})$/, // CH 0800 + 0900
+                    replace: '+41 $1 $2 $3'
+                },{
+                    regExp: /^\+41([1-7][0-9])([0-9]{3})([0-9]{2})([0-9]{2})$/, // CH default
+                    replace: '+41 $1 $2 $3 $4'
+                },{ 
+                    regExp: /^\+423([0-9]{3})([0-9]{2})([0-9]{2})$/, // LI
+                    replace: '+423 $1 $2 $3'
+                },{ 
+                    regExp: /^\+43([0-9]{3})([0-9]{4})([0-9]{6})([0-9]{4})$/, // A
+                    replace: '+43 $1 $2 $3 $4'
+                //},{ 
+                //    regExp: /^\+49([0-9]{3})([0-9]{3})([0-9]{11})$/, // D // TODO: richtige Formatierung?
+                //    replace: '+49 $1 $2 $3'
+                },{ 
+                    regExp: /^\+33([0-9])([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})$/, // F
+                    replace: '+33 $1 $2 $3 $4 $5'
+                }
+            ]
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            defaultCountryCallingCode: true,    // Standard Landesvorwahl welche entfernt wird
-            formatValue: true,                  // Soll die Nummer automatisch formatiert werden
-            replaceLeadingZeros: true,
-            showLinkButton: true
+            defaultCountryCallingCode: true,    // Standard Landesvorwahl
+            linkButtonVisible: { target: 'visible', context: this._linkButtonEl }
         });
-
-        // Listeners
-        this.on('change', this.#onChange, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
-        }
-
-        if (this._showLinkButton) {
-            this.add(this._createElements());
         }
     }
 
@@ -99,11 +84,13 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     get defaultCountryCallingCode() { return this._defaultCountryCallingCode; }
     set defaultCountryCallingCode(val) { this._defaultCountryCallingCode = val; }
 
-    get replaceLeadingZeros() { return this._replaceLeadingZeros; }
-    set replaceLeadingZeros(val) { this._replaceLeadingZeros = !!val; }
-
-    get showLinkButton() { return this._showLinkButton; }
-    set showLinkButton(val) { this._showLinkButton = !!val; }
+    get internationalCallPrefix() { return this._internationalCallPrefix; }
+    set internationalCallPrefix(val) { this._internationalCallPrefix = val; }
+    
+    get linkButton() { return this._linkButtonEl; }
+    
+    get linkButtonVisible() { return this._linkButtonEl.visible; }
+    set linkButtonVisible(val) { this._linkButtonEl.visible = val; }
 
 
 
@@ -111,111 +98,87 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     // MEMBERS
     // --------------------------------------------------------------
     // PROTECTED
-    _checkFormat(val) {
-        let format = null;
-        let delimiter = ' ';
-
-        // Alles andere als Zahlen und das + am Anfang entfernen
-        val = val.replace(/(?!^\+)[^0-9]+/g, '');
-
-        // Eventuell Vorwahl entfernen
-        if (this._defaultCountryCallingCode && val.substring(0, this._defaultCountryCallingCode.length) === this._defaultCountryCallingCode) {
-            val = '0' + val.substring(this._defaultCountryCallingCode.length, val.length);
-        }
-
-        // Lokale Schweizernummer formatieren
-        if (val.substring(0, 1) === '0' && val.length === 10) {
-            format = [3, 3, 2, 2];
-            val = this._format(val, format, delimiter);
-
-        // Internationale Nummern formatieren
-        } else if (val.substring(0, 1) === '+' || val.substring(0, 2) === '00') {
-
-            switch (true) {
-                case val.substring(0, 4) === '0041': // Schweiz
-                case val.substring(0, 3) === '+41':
-                    format = [3, 2, 3, 2, 2];
-                    break;
-
-                case val.substring(0, 5) === '00423': // Lichtenstein
-                case val.substring(0, 4) === '+423':
-                    format = [4, 3, 2, 2];
-                    break;
-
-                case val.substring(0, 4) === '0043': // Österreich
-                case val.substring(0, 3) === '+43':
-                    format = [3, 4, 6, 4];
-                    break;
-
-                case val.substring(0, 4) === '0049': // Deutschland
-                case val.substring(0, 3) === '+49':
-                    format = [3, 3, 11];
-                    break;
-            }
-
-            if (format) {
-                val = this._format(val, format, delimiter);
+    // overwrite
+    _formatRules(value) {
+        // führende 00 durch + ersetzen
+        if (!kijs.isEmpty(this._internationalCallPrefix)) {
+            if (value.substring(0, this._internationalCallPrefix.length) === this._internationalCallPrefix) {
+                value = '+' + value.substring(this._internationalCallPrefix.length, value.length);
             }
         }
-
-        return val;
-    }
-    
-    _createElements() {
-        return new kijs.gui.Button(
-            {
-                iconMap: 'kijs.iconMap.Fa.phone',
-                on: {
-                    click: this.#onLinkButtonClick,
-                    context: this
+        
+        // formatRegExps 
+        // Diese haben hier ein anderes Verhalten. Falls keine regExp anwendung findet,
+        // wird die Nummer so belassen, wie sie eingegeben wurde.
+        if (this._formatRegExps) {
+            let val = '';
+            let origVal = '';
+            
+            val = value;
+            
+            // Alles andere als Zahlen und das + am Anfang entfernen
+            val = val.replace(/(?!^\+)[^0-9]+/g, '');
+            
+            // Bei lokaler Nummer: Landesvorwahl hinzufügen
+            if (!kijs.isEmpty(this._defaultCountryCallingCode)) {
+                if (val.match(/^[0][1-9][0-9]+$/)){
+                    val = this._defaultCountryCallingCode + val.substring(1);
                 }
+                val = val.replace(/^[0][1-9][0-9]+$/, this._defaultCountryCallingCode);
             }
-        );
-    }
-
-    // Formatiert die Nummer
-    _format(val, format, delimiter) {
-        let formattedVal = '';
-        let offset = 0;
-
-        // 00 am Anfang verarbeiten
-        if (val.substring(0, 2) === '00') {
-            format[0] += 1;
+            origVal = val;
+            
+            // Formatierung temporär anwenden           
+            val = this._applyReplaceRegExps(this._formatRegExps, val);
+            
+            // hat eine Formatierung gepasst? 
+            // Dann Formatierung anwenden. Sonst nicht formatieren
+            if (val !== origVal) {
+                value = val;
+            }
         }
-
-        for (let i = 0; i < format.length; i++) {
-            formattedVal += formattedVal ? delimiter : '';
-            formattedVal += val.substr(offset, format[i]);
-
-            offset += format[i];
+        
+        // Evtl. in lokale Nummer konvertieren
+        if (!kijs.isEmpty(this._defaultCountryCallingCode)) {
+            if (value.substring(0, this._defaultCountryCallingCode.length) === this._defaultCountryCallingCode) {
+                value = value.substring(this._defaultCountryCallingCode.length, value.length);
+                // Leerzeichen am Anfang entfernen
+                value = value.replace(/^[ ]+/, '');
+                // 0 als Präfix
+                value = '0' + value;
+            }
         }
-
-        return formattedVal.trim();
+        
+        // formatFn
+        if (kijs.isFunction(this._formatFn)) {
+            if (value !== null && value.toString() !== '') {
+                value = this._formatFn.call(this._formatFnContext || this, value);
+            }
+        }
+        
+        return value;
     }
 
 
     // PRIVATE
     // LISTENERS
-    #onChange() {
-        let val = this.value;
-
-        if (this._replaceLeadingZeros) {
-            if (val.substring(0, 2) === '00') {
-                val = '+' + val.substring(2, val.length);
-            }
-        }
-
-        if (this._formatValue) {
-            val = this._checkFormat(val);
-        }
-
-        this.value = val;
-    }
-
     #onLinkButtonClick() {
-        if (this.value) {
-            let val = this.value.replace(/(?!^\+)[^0-9]+/g, '');
-            kijs.Navigator.openLink('tel:' + val);
+        let val = this.value;
+        if (!this.disabled && !kijs.isEmpty(val) && this.validate(val)) {
+            
+            // Alles andere als Zahlen und das + am Anfang entfernen
+            val = val.replace(/(?!^\+)[^0-9]+/g, '');
+            
+            // Bei lokaler Nummer: Landesvorwahl hinzufügen
+            if (!kijs.isEmpty(this._defaultCountryCallingCode)) {
+                if (val.match(/^[0][1-9][0-9]+$/)){
+                    val = this._defaultCountryCallingCode + val.substring(1);
+                }
+                val = val.replace(/^[0][1-9][0-9]+$/, this._defaultCountryCallingCode);
+            }
+            
+            // Link, öffnen
+            kijs.Navigator.openEmailPhoneLink('tel:' + val);
         }
     }
 
@@ -234,12 +197,14 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
             this.raiseEvent('destruct');
         }
 
+        // Elemente/DOM-Objekte entladen
+        if (this._linkButtonEl) {
+            this._linkButtonEl.destruct();
+        }
+        
         // Variablen (Objekte/Arrays) leeren
-        this._defaultCountryCallingCode = null;
-        this._formatValue = null;
-        this._replaceLeadingZeros = null;
-        this._showLinkButton = null;
-
+        this._linkButtonEl = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

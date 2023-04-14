@@ -582,7 +582,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      */
     #onCanvasMouseClick(e) {
         if (!this.disabled) {
-            const curValue = this.value;
+            const oldValue = this.value;
             let x = e.nodeEvent.layerX, y = e.nodeEvent.layerY;
             let dg = this._coordinatesToDegree(x, y);
             let inputFinished = false;
@@ -672,8 +672,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this._updateInputFields();
 
             // Events
-            if (curValue !== this.value) {
-                this.raiseEvent('change', {value: this.value});
+            if (oldValue !== this.value) {
+                this.raiseEvent('change', { value: this.value, oldValue: oldValue });
             }
             if (inputFinished) {
                 this.raiseEvent('inputFinished');
@@ -724,13 +724,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
 
     #onEmptyBtnClick(e) {
-        const curValue = this.value;
+        const oldValue = this.value;
 
         this.value = '';
 
         // Event
-        if (curValue !== this.value) {
-            this.raiseEvent('change', {value: this.value});
+        if (oldValue !== this.value) {
+            this.raiseEvent('change', { value: this.value, oldValue: oldValue });
         }
         this.raiseEvent('emptyClick');
     }
@@ -741,7 +741,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      * @returns {undefined}
      */
     #onInputChange(e) {
-        const curValue = this.value;
+        const oldValue = this.value;
         const fld = e.context;
         let inputFinished = false;
 
@@ -777,8 +777,8 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._updateInputFields();
 
         // Events
-        if (curValue !== this.value) {
-            this.raiseEvent('change', {value: this.value});
+        if (oldValue !== this.value) {
+            this.raiseEvent('change', { value: this.value, oldValue: oldValue });
         }
         if (inputFinished) {
             this.raiseEvent('inputFinished');
@@ -886,13 +886,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
     // Die aktuelle Zeit übernehmen
     #onNowBtnClick(e) {
-        const curValue = this.value;
+        const oldValue = this.value;
         let time = new Date();
         this.value =  '' + time.getHours() + this._separator + time.getMinutes() + this._separator + time.getSeconds();
 
         // Event
-        if (curValue !== this.value) {
-            this.raiseEvent('change', {value: this.value});
+        if (oldValue !== this.value) {
+            this.raiseEvent('change', { value: this.value, oldValue: oldValue });
         }
         this.raiseEvent('nowClick');
     }

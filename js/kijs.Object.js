@@ -23,12 +23,21 @@ kijs.Object = class kijs_Object {
         kijs.Object.each(config, function(cfgKey, cfgVal){
 
             if (!configMap.hasOwnProperty(cfgKey)) {
-                // Bei unbekannten Config-Eigenschaften kein Fehler ausgeben (wird bei der Zuweisung der defaults vom ki.gui.Container verwendet)
-                if (config.skipUnknownConfig || cfgKey === 'skipUnknownConfig') {
+                // skipUnknownConfigs immer ignorieren
+                if (cfgKey === 'skipUnknownConfigs') {
                     return;
-                } else {
-                    throw new kijs.Error(`Unkown config "${cfgKey}"`);
                 }
+                
+                // Bei unbekannten Config-Eigenschaften nur einen Fehler ausgeben, wenn
+                // der Propertyname nicht in der Eigenschaft skipUnknownConfigs steht.
+                // (Array wird bei der Zuweisung der defaults vom ki.gui.Container gefüllt)
+                if ( kijs.isArray(config.skipUnknownConfigs) 
+                        && kijs.Array.contains(config.skipUnknownConfigs, cfgKey) ) {
+                    return;
+                }
+                
+                // sonst Fehler
+                throw new kijs.Error(`Unkown config "${cfgKey}"`);
             }
 
             // fn und target ermitteln

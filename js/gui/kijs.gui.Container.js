@@ -671,15 +671,18 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
         // Falls ein Config-Objekt übergeben wird
         } else  if (kijs.isObject(obj)) {
-
+            
             // defaults
             if (!kijs.isEmpty(this._defaults)) {
-                // Bei unbekannten defaults soll kein Fehler ausgelöst werden
-                this._defaults.skipUnknownConfig = true;
-
-                // defaults in die config übernehmen. Bereits vorhandene Eigenschaften werden nicht verändert.
+                
+                // Damit unbekannte defaults keinen Fehler auslösen, die Namen der
+                // defaults in die skipUnknownConfigs schreiben
+                this._defaults.skipUnknownConfigs = Object.getOwnPropertyNames(this._defaults);
+                
+                // defaults in die config übernehmen. 
+                // Bereits vorhandene Eigenschaften werden nicht verändert.
                 kijs.Object.assignDeep(obj, this._defaults, false);
-
+                
                 // Defaults wiederum als defaults weitergeben, damit evtl. vorhandene subElements diese auch übernehmen können
                 /*if (kijs.isObject(obj.defaults)) {
                     kijs.Object.assignDeep(obj.defaults, this._defaults, false);

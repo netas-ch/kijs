@@ -43,6 +43,10 @@ div.markdown, div.markdown * {
     font-size: 12px;
     line-height: 14px;
     color: var(--grey8);
+    
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
 }
 
 .markdown h1 {
@@ -116,7 +120,7 @@ div.markdown, div.markdown * {
 
 /* ul, ol */
 .markdown ul, .markdown ol {
-    margin: 0 0 0 0;
+    margin: 2px 0 0 0;
 }
 
 .markdown li {

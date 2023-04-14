@@ -31,6 +31,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
             },
             headerElements: this._getHeaderElements(),
             elements:[
+                
                 {
                     xtype: 'kijs.gui.FormPanel',
                     caption: 'Formular',
@@ -55,6 +56,10 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             labelWidth: 100,
                             required: true
                         }
+                    },
+                    on: {
+                        change: console.log,
+                        context: this
                     },
                     elements: [
                         {
@@ -186,7 +191,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     mode: 'date',
                                     on: {
                                         change: function(e) {
-                                            e.element.next.value = this._calculateAge(e.value);
+                                            let birthday = e.value ? kijs.Date.create(e.value) : null;
+                                            e.element.next.value =kijs.Date.getAge(birthday);
                                         },
                                         context: this
                                     }
@@ -238,6 +244,14 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',
+                            caption: 'Leeren',
+                            on: {
+                                click: function() {
+                                    this.upX('kijs.gui.FormPanel').clear();
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
                             caption: 'Validieren',
                             on: {
                                 click: function() {
@@ -246,47 +260,33 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            name: 'btnReadOnly',
-                            caption: 'ReadOnly',
+                            caption: 'check isDirty',
                             on: {
                                 click: function() {
-                                    this.parent.parent.readOnly = true;
-                                    this.disabled = true;
-                                    this.parent.down('btnEnable').disabled = false;
+                                    kijs.gui.CornerTipContainer.show('isDirty', this.upX('kijs.gui.FormPanel').isDirty ? 'true' : 'false');
                                 }
                             }
                         },{
-                            xtype: 'kijs.gui.Button',
-                            name: 'btnDisable',
-                            caption: 'Deaktivieren',
+                            xtype: 'kijs.gui.field.Switch',
+                            label: 'readOnly',
                             on: {
-                                click: function() {
-                                    this.upX('kijs.gui.FormPanel').disabled = true;
-                                    this.disabled = true;
-                                    this.parent.down('btnEnable').disabled = false;
+                                change: function(e) {
+                                    this.upX('kijs.gui.FormPanel').readOnly = e.value;
                                 }
                             }
                         },{
-                            xtype: 'kijs.gui.Button',
-                            name: 'btnEnable',
-                            caption: 'Aktivieren',
-                            disabled: true,
+                            xtype: 'kijs.gui.field.Switch',
+                            label: 'disabled',
                             on: {
-                                click: function() {
-                                    kijs.Array.each(this.parent.parent.elements, function(element) {
-                                        if (element instanceof kijs.gui.field.Field) {
-                                            element.readOnly = false;
-                                        }
-                                    }, this);
-                                    this.upX('kijs.gui.FormPanel').disabled = false;
-                                    this.disabled = true;
-                                    this.parent.down('btnReadOnly').disabled = false;
-                                    this.parent.down('btnDisable').disabled = false;
+                                change: function(e) {
+                                    this.upX('kijs.gui.FormPanel').innerDisabled = e.value;
                                 }
                             }
                         }
                     ]
                 },
+                
+                
                 
                 {
                     xtype: 'kijs.gui.FormPanel',
@@ -320,7 +320,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     footerElements: [
                         {
                             xtype: 'kijs.gui.Button',
-                            name: 'btnLoad',
                             caption: 'RPC Load',
                             on: {
                                 click: function() {
@@ -329,11 +328,18 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            name: 'btnSave',
                             caption: 'RPC Save',
                             on: {
                                 click: function() {
                                     this.upX('kijs.gui.FormPanel').save();
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Leeren',
+                            on: {
+                                click: function() {
+                                    this.upX('kijs.gui.FormPanel').clear();
                                 }
                             }
                         },{
@@ -346,42 +352,26 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            name: 'btnReadOnly',
-                            caption: 'ReadOnly',
+                            caption: 'check isDirty',
                             on: {
                                 click: function() {
-                                    this.parent.parent.readOnly = true;
-                                    this.disabled = true;
-                                    this.parent.down('btnEnable').disabled = false;
+                                    kijs.gui.CornerTipContainer.show('isDirty', this.upX('kijs.gui.FormPanel').isDirty ? 'true' : 'false');
                                 }
                             }
                         },{
-                            xtype: 'kijs.gui.Button',
-                            name: 'btnDisable',
-                            caption: 'Deaktivieren',
+                            xtype: 'kijs.gui.field.Switch',
+                            label: 'readOnly',
                             on: {
-                                click: function() {
-                                    this.upX('kijs.gui.FormPanel').disabled = true;
-                                    this.disabled = true;
-                                    this.parent.down('btnEnable').disabled = false;
+                                change: function(e) {
+                                    this.upX('kijs.gui.FormPanel').readOnly = e.value;
                                 }
                             }
                         },{
-                            xtype: 'kijs.gui.Button',
-                            name: 'btnEnable',
-                            caption: 'Aktivieren',
-                            disabled: true,
+                            xtype: 'kijs.gui.field.Switch',
+                            label: 'disabled',
                             on: {
-                                click: function() {
-                                    kijs.Array.each(this.parent.parent.elements, function(element) {
-                                        if (element instanceof kijs.gui.field.Field) {
-                                            element.readOnly = false;
-                                        }
-                                    }, this);
-                                    this.upX('kijs.gui.FormPanel').disabled = false;
-                                    this.disabled = true;
-                                    this.parent.down('btnReadOnly').disabled = false;
-                                    this.parent.down('btnDisable').disabled = false;
+                                change: function(e) {
+                                    this.upX('kijs.gui.FormPanel').innerDisabled = e.value;
                                 }
                             }
                         }
@@ -548,7 +538,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             mode: 'date',
                                             on: {
                                                 change: function(e) {
-                                                    e.element.next.value = this._calculateAge(e.value);
+                                                    let birthday = e.value ? kijs.Date.create(e.value) : null;
+                                                    e.element.next.value =kijs.Date.getAge(birthday);
                                                 },
                                                 context: this
                                             }
@@ -612,13 +603,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
     
     
     // PROTECTED
-    _calculateAge(birthday) {
-        birthday = kijs.Date.create(birthday);
-        const ageDifMs = Date.now() - birthday.getTime();
-        const ageDate = new Date(ageDifMs);
-        return Math.abs(ageDate.getUTCFullYear() - 1970);
-    }
-    
     _getHeaderElements() {
         return [
             {

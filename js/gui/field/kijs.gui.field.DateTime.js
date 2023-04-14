@@ -38,8 +38,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._useDefaultSpinIcon = !kijs.isDefined(config.spinIconChar);
 
-        this._lastValue = null;         // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
-        this._lastValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValue = null;         // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -110,6 +110,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            inputMode: { target: 'inputMode' },
             nameEnd: true,
             mode: { target: 'mode' },           // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
             secondsHide: { target: 'secondsHide', context: this._timePicker },   // Sekunden auch erfassen?
@@ -157,6 +159,20 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
+    set autocomplete(val) {
+        let value = 'on';
+
+        if (kijs.isString(val)) {
+            value = val;
+        } else if (val === false) {
+            value = 'off';
+        }
+
+        // De-/aktiviert die Browservorschläge
+        this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+    
     // Gibt das Datum zurück. Falls nur eine Uhrzeit existiert, wird das Datum vom 01.01.1970 genommen
     get date() {
         let date = null;
@@ -198,7 +214,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
 
-        this._lastValue = this.value;
+        this._previousChangeValue = this.value;
+        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
@@ -223,14 +240,21 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
 
-        this._lastValueEnd = this.valueEnd;
+        this._previousChangeValueEnd = this.valueEnd;
+        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
     // overwrite
     get datePicker() { return this._datePicker; }
 
+   // overwrite
+    get hasFocus() { return this._inputDom.hasFocus; }
+
     get inputDom() { return this._inputDom; }
+
+    get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
+    set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
     get isEmpty() { return kijs.isEmpty(this.value); }
 
@@ -269,11 +293,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        if (val) {
-            this._inputDom.nodeAttributeSet('readonly', true);
-        } else {
-            this._inputDom.nodeAttributeSet('readonly', false);
-        }
+        this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
     get timePicker() { return this._timePicker; }
@@ -431,8 +451,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._timePicker.value = '';
         }
 
-        this._lastValue = this.value;
-
+        this._previousChangeValue = this.value;
+        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
@@ -458,6 +478,13 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this.dateEnd = val;
     }
 
+    /**
+     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
+     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     */
+    get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
+    set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
+
 
 
     // --------------------------------------------------------------
@@ -466,7 +493,24 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._inputDom.disabled = !!val;
+        this._inputDom.changeDisabled(!!val, true);
+    }
+    
+    /**
+     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]
+     * @param {Boolean} [selectText=false]
+     * @returns {undefined}
+     * @overwrite
+     */
+    focus(alsoSetIfNoTabIndex, selectText) {
+        let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
+        if (selectText) {
+            if (nde) {
+                nde.select();
+            }
+        }
+        return nde;
     }
     
     // overwrite
@@ -1108,10 +1152,16 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Falls etwas geändert hat: Change Event auslösen
         const value = this.value;
         const valueEnd = this.valueEnd;
-        if (this._lastValue !== value || this._lastValueEnd !== valueEnd) {
-            this.raiseEvent('change', {value: value, valueEnd: valueEnd});
-            this._lastValue = value;
-            this._lastValueEnd = valueEnd;
+        if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
+            this._isDirty = true;
+            this.raiseEvent('change', { 
+                value: value, 
+                valueEnd: valueEnd, 
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
+            this._previousChangeValue = value;
+            this._previousChangeValueEnd = valueEnd;
         }
     }
     
@@ -1133,10 +1183,16 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Falls etwas geändert hat: Change Event auslösen
         const value = this.value;
         const valueEnd = this.valueEnd;
-        if (this._lastValue !== value || this._lastValueEnd !== valueEnd) {
-            this.raiseEvent('change', {value: value, valueEnd: valueEnd});
-            this._lastValue = value;
-            this._lastValueEnd = valueEnd;
+        if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
+            this._isDirty = true;
+            this.raiseEvent('change', {
+                value: value, 
+                valueEnd: valueEnd,
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
+            this._previousChangeValue = value;
+            this._previousChangeValueEnd = valueEnd;
         }
     }
 

@@ -50,9 +50,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                     currentBtnHide: false,
                     closeBtnHide: true,
                     on: {
-                        change: function(e) {
-                            console.log('change: ' + e.element.value);
-                        },
+                        change: console.log,
                         context: this
                     }
                 },

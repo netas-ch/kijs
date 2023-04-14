@@ -176,16 +176,16 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         if (kijs.isEmpty(this._date)) {
             // Falls es ein End-Datum gibt dieses nehmen
             if (!kijs.isEmpty(this._dateEnd)) {
-                return this._dateEnd;
+                return kijs.Date.clone(this._dateEnd);
             } else {
                 return null;
             }
         } else {
             // Sicherstellen, dass das Enddatum hinter dem Startdatum liegt
             if (!kijs.isEmpty(this._dateEnd) && this._dateEnd < this._date) {
-                return this._dateEnd;
+                return kijs.Date.clone(this._dateEnd);
             } else {
-                return this._date;
+                return kijs.Date.clone(this._date);
             }
         }
     }
@@ -218,10 +218,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Sicherstellen, dass das Enddatum hinter dem Startdatum liegt
         } else if (this._dateEnd < this._date) {
-            return this._date;
+            return kijs.Date.clone(this._date);
 
         } else {
-            return this._dateEnd;
+            return kijs.Date.clone(this._dateEnd);
         }
     }
     set dateEnd(val) {
@@ -722,15 +722,27 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onEmptyBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
-
+        const oldDate = this.date;
+        const oldDateEnd = this.dateEnd;
+        const oldVal = this.value;
+        const oldValEnd = this.valueEnd;
+        
         this._date = null;
         this._dateEnd = null;
         this._monthPicker.date = new Date();
         this._calculate();
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value, valueEnd: this.valueEnd});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', {
+                value: this.value, 
+                date: this.date,
+                valueEnd: this.valueEnd,
+                dateEnd: this.dateEnd,
+                oldValue: oldVal,
+                oldDate: oldDate,
+                oldValueEnd: oldValEnd,
+                oldDateEnd: oldDateEnd
+            });
         }
         this.raiseEvent('emptyClick');
     }
@@ -746,8 +758,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
     #onItemDomClick(e) {
         if (e.dom.clsHas('kijs-day') && !e.dom.disabled) {
-            const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
-            const curEndDate = kijs.isEmpty(this._dateEnd) ? null : kijs.Date.clone(this._dateEnd);
+            const oldDate = this.date;
+            const oldDateEnd = this.dateEnd;
+            const oldVal = this.value;
+            const oldValEnd = this.valueEnd;
             let inputFinished = false;
 
             let date = this.getNextValidDate(e.dom.date);
@@ -772,8 +786,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                 this._monthPicker.date = date;
                 this._calculate();
 
-                if (!kijs.Date.compare(this._date, curDate) || !kijs.Date.compare(this._enDate, curEndDate)) {
-                    this.raiseEvent('change', {value: this.value, valueEnd: this.valueEnd});
+                if (!kijs.Date.compare(this.date, oldDate) || !kijs.Date.compare(this.dateEnd, oldDateEnd)) {
+                    this.raiseEvent('change', {
+                        value: this.value, 
+                        date: this.date,
+                        valueEnd: this.valueEnd,
+                        dateEnd: this.dateEnd,
+                        oldValue: oldVal,
+                        oldDate: oldDate,
+                        oldValueEnd: oldValEnd,
+                        oldDateEnd: oldDateEnd
+                    });
                 }
             }
 
@@ -826,7 +849,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     }
     
     #onTodayBtnClick(e) {
-        const curDate = kijs.isEmpty(this._date) ? null : kijs.Date.clone(this._date);
+        const oldDate = this.date;
+        const oldDateEnd = this.dateEnd;
+        const oldVal = this.value;
+        const oldValEnd = this.valueEnd;
 
         let date = kijs.Date.getDatePart(new Date());
 
@@ -839,8 +865,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._monthPicker.date = this._date;
         this._calculate(true);
 
-        if (!kijs.Date.compare(this._date, curDate)) {
-            this.raiseEvent('change', {value: this.value, valueEnd: this.valueEnd});
+        if (!kijs.Date.compare(this.date, oldDate)) {
+            this.raiseEvent('change', {
+                value: this.value, 
+                date: this.date,
+                valueEnd: this.valueEnd,
+                dateEnd: this.dateEnd,
+                oldValue: oldVal,
+                oldDate: oldDate,
+                oldValueEnd: oldValEnd,
+                oldDateEnd: oldDateEnd
+            });
         }
         this.raiseEvent('todayClick');
     }

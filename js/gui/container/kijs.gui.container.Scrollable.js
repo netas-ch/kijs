@@ -582,8 +582,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._innerDom.node.scrollTo(opt);
         
         this._scrollDeferId = kijs.defer(this._scrollStart, this._scrollDelay, this, dir);
-        
     }
+    
     // stopt das Scrollen
     _scrollStop() {
         if (this._scrollDeferId) {

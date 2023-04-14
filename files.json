@@ -81,9 +81,11 @@
    "js/gui/field/kijs.gui.field.js",
    "js/gui/field/kijs.gui.field.Field.js",
    "js/gui/field/kijs.gui.field.Text.js",
+   "js/gui/field/kijs.gui.field.Url.js",
    "js/gui/field/kijs.gui.field.Email.js",
    "js/gui/field/kijs.gui.field.Phone.js",
    "js/gui/field/kijs.gui.field.Iban.js",
+   "js/gui/field/kijs.gui.field.SozVersNr.js",
    "js/gui/field/kijs.gui.field.Number.js",
    "js/gui/field/kijs.gui.field.Memo.js",
    "js/gui/field/kijs.gui.field.Password.js",
@@ -134,10 +136,10 @@
    "js/gui/grid/filter/kijs.gui.grid.filter.Icon.js"
   ],
 
-  "editor":[
+  "aceEditor":[
    "lib/ace/ace.js",
    "lib/ace/theme-ambiance.js",
-   "js/gui/field/kijs.gui.field.Editor.js"
+   "js/gui/field/kijs.gui.field.AceEditor.js"
   ]
  },
 

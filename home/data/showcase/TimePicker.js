@@ -48,9 +48,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                     emptyBtnHide: false,
                     nowBtnHide: false,
                     on: {
-                        change: function(e) {
-                            console.log('change: ' + e.element.value);
-                        },
+                        change: console.log,
                         context: this
                     }
                 },

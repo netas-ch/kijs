@@ -72,6 +72,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this

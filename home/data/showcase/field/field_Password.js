@@ -43,6 +43,7 @@ home.sc.field_Password = class home_sc_field_Password {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Password',
+                    name: 'password',
                     label: 'Label',
                     disableBrowserSecurityWarning: 'auto',
                     on: {
@@ -55,6 +56,7 @@ home.sc.field_Password = class home_sc_field_Password {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
@@ -152,10 +154,10 @@ home.sc.field_Password = class home_sc_field_Password {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }

@@ -89,7 +89,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
-     * Um den Fokus zu setzen verwenden sie stattdessen die Funktion .focus() vom Element.
+     * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
      * @param {kijs.gui.DataViewElement|null} el
      * @returns {undefined}
      */
@@ -180,6 +180,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         } else {
             //this._dom.nodeAttributeSet('tabIndex', undefined);
         }
+    }
+    
+    // overwrite
+    get hasFocus() {
+        return this._currentEl ? this._currentEl.hasFocus : false;
     }
 
     get rpc() {

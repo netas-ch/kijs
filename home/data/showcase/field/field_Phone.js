@@ -13,7 +13,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
     }
     
     
-    
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -34,8 +34,6 @@ home.sc.field_Phone = class home_sc_field_Phone {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
-                },{
-                    xtype: 'kijs.gui.field.Phone'
                 },
                 
                 {
@@ -45,10 +43,9 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 },{
                     xtype: 'kijs.gui.field.Phone',
                     label: 'Label',
-                    defaultCountryCallingCode: '+41',
-                    //formatValue: false,
-                    //replaceLeadingZeros: false,
-                    showLinkButton: true,
+                    //defaultCountryCallingCode: '+41',
+                    //internationalCallPrefix: '00',
+                    linkButtonVisible: true,
                     on: {
                         focus:  console.log,
                      
@@ -59,6 +56,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                         spacePress:  console.log,
                         
                         blur:  console.log,
+                        change: console.log,
                         input:  console.log,
 
                         context: this
@@ -156,11 +154,11 @@ home.sc.field_Phone = class home_sc_field_Phone {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrim',
+                label: 'valueTrimEnable',
                 value: true,
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrim', e.element.value);
+                        this._updateProperty('valueTrimEnable', e.element.value);
                     },
                     context: this
                 }

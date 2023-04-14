@@ -15,7 +15,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         this._minSelectCount = null;
         this._maxSelectCount = null;
-        this._oldValue = [];
+        this._previousChangeValue = [];
         this._rpc = null;               // Instanz von kijs.gui.Rpc
 
         this._listView = new kijs.gui.ListView({});
@@ -86,6 +86,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     set facadeFnLoad(val) { this._listView.facadeFnLoad = val; }
 
     // overwrite
+    get hasFocus() { return this._listView.hasFocus; }
+    
+    // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
     // overwrite
@@ -96,9 +99,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     }
     
     get rpc() {
-
         if (!this._rpc) {
-
             // Sucht nach einem FormPanel oberhalb
             let formPanel = this.upX('kijs.gui.FormPanel');
 
@@ -126,7 +127,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     get value() { return this._listView.value; }
     set value(val) {
         this._listView.value = val;
-        this._oldValue = this._listView.value;
+        this._previousChangeValue = this._listView.value;
+        this._isDirty = false;
     }
 
     get valueField() { return this._listView.valueField; }
@@ -149,9 +151,14 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._listView.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), true);
+        this._listView.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
     }
 
+    // overwrite
+    focus(alsoSetIfNoTabIndex) {
+        return this._listView.focus(alsoSetIfNoTabIndex);
+    }
+    
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -225,9 +232,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // LISTENERS
     #onListViewSelectionChange() {
         const val = this.value;
-
-        this.raiseEvent(['input', 'change'], { oldValue: this._oldValue, value: val });
-        this._oldValue = val;
+        this._isDirty = true;
+        
+        this.raiseEvent('change', { oldValue: this._previousChangeValue, value: val });
+        this._previousChangeValue = val;
 
         this.validate();
     }
@@ -254,7 +262,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         // Variablen (Objekte/Arrays) leeren
         this._listView = null;
-        this._oldValue = null;
+        this._previousChangeValue = null;
         this._rpc = null;
 
         // Basisklasse entladen
