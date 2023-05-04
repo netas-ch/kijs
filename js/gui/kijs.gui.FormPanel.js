@@ -317,6 +317,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
                 ret.push(el);
                 
+                // blur listener
+                if (!el.hasListener('blur', this.#onFieldBlur, this)) {
+                    el.on('blur', this.#onFieldBlur, this);
+                }
+                
                 // change listener
                 if (!el.hasListener('change', this.#onFieldChange, this)) {
                     el.on('change', this.#onFieldChange, this);
@@ -447,6 +452,10 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // EVENTS
     #onAfterFirstRenderTo(e) {
         this.load().catch(() => {});
+    }
+
+    #onFieldBlur(e) {
+        this.raiseEvent('blur', e);
     }
 
     #onFieldChange(e) {
