@@ -1,0 +1,3 @@
+https://github.com/ajaxorg/ace-builds
+
+1.18.0
