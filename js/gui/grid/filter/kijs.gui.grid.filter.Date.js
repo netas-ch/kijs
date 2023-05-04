@@ -20,7 +20,7 @@ kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.gri
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-
+            // keine
         });
 
         // Config anwenden

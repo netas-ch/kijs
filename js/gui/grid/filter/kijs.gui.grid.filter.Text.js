@@ -16,6 +16,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         this._applyFilter = true;
         this._compare = 'begin'; // full, part
         this._searchField = new kijs.gui.field.Text({
+            labelHide: true,
             on: {
                 change: function() {
                     if (this._applyFilter) {

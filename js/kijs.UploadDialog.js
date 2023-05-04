@@ -94,11 +94,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
-
     get contentTypes() { return this._contentTypes; }
     set contentTypes(val) {
         if (!kijs.isArray(val)) {
@@ -149,10 +148,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     get observePaste() { return this._observePaste; }
     set observePaste(val) { this._observePaste = !!val; }
 
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     /**
      * Verbindet eine Dropzone mit dem UploadDialog. Wird eine
      * Datei auf die Dropzone gezogen, wird sie mit der Upload-Funktion
@@ -276,6 +275,21 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         return match;
     }
+    
+    /**
+     * Prüft, ob die übergebene MIME-Grösse der maximal erlaubten Grösse entspricht
+     * @param {String} mime
+     * @returns {Boolean}
+     */
+    _checkSize(mime) {
+        if (this._maxFilesize) {
+            if (mime.size > this._maxFilesize) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     _getFilename(filename) {
         if (this._sanitizeFilename) {
@@ -346,7 +360,12 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         if (fileList) {
             for (let i=0; i<fileList.length; i++) {
                 if (this._checkMime(fileList[i])) {
-                    this._uploadFile(fileList[i]);
+                    if (this._checkSize(fileList[i])) {
+                        this._uploadFile(fileList[i]);
+                    } else {
+                        const errMsg = this._getFilename(fileList[i].name) + ' ' + kijs.getText('ist zu gross');
+                        this.raiseEvent('failUpload', { errMsg: errMsg });
+                    }
                 } else {
                     this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
                 }

@@ -90,7 +90,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
             this._autoSize = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "autoSize"`);
+            throw new kijs.Error(`Unknown format on config "autoSize"`);
         }
     }
 
@@ -369,7 +369,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                     if (this._targetEl.hasOwnProperty('spinBoxWidth')) {
                         width = this._targetEl.spinBoxWidth;
                     } else {
-                        width = this._targetEl.width;
+                        width = this._targetEl[this.targetDomProperty].width;
                     }
                 }
                 

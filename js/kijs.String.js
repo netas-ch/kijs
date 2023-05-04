@@ -212,7 +212,7 @@ kijs.String = class kijs_String {
     /**
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text
-     * @param {Number} length maximlae Länge
+     * @param {Number} length maximale Länge
      * @param {Boolean} [useWordBoundary=false] Nur bei Leerzeichen abschneiden
      * @param {String} [postFixChar='…'] Zeichen, dass beim Abschneiden angehängt wird
      * @returns {String}

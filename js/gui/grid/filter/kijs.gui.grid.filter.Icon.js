@@ -19,12 +19,12 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            //keine
+            // keine
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            //keine
+            // keine
         });
 
         // Config anwenden
