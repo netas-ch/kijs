@@ -296,7 +296,7 @@ kijs.Dom = class kijs_Dom {
 
         return null;
     }
-
+    
     /**
      * Berechnet die Breite einer Scrollbar und gibt diese zurück
      * @returns {Number}

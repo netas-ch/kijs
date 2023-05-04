@@ -61,11 +61,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._isDirty = false;  // Wurde der Wert verändert?
         this._submitValueEnable = true;
         this._validationFn = null;
-        this._validationFnContext = null;
+        this._validationFnContext = this;
         this._validationRegExps = [];
 
         this._inputId = kijs.uniqId('kijs_-_input_');
-
+        
         this._inputWrapperDom = new kijs.gui.Dom({
             cls: 'kijs-inputwrapper'
         });
@@ -152,8 +152,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             spinIconMap: { target: 'iconMap', context: this._spinIconEl },
             spinIconVisible: { target: 'visible', context: this._spinIconEl },
 
-            validationFn: true,
-            validationFnContext: true,
+            validationFn: { target: 'validationFn' },
+            validationFnContext: { target: 'validationFnContext' },
             validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this },
 
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
@@ -402,6 +402,26 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get submitValueEnable() { return this._submitValueEnable; }
     set submitValueEnable(val) { this._submitValueEnable = !!val; }
 
+    get validationFn() { return this._validationFn; }
+    set validationFn(val) { 
+        let fn = kijs.getFunctionFromString(val);
+        if (kijs.isFunction(fn)) {
+            this._validationFn = fn;
+        } else {
+            throw new kijs.Error(`config "validationFn" is not valid.`);
+        }
+    }
+    
+    get validationFnContext() { return this._validationFnContext; }
+    set validationFnContext(val) {
+        let context = kijs.getObjectFromString(val);
+        if (kijs.isObject(context)) {
+            this._validationFnContext = context;
+        } else {
+            throw new kijs.Error(`config "validationFnContext" is not valid.`);
+        }
+    }
+    
     // Muss überschrieben werden
     get value() { return null; }
     set value(val) {
@@ -672,8 +692,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      * @returns {undefined}
      */
     _validationRules(value, ignoreEmpty) {
-        if (ignoreEmpty) {
-            return true;
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
         }
         
         // Eingabe erforderlich

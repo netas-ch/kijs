@@ -416,10 +416,14 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     }
     
     // overwrite
-    _validationRules(value) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         let initialValue = value;
         
-        super._validationRules(value);
+        super._validationRules(value, ignoreEmpty);
 
         value = kijs.toString(value).trim();
         

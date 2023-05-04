@@ -53,7 +53,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         super(false);
 
         this._formatFn = null;
-        this._formatFnContext = null;
+        this._formatFnContext = this;
         this._formatRegExps = [];
         this._valueTrimEnable = true;
         this._previousChangeValue = '';
@@ -80,8 +80,8 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
-            formatFn: true,
-            formatFnContext: true,
+            formatFn: { target: 'formatFn' },
+            formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
             inputMode: { target: 'inputMode' },
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
@@ -124,6 +124,26 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+    
+    get formatFn() { return this._formatFn; }
+    set formatFn(val) { 
+        let fn = kijs.getFunctionFromString(val);
+        if (kijs.isFunction(fn)) {
+            this._formatFn = fn;
+        } else {
+            throw new kijs.Error(`config "formatFn" is not valid.`);
+        }
+    }
+    
+    get formatFnContext() { return this._formatFnContext; }
+    set formatFnContext(val) {
+        let context = kijs.getObjectFromString(val);
+        if (kijs.isObject(context)) {
+            this._formatFnContext = context;
+        } else {
+            throw new kijs.Error(`config "formatFnContext" is not valid.`);
+        }
     }
     
     // overwrite

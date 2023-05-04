@@ -31,7 +31,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
             elements:[
                 {
                     xtype: 'kijs.gui.grid.Grid',
-                    rpc: this._app.rpc,
+                    //rpc: 'default',
                     facadeFnLoad: 'grid.load',
                     filterable: true,
                     filterVisible: true,

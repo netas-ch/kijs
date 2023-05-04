@@ -103,7 +103,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     }
     set iconMap(val) {
         if (kijs.isString(val) && val) {
-            const obj = kijs.getClassFromXtype(val);
+            const obj = kijs.getObjectFromString(val);
             if (kijs.isEmpty(obj)) {
                 throw new kijs.Error(`Unknown iconMap "${val}".`);
             }

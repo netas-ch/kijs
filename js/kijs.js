@@ -17,10 +17,11 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
 
     // Static Properties in this Class
-    // __uniqueId {Number|null}       Zähler der eindeutigen UniqueId
-    // __getTextFn {Function|null}    getText-Methode
-    // __getTextFnScope {Object|null} Kontext der getText-Methode
-
+    // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
+    // __getTextFn {Function|null}      Verweise auf die getText()-Funktion
+    // __getTextFnContext {Object|null} Kontext der getText()-Funktion
+    // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
+    //                                  { default:..., myRpc2:... }
 
     /**
      * Erstellt eine Delegate
@@ -81,24 +82,44 @@ window.kijs = class kijs {
     }
 
     /**
-     * Erstellt eine Klasse/Objekt aus einem Namespace (xtype, iconMap)
-     * @param {String} xtype    Beispiel: 'kijs.gui.Element'
-     * @returns {kijs.gui.Element|null}
+     * Erstellt aus einem String eine Funktion
+     * Dazu kann entweder eine neue Funktion als String übergeben werden:
+     * 'function(myArg) { return myArg; }'
+     * Oder ein Verweis auf eine bestehende Funktion:
+     * 'myApp.doThis'
+     * @param {String|Function} str
+     * @returns {Function|Null}
      */
-    static getClassFromXtype(xtype) {
-        const parts = xtype.split('.');
-        let parent = window;
+    static getFunctionFromString(str) {
+        if (kijs.isFunction(str)) {
+            return str;
+            
+        } else if (kijs.isString(str)) {
+            // Funktion als String Bsp: function(a,b,...) {...}
+            let res = /^function\s*\(([a-zA-Z0-9_, ]*)\)\s*\{\s(.*)\s\}/s.exec(str);
+            if (res !== null) {
+                // Funktionsargumente
+                let args = res[1];
 
-        for (let i=0; i<parts.length; i++) {
-            let part = parts[i];
-            if (!parent[part]) {
-                return null;
+                // Funktionsinhalt
+                let fnContent = res[2];
+
+                // Funktion erstellen und zurückgeben
+                return Function(args, fnContent);
             }
-            parent = parent[part];
+            
+            // Verweis auf eine bestehende Funktion als String Bsp: console.log
+            if (/^([a-zA-Z][a-zA-Z0-9_]*\.?)+$/s.match !== null) {
+                let fn = kijs.getObjectFromString(str);
+                if (kijs.isFunction(fn)) {
+                    return fn;
+                }
+            }
         }
-        return parent;
+        
+        return null;
     }
-
+    
     /**
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden
      * @param {String} [parameterName] Den Parameter, der gesucht wird. Ohne Argument werden alle zurückgegeben.
@@ -108,19 +129,74 @@ window.kijs = class kijs {
         console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.getGetParameter"`);
         return kijs.Navigator.getGetParameter(parameterName);
     }
+    
+    /**
+     * Erstellt aus einem String mit einem Verweis ein Objekt/Funktion
+     * Beispiel: 'myApp.doThis' oder 'kijs.gui.Button'
+     * @param {String} str
+     * @returns {Object|Funktion|Null}
+     */
+    static getObjectFromString(str) {
+        if (kijs.isFunction(str) || kijs.isObject(str)) {
+            return str;
+            
+        } else {
+            const parts = str.split('.');
+            let parent = window;
 
+            // der parent ist immer window oder this
+            if (parts.length > 0) {
+                // beginnend mit this ist der parent this
+                if (parts[0] === 'this') {
+                    parent = 'this';
+                    parts.shift();
+                    
+                // beginnend mit window ist der parent window
+                } else if (parts[0] === 'window') {
+                    parts.shift();
+                    
+                }
+            }
+
+            for (let i=0; i<parts.length; i++) {
+                let part = parts[i];
+                if (!parent[part]) {
+                    return null;
+                }
+                parent = parent[part];
+            }
+            return parent;
+        }
+        
+        return null;
+    }
+
+    /**
+     * Gibt den Verweis auf eine RPC-Instanz zurück.
+     * Wird kein Namen angegeben, wird der default-RPC zurück gegeben.
+     * Die RPCs müssen vorgängig mit kijs.setRpc() definiert werden.
+     * @param {String} [name='default']
+     * @returns {undefined}
+     */
+    static getRpc(name = 'default') {
+        if (!kijs.isObject(kijs.__rpcs) || kijs.isEmpty(kijs.__rpcs[name])) {
+            throw new kijs.Error(`global RPC "${name}" is not exist.`);
+        }
+        return kijs.__rpcs[name];
+    }
+    
     /**
      * Text für Übersetzung zurückgeben
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
-     * @param {String} comment          Kommentar für den Übersetzer. Wird nur zum Generieren der Usages-Datei benötigt.
+     * @param {String} comment          Kommentar für den Übersetzer. Wird nur zum generieren der Usages-Datei benötigt.
      * @param {String} languageId
      * @returns {String}
      */
     static getText(key, variant='', args=null, comment='', languageId=null) {
         if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnScope || this, key, variant, args, comment, languageId);
+            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, comment, languageId);
         }
 
         // keine getText-Fn definiert: Argumente ersetzen
@@ -330,14 +406,29 @@ window.kijs = class kijs {
 
     /**
      * Setzt eine individuelle getText-Funktion.
-     * Die fn erhält folgende Variablen: key, variant, args, comment, languageId
+     * Die fn erhält folgende Argumente: key, variant, args, comment, languageId
      * @param {Function} fn
-     * @param {Object} scope
+     * @param {Object} [context=this]
      * @returns {undefined}
      */
-    static setGetTextFn(fn, scope=null) {
+    static setGetTextFn(fn, context) {
         kijs.__getTextFn = fn;
-        kijs.__getTextFnScope = scope;
+        kijs.__getTextFnContext = context || this;
+    }
+    
+    /**
+     * Erstellt einen globalen Verweis auf eine RPC-Klasse
+     * Der Standard-RPC sollte 'default' heissen. 
+     * Weitere sind mit beliebigen Namen möglich.
+     * @param {String} name
+     * @param {kijs.gui.Rpc} rpc
+     * @returns {undefined}
+     */
+    static setRpc(name, rpc) {
+        if (!kijs.isObject(kijs.__rpcs)) {
+            kijs.__rpcs = {};
+        }
+        kijs.__rpcs[name] = rpc;
     }
 
     /**

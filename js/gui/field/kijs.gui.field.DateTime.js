@@ -1030,7 +1030,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     // overwrite
-    _validationRules(value) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         const date = this._datePicker.date;
         const dateEnd = this._datePicker.dateEnd;
         const time = this._timePicker.value;
@@ -1098,7 +1102,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
 
-        super._validationRules(value);
+        super._validationRules(value, ignoreEmpty);
     }
 
     /**

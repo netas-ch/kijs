@@ -84,14 +84,14 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Server Sort',
                     facadeFnLoad: 'combo.load',
-                    rpc: this._app.rpc,
+                    //rpc: 'default'
                     autoLoad: true,
                     remoteSort: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Local Sort',
                     facadeFnLoad: 'combo.load',
-                    rpc: this._app.rpc,
+                    //rpc: 'default'
                     autoLoad: true,
                     remoteSort: false
                 },{
@@ -100,7 +100,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     facadeFnLoad: 'combo.load',
                     autoLoad: true,
                     remoteSort: true,
-                    rpc: this._app.rpc,
+                    //rpc: 'default'
                     forceSelection: false,
                     showPlaceholder: false
                 }

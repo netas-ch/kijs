@@ -1,40 +1,90 @@
-Schriften
-=========
+Ereignisse
+==========
 
-Einheit px
+Einführung
 ----------
-Schriftgrössen sollten immer in px angegeben werden. Andere Einheiten machen für 
-Webanwendungen wenig Sinn. Schriften werden bei anderen Einheiten als px nicht 
-im gleichen Mass wie andere Inhalte skaliert. Dadurch geht das Layout kaput, 
-dass bei kijs Pixelgenau aufgebaut ist.  
-Menschen, die eine grössere Schriftgrösse benötigen, sollten die Möglichkeit haben 
-das ganze Layout zu Zoomen (Ctrl+Mausrad). Damit werden die Schriften im gleichen 
-Verhältnis wie die anderen Inhalte skaliert.  
+kijs verfügt über ein eigenes System von Ereignissen. Es funktioniert unabhängig 
+von den nativen JavaScript events.  
+
+Die abstrakte Klasse ```kijs.Observable``` enthält diese Funktionalität.  
+Fast alle Klassein in kijs erben von ```kijs.Observable``` und erhalten dadurch 
+die Möglichkeit kijs-Ereignisse auszulösen.  
 
 
-Schriftgrössen
---------------
-- ```11px``` grid, tree
-- ```12px``` default (Buttons, Formularfelder, Labels, etc...)
-- ```14px``` PanelHeader
+Funktionen
+----------
+### raiseEvent(name, e)  
+Löst ein Ereignis aus.  
+Argumente:  
+ - ```name``` gewünschter Name des Ereignisses.  
+ - ```e``` Objekt mit Infos zum Ereignis.  
 
-Wichtig ist, dass verschiedene Schriftgrössen **nicht** gemischt werden.
-**Ausnahmen:** 
- - Überschriften (wenn Fett nicht ausreicht)
- - Grid
+Theoretisch können auch mehrere Argumente zu einem Eregnis definiert werden.  
+```raiseEvent(name, ...args)```. Darauf sollte aber in kijs verzeichtet werden und 
+naben ```name``` immer nur ein Argument ```e```verwendet werden.  
 
-### Vergleich Senche ExtJs 3.4.1
- - ```11px``` grid
- - ```12px``` Formularfelder, Labels
+Ein Ereignis muss in kijs nicht definiert werden. Sobald mit ```raiseEvent(name, e)``` 
+ein Eregnis ausgelöst wird, existiert es.  
 
-### Vergleich: Sencha Ext 7
- - ```13px``` Formularfelder, Labels, Grid
- - ```13.33px``` Buttons
- - ```14px``` Tree, Überschriften in Formularen
+### on(names, callback, context)  
+Erstellt einen Listener für ein Ereignis.  
+Argumente:  
+ - ```names``` String mit dem Namen des Ereignisses oder ein Array mit mehreren Namen.  
+ - ```callback``` Funktion, die ausgeführt werden soll, wenn das Ereignis auftritt.  
+   Hier gibt es verschiedene Möglichkeiten eine Funktion zu definieren:  
+    - Direkt eine Funktion übergeben ```function(e) { ... }```  
+    - Eine bestehende Funktion aufrufen ```this.macheDies```  oder ```myApp.macheDies```  
+    - Eine Funktion als String übergeben ```'function(e) { ... }'```  
+    - Eine bestehende Funktion als String aufrufen ```'this.macheDies'```  oder ```'myApp.macheDies'```  
+   Die Möglichkeit Funktionen als String zu übergeben, kann z.B. bei Configs, die 
+   via RPC vom Server geholt werden benutzt werden. Da in JSON keine Funktionen möglich 
+   sind, können auf diese Weise trotzdem Funktionen benutzt werden.  
+ - ```context``` (optional) Kontext in dem die Funktion ausgeführt werden soll.  
+   Standard = ```this```.  
+   Bei der Benutzung von ```this``` innerhalb der Funktion, wird dieser Kontext verwendet.  
+   Auch ein Kontext kann als String übergeben werden. Bsp: ```'this'``` oder ```'myApp.myFunctions'```  
+
+### once(names, callback, context)  
+Gleich wie ```on()```, jedoch wird der Listener nach dem 1. Aufruf wieder entfernt.  
+
+### off(names, callback, context)  
+Entfernt einen Listener.  
+Argumente:  
+ - ```names``` (optional) String mit dem Namen des Ereignisses oder ein Array mit mehreren Namen.  
+   Optional. Wenn leer, werden alle Listeners entfernt.  
+ - ```callback``` (optional) Falls nur ein Listener mit einer bestimmten Funktion entfernt werden 
+   soll, kann hier die Funktion angegeben werden. Sonst werden alle Listeners entfernt.  
+ - ```context``` (optional) Es werden nur Listeners von diesem Kontext entfernt. 
+   Sonst werden alle Listeners entfernt.  
+
+### hasListener(name, callback, context)  
+Überprüft ob ein Listener vorhanden ist.  
+Rückgabe: true=Listener ist vorhanden, false=Listener ist nicht vorhanden.  
+Argumente:  
+ - ```name``` (optional) String mit dem Namen des Ereignisses.  
+ - ```callback``` (optional) Funktion des Listeners. 
+ - ```context``` (optional) Kontext des Listeners. 
 
 
-Schriftarten
-------------
-In kijs sind folgende Schriftarten eingebunden:
-- Roboto (für Texte)
-- Font Awesome (für Icons)
+
+
+Listeners mit Rückgabewerten
+----------------------------
+Bei allen Ereignissen deren Namen mit ```'before...``` beginnt, wird ein Rückgabewert 
+vom Listener erwartet ```true```=ok oder ```false```=abbrechen.  
+Diese Ereignisse werden jeweils am Anfang einer Operation aufgerufen und bieten 
+dadurch die Möglichkeit, dass ein Listener die Operation abbricht.  
+
+Beispiel:  
+Wenn ein Fenster ```kijs.gui.Window``` geschlossen wird. Wird vorher das Ereignis 
+```beforeClose``` aufgerufen. Soll dies verhindert werden, kann dies über einen 
+Listener verhindert werden:
+
+    myWindow.on('beforeClose', function(e) {
+        if (e.element.down('myField').value === 'xy') {
+            kijs.gui.MsgBox.alert('Ooops', 'Im Feld steht noch "xy"!');
+            return false;
+        }
+        return true;
+    }, this);
+

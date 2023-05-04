@@ -350,8 +350,11 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     }
 
     // overwrite
-    _validationRules(value) {
-
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         // Eingabe erforderlich
         if (this._required) {
             if (!value) {

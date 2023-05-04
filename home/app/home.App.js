@@ -26,14 +26,14 @@ home.App = class home_App {
         if (config.appAjaxUrl) {
             appRpcConfig.url = config.appAjaxUrl;
         }
-        this._rpcApp = new kijs.gui.Rpc(appRpcConfig);
+        kijs.setRpc('app', new kijs.gui.Rpc(appRpcConfig));
         
         // RPC-Instanz für den Inhalt (data)
         let dataRpcConfig = {};
         if (config.dataAjaxUrl) {
             dataRpcConfig.url = config.dataAjaxUrl;
         }
-        this._rpcData = new kijs.gui.Rpc(dataRpcConfig);
+        kijs.setRpc('default', new kijs.gui.Rpc(dataRpcConfig));
     }
     
     
@@ -41,7 +41,6 @@ home.App = class home_App {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get rpc() { return this._rpcData; }
 
 
 
@@ -119,7 +118,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeShowcase',
-                    rpc: this._rpcApp,
+                    rpc: 'app',
                     facadeFnLoad: 'naviShowcase.load',
                     style: {
                         flex: 1
@@ -141,7 +140,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeTest',
-                    rpc: this._rpcApp,
+                    rpc: 'app',
                     facadeFnLoad: 'naviTest.load',
                     style: {
                         flex: 1
@@ -163,7 +162,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeDocu',
-                    rpc: this._rpcApp,
+                    rpc: 'app',
                     facadeFnLoad: 'naviDocu.load',
                     style: {
                         flex: 1
@@ -249,12 +248,11 @@ home.App = class home_App {
                     },
                     data: [
                         { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
-                        { id:'kijs.theme.old.css', Bezeichnung:'Alt' },
-                        { id:'kijs.theme.joel.css', Bezeichnung:'Joel' }
+                        { id:'kijs.theme.old.css', Bezeichnung:'Alt' }
                     ],
                     value: this._currentDesign ? this._currentDesign : 'kijs.theme.default.css',
                     on: {
-                        input: function(e) {
+                        change: function(e) {
                             this._currentDesign = e.value;
                             kijs.Dom.cssFileReplace(e.oldValue, e.value)
                                 .then((node) => {
@@ -278,7 +276,7 @@ home.App = class home_App {
                         margin: '10px'
                     },
                     on: {
-                        input: function(e) {
+                        change: function(e) {
                             if (e.value) {
                                 this._viewport.theme = 'dark';
                             } else {
@@ -409,9 +407,7 @@ home.App = class home_App {
     // --------------------------------------------------------------
     destruct() {
         this._viewport.destruct();
-        this._rpcApp.destruct();
-        this._rpcData.destruct();
-        
+
         this._header = null;
         this._tabShowcase = null;
         this._tabTest = null;
@@ -419,8 +415,6 @@ home.App = class home_App {
         this._navigation = null;
         this._content = null;
         this._viewport = null;
-        this._rpcApp = null;
-        this._rpcData = null;
     }
 
 };

@@ -137,9 +137,13 @@
   ],
 
   "aceEditor":[
-   "lib/ace/ace.js",
-   "lib/ace/theme-ambiance.js",
+   "lib/ace/src-min-noconflict/ace.js",
    "js/gui/field/kijs.gui.field.AceEditor.js"
+  ],
+  
+  "quillEditor":[
+   "lib/quill/quill.min.js",
+   "js/gui/field/kijs.gui.field.QuillEditor.js"
   ]
  },
 
@@ -148,6 +152,10 @@
   "gui":[
    "css/kijs.theme.default.css",
    "css/kijs.gui.css"
+  ],
+  "quillEditor":[
+   "lib/quill/quill.bubble.css",
+   "lib/quill/quill.snow.css"
   ]
  },
 

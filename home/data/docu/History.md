@@ -29,7 +29,6 @@ Neue Features
 
  - Die Funktion ```cssFileReplace()``` gibt neu ein Promise zurück
 
-
 ### kijs.gui.MsgBox
 - Neue Statische Funktion ```kijs.gui.MsgBox.errorNotice()```  
   Funktioniert gleich wie ```kijs.gui.MsgBox.error()```. Es wird aber ein anderes Icon 
@@ -39,6 +38,23 @@ Neue Features
 - Neue Funktion ```errorNotice()```  
 - Neues Icon ```'errorNotice'``` bei der statischen Funktion 
   ```kijs.gui.CornerTipContainer.show()```
+
+### globales RPC-Instanzen  
+Damit nicht in jedem Element, dass ein RPC-Objekt benutzt eine Instanz von einem 
+```kijs.gui.Rpc``` übergeben werden muss und es bisher auch nicht möglich war via 
+RPC einem Element eine RPC-Instanz zuzuweisen, können nun ```kijs.gui.Rpc```-Objekte 
+global mit einem Namen definiert werden.  
+Bei allen Elementen kann anstelle ```kijs.gui.Rpc````-Instanz auch nur der Name der 
+globalen Instanz übergeben werden. Wird gar nichts angegeben, wird standardmässig 
+die globale Instanz ```'default'``` verwendet.  
+Globale Instanzen können über folgende Funktionen definiert/abgerufen werden:  
+ - ```kijs.setRpc(name, rpc)``` Erstellt eine neue globale Instanz.  
+   Die Standard-Instanz muss ```'default'``` heissen.
+ - ```kijs.getRpc(name)``` Gibt eine globale Instanz zurück. Falls kein ```name``` 
+   angegeben wird, wird die globale Instanz ```'default'``` zurückgegeben.  
+
+**ACHTUNG!** Die RPC Funktion wird nicht mehr von dem übergeordneten 
+```kijs.gui.FormPanel``` geholt!
 
 ### kijs.gui.container.Scrollable (NEU)
 Funktioniert wie der Container, anstelle von Scrollbars werden Scroll-Buttons 
@@ -53,12 +69,17 @@ angezeigt.
 ### kijs.gui.field.SozVersNr (NEU)
 - Feld für die schweizer Sozialversicherungs-Nr. und AHV-Nr.
 
+### kijs.gui.field.QuillEditor (NEU)
+- WYSIWYG Editor **wird evtl. in Zukunft durch einen besseren Editor ersetzt!**  
+
 
 Änderungen
 -------------
 ### aceEditor (kijs.gui.field.AceEditor)
  - kijs-Modul ```'editor'``` umbenannt zu ```'aceEditor'```. Bitte beim einbinden in 
    die index.html berücksichtigen.  
+ - AceEditor aktualisiert auf neuste Version 1.18.0.  
+   Achtung Dateistruktur hat geändert! 
  - ```kijs.gui.field.Editor``` umbenannt zu ```kijs.gui.field.AceEditor```  
 
 ### Private Funktionen
@@ -74,6 +95,10 @@ angezeigt.
  - Neu sind im kijs alle Listeners private (Präfix: ```#```)
  - Dadurch wird verhindert, dass sie versehentlich in einer vererbten Klasse
    überschrieben werden.
+
+## Listeners und callbackFn können nun alle per String übergeben werden.  
+Dadurch können via RPC Funktionen oder Verweise auf Funktionen übermittelt werden. 
+Auch der Kontext zu einer Funktion kann per String übergeben werden.  
 
 ### RPC response
         response.errorMsg 
@@ -96,6 +121,9 @@ angezeigt.
 
 ### Ereignisse afterLoad und afterSave
 - ```afterLoad``` und ```afterSave``` events haben neu nur noch ein Argument ```e```
+
+### kijs
+ - ```kijs.getClassFromXtype(xtype)``` umbenannt zu ```kijs.getObjectFromString(str)```  
 
 ### kijs.Graphic
  - Die Funktion ```colorGetHex()``` gibt neu auch einen # zurück.  
@@ -126,10 +154,9 @@ angezeigt.
         }
 
 ### kijs.Rpc
- - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```.  
-   Die alten Argumente werden noch eine Zeitlang unterstützt, sollten aber 
-   angepasst werden.  
-   In der Console wird eine DEPRECATED-Meldung angezeigt.  
+ - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```. **ACHTUNG!!!**  
+ - Es gibt eine neues config-Property ```owner```. Diesem kann in der Regel ```this``` 
+   übergeben werden. Es wird verwendet um bei cancelRunningRpcs den owner zu unterscheiden.  
  - Die callbackFn fn hat neu nur noch ein Argument ```{ response: ..., request: ... }```  
  - Falls config.fn übergeben wurde wird immer diese fn ausgeführt (auch im Fehlerfall).  
    Dann wird auch kein Promise, sondern Null zurückgegeben.  
@@ -140,31 +167,31 @@ angezeigt.
    - ```'error'```: Es wird reject ausgeführt mit einem Error Objekt als Argument.
 
 ### kijs.gui.Rpc
-- Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```.  
-  Die alten Argumente werden noch eine Zeitlang unterstützt, sollten aber angepasst 
-  werden. In der Console wird eine DEPRECATED-Meldung angezeigt.  
-- Die ```callbackFn``` hat neu ein anderes Argument! **ACHTUNG!!!**  
-  Bisher: ```responseData```  
-  Neu: ```{ responseData: ..., requestData: ..., errorType: ..., errorMsg: ... }```  
-- Die ```callbackFn``` wird nun immer ausgeführt! Auch in einem Fehlerfall! **ACHTUNG!!!**  
-  Um den gleichen Effekt wie früher zu haben muss der Inhalt der CallbackFn in ein  
+ - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```. **ACHTUNG!!!**   
+ - Es gibt eine neues config-Property ```owner```. Diesem kann in der Regel ```this``` 
+   übergeben werden. Es wird verwendet um bei cancelRunningRpcs den owner zu unterscheiden.  
+ - Die ```callbackFn``` hat neu ein anderes Argument! **ACHTUNG!!!**  
+   Bisher: ```responseData```  
+   Neu: ```{ responseData: ..., requestData: ..., errorType: ..., errorMsg: ... }```  
+ - Die ```callbackFn``` wird nun immer ausgeführt! Auch in einem Fehlerfall! **ACHTUNG!!!**  
+   Um den gleichen Effekt wie früher zu haben muss der Inhalt der CallbackFn in ein  
 
         if(kijs.isEmpty(rpcData.errorMsg)) {  
             ...  
         }  
 
-- Das Promise wird nur noch zurückgegeben, wenn keine callbackFn übergeben wurde.
-- Bei der Funktion ```do()``` gibt es beim Promise nun ein reject.  
-  Dieses wird nur ausgelöst, wenn keine callbackFn angegeben wurde, ein Fehler 
-  mit ```errorType='error'``` vom Server gemeldet wurde.  
-  Eine MsgBox wird zwar von kijs.gui.Rpc angezeigt, die Ladeanzeige wird auch entfernt.  
-  Das reject muss aber trotzdem bei jedem Aufruf abgefangen werden, damit kein 
-  Javascript-Fehler entsteht.  
-  Minimale Fehlerbehandlung: ```.catch(() => {});```  
-  Oder, wenn die übergeordnete Funktion async ist und await verwendet wird, können 
-  Fehler mit einem normalen ```try{} catch{}``` abgefangen werden.
-- das Argument bei ```load()``` ```fnBeforeMessages``` gibt es nicht mehr.  
-  Es wird nicht mehr benötigt, weil die Load Funktion nun immer eine Antwort zurückgibt.
+ - Das Promise wird nur noch zurückgegeben, wenn keine callbackFn übergeben wurde.
+ - Bei der Funktion ```do()``` gibt es beim Promise nun ein reject.  
+   Dieses wird nur ausgelöst, wenn keine callbackFn angegeben wurde, ein Fehler 
+   mit ```errorType='error'``` vom Server gemeldet wurde.  
+   Eine MsgBox wird zwar von kijs.gui.Rpc angezeigt, die Ladeanzeige wird auch entfernt.  
+   Das reject muss aber trotzdem bei jedem Aufruf abgefangen werden, damit kein 
+   Javascript-Fehler entsteht.  
+   Minimale Fehlerbehandlung: ```.catch(() => {});```  
+   Oder, wenn die übergeordnete Funktion async ist und await verwendet wird, können 
+   Fehler mit einem normalen ```try{} catch{}``` abgefangen werden.
+ - das Argument bei ```load()``` ```fnBeforeMessages``` gibt es nicht mehr.  
+   Es wird nicht mehr benötigt, weil die Load Funktion nun immer eine Antwort zurückgibt.
 
 ### kijs.gui.Dom
  - Neue config/getter/setter ```disabled```
@@ -474,6 +501,16 @@ angezeigt.
 
 Änderungen im CSS
 --------------------
+### Layers
+Das CSS von kijs ist nun in einem Layer ```@layer kijs {...}```.  
+Damit kann neu die Priorität der einzelnen CSS-Dateien definiert werden: 
+```@layer kijs, myApp;``` (weiter hinten = grössere Priorität).  
+
+CSS-Styles, die in keinem Layer sind, haben die höchste Priorität.  
+Falls also zusätzliche CSS-Dateien eingebunden werden, haben sie immer eine höhere 
+Priorität als das kijs-CSS. Falls dies mal nicht gewünscht sein sollte, kann darin auch 
+ein Layer definiert werden. Dann kann die Priorität definiert werden.  
+
 ### kijs-autoscroll
 - Die CSS-Klasse ```kijs-autoscroll``` gibt es nicht mehr.  
   ==> Bitte dafür die Config ```scrollableY``` von kijs.gui.Container benutzen.

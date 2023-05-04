@@ -98,7 +98,7 @@ home.sc.DataView = class home_sc_DataView {
                             ],
                             value: 'multi',
                             on: {
-                                input: function(e) {
+                                change: function(e) {
                                     const dv = this._content.down('dataViewRpc');
                                     dv.clearSelections();
                                     dv.selectType = e.value;
@@ -113,7 +113,7 @@ home.sc.DataView = class home_sc_DataView {
                             xtype: 'kijs.gui.DataView',
                             name: 'dataViewRpc',
                             selectType: 'multi',
-                            rpc: this._app.rpc,
+                            //rpc: 'default',
                             //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
                             autoLoad: true,
                             facadeFnLoad: 'dataview.load',

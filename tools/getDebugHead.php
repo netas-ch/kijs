@@ -1,8 +1,23 @@
 <?php
 // Beispielaufrufe
 // http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js
-// <script type="text/javascript" src="tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=js"></script>
-// <link rel="stylesheet" type="text/css" href="tools/getDebugHead.php?modules=core,gui,grid,editor&fileType=css">
+// http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css
+
+/* Beispiel
+ * --------
+ * <?php
+ *   // Base-URL ermittlen
+ *   $baseUrl = '';
+ *   $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
+ *   $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
+ * 
+ *   // CSS Files
+ *   echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=css');
+ *
+ *   // JS Files
+ *   echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=js');
+ * ?>
+ */ 
 
 $modules = filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
 $fileType = filter_input(INPUT_GET, 'fileType');    // 'js' oder 'css'
@@ -45,14 +60,14 @@ foreach ($modules as $module) {
                     break;
                 
                 case 'css':
-                    // .less-Files in .php-Files umwandeln
+                    // Anstelle der .less-Files .css-Files einbinden
                     if (substr($file, strlen('.less')*-1) === '.less') {
                         $file = substr($file, 0, strlen('.less')*-1) . '.css';
                     }
                     
                     $return .= '<link rel="stylesheet" type="text/css" href="' . $baseUrl . $file . '">' . "\n";
                     break;
-                
+                    
             }
         }
     }

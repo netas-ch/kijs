@@ -141,7 +141,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
         }
 
         if (kijs.isString(value) && value.substr(0, 4) === 'kijs') {
-            let iconMap = kijs.getClassFromXtype(value);
+            let iconMap = kijs.getObjectFromString(value);
             if (kijs.isInteger(iconMap.char)) {
                 value = iconMap.char;
             }

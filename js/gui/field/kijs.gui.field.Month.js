@@ -358,7 +358,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     }
 
     // overwrite
-    _validationRules(value) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         if (!kijs.isEmpty(value)) {
             const date = kijs.Date.create(value);
 
@@ -379,7 +383,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             }
         }
 
-        super._validationRules(value);
+        super._validationRules(value, ignoreEmpty);
     }
 
 

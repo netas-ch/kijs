@@ -139,16 +139,30 @@ home.sc.field_Text = class home_sc_field_Text {
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mit Validierung',
+                    html: 'mit Validierungen',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Text',
-                    label: 'Test',
+                    label: 'validationRegExp',
                     required: true,
                     //value: 'sdfg',
                     validationRegExp: { 
                         regExp: /^Test$/,
                         msg: 'Wert muss \'Test\' sein'
+                    }
+                },{
+                    xtype: 'kijs.gui.field.Text',
+                    label: 'validationFn',
+                    required: true,
+                    //value: 'sdfg',
+                    /*validationFn: function(val){
+                        if (val !== 'Test') {
+                            return 'Wert muss \'Test\' sein';
+                        }
+                    },*/
+                    validationFn: "function(val){ if (val!=='Test'){return 'Wert muss \\'Test\\' sein';} }",
+                    on: {
+                        input: 'function(e) { e.element.helpText = e.element.value==="Test" ? "Richtig! Der Wert ist \\"Test\\"!" : ""; }'
                     }
                 },
                 

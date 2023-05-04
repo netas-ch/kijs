@@ -13,7 +13,7 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     constructor(config={}) {
         super(false);
 
-        this._allowAhvNr = true;        // darf eine alte AHV-Nr eingegeben werden?
+        this._allowAhvNr = false;       // darf eine alte AHV-Nr eingegeben werden?
         this._allowSozVersNr = true;    // darf eine neue Soz.vers.-Nr. eingegeben werden?
         
         this._dom.clsRemove('kijs-field-text');
@@ -23,16 +23,7 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         Object.assign(this._defaultConfig, {
             disableFlex: true,
             formatFn: this._formatNr,
-            formatFnContext: this/*,
-            formatRegExp:[  // Formatierung (kann mit config ersetzt werden)
-                {   // neue Soz.vers.-Nr. (Format: xxx.xxxx.xxxx.xx)
-                    regExp: /^([0-9]{3})[ \.]*([0-9]{4})[ \.]*([0-9]{4})[ \.]*([0-9]{2})[ \.]*$/, // Whitespace am Ende entfernen
-                    replace: '$1.$2.$3.$4'
-                },{   // alte AHV-Nr.(Format: xxx.xx.xxx.xxx)
-                    regExp: /^([0-9]{3})[ \.]*([0-9]{2})[ \.]*([0-9]{3})[ \.]*([0-9]{3})[ \.]*$/, // Whitespace am Ende entfernen
-                    replace: '$1.$2.$3.$4'
-                }
-            ]*/
+            formatFnContext: this
         });
         
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -185,8 +176,12 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     }
     
     // overwrite
-    _validationRules(value) {
-        super._validationRules(value);
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
+        super._validationRules(value, ignoreEmpty);
 
         // SozVersNr validieren
         if (!kijs.isEmpty(value)) {

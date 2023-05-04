@@ -85,9 +85,12 @@ kijs.Rpc = class kijs_Rpc {
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
-     *     {Function} fn                         Callback-Funktion
-     *     {Object} context                      Kontext für die Callback-Funktion
-     *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests an dieselbe facadeFn abgebrochen
+     *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID, 
+     *                                           die das Element eindeutig identifiziert.
+     *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
+     *     {Function} [fn]                       Callback-Funktion
+     *     {Object} [context]                    Kontext für die Callback-Funktion
+     *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe facadeFn abgebrochen
      *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
@@ -96,20 +99,6 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {Promise|Null}
      */
     do(config) {
-        // DEPRECATED: Rückwärtskompatibilität
-        if (kijs.isString(config)) {
-            config = {
-                facadeFn: arguments[0],
-                requestData: arguments[1],
-                fn: arguments[2],
-                context: arguments[3],
-                cancelRunningRpcs: arguments[4],
-                rpcParams: arguments[5],
-                responseArgs: arguments[6]
-            };
-            console.warn('DEPRECATED: kijs.Rpc.do(), please use only 1 argument (config)');
-        }
-
         // Validierung / Pflichtfelder
         if (!kijs.isObject(config)) {
             throw new kijs.Error('RPC call without config object');
@@ -122,9 +111,12 @@ kijs.Rpc = class kijs_Rpc {
             clearTimeout(this._deferId);
         }
 
+        // Evtl. bestehende RPCs vom gleichen owner an die gleiche facadeFn abbrechen
+        // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
+        // die die gleiche facadeFn benutzen. 
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
-                if (this._queue[i].facadeFn === config.facadeFn) {
+                if (this._queue[i].owner === config.owner && this._queue[i].facadeFn === config.facadeFn) {
                     switch (this._queue[i].state) {
                         case 1: // queue
                             this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
@@ -147,6 +139,7 @@ kijs.Rpc = class kijs_Rpc {
             requestData: config.requestData,
             type: 'rpc',
             tid: this._createTid(),
+            owner: config.owner,
             fn: config.fn,
             context: config.context,
             rpcParams: config.rpcParams,

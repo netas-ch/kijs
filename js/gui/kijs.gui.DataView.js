@@ -49,7 +49,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
             facadeFnArgs: true,         // Objekt mit Argumenten für die FacadeFn
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc
+            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
             selectType: true            // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -188,22 +188,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     get rpc() {
-        if (!this._rpc) {
-
-            // Sucht nach einem FormPanel oberhalb
-            let formPanel = this.upX('kijs.gui.FormPanel');
-
-            // Wenn ein FormPanel gefunden wurde und dort eine RPC-Instance vorhanden ist, wird diese genommen
-            if (formPanel && formPanel.rpc) {
-                this._rpc = formPanel.rpc;
-            }
-        }
-        return this._rpc;
+        return this._rpc || kijs.getRpc('default');
     }
     set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+        
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
-
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
         }
@@ -430,8 +423,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             this.rpc.do({
                 facadeFn: this._facadeFnLoad,
+                owner: this, // wird gebraucht um bei cancelRunningRpcs den owner zu unterscheiden
                 data: args,
-                cancelRunningRpcs: true, 
+                cancelRunningRpcs: true,
                 waitMaskTarget: this, 
                 waitMaskTargetDomProperty: 'dom'
                 

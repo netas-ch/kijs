@@ -34,7 +34,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
-            rpc: { target: 'rpc' },
+            rpc: { target: 'rpc' },             // Instanz von kijs.gui.Rpc oder Name einer RPC
             rpcArgs: true
         });
 
@@ -181,28 +181,23 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }
         }
     }
-
-    get rpc() { return this._rpc;}
+    
+    get rpc() {
+        return this._rpc || kijs.getRpc('default');
+    }
     set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+        
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
-
-        } else if (kijs.isString(val)) {
-            if (this._rpc) {
-                this._rpc.url = val;
-            } else {
-                this._rpc = new kijs.gui.Rpc({
-                    url: val
-                });
-            }
-            
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
-            
         }
     }
-
-
+    
+    
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -259,8 +254,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 }
                 args = Object.assign(args, this._rpcArgs);
 
-                this._rpc.do({
+                this.rpc.do({
                     facadeFn: this._facadeFnLoad,
+                    owner: this,
                     data: args, 
                     cancelRunningRpcs: true, 
                     waitMaskTarget: this,
@@ -380,8 +376,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             args.formData = this.data;
 
             // an den Server senden
-            this._rpc.do({
+            this.rpc.do({
                 facadeFn: this.facadeFnSave,
+                owner: this,
                 data: args, 
                 cancelRunningRpcs: false, 
                 waitMaskTarget: waitMaskTarget, 

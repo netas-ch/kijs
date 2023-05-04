@@ -23,7 +23,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     constructor(config={}) {
         super(false);
 
-        this._rpc = null;
+        this._rpc = null;                   // Instanz von kijs.gui.Rpc
         this._rows = [];
         this._columnConfigs = [];
         this._primaryKeys = [];
@@ -102,13 +102,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad                  : true,
-            rpc                       : true,
-            facadeFnLoad              : true,
-            facadeFnSave              : true,
-            facadeFnArgs              : true,
-            waitMaskTarget            : true,
-            waitMaskTargetDomProperty : true,
+            autoLoad:       true,
+            rpc:            { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
+            facadeFnLoad:   true,
+            facadeFnSave:   true,
+            facadeFnArgs:   true,
+            waitMaskTarget: true,
+            waitMaskTargetDomProperty: true,
 
             columnConfigs:  { fn: 'function', target: this.columnConfigAdd, context: this },
             primaryKeys:    { target: 'primaryKeys' },
@@ -147,7 +147,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * @returns {undefined}
      */
     set current(cRow) {
-
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
 
@@ -256,6 +255,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     get rows() { return this._rows; }
 
     get rowsCount() { return this._remoteDataTotal || this._remoteDataLoaded; }
+
+    get rpc() {
+        return this._rpc || kijs.getRpc('default');
+    }
+    set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+        
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+        } else {
+            throw new kijs.Error(`Unkown format on config "rpc"`);
+        }
+    }
 
     get selectType() { return this._selectType; }
     set selectType(val) {
@@ -972,7 +986,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Standard-Objekt übergeben: instanz von xType erstellen und config übergeben
         if (kijs.isObject(configOrInstance) && configOrInstance.constructor === window.Object) {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
-            let constructor = kijs.getClassFromXtype(configOrInstance.xtype);
+            let constructor = kijs.getObjectFromString(configOrInstance.xtype);
             if (constructor === false) {
                 throw new kijs.Error('invalid xtype ' + configOrInstance.xtype);
             }
@@ -1027,7 +1041,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return new Promise((resolve, reject) => {
             if (
                 this._facadeFnLoad
-                && this._rpc
                 && !this._isLoading
                 && (
                     !this._remoteDataLoaded // Erster Aufruf
@@ -1070,8 +1083,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 let showWaitMask = this._remoteDataStartIndex === 0;
 
                 // RPC ausführen
-                this._rpc.do({
+                this.rpc.do({
                     facadeFn: this._facadeFnLoad,
+                    owner: this,
                     data: args, 
                     cancelRunningRpcs: true,                                        // Cancel running
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
@@ -1457,7 +1471,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._topDom = null;
         this._middleDom = null;
         this._bottomDom = null;
-
+        
+        this._rpc = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

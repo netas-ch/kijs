@@ -24,9 +24,11 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} facadeFn         Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} data              Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
+     *     {Object} [owner]          Verweis auf das Aufzurufende Element oder eine ID, die das Element eindeutig identifiziert.
+     *                               Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
      *     {Function} fn             Callback-Funktion
      *     {Object} context          Kontext für die Callback-Funktion
-     *     {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests an die selbe facadeFn abgebrochen
+     *     {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests vom selben owner an dieselbe facadeFn abgebrochen
      *     {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node
      *                                                                       für Lademaske, NULL=document.body, 'none' für keine Maske.
      *     {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske
@@ -36,21 +38,6 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      */
     // overwrite (Vorsicht andere Argumente!)
     do(config) {
-        // DEPRECATED: Rückwärtskompatibilität
-        if (kijs.isString(config)) {
-            config = {
-                facadeFn: arguments[0],
-                data: arguments[1],
-                fn: arguments[2],
-                context: arguments[3],
-                cancelRunningRpcs: arguments[4],
-                waitMaskTarget: arguments[5],
-                waitMaskTargetDomProperty: arguments[6],
-                ignoreWarnings: arguments[7]
-            };
-            console.warn('DEPRECATED: kijs.gui.Rpc.do(), please use only 1 argument (config)');
-        }
-
         // Validierung
         if (!kijs.isObject(config)) {
             throw new kijs.Error('RPC call without config object');
@@ -90,6 +77,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         super.do({
             facadeFn: config.facadeFn,
             requestData: config.data,
+            owner: config.owner,
             cancelRunningRpcs: config.cancelRunningRpcs,
             rpcParams: {ignoreWarnings: !!config.ignoreWarnings},
             responseArgs: {waitMask: waitMask},
@@ -129,6 +117,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                                 this._doRpc({
                                     facadeFn: config.facadeFn,
                                     data: config.data,
+                                    owner: config.owner,
                                     fn: config.fn,
                                     context: config.context,
                                     cancelRunningRpcs: config.cancelRunningRpcs,

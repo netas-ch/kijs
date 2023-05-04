@@ -202,7 +202,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 ],
                 value: 'fade',
                 on: {
-                    input: function(e) {
+                    change: function(e) {
                         this._content.elements[0].elements[0].animation = e.value;
                     },
                     context: this
@@ -222,7 +222,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 ],
                 value: 'top',
                 on: {
-                    input: function(e) {
+                    change: function(e) {
                         this._content.down('tab').tabBarPos = e.value;
                     },
                     context: this

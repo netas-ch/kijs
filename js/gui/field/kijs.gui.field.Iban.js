@@ -91,8 +91,12 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     }
     
     // overwrite
-    _validationRules(value) {
-        super._validationRules(value);
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
+        super._validationRules(value, ignoreEmpty);
 
         // IBAN validieren
         if (!kijs.isEmpty(value) && !this._validateIban(value)) {

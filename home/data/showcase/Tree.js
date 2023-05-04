@@ -41,7 +41,7 @@ home.sc.Tree = class home_sc_Tree {
                     //iconCls: 'icoFolder32',
                     //expandedIconCls: 'icoFolderOpen32',
                     //iconSize: 16,
-                    rpc: this._app.rpc,
+                    //rpc: 'default',
                     facadeFnLoad: 'tree.load',
                     draggable: true,
                     on: {

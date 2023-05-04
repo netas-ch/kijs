@@ -2,6 +2,9 @@
    * kijs GUI Style
    ****************** */
 
+/* START LAYER kijs */
+@layer kijs {
+
 
 /* ******************
    * Roboto (http://fontfacekit.github.io/roboto/)
@@ -3576,7 +3579,7 @@ div.kijs-field-aceeditor {
         outline: none;
         min-width: 160px;
 
-        > div {
+        > .ace_editor {
             height: 100%;
             border: 1px solid var(--field-borderColor);
 
@@ -3600,6 +3603,94 @@ div.kijs-field-aceeditor {
                 border: 1px solid var(--field-focus-borderColor);
             }
         }
+    }
+    
+    > .kijs-container-inner {
+        > .kijs-button.kijs-inline {
+            height: 100%;
+            align-items: flex-start;
+            > .kijs-icon {
+                padding: 3px 0 0 0;
+            }
+            > .kijs-caption {
+                padding: 6px 0 0 0;
+            }
+        }
+    }
+    
+    &.kijs-disableFlex {
+        align-self: start;
+        flex: none;
+        
+        > .kijs-inputwrapper {
+            width: 180px;
+        }
+    }
+    
+    &.kijs-error > .kijs-inputwrapper > div {
+        background-color: var(--field-error-bkgrndColor);
+    }
+
+    &.kijs-disabled, &.kijs-readonly {
+        > .kijs-inputwrapper > div {
+            background-color: var(--field-disabled-bkgrndColor);
+        }
+    }
+}
+
+
+
+/* ******************
+   * Field QuillEditor
+   ****************** */
+div.kijs-field-quilleditor {
+    > .kijs-inputwrapper {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-width: 160px;
+        
+        * {
+            overflow: initial;
+            margin: initial;
+            padding: initial;
+        }
+        
+        > .ql-toolbar {
+            flex: none;
+            border-top: 1px solid var(--field-borderColor) !important;
+            border-left: 1px solid var(--field-borderColor) !important;
+            border-right: 1px solid var(--field-borderColor) !important;
+            border-bottom: 0 !important;
+        }
+
+        > .ql-container {
+            flex: 1;
+            border: 0 !important;
+
+            &.ql-snow {
+                overflow: hidden;
+            }
+            &.ql-bubble {
+                overflow: visible;
+            }
+
+            > .ql-editor {
+                overflow-y: auto;
+                border: 1px solid var(--field-borderColor);
+                background-color: var(--field-bkgrndColor);
+                font-family: var(--default-fontFamily) !important;
+                
+                &:focus {
+                    border: 1px solid var(--field-focus-borderColor);
+                }
+            }
+
+            > .ql-tooltip {
+                position: fixed;
+            }
+        }
+        
     }
     
     > .kijs-container-inner {
@@ -3813,4 +3904,9 @@ div.kijs-hidden, .kijs-hidden {
      > * {
         flex: none;
     }
+}
+
+
+
+/* END LAYER kijs */
 }

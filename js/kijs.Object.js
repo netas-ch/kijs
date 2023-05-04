@@ -181,21 +181,34 @@ kijs.Object = class kijs_Object {
                         }
                     }
                     break;
-
+                    
                 // Listeners des "on"-Objekts mergen
                 case 'assignListeners':
                     if (kijs.isObject(cfg.value)) {
+                        // context ermitteln
+                        let fnContext = null;
+                        if (kijs.isEmpty(cfg.value.context)) {
+                            fnContext = cfg.context;
+                        } else {
+                            fnContext = kijs.getObjectFromString(cfg.value.context);
+                            if (!kijs.isObject(fnContext)) {
+                                throw new kijs.Error('Context of listener "' + k + '" ist not valid.');
+                            }
+                        }
+                        
+                        // Listeners durchgehen und übernehmen
                         for (let k in cfg.value) {
                             if (k !== 'context') {
-                                if (!kijs.isFunction(cfg.value[k])) {
-                                    throw new kijs.Error('Listener "' + k + '" ist not a function.');
+                                let fn = kijs.getFunctionFromString(cfg.value[k]);
+                                if (!kijs.isFunction(fn)) {
+                                    throw new kijs.Error('Listener "' + k + '" ist not valid.');
                                 }
-                                cfg.context.on(k, cfg.value[k], cfg.value.context || cfg.context);
+                                cfg.context.on(k, fn, fnContext);
                             }
                         }
                     }
                     break;
-
+                    
                 // Funktion ausführen
                 case 'function':
                     if (kijs.isFunction(cfg.target)) {

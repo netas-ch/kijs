@@ -22,7 +22,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // overwrite
     constructor(config={}) {
         super(false);
-        this._rpc = null;
+        this._rpc = null;   // Instanz von kijs.gui.Rpc
         this._facadeFnLoad = null;
         this._facadeFnSave = null;
         this._autoLoad = true;
@@ -82,7 +82,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             allowDrag                 : true,
             allowDrop                 : true,
 
-            rpc                       : true,
+            rpc                       : { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
             rpcArgs                   : true,
             facadeFnLoad              : true,
             facadeFnSave              : true,
@@ -248,16 +248,27 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     get nodeId() { return this._nodeId; }
     set nodeId(val) { this._nodeId = val; }
 
+
     get rpc() {
         if (this._rpc) {
             return this._rpc;
+        } else if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+            return this.parent.rpc; 
+        } else {
+            return kijs.getRpc('default');
         }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpc;
-        }
-        return null;
     }
-    set rpc(val) { this._rpc = val; }
+    set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+        
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+        } else {
+            throw new kijs.Error(`Unkown format on config "rpc"`);
+        }
+    }
 
     get rpcArgs() {
         if (this._rpcArgs) {
@@ -420,6 +431,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 this.rpc.do({
                     facadeFn: this.facadeFnLoad,
+                    owner: this,
                     data: args,
                     waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
                     
@@ -624,6 +636,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                 if (this.facadeFnSave && this.rpc) {
                     this.rpc.do({
                         facadeFn: this.facadeFnSave,
+                        owner: this,
                         data: {
                             movedId: eventData.movedId,
                             targetId: eventData.targetId,
@@ -785,7 +798,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl.destruct();
         this._spinnerIconEl.destruct();
         this._treeCaptionDom.destruct();
-
+        
+        // Variablen (Objekte/Arrays) leeren
+        this._rpc = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

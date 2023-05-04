@@ -314,8 +314,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
     // overwrite
-    _validationRules(value) {
-
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         // Eingabe erforderlich
         if (this._required) {
             if (!value) {

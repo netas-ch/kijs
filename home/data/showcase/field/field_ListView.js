@@ -91,7 +91,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     captionField: 'Bez',
                     iconCharField: 'iconChar',
                     iconColorField: 'color',
-                    rpc: this._app.rpc,
+                    //rpc: 'default',
                     facadeFnLoad: 'colors.load',
                     autoLoad: true,
                     showCheckBoxes: false,
@@ -132,10 +132,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     ],
                     value: [2,3],
                     on: {
-                        input: function(e) {
-                            console.log(e.oldValue);
-                            console.log(e.value);
-                        }
+                        change: console.log
                     }
                 }
             ]

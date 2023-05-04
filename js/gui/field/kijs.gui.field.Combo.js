@@ -321,7 +321,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             if (forceLoad || args.query.length >= this._minChars) {
                 this._listViewEl.load(args).then((responseData) => {
                     // Nach dem Laden das value neu setzen,
-                    // damit das Label erscheint (ohne change-event)
+                    // damit die caption erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
@@ -338,7 +338,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._listViewEl.data = [];
                 this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
-
+            
         } else if (!this._firstLoaded || forceLoad) {
             // alle Datensätze laden
             this._listViewEl.load(args)
@@ -354,6 +354,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                             this.value = responseData.value;
                         }
                     }
+                    
+                    this.validate(true);
                 }).catch(() => {});
         }
 
@@ -539,7 +541,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     // overwrite
-    _validationRules(value) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -547,7 +553,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
 
-        // Ein Datensatz muss ausgewählt werden.
+        // Wert muss in der Liste vorhanden sein.
         if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
             let match = false;
             kijs.Array.each(this._listViewEl.data, function(row) {
@@ -645,7 +651,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else {
             this.value = this._value;
         }
-
+        
         // validieren
         this.validate();
 
@@ -761,7 +767,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             let oldVal = this.value;
             this.value = this._listViewEl.value;
             this._isDirty = true;
-
+            
             // validieren
             this.validate();
             

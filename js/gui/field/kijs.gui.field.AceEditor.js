@@ -3,6 +3,7 @@
 // --------------------------------------------------------------
 // kijs.gui.field.AceEditor
 // --------------------------------------------------------------
+// Text/Sourcecode Editor
 kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field.Field {
 
 
@@ -17,15 +18,17 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         this._aceEditorNode = null;
         this._mode = 'javascript';
         this._theme = null;
-        this._value = null;
-        this._previousChangeValue = null;
+        this._value = '';
+        this._valueTrimEnable = true;
+        this._previousChangeValue = '';
 
         this._dom.clsAdd('kijs-field-aceeditor');
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             mode: true,          // 'javascript' (Default), 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
-            theme: true          // (siehe Ordner kijs\lib\ace)
+            theme: true,         // (siehe Ordner kijs\lib\ace)
+            valueTrimEnable: true // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
         });
 
         // Listeners
@@ -47,7 +50,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-
+    
     get mode() { return this._mode; }
     set mode(val) { this._mode = val; }
 
@@ -70,24 +73,29 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
     // overwrite
     get value() {
+        let val = '';
         if (this._aceEditor) {
-            return this._aceEditor.getValue();
+            val = this._aceEditor.getValue();
         } else {
-            return kijs.toString(this._value);
+            val = kijs.toString(this._value);
         }
+        if (this._valueTrimEnable) {
+            val = val.trim();
+        }
+        return val;
     }
     set value(val) {
         val = kijs.toString(val);
         this._value = val;
+        this._previousChangeValue = val;
+        this._isDirty = false;
         if (this._aceEditor) {
-            if (!val) {
-                val = '';
-            }
             this._aceEditor.setValue(val, 1);
-            this._previousChangeValue = val;
-            this._isDirty = false;
         }
     }
+
+    get valueTrimEnable() { return this._valueTrimEnable; }
+    set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
     /**
      * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
@@ -186,8 +194,12 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
     // PROTECTED
     // overwrite
-    _validationRules(value) {
-        super._validationRules(value);
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+        
+        super._validationRules(value, ignoreEmpty);
 
         // Fehler des Editors auch übernehmen
         if (this._aceEditor) {

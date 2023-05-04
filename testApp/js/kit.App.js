@@ -79,12 +79,11 @@ kit.App = class kit_App {
                                                 },
                                                 data: [
                                                     {id:'kijs.theme.default.css', Bezeichnung:'Standard' },
-                                                    {id:'kijs.theme.old.css', Bezeichnung:'Alt' },
-                                                    {id:'kijs.theme.joel.css', Bezeichnung:'Joel' }
+                                                    {id:'kijs.theme.old.css', Bezeichnung:'Alt' }
                                                 ],
                                                 value: this._currentDesign ? this._currentDesign : 'kijs.theme.default.css',
                                                 on: {
-                                                    input: function(e) {
+                                                    change: function(e) {
                                                         this._currentDesign = e.value;
                                                         kijs.Dom.cssFileReplace(e.oldValue, e.value);
                                                         if (viewport.isRendered) {
@@ -103,7 +102,7 @@ kit.App = class kit_App {
                                                     margin: '10px'
                                                 },
                                                 on: {
-                                                    input: function(e) {
+                                                    change: function(e) {
                                                         if (e.value) {
                                                             viewport.theme = 'dark';
                                                         } else {
@@ -681,8 +680,8 @@ kit.App = class kit_App {
                                             required: true,
                                             //value: false,
                                             on: {
-                                                input: function(e) {
-                                                    console.log('input:' + this.value);
+                                                change: function(e) {
+                                                    console.log('change:' + this.value);
                                                 }
                                             },
                                             elements: [
@@ -724,8 +723,8 @@ kit.App = class kit_App {
                                             valueUnchecked: 'Aus',
                                             value: 'Ein',
                                             on: {
-                                                input: function(e) {
-                                                    console.log('input:' + this.value);
+                                                change: function(e) {
+                                                    console.log('change:' + this.value);
                                                 }
                                             },
                                             elements: [
@@ -777,7 +776,7 @@ kit.App = class kit_App {
                                             ],
                                             value: [2,3],
                                             on: {
-                                                input: function(e) {
+                                                change: function(e) {
                                                     console.log(e);
                                                 }
                                             },
@@ -822,7 +821,7 @@ kit.App = class kit_App {
                                             autoLoad: true,
                                             value: ['#0f0', '#ff0'],
                                             on: {
-                                                input: function(e) {
+                                                change: function(e) {
                                                     console.log(e);
                                                 }
                                             }
@@ -843,7 +842,7 @@ kit.App = class kit_App {
                                             ],
                                             //value: 2,
                                             on: {
-                                                input: function(e) {
+                                                change: function(e) {
                                                     console.log('oldValue:' + e.oldValue + ' value:' + e.value);
                                                 }
                                             }
@@ -860,9 +859,7 @@ kit.App = class kit_App {
                                             ],
                                             value: 2,
                                             on: {
-                                                input: function(e) {
-                                                    console.log('input:' + this.value);
-                                                }
+                                                change: console.log
                                             },
                                             elements: [
                                                 {
@@ -892,9 +889,7 @@ kit.App = class kit_App {
                                             data: [{id:1}, {id:2}, {id:3}],
                                             value: 2,
                                             on: {
-                                                input: function(e) {
-                                                    console.log('input:' + this.value);
-                                                }
+                                                input: console.log
                                             },
                                             elements: [
                                                 {
@@ -1217,10 +1212,7 @@ kit.App = class kit_App {
                                             ],
                                             value: [2,3],
                                             on: {
-                                                input: function(e) {
-                                                    console.log(e.oldValue);
-                                                    console.log(e.value);
-                                                }
+                                                change: console.log
                                             }
                                         },{
                                             xtype: 'kijs.gui.field.ListView',
@@ -1427,6 +1419,7 @@ kit.App = class kit_App {
                                                 click: function() {
                                                     _this._rpc.do({
                                                         facadeFn: 'test.test',
+                                                        owner: this,
                                                         data: 'data', 
                                                         fn: function(responseData){
                                                             // nix

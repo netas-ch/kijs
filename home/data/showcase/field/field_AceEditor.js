@@ -63,6 +63,12 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
 
                         context: this
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: '<a href="https://ace.c9.io/" target="blank">ACE Webseite</a><br><a href="https://github.com/ajaxorg/ace-builds" target="blank">GitHub</a>',
+                    style: { margin: '20px 0 4px 0'}
                 }
             ]
         });

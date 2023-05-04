@@ -76,16 +76,16 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
                     ]
                 },{
                     xtype: 'kijs.gui.field.SozVersNr',
-                    label: 'nur Soz.vers.-Nr.',
-                    allowAhvNr: false,
-                    allowSozVersNr: true,
-                    value: '756.1234.5678.97'
-                },{
-                    xtype: 'kijs.gui.field.SozVersNr',
                     label: 'nur AHV-Nr.',
                     allowAhvNr: true,
                     allowSozVersNr: false,
                     value: '123.45.678.903'
+                },{
+                    xtype: 'kijs.gui.field.SozVersNr',
+                    label: 'AHV + Soz.vers.-Nr.',
+                    allowAhvNr: true,
+                    allowSozVersNr: true,
+                    value: '756.1234.5678.97'
                 }
             ]
         });

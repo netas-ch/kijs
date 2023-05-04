@@ -54,7 +54,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         this._clickableLinks = false;
         this._formatFn = null;
-        this._formatFnContext = null;
+        this._formatFnContext = this;
         this._formatRegExps = [];
         this._value = '';
         this._valueTrimEnable = true;
@@ -78,8 +78,8 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             clickableLinks: true,         // Weblink zum anklicken machen
-            formatFn: true,
-            formatFnContext: true,
+            formatFn: { target: 'formatFn' },
+            formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
             valueTrimEnable: true       // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
         });
@@ -104,6 +104,26 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
     
+    get formatFn() { return this._formatFn; }
+    set formatFn(val) { 
+        let fn = kijs.getFunctionFromString(val);
+        if (kijs.isFunction(fn)) {
+            this._formatFn = fn;
+        } else {
+            throw new kijs.Error(`config "formatFn" is not valid.`);
+        }
+    }
+    
+    get formatFnContext() { return this._formatFnContext; }
+    set formatFnContext(val) {
+        let context = kijs.getObjectFromString(val);
+        if (kijs.isObject(context)) {
+            this._formatFnContext = context;
+        } else {
+            throw new kijs.Error(`config "formatFnContext" is not valid.`);
+        }
+    }
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
@@ -360,7 +380,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
-
+        this._formatFn = null;
+        this._formatFnContext = null;
+        this._formatRegExps = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

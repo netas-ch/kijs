@@ -1,7 +1,11 @@
 /* global kijs */
 
+// TODO: Der Quill Editor hat Probleme mit overflow:hidden von übergeordneten 
+//       Elementen. Tooltips und Kontextmenüs werden deshalb abgeschnitten.
+//       Das CSS ist ein gebastel.
+//       Evtl. bauen wir besser einen anderen Editor ein. Z.B. summernote.org
 window.home.sc = {};
-home.sc.field_AceEditor = class home_sc_field_AceEditor {
+home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
     
     
     // --------------------------------------------------------------
@@ -19,7 +23,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.AceEditor',
+            caption: 'kijs.gui.field.QuillEditor',
             scrollableY: 'auto',
             cls: 'kijs-flexform',
             style: {
@@ -34,20 +38,21 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:'
                 },{
-                    xtype: 'kijs.gui.field.AceEditor'
+                    xtype: 'kijs.gui.field.QuillEditor'
                 },
                 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    html: 'mit Label und fixer Höhe',
                     style: { margin: '10px 0 0 0'}
                 },{
-                    xtype: 'kijs.gui.field.AceEditor',
+                    xtype: 'kijs.gui.field.QuillEditor',
                     label: 'Label',
-                    mode: 'javascript',
-                    //theme: 'monokai',
-                    value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
-                    height: 100,
+                    placeholder: 'Bitte hier Text eingeben...',
+                    required: true,
+                    //theme: 'snow',
+                    //value: '',
+                    height: 200,
                     on: {
                         focus:  console.log,
                      
@@ -63,6 +68,25 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.Element',
+                    html: 'mit Theme bubble',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.field.QuillEditor',
+                    label: 'Label',
+                    theme: 'bubble',
+                    value: 'Dies ist mein <b>fetter</b> Text.',
+                    height: 100,
+                    toolbarOptions:[
+                        ['bold', 'italic', 'underline']
+                    ]
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: '<a href="https://quilljs.com/" target="blank">Quill Webseite</a><br><a href="https://github.com/quilljs/quill/releases/" target="blank">GitHub</a>',
+                    style: { margin: '20px 0 4px 0'}
                 }
             ]
         });
