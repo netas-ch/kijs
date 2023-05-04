@@ -146,6 +146,22 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
     // PRIVATE
     // LISTENERS
+    #onEndUpload() {
+        // uploads fertig
+        this._uploadRunning = false;
+        if (this._autoClose) {
+            kijs.defer(function() {
+                if (this._dom.node) {
+                    this.unrender();
+                }
+            }, 1000, this);
+        }
+    }
+    
+    #onFailUpload(ud, filename, filetype) {
+        this._autoClose = false;
+    }
+
     #onStartUpload(ud, filename, filedir, filetype, uploadId) {
         let progressBar = new kijs.gui.ProgressBar({
             caption: kijs.String.htmlspecialchars(filename),
@@ -173,27 +189,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadRunning = true;
     }
 
-    #onFailUpload(ud, filename, filetype) {
-        this._autoClose = false;
-    }
-
     #onUpload(ud, response, errorMsg, uploadId) {
         let pg = this._getUploadProgressBar(uploadId);
         if (errorMsg && pg) {
             this._autoClose = false;
             pg.bottomCaption = '<span class="error">' + kijs.String.htmlspecialchars(errorMsg) + '</span>';
-        }
-    }
-
-    #onEndUpload() {
-        // uploads fertig
-        this._uploadRunning = false;
-        if (this._autoClose) {
-            kijs.defer(function() {
-                if (this._dom.node) {
-                    this.unrender();
-                }
-            }, 1000, this);
         }
     }
 
@@ -211,7 +211,13 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-
+        
+        // Variablen (Objekte/Arrays) leeren
+        this._uploadDialog = null;   // intern
+        this._uploads = [];          // intern
+        this._autoClose = true;      // intern
+        this._uploadRunning = true;  // intern
+        
         // Basisklasse auch entladen
         super.destruct(true);
     }
