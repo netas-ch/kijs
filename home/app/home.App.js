@@ -248,6 +248,7 @@ home.App = class home_App {
                     },
                     data: [
                         { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
+                        {id:'kijs.theme.retro.css', Bezeichnung:'Retro' },
                         { id:'kijs.theme.old.css', Bezeichnung:'Alt' }
                     ],
                     value: this._currentDesign ? this._currentDesign : 'kijs.theme.default.css',
