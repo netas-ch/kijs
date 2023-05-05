@@ -192,7 +192,7 @@ kijs.Object = class kijs_Object {
                         } else {
                             fnContext = kijs.getObjectFromString(cfg.value.context);
                             if (!kijs.isObject(fnContext)) {
-                                throw new kijs.Error('Context of listener "' + k + '" ist not valid.');
+                                throw new kijs.Error('Context of listener ist not valid.');
                             }
                         }
                         

@@ -82,18 +82,6 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'Test Context',
-                    badgeText: 5,
-                    on: {
-                        click: function() {
-                            window.alert(this === document.body ? 'erfolgreich' : 'fehlgeschlagen');
-                        },
-                        context: document.body
-                    }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Button',
                     caption: 'isDefault',
                     isDefault: true,
                     tooltip: 'click to toggle isDefault',

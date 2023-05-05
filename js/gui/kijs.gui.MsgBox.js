@@ -298,8 +298,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                                             value = e.element.upX('kijs.gui.Window').down('field').value;
                                             e.element.upX('kijs.gui.Window').destruct();
                                         }
-                                    },
-                                    context: this
+                                    }
                                 }
                             }
                         ]
