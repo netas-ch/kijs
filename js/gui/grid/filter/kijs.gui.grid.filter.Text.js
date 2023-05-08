@@ -17,8 +17,18 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     constructor(config={}) {
         super(false);
 
+        // compare types
+        this._compareTypes = {
+            full: kijs.getText('Ist gleich...'),
+            notfull: kijs.getText('Ist nicht gleich...'),
+            begin: kijs.getText('Beginnt mit...'),
+            end: kijs.getText('Endet mit...'),
+            part: kijs.getText('Enthält...'),
+            notpart: kijs.getText('Enthält nicht...')
+        };
+
         this._applyFilter = true;
-        this._compare = 'begin'; // full, part
+        this._compare = 'begin';
         this._searchField = new kijs.gui.field.Text({
             on: {
                 change: function() {
@@ -86,32 +96,26 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
     // overwrite
     _getMenuButtons() {
+        let compareButtons = [];
+
+        if (this._compare !== false && this._compareTypes) {
+            compareButtons.push('-');
+
+            for (const compareType in this._compareTypes) {
+                compareButtons.push({
+                    name: 'btn_compare_' + compareType,
+                    caption : this._compareTypes[compareType],
+                    iconMap: this._compare === compareType ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
+                    on: {
+                        click: this._onCompareBtnClick,
+                        context: this
+                    }
+                });
+            }
+        }
+
         return kijs.Array.concat(this._getDefaultMenuButtons(),
-            ['-',{
-                name: 'btn_compare_begin',
-                caption : kijs.getText('Feldanfang'),
-                iconMap: this._compare === 'begin' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
-                on: {
-                    click: this._onCompareBtnClick,
-                    context: this
-                }
-            },{
-                caption : kijs.getText('Beliebiger Teil'),
-                name: 'btn_compare_part',
-                iconMap: this._compare === 'part' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
-                on: {
-                    click: this._onCompareBtnClick,
-                    context: this
-                }
-            },{
-                caption : kijs.getText('Ganzes Feld'),
-                name: 'btn_compare_full',
-                iconMap: this._compare === 'full' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
-                on: {
-                    click: this._onCompareBtnClick,
-                    context: this
-                }
-            }],
+            compareButtons,
             this._getCheckboxMenuButtons()
         );
     }
@@ -119,18 +123,15 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     _onCompareBtnClick(e) {
         this._menuButton.menu.close();
 
-        if (e.element.name === 'btn_compare_begin') {
-            this._compare = 'begin';
-        } else if (e.element.name === 'btn_compare_part') {
-            this._compare = 'part';
-        } else if (e.element.name === 'btn_compare_full') {
-            this._compare = 'full';
+        if (e.element.name && e.element.name.substring(0, 'btn_compare_'.length) === 'btn_compare_') {
+            this._compare = e.element.name.substring('btn_compare_'.length);
         }
 
         kijs.Array.each(e.element.parent.elements, function(element) {
             if (element.name === e.element.name) {
                 element.iconMap = 'kijs.iconMap.Fa.square-check';
-            } else if (kijs.Array.contains(['btn_compare_begin', 'btn_compare_part', 'btn_compare_full'], element.name)) {
+
+            } else if (element.name && element.name.substr(0, 'btn_compare_'.length) === 'btn_compare_') {
                 element.iconMap = 'kijs.iconMap.Fa.square';
             }
         });
