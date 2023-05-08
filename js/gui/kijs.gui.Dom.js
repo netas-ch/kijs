@@ -1280,7 +1280,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                             break;
                             
                         default:
-                            throw new kijs.Error(`kijsEvent "${kijsEvent}" is not supported by the browser`);
+                            // keine Fehlermeldung, weil nicht alle Browser alle Events unterstützen.
                     }
                     
                 }

@@ -103,7 +103,7 @@ function _readNavigationTree($nodeId, $rootDir) {
                     break;
                 
                 default:
-                    continue;
+                    continue 2;
                     
             }
             

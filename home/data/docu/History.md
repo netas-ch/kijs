@@ -1,6 +1,8 @@
 Version 2.1.2
 ===============
-Kleinere CSS Anpassungen  
+ - Neues Theme "Retro"
+ - Kleinere Fehlerbehebungen
+ - Kleinere CSS Anpassungen  
 
 
 
