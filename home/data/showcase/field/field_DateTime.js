@@ -34,7 +34,8 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     xtype: 'kijs.gui.Element',
                     html: 'Minimalkonfiguration:'
                 },{
-                    xtype: 'kijs.gui.field.DateTime'
+                    xtype: 'kijs.gui.field.DateTime',
+                    required: true
                 },
                 
                 {

@@ -577,8 +577,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
         
-        this._spinBoxEl.render();
-        
+        if (this._spinBoxEl.isRendered) {
+            this._spinBoxEl.render();
+        }
+
         switch (this._mode) {
             case 'range':
             case 'week':
@@ -1041,67 +1043,71 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const dateFormat = this._displayDateFormat ? this._displayDateFormat : 'd.m.Y';
 
         // Datum validieren
-        if ((!kijs.isEmpty(date) || !kijs.isEmpty(dateEnd)) && this._hasDate()) {
+        if (this._hasDate()) {
+            if (!kijs.isEmpty(date) || !kijs.isEmpty(dateEnd)) {
 
-            // Start- und Enddatum validieren
-            if (this._mode === 'range' || this._mode === 'week') {
+                // Start- und Enddatum validieren
+                if (this._mode === 'range' || this._mode === 'week') {
 
-                // Es fehlt das Start- oder Enddatum
-                if (kijs.isEmpty(date) || kijs.isEmpty(dateEnd)) {
-                    this._errors.push(kijs.getText('Es fehlt das Start- oder Enddatum'));
+                    // Es fehlt das Start- oder Enddatum
+                    if (kijs.isEmpty(date) || kijs.isEmpty(dateEnd)) {
+                        this._errors.push(kijs.getText('Es fehlt das Start- oder Enddatum'));
+                    }
+
+                    // Min. value
+                    if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate)
+                            || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.minDate) && dateEnd < this._datePicker.minDate) ) {
+
+                        this._errors.push(
+                                kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                                '',
+                                kijs.Date.format(this._datePicker.minDate, dateFormat)));
+                    }
+
+                    // Max. value
+                    if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate)
+                            || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.maxDate) && dateEnd < this._datePicker.maxDate) ) {
+
+                        this._errors.push(
+                                kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                                '',
+                                kijs.Date.format(this._datePicker.maxDate, dateFormat)));
+                    }
+
+                // nur Startdatum validieren
+                } else {
+
+                    // Min. value
+                    if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate) {
+                        this._errors.push(
+                                kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                                '',
+                                kijs.Date.format(this._datePicker.minDate, dateFormat)));
+                    }
+
+                    // Max. value
+                    if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate) {
+                        this._errors.push(
+                                kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                                '',
+                                kijs.Date.format(this._datePicker.maxDate, dateFormat)));
+                    }
+
                 }
-
-                // Min. value
-                if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate)
-                        || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.minDate) && dateEnd < this._datePicker.minDate) ) {
-
-                    this._errors.push(
-                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
-                            '',
-                            kijs.Date.format(this._datePicker.minDate, dateFormat)));
-                }
-
-                // Max. value
-                if ( (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate)
-                        || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.maxDate) && dateEnd < this._datePicker.maxDate) ) {
-
-                    this._errors.push(
-                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
-                            '',
-                            kijs.Date.format(this._datePicker.maxDate, dateFormat)));
-                }
-
-            // nur Startdatum validieren
-            } else {
-
-                // Min. value
-                if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate) {
-                    this._errors.push(
-                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
-                            '',
-                            kijs.Date.format(this._datePicker.minDate, dateFormat)));
-                }
-
-                // Max. value
-                if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate) {
-                    this._errors.push(
-                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
-                            '',
-                            kijs.Date.format(this._datePicker.maxDate, dateFormat)));
-                }
-
+                
+            } else if (kijs.isEmpty(date) && !kijs.isEmpty(value)) {
+                this._errors.push(kijs.getText('Das Datum darf nicht leer sein'));
+                
             }
-        } else if (this._hasDate() && this._required && kijs.isEmpty(date)) {
-            this._errors.push(kijs.getText('Das Datum darf nicht leer sein'));
         }
-
+        
         // Uhrzeit validieren
         if (this._hasTime()) {
-            if (this._required && this._timeRequired && kijs.isEmpty(time)) {
+            if (this._timeRequired && kijs.isEmpty(time) && !kijs.isEmpty(value)) {
                 this._errors.push(kijs.getText('Die Uhrzeit darf nicht leer sein'));
             }
         }
-
+        
         super._validationRules(value, ignoreEmpty);
     }
 

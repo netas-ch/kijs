@@ -36,8 +36,8 @@ foreach ($requests as $request) {
         
         case 'combo.load':
             try {
-                $query = $request->requestData->query; // suchbegriff
-                $value = $request->requestData->value; // aktuell selektierte ID
+                $query = $request->requestData->query ?? ''; // suchbegriff
+                $value = $request->requestData->value ?? ''; // aktuell selektierte ID
                 $noRemoteSort = ($request->requestData->remoteSort ?? null) == false; // Bei remoteSort=false alles zurückgeben
                 $rows = array();
                 

@@ -1,8 +1,9 @@
 Version 2.1.2
 ===============
- - Neues Theme "Retro"
- - Kleinere Fehlerbehebungen
+ - Neues Theme "Retro"  
+ - Kleinere Fehlerbehebungen  
  - Kleinere CSS Anpassungen  
+ - kijs.gui.grid.Grid: Zusätzliche Vergleichsfunktionen bei Textfeldern in Filterzeile  
 
 
 
