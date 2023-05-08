@@ -1398,47 +1398,50 @@
        * Menu-Button
        ****************** */
     div.kijs-menu-spinbox {
-        .kijs-container-inner > * {
-            margin: 0;
-            border-radius: 0;
-        }
+        > .kijs-container-inner {
+            > * {
+                margin: 0;
+                border-radius: 0;
+            }
 
-        .kijs-container-inner > div.separator {
-            background-color: var(--button-bkgrndColor);
+            > div.separator {
+                background-color: var(--button-bkgrndColor);
 
-            > hr {
-                padding: 0;
-                height: 1px;
-                width: 96%;
-                margin: 0 0 0 2%;
+                > hr {
+                    padding: 0;
+                    height: 1px;
+                    width: 96%;
+                    margin: 0 0 0 2%;
+                    border: 0;
+                    background-color: var(--field-borderColor);
+                    color: var(--field-borderColor);
+                }
+            }
+
+            > button.kijs-button {
+                text-align: left;
+                display: flex;
+                flex-direction: row;
                 border: 0;
-                background-color: var(--field-borderColor);
-                color: var(--field-borderColor);
-            }
-        }
+                
+                &.kijs-hidden {
+                    display: none;
+                }
 
-        button.kijs-button {
-            text-align: left;
-            display: flex;
-            flex-direction: row;
+                > .kijs-caption {
+                    flex: 1;
+                }
+                > .kijs-caption:first-child {
+                    margin-left: 22px;
+                }
 
-            &.kijs-hidden {
-                display: none;
-            }
+                > .kijs-icon {
+                    width: 18px;
+                }
 
-            > .kijs-caption {
-                flex: 1;
-            }
-            > .kijs-caption:first-child {
-                margin-left: 22px;
-            }
-
-            > .kijs-icon {
-                width: 18px;
-            }
-
-            > .kijs-icon2 {
-                text-align: right;
+                > .kijs-icon2 {
+                    text-align: right;
+                }
             }
         }
     }
@@ -2212,7 +2215,7 @@
     /* ******************
        * Grid
        ****************** */
-    /* TODO: Es gibt einige zuweisungen, die sich nicht nur auf direkt untergeordnete
+    /* TODO: Es gibt einige Zuweisungen, die sich nicht nur auf direkt untergeordnete
              Elemente beziehen. Es sollte immer > verwendet werden
        TODO: Allgemeine Klassennmanen wie .kijs-top, .kijs-center, .kijs-bottom
              sollten hier nicht verwendet werden. Sie sollten noch grid im Namen haben */
@@ -2224,11 +2227,12 @@
         font-family: var(--default-fontFamily);
         font-size: var(--default-fontSize);
 
+        
         table {
             border-collapse: collapse;
             table-layout: fixed;
 
-            tr {
+            > tr {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -2246,7 +2250,7 @@
                 }
             }
 
-            tr td {
+            > tr > td {
                 flex: none;
                 overflow: hidden;
                 text-overflow: ellipsis;
@@ -2309,192 +2313,208 @@
 
             }
         }
-
-        .kijs-top, .kijs-center, .kijs-bottom {
+        
+        
+        > .kijs-top {
+            flex: 0 0 auto;
             display: flex;
             flex-direction: row;
-        }
-
-        .kijs-top, .kijs-bottom {
-            flex: 0 0 auto;
-        }
-
-        .kijs-center {
-            flex: 1;
-
-            .kijs-tablecontainer {
-                overflow: auto;
+            
+            > .kijs-headercontainer  {
                 flex: 1;
-            }
-        }
-
-
-        .kijs-top > .kijs-headercontainer {
-            flex: 1;
-            background-color: var(--grid-header-bkgrndColor);
-
-            > table > tr.kijs-grid-header > td {
-                display: flex;
-                flex-direction: row;
-                padding-right: 0;
-
-                &.kijs-hidden {
-                    display: none;
-                }
-
-                > .kijs-caption {
-                    flex: 1;
-
-                    > span.kijs-sort {
-                        color: #555;
-                        font-family: 'Font Awesome 6 Free';
-                        font-weight: 900;
-                        padding-left: 5px;
-                    }
-                }
-
-                > span.kijs-tooltip-icon {
-                    font-size: 11px;
-                    margin: 1px 4px 0 0;
-                }
-
-                > .kijs-button {
-                    flex: none;
-                    width: 0px;
-                    height: 17px;
-                    margin: 0;
-                    border: 0;
-                    padding: 0;
-                    background-color: transparent;
-                    opacity: 0;
-                    transition: opacity 0.5s, width 0.5s ease-in;
-
-                    > .kijs-icon2 {
-                        margin: 0;
-                    }
-                }
-                &:hover .kijs-button {
-                    width: 15px;
-                    opacity: 1;
-                    transition: opacity 0.5s;
-                }
-
-                .kijs-splitter {
-                    flex: none;
-                    width: 3px;
-                    border-right: 1px solid var(--splitter-overlay-bkgrndColor);
-                    cursor: col-resize;
-                    margin: 0 0 0 2px;
-                }
-
-                /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
-                &:last-child {
-                    margin-right: 20px;
-                }
-            }
-
-            tr.kijs-grid-filter {
-                background-color: var(--field-bkgrndColor);
-                transition: max-height 0.5s;
-                max-height: 25px;
-
-                /*border-bottom-width: 2px;*/
-
-                td {
-                    height: 25px;
+                position: relative;
+                background-color: var(--grid-header-bkgrndColor);
+                
+                > table > tr.kijs-grid-header > td {
                     display: flex;
                     flex-direction: row;
-                    padding: 1px 0 1px 1px;
+                    padding: 2px 0 0 6px;
 
                     &.kijs-hidden {
                         display: none;
                     }
 
-                    div:first-child {
+                    > .kijs-caption {
                         flex: 1;
-                    }
 
-                    div.kijs-field-text {
-                        margin-left: 4px;
-                        height: 22px;
-
-                        input {
-                            flex: 1;
-                            border:  0; /* 1px solid var(--grid-border-color);*/
-                            outline: none;
-                            padding: 0;
-                            font-size: 11px;
-                            line-height: 11px;
-                            background-color: transparent;
-
-                            &::placeholder {
-                                transition: opacity 0.5s;
-                                opacity: 0;
-                                color: var(--default-fontColor);
-                            }
+                        > span.kijs-sort {
+                            color: #555;
+                            font-family: 'Font Awesome 6 Free';
+                            font-weight: 900;
+                            padding-left: 5px;
                         }
                     }
 
-                    div.kijs-icon {
-                        font-family: 'Font Awesome 6 Free';
-                        text-align: center;
-                        font-size: 14px;
-                        padding: 4px 0 4px 18px;
+                    > span.kijs-tooltip-icon {
+                        font-size: 11px;
+                        margin: 1px 4px 0 0;
                     }
 
+                    > .kijs-button {
+                        flex: none;
+                        width: 0px;
+                        height: 17px;
+                        margin: 0;
+                        border: 0;
+                        padding: 0;
+                        background-color: transparent;
+                        opacity: 0;
+                        transition: opacity 0.5s, width 0.5s ease-in;
 
-                    .kijs-grid-filter-reset {
-                        width: 20px;
-                        margin: 2px 0;
-                        padding: 0 4px;
-                        border-right: 1px solid var(--splitter-overlay-bkgrndColor);
-
-                        .kijs-button {
-                            flex: none;
-                            width: 15px;
+                        > .kijs-icon2 {
                             margin: 0;
-                            padding: 0;
-                            background-color: transparent;
-                            border: 0;
-
-                            .kijs-icon {
-                                transition: color 0.5s;
-                                color: var(--grid-border-color);
-                                font-size: 12px;
-                                margin: -2px 0 0 0;
-
-                            }
                         }
                     }
+                    &:hover .kijs-button {
+                        width: 15px;
+                        opacity: 1;
+                        transition: opacity 0.5s;
+                    }
 
-                    &:hover {
-                        .kijs-button .kijs-icon {
-                            color: var(--button-icon-fontColor);
-                        }
+                    .kijs-splitter {
+                        flex: none;
+                        width: 3px;
+                        border-right: 1px solid var(--splitter-overlay-bkgrndColor);
+                        cursor: col-resize;
+                        margin: 0 0 0 2px;
+                    }
 
-                        div.kijs-field-text input::placeholder {
-                            opacity: 0.5;
-                        }
+                    /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
+                    &:last-child {
+                        margin-right: 20px;
                     }
                 }
+
+                > table > tr.kijs-grid-filter {
+                    background-color: var(--field-bkgrndColor);
+                    transition: max-height 0.5s;
+                    max-height: 25px;
+
+                    /*border-bottom-width: 2px;*/
+
+                    > td {
+                        height: 25px;
+                        display: flex;
+                        flex-direction: row;
+                        padding: 1px 0 1px 1px;
+
+                        &.kijs-hidden {
+                            display: none;
+                        }
+
+                        div:first-child {
+                            flex: 1;
+                        }
+
+                        div.kijs-field-text {
+                            margin-left: 4px;
+                            height: 22px;
+
+                            input {
+                                flex: 1;
+                                border:  0; /* 1px solid var(--grid-border-color);*/
+                                outline: none;
+                                padding: 0;
+                                font-size: 11px;
+                                line-height: 11px;
+                                background-color: transparent;
+
+                                &::placeholder {
+                                    transition: opacity 0.5s;
+                                    opacity: 0;
+                                    color: var(--default-fontColor);
+                                }
+                            }
+                        }
+
+                        div.kijs-icon {
+                            font-family: 'Font Awesome 6 Free';
+                            text-align: center;
+                            font-size: 14px;
+                            padding: 4px 0 4px 18px;
+                        }
+
+
+                        .kijs-grid-filter-reset {
+                            width: 20px;
+                            margin: 2px 0;
+                            padding: 0 4px;
+                            border-right: 1px solid var(--splitter-overlay-bkgrndColor);
+
+                            .kijs-button {
+                                flex: none;
+                                width: 15px;
+                                margin: 0;
+                                padding: 0;
+                                background-color: transparent;
+                                border: 0;
+
+                                .kijs-icon {
+                                    transition: color 0.5s;
+                                    color: var(--grid-border-color);
+                                    font-size: 12px;
+                                    margin: -2px 0 0 0;
+
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            .kijs-button .kijs-icon {
+                                color: var(--button-icon-fontColor);
+                            }
+
+                            div.kijs-field-text input::placeholder {
+                                opacity: 0.5;
+                            }
+                        }
+                    }
+                    
+                    &.kijs-hidden {
+                        /*display: none;*/
+                        max-height: 0;
+                        margin: 0;
+                        padding: 0;
+                        border: 0;
+                        overflow: hidden;
+                    }
+                }
+                
             }
-
-            tr.kijs-grid-filter.kijs-hidden {
-                /*display: none;*/
-                max-height: 0;
-                margin: 0;
-                padding: 0;
-                border: 0;
-                overflow: hidden;
+        }
+        
+        
+        > .kijs-center {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            background-color: var(--field-bkgrndColor);
+            
+            > .kijs-leftcontainer {
+                position: relative;
+            } 
+            
+            > .kijs-tablecontainer {
+                flex: 1;
+                position: relative;
+                overflow: auto;
             }
-
+            
+            > .kijs-rightcontainer {
+                position: relative;
+            }
         }
-
-        /*  Die container, welche scrollen, müssen positioniert werden, ansonsten wird domEl.offsetParent
-            nicht aufgerufen und die scrollpos falsch berechnet. */
-        .kijs-headercontainer, .kijs-footercontainer, .kijs-leftcontainer, .kijs-rightcontainer, .kijs-tablecontainer  {
-            position: relative;
+        
+        > .kijs-bottom {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: row;
+            
+            > .kijs-footercontainer {
+                position: relative;
+            }
         }
+        
 
         div.kijs-splitter-overlay {
             position: absolute;

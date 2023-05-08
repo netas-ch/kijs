@@ -1294,14 +1294,14 @@
   /* ******************
        * Menu-Button
        ****************** */
-  div.kijs-menu-spinbox .kijs-container-inner > * {
+  div.kijs-menu-spinbox > .kijs-container-inner > * {
     margin: 0;
     border-radius: 0;
   }
-  div.kijs-menu-spinbox .kijs-container-inner > div.separator {
+  div.kijs-menu-spinbox > .kijs-container-inner > div.separator {
     background-color: var(--button-bkgrndColor);
   }
-  div.kijs-menu-spinbox .kijs-container-inner > div.separator > hr {
+  div.kijs-menu-spinbox > .kijs-container-inner > div.separator > hr {
     padding: 0;
     height: 1px;
     width: 96%;
@@ -1310,24 +1310,25 @@
     background-color: var(--field-borderColor);
     color: var(--field-borderColor);
   }
-  div.kijs-menu-spinbox button.kijs-button {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button {
     text-align: left;
     display: flex;
     flex-direction: row;
+    border: 0;
   }
-  div.kijs-menu-spinbox button.kijs-button.kijs-hidden {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button.kijs-hidden {
     display: none;
   }
-  div.kijs-menu-spinbox button.kijs-button > .kijs-caption {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-caption {
     flex: 1;
   }
-  div.kijs-menu-spinbox button.kijs-button > .kijs-caption:first-child {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-caption:first-child {
     margin-left: 22px;
   }
-  div.kijs-menu-spinbox button.kijs-button > .kijs-icon {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-icon {
     width: 18px;
   }
-  div.kijs-menu-spinbox button.kijs-button > .kijs-icon2 {
+  div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-icon2 {
     text-align: right;
   }
   /* ******************
@@ -1964,7 +1965,7 @@
   /* ******************
        * Grid
        ****************** */
-  /* TODO: Es gibt einige zuweisungen, die sich nicht nur auf direkt untergeordnete
+  /* TODO: Es gibt einige Zuweisungen, die sich nicht nur auf direkt untergeordnete
              Elemente beziehen. Es sollte immer > verwendet werden
        TODO: Allgemeine Klassennmanen wie .kijs-top, .kijs-center, .kijs-bottom
              sollten hier nicht verwendet werden. Sie sollten noch grid im Namen haben */
@@ -1975,30 +1976,28 @@
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
-    /*  Die container, welche scrollen, müssen positioniert werden, ansonsten wird domEl.offsetParent
-            nicht aufgerufen und die scrollpos falsch berechnet. */
   }
   div.kijs-grid table {
     border-collapse: collapse;
     table-layout: fixed;
   }
-  div.kijs-grid table tr {
+  div.kijs-grid table > tr {
     display: flex;
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid var(--grid-border-color);
     outline: none;
   }
-  div.kijs-grid table tr.kijs-current {
+  div.kijs-grid table > tr.kijs-current {
     background-color: var(--item-focus-bkgrndColor);
   }
-  div.kijs-grid table tr:hover {
+  div.kijs-grid table > tr:hover {
     background-color: var(--item-focus-bkgrndColor);
   }
-  div.kijs-grid table tr.kijs-selected {
+  div.kijs-grid table > tr.kijs-selected {
     background-color: var(--item-selected-bkgrndColor);
   }
-  div.kijs-grid table tr td {
+  div.kijs-grid table > tr > td {
     flex: none;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2011,91 +2010,80 @@
     /* Daten verändert: rotes Dreieck oben links */
     /* Textfelder im Grid */
   }
-  div.kijs-grid table tr td.kijs-hidden {
+  div.kijs-grid table > tr > td.kijs-hidden {
     display: none;
   }
-  div.kijs-grid table tr td.kijs-grid-cell-number {
+  div.kijs-grid table > tr > td.kijs-grid-cell-number {
     text-align: right;
   }
-  div.kijs-grid table tr td.kijs-grid-cell-checkbox {
+  div.kijs-grid table > tr > td.kijs-grid-cell-checkbox {
     text-align: center;
     font-family: 'Font Awesome 6 Free';
     font-size: 14px;
     padding: 2px 0 0 0;
   }
-  div.kijs-grid table tr td.kijs-grid-cell-checkbox:hover {
+  div.kijs-grid table > tr > td.kijs-grid-cell-checkbox:hover {
     color: var(--field-focus-borderColor);
   }
-  div.kijs-grid table tr td.kijs-grid-cell-checkbox.kijs-disabled {
+  div.kijs-grid table > tr > td.kijs-grid-cell-checkbox.kijs-disabled {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-grid table tr td.kijs-grid-cell-icon {
+  div.kijs-grid table > tr > td.kijs-grid-cell-icon {
     text-align: center;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 14px;
     padding: 2px 0 0 0;
   }
-  div.kijs-grid table tr td.kijs-grid-cell-dirty {
+  div.kijs-grid table > tr > td.kijs-grid-cell-dirty {
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
     background-repeat: no-repeat;
     background-position: top left;
   }
-  div.kijs-grid table tr td.kijs-celledit {
+  div.kijs-grid table > tr > td.kijs-celledit {
     padding: 0;
   }
-  div.kijs-grid table tr td.kijs-celledit > div.kijs-field {
+  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field {
     height: 100%;
     width: 100%;
   }
-  div.kijs-grid table tr td.kijs-celledit > div.kijs-field div.kijs-inputwrapper,
-  div.kijs-grid table tr td.kijs-celledit > div.kijs-field span.kijs-icon-spindown {
+  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field div.kijs-inputwrapper,
+  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field span.kijs-icon-spindown {
     height: 100%;
   }
-  div.kijs-grid .kijs-top,
-  div.kijs-grid .kijs-center,
-  div.kijs-grid .kijs-bottom {
+  div.kijs-grid > .kijs-top {
+    flex: 0 0 auto;
     display: flex;
     flex-direction: row;
   }
-  div.kijs-grid .kijs-top,
-  div.kijs-grid .kijs-bottom {
-    flex: 0 0 auto;
-  }
-  div.kijs-grid .kijs-center {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer {
     flex: 1;
-  }
-  div.kijs-grid .kijs-center .kijs-tablecontainer {
-    overflow: auto;
-    flex: 1;
-  }
-  div.kijs-grid .kijs-top > .kijs-headercontainer {
-    flex: 1;
+    position: relative;
     background-color: var(--grid-header-bkgrndColor);
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td {
     display: flex;
     flex-direction: row;
-    padding-right: 0;
+    padding: 2px 0 0 6px;
     /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-hidden {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-hidden {
     display: none;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption {
     flex: 1;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption > span.kijs-sort {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption > span.kijs-sort {
     color: #555;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     padding-left: 5px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > span.kijs-tooltip-icon {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > span.kijs-tooltip-icon {
     font-size: 11px;
     margin: 1px 4px 0 0;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button {
     flex: none;
     width: 0px;
     height: 17px;
@@ -2106,47 +2094,47 @@
     opacity: 0;
     transition: opacity 0.5s, width 0.5s ease-in;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button > .kijs-icon2 {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button > .kijs-icon2 {
     margin: 0;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:hover .kijs-button {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:hover .kijs-button {
     width: 15px;
     opacity: 1;
     transition: opacity 0.5s;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td .kijs-splitter {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td .kijs-splitter {
     flex: none;
     width: 3px;
     border-right: 1px solid var(--splitter-overlay-bkgrndColor);
     cursor: col-resize;
     margin: 0 0 0 2px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:last-child {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:last-child {
     margin-right: 20px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter {
     background-color: var(--field-bkgrndColor);
     transition: max-height 0.5s;
     max-height: 25px;
     /*border-bottom-width: 2px;*/
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td {
     height: 25px;
     display: flex;
     flex-direction: row;
     padding: 1px 0 1px 1px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td.kijs-hidden {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td.kijs-hidden {
     display: none;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td div:first-child {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div:first-child {
     flex: 1;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td div.kijs-field-text {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div.kijs-field-text {
     margin-left: 4px;
     height: 22px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td div.kijs-field-text input {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div.kijs-field-text input {
     flex: 1;
     border: 0;
     /* 1px solid var(--grid-border-color);*/
@@ -2156,24 +2144,24 @@
     line-height: 11px;
     background-color: transparent;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td div.kijs-field-text input::placeholder {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div.kijs-field-text input::placeholder {
     transition: opacity 0.5s;
     opacity: 0;
     color: var(--default-fontColor);
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td div.kijs-icon {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div.kijs-icon {
     font-family: 'Font Awesome 6 Free';
     text-align: center;
     font-size: 14px;
     padding: 4px 0 4px 18px;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td .kijs-grid-filter-reset {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td .kijs-grid-filter-reset {
     width: 20px;
     margin: 2px 0;
     padding: 0 4px;
     border-right: 1px solid var(--splitter-overlay-bkgrndColor);
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td .kijs-grid-filter-reset .kijs-button {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td .kijs-grid-filter-reset .kijs-button {
     flex: none;
     width: 15px;
     margin: 0;
@@ -2181,19 +2169,19 @@
     background-color: transparent;
     border: 0;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td .kijs-grid-filter-reset .kijs-button .kijs-icon {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td .kijs-grid-filter-reset .kijs-button .kijs-icon {
     transition: color 0.5s;
     color: var(--grid-border-color);
     font-size: 12px;
     margin: -2px 0 0 0;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td:hover .kijs-button .kijs-icon {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td:hover .kijs-button .kijs-icon {
     color: var(--button-icon-fontColor);
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter td:hover div.kijs-field-text input::placeholder {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td:hover div.kijs-field-text input::placeholder {
     opacity: 0.5;
   }
-  div.kijs-grid .kijs-top > .kijs-headercontainer tr.kijs-grid-filter.kijs-hidden {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter.kijs-hidden {
     /*display: none;*/
     max-height: 0;
     margin: 0;
@@ -2201,11 +2189,29 @@
     border: 0;
     overflow: hidden;
   }
-  div.kijs-grid .kijs-headercontainer,
-  div.kijs-grid .kijs-footercontainer,
-  div.kijs-grid .kijs-leftcontainer,
-  div.kijs-grid .kijs-rightcontainer,
-  div.kijs-grid .kijs-tablecontainer {
+  div.kijs-grid > .kijs-center {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-grid > .kijs-center > .kijs-leftcontainer {
+    position: relative;
+  }
+  div.kijs-grid > .kijs-center > .kijs-tablecontainer {
+    flex: 1;
+    position: relative;
+    overflow: auto;
+  }
+  div.kijs-grid > .kijs-center > .kijs-rightcontainer {
+    position: relative;
+  }
+  div.kijs-grid > .kijs-bottom {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: row;
+  }
+  div.kijs-grid > .kijs-bottom > .kijs-footercontainer {
     position: relative;
   }
   div.kijs-grid div.kijs-splitter-overlay {
