@@ -150,7 +150,6 @@
 
  "css":{
   "gui":[
-   "css/kijs.theme.default.css",
    "css/kijs.gui.css"
   ],
   "quillEditor":[

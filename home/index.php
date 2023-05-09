@@ -9,7 +9,11 @@
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
     
+    $themeUrl .= $baseUrl . '/kijs/css/kijs.theme.default.css';
     // CSS Files
+?>
+    <link rel="stylesheet" type="text/css" href="<?=$themeUrl?>">
+<?php
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=css');
 ?>    
     <link rel="stylesheet" type="text/css" href="app/style.css">
