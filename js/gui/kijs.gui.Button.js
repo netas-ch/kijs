@@ -161,16 +161,36 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) { this._iconEl.iconChar = val; }
+    set iconChar(val) { 
+        this._iconEl.iconChar = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) { this._iconEl.iconCls = val; }
+    set iconCls(val) { 
+        this._iconEl.iconCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) { this._iconEl.iconColor = val; }
+    set iconColor(val) { 
+        this._iconEl.iconColor = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get iconMap() { return this._iconEl.iconMap; }
-    set iconMap(val) { this._iconEl.iconMap = val; }
+    set iconMap(val) { 
+        this._iconEl.iconMap = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get icon2() { return this._icon2El; }
     /**
@@ -209,15 +229,35 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
     get icon2Char() { return this._icon2El.iconChar; }
-    set icon2Char(val) { this._icon2El.iconChar = val; }
+    set icon2Char(val) {
+        this._icon2El.iconChar = val; 
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get icon2Cls() { return this._icon2El.iconCls; }
-    set icon2Cls(val) { this._icon2El.iconCls = val; }
+    set icon2Cls(val) { 
+        this._icon2El.iconCls = val; 
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get icon2Color() { return this._icon2El.iconColor; }
-    set icon2Color(val) { this._icon2El.iconColor = val; }
+    set icon2Color(val) { 
+        this._icon2El.iconColor = val; 
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
-    set icon2Map(val) { this._icon2El.iconMap = val; }
+    set icon2Map(val) { 
+        this._icon2El.iconMap = val; 
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get isDefault() {
         return this._dom.clsHas('kijs-default');
