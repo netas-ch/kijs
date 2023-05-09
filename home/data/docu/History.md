@@ -4,6 +4,9 @@ Version 2.1.2
  - Kleinere Fehlerbehebungen  
  - Kleinere CSS Anpassungen  
  - kijs.gui.grid.Grid: Zusätzliche Vergleichsfunktionen bei Textfeldern in Filterzeile  
+ - Die Theme-Datei ```kijs.theme.default.css``` ist nun nicht mehr in der ```files.json```  
+   **Achtung!** Die gewünschte Theme-Datei muss nun direkt in die index.php eingebunden 
+   werden!
 
 
 
@@ -105,7 +108,7 @@ angezeigt.
  - Dadurch wird verhindert, dass sie versehentlich in einer vererbten Klasse
    überschrieben werden.
 
-## Listeners und callbackFn können nun alle per String übergeben werden.  
+### Listeners und callbackFn können nun alle per String übergeben werden.  
 Dadurch können via RPC Funktionen oder Verweise auf Funktionen übermittelt werden. 
 Auch der Kontext zu einer Funktion kann per String übergeben werden.  
 
@@ -140,7 +143,7 @@ Auch der Kontext zu einer Funktion kann per String übergeben werden.
 
 ### kijs.Navigator
  - Die Funktion ```openLink()``` gibt es nicht mehr. Stattdessen bitte 
-   ```openemailPhoneLink(href)``` oder ```window.open(href, target)``` benutzen.
+   ```openEmailPhoneLink(href)``` oder ```window.open(href, target)``` benutzen.
 
 ### kijs.gui.ApertureMask
  - Die Funktion ```_updatePosition()``` ist jetzt nicht mehr public.  
@@ -164,9 +167,18 @@ Auch der Kontext zu einer Funktion kann per String übergeben werden.
 
 ### kijs.Rpc
  - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```. **ACHTUNG!!!**  
+   Mapping:
+   1. facadeFn
+   2. requestData
+   3. fn
+   4. context
+   5. cancelRunningRpcs
+   6. rpcParams
+   7. responseArgs
+
  - Es gibt eine neues config-Property ```owner```. Diesem kann in der Regel ```this``` 
    übergeben werden. Es wird verwendet um bei cancelRunningRpcs den owner zu unterscheiden.  
- - Die callbackFn fn hat neu nur noch ein Argument ```{ response: ..., request: ... }```  
+ - Die callbackFn fn hat neu nur noch ein Argument ```e```. Inhalt: ```{ response: ..., request: ... }```  
  - Falls config.fn übergeben wurde wird immer diese fn ausgeführt (auch im Fehlerfall).  
    Dann wird auch kein Promise, sondern Null zurückgegeben.  
  - Wird **keine** fn übergeben, so wird ein Promise zurückgegeben. Im Fehlerfall wird 
@@ -176,16 +188,26 @@ Auch der Kontext zu einer Funktion kann per String übergeben werden.
    - ```'error'```: Es wird reject ausgeführt mit einem Error Objekt als Argument.
 
 ### kijs.gui.Rpc
- - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```. **ACHTUNG!!!**   
+ - Die Funktion ```do(config)``` hat neu nur noch ein Argument ```config```. **ACHTUNG!!!**  
+   Mapping:
+   1. facadeFn
+   2. data
+   3. fn
+   4. context
+   5. cancelRunningRpcs
+   6. waitMaskTarget
+   7. waitMaskTargetDomProperty
+   8. ignoreWarnings
+
  - Es gibt eine neues config-Property ```owner```. Diesem kann in der Regel ```this``` 
    übergeben werden. Es wird verwendet um bei cancelRunningRpcs den owner zu unterscheiden.  
  - Die ```callbackFn``` hat neu ein anderes Argument! **ACHTUNG!!!**  
    Bisher: ```responseData```  
-   Neu: ```{ responseData: ..., requestData: ..., errorType: ..., errorMsg: ... }```  
+   Neu: ```e```. Inhalt: ```{ responseData: ..., requestData: ..., errorType: ..., errorMsg: ... }```  
  - Die ```callbackFn``` wird nun immer ausgeführt! Auch in einem Fehlerfall! **ACHTUNG!!!**  
    Um den gleichen Effekt wie früher zu haben muss der Inhalt der CallbackFn in ein  
 
-        if(kijs.isEmpty(rpcData.errorMsg)) {  
+        if (kijs.isEmpty(e.errorMsg)) {  
             ...  
         }  
 
@@ -488,7 +510,7 @@ Auch der Kontext zu einer Funktion kann per String übergeben werden.
             }
         ]
 
-## kijs.gui.field.Phone
+### kijs.gui.field.Phone
 - config ```showLinkButton``` umbenannt zu ```linkButtonVisible``` und default ist jetzt ```true```    
 - config/getter/setter ```replaceLeadingZeros``` entfernt.  
 - config ```formatValue``` entfernt. Es wird jetzt immer formatiert, falls eine 
