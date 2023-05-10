@@ -33,16 +33,16 @@ Argumente:
  - ```callback``` Funktion, die ausgeführt werden soll, wenn das Ereignis auftritt.  
    Hier gibt es verschiedene Möglichkeiten eine Funktion zu definieren:  
     - Direkt eine Funktion übergeben ```function(e) { ... }```  
-    - Eine bestehende Funktion aufrufen ```this.macheDies```  oder ```myApp.macheDies```  
+    - Eine bestehende Funktion aufrufen ```myApp.macheDies```  
     - Eine Funktion als String übergeben ```'function(e) { ... }'```  
-    - Eine bestehende Funktion als String aufrufen ```'this.macheDies'```  oder ```'myApp.macheDies'```  
+    - Eine bestehende **statische** Funktion als String aufrufen ```'myApp.macheDies'```  
    Die Möglichkeit Funktionen als String zu übergeben, kann z.B. bei Configs, die 
    via RPC vom Server geholt werden benutzt werden. Da in JSON keine Funktionen möglich 
    sind, können auf diese Weise trotzdem Funktionen benutzt werden.  
  - ```context``` (optional) Kontext in dem die Funktion ausgeführt werden soll.  
    Standard = ```this```.  
    Bei der Benutzung von ```this``` innerhalb der Funktion, wird dieser Kontext verwendet.  
-   Auch ein Kontext kann als String übergeben werden. Bsp: ```'this'``` oder ```'myApp.myFunctions'```  
+   Auch ein Kontext kann als String übergeben werden. Bsp: ```'myApp.Functions'```  
 
 ### once(names, callback, context)  
 Gleich wie ```on()```, jedoch wird der Listener nach dem 1. Aufruf wieder entfernt.  

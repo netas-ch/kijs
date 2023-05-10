@@ -48,7 +48,7 @@ Meldungsfenster angezeigt und es wird eine Lademaske während des Requests angez
 
 Beispiel:
 
-    myRpc.do({
+    kijs.getRpc('default').do({
         facadeFn: 'myModule.myFunction',   // Gewünschte Funktion des Servers 
         owner: this,                       // wird gebraucht um bei cancelRunningRpcs
                                            // den owner zu unterscheiden
@@ -60,6 +60,60 @@ Beispiel:
     }).catch((ex) => {
         console.error(ex);
     });
+
+
+
+Callback Funktion ```fn```
+--------------------------
+Die übergebene (optionale) callback-fn ```fn``` wird ausgeführt, wenn vom Server eine 
+Antwort zurückkommt. Sie wird immer ausgeführt, ausser wenn der Server nicht mit 
+einem Status von 200 bis 299 antwortet.  
+
+### fn bei kijs.gui.Rpc
+Auch hier wird die callback-fn immer ausgeführt.  
+Wenn auf dem Server eine Exception auftritt, wird eine ```errorMsg``` zurückgegeben.  
+Der Type der Exception wird in ```errorType``` zurückgegeben. Mögliche errorTypes:  
+ - ```errorNotice``` Anwenderfehler. Z.B. ein Pflichtfeld wurde nicht ausgefüllt.  
+ - ```error```       Applikationsfehler.  
+
+```errorMsg``` werden von kijs automatisch mit einer ```kijs.gui.MsgBox``` angezeigt.  
+Das Icon entspricht dem ```errorType```.  
+
+Es ist wichtig, dass in der callback-fn, ein auf dem Server aufgetretener Fehler, noch 
+ausgewertet wird. Meistens muss der Code in der Callback-fn ja nur ausgeführt werden, 
+wenn auf dem Server alles ok ist. Dazu kann folgender Code verwendet werden:  
+
+    #myCallbackFn(e) {
+        if (kijs.isEmpty(e.errorMsg)) {  
+            // mach dies
+        }
+    }
+
+
+
+Promise
+-------
+### Promise bei kijs.gui.Rpc
+Die Funktion ```do()``` gibt als return ein Promise zurück. Die Antwort vom Server 
+kann also auch mit damit ausgewertet werden.  
+
+Beispiel:  
+
+    kijs.getRpc('default').do({
+        facadeFn: 'myModule.myFunction',
+        owner: this,
+        data: { ... }
+    }).then((e) => {
+        // mach dies
+    }).catch((ex) => {
+        // und im Fehlerfall mach das
+    });
+
+Die Fehlerbehandlung verhält sich bei einem Promise etwas anders, als bei einer 
+callback-fn:
+Wenn vom Server eine ```errorMsg``` mit ```errorType === 'error'``` zurückkommt, 
+wird das Promise zurückgewiesen (reject). Es wird ```catch()``` aufgerufen, sonst 
+wird immer ```then()``` aufgerufen.  
 
 
 
