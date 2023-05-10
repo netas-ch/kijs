@@ -225,6 +225,9 @@
         /* falls der Button keine kijs-caption enthält, weniger Rand anzeigen */
         &.kijs-smallpaddings {
             padding: 0 0 0 4px;
+            > span {
+                margin-right: 0;
+            }
         }
 
         > .kijs-icon {
@@ -314,7 +317,7 @@
 
 
     /* ******************
-       * Trigger Button 
+       * Trigger Button
        * TODO: Wird niergends verwendet????????
        ****************** */
     button.kijs-button.kijs-trigger {
@@ -395,7 +398,7 @@
             }
         }
 
-        > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+        > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
         > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
             display: flex;
             flex-direction: column;
@@ -579,7 +582,7 @@
                 }
             }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
             > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
                 background-color: var(--tabBar-bkgrndColor);
                 border: 0 none;
@@ -656,7 +659,7 @@
                 border-left: 1px solid var(--tabButton-borderColor);
             }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
             > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
                 margin-top: 4px;
             }
@@ -672,7 +675,7 @@
                 border-left: 0 none;
             }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
             > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
                 margin-right: 4px;
             }
@@ -688,7 +691,7 @@
                 border-left: 1px solid var(--tabButton-borderColor);
             }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
             > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
                 margin-bottom: 4px;
             }
@@ -704,7 +707,7 @@
                 border-left: 1px solid var(--tabButton-borderColor);
             }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown, 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
             > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
                 margin-left: 4px;
             }
@@ -1423,7 +1426,7 @@
                 display: flex;
                 flex-direction: row;
                 border: 0;
-                
+
                 &.kijs-hidden {
                     display: none;
                 }
@@ -1485,7 +1488,7 @@
        ****************** */
     div.kijs-tree {
         background-color: var(--field-bkgrndColor);
-        
+
         &.kijs-tree-root > .kijs-container-inner {
             height: 100%;
 
@@ -1926,7 +1929,7 @@
                 justify-content: center;
                 border-right: 1px solid var(--panel-borderColor);
                 background-color: var(--panel-bkgrndColor);
-                
+
                 > div {
                     width: 40%;
                     text-align: center;
@@ -2227,7 +2230,7 @@
         font-family: var(--default-fontFamily);
         font-size: var(--default-fontSize);
 
-        
+
         table {
             border-collapse: collapse;
             table-layout: fixed;
@@ -2313,18 +2316,18 @@
 
             }
         }
-        
-        
+
+
         > .kijs-top {
             flex: 0 0 auto;
             display: flex;
             flex-direction: row;
-            
+
             > .kijs-headercontainer  {
                 flex: 1;
                 position: relative;
                 background-color: var(--grid-header-bkgrndColor);
-                
+
                 > table > tr.kijs-grid-header > td {
                     display: flex;
                     flex-direction: row;
@@ -2469,7 +2472,7 @@
                             }
                         }
                     }
-                    
+
                     &.kijs-hidden {
                         /*display: none;*/
                         max-height: 0;
@@ -2479,42 +2482,42 @@
                         overflow: hidden;
                     }
                 }
-                
+
             }
         }
-        
-        
+
+
         > .kijs-center {
             flex: 1;
             display: flex;
             flex-direction: row;
             background-color: var(--field-bkgrndColor);
-            
+
             > .kijs-leftcontainer {
                 position: relative;
-            } 
-            
+            }
+
             > .kijs-tablecontainer {
                 flex: 1;
                 position: relative;
                 overflow: auto;
             }
-            
+
             > .kijs-rightcontainer {
                 position: relative;
             }
         }
-        
+
         > .kijs-bottom {
             flex: 0 0 auto;
             display: flex;
             flex-direction: row;
-            
+
             > .kijs-footercontainer {
                 position: relative;
             }
         }
-        
+
 
         div.kijs-splitter-overlay {
             position: absolute;
@@ -2747,9 +2750,9 @@
        * Field Phone
        * Field Number
        ****************** */
-    div.kijs-field-text, 
-    div.kijs-field-url, 
-    div.kijs-field-email, 
+    div.kijs-field-text,
+    div.kijs-field-url,
+    div.kijs-field-email,
     div.kijs-field-iban,
     div.kijs-field-sozversnr,
     div.kijs-field-phone,

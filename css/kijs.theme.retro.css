@@ -9,7 +9,7 @@
     --accentColor: #83a5d9; /*#1f90f2;*/
     --accentColor2: #dfe8f6; /*#d9ecfc;*/
     --accentColor3: #ff9900;
-    
+
     --errorColor: #c23c45;
     --errorColorLight: #f4d9d9;
 
@@ -17,7 +17,7 @@
     --helpColorLight: #d9ecfc;
 
     --okColor: #61c259;
-    
+
     --grey0: #fff;
     --grey1: #fff;
     --grey2: #f6f6f6;
@@ -103,23 +103,23 @@
     --window-footer-button-focus-borderColor: var(--grey9);
     --window-footer-button-focus-fontColor: var(--grey9);
 
-   
+
     /* Tab */
     --tabBar-bkgrndColor: var(--grey2);
-    
+
     --tabButton-bkgrndColor: var(--grey3);
     --tabButton-borderColor: #8db2e3; /*var(--grey4)*/;
     --tabButton-fontColor: #15428b; /*var(--grey9);*/
-    
+
     --tabButton-current-bkgrndColor: var(--grey1);
     --tabButton-current-borderColor: #8db2e3; /*var(--grey4);*/
     --tabButton--currentfontColor: #15428b; /*var(--accentColor);*/
-    
+
     --tabButton-focus-bkgrndColor: var(--grey3);
     --tabButton-focus-borderColor: var(--grey4);
     --tabButton-focus-fontColor: var(--accentColor);
-    
-    
+
+
     /* Badge */
     --badge-bkgrndColor: var(--accentColor3);
     --badge-fontColor: var(--grey9);
@@ -139,7 +139,7 @@
     --bar-bkgrndColor: #d9e7f6; /*var(--accentColor);*/
     --bar-disabled-fontColor: var(--grey2);
     --bar-disabled-bkgrndColor: var(--grey6);
-    
+
     --headerBar-fontSize: 11px; /*14px;*/
     --footerBar-fontSize: 11px; /*12px;*/
 
@@ -166,7 +166,7 @@
     --field-disabled-fontColor: var(--grey7);
 
     --field-error-bkgrndColor: var(--errorColorLight);
-    
+
     /* Range */
     --range-bkgrndColor: var(--grey6);
     --range-btnColor: var(--grey8);
@@ -203,7 +203,7 @@
     --clock-fontColor: var(--grey9);
     --clock-pointer-bkgrndColor: var(--accentColor);
     --clock-disabled-pointer-bkgrndColor: var(--grey6);
-    
+
 
     /* Help/Error Icon */
     --icon-error-bkgrndColor: var(--errorColorLight);
@@ -247,7 +247,7 @@
 .kijs-panel > .kijs-footer {
     background-color: #dfe8f6;
 }
-.kijs-panel.kijs-collapse-top, 
+.kijs-panel.kijs-collapse-top,
 .kijs-panel.kijs-collapse-bottom {
     height: 27px !important;
 }
@@ -273,7 +273,7 @@
 .kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button,
 .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(237,253,255,1) 7%, rgba(213,233,255,1) 94%, rgba(233,244,255,1) 100%);
-    width: 15px;
+    /*width: 15px;*/
     height: 15px;
     border: 1px solid #99bbe8;
     border-radius: 3px;
@@ -350,8 +350,18 @@
 
 
 /* kijs.gui.Menu */
+.kijs-menu-spinbox > .kijs-container-inner {
+    background: #f0f0f0;
+}
 .kijs-menu-spinbox > .kijs-container-inner > .kijs-button {
     background: #f0f0f0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    margin: 1px;
+}
+.kijs-menu-spinbox > .kijs-container-inner > .kijs-button:hover {
+    border-color: #aaccf6;
+    background: linear-gradient(0deg, rgba(217,232,251,1) 60%, rgba(235,243,253,1) 60%);
 }
 
 
