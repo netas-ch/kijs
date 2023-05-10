@@ -319,16 +319,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
-                this._listViewEl.load(args).then((responseData) => {
+                this._listViewEl.load(args).then((e) => {
                     // Nach dem Laden das value neu setzen,
                     // damit die caption erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
                     // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
-                        if (kijs.toString(responseData.value) !== kijs.toString(this.value)) {
-                            this.value = responseData.value;
+                    } else if (query === null && kijs.isDefined(e.responseData.value) && e.responseData.value !== null && this._isValueInStore(e.responseData.value)) {
+                        if (kijs.toString(e.responseData.value) !== kijs.toString(this.value)) {
+                            this.value = e.responseData.value;
                         }
                         
                     }
@@ -342,16 +342,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else if (!this._firstLoaded || forceLoad) {
             // alle Datensätze laden
             this._listViewEl.load(args)
-                .then((responseData) => {
+                .then((e) => {
                     // Nach dem Laden das value neu setzen,
                     // damit das Label erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
                     // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(responseData.value) && responseData.value !== null && this._isValueInStore(responseData.value)) {
-                        if (kijs.toString(responseData.value) !== kijs.toString(this.value)) {
-                            this.value = responseData.value;
+                    } else if (query === null && kijs.isDefined(e.responseData.value) && e.responseData.value !== null && this._isValueInStore(e.responseData.value)) {
+                        if (kijs.toString(e.responseData.value) !== kijs.toString(this.value)) {
+                            this.value = e.responseData.value;
                         }
                     }
                     
