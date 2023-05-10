@@ -41,7 +41,7 @@ kijs.Storage = class kijs_Storage {
             }
             return null;
 
-        } catch (e) {
+        } catch(ex) {
             return false;
         }
     }
@@ -68,7 +68,7 @@ kijs.Storage = class kijs_Storage {
             }
             return keys;
 
-        } catch (e) {
+        } catch(ex) {
             return false;
         }
     }
@@ -108,7 +108,7 @@ kijs.Storage = class kijs_Storage {
             }
             storage.removeItem(prefix + key);
 
-        } catch (e) {
+        } catch(ex) {
             return false;
         }
     }
@@ -131,7 +131,7 @@ kijs.Storage = class kijs_Storage {
             storage.setItem(prefix + key, JSON.stringify({value: value}));
             return true;
 
-        } catch (e) {
+        } catch(ex) {
             return false;
         }
     }
@@ -168,6 +168,7 @@ kijs.Storage = class kijs_Storage {
 
     /**
      * Gibt die instanz auf den Storage zurück.
+     * @param {String} mode 'session' oder 'local'
      * @returns {window.localStorage|window.sessionStorage}
      */
     static _getStorage(mode) {
@@ -179,7 +180,7 @@ kijs.Storage = class kijs_Storage {
 
     /**
      * Gibt das Prefix zurück
-     * @param {String|Boolean} prefix
+     * @param {String|Boolean} pref
      * @returns {String}
      */
     static _getPrefix(pref) {

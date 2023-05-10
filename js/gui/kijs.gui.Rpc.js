@@ -165,7 +165,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                     // Promise auslösen
                     } else {
-                        if (e.errorMsg && e.errorType === 'error') {
+                        if (!kijs.isEmpty(e.errorMsg) && e.errorType === 'error') {
                             reject( new Error(e.errorMsg) );
                         } else {
                             resolve(e);

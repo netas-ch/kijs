@@ -109,8 +109,9 @@ angezeigt.
    überschrieben werden.
 
 ### Listeners und callbackFn können nun alle per String übergeben werden.  
-Dadurch können via RPC Funktionen oder Verweise auf Funktionen übermittelt werden. 
+Dadurch können via RPC Funktionen oder Verweise auf Funktionen übermittelt werden.  
 Auch der Kontext zu einer Funktion kann per String übergeben werden.  
+Siehe dazu auch den Leitfaden "Ereignisse" im Kapitel "on(names, callback, context)"  
 
 ### RPC response
         response.errorMsg 
@@ -209,7 +210,7 @@ Auch der Kontext zu einer Funktion kann per String übergeben werden.
 
         if (kijs.isEmpty(e.errorMsg)) {  
             ...  
-        }  
+        }
 
  - Das Promise wird nur noch zurückgegeben, wenn keine callbackFn übergeben wurde.
  - Bei der Funktion ```do()``` gibt es beim Promise nun ein reject.  

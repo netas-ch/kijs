@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.1.2'; }
+    static get version() { return '2.1.3'; }
 
 
     // --------------------------------------------------------------
@@ -144,15 +144,9 @@ window.kijs = class kijs {
             const parts = str.split('.');
             let parent = window;
 
-            // der parent ist immer window oder this
+            // der parent ist immer window
             if (parts.length > 0) {
-                // beginnend mit this ist der parent this
-                if (parts[0] === 'this') {
-                    parent = 'this';
-                    parts.shift();
-                    
-                // beginnend mit window ist der parent window
-                } else if (parts[0] === 'window') {
+                if (parts[0] === 'window') {
                     parts.shift();
                     
                 }

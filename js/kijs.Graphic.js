@@ -363,8 +363,8 @@ kijs.Graphic = class kijs_Graphic {
                         }, targetType);
                     }
                     
-                } catch (e) {
-                    reject(e);
+                } catch(ex) {
+                    reject(ex);
                 }
             };
 

@@ -120,7 +120,7 @@ kijs.Ajax = class kijs_Ajax {
                         case 'json':
                             try {
                                 val = JSON.parse(xmlhttp.responseText);
-                            } catch (e) {
+                            } catch (ex) {
                                 val = xmlhttp.responseText;
                             }
                             break;

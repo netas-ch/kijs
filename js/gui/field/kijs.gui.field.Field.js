@@ -680,7 +680,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
         try {
             return new RegExp(str.slice(1, i), str.slice(i+1));
-        } catch (error) {
+        } catch (ex) {
             return false;
         }
     }
