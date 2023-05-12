@@ -4,8 +4,8 @@
 // kijs.gui.FormPanel
 // --------------------------------------------------------------
 kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -21,7 +21,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._rpcArgs = {};         // Standard RPC-Argumente
         this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.';
         this._errorTitle = kijs.getText('Fehler') + '.';
-                
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -80,7 +80,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 delete this._data[field.name];
             }
         }, this);
-        
+
         return this._data;
     }
     set data(val) {
@@ -95,6 +95,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             field.values = this._data;
             // Feld validieren, wenn nicht leer
             field.validate(true);
+            // nicht 'dirty'
+            field.isDirty = false;
         }, this);
     }
 
@@ -110,7 +112,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
         return this._fields;
     }
-    
+
     // gibt es ein Feld, dass verändert wurde?
     get isDirty() {
         if (kijs.isEmpty(this._fields)) {
@@ -135,7 +137,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._fields[i].isDirty = !!val;
         }
     }
-    
+
     // sind alle Felder leer?
     get isEmpty() {
         if (kijs.isEmpty(this._fields)) {
@@ -181,7 +183,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             }
         }
     }
-    
+
     get rpc() {
         return this._rpc || kijs.getRpc('default');
     }
@@ -189,15 +191,15 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         if (kijs.isString(val)) {
             val = kijs.getRpc(val);
         }
-        
+
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
         }
     }
-    
-    
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -219,7 +221,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
 
         this._data = {};
-        
+
         // Validierungsfehler auch zurücksetzen
         this.errorsClear();
     }
@@ -257,12 +259,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 this.rpc.do({
                     facadeFn: this._facadeFnLoad,
                     owner: this,
-                    data: args, 
-                    cancelRunningRpcs: true, 
+                    data: args,
+                    cancelRunningRpcs: true,
                     waitMaskTarget: this,
-                    waitMaskTargetDomProperty: 'dom', 
+                    waitMaskTargetDomProperty: 'dom',
                     context: this
-                    
+
                 }).then((e) => {
                     // Formular
                     if (e.responseData.form) {
@@ -283,19 +285,19 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     if (resetValidation) {
                         this.errorsClear();
                     }
-                    
+
                     // rendern
                     this.render();
 
                     // load event
                     this.raiseEvent('afterLoad', e);
-                    
+
                     // promise ausführen
                     resolve(e);
-                    
+
                 }).catch((ex) => {
                     reject(ex);
-                    
+
                 });
             }
         });
@@ -312,28 +314,28 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         for (let i=0; i<parent.elements.length; i++) {
             let el = parent.elements[i];
-            
+
             // field
             if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
                 ret.push(el);
-                
+
                 // blur listener
                 if (!el.hasListener('blur', this.#onFieldBlur, this)) {
                     el.on('blur', this.#onFieldBlur, this);
                 }
-                
+
                 // change listener
                 if (!el.hasListener('change', this.#onFieldChange, this)) {
                     el.on('change', this.#onFieldChange, this);
                 }
-                
+
             // container
             } else if (el instanceof kijs.gui.Container) {
                 ret = ret.concat(this.searchFields(el));
 
             }
         }
-        
+
         if (parent === this) {
             // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
             if (!kijs.isEmpty(this._fields)) {
@@ -349,7 +351,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return ret;
     }
-    
+
     /**
      * Sendet die Formulardaten an den Server
      * @param {type} searchFields
@@ -384,12 +386,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this.rpc.do({
                 facadeFn: this.facadeFnSave,
                 owner: this,
-                data: args, 
-                cancelRunningRpcs: false, 
-                waitMaskTarget: waitMaskTarget, 
-                waitMaskTargetDomProperty: 'dom', 
+                data: args,
+                cancelRunningRpcs: false,
+                waitMaskTarget: waitMaskTarget,
+                waitMaskTargetDomProperty: 'dom',
                 context: this
-                
+
             }).then((e) => {
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
@@ -409,18 +411,18 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                         e.errorMsg = this._errorMsg;
                     }
                 }
-                
+
                 // Falls alles OK
                 if (kijs.isEmpty(e.errorMsg)) {
                     // 'dirty' zurücksetzen
                     this.isDirty = false;
-                    
+
                     // event
                     this.raiseEvent('afterSave', e);
                 }
-                
+
                 resolve(e);
-                
+
             }).catch((ex) => {
                 reject(ex);
             });
@@ -446,8 +448,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         return ret;
     }
- 
- 
+
+
     // LISTENERS
     // EVENTS
     #onAfterFirstRenderTo(e) {

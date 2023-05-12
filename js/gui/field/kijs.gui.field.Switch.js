@@ -59,7 +59,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             nodeTagName: 'div'
         });
         this._inputDom.nodeAttributeSet('tabIndex', 0);
-        
+
         this._togglePointDom = new kijs.gui.Dom({
             cls: 'kijs-togglePoint',
             nodeTagName: 'div'
@@ -91,7 +91,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             captionWidth: { target: 'captionWidth' },
-            
+
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
@@ -149,12 +149,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "checked" is not valid.`);
         }
         this._updateTogglePoint();
-        this._isDirty = false;
     }
 
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -226,7 +225,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "value" is not valid.`);
         }
         this._updateTogglePoint();
-        this._isDirty = false;
     }
 
     get valueChecked() { return this._valueChecked; }
@@ -244,14 +242,14 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     focus(alsoSetIfNoTabIndex) {
         return this._inputDom.focus(alsoSetIfNoTabIndex);
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
-        
+
         // Toggle-Border rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
-        
+
         // Toggle-Punkt rendern (kijs.guiDom)
         this._togglePointDom.renderTo(this._inputDom.node);
         this._updateTogglePoint();
@@ -318,7 +316,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         // Eingabe erforderlich
         if (this._required) {
             if (!value) {
@@ -336,17 +334,16 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             const oldValue = this.value;
 
             this._checked = this._checked ? 0 : 1;
-            this._isDirty = true;
 
             this._updateTogglePoint();
             this._inputDom.focus();
             this.validate();
-            
-            this.raiseEvent('change', { 
-                checked: this._checked, 
-                oldChecked: oldChecked, 
-                value: this.value, 
-                oldValue: oldValue 
+
+            this.raiseEvent('change', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
             });
         }
     }
@@ -357,16 +354,15 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             const oldValue = this.value;
 
             this._checked = this._checked ? 0 : 1;
-            this._isDirty = true;
 
             this._updateTogglePoint();
             this.validate();
-            
-            this.raiseEvent('change', { 
-                checked: this._checked, 
-                oldChecked: oldChecked, 
-                value: this.value, 
-                oldValue: oldValue 
+
+            this.raiseEvent('change', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
             });
         }
         // Bildlauf der Space-Taste verhindern
@@ -392,11 +388,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         if (this._togglePointDom) {
             this._togglePointDom.destruct();
         }
-        
+
         if (this._inputDom) {
             this._inputDom.destruct();
         }
-        
+
         if (this._iconEl) {
             this._iconEl.destruct();
         }
@@ -414,5 +410,5 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

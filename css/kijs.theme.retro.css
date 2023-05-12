@@ -262,6 +262,9 @@
 .kijs-panelbar > .kijs-icon {
     width: 16px;
 }
+.kijs-panelbar .kijs-button.kijs-smallpaddings > span {
+    margin-right: 0;
+}
 
 .kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button > .kijs-caption,
 .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,

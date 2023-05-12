@@ -132,7 +132,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._spinBoxEl.on('close', this.#onSpinBoxElClose, this);
         this._spinBoxEl.on('show', this.#onSpinBoxElShow, this);
         this._spinIconEl.on('click', this.#onSpinButtonClick, this);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -200,7 +200,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
-    
+
     get minChars() { return this._minChars; }
     set minChars(val) {
         if (val === 'auto') {
@@ -242,8 +242,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._caption  = this._getCaptionFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
-        this._isDirty = false;
-        
+
         // falls das value nicht im store ist, vom server laden
         if (this._remoteSort) {
             if (!valueIsInStore && this._firstLoaded) {
@@ -284,7 +283,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._listViewEl.disabled = !!val;
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -330,7 +329,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         if (kijs.toString(e.responseData.value) !== kijs.toString(this.value)) {
                             this.value = e.responseData.value;
                         }
-                        
+
                     }
                 }).catch(() => {});
 
@@ -338,7 +337,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._listViewEl.data = [];
                 this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
             }
-            
+
         } else if (!this._firstLoaded || forceLoad) {
             // alle Datensätze laden
             this._listViewEl.load(args)
@@ -354,7 +353,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                             this.value = e.responseData.value;
                         }
                     }
-                    
+
                     this.validate(true);
                 }).catch(() => {});
         }
@@ -383,7 +382,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             window.clearTimeout(this._keyUpDeferId);
             this._keyUpDeferId = null;
         }
-        
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -545,7 +544,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -603,7 +602,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }, 200, this);
     }
-    
+
     #onInputDomChange(e) {
         // change event nicht berücksichtigen, wenn die spinbox
         // offen ist.
@@ -651,13 +650,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else {
             this.value = this._value;
         }
-        
+
         // validieren
         this.validate();
 
         // change-event
         if (changed) {
-            this._isDirty = true;
             this.raiseEvent('change', { value: this.value, oldValue: oldVal });
         }
     }
@@ -696,7 +694,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this.value = newVal;
 
                 if (changed) {
-                    this._isDirty = true;
                     this.raiseEvent('change', {value: this.value, oldValue: oldVal});
                 }
             }
@@ -766,11 +763,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this.value !== this._listViewEl.value) {
             let oldVal = this.value;
             this.value = this._listViewEl.value;
-            this._isDirty = true;
-            
+
             // validieren
             this.validate();
-            
+
             this.raiseEvent('change', {value: this.value, oldValue: oldVal});
         }
     }
@@ -778,7 +774,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     #onSpinBoxElClick() {
         this._inputDom.focus();
     }
-    
+
     #onSpinBoxElClose() {
         this._inputDom.focus();
         this.#onInputDomBlur();
@@ -826,5 +822,5 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

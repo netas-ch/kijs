@@ -172,7 +172,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
+
     // Gibt das Datum zurück. Falls nur eine Uhrzeit existiert, wird das Datum vom 01.01.1970 genommen
     get date() {
         let date = null;
@@ -215,7 +215,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         this._previousChangeValue = this.value;
-        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
@@ -241,7 +240,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         this._previousChangeValueEnd = this.valueEnd;
-        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
@@ -279,10 +277,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         this._mode = val;
-        
+
         this._dom.clsRemove(['kijs-date','kijs-time','kijs-dateTime','kijs-week','kijs-range']);
         this._dom.clsAdd('kijs-' + val);
-        
+
         this._createSpinBoxElements();
     }
 
@@ -452,7 +450,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         this._previousChangeValue = this.value;
-        this._isDirty = false;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
     }
 
@@ -495,7 +492,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -512,7 +509,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -576,7 +573,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 this._spinBoxEl.remove(this._timePicker, true, true);
             }
         }
-        
+
         if (this._spinBoxEl.isRendered) {
             this._spinBoxEl.render();
         }
@@ -1036,7 +1033,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         const date = this._datePicker.date;
         const dateEnd = this._datePicker.dateEnd;
         const time = this._timePicker.value;
@@ -1094,20 +1091,20 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     }
 
                 }
-                
+
             } else if (kijs.isEmpty(date) && !kijs.isEmpty(value)) {
                 this._errors.push(kijs.getText('Das Datum darf nicht leer sein'));
-                
+
             }
         }
-        
+
         // Uhrzeit validieren
         if (this._hasTime()) {
             if (this._timeRequired && kijs.isEmpty(time) && !kijs.isEmpty(value)) {
                 this._errors.push(kijs.getText('Die Uhrzeit darf nicht leer sein'));
             }
         }
-        
+
         super._validationRules(value, ignoreEmpty);
     }
 
@@ -1163,10 +1160,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const value = this.value;
         const valueEnd = this.valueEnd;
         if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
-            this._isDirty = true;
-            this.raiseEvent('change', { 
-                value: value, 
-                valueEnd: valueEnd, 
+            this.raiseEvent('change', {
+                value: value,
+                valueEnd: valueEnd,
                 oldValue: this._previousChangeValue,
                 oldValueEnd: this._previousChangeValueEnd
             });
@@ -1174,7 +1170,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._previousChangeValueEnd = valueEnd;
         }
     }
-    
+
     #onInputDomDblClick() {
         // Mobile: Tastatur anzeigen beim Doppelklick
         // Funktioniert nur in Chrome
@@ -1182,9 +1178,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             window.navigator.virtualKeyboard.show();
         }
     }
-    
+
     #onInputDomInput(e) {
-        this.resetErrors();
+        this.errorsReset();
     }
 
     #onSpinBoxElClose(e) {
@@ -1194,9 +1190,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const value = this.value;
         const valueEnd = this.valueEnd;
         if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
-            this._isDirty = true;
             this.raiseEvent('change', {
-                value: value, 
+                value: value,
                 valueEnd: valueEnd,
                 oldValue: this._previousChangeValue,
                 oldValueEnd: this._previousChangeValueEnd
@@ -1265,5 +1260,5 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

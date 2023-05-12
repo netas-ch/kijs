@@ -15,7 +15,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
         this._valueTrimEnable = true;
         this._previousChangeValue = '';
-        
+
         this._inputDom = new kijs.gui.Dom({
             disableEnterBubbeling: true,
             nodeTagName: 'textarea',
@@ -35,7 +35,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         Object.assign(this._defaultConfig, {
             autocomplete: false
         });
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
@@ -55,7 +55,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -81,7 +81,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
@@ -117,9 +117,8 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         val = kijs.toString(val);
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
-        this._isDirty = false;
     }
-    
+
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
@@ -140,7 +139,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -157,7 +156,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -190,17 +189,16 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt wird.
         let val = this.value;
         let oldVal = this._previousChangeValue;
-        
+
         // Wert neu reinschreiben (evtl. wurde er getrimmt)
         this.value = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     #onInputDomInput(e) {
         this.validate();
     }
@@ -231,5 +229,5 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

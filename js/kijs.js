@@ -9,7 +9,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.1.3'; }
+    static get version() { return '2.2.1'; }
 
 
     // --------------------------------------------------------------
@@ -93,7 +93,7 @@ window.kijs = class kijs {
     static getFunctionFromString(str) {
         if (kijs.isFunction(str)) {
             return str;
-            
+
         } else if (kijs.isString(str)) {
             // Funktion als String Bsp: function(a,b,...) {...}
             let res = /^function\s*\(([a-zA-Z0-9_, ]*)\)\s*\{\s(.*)\s\}/s.exec(str);
@@ -107,7 +107,7 @@ window.kijs = class kijs {
                 // Funktion erstellen und zurückgeben
                 return Function(args, fnContent);
             }
-            
+
             // Verweis auf eine bestehende Funktion als String Bsp: console.log
             if (/^([a-zA-Z][a-zA-Z0-9_]*\.?)+$/s.match !== null) {
                 let fn = kijs.getObjectFromString(str);
@@ -116,10 +116,10 @@ window.kijs = class kijs {
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden
      * @param {String} [parameterName] Den Parameter, der gesucht wird. Ohne Argument werden alle zurückgegeben.
@@ -129,7 +129,7 @@ window.kijs = class kijs {
         console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.getGetParameter"`);
         return kijs.Navigator.getGetParameter(parameterName);
     }
-    
+
     /**
      * Erstellt aus einem String mit einem Verweis ein Objekt/Funktion
      * Beispiel: 'myApp.doThis' oder 'kijs.gui.Button'
@@ -139,7 +139,7 @@ window.kijs = class kijs {
     static getObjectFromString(str) {
         if (kijs.isFunction(str) || kijs.isObject(str)) {
             return str;
-            
+
         } else {
             const parts = str.split('.');
             let parent = window;
@@ -148,7 +148,7 @@ window.kijs = class kijs {
             if (parts.length > 0) {
                 if (parts[0] === 'window') {
                     parts.shift();
-                    
+
                 }
             }
 
@@ -161,7 +161,7 @@ window.kijs = class kijs {
             }
             return parent;
         }
-        
+
         return null;
     }
 
@@ -178,7 +178,7 @@ window.kijs = class kijs {
         }
         return kijs.__rpcs[name];
     }
-    
+
     /**
      * Text für Übersetzung zurückgeben
      * @param {String} key
@@ -348,7 +348,7 @@ window.kijs = class kijs {
     static isReady(fn, context) {
         document.addEventListener('DOMContentLoaded', this.createDelegate(fn, context || this), false);
     }
-    
+
     /**
      * Prüft, ob ein value vom Typ RegExp ist.
      * @param {Object} value
@@ -409,10 +409,10 @@ window.kijs = class kijs {
         kijs.__getTextFn = fn;
         kijs.__getTextFnContext = context || this;
     }
-    
+
     /**
      * Erstellt einen globalen Verweis auf eine RPC-Klasse
-     * Der Standard-RPC sollte 'default' heissen. 
+     * Der Standard-RPC sollte 'default' heissen.
      * Weitere sind mit beliebigen Namen möglich.
      * @param {String} name
      * @param {kijs.gui.Rpc} rpc

@@ -172,7 +172,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
+
     get date() {
         return this._monthPicker.date;
     }
@@ -180,9 +180,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker.date = val;
         this._updateInputValue();
         this._previousChangeDate = this._monthPicker.date;
-        this._isDirty = false;
     }
-    
+
     get displayFormat() { return this._monthPicker.headerBarFormat; }
     set displayFormat(val) { this._monthPicker.headerBarFormat = val; }
 
@@ -191,7 +190,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     get inputDom() { return this._inputDom; }
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
@@ -241,7 +240,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -258,7 +257,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -362,7 +361,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         if (!kijs.isEmpty(value)) {
             const date = kijs.Date.create(value);
 
@@ -395,18 +394,17 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (!kijs.isEmpty(oldDate)) {
             oldValue = kijs.Date.format(oldDate, this._monthPicker.valueFormat);
         };
-        
+
         this._previousChangeDate = this._monthPicker.date;
-        
+
         this._updateInputValue();
         this.validate();
 
         if (!kijs.Date.compare(this._monthPicker.date, oldDate)) {
-            this._isDirty = true;
             this.raiseEvent('change', {
                 date: this.date,
                 oldDate: oldDate,
-                value: this.value, 
+                value: this.value,
                 oldValue: oldValue
             });
         }
@@ -416,7 +414,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         const rawValue = this._inputDom.nodeAttributeGet('value');
         const date = this._parseStringToMonth(rawValue);
 
-        this.resetErrors();
+        this.errorsReset();
 
         this._monthPicker.date = date;
     }
@@ -427,18 +425,17 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (!kijs.isEmpty(oldDate)) {
             oldValue = kijs.Date.format(oldDate, this._monthPicker.valueFormat);
         };
-        
+
         this._previousChangeDate = this._monthPicker.date;
-        
+
         this._updateInputValue();
         this.validate();
 
         if (!kijs.Date.compare(this._monthPicker.date, oldDate)) {
-            this._isDirty = true;
-            this.raiseEvent('change', { 
+            this.raiseEvent('change', {
                 date: this.date,
                 oldDate: oldDate,
-                value: this.value, 
+                value: this.value,
                 oldValue: oldValue
             });
         }
@@ -493,5 +490,5 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

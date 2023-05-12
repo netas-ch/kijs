@@ -47,10 +47,10 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get hasFocus() { return this._aceEditorNode.firstChild === document.activeElement; }
-    
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-    
+
     get mode() { return this._mode; }
     set mode(val) { this._mode = val; }
 
@@ -64,7 +64,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     }
 
     get theme() { return this._theme; }
-    set theme(val) { 
+    set theme(val) {
         this._theme = val;
         if (this._aceEditor) {
             this._aceEditor.setTheme('ace/theme/' + val);
@@ -88,7 +88,6 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         val = kijs.toString(val);
         this._value = val;
         this._previousChangeValue = val;
-        this._isDirty = false;
         if (this._aceEditor) {
             this._aceEditor.setValue(val, 1);
         }
@@ -118,7 +117,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         super.changeDisabled(!!val, callFromParent);
         this._aceEditor.setReadOnly(!!val);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -127,9 +126,9 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
      * @overwrite
      */
     focus(alsoSetIfNoTabIndex, selectText) {
-        let nde = this._aceEditorNode && this._aceEditorNode.firstChild ? 
+        let nde = this._aceEditorNode && this._aceEditorNode.firstChild ?
                 this._aceEditorNode.firstChild : null;
-        
+
         if (nde) {
             if (alsoSetIfNoTabIndex) {
                 nde.focus();
@@ -141,7 +140,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         }
         return false;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -198,7 +197,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         super._validationRules(value, ignoreEmpty);
 
         // Fehler des Editors auch übernehmen
@@ -211,8 +210,8 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
             }
         }
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     #onAnnotationChange() {
@@ -228,7 +227,6 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
     #onInputNodeBlur() {
         if (this.value !== this._previousChangeValue) {
-            this._isDirty = true;
             this.raiseEvent('change', { value: this.value, oldValue: this._previousChangeValue });
             this._previousChangeValue = this.value;
         }
@@ -262,5 +260,5 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

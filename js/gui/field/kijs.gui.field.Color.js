@@ -53,9 +53,9 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         super(false);
 
         this._previousChangeValue = '';
-        this._defaultColor = '#ffffff'; // Standardfarbe wenn leer. 
+        this._defaultColor = '#ffffff'; // Standardfarbe wenn leer.
                                         // Weil das native Color-Field kann nicht leer sein.
-        
+
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
             nodeAttribute: {
@@ -118,10 +118,10 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-   
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -141,16 +141,15 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     }
     set value(val) {
         val = kijs.toString(val);
-        
+
         if (kijs.isEmpty(val)) {
             val = this._defaultColor;
         } else {
             val = kijs.Graphic.colorGetHex(val);
         }
-        
+
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
-        this._isDirty = false;
     }
 
 
@@ -163,7 +162,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
     }
-    
+
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         return this._inputDom.focus(alsoSetIfNoTabIndex);
@@ -200,14 +199,13 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt wird.
         let val = this.value;
         let oldVal = this._previousChangeValue;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     #onInputDomInput(e) {
         this.validate();
     }
@@ -238,5 +236,5 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

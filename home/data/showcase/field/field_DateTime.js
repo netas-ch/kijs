@@ -2,8 +2,8 @@
 
 window.home.sc = {};
 home.sc.field_DateTime = class home_sc_field_DateTime {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,9 +11,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -37,7 +37,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     xtype: 'kijs.gui.field.DateTime',
                     required: true
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode: \'date\'',
@@ -51,13 +51,13 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     maxValue: kijs.Date.addDays(new Date(), 15),
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         change: console.log,
                         input:  console.log,
@@ -65,7 +65,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                         context: this
                     }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode: \'dateTime\'',
@@ -96,7 +96,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     timeRequired: false,
                     date: new Date()
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode: \'time\'',
@@ -107,7 +107,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     mode: 'time',
                     value: '13'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode: \'week\'',
@@ -117,7 +117,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     label: 'Woche',
                     mode: 'week'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mode: \'range\'',
@@ -129,7 +129,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     label: 'von/bis',
                     mode: 'range'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.MonthPicker<br>kijs.gui.TimePicker<br>kijs.gui.field.Month',
@@ -137,15 +137,15 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -154,7 +154,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -257,10 +257,26 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: '\'isDirty\' abfragen',
+                on: {
+                    click: function(e) {
+                        let fieldStates = [];
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                fieldStates.push('Feld ' + (fieldStates.length+1) + ': ' + (el.isDirty ? 'dirty' : 'not dirty') );
+                            }
+                        }, this);
+
+                        kijs.gui.MsgBox.alert('isDirty', fieldStates);
+                    },
+                    context: this
+                }
             }
         ];
     }
-    
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -268,14 +284,14 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

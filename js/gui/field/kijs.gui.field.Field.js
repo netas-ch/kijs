@@ -48,7 +48,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // overwrite
     constructor(config={}) {
         super(false);
-        
+
         // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in
         // der abgeleiteten Klasse überschrieben werden
         this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
@@ -57,19 +57,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errors = [];
         this._maxLength = null;
         this._minLength = null;
+        this._initialValues = {};
         this._required = false;
-        this._isDirty = false;  // Wurde der Wert verändert?
         this._submitValueEnable = true;
         this._validationFn = null;
         this._validationFnContext = this;
         this._validationRegExps = [];
 
         this._inputId = kijs.uniqId('kijs_-_input_');
-        
+
         this._inputWrapperDom = new kijs.gui.Dom({
             cls: 'kijs-inputwrapper'
         });
-        
+
         this._labelDom = new kijs.gui.Dom({
             cls: 'kijs-label',
             nodeTagName: 'label',
@@ -103,27 +103,27 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         });
 
         this._spinBoxEl = null;
-        
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // nix
+            isDirty: false
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
-            isDirty: true,
-            
+            isDirty: { target: 'isDirty', prio: 1001 },
+
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,
             labelHtmlDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
-            
+
             errorIcon: { target: 'errorIcon' },
             errorIconChar: { target: 'iconChar', context: this._errorIconEl },
             errorIconCls: { target: 'iconCls', context: this._errorIconEl },
@@ -233,7 +233,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get errorIconMap() { return this._errorIconEl.iconMap; }
     set errorIconMap(val) { this._errorIconEl.iconMap = val;}
-    
+
     get helpIcon() { return this._helpIconEl; }
     /**
      * Icon zuweisen
@@ -286,9 +286,28 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     get inputWrapperDom() { return this._inputWrapperDom; }
-    
-    get isDirty() { return this._isDirty; }
-    set isDirty(val) { this._isDirty = !!val; }
+
+    get isDirty() {
+        let isDirty = false;
+        kijs.Array.each(this._valuesMapping, function(map) {
+            let oVal = kijs.toString(this._initialValues[map.valueProperty]);
+            if (oVal !== kijs.toString(this[map.valueProperty])) {
+                isDirty = true;
+            }
+        }, this);
+        return isDirty;
+    }
+    set isDirty(val) {
+        if (val) {
+            throw new Error(`"isDirty" cannot be set to true.`);
+
+        } else {
+            this._initialValues = {};
+            kijs.Array.each(this._valuesMapping, function(map) {
+                this._initialValues[map.valueProperty] = kijs.toString(this[map.valueProperty]);
+            }, this);
+        }
+    }
 
     get label() { return this._labelDom.html; }
     set label(val) {
@@ -403,7 +422,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set submitValueEnable(val) { this._submitValueEnable = !!val; }
 
     get validationFn() { return this._validationFn; }
-    set validationFn(val) { 
+    set validationFn(val) {
         let fn = kijs.getFunctionFromString(val);
         if (kijs.isFunction(fn)) {
             this._validationFn = fn;
@@ -411,7 +430,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             throw new kijs.Error(`config "validationFn" is not valid.`);
         }
     }
-    
+
     get validationFnContext() { return this._validationFnContext; }
     set validationFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -421,11 +440,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             throw new kijs.Error(`config "validationFnContext" is not valid.`);
         }
     }
-    
+
     // Muss überschrieben werden
     get value() { return null; }
     set value(val) {
-        this._isDirty = false;
+        this.isDirty = false;
     }
 
     /**
@@ -462,7 +481,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Für Felder mit mehreren Werten: Damit können mehrere Werte gliechzeitig 
+     * Für Felder mit mehreren Werten: Damit können mehrere Werte gliechzeitig
      * zugewiesen werden.
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
      * @param {Object} val
@@ -474,7 +493,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this[map.valueProperty] = val[fieldName];
             }
         }, this);
-        this._isDirty = false;
+        this.isDirty = false;
     }
 
 
@@ -491,10 +510,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (!kijs.isArray(regExps)) {
             regExps = [regExps];
         }
-        
+
         kijs.Array.each(regExps, function(regExp) {
             let ok = true;
-            
+
             if (typeof regExp !== 'object') {
                 ok = false;
             }
@@ -506,7 +525,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                     ok = false;
                 }
             }
-            
+
             if (ok) {
                 this._validationRegExps.push(regExp);
             } else {
@@ -514,11 +533,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }, this);
     }
-    
+
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        
+
         // Icons auch aktivieren/deaktivieren
         this._spinIconEl.changeDisabled(!!val, true);
         this._errorIconEl.changeDisabled(!!val, true);
@@ -534,7 +553,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             button.changeDisabled(!!val, true);
         }, this);
     }
-    
+
     /**
      * Setz den Wert auf null
      * @returns {undefined}
@@ -543,9 +562,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         kijs.Array.each(this._valuesMapping, function(map) {
                 this[map.valueProperty] = null;
         }, this);
-        this._isDirty = false;
+        this.isDirty = false;
     }
-    
+
     /**
      * Fügt Fehler aus einer externen Validation hinzu
      * @param {String|Array} errors
@@ -564,18 +583,18 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Fehler anzeigen, falls vorhanden
         this._displayErrors();
     }
-    
+
     /**
      * Setzt die Validierungsfehler zurück
      * @returns {undefined}
      */
     errorsClear() {
         this._errors = [];
-        
+
         // Fehler anzeigen, falls vorhanden
         this._displayErrors();
     }
-    
+
     // overwrite
     render(superCall) {
         // dom mit elements rendern (innerDom)
@@ -599,7 +618,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Error icon rendern (kijs.gui.Icon)
         this._errorIconEl.renderTo(this._dom.node);
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -610,7 +629,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      * Setzt die Fehleranzeige zurück
      * @return {undefined}
      */
-    resetErrors() {
+    errorsReset() {
         this._dom.clsRemove('kijs-error');
         this._errorIconEl.visible = false;
     }
@@ -653,6 +672,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
 
+    /**
+     * Setzt den Wert des Feldes auf den Originalwert zurück (not dirty).
+     * @returns {undefined}
+     */
+    valuesReset() {
+        kijs.Array.each(this._valuesMapping, function(map) {
+            if (kijs.isDefined(this._initialValues[map.valueProperty])) {
+                this[map.valueProperty] = this._initialValues[map.valueProperty];
+            }
+        }, this);
+    }
+
+
     // PROTECTED
     /**
      * Zeigt die Fehler aus this._errors im errorIcon an
@@ -684,7 +716,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             return false;
         }
     }
-    
+
    /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
@@ -695,7 +727,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         // Eingabe erforderlich
         if (this._required) {
             if (kijs.isEmpty(value)) {
@@ -716,7 +748,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this._errors.push(kijs.getText('Dieses Feld darf maximal %1 Zeichen enthalten', '', this._maxLength));
             }
         }
-        
+
         // validationRegExps
         if (!kijs.isEmpty(this._validationRegExps)) {
             if (value !== null && value.toString() !== '') {
@@ -733,7 +765,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 }, this);
             }
         }
-        
+
         // validationFn
         if (kijs.isFunction(this._validationFn)) {
             if (value !== null && value.toString() !== '') {
@@ -765,7 +797,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }
     }
-    
+
 
 
     // --------------------------------------------------------------
@@ -812,9 +844,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._validationFn = null;
         this._validationFnContext = null;
         this._validationRegExps = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

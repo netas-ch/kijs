@@ -213,9 +213,6 @@
   button.kijs-button.kijs-smallpaddings {
     padding: 0 0 0 4px;
   }
-  button.kijs-button.kijs-smallpaddings > span {
-    margin-right: 0;
-  }
   button.kijs-button > .kijs-icon {
     flex: none;
     margin: 0 4px 0 0;

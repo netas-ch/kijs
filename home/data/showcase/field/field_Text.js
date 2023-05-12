@@ -2,8 +2,8 @@
 
 window.home.sc = {};
 home.sc.field_Text = class home_sc_field_Text {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,9 +11,9 @@ home.sc.field_Text = class home_sc_field_Text {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -36,7 +36,7 @@ home.sc.field_Text = class home_sc_field_Text {
                 },{
                     xtype: 'kijs.gui.field.Text'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
@@ -46,13 +46,13 @@ home.sc.field_Text = class home_sc_field_Text {
                     label: 'Label',
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         change:  console.log,
                         input:  console.log,
@@ -66,7 +66,10 @@ home.sc.field_Text = class home_sc_field_Text {
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
+                            iconMap: 'kijs.iconMap.Fa.paste',
+                            on: {
+                                click: (b) => { b.element.upX('kijs.gui.field.Text').value = 'Hello World!'; }
+                            }
                         }
                     ]
                 },{
@@ -136,7 +139,7 @@ home.sc.field_Text = class home_sc_field_Text {
                     label: 'mit spinIcon',
                     spinIconVisible: true
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Validierungen',
@@ -146,7 +149,7 @@ home.sc.field_Text = class home_sc_field_Text {
                     label: 'validationRegExp',
                     required: true,
                     //value: 'sdfg',
-                    validationRegExp: { 
+                    validationRegExp: {
                         regExp: /^Test$/,
                         msg: 'Wert muss \'Test\' sein'
                     }
@@ -165,7 +168,7 @@ home.sc.field_Text = class home_sc_field_Text {
                         input: 'function(e) { e.element.helpText = e.element.value==="Test" ? "Richtig! Der Wert ist \\"Test\\"!" : ""; }'
                     }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Formatierung',
@@ -177,16 +180,16 @@ home.sc.field_Text = class home_sc_field_Text {
                     value: 'sdfg',
                     helpText: 'nach 3 Zeichen wird eine Lücke eingefügt und es werden nur Grossbuchstaben verwendet.',
                     formatRegExp: [
-                        { 
+                        {
                             regExp: /\s/g, // Whitespace entfernen
                             replace: ''
-                        },{ 
+                        },{
                             regExp: /(\S{3})/g, // alle 3 Zeichen eine Lücke einfügen
                             replace: '$1 '
-                        },{ 
+                        },{
                             regExp: /\s$/, // Whitespace am Ende entfernen
                             replace: ''
-                        },{ 
+                        },{
                             regExp: /(.*)/g, // Buchstaben in Grossbauchstaben umwandeln
                             toUpperCase: true
                         }
@@ -194,15 +197,15 @@ home.sc.field_Text = class home_sc_field_Text {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -211,7 +214,7 @@ home.sc.field_Text = class home_sc_field_Text {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -332,10 +335,26 @@ home.sc.field_Text = class home_sc_field_Text {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: '\'isDirty\' abfragen',
+                on: {
+                    click: function(e) {
+                        let fieldStates = [];
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                fieldStates.push('Feld ' + (fieldStates.length+1) + ': ' + (el.isDirty ? 'dirty' : 'not dirty') );
+                            }
+                        }, this);
+
+                        kijs.gui.MsgBox.alert('isDirty', fieldStates);
+                    },
+                    context: this
+                }
             }
         ];
     }
-    
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -343,14 +362,14 @@ home.sc.field_Text = class home_sc_field_Text {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

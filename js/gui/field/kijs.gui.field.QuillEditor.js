@@ -16,13 +16,13 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         this._quillEditor = null;
         this._quillEditorContainerNode = null;
         this._quillEditorNode = null;
-        
+
         this._placeholder = '';
         this._theme = 'snow';
         this._value = '';
         this._valueTrimEnable = true;
         this._previousChangeValue = '';
-        
+
         this._toolbarOptions = [
             ['bold',  'underline', 'strike'],              // toggled buttons
             ['blockquote', 'code-block'],
@@ -70,7 +70,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get hasFocus() { 
+    get hasFocus() {
         if (this._quillEditor) {
             return this._quillEditor.hasFocus();
         }
@@ -112,7 +112,6 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         val = kijs.toString(val);
         this._value = val;
         this._previousChangeValue = val;
-        this._isDirty = false;
         if (this._quillEditor) {
             this._quillEditor.setContents([]);
             this._quillEditor.clipboard.dangerouslyPasteHTML(0, val);
@@ -136,7 +135,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             this._quillEditor.enable(true);
         }
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -151,33 +150,33 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             if (selectText) {
                 this._quillEditor.setSelection(0, this._quillEditor.getLength());
             }
-            
+
             return this._quillEditorNode.firstChild;
-            
+
         } else {
             return false;
-            
+
         }
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
 
         // quillEditor erstellen
         if (!this._quillEditor) {
-            
+
             // Container erstellen
             //this._quillEditorContainerNode = document.createElement('div');
             //this._quillEditorContainerNode.className = 'quill-editor-container';
-            
+
             // Div für Editor erstellen
             this._quillEditorNode = document.createElement('div');
             //this._quillEditorContainerNode.appendChild(this._quillEditorNode);
-            
+
             //this._inputWrapperDom.node.appendChild(this._quillEditorContainerNode);
             this._inputWrapperDom.node.appendChild(this._quillEditorNode);
-            
+
             // Editor erstellen
             this._quillEditor = new Quill(this._quillEditorNode, {
                 theme: this._theme,
@@ -207,7 +206,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             this.raiseEvent('afterRender');
         }
     }
-    
+
 
     // PRIVATE
     // LISTENERS
@@ -217,7 +216,6 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
 
     #onInputNodeBlur() {
         if (this.value !== this._previousChangeValue) {
-            this._isDirty = true;
             this.raiseEvent('change', { value: this.value, oldValue: this._previousChangeValue });
             this._previousChangeValue = this.value;
         }
@@ -250,5 +248,5 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

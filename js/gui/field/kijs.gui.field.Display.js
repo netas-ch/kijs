@@ -58,8 +58,8 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._formatRegExps = [];
         this._value = '';
         this._valueTrimEnable = true;
-        
-        
+
+
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'div',
             htmlDisplayType: 'html',
@@ -97,15 +97,15 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get clickableLinks() { return this._clickableLinks; }
-    set clickableLinks(val) { 
+    set clickableLinks(val) {
         this._clickableLinks = !!val;
         if (this.isRendered) {
             this.value = this._value;
         }
     }
-    
+
     get formatFn() { return this._formatFn; }
-    set formatFn(val) { 
+    set formatFn(val) {
         let fn = kijs.getFunctionFromString(val);
         if (kijs.isFunction(fn)) {
             this._formatFn = fn;
@@ -113,7 +113,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             throw new kijs.Error(`config "formatFn" is not valid.`);
         }
     }
-    
+
     get formatFnContext() { return this._formatFnContext; }
     set formatFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -143,23 +143,21 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     set value(val) {
         val = kijs.toString(val);
         val = this._formatRules(val);
-        
+
          // Sicherstellen, dass kein HTML-Code drin ist.
         val = kijs.String.htmlspecialchars(val);
-        
+
         // Hyperlinks einfügen
         if (this._clickableLinks) {
             val = this._linkify(val);
         }
-        
+
         // Zeilenumbrüche einfügen
         val = this._insertLineBreaks(val);
-        
-        this._isDirty = false;
-        
+
         this._inputDom.html = val;
     }
-    
+
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
@@ -170,20 +168,20 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     /**
      * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
-     * @param {Object|Array} regExps 
+     * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
-     *                       sonst replace() 
+     *                       sonst replace()
      * @returns {undefined}
      */
     addFormatRegExp(regExps) {
         if (!kijs.isArray(regExps)) {
             regExps = [regExps];
         }
-        
+
         kijs.Array.each(regExps, function(regExp) {
             let ok = true;
-            
+
             if (typeof regExp !== 'object') {
                 ok = false;
             }
@@ -195,7 +193,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                     ok = false;
                 }
             }
-            
+
             if (ok) {
                 if (kijs.isString(regExp.replace) && (regExp.toUpperCase || regExp.toLowerCase)) {
                     throw new kijs.Error(`"formatRegExp" must not have a "toUpperCase" or "toLowerCase" and a "replace" at the same time.`);
@@ -203,7 +201,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                     ok = false;
                 }
             }
-            
+
             if (ok) {
                 this._formatRegExps.push(regExp);
             } else {
@@ -211,13 +209,13 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             }
         }, this);
     }
-    
+
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -234,7 +232,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -274,7 +272,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             if (value !== '') {
                 kijs.Array.each(regExps, function(regExp) {
                     let r = this._stringToRegExp(regExp.regExp);
-                    
+
                     // in Grossbuchstaben umwandeln
                     if (regExp.toUpperCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -284,7 +282,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                         } else {
                             value = value.replace(r, function(v) { return v.toUpperCase(); });
                         }
-                        
+
                     // oder in Kleinbuchstaben umwandeln
                     } else if (regExp.toUpperCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -294,7 +292,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                         } else {
                             value = value.replace(r, function(v) { return v.toLowerCase(); });
                         }
-                        
+
                     // oder durch String ersetzen
                     } else {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -304,14 +302,14 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                         } else {
                             value = value.replace(r, regExp.replace);
                         }
-                        
+
                     }
                 }, this);
             }
         }
         return value;
     }
-    
+
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
@@ -322,26 +320,26 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         if (!kijs.isEmpty(this._formatRegExps)) {
             value = this._applyReplaceRegExps(this._formatRegExps, value);
         }
-        
+
         // formatFn
         if (kijs.isFunction(this._formatFn)) {
             if (value !== null && value.toString() !== '') {
                 value = this._formatFn.call(this._formatFnContext || this, value);
             }
         }
-        
+
         return value;
     }
-    
+
     // Ersetzt /n durch <br>
     _insertLineBreaks(txt) {
         return txt.replace(/\n/gim, '<br>');
     }
-    
+
     // Ersetzt Links durch <a>-Tags
     _linkify(txt) {
         let pattern;
-        
+
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
         pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
@@ -357,9 +355,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         return txt;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -383,9 +381,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._formatFn = null;
         this._formatFnContext = null;
         this._formatRegExps = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

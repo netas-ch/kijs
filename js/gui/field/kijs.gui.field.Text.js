@@ -57,7 +57,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._formatRegExps = [];
         this._valueTrimEnable = true;
         this._previousChangeValue = '';
-        
+
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
             nodeAttribute: {
@@ -69,14 +69,14 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                 context: this
             }
         });
-        
+
         this._dom.clsAdd('kijs-field-text');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false
         });
-        
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
@@ -125,9 +125,9 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
+
     get formatFn() { return this._formatFn; }
-    set formatFn(val) { 
+    set formatFn(val) {
         let fn = kijs.getFunctionFromString(val);
         if (kijs.isFunction(fn)) {
             this._formatFn = fn;
@@ -135,7 +135,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             throw new kijs.Error(`config "formatFn" is not valid.`);
         }
     }
-    
+
     get formatFnContext() { return this._formatFnContext; }
     set formatFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -145,10 +145,10 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             throw new kijs.Error(`config "formatFnContext" is not valid.`);
         }
     }
-    
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     get inputDom() { return this._inputDom; }
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
@@ -166,7 +166,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         super.readOnly = !!val;
         this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
-    
+
     // overwrite
     get value() {
         let val = kijs.toString(this._inputDom.nodeAttributeGet('value'));
@@ -180,7 +180,6 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         val = this._formatRules(val, false);
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
-        this._isDirty = false;
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }
@@ -200,20 +199,20 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     /**
      * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
-     * @param {Object|Array} regExps 
+     * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
-     *                       sonst replace() 
+     *                       sonst replace()
      * @returns {undefined}
      */
     addFormatRegExp(regExps) {
         if (!kijs.isArray(regExps)) {
             regExps = [regExps];
         }
-        
+
         kijs.Array.each(regExps, function(regExp) {
             let ok = true;
-            
+
             if (typeof regExp !== 'object') {
                 ok = false;
             }
@@ -225,7 +224,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                     ok = false;
                 }
             }
-            
+
             if (ok) {
                 if (kijs.isString(regExp.replace) && (regExp.toUpperCase || regExp.toLowerCase)) {
                     throw new kijs.Error(`"formatRegExp" must not have a "toUpperCase" or "toLowerCase" and a "replace" at the same time.`);
@@ -233,7 +232,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                     ok = false;
                 }
             }
-            
+
             if (ok) {
                 this._formatRegExps.push(regExp);
             } else {
@@ -241,13 +240,13 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             }
         }, this);
     }
-    
+
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -264,7 +263,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -288,8 +287,8 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._inputDom.unrender();
         super.unrender(true);
     }
-    
-    
+
+
     // PROTECTED
     _applyReplaceRegExps(regExps, value) {
         if (!kijs.isEmpty(regExps)) {
@@ -297,7 +296,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             if (value !== '') {
                 kijs.Array.each(regExps, function(regExp) {
                     let r = this._stringToRegExp(regExp.regExp);
-                    
+
                     // in Grossbuchstaben umwandeln
                     if (regExp.toUpperCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -307,7 +306,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                         } else {
                             value = value.replace(r, function(v) { return v.toUpperCase(); });
                         }
-                        
+
                     // oder in Kleinbuchstaben umwandeln
                     } else if (regExp.toUpperCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -317,7 +316,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                         } else {
                             value = value.replace(r, function(v) { return v.toLowerCase(); });
                         }
-                        
+
                     // oder durch String ersetzen
                     } else {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -327,14 +326,14 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
                         } else {
                             value = value.replace(r, regExp.replace);
                         }
-                        
+
                     }
                 }, this);
             }
         }
         return value;
     }
-    
+
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
@@ -346,35 +345,34 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         if (!kijs.isEmpty(this._formatRegExps)) {
             value = this._applyReplaceRegExps(this._formatRegExps, value);
         }
-        
+
         // formatFn
         if (kijs.isFunction(this._formatFn)) {
             if (value !== null && value.toString() !== '') {
                 value = this._formatFn.call(this._formatFnContext || this, value, !!whileTyping);
             }
         }
-        
+
         return value;
     }
 
-    
+
     // PRIVATE
     // LISTENERS
     #onInputDomChange(e) {
         // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt wird.
         let val = this.value;
         let oldVal = this._previousChangeValue;
-        
+
         // Wert neu reinschreiben (evtl. wurde er getrimmt)
         this.value = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     #onInputDomInput(e) {
         let val = kijs.toString(this._inputDom.nodeAttributeGet('value'));
         val = this._formatRules(val, true);
@@ -407,9 +405,9 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._formatFn = null;
         this._formatFnContext = null;
         this._formatRegExps = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

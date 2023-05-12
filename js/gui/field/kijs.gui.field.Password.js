@@ -17,7 +17,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._passwordChar = '●';
         this._valueTrimEnable = false;
         this._previousChangeValue = '';
-        
+
         this._value = '';
 
         this._inputDom = new kijs.gui.Dom({
@@ -100,10 +100,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         this._disableBrowserSecurityWarning = !!val;
     }
-    
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -145,9 +145,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this._inputDom.nodeAttributeSet('value', val);
         }
         this._previousChangeValue = val;
-        this._isDirty = false;
     }
-    
+
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
@@ -168,7 +167,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
     }
-    
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -185,7 +184,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -235,17 +234,16 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt wird.
         let val = this.value;
         let oldVal = this._previousChangeValue;
-        
+
         // Wert neu reinschreiben (evtl. wurde er getrimmt)
         this.value = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     #onInputDomInput(e) {
         if (this._disableBrowserSecurityWarning) {
             const val = kijs.toString(this._inputDom.nodeAttributeGet('value'));
@@ -255,7 +253,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
             // Neue Zeichen ermittteln
             var newChars = kijs.String.replaceAll(val, this._passwordChar, '');
-            
+
             // Ist das Feld nun leer?
             if (val === '') {
                 this._value = '';
@@ -276,10 +274,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                 this._value = this._value.substr(0, len);
 
             }
-            
+
             this._inputDom.nodeAttributeSet('value', this._value.replace(/./g, this._passwordChar));
         }
-        
+
         this.validate();
     }
 
@@ -317,5 +315,5 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

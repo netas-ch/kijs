@@ -1,3 +1,11 @@
+Version 2.2.1
+===============
+### kijs.gui.field.*
+ - Methode ```resetErrors()``` umbenannt zu ```errorsReset()```
+ - ```isDirty``` wird vom ```value```-setter nicht zurückgesetzt
+ - Dem ```isDirty``` setter kann nur noch false übergeben werden
+
+
 Version 2.1.2
 ===============
  - Neues Theme "Retro"  

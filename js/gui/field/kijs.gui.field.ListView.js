@@ -86,7 +86,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
     // overwrite
     get hasFocus() { return this._listView.hasFocus; }
-    
+
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
@@ -96,19 +96,18 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         super.readOnly = !!val;
         this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
     }
-    
+
     get rpc() { return this._listView.rpc; }
     set rpc(val) { this._listView.rpc = val; }
 
     get selectType() { return this._listView.selectType; }
     set selectType(val) { this._listView.selectType = val; }
-    
+
     // overwrite
     get value() { return this._listView.value; }
     set value(val) {
         this._listView.value = val;
         this._previousChangeValue = this._listView.value;
-        this._isDirty = false;
     }
 
     get valueField() { return this._listView.valueField; }
@@ -127,7 +126,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     addData(data) {
         this._listView.addData(data);
     }
-    
+
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -138,7 +137,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     focus(alsoSetIfNoTabIndex) {
         return this._listView.focus(alsoSetIfNoTabIndex);
     }
-    
+
     /**
      * Füllt das Combo mit Daten vom Server
      * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
@@ -178,7 +177,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         super._validationRules(value, ignoreEmpty);
 
         // minSelectCount
@@ -213,8 +212,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // LISTENERS
     #onListViewSelectionChange() {
         const val = this.value;
-        this._isDirty = true;
-        
+
         this.raiseEvent('change', { oldValue: this._previousChangeValue, value: val });
         this._previousChangeValue = val;
 

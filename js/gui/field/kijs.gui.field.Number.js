@@ -20,19 +20,19 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._minValue = null;
         this._maxValue = null;
         this._thousandsSeparator = '';
-        
+
         this._spinStep = 1;
         this._spinDelay = 400;
         this._spinAcceleration = 20;
-        
+
         this._spinDelayCurrent = null;
         this._spinDeferId = null;
-        
+
         this._allowedDecimalSeparators = ['.', ','];
         this._allowedThousandsSeparators = ['\'', ' ', '`', '´'];
-        
+
         this._previousChangeValue = '';
-        
+
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
             nodeAttribute: {
@@ -45,7 +45,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
                 context: this
             }
         });
-        
+
         // Spin Up/Down Buttons
         this._spinUpButtonEl = new kijs.gui.Button({
             iconMap: 'kijs.iconMap.Fa.caret-up',
@@ -76,16 +76,16 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             elements:[ this._spinUpButtonEl, this._spinDownButtonEl ]
         });
         this.add(this._spinContainerEl);
-        
+
         this._dom.clsAdd('kijs-field-number');
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
             disableFlex: true,
             spinButtonsVisible: false
         });
-        
+
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             allowDecimals: true,
@@ -117,7 +117,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._eventForwardsAdd('enterPress', this._inputDom);
         this._eventForwardsAdd('enterEscPress', this._inputDom);
         this._eventForwardsAdd('escPress', this._inputDom);
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -134,7 +134,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     set allowDecimals(val) { this._allowDecimals = !!val; }
 
     get alwaysDisplayDecimals() { return this._alwaysDisplayDecimals; }
-    set alwaysDisplayDecimals(val) { 
+    set alwaysDisplayDecimals(val) {
         this._alwaysDisplayDecimals = !!val;
     }
 
@@ -151,20 +151,20 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         // De-/aktiviert die Browservorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
+
     get decimalPrecision() { return this._decimalPrecision; }
-    set decimalPrecision(val) { 
+    set decimalPrecision(val) {
         this._decimalPrecision = kijs.isNumeric(val) ? parseInt(val) : 2;
     }
 
     get decimalSeparator() { return this._decimalSeparator; }
-    set decimalSeparator(val) { 
+    set decimalSeparator(val) {
         this._decimalSeparator = val;
     }
-    
+
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-    
+
     // overwrite
     get inputDom() { return this._inputDom; }
 
@@ -173,14 +173,14 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
-    
+
     get maxValue() { return this._maxValue; }
-    set maxValue(val) { 
+    set maxValue(val) {
         this._maxValue = val === null ? null : parseFloat(val);
     }
 
     get minValue() { return this._minValue; }
-    set minValue(val) { 
+    set minValue(val) {
         this._minValue = val === null ? null : parseFloat(val);
     }
 
@@ -195,10 +195,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinUpButtonEl.disabled = val;
         this._spinDownButtonEl.disabled = val;
     }
-    
+
     get spinButtonsVisible() { return this._spinContainerEl.visible; }
     set spinButtonsVisible(val) { this._spinContainerEl.visible = val; }
-    
+
     get spinAcceleration() { return this._spinAcceleration; }
     set spinAcceleration(val) { this._spinAcceleration = val; }
 
@@ -210,7 +210,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
     get spinUpButton() { return this._spinUpButtonEl; }
     get spinDownButton() { return this._spinDownButtonEl; }
-    
+
     get thousandsSeparator() { return this._thousandsSeparator; }
     set thousandsSeparator(val) {
         this._thousandsSeparator = val;
@@ -229,7 +229,6 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         val = this._formatNumber(val);
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
         this._previousChangeValue = val;
-        this._isDirty = false;
     }
 
     /**
@@ -266,7 +265,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         }
         return nde;
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
@@ -286,7 +285,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             clearTimeout(this._spinDeferId);
             this._spinDeferId = null;
         }
-        
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
@@ -295,36 +294,36 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._inputDom.unrender();
         super.unrender(true);
     }
-    
-    
+
+
     // PROTECTED
     // Zahl formatieren
     _formatNumber(value) {
         // vorhandene Formatierung entfernen
         value = this._unformatNumber(value);
-        
+
         // Wenn Nummer nicht valide ist, wird der Ursprungswert zurückgegeben?
         if (!value.match(/^-?[0-9]+(?:\.[0-9]+)?$/)) {
             return value;
         }
-        
+
         // Runden
         let digits = 0;
         if (this._allowDecimals) {
             digits = this.decimalPrecision;
         }
         value = kijs.Number.round(value, digits);
-        
+
         // formatieren
         value = kijs.Number.format(
-                value, 
-                (this._alwaysDisplayDecimals ? this._decimalPrecision : null), 
-                this._decimalSeparator, 
+                value,
+                (this._alwaysDisplayDecimals ? this._decimalPrecision : null),
+                this._decimalSeparator,
                 this._thousandsSeparator);
-        
+
         return value;
     }
-    
+
     // Startet das Hoch-/runterzählen von einem Spinnbutton
     _spinStart(dir) {
         // falls bereits gescrollt wird: abbrechen
@@ -332,28 +331,28 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             clearTimeout(this._spinDeferId);
             this._spinDeferId = null;
         }
-        
+
         if (this.disabled) {
             return;
         }
-        
+
         let val = this.value;
-        
+
         if (kijs.isEmpty(val)) {
             val = 0;
         }
-        
+
         val = window.parseFloat(val);
-        
+
         if (window.isNaN(val)) {
             return;
         }
-        
+
         switch (dir) {
             case 'up':    val += this._spinStep; break;
             case 'down':  val -= this._spinStep; break;
         }
-        
+
         if (this._maxValue !== null && val > this._maxValue) {
             val = this._maxValue;
         }
@@ -361,10 +360,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._minValue !== null && val < this._minValue) {
             val = this._minValue;
         }
-        
+
         val = this._formatNumber(val);
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
-        
+
         let step = 10; // Minimalintervall
         if (this._spinAcceleration > 0) {
             step = parseInt(this._spinDelayCurrent / 100 * this._spinAcceleration);
@@ -373,74 +372,73 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinDelayCurrent < 10) {
             this._spinDelayCurrent = 10;
         }
-        
+
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
-    
+
     // Stopt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
             this._spinDeferId = null;
         }
-        
+
         let val = this.value;
         let oldVal = this._previousChangeValue;
         this._previousChangeValue = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     // Formatierung einer Zahl entfernen
     _unformatNumber(value) {
         value = kijs.toString(value).trim();
-        
+
         // Tausendertrennzeichen entfernen
         kijs.Array.each(this._allowedThousandsSeparators, function(sep) {
             value = kijs.String.replaceAll(value, sep, '');
         }, this);
-        
+
         // Dezimaltrennzeichen durch . ersetzen
         kijs.Array.each(this._allowedDecimalSeparators, function(sep) {
             value = kijs.String.replaceAll(value, sep, '.');
         }, this);
-        
+
         // Falls die Zahl mit einem Dezimaltrennzeichen endet, dieses entfernen.
         value = value.replace(/[\.]+$/, '');
-        
+
         return value;
     }
-    
+
     // overwrite
     _validationRules(value, ignoreEmpty) {
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
-        
+
         let initialValue = value;
-        
+
         super._validationRules(value, ignoreEmpty);
 
         value = kijs.toString(value).trim();
-        
+
         // Falls das Feld leer ist, nichts weiter tun.
         if (value === '') {
             return;
         }
-        
+
         // Formatierung entfernen
         value = this._unformatNumber(value);
-        
+
         // valide Nummer?
         if (!value.match(/^-?[0-9]+\.?[0-9]*?$/)) {
             this._errors.push(kijs.getText('%1 ist keine gültige Nummer', '', initialValue));
             return;
         }
-        
+
         // runden, damit min und max geprüft werden können
         if (this._allowDecimals) {
             value = window.parseFloat(value);
@@ -459,8 +457,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             this._errors.push(kijs.getText('Der maximale Wert für dieses Feld ist %1', '', this._maxValue));
         }
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     #onInputDomChange(e) {
@@ -468,26 +466,25 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         // Wenn Nummer ungültig, die Nummer belassen
         let val = this.value;
         let oldVal = this._previousChangeValue;
-        
+
         // Wert neu reinschreiben (evtl. wurde er Formatiert)
         this.value = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
-            this._isDirty = true;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
-    
+
     #onInputDomInput(e) {
         this.validate();
     }
-    
+
     #onSpinDownButtonMouseDown() {
         this._spinDelayCurrent = this._spinDelay;
         this._spinStart('down');
     }
-    
+
     #onSpinDownButtonMouseUp() {
         this._spinStop();
     }
@@ -500,7 +497,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     #onSpinUpButtonMouseUp() {
         this._spinStop();
     }
-    
+
 
 
     // --------------------------------------------------------------
@@ -529,7 +526,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinContainerEl) {
             this._spinContainerEl.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._allowedDecimalSeparators = null;
         this._allowedThousandsSeparators = null;
@@ -537,9 +534,9 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinUpButtonEl = null;
         this._spinDownButtonEl = null;
         this._spinContainerEl = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };
