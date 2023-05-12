@@ -661,16 +661,29 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
     
     #onWheel(e) {
-        const hasScrollX = this._dom.clsHas('kijs-scrollable-x-enable');
-        const hasScrollY = this._dom.clsHas('kijs-scrollable-y-enable');
+        const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
+        const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');
         
-        if (hasScrollY) {
+        // Scrollbar auf Y + X Achse
+        if (hasScrollbarY && hasScrollbarX) {
             this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
-        } else if (hasScrollX) {
-            this._innerDom.node.scrollLeft += e.nodeEvent.deltaY;
+            this._innerDom.node.scrollLeft += e.nodeEvent.deltaX;
+            
+        // Scrollbar nur auf Y Achse
+        } else if (hasScrollbarY) {
+            this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
+            
+        // Scrollbar nur auf X Achse
+        } else if (hasScrollbarX) {
+            // Mit dem Mausrad kann auf der X-Achse gescrollt werden
+            if (e.nodeEvent.deltaX) {
+                this._innerDom.node.scrollLeft += e.nodeEvent.deltaX;
+            } else {
+                this._innerDom.node.scrollLeft += e.nodeEvent.deltaY;
+            }
         }
         
-        if (hasScrollX || hasScrollY) {
+        if (hasScrollbarX || hasScrollbarY) {
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
         }
