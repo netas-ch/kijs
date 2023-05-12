@@ -5,6 +5,24 @@ Version 2.2.1
  - ```isDirty``` wird vom ```value```-setter nicht zurückgesetzt
  - Dem ```isDirty``` setter kann nur noch false übergeben werden
 
+### kijs.gui.Rpc
+ - Die callback-fn oder das Promise wird nun auch ausgeführt, wenn bei einer 
+   ```"warningMsg"``` auf "Abbrechen" geklickt wurde. Der ```"errorType"``` ist 
+   dann ```"warning"```.  
+   Die callback-fn wird somit in jedem Fall ausgeführt (Ausnahme: der Request wird 
+   bei ```cancelRunningRpcs=true``` von einem neueren Request abgebrochen.)  
+
+   Ein Promise verhält sich gleich. Es wird aber aufgeteilt in  
+    - ```then()```  
+    - ```catch()``` (nur bei ```errorType='error'```)  
+
+   In der callback-fn oder im then() sollte der Code in der Regel in ein  
+
+        if (kijs.isEmpty(e.errorType)) {  
+            ...  
+        }
+
+
 
 Version 2.1.2
 ===============
@@ -216,7 +234,7 @@ Siehe dazu auch den Leitfaden "Ereignisse" im Kapitel "on(names, callback, conte
  - Die ```callbackFn``` wird nun immer ausgeführt! Auch in einem Fehlerfall! **ACHTUNG!!!**  
    Um den gleichen Effekt wie früher zu haben muss der Inhalt der CallbackFn in ein  
 
-        if (kijs.isEmpty(e.errorMsg)) {  
+        if (kijs.isEmpty(e.errorType)) {  
             ...  
         }
 

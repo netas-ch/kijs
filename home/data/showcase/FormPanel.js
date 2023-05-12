@@ -35,7 +35,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                 {
                     xtype: 'kijs.gui.FormPanel',
                     caption: 'Formular',
-                    //rpc: this._app.rpc,
+                    //rpc: kijs.getRpc('default'),
                     //autoLoad: false,
                     //facadeFnLoad: 'form.load',
                     //facadeFnSave: 'form.save',

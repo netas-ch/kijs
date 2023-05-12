@@ -14,12 +14,15 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
     /**
      * Führt einen RPC aus
      * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt, auch im Fehlerfall.
-     *   Die Rückgabe der Funktion ist dann immer Null.
-     * - Wird KEINE fn übergeben, so wird ein Promise zurückgegeben. Im Fehlerfall wird unterschieden zwischen zwei errorType:
-     *   - 'errorNotice' (default): Es wird resolve ausgeführt. Die errorMsg befindet sich dann unter e.errorMsg.
-     *   - 'error':                 Es wird reject ausgeführt mit einem Error Objekt als Argument.
-
-     * 
+     * - Wird KEINE fn übergeben, so wird ein Promise zurückgegeben. Bei folgenden errorType 
+     *   wird catch aufgerufen:
+     *    - 'error'   Es wurde eine errorMsg vom Server zurückgegeben mit errorType='error' 
+     *                oder ohne errorType (dann wird der errorType automatisch auf 'error' 
+     *                gesetzt. 
+     *    - 'warning' Es wurde vom Server eine warningMsg zurückgegeben und der Benutzer 
+     *                hat auf Abbrechen geklickt.
+     *   Es können aber auch andere errorTypes verwendet werden, wie z.B. 'errorNotice', 
+     *   die aber alle keinen Catch auslösen, sondern resolve.
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} facadeFn         Modul/Facaden-name und Methodenname Bsp: 'address.save'
@@ -95,8 +98,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                 if (!rpcData.response.canceled) {
                     // Fehler --> FehlerMsg + Abbruch
                     // rpcData.response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    if (rpcData.response.errorMsg) {
+                    if (!kijs.isEmpty(rpcData.response.errorType) || !kijs.isEmpty(rpcData.response.errorMsg)) {
                         let errorTitle = rpcData.response.errorTitle;
+                        
+                        // Falls kein errorType zurückgegeben wurde: 'error' nehmen.
+                        if (kijs.isEmpty(rpcData.response.errorType)) {
+                            rpcData.response.errorType = 'error';
+                        }
+                        
                         if (rpcData.response.errorType === 'error') {
                             errorTitle = kijs.isEmpty(errorTitle) ? kijs.getText('Unerwarteter Fehler'): errorTitle;
                             kijs.gui.MsgBox.error(errorTitle, rpcData.response.errorMsg);
@@ -104,14 +113,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                             errorTitle = kijs.isEmpty(errorTitle) ? kijs.getText('Fehler'): errorTitle;
                             kijs.gui.MsgBox.errorNotice(errorTitle, rpcData.response.errorMsg);
                         }
-                    }
 
                     // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
                     // rpcData.response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    if (rpcData.response.warningMsg) {
+                    } else if (!kijs.isEmpty(rpcData.response.warningMsg)) {
                         let warningTitle = rpcData.response.warningTitle;
                         warningTitle = kijs.isEmpty(warningTitle) ? kijs.getText('Warnung'): warningTitle;
                         kijs.gui.MsgBox.warning(warningTitle, rpcData.response.warningMsg, function(e) {
+                            // click auf Ok
                             if (e.btn === 'ok') {
                                 // Request nochmal senden mit Flag ignoreWarnings
                                 this._doRpc({
@@ -125,13 +134,33 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                                     waitMaskTargetDomProperty: config.waitMaskTargetDomProperty,
                                     ignoreWarnings: true
                                 }, resolve, reject);
+                                
+                            // click auf Abbrechen
+                            } else {
+                                // errorType ist fix 'warning'
+                                rpcData.response.errorType = 'warning';
+                                
+                                // Argument vorbereiten
+                                const e = {
+                                    responseData: rpcData.response.responseData,
+                                    requestData: rpcData.request.requestData,
+                                    errorType: rpcData.response.errorType,
+                                    errorMsg: rpcData.response.errorMsg
+                                };
+
+                                // callback-fn ausführen
+                                if (kijs.isFunction(config.fn)) {
+                                    config.fn.call(config.context || this, e);
+
+                                // Promise auslösen
+                                } else {
+                                    resolve(e);
+
+                                }
+                                
                             }
                         }, this);
-
-                        // promise nicht auslösen
-                        rpcData.request.promiseResolve = null;
-                        rpcData.request.promiseReject = null;
-
+                        
                         return;
                     }
 
@@ -165,7 +194,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                     // Promise auslösen
                     } else {
-                        if (!kijs.isEmpty(e.errorMsg) && e.errorType === 'error') {
+                        if (e.errorType === 'error') {
                             reject( new Error(e.errorMsg) );
                         } else {
                             resolve(e);
