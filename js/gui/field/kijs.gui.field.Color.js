@@ -60,7 +60,8 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             nodeTagName: 'input',
             nodeAttribute: {
                 type: 'color',
-                id: this._inputId
+                id: this._inputId,
+                value: this._defaultColor
             },
             on: {
                 change: this.#onInputDomChange,
@@ -137,7 +138,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // overwrite
     get value() {
         let val = this._inputDom.nodeAttributeGet('value');
-        return val === null ? '' : val;
+        return kijs.toString(val).toLowerCase();
     }
     set value(val) {
         val = kijs.toString(val);

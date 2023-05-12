@@ -315,6 +315,18 @@ home.sc.field_Text = class home_sc_field_Text {
                 }
             },{
                 xtype: 'kijs.gui.Button',
+                caption: 'isDirty',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            this._updateIsDirtyButton({element: el});
+                        }, this);
+
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
                 caption: 'Buttons hinzufügen',
                 on: {
                     click: function(e) {
@@ -335,24 +347,37 @@ home.sc.field_Text = class home_sc_field_Text {
                     },
                     context: this
                 }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: '\'isDirty\' abfragen',
-                on: {
-                    click: function(e) {
-                        let fieldStates = [];
-                        kijs.Array.each(this._content.elements, function(el) {
-                            if (el instanceof kijs.gui.field.Field) {
-                                fieldStates.push('Feld ' + (fieldStates.length+1) + ': ' + (el.isDirty ? 'dirty' : 'not dirty') );
-                            }
-                        }, this);
-
-                        kijs.gui.MsgBox.alert('isDirty', fieldStates);
-                    },
-                    context: this
-                }
             }
         ];
+    }
+
+    _updateIsDirtyButton(e) {
+        const el = e.element;
+        if (el instanceof kijs.gui.field.Field) {
+            if (el.isDirty && !el.down('isDirtyResetButton')) {
+                el.add({
+                    xtype: 'kijs.gui.Button',
+                    name: 'isDirtyResetButton',
+                    caption: 'isDirty',
+                    tooltip: 'isDirty zurücksetzen',
+                    style: {
+                        borderColor: '#ff8800',
+                    },
+                    captionStyle: {
+                        color: '#ff8800'
+                    },
+                    on: {
+                        click: (e) => {
+                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
+                            e.element.parent.isDirty = false;
+                            e.element.parent.remove(e.element);
+                        }
+                    }
+                });
+            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
+                el.remove(el.down('isDirtyResetButton'));
+            }
+        }
     }
 
     _updateProperty(propertyName, value) {

@@ -2,8 +2,8 @@
 
 window.home.sc = {};
 home.sc.field_Checkbox = class home_sc_field_Checkbox {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,9 +11,9 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -36,7 +36,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 },{
                     xtype: 'kijs.gui.field.Checkbox'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
@@ -47,13 +47,13 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     caption: 'Caption',
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         change: console.log,
                         input:  console.log,
@@ -61,7 +61,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                         context: this
                     }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'weitere Beispiele',
@@ -116,15 +116,15 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -133,7 +133,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -215,11 +215,42 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     context: this
                 }
             },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'isDirty',
+                on: {
+                    change: function(e) {
+                        const isOn = !!e.element.value;
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                if (isOn) {
+                                    el.on('input', this._updateIsDirtyButton, this);
+                                } else {
+                                    el.off('input', this._updateIsDirtyButton, this);
+                                }
+                            }
+                        }, this);
+
+                    },
+                    context: this
+                }
+            },{
                 xtype: 'kijs.gui.Button',
                 caption: 'Validate',
                 on: {
                     click: function(e) {
                         this._callFunction('validate');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'isDirty',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            this._updateIsDirtyButton({element: el});
+                        }, this);
+
                     },
                     context: this
                 }
@@ -248,7 +279,36 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
             }
         ];
     }
-    
+
+    _updateIsDirtyButton(e) {
+        const el = e.element;
+        if (el instanceof kijs.gui.field.Field) {
+            if (el.isDirty && !el.down('isDirtyResetButton')) {
+                el.add({
+                    xtype: 'kijs.gui.Button',
+                    name: 'isDirtyResetButton',
+                    caption: 'isDirty',
+                    tooltip: 'isDirty zurücksetzen',
+                    style: {
+                        borderColor: '#ff8800',
+                    },
+                    captionStyle: {
+                        color: '#ff8800'
+                    },
+                    on: {
+                        click: (e) => {
+                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
+                            e.element.parent.isDirty = false;
+                            e.element.parent.remove(e.element);
+                        }
+                    }
+                });
+            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
+                el.remove(el.down('isDirtyResetButton'));
+            }
+        }
+    }
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -256,14 +316,14 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

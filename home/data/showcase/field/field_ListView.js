@@ -2,8 +2,8 @@
 
 window.home.sc = {};
 home.sc.field_ListView = class home_sc_field_ListView {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,9 +11,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -43,7 +43,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                         { caption: 'Windows', value: 3}
                     ]
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
@@ -64,13 +64,13 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     ],
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         change: console.log,
                         input:  console.log,
@@ -78,7 +78,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                         context: this
                     }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit RPC',
@@ -95,11 +95,12 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     facadeFnLoad: 'colors.load',
                     autoLoad: true,
                     showCheckBoxes: false,
+                    selectType: 'multi',
                     value: ['#0f0', '#ff0'],
                     minSelectCount: 2,
                     maxSelectCount: 3
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'ListView local:',
@@ -118,16 +119,16 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     required: true,
                     width: 350,
                     data: [
-                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' }, 
-                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' }, 
+                        {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' },
+                        {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' },
                         {id:3, Bezeichnung:'pink', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff0088' },
-                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' }, 
-                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' }, 
+                        {id:4, Bezeichnung:'türkis', Icon:'kijs.iconMap.Fa.droplet', Color:'#00ff88' },
+                        {id:5, Bezeichnung:'orange', Icon:'kijs.iconMap.Fa.droplet', Color:'#ff8800' },
                         {id:6, Bezeichnung:'viollet', Icon:'kijs.iconMap.Fa.droplet', Color:'#8800ff' },
-                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' }, 
-                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' }, 
-                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' }, 
-                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' }, 
+                        {id:7, Bezeichnung:'dunkelgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#666666' },
+                        {id:8, Bezeichnung:'grau', Icon:'kijs.iconMap.Fa.droplet', Color:'#999999' },
+                        {id:9, Bezeichnung:'hellgrau', Icon:'kijs.iconMap.Fa.droplet', Color:'#bbbbbb' },
+                        {id:10, Bezeichnung:'weiss', Icon:'kijs.iconMap.Fa.droplet', Color:'#ffffff' },
                         {id:11, Bezeichnung:'schwarz', Icon:'kijs.iconMap.Fa.droplet', Color:'#000000' }
                     ],
                     value: [2,3],
@@ -137,15 +138,15 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -154,7 +155,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -257,6 +258,18 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 }
             },{
                 xtype: 'kijs.gui.Button',
+                caption: 'isDirty',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            this._updateIsDirtyButton({element: el});
+                        }, this);
+
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
                 caption: 'Buttons hinzufügen',
                 on: {
                     click: function(e) {
@@ -280,7 +293,36 @@ home.sc.field_ListView = class home_sc_field_ListView {
             }
         ];
     }
-    
+
+    _updateIsDirtyButton(e) {
+        const el = e.element;
+        if (el instanceof kijs.gui.field.Field) {
+            if (el.isDirty && !el.down('isDirtyResetButton')) {
+                el.add({
+                    xtype: 'kijs.gui.Button',
+                    name: 'isDirtyResetButton',
+                    caption: 'isDirty',
+                    tooltip: 'isDirty zurücksetzen',
+                    style: {
+                        borderColor: '#ff8800',
+                    },
+                    captionStyle: {
+                        color: '#ff8800'
+                    },
+                    on: {
+                        click: (e) => {
+                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
+                            e.element.parent.isDirty = false;
+                            e.element.parent.remove(e.element);
+                        }
+                    }
+                });
+            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
+                el.remove(el.down('isDirtyResetButton'));
+            }
+        }
+    }
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -288,14 +330,14 @@ home.sc.field_ListView = class home_sc_field_ListView {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

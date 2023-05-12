@@ -61,12 +61,15 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
         this._inputDom.nodeAttributeSet('type', 'range');
         this._dom.clsRemove('kijs-field-text');
         this._dom.clsAdd('kijs-field-range');
-        
+
          // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // nix
+            min  : 0,
+            max  : 100,
+            step : 1,
+            value: 50
         });
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             min: { target: 'min' },
@@ -80,7 +83,7 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
             this.applyConfig(config, true);
         }
     }
-    
+
 
 
     // --------------------------------------------------------------
@@ -109,6 +112,9 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
     }
 
     set step(val) { this._inputDom.nodeAttributeSet('step', val); }
-    get step() { return this._inputDom.nodeAttributeGet('step'); }
+    get step() { return parseInt(this._inputDom.nodeAttributeGet('step')); }
+
+    set value(val) { super.value = val; }
+    get value() { return parseInt(super.value); }
 
 };

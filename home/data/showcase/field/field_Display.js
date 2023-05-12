@@ -2,8 +2,8 @@
 
 window.home.sc = {};
 home.sc.field_Display = class home_sc_field_Display {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -11,9 +11,9 @@ home.sc.field_Display = class home_sc_field_Display {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -37,14 +37,14 @@ home.sc.field_Display = class home_sc_field_Display {
                     xtype: 'kijs.gui.field.Display',
                     value: 'meinText'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.field.Display',
                     label: 'langer Text',
                     value: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
                     helpText: 'Hilfe'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Element',
                     html: 'mit Label',
@@ -57,13 +57,13 @@ home.sc.field_Display = class home_sc_field_Display {
                     clickableLinks: false,
                     on: {
                         focus:  console.log,
-                     
+
                         keyDown:  console.log,
                         enterPress:  console.log,
                         enterEscPress:  console.log,
                         escPress:  console.log,
                         spacePress:  console.log,
-                        
+
                         blur:  console.log,
                         change: console.log,
                         input:  console.log,
@@ -83,15 +83,15 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _callFunction(fnName) {
         kijs.Array.each(this._content.elements, function(el) {
@@ -100,7 +100,7 @@ home.sc.field_Display = class home_sc_field_Display {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -192,6 +192,18 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             },{
                 xtype: 'kijs.gui.Button',
+                caption: 'isDirty',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            this._updateIsDirtyButton({element: el});
+                        }, this);
+
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
                 caption: 'Buttons hinzufügen',
                 on: {
                     click: function(e) {
@@ -215,7 +227,36 @@ home.sc.field_Display = class home_sc_field_Display {
             }
         ];
     }
-    
+
+    _updateIsDirtyButton(e) {
+        const el = e.element;
+        if (el instanceof kijs.gui.field.Field) {
+            if (el.isDirty && !el.down('isDirtyResetButton')) {
+                el.add({
+                    xtype: 'kijs.gui.Button',
+                    name: 'isDirtyResetButton',
+                    caption: 'isDirty',
+                    tooltip: 'isDirty zurücksetzen',
+                    style: {
+                        borderColor: '#ff8800',
+                    },
+                    captionStyle: {
+                        color: '#ff8800'
+                    },
+                    on: {
+                        click: (e) => {
+                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
+                            e.element.parent.isDirty = false;
+                            e.element.parent.remove(e.element);
+                        }
+                    }
+                });
+            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
+                el.remove(el.down('isDirtyResetButton'));
+            }
+        }
+    }
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -223,14 +264,14 @@ home.sc.field_Display = class home_sc_field_Display {
             }
         }, this);
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

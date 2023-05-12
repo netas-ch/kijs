@@ -69,7 +69,7 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
                     label: 'ohne Punkte',
                     value: '756.1234.5678.97',
                     formatRegExp:[
-                        { 
+                        {
                             regExp: /\./g, // Punkte entfernen
                             replace: ''
                         }
@@ -106,7 +106,7 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
             }
         }, this);
     }
-    
+
     _getHeaderElements() {
         return [
             {
@@ -218,6 +218,18 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
                 }
             },{
                 xtype: 'kijs.gui.Button',
+                caption: 'isDirty',
+                on: {
+                    click: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            this._updateIsDirtyButton({element: el});
+                        }, this);
+
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
                 caption: 'value setzen',
                 on: {
                     click: function(e) {
@@ -254,7 +266,36 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
             }
         ];
     }
-    
+
+    _updateIsDirtyButton(e) {
+        const el = e.element;
+        if (el instanceof kijs.gui.field.Field) {
+            if (el.isDirty && !el.down('isDirtyResetButton')) {
+                el.add({
+                    xtype: 'kijs.gui.Button',
+                    name: 'isDirtyResetButton',
+                    caption: 'isDirty',
+                    tooltip: 'isDirty zurücksetzen',
+                    style: {
+                        borderColor: '#ff8800',
+                    },
+                    captionStyle: {
+                        color: '#ff8800'
+                    },
+                    on: {
+                        click: (e) => {
+                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
+                            e.element.parent.isDirty = false;
+                            e.element.parent.remove(e.element);
+                        }
+                    }
+                });
+            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
+                el.remove(el.down('isDirtyResetButton'));
+            }
+        }
+    }
+
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -271,5 +312,5 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
     destruct() {
         this._content = null;
     }
-    
+
 };
