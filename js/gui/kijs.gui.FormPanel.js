@@ -410,16 +410,18 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     if (kijs.isEmpty(e.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
                         e.errorMsg = this._errorMsg;
                     }
+                    if (kijs.isEmpty(e.errorType)) {
+                        e.errorType = 'errorNotice';
+                    }
                 }
 
-                // Falls alles OK
-                if (kijs.isEmpty(e.errorMsg)) {
-                    // 'dirty' zurücksetzen
+                // Falls alles OK: 'dirty' zurücksetzen
+                if (kijs.isEmpty(e.errorType)) {
                     this.isDirty = false;
-
-                    // event
-                    this.raiseEvent('afterSave', e);
                 }
+                
+                // 'afterSave' auslösen
+                this.raiseEvent('afterSave', e);
 
                 resolve(e);
 
