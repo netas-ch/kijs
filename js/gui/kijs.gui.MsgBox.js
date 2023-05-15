@@ -25,7 +25,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return this.show({
             caption: caption,
             msg: msg,
-            closable: false,
+            closable: true,
             fn: fn,
             context: context,
             buttons: [
@@ -89,7 +89,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return this.show({
             caption: caption,
             msg: msg,
-            closable: false,
+            closable: true,
             fn: fn,
             context: context,
             icon: {
@@ -122,7 +122,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return this.show({
             caption: caption,
             msg: msg,
-            closable: false,
+            closable: true,
             fn: fn,
             context: context,
             icon: {
@@ -155,7 +155,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return this.show({
             caption: caption,
             msg: msg,
-            closable: false,
+            closable: true,
             fn: fn,
             context: context,
             icon: {
@@ -351,7 +351,7 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
             // Fenster erstellen
             const win = new kijs.gui.Window({
-                caption: config.caption,
+                caption: kijs.isEmpty(config.caption) ? ' ' :  config.caption,
                 iconMap: config.iconMap ? config.iconMap : '',
                 closable: config.hasOwnProperty('closable') ? !!config.closable : true,
                 collapsible: false,
