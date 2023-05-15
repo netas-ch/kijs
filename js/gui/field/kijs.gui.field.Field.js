@@ -685,6 +685,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // PROTECTED
     /**
      * compares the current value to the initial value.
+     * @param {String|Number|Array|Object|Null} initialValue
+     * @param {String|Number|Array|Object|Null} currentValue
      * @returns {Boolean}
      */
     _compareIsDirty(initialValue, currentValue) {

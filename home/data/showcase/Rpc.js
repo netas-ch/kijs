@@ -42,7 +42,9 @@ home.sc.Rpc = class home_sc_Rpc {
                                 facadeFn:'rpc.simple', 
                                 data: 'RPC mit Promise'
                             }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -56,7 +58,9 @@ home.sc.Rpc = class home_sc_Rpc {
                                 facadeFn:'rpc.simple', 
                                 data: 'RPC mit Promise'
                             });
-                            kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(rpcData.responseData));
+                            if (kijs.isEmpty(rpcData.errorType)) {
+                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(rpcData.responseData));
+                            }
                         },
                         context: this
                     }
@@ -69,7 +73,9 @@ home.sc.Rpc = class home_sc_Rpc {
                                 facadeFn:'rpc.simple', 
                                 data: 'RPC mit callback function',
                                 fn: function(e) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                    if (kijs.isEmpty(e.errorType)) {
+                                        kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                    }
                                 }
                             });
                         },
@@ -80,8 +86,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'RPC verzögert mit Ladeanzeige',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.delay', data: 'RPC verzögert mit Ladeanzeige' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.delay', 
+                                data: 'RPC verzögert mit Ladeanzeige' 
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -97,7 +108,9 @@ home.sc.Rpc = class home_sc_Rpc {
                                 waitMaskTarget: 'none',
                                 cancelRunningRpcs: true
                             }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -113,14 +126,29 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'Sende 3 RPCs',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.simple', data: 'RPC 1/3' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.simple', 
+                                data: 'RPC 1/3'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.simple', data: 'RPC 2/3' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.simple', 
+                                data: 'RPC 2/3'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.simple', data: 'RPC 3/3' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.simple', 
+                                data: 'RPC 3/3' 
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -136,8 +164,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'infoMsg',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.infoMsg', data: 'infoMsg' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({
+                                facadeFn: 'rpc.infoMsg',
+                                data: 'infoMsg'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -147,8 +180,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'cornerTipMsg',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.cornerTipMsg', data: 'cornerTipMsg' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.cornerTipMsg', 
+                                data: 'cornerTipMsg'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -158,8 +196,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'warningMsg',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.warningMsg', data: 'warningMsg' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.warningMsg', 
+                                data: 'warningMsg' 
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -169,8 +212,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'errorMsg',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.errorMsg', data: 'errorMsg' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.errorMsg', 
+                                data: 'errorMsg' 
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -187,8 +235,13 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'errorNotice',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.errorNotice', data: 'error' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.errorNotice', 
+                                data: 'error' 
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -198,65 +251,19 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'error',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.error', data: 'errorNotice' }).
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.error', 
+                                data: 'errorNotice' 
+                            }).
                                 then((e) => {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
-                                })
-                                .catch((ex) => {
-                                    kijs.gui.CornerTipContainer.show('Unerwarteter Fehler', JSON.stringify(ex.message));
+                                    if (kijs.isEmpty(e.errorType)) {
+                                        kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                    }
                                 });
                         },
                         context: this
                     }
                 },
-                
-                {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimale Fehlerbehandlung:',
-                    style: { margin: '10px 0 0 0'}
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'error ohne Fehlerbehandlung',
-                    on: {
-                        click: function() {
-                            try {
-                                kijs.getRpc('default').do({ facadeFn: 'rpc.error', data: 'error' }).then((e) => {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
-                                });
-                            } catch(ex) {
-                                console.log('Fehler wurde abgefangen');
-                            } 
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'error mit minimaler Fehlerbehandlung (es ist min. ein catch(() => {}) nötig!)',
-                    on: {
-                        click: function() {
-                            kijs.getRpc('default').do({ facadeFn: 'rpc.error', data: 'error' }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
-                            }).catch(() => {});
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'oder die übergeordnete Funktion ist async!',
-                    on: {
-                        click: async function() {
-                            try {
-                                const rpcData = await kijs.getRpc('default').do({ facadeFn: 'rpc.error', data: 'error' });
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(rpcData.responseData));
-                            } catch(ex) {
-                                console.log('Fehler wurde abgefangen');
-                            }        
-                        },
-                        context: this
-                    }
-                },
-                
-                
                 
                 {
                     xtype: 'kijs.gui.Element',
@@ -273,7 +280,9 @@ home.sc.Rpc = class home_sc_Rpc {
                                 waitMaskTarget: this._content.down('waitMaskTarget'),
                                 waitMaskTargetDomProperty: 'innerDom'
                             }).then((e) => {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
                             });
                         },
                         context: this
@@ -292,39 +301,6 @@ home.sc.Rpc = class home_sc_Rpc {
                     innerStyle: {
                         color: '#666',
                         textAlign: 'center'
-                    }
-                },
-                
-                {
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Test fn',
-                    on: {
-                        click: function() {
-                            kijs.getRpc('default').do({
-                                facadeFn: 'rpc.warningMsg',
-                                data: 'Test fn',
-                                fn: function(e) {
-                                    console.log('fn ' + (e.errorType ?? ''));
-                                }
-                            });
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'Test promise',
-                    on: {
-                        click: function() {
-                            kijs.getRpc('default').do({
-                                facadeFn: 'rpc.warningMsg',
-                                data: 'Test promise'
-                            }).then((e) => {
-                                console.log('then ' + (e.errorType ?? ''));
-                            }).catch((ex) => {
-                                console.log('catch');
-                            });
-                        },
-                        context: this
                     }
                 }
                 

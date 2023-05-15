@@ -200,6 +200,7 @@ foreach ($requests as $request) {
                 if (count(get_object_vars($fieldErrors))) {
                     $response->responseData->fieldErrors = $fieldErrors;
                     $response->errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt';
+                    $response->errorType = 'errorNotice';
                 }
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -411,7 +412,7 @@ foreach ($requests as $request) {
             break;
         
         case 'rpc.simple':
-            $response->errorMsg = 'Ich bin eine errorMsg';
+            $response->infoMsg = 'Ich bin eine Nachricht vom Server';
             $response->responseData = $request->requestData;
             break;
         

@@ -31,8 +31,9 @@ Die dann verwendet werden kann:
         requestData: { ... },               // Argumente, die an den Server übermittelt werden
     }).then((e) => {
         console.log(e.responseData);
-    }).catch((ex) => {
-        console.error(ex);
+        if (kijs.isEmpty(e.errorType)) {
+            // ...
+        }
     });
 
 Falls auch gui-Elemente von kijs verwendet werden, sollte die ```kijs.gui.Rpc```-Klasse 
@@ -57,22 +58,23 @@ Beispiel:
                                  // Facade abgebrochen werden
     }).then((e) => {
         console.log(e.responseData);
-    }).catch((ex) => {
-        console.error(ex);
+        if (kijs.isEmpty(e.errorType)) {
+            // ...
+        }
     });
 
 
 
 Callback Funktion ```fn```
 --------------------------
-Die übergebene (optionale) callback-fn ```fn``` wird ausgeführt, wenn vom Server eine 
-Antwort zurückkommt. Sie wird immer ausgeführt, ausser wenn der Server nicht mit 
-einem Status von 200 bis 299 antwortet.  
+Die übergebene (optionale) callback-fn ```fn``` wird immer ausgeführt. Auch wenn der  
+Server nicht Antwortet (dann verzögert).
 
 ### fn bei kijs.gui.Rpc
 Auch hier wird die callback-fn immer ausgeführt.  
+
 Wenn auf dem Server eine Exception auftritt, wird eine ```errorMsg``` zurückgegeben.  
-Der Type der Exception wird in ```errorType``` zurückgegeben. Mögliche errorTypes:  
+Der Type der Exception wird mit ```errorType``` zurückgegeben. Mögliche errorTypes:  
  - ```errorNotice``` Anwenderfehler. Z.B. ein Pflichtfeld wurde nicht ausgefüllt.  
  - ```error```       Applikationsfehler.  
 
@@ -84,8 +86,8 @@ ausgewertet wird. Meistens muss der Code in der Callback-fn ja nur ausgeführt w
 wenn auf dem Server alles ok ist. Dazu kann folgender Code verwendet werden:  
 
     #myCallbackFn(e) {
-        if (kijs.isEmpty(e.errorMsg)) {  
-            // mach dies
+        if (kijs.isEmpty(e.errorType)) {  
+            // ...
         }
     }
 
@@ -95,7 +97,7 @@ Promise
 -------
 ### Promise bei kijs.gui.Rpc
 Die Funktion ```do()``` gibt als return ein Promise zurück. Die Antwort vom Server 
-kann also auch mit damit ausgewertet werden.  
+kann also anstelle einer callback-fn auch mit einem Promise ausgewertet werden.  
 
 Beispiel:  
 
@@ -104,16 +106,10 @@ Beispiel:
         owner: this,
         data: { ... }
     }).then((e) => {
-        // mach dies
-    }).catch((ex) => {
-        // und im Fehlerfall mach das
+        if (kijs.isEmpty(e.errorType)) {
+            // mach dies
+        }
     });
-
-Die Fehlerbehandlung verhält sich bei einem Promise etwas anders, als bei einer 
-callback-fn:
-Wenn vom Server eine ```errorMsg``` mit ```errorType === 'error'``` zurückkommt, 
-wird das Promise zurückgewiesen (reject). Es wird ```catch()``` aufgerufen, sonst 
-wird immer ```then()``` aufgerufen.  
 
 
 
@@ -218,7 +214,9 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                         'Name' => 'Meier',
                         'Vorname' => 'Susanne'
                     );
+
                 } catch (Exception $ex) {
+                    $response->errorType = 'error';
                     $response->errorMsg = $ex->getMessage();
                 }
                 break;
@@ -230,6 +228,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                         ['caption' => 'Frau', 'value' => 'w']
                     ];
                 } catch (Exception $ex) {
+                    $response->errorType = 'error';
                     $response->errorMsg = $ex->getMessage();
                 }
                 break;
@@ -246,14 +245,17 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
 
                     if (count(get_object_vars($fieldErrors))) {
                         $response->responseData->fieldErrors = $fieldErrors;
+                        $response->errorType = 'errorNotice';
                         $response->errorMsg = 'Einige Felder sind nicht korrekt ausgefüllt.';
                     }
                 } catch (Exception $ex) {
+                    $response->errorType = 'error';
                     $response->errorMsg = $ex->getMessage();
                 }
                 break;
 
             default:
+                $response->errorType = 'error';
                 $response->errorMsg = 'FacadeFn "' . $request->facadeFn . '" existiert nicht.';
         }
 

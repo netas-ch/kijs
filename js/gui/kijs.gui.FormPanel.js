@@ -19,8 +19,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         this._fields = [];          // Array mit kijs.gui.field.Fields-Elementen
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._rpcArgs = {};         // Standard RPC-Argumente
-        this._errorMsg = kijs.getText('Es wurden noch nicht alle Felder richtig ausgefüllt') + '.';
-        this._errorTitle = kijs.getText('Fehler') + '.';
+        this._defaultSaveErrorMsg = kijs.getText(`Es wurden noch nicht alle Felder richtig ausgefüllt`) + '.';
+        this._defaultSaveErrorTitle = kijs.getText(`Fehler`) + '.';
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -31,7 +31,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
-            errorMsg: true,                     // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
+            defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             facadeFnLoad: true,
             facadeFnSave: true,
             rpc: { target: 'rpc' },             // Instanz von kijs.gui.Rpc oder Name einer RPC
@@ -99,6 +99,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             field.isDirty = false;
         }, this);
     }
+
+    get defaultSaveErrorMsg() { return this._defaultSaveErrorMsg; }
+    set defaultSaveErrorMsg(val) { this._defaultSaveErrorMsg = val; }
 
     get facadeFnLoad() { return this._facadeFnLoad; }
     set facadeFnLoad(val) { this._facadeFnLoad = val; }
@@ -248,7 +251,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @returns {Promise}
      */
     load(args=null, searchFields=false, resetValidation=false) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (this._facadeFnLoad) {
 
                 if (!kijs.isObject(args)) {
@@ -289,15 +292,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     // rendern
                     this.render();
 
-                    // load event
+                    // 'afterLoad' auslösen
                     this.raiseEvent('afterLoad', e);
 
                     // promise ausführen
                     resolve(e);
-
-                }).catch((ex) => {
-                    reject(ex);
-
                 });
             }
         });
@@ -360,7 +359,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @returns {Promise}
      */
     save(searchFields=false, args=null, waitMaskTarget=null) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (!kijs.isObject(args)) {
                 args = {};
             }
@@ -375,7 +374,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             // Zuerst lokal validieren
             if (!this.validate()) {
-                kijs.gui.MsgBox.error(this._errorTitle, this._errorMsg);
+                kijs.gui.MsgBox.error(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
                 return;
             }
 
@@ -391,7 +390,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 waitMaskTarget: waitMaskTarget,
                 waitMaskTargetDomProperty: 'dom',
                 context: this
-
+                
             }).then((e) => {
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
@@ -404,14 +403,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     }
 
                     // Falls keine errorMsg übergeben wurde, die Standardmeldung nehmen
-                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._errorTitle)) {
-                        e.errorTitle = this._errorTitle;
+                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._defaultSaveErrorTitle)) {
+                        e.errorTitle = this._defaultSaveErrorTitle;
                     }
-                    if (kijs.isEmpty(e.errorMsg) && !kijs.isEmpty(this._errorMsg)) {
-                        e.errorMsg = this._errorMsg;
-                    }
-                    if (kijs.isEmpty(e.errorType)) {
-                        e.errorType = 'errorNotice';
+                    if (kijs.isEmpty(e.errorMsg)) {
+                        e.errorMsg = this._defaultSaveErrorMsg;
                     }
                 }
 
@@ -419,14 +415,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 if (kijs.isEmpty(e.errorType)) {
                     this.isDirty = false;
                 }
-                
+
                 // 'afterSave' auslösen
                 this.raiseEvent('afterSave', e);
-
+                
+                // Promise auslösen
                 resolve(e);
-
-            }).catch((ex) => {
-                reject(ex);
             });
         });
     }

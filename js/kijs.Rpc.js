@@ -10,8 +10,11 @@ kijs.Rpc = class kijs_Rpc {
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
+        this._defaultConfig = {};
+        
         this._url = '.';                    // URL Beispiel: '.' oder 'index.php'
         this._parameters = {};              // Objekt mit optionalem GET-Parametern
+        this._defaultErrorType = 'errorNotice';
         this._defer = 10;
         this._timeout = 0;
 
@@ -20,9 +23,15 @@ kijs.Rpc = class kijs_Rpc {
         this._tid = 0;
 
         this._queue = [];
-
+        
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            // keine
+        });
+        
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
+            defaultErrorType: true, // Standard errorType, wenn eine errorMsg vorhanden ist ohne errorType
             defer: true,        // millisekunden, in denen auf weitere RPC gewartet wird
             timeout: true,      // millisekunden, nach denen der RPC abgebrochen wird
             url: true,          // server URL
@@ -31,6 +40,7 @@ kijs.Rpc = class kijs_Rpc {
 
         // Config anwenden
         if (kijs.isObject(config)) {
+            config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config);
         }
     }
@@ -52,6 +62,9 @@ kijs.Rpc = class kijs_Rpc {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get defaultErrorType() { return this._defaultErrorType; }
+    set defaultErrorType(val) { this._defaultErrorType = val; }
+    
     get defer() { return this._defer; }
     set defer(val) { this._defer = val; }
 
@@ -76,11 +89,11 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Führt einen RPC aus.
-     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt, auch im Fehlerfall.
+     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt (auch im Fehlerfall).
      *   Die Rückgabe der Funktion ist dann immer Null.
-     * - Wird KEINE fn übergeben, so wird ein Promise zurückgegeben. Im Fehlerfall wird unterschieden zwischen zwei errorType:
-     *   - 'errorNotice' (default): Es wird resolve ausgeführt. Die errorMsg befindet sich dann unter e.response.errorMsg.
-     *   - 'error':                 Es wird reject ausgeführt mit einem Error Objekt als Argument.
+     * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
+     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
+     *   werden.
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
@@ -147,13 +160,9 @@ kijs.Rpc = class kijs_Rpc {
             state: kijs.Rpc.states.QUEUE
         };
         
-        let ret = null;
-        if (!kijs.isFunction(config.fn)) {
-            ret = new Promise((resolve, reject) => {
-                queueEl.promiseResolve = resolve;
-                queueEl.promiseReject = reject;
-            });
-        }
+        let ret = new Promise((resolve) => {
+            queueEl.promiseResolve = resolve;
+        });
         
         this._queue.push(queueEl);
 
@@ -205,7 +214,7 @@ kijs.Rpc = class kijs_Rpc {
 
             if (!kijs.isObject(subResponse)) {
                 subResponse = {
-                    errorMsg: 'RPC-Antwort im falschen Format'
+                    errorMsg: 'RPC response in wrong format'
                 };
             }
 
@@ -213,7 +222,7 @@ kijs.Rpc = class kijs_Rpc {
             if (ajaxData.errorMsg) {
                 subResponse.errorMsg = ajaxData.errorMsg;
             } else if (!subResponse.errorMsg && subResponse.tid !== subRequest.tid) {
-                subResponse.errorMsg = 'Die RPC-Antwort passt nicht zum Request';
+                subResponse.errorMsg = 'The RPC response does not match the request';
             }
 
             // Abbruch durch neueren Request?
@@ -227,33 +236,28 @@ kijs.Rpc = class kijs_Rpc {
             
             
             if (!subResponse.canceled) {
-                // Standard errorType = 'errorNotice'
-                let errorType = subResponse.errorType;
-                if (kijs.isEmpty(errorType) && !kijs.isEmpty(subResponse.errorMsg)) {
-                    errorType = 'errorNotice';
+                // Standard errorType
+                if (!kijs.isEmpty(subResponse.errorMsg) && kijs.isEmpty(subResponse.errorType)) {
+                    subResponse.errorType = this._defaultErrorType;
                 }
                 
                 // Argument vorbereiten
                 const e = {
                     response: subResponse,
                     request: subRequest,
-                    errorType: errorType,
+                    errorType: subResponse.errorType,
                     errorMsg: subResponse.errorMsg
                 };
-                    
+                
                 // callback-fn ausführen
                 if (kijs.isFunction(subRequest.fn)) {
                     subRequest.fn.call(subRequest.context || this, e);
-                    
-                // Promise
-                } else if (subRequest.promiseResolve && !subResponse.canceled) {
-                    if (e.errorMsg && e.errorType === 'error') {
-                        subRequest.promiseReject( new Error(e.errorMsg) );
-                    } else {
-                        subRequest.promiseResolve(e);
-                    }
                 }
                 
+                // Promise auslösen
+                if (subRequest.promiseResolve) {
+                    subRequest.promiseResolve(e);
+                }
             }
         }
     }
