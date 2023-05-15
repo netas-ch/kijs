@@ -51,6 +51,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         // Listeners
         this._listView.on('selectionChange', this.#onListViewSelectionChange, this);
+        this._listView.once('afterLoad', this.#onceListViewAfterLoad, this);
         this._eventForwardsAdd('ddOver', this._listView);
         this._eventForwardsAdd('ddDrop', this._listView.dom);
 
@@ -210,6 +211,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
     // PRIVATE
     // LISTENERS
+    #onceListViewAfterLoad() {
+        this.isDirty = false; // reset the dirty flag after first loading data from remote
+    }
+
     #onListViewSelectionChange() {
         const val = this.value;
 

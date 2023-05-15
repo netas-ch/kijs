@@ -290,10 +290,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get isDirty() {
         let isDirty = false;
         kijs.Array.each(this._valuesMapping, function(map) {
-            let oVal = kijs.toString(this._initialValues[map.valueProperty]);
-            if (oVal !== kijs.toString(this[map.valueProperty])) {
-                isDirty = true;
-            }
+            isDirty = isDirty || this._compareIsDirty(this._initialValues[map.valueProperty], this[map.valueProperty]);
         }, this);
         return isDirty;
     }
@@ -686,6 +683,35 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
 
     // PROTECTED
+    /**
+     * compares the current value to the initial value.
+     * @returns {Boolean}
+     */
+    _compareIsDirty(initialValue, currentValue) {
+        if (kijs.isArray(initialValue) && kijs.isArray(currentValue)) {
+            if (initialValue.length !== currentValue.length) {
+                return true;
+            }
+            for (let i=0; i < initialValue.length; i++) {
+                if (currentValue.indexOf(initialValue[i]) === -1) {
+                    return true;
+                }
+            }
+        } else if (kijs.isObject(initialValue) && kijs.isObject(currentValue)) {
+            for (let key in initialValue) {
+                if (this._compareIsDirty(initialValue[key], currentValue[key])) {
+                    return true;
+                }
+            }
+        } else {
+            if (kijs.toString(initialValue) !== kijs.toString(currentValue)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Zeigt die Fehler aus this._errors im errorIcon an
      * @returns {undefined}

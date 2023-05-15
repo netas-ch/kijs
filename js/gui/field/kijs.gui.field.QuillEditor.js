@@ -166,6 +166,9 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         // quillEditor erstellen
         if (!this._quillEditor) {
 
+            // dirty?
+            const isDirtyBeforeRender = this.isDirty;
+
             // Container erstellen
             //this._quillEditorContainerNode = document.createElement('div');
             //this._quillEditorContainerNode.className = 'quill-editor-container';
@@ -196,10 +199,15 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
 
             // Listener setzen und Event weiterleiten
             this._quillEditor.on('text-change', function() { this.raiseEvent('input'); }, this);
-        }
 
-        // Inhalt einfügen
-        this.value = this._value ? this._value : '';
+            // Inhalt einfügen
+            this.value = !kijs.isEmpty(this._value) ? this._value : '';
+
+            // reset isDirty flag
+            if (!isDirtyBeforeRender) {
+                this.isDirty = false;
+            }
+        }
 
         // Event afterRender auslösen
         if (!superCall) {

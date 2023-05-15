@@ -86,7 +86,8 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     facadeFnLoad: 'combo.load',
                     //rpc: 'default'
                     autoLoad: true,
-                    remoteSort: true
+                    remoteSort: true,
+                    value: 3132
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Local Sort',
