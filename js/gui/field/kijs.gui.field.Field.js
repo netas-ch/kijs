@@ -698,7 +698,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 }
             }
         } else if (kijs.isObject(initialValue) && kijs.isObject(currentValue)) {
-            for (let key in initialValue) {
+            const allKeys = kijs.Array.concatUnique(Object.keys(initialValue), Object.keys(currentValue));
+            for (let key of allKeys) {
                 if (this._compareIsDirty(initialValue[key], currentValue[key])) {
                     return true;
                 }
