@@ -13,6 +13,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
+        this._autoTheme = false;
         this._dom.node = document.body;
 
         this._dom.clsRemove('kijs-container');
@@ -34,6 +35,9 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
 
         // onResize überwachen
         kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
+
+        // dark mode change überwachen
+        kijs.Dom.addEventListener('change', window.matchMedia('(prefers-color-scheme: dark)'), this.#onDarkModeChange, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -64,7 +68,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
            throw new kijs.Error('invalid value for property "disableContextMenu" in kijs.gui.ViewPort');
         }
     }
-    
+
     get disableDrop() {
         return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
     }
@@ -88,13 +92,14 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
            throw new kijs.Error('invalid value for property "disableDrop" in kijs.gui.ViewPort');
         }
     }
-    
+
     get theme() {
         return kijs.Dom.themeGet();
     }
     // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
     set theme(val) {
         kijs.Dom.themeSet(val);
+        this._autoTheme = val === null;
         if (this.isRendered) {
             this.render();
         }
@@ -125,6 +130,11 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         this._raiseAfterResizeEvent(true, e);
     }
 
+    #onDarkModeChange(e) {
+        if (this._autoTheme) {
+            this.theme = null; // set to null to get the current browser theme
+        }
+    }
 
 
     // --------------------------------------------------------------
@@ -140,8 +150,8 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
             this.raiseEvent('destruct');
         }
 
-        // Node-Event Listener auf Window entfernen
-        kijs.Dom.removeEventListener('resize', window, this);
+        // Listener entfernen
+        kijs.Dom.removeAllEventListenersFromContext(this);
 
         // Basisklasse auch entladen
         super.destruct(true);
