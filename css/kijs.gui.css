@@ -1523,6 +1523,7 @@
     align-items: stretch;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
+    cursor: pointer;
   }
   div.kijs-listview.kijs-borderless {
     border: none;
@@ -2973,6 +2974,7 @@
     font-size: 15px;
     line-height: var(--field-lineHeight);
     color: var(--button-icon-fontColor);
+    cursor: pointer;
   }
   div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-icon {
     flex: none;
@@ -3014,6 +3016,7 @@
     border-radius: 10px;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
+    cursor: pointer;
   }
   div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
     height: 20px;
