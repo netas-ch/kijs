@@ -19,7 +19,6 @@ kijs.Rpc = class kijs_Rpc {
         this._timeout = 0;
 
         this._deferId = null;
-        this._queue = null;
         this._tid = 0;
 
         this._queue = [];
@@ -205,7 +204,7 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
    _receive(ajaxData) {
-       // Antworten für die einzelnen Requests durchgehen
+        // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;
 
@@ -228,14 +227,15 @@ kijs.Rpc = class kijs_Rpc {
             // Abbruch durch neueren Request?
             if (subRequest.state === kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT ||
                     subRequest.state === kijs.Rpc.states.CANCELED_AFTER_TRANSMIT) {
-                subResponse.canceled = true;
+                subResponse.errorType = 'cancel';
+                //subResponse.canceled = true;
             }
 
             // Transfer-ID aus der Queue entfernen
             this._removeTid(subRequest.tid);
             
             
-            if (!subResponse.canceled) {
+            //if (!subResponse.canceled) {
                 // Standard errorType
                 if (!kijs.isEmpty(subResponse.errorMsg) && kijs.isEmpty(subResponse.errorType)) {
                     subResponse.errorType = this._defaultErrorType;
@@ -258,7 +258,7 @@ kijs.Rpc = class kijs_Rpc {
                 if (subRequest.promiseResolve) {
                     subRequest.promiseResolve(e);
                 }
-            }
+            //}
         }
     }
 

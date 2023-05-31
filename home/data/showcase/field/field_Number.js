@@ -187,20 +187,28 @@ home.sc.field_Number = class home_sc_field_Number {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'valueTrimEnable',
-                value: true,
+                label: 'placeholder',
                 on: {
                     change: function(e) {
-                        this._updateProperty('valueTrimEnable', e.element.value);
+                        this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
                     },
                     context: this
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'placeholder',
+                label: 'isDirty anzeigen',
                 on: {
                     change: function(e) {
-                        this._updateProperty('placeholder', e.element.value ? 'Hier Wert eingeben' : '');
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                if (e.value) {
+                                    el.on('input', this.#onInputForIsDirty, this);
+                                } else {
+                                    el.off('input', this.#onInputForIsDirty, this);
+                                }
+                                this._updateIsDirtyButton(el, e.value);
+                            }
+                        }, this);
                     },
                     context: this
                 }
@@ -210,18 +218,6 @@ home.sc.field_Number = class home_sc_field_Number {
                 on: {
                     click: function(e) {
                         this._callFunction('validate');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'isDirty',
-                on: {
-                    click: function(e) {
-                        kijs.Array.each(this._content.elements, function(el) {
-                            this._updateIsDirtyButton({element: el});
-                        }, this);
-
                     },
                     context: this
                 }
@@ -251,41 +247,54 @@ home.sc.field_Number = class home_sc_field_Number {
         ];
     }
 
-    _updateIsDirtyButton(e) {
-        const el = e.element;
-        if (el instanceof kijs.gui.field.Field) {
-            if (el.isDirty && !el.down('isDirtyResetButton')) {
-                el.add({
-                    xtype: 'kijs.gui.Button',
-                    name: 'isDirtyResetButton',
-                    caption: 'isDirty',
-                    tooltip: 'isDirty zurücksetzen',
-                    style: {
-                        borderColor: '#ff8800',
+    // Zeigt beim Übergebenen Feld einen isDirty-Button an, wenn etwas geändert wurde
+    _updateIsDirtyButton(el, addRemove=null) {
+        let btn = el.down('isDirtyResetButton');
+        
+        // button erstellen
+        if (addRemove===true && !btn) {
+            btn = new kijs.gui.Button({
+                xtype: 'kijs.gui.Button',
+                name: 'isDirtyResetButton',
+                caption: 'isDirty',
+                tooltip: 'isDirty zurücksetzen',
+                style: { borderColor: '#ff8800' },
+                captionStyle: { color: '#ff8800' },
+                on: {
+                    click: (e) => {
+                        e.element.parent.isDirty = false;
+                        this._updateIsDirtyButton(el);
                     },
-                    captionStyle: {
-                        color: '#ff8800'
-                    },
-                    on: {
-                        click: (e) => {
-                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
-                            e.element.parent.isDirty = false;
-                            e.element.parent.remove(e.element);
-                        }
-                    }
-                });
-            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
-                el.remove(el.down('isDirtyResetButton'));
-            }
+                    context: this
+                }
+            });
+            el.add(btn);
+        }
+        
+        // button ein-/ausblenden
+        if (btn) {
+            btn.visible = el.isDirty;
+        }
+        
+        // button entfernen
+        if (addRemove===false && btn) {
+            el.remove(btn);
         }
     }
-
+    
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
                 el[propertyName] = value;
             }
         }, this);
+    }
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onInputForIsDirty(e) {
+        this._updateIsDirtyButton(e.element);
     }
 
 

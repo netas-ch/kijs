@@ -79,6 +79,8 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *    - 'error'         Es wurde eine errorMsg vom Server zurückgegeben mit errorType='error'.
      *    - 'warning'       Es wurde vom Server eine warningMsg zurückgegeben und der Benutzer 
      *                      hat auf Abbrechen geklickt.
+     *    - 'cancel'        Der Request wurde bei cancelRunningRpcs=true durch einen 
+     *                      neueren Request abgebrochen
      *   Es können auch eigene errorTypes verwendet werden.
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
@@ -88,7 +90,8 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *                               Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
      *     {Function} fn             Callback-Funktion
      *     {Object} context          Kontext für die Callback-Funktion
-     *     {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests vom selben owner an dieselbe facadeFn abgebrochen
+     *     {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests 
+     *                               vom selben owner an dieselbe facadeFn abgebrochen
      *     {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node
      *                                                                       für Lademaske, NULL=document.body, 'none' für keine Maske.
      *     {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske
@@ -127,7 +130,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         }
         
         // RPC
-        super.do({
+        return super.do({
             facadeFn: config.facadeFn,
             requestData: config.data,
             owner: config.owner,
@@ -145,105 +148,8 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     }
                 }
 
-                if (!rpcData.response.canceled) {
-                    // Fehler --> FehlerMsg + Abbruch
-                    // rpcData.response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    if (!kijs.isEmpty(rpcData.response.errorType) || !kijs.isEmpty(rpcData.response.errorMsg)) {
-                        // Standard errorType
-                        if (kijs.isEmpty(rpcData.response.errorType)) {
-                            rpcData.response.errorType = this._defaultErrorType;
-                        }
-                        
-                        // Standard errorTitle
-                        if (kijs.isEmpty(rpcData.response.errorTitle)) {
-                            rpcData.response.errorTitle = this._defaultErrorTitle;
-                        }
-                        
-                        // Fehler anzeigen
-                        if (rpcData.response.errorType === 'error') {
-                            kijs.gui.MsgBox.error(rpcData.response.errorTitle, rpcData.response.errorMsg);
-                        } else {
-                            kijs.gui.MsgBox.errorNotice(rpcData.response.errorTitle, rpcData.response.errorMsg);
-                        }
-
-                    // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
-                    // rpcData.response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    } else if (!kijs.isEmpty(rpcData.response.warningMsg)) {
-                        // Standard warningTitle
-                        if (kijs.isEmpty(rpcData.response.warningTitle)) {
-                            rpcData.response.warningTitle = this._defaultWarningTitle;
-                        }
-                        
-                        // Warnung anzeigen
-                        kijs.gui.MsgBox.warning(rpcData.response.warningTitle, rpcData.response.warningMsg, function(e) {
-                            // click auf Ok
-                            if (e.btn === 'ok') {
-                                // Request nochmal senden mit Flag ignoreWarnings
-                                this._doRpc({
-                                    facadeFn: config.facadeFn,
-                                    data: config.data,
-                                    owner: config.owner,
-                                    fn: config.fn,
-                                    context: config.context,
-                                    cancelRunningRpcs: config.cancelRunningRpcs,
-                                    waitMaskTarget: config.waitMaskTarget,
-                                    waitMaskTargetDomProperty: config.waitMaskTargetDomProperty,
-                                    ignoreWarnings: true
-                                }, resolve);
-                                
-                            // click auf Abbrechen
-                            } else {
-                                // errorType ist fix 'warning'
-                                rpcData.response.errorType = 'warning';
-                                
-                                // Argument vorbereiten
-                                const e = {
-                                    responseData: rpcData.response.responseData,
-                                    requestData: rpcData.request.requestData,
-                                    errorType: rpcData.response.errorType,
-                                    errorMsg: rpcData.response.errorMsg
-                                };
-
-                                // callback-fn ausführen
-                                if (kijs.isFunction(config.fn)) {
-                                    config.fn.call(config.context || this, e);
-                                }
-                                
-                                // Promise auslösen
-                                resolve(e);
-                            }
-                        }, this);
-                        
-                        return;
-                    }
-
-                    // Info --> Msg ohne Icon
-                    // rpcData.response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    if (!kijs.isEmpty(rpcData.response.infoMsg)) {
-                        // Standard infoTitle
-                        if (kijs.isEmpty(rpcData.response.infoTitle)) {
-                            rpcData.response.infoTitle = this._defaultInfoTitle;
-                        }
-                        kijs.gui.MsgBox.info(rpcData.response.infoTitle, rpcData.response.infoMsg);
-                    }
-
-                    // CornerTip -> Msg, die automatisch wieder verschwindet kein Abbruch
-                    // rpcData.response.tipMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
-                    if (rpcData.response.cornerTipMsg) {
-                        // Standard cornerTipIcon
-                        if (kijs.isEmpty(rpcData.response.cornerTipIcon)) {
-                            rpcData.response.cornerTipIcon = this._defaultCornerTipIcon;
-                        }
-                        
-                        // Standard cornerTipTitle
-                        if (kijs.isEmpty(rpcData.response.cornerTipTitle)) {
-                            rpcData.response.cornerTipTitle = this._defaultCornerTipTitle;
-                        }
-                        
-                        kijs.gui.CornerTipContainer.show(rpcData.response.cornerTipTitle, 
-                                rpcData.response.cornerTipMsg, rpcData.response.cornerTipIcon);
-                    }
-
+                // Abbruch durch neueren RPC bei cancelRunningRpcs=true
+                if (rpcData.response.errorType === 'cancel') {
                     // Argument vorbereiten
                     const e = {
                         responseData: rpcData.response.responseData,
@@ -256,10 +162,124 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     if (kijs.isFunction(config.fn)) {
                         config.fn.call(config.context || this, e);
                     }
-                    
+
                     // Promise auslösen
                     resolve(e);
+                    return;
+                    
+                // Fehler --> FehlerMsg + Abbruch
+                // rpcData.response.errorMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
+                } else if (!kijs.isEmpty(rpcData.response.errorType) || !kijs.isEmpty(rpcData.response.errorMsg)) {
+                    // Standard errorType
+                    if (kijs.isEmpty(rpcData.response.errorType)) {
+                        rpcData.response.errorType = this._defaultErrorType;
+                    }
+
+                    // Standard errorTitle
+                    if (kijs.isEmpty(rpcData.response.errorTitle)) {
+                        rpcData.response.errorTitle = this._defaultErrorTitle;
+                    }
+
+                    // Fehler anzeigen
+                    if (rpcData.response.errorType === 'error') {
+                        kijs.gui.MsgBox.error(rpcData.response.errorTitle, rpcData.response.errorMsg);
+                    } else {
+                        kijs.gui.MsgBox.errorNotice(rpcData.response.errorTitle, rpcData.response.errorMsg);
+                    }
+
+                // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
+                // rpcData.response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
+                } else if (!kijs.isEmpty(rpcData.response.warningMsg)) {
+                    // Standard warningTitle
+                    if (kijs.isEmpty(rpcData.response.warningTitle)) {
+                        rpcData.response.warningTitle = this._defaultWarningTitle;
+                    }
+
+                    // Warnung anzeigen
+                    kijs.gui.MsgBox.warning(rpcData.response.warningTitle, rpcData.response.warningMsg, function(e) {
+                        // click auf Ok
+                        if (e.btn === 'ok') {
+                            // Request nochmal senden mit Flag ignoreWarnings
+                            this._doRpc({
+                                facadeFn: config.facadeFn,
+                                data: config.data,
+                                owner: config.owner,
+                                fn: config.fn,
+                                context: config.context,
+                                cancelRunningRpcs: config.cancelRunningRpcs,
+                                waitMaskTarget: config.waitMaskTarget,
+                                waitMaskTargetDomProperty: config.waitMaskTargetDomProperty,
+                                ignoreWarnings: true
+                            }, resolve);
+
+                        // click auf Abbrechen
+                        } else {
+                            // errorType ist fix 'warning'
+                            rpcData.response.errorType = 'warning';
+
+                            // Argument vorbereiten
+                            const e = {
+                                responseData: rpcData.response.responseData,
+                                requestData: rpcData.request.requestData,
+                                errorType: rpcData.response.errorType,
+                                errorMsg: rpcData.response.errorMsg
+                            };
+
+                            // callback-fn ausführen
+                            if (kijs.isFunction(config.fn)) {
+                                config.fn.call(config.context || this, e);
+                            }
+
+                            // Promise auslösen
+                            resolve(e);
+                        }
+                    }, this);
+
+                    return;
                 }
+
+                // Info --> Msg ohne Icon
+                // rpcData.response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
+                if (!kijs.isEmpty(rpcData.response.infoMsg)) {
+                    // Standard infoTitle
+                    if (kijs.isEmpty(rpcData.response.infoTitle)) {
+                        rpcData.response.infoTitle = this._defaultInfoTitle;
+                    }
+                    kijs.gui.MsgBox.info(rpcData.response.infoTitle, rpcData.response.infoMsg);
+                }
+
+                // CornerTip -> Msg, die automatisch wieder verschwindet kein Abbruch
+                // rpcData.response.tipMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
+                if (rpcData.response.cornerTipMsg) {
+                    // Standard cornerTipIcon
+                    if (kijs.isEmpty(rpcData.response.cornerTipIcon)) {
+                        rpcData.response.cornerTipIcon = this._defaultCornerTipIcon;
+                    }
+
+                    // Standard cornerTipTitle
+                    if (kijs.isEmpty(rpcData.response.cornerTipTitle)) {
+                        rpcData.response.cornerTipTitle = this._defaultCornerTipTitle;
+                    }
+
+                    kijs.gui.CornerTipContainer.show(rpcData.response.cornerTipTitle, 
+                            rpcData.response.cornerTipMsg, rpcData.response.cornerTipIcon);
+                }
+
+                // Argument vorbereiten
+                const e = {
+                    responseData: rpcData.response.responseData,
+                    requestData: rpcData.request.requestData,
+                    errorType: rpcData.response.errorType,
+                    errorMsg: rpcData.response.errorMsg
+                };
+
+                // callback-fn ausführen
+                if (kijs.isFunction(config.fn)) {
+                    config.fn.call(config.context || this, e);
+                }
+
+                // Promise auslösen
+                resolve(e);
             }
         });
     }

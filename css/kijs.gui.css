@@ -176,6 +176,26 @@
     padding: 0;
   }
   /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+  .kijs-scrollable-x-enable,
+  div.kijs-scrollable-x-enable {
+    overflow-x: scroll;
+  }
+  .kijs-scrollable-x-auto,
+  div.kijs-scrollable-x-auto {
+    overflow-x: auto;
+  }
+  .kijs-scrollable-y-enable,
+  div.kijs-scrollable-y-enable {
+    overflow-y: scroll;
+  }
+  .kijs-scrollable-y-auto,
+  div.kijs-scrollable-y-auto {
+    overflow-y: auto;
+  }
+  /* ******************
        * Icon
        ****************** */
   span.kijs-icon {
@@ -331,6 +351,8 @@
     display: grid;
     grid-template-rows: 1fr;
     grid-template-columns: 1fr;
+    overflow-y: hidden;
+    overflow-x: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
     /* nur kijs-scrollable-y-enable */
@@ -2973,7 +2995,7 @@
     margin: 0 4px 0 0;
     font-size: 15px;
     line-height: var(--field-lineHeight);
-    color: var(--button-icon-fontColor);
+    color: var(--field-fontColor);
     cursor: pointer;
   }
   div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-icon {
@@ -3340,23 +3362,6 @@
   /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
        ****************** */
-  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-  .kijs-scrollable-x-enable,
-  div.kijs-scrollable-x-enable {
-    overflow-x: scroll;
-  }
-  .kijs-scrollable-x-auto,
-  div.kijs-scrollable-x-auto {
-    overflow-x: auto;
-  }
-  .kijs-scrollable-y-enable,
-  div.kijs-scrollable-y-enable {
-    overflow-y: scroll;
-  }
-  .kijs-scrollable-y-auto,
-  div.kijs-scrollable-y-auto {
-    overflow-y: auto;
-  }
   /* Passt den Inhalt an die Containergrösse an */
   /* (nur für Container mit einem Kind geeignet) */
   .kijs-flexfit > .kijs-container-inner {

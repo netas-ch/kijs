@@ -7,7 +7,6 @@ sehr ähnlich. Es gibt aber wichtige Unterschiede.
 | Funktion                     | disabled | readOnly                   |
 |------------------------------|----------|----------------------------|
 | Fokussierbar (focus)         | nein     | ja                         |
-| Wert wird übermittelt        | nein     | ja                         |
 | Selektierbar                 | ja       | ja                         |
 | Felder änderbar              | nein     | nein                       |
 | Schaltflächen bedienbar      | nein     | ja, wenn sie nichts ändern |

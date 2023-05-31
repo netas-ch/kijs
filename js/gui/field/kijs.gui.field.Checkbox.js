@@ -385,6 +385,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._checkboxIconEl.focus();
             this.validate();
 
+            this.raiseEvent('input', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
             this.raiseEvent('change', {
                 checked: this._checked,
                 oldChecked: oldChecked,

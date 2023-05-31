@@ -197,23 +197,29 @@ home.sc.field_Memo = class home_sc_field_Memo {
                     context: this
                 }
             },{
-                xtype: 'kijs.gui.Button',
-                caption: 'Validate',
+                xtype: 'kijs.gui.field.Switch',
+                label: 'isDirty anzeigen',
                 on: {
-                    click: function(e) {
-                        this._callFunction('validate');
+                    change: function(e) {
+                        kijs.Array.each(this._content.elements, function(el) {
+                            if (el instanceof kijs.gui.field.Field) {
+                                if (e.value) {
+                                    el.on('input', this.#onInputForIsDirty, this);
+                                } else {
+                                    el.off('input', this.#onInputForIsDirty, this);
+                                }
+                                this._updateIsDirtyButton(el, e.value);
+                            }
+                        }, this);
                     },
                     context: this
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                caption: 'isDirty',
+                caption: 'Validate',
                 on: {
                     click: function(e) {
-                        kijs.Array.each(this._content.elements, function(el) {
-                            this._updateIsDirtyButton({element: el});
-                        }, this);
-
+                        this._callFunction('validate');
                     },
                     context: this
                 }
@@ -243,35 +249,41 @@ home.sc.field_Memo = class home_sc_field_Memo {
         ];
     }
 
-    _updateIsDirtyButton(e) {
-        const el = e.element;
-        if (el instanceof kijs.gui.field.Field) {
-            if (el.isDirty && !el.down('isDirtyResetButton')) {
-                el.add({
-                    xtype: 'kijs.gui.Button',
-                    name: 'isDirtyResetButton',
-                    caption: 'isDirty',
-                    tooltip: 'isDirty zurücksetzen',
-                    style: {
-                        borderColor: '#ff8800',
+    // Zeigt beim Übergebenen Feld einen isDirty-Button an, wenn etwas geändert wurde
+    _updateIsDirtyButton(el, addRemove=null) {
+        let btn = el.down('isDirtyResetButton');
+        
+        // button erstellen
+        if (addRemove===true && !btn) {
+            btn = new kijs.gui.Button({
+                xtype: 'kijs.gui.Button',
+                name: 'isDirtyResetButton',
+                caption: 'isDirty',
+                tooltip: 'isDirty zurücksetzen',
+                style: { borderColor: '#ff8800' },
+                captionStyle: { color: '#ff8800' },
+                on: {
+                    click: (e) => {
+                        e.element.parent.isDirty = false;
+                        this._updateIsDirtyButton(el);
                     },
-                    captionStyle: {
-                        color: '#ff8800'
-                    },
-                    on: {
-                        click: (e) => {
-                            kijs.gui.CornerTipContainer.show('isDirty', 'isDirty wurde zurückgesetzt.');
-                            e.element.parent.isDirty = false;
-                            e.element.parent.remove(e.element);
-                        }
-                    }
-                });
-            } else if (!el.isDirty && el.down('isDirtyResetButton')) {
-                el.remove(el.down('isDirtyResetButton'));
-            }
+                    context: this
+                }
+            });
+            el.add(btn);
+        }
+        
+        // button ein-/ausblenden
+        if (btn) {
+            btn.visible = el.isDirty;
+        }
+        
+        // button entfernen
+        if (addRemove===false && btn) {
+            el.remove(btn);
         }
     }
-
+    
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
             if (el instanceof kijs.gui.field.Field) {
@@ -279,7 +291,14 @@ home.sc.field_Memo = class home_sc_field_Memo {
             }
         }, this);
     }
-
+    
+    
+    // PRIVATE
+    // LISTENERS
+    #onInputForIsDirty(e) {
+        this._updateIsDirtyButton(e.element);
+    }
+    
 
 
     // --------------------------------------------------------------

@@ -72,7 +72,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         // Evtl. Daten aus Formular holen
         kijs.Array.each(this._fields, function(field) {
-            if (field.submitValueEnable && !field.disabled) {
+            if (field.submitValueEnable) {
                 // Bestehendes Recordset mit Daten aus dem Feld ergänzen
                 Object.assign(this._data, field.values);
             } else {
@@ -199,6 +199,20 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             this._rpc = val;
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
+        }
+    }
+    
+    /**
+     * Setzt die Werte der Felder auf den Originalwert zurück
+     * @returns {undefined}
+     */
+    valuesReset() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+        
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].valuesReset();
         }
     }
 

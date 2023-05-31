@@ -126,16 +126,10 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
      * @overwrite
      */
     focus(alsoSetIfNoTabIndex, selectText) {
-        let nde = this._aceEditorNode && this._aceEditorNode.firstChild ?
-                this._aceEditorNode.firstChild : null;
-
-        if (nde) {
-            if (alsoSetIfNoTabIndex) {
-                nde.focus();
-                if (selectText) {
-                    nde.select();
-                }
-                return nde;
+        if (this._aceEditor) {
+            this._aceEditor.focus();
+            if (selectText) {
+                this._aceEditor.selectAll();
             }
         }
         return false;
@@ -157,32 +151,33 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
                 this._aceEditor.on('change', () => { this.raiseEvent('input'); });
-                this._aceEditor.getSession().on('changeAnnotation', () => { this.#onAnnotationChange() });
+                this._aceEditor.getSession().on('changeAnnotation', () => { this.#onAnnotationChange(); });
 
                 kijs.Dom.addEventListener('blur', inputNode, this.#onInputNodeBlur, this);
             }, 200, this);
+            
+            this._aceEditor.setHighlightActiveLine(false);
+            //this._aceEditor.$blockScrolling = Infinity;
+
+            if (this._theme) {
+                this._aceEditor.setTheme('ace/theme/' + this._theme);
+            } else {
+                if (kijs.Dom.themeGet() === 'dark') {
+                    this._aceEditor.setTheme('ace/theme/ambiance');
+                } else {
+                    this._aceEditor.setTheme('');
+                }
+            }
+            if (this._mode) {
+                this._aceEditor.session.setMode('ace/mode/' + this._mode);
+            }
+
+            this._aceEditor.setReadOnly(this.readOnly || this.disabled);
+
+            this.value = this._value ? this._value : '';
         } else {
             this._inputWrapperDom.node.appendChild(this._aceEditorNode);
         }
-
-        this._aceEditor.setHighlightActiveLine(false);
-        //this._aceEditor.$blockScrolling = Infinity;
-
-        if (this._theme) {
-            this._aceEditor.setTheme('ace/theme/' + this._theme);
-        } else {
-            if (kijs.Dom.themeGet() === 'dark') {
-                this._aceEditor.setTheme('ace/theme/ambiance');
-            } else {
-                this._aceEditor.setTheme('');
-            }
-        }
-        if (this._mode) {
-            this._aceEditor.session.setMode('ace/mode/' + this._mode);
-        }
-
-        this.value = this._value ? this._value : '';
-        this._aceEditor.setReadOnly(this.readOnly || this.disabled);
 
         // Event afterRender auslösen
         if (!superCall) {

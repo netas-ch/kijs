@@ -432,6 +432,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this.validate();
 
         if (!kijs.Date.compare(this._monthPicker.date, oldDate)) {
+            this.raiseEvent('input', {
+                date: this.date,
+                oldDate: oldDate,
+                value: this.value,
+                oldValue: oldValue
+            });
             this.raiseEvent('change', {
                 date: this.date,
                 oldDate: oldDate,

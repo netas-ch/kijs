@@ -339,6 +339,13 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             this._inputDom.focus();
             this.validate();
 
+            this.raiseEvent('input', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
+            
             this.raiseEvent('change', {
                 checked: this._checked,
                 oldChecked: oldChecked,

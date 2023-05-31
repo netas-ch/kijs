@@ -656,6 +656,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // change-event
         if (changed) {
+            this.raiseEvent('input', { value: this.value, oldValue: oldVal });
             this.raiseEvent('change', { value: this.value, oldValue: oldVal });
         }
     }
@@ -767,6 +768,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // validieren
             this.validate();
 
+            this.raiseEvent('input', {value: this.value, oldValue: oldVal});
             this.raiseEvent('change', {value: this.value, oldValue: oldVal});
         }
     }

@@ -1160,6 +1160,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const value = this.value;
         const valueEnd = this.valueEnd;
         if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
+            this.raiseEvent('input', {
+                value: value,
+                valueEnd: valueEnd,
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
             this.raiseEvent('change', {
                 value: value,
                 valueEnd: valueEnd,
@@ -1190,6 +1196,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const value = this.value;
         const valueEnd = this.valueEnd;
         if (this._previousChangeValue !== value || this._previousChangeValueEnd !== valueEnd) {
+            this.raiseEvent('input', {
+                value: value,
+                valueEnd: valueEnd,
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
             this.raiseEvent('change', {
                 value: value,
                 valueEnd: valueEnd,

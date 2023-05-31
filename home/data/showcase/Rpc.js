@@ -115,6 +115,32 @@ home.sc.Rpc = class home_sc_Rpc {
                         },
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true',
+                    on: {
+                        click: function() {
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.delay', 
+                                data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 1/2',
+                                cancelRunningRpcs: true
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
+                            });
+                            kijs.getRpc('default').do({ 
+                                facadeFn: 'rpc.delay', 
+                                data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 2/2',
+                                cancelRunningRpcs: true
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
+                            });
+                        },
+                        context: this
+                    }
                 },
                 
                 {

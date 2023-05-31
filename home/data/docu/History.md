@@ -1,3 +1,19 @@
+Version 2.2.2
+===============
+### kijs.gui.field.*
+ - Alle fields haben jetzt ein input-Event. Dieses kommt während der Eingabe und 
+   auch bei jeder Änderung (z.B. beim Wählen eines Werts aus der Liste eines Combos)  
+
+### kijs.gui.FormPanel
+ - Fields mit ```disabled=true``` werden neu bei ```save()```auch übermittelt.  
+ - neue Methode ```valuesReset()```. Setzt die Felder auf den Usprungswert zurück.  
+
+### kijs.Rpc und kijs.gui.Rpc
+Wird ein Request bei cancelRunningRpcs=true durch einen neueren Request abgebrochen, 
+neu die callbackFn und auch das resolve des Promise ausgeführt. Der errorType ist 
+'cancel'.  
+
+
 Version 2.2.1
 ===============
 ### kijs.gui.field.*
