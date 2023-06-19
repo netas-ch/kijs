@@ -140,10 +140,12 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // Aktueller Container ermitteln/setzen via Index
     get currentIndex() { return this._getElIndex(this._currentEl); }
     set currentIndex(val) {
-        if (!this._elements[val]) {
-            throw new kijs.Error(`currentIndex does not exist in elements.`);
-        } else {
-            this.currentEl = this._elements[val];
+        if (kijs.isArray(this._elements) && this._elements.length) {
+            if (!this._elements[val]) {
+                throw new kijs.Error(`currentIndex does not exist in elements.`);
+            } else {
+                this.currentEl = this._elements[val];
+            }
         }
     }
     

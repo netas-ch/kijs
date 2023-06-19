@@ -124,7 +124,7 @@ kijs.Rpc = class kijs_Rpc {
         }
 
         // Evtl. bestehende RPCs vom gleichen owner an die gleiche facadeFn abbrechen
-        // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
+        // Der owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren,
         // die die gleiche facadeFn benutzen. 
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
