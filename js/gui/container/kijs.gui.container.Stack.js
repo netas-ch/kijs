@@ -430,7 +430,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Überprüft, ob eine animation gültig ist
+    // Überprüft, ob eine Animation gültig ist
     _validateAnimation(animation) {
         return this._getAnimationCls(animation, 'in') !== null;
     }

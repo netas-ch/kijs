@@ -73,7 +73,7 @@ kijs.gui.Wizard = class kijs_gui_Wizard extends kijs.gui.Window {
     next() {
         let index = this._containerStack.currentIndex + 1;
 
-        if (index > this._containerStack.elements.length) {
+        if (index < this._containerStack.elements.length) {
             this._changeContainer(index);
         }
     }
@@ -81,7 +81,7 @@ kijs.gui.Wizard = class kijs_gui_Wizard extends kijs.gui.Window {
     previous() {
         let index = this._containerStack.currentIndex - 1;
 
-        if (index < 0) {
+        if (index >= 0) {
             this._changeContainer(index);
         }
     }
