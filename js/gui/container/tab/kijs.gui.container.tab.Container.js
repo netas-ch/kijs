@@ -23,15 +23,15 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // overwrite
     constructor(config={}) {
         super(false);
-        
+
         this._tabClosableIcon = 'kijs.iconMap.Fa.xmark';
-        
+
         this._tabButtonEl = new kijs.gui.Button({
             on: {
                 context: this
             }
         });
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -72,22 +72,26 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get tabButtonEl() { return this._tabButtonEl; }
-    
+
     get tabClosable() { return !!this._tabButtonEl.icon2Map; }
     set tabClosable(val) {
-        this._tabButtonEl.icon2Map = this._tabClosableIcon;
+        if (val) {
+            this._tabButtonEl.icon2Map = this._tabClosableIcon;
+        } else {
+            this._tabButtonEl.icon2Map = null;
+        }
     }
-    
+
     get tabClosableIcon() { return this._tabClosableIcon; }
-    set tabClosableIcon(val) { 
+    set tabClosableIcon(val) {
         this._tabClosableIcon = val;
         if (this._tabButtonEl.icon2Map) {
             this._tabButtonEl.icon2Map = val;
         }
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -97,16 +101,16 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-        
+
         if (this._tabButtonEl) {
             this._tabButtonEl.unrender();
         }
-        
+
         super.unrender(true);
     }
-    
 
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -119,18 +123,18 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
         if (this._tabButtonEl) {
             this._tabButtonEl.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._tabButtonEl = null;
         this._tabClosableIcon = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

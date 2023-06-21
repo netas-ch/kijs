@@ -5,7 +5,7 @@
 // --------------------------------------------------------------
 /**
  * Tab Container. 
- * Es künnen nur kijs.gui.container.tab.Container hinzugefügt werden (xtype kann 
+ * Es können nur kijs.gui.container.tab.Container hinzugefügt werden (xtype kann
  * auch weggelassen werden).
  *
  * KLASSENHIERARCHIE

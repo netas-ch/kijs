@@ -465,8 +465,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     
     /**
      * Schliesst das Panel
-     * @param {Booelan} [preventDestruct=false] Kein 'close' Event auslösen
-     * @param {Booelan} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
+     * @param {Boolean} [preventDestruct=false]  Kein 'close' Event auslösen
+     * @param {Boolean} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
      * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */

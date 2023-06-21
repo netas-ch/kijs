@@ -156,7 +156,6 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
 
         } else {
             throw new kijs.Error(`config "icon" is not valid.`);
-
         }
     }
 
