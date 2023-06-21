@@ -25,7 +25,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // overwrite
     constructor(config={}) {
         super(false);
-        
+
         this._tabBarEl = new kijs.gui.container.tab.Bar({
             parent: this,
             on: {
@@ -70,7 +70,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     get tabBarPos() { return this._tabBarPos; }
     set tabBarPos(val) {
         
-        if (!kijs.Array.contains(['top','right','bottom','left'], val)) {
+        if (!kijs.Array.contains(['top','topCenter','right','rightCenter','bottom', 'bottomCenter','left', 'leftCenter'], val)) {
             throw new kijs.Error(`unknown tabBarPos.`);
         }
         
@@ -78,10 +78,10 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarPos = val;
         
         // bestehende CSS-Klassen entfernen
-        this._dom.clsRemove(['kijs-pos-top','kijs-pos-right','kijs-pos-bottom','kijs-pos-left']);
+        this._dom.clsRemove(['kijs-pos-top','kijs-pos-top-center','kijs-pos-right','kijs-pos-right-center','kijs-pos-bottom','kijs-pos-bottom-center','kijs-pos-left','kijs-pos-left-center']);
         
         // neue hinzufügen
-        this._dom.clsAdd('kijs-pos-' + val.toLowerCase());
+        this._dom.clsAdd('kijs-pos-' + val.replace(/([A-Z])/g, '-$1').toLowerCase());
         
         if (val !== oldTabParPos) {
             this._tabBarEl.render();
@@ -284,6 +284,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         
         // Variablen (Objekte/Arrays) leeren
         this._tabBarEl = null;
+        this._tabBarPos = null;
         
         // Basisklasse entladen
         super.destruct(true);
