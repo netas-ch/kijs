@@ -172,8 +172,8 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    add(elements, index=null) {
-        super.add(elements, index);
+    add(elements, index=null, preventRender=false) {
+        super.add(elements, index, preventRender);
     }
     
     // overwrite

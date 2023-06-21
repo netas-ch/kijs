@@ -465,8 +465,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     
     /**
      * Schliesst das Panel
-     * @param {Booelan} [preventDestruct=false] Kein 'close' Event auslösen
-     * @param {Booelan} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
+     * @param {Boolean} [preventDestruct=false]  Kein 'close' Event auslösen
+     * @param {Boolean} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
      * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
@@ -481,17 +481,17 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         
         if (this._parentEl && (this._parentEl instanceof kijs.gui.Container) && this._parentEl.hasChild(this)) {
-            this._parentEl.remove(this, false, preventDestruct, preventEvents);
+            this._parentEl.remove(this, false, true, preventEvents);
         } else {
-            if (preventDestruct) {
-                this.unrender();
-            } else {
-                this.destruct();
-            }
+            this.unrender();
         }
         
         if (!preventEvents) {
             this.raiseEvent('close');
+        }
+
+        if (!preventDestruct) {
+            this.destruct();
         }
     }
 
