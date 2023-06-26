@@ -44,7 +44,7 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-container-Wizard',
+            cls: 'kijs-container-wizard',
             tabBarPos: 'bottomCenter'
         });
 

@@ -640,12 +640,32 @@
         }
 
         /* tabBar Positionierung */
-        &.kijs-pos-top, &.kijs-pos-bottom {
+
+        &.kijs-pos-top,
+        &.kijs-pos-top-center,
+        &.kijs-pos-bottom,
+        &.kijs-pos-bottom-center {
             flex-direction: column;
         }
 
-        &.kijs-pos-left, &.kijs-pos-right {
+        &.kijs-pos-top-center,
+        &.kijs-pos-bottom-center,
+        &.kijs-pos-left-center,
+        &.kijs-pos-right-center {
+
+            > .kijs-container-scrollable {
+                > .kijs-container-inner {
+                    justify-content: center;
+                }
+            }
+        }
+
+        &.kijs-pos-left,
+        &.kijs-pos-left-center,
+        &.kijs-pos-right,
+        &.kijs-pos-right-center {
             flex-direction: row;
+
             > .kijs-container-scrollable {
                 > .kijs-container-inner {
                     display: flex;
@@ -654,23 +674,37 @@
             }
         }
 
-        &.kijs-pos-right > .kijs-container-scrollable { order: 2; }
-        &.kijs-pos-bottom > .kijs-container-scrollable { order: 2; }
-
-
-        &.kijs-pos-top > .kijs-container-scrollable {
-            > .kijs-container-inner > .kijs-button {
-                margin: 4px 0 0 4px;
-                border-radius: 6px 6px 0 0;
-                border-top: 1px solid var(--tabButton-borderColor);
-                border-right: 1px solid var(--tabButton-borderColor);
-                border-bottom: 0 none;
-                border-left: 1px solid var(--tabButton-borderColor);
+        &.kijs-pos-right,
+        &.kijs-pos-right-center {
+            > .kijs-container-scrollable {
+                order: 2;
             }
+        }
 
-            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
-            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
-                margin-top: 4px;
+        &.kijs-pos-bottom,
+        &.kijs-pos-bottom-center {
+            > .kijs-container-scrollable {
+                order: 2;
+            }
+        }
+
+
+        &.kijs-pos-top,
+        &.kijs-pos-top-center {
+            > .kijs-container-scrollable {
+                > .kijs-container-inner > .kijs-button {
+                    margin: 4px 0 0 4px;
+                    border-radius: 6px 6px 0 0;
+                    border-top: 1px solid var(--tabButton-borderColor);
+                    border-right: 1px solid var(--tabButton-borderColor);
+                    border-bottom: 0 none;
+                    border-left: 1px solid var(--tabButton-borderColor);
+                }
+
+                > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+                > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                    margin-top: 4px;
+                }
             }
         }
 
@@ -727,7 +761,7 @@
             border-color: var(--tabButton-current-borderColor);
 
             > .kijs-caption {
-                color: var(--tabButton--currentfontColor);
+                color: var(--tabButton-current-fontColor);
             }
 
             &.kijs-disabled > .kijs-caption {
@@ -737,6 +771,101 @@
     }
 
 
+    /* ******************
+       * Container Wizard
+       ****************** */
+    div.kijs-container-wizard {
+        > .kijs-container-scrollable {
+            > .kijs-container-inner {
+                > .kijs-button {
+                    background: none;
+                    border: none;
+
+                    &:focus {
+                        background: none;
+                        border: none;
+
+                        > .kijs-icon {
+                            color: var(--tabButton-focus-fontColor);
+                        }
+                    }
+
+                    &:hover {
+                        background: none;
+                        border: none;
+                    }
+
+                    &.kijs-disabled {
+                        border: none;
+                        background: none;
+
+                        > .kijs-caption,
+                        > .kijs-icon {
+                            color: var(--tabButton-fontColor);
+                        }
+
+                        &:focus {
+                            background: none;
+                            border: none;
+                        }
+                    }
+
+                    &.kijs-current {
+                        background: none;
+
+                        > .kijs-icon {
+                            color: var(--tabButton-current-fontColor);
+                            font-size: 10px;
+                        }
+
+                        > .kijs-caption {
+                            color: var(--tabButton-current-fontColor);
+                        }
+
+                        &.kijs-disabled {
+                            > .kijs-caption {
+                                color: var(--tabButton-current-fontColor);
+                            }
+                        }
+                    }
+
+                    > .kijs-icon {
+                        font-size: 8px;
+                    }
+
+                    > .kijs-caption {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+
+        > .kijs-arrow-left {
+            z-index: 1;
+            position: absolute;
+            top: 45%;
+            left: 10px;
+            cursor: pointer;
+            opacity: 0.2;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        > .kijs-arrow-right {
+            z-index: 1;
+            position: absolute;
+            top: 45%;
+            right: 10px;
+            cursor: pointer;
+            opacity: 0.2;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 
     /* ******************
        * Tooltip
