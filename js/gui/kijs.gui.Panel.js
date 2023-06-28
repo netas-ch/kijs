@@ -115,6 +115,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
+            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Breite angezeigt werden.
+            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Höhe angezeigt werden.
             shadow: { target: 'shadow' },       // Soll ein Schatten angezeigt werden?
             
             collapsible: { prio: 1002, target: 'collapsible' },
@@ -401,19 +403,25 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     get resizable() { return !!this._resizerEl; }
     set resizable(val) {
-        if (!!val !== !!this._resizerEl) {
-            if (this._resizerEl) {
-                this._resizerEl.destruct();
-                this._resizerEl = null;
-            } else {
-                this._resizerEl = new kijs.gui.Resizer({
-                    target: this
-                });
-                if (this._dom.node) {
-                    this._resizerEl.renderTo(this._dom.node);
-                }
-            }
+        if (val) {
+            this._setResizable(true, true);
+        } else {
+            this._setResizable(false, false);
         }
+    }
+    
+    get resizableHeight() {
+        return this._resizerEl && this._resizerEl.allowResizeHeight;
+    }
+    set resizableHeight(val) {
+        this._setResizable(null, !!val);
+    }
+    
+    get resizableWidth() {
+        return this._resizerEl && this._resizerEl.allowResizeWidth;
+    }
+    set resizableWidth(val) {
+        this._setResizable(!!val, null);
     }
 
     get shadow() { this._dom.clsHas('kijs-shadow'); }
@@ -813,6 +821,42 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         return '';
+    }
+    
+    /**
+     * Zeigt das Resize-Icon in der unteren rechten Ecke an oder blendet es aus.
+     * @param {Boolean|null} resizeWidth Breite änderbar
+     * @param {Boolean|null} resizeHeight Höhe änderbar
+     * @returns {undefined}
+     */
+    _setResizable(resizeWidth, resizeHeight) {
+        if (resizeWidth === null) {
+            resizeWidth = this._resizerEl && this._resizerEl.allowResizeWidth;
+        }
+        if (resizeHeight === null) {
+            resizeHeight = this._resizerEl && this._resizerEl.allowResizeHeight;
+        }
+        
+        const hasResizer = resizeWidth || resizeHeight;
+        
+        if (hasResizer !== !!this._resizerEl) {
+            if (this._resizerEl) {
+                this._resizerEl.destruct();
+                this._resizerEl = null;
+            } else {
+                this._resizerEl = new kijs.gui.Resizer({
+                    target: this
+                });
+                if (this._dom.node) {
+                    this._resizerEl.renderTo(this._dom.node);
+                }
+            }
+        }
+        
+        if (hasResizer) {
+            this._resizerEl.allowResizeWidth = resizeWidth;
+            this._resizerEl.allowResizeHeight = resizeHeight;
+        }
     }
 
 

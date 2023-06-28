@@ -976,7 +976,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
-
+            
             &:last-child {
                 margin: 0 6px 0 0;
             }
@@ -1394,9 +1394,18 @@
         background-image: url("data:image/svg+xml;utf8,<svg width='7' height='7' xmlns='http://www.w3.org/2000/svg'><line x1='1' y1='7' x2='7' y2='1' stroke='black' stroke-width='1'/><line x1='5' y1='7' x2='7' y2='5' stroke='black' stroke-width='1' /></svg>");
         background-repeat: no-repeat;
         background-position: bottom 2px right 2px;
-        cursor: nwse-resize;
         opacity: 0.3;
 
+        &.kijs-resizer-width {
+            cursor: we-resize;
+        }
+        &.kijs-resizer-height {
+            cursor: ns-resize;
+        }
+        &.kijs-resizer-width.kijs-resizer-height {
+            cursor: nwse-resize;
+        }
+        
         &:hover {
             opacity: 1;
         }

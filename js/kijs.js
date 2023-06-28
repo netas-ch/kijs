@@ -5,24 +5,25 @@
 // --------------------------------------------------------------
 window.kijs = class kijs {
 
-
-    // --------------------------------------------------------------
-    // STATIC GETTERS / SETTERS
-    // --------------------------------------------------------------
-    static get version() { return '2.2.2'; }
-    
-    
-    // --------------------------------------------------------------
-    // STATICS
-    // --------------------------------------------------------------
-
-    // Static Properties in this Class
+    // PRIVATE VARS
     // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
     // __getTextFn {Function|null}      Verweise auf die getText()-Funktion
     // __getTextFnContext {Object|null} Kontext der getText()-Funktion
     // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
     //                                  { default:..., myRpc2:... }
 
+
+
+    // --------------------------------------------------------------
+    // STATIC GETTERS / SETTERS
+    // --------------------------------------------------------------
+    static get version() { return '2.2.3'; }
+    
+    
+    
+    // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
     /**
      * Erstellt eine Delegate
      * @param {Function} fn

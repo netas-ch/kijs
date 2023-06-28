@@ -36,6 +36,8 @@ home.sc.Resizer = class home_sc_Resizer {
                     iconMap: 'kijs.iconMap.Fa.up-right-and-down-left-from-center',
                     shadow: true,
                     resizable: true,
+                    resizableWidth: true,
+                    resizableHeight: true,
                     width: 150,
                     height: 100,
                     elements: []/*,
@@ -53,7 +55,8 @@ home.sc.Resizer = class home_sc_Resizer {
         this._win = new kijs.gui.Window({
             caption: 'Window mit Resizer',
             iconMap: 'kijs.iconMap.Fa.up-right-and-down-left-from-center',
-            resizable: true,
+            resizableWidth: false,
+            resizableHeight: true,
             maximizable: false,
             width: 200,
             height: 100,
