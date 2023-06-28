@@ -1,3 +1,22 @@
+Version 2.2.3
+=============
+### kijs.gui.Resizer
+Neue config/getter/setter:  
+ - allowResizeWidth (Boolean, Default=true)  
+ - allowResizeHeight (Boolean, Default=true)  
+
+### kijs.gui.Panel
+Neue config/getter/setter:  
+Damit kann eingestellt werden, dass nur die Höhe oder die Breite verändert werden kann.  
+ - resizableWidth (Boolean, Default=true)  
+ - resizableHeight (Boolean, Default=true)  
+
+
+### kijs.gui.Window
+Fenster haben neu runde Ecken.  
+
+
+
 Version 2.2.2
 ===============
 ### kijs.gui.field.*
@@ -12,6 +31,7 @@ Version 2.2.2
 Wird ein Request bei cancelRunningRpcs=true durch einen neueren Request abgebrochen, 
 neu die callbackFn und auch das resolve des Promise ausgeführt. Der errorType ist 
 'cancel'.  
+
 
 
 Version 2.2.1
@@ -42,6 +62,7 @@ Version 2.2.1
  - Das Event ```afterSave``` wird nun immer ausgeführt. Auch wenn ein Fehler aufgetreten ist.  
  - Bei der Funktion ```save()``` gibt es kein catch() mehr. Es wird nun immer 
    ```resolve()``` ausgeführt.  
+
 
 
 Version 2.1.2
