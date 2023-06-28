@@ -275,17 +275,13 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
             h = minMaxSize.hMax;
         }
 
-        // Wenn Breite nicht veränderbar
-        if (!this._dom.clsHas('kijs-resizer-width')) {
-            w = this._initialPos.w;
-        }
-        if (!this._dom.clsHas('kijs-resizer-height')) {
-            h = this._initialPos.h;
-        }
-
         // Grösse zuweisen
-        this._targetEl.width = w;
-        this._targetEl.height = h;
+        if (this._dom.clsHas('kijs-resizer-width')) {
+            this._targetEl.width = w;
+        }
+        if (this._dom.clsHas('kijs-resizer-height')) {
+            this._targetEl.height = h;
+        }
 
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
