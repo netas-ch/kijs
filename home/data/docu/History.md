@@ -8,8 +8,8 @@ Neue config/getter/setter:
 ### kijs.gui.Panel
 Neue config/getter/setter:  
 Damit kann eingestellt werden, dass nur die Höhe oder die Breite verändert werden kann.  
- - resizableWidth (Boolean, Default=true)  
- - resizableHeight (Boolean, Default=true)  
+ - resizableWidth (Boolean, Default=false)  
+ - resizableHeight (Boolean, Default=false)  
 
 
 ### kijs.gui.Window
