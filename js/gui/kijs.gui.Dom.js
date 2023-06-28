@@ -1139,26 +1139,28 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
-     * @param {HTMLElement} targetNode
-     * @param {HTMLElement} [insert] - Falls das Element statt angehängt eingefügt werden soll.
-     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
+     * @param {HTMLElement} targetNode           Eltern-Node
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     *                                           statt angehängt eingefügt werden soll
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
-    renderTo(targetNode, insert, insertPosition='before') {
+    renderTo(targetNode, referenceNode=null, insertPosition='before') {
         this.render();
 
-        if (insert) {
-
-            // Element vor dem insert-Element einfügen
+        // Element vor oder nach einem Element einfügen
+        if (referenceNode) {
+            // Element vor dem referenceNode-Element einfügen
             if (insertPosition === 'before') {
-                targetNode.insertBefore(this._node, insert);
+                targetNode.insertBefore(this._node, referenceNode);
 
-            // Element nach dem insert-Element einfügen
+            // Element nach dem referenceNode-Element einfügen
             } else if (insertPosition === 'after') {
-                targetNode.insertBefore(this._node, insert.nextSibling);
+                targetNode.insertBefore(this._node, referenceNode.nextSibling);
 
             } else {
-                throw new kijs.Error('invalid insert position for renderTo');
+                throw new kijs.Error('invalid insertPosition for renderTo');
             }
 
         // Element anhängen

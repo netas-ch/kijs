@@ -259,10 +259,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('dblClick', this._dom);
         this._eventForwardsAdd('rightClick', this._dom);
         this._eventForwardsAdd('drag', this._dom);
+        this._eventForwardsAdd('dragEnd', this._dom);
+        this._eventForwardsAdd('dragEnter', this._dom);
+        this._eventForwardsAdd('dragLeave', this._dom);
         this._eventForwardsAdd('dragOver', this._dom);
         this._eventForwardsAdd('dragStart', this._dom);
-        this._eventForwardsAdd('dragLeave', this._dom);
-        this._eventForwardsAdd('dragEnd', this._dom);
         this._eventForwardsAdd('drop', this._dom);
         this._eventForwardsAdd('focus', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);
@@ -710,36 +711,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
-     * @param {HTMLElement} targetNode
-     * @param {HTMLElement} [insert] - true=vorher oder nachher einfügen, false=als Kind anhängen
-     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
+     * rendert das Element und fügt den DOM-Node einem Parent-DOM-Node hinzu
+     * @param {HTMLElement} targetNode           Eltern-Node
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     *                                           statt angehängt eingefügt werden soll
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
-    renderTo(targetNode, insert, insertPosition='before') {
+    renderTo(targetNode, referenceNode=null, insertPosition='before') {
         const firstRender = !this.isRendered;
 
         this.render();
-
-        // vorher oder nachher einfügen
-        if (insert) {
-            // Element vor dem insert-Element einfügen
-            if (insertPosition === 'before') {
-                targetNode.insertBefore(this._dom.node, insert);
-
-            // Element nach dem insert-Element einfügen
-            } else if (insertPosition === 'after') {
-                targetNode.insertBefore(this._dom.node, insert.nextSibling);
-
-            } else {
-                throw new kijs.Error('invalid insert position for renderTo');
-            }
-
-        // als Kind-Element anhängen
-        } else {
-            targetNode.appendChild(this._dom.node);
-        }
-
+        
+        this._dom.renderTo(targetNode, referenceNode, insertPosition);
+        
         // Event afterFirstRenderTo auslösen
         if (firstRender) {
             this.raiseEvent('afterFirstRenderTo');
