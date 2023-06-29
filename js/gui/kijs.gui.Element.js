@@ -259,11 +259,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('dblClick', this._dom);
         this._eventForwardsAdd('rightClick', this._dom);
         this._eventForwardsAdd('drag', this._dom);
-        this._eventForwardsAdd('dragEnd', this._dom);
         this._eventForwardsAdd('dragEnter', this._dom);
-        this._eventForwardsAdd('dragLeave', this._dom);
         this._eventForwardsAdd('dragOver', this._dom);
         this._eventForwardsAdd('dragStart', this._dom);
+        this._eventForwardsAdd('dragLeave', this._dom);
+        this._eventForwardsAdd('dragEnd', this._dom);
         this._eventForwardsAdd('drop', this._dom);
         this._eventForwardsAdd('focus', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);
@@ -356,6 +356,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     get htmlDisplayType() { return this._dom.htmlDisplayType; }
     set htmlDisplayType(val) { this._dom.htmlDisplayType = val; }
 
+    /**
+     * Index im elements-Array des parent-Containers
+     * @returns {Number|null}
+     */
+    get index() {
+        if (kijs.isEmpty(this.parent) || kijs.isEmpty(this.parent.elements)) {
+            return null;
+        }
+        let index = this.parent.elements.indexOf(this);
+        if (index === -1) {
+            index = null;
+        }
+        return index;
+    }
+    
     get isEmpty() { return this._dom.isEmpty; }
 
     get left() { return this._dom.left; }
@@ -965,7 +980,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         }
     }
-
+    
 
     // PRIVATE
     // LISTENERS
