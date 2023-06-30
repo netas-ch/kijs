@@ -85,6 +85,8 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
                 element.tabButtonEl.iconMap = 'kijs.iconMap.Fa.circle';
             }
         }, this);
+
+        this._updateArrows();
     }
 
     next() {
@@ -163,7 +165,7 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
 
         // Sichtbarkeit der Pfeile
         if (this._navigable) {
-            this._arrowLeft.visible = this.currentIndex !== 0;
+            this._arrowLeft.visible = this.currentIndex > 0;
             this._arrowRight.visible = this.currentIndex !== this.elements.length - 1;
         } else {
             this._arrowLeft.visible = false;

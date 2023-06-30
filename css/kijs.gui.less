@@ -776,7 +776,12 @@
        ****************** */
     div.kijs-container-wizard {
         > .kijs-container-scrollable {
+            min-height: 25px;
+
             > .kijs-container-inner {
+                flex-wrap: wrap;
+                align-content: center;
+
                 > .kijs-button {
                     background: none;
                     border: none;
@@ -892,6 +897,7 @@
             border: 1px solid var(--icon-error-borderColor);
             background-color: var(--icon-error-bkgrndColor);
         }
+
         &.kijs-help {
             border: 1px solid var(--icon-help-borderColor);
             background-color: var(--icon-help-bkgrndColor);
