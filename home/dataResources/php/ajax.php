@@ -77,6 +77,31 @@ foreach ($requests as $request) {
             }
             break;
             
+        case 'container.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            {
+                                "xtype": "kijs.gui.Button",
+                                "height": 40,
+                                "caption": "Button vom Server",
+                                "on": {
+                                    "click": "home.sc.Container.onRpcButtonClick"
+                                }
+                            }
+                        ]
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'dataview.load':
             try {
                 $rows = array();
@@ -135,11 +160,29 @@ foreach ($requests as $request) {
             }
             break;
         
+        case 'element.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "html": "Ich wurde geladen :)",
+                        "tooltip": "Ich bin ein Tooltip vom Server"
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'form.load':
             try {
                 // Formular
-                $response->responseData->form = json_decode('
-                        [
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
                             {
                                 "xtype": "kijs.gui.field.Combo",
                                 "name": "Anrede",
@@ -156,7 +199,8 @@ foreach ($requests as $request) {
                                 "label": "Vorname"
                             }
                         ]
-                    ');
+                    }
+                ');
 
                 // Formulardaten
                 $response->responseData->formData = array(
@@ -164,6 +208,9 @@ foreach ($requests as $request) {
                     'Name' => 'Meier',
                     'Vorname' => 'Susanne'
                 );
+                
+                //sleep(1);
+                
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
             }

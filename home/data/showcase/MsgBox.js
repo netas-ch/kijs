@@ -138,9 +138,11 @@ home.sc.MsgBox = class home_sc_MsgBox {
                                 closable: true, // Soll das Fenster ein X zum Schliessen haben?
 
                                 // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
-                                fieldXtype: 'kijs.gui.field.Text',
-                                label: 'Wert',
-                                value: 'Mein Testwert',
+                                fieldConfig:{
+                                    xtype: 'kijs.gui.field.Text',
+                                    label: 'Wert',
+                                    value: 'Mein Testwert'
+                                },
 
                                 //fn: function(e, el) {
                                 //    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);

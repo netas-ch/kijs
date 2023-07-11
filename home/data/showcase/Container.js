@@ -15,6 +15,16 @@ home.sc.Container = class home_sc_Container {
     
     
     // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
+    // Listener für dynamisch geladenen Button
+    static onRpcButtonClick(e) {
+        e.element.caption = 'Ich wurde angeklickt';
+    }
+    
+    
+    
+    // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
@@ -165,6 +175,27 @@ home.sc.Container = class home_sc_Container {
                             ]
                         }
                     ]
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'Container mit HTML Inhalt von RPC:',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.Container',
+                    facadeFnLoad: 'container.load',
+                    autoLoad: true,
+                    elements: [
+                        {
+                            xtype: 'kijs.gui.Element',
+                            html: 'HTML wird dynamisch geladen'
+                        }
+                    ],
+                    style: { 
+                        backgroundColor:'#ddd',
+                        padding: '10px',
+                        border: '1px solid #333'
+                    }
                 }
             ]
         });
