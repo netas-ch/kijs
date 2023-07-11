@@ -727,10 +727,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 }).then((e) => {
                     // config Properties
                     if (e.responseData.config) {
-                        // Falls elements übergeben wurden, die bestehenden entfernen
-                        if (e.responseData.config.elements && this._elements) {
-                            this.removeAll(true);
-                        }
                         // config Properties übernehmen
                         this.applyConfig(e.responseData.config);
                     }

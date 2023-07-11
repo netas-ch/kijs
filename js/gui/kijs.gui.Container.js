@@ -199,7 +199,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             innerCls: { fn: 'function', target: this._innerDom.clsAdd, context: this._innerDom },
             innerStyle : { fn: 'assign', target: 'style', context: this._innerDom },
 
-            elements: { prio: 1000, fn: 'function', target: this.add, context: this }
+            elements: { prio: 1000, fn: 'function', target: this._replaceElements, context: this }
         });
 
         // Event-Weiterleitungen von this._innerDom
@@ -726,6 +726,21 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             el.renderTo(this._innerDom.node);
         }, this);
     }
+
+    /**
+     * Entfernt alle elements und fügt neue hinzu
+     * Wird intern von der config elements verwendet
+     * @param {Object|Array} elements
+     * @returns {undefined}
+     */
+    _replaceElements(elements) {
+        // Bestehende Elemente löschen
+        this.removeAll(true, false, false);
+        
+        // Neue Elemente hinzufügen
+        this.add(elements, null, false);
+    }
+
 
 
     // PRVATE
