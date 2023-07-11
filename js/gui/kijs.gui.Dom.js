@@ -416,9 +416,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     get htmlDisplayType() { return this._htmlDisplayType; }
     set htmlDisplayType(val) { this._htmlDisplayType = val; }
-
-    get isAppended() { return this.isRendered && !!this._node.parentNode; }
-
+    
     get isEmpty() { return kijs.isEmpty(this.html); }
 
     get isRendered() { return !!this._node; }
