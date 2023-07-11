@@ -336,9 +336,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         if (this._innerDom.node && !preventRender) {
             this.render();
         }
-
+        
         // Hinzugefügt, Event auslösen.
         this.raiseEvent('add', {elements: newElements});
+        
+        this.raiseEvent('afterResize');
     }
 
     // overwrite
