@@ -18,6 +18,8 @@ Allgemein
 - kijs.gui.DropZone überarbeiten
 - kijs.gui.Menu überarbeiten
 - Idee: kijs.gui.Element oder Container, Panel remote laden von Configs/Elements (loadConfig, loadElements)
+- Mehrsprachigkeit: Formatierung von Datum, Zahlen, Monats- und Wohentagsnamen
+- Chart.js
 
 
 kijs.gui.Fields
@@ -52,3 +54,4 @@ Weiteres
 - Gestensteuerung (z.B. bei kijs.gui.field.Switch, kijs.gui.container.Stack oder Scrollen)
 - Tests auf verschiedenen Browsern/Geräten
 - Neues Design "Neomorphismus"
+- Import von kijs-core, kijs-gui und Plugins (aceEditor, quillEditor, chartJs)
