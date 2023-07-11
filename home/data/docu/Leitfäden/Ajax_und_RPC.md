@@ -188,24 +188,26 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
             case 'module1.formLoad':
                 try {
                     // Formular
-                    $response->responseData->form = json_decode('
-                        [
-                            {
-                                "xtype": "kijs.gui.field.Combo",
-                                "name": "Anrede",
-                                "label": "Anrede",
-                                "facadeFnLoad": "module1.loadAnredeCombo",
-                                "autoLoad": true
-                            },{
-                                "xtype": "kijs.gui.field.Text",
-                                "name": "Name",
-                                "label": "Name"
-                            },{
-                                "xtype": "kijs.gui.field.Text",
-                                "name": "Vorname",
-                                "label": "Vorname"
-                            }
-                        ]
+                    $response->responseData->config = json_decode('
+                        {
+                            "elements": [
+                                {
+                                    "xtype": "kijs.gui.field.Combo",
+                                    "name": "Anrede",
+                                    "label": "Anrede",
+                                    "facadeFnLoad": "module1.loadAnredeCombo",
+                                    "autoLoad": true
+                                },{
+                                    "xtype": "kijs.gui.field.Text",
+                                    "name": "Name",
+                                    "label": "Name"
+                                },{
+                                    "xtype": "kijs.gui.field.Text",
+                                    "name": "Vorname",
+                                    "label": "Vorname"
+                                }
+                            ]
+                        }
                     ');
 
                     // Formulardaten
@@ -263,5 +265,46 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
     }
 
     print(json_encode($responses));
+
+
+Laden von configs
+-----------
+Alle Elemente (kijs.gui.Element + vererbte) bieten die Möglichkeit die config dynamisch 
+über RPC zu laden.
+
+    {
+        xtype: 'kijs.gui.Element',
+        facadeFnLoad: 'element.load',
+        // rpc: 'default',
+        rpcArgs: {
+            myArgument: 'test'
+        },
+        autoLoad: true
+    }
+
+Die vom Server erhaltene config wird automatisch beim Empfang übernommen.  
+Bei der Antwort vom Server muss die Config als Objekt wie folgt zurückgegeben werden:  
+
+    $config = new stdClass();
+    $config->html = '<b>Ich komme vom Server</b>';
+    $config->tooltip = 'Ich auch';
+    $response->responseData->config = $config;
+
+Beispiel für das Laden von Kind-Elementen bei einem Panel:  
+    
+    $response->responseData->config = json_decode('
+        {
+            "caption": "Dynamisch geladenes Panel",
+            "elements": [
+                {
+                    "xtype":"kijs.gui.Button",
+                    "caption":"Button vom Server",
+                    "on":{
+                        "click":"myStyticClass.onAwesomeButtonClick"  // listener must be static
+                    }
+                }
+            ]
+        }
+    ');
 
 

@@ -30,10 +30,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
             selectType: { target: 'selectType', context: this._listView },
 
-            facadeFnLoad: { target: 'facadeFnLoad', context: this._listView },
-            facadeFnArgs: { target: 'facadeFnArgs', context: this._listView },
-            rpc: { target: 'rpc' }, // Instanz von kijs.gui.Rpc oder Name einer RPC
-
             captionField: { target: 'captionField', context: this._listView },
             iconCharField: { target: 'iconCharField', context: this._listView },
             iconMapField: { target: 'iconMapField', context: this._listView },
@@ -79,12 +75,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     get elements() { return this._listView.elements; }
 
-    get facadeFnArgs() { return this._listView.facadeFnArgs; }
-    set facadeFnArgs(val) { this._listView.facadeFnArgs = val; }
-
-    get facadeFnLoad() { return this._listView.facadeFnLoad; }
-    set facadeFnLoad(val) { this._listView.facadeFnLoad = val; }
-
     // overwrite
     get hasFocus() { return this._listView.hasFocus; }
 
@@ -97,9 +87,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         super.readOnly = !!val;
         this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
     }
-
-    get rpc() { return this._listView.rpc; }
-    set rpc(val) { this._listView.rpc = val; }
 
     get selectType() { return this._listView.selectType; }
     set selectType(val) { this._listView.selectType = val; }
@@ -138,14 +125,35 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     focus(alsoSetIfNoTabIndex) {
         return this._listView.focus(alsoSetIfNoTabIndex);
     }
-
+    
     /**
-     * Füllt das Combo mit Daten vom Server
-     * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
-     * @returns {undefined}
+     * Füllt das Listview mit Daten vom Server
+     * @param {Object|Null} [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Boolean} [superCall=false]
+     * @returns {Promise}
      */
-    load(args) {
-        return this._listView.load(args);
+    load(args, superCall=false) {
+        return new Promise((resolve, reject) => {
+            super.load(args, true).then((e) => {
+
+                this._listView.data = e.responseData.rows;
+                if (!kijs.isEmpty(e.responseData.selectFilters)) {
+                    this._listView.selectByFilters(e.responseData.selectFilters);
+                }
+                
+                // 'afterLoad' auslösen
+                if (!superCall) {
+                    this._listView.raiseEvent('afterLoad', e);
+                }
+                
+                // Promise ausführen
+                resolve(e);
+                
+            }).catch((ex) => {
+                reject(ex);
+                
+            });
+        });
     }
 
     // overwrite

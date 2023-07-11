@@ -1,5 +1,6 @@
 /* global kijs, this */
 
+// TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
 // kijs.gui.grid.Grid
 // --------------------------------------------------------------

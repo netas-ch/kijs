@@ -193,6 +193,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._dom = new kijs.gui.Dom();
         this._name = null;
         this._parentEl = null;
+        this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._rpcArgs = {};         // Standard RPC-Argumente
+        this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
         this._visible = true;
         this._lastSize = null;    // Grösse beim letzten Aufruf vom afterResize-Event
         this._userData = null;    // Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
@@ -228,6 +231,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             afterResizeDelay: true,
+            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
             disableEnterBubbeling: { target: 'disableEnterBubbeling', context: this._dom },
             disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },
@@ -250,6 +254,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
             xtype: { fn: 'manual' },
+            facadeFnLoad: true,
+            rpc: { target: 'rpc' },             // Instanz von kijs.gui.Rpc oder Name einer RPC
+            rpcArgs: true,
             
             disabled: { prio: 2000, target: 'disabled' }
         };
@@ -302,6 +309,17 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     get afterResizeDelay() { return this._afterResizeDelay; }
     set afterResizeDelay(val) { this._afterResizeDelay = val; }
 
+    get autoLoad() {
+        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+    }
+    set autoLoad(val) {
+        if (val) {
+            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        } else {
+            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        }
+    }
+
     // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
     get disabled() {  return this._dom.disabled; }
     set disabled(val) {
@@ -331,6 +349,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     get dom() { return this._dom; }
+
+    get facadeFnLoad() { return this._facadeFnLoad; }
+    set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
     get isAppended() { return !!this._dom.isAppended; }
 
@@ -465,6 +486,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             return this._parentEl.elements[index];
         } else {
             return null;
+        }
+    }
+
+    get rpc() {
+        return this._rpc || kijs.getRpc('default');
+    }
+    set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+        } else {
+            throw new kijs.Error(`Unkown format on config "rpc"`);
         }
     }
 
@@ -662,6 +698,57 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Lädt die config via RPC
+     * @param {Object}  [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Boolean} [superCall=false]
+     * @returns {Promise}
+     */
+    load(args=null, superCall=false) {
+        return new Promise((resolve, reject) => {
+            if (this._facadeFnLoad) {
+
+                if (!kijs.isObject(args)) {
+                    args = {};
+                }
+                args = Object.assign({}, args, this._rpcArgs);
+
+                this.rpc.do({
+                    facadeFn: this._facadeFnLoad,
+                    owner: this,
+                    data: args,
+                    cancelRunningRpcs: true,
+                    waitMaskTarget: this,
+                    waitMaskTargetDomProperty: 'dom',
+                    context: this
+
+                }).then((e) => {
+                    // config Properties
+                    if (e.responseData.config) {
+                        // Falls elements übergeben wurden, die bestehenden entfernen
+                        if (e.responseData.config.elements && this._elements) {
+                            this.removeAll(true);
+                        }
+                        // config Properties übernehmen
+                        this.applyConfig(e.responseData.config);
+                    }
+                    
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', e);
+                    }
+
+                    // promise ausführen
+                    resolve(e);
+                    
+                }).catch((ex) => {
+                    reject(ex);
+
+                });
+            }
+        });
     }
 
     // overwrite
@@ -984,6 +1071,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     // PRIVATE
     // LISTENERS
+    #onAfterFirstRenderTo(e) {
+        this.load().catch(() => {});
+    }
+
     /**
      * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte.
      * Hier werden die Events, die in (this._eventForwards) zum Weiterleiten gekennzeichnet sind weitergeleitet.
@@ -1058,7 +1149,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._dom.destruct();
         }
         if (this._waitMaskEl) {
-            this._waitMaskEl.destruct;
+            this._waitMaskEl.destruct();
         }
         
         // Variablen (Objekte/Arrays) leeren
@@ -1070,7 +1161,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._lastSize = null;
         this._userData = null;
         this._waitMaskEl = null;
-
+        this._rpc = null;
+        
         // Basisklasse entladen
         super.destruct();
     }

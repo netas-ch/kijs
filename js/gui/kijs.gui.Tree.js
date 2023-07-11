@@ -1,5 +1,7 @@
 /* global kijs, this */
 
+// TODO: Grundsätzlich überarbeiten
+// TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
 // kijs.gui.Tree
 // --------------------------------------------------------------

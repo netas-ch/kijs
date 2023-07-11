@@ -1,3 +1,63 @@
+Version 2.3.1
+=============
+Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.  
+Es sind evtl. Anpassungen am Projekt nötig.  
+
+### kijs.gui.Container
+ - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
+   auf dem Coontainer ausgelöst. Dieses wird auch an alle elements weitergericht.
+
+### kijs.gui.Element
+ - Neuer getter ```index```. Gibt den Index des Elements im elements-Array des parent 
+   an oder ```null```.
+ - getter ```isAppended``` gibt es nicht mehr. Dieser getter gab nur zurück, ob 
+   der node ein parent node hat. Dies hiess aber nicht unbedingt, dass der node 
+   auch sichtbar war, denn es konnt sein, dass der parent node selbst noch kein 
+   parent node hat.  
+   Da beim hinzufügen von neuen Elementen in einen container neu das ```afterresize```
+   Event kommt, solte nun alles auch ohne diesen getter funktionieren.  
+   **UPDATE TIPP:** Projekt nach ```isAppended``` durchsuchen.  
+ - Neue config/getter/setter, mit denen der die Configs des Elements (oder von 
+   vererbten Klassen) via RPC geladen werden können:  
+    - ```autoLoad```
+    - ```facadeFnLoad```
+    - ```rpc``` 
+    - ```rpcArgs```
+   Siehe dazu auch den Leitfaden "Ajax und RPC" unter "Laden von configs".  
+   Dies funktioniert natürlich auch in allen abgeleiteten Klassen.  
+   Ausnahmen, wo es im Moment noch nicht funktioniert:
+    - kijs.gui.grid.Grid
+    - kijs.gui.Tree
+    - kijs.gui.field.Combo
+
+### kijs.gui.Dom
+ - getter ```isAppended``` gibt es nicht mehr. Sie dazu auch den Kommentar unter 
+   kijs.gui.Element.  
+
+### kijs.gui.MsgBox
+ - config-Argumente der statischen Funktion ```kijs.gui.MsgBox.show(config)``` 
+   geändert:  
+    - ```fieldConfig``` NEU! Objekt mit Eigenschaften für das Field  
+    - ```fieldXtype``` GELÖSCHT! Bitte fieldConfig -> ```xtype``` verwenden  
+    - ```label```  GELÖSCHT! Bitte fieldConfig -> ```label``` verwenden  
+    - ```value```  GELÖSCHT! Bitte fieldConfig -> ```value``` verwenden  
+    - ```required```  GELÖSCHT! Bitte fieldConfig -> ```required``` verwenden  
+    - ```facadeFnArgs```  GELÖSCHT! Bitte fieldConfig -> ```facadeFnArgs``` verwenden  
+   
+   **UPDATE TIPP:** Projekt nach ```kijs.gui.MsgBox.show(``` durchsuchen, und die 
+   Argumente anpassen.  
+
+### kijs.gui.FormPanel
+ - Property in RPC Antwort von load() umbenannt.  
+   alt: ```responseData.form = [...]```  
+   neu: ```responseData.config.elements = [...]```  
+   Damit ist load() kompatibel mit load() der Basisklasse kijs.gui.Element.  
+   Neu können damit neben den elements auch andere configs gesendet werden.  
+   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und erstzen durch 
+   ```config.elements```.  
+
+
+
 Version 2.2.3
 =============
 ### kijs.gui.Resizer
