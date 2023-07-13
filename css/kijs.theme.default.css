@@ -75,6 +75,12 @@
     --default-lineHeight: 13px;
 
 
+    /* Scrollbar */
+    --scrollbar-color: var(--grey4);
+    --scrollbar-background-color: var(--grey3);
+    --scrollbar-hover-color: var(--grey5);
+
+
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: var(--grey4);
@@ -118,8 +124,8 @@
 
 
     /* Buttons im Window-Footer */
-    --window-footer-button-bkgrndColor: var(--accentColor);
-    --window-footer-button-borderColor: var(--accentColor);
+    --window-footer-button-bkgrndColor: var(--grey3);
+    --window-footer-button-borderColor: var(--grey3);
     --window-footer-button-fontColor: var(--grey9);
 
     --window-footer-button-focus-borderColor: var(--grey9);
@@ -154,6 +160,8 @@
     /* Panel */
     --panel-bkgrndColor: var(--grey1);
     --panel-borderColor: var(--grey4);
+    --panel-collapse-height: 30px;
+    --panel-collapse-width: 30px;
 
 
     /* Bar */
