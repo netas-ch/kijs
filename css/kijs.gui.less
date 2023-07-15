@@ -875,6 +875,106 @@
     }
 
 
+    /* ******************
+       * Container Wizard
+       ****************** */
+    div.kijs-container-wizard {
+        > .kijs-container-scrollable {
+            min-height: 25px;
+
+            > .kijs-container-inner {
+                flex-wrap: wrap;
+                align-content: center;
+
+                > .kijs-button {
+                    background: none;
+                    border: none;
+
+                    &:focus {
+                        background: none;
+                        border: none;
+
+                        > .kijs-icon {
+                            color: var(--tabButton-focus-fontColor);
+                        }
+                    }
+
+                    &:hover {
+                        background: none;
+                        border: none;
+                    }
+
+                    &.kijs-disabled {
+                        border: none;
+                        background: none;
+
+                        > .kijs-caption,
+                        > .kijs-icon {
+                            color: var(--tabButton-fontColor);
+                        }
+
+                        &:focus {
+                            background: none;
+                            border: none;
+                        }
+                    }
+
+                    &.kijs-current {
+                        background: none;
+
+                        > .kijs-icon {
+                            color: var(--tabButton-current-fontColor);
+                            font-size: 10px;
+                        }
+
+                        > .kijs-caption {
+                            color: var(--tabButton-current-fontColor);
+                        }
+
+                        &.kijs-disabled {
+                            > .kijs-caption {
+                                color: var(--tabButton-current-fontColor);
+                            }
+                        }
+                    }
+
+                    > .kijs-icon {
+                        font-size: 8px;
+                    }
+
+                    > .kijs-caption {
+                        font-size: 10px;
+                    }
+                }
+            }
+        }
+
+        > .kijs-arrow-left {
+            z-index: 1;
+            position: absolute;
+            top: 45%;
+            left: 10px;
+            cursor: pointer;
+            opacity: 0.2;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        > .kijs-arrow-right {
+            z-index: 1;
+            position: absolute;
+            top: 45%;
+            right: 10px;
+            cursor: pointer;
+            opacity: 0.2;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+    }
 
     /* ******************
        * Tooltip
@@ -1371,6 +1471,67 @@
         }
     }
 
+
+    /* ******************
+       * Wizard
+       ****************** */
+    div.kijs-wizard {
+        > .kijs-container-inner {
+            display: flex;
+            flex-direction: column;
+
+            > .kijs-container-stack {
+                flex: 1;
+            }
+
+            > .kijs-dots-container {
+                > .kijs-container-inner {
+                    margin: 5px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    > .kijs-dot {
+                        font-size: 6pt;
+                        margin: 2px;
+
+                        &.kijs-current {
+                            font-size: 8pt;
+                            color: var(--tabButton--currentfontColor);
+                        }
+
+                        &.kijs-selectable {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            > .kijs-arrow-left {
+                position: absolute;
+                top: 50%;
+                left: 10px;
+                cursor: pointer;
+                opacity: 0.2;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+
+            > .kijs-arrow-right {
+                position: absolute;
+                top: 50%;
+                right: 10px;
+                cursor: pointer;
+                opacity: 0.2;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+    }
 
 
     /* ******************
