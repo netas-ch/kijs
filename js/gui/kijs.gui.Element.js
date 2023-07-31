@@ -503,6 +503,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             throw new kijs.Error(`Unkown format on config "rpc"`);
         }
     }
+    
+    get rpcArgs() {
+        return this._rpcArgs;
+    }
+    
+    set rpcArgs(val) {
+        this._rpcArgs = val;
+    }
 
     get style() { return this._dom.style; }
 
