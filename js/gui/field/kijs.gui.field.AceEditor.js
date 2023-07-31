@@ -211,7 +211,9 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     // PRIVATE
     // LISTENERS
     #onAfterResize(e) {
-        this._aceEditor.resize();
+        if (this._aceEditor) {
+            this._aceEditor.resize();
+        }
     }
     
     #onAnnotationChange() {

@@ -42,7 +42,7 @@ home.sc.Tree = class home_sc_Tree {
                     //expandedIconCls: 'icoFolderOpen32',
                     //iconSize: 16,
                     //rpc: 'default',
-                    facadeFnLoad: 'tree.load',
+                    rpcLoadFn: 'tree.load',
                     draggable: true,
                     on: {
                         expand: function(){ console.log('expand event'); },
@@ -68,7 +68,7 @@ home.sc.Tree = class home_sc_Tree {
                     iconCls: 'icoFolder32',
                     expandedIconCls: 'icoFolderOpen32',
                     iconSize: 16,
-                    facadeFnLoad: 'tree.load',
+                    rpcLoadFn: 'tree.load',
                     draggable: true,
                     on: {
                         expand: function(){ console.log('expand event'); },

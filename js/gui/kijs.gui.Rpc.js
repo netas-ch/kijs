@@ -84,14 +84,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *   Es können auch eigene errorTypes verwendet werden.
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
-     *     {String} facadeFn         Modul/Facaden-name und Methodenname Bsp: 'address.save'
+     *     {String} remoteFn         Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} data              Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]          Verweis auf das Aufzurufende Element oder eine ID, die das Element eindeutig identifiziert.
      *                               Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
      *     {Function} fn             Callback-Funktion
      *     {Object} context          Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false] Bei true, werden alle laufenden Requests 
-     *                               vom selben owner an dieselbe facadeFn abgebrochen
+     *                               vom selben owner an dieselbe remoteFn abgebrochen
      *     {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node
      *                                                                       für Lademaske, NULL=document.body, 'none' für keine Maske.
      *     {String} [waitMaskTargetDomProperty='dom']        Name der DOM-Eigenschaft in der die Lademaske
@@ -131,7 +131,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         
         // RPC
         return super.do({
-            facadeFn: config.facadeFn,
+            remoteFn: config.remoteFn,
             requestData: config.data,
             owner: config.owner,
             cancelRunningRpcs: config.cancelRunningRpcs,
@@ -201,7 +201,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                         if (e.btn === 'ok') {
                             // Request nochmal senden mit Flag ignoreWarnings
                             this._doRpc({
-                                facadeFn: config.facadeFn,
+                                remoteFn: config.remoteFn,
                                 data: config.data,
                                 owner: config.owner,
                                 fn: config.fn,

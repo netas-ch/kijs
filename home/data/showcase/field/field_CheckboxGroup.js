@@ -91,7 +91,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
                     iconMapField: 'iconMap',
                     iconColorField: 'color',
                     //rpc: 'default',
-                    facadeFnLoad: 'colors.load',
+                    rpcLoadFn: 'colors.load',
                     autoLoad: true,
                     value: ['#0f0', '#ff0']
                 }

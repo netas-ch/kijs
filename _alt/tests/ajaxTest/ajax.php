@@ -7,7 +7,7 @@
         $response = new stdClass();
         $response->tid = $request->tid;
         
-        switch ($request->facadeFn) {
+        switch ($request->remoteFn) {
             case 'address.load':
                 try {
                     $response->formData = array(

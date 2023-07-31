@@ -23,8 +23,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad: { target: 'autoLoad', context: this._listView },
-
             ddSort: { target: 'ddSort', context: this._listView },
 
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
@@ -63,9 +61,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoLoad() { return this._listView.autoLoad; }
-    set autoLoad(val) { this._listView.autoLoad = val; }
-
     get captionField() { return this._listView.captionField; }
     set captionField(val) { this._listView.captionField = val; }
 
@@ -128,7 +123,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     
     /**
      * Füllt das Listview mit Daten vom Server
-     * @param {Object|Null} [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
@@ -143,7 +138,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
                 
                 // 'afterLoad' auslösen
                 if (!superCall) {
-                    this._listView.raiseEvent('afterLoad', e);
+                    this.raiseEvent('afterLoad', e);
                 }
                 
                 // Promise ausführen

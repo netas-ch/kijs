@@ -14,7 +14,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         super(false);
 
         this._data = {};
-        this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
+        this._rpcSaveFn = null;     // Name der remoteFn. Bsp: 'address.save'
+        this._rpcSaveArgs = {};     // Standard RPC-Argumente
         this._fields = [];          // Array mit kijs.gui.field.Fields-Elementen
         this._defaultSaveErrorMsg = kijs.getText(`Es wurden noch nicht alle Felder richtig ausgefüllt`) + '.';
         this._defaultSaveErrorTitle = kijs.getText(`Fehler`) + '.';
@@ -29,7 +30,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
-            facadeFnSave: true
+            rpcSaveFn: true,
+            rpcSaveArgs: true
         });
 
         // Beim Hinzufügen oder Löschen von Kindelementen Felder neu suchen
@@ -96,9 +98,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     get defaultSaveErrorMsg() { return this._defaultSaveErrorMsg; }
     set defaultSaveErrorMsg(val) { this._defaultSaveErrorMsg = val; }
-
-    get facadeFnSave() { return this._facadeFnSave; }
-    set facadeFnSave(val) { this._facadeFnSave = val; }
 
     get fields() {
         if (kijs.isEmpty(this._fields)) {
@@ -178,19 +177,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
     }
 
-    /**
-     * Setzt die Werte der Felder auf den Originalwert zurück
-     * @returns {undefined}
-     */
-    valuesReset() {
-        if (kijs.isEmpty(this._fields)) {
-            this.searchFields();
-        }
-        
-        for (let i=0; i<this._fields.length; i++) {
-            this._fields[i].valuesReset();
-        }
-    }
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
+    
+    get rpcSaveFn() { return this._rpcSaveFn; }
+    set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
 
 
@@ -235,7 +226,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     /**
      * Lädt das Formular mit Daten vom Server
-     * @param {Object}  [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
      * @param {Boolean} [superCall=false]
@@ -334,7 +325,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             if (!kijs.isObject(args)) {
                 args = {};
             }
-
+            
+            args = Object.assign({}, args, this._rpcSaveArgs);
+            
             if (!waitMaskTarget) {
                 waitMaskTarget = this;
             }
@@ -354,7 +347,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             // an den Server senden
             this.rpc.do({
-                facadeFn: this.facadeFnSave,
+                remoteFn: this.rpcSaveFn,
                 owner: this,
                 data: args,
                 cancelRunningRpcs: false,
@@ -420,6 +413,20 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         return ret;
     }
 
+    /**
+     * Setzt die Werte der Felder auf den Originalwert zurück
+     * @returns {undefined}
+     */
+    valuesReset() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+        
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].valuesReset();
+        }
+    }
+    
 
     // PRIVATE
     // LISTENERS
@@ -453,6 +460,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Variablen (Objekte/Arrays) leeren
         this._data = null;
         this._fields = null;
+        this._rpcSaveArgs = null;
 
         // Basisklasse entladen
         super.destruct(true);

@@ -119,7 +119,7 @@ home.App = class home_App {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeShowcase',
                     rpc: 'app',
-                    facadeFnLoad: 'naviShowcase.load',
+                    rpcLoadFn: 'naviShowcase.load',
                     style: {
                         flex: 1
                     },
@@ -141,7 +141,7 @@ home.App = class home_App {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeTest',
                     rpc: 'app',
-                    facadeFnLoad: 'naviTest.load',
+                    rpcLoadFn: 'naviTest.load',
                     style: {
                         flex: 1
                     },
@@ -163,7 +163,7 @@ home.App = class home_App {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeDocu',
                     rpc: 'app',
-                    facadeFnLoad: 'naviDocu.load',
+                    rpcLoadFn: 'naviDocu.load',
                     style: {
                         flex: 1
                     },
