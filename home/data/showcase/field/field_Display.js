@@ -44,6 +44,26 @@ home.sc.field_Display = class home_sc_field_Display {
                     value: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
                     helpText: 'Hilfe'
                 },
+                
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'html:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'html',
+                    style: { margin: '10px 0 0 0'}
+                },
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'text:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'text'
+                },
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'code:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'code'
+                },
 
                 {
                     xtype: 'kijs.gui.Element',
@@ -79,6 +99,13 @@ home.sc.field_Display = class home_sc_field_Display {
                     xtype: 'kijs.gui.field.Display',
                     label: 'Hyperlink 2',
                     value: 'Klicke auf https://www.netas.ch!\n oder auf support@netas.ch',
+                    valueDisplayType: 'html',
+                    clickableLinks: true
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'HTML+Hyperlink',
+                    value: '<b>Link:</b> www.netas.ch',
+                    valueDisplayType: 'html',
                     clickableLinks: true
                 }
             ]

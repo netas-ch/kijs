@@ -78,6 +78,14 @@ Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.
    **UPDATE TIPP:** PHP nach ```form``` durchsuchen und erstzen durch 
    ```config.elements```.  
 
+### kijs.gui.field.Display
+ - Neue config/getter/setter ```valueDisplayType```  
+   Darstellung der Eigenschaft ```value```  (Default='code')  
+   Mögliche Werte:  
+    - ```html```: als html-Inhalt (innerHtml)  
+    - ```code```: Tags werden als Text angezeigt  
+    - ```text```: Tags werden entfernt  
+
 
 
 Version 2.2.3
