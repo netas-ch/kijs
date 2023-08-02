@@ -183,7 +183,7 @@ home.sc.Container = class home_sc_Container {
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
-                    facadeFnLoad: 'container.load',
+                    rpcLoadFn: 'container.load',
                     autoLoad: true,
                     elements: [
                         {

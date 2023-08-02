@@ -25,7 +25,7 @@ Dazu muss zuerst eine Instanz erstellt werden:
 Die dann verwendet werden kann:  
 
     myRpc.do({
-        facadeFn: 'myModule.myFunction',    // Gewünschte Funktion des Servers
+        remoteFn: 'myModule.myFunction',    // Gewünschte Funktion des Servers
         owner: this,                        // wird gebraucht um bei cancelRunningRpcs
                                             // den owner zu unterscheiden
         requestData: { ... },               // Argumente, die an den Server übermittelt werden
@@ -50,12 +50,12 @@ Meldungsfenster angezeigt und es wird eine Lademaske während des Requests angez
 Beispiel:
 
     kijs.getRpc('default').do({
-        facadeFn: 'myModule.myFunction',   // Gewünschte Funktion des Servers 
+        remoteFn: 'myModule.myFunction',   // Gewünschte Funktion des Servers 
         owner: this,                       // wird gebraucht um bei cancelRunningRpcs
                                            // den owner zu unterscheiden
         data: { ... },           // Argumente, die an den Server übermittelt werden
         cancelRunningRpcs: true  // Sollen bereits laufende Requests an die gleiche 
-                                 // Facade abgebrochen werden
+                                 // remoteFn abgebrochen werden
     }).then((e) => {
         console.log(e.responseData);
         if (kijs.isEmpty(e.errorType)) {
@@ -102,7 +102,7 @@ kann also anstelle einer callback-fn auch mit einem Promise ausgewertet werden.
 Beispiel:  
 
     kijs.getRpc('default').do({
-        facadeFn: 'myModule.myFunction',
+        remoteFn: 'myModule.myFunction',
         owner: this,
         data: { ... }
     }).then((e) => {
@@ -124,7 +124,7 @@ kijs generiert automatisch Requests mit folgendem Aufbau:
         {
             "tid":1,                            // eindeutige Id (wird automatisch 
                                                 // vergeben und eingefügt)
-            "facadeFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
+            "remoteFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
             "requestData": {
                 ...                             // beliebige Daten die zurückgegeben werden
             },
@@ -184,7 +184,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
         $response->tid = $request->tid;
         $response->responseData = new stdClass();
 
-        switch ($request->facadeFn) {
+        switch ($request->remoteFn) {
             case 'module1.formLoad':
                 try {
                     // Formular
@@ -195,7 +195,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                                     "xtype": "kijs.gui.field.Combo",
                                     "name": "Anrede",
                                     "label": "Anrede",
-                                    "facadeFnLoad": "module1.loadAnredeCombo",
+                                    "rpcLoadFn": "module1.loadAnredeCombo",
                                     "autoLoad": true
                                 },{
                                     "xtype": "kijs.gui.field.Text",
@@ -258,7 +258,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
 
             default:
                 $response->errorType = 'error';
-                $response->errorMsg = 'FacadeFn "' . $request->facadeFn . '" existiert nicht.';
+                $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
         }
 
         $responses[] = $response;
@@ -274,9 +274,9 @@ Alle Elemente (kijs.gui.Element + vererbte) bieten die Möglichkeit die config d
 
     {
         xtype: 'kijs.gui.Element',
-        facadeFnLoad: 'element.load',
+        rpcLoadFn: 'element.load',
         // rpc: 'default',
-        rpcArgs: {
+        rpcLoadArgs: {
             myArgument: 'test'
         },
         autoLoad: true

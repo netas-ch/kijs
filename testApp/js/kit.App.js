@@ -209,7 +209,7 @@ kit.App = class kit_App {
 //                                                    expandedIconCls: 'icoFolderOpen32',
 //                                                    iconSize: 16,
                                                     rpc: this._rpc,
-                                                    facadeFnLoad: 'tree.load',
+                                                    rpcLoadFn: 'tree.load',
                                                     draggable: true,
                                                     on: {
                                                         expand: function(){ console.log('expand event'); },
@@ -441,7 +441,7 @@ kit.App = class kit_App {
 //                                            return cols;
 //                                        })(),
 
-                                        facadeFnLoad: 'grid.load',
+                                        rpcLoadFn: 'grid.load',
                                         rpc: this._rpc,
                                         filterable: true,
                                         filterVisible: true,
@@ -508,8 +508,8 @@ kit.App = class kit_App {
                                     autoLoad: false,
                                     rpc: this._rpc,
                                     waitMaskTargetDomProperty: 'innerDom',
-                                    facadeFnLoad: 'address.load',
-                                    facadeFnSave: 'address.save',
+                                    rpcLoadFn: 'address.load',
+                                    rpcSaveFn: 'address.save',
                                     scrollableY: 'auto',
                                     style: {
                                         marginTop:'10px'
@@ -585,7 +585,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
-                                            facadeFnLoad: 'combo.load',
+                                            rpcLoadFn: 'combo.load',
                                             autoLoad: true,
                                             remoteSort: true,
                                             rpc: this._rpc,
@@ -604,7 +604,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'ServerSortCombo',
                                             label: 'Server Sort mit langem Label',
-                                            facadeFnLoad: 'combo.load',
+                                            rpcLoadFn: 'combo.load',
                                             autoLoad: true,
                                             remoteSort: true,
                                             rpc: this._rpc,
@@ -622,7 +622,7 @@ kit.App = class kit_App {
                                             xtype: 'kijs.gui.field.Combo',
                                             name: 'Test',
                                             label: 'Kein Force',
-                                            facadeFnLoad: 'combo.load',
+                                            rpcLoadFn: 'combo.load',
                                             autoLoad: true,
                                             remoteSort: true,
                                             rpc: this._rpc,
@@ -634,7 +634,7 @@ kit.App = class kit_App {
                                             name: 'Land',
                                             label: 'Remote',
                                             rpc: this._rpc,
-                                            facadeFnLoad: 'land.load',
+                                            rpcLoadFn: 'land.load',
                                             autoLoad: true,
                                             value: 'CH',
                                             valueField: 'value',
@@ -818,7 +818,7 @@ kit.App = class kit_App {
                                             iconCharField: 'iconChar',
                                             iconColorField: 'color',
                                             rpc: this._rpc,
-                                            facadeFnLoad: 'color.load',
+                                            rpcLoadFn: 'color.load',
                                             autoLoad: true,
                                             value: ['#0f0', '#ff0'],
                                             on: {
@@ -1158,7 +1158,7 @@ kit.App = class kit_App {
                                             name: 'Land',
                                             label: 'Land',
                                             rpc: this._rpc,
-                                            facadeFnLoad: 'land.load',
+                                            rpcLoadFn: 'land.load',
                                             autoLoad: true,
                                             value: 'CH',
                                             valueField: 'value',
@@ -1223,7 +1223,7 @@ kit.App = class kit_App {
                                             iconCharField: 'iconChar',
                                             iconColorField: 'color',
                                             rpc: this._rpc,
-                                            facadeFnLoad: 'color.load',
+                                            rpcLoadFn: 'color.load',
                                             autoLoad: true,
                                             value: '#0f0',
                                             showCheckBoxes: false,
@@ -1256,7 +1256,7 @@ kit.App = class kit_App {
                                             iconCharField: 'iconChar',
                                             iconColorField: 'color',
                                             rpc: this._rpc,
-                                            facadeFnLoad: 'color.load',
+                                            rpcLoadFn: 'color.load',
                                             autoLoad: true,
                                             value: '#ff0',
                                             showCheckBoxes: true,
@@ -1419,7 +1419,7 @@ kit.App = class kit_App {
                                             on: {
                                                 click: function() {
                                                     _this._rpc.do({
-                                                        facadeFn: 'test.test',
+                                                        remoteFn: 'test.test',
                                                         owner: this,
                                                         data: 'data', 
                                                         fn: function(responseData){
@@ -1438,8 +1438,8 @@ kit.App = class kit_App {
                                 },{
                                     xtype: 'kijs.gui.FormPanel',
                                     rpc: this._rpc,
-                                    facadeFnLoad: 'form.load',
-                                    facadeFnSave: 'form.save',
+                                    rpcLoadFn: 'form.load',
+                                    rpcSaveFn: 'form.save',
                                     shadow: true,
                                     scrollableY: 'auto',
                                     style: {
@@ -1519,7 +1519,7 @@ kit.App = class kit_App {
                                             rpc: this._rpc,
                                             //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
                                             autoLoad: true,
-                                            facadeFnLoad: 'dataview.load',
+                                            rpcLoadFn: 'dataview.load',
                                             waitMaskTargetDomProperty: 'innerDom',
                                             //scrollableY: 'auto',
                                             style: {

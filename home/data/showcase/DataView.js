@@ -116,7 +116,7 @@ home.sc.DataView = class home_sc_DataView {
                             //rpc: 'default',
                             //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
                             autoLoad: true,
-                            facadeFnLoad: 'dataview.load',
+                            rpcLoadFn: 'dataview.load',
                             waitMaskTargetDomProperty: 'innerDom',
                             //scrollableY: 'auto',
                             style: {

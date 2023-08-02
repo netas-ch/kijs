@@ -3,6 +3,28 @@ Version 2.3.1
 Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.  
 Es sind evtl. Anpassungen am Projekt nötig.  
 
+### Neue Benennungen von RPC-configs/getters/setters
+ - ```facadeFnLoad``` heisst nun ```rpcLoadFn```  
+ - ```facadeFnSave``` heisst nun ```rpcSaveFn```  
+ - ```rpcArgs``` heisst nun ```rpcLoadArgs```. Bei save-Funktionen gibt es neu eine 
+   eigene ```rpcSaveArgs``` config/getter/setter.  
+
+**UPDATE TIPP:** Folgende Texte im ganzen Projekt durch suchen/ersetzen ändern 
+(dabei nur nach ganzen Wörtern suchen):  
+ - ```facadeFnLoad``` ersetzen durch ```rpcLoadFn```  
+ - ```facadeFnSave``` ersetzen durch ```rpcSaveFn```  
+ - ```rpcArgs``` ersetzen durch ```rpcLoadArgs```  
+
+### kijs.rpc und kijs.gui.rpc
+- Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
+  nach ```remoteFn```.  
+  **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen. Vorsicht! 
+  Nur ersetzen, wenn ein Argument von do(config)!  
+
+**UPDATE TIPP:** Zur Kontrolle kann im Projekt noch nach ```facade``` gesucht werden. 
+Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.  
+
+
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
    auf dem Coontainer ausgelöst. Dieses wird auch an alle elements weitergericht.
@@ -19,10 +41,10 @@ Es sind evtl. Anpassungen am Projekt nötig.
    **UPDATE TIPP:** Projekt nach ```isAppended``` durchsuchen.  
  - Neue config/getter/setter, mit denen der die Configs des Elements (oder von 
    vererbten Klassen) via RPC geladen werden können:  
-    - ```autoLoad```
-    - ```facadeFnLoad```
     - ```rpc``` 
-    - ```rpcArgs```
+    - ```rpcLoadFn```
+    - ```rpcLoadArgs```
+    - ```autoLoad```
    Siehe dazu auch den Leitfaden "Ajax und RPC" unter "Laden von configs".  
    Dies funktioniert natürlich auch in allen abgeleiteten Klassen.  
    Ausnahmen, wo es im Moment noch nicht funktioniert:
@@ -42,7 +64,7 @@ Es sind evtl. Anpassungen am Projekt nötig.
     - ```label```  GELÖSCHT! Bitte fieldConfig -> ```label``` verwenden  
     - ```value```  GELÖSCHT! Bitte fieldConfig -> ```value``` verwenden  
     - ```required```  GELÖSCHT! Bitte fieldConfig -> ```required``` verwenden  
-    - ```facadeFnArgs```  GELÖSCHT! Bitte fieldConfig -> ```facadeFnArgs``` verwenden  
+    - ```facadeFnArgs```  GELÖSCHT! Bitte fieldConfig -> ```rpcLoadArgs``` verwenden  
    
    **UPDATE TIPP:** Projekt nach ```kijs.gui.MsgBox.show(``` durchsuchen, und die 
    Argumente anpassen.  
@@ -55,6 +77,14 @@ Es sind evtl. Anpassungen am Projekt nötig.
    Neu können damit neben den elements auch andere configs gesendet werden.  
    **UPDATE TIPP:** PHP nach ```form``` durchsuchen und erstzen durch 
    ```config.elements```.  
+
+### kijs.gui.field.Display
+ - Neue config/getter/setter ```valueDisplayType```  
+   Darstellung der Eigenschaft ```value```  (Default='code')  
+   Mögliche Werte:  
+    - ```html```: als html-Inhalt (innerHtml)  
+    - ```code```: Tags werden als Text angezeigt  
+    - ```text```: Tags werden entfernt  
 
 
 

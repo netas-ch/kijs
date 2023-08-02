@@ -194,8 +194,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._name = null;
         this._parentEl = null;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
-        this._rpcArgs = {};         // Standard RPC-Argumente
-        this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
+        this._rpcLoadFn = null;     // Name der remoteFn. Bsp: 'address.load'
+        this._rpcLoadArgs = {};     // Standard RPC-Argumente
         this._visible = true;
         this._lastSize = null;    // Grösse beim letzten Aufruf vom afterResize-Event
         this._userData = null;    // Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
@@ -254,9 +254,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
             xtype: { fn: 'manual' },
-            facadeFnLoad: true,
-            rpc: { target: 'rpc' },             // Instanz von kijs.gui.Rpc oder Name einer RPC
-            rpcArgs: true,
+            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
+            rpcLoadFn: true,
+            rpcLoadArgs: true,
             
             disabled: { prio: 2000, target: 'disabled' }
         };
@@ -349,9 +349,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     get dom() { return this._dom; }
-
-    get facadeFnLoad() { return this._facadeFnLoad; }
-    set facadeFnLoad(val) { this._facadeFnLoad = val; }
 
     get isAppended() { return !!this._dom.isAppended; }
 
@@ -504,13 +501,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
     
-    get rpcArgs() {
-        return this._rpcArgs;
-    }
-    
-    set rpcArgs(val) {
-        this._rpcArgs = val;
-    }
+    get rpcLoadArgs() { return this._rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
+
+    get rpcLoadFn() { return this._rpcLoadFn; }
+    set rpcLoadFn(val) { this._rpcLoadFn = val; }
 
     get style() { return this._dom.style; }
 
@@ -710,21 +705,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Lädt die config via RPC
-     * @param {Object}  [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
     load(args=null, superCall=false) {
         return new Promise((resolve, reject) => {
-            if (this._facadeFnLoad) {
+            if (this._rpcLoadFn) {
 
                 if (!kijs.isObject(args)) {
                     args = {};
                 }
-                args = Object.assign({}, args, this._rpcArgs);
+                args = Object.assign({}, args, this._rpcLoadArgs);
 
                 this.rpc.do({
-                    facadeFn: this._facadeFnLoad,
+                    remoteFn: this._rpcLoadFn,
                     owner: this,
                     data: args,
                     cancelRunningRpcs: true,
@@ -1166,6 +1161,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._userData = null;
         this._waitMaskEl = null;
         this._rpc = null;
+        this._rpcLoadArgs = null;
         
         // Basisklasse entladen
         super.destruct();

@@ -77,7 +77,7 @@ home.sc.Element = class home_sc_Element {
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',
-                    facadeFnLoad: 'element.load',
+                    rpcLoadFn: 'element.load',
                     autoLoad: true,
                     html: 'HTML wird dynamisch geladen',
                     style: { 

@@ -28,9 +28,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._rows = [];
         this._columnConfigs = [];
         this._primaryKeys = [];
-        this._facadeFnLoad = null;
-        this._facadeFnSave = null;
-        this._facadeFnArgs = null;
+        this._rpcLoadFn = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveFn = null;      // TODO: Wird nicht verwendet !!!!!!!!!
+        this._rpcSaveArgs = null;    // TODO: Wird nicht verwendet !!!!!!!!!
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
@@ -105,9 +106,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         Object.assign(this._configMap, {
             autoLoad:       true,
             rpc:            { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
-            facadeFnLoad:   true,
-            facadeFnSave:   true,
-            facadeFnArgs:   true,
+            rpcLoadFn:      true,
+            rpcLoadArgs:    true,
+            rpcSaveFn:      true,
+            rpcSaveArgs:    true,
             waitMaskTarget: true,
             waitMaskTargetDomProperty: true,
 
@@ -207,9 +209,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return dataRows;
     }
 
-    get facadeFnArgs() { return this._facadeFnArgs; }
-    set facadeFnArgs(val) { this._facadeFnArgs = val; }
-
     get filter() { return this._filter; }
 
     get filterable() { return this._filterable; }
@@ -271,6 +270,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             throw new kijs.Error(`Unkown format on config "rpc"`);
         }
     }
+
+    get rpcLoadArgs() { return this._rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
+
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
     get selectType() { return this._selectType; }
     set selectType(val) {
@@ -1056,7 +1061,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     _remoteLoad(resetData=false, loadNextData=false) {
         return new Promise((resolve, reject) => {
             if (
-                this._facadeFnLoad
+                this._rpcLoadFn
                 && !this._isLoading
                 && (
                     !this._remoteDataLoaded // Erster Aufruf
@@ -1090,8 +1095,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 args.start = this._remoteDataStartIndex;
                 args.limit = this._remoteDataStep;
 
-                if (kijs.isObject(this._facadeFnArgs)) {
-                    args = Object.assign(args, this._facadeFnArgs);
+                if (kijs.isObject(this._rpcLoadArgs)) {
+                    args = Object.assign(args, this._rpcLoadArgs);
                 }
 
                 // Lademaske wird angezeigt, wenn das erste Mal geladen wird, oder
@@ -1100,7 +1105,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // RPC ausführen
                 this.rpc.do({
-                    facadeFn: this._facadeFnLoad,
+                    remoteFn: this._rpcLoadFn,
                     owner: this,
                     data: args, 
                     cancelRunningRpcs: true,                                        // Cancel running
@@ -1489,6 +1494,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._bottomDom = null;
         
         this._rpc = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveArgs = null;
         
         // Basisklasse entladen
         super.destruct(true);

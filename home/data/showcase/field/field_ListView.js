@@ -92,7 +92,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     iconCharField: 'iconChar',
                     iconColorField: 'color',
                     //rpc: 'default',
-                    facadeFnLoad: 'colors.load',
+                    rpcLoadFn: 'colors.load',
                     autoLoad: true,
                     showCheckBoxes: false,
                     selectType: 'multi',

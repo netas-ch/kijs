@@ -182,6 +182,7 @@
     }
 
 
+
     /* ******************
        * Allgemein
        ****************** */
@@ -201,21 +202,11 @@
        * Ergänzung für kijs.gui.Container (+ vererbte)
        ****************** */
     /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable {
-        overflow-x: scroll;
-    }
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
 
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto {
-        overflow-x: auto;
-    }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable {
-        overflow-y: scroll;
-    }
-
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto {
-        overflow-y: auto;
-    }
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
     /* ******************
@@ -237,26 +228,6 @@
         }
     }
 
-
-    /* ******************
-       * Scrollbar
-       ****************** */
-    ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--scrollbar-background-color);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-color);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-hover-color);
-    }
 
 
     /* ******************
@@ -284,17 +255,18 @@
 
         > .kijs-icon {
             flex: none;
+            margin: 0 4px 0 0;
             color: var(--button-icon-fontColor);
         }
 
         > .kijs-icon2 {
             flex: none;
-            margin: 0 0 0 4px;
+            margin: 0 4px 0 0;
         }
 
         > .kijs-caption {
             flex: 1;
-            margin: 0 4px 0 4px;
+            margin: 0 4px 0 0;
             font-family: var(--default-fontFamily);
             font-size: var(--button-fontSize);
             line-height: var(--button-lineHeight);
@@ -366,6 +338,7 @@
     }
 
 
+
     /* ******************
        * Trigger Button
        * TODO: Wird niergends verwendet????????
@@ -379,6 +352,7 @@
         border-right: 1px solid var(--field-borderColor);
         border-bottom: 1px solid var(--field-borderColor);
     }
+
 
 
     /* ******************
@@ -399,10 +373,10 @@
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
-        -webkit-user-select: none; /* Safari */
+        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
-        -webkit-overflow-scrolling: touch; /* iOS Safari: Native Style Scrolling einschalten */
+        -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
     }
 
     .kijs-disabled {
@@ -412,6 +386,7 @@
             color: var(--default-disabled-fontColor);
         }
     }
+
 
 
     /* ******************
@@ -468,7 +443,6 @@
                 background-color: var(--button-focus-bkgrndColor);
                 border: 1px solid var(--button-focus-borderColor);
             }
-
             &:focus {
                 border: 1px solid var(--button-focus-borderColor);
             }
@@ -490,7 +464,6 @@
             grid-column: 1;
             margin-bottom: 2px;
         }
-
         > .kijs-btn-scrolldown {
             grid-row: 3;
             grid-column: 1;
@@ -498,13 +471,11 @@
         }
 
         /* nur kijs-scrollable-x-enable */
-
         > .kijs-btn-scrollleft {
             grid-row: 1;
             grid-column: 1;
             margin-right: 2px;
         }
-
         > .kijs-btn-scrollright {
             grid-row: 1;
             grid-column: 3;
@@ -517,23 +488,21 @@
                 grid-row: 1;
                 grid-column: 2;
             }
-
             > .kijs-btn-scrolldown {
                 grid-row: 3;
                 grid-column: 2;
             }
-
             > .kijs-btn-scrollleft {
                 grid-row: 2;
                 grid-column: 1;
             }
-
             > .kijs-btn-scrollright {
                 grid-row: 2;
                 grid-column: 3;
             }
         }
     }
+
 
 
     /* ******************
@@ -555,48 +524,21 @@
                 width: 100%;
                 height: 100%;
 
-                &.kijs-fade-in {
-                    animation: kijs-fade-in 1s;
-                }
+                &.kijs-fade-in { animation: kijs-fade-in 1s; }
+                &.kijs-slide-in-top { animation: kijs-slide-in-top 1s; }
+                &.kijs-slide-in-right { animation: kijs-slide-in-right 1s; }
+                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom 1s; }
+                &.kijs-slide-in-left { animation: kijs-slide-in-left 1s; }
 
-                &.kijs-slide-in-top {
-                    animation: kijs-slide-in-top 1s;
-                }
-
-                &.kijs-slide-in-right {
-                    animation: kijs-slide-in-right 1s;
-                }
-
-                &.kijs-slide-in-bottom {
-                    animation: kijs-slide-in-bottom 1s;
-                }
-
-                &.kijs-slide-in-left {
-                    animation: kijs-slide-in-left 1s;
-                }
-
-                &.kijs-fade-out {
-                    animation: kijs-fade-out 1s;
-                }
-
-                &.kijs-slide-out-top {
-                    animation: kijs-slide-out-top 1s;
-                }
-
-                &.kijs-slide-out-right {
-                    animation: kijs-slide-out-right 1s;
-                }
-
-                &.kijs-slide-out-bottom {
-                    animation: kijs-slide-out-bottom 1s;
-                }
-
-                &.kijs-slide-out-left {
-                    animation: kijs-slide-out-left 1s;
-                }
+                &.kijs-fade-out { animation: kijs-fade-out 1s; }
+                &.kijs-slide-out-top { animation: kijs-slide-out-top 1s; }
+                &.kijs-slide-out-right { animation: kijs-slide-out-right 1s; }
+                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom 1s; }
+                &.kijs-slide-out-left { animation: kijs-slide-out-left 1s; }
             }
         }
     }
+
 
 
     /* ******************
@@ -654,11 +596,9 @@
                         > .kijs-icon {
                             color: var(--button-disabled-fontColor);
                         }
-
                         > .kijs-icon2 {
                             opacity: 0.3;
                         }
-
                         > .kijs-badge {
                             background-color: var(--badge-disabled-bkgrndColor);
                             color: var(--badge-disabled-fontColor);
@@ -701,75 +641,27 @@
                 width: 100%;
                 height: 100%;
 
-                &.kijs-fade-in {
-                    animation: kijs-fade-in 1s;
-                }
+                &.kijs-fade-in { animation: kijs-fade-in 1s; }
+                &.kijs-slide-in-top { animation: kijs-slide-in-top 1s; }
+                &.kijs-slide-in-right { animation: kijs-slide-in-right 1s; }
+                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom 1s; }
+                &.kijs-slide-in-left { animation: kijs-slide-in-left 1s; }
 
-                &.kijs-slide-in-top {
-                    animation: kijs-slide-in-top 1s;
-                }
-
-                &.kijs-slide-in-right {
-                    animation: kijs-slide-in-right 1s;
-                }
-
-                &.kijs-slide-in-bottom {
-                    animation: kijs-slide-in-bottom 1s;
-                }
-
-                &.kijs-slide-in-left {
-                    animation: kijs-slide-in-left 1s;
-                }
-
-                &.kijs-fade-out {
-                    animation: kijs-fade-out 1s;
-                }
-
-                &.kijs-slide-out-top {
-                    animation: kijs-slide-out-top 1s;
-                }
-
-                &.kijs-slide-out-right {
-                    animation: kijs-slide-out-right 1s;
-                }
-
-                &.kijs-slide-out-bottom {
-                    animation: kijs-slide-out-bottom 1s;
-                }
-
-                &.kijs-slide-out-left {
-                    animation: kijs-slide-out-left 1s;
-                }
+                &.kijs-fade-out { animation: kijs-fade-out 1s; }
+                &.kijs-slide-out-top { animation: kijs-slide-out-top 1s; }
+                &.kijs-slide-out-right { animation: kijs-slide-out-right 1s; }
+                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom 1s; }
+                &.kijs-slide-out-left { animation: kijs-slide-out-left 1s; }
             }
         }
 
         /* tabBar Positionierung */
-
-        &.kijs-pos-top,
-        &.kijs-pos-top-center,
-        &.kijs-pos-bottom,
-        &.kijs-pos-bottom-center {
+        &.kijs-pos-top, &.kijs-pos-bottom {
             flex-direction: column;
         }
 
-        &.kijs-pos-top-center,
-        &.kijs-pos-bottom-center,
-        &.kijs-pos-left-center,
-        &.kijs-pos-right-center {
-
-            > .kijs-container-scrollable {
-                > .kijs-container-inner {
-                    justify-content: center;
-                }
-            }
-        }
-
-        &.kijs-pos-left,
-        &.kijs-pos-left-center,
-        &.kijs-pos-right,
-        &.kijs-pos-right-center {
+        &.kijs-pos-left, &.kijs-pos-right {
             flex-direction: row;
-
             > .kijs-container-scrollable {
                 > .kijs-container-inner {
                     display: flex;
@@ -778,37 +670,23 @@
             }
         }
 
-        &.kijs-pos-right,
-        &.kijs-pos-right-center {
-            > .kijs-container-scrollable {
-                order: 2;
+        &.kijs-pos-right > .kijs-container-scrollable { order: 2; }
+        &.kijs-pos-bottom > .kijs-container-scrollable { order: 2; }
+
+
+        &.kijs-pos-top > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 4px 0 0 4px;
+                border-radius: 6px 6px 0 0;
+                border-top: 1px solid var(--tabButton-borderColor);
+                border-right: 1px solid var(--tabButton-borderColor);
+                border-bottom: 0 none;
+                border-left: 1px solid var(--tabButton-borderColor);
             }
-        }
 
-        &.kijs-pos-bottom,
-        &.kijs-pos-bottom-center {
-            > .kijs-container-scrollable {
-                order: 2;
-            }
-        }
-
-
-        &.kijs-pos-top,
-        &.kijs-pos-top-center {
-            > .kijs-container-scrollable {
-                > .kijs-container-inner > .kijs-button {
-                    margin: 4px 0 0 4px;
-                    border-radius: 6px 6px 0 0;
-                    border-top: 1px solid var(--tabButton-borderColor);
-                    border-right: 1px solid var(--tabButton-borderColor);
-                    border-bottom: 0 none;
-                    border-left: 1px solid var(--tabButton-borderColor);
-                }
-
-                > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
-                > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
-                    margin-top: 4px;
-                }
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-top: 4px;
             }
         }
 
@@ -865,7 +743,7 @@
             border-color: var(--tabButton-current-borderColor);
 
             > .kijs-caption {
-                color: var(--tabButton-current-fontColor);
+                color: var(--tabButton--currentfontColor);
             }
 
             &.kijs-disabled > .kijs-caption {
@@ -875,106 +753,6 @@
     }
 
 
-    /* ******************
-       * Container Wizard
-       ****************** */
-    div.kijs-container-wizard {
-        > .kijs-container-scrollable {
-            min-height: 25px;
-
-            > .kijs-container-inner {
-                flex-wrap: wrap;
-                align-content: center;
-
-                > .kijs-button {
-                    background: none;
-                    border: none;
-
-                    &:focus {
-                        background: none;
-                        border: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-focus-fontColor);
-                        }
-                    }
-
-                    &:hover {
-                        background: none;
-                        border: none;
-                    }
-
-                    &.kijs-disabled {
-                        border: none;
-                        background: none;
-
-                        > .kijs-caption,
-                        > .kijs-icon {
-                            color: var(--tabButton-fontColor);
-                        }
-
-                        &:focus {
-                            background: none;
-                            border: none;
-                        }
-                    }
-
-                    &.kijs-current {
-                        background: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-current-fontColor);
-                            font-size: 10px;
-                        }
-
-                        > .kijs-caption {
-                            color: var(--tabButton-current-fontColor);
-                        }
-
-                        &.kijs-disabled {
-                            > .kijs-caption {
-                                color: var(--tabButton-current-fontColor);
-                            }
-                        }
-                    }
-
-                    > .kijs-icon {
-                        font-size: 8px;
-                    }
-
-                    > .kijs-caption {
-                        font-size: 10px;
-                    }
-                }
-            }
-        }
-
-        > .kijs-arrow-left {
-            z-index: 1;
-            position: absolute;
-            top: 45%;
-            left: 10px;
-            cursor: pointer;
-            opacity: 0.2;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-
-        > .kijs-arrow-right {
-            z-index: 1;
-            position: absolute;
-            top: 45%;
-            right: 10px;
-            cursor: pointer;
-            opacity: 0.2;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
 
     /* ******************
        * Tooltip
@@ -1001,12 +779,12 @@
             border: 1px solid var(--icon-error-borderColor);
             background-color: var(--icon-error-bkgrndColor);
         }
-
         &.kijs-help {
             border: 1px solid var(--icon-help-borderColor);
             background-color: var(--icon-help-bkgrndColor);
         }
     }
+
 
 
     /* ******************
@@ -1017,14 +795,10 @@
         position: absolute;
         background-color: var(--dragover-ok-borderColor);
 
-        &.top, &.bottom {
-            height: 2px
-        }
-
-        &.left, &.right {
-            width: 2px
-        }
+        &.top, &.bottom { height: 2px }
+        &.left, &.right { width: 2px }
     }
+
 
 
     /* ******************
@@ -1039,7 +813,7 @@
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
         background-color: var(--panel-bkgrndColor);
 
-        -webkit-user-select: none; /* Safari */
+        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         &.kijs-pos-top {
@@ -1066,12 +840,14 @@
     }
 
 
+
     /* ******************
        * TODO: Accordion ???
        ****************** */
     div.kijs-accordion > .kijs-container-inner > .kijs-panel {
         flex: 1 1 auto
     }
+
 
 
     /* ******************
@@ -1094,6 +870,7 @@
     }
 
 
+
     /* ******************
        * Splitter
        ****************** */
@@ -1107,7 +884,7 @@
         position: absolute;
         width: 5px;
         height: 100%;
-        background-color: var(--splitter-overlay-bkgrndColor);
+        background-color:var(--splitter-overlay-bkgrndColor);
         opacity: 0.8;
         cursor: ew-resize;
     }
@@ -1122,10 +899,11 @@
         position: absolute;
         height: 5px;
         width: 100%;
-        background-color: var(--splitter-overlay-bkgrndColor);
+        background-color:var(--splitter-overlay-bkgrndColor);
         opacity: 0.8;
         cursor: ns-resize;
     }
+
 
 
     /* ******************
@@ -1136,11 +914,11 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: var(--panel-collapse-height);
+        height: 30px;
         padding: 0 0 0 6px;
         background-color: var(--bar-bkgrndColor);
 
-        -webkit-user-select: none; /* Safari */
+        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         font-family: var(--default-fontFamily);
@@ -1197,7 +975,7 @@
                         cursor: auto;
 
                         > .kijs-caption,
-                        > .kijs-icon {
+                        > .kijs-icon{
                             color: var(--bar-button-icon-disabled-fontColor);
                         }
                     }
@@ -1214,13 +992,13 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
-
+            
             &:last-child {
                 margin: 0 6px 0 0;
             }
         }
 
-        &.kijs-headerbar > .kijs-container-inner {
+        &.kijs-headerbar  > .kijs-container-inner {
             font-family: var(--default-fontFamily);
             font-size: var(--headerBar-fontSize);
             text-align: left;
@@ -1240,13 +1018,14 @@
 
         &.kijs-disabled {
             background-color: var(--bar-disabled-bkgrndColor);
-            color: var(--bar-disabled-fontColor);
+            color:  var(--bar-disabled-fontColor);
 
             > .kijs-container-inner {
-                color: var(--bar-disabled-fontColor);
+                color:  var(--bar-disabled-fontColor);
             }
         }
     }
+
 
 
     /* ******************
@@ -1256,7 +1035,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
-        background-color: var(--panel-bkgrndColor);
+        background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
 
         &:focus {
@@ -1280,7 +1059,7 @@
                 padding: 6px;
                 gap: 6px;
 
-                > * {
+                 > * {
                     flex: none;
                 }
             }
@@ -1302,7 +1081,7 @@
                 padding: 6px;
                 gap: 6px;
 
-                > * {
+                 > * {
                     flex: none;
                 }
 
@@ -1343,13 +1122,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: var(--panel-collapse-height) !important;
+            height: 30px !important;
             flex: none !important;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto !important;
-            width: var(--panel-collapse-width) !important;
+            width: 30px !important;
             flex: none !important;
             display: flex;
             flex-direction: row;
@@ -1367,7 +1146,6 @@
             border-left: 1px solid var(--panel-borderColor);
             border-right: 1px solid var(--panel-borderColor);
         }
-
         &.kijs-shadow > div:first-child:not(.kijs-panelbar) {
             border-top: 1px solid var(--panel-borderColor);
         }
@@ -1427,6 +1205,7 @@
     }
 
 
+
     /* ******************
        * Window
        ****************** */
@@ -1435,8 +1214,8 @@
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
-
-        -webkit-user-select: none; /* Safari */
+        
+        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         /* Buttons im Fuss eines Fensters sind blau */
@@ -1462,7 +1241,6 @@
                     border: 1px solid var(--footer-button-disabled-borderColor);
                     background-color: var(--footer-button-disabled-bkgrndColor);
                     cursor: auto;
-
                     > * {
                         color: var(--button-disabled-fontColor);
                     }
@@ -1471,67 +1249,6 @@
         }
     }
 
-
-    /* ******************
-       * Wizard
-       ****************** */
-    div.kijs-wizard {
-        > .kijs-container-inner {
-            display: flex;
-            flex-direction: column;
-
-            > .kijs-container-stack {
-                flex: 1;
-            }
-
-            > .kijs-dots-container {
-                > .kijs-container-inner {
-                    margin: 5px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-
-                    > .kijs-dot {
-                        font-size: 6pt;
-                        margin: 2px;
-
-                        &.kijs-current {
-                            font-size: 8pt;
-                            color: var(--tabButton--currentfontColor);
-                        }
-
-                        &.kijs-selectable {
-                            cursor: pointer;
-                        }
-                    }
-                }
-            }
-
-            > .kijs-arrow-left {
-                position: absolute;
-                top: 50%;
-                left: 10px;
-                cursor: pointer;
-                opacity: 0.2;
-
-                &:hover {
-                    opacity: 1;
-                }
-            }
-
-            > .kijs-arrow-right {
-                position: absolute;
-                top: 50%;
-                right: 10px;
-                cursor: pointer;
-                opacity: 0.2;
-
-                &:hover {
-                    opacity: 1;
-                }
-            }
-        }
-    }
 
 
     /* ******************
@@ -1551,7 +1268,7 @@
         left: 0;
         bottom: 0;
 
-        -webkit-user-select: none; /* Safari  */
+        -webkit-user-select: none;  /* Safari  */
         user-select: none;
 
         > .kijs-icon {
@@ -1565,11 +1282,11 @@
             font-size: 17px;
             font-family: var(--default-fontFamily);
         }
-
         > .kijs-mask-text:empty {
             display: none;
         }
     }
+
 
 
     /* ******************
@@ -1584,27 +1301,24 @@
         &.top {
             top: 0;
         }
-
         &.right {
             top: 0;
             right: 0;
             bottom: 0;
         }
-
         &.bottom {
             bottom: 0;
         }
-
         &.left {
             left: 0;
             top: 0;
-            bottom: 0;
+            bottom:0;
         }
-
         &.animated {
             transition: opacity 0.2s linear;
         }
     }
+
 
 
     /* ******************
@@ -1647,6 +1361,7 @@
     }
 
 
+
     /* ******************
        * CornerTipContainer
        ****************** */
@@ -1668,20 +1383,19 @@
             font-size: var(--default-fontSize);
             color: var(--default-fontColor);
         }
-
         .kijs-panel > .kijs-container-inner > .kijs-icon {
             flex: none;
             font-size: 30px;
             width: 40px;
             margin: 10px 0 10px 10px;
         }
-
         .kijs-panel > .kijs-container-inner > .kijs-msgbox-inner {
             flex: 1;
             padding: 10px;
             overflow: auto;
         }
     }
+
 
 
     /* ******************
@@ -1698,6 +1412,16 @@
         background-position: bottom 2px right 2px;
         opacity: 0.3;
 
+        &.kijs-resizer-width {
+            cursor: we-resize;
+        }
+        &.kijs-resizer-height {
+            cursor: ns-resize;
+        }
+        &.kijs-resizer-width.kijs-resizer-height {
+            cursor: nwse-resize;
+        }
+        
         &:hover {
             opacity: 1;
         }
@@ -1708,6 +1432,7 @@
         background-color: rgba(255, 255, 255, 0.5);
         border: 1px dashed rgba(0, 0, 0, 0.5);
     }
+
 
 
     /* ******************
@@ -1747,7 +1472,6 @@
                 > .kijs-caption {
                     flex: 1;
                 }
-
                 > .kijs-caption:first-child {
                     margin-left: 22px;
                 }
@@ -1762,6 +1486,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -1793,6 +1518,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -1839,6 +1565,7 @@
                 > .kijs-icon {
                     margin: 1px 5px;
                     color: #555555;
+                    cursor: pointer;
 
                     &.kijs-expandedicon {
                         display: none;
@@ -1854,6 +1581,7 @@
                     justify-content: center;
                     align-items: center;
                     margin: 4px 0;
+                    cursor: pointer;
                     color: var(--default-fontColor);
                     font-size: var(--default-fontSize);
                     line-height: var(--default-lineHeight);
@@ -1912,6 +1640,7 @@
     }
 
 
+
     /* ******************
        * DataView
        ****************** */
@@ -1947,7 +1676,6 @@
                     line-height: var(--item-lineHeight);
                     color: var(--item-fontColor);
                 }
-
                 &:focus,
                 &:hover {
                     background-color: var(--item-focus-bkgrndColor);
@@ -1992,6 +1720,7 @@
             background-color: var(--field-disabled-bkgrndColor);
         }
     }
+
 
 
     /* ******************
@@ -2131,6 +1860,7 @@
     }
 
 
+
     /* ******************
        * ProgressBar
        ****************** */
@@ -2192,23 +1922,21 @@
             > .kijs-progressbar-caption {
                 color: var(--default-disabled-fontColor);
             }
-
             > .kijs-progressbar-field {
                 > .kijs-progressbar-bar {
                     background-color: var(--bar-disabled-bkgrndColor);
                     color: var(--bar-disabled-fontColor);
                 }
-
                 > .kijs-progressbar-text {
                     color: var(--bar-disabled-fontColor);
                 }
             }
-
             > .kijs-progressbar-caption-bottom {
                 color: var(--default-disabled-fontColor);
             }
         }
     }
+
 
 
     /* ******************
@@ -2256,10 +1984,7 @@
 
                     &.kijs-disabled {
                         color: var(--button-disabled-fontColor);
-
-                        &:hover {
-                            background-color: initial;
-                        }
+                        &:hover { background-color: initial; }
                     }
 
                     &.kijs-selected {
@@ -2295,10 +2020,7 @@
 
                         &.kijs-disabled {
                             color: var(--button-disabled-fontColor);
-
-                            &:hover {
-                                background-color: initial;
-                            }
+                            &:hover { background-color: initial; }
                         }
 
                         &.kijs-selected {
@@ -2321,6 +2043,7 @@
             gap: 6px;
         }
     }
+
 
 
     /* ******************
@@ -2369,11 +2092,9 @@
                         color: var(--item-label-fontColor);
                         font-weight: bold;
                     }
-
                     &.kijs-outofmonth {
                         color: var(--item-label-fontColor);
                     }
-
                     &.kijs-today {
                         color: var(--today-fontColor);
 
@@ -2381,23 +2102,19 @@
                             color: var(--default-fontColor);
                         }
                     }
-
                     &.kijs-weekend {
                         background-color: var(--viewport-bkgrndColor);
                     }
-
                     &.kijs-weekno {
                         font-size: var(--item-label-fontSize);
                         color: var(--item-label-fontColor);
                     }
-
                     &.kijs-value {
                         padding: 4px 4px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
                         color: var(--item-selected-fontColor);
                         border: 1px solid var(--item-selected-borderColor);
                     }
-
                     &.kijs-range {
                         padding: 4px 5px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
@@ -2405,12 +2122,10 @@
                         border-top: 1px solid var(--item-selected-borderColor);
                         border-bottom: 1px solid var(--item-selected-borderColor);
                     }
-
                     &.kijs-rangestart {
                         padding: 4px 5px 0 0;
                         border-left: 1px solid var(--item-selected-borderColor);
                     }
-
                     &.kijs-rangeend {
                         padding: 4px 4px 0 0;
                         border-right: 1px solid var(--item-selected-borderColor);
@@ -2432,14 +2147,10 @@
                     &.kijs-day:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }
-
                     &.kijs-disabled {
                         color: var(--badge-disabled-fontColor);
                         background-color: var(--field-disabled-bkgrndColor);
-
-                        &:hover {
-                            background-color: var(--field-disabled-bkgrndColor);
-                        }
+                        &:hover { background-color: var(--field-disabled-bkgrndColor); }
                     }
                 }
             }
@@ -2456,6 +2167,7 @@
             gap: 6px;
         }
     }
+
 
 
     /* ******************
@@ -2493,7 +2205,6 @@
                 &::selection {
                     background: #fff;
                 }
-
                 &::-moz-selection {
                     background: #fff;
                 }
@@ -2544,6 +2255,7 @@
     }
 
 
+
     /* ******************
        * Grid
        ****************** */
@@ -2574,11 +2286,9 @@
                 &.kijs-current {
                     background-color: var(--item-focus-bkgrndColor);
                 }
-
                 &:hover {
                     background-color: var(--item-focus-bkgrndColor);
                 }
-
                 &.kijs-selected {
                     background-color: var(--item-selected-bkgrndColor);
                 }
@@ -2609,11 +2319,9 @@
                     font-size: 14px;
                     padding: 2px 0 0 0;
                 }
-
                 &.kijs-grid-cell-checkbox:hover {
                     color: var(--field-focus-borderColor);
                 }
-
                 &.kijs-grid-cell-checkbox.kijs-disabled {
                     color: var(--field-disabled-fontColor);
                 }
@@ -2627,7 +2335,6 @@
                 }
 
                 /* Daten verändert: rotes Dreieck oben links */
-
                 &.kijs-grid-cell-dirty {
                     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
                     background-repeat: no-repeat;
@@ -2635,7 +2342,6 @@
                 }
 
                 /* Textfelder im Grid */
-
                 &.kijs-celledit {
                     padding: 0;
 
@@ -2658,7 +2364,7 @@
             display: flex;
             flex-direction: row;
 
-            > .kijs-headercontainer {
+            > .kijs-headercontainer  {
                 flex: 1;
                 position: relative;
                 background-color: var(--grid-header-bkgrndColor);
@@ -2703,7 +2409,6 @@
                             margin: 0;
                         }
                     }
-
                     &:hover .kijs-button {
                         width: 15px;
                         opacity: 1;
@@ -2719,7 +2424,6 @@
                     }
 
                     /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
-
                     &:last-child {
                         margin-right: 20px;
                     }
@@ -2752,7 +2456,7 @@
 
                             input {
                                 flex: 1;
-                                border: 0; /* 1px solid var(--grid-border-color);*/
+                                border:  0; /* 1px solid var(--grid-border-color);*/
                                 outline: none;
                                 padding: 0;
                                 font-size: 11px;
@@ -2867,6 +2571,7 @@
     }
 
 
+
     /* ******************
        * Filter
        ****************** */
@@ -2891,13 +2596,13 @@
 
             &:hover {
                 background-color: var(--buttonGroup-button-focus-bkgrndColor);
-
                 > * {
                     color: var(--buttonGroup-button-focus-fontColor);
                 }
             }
         }
     }
+
 
 
     /* ******************
@@ -3120,7 +2825,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3130,7 +2835,6 @@
             }
         }
     }
-
     div.kijs-field-number > .kijs-container-inner > .kijs-spinners {
         flex: none;
 
@@ -3184,26 +2888,22 @@
             }
         }
     }
-
     div.kijs-field-url,
     div.kijs-field-email {
         &.kijs-disableFlex > .kijs-inputwrapper {
             width: 160px;
         }
     }
-
     div.kijs-field-phone {
         &.kijs-disableFlex > .kijs-inputwrapper {
             width: 140px;
         }
     }
-
     div.kijs-field-sozversnr {
         &.kijs-disableFlex > .kijs-inputwrapper {
             width: 120px;
         }
     }
-
     div.kijs-field-number.kijs-disableFlex > .kijs-inputwrapper {
         width: 80px;
     }
@@ -3245,6 +2945,7 @@
     }
 
 
+
     /* ******************
        * Field Password
        ****************** */
@@ -3276,7 +2977,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3286,6 +2987,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3319,7 +3021,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3333,6 +3035,7 @@
     .kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
         height: 100%;
     }
+
 
 
     /* ******************
@@ -3366,29 +3069,14 @@
             > .kijs-inputwrapper {
                 width: 170px;
             }
-
-            &.kijs-date > .kijs-inputwrapper {
-                width: 80px;
-            }
-
-            &.kijs-time > .kijs-inputwrapper {
-                width: 80px;
-            }
-
-            &.kijs-dateTime > .kijs-inputwrapper {
-                width: 130px;
-            }
-
-            &.kijs-week > .kijs-inputwrapper {
-                width: 80px;
-            }
-
-            &.kijs-range > .kijs-inputwrapper {
-                width: 170px;
-            }
+            &.kijs-date > .kijs-inputwrapper { width: 80px; }
+            &.kijs-time > .kijs-inputwrapper { width: 80px; }
+            &.kijs-dateTime > .kijs-inputwrapper { width: 130px; }
+            &.kijs-week > .kijs-inputwrapper { width: 80px; }
+            &.kijs-range > .kijs-inputwrapper { width: 170px; }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3415,6 +3103,7 @@
             border: 0 none transparent;
         }
     }
+
 
 
     /* ******************
@@ -3447,11 +3136,9 @@
             > .kijs-button.kijs-inline {
                 height: 100%;
                 align-items: flex-start;
-
                 > .kijs-icon {
                     padding: 3px 0 0 0;
                 }
-
                 > .kijs-caption {
                     padding: 6px 0 0 0;
                 }
@@ -3467,7 +3154,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > textarea {
+        &.kijs-error  > .kijs-inputwrapper > textarea {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3477,6 +3164,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3501,18 +3189,16 @@
             > .kijs-button.kijs-inline {
                 height: 100%;
                 align-items: flex-start;
-
                 > .kijs-icon {
                     padding: 3px 0 0 0;
                 }
-
                 > .kijs-caption {
                     padding: 6px 0 0 0;
                 }
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > .kijs-listview {
+        &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
 
@@ -3523,6 +3209,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3555,7 +3242,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > .kijs-listview {
+        &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
 
@@ -3592,6 +3279,7 @@
     }
 
 
+
     /* ******************
        * Field Combo
        ****************** */
@@ -3623,7 +3311,7 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
@@ -3667,6 +3355,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3721,11 +3410,11 @@
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
-        &.kijs-disabled > .kijs-inputwrapper, &.kijs-readonly > .kijs-inputwrapper {
+        &.kijs-disabled > .kijs-inputwrapper , &.kijs-readonly > .kijs-inputwrapper {
             > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
@@ -3746,6 +3435,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3796,10 +3486,11 @@
 
         &.kijs-disabled, &.kijs-readonly {
             > .kijs-inputwrapper > * {
-                color: var(--field-disabled-fontColor);
+                    color: var(--field-disabled-fontColor);
             }
         }
     }
+
 
 
     /* ******************
@@ -3834,7 +3525,6 @@
                 &:focus {
                     border-color: var(--field-focus-borderColor);
                 }
-
                 &:hover {
                     > .kijs-togglePoint {
                         background-color: var(--field-item-focus-bkgrndColor);
@@ -3891,6 +3581,7 @@
     }
 
 
+
     /* ******************
        * Field Display
        ****************** */
@@ -3913,7 +3604,6 @@
                     color: var(--field-fontColor);
                     cursor: pointer;
                     text-decoration: underline;
-
                     &:hover {
 
                     }
@@ -3942,6 +3632,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -3983,11 +3674,9 @@
             > .kijs-button.kijs-inline {
                 height: 100%;
                 align-items: flex-start;
-
                 > .kijs-icon {
                     padding: 3px 0 0 0;
                 }
-
                 > .kijs-caption {
                     padding: 6px 0 0 0;
                 }
@@ -4013,6 +3702,7 @@
             }
         }
     }
+
 
 
     /* ******************
@@ -4046,7 +3736,6 @@
                 &.ql-snow {
                     overflow: hidden;
                 }
-
                 &.ql-bubble {
                     overflow: visible;
                 }
@@ -4073,11 +3762,9 @@
             > .kijs-button.kijs-inline {
                 height: 100%;
                 align-items: flex-start;
-
                 > .kijs-icon {
                     padding: 3px 0 0 0;
                 }
-
                 > .kijs-caption {
                     padding: 6px 0 0 0;
                 }
@@ -4105,103 +3792,64 @@
     }
 
 
+
     /* ******************
        * Animationen
        ****************** */
     /* Animationen zu den Spin- und Pulse-Effekten */
     @keyframes kijs-spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(359deg);
-        }
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(359deg);
+      }
     }
 
     /* fade */
     @keyframes kijs-fade-in {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
+        from { opacity: 0; }
+        to   { opacity: 1; }
     }
     @keyframes kijs-fade-out {
-        from {
-            opacity: 1;
-        }
-        to {
-            opacity: 0;
-        }
+        from { opacity: 1; }
+        to   { opacity: 0; }
     }
 
     /* slide in */
     @keyframes kijs-slide-in-top {
-        from {
-            top: 100%;
-        }
-        to {
-            top: 0;
-        }
+        from { top: 100%; }
+        to   { top: 0; }
     }
     @keyframes kijs-slide-in-right {
-        from {
-            left: -100%;
-        }
-        to {
-            left: 0;
-        }
+        from { left: -100%; }
+        to   { left: 0; }
     }
     @keyframes kijs-slide-in-bottom {
-        from {
-            top: -100%;
-        }
-        to {
-            top: 0;
-        }
+        from { top: -100%; }
+        to   { top: 0; }
     }
     @keyframes kijs-slide-in-left {
-        from {
-            left: 100%;
-        }
-        to {
-            left: 0;
-        }
+        from { left: 100%; }
+        to   { left: 0; }
     }
 
     /* slide out */
     @keyframes kijs-slide-out-top {
-        from {
-            top: 0;
-        }
-        to {
-            top: -100%;
-        }
+        from { top: 0; }
+        to   { top: -100%; }
     }
     @keyframes kijs-slide-out-right {
-        from {
-            left: 0;
-        }
-        to {
-            left: 100%;
-        }
+        from { left: 0; }
+        to   { left: 100%; }
     }
     @keyframes kijs-slide-out-bottom {
-        from {
-            top: 0;
-        }
-        to {
-            top: 100%;
-        }
+        from { top: 0; }
+        to   { top: 100%; }
     }
     @keyframes kijs-slide-out-left {
-        from {
-            left: 0;
-        }
-        to {
-            left: -100%;
-        }
+        from { left: 0; }
+        to   { left: -100%; }
     }
 
 
@@ -4211,7 +3859,7 @@
        ****************** */
     /* Ausblenden (Bitte dafür die Config visible benutzen!!!) */
     div.kijs-hidden, .kijs-hidden {
-        display: none;
+      display: none;
     }
 
     /* Schatten (Bitte bei einem Panel dafür die Config shadow verwenden!!!)*/
@@ -4220,18 +3868,20 @@
     }
 
 
+
     /* ******************
        * Ergänzungen für Icons
        ****************** */
     /* Dreh-Effekt */
     .kijs-spin {
-        animation: kijs-spin 2s infinite linear;
+      animation: kijs-spin 2s infinite linear;
     }
 
     /* Pulse-Effekt (für Load-Icons) */
     .kijs-pulse {
-        animation: kijs-spin 1s infinite steps(8);
+      animation: kijs-spin 1s infinite steps(8);
     }
+
 
 
     /* ******************
@@ -4290,7 +3940,7 @@
 
         gap: 4px;
 
-        > * {
+         > * {
             flex: none;
             max-width: 500px;
         }
@@ -4308,11 +3958,12 @@
         align-items: start;
         gap: 4px;
 
-        > * {
+         > * {
             flex: none;
         }
     }
 
 
-    /* END LAYER kijs */
+
+/* END LAYER kijs */
 }

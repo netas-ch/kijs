@@ -61,7 +61,7 @@ function gui_test_08_listView() {
         iconCharField: 'iconChar',
         iconColorField: 'color',
         rpc: 'tests/rpcTest/rpc.php',
-        facadeFnLoad: 'color.load',
+        rpcLoadFn: 'color.load',
         autoLoad: true,
         value: '#0f0',
         showCheckBoxes: true,

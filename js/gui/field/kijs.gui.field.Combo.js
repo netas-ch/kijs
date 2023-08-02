@@ -87,8 +87,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
 
-            facadeFnLoad: { target: 'facadeFnLoad', context: this._listViewEl },
-            facadeFnArgs: { target: 'facadeFnArgs', context: this._listViewEl },
+            rpcLoadFn: { target: 'rpcLoadFn', context: this._listViewEl },
+            rpcLoadArgs: { target: 'rpcLoadArgs', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
 
             minChars: { target: 'minChars', prio: 2}, // Nicht beachtet, wenn remoteSort false ist
@@ -188,12 +188,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
-    get facadeFnArgs() { return this._listViewEl.facadeFnArgs; }
-    set facadeFnArgs(val) { this._listViewEl.facadeFnArgs = val; }
-
-    get facadeFnLoad() { return this._listViewEl.facadeFnLoad; }
-    set facadeFnLoad(val) { this._listViewEl.facadeFnLoad = val; }
-
    // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
@@ -209,7 +203,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set minChars(val) {
         if (val === 'auto') {
             // remote combo
-            if (this._listViewEl.facadeFnLoad) {
+            if (this._listViewEl.rpcLoadFn) {
                 this._minChars = 4;
 
             // local combo
@@ -236,6 +230,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get rpc() { return this._listViewEl.rpc; }
     set rpc(val) { this._listViewEl.rpc = val; }
+
+    get rpcLoadArgs() { return this._listViewEl.rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._listViewEl.rpcLoadArgs = val; }
+
+    get rpcLoadFn() { return this._listViewEl.rpcLoadFn; }
+    set rpcLoadFn(val) { this._listViewEl.rpcLoadFn = val; }
 
     // overwrite
     get value() { return this._value; }
@@ -307,7 +307,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     /**
      * Füllt das Combo mit Daten vom Server
-     * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
+     * @param {Array} args Array mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} forceLoad true, wenn immer geladen werden soll
      * @param {String} query Suchstring
      * @returns {undefined}

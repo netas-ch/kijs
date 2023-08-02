@@ -375,7 +375,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     /**
      * Füllt das Dataview mit Daten vom Server
-     * @param {Object|Null} [args] Objekt mit Argumenten, die an die Facade übergeben werden
+     * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
