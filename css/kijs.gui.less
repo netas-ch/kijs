@@ -934,7 +934,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: 30px;
+        height: var(--panel-collapse-height);
         padding: 0 0 0 6px;
         background-color: var(--bar-bkgrndColor);
 
@@ -1142,13 +1142,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: 30px !important;
+            height: var(--panel-collapse-height) !important;
             flex: none !important;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto !important;
-            width: 30px !important;
+            width: var(--panel-collapse-width) !important;
             flex: none !important;
             display: flex;
             flex-direction: row;
