@@ -135,17 +135,16 @@ window.kijs = class kijs {
      * Erstellt aus einem String mit einem Verweis ein Objekt/Funktion
      * Beispiel: 'myApp.doThis' oder 'kijs.gui.Button'
      * @param {String} str
+     * @param {Object} [parent=window]
      * @returns {Object|Funktion|Null}
      */
-    static getObjectFromString(str) {
+    static getObjectFromString(str, parent=window) {
         if (kijs.isFunction(str) || kijs.isObject(str)) {
             return str;
 
         } else {
             const parts = str.split('.');
-            let parent = window;
 
-            // der parent ist immer window
             if (parts.length > 0) {
                 if (parts[0] === 'window') {
                     parts.shift();
