@@ -79,7 +79,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             submitValueEnable: false
         });
 
-       // Mapping für die Zuweisung der Config-Eigenschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             clickableLinks: true,         // Weblink zum anklicken machen
             formatFn: { target: 'formatFn' },

@@ -839,7 +839,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
-        this.load().catch(() => {});
+        this.load();
     }
 
     #onElementClick(e) {

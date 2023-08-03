@@ -1071,7 +1071,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
-        this.load().catch(() => {});
+        this.load();
     }
 
     /**

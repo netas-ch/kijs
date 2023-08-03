@@ -500,7 +500,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
 
         if (this._autoLoad && this.isRemote && this.isRoot) {
-            this.load().catch(() => {});
+            this.load();
         }
     }
 
@@ -674,12 +674,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 // node A nur neu laden, wenn sie kein Kind von B ist.
                 if ((nodeA instanceof kijs.gui.Tree) && !nodeA.isChildOf(nodeB)) {
-                    nodeA.load(null, true).catch(() => {});
+                    nodeA.load(null, true);
                 }
 
                 // Node B nur neu laden, wenn sie kein Kind von A ist
                 if (nodeB !== nodeA && (nodeB instanceof kijs.gui.Tree) && !nodeB.isChildOf(nodeA)) {
-                    nodeB.load(null, true).catch(() => {});
+                    nodeB.load(null, true);
                 }
 
             // Elemente verschieben im Dom

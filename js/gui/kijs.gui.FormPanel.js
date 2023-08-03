@@ -431,7 +431,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
-        this.load().catch(() => {});
+        this.load();
     }
 
     #onFieldBlur(e) {
