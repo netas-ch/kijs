@@ -228,7 +228,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             return;
         }
 
-        if (this._ddSort && tIndex !== -1 && sIndex !== -1 && tIndex !== sIndex && (pos === 'above' || pos === 'below')) {
+        if (this._ddSort && tIndex !== -1 && sIndex !== -1 && 
+                tIndex !== sIndex && (pos === 'above' || pos === 'below')) {
             if (pos === 'below') {
                 tIndex += 1;
             }
@@ -244,7 +245,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     }
 
     #onDdOver(e) {
-        if (!this._ddSort || this._elements.indexOf(e.sourceElement) === -1 || this.raiseEvent('ddOver', e) === false) {
+        if (!this._ddSort || this._elements.indexOf(e.sourceElement) === -1 || 
+                this.raiseEvent('ddOver', e) === false) {
             // fremdes Element, kein Drop.
             e.position.allowAbove = false;
             e.position.allowBelow = false;

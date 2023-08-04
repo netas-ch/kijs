@@ -335,7 +335,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         }
 
                     }
-                }).catch(() => {});
+                });
 
             } else {
                 this._listViewEl.data = [];
@@ -359,7 +359,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     }
 
                     this.validate(true);
-                }).catch(() => {});
+                });
         }
 
         // Flag setzen

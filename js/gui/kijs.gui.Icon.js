@@ -15,6 +15,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
         this._iconCls = null;
         this._iconSize = null;
+        this._iconMapName = null;
 
         this._dom.nodeTagName = 'span';
         this._dom.clsAdd('kijs-icon');
@@ -107,7 +108,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             if (kijs.isEmpty(obj)) {
                 throw new kijs.Error(`Unknown iconMap "${val}".`);
             }
+            this._iconMapName = val;
             val = obj;
+        } else {
+            this._iconMapName = null;
         }
 
         if (kijs.isEmpty(val)) {
@@ -128,6 +132,9 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             }
         }
     }
+    
+    get iconMapName() { return this._iconMapName; }
+    set iconMapName(val) { this.iconMap = val; }
 
     get iconSize() { return this._iconSize; }
     set iconSize(val) {

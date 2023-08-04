@@ -86,6 +86,11 @@ Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.
     - ```code```: Tags werden als Text angezeigt  
     - ```text```: Tags werden entfernt  
 
+### kijs.gui.Icon
+ - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 
+   String übergeben wurde, kann mit ```iconMapName``` dieser wieder abgerufen 
+   werden. Sonst wird ```null``` zurückgegeben.  
+
 
 
 Version 2.2.3
