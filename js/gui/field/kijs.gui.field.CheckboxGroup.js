@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 
-// TODO: Eigenschaft "checkedValues" entfernen. Der Name ist verwirrend und es besteht eine grosse 
+// TODO: Eigenschaft "checkedValues" entfernen. Der Name ist verwirrend und es besteht eine grosse
 // Ähnlichkeit zu value. Evtl. dafür neue Funktionen: checkAll(), uncheckAll() oder noch besser die 
 // Filter des zugrundeliegenden DataView verwenden.
 
@@ -42,8 +42,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        this._listView.on('afterLoad', this.#onAfterLoad, this);
     }
 
 
@@ -86,6 +84,21 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+
+    // overwrite
+    load(args, superCall=false) {
+        return super.load(args, true).then((e) => {
+            if (this._checkedAll) {
+                this._checkAll(true);
+            }
+
+            // 'afterLoad' auslösen
+            if (!superCall) {
+                this.raiseEvent('afterLoad', e);
+            }
+        });
+    }
+
     // PROTECTED
     _checkAll(val) {
         let ids = [];
@@ -97,19 +110,8 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }
         this.value = ids;
     }
+    
 
-    
-    // PRIVATE
-    // LISTENERS
-    #onAfterLoad(e) {
-        if (this._checkedAll) {
-            this._checkAll(true);
-        }
-        this.raiseEvent('afterLoad', e);
-    }
-    
-    
-    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
