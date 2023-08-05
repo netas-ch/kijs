@@ -43,7 +43,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             this.applyConfig(config, true);
         }
 
-        this.on('afterLoad', this.#onAfterLoad, this);
+        this._listView.on('afterLoad', this.#onAfterLoad, this);
     }
 
 
