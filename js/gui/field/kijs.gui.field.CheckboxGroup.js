@@ -105,7 +105,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         if (this._checkedAll) {
             this._checkAll(true);
         }
-        this.raiseEvent('afterLoad', e);
     }
     
     
