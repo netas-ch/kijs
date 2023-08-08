@@ -41,7 +41,20 @@
         background-repeat: repeat;
     }
 
-
+    /* Dashboard-Item-Panel Drag&Drop*/
+    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-dragging {
+        opacity: 0.6
+    }
+    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-dragover {
+        border: 2px solid var(--accentColor3) !important;
+    }
+    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > .kijs-dropmarker {
+        flex: none;
+        height: 31px;
+        border: 2px solid var(--accentColor3);
+        border-radius: 5px;
+    }
+    
 
 /* END LAYER app */
 }

@@ -33,7 +33,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Tab',
                     cls: 'kijs-flexcolumn',
-                    height: 200,
+                    height: 400,
                     width: 600,
                     shadow: true,
                     closable: true,
@@ -50,10 +50,12 @@ home.sc.container_Tab = class home_sc_container_Tab {
                         {
                             xtype: 'kijs.gui.container.Tab',
                             name: 'tab',
+                            sortable: true,
+                            ddName: 'tab',
                             //tabBarScrollableX: true,
                             //tabBarScrollableY: false,
-                            style: { flex: 1 },
-                            currentName: 's3',
+                            style: { flex: 2 },
+                            currentName: 'a3',
                             defaults:{
                                 innerStyle: { padding:'10px' },
                                 tabClosable: true,
@@ -70,15 +72,30 @@ home.sc.container_Tab = class home_sc_container_Tab {
                                 context: this
                             },
                             elements: [
-                                { name:'s1', tabCaption:'Seite 1', tabIconMap:'kijs.iconMap.Fa.house', html:'Seite 1', innerStyle:{ color:'#f99'} },
-                                { name:'s2', tabCaption:'Seite 2', tabIconMap:'kijs.iconMap.Fa.user', html:'Seite 2', innerStyle:{ color:'#9f9'} },
-                                { name:'s3', tabCaption:'Seite 3', tabIconMap:'kijs.iconMap.Fa.phone', html:'Seite 3', innerStyle:{ color:'#99f'} },
-                                { name:'s4', tabCaption:'Seite 4', tabIconMap:'kijs.iconMap.Fa.envelope', html:'Seite 4', innerStyle:{ color:'#f9f'} },
-                                { name:'s5', tabCaption:'Seite 5', tabIconMap:'kijs.iconMap.Fa.location-dot', html:'Seite 5', innerStyle:{ color:'#9ff'} }
+                                { name:'a1', tabCaption:'A 1', tabIconMap:'kijs.iconMap.Fa.house', html:'A 1', innerStyle:{ color:'#f99'} },
+                                { name:'a2', tabCaption:'A 2', tabIconMap:'kijs.iconMap.Fa.user', html:'A 2', innerStyle:{ color:'#9f9'} },
+                                { name:'a3', tabCaption:'A 3', tabIconMap:'kijs.iconMap.Fa.phone', html:'A 3', innerStyle:{ color:'#99f'} },
+                                { name:'a4', tabCaption:'A 4', tabIconMap:'kijs.iconMap.Fa.envelope', html:'A 4', innerStyle:{ color:'#f9f'}, disabled: true },
+                                { name:'a5', tabCaption:'A 5', tabIconMap:'kijs.iconMap.Fa.location-dot', html:'A 5', innerStyle:{ color:'#9ff'} }
                             ]
+                        },{
+                            xtype: 'kijs.gui.container.Tab',
+                            name: 'tab2',
+                            rpcLoadFn: 'containerTab.load',
+                            rpcSaveFn: 'containerTab.save',
+                            autoLoad: true,
+                            autoSave: true,
+                            sortable: true,
+                            ddName: 'tab',
+                            style: { flex: 1 },
+                            defaults:{
+                                innerStyle: { padding:'10px' },
+                                tabClosable: true,
+                                tabWidth: 90
+                            }
                         }
                     ],
-                    footerElements:[
+                    headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
                             caption: 'Tab hinzufügen',
@@ -138,6 +155,12 @@ home.sc.container_Tab = class home_sc_container_Tab {
                                 },
                                 context: this
                             }
+                        }
+                    ],
+                    footerElements: [
+                        {
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'Die Registerkarten können per Drag&Drop verschoben werden.'
                         }
                     ]
                 }
@@ -224,6 +247,25 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 on: {
                     change: function(e) {
                         this._content.down('tab').tabBarPos = e.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.OptionGroup',
+                label: 'tabBarAlign:',
+                cls: 'kijs-inline',
+                valueField: 'id',
+                captionField: 'id',
+                required: true,
+                data: [
+                    { id:'start' },
+                    { id:'center' },
+                    { id:'end' }
+                ],
+                value: 'start',
+                on: {
+                    change: function(e) {
+                        this._content.down('tab').tabBarAlign = e.value;
                     },
                     context: this
                 }

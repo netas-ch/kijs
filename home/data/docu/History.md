@@ -24,12 +24,20 @@ Es sind evtl. Anpassungen am Projekt nötig.
 **UPDATE TIPP:** Zur Kontrolle kann im Projekt noch nach ```facade``` gesucht werden. 
 Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.  
 
+### Drag&Drop
+Unterstützung von Drag&Drop. Dazu gibt es folgende neuen Klassen:  
+ - kijs.gui.DragDrop  
+ - kijs.gui.dragDrop.Source  
+ - kijs.gui.dragDrop.Target  
+Siehe dazu den Leitfaden 'Drag&Drop'.  
+Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.  
 
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
    auf dem Coontainer ausgelöst. Dieses wird auch an alle elements weitergericht.
 
 ### kijs.gui.Element
+ - Neue config/getter/setter ```ddSource```. Siehe dazu den Leitfaden 'Drag&Drop'.  
  - Neuer getter ```index```. Gibt den Index des Elements im elements-Array des parent 
    an oder ```null```.
  - getter ```isAppended``` gibt es nicht mehr. Dieser getter gab nur zurück, ob 
@@ -90,6 +98,27 @@ Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.
  - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 
    String übergeben wurde, kann mit ```iconMapName``` dieser wieder abgerufen 
    werden. Sonst wird ```null``` zurückgegeben.  
+
+### kijs.gui.container.Tab
+ - Bietet neu die Möglichkeit Tabs per Drag&Drop zu verschieben. Falls mehrere 
+   Tab-Elemente den gleichen ddName haben können auch Tabs auf ein anderes 
+   Tab-Element gezeogen werden.  
+ - Neue config/getter/setter:
+    - ```tabBarAlign``` Ausrichtung der Tabs 'start' (default), 'end' oder 'center'  
+    - ```rpcSaveFn```  
+    - ```rpcSaveArgs```  
+    - ```autoSave``` Automatisches Speichern bei Drag&Drop oder dem Schliessen 
+                     Tabs. Boolean, default: false  
+    - ```sortable``` Richtet Drag&Drop ein, so dass die Tabs verschoben werden 
+                     können. Boolean, default: false  
+
+    - ```ddName```   Siehe Leitfaden 'Drag & Drop'. Falls kein ddName angegeben 
+                     wird, wird automatisch eineindeutiger Name vergeben.  
+    - ```ddPosBeforeAfterFactor``` Siehe Leitfaden 'Drag & Drop'
+    - ```ddMapping``` Siehe Leitfaden 'Drag & Drop'
+
+### kijs.gui.Dashboard (NEU)
+Siehe Beispiel im Showcase.  
 
 
 

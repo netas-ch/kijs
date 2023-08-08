@@ -518,6 +518,9 @@
     /* tabBar */
     /* container */
     /* tabBar Positionierung */
+    /* tabBar Align */
+    /* Drag&Drop */
+    /* Drop Marker */
   }
   div.kijs-container-tab > .kijs-container-scrollable {
     flex: none;
@@ -731,6 +734,43 @@
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
+  }
+  div.kijs-container-tab.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-start;
+  }
+  div.kijs-container-tab .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: center;
+  }
+  div.kijs-container-tab .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-end;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
+    opacity: 0.6;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragover {
+    border-color: var(--accentColor3);
+    border-width: 2px;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    flex: none;
+    border: 2px solid var(--accentColor3);
+    border-radius: 5px;
+  }
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 4px 0 0 4px;
+  }
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 4px 0 0;
+  }
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 0 0 4px 4px;
+  }
+  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 0 0 4px;
   }
   /* ******************
        * Tooltip
@@ -1132,6 +1172,57 @@
     order: 20;
     writing-mode: tb-rl;
     margin: 0 0 3px 0;
+  }
+  /* ******************
+       * Dashboard
+       ****************** */
+  div.kijs-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  div.kijs-dashboard > .kijs-container-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    gap: 5px;
+    /* Spalten*/
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column {
+    flex: 1;
+    overflow: visible;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner {
+    flex: none;
+    min-height: 100%;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* Panel */
+    /* Drop Marker */
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel {
+    flex: none;
+    border: 2px solid var(--bar-bkgrndColor);
+    border-radius: 5px;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel > .kijs-headerbar[draggable] > .kijs-container-inner {
+    cursor: move;
+    user-select: none;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragging {
+    opacity: 0.6;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
+    border-color: var(--accentColor3);
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
+    flex: none;
+    height: 100px;
+    border: 2px solid var(--accentColor3);
+    border-radius: 5px;
   }
   /* ******************
        * Window

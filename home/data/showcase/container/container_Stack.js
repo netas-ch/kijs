@@ -247,7 +247,72 @@ home.sc.container_Stack = class home_sc_container_Stack {
                             ]
                         }
                     ]
+                },
+                
+                {
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Wizard mit RPC',
+                    cls: 'kijs-flexcolumn',
+                    height: 200,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.container.Stack',
+                            rpcLoadFn: 'containerStack.load',
+                            autoLoad: true
+                        }
+                    ],
+                    footerElements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Element hinzufügen',
+                            iconMap: 'kijs.iconMap.Fa.circle-plus',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    cStack.add({
+                                          html: 'My new Element'
+                                    });
+                                    cStack.currentIndex = cStack.elements.length - 1;
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'zurück',
+                            iconMap: 'kijs.iconMap.Fa.circle-chevron-left',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    let i = cStack.currentIndex;
+                                    i--;
+                                    if (i < 0) {
+                                        i = cStack.elements.length - 1;
+                                    }
+                                    cStack.setCurrentAnimated(i, 'slideRight').then((e) => {
+                                        console.log('animation end');
+                                    });
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'weiter',
+                            iconMap: 'kijs.iconMap.Fa.circle-chevron-right',
+                            on: {
+                                click: function(e) {
+                                    const cStack = this.parent.parent.elements[0];
+                                    let i = cStack.currentIndex;
+                                    i++;
+                                    if (i >= cStack.elements.length) {
+                                        i = 0;
+                                    }
+                                    cStack.setCurrentAnimated(i, 'slideLeft').then((e) => {
+                                        console.log('animation end');
+                                    });
+                                }
+                            }
+                        }
+                    ]
                 }
+                
             ]
         });
         
