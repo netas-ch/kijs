@@ -679,6 +679,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this[map.valueProperty] = this._initialValues[map.valueProperty];
             }
         }, this);
+        // Fehler nicht mehr anzeigen
+        this._dom.clsRemove('kijs-error');
+        this._errorIconEl.visible = false;
     }
 
 
