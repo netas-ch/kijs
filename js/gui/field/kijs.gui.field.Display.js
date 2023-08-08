@@ -148,6 +148,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     set value(val) {
         val = kijs.toString(val);
         val = this._formatRules(val);
+        this._value = val;
         
         switch (this._valueDisplayType) {
             case 'code':

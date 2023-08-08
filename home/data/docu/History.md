@@ -120,6 +120,9 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
 ### kijs.gui.Dashboard (NEU)
 Siehe Beispiel im Showcase.  
 
+### kijs.gui.field.ChekboxGroup
+Funktion checkedValues() ist nun DEPRECATED
+
 
 
 Version 2.2.3

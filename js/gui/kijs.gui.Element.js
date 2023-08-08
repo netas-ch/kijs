@@ -245,7 +245,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             left: { target: 'left' },
             name: true,
             nodeAttribute: { fn: 'function', target: this._dom.nodeAttributeSet, context: this._dom },
-            on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
             tooltip: { target: 'tooltip' },
@@ -260,6 +259,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             rpcLoadFn: true,
             rpcLoadArgs: true,
             
+            on: { prio: 1500,  fn: 'assignListeners' },
             disabled: { prio: 2000, target: 'disabled' }
         };
 
