@@ -29,11 +29,18 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl = new kijs.gui.container.tab.Bar({
             parent: this,
             on: {
+                sourceDrop: this.#onTabBarSourceDrop,
+                targetDrop: this.#onTabBarTargetDrop,
                 context: this
             }
         });
         
         this._tabBarPos = 'top';
+        this._tabBarAlign = 'start';
+        
+        this._rpcSaveFn = null;     // Name der remoteFn. Bsp: 'myTabs.save'
+        this._rpcSaveArgs = {};     // Standard RPC-Argumente fürs Speichern
+        this._autoSave = false;     // Automatisches Speichern bei Änderungen
         
         this._dom.clsRemove('kijs-container-stack');
         this._dom.clsAdd('kijs-container-tab');
@@ -43,6 +50,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
             animation: 'fade',
             animationDuration: 300,
             tabBarPos: 'top',
+            tabBarAlign: 'start',
             tabBarScrollableX: 'auto',
             tabBarScrollableY: 'auto'
         });
@@ -51,8 +59,20 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         Object.assign(this._configMap, {
             tabBarPos: { target: 'tabBarPos' }, // Position der TabBar 'top', 'left', 
                                                 // 'bottom' oder 'right' (default: 'top')
+            tabBarAlign: { target: 'tabBarAlign'},// Ausrichtung der Tabs 'start', 
+                                                  // center oder 'end' (default: 'start')
             tabBarScrollableX: { target: 'scrollableX', context: this._tabBarEl },
-            tabBarScrollableY: { target: 'scrollableY', context: this._tabBarEl }
+            tabBarScrollableY: { target: 'scrollableY', context: this._tabBarEl },
+            
+            ddName: { target: 'ddName', context: this._tabBarEl },
+            ddPosBeforeAfterFactor: { target: 'ddPosBeforeAfterFactor', context: this._tabBarEl },
+            ddMapping: { target: 'ddMapping', context: this._tabBarEl },
+            
+            rpcSaveFn: true,    // Name der remoteFn. Bsp: 'myTabs.save'
+            rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
+            autoSave: true,     // Automatisches Speichern bei Änderungen
+            
+            sortable: { prio: 90, target: 'sortable', context: this._tabBarEl }
         });
         
         // Config anwenden
@@ -67,6 +87,35 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autoSave() { return this._autoSave; }
+    set autoSave(val) { this._autoSave = !!val; }
+    
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
+    
+    get rpcSaveFn() { return this._rpcSaveFn; }
+    set rpcSaveFn(val) { this._rpcSaveFn = val; }
+
+    get tabBarAlign() { return this._tabBarAlign; }
+    set tabBarAlign(val) {
+        if (!kijs.Array.contains(['start','center','end'], val)) {
+            throw new kijs.Error(`unknown tabBarAlign.`);
+        }
+        
+        let oldTabParAlign = this._tabBarAlign;
+        this._tabBarAlign = val;
+        
+        // bestehende CSS-Klassen entfernen
+        this._dom.clsRemove(['kijs-align-start','kijs-align-center','kijs-align-end']);
+
+        // neue hinzufügen
+        this._dom.clsAdd('kijs-align-' + val.toLowerCase());
+        
+        if (val !== oldTabParAlign) {
+            this._tabBarEl.render();
+        }
+    }
+    
     get tabBarPos() { return this._tabBarPos; }
     set tabBarPos(val) {
         
@@ -83,11 +132,26 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         // neue hinzufügen
         this._dom.clsAdd('kijs-pos-' + val.toLowerCase());
         
+        // Drag&Drop direction von tabBar nachführen
+        switch (val) {
+            case 'top':
+            case 'bottom':
+                this._tabBarEl.ddDirection = 'horizontal';
+                break;
+                
+            case 'left':
+            case 'right':
+                this._tabBarEl.ddDirection = 'vertical';
+                break;
+                       
+        }
+        
+        
         if (val !== oldTabParPos) {
             this._tabBarEl.render();
         }
     }
-    
+        
     
     
     // --------------------------------------------------------------
@@ -167,6 +231,11 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         }, this);
         
         super.remove(elements, preventRender, preventDestruct, preventEvents, true);
+        
+        // speichern
+        if (this._autoSave && this._rpcSaveFn && !preventEvents) {
+            this.save();
+        }
     }
     
     // overwrite
@@ -175,6 +244,42 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         
         // TabBar rendern (kijs.gui.container.tab.Bar)
         this._tabBarEl.renderTo(this._dom.node, this._innerDom.node);
+    }
+    
+    save() {
+        return new Promise((resolve, reject) => {
+            let args = {};
+            
+            args = Object.assign({}, args, this._rpcSaveArgs);
+            
+            // Positionsdaten der Spalten + Panels ermitteln
+            args.elements = [];
+            kijs.Array.each(this._elements, function(el) {
+                args.elements.push(el.posData);
+            }, this);
+            
+            // an den Server senden
+            this.rpc.do({
+                remoteFn: this.rpcSaveFn,
+                owner: this,
+                data: args,
+                cancelRunningRpcs: false,
+                waitMaskTarget: this,
+                waitMaskTargetDomProperty: 'dom',
+                context: this
+                
+            }).then((e) => {
+                // 'afterSave' auslösen
+                this.raiseEvent('afterSave', e);
+                
+                // Promise auslösen
+                resolve(e);
+                
+            }).catch((ex) => {
+                reject(ex);
+                
+            });
+        });
     }
     
     // overwrite
@@ -244,6 +349,59 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     
     // PRIVATE
     // LISTENERS
+    #onTabBarSourceDrop(e) {
+        // Source Button+Container
+        let sourceButton = e.source.ownerEl;
+        let sourceContainer = sourceButton.parent.parent.elements[sourceButton.index];
+        
+        // Source Container merken, damit er beim Ziel wieder eingefügt werden kann
+        kijs.gui.DragDrop.data.sourceContainer = sourceContainer;
+                
+        // Events vom sourceButton entfernen
+        sourceButton.off('click', this.#onTabButtonElClick, this);
+        sourceButton.icon2.off('click', this.#onTabButtonElCloseClick, this);
+        sourceButton.ddSource.off('drop');
+        
+        // Container vom alten Ort entfernen
+        sourceContainer.parent.remove(sourceContainer, false, true, true);
+        
+        // speichern
+        if (this._autoSave && this._rpcSaveFn) {
+            // nur speichern, wenn das Target ein anderes Element ist
+            // (sonst wird ja beim target bereits gespeichert)
+            if (e.target.ownerEl !== this._tabBarEl) {
+                this.save();
+            }
+        }
+    }
+    
+    #onTabBarTargetDrop(e) {
+        // target index ermitteln
+        let targetIndex = kijs.gui.DragDrop.dropFnGetTargetIndex(e);
+        
+        // Container, des gezogenen Tab-Buttons ermitteln
+        let sourceContainer = kijs.gui.DragDrop.data.sourceContainer;
+        
+        // Ist das geogene Tab das aktuell selektierte?
+        const isCurrent = e.source.ownerEl.dom.clsHas('kijs-current');
+        
+        // Container am neuen Ort wieder einfügen
+        this.add(sourceContainer, targetIndex);
+        
+        // in sichtbaren Bereich scrollen
+        sourceContainer.tabButtonEl.dom.scrollIntoView();
+        
+        // Fall der aktuelle Container gezigen wurde: wieder auswählen
+        if (isCurrent) {
+            this.currentEl = sourceContainer;
+        }
+        
+        // speichern
+        if (this._autoSave && this._rpcSaveFn) {
+            this.save();
+        }
+    }
+    
     #onTabButtonElClick(e) {
         let el = this._getElFromTabButton(e.element);
         
@@ -283,6 +441,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         }
         
         // Variablen (Objekte/Arrays) leeren
+        this._rpcSaveArgs = null;
         this._tabBarEl = null;
         
         // Basisklasse entladen

@@ -102,6 +102,68 @@ foreach ($requests as $request) {
             }
             break;
         
+        case 'containerStack.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "style": { "flex": 1 },
+                        
+                        "defaults":{
+                            "xtype": "kijs.gui.Container",
+                            "innerStyle": { "padding":"10px" }
+                        },
+                        "elements": [
+                            { "name":"s1", "html":"Seite 1", "style":{"backgroundColor":"#f99"} },
+                            { "name":"s2", "html":"Seite 2", "style":{"backgroundColor":"#9f9"} },
+                            { "name":"s3", "html":"Seite 3", "style":{"backgroundColor":"#99f"} },
+                            { "name":"s4", "html":"Seite 4", "style":{"backgroundColor":"#ff9"} },
+                            { "name":"s5", "html":"Seite 5", "style":{"backgroundColor":"#9ff"} }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'containerTab.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            { "name":"b1", "tabCaption":"B 1", "tabIconMap":"kijs.iconMap.Fa.house", "html":"B 1", "innerStyle":{ "color":"#f99"} },
+                            { "name":"b2", "tabCaption":"B 2", "tabIconMap":"kijs.iconMap.Fa.user", "html":"B 2", "innerStyle":{ "color":"#9f9"} },
+                            { "name":"b3", "tabCaption":"B 3", "tabIconMap":"kijs.iconMap.Fa.phone", "html":"B 3", "innerStyle":{ "color":"#99f"} },
+                            { "name":"b4", "tabCaption":"B 4", "tabIconMap":"kijs.iconMap.Fa.envelope", "html":"B 4", "innerStyle":{ "color":"#f9f" }, "disabled":true },
+                            { "name":"b5", "tabCaption":"B 5", "tabIconMap":"kijs.iconMap.Fa.location-dot", "html":"B 5", "innerStyle":{ "color":"#9ff" } }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'containerTab.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'dataview.load':
             try {
                 $rows = array();

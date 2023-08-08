@@ -29,6 +29,12 @@
    "js/iconMap/kijs.iconMap.Fa.js",
 
    "js/gui/kijs.gui.js",
+   
+   "js/gui/kijs.gui.DragDrop.js",
+   "js/gui/dragDrop/kijs.gui.dragDrop.js",
+   "js/gui/dragDrop/kijs.gui.dragDrop.Source.js",
+   "js/gui/dragDrop/kijs.gui.dragDrop.Target.js",
+            
    "js/gui/kijs.gui.Dom.js",
    "js/gui/kijs.gui.Tooltip.js",
    "js/gui/kijs.gui.Element.js",
@@ -46,7 +52,7 @@
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",
    "js/gui/kijs.gui.ViewPort.js",
-
+   
    "js/gui/kijs.gui.Icon.js",
    "js/gui/kijs.gui.Button.js",
    "js/gui/kijs.gui.ButtonGroup.js",
@@ -57,7 +63,7 @@
    "js/gui/kijs.gui.Resizer.js",
    "js/gui/kijs.gui.Splitter.js",
    "js/gui/kijs.gui.Panel.js",
-
+            
    "js/gui/kijs.gui.Mask.js",
    "js/gui/kijs.gui.ApertureMask.js",
    "js/gui/kijs.gui.LayerManager.js",

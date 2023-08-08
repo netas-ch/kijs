@@ -468,10 +468,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
     set style(val) {
-        if (!this._node) {
-            this._style = val;
+        if (!kijs.isEmpty(this._style)) {
+            Object.assign(this._style, val);
         } else {
-            throw new kijs.Error(`Property "style" can not be set. The node has already been rendered.`);
+            this._style = val;
+        }
+        
+        // Falls bereits gerendert wurde: styles anwenden
+        if (this._node) {
+            Object.assign(this._node.style, this._style);
         }
     }
 

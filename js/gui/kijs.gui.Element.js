@@ -192,6 +192,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._disabledInitial = false;
         this._dom = new kijs.gui.Dom();
         this._name = null;
+        this._ddSource = null;
         this._parentEl = null;
         this._rpc = null;           // Instanz von kijs.gui.Rpc
         this._rpcLoadFn = null;     // Name der remoteFn. Bsp: 'address.load'
@@ -237,6 +238,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },
             nodeTagName: { target: 'nodeTagName', context: this._dom },
             defaults: { fn: 'manual' }, // wird nur bei containern gebraucht
+            ddSource: { target: 'ddSource' },   // Drag&Drop-Source Einstellungen
             height: { target: 'height' },
             html: { target: 'html', context: this._dom },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
@@ -303,6 +305,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -317,6 +320,35 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         } else {
             this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        }
+    }
+
+    get ddSource() { 
+        return this._ddSource; 
+    }
+    set ddSource(val) {
+        // config-object
+        if (kijs.isObject(val)) {
+            if (kijs.isEmpty(this._ddSource)) {
+                val.ownerEl = this;
+                if (kijs.isEmpty(val.sourceDomProperty)) {
+                    val.sourceDomProperty = 'dom';
+                }
+                this._ddSource = new kijs.gui.dragDrop.Source(val);
+            } else {
+                this._ddSource.applyConfig(val);
+            }
+            
+        // null
+        } else if (val === null) {
+            if (this._ddSource) {
+                this._ddSource.destruct();
+            }
+            this._ddSource = null;
+            
+        } else {
+            throw new kijs.Error(`ddSource must be a object or null`);
+            
         }
     }
 
@@ -934,7 +966,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         if (!this._eventForwardsHas(eventName, target, targetEventName)) {
-            this._eventForwards[eventName] = this._eventForwards[eventName] || [];
+            if (!this._eventForwards[eventName]) {
+                this._eventForwards[eventName] = [];
+            }
             const forward = {
                 target: target,
                 targetEventName: targetEventName
@@ -1150,6 +1184,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (this._waitMaskEl) {
             this._waitMaskEl.destruct();
         }
+        if (this._ddSource) {
+            this._ddSource.destruct();
+        }
         
         // Variablen (Objekte/Arrays) leeren
         this._afterResizeDeferId = null;
@@ -1160,6 +1197,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._lastSize = null;
         this._userData = null;
         this._waitMaskEl = null;
+        this._ddSource = null;
         this._rpc = null;
         this._rpcLoadArgs = null;
         

@@ -62,6 +62,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             on: {
                 mouseDown: this.#onBtnScrollUpMouseDown,
                 mouseUp: this.#onBtnScrollMouseUp,
+                dragOver: this.#onBtnScrollUpMouseDown,
+                dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
         });
@@ -71,6 +73,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             on: {
                 mouseDown: this.#onBtnScrollLeftMouseDown,
                 mouseUp: this.#onBtnScrollMouseUp,
+                dragOver: this.#onBtnScrollLeftMouseDown,
+                dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
         });
@@ -80,6 +84,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             on: {
                 mouseDown: this.#onBtnScrollRightMouseDown,
                 mouseUp: this.#onBtnScrollMouseUp,
+                dragOver: this.#onBtnScrollRightMouseDown,
+                dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
         });
@@ -89,6 +95,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             on: {
                 mouseDown: this.#onBtnScrollDownMouseDown,
                 mouseUp: this.#onBtnScrollMouseUp,
+                dragOver: this.#onBtnScrollDownMouseDown,
+                dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
         });
@@ -616,11 +624,15 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // PRIVATE
     // LISTENERS
     #onBtnScrollDownMouseDown(e) {
-        this._scrollStart('down');
+        if (!this._btnDownDom.disabled) {
+            this._scrollStart('down');
+        }
     }
     
     #onBtnScrollLeftMouseDown(e) {
-        this._scrollStart('left');
+        if (!this._btnLeftDom.disabled) {
+            this._scrollStart('left');
+        }
     }
     
     #onBtnScrollMouseUp(e) {
@@ -628,11 +640,15 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
     
     #onBtnScrollRightMouseDown(e) {
-        this._scrollStart('right');
+        if (!this._btnRightDom.disabled) {
+            this._scrollStart('right');
+        }
     }
     
     #onBtnScrollUpMouseDown(e) {
-        this._scrollStart('up');
+        if (!this._btnUpDom.disabled) {
+            this._scrollStart('up');
+        }
     }
     
     // Wenn die Grösse des Containers verändert wird, müssen evtl. 

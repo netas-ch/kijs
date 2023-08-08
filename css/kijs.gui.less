@@ -194,9 +194,9 @@
         margin: 0;
         padding: 0;
     }
-
     
-
+    
+    
     /* ******************
        * Ergänzung für kijs.gui.Container (+ vererbte)
        ****************** */
@@ -577,7 +577,7 @@
                     > .kijs-caption {
                         color: var(--tabButton-fontColor);
                     }
-
+                    
                     &:hover, &:focus {
                         background-color: var(--tabButton-focus-bkgrndColor);
                         border: 1px solid var(--tabButton-focus-borderColor);
@@ -586,7 +586,7 @@
                             color: var(--tabButton-focus-fontColor);
                         }
                     }
-
+                    
                     &.kijs-disabled {
                         background-color: var(--button-bkgrndColor);
                         border: 1px solid var(--button-borderColor);
@@ -748,6 +748,60 @@
 
             &.kijs-disabled > .kijs-caption {
                 color: var(--button-disabled-fontColor);
+            }
+        }
+        
+        /* tabBar Align */
+        &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: flex-start;
+        }
+        .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: center;
+        }
+        .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: flex-end;
+        }
+        
+        /* Drag&Drop */
+        > .kijs-container-scrollable > .kijs-container-inner {
+            > .kijs-button {
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+                &.kijs-dragover {
+                    border-color: var(--accentColor3);
+                    border-width: 2px;
+                }
+            }
+        }
+        /* Drop Marker */
+        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            flex: none;
+            border: 2px solid var(--accentColor3);
+            border-radius: 5px;
+        }
+        &.kijs-pos-top {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                width: 40px;
+                margin: 4px 0 0 4px;
+            }
+        }
+        &.kijs-pos-right {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                height: 20px;
+                margin: 4px 4px 0 0;
+            }
+        }
+        &.kijs-pos-bottom {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                width: 40px;
+                margin: 0 0 4px 4px;
+            }
+        }
+        &.kijs-pos-left {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                height: 20px;
+                margin: 4px 0 0 4px;
             }
         }
     }

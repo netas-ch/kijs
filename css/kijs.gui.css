@@ -518,6 +518,9 @@
     /* tabBar */
     /* container */
     /* tabBar Positionierung */
+    /* tabBar Align */
+    /* Drag&Drop */
+    /* Drop Marker */
   }
   div.kijs-container-tab > .kijs-container-scrollable {
     flex: none;
@@ -731,6 +734,43 @@
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
+  }
+  div.kijs-container-tab.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-start;
+  }
+  div.kijs-container-tab .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: center;
+  }
+  div.kijs-container-tab .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-end;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
+    opacity: 0.6;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragover {
+    border-color: var(--accentColor3);
+    border-width: 2px;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    flex: none;
+    border: 2px solid var(--accentColor3);
+    border-radius: 5px;
+  }
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 4px 0 0 4px;
+  }
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 4px 0 0;
+  }
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 0 0 4px 4px;
+  }
+  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 0 0 4px;
   }
   /* ******************
        * Tooltip
