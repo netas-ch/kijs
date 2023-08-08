@@ -301,7 +301,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         } else {
             this._initialValues = {};
             kijs.Array.each(this._valuesMapping, function(map) {
-                this._initialValues[map.valueProperty] = kijs.toString(this[map.valueProperty]);
+                this._initialValues[map.valueProperty] = this[map.valueProperty];
             }, this);
         }
     }
