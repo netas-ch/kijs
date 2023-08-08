@@ -58,6 +58,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }
     }
 
+    // DEPRECATED
     // Checkboxen die ausgewählt werden sollen / sind
     // TODO: unterschied zu value?
     get checkedValues () { return this.value.length ? this.value : []; }
