@@ -58,7 +58,7 @@ home.sc.Button = class home_sc_Button {
                 
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: '2 Icons',
+                    caption: 'Icon Rechts',
                     icon2Map:'kijs.iconMap.Fa.house'
                 },
                 

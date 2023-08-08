@@ -45,6 +45,7 @@ home.sc.field_Password = class home_sc_field_Password {
                     xtype: 'kijs.gui.field.Password',
                     name: 'password',
                     label: 'Label',
+                    value: '123',
                     disableBrowserSecurityWarning: 'auto',
                     on: {
                         focus:  console.log,
@@ -172,14 +173,56 @@ home.sc.field_Password = class home_sc_field_Password {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'isDirty anzeigen',
+                label: 'Debug-Buttons',
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
                             if (el instanceof kijs.gui.field.Field) {
                                 if (e.value) {
+                                    el.add(new kijs.gui.Button({
+                                        name: 'showValue',
+                                        tooltip: 'value anzeigen',
+                                        iconMap: 'kijs.iconMap.Fa.eye',
+                                        on: {
+                                            click: function(e) {
+                                                kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
+                                            },
+                                            context: this
+                                        }
+                                    }));
+                                    el.add(new kijs.gui.Button({
+                                        name: 'setValue',
+                                        tooltip: 'value neu setzen (value=value)',
+                                        iconMap: 'kijs.iconMap.Fa.pen',
+                                        on: {
+                                            click: function(e) {
+                                                let val = el.value;
+                                                el.value = val;
+                                                this._updateIsDirtyButton(el, e.value);
+                                            },
+                                            context: this
+                                        }
+                                    }));
+                                    el.add(new kijs.gui.Button({
+                                        name: 'resetValue',
+                                        tooltip: 'valuesReset',
+                                        iconMap: 'kijs.iconMap.Fa.arrow-rotate-left',
+                                        on: {
+                                            click: function(e) {
+                                                el.valuesReset();
+                                                this._updateIsDirtyButton(el, e.value);
+                                            },
+                                            context: this
+                                        }
+                                    }));
                                     el.on('input', this.#onInputForIsDirty, this);
                                 } else {
+                                    el.remove([
+                                        el.down('showValue'),
+                                        el.down('setValue'),
+                                        el.down('resetValue')
+                                    ]);
+                                    
                                     el.off('input', this.#onInputForIsDirty, this);
                                 }
                                 this._updateIsDirtyButton(el, e.value);
@@ -199,21 +242,12 @@ home.sc.field_Password = class home_sc_field_Password {
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                caption: 'Buttons hinzufügen',
+                caption: 'valuesReset',
                 on: {
                     click: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
                             if (el instanceof kijs.gui.field.Field) {
-                                el.add(new kijs.gui.Button({
-                                    caption: 'value anzeigen',
-                                    iconMap: 'kijs.iconMap.Fa.wand-magic-sparkles',
-                                    on: {
-                                        click: function(e) {
-                                            kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
-                                        },
-                                        context: this
-                                    }
-                                }));
+                                el.valuesReset();
                             }
                         }, this);
                     },
