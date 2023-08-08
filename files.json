@@ -64,6 +64,11 @@
    "js/gui/kijs.gui.Splitter.js",
    "js/gui/kijs.gui.Panel.js",
             
+   "js/gui/dashboard/kijs.gui.dashboard.js",
+   "js/gui/dashboard/kijs.gui.dashboard.Panel.js",
+   "js/gui/dashboard/kijs.gui.dashboard.Column.js",
+   "js/gui/kijs.gui.Dashboard.js",
+            
    "js/gui/kijs.gui.Mask.js",
    "js/gui/kijs.gui.ApertureMask.js",
    "js/gui/kijs.gui.LayerManager.js",

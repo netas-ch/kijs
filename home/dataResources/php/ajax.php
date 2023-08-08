@@ -164,6 +164,139 @@ foreach ($requests as $request) {
             }
             break;
         
+        case 'dashboard.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            {
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"kijs.gui.dashboard.Panel",
+                                        "caption": "Info",
+                                        "iconMap":"kijs.iconMap.Fa.circle-info",
+                                        "html":"Dies ist ein <b>Info</b>-Text.",
+                                        "innerStyle": { "padding": "10px" }
+                                    },{
+                                        "xtype":"home.sc.DashboardItemPanel",
+                                        "caption": "Items 1",
+                                        "elements": [
+                                            {
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": true,
+                                                    "allowCopy": false,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 1 (move only)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "1px solid var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            }
+                                        ]
+                                    },{
+                                        "xtype":"home.sc.DashboardItemPanel",
+                                        "caption": "Items 2",
+                                        "elements": [
+                                            {
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": false,
+                                                    "allowCopy": true,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 2 (copy only)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },{
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"home.sc.DashboardFormPanel",
+                                        "caption": "Form",
+                                        "rpcLoadFn":"dashboardFormPanel.load",
+                                        "rpcSaveFn":"dashboardFormPanel.save",
+                                        "autoLoad":true
+                                    }
+                                ]
+                            },{
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"home.sc.DashboardFormPanel",
+                                        "caption": "Form",
+                                        "rpcLoadFn":"dashboardFormPanel.load",
+                                        "rpcSaveFn":"dashboardFormPanel.save",
+                                        "autoLoad":true
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboard.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboardFormPanel.load':
+            try {
+                // config
+                $response->responseData->formData = json_decode('
+                    {
+                        "memo":"Ich bin eine Bemerkung!"
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboardFormPanel.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'dataview.load':
             try {
                 $rows = array();

@@ -117,6 +117,9 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
     - ```ddPosBeforeAfterFactor``` Siehe Leitfaden 'Drag & Drop'
     - ```ddMapping``` Siehe Leitfaden 'Drag & Drop'
 
+### kijs.gui.Dashboard (NEU)
+Siehe Beispiel im Showcase.  
+
 
 
 Version 2.2.3

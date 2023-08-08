@@ -5,7 +5,6 @@ Allgemein
 - **kijs.gui.container.Tab Kontextmenü (close, close all, close other)**
 - **kijs.gui.container.Tab disableTab, disableAll**
 - **kijs.gui.Tree überarbeiten**
-- kijs.gui.Dashboard (Beispiel: https://examples.sencha.com/extjs/7.6.0/examples/classic/portal/)
 - kijs.Storage überarbeiten
 - kijs.gui.grid.disable
 - kijs.gui.ButtonGroup
