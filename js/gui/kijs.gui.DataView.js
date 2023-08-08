@@ -377,11 +377,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Füllt das Dataview mit Daten vom Server
      * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
+     * @param {Object|Null} config
      * @returns {Promise}
      */
-    load(args, superCall=false) {
+    load(args, superCall=false, config=null) {
         return new Promise((resolve, reject) => {
-            super.load(args, true).then((e) => {
+            super.load(args, true, config).then((e) => {
 
                 this.data = e.responseData.rows;
                 if (!kijs.isEmpty(e.responseData.selectFilters)) {
