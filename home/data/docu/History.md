@@ -123,6 +123,24 @@ Siehe Beispiel im Showcase.
 ### kijs.gui.field.ChekboxGroup
 Funktion checkedValues() ist nun DEPRECATED
 
+### CSS Anpassungen
+ - Foglender globaler CSS-Code entfernt und direkt bei den Elementen eingefügt, wo 
+   nötig:  
+
+    .kijs div, .kijs-viewport, .kijs-viewport div {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+ - ```lineHeight``` von 13px auf 14px erhöht. Damit werden nun Buchstaben unten 
+   nicht mehr abgeschnitten. **UPDATE TIPP:** Bei eigenen CSS-Templates evtl. 
+   auch anpassen.  
+
+ - Die Bestandteile des kijs.gui.Button sind neu durch einen ```gap: 4px``` getrennt.  
+
+ - verschiedene weitere kleinere CSS-Anpassungen.  
+
 
 
 Version 2.2.3

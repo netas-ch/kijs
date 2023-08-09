@@ -15,7 +15,8 @@ Allgemein
 - kijs.gui.DropZone überarbeiten
 - kijs.gui.Menu überarbeiten
 - Mehrsprachigkeit: Formatierung von Datum, Zahlen, Monats- und Wohentagsnamen
-- Chart.js
+- Chart.js Plugin
+- fullCalendar Plugin
 
 
 kijs.gui.Fields
