@@ -80,8 +80,11 @@
    "js/gui/kijs.gui.CornerTipContainer.js",
 
    "js/gui/kijs.gui.Rpc.js",
-   "js/gui/kijs.gui.DataViewElement.js",
+   
    "js/gui/kijs.gui.DataView.js",
+   "js/gui/dataView/kijs.gui.dataView.js",
+   "js/gui/dataView/kijs.gui.dataView.Element.js",
+   
    "js/gui/kijs.gui.ListView.js",
    "js/gui/kijs.gui.FormPanel.js",
 

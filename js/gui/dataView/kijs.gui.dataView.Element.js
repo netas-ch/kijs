@@ -1,9 +1,9 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.DataViewElement
+// kijs.gui.dataView.Element
 // --------------------------------------------------------------
-kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Container {
+kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -18,7 +18,7 @@ kijs.gui.DataViewElement = class kijs_gui_DataViewElement extends kijs.gui.Conta
         this._selected = false;
 
         this._dom.clsRemove('kijs-container');
-        this._dom.clsAdd('kijs-dataviewelement');
+        this._dom.clsAdd('kijs-dataview-element');
         this._dom.htmlDisplayType = 'html';
 
         //this._dom.nodeAttributeSet('tabIndex', -1);

@@ -83,7 +83,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
-     * @param {kijs.gui.DataViewElement|null} el
+     * @param {kijs.gui.dataView.Element|null} el
      * @returns {undefined}
      */
     set current(el) {
@@ -241,7 +241,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             html += '</div>';
         }, this);
 
-        return new kijs.gui.DataViewElement({
+        return new kijs.gui.dataView.Element({
             dataRow: dataRow,
             html: html
         });
@@ -250,7 +250,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Gibt die selektieten Elemente zurück
      * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
-     * @returns {Array|kijs.gui.DataViewElement|null}
+     * @returns {Array|kijs.gui.dataView.Element|null}
      */
     getSelected() {
         let ret = [];
@@ -524,7 +524,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
             kijs.Array.each(this._elements, function(el) {
-                if (el instanceof kijs.gui.DataViewElement) {
+                if (el instanceof kijs.gui.dataView.Element) {
                     const row = el.dataRow;
 
                     kijs.Array.each(filters, function(filterFields) {
@@ -650,7 +650,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // index des aktuellen Elements merken (Element mit Fokus)
         let currentIndex = null;
-        if (this._currentEl && (this._currentEl instanceof kijs.gui.DataViewElement) && kijs.isDefined(this._currentEl.index)) {
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.Element) && kijs.isDefined(this._currentEl.index)) {
             currentIndex = this._currentEl.index;
         }
 

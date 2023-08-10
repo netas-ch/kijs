@@ -141,6 +141,14 @@ Funktion checkedValues() ist nun DEPRECATED
 
  - verschiedene weitere kleinere CSS-Anpassungen.  
 
+### kijs.gui.dataView.Element
+ - ```kijs.gui.DataViewElement``` umenannt zu ```kijs.gui.dataView.Element```  
+   **UPDATE TIPP:**  
+     - Projekt nach ```kijs.gui.DataViewElement``` duchsuchen und durch 
+       ```kijs.gui.dataView.Element``` ersetzen.  
+     - CSS nach ```kijs-dataviewelement``` durchsuchen und durch 
+       ```kijs-dataview-element``` ersetzen.  
+
 
 
 Version 2.2.3
