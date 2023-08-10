@@ -383,7 +383,8 @@ foreach ($requests as $request) {
                                 "name": "Anrede",
                                 "label": "Anrede",
                                 "rpcLoadFn": "form.loadCombo",
-                                "autoLoad": true
+                                "autoLoad": true,
+                                "disableFlex":true
                             },{
                                 "xtype": "kijs.gui.field.Text",
                                 "name": "Name",

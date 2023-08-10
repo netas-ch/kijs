@@ -1203,6 +1203,9 @@
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
     border-color: var(--accentColor3);
   }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-disabled {
+    border: 2px solid var(--bar-disabled-bkgrndColor);
+  }
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
     flex: none;
     height: 100px;
@@ -2657,7 +2660,7 @@
     width: 160px;
   }
   div.kijs-field-phone.kijs-disableFlex > .kijs-inputwrapper {
-    width: 140px;
+    width: 130px;
   }
   div.kijs-field-sozversnr.kijs-disableFlex > .kijs-inputwrapper {
     width: 120px;
