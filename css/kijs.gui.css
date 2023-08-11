@@ -168,33 +168,6 @@
     z-index: 0;
     /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
   }
-  .kijs div,
-  .kijs-viewport,
-  .kijs-viewport div {
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
-  /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-  .kijs-scrollable-x-enable,
-  div.kijs-scrollable-x-enable {
-    overflow-x: scroll;
-  }
-  .kijs-scrollable-x-auto,
-  div.kijs-scrollable-x-auto {
-    overflow-x: auto;
-  }
-  .kijs-scrollable-y-enable,
-  div.kijs-scrollable-y-enable {
-    overflow-y: scroll;
-  }
-  .kijs-scrollable-y-auto,
-  div.kijs-scrollable-y-auto {
-    overflow-y: auto;
-  }
   /* ******************
        * Icon
        ****************** */
@@ -222,7 +195,8 @@
     height: 25px;
     margin: 0;
     border-radius: 6px;
-    padding: 0 4px 0 8px;
+    padding: 0 8px;
+    gap: 4px;
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
     color: var(--default-fontColor);
@@ -231,20 +205,20 @@
     /* falls der Button keine kijs-caption enthält, weniger Rand anzeigen */
   }
   button.kijs-button.kijs-smallpaddings {
-    padding: 0 0 0 4px;
+    padding: 0 4px;
   }
   button.kijs-button > .kijs-icon {
     flex: none;
-    margin: 0 4px 0 0;
+    margin: 0;
     color: var(--button-icon-fontColor);
   }
   button.kijs-button > .kijs-icon2 {
     flex: none;
-    margin: 0 4px 0 0;
+    margin: 0;
   }
   button.kijs-button > .kijs-caption {
     flex: 1;
-    margin: 0 4px 0 0;
+    margin: 0;
     font-family: var(--default-fontFamily);
     font-size: var(--button-fontSize);
     line-height: var(--button-lineHeight);
@@ -306,6 +280,7 @@
   }
   /* ******************
        * Trigger Button
+       * DEPRECATED
        * TODO: Wird niergends verwendet????????
        ****************** */
   button.kijs-button.kijs-trigger {
@@ -324,11 +299,13 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
   }
   div.kijs-container-inner {
     position: relative;
+    overflow: hidden;
     flex: 1 1 auto;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
@@ -465,6 +442,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
   }
@@ -513,6 +491,7 @@
   div.kijs-container-tab {
     display: flex;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
     /* tabBar */
@@ -778,6 +757,7 @@
   div.kijs-tooltip {
     position: fixed;
     display: block;
+    overflow: hidden;
     z-index: 50101;
     border-radius: 4px;
     padding: 4px;
@@ -801,6 +781,7 @@
     background-color: var(--icon-help-bkgrndColor);
   }
   /* ******************
+       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
   body > div.kijs-dragdrop-marker {
@@ -821,6 +802,7 @@
        ****************** */
   div.kijs-spinbox {
     position: absolute;
+    overflow: hidden;
     z-index: 50100;
     max-width: 100%;
     max-height: 100%;
@@ -849,6 +831,7 @@
     border: none;
   }
   /* ******************
+       * DEPRECATED
        * TODO: Accordion ???
        ****************** */
   div.kijs-accordion > .kijs-container-inner > .kijs-panel {
@@ -859,6 +842,7 @@
        ****************** */
   .kijs-viewport {
     position: fixed;
+    overflow: hidden;
     top: 0;
     right: 0;
     bottom: 0;
@@ -909,7 +893,8 @@
     flex-direction: row;
     align-items: center;
     height: 30px;
-    padding: 0 0 0 6px;
+    padding: 0 6px;
+    gap: 4px;
     background-color: var(--bar-bkgrndColor);
     -webkit-user-select: none;
     /* Safari */
@@ -921,7 +906,7 @@
   }
   div.kijs-panelbar > .kijs-icon {
     flex: none;
-    margin: 0 3px 0 0;
+    margin: 0;
     color: var(--bar-fontColor);
   }
   div.kijs-panelbar > .kijs-container-left,
@@ -930,17 +915,21 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: visible;
+    gap: 4px;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner {
     display: flex;
     flex-direction: row;
+    overflow: visible;
+    gap: 4px;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
     flex: none;
     height: auto;
-    margin: 0 3px 0 0;
+    margin: 0;
     border-radius: 0;
     padding: 0;
     border: none;
@@ -981,16 +970,14 @@
     color: var(--bar-button-icon-disabled-fontColor);
   }
   div.kijs-panelbar > .kijs-container-inner {
+    overflow: visible;
     flex: 1 1 auto;
-    margin: 0 3px 0 0;
+    margin: 0;
     text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--bar-fontColor);
-  }
-  div.kijs-panelbar > .kijs-container-inner:last-child {
-    margin: 0 6px 0 0;
   }
   div.kijs-panelbar.kijs-headerbar > .kijs-container-inner {
     font-family: var(--default-fontFamily);
@@ -1021,6 +1008,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     background-color: var(--panel-bkgrndColor);
     transition: 0.2s;
     /* bei Schatten auch diverse Linien anzeigen */
@@ -1031,6 +1019,7 @@
     /*border: 1px solid var(--item-selected-borderColor);*/
   }
   div.kijs-panel > .kijs-header {
+    overflow: hidden;
     flex: none;
     border-left: 1px solid var(--panel-borderColor);
     border-right: 1px solid var(--panel-borderColor);
@@ -1050,6 +1039,7 @@
     flex: none;
   }
   div.kijs-panel > .kijs-footer {
+    overflow: hidden;
     flex: none;
     border-top: 1px solid var(--panel-borderColor);
     border-left: 1px solid var(--panel-borderColor);
@@ -1072,8 +1062,6 @@
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button {
     border: 1px solid var(--footer-button-borderColor);
     background-color: var(--footer-button-bkgrndColor);
-    /*margin-top: 5px;
-                    margin-bottom: 5px;*/
   }
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
@@ -1151,17 +1139,13 @@
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
-    margin: 0 0 3px 0;
+    align-self: center;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon {
     line-height: 16px;
-  }
-  div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-badge,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-badge {
-    right: 0;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-icon,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-icon {
@@ -1180,6 +1164,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
   }
   div.kijs-dashboard > .kijs-container-inner {
     flex: 1;
@@ -1218,6 +1203,9 @@
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
     border-color: var(--accentColor3);
   }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-disabled {
+    border: 2px solid var(--bar-disabled-bkgrndColor);
+  }
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
     flex: none;
     height: 100px;
@@ -1229,6 +1217,7 @@
        ****************** */
   div.kijs-window {
     position: absolute;
+    overflow: hidden;
     max-width: 100%;
     max-height: 100%;
     border-radius: 5px;
@@ -1269,6 +1258,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     z-index: 60000;
     background-color: rgba(0, 0, 0, 0.2);
     flex-direction: column;
@@ -1298,6 +1288,7 @@
        ****************** */
   div.kijs-aperturemask {
     position: absolute;
+    overflow: hidden;
     z-index: 9000;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
@@ -1359,6 +1350,7 @@
        ****************** */
   div.kijs-cornertipcontainer {
     position: fixed;
+    overflow: hidden;
     right: 0;
     bottom: 0;
     z-index: 70000;
@@ -1390,6 +1382,7 @@
        ****************** */
   div.kijs-resizer {
     position: absolute;
+    overflow: hidden;
     bottom: 0;
     right: 0;
     width: 12px;
@@ -1413,6 +1406,7 @@
   }
   div.kijs-resizer-overlay {
     position: absolute;
+    overflow: hidden;
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px dashed rgba(0, 0, 0, 0.5);
   }
@@ -1462,6 +1456,7 @@
   div.kijs-buttongroup {
     display: flex;
     flex-direction: column-reverse;
+    overflow: hidden;
     border-right: 1px solid var(--panel-borderColor);
   }
   div.kijs-buttongroup > .kijs-caption {
@@ -1484,6 +1479,7 @@
        * Tree
        ****************** */
   div.kijs-tree {
+    overflow: hidden;
     background-color: var(--field-bkgrndColor);
   }
   div.kijs-tree.kijs-tree-root > .kijs-container-inner {
@@ -1579,6 +1575,7 @@
   div.kijs-dataview {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
   div.kijs-dataview > .kijs-container-inner {
     flex: 1;
@@ -1648,6 +1645,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
@@ -1755,6 +1753,9 @@
   /* ******************
        * ProgressBar
        ****************** */
+  div.kijs-progressbar {
+    overflow: hidden;
+  }
   div.kijs-progressbar > .kijs-progressbar-caption {
     padding: 0 0 2px 0;
     font-family: var(--default-fontFamily);
@@ -2444,13 +2445,14 @@
     flex: none;
     display: flex;
     flex-direction: row;
+    overflow: visible;
   }
   div.kijs-field > .kijs-container-inner > .kijs-button {
     margin: 0 0 0 2px;
     height: 25px;
   }
   div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline {
-    margin: 0 0 0 0;
+    margin: 0;
     border-radius: 0px;
     border-top: 1px solid var(--field-borderColor);
     border-right: 1px solid var(--field-borderColor);
@@ -2507,14 +2509,14 @@
   div.kijs-field > .kijs-icon-error {
     flex: none;
     height: 16px;
-    margin: 4px 0 0 2px;
+    margin: 3px 0 0 2px;
     color: var(--icon-error-fontColor);
     cursor: default;
   }
   div.kijs-field > .kijs-icon-help {
     flex: none;
     height: 16px;
-    margin: 4px 0 0 2px;
+    margin: 3px 0 0 2px;
     color: var(--icon-help-fontColor);
     cursor: default;
   }
@@ -2658,7 +2660,7 @@
     width: 160px;
   }
   div.kijs-field-phone.kijs-disableFlex > .kijs-inputwrapper {
-    width: 140px;
+    width: 130px;
   }
   div.kijs-field-sozversnr.kijs-disableFlex > .kijs-inputwrapper {
     width: 120px;
@@ -2848,6 +2850,7 @@
   }
   div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -2886,6 +2889,7 @@
   }
   div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -3140,15 +3144,16 @@
     height: 20px;
     width: 34px;
     margin: 0 4px 0 0;
+    padding: 1px 0 0 1px;
     border-radius: 10px;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
   div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
-    height: 20px;
-    width: 20px;
-    border-radius: 10px;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
     background-color: var(--field-item-bkgrndColor);
     transition: margin-left 0.2s;
   }
@@ -3257,6 +3262,7 @@
   }
   div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -3324,6 +3330,7 @@
   }
   div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -3452,6 +3459,26 @@
   /* Schatten (Bitte bei einem Panel dafür die Config shadow verwenden!!!)*/
   .kijs-shadow {
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+  }
+  /* ******************
+     * Ergänzung für kijs.gui.Container (+ vererbte)
+     ****************** */
+  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+  .kijs-scrollable-x-enable,
+  div.kijs-scrollable-x-enable {
+    overflow-x: scroll;
+  }
+  .kijs-scrollable-x-auto,
+  div.kijs-scrollable-x-auto {
+    overflow-x: auto;
+  }
+  .kijs-scrollable-y-enable,
+  div.kijs-scrollable-y-enable {
+    overflow-y: scroll;
+  }
+  .kijs-scrollable-y-auto,
+  div.kijs-scrollable-y-auto {
+    overflow-y: auto;
   }
   /* ******************
        * Ergänzungen für Icons

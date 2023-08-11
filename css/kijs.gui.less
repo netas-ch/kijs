@@ -55,11 +55,10 @@
         font-style: normal;
     }
 
-
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -189,25 +188,8 @@
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
     }
-
-    .kijs div, .kijs-viewport, .kijs-viewport div {
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-    }
-
-
-    /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
-
-
+    
+    
     
     /* ******************
        * Icon
@@ -229,26 +211,6 @@
     }
 
 
-    /* ******************
-       * Scrollbar
-       ****************** */
-    ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--scrollbar-background-color);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-color);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-hover-color);
-    }
-
 
     /* ******************
        * Button
@@ -261,7 +223,8 @@
         height: 25px;
         margin: 0;
         border-radius: 6px;
-        padding: 0 4px 0 8px;
+        padding: 0 8px;
+        gap: 4px;
         background-color: var(--button-bkgrndColor);
         border: 1px solid var(--button-borderColor);
         color: var(--default-fontColor);
@@ -270,23 +233,23 @@
 
         /* falls der Button keine kijs-caption enthält, weniger Rand anzeigen */
         &.kijs-smallpaddings {
-            padding: 0 0 0 4px;
+            padding: 0 4px;
         }
 
         > .kijs-icon {
             flex: none;
-            margin: 0 4px 0 0;
+            margin: 0;
             color: var(--button-icon-fontColor);
         }
 
         > .kijs-icon2 {
             flex: none;
-            margin: 0 4px 0 0;
+            margin: 0;
         }
 
         > .kijs-caption {
             flex: 1;
-            margin: 0 4px 0 0;
+            margin: 0;
             font-family: var(--default-fontFamily);
             font-size: var(--button-fontSize);
             line-height: var(--button-lineHeight);
@@ -361,6 +324,7 @@
 
     /* ******************
        * Trigger Button
+       * DEPRECATED
        * TODO: Wird niergends verwendet????????
        ****************** */
     button.kijs-button.kijs-trigger {
@@ -382,14 +346,16 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        overflow: hidden;
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
     }
 
     div.kijs-container-inner {
         position: relative;
+        overflow: hidden;
         flex: 1 1 auto;
-
+        
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
@@ -532,6 +498,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        overflow: hidden;
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
@@ -567,6 +534,7 @@
     div.kijs-container-tab {
         display: flex;
         align-items: stretch;
+        overflow: hidden;
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
@@ -597,7 +565,7 @@
                     > .kijs-caption {
                         color: var(--tabButton-fontColor);
                     }
-
+                    
                     &:hover, &:focus {
                         background-color: var(--tabButton-focus-bkgrndColor);
                         border: 1px solid var(--tabButton-focus-borderColor);
@@ -606,7 +574,7 @@
                             color: var(--tabButton-focus-fontColor);
                         }
                     }
-
+                    
                     &.kijs-disabled {
                         background-color: var(--button-bkgrndColor);
                         border: 1px solid var(--button-borderColor);
@@ -770,6 +738,60 @@
                 color: var(--button-disabled-fontColor);
             }
         }
+        
+        /* tabBar Align */
+        &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: flex-start;
+        }
+        .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: center;
+        }
+        .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+            justify-content: flex-end;
+        }
+        
+        /* Drag&Drop */
+        > .kijs-container-scrollable > .kijs-container-inner {
+            > .kijs-button {
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+                &.kijs-dragover {
+                    border-color: var(--accentColor3);
+                    border-width: 2px;
+                }
+            }
+        }
+        /* Drop Marker */
+        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            flex: none;
+            border: 2px solid var(--accentColor3);
+            border-radius: 5px;
+        }
+        &.kijs-pos-top {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                width: 40px;
+                margin: 4px 0 0 4px;
+            }
+        }
+        &.kijs-pos-right {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                height: 20px;
+                margin: 4px 4px 0 0;
+            }
+        }
+        &.kijs-pos-bottom {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                width: 40px;
+                margin: 0 0 4px 4px;
+            }
+        }
+        &.kijs-pos-left {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+                height: 20px;
+                margin: 4px 0 0 4px;
+            }
+        }
     }
 
 
@@ -780,6 +802,7 @@
     div.kijs-tooltip {
         position: fixed;
         display: block;
+        overflow: hidden;
         z-index: 50101;
         border-radius: 4px;
         padding: 4px;
@@ -808,6 +831,7 @@
 
 
     /* ******************
+       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
     body > div.kijs-dragdrop-marker {
@@ -826,6 +850,7 @@
        ****************** */
     div.kijs-spinbox {
         position: absolute;
+        overflow: hidden;
         z-index: 50100;
         max-width: 100%;
         max-height: 100%;
@@ -862,6 +887,7 @@
 
 
     /* ******************
+       * DEPRECATED
        * TODO: Accordion ???
        ****************** */
     div.kijs-accordion > .kijs-container-inner > .kijs-panel {
@@ -875,6 +901,7 @@
        ****************** */
     .kijs-viewport {
         position: fixed;
+        overflow: hidden;
         top: 0;
         right: 0;
         bottom: 0;
@@ -934,8 +961,9 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: var(--panel-collapse-height);
-        padding: 0 0 0 6px;
+        height: 30px;
+        padding: 0 6px;
+        gap: 4px;
         background-color: var(--bar-bkgrndColor);
 
         -webkit-user-select: none;  /* Safari */
@@ -948,7 +976,7 @@
 
         > .kijs-icon {
             flex: none;
-            margin: 0 3px 0 0;
+            margin: 0;
             color: var(--bar-fontColor);
         }
 
@@ -957,15 +985,19 @@
             display: flex;
             flex-direction: column;
             align-items: stretch;
+            overflow: visible;
+            gap: 4px;
 
             > .kijs-container-inner {
                 display: flex;
                 flex-direction: row;
+                overflow: visible;
+                gap: 4px;
 
                 > .kijs-button {
                     flex: none;
                     height: auto;
-                    margin: 0 3px 0 0;
+                    margin: 0;
                     border-radius: 0;
                     padding: 0;
                     border: none;
@@ -1005,19 +1037,16 @@
 
 
         > .kijs-container-inner {
+            overflow: visible;
             flex: 1 1 auto;
-            margin: 0 3px 0 0;
+            margin: 0;
             text-align: left;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
-            
-            &:last-child {
-                margin: 0 6px 0 0;
-            }
         }
-
+        
         &.kijs-headerbar  > .kijs-container-inner {
             font-family: var(--default-fontFamily);
             font-size: var(--headerBar-fontSize);
@@ -1055,6 +1084,7 @@
         position: relative;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
 
@@ -1064,6 +1094,7 @@
         }
 
         > .kijs-header {
+            overflow: hidden;
             flex: none;
             border-left: 1px solid var(--panel-borderColor);
             border-right: 1px solid var(--panel-borderColor);
@@ -1086,6 +1117,7 @@
         }
 
         > .kijs-footer {
+            overflow: hidden;
             flex: none;
             border-top: 1px solid var(--panel-borderColor);
             border-left: 1px solid var(--panel-borderColor);
@@ -1109,8 +1141,6 @@
                 > .kijs-button {
                     border: 1px solid var(--footer-button-borderColor);
                     background-color: var(--footer-button-bkgrndColor);
-                    /*margin-top: 5px;
-                    margin-bottom: 5px;*/
 
                     &:hover, &:focus {
                         background-color: var(--footer-button-focus-bkgrndColor);
@@ -1142,13 +1172,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: var(--panel-collapse-height) !important;
+            height: 30px !important;
             flex: none !important;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto !important;
-            width: var(--panel-collapse-width) !important;
+            width: 30px !important;
             flex: none !important;
             display: flex;
             flex-direction: row;
@@ -1177,7 +1207,7 @@
         /* PanelBar Minimiert */
         &.kijs-collapse-right, &.kijs-collapse-left {
             > .kijs-panelbar {
-                width: var(--panel-collapse-width);
+                width: 30px;
                 height: auto;
                 padding: 3px 0 3px 0;
                 flex-direction: column;
@@ -1196,16 +1226,11 @@
                         align-items: center;
 
                         > .kijs-button {
-                            margin: 0 0 3px 0;
-
+                            align-self: center;
+                            
                             > .kijs-caption, > .kijs-icon {
                                 line-height: 16px;
                             }
-
-                            > .kijs-badge {
-                                right: 0;
-                            }
-
                         }
                     }
                 }
@@ -1227,10 +1252,82 @@
 
 
     /* ******************
+       * Dashboard
+       ****************** */
+    div.kijs-dashboard {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        overflow: hidden;
+        
+        > .kijs-container-inner {
+            flex: 1;
+            display: flex;
+            flex-direction: row;
+            padding: 5px;
+            gap: 5px;
+            
+            /* Spalten*/
+            > .kijs-dashboard-column {
+                flex: 1;
+                overflow: visible;
+                
+                > .kijs-container-inner {
+                    flex:none;
+                    min-height:100%;
+                    overflow: visible;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    
+                    /* Panel */
+                    > .kijs-dashboard-panel {
+                        flex: none;
+                        border: 2px solid var(--bar-bkgrndColor);
+                        border-radius: 5px;
+                        
+                        > .kijs-headerbar[draggable] {
+                            > .kijs-container-inner {
+                                cursor: move;
+                                user-select: none;
+                            }
+                        }
+                        
+                        &.kijs-dragging {
+                            opacity: 0.6
+                        }
+                        
+                        &.kijs-dragover {
+                            border-color: var(--accentColor3);
+                        }
+                        
+                        &.kijs-disabled {
+                            border: 2px solid var(--bar-disabled-bkgrndColor);
+                        }
+                    }
+                    
+                    /* Drop Marker */
+                    > .kijs-dropmarker {
+                        flex: none;
+                        height: 100px;
+                        border: 2px solid var(--accentColor3);
+                        border-radius: 5px;
+                    }
+                    
+                }
+            }
+        }
+
+    }
+    
+    
+
+    /* ******************
        * Window
        ****************** */
     div.kijs-window {
         position: absolute;
+        overflow: hidden;
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
@@ -1279,6 +1376,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
         z-index: 60000;
         background-color: rgba(0, 0, 0, 0.2);
         flex-direction: column;
@@ -1314,6 +1412,7 @@
        ****************** */
     div.kijs-aperturemask {
         position: absolute;
+        overflow: hidden;
         z-index: 9000;
         background-color: rgba(0, 0, 0, 0.5);
         opacity: 0;
@@ -1387,6 +1486,7 @@
        ****************** */
     div.kijs-cornertipcontainer {
         position: fixed;
+        overflow: hidden;
         right: 0;
         bottom: 0;
         z-index: 70000;
@@ -1423,6 +1523,7 @@
        ****************** */
     div.kijs-resizer {
         position: absolute;
+        overflow: hidden;
         bottom: 0;
         right: 0;
         width: 12px;
@@ -1449,6 +1550,7 @@
 
     div.kijs-resizer-overlay {
         position: absolute;
+        overflow: hidden;
         background-color: rgba(255, 255, 255, 0.5);
         border: 1px dashed rgba(0, 0, 0, 0.5);
     }
@@ -1515,6 +1617,7 @@
     div.kijs-buttongroup {
         display: flex;
         flex-direction: column-reverse;
+        overflow: hidden;
         border-right: 1px solid var(--panel-borderColor);
 
         > .kijs-caption {
@@ -1545,6 +1648,7 @@
        * Tree
        ****************** */
     div.kijs-tree {
+        overflow: hidden;
         background-color: var(--field-bkgrndColor);
 
         &.kijs-tree-root > .kijs-container-inner {
@@ -1667,7 +1771,8 @@
     div.kijs-dataview {
         display: flex;
         flex-direction: column;
-
+        overflow: hidden;
+        
         > .kijs-container-inner {
             flex: 1;
             display: flex;
@@ -1750,6 +1855,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
+        overflow: hidden;
         border: 1px solid var(--field-borderColor);
         background-color: var(--field-bkgrndColor);
         cursor: pointer;
@@ -1885,7 +1991,8 @@
        * ProgressBar
        ****************** */
     div.kijs-progressbar {
-
+        overflow: hidden;
+        
         > .kijs-progressbar-caption {
             padding: 0 0 2px 0;
             font-family: var(--default-fontFamily);
@@ -2696,13 +2803,14 @@
             flex: none;
             display: flex;
             flex-direction: row;
-
+            overflow: visible;
+            
             > .kijs-button {
                 margin: 0 0 0 2px;
                 height: 25px;
 
                 &.kijs-inline {
-                    margin: 0 0 0 0;
+                    margin: 0;
                     border-radius: 0px;
                     border-top: 1px solid var(--field-borderColor);
                     border-right: 1px solid var(--field-borderColor);
@@ -2772,7 +2880,7 @@
         > .kijs-icon-error {
             flex: none;
             height: 16px;
-            margin: 4px 0 0 2px;
+            margin: 3px 0 0 2px;
             color: var(--icon-error-fontColor);
             cursor: default;
         }
@@ -2780,7 +2888,7 @@
         > .kijs-icon-help {
             flex: none;
             height: 16px;
-            margin: 4px 0 0 2px;
+            margin: 3px 0 0 2px;
             color: var(--icon-help-fontColor);
             cursor: default;
         }
@@ -2916,7 +3024,7 @@
     }
     div.kijs-field-phone {
         &.kijs-disableFlex > .kijs-inputwrapper {
-            width: 140px;
+            width: 130px;
         }
     }
     div.kijs-field-sozversnr {
@@ -3155,6 +3263,7 @@
         > .kijs-container-inner {
             > .kijs-button.kijs-inline {
                 height: 100%;
+                padding: 0 4px;
                 align-items: flex-start;
                 > .kijs-icon {
                     padding: 3px 0 0 0;
@@ -3208,6 +3317,7 @@
         > .kijs-container-inner {
             > .kijs-button.kijs-inline {
                 height: 100%;
+                padding: 0 4px;
                 align-items: flex-start;
                 > .kijs-icon {
                     padding: 3px 0 0 0;
@@ -3529,15 +3639,16 @@
                 height: 20px;
                 width: 34px;
                 margin: 0 4px 0 0;
+                padding: 1px 0 0 1px;
                 border-radius: 10px;
                 border: 1px solid var(--field-borderColor);
                 background-color: var(--field-bkgrndColor);
                 cursor: pointer;
 
                 > .kijs-togglePoint {
-                    height: 20px;
-                    width: 20px;
-                    border-radius: 10px;
+                    height: 16px;
+                    width: 16px;
+                    border-radius: 8px;
                     background-color: var(--field-item-bkgrndColor);
                     transition: margin-left 0.2s;
                 }
@@ -3693,6 +3804,7 @@
         > .kijs-container-inner {
             > .kijs-button.kijs-inline {
                 height: 100%;
+                padding: 0 4px;
                 align-items: flex-start;
                 > .kijs-icon {
                     padding: 3px 0 0 0;
@@ -3781,6 +3893,7 @@
         > .kijs-container-inner {
             > .kijs-button.kijs-inline {
                 height: 100%;
+                padding: 0 4px;
                 align-items: flex-start;
                 > .kijs-icon {
                     padding: 3px 0 0 0;
@@ -3818,12 +3931,12 @@
        ****************** */
     /* Animationen zu den Spin- und Pulse-Effekten */
     @keyframes kijs-spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(359deg);
-      }
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(359deg);
+        }
     }
 
     /* fade */
@@ -3879,7 +3992,7 @@
        ****************** */
     /* Ausblenden (Bitte dafür die Config visible benutzen!!!) */
     div.kijs-hidden, .kijs-hidden {
-      display: none;
+        display: none;
     }
 
     /* Schatten (Bitte bei einem Panel dafür die Config shadow verwenden!!!)*/
@@ -3890,16 +4003,28 @@
 
 
     /* ******************
+     * Ergänzung für kijs.gui.Container (+ vererbte)
+     ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
+
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
+
+
+
+    /* ******************
        * Ergänzungen für Icons
        ****************** */
     /* Dreh-Effekt */
     .kijs-spin {
-      animation: kijs-spin 2s infinite linear;
+        animation: kijs-spin 2s infinite linear;
     }
 
     /* Pulse-Effekt (für Load-Icons) */
     .kijs-pulse {
-      animation: kijs-spin 1s infinite steps(8);
+        animation: kijs-spin 1s infinite steps(8);
     }
 
 

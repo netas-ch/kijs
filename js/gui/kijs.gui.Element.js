@@ -689,7 +689,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {undefined}
      */
     changeDisabled(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -709,7 +709,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null}                     HTML-Node, das den Fokus erhalten hat
      */

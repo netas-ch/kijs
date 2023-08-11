@@ -84,7 +84,50 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
     }
     
     #onPanelDrop(e) {
-        kijs.gui.DragDrop.dropFnMoveEl(e);
+        switch (e.operation) {
+            case 'move':
+                kijs.gui.DragDrop.dropFnMoveEl(e);
+                break;
+                
+            case 'copy':
+                const sourceEl = e.source.ownerEl;
+                const cloneEl = new kijs.gui.Element({
+                    height: 31,
+                    ddSource:{
+                        name: sourceEl.ddSource.name,
+                        allowMove: sourceEl.ddSource.allowMove,
+                        allowCopy: sourceEl.ddSource.allowCopy,
+                        allowLink: sourceEl.ddSource.allowLink
+                    },
+                    html: 'Item (copy)',
+                    style: {
+                        padding: '4px 10px',
+                        border: '1px solid var(--panel-borderColor)',
+                        borderRadius: '5px',
+                        backgroundColor: 'var(--viewport-bkgrndColor)'
+                    }
+                });
+                
+                // beim neuen Ort einfügen
+                switch (e.target.targetPos){
+                    case 'child':
+                        e.target.targetEl.add(cloneEl);
+                        break;
+
+                    case 'before':
+                        e.target.targetEl.parent.add(cloneEl, e.target.targetEl.index);
+                        break;
+
+                    case 'after':
+                        e.target.targetEl.parent.add(cloneEl, e.target.targetEl.index+1);
+                        break;
+                }
+                break;
+                
+            case 'link':
+                throw new kijs.Error(`operation 'link' is not supported in this example`);
+                break;
+        }
         //this.save();
     }
     

@@ -81,6 +81,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                         },{
                             xtype: 'kijs.gui.Container',
                             cls: 'kijs-flexline',
+                            innerStyle: { gap: '0 20px' },
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Text',
@@ -92,8 +93,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     name: 'Name',
                                     label: 'Name',
                                     labelWidth: null,
-                                    labelStyle: { textAlign: 'right' },
-                                    style: { marginLeft: '20px', flex: 1 }
+                                    style: { flex: 1 },
+                                    labelStyle: { textAlign: 'right' }
                                 }
                             ]
                         },{
@@ -102,21 +103,22 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             label: 'Strasse'
                         },{
                             xtype: 'kijs.gui.Container',
-                            cls: 'kijs-flexrow',
+                            cls: 'kijs-flexline',
+                            innerStyle: { gap: '0 20px' },
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Plz',
                                     label: 'PLZ',
-                                    width: 200,
-                                    style: { flex: 'none' }
+                                    disableFlex: true,
+                                    width: 200
                                 },{
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Ort',
                                     label: 'Ort',
-                                    labelWidth: 30,
-                                    labelStyle: { textAlign: 'right' },
-                                    style: { marginLeft:'20px', flex: 1 }
+                                    labelWidth: null,
+                                    style: { flex: 1 },
+                                    labelStyle: { textAlign: 'right' }
                                 }
                             ]
                         },{
@@ -136,38 +138,36 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             style: { fontWeight: 'bold' }
                         },{
                             xtype: 'kijs.gui.Container',
-                            cls: 'kijs-flexrow',
+                            cls: 'kijs-flexline',
+                            innerStyle: { gap: '0 20px' },
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'TelefonP',
-                                    label: 'Telefon P',
-                                    style: { flex: 1 }
+                                    label: 'Telefon P'
                                 },{
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'TelefonG',
                                     label: 'Telefon G',
-                                    labelWidth: 65,
-                                    labelStyle: { textAlign: 'right' },
-                                    style: { marginLeft:'20px', flex: 1 }
+                                    labelWidth: 60,
+                                    labelStyle: { textAlign: 'right' }
                                 }
                             ]
                         },{
                             xtype: 'kijs.gui.Container',
-                            cls: 'kijs-flexrow',
+                            cls: 'kijs-flexline',
+                            innerStyle: { gap: '0 20px' },
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'MobileP',
-                                    label: 'Mobile P',
-                                    style: { flex: 1 }
+                                    label: 'Mobile P'
                                 },{
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'MobileG',
                                     label: 'Mobile G',
-                                    labelWidth: 65,
-                                    labelStyle: { textAlign: 'right' },
-                                    style: { marginLeft:'20px', flex: 1 }
+                                    labelWidth: 60,
+                                    labelStyle: { textAlign: 'right' }
                                 }
                             ]
                         },{
@@ -182,7 +182,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             style: { fontWeight: 'bold' }
                         },{
                             xtype: 'kijs.gui.Container',
-                            cls: 'kijs-flexrow',
+                            cls: 'kijs-flexline',
+                            innerStyle: { gap: '0 20px' },
                             elements:[
                                 {
                                     xtype: 'kijs.gui.field.DateTime',
@@ -200,12 +201,11 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Alter',
                                     label: 'Alter',
-                                    labelStyle: { textAlign: 'right' },
+                                    readOnly: true,
                                     disableFlex: true,
                                     width: 80,
-                                    labelWidth: 35,
-                                    readOnly: true,
-                                    style: { marginLeft:'20px' }
+                                    labelWidth: null,
+                                    labelStyle: { textAlign: 'right' }
                                 }
                             ]
                         },{
@@ -236,8 +236,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                             xtype: 'kijs.gui.field.Memo',
                             name: 'Bemerkungen',
                             label: 'Bemerkungen',
-                            height: 50,
-                            helpText: 'Hier können Sie die Bermerkungen eintragen'
+                            helpText: 'Hier können Sie die Bermerkungen eintragen',
+                            height: 50
                         }
                     ],
                     
@@ -386,14 +386,14 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     shadow: true,
                     resizable: true,
                     scrollableY: 'auto',
-                    width: 840,
+                    width: 600,
                     cls: 'kijs-flexrowwrap',
                     style: {
                         marginTop: '10px'
                     },
                     defaults: {
                         cls: 'kijs-flexform',
-                        style: {maxWidth: '400px'},
+                        width: 500,
                         defaults: {
                             labelWidth: 100,
                             required: true,
@@ -426,6 +426,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                 },{
                                     xtype: 'kijs.gui.Container',
                                     cls: 'kijs-flexline',
+                                    innerStyle: { gap: '0 20px' },
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Text',
@@ -436,8 +437,9 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Name',
                                             label: 'Name',
-                                            labelWidth: 45,
-                                            style: { marginLeft:'20px', flex: 1 }
+                                            labelWidth: null,
+                                            style: { flex: 1 },
+                                            labelStyle: { textAlign: 'right' }
                                         }
                                     ]
                                 },{
@@ -446,20 +448,22 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     label: 'Strasse'
                                 },{
                                     xtype: 'kijs.gui.Container',
-                                    cls: 'kijs-flexrow',
+                                    cls: 'kijs-flexline',
+                                    innerStyle: { gap: '0 20px' },
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Plz',
                                             label: 'PLZ',
-                                            width: 200,
-                                            style: { flex: 'none' }
+                                            disableFlex: true,
+                                            width: 200
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Ort',
                                             label: 'Ort',
-                                            labelWidth: 30,
-                                            style: { marginLeft:'20px', flex: 1 }
+                                            labelWidth: null,
+                                            style: { flex: 1 },
+                                            labelStyle: { textAlign: 'right' }
                                         }
                                     ]
                                 },{
@@ -482,36 +486,36 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     style: { fontWeight: 'bold' }
                                 },{
                                     xtype: 'kijs.gui.Container',
-                                    cls: 'kijs-flexrow',
+                                    cls: 'kijs-flexline',
+                                    innerStyle: { gap: '0 20px' },
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'TelefonP',
-                                            label: 'Telefon P',
-                                            style: { flex: 1 }
+                                            label: 'Telefon P'
                                         },{
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'TelefonG',
                                             label: 'Telefon G',
-                                            labelWidth: 65,
-                                            style: { marginLeft:'20px', flex: 1 }
+                                            labelWidth: 60,
+                                            labelStyle: { textAlign: 'right' }
                                         }
                                     ]
                                 },{
                                     xtype: 'kijs.gui.Container',
-                                    cls: 'kijs-flexrow',
+                                    cls: 'kijs-flexline',
+                                    innerStyle: { gap: '0 20px' },
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'MobileP',
-                                            label: 'Mobile P',
-                                            style: { flex: 1 }
+                                            label: 'Mobile P'
                                         },{
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'MobileG',
                                             label: 'Mobile G',
-                                            labelWidth: 65,
-                                            style: { marginLeft:'20px', flex: 1 }
+                                            labelWidth: 60,
+                                            labelStyle: { textAlign: 'right' }
                                         }
                                     ]
                                 },{
@@ -529,7 +533,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     style: { fontWeight: 'bold' }
                                 },{
                                     xtype: 'kijs.gui.Container',
-                                    cls: 'kijs-flexrow',
+                                    cls: 'kijs-flexline',
+                                    innerStyle: { gap: '0 20px' },
                                     elements:[
                                         {
                                             xtype: 'kijs.gui.field.DateTime',
@@ -547,11 +552,11 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Alter',
                                             label: 'Alter',
+                                            readOnly: true,
                                             disableFlex: true,
                                             width: 80,
-                                            labelWidth: 35,
-                                            readOnly: true,
-                                            style: { marginLeft:'20px' }
+                                            labelWidth: null,
+                                            labelStyle: { textAlign: 'right' }
                                         }
                                     ]
                                 },{

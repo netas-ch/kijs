@@ -478,7 +478,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Für Felder mit mehreren Werten: Damit können mehrere Werte gliechzeitig
+     * Für Felder mit mehreren Werten: Damit können mehrere Werte gleichzeitig
      * zugewiesen werden.
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
      * @param {Object} val

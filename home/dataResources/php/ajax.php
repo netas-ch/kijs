@@ -383,7 +383,8 @@ foreach ($requests as $request) {
                                 "name": "Anrede",
                                 "label": "Anrede",
                                 "rpcLoadFn": "form.loadCombo",
-                                "autoLoad": true
+                                "autoLoad": true,
+                                "disableFlex":true
                             },{
                                 "xtype": "kijs.gui.field.Text",
                                 "name": "Name",
@@ -652,7 +653,25 @@ foreach ($requests as $request) {
                 $response->errorMsg = $ex->getMessage();
             }
             break;
-        
+
+        case 'multicombo.load':
+            try {
+                $rows = array();
+
+                $berufe = file('../testData/beruf.csv');
+                foreach ($berufe as $beruf) {
+                    $beruf = explode(';', trim($beruf));
+                    $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
+                }
+
+
+                $response->responseData->rows = $rows;
+
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
         case 'rpc.simple':
             $response->infoMsg = 'Ich bin eine Nachricht vom Server';
             $response->responseData = $request->requestData;

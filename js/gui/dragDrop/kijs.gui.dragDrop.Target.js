@@ -264,6 +264,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                 kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy, 
                 kijs.gui.DragDrop.source.allowLink && mapping.allowLink);
         
+        let operation = e.nodeEvent.dataTransfer.dropEffect;
+        
         // nächstes Element mit Positionen ermitteln
         let ddCPos = this._getDragOverChild(
                 this._ownerEl.elements, 
@@ -301,8 +303,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                     break;
             }
             
-            // Wenn Source=Target: Nichts tun
-            if (insertPos !== 'none') {
+            // Bei move: Wenn Source=Target: Nichts tun
+            if (operation === 'move' && insertPos !== 'none') {
                 if (ddCPos.closestElBefore === kijs.gui.DragDrop.source.ownerEl) {
                     insertPos = 'none';
                 } else if (insertPos === 'before' && ddCPos.closestElBefore.previous === kijs.gui.DragDrop.source.ownerEl) {
