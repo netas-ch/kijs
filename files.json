@@ -99,6 +99,7 @@
    "js/gui/field/kijs.gui.field.SozVersNr.js",
    "js/gui/field/kijs.gui.field.Number.js",
    "js/gui/field/kijs.gui.field.Memo.js",
+   "js/gui/field/kijs.gui.field.MultiCombo.js",
    "js/gui/field/kijs.gui.field.Password.js",
    "js/gui/field/kijs.gui.field.ListView.js",
    "js/gui/field/kijs.gui.field.Switch.js",
