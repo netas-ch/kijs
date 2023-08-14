@@ -83,7 +83,7 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
    neu: ```responseData.config.elements = [...]```  
    Damit ist load() kompatibel mit load() der Basisklasse kijs.gui.Element.  
    Neu können damit neben den elements auch andere configs gesendet werden.  
-   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und erstzen durch 
+   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und ersetzen durch 
    ```config.elements```.  
 
 ### kijs.gui.field.Display

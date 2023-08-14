@@ -3525,7 +3525,7 @@
     align-items: stretch;
   }
   .kijs-flexfit > .kijs-container-inner > * {
-    flex: 1 0 auto;
+    flex: 0 1 auto;
   }
   /* Flext den Inhalt in eine Spalte */
   .kijs-flexcolumn > .kijs-container-inner {
