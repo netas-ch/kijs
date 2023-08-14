@@ -2105,6 +2105,7 @@
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
+    overflow: hidden;
   }
   div.kijs-grid table {
     border-collapse: collapse;
@@ -2183,11 +2184,16 @@
   div.kijs-grid > .kijs-top {
     flex: 0 0 auto;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
+  }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer-left {
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer {
     flex: 1;
     position: relative;
+    overflow: hidden;
     background-color: var(--grid-header-bkgrndColor);
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td {
@@ -2318,14 +2324,19 @@
     border: 0;
     overflow: hidden;
   }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer-right {
+    overflow: hidden;
+  }
   div.kijs-grid > .kijs-center {
     flex: 1;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
     background-color: var(--field-bkgrndColor);
   }
   div.kijs-grid > .kijs-center > .kijs-leftcontainer {
     position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-center > .kijs-tablecontainer {
     flex: 1;
@@ -2334,14 +2345,25 @@
   }
   div.kijs-grid > .kijs-center > .kijs-rightcontainer {
     position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-bottom {
     flex: 0 0 auto;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
+  }
+  div.kijs-grid > .kijs-bottom > .kijs-footercontainer-left {
+    position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-bottom > .kijs-footercontainer {
     position: relative;
+    overflow: hidden;
+  }
+  div.kijs-grid > .kijs-bottom > .kijs-footercontainer-right {
+    position: relative;
+    overflow: hidden;
   }
   div.kijs-grid div.kijs-splitter-overlay {
     position: absolute;

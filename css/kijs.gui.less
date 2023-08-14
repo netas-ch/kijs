@@ -2397,7 +2397,7 @@
         color: var(--default-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--default-fontSize);
-
+        overflow: hidden;
 
         table {
             border-collapse: collapse;
@@ -2489,11 +2489,17 @@
         > .kijs-top {
             flex: 0 0 auto;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
+            
+            > .kijs-headercontainer-left {
+                overflow: hidden;
+            }
 
             > .kijs-headercontainer  {
                 flex: 1;
                 position: relative;
+                overflow: hidden;
                 background-color: var(--grid-header-bkgrndColor);
 
                 > table > tr.kijs-grid-header > td {
@@ -2650,7 +2656,10 @@
                         overflow: hidden;
                     }
                 }
-
+            }
+            
+            > .kijs-headercontainer-right {
+                overflow: hidden;
             }
         }
 
@@ -2658,11 +2667,13 @@
         > .kijs-center {
             flex: 1;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
             background-color: var(--field-bkgrndColor);
 
             > .kijs-leftcontainer {
                 position: relative;
+                overflow: hidden;
             }
 
             > .kijs-tablecontainer {
@@ -2673,16 +2684,27 @@
 
             > .kijs-rightcontainer {
                 position: relative;
+                overflow: hidden;
             }
         }
 
         > .kijs-bottom {
             flex: 0 0 auto;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
 
+            > .kijs-footercontainer-left {
+                position: relative;
+                overflow: hidden;
+            }
             > .kijs-footercontainer {
                 position: relative;
+                overflow: hidden;
+            }
+            > .kijs-footercontainer-right {
+                position: relative;
+                overflow: hidden;
             }
         }
 
