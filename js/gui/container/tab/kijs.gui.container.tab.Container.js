@@ -81,6 +81,9 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabIconMap: this._tabButtonEl.icon.iconMapName ?? null,
             tabClosable: this.tabClosable
         };
+        if (!kijs.isEmpty(this.name)) {
+            ret.name = this.name;
+        }
         if (this.disabled) {
             ret.disabled = this.disabled;
         }
