@@ -57,7 +57,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._formatFnContext = this;
         this._formatRegExps = [];
         this._value = '';
-        this._valueDisplayType = 'code',    // Darstellung der Eigenschaft 'value'. Default: 'code'
+        this._valueDisplayType = 'code';    // Darstellung der Eigenschaft 'value'. Default: 'code'
                                             // html: als html-Inhalt (innerHtml)
                                             // code: Tags werden als Text angezeigt
                                             // text: Tags werden entfernt

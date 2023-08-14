@@ -236,7 +236,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
 
-                if (searchFields || (!kijs.isEmpty(e.responseData.config) && !kijs.isEmpty(e.responseData.config.elements)) || kijs.isEmpty(this._fields)) {
+                if (e.responseData.config && e.responseData.config.elements) {
+                    searchFields = true;
+                }
+
+                if (searchFields || kijs.isEmpty(this._fields)) {
                     this.searchFields();
                 }
 
