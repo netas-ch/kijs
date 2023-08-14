@@ -19,19 +19,19 @@ foreach ($requests as $request) {
             $nodes = _readNavigationTree($nodeId, 'data/docu');
             $response->responseData->tree = $nodes;
             break;
-        
+
         case 'naviShowcase.load':
             $nodeId = $request->requestData->nodeId;
             $nodes = _readNavigationTree($nodeId, 'data/showcase');
             $response->responseData->tree = $nodes;
             break;
-        
+
         case 'naviTest.load':
             $nodeId = $request->requestData->nodeId;
             $nodes = _readNavigationTree($nodeId, 'data/test');
             $response->responseData->tree = $nodes;
             break;
-            
+
         default:
             $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
@@ -50,22 +50,22 @@ print(json_encode($responses));
 // ------------------------------------
 function _readNavigationTree($nodeId, $rootDir) {
     $excludeFiles = ['.', '..'];
-    
+
     $nodes = [];
-    
+
     $dirPath = $nodeId ? $nodeId : $rootDir;
-    
+
     $handle = opendir('../' . $dirPath);
-    
+
     if ($handle) {
         while ( ($filename = readdir($handle)) !== false ) {
             $path = $dirPath . '/' . $filename;
-                    
+
             // Unbenötigte Dateien ignorieren
             if (in_array($filename, $excludeFiles)) {
                 continue;
             }
-            
+
             $userData  = new stdClass();
             $userData->path = $path;
             $userData->filename = $filename;
@@ -74,17 +74,17 @@ function _readNavigationTree($nodeId, $rootDir) {
             if ($userData->filetype) {
                 $userData->caption = substr($userData->caption, 0, (strlen($userData->filetype)+1) * -1);
             }
-            
+
             // Dateityp
             switch ($userData->filetype) {
                 case '':    // Folder
                     break;
-                
+
                 case 'html':
                     $userData->iconMap = 'kijs.iconMap.Fa.file-code';
                     $userData->html = file_get_contents('../' . $path);
                     break;
-                
+
                 case 'js':
                     $userData->iconMap = 'kijs.iconMap.Fa.js';
                     switch ($rootDir) {
@@ -94,20 +94,20 @@ function _readNavigationTree($nodeId, $rootDir) {
                     }
                     $userData->className = str_replace(' ', '_', $userData->caption);
                     break;
-                    
+
                 case 'md':
                     $userData->iconMap = 'kijs.iconMap.Fa.markdown';
-                    
-                    
+
+
                     $userData->markdown = file_get_contents('../' . $path);
                     break;
-                
+
                 default:
                     continue 2;
-                    
+
             }
-            
-            
+
+
             $node = new stdClass();
             $node->caption = $userData->caption;
             $node->nodeId = $userData->path;
@@ -121,6 +121,11 @@ function _readNavigationTree($nodeId, $rootDir) {
 
         closedir($handle);
     }
-    
+
+    // Sortieren
+    usort($nodes, function($a, $b) {
+        return strcmp(strtolower($a->caption ?? ''), strtolower($b->caption ?? ''));
+    });
+
     return $nodes;
 }
