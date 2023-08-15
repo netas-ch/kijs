@@ -525,7 +525,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _setScrollPositionToSelection() {
         let sel = this._listViewEl.getSelected();
-        if (kijs.isObject(sel) && (sel instanceof kijs.gui.DataViewElement)) {
+        if (kijs.isObject(sel) && (sel instanceof kijs.gui.dataView.Element)) {
             if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
                 let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
 
@@ -692,7 +692,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             let dataViewElement = this._listViewEl.getSelected();
             this._spinBoxEl.close();
 
-            if (dataViewElement && (dataViewElement instanceof kijs.gui.DataViewElement)) {
+            if (dataViewElement && (dataViewElement instanceof kijs.gui.dataView.Element)) {
                 let newVal = dataViewElement.dataRow[this.valueField],
                     oldVal = this.value,
                     changed = newVal !== this.value;

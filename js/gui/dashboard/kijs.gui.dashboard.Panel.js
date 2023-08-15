@@ -57,6 +57,9 @@ kijs.gui.dashboard.Panel = class kijs_gui_dashboard_Panel extends kijs.gui.Panel
         let ret = {
             xtype: this.xtype
         };
+        if (!kijs.isEmpty(this.name)) {
+            ret.name = this.name;
+        }
         if (this.collapsed) {
             ret.collapsed = this.collapsed;
         } else {

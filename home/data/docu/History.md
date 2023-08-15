@@ -83,7 +83,7 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
    neu: ```responseData.config.elements = [...]```  
    Damit ist load() kompatibel mit load() der Basisklasse kijs.gui.Element.  
    Neu können damit neben den elements auch andere configs gesendet werden.  
-   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und erstzen durch 
+   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und ersetzen durch 
    ```config.elements```.  
 
 ### kijs.gui.field.Display
@@ -140,6 +140,14 @@ Funktion checkedValues() ist nun DEPRECATED
  - Die Bestandteile des kijs.gui.Button sind neu durch einen ```gap: 4px``` getrennt.  
 
  - verschiedene weitere kleinere CSS-Anpassungen.  
+
+### kijs.gui.dataView.Element
+ - ```kijs.gui.DataViewElement``` umenannt zu ```kijs.gui.dataView.Element```  
+   **UPDATE TIPP:**  
+     - Projekt nach ```kijs.gui.DataViewElement``` duchsuchen und durch 
+       ```kijs.gui.dataView.Element``` ersetzen.  
+     - CSS nach ```kijs-dataviewelement``` durchsuchen und durch 
+       ```kijs-dataview-element``` ersetzen.  
 
 
 

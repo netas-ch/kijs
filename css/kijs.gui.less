@@ -1781,7 +1781,7 @@
             align-content: flex-start;
             gap: 4px;
 
-            > .kijs-dataviewelement {
+            > .kijs-dataview-element {
                 flex: none;
                 width: 200px;
                 padding: 2px 4px 6px 4px;
@@ -1873,12 +1873,12 @@
                 display: flex;
                 flex-direction: column;
 
-                > .kijs-dataviewelement {
+                > .kijs-dataview-element {
                     flex: 1 0 auto;
                 }
             }
 
-            > .kijs-dataviewelement {
+            > .kijs-dataview-element {
                 display: flex;
                 flex-direction: row;
                 align-items: center;
@@ -1974,7 +1974,7 @@
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
 
-            div.kijs-dataviewelement {
+            div.kijs-dataview-element {
                 background-color: transparent;
 
                 &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
@@ -2397,7 +2397,7 @@
         color: var(--default-fontColor);
         font-family: var(--default-fontFamily);
         font-size: var(--default-fontSize);
-
+        overflow: hidden;
 
         table {
             border-collapse: collapse;
@@ -2489,11 +2489,17 @@
         > .kijs-top {
             flex: 0 0 auto;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
+            
+            > .kijs-headercontainer-left {
+                overflow: hidden;
+            }
 
             > .kijs-headercontainer  {
                 flex: 1;
                 position: relative;
+                overflow: hidden;
                 background-color: var(--grid-header-bkgrndColor);
 
                 > table > tr.kijs-grid-header > td {
@@ -2650,7 +2656,10 @@
                         overflow: hidden;
                     }
                 }
-
+            }
+            
+            > .kijs-headercontainer-right {
+                overflow: hidden;
             }
         }
 
@@ -2658,11 +2667,13 @@
         > .kijs-center {
             flex: 1;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
             background-color: var(--field-bkgrndColor);
 
             > .kijs-leftcontainer {
                 position: relative;
+                overflow: hidden;
             }
 
             > .kijs-tablecontainer {
@@ -2673,16 +2684,27 @@
 
             > .kijs-rightcontainer {
                 position: relative;
+                overflow: hidden;
             }
         }
 
         > .kijs-bottom {
             flex: 0 0 auto;
             display: flex;
+            overflow: hidden;
             flex-direction: row;
 
+            > .kijs-footercontainer-left {
+                position: relative;
+                overflow: hidden;
+            }
             > .kijs-footercontainer {
                 position: relative;
+                overflow: hidden;
+            }
+            > .kijs-footercontainer-right {
+                position: relative;
+                overflow: hidden;
             }
         }
 
@@ -2705,7 +2727,7 @@
     .kijs-filter-icon-checkboxgroup, .kijs-filter-checkboxgroup {
         background-color: var(--button-bkgrndColor);
 
-        > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+        > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
             cursor: pointer;
 
             &.kijs-display-checkboxes::before {
@@ -3358,7 +3380,7 @@
                 background-color: transparent;
                 border-color: transparent;
 
-                .kijs-dataviewelement {
+                .kijs-dataview-element {
                     background-color: transparent;
 
                     &:focus,
@@ -3378,7 +3400,7 @@
 
         &.kijs-disabled,
         &.kijs-readonly {
-            > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement {
+            > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
                 color: var(--field-disabled-fontColor);
 
                 > .kijs-caption {
@@ -3393,7 +3415,7 @@
             flex-wrap: wrap;
             gap: 4px;
 
-            > .kijs-dataviewelement {
+            > .kijs-dataview-element {
                 flex: none;
                 padding: 0;
 
@@ -3462,7 +3484,7 @@
                 flex-direction: column;
             }
 
-            div.kijs-dataviewelement {
+            div.kijs-dataview-element {
                 > .kijs-container-inner {
                     display: flex;
                     flex-direction: row;
@@ -4041,7 +4063,7 @@
         align-items: stretch;
 
         > * {
-            flex: 1 0 auto;
+            flex: 0 1 auto;
         }
     }
 

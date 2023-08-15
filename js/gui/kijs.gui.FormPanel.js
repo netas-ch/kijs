@@ -230,14 +230,17 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
      * @param {Boolean} [superCall=false]
-     * @param {Object|Null} config
      * @returns {Promise}
      */
     load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
         return new Promise((resolve) => {
             super.load(args, true, config).then((e) => {
 
-                if (searchFields || (!kijs.isEmpty(e.responseData.config) && !kijs.isEmpty(e.responseData.config.elements)) || kijs.isEmpty(this._fields)) {
+                if (e.responseData.config && e.responseData.config.elements) {
+                    searchFields = true;
+                }
+
+                if (searchFields || kijs.isEmpty(this._fields)) {
                     this.searchFields();
                 }
 

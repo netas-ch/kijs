@@ -2,6 +2,9 @@ ToDo
 =====
 Allgemein
 ---------
+- kijs.gui.field.Email, kijs.gui.fieldNumber, kijs.gui.field.Phone, kijs.gui.field.Url:  
+  Für die Buttons-Rechts nicht mehr den innerContainer benutzen, sondern fixe-Buttons,  
+  so dass der innerContainer nur für eigene Buttons verwendet wird.  
 - **kijs.gui.container.Tab Kontextmenü (close, close all, close other)**
 - **kijs.gui.container.Tab disableTab, disableAll**
 - **kijs.gui.Tree überarbeiten**

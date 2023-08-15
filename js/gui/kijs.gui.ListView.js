@@ -193,7 +193,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             }
         }
 
-        let dve = new kijs.gui.DataViewElement({
+        let dve = new kijs.gui.dataView.Element({
             dataRow: dataRow,
             elements: [icon, captionDom],
             tooltip: tooltip,
