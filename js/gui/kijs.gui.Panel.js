@@ -1054,6 +1054,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._collapseButtonEl = null;
         this._maximizeButtonEl = null;
         this._resizerEl = null;
+        this._expandedSize = null;
 
         // Basisklasse entladen
         super.destruct(true);
