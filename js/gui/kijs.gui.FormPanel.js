@@ -323,6 +323,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     return;
                 }
                 
+                // config Properties anwenden, falls vorhanden
+                if (e.responseData.config) {
+                    // config Properties übernehmen
+                    this.applyConfig(e.responseData.config);
+                }
+                
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
                     if (!kijs.isEmpty(this._fields)) {
