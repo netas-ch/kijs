@@ -16,6 +16,8 @@ Es sind evtl. Anpassungen am Projekt nötig.
  - ```rpcArgs``` ersetzen durch ```rpcLoadArgs```  
 
 ### kijs.rpc und kijs.gui.rpc
+- Bei allen ```save()``` Funktionen kann neu in der Antwort ein ```responseData.config``` 
+  sein, dass angewendet wird (wie bei ```load()```).  
 - Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
   nach ```remoteFn```.  
   **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen. Vorsicht! 
