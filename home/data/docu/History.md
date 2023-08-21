@@ -34,7 +34,10 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
 
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
-   auf dem Coontainer ausgelöst. Dieses wird auch an alle elements weitergericht.
+   auf dem Container ausgelöst. Dieses wird auch an alle elements weitergericht.  
+ - Die Funktionen ```remove()``` und ```removeAll()``` machten bisher bei 
+   ```preventDestruct=true``` anstelle des desctruct ein unrender. Neu machen sie 
+   auch kein unrender mehr.  
 
 ### kijs.gui.Element
  - Neue config/getter/setter ```ddSource```. Siehe dazu den Leitfaden 'Drag&Drop'.  
