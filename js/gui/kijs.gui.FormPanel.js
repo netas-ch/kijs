@@ -235,7 +235,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
-
+                
+                // Falls des Formular destructed wurde: abbrechen
+                if (!this._dom) {
+                    resolve(e);
+                    return;
+                }
+                
                 if (e.responseData.config && e.responseData.config.elements) {
                     searchFields = true;
                 }
@@ -267,56 +273,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             });
         });
     }
-
-    /**
-     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields
-     * (rekursiv)
-     * @param {kijs.gui.Container} [parent=this]
-     * @returns {Array}
-     */
-    searchFields(parent=this) {
-        let ret = [];
-
-        for (let i=0; i<parent.elements.length; i++) {
-            let el = parent.elements[i];
-
-            // field
-            if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
-                ret.push(el);
-
-                // blur listener
-                if (!el.hasListener('blur', this.#onFieldBlur, this)) {
-                    el.on('blur', this.#onFieldBlur, this);
-                }
-
-                // change listener
-                if (!el.hasListener('change', this.#onFieldChange, this)) {
-                    el.on('change', this.#onFieldChange, this);
-                }
-
-            // container
-            } else if (el instanceof kijs.gui.Container) {
-                ret = ret.concat(this.searchFields(el));
-
-            }
-        }
-
-        if (parent === this) {
-            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
-            if (!kijs.isEmpty(this._fields)) {
-                this._fields.forEach((oldField) => {
-                    if (ret.indexOf(oldField) === -1) {
-                        oldField.off('change', this.#onFieldChange, this);
-                    }
-                });
-            }
-
-            this._fields = ret;
-        }
-
-        return ret;
-    }
-
+    
     /**
      * Sendet die Formulardaten an den Server
      * @param {type} searchFields
@@ -360,6 +317,12 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 context: this
                 
             }).then((e) => {
+                // Falls des Formular destructed wurde: abbrechen
+                if (!this._dom) {
+                    resolve(e);
+                    return;
+                }
+                
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
                     if (!kijs.isEmpty(this._fields)) {
@@ -395,6 +358,55 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                 
             });
         });
+    }
+
+    /**
+     * Sucht alle Felder im Formular und schreibt einen Verweis darauf in this._fields
+     * (rekursiv)
+     * @param {kijs.gui.Container} [parent=this]
+     * @returns {Array}
+     */
+    searchFields(parent=this) {
+        let ret = [];
+
+        for (let i=0; i<parent.elements.length; i++) {
+            let el = parent.elements[i];
+
+            // field
+            if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
+                ret.push(el);
+
+                // blur listener
+                if (!el.hasListener('blur', this.#onFieldBlur, this)) {
+                    el.on('blur', this.#onFieldBlur, this);
+                }
+
+                // change listener
+                if (!el.hasListener('change', this.#onFieldChange, this)) {
+                    el.on('change', this.#onFieldChange, this);
+                }
+
+            // container
+            } else if (el instanceof kijs.gui.Container) {
+                ret = ret.concat(this.searchFields(el));
+
+            }
+        }
+        
+        if (parent === this) {
+            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
+            if (!kijs.isEmpty(this._fields)) {
+                this._fields.forEach((oldField) => {
+                    if (ret.indexOf(oldField) === -1) {
+                        oldField.off('change', this.#onFieldChange, this);
+                    }
+                });
+            }
+
+            this._fields = ret;
+        }
+
+        return ret;
     }
 
     /**
