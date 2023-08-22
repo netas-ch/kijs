@@ -248,7 +248,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Gibt die selektieten Elemente zurück
+     * Gibt die selektierten Elemente zurück
      * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.Element|null}
      */

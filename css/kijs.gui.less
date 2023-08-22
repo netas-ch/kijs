@@ -58,7 +58,7 @@
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -3898,10 +3898,30 @@
 
             > .ql-toolbar {
                 flex: none;
+                z-index: 1;
+                overflow: visible;
                 border-top: 1px solid var(--field-borderColor) !important;
                 border-left: 1px solid var(--field-borderColor) !important;
                 border-right: 1px solid var(--field-borderColor) !important;
                 border-bottom: 0 !important;
+
+                .ql-picker-options {
+                    background-color: var(--panel-bkgrndColor) !important;
+                }
+
+                span {
+                    color: var(--button-fontColor) !important;
+                }
+
+                svg {
+                    > .ql-stroke:not(.ql-color-label) {
+                        stroke: var(--button-fontColor) !important;
+                    }
+
+                    > .ql-fill:not(.ql-color-label) {
+                        fill: var(--button-fontColor) !important;
+                    }
+                }
             }
 
             > .ql-container {
