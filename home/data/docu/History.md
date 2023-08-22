@@ -102,7 +102,7 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
     - ```kijs-title``` Text wird fett dargestellt  
     - ```kijs-help```  Text wird blau dargestellt  
     - ```kijs-error```  Text wird rot dargestellt  
-   (es können auch Klassen kombiniert werden: ```cls: []```  
+   (es können auch Klassen kombiniert werden: ```cls: ['kijs-title', 'kijs-error']```  
 
 ### kijs.gui.Icon
  - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 
