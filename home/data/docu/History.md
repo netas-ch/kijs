@@ -98,6 +98,11 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
     - ```html```: als html-Inhalt (innerHtml)  
     - ```code```: Tags werden als Text angezeigt  
     - ```text```: Tags werden entfernt  
+ - Vorgefertigte Formatierungen mit CSS-Klassen:  
+    - ```kijs-title``` Text wird fett dargestellt  
+    - ```kijs-help```  Text wird blau dargestellt  
+    - ```kijs-error```  Text wird rot dargestellt  
+   (es können auch Klassen kombiniert werden: ```cls: []```  
 
 ### kijs.gui.Icon
  - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 

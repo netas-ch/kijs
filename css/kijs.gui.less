@@ -760,6 +760,9 @@
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
+                &.kijs-dragging:not(.kijs-dragover) {
+                    display: none;
+                }
             }
         }
         /* Drop Marker */
@@ -3739,7 +3742,7 @@
        * Field Display
        ****************** */
     div.kijs-field-display {
-        .kijs-inputwrapper {
+        > .kijs-inputwrapper {
             min-height: 25px;
 
             > div {
@@ -3773,6 +3776,24 @@
             }
         }
 
+        /* Ergänzungen */
+        &.kijs-title {
+            > .kijs-inputwrapper > div {
+                font-weight: bold;
+            }
+        }
+        &.kijs-error {
+            > .kijs-inputwrapper > div {
+                color: var(--errorColor);
+            }
+        }
+        &.kijs-help {
+            > .kijs-inputwrapper > div {
+                color: var(--helpColor);
+            }
+        }
+        
+        
         &.kijs-disabled {
             > .kijs-inputwrapper > div {
                 color: var(--field-disabled-fontColor);
@@ -3785,8 +3806,8 @@
             }
         }
     }
-
-
+    
+    
     
     /* ******************
        * Field AceEditor

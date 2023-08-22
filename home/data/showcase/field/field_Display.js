@@ -107,6 +107,32 @@ home.sc.field_Display = class home_sc_field_Display {
                     value: '<b>Link:</b> www.netas.ch',
                     valueDisplayType: 'html',
                     clickableLinks: true
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'Formatieren mit CSS-Klassen',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-title',
+                    cls: 'kijs-title'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-help',
+                    cls: 'kijs-help'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-error',
+                    cls: 'kijs-error'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-title, kijs-error',
+                    cls: ['kijs-title', 'kijs-error']
                 }
             ]
         });

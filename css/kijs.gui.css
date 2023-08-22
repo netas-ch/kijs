@@ -730,6 +730,9 @@
     border-color: var(--accentColor3);
     border-width: 2px;
   }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging:not(.kijs-dragover) {
+    display: none;
+  }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
     flex: none;
     border: 2px solid var(--accentColor3);
@@ -3221,10 +3224,13 @@
   /* ******************
        * Field Display
        ****************** */
-  div.kijs-field-display .kijs-inputwrapper {
+  div.kijs-field-display {
+    /* Ergänzungen */
+  }
+  div.kijs-field-display > .kijs-inputwrapper {
     min-height: 25px;
   }
-  div.kijs-field-display .kijs-inputwrapper > div {
+  div.kijs-field-display > .kijs-inputwrapper > div {
     padding: 6px 0 2px 0;
     color: var(--field-fontColor);
     font-family: var(--default-fontFamily);
@@ -3235,7 +3241,7 @@
     user-select: text;
     cursor: default;
   }
-  div.kijs-field-display .kijs-inputwrapper > div > a {
+  div.kijs-field-display > .kijs-inputwrapper > div > a {
     color: var(--field-fontColor);
     cursor: pointer;
     text-decoration: underline;
@@ -3246,6 +3252,15 @@
   }
   div.kijs-field-display.kijs-disableFlex > .kijs-inputwrapper {
     width: 180px;
+  }
+  div.kijs-field-display.kijs-title > .kijs-inputwrapper > div {
+    font-weight: bold;
+  }
+  div.kijs-field-display.kijs-error > .kijs-inputwrapper > div {
+    color: var(--errorColor);
+  }
+  div.kijs-field-display.kijs-help > .kijs-inputwrapper > div {
+    color: var(--helpColor);
   }
   div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > div {
     color: var(--field-disabled-fontColor);
