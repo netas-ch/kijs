@@ -3483,8 +3483,19 @@
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
   }
   /* ******************
-     * Ergänzung für kijs.gui.Container (+ vererbte)
-     ****************** */
+       * Ergänzungen für Icons
+       ****************** */
+  /* Dreh-Effekt */
+  .kijs-spin {
+    animation: kijs-spin 2s infinite linear;
+  }
+  /* Pulse-Effekt (für Load-Icons) */
+  .kijs-pulse {
+    animation: kijs-spin 1s infinite steps(8);
+  }
+  /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
   /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
   .kijs-scrollable-x-enable,
   div.kijs-scrollable-x-enable {
@@ -3501,17 +3512,6 @@
   .kijs-scrollable-y-auto,
   div.kijs-scrollable-y-auto {
     overflow-y: auto;
-  }
-  /* ******************
-       * Ergänzungen für Icons
-       ****************** */
-  /* Dreh-Effekt */
-  .kijs-spin {
-    animation: kijs-spin 2s infinite linear;
-  }
-  /* Pulse-Effekt (für Load-Icons) */
-  .kijs-pulse {
-    animation: kijs-spin 1s infinite steps(8);
   }
   /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
