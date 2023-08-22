@@ -14,12 +14,12 @@ Passt den Inhalt an die Containergrösse an (nur für Container mit einem Kind g
 
     .kijs-flexfit > .kijs-container-inner {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: nowrap;
         align-items: stretch;
 
         > * {
-            flex: 1 0 auto;
+            flex: 1 1 auto;
         }
     }
 

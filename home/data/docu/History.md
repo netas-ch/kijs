@@ -16,6 +16,8 @@ Es sind evtl. Anpassungen am Projekt nötig.
  - ```rpcArgs``` ersetzen durch ```rpcLoadArgs```  
 
 ### kijs.rpc und kijs.gui.rpc
+- Bei allen ```save()``` Funktionen kann neu in der Antwort ein ```responseData.config``` 
+  sein, dass angewendet wird (wie bei ```load()```).  
 - Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
   nach ```remoteFn```.  
   **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen. Vorsicht! 
@@ -34,7 +36,10 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
 
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
-   auf dem Coontainer ausgelöst. Dieses wird auch an alle elements weitergericht.
+   auf dem Container ausgelöst. Dieses wird auch an alle elements weitergericht.  
+ - Die Funktionen ```remove()``` und ```removeAll()``` machten bisher bei 
+   ```preventDestruct=true``` anstelle des desctruct ein unrender. Neu machen sie 
+   auch kein unrender mehr.  
 
 ### kijs.gui.Element
  - Neue config/getter/setter ```ddSource```. Siehe dazu den Leitfaden 'Drag&Drop'.  
@@ -93,6 +98,11 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
     - ```html```: als html-Inhalt (innerHtml)  
     - ```code```: Tags werden als Text angezeigt  
     - ```text```: Tags werden entfernt  
+ - Vorgefertigte Formatierungen mit CSS-Klassen:  
+    - ```kijs-title``` Text wird fett dargestellt  
+    - ```kijs-help```  Text wird blau dargestellt  
+    - ```kijs-error```  Text wird rot dargestellt  
+   (es können auch Klassen kombiniert werden: ```cls: ['kijs-title', 'kijs-error']```  
 
 ### kijs.gui.Icon
  - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 

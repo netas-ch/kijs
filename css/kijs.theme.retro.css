@@ -249,7 +249,7 @@
 }
 .kijs-panel.kijs-collapse-top,
 .kijs-panel.kijs-collapse-bottom {
-    height: 27px !important;
+    height: 27px;
 }
 
 

@@ -760,6 +760,9 @@
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
+                &.kijs-dragging:not(.kijs-dragover) {
+                    display: none;
+                }
             }
         }
         /* Drop Marker */
@@ -1157,14 +1160,14 @@
         }
 
         &.kijs-maximize {
-            position: fixed !important;
-            top: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            width: auto !important;
-            height: auto !important;
-            margin: 0 !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: auto;
+            height: auto;
+            margin: 0;
 
             > .kijs-resizer {
                 display: none;
@@ -1172,14 +1175,14 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: 30px !important;
-            flex: none !important;
+            height: 30px;
+            flex: none;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
-            height: auto !important;
-            width: 30px !important;
-            flex: none !important;
+            height: auto;
+            width: 30px;
+            flex: none;
             display: flex;
             flex-direction: row;
         }
@@ -1818,13 +1821,13 @@
                 > div > .value {
                     display: inline-block;
                 }
-
+                
                 &.kijs-selected {
                     color: var(--item-selected-fontColor);
                     background-color: var(--item-selected-bkgrndColor);
                     border-color: var(--item-selected-borderColor);
                 }
-
+                
                 &.kijs-disabled {
                     background-color: var(--item-disabled-bkgrndColor);
                     border-color: var(--item-disabled-borderColor);
@@ -3739,7 +3742,7 @@
        * Field Display
        ****************** */
     div.kijs-field-display {
-        .kijs-inputwrapper {
+        > .kijs-inputwrapper {
             min-height: 25px;
 
             > div {
@@ -3773,6 +3776,24 @@
             }
         }
 
+        /* Ergänzungen */
+        &.kijs-title {
+            > .kijs-inputwrapper > div {
+                font-weight: bold;
+            }
+        }
+        &.kijs-error {
+            > .kijs-inputwrapper > div {
+                color: var(--errorColor);
+            }
+        }
+        &.kijs-help {
+            > .kijs-inputwrapper > div {
+                color: var(--helpColor);
+            }
+        }
+        
+        
         &.kijs-disabled {
             > .kijs-inputwrapper > div {
                 color: var(--field-disabled-fontColor);
@@ -3785,9 +3806,9 @@
             }
         }
     }
-
-
-
+    
+    
+    
     /* ******************
        * Field AceEditor
        ****************** */
@@ -4022,20 +4043,8 @@
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
     }
 
-
-
-    /* ******************
-     * Ergänzung für kijs.gui.Container (+ vererbte)
-     ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
-
-
-
+    
+    
     /* ******************
        * Ergänzungen für Icons
        ****************** */
@@ -4048,9 +4057,21 @@
     .kijs-pulse {
         animation: kijs-spin 1s infinite steps(8);
     }
+    
+    
+    
+    /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
 
-
-
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
+    
+    
+    
     /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
        ****************** */
@@ -4058,12 +4079,12 @@
     /* (nur für Container mit einem Kind geeignet) */
     .kijs-flexfit > .kijs-container-inner {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: nowrap;
         align-items: stretch;
 
         > * {
-            flex: 0 1 auto;
+            flex: 1 1 auto;
         }
     }
 

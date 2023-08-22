@@ -563,9 +563,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             
             if (!preventDestruct && el.destruct) {
                 el.destruct();
-
-            } else if (el.isRendered && el.unrender) {
-                el.unrender();
             }
             el.off(null, null, this);
             kijs.Array.remove(this._elements, el);
