@@ -14,7 +14,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         super(false);
 
         this._captionField = null;
-        this._captionHtmlDisplayType = 'html';
+        this._captionHtmlDisplayType = 'code';
         this._valueField = null;
         this._iconCharField = null;
         this._iconClsField = null;
@@ -36,6 +36,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             captionField: true,
+            captionHtmlDisplayType: true,
             iconCharField: true,
             iconClsField: true,
             iconColorField: true,
@@ -63,6 +64,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get captionHtmlDisplayType() { return this._captionHtmlDisplayType; }    
+    set captionHtmlDisplayType(val) { this._captionHtmlDisplayType = val; }
+    
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
 
@@ -165,7 +169,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             caption = dataRow[this._captionField];
         }
         let captionDom = new kijs.gui.Element({
-            htmlDisplayType: 'code',
+            htmlDisplayType: this._captionHtmlDisplayType,
             nodeTagName: 'span',
             html: caption,
             cls: 'kijs-caption'
