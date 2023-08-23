@@ -44,6 +44,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         // Masse, die bei collapse oder Maximize hier zwischengespeichert werden, damit sie dann bei 
         // expand/restore wieder wie vorher sind.
         this._expandedSize = { 
+            left:null, top:null,
             width:null, height:null, 
             marginLeft:null, marginRight:null, marginTop:null, marginBottom:null
         };
@@ -707,12 +708,16 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             document.body.appendChild(this._dom.node);
         }
         
+        this._expandedSize.left = this._dom.style.left;
+        this._expandedSize.top = this._dom.style.top;
         this._expandedSize.marginLeft = this._dom.style.marginLeft;
         this._expandedSize.marginRight = this._dom.style.marginRight;
         this._expandedSize.marginTop = this._dom.style.marginTop;
         this._expandedSize.marginBottom = this._dom.style.marginBottom;
         
         this._dom.clsAdd('kijs-maximize');
+        this.left = 0;
+        this.top = 0;
         this._dom.width = null;
         this._dom.height = null;
         this._dom.style.marginLeft = 0;
@@ -812,6 +817,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         this._dom.clsRemove('kijs-maximize');
 
+        if (!kijs.isEmpty(this._expandedSize.left)) {
+            this._dom.style.left = this._expandedSize.left;
+        }
+        if (!kijs.isEmpty(this._expandedSize.top)) {
+            this._dom.style.top = this._expandedSize.top;
+        }
         if (!kijs.isEmpty(this._expandedSize.width)) {
             this._dom.width = this._expandedSize.width;
         }

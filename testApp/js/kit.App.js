@@ -503,6 +503,7 @@ kit.App = class kit_App {
                                     closable: true,
                                     collapsible: 'top',
                                     resizable: true,
+                                    maximizable: true,
                                     height: 600,
                                     shadow: true,
                                     autoLoad: false,
