@@ -68,6 +68,10 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
 ### kijs.gui.Dom
  - getter ```isAppended``` gibt es nicht mehr. Sie dazu auch den Kommentar unter 
    kijs.gui.Element.  
+ - Die Methode ```scrollIntoView(options)``` hat neu ein optionales Argument ```options``` 
+   welches dem Standard entspricht 
+   https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView  
+ - Neue Methode ```scrollIntoViewIfNeeded(options)```  
 
 ### kijs.gui.MsgBox
  - config-Argumente der statischen Funktion ```kijs.gui.MsgBox.show(config)``` 

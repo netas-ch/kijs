@@ -1174,10 +1174,26 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * Scrollt den Node in den sichtbaren Bereich
+     * @param {object} options
      * @returns {undefined}
      */
-    scrollIntoView(){
-        this._node.scrollIntoView();
+    scrollIntoView(options={behavior:'auto', block:'start', inline: 'nearest'}){
+        this._node.scrollIntoView(options);
+    }
+    
+    /**
+     * Scrollt den Node in den sichtbaren Bereich, falls er nicht ganz sichtbar ist
+     * @param {object} options
+     * @returns {undefined}
+     */
+    scrollIntoViewIfNeeded(options={behavior:'auto', block:'start', inline: 'nearest'}) {
+        const rect = this._node.getBoundingClientRect();
+        const rectParent = this._node.parentNode.getBoundingClientRect();
+        
+        if (rect.top < rectParent.top || rect.bottom > rectParent.bottom ||
+                rect.right > rectParent.right || rect.left < rectParent.left) {
+            this._node.scrollIntoView(options);
+        }
     }
 
     /**
