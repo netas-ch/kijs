@@ -11,7 +11,7 @@
         $response->tid = $request->tid;
         $response->responseData = new stdClass();
         
-        switch ($request->facadeFn) {
+        switch ($request->remoteFn) {
             
             case 'myFacade.myFunction':
                 try {

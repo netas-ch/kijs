@@ -5,24 +5,25 @@
 // --------------------------------------------------------------
 window.kijs = class kijs {
 
-
-    // --------------------------------------------------------------
-    // STATIC GETTERS / SETTERS
-    // --------------------------------------------------------------
-    static get version() { return '2.2.2'; }
-    
-    
-    // --------------------------------------------------------------
-    // STATICS
-    // --------------------------------------------------------------
-
-    // Static Properties in this Class
+    // PRIVATE VARS
     // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
     // __getTextFn {Function|null}      Verweise auf die getText()-Funktion
     // __getTextFnContext {Object|null} Kontext der getText()-Funktion
     // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
     //                                  { default:..., myRpc2:... }
 
+
+
+    // --------------------------------------------------------------
+    // STATIC GETTERS / SETTERS
+    // --------------------------------------------------------------
+    static get version() { return '2.3.1'; }
+    
+    
+    
+    // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
     /**
      * Erstellt eine Delegate
      * @param {Function} fn
@@ -134,17 +135,16 @@ window.kijs = class kijs {
      * Erstellt aus einem String mit einem Verweis ein Objekt/Funktion
      * Beispiel: 'myApp.doThis' oder 'kijs.gui.Button'
      * @param {String} str
+     * @param {Object} [parent=window]
      * @returns {Object|Funktion|Null}
      */
-    static getObjectFromString(str) {
+    static getObjectFromString(str, parent=window) {
         if (kijs.isFunction(str) || kijs.isObject(str)) {
             return str;
 
         } else {
             const parts = str.split('.');
-            let parent = window;
 
-            // der parent ist immer window
             if (parts.length > 0) {
                 if (parts[0] === 'window') {
                     parts.shift();

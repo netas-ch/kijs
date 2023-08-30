@@ -44,6 +44,26 @@ home.sc.field_Display = class home_sc_field_Display {
                     value: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.',
                     helpText: 'Hilfe'
                 },
+                
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'html:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'html',
+                    style: { margin: '10px 0 0 0'}
+                },
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'text:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'text'
+                },
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'code:',
+                    value: 'mein Text mit <b>fettem</b> Wort.',
+                    valueDisplayType: 'code'
+                },
 
                 {
                     xtype: 'kijs.gui.Element',
@@ -79,7 +99,40 @@ home.sc.field_Display = class home_sc_field_Display {
                     xtype: 'kijs.gui.field.Display',
                     label: 'Hyperlink 2',
                     value: 'Klicke auf https://www.netas.ch!\n oder auf support@netas.ch',
+                    valueDisplayType: 'html',
                     clickableLinks: true
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'HTML+Hyperlink',
+                    value: '<b>Link:</b> www.netas.ch',
+                    valueDisplayType: 'html',
+                    clickableLinks: true
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'Formatieren mit CSS-Klassen',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-title',
+                    cls: 'kijs-title'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-help',
+                    cls: 'kijs-help'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-error',
+                    cls: 'kijs-error'
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    label: 'Label',
+                    value: 'kijs-title, kijs-error',
+                    cls: ['kijs-title', 'kijs-error']
                 }
             ]
         });
@@ -183,14 +236,56 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             },{
                 xtype: 'kijs.gui.field.Switch',
-                label: 'isDirty anzeigen',
+                label: 'Debug-Buttons',
                 on: {
                     change: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
                             if (el instanceof kijs.gui.field.Field) {
                                 if (e.value) {
+                                    el.add(new kijs.gui.Button({
+                                        name: 'showValue',
+                                        tooltip: 'value anzeigen',
+                                        iconMap: 'kijs.iconMap.Fa.eye',
+                                        on: {
+                                            click: function(e) {
+                                                kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
+                                            },
+                                            context: this
+                                        }
+                                    }));
+                                    el.add(new kijs.gui.Button({
+                                        name: 'setValue',
+                                        tooltip: 'value neu setzen (value=value)',
+                                        iconMap: 'kijs.iconMap.Fa.pen',
+                                        on: {
+                                            click: function(e) {
+                                                let val = el.value;
+                                                el.value = val;
+                                                this._updateIsDirtyButton(el, e.value);
+                                            },
+                                            context: this
+                                        }
+                                    }));
+                                    el.add(new kijs.gui.Button({
+                                        name: 'resetValue',
+                                        tooltip: 'valuesReset',
+                                        iconMap: 'kijs.iconMap.Fa.arrow-rotate-left',
+                                        on: {
+                                            click: function(e) {
+                                                el.valuesReset();
+                                                this._updateIsDirtyButton(el, e.value);
+                                            },
+                                            context: this
+                                        }
+                                    }));
                                     el.on('input', this.#onInputForIsDirty, this);
                                 } else {
+                                    el.remove([
+                                        el.down('showValue'),
+                                        el.down('setValue'),
+                                        el.down('resetValue')
+                                    ]);
+                                    
                                     el.off('input', this.#onInputForIsDirty, this);
                                 }
                                 this._updateIsDirtyButton(el, e.value);
@@ -210,21 +305,12 @@ home.sc.field_Display = class home_sc_field_Display {
                 }
             },{
                 xtype: 'kijs.gui.Button',
-                caption: 'Buttons hinzufügen',
+                caption: 'valuesReset',
                 on: {
                     click: function(e) {
                         kijs.Array.each(this._content.elements, function(el) {
                             if (el instanceof kijs.gui.field.Field) {
-                                el.add(new kijs.gui.Button({
-                                    caption: 'value anzeigen',
-                                    iconMap: 'kijs.iconMap.Fa.wand-magic-sparkles',
-                                    on: {
-                                        click: function(e) {
-                                            kijs.gui.CornerTipContainer.show('value', '<pre style="border:1px solid #000">'+el.value+'</pre>');
-                                        },
-                                        context: this
-                                    }
-                                }));
+                                el.valuesReset();
                             }
                         }, this);
                     },

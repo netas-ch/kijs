@@ -1,3 +1,198 @@
+Version 2.3.1
+=============
+Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.  
+Es sind evtl. Anpassungen am Projekt nötig.  
+
+### Neue Benennungen von RPC-configs/getters/setters
+ - ```facadeFnLoad``` heisst nun ```rpcLoadFn```  
+ - ```facadeFnSave``` heisst nun ```rpcSaveFn```  
+ - ```rpcArgs``` heisst nun ```rpcLoadArgs```. Bei save-Funktionen gibt es neu eine 
+   eigene ```rpcSaveArgs``` config/getter/setter.  
+
+**UPDATE TIPP:** Folgende Texte im ganzen Projekt durch suchen/ersetzen ändern 
+(dabei nur nach ganzen Wörtern suchen):  
+ - ```facadeFnLoad``` ersetzen durch ```rpcLoadFn```  
+ - ```facadeFnSave``` ersetzen durch ```rpcSaveFn```  
+ - ```rpcArgs``` ersetzen durch ```rpcLoadArgs```  
+
+### kijs.rpc und kijs.gui.rpc
+- Bei allen ```save()``` Funktionen kann neu in der Antwort ein ```responseData.config``` 
+  sein, dass angewendet wird (wie bei ```load()```).  
+- Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
+  nach ```remoteFn```.  
+  **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen. Vorsicht! 
+  Nur ersetzen, wenn ein Argument von do(config)!  
+
+**UPDATE TIPP:** Zur Kontrolle kann im Projekt noch nach ```facade``` gesucht werden. 
+Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.  
+
+### Drag&Drop
+Unterstützung von Drag&Drop. Dazu gibt es folgende neuen Klassen:  
+ - kijs.gui.DragDrop  
+ - kijs.gui.dragDrop.Source  
+ - kijs.gui.dragDrop.Target  
+Siehe dazu den Leitfaden 'Drag&Drop'.  
+Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.  
+
+### kijs.gui.Container
+ - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
+   auf dem Container ausgelöst. Dieses wird auch an alle elements weitergericht.  
+ - Die Funktionen ```remove()``` und ```removeAll()``` machten bisher bei 
+   ```preventDestruct=true``` anstelle des desctruct ein unrender. Neu machen sie 
+   auch kein unrender mehr.  
+
+### kijs.gui.Element
+ - Neue config/getter/setter ```ddSource```. Siehe dazu den Leitfaden 'Drag&Drop'.  
+ - Neuer getter ```index```. Gibt den Index des Elements im elements-Array des parent 
+   an oder ```null```.
+ - getter ```isAppended``` gibt es nicht mehr. Dieser getter gab nur zurück, ob 
+   der node ein parent node hat. Dies hiess aber nicht unbedingt, dass der node 
+   auch sichtbar war, denn es konnt sein, dass der parent node selbst noch kein 
+   parent node hat.  
+   Da beim hinzufügen von neuen Elementen in einen container neu das ```afterresize```
+   Event kommt, solte nun alles auch ohne diesen getter funktionieren.  
+   **UPDATE TIPP:** Projekt nach ```isAppended``` durchsuchen.  
+ - Neue config/getter/setter, mit denen der die Configs des Elements (oder von 
+   vererbten Klassen) via RPC geladen werden können:  
+    - ```rpc``` 
+    - ```rpcLoadFn```
+    - ```rpcLoadArgs```
+    - ```autoLoad```
+   Siehe dazu auch den Leitfaden "Ajax und RPC" unter "Laden von configs".  
+   Dies funktioniert natürlich auch in allen abgeleiteten Klassen.  
+   Ausnahmen, wo es im Moment noch nicht funktioniert:
+    - kijs.gui.grid.Grid
+    - kijs.gui.Tree
+    - kijs.gui.field.Combo
+
+### kijs.gui.Dom
+ - getter ```isAppended``` gibt es nicht mehr. Sie dazu auch den Kommentar unter 
+   kijs.gui.Element.  
+ - Die Methode ```scrollIntoView()``` hat neu ein optionales Argument ```options``` 
+   Sie verhält sich nun anderes, als vorher. Standardmässig wird jetzt nur noch der 
+   erste 'Elterncontainer mit Scrollbar' gescrollt. Übergeordnete Container werden 
+   nicht mehr gescrollt. 
+   **UPDATE TIPP:** um die gleiche Funktionalität wie vorher zu haben:  
+   Projekt nach ```dom.scrollIntoView()``` durchsuchen und durch 
+   ```dom.scrollIntoView({ scrollParentsTo: true })``` ersetzen.  
+
+### kijs.Dom
+ - Neue statische Funktion ```scrollIntoView(node, options)```  
+
+### kijs.gui.MsgBox
+ - config-Argumente der statischen Funktion ```kijs.gui.MsgBox.show(config)``` 
+   geändert:  
+    - ```fieldConfig``` NEU! Objekt mit Eigenschaften für das Field  
+    - ```fieldXtype``` GELÖSCHT! Bitte fieldConfig -> ```xtype``` verwenden  
+    - ```label```  GELÖSCHT! Bitte fieldConfig -> ```label``` verwenden  
+    - ```value```  GELÖSCHT! Bitte fieldConfig -> ```value``` verwenden  
+    - ```required```  GELÖSCHT! Bitte fieldConfig -> ```required``` verwenden  
+    - ```facadeFnArgs```  GELÖSCHT! Bitte fieldConfig -> ```rpcLoadArgs``` verwenden  
+   
+   **UPDATE TIPP:** Projekt nach ```kijs.gui.MsgBox.show(``` durchsuchen, und die 
+   Argumente anpassen.  
+
+### kijs.gui.FormPanel
+ - Property in RPC Antwort von load() umbenannt.  
+   alt: ```responseData.form = [...]```  
+   neu: ```responseData.config.elements = [...]```  
+   Damit ist load() kompatibel mit load() der Basisklasse kijs.gui.Element.  
+   Neu können damit neben den elements auch andere configs gesendet werden.  
+   **UPDATE TIPP:** PHP nach ```form``` durchsuchen und ersetzen durch 
+   ```config.elements```.  
+
+### kijs.gui.field.Display
+ - Neue config/getter/setter ```valueDisplayType```  
+   Darstellung der Eigenschaft ```value```  (Default='code')  
+   Mögliche Werte:  
+    - ```html```: als html-Inhalt (innerHtml)  
+    - ```code```: Tags werden als Text angezeigt  
+    - ```text```: Tags werden entfernt  
+ - Vorgefertigte Formatierungen mit CSS-Klassen:  
+    - ```kijs-title``` Text wird fett dargestellt  
+    - ```kijs-help```  Text wird blau dargestellt  
+    - ```kijs-error```  Text wird rot dargestellt  
+   (es können auch Klassen kombiniert werden: ```cls: ['kijs-title', 'kijs-error']```  
+
+### kijs.gui.Icon
+ - Neuer getter ```iconMapName```. Falls an die config/setter ```iconMap``` ein 
+   String übergeben wurde, kann mit ```iconMapName``` dieser wieder abgerufen 
+   werden. Sonst wird ```null``` zurückgegeben.  
+
+### kijs.gui.container.Tab
+ - Bietet neu die Möglichkeit Tabs per Drag&Drop zu verschieben. Falls mehrere 
+   Tab-Elemente den gleichen ddName haben können auch Tabs auf ein anderes 
+   Tab-Element gezeogen werden.  
+ - Neue config/getter/setter:
+    - ```tabBarAlign``` Ausrichtung der Tabs 'start' (default), 'end' oder 'center'  
+    - ```rpcSaveFn```  
+    - ```rpcSaveArgs```  
+    - ```autoSave``` Automatisches Speichern bei Drag&Drop oder dem Schliessen 
+                     Tabs. Boolean, default: false  
+    - ```sortable``` Richtet Drag&Drop ein, so dass die Tabs verschoben werden 
+                     können. Boolean, default: false  
+
+    - ```ddName```   Siehe Leitfaden 'Drag & Drop'. Falls kein ddName angegeben 
+                     wird, wird automatisch eineindeutiger Name vergeben.  
+    - ```ddPosBeforeAfterFactor``` Siehe Leitfaden 'Drag & Drop'
+    - ```ddMapping``` Siehe Leitfaden 'Drag & Drop'
+
+### kijs.gui.Dashboard (NEU)
+Siehe Beispiel im Showcase.  
+
+### kijs.gui.field.ChekboxGroup
+Funktion checkedValues() ist nun DEPRECATED
+
+### kijs.gui.Separator (NEU)
+Einfaches Element um Trennlinien in Toolbars oder Formularen einzufügen.  
+
+### CSS Anpassungen
+ - Foglender globaler CSS-Code entfernt und direkt bei den Elementen eingefügt, wo 
+   nötig:  
+
+    .kijs div, .kijs-viewport, .kijs-viewport div {
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+ - ```lineHeight``` von 13px auf 14px erhöht. Damit werden nun Buchstaben unten 
+   nicht mehr abgeschnitten. **UPDATE TIPP:** Bei eigenen CSS-Templates evtl. 
+   auch anpassen.  
+
+ - Die Bestandteile des kijs.gui.Button sind neu durch einen ```gap: 4px``` getrennt.  
+
+ - verschiedene weitere kleinere CSS-Anpassungen.  
+
+### kijs.gui.dataView.Element
+ - ```kijs.gui.DataViewElement``` umenannt zu ```kijs.gui.dataView.Element```  
+   **UPDATE TIPP:**  
+     - Projekt nach ```kijs.gui.DataViewElement``` duchsuchen und durch 
+       ```kijs.gui.dataView.Element``` ersetzen.  
+     - CSS nach ```kijs-dataviewelement``` durchsuchen und durch 
+       ```kijs-dataview-element``` ersetzen.  
+
+
+
+Version 2.2.3
+=============
+### kijs.gui.Resizer
+Neue config/getter/setter:  
+ - allowResizeWidth (Boolean, Default=true)  
+ - allowResizeHeight (Boolean, Default=true)  
+
+### kijs.gui.Panel
+Neue config/getter/setter:  
+Damit kann eingestellt werden, dass nur die Höhe oder die Breite verändert werden kann.  
+ - resizableWidth (Boolean, Default=false)  
+ - resizableHeight (Boolean, Default=false)  
+
+
+### kijs.gui.Window
+Fenster haben neu runde Ecken.  
+
+
+
 Version 2.2.2
 ===============
 ### kijs.gui.field.*
@@ -12,6 +207,7 @@ Version 2.2.2
 Wird ein Request bei cancelRunningRpcs=true durch einen neueren Request abgebrochen, 
 neu die callbackFn und auch das resolve des Promise ausgeführt. Der errorType ist 
 'cancel'.  
+
 
 
 Version 2.2.1
@@ -42,6 +238,7 @@ Version 2.2.1
  - Das Event ```afterSave``` wird nun immer ausgeführt. Auch wenn ein Fehler aufgetreten ist.  
  - Bei der Funktion ```save()``` gibt es kein catch() mehr. Es wird nun immer 
    ```resolve()``` ausgeführt.  
+
 
 
 Version 2.1.2

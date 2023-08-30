@@ -168,32 +168,21 @@
     z-index: 0;
     /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
   }
-  .kijs div,
-  .kijs-viewport,
-  .kijs-viewport div {
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
   /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
+       * Separator
        ****************** */
-  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-  .kijs-scrollable-x-enable,
-  div.kijs-scrollable-x-enable {
-    overflow-x: scroll;
+  div.kijs-separator {
+    display: inline-block;
+    min-height: 1px;
+    min-width: 1px;
+    margin: 0;
+    background-color: var(--separator-bkgrndColor);
   }
-  .kijs-scrollable-x-auto,
-  div.kijs-scrollable-x-auto {
-    overflow-x: auto;
+  div.kijs-separator.kijs-hidden {
+    display: none;
   }
-  .kijs-scrollable-y-enable,
-  div.kijs-scrollable-y-enable {
-    overflow-y: scroll;
-  }
-  .kijs-scrollable-y-auto,
-  div.kijs-scrollable-y-auto {
-    overflow-y: auto;
+  div.kijs-separator.kijs-disabled {
+    background-color: var(--separator-disabled-bkgrndColor);
   }
   /* ******************
        * Icon
@@ -222,7 +211,8 @@
     height: 25px;
     margin: 0;
     border-radius: 6px;
-    padding: 0 4px 0 8px;
+    padding: 0 8px;
+    gap: 4px;
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
     color: var(--default-fontColor);
@@ -231,20 +221,20 @@
     /* falls der Button keine kijs-caption enthält, weniger Rand anzeigen */
   }
   button.kijs-button.kijs-smallpaddings {
-    padding: 0 0 0 4px;
+    padding: 0 4px;
   }
   button.kijs-button > .kijs-icon {
     flex: none;
-    margin: 0 4px 0 0;
+    margin: 0;
     color: var(--button-icon-fontColor);
   }
   button.kijs-button > .kijs-icon2 {
     flex: none;
-    margin: 0 4px 0 0;
+    margin: 0;
   }
   button.kijs-button > .kijs-caption {
     flex: 1;
-    margin: 0 4px 0 0;
+    margin: 0;
     font-family: var(--default-fontFamily);
     font-size: var(--button-fontSize);
     line-height: var(--button-lineHeight);
@@ -306,6 +296,7 @@
   }
   /* ******************
        * Trigger Button
+       * DEPRECATED
        * TODO: Wird niergends verwendet????????
        ****************** */
   button.kijs-button.kijs-trigger {
@@ -324,11 +315,13 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
   }
   div.kijs-container-inner {
     position: relative;
+    overflow: hidden;
     flex: 1 1 auto;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
@@ -465,6 +458,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
   }
@@ -513,11 +507,15 @@
   div.kijs-container-tab {
     display: flex;
     align-items: stretch;
+    overflow: hidden;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
     /* tabBar */
     /* container */
     /* tabBar Positionierung */
+    /* tabBar Align */
+    /* Drag&Drop */
+    /* Drop Marker */
   }
   div.kijs-container-tab > .kijs-container-scrollable {
     flex: none;
@@ -732,12 +730,53 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
   }
+  div.kijs-container-tab.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-start;
+  }
+  div.kijs-container-tab .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: center;
+  }
+  div.kijs-container-tab .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: flex-end;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
+    opacity: 0.6;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragover {
+    border-color: var(--accentColor3);
+    border-width: 2px;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging:not(.kijs-dragover) {
+    display: none;
+  }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    flex: none;
+    border: 2px solid var(--accentColor3);
+    border-radius: 5px;
+  }
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 4px 0 0 4px;
+  }
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 4px 0 0;
+  }
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
+    margin: 0 0 4px 4px;
+  }
+  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
+    margin: 4px 0 0 4px;
+  }
   /* ******************
        * Tooltip
        ****************** */
   div.kijs-tooltip {
     position: fixed;
     display: block;
+    overflow: hidden;
     z-index: 50101;
     border-radius: 4px;
     padding: 4px;
@@ -761,6 +800,7 @@
     background-color: var(--icon-help-bkgrndColor);
   }
   /* ******************
+       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
   body > div.kijs-dragdrop-marker {
@@ -781,6 +821,7 @@
        ****************** */
   div.kijs-spinbox {
     position: absolute;
+    overflow: hidden;
     z-index: 50100;
     max-width: 100%;
     max-height: 100%;
@@ -809,6 +850,7 @@
     border: none;
   }
   /* ******************
+       * DEPRECATED
        * TODO: Accordion ???
        ****************** */
   div.kijs-accordion > .kijs-container-inner > .kijs-panel {
@@ -819,6 +861,7 @@
        ****************** */
   .kijs-viewport {
     position: fixed;
+    overflow: hidden;
     top: 0;
     right: 0;
     bottom: 0;
@@ -869,7 +912,8 @@
     flex-direction: row;
     align-items: center;
     height: 30px;
-    padding: 0 0 0 6px;
+    padding: 0 6px;
+    gap: 4px;
     background-color: var(--bar-bkgrndColor);
     -webkit-user-select: none;
     /* Safari */
@@ -881,7 +925,7 @@
   }
   div.kijs-panelbar > .kijs-icon {
     flex: none;
-    margin: 0 3px 0 0;
+    margin: 0;
     color: var(--bar-fontColor);
   }
   div.kijs-panelbar > .kijs-container-left,
@@ -890,17 +934,21 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: visible;
+    gap: 4px;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner {
     display: flex;
     flex-direction: row;
+    overflow: visible;
+    gap: 4px;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
     flex: none;
     height: auto;
-    margin: 0 3px 0 0;
+    margin: 0;
     border-radius: 0;
     padding: 0;
     border: none;
@@ -940,14 +988,18 @@
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
     color: var(--bar-button-icon-disabled-fontColor);
   }
+  div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-separator,
+  div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-separator {
+    margin: 4px 0;
+  }
   div.kijs-panelbar > .kijs-container-inner {
     flex: 1 1 auto;
-    margin: 0 3px 0 0;
+    margin: 0;
     text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     color: var(--bar-fontColor);
-  }
-  div.kijs-panelbar > .kijs-container-inner:last-child {
-    margin: 0 6px 0 0;
   }
   div.kijs-panelbar.kijs-headerbar > .kijs-container-inner {
     font-family: var(--default-fontFamily);
@@ -978,6 +1030,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
     background-color: var(--panel-bkgrndColor);
     transition: 0.2s;
     /* bei Schatten auch diverse Linien anzeigen */
@@ -988,6 +1041,7 @@
     /*border: 1px solid var(--item-selected-borderColor);*/
   }
   div.kijs-panel > .kijs-header {
+    overflow: hidden;
     flex: none;
     border-left: 1px solid var(--panel-borderColor);
     border-right: 1px solid var(--panel-borderColor);
@@ -1007,6 +1061,7 @@
     flex: none;
   }
   div.kijs-panel > .kijs-footer {
+    overflow: hidden;
     flex: none;
     border-top: 1px solid var(--panel-borderColor);
     border-left: 1px solid var(--panel-borderColor);
@@ -1029,8 +1084,6 @@
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button {
     border: 1px solid var(--footer-button-borderColor);
     background-color: var(--footer-button-bkgrndColor);
-    /*margin-top: 5px;
-                    margin-bottom: 5px;*/
   }
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
@@ -1043,28 +1096,28 @@
     cursor: auto;
   }
   div.kijs-panel.kijs-maximize {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: auto !important;
-    height: auto !important;
-    margin: 0 !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    margin: 0;
   }
   div.kijs-panel.kijs-maximize > .kijs-resizer {
     display: none;
   }
   div.kijs-panel.kijs-collapse-top,
   div.kijs-panel.kijs-collapse-bottom {
-    height: 30px !important;
-    flex: none !important;
+    height: 30px;
+    flex: none;
   }
   div.kijs-panel.kijs-collapse-right,
   div.kijs-panel.kijs-collapse-left {
-    height: auto !important;
-    width: 30px !important;
-    flex: none !important;
+    height: auto;
+    width: 30px;
+    flex: none;
     display: flex;
     flex-direction: row;
   }
@@ -1108,17 +1161,13 @@
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
-    margin: 0 0 3px 0;
+    align-self: center;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon {
     line-height: 16px;
-  }
-  div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-badge,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-badge {
-    right: 0;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-icon,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-icon {
@@ -1131,12 +1180,69 @@
     margin: 0 0 3px 0;
   }
   /* ******************
+       * Dashboard
+       ****************** */
+  div.kijs-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+  }
+  div.kijs-dashboard > .kijs-container-inner {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+    gap: 5px;
+    /* Spalten*/
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column {
+    flex: 1;
+    overflow: visible;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner {
+    flex: none;
+    min-height: 100%;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    /* Panel */
+    /* Drop Marker */
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel {
+    flex: none;
+    border: 2px solid var(--bar-bkgrndColor);
+    border-radius: 5px;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel > .kijs-headerbar[draggable] > .kijs-container-inner {
+    cursor: move;
+    user-select: none;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragging {
+    opacity: 0.6;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
+    border-color: var(--accentColor3);
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-disabled {
+    border: 2px solid var(--bar-disabled-bkgrndColor);
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
+    flex: none;
+    height: 100px;
+    border: 2px solid var(--accentColor3);
+    border-radius: 5px;
+  }
+  /* ******************
        * Window
        ****************** */
   div.kijs-window {
     position: absolute;
+    overflow: hidden;
     max-width: 100%;
     max-height: 100%;
+    border-radius: 5px;
     -webkit-user-select: none;
     /* Safari */
     user-select: none;
@@ -1174,6 +1280,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     z-index: 60000;
     background-color: rgba(0, 0, 0, 0.2);
     flex-direction: column;
@@ -1203,6 +1310,7 @@
        ****************** */
   div.kijs-aperturemask {
     position: absolute;
+    overflow: hidden;
     z-index: 9000;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
@@ -1264,6 +1372,7 @@
        ****************** */
   div.kijs-cornertipcontainer {
     position: fixed;
+    overflow: hidden;
     right: 0;
     bottom: 0;
     z-index: 70000;
@@ -1295,6 +1404,7 @@
        ****************** */
   div.kijs-resizer {
     position: absolute;
+    overflow: hidden;
     bottom: 0;
     right: 0;
     width: 12px;
@@ -1302,14 +1412,23 @@
     background-image: url("data:image/svg+xml;utf8,<svg width='7' height='7' xmlns='http://www.w3.org/2000/svg'><line x1='1' y1='7' x2='7' y2='1' stroke='black' stroke-width='1'/><line x1='5' y1='7' x2='7' y2='5' stroke='black' stroke-width='1' /></svg>");
     background-repeat: no-repeat;
     background-position: bottom 2px right 2px;
-    cursor: nwse-resize;
     opacity: 0.3;
+  }
+  div.kijs-resizer.kijs-resizer-width {
+    cursor: we-resize;
+  }
+  div.kijs-resizer.kijs-resizer-height {
+    cursor: ns-resize;
+  }
+  div.kijs-resizer.kijs-resizer-width.kijs-resizer-height {
+    cursor: nwse-resize;
   }
   div.kijs-resizer:hover {
     opacity: 1;
   }
   div.kijs-resizer-overlay {
     position: absolute;
+    overflow: hidden;
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px dashed rgba(0, 0, 0, 0.5);
   }
@@ -1359,6 +1478,7 @@
   div.kijs-buttongroup {
     display: flex;
     flex-direction: column-reverse;
+    overflow: hidden;
     border-right: 1px solid var(--panel-borderColor);
   }
   div.kijs-buttongroup > .kijs-caption {
@@ -1381,6 +1501,7 @@
        * Tree
        ****************** */
   div.kijs-tree {
+    overflow: hidden;
     background-color: var(--field-bkgrndColor);
   }
   div.kijs-tree.kijs-tree-root > .kijs-container-inner {
@@ -1476,6 +1597,7 @@
   div.kijs-dataview {
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
   div.kijs-dataview > .kijs-container-inner {
     flex: 1;
@@ -1485,7 +1607,7 @@
     align-content: flex-start;
     gap: 4px;
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element {
     flex: none;
     width: 200px;
     padding: 2px 4px 6px 4px;
@@ -1498,41 +1620,41 @@
     line-height: var(--item-lineHeight);
     color: var(--item-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement * {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element * {
     font-family: var(--default-fontFamily);
     font-size: var(--item-fontSize);
     line-height: var(--item-lineHeight);
     color: var(--item-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement:focus,
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement:hover {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:focus,
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:hover {
     background-color: var(--item-focus-bkgrndColor);
     border-color: var(--item-focus-borderColor);
     color: var(--item-focus-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement > div > .label {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > div > .label {
     display: inline-block;
     width: 50px;
     font-size: var(--item-label-fontSize);
     color: var(--item-label-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement > div > .value {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > div > .value {
     display: inline-block;
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement.kijs-selected {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     color: var(--item-selected-fontColor);
     background-color: var(--item-selected-bkgrndColor);
     border-color: var(--item-selected-borderColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement.kijs-disabled {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled {
     background-color: var(--item-disabled-bkgrndColor);
     border-color: var(--item-disabled-borderColor);
     color: var(--item-disabled-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement.kijs-disabled * {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled * {
     color: var(--item-disabled-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataviewelement.kijs-disabled > div > .label {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > div > .label {
     color: var(--item-label-disabled-fontColor);
   }
   div.kijs-dataview.kijs-disabled {
@@ -1545,6 +1667,7 @@
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    overflow: hidden;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
@@ -1561,10 +1684,10 @@
     display: flex;
     flex-direction: column;
   }
-  div.kijs-listview > .kijs-container-inner[style="height:*"] > .kijs-dataviewelement {
+  div.kijs-listview > .kijs-container-inner[style="height:*"] > .kijs-dataview-element {
     flex: 1 0 auto;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -1573,21 +1696,21 @@
     padding: 0 4px;
     outline: none;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
     flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
     gap: 4px;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner > .kijs-icon {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-icon {
     flex: none;
     margin: 0;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner > .kijs-icon:empty {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-icon:empty {
     display: none;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner > .kijs-caption {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     margin: 0;
     font-family: var(--default-fontFamily);
@@ -1595,63 +1718,66 @@
     line-height: var(--default-lineHeight);
     color: var(--item-fontColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement:focus,
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement:hover {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:focus,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:hover {
     background-color: var(--item-focus-bkgrndColor);
     border-color: var(--item-focus-borderColor);
     color: var(--item-focus-fontColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-selected {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     border-color: var(--item-selected-borderColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
     background-color: var(--item-selected-bkgrndColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-checkboxes {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
     color: var(--field-fontColor);
     border-color: transparent;
     /*> div.kijs-container-inner {
                         display: inline-block;
                     }*/
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-checkboxes:before {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:before {
     flex: none;
     margin: 0 4px 0 0;
     font: normal normal normal 15px/1 'Font Awesome 6 Free';
     content: '\f096';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-checkboxes.kijs-selected:before {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f046';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-options {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options {
     color: var(--field-fontColor);
     border-color: transparent;
     /*> div.kijs-container-inner {
                         display: inline-block;
                     }*/
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-options:before {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
     flex: none;
     margin: 0 4px 0 0;
     font: normal normal normal 15px/1 'Font Awesome 6 Free';
     content: '\f10c';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-options.kijs-selected:before {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f05d';
   }
   div.kijs-listview.kijs-disabled {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-listview.kijs-disabled div.kijs-dataviewelement {
+  div.kijs-listview.kijs-disabled div.kijs-dataview-element {
     background-color: transparent;
   }
-  div.kijs-listview.kijs-disabled div.kijs-dataviewelement.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
     border-color: var(--item-selected-disabled-borderColor);
     background-color: transparent;
   }
   /* ******************
        * ProgressBar
        ****************** */
+  div.kijs-progressbar {
+    overflow: hidden;
+  }
   div.kijs-progressbar > .kijs-progressbar-caption {
     padding: 0 0 2px 0;
     font-family: var(--default-fontFamily);
@@ -2001,6 +2127,7 @@
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
+    overflow: hidden;
   }
   div.kijs-grid table {
     border-collapse: collapse;
@@ -2079,11 +2206,16 @@
   div.kijs-grid > .kijs-top {
     flex: 0 0 auto;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
+  }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer-left {
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer {
     flex: 1;
     position: relative;
+    overflow: hidden;
     background-color: var(--grid-header-bkgrndColor);
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td {
@@ -2214,14 +2346,19 @@
     border: 0;
     overflow: hidden;
   }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer-right {
+    overflow: hidden;
+  }
   div.kijs-grid > .kijs-center {
     flex: 1;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
     background-color: var(--field-bkgrndColor);
   }
   div.kijs-grid > .kijs-center > .kijs-leftcontainer {
     position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-center > .kijs-tablecontainer {
     flex: 1;
@@ -2230,14 +2367,25 @@
   }
   div.kijs-grid > .kijs-center > .kijs-rightcontainer {
     position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-bottom {
     flex: 0 0 auto;
     display: flex;
+    overflow: hidden;
     flex-direction: row;
+  }
+  div.kijs-grid > .kijs-bottom > .kijs-footercontainer-left {
+    position: relative;
+    overflow: hidden;
   }
   div.kijs-grid > .kijs-bottom > .kijs-footercontainer {
     position: relative;
+    overflow: hidden;
+  }
+  div.kijs-grid > .kijs-bottom > .kijs-footercontainer-right {
+    position: relative;
+    overflow: hidden;
   }
   div.kijs-grid div.kijs-splitter-overlay {
     position: absolute;
@@ -2254,29 +2402,29 @@
   .kijs-filter-checkboxgroup {
     background-color: var(--button-bkgrndColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
     cursor: pointer;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement.kijs-display-checkboxes::before,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement.kijs-display-checkboxes::before {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before {
     padding: 3px 7px 3px 3px;
     color: var(--buttonGroup-button-fontColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement .kijs-icon,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement .kijs-icon {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon {
     width: 20px;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement .kijs-icon:empty,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement .kijs-icon:empty {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty {
     display: none;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
     background-color: var(--buttonGroup-button-focus-bkgrndColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover > *,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover > * {
+  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > *,
+  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > * {
     color: var(--buttonGroup-button-focus-fontColor);
   }
   /* ******************
@@ -2287,6 +2435,7 @@
     flex: 1 0 auto;
     flex-direction: row;
     min-height: 25px;
+    overflow: hidden;
   }
   div.kijs-field > .kijs-label {
     display: block;
@@ -2296,7 +2445,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     padding: 6px 4px 3px 0;
+    overflow: hidden;
     overflow-wrap: break-word;
+    text-overflow: ellipsis;
     /* selektion von Text erlauben */
     -webkit-user-select: text;
     user-select: text;
@@ -2341,13 +2492,14 @@
     flex: none;
     display: flex;
     flex-direction: row;
+    overflow: visible;
   }
   div.kijs-field > .kijs-container-inner > .kijs-button {
     margin: 0 0 0 2px;
     height: 25px;
   }
   div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline {
-    margin: 0 0 0 0;
+    margin: 0;
     border-radius: 0px;
     border-top: 1px solid var(--field-borderColor);
     border-right: 1px solid var(--field-borderColor);
@@ -2404,14 +2556,14 @@
   div.kijs-field > .kijs-icon-error {
     flex: none;
     height: 16px;
-    margin: 4px 0 0 2px;
+    margin: 3px 0 0 2px;
     color: var(--icon-error-fontColor);
     cursor: default;
   }
   div.kijs-field > .kijs-icon-help {
     flex: none;
     height: 16px;
-    margin: 4px 0 0 2px;
+    margin: 3px 0 0 2px;
     color: var(--icon-help-fontColor);
     cursor: default;
   }
@@ -2555,7 +2707,7 @@
     width: 160px;
   }
   div.kijs-field-phone.kijs-disableFlex > .kijs-inputwrapper {
-    width: 140px;
+    width: 130px;
   }
   div.kijs-field-sozversnr.kijs-disableFlex > .kijs-inputwrapper {
     width: 120px;
@@ -2745,6 +2897,7 @@
   }
   div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -2783,6 +2936,7 @@
   }
   div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -2814,30 +2968,30 @@
     background-color: transparent;
     border-color: transparent;
   }
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement {
+  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
+  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
     background-color: transparent;
   }
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:focus,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:focus,
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataviewelement:hover {
+  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
+  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
     color: var(--field-focus-borderColor);
   }
   div.kijs-field-optiongroup.kijs-error > .kijs-inputwrapper > .kijs-listview,
   div.kijs-field-checkboxgroup.kijs-error > .kijs-inputwrapper > .kijs-listview {
     background-color: var(--icon-error-bkgrndColor);
   }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement {
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-caption,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-caption {
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
     color: var(--field-disabled-fontColor);
   }
   div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
@@ -2847,19 +3001,19 @@
     flex-wrap: wrap;
     gap: 4px;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     flex: none;
     padding: 0;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-checkboxes,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-checkboxes,
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-options:before,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement.kijs-display-options:before {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
     margin: 0 2px 0 0;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataviewelement > .kijs-container-inner {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
     gap: 2px;
   }
   /* ******************
@@ -2901,11 +3055,11 @@
     display: flex;
     flex-direction: column;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataviewelement > .kijs-container-inner {
+  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner {
     display: flex;
     flex-direction: row;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataviewelement > .kijs-container-inner > .kijs-caption {
+  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     padding-bottom: 3px;
   }
@@ -3037,15 +3191,16 @@
     height: 20px;
     width: 34px;
     margin: 0 4px 0 0;
+    padding: 1px 0 0 1px;
     border-radius: 10px;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
   div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
-    height: 20px;
-    width: 20px;
-    border-radius: 10px;
+    height: 16px;
+    width: 16px;
+    border-radius: 8px;
     background-color: var(--field-item-bkgrndColor);
     transition: margin-left 0.2s;
   }
@@ -3091,10 +3246,13 @@
   /* ******************
        * Field Display
        ****************** */
-  div.kijs-field-display .kijs-inputwrapper {
+  div.kijs-field-display {
+    /* Ergänzungen */
+  }
+  div.kijs-field-display > .kijs-inputwrapper {
     min-height: 25px;
   }
-  div.kijs-field-display .kijs-inputwrapper > div {
+  div.kijs-field-display > .kijs-inputwrapper > div {
     padding: 6px 0 2px 0;
     color: var(--field-fontColor);
     font-family: var(--default-fontFamily);
@@ -3105,7 +3263,7 @@
     user-select: text;
     cursor: default;
   }
-  div.kijs-field-display .kijs-inputwrapper > div > a {
+  div.kijs-field-display > .kijs-inputwrapper > div > a {
     color: var(--field-fontColor);
     cursor: pointer;
     text-decoration: underline;
@@ -3116,6 +3274,15 @@
   }
   div.kijs-field-display.kijs-disableFlex > .kijs-inputwrapper {
     width: 180px;
+  }
+  div.kijs-field-display.kijs-title > .kijs-inputwrapper > div {
+    font-weight: bold;
+  }
+  div.kijs-field-display.kijs-error > .kijs-inputwrapper > div {
+    color: var(--errorColor);
+  }
+  div.kijs-field-display.kijs-help > .kijs-inputwrapper > div {
+    color: var(--helpColor);
   }
   div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > div {
     color: var(--field-disabled-fontColor);
@@ -3154,6 +3321,7 @@
   }
   div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -3221,6 +3389,7 @@
   }
   div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
+    padding: 0 4px;
     align-items: flex-start;
   }
   div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
@@ -3362,18 +3531,38 @@
     animation: kijs-spin 1s infinite steps(8);
   }
   /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+  .kijs-scrollable-x-enable,
+  div.kijs-scrollable-x-enable {
+    overflow-x: scroll;
+  }
+  .kijs-scrollable-x-auto,
+  div.kijs-scrollable-x-auto {
+    overflow-x: auto;
+  }
+  .kijs-scrollable-y-enable,
+  div.kijs-scrollable-y-enable {
+    overflow-y: scroll;
+  }
+  .kijs-scrollable-y-auto,
+  div.kijs-scrollable-y-auto {
+    overflow-y: auto;
+  }
+  /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
        ****************** */
   /* Passt den Inhalt an die Containergrösse an */
   /* (nur für Container mit einem Kind geeignet) */
   .kijs-flexfit > .kijs-container-inner {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
   }
   .kijs-flexfit > .kijs-container-inner > * {
-    flex: 1 0 auto;
+    flex: 1 1 auto;
   }
   /* Flext den Inhalt in eine Spalte */
   .kijs-flexcolumn > .kijs-container-inner {

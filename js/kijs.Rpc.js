@@ -95,14 +95,14 @@ kijs.Rpc = class kijs_Rpc {
      *   werden.
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
-     *     {String} facadeFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
+     *     {String} remoteFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID, 
      *                                           die das Element eindeutig identifiziert.
      *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
      *     {Function} [fn]                       Callback-Funktion
      *     {Object} [context]                    Kontext für die Callback-Funktion
-     *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe facadeFn abgebrochen
+     *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe remoteFn abgebrochen
      *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
@@ -115,20 +115,20 @@ kijs.Rpc = class kijs_Rpc {
         if (!kijs.isObject(config)) {
             throw new kijs.Error('RPC call without config object');
         }
-        if (!config.facadeFn) {
-            throw new kijs.Error('RPC call without facade function');
+        if (!config.remoteFn) {
+            throw new kijs.Error('RPC call without remote function');
         }
 
         if (this._deferId) {
             clearTimeout(this._deferId);
         }
 
-        // Evtl. bestehende RPCs vom gleichen owner an die gleiche facadeFn abbrechen
-        // Der owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren,
-        // die die gleiche facadeFn benutzen. 
+        // Evtl. bestehende RPCs vom gleichen owner an die gleiche remoteFn abbrechen
+        // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
+        // die die gleiche remoteFn benutzen. 
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
-                if (this._queue[i].owner === config.owner && this._queue[i].facadeFn === config.facadeFn) {
+                if (this._queue[i].owner === config.owner && this._queue[i].remoteFn === config.remoteFn) {
                     switch (this._queue[i].state) {
                         case 1: // queue
                             this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
@@ -147,7 +147,7 @@ kijs.Rpc = class kijs_Rpc {
         }
         
         const queueEl = {
-            facadeFn: config.facadeFn,
+            remoteFn: config.remoteFn,
             requestData: config.requestData,
             type: 'rpc',
             tid: this._createTid(),
@@ -289,7 +289,7 @@ kijs.Rpc = class kijs_Rpc {
         for (let i=0; i<this._queue.length; i++) {
             if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
                 const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
-                subRequest.facadeFn = this._queue[i].facadeFn;
+                subRequest.remoteFn = this._queue[i].remoteFn;
                 subRequest.requestData = this._queue[i].requestData;
                 subRequest.type = this._queue[i].type;
                 subRequest.tid = this._queue[i].tid;

@@ -192,7 +192,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._disabledInitial = false;
         this._dom = new kijs.gui.Dom();
         this._name = null;
+        this._ddSource = null;
         this._parentEl = null;
+        this._rpc = null;           // Instanz von kijs.gui.Rpc
+        this._rpcLoadFn = null;     // Name der remoteFn. Bsp: 'address.load'
+        this._rpcLoadArgs = {};     // Standard RPC-Argumente
         this._visible = true;
         this._lastSize = null;    // Grösse beim letzten Aufruf vom afterResize-Event
         this._userData = null;    // Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
@@ -228,18 +232,19 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             afterResizeDelay: true,
+            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
             disableEnterBubbeling: { target: 'disableEnterBubbeling', context: this._dom },
             disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },
             nodeTagName: { target: 'nodeTagName', context: this._dom },
             defaults: { fn: 'manual' }, // wird nur bei containern gebraucht
+            ddSource: { target: 'ddSource' },   // Drag&Drop-Source Einstellungen
             height: { target: 'height' },
             html: { target: 'html', context: this._dom },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
             left: { target: 'left' },
             name: true,
             nodeAttribute: { fn: 'function', target: this._dom.nodeAttributeSet, context: this._dom },
-            on: { fn: 'assignListeners' },
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
             tooltip: { target: 'tooltip' },
@@ -250,7 +255,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
             xtype: { fn: 'manual' },
+            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
+            rpcLoadFn: true,
+            rpcLoadArgs: true,
             
+            on: { prio: 1500,  fn: 'assignListeners' },
             disabled: { prio: 2000, target: 'disabled' }
         };
 
@@ -259,6 +268,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('dblClick', this._dom);
         this._eventForwardsAdd('rightClick', this._dom);
         this._eventForwardsAdd('drag', this._dom);
+        this._eventForwardsAdd('dragEnter', this._dom);
         this._eventForwardsAdd('dragOver', this._dom);
         this._eventForwardsAdd('dragStart', this._dom);
         this._eventForwardsAdd('dragLeave', this._dom);
@@ -295,11 +305,52 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get afterResizeDelay() { return this._afterResizeDelay; }
     set afterResizeDelay(val) { this._afterResizeDelay = val; }
+
+    get autoLoad() {
+        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+    }
+    set autoLoad(val) {
+        if (val) {
+            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        } else {
+            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        }
+    }
+
+    get ddSource() { 
+        return this._ddSource; 
+    }
+    set ddSource(val) {
+        // config-object
+        if (kijs.isObject(val)) {
+            if (kijs.isEmpty(this._ddSource)) {
+                val.ownerEl = this;
+                if (kijs.isEmpty(val.sourceDomProperty)) {
+                    val.sourceDomProperty = 'dom';
+                }
+                this._ddSource = new kijs.gui.dragDrop.Source(val);
+            } else {
+                this._ddSource.applyConfig(val);
+            }
+            
+        // null
+        } else if (val === null) {
+            if (this._ddSource) {
+                this._ddSource.destruct();
+            }
+            this._ddSource = null;
+            
+        } else {
+            throw new kijs.Error(`ddSource must be a object or null`);
+            
+        }
+    }
 
     // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
     get disabled() {  return this._dom.disabled; }
@@ -355,6 +406,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     get htmlDisplayType() { return this._dom.htmlDisplayType; }
     set htmlDisplayType(val) { this._dom.htmlDisplayType = val; }
 
+    /**
+     * Index im elements-Array des parent-Containers
+     * @returns {Number|null}
+     */
+    get index() {
+        if (kijs.isEmpty(this.parent) || kijs.isEmpty(this.parent.elements)) {
+            return null;
+        }
+        let index = this.parent.elements.indexOf(this);
+        if (index === -1) {
+            index = null;
+        }
+        return index;
+    }
+    
     get isEmpty() { return this._dom.isEmpty; }
 
     get left() { return this._dom.left; }
@@ -451,6 +517,27 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             return null;
         }
     }
+
+    get rpc() {
+        return this._rpc || kijs.getRpc('default');
+    }
+    set rpc(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getRpc(val);
+        }
+
+        if (val instanceof kijs.gui.Rpc) {
+            this._rpc = val;
+        } else {
+            throw new kijs.Error(`Unkown format on config "rpc"`);
+        }
+    }
+    
+    get rpcLoadArgs() { return this._rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
+
+    get rpcLoadFn() { return this._rpcLoadFn; }
+    set rpcLoadFn(val) { this._rpcLoadFn = val; }
 
     get style() { return this._dom.style; }
 
@@ -602,7 +689,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {undefined}
      */
     changeDisabled(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -622,7 +709,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null}                     HTML-Node, das den Fokus erhalten hat
      */
@@ -646,6 +733,53 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Lädt die config via RPC
+     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
+     * @param {Boolean} [superCall=false]
+     * @returns {Promise}
+     */
+    load(args=null, superCall=false) {
+        return new Promise((resolve, reject) => {
+            if (this._rpcLoadFn) {
+
+                if (!kijs.isObject(args)) {
+                    args = {};
+                }
+                args = Object.assign({}, args, this._rpcLoadArgs);
+
+                this.rpc.do({
+                    remoteFn: this._rpcLoadFn,
+                    owner: this,
+                    data: args,
+                    cancelRunningRpcs: true,
+                    waitMaskTarget: this,
+                    waitMaskTargetDomProperty: 'dom',
+                    context: this
+
+                }).then((e) => {
+                    // config Properties
+                    if (e.responseData.config) {
+                        // config Properties übernehmen
+                        this.applyConfig(e.responseData.config);
+                    }
+                    
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', e);
+                    }
+
+                    // promise ausführen
+                    resolve(e);
+                    
+                }).catch((ex) => {
+                    reject(ex);
+
+                });
+            }
+        });
     }
 
     // overwrite
@@ -710,36 +844,21 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
-     * @param {HTMLElement} targetNode
-     * @param {HTMLElement} [insert] - true=vorher oder nachher einfügen, false=als Kind anhängen
-     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
+     * rendert das Element und fügt den DOM-Node einem Parent-DOM-Node hinzu
+     * @param {HTMLElement} targetNode           Eltern-Node
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     *                                           statt angehängt eingefügt werden soll
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
-    renderTo(targetNode, insert, insertPosition='before') {
+    renderTo(targetNode, referenceNode=null, insertPosition='before') {
         const firstRender = !this.isRendered;
 
         this.render();
-
-        // vorher oder nachher einfügen
-        if (insert) {
-            // Element vor dem insert-Element einfügen
-            if (insertPosition === 'before') {
-                targetNode.insertBefore(this._dom.node, insert);
-
-            // Element nach dem insert-Element einfügen
-            } else if (insertPosition === 'after') {
-                targetNode.insertBefore(this._dom.node, insert.nextSibling);
-
-            } else {
-                throw new kijs.Error('invalid insert position for renderTo');
-            }
-
-        // als Kind-Element anhängen
-        } else {
-            targetNode.appendChild(this._dom.node);
-        }
-
+        
+        this._dom.renderTo(targetNode, referenceNode, insertPosition);
+        
         // Event afterFirstRenderTo auslösen
         if (firstRender) {
             this.raiseEvent('afterFirstRenderTo');
@@ -847,7 +966,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         if (!this._eventForwardsHas(eventName, target, targetEventName)) {
-            this._eventForwards[eventName] = this._eventForwards[eventName] || [];
+            if (!this._eventForwards[eventName]) {
+                this._eventForwards[eventName] = [];
+            }
             const forward = {
                 target: target,
                 targetEventName: targetEventName
@@ -979,10 +1100,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         }
     }
-
+    
 
     // PRIVATE
     // LISTENERS
+    #onAfterFirstRenderTo(e) {
+        this.load();
+    }
+
     /**
      * Listener für die weitergeleiteten Events der untergeordneten kijs.gui.Dom oder kijs.gui.Element Objekte.
      * Hier werden die Events, die in (this._eventForwards) zum Weiterleiten gekennzeichnet sind weitergeleitet.
@@ -1057,7 +1182,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._dom.destruct();
         }
         if (this._waitMaskEl) {
-            this._waitMaskEl.destruct;
+            this._waitMaskEl.destruct();
+        }
+        if (this._ddSource) {
+            this._ddSource.destruct();
         }
         
         // Variablen (Objekte/Arrays) leeren
@@ -1069,7 +1197,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._lastSize = null;
         this._userData = null;
         this._waitMaskEl = null;
-
+        this._ddSource = null;
+        this._rpc = null;
+        this._rpcLoadArgs = null;
+        
         // Basisklasse entladen
         super.destruct();
     }

@@ -53,6 +53,11 @@
     --default-lineHeight: 14px; /*13px;*/
 
 
+    /* Separator */
+    --separator-bkgrndColor: #bdc4cd;
+    --separator-disabled-bkgrndColor: #bdc4cd;
+
+    
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: #bdc4cd; /*var(--grey4);*/
@@ -249,7 +254,7 @@
 }
 .kijs-panel.kijs-collapse-top,
 .kijs-panel.kijs-collapse-bottom {
-    height: 27px !important;
+    height: 27px;
 }
 
 

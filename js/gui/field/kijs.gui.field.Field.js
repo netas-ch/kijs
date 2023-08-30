@@ -301,7 +301,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         } else {
             this._initialValues = {};
             kijs.Array.each(this._valuesMapping, function(map) {
-                this._initialValues[map.valueProperty] = kijs.toString(this[map.valueProperty]);
+                this._initialValues[map.valueProperty] = this[map.valueProperty];
             }, this);
         }
     }
@@ -478,7 +478,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Für Felder mit mehreren Werten: Damit können mehrere Werte gliechzeitig
+     * Für Felder mit mehreren Werten: Damit können mehrere Werte gleichzeitig
      * zugewiesen werden.
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
      * @param {Object} val
@@ -679,6 +679,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 this[map.valueProperty] = this._initialValues[map.valueProperty];
             }
         }, this);
+        // Fehler nicht mehr anzeigen
+        this._dom.clsRemove('kijs-error');
+        this._errorIconEl.visible = false;
     }
 
 

@@ -38,11 +38,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             parent: this
         });
 
-        this._collapseHeight = null;
-        this._collapseWidth = null;
-
+        this._collapseHeight = null;    // Schwellwert, wenn die Höhe kleiner ist, wird zugeklappt
+        this._collapseWidth = null;     // Schwellwert, wenn die Breite kleiner ist, wird zugeklappt
+        
+        // Masse, die bei collapse oder Maximize hier zwischengespeichert werden, damit sie dann bei 
+        // expand/restore wieder wie vorher sind.
+        this._expandedSize = { 
+            left:null, top:null,
+            width:null, height:null, 
+            marginLeft:null, marginRight:null, marginTop:null, marginBottom:null
+        };
+        
         this._domPos = null;
-
+        
         this._closeButtonEl = null;
         this._collapseButtonEl = null;
         this._innerDisabled = false;
@@ -115,6 +123,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
+            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Breite angezeigt werden.
+            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Höhe angezeigt werden.
             shadow: { target: 'shadow' },       // Soll ein Schatten angezeigt werden?
             
             collapsible: { prio: 1002, target: 'collapsible' },
@@ -318,7 +328,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 doFn = 'expand';
             }
         }
-
+        
+        // Höhe merken, damit beim aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
+        if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
+            this._expandedSize.height = val;
+        }
+        
         if (doFn === 'collapse') {
             if (!this.collapsed) {
                 this.collapse();
@@ -401,19 +416,25 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     get resizable() { return !!this._resizerEl; }
     set resizable(val) {
-        if (!!val !== !!this._resizerEl) {
-            if (this._resizerEl) {
-                this._resizerEl.destruct();
-                this._resizerEl = null;
-            } else {
-                this._resizerEl = new kijs.gui.Resizer({
-                    target: this
-                });
-                if (this._dom.node) {
-                    this._resizerEl.renderTo(this._dom.node);
-                }
-            }
+        if (val) {
+            this._setResizable(true, true);
+        } else {
+            this._setResizable(false, false);
         }
+    }
+    
+    get resizableHeight() {
+        return this._resizerEl && this._resizerEl.allowResizeHeight;
+    }
+    set resizableHeight(val) {
+        this._setResizable(null, !!val);
+    }
+    
+    get resizableWidth() {
+        return this._resizerEl && this._resizerEl.allowResizeWidth;
+    }
+    set resizableWidth(val) {
+        this._setResizable(!!val, null);
     }
 
     get shadow() { this._dom.clsHas('kijs-shadow'); }
@@ -437,7 +458,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
                 doFn = 'expand';
             }
         }
-
+        
+        // Breite merken, damit beim aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
+        if (kijs.isNumber(this._collapseWidth) && val > kijs.isNumber(this._collapseWidth)) {
+            this._expandedSize.width = val;
+        }
+        
         if (doFn === 'collapse') {
             if (!this.collapsed) {
                 this.collapse();
@@ -520,10 +546,26 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._dom.clsRemove(['kijs-collapse-top', 'kijs-collapse-right', 'kijs-collapse-bottom', 'kijs-collapse-left']);
 
         switch (this._collapsible) {
-            case 'top':    this._dom.clsAdd('kijs-collapse-top'); break;
-            case 'right':  this._dom.clsAdd('kijs-collapse-right'); break;
-            case 'bottom': this._dom.clsAdd('kijs-collapse-bottom'); break;
-            case 'left':   this._dom.clsAdd('kijs-collapse-left'); break;
+            case 'top':
+                this._dom.clsAdd('kijs-collapse-top');
+                this._dom.height = null;
+                break;
+                
+            case 'right':
+                this._dom.clsAdd('kijs-collapse-right');
+                this._dom.width = null;
+                break;
+                
+            case 'bottom':
+                this._dom.clsAdd('kijs-collapse-bottom');
+                this._dom.height = null;
+                break;
+                
+            case 'left':
+                this._dom.clsAdd('kijs-collapse-left');
+                this._dom.width = null;
+                break;
+                
         }
 
         // das richtige Icon in den Button
@@ -557,7 +599,26 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (this._collapseButtonEl) {
             this._collapseButtonEl.iconMap = this._getCollapseIconMap();
         }
+        
+        // falls kein size übergeben wurde, die letzte breite/höhe nehmen
+        if (kijs.isEmpty(size)) {
+            switch (this._collapsible) {
+                case 'top':
+                case 'bottom':
+                    if (!kijs.isEmpty(this._expandedSize.height)) {
+                        size = this._expandedSize.height;
+                    }
+                    break;
 
+                case 'right':
+                case 'left':
+                    if (!kijs.isEmpty(this._expandedSize.width)) {
+                        size = this._expandedSize.width;
+                    }
+                    break;
+            }
+        }
+        
         // Übergebene Grösse wiederherstellen
         if (!kijs.isEmpty(size)) {
             switch (this._collapsible) {
@@ -646,9 +707,24 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             };
             document.body.appendChild(this._dom.node);
         }
-
+        
+        this._expandedSize.left = this._dom.style.left;
+        this._expandedSize.top = this._dom.style.top;
+        this._expandedSize.marginLeft = this._dom.style.marginLeft;
+        this._expandedSize.marginRight = this._dom.style.marginRight;
+        this._expandedSize.marginTop = this._dom.style.marginTop;
+        this._expandedSize.marginBottom = this._dom.style.marginBottom;
+        
         this._dom.clsAdd('kijs-maximize');
-
+        this.left = 0;
+        this.top = 0;
+        this._dom.width = null;
+        this._dom.height = null;
+        this._dom.style.marginLeft = 0;
+        this._dom.style.marginRight = 0;
+        this._dom.style.marginTop = 0;
+        this._dom.style.marginBottom = 0;
+        
         // das richtige Icon in den Button
         if (this._maximizeButtonEl) {
             this._maximizeButtonEl.iconMap = this._getMaximizeIconMap();
@@ -741,6 +817,31 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
         this._dom.clsRemove('kijs-maximize');
 
+        if (!kijs.isEmpty(this._expandedSize.left)) {
+            this._dom.style.left = this._expandedSize.left;
+        }
+        if (!kijs.isEmpty(this._expandedSize.top)) {
+            this._dom.style.top = this._expandedSize.top;
+        }
+        if (!kijs.isEmpty(this._expandedSize.width)) {
+            this._dom.width = this._expandedSize.width;
+        }
+        if (!kijs.isEmpty(this._expandedSize.height)) {
+            this._dom.height = this._expandedSize.height;
+        }
+        if (!kijs.isEmpty(this._expandedSize.marginLeft)) {
+            this._dom.style.marginLeft = this._expandedSize.marginLeft;
+        }
+        if (!kijs.isEmpty(this._expandedSize.marginRight)) {
+            this._dom.style.marginRight = this._expandedSize.marginRight;
+        }
+        if (!kijs.isEmpty(this._expandedSize.marginTop)) {
+            this._dom.style.marginTop = this._expandedSize.marginTop;
+        }
+        if (!kijs.isEmpty(this._expandedSize.marginBottom)) {
+            this._dom.style.marginBottom = this._expandedSize.marginBottom;
+        }
+
         // das richtige Icon in den Button
         if (this._maximizeButtonEl) {
             this._maximizeButtonEl.iconMap = this._getMaximizeIconMap();
@@ -813,6 +914,42 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         return '';
+    }
+    
+    /**
+     * Zeigt das Resize-Icon in der unteren rechten Ecke an oder blendet es aus.
+     * @param {Boolean|null} resizeWidth Breite änderbar
+     * @param {Boolean|null} resizeHeight Höhe änderbar
+     * @returns {undefined}
+     */
+    _setResizable(resizeWidth, resizeHeight) {
+        if (resizeWidth === null) {
+            resizeWidth = this._resizerEl && this._resizerEl.allowResizeWidth;
+        }
+        if (resizeHeight === null) {
+            resizeHeight = this._resizerEl && this._resizerEl.allowResizeHeight;
+        }
+        
+        const hasResizer = resizeWidth || resizeHeight;
+        
+        if (hasResizer !== !!this._resizerEl) {
+            if (this._resizerEl) {
+                this._resizerEl.destruct();
+                this._resizerEl = null;
+            } else {
+                this._resizerEl = new kijs.gui.Resizer({
+                    target: this
+                });
+                if (this._dom.node) {
+                    this._resizerEl.renderTo(this._dom.node);
+                }
+            }
+        }
+        
+        if (hasResizer) {
+            this._resizerEl.allowResizeWidth = resizeWidth;
+            this._resizerEl.allowResizeHeight = resizeHeight;
+        }
     }
 
 
@@ -928,6 +1065,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._collapseButtonEl = null;
         this._maximizeButtonEl = null;
         this._resizerEl = null;
+        this._expandedSize = null;
 
         // Basisklasse entladen
         super.destruct(true);

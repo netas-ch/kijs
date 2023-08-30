@@ -101,7 +101,7 @@ home.sc.ListView = class home_sc_ListView {
                     iconMapField: 'iconMap',
                     iconColorField: 'color',
                     //rpc: 'default',
-                    facadeFnLoad: 'listView.loadColors',
+                    rpcLoadFn: 'listView.loadColors',
                     autoLoad: true,
                     value: '#0f0',
                     showCheckBoxes: true,

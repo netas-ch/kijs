@@ -108,7 +108,7 @@ home.test.FormWizard = class home_test_FormWizard {
         // FormPanel
         this._formPanel = new kijs.gui.FormPanel({
             cls: 'kijs-flexcolumn',
-            facadeFnSave: 'form.save',
+            rpcSaveFn: 'form.save',
             style: {
                 flex: 1
             },

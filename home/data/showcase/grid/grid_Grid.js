@@ -23,7 +23,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.grid.Grid',
             //scrollableY: 'auto',
-            cls: 'kijs-flexcolumn',
+            cls: 'kijs-flexfit',
             style: {
                 flex: 1
             },
@@ -32,12 +32,9 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 {
                     xtype: 'kijs.gui.grid.Grid',
                     //rpc: 'default',
-                    facadeFnLoad: 'grid.load',
+                    rpcLoadFn: 'grid.load',
                     filterable: true,
                     filterVisible: true,
-                    style: {
-                        flex: 1
-                    },
                     
                     /*columnConfigs: (function(){
                         let cols = [ {caption:'Vorname', valueField:'vorname'} ];

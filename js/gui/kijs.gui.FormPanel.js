@@ -14,11 +14,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         super(false);
 
         this._data = {};
-        this._facadeFnLoad = null;  // Name der Facade-Funktion. Bsp: 'address.load'
-        this._facadeFnSave = null;  // Name der Facade-Funktion. Bsp: 'address.save'
+        this._rpcSaveFn = null;     // Name der remoteFn. Bsp: 'address.save'
+        this._rpcSaveArgs = {};     // Standard RPC-Argumente
         this._fields = [];          // Array mit kijs.gui.field.Fields-Elementen
-        this._rpc = null;           // Instanz von kijs.gui.Rpc
-        this._rpcArgs = {};         // Standard RPC-Argumente
         this._defaultSaveErrorMsg = kijs.getText(`Es wurden noch nicht alle Felder richtig ausgefüllt`) + '.';
         this._defaultSaveErrorTitle = kijs.getText(`Fehler`) + '.';
 
@@ -32,10 +30,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
-            facadeFnLoad: true,
-            facadeFnSave: true,
-            rpc: { target: 'rpc' },             // Instanz von kijs.gui.Rpc oder Name einer RPC
-            rpcArgs: true
+            rpcSaveFn: true,
+            rpcSaveArgs: true
         });
 
         // Beim Hinzufügen oder Löschen von Kindelementen Felder neu suchen
@@ -102,12 +98,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     get defaultSaveErrorMsg() { return this._defaultSaveErrorMsg; }
     set defaultSaveErrorMsg(val) { this._defaultSaveErrorMsg = val; }
-
-    get facadeFnLoad() { return this._facadeFnLoad; }
-    set facadeFnLoad(val) { this._facadeFnLoad = val; }
-
-    get facadeFnSave() { return this._facadeFnSave; }
-    set facadeFnSave(val) { this._facadeFnSave = val; }
 
     get fields() {
         if (kijs.isEmpty(this._fields)) {
@@ -187,34 +177,11 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
     }
 
-    get rpc() {
-        return this._rpc || kijs.getRpc('default');
-    }
-    set rpc(val) {
-        if (kijs.isString(val)) {
-            val = kijs.getRpc(val);
-        }
-
-        if (val instanceof kijs.gui.Rpc) {
-            this._rpc = val;
-        } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
-        }
-    }
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
     
-    /**
-     * Setzt die Werte der Felder auf den Originalwert zurück
-     * @returns {undefined}
-     */
-    valuesReset() {
-        if (kijs.isEmpty(this._fields)) {
-            this.searchFields();
-        }
-        
-        for (let i=0; i<this._fields.length; i++) {
-            this._fields[i].valuesReset();
-        }
-    }
+    get rpcSaveFn() { return this._rpcSaveFn; }
+    set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
 
 
@@ -259,60 +226,143 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     /**
      * Lädt das Formular mit Daten vom Server
-     * @param {Object|null} args
+     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
+     * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
-    load(args=null, searchFields=false, resetValidation=false) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
-            if (this._facadeFnLoad) {
-
-                if (!kijs.isObject(args)) {
-                    args = {};
-                }
-                args = Object.assign(args, this._rpcArgs);
-
-                this.rpc.do({
-                    facadeFn: this._facadeFnLoad,
-                    owner: this,
-                    data: args,
-                    cancelRunningRpcs: true,
-                    waitMaskTarget: this,
-                    waitMaskTargetDomProperty: 'dom',
-                    context: this
-
-                }).then((e) => {
-                    // Formular
-                    if (e.responseData.form) {
-                        this.removeAll(true);
-                        this.add(e.responseData.form, true);
-                    }
-
-                    if (searchFields || e.responseData.form || kijs.isEmpty(this._fields)) {
-                        this.searchFields();
-                    }
-
-                    // Formulardaten in Formular einfüllen
-                    if (e.responseData.formData) {
-                        this.data = e.responseData.formData;
-                    }
-
-                    // Validierung zurücksetzen?
-                    if (resetValidation) {
-                        this.errorsClear();
-                    }
-
-                    // rendern
-                    this.render();
-
-                    // 'afterLoad' auslösen
-                    this.raiseEvent('afterLoad', e);
-
-                    // promise ausführen
+            super.load(args, true).then((e) => {
+                
+                // Falls des Formular destructed wurde: abbrechen
+                if (!this._dom) {
                     resolve(e);
-                });
+                    return;
+                }
+                
+                if (e.responseData.config && e.responseData.config.elements) {
+                    searchFields = true;
+                }
+
+                if (searchFields || kijs.isEmpty(this._fields)) {
+                    this.searchFields();
+                }
+
+                // Formulardaten in Formular einfüllen
+                if (e.responseData.formData) {
+                    this.data = e.responseData.formData;
+                }
+
+                // Validierung zurücksetzen?
+                if (resetValidation) {
+                    this.errorsClear();
+                }
+                
+                // rendern
+                this.render();
+
+                // 'afterLoad' auslösen
+                if (!superCall) {
+                    this.raiseEvent('afterLoad', e);
+                }
+                
+                // promise ausführen
+                resolve(e);
+            });
+        });
+    }
+    
+    /**
+     * Sendet die Formulardaten an den Server
+     * @param {type} searchFields
+     * @param {type} args
+     * @param {type} waitMaskTarget
+     * @returns {Promise}
+     */
+    save(searchFields=false, args=null, waitMaskTarget=null) {
+        return new Promise((resolve, reject) => {
+            if (!kijs.isObject(args)) {
+                args = {};
             }
+            
+            args = Object.assign({}, args, this._rpcSaveArgs);
+            
+            if (!waitMaskTarget) {
+                waitMaskTarget = this;
+            }
+
+            if (searchFields || kijs.isEmpty(this._fields)) {
+                this.searchFields();
+            }
+
+            // Zuerst lokal validieren
+            if (!this.validate()) {
+                kijs.gui.MsgBox.error(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
+                return;
+            }
+
+            // formData ermitteln
+            args.formData = this.data;
+
+            // an den Server senden
+            this.rpc.do({
+                remoteFn: this.rpcSaveFn,
+                owner: this,
+                data: args,
+                cancelRunningRpcs: false,
+                waitMaskTarget: waitMaskTarget,
+                waitMaskTargetDomProperty: 'dom',
+                context: this
+                
+            }).then((e) => {
+                // Falls des Formular destructed wurde: abbrechen
+                if (!this._dom) {
+                    resolve(e);
+                    return;
+                }
+                
+                // config Properties anwenden, falls vorhanden
+                if (e.responseData.config) {
+                    // config Properties übernehmen
+                    this.applyConfig(e.responseData.config);
+                }
+                
+                // Evtl. Fehler bei den entsprechenden Feldern anzeigen
+                if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
+                    if (!kijs.isEmpty(this._fields)) {
+                        kijs.Array.each(this._fields, function(field) {
+                            if (e.responseData.fieldErrors[field.name]) {
+                                field.errorsAdd(e.responseData.fieldErrors[field.name]);
+                            }
+                        }, this);
+                    }
+
+                    // Falls keine errorMsg übergeben wurde, die Standardmeldung nehmen
+                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._defaultSaveErrorTitle)) {
+                        e.errorTitle = this._defaultSaveErrorTitle;
+                    }
+                    if (kijs.isEmpty(e.errorMsg)) {
+                        e.errorMsg = this._defaultSaveErrorMsg;
+                    }
+                }
+
+                // Falls alles OK: 'dirty' zurücksetzen
+                if (kijs.isEmpty(e.errorType)) {
+                    this.isDirty = false;
+                }
+
+                // 'afterSave' auslösen
+                this.raiseEvent('afterSave', e);
+                
+                // Promise auslösen
+                resolve(e);
+                
+            }).catch((ex) => {
+                reject(ex);
+                
+            });
         });
     }
 
@@ -348,7 +398,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             }
         }
-
+        
         if (parent === this) {
             // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
             if (!kijs.isEmpty(this._fields)) {
@@ -363,80 +413,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         }
 
         return ret;
-    }
-
-    /**
-     * Sendet die Formulardaten an den Server
-     * @param {type} searchFields
-     * @param {type} args
-     * @param {type} waitMaskTarget
-     * @returns {Promise}
-     */
-    save(searchFields=false, args=null, waitMaskTarget=null) {
-        return new Promise((resolve) => {
-            if (!kijs.isObject(args)) {
-                args = {};
-            }
-
-            if (!waitMaskTarget) {
-                waitMaskTarget = this;
-            }
-
-            if (searchFields || kijs.isEmpty(this._fields)) {
-                this.searchFields();
-            }
-
-            // Zuerst lokal validieren
-            if (!this.validate()) {
-                kijs.gui.MsgBox.error(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
-                return;
-            }
-
-            // formData ermitteln
-            args.formData = this.data;
-
-            // an den Server senden
-            this.rpc.do({
-                facadeFn: this.facadeFnSave,
-                owner: this,
-                data: args,
-                cancelRunningRpcs: false,
-                waitMaskTarget: waitMaskTarget,
-                waitMaskTargetDomProperty: 'dom',
-                context: this
-                
-            }).then((e) => {
-                // Evtl. Fehler bei den entsprechenden Feldern anzeigen
-                if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
-                    if (!kijs.isEmpty(this._fields)) {
-                        kijs.Array.each(this._fields, function(field) {
-                            if (e.responseData.fieldErrors[field.name]) {
-                                field.errorsAdd(e.responseData.fieldErrors[field.name]);
-                            }
-                        }, this);
-                    }
-
-                    // Falls keine errorMsg übergeben wurde, die Standardmeldung nehmen
-                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._defaultSaveErrorTitle)) {
-                        e.errorTitle = this._defaultSaveErrorTitle;
-                    }
-                    if (kijs.isEmpty(e.errorMsg)) {
-                        e.errorMsg = this._defaultSaveErrorMsg;
-                    }
-                }
-
-                // Falls alles OK: 'dirty' zurücksetzen
-                if (kijs.isEmpty(e.errorType)) {
-                    this.isDirty = false;
-                }
-
-                // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
-                
-                // Promise auslösen
-                resolve(e);
-            });
-        });
     }
 
     /**
@@ -459,11 +435,25 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         return ret;
     }
 
+    /**
+     * Setzt die Werte der Felder auf den Originalwert zurück
+     * @returns {undefined}
+     */
+    valuesReset() {
+        if (kijs.isEmpty(this._fields)) {
+            this.searchFields();
+        }
+        
+        for (let i=0; i<this._fields.length; i++) {
+            this._fields[i].valuesReset();
+        }
+    }
+    
 
+    // PRIVATE
     // LISTENERS
-    // EVENTS
     #onAfterFirstRenderTo(e) {
-        this.load().catch(() => {});
+        this.load();
     }
 
     #onFieldBlur(e) {
@@ -492,7 +482,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
         // Variablen (Objekte/Arrays) leeren
         this._data = null;
         this._fields = null;
-        this._rpc = null;
+        this._rpcSaveArgs = null;
 
         // Basisklasse entladen
         super.destruct(true);

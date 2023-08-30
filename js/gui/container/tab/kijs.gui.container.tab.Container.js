@@ -26,11 +26,7 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
 
         this._tabClosableIcon = 'kijs.iconMap.Fa.xmark';
 
-        this._tabButtonEl = new kijs.gui.Button({
-            on: {
-                context: this
-            }
-        });
+        this._tabButtonEl = new kijs.gui.Button();
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -49,6 +45,13 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabCaptionCls: { target: 'captionCls', context: this._tabButtonEl },
             tabCaptionHtmlDisplayType: { target: 'captionHtmlDisplayType', context: this._tabButtonEl },
             tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },
+            
+            //tabDraggable: { target: 'draggable', context: this._tabButtonEl },
+            //tabDdName: { target: 'ddName', context: this._tabButtonEl },
+            //tabDdAllowMove: { target: 'ddAllowMove', context: this._tabButtonEl },
+            //tabDdAllowCopy: { target: 'ddAllowCopy', context: this._tabButtonEl },
+            //tabDdAllowLink: { target: 'ddAllowLink', context: this._tabButtonEl },
+            
             tabIcon: { target: 'icon', context: this._tabButtonEl },
             tabIconMap: { target: 'iconMap', context: this._tabButtonEl },
             tabIconChar: { target: 'iconChar', context: this._tabButtonEl },
@@ -71,6 +74,25 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    // gibt Grund-Daten zum Container zurück, wie caption und Position.
+    get posData() {
+        let ret = {
+            tabCaption: this._tabButtonEl.caption,
+            tabIconMap: this._tabButtonEl.icon.iconMapName ?? null,
+            tabClosable: this.tabClosable
+        };
+        if (!kijs.isEmpty(this.name)) {
+            ret.name = this.name;
+        }
+        if (this.disabled) {
+            ret.disabled = this.disabled;
+        }
+        if (this.userData) {
+            ret.userData = this.userData;
+        }
+        return ret;
+    }
+    
     get tabButtonEl() { return this._tabButtonEl; }
 
     get tabClosable() { return !!this._tabButtonEl.icon2Map; }
@@ -95,6 +117,12 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(!!val, callFromParent);
+        this._tabButtonEl.changeDisabled(!!val, true);
+    }
+    
     // overwrite
     unrender(superCall) {
         // Event auslösen.

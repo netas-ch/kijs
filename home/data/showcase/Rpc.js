@@ -39,7 +39,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
-                                facadeFn:'rpc.simple', 
+                                remoteFn:'rpc.simple', 
                                 data: 'RPC mit Promise'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -55,7 +55,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: async function() {
                             const rpcData = await kijs.getRpc('default').do({
-                                facadeFn:'rpc.simple', 
+                                remoteFn:'rpc.simple', 
                                 data: 'RPC mit Promise'
                             });
                             if (kijs.isEmpty(rpcData.errorType)) {
@@ -70,7 +70,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
-                                facadeFn:'rpc.simple', 
+                                remoteFn:'rpc.simple', 
                                 data: 'RPC mit callback function',
                                 fn: function(e) {
                                     if (kijs.isEmpty(e.errorType)) {
@@ -87,7 +87,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.delay', 
+                                remoteFn: 'rpc.delay', 
                                 data: 'RPC verzögert mit Ladeanzeige' 
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -103,7 +103,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.delay', 
+                                remoteFn: 'rpc.delay', 
                                 data: 'RPC verzögert ohne Ladeanzeige, mit cancelRunningRpcs=true',
                                 waitMaskTarget: 'none',
                                 cancelRunningRpcs: true
@@ -121,7 +121,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.delay', 
+                                remoteFn: 'rpc.delay', 
                                 data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 1/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
@@ -130,7 +130,7 @@ home.sc.Rpc = class home_sc_Rpc {
                                 }
                             });
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.delay', 
+                                remoteFn: 'rpc.delay', 
                                 data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 2/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
@@ -153,7 +153,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.simple', 
+                                remoteFn: 'rpc.simple', 
                                 data: 'RPC 1/3'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -161,7 +161,7 @@ home.sc.Rpc = class home_sc_Rpc {
                                 }
                             });
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.simple', 
+                                remoteFn: 'rpc.simple', 
                                 data: 'RPC 2/3'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -169,7 +169,7 @@ home.sc.Rpc = class home_sc_Rpc {
                                 }
                             });
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.simple', 
+                                remoteFn: 'rpc.simple', 
                                 data: 'RPC 3/3' 
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -191,7 +191,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({
-                                facadeFn: 'rpc.infoMsg',
+                                remoteFn: 'rpc.infoMsg',
                                 data: 'infoMsg'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -207,7 +207,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.cornerTipMsg', 
+                                remoteFn: 'rpc.cornerTipMsg', 
                                 data: 'cornerTipMsg'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -223,7 +223,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.warningMsg', 
+                                remoteFn: 'rpc.warningMsg', 
                                 data: 'warningMsg' 
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -239,7 +239,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.errorMsg', 
+                                remoteFn: 'rpc.errorMsg', 
                                 data: 'errorMsg' 
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -262,7 +262,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.errorNotice', 
+                                remoteFn: 'rpc.errorNotice', 
                                 data: 'error' 
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
@@ -278,7 +278,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.error', 
+                                remoteFn: 'rpc.error', 
                                 data: 'errorNotice' 
                             }).
                                 then((e) => {
@@ -301,7 +301,7 @@ home.sc.Rpc = class home_sc_Rpc {
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
-                                facadeFn: 'rpc.delay',
+                                remoteFn: 'rpc.delay',
                                 data: 'RPC verzögert mit Lademaske auf einem individuellen Element',
                                 waitMaskTarget: this._content.down('waitMaskTarget'),
                                 waitMaskTargetDomProperty: 'innerDom'

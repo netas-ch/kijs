@@ -196,7 +196,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     set date(val) {
         const datetime = kijs.Date.create(val);
-
+        
         if (kijs.isEmpty(datetime)) {
             this._datePicker.date = null;
             this._timePicker.value = '';
@@ -227,8 +227,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     set dateEnd(val) {
         const date = kijs.Date.create(val);
-
-        this._timePicker.value = '';
+        
         if (kijs.isEmpty(date)) {
             this._datePicker.dateEnd = null;
         } else {
@@ -237,6 +236,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             } else {
                 this._datePicker.dateEnd = null;
             }
+            // Wenn es ein end-Datum gibt, gibt es nie eine Uhrzeit
+            this._timePicker.value = '';
         }
 
         this._previousChangeValueEnd = this.valueEnd;
@@ -431,7 +432,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 ok = false;
             }
         }
-
+        
         // Datum
         if (ok && dateIndex !== null && arr.length >= dateIndex+1) {
             this._datePicker.value = arr[dateIndex];

@@ -95,8 +95,26 @@ kijs.Graphic = class kijs_Graphic {
 
         return ret;
     }
-
-
+    
+    
+    /**
+     * Gibt die Distanz zwischen zwei Rechtecken zurück.
+     * Die Distanz wird jeweils von der Mitte des Rechtecks aus gemessen.
+     * @param {Object} rectA    Rechteck  im Format: {x:..., y:..., w:..., h:...}
+     * @param {Object} rectB    Rechteck  im Format: {x:..., y:..., w:..., h:...}
+     * @returns {Number}        Distanz in Pixel
+     */
+    static rectsDistance(rectA, rectB) {
+        const aX = rectA.x + rectA.w/2;
+        const aY = rectA.y + rectA.h/2;
+        
+        const bX = rectB.x + rectB.w/2;
+        const bY = rectB.y + rectB.h/2;
+        
+        return Math.hypot(bX-aX, bY-aY);
+    }
+    
+    
     /**
      * Schaut ob ein Rechteck in einem anderen Platz hat
      * @param {Object} rect Masse des Rechtecks im Format: {x:..., y:..., w:..., h:...}

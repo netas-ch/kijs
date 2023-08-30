@@ -57,6 +57,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._formatFnContext = this;
         this._formatRegExps = [];
         this._value = '';
+        this._valueDisplayType = 'code';    // Darstellung der Eigenschaft 'value'. Default: 'code'
+                                            // html: als html-Inhalt (innerHtml)
+                                            // code: Tags werden als Text angezeigt
+                                            // text: Tags werden entfernt
         this._valueTrimEnable = true;
 
 
@@ -75,12 +79,13 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
             submitValueEnable: false
         });
 
-       // Mapping für die Zuweisung der Config-Eigenschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             clickableLinks: true,         // Weblink zum anklicken machen
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
+            valueDisplayType: true,
             valueTrimEnable: true       // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
         });
 
@@ -143,10 +148,26 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     set value(val) {
         val = kijs.toString(val);
         val = this._formatRules(val);
+        this._value = val;
+        
+        switch (this._valueDisplayType) {
+            case 'code':
+                val = kijs.String.htmlspecialchars(val);
+                break;
 
-         // Sicherstellen, dass kein HTML-Code drin ist.
-        val = kijs.String.htmlspecialchars(val);
+            case 'text':
+                let d = document.createElement('div');
+                d.innerHTML = val;
+                val = d.innerText || d.textContent || '';
+                d = null;
+                break;
 
+            case 'html':
+            default:
+                // nix
+                break;
+        }
+        
         // Hyperlinks einfügen
         if (this._clickableLinks) {
             val = this._linkify(val);
@@ -157,6 +178,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         this._inputDom.html = val;
     }
+
+    get valueDisplayType() { return this._valueDisplayType; }
+    set valueDisplayType(val) { this._valueDisplayType = val; }
 
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
@@ -339,18 +363,20 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // Ersetzt Links durch <a>-Tags
     _linkify(txt) {
         let pattern;
-
+        
+        // Bei allen patterns darf vorher kein href=" stehen (?<!href\s*=\s*[\"\'])
+        
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
-        pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        pattern = /(?<!href\s*=\s*[\"\'])(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
 
         // URLs beginnend mit 'www.'
         // (without // before it, or it'd re-link the ones done above).
-        pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+        pattern = /(?<!href\s*=\s*[\"\'])(^|[^\/])(www\.[\S]+(\b|$))/gim;
         txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');
 
         // E-Mailadressen
-        pattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        pattern = /(?<!href\s*=\s*[\"\'])(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
         txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');
 
         return txt;

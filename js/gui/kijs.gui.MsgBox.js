@@ -192,9 +192,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             msg: msg,
 
             closable: true,
-            fieldXtype: 'kijs.gui.field.Text',
-            label: label,
-            value: value,
+            fieldConfig: {
+                xtype: 'kijs.gui.field.Text',
+                label: label,
+                value: value
+            },
 
             fn: fn,
             context: context,
@@ -224,10 +226,13 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
      *
      *     closable: true, // Soll das Fenster ein X zum Schliessen haben?
      *
-     *     // Falls ein Input gewünscht wird, können noch folgende Eigenschaften verwendet werden:
-     *     fieldXtype: 'kijs.gui.field.Text',
-     *     label: 'Wert',
-     *     value: 'Mein Testwert',
+     *     //Falls ein Input-Field gewünscht wird, können in einem Objekt die 
+     *     // Eigenschaften des Fields angegeben werden:
+     *     fieldConfig: {
+     *         xtype: 'kijs.gui.field.Text',
+     *         label: 'Wert',
+     *         value: 'Mein Testwert'
+     *     }
      *
      *     fn: function(e, el) {
      *         alert('Es wurde geklickt auf: ' + e.btn);
@@ -267,10 +272,29 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 }
                 elements.push(config.icon);
             }
+            
+            // Benutzerdefiniertes Feld aus fieldConfig
+            if (config.fieldConfig && config.fieldConfig.xtype) {
+                
+                // Konstruktor ermitteln
+                const constr = kijs.getObjectFromString(config.fieldConfig.xtype);
+                if (!kijs.isFunction(constr)) {
+                    throw new kijs.Error(`Unknown xtype "${config.fieldConfig.xtype}".`);
+                }
 
-            if (config.fieldXtype) {
-                // Beschrieb und Feld
-                let element = new kijs.gui.Container(
+                // fixe Properties
+                config.fieldConfig.name = 'field';
+                
+                // Field erstellen
+                const fld = new constr(config.fieldConfig);
+                fld.on('enterPress', (e) => {
+                    btn = 'ok';
+                    value = fld.value;
+                    fld.upX('kijs.gui.Window').destruct();
+                });
+                
+                // Container mit Beschrieb und Field
+                elements.push(new kijs.gui.Container(
                     {
                         htmlDisplayType: 'html',
                         cls: 'kijs-msgbox-inner',
@@ -282,47 +306,23 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                                 style: {
                                     marginBottom: '4px'
                                 }
-                            },{
-                                xtype: config.fieldXtype,
-                                name: 'field',
-                                label: config.label,
-                                value: config.value,
-                                required: !!config.required,
-                                labelStyle: {
-                                    marginRight: '4px'
-                                },
-                                on: {
-                                    enterPress: function(e) {
-                                        if (config.fieldXtype) {
-                                            btn = 'ok';
-                                            value = e.element.upX('kijs.gui.Window').down('field').value;
-                                            e.element.upX('kijs.gui.Window').destruct();
-                                        }
-                                    }
-                                }
-                            }
+                            },
+                            fld
                         ]
                     }
-                );
-
-                // Wenn Argumente vorhanden sind, diese dem Feld mitgeben
-                if (config.hasOwnProperty('facadeFnArgs') && config.facadeFnArgs) {
-                    element.down('field').facadeFnArgs = config.facadeFnArgs;
-                }
-
-                // Element zu Elements hinzufügen
-                elements.push(element);
-
+                ));
+                
+            // nur ein Element mit Html
             } else {
-                // Text
                 elements.push({
                     xtype: 'kijs.gui.Element',
                     html: config.msg,
                     htmlDisplayType: 'html',
                     cls: 'kijs-msgbox-inner'
                 });
+                
             }
-
+            
             // Buttons
             kijs.Array.each(config.buttons, function(button) {
                 if (!(button instanceof kijs.gui.Button)) {
@@ -333,10 +333,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                     if (!button.on.click) {
                         button.on.click = function() {
                             btn = button.name;
-                            if (config.fieldXtype) {
-                                value = this.upX('kijs.gui.Window').down('field').value;
+                            if (config.fieldConfig && config.fieldConfig.xtype) {
+                                const fld = this.upX('kijs.gui.Window').down('field');
+                                value = fld.value;
 
-                                if (!this.upX('kijs.gui.Window').down('field').validate()) {
+                                if (!fld.validate()) {
                                     return;
                                 }
                             }

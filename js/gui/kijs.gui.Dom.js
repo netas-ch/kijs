@@ -416,9 +416,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     get htmlDisplayType() { return this._htmlDisplayType; }
     set htmlDisplayType(val) { this._htmlDisplayType = val; }
-
-    get isAppended() { return this.isRendered && !!this._node.parentNode; }
-
+    
     get isEmpty() { return kijs.isEmpty(this.html); }
 
     get isRendered() { return !!this._node; }
@@ -470,10 +468,15 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
     set style(val) {
-        if (!this._node) {
-            this._style = val;
+        if (!kijs.isEmpty(this._style)) {
+            Object.assign(this._style, val);
         } else {
-            throw new kijs.Error(`Property "style" can not be set. The node has already been rendered.`);
+            this._style = val;
+        }
+        
+        // Falls bereits gerendert wurde: styles anwenden
+        if (this._node) {
+            Object.assign(this._node.style, this._style);
         }
     }
 
@@ -1139,26 +1142,28 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
-     * @param {HTMLElement} targetNode
-     * @param {HTMLElement} [insert] - Falls das Element statt angehängt eingefügt werden soll.
-     * @param {String} [insertPosition='before'] before, falls das Element vor dem insert-Element eingefügt werden soll, 'after' für nach dem Element.
+     * @param {HTMLElement} targetNode           Eltern-Node
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     *                                           statt angehängt eingefügt werden soll
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
-    renderTo(targetNode, insert, insertPosition='before') {
+    renderTo(targetNode, referenceNode=null, insertPosition='before') {
         this.render();
 
-        if (insert) {
-
-            // Element vor dem insert-Element einfügen
+        // Element vor oder nach einem Element einfügen
+        if (referenceNode) {
+            // Element vor dem referenceNode-Element einfügen
             if (insertPosition === 'before') {
-                targetNode.insertBefore(this._node, insert);
+                targetNode.insertBefore(this._node, referenceNode);
 
-            // Element nach dem insert-Element einfügen
+            // Element nach dem referenceNode-Element einfügen
             } else if (insertPosition === 'after') {
-                targetNode.insertBefore(this._node, insert.nextSibling);
+                targetNode.insertBefore(this._node, referenceNode.nextSibling);
 
             } else {
-                throw new kijs.Error('invalid insert position for renderTo');
+                throw new kijs.Error('invalid insertPosition for renderTo');
             }
 
         // Element anhängen
@@ -1169,10 +1174,31 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * Scrollt den Node in den sichtbaren Bereich
+     * (rekursiv)
+     * @param {Object} options
+     *  - verticalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (oben) positioniert
+     *     - 'end'    Node wird am Ende (unten) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node im sichtbaren Bereich ist.
+     *  - horizontalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (links) positioniert
+     *     - 'end'    Node wird am Ende (rechts) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node ganz im sichtbaren Bereich ist.
+     *  - verticalOffset (Number) default=0 Versatz auf Y-Achse
+     *  - horizontalOffset (Number) default=0 Versatz auf X-Achse
+     *  - behavior  (String) default='auto'
+     *     - 'smooth' Animiertes Scrollen
+     *     - 'instant' Scrollen ohne Animation
+     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
-    scrollIntoView(){
-        this._node.scrollIntoView();
+    scrollIntoView(options) {
+        kijs.Dom.scrollIntoView(this._node, options);
     }
 
     /**

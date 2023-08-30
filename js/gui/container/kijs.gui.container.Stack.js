@@ -140,12 +140,8 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // Aktueller Container ermitteln/setzen via Index
     get currentIndex() { return this._getElIndex(this._currentEl); }
     set currentIndex(val) {
-        if (kijs.isArray(this._elements) && this._elements.length) {
-            if (!this._elements[val]) {
-                throw new kijs.Error(`currentIndex does not exist in elements.`);
-            } else {
-                this.currentEl = this._elements[val];
-            }
+        if (this._elements[val]) {
+            this.currentEl = this._elements[val];
         }
     }
     
@@ -205,7 +201,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
                 if (this._elHistory.length) {
                     this.currentEl = this._elHistory[this._elHistory.length-1];
                     
-                // sonst das Element mit Index 1 nehmen
+                // sonst das Element mit Index 0 nehmen
                 } else {
                     this.currentIndex = 0;
                 }
@@ -255,9 +251,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             if (oldEl === el) {
                 return;
             }
-
-            // Bei Dauer = 0 ist keine Animation nötig
-            if (duration === 0) {
+            
+            // Wenn noch kein Element aktiv ist oder bei Dauer = 0 ist keine 
+            // Animation nötig
+            if (!oldEl || duration === 0) {
                 this.currentEl = el;
                 return;
             }
@@ -425,12 +422,28 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     
     // nur das currentEl ist sichtbar, alle anderen werden ausgeblendet
     _updateElementsVisibility() {
+        // Falls es noch kein aktuelles Element gibt
+        if (!this._currentEl) {
+            if (this._elements.length) {
+                // Wenn noch eines in der History ist: dieses nehmen
+                if (this._elHistory.length) {
+                    this.currentEl = this._elHistory[this._elHistory.length-1];
+                // sonst das Element mit Index 0 nehmen
+                } else {
+                    this.currentIndex = 0;
+                }
+            } else {
+                // es gibt keine Elemente
+                this._currentEl = null;
+            }
+        }
+        
         for (let i=0; i<this._elements.length; i++) {
             this._elements[i].visible = this._elements[i] === this._currentEl;
         }
     }
     
-    // Überprüft, ob eine Animation gültig ist
+    // Überprüft, ob eine animation gültig ist
     _validateAnimation(animation) {
         return this._getAnimationCls(animation, 'in') !== null;
     }

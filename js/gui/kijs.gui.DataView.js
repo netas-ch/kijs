@@ -23,13 +23,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                                         // hat dieses Element den Fokus)
         this._lastSelectedEl = null;    // Letztes Element das Selektiert wurde. Wird gebraucht,
                                         // wenn mit der Shift-Taste mehrere selektiert werden.
-
         this._data = [];
-        this._facadeFnLoad = null;
-        this._facadeFnArgs = {};
         this._filters = [];
         this._focusable = true;
-        this._rpc = null;               // Instanz von kijs.gui.Rpc
         this._selectType = 'none';
 
         this._dom.clsRemove('kijs-container');
@@ -46,10 +42,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
-            facadeFnLoad: true,         // Name der Facade-Funktion. Bsp: 'address.load'
-            facadeFnArgs: true,         // Objekt mit Argumenten für die FacadeFn
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
             selectType: true            // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -90,7 +83,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
-     * @param {kijs.gui.DataViewElement|null} el
+     * @param {kijs.gui.dataView.Element|null} el
      * @returns {undefined}
      */
     set current(el) {
@@ -143,12 +136,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
     }
 
-    get facadeFnArgs() { return this._facadeFnArgs; }
-    set facadeFnArgs(val) { this._facadeFnArgs = val; }
-
-    get facadeFnLoad() { return this._facadeFnLoad; }
-    set facadeFnLoad(val) { this._facadeFnLoad = val; }
-
     get filters() { return this._filters; }
     set filters(val) {
         if (!val) {
@@ -185,21 +172,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // overwrite
     get hasFocus() {
         return this._currentEl ? this._currentEl.hasFocus : false;
-    }
-
-    get rpc() {
-        return this._rpc || kijs.getRpc('default');
-    }
-    set rpc(val) {
-        if (kijs.isString(val)) {
-            val = kijs.getRpc(val);
-        }
-        
-        if (val instanceof kijs.gui.Rpc) {
-            this._rpc = val;
-        } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
-        }
     }
 
     get selectType() { return this._selectType; }
@@ -269,7 +241,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             html += '</div>';
         }, this);
 
-        return new kijs.gui.DataViewElement({
+        return new kijs.gui.dataView.Element({
             dataRow: dataRow,
             html: html
         });
@@ -278,7 +250,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Gibt die selektieten Elemente zurück
      * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
-     * @returns {Array|kijs.gui.DataViewElement|null}
+     * @returns {Array|kijs.gui.dataView.Element|null}
      */
     getSelected() {
         let ret = [];
@@ -403,42 +375,26 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     /**
      * Füllt das Dataview mit Daten vom Server
-     * @param {Array} args Array mit Argumenten, die an die Facade übergeben werden
+     * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
+     * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
-    load(args) {
+    load(args, superCall=false) {
         return new Promise((resolve, reject) => {
-            // Standardargumente anhängen
-            if (kijs.isObject(this._facadeFnArgs) && !kijs.isEmpty(this._facadeFnArgs)) {
-                if (kijs.isObject(args)) {
-                    Object.assign(args, this._facadeFnArgs);
+            super.load(args, true).then((e) => {
 
-                } else if (kijs.isArray(args)) {
-                    args.push(kijs.Object.clone(this._facadeFnArgs));
-
-                } else {
-                    args = kijs.Object.clone(this._facadeFnArgs);
-                }
-            }
-
-            this.rpc.do({
-                facadeFn: this._facadeFnLoad,
-                owner: this, // wird gebraucht um bei cancelRunningRpcs den owner zu unterscheiden
-                data: args,
-                cancelRunningRpcs: true,
-                waitMaskTarget: this, 
-                waitMaskTargetDomProperty: 'dom'
-                
-            }).then((e) => {
                 this.data = e.responseData.rows;
                 if (!kijs.isEmpty(e.responseData.selectFilters)) {
                     this.selectByFilters(e.responseData.selectFilters);
                 }
                 
+                // 'afterLoad' auslösen
+                if (!superCall) {
+                    this.raiseEvent('afterLoad', e);
+                }
+                
                 // Promise ausführen
                 resolve(e);
-                
-                this.raiseEvent('afterLoad', e);
                 
             }).catch((ex) => {
                 reject(ex);
@@ -568,7 +524,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
             kijs.Array.each(this._elements, function(el) {
-                if (el instanceof kijs.gui.DataViewElement) {
+                if (el instanceof kijs.gui.dataView.Element) {
                     const row = el.dataRow;
 
                     kijs.Array.each(filters, function(filterFields) {
@@ -694,7 +650,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // index des aktuellen Elements merken (Element mit Fokus)
         let currentIndex = null;
-        if (this._currentEl && (this._currentEl instanceof kijs.gui.DataViewElement) && kijs.isDefined(this._currentEl.index)) {
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.Element) && kijs.isDefined(this._currentEl.index)) {
             currentIndex = this._currentEl.index;
         }
 
@@ -883,7 +839,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
-        this.load().catch(() => {});
+        this.load();
     }
 
     #onElementClick(e) {
@@ -926,7 +882,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._currentEl = null;
         this._lastSelectedEl = null;
         this._data = null;
-        this._rpc = null;
 
         // Basisklasse entladen
         super.destruct(true);

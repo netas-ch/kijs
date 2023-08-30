@@ -1,5 +1,6 @@
 /* global kijs, this */
 
+// TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
 // kijs.gui.grid.Grid
 // --------------------------------------------------------------
@@ -27,9 +28,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._rows = [];
         this._columnConfigs = [];
         this._primaryKeys = [];
-        this._facadeFnLoad = null;
-        this._facadeFnSave = null;
-        this._facadeFnArgs = null;
+        this._rpcLoadFn = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveFn = null;      // TODO: Wird nicht verwendet !!!!!!!!!
+        this._rpcSaveArgs = null;    // TODO: Wird nicht verwendet !!!!!!!!!
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
@@ -104,9 +106,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         Object.assign(this._configMap, {
             autoLoad:       true,
             rpc:            { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
-            facadeFnLoad:   true,
-            facadeFnSave:   true,
-            facadeFnArgs:   true,
+            rpcLoadFn:      true,
+            rpcLoadArgs:    true,
+            rpcSaveFn:      true,
+            rpcSaveArgs:    true,
             waitMaskTarget: true,
             waitMaskTargetDomProperty: true,
 
@@ -206,9 +209,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return dataRows;
     }
 
-    get facadeFnArgs() { return this._facadeFnArgs; }
-    set facadeFnArgs(val) { this._facadeFnArgs = val; }
-
     get filter() { return this._filter; }
 
     get filterable() { return this._filterable; }
@@ -263,13 +263,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (kijs.isString(val)) {
             val = kijs.getRpc(val);
         }
-        
+
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
             throw new kijs.Error(`Unkown format on config "rpc"`);
         }
     }
+
+    get rpcLoadArgs() { return this._rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
+
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
     get selectType() { return this._selectType; }
     set selectType(val) {
@@ -301,7 +307,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             row.commit();
         }, this);
     }
-    
+
     columnConfigAdd(columnConfigs) {
         if (!kijs.isArray(columnConfigs)) {
             columnConfigs = [columnConfigs];
@@ -454,7 +460,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._tableDom.width = null;
                 this._tableDom.height = null;
             }
-            
+
             if (
                 !this._tableDom.node.height
                 && !this._tableDom.node.scrollWidth
@@ -473,7 +479,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             return responseData;
         });
     }
-    
+
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -712,7 +718,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: false } );
         }
     }
-    
+
     /**
      * Selektiert Datensätze anhand der ID
      * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
@@ -937,6 +943,20 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return cellToEdit;
     }
 
+    /**
+     * Stoppt alle aktiven Edits
+     * @param {Boolean} cancelEdit true, falls Abgebrochen werden soll
+     * @returns {undefined}
+     */
+    stopCellEdit(cancelEdit=false) {
+        kijs.Array.each(this.rows, function(row) {
+            kijs.Array.each(row.cells, function(cell) {
+                cell.stopCellEdit(cancelEdit);
+            }, this);
+        }, this);
+
+    }
+
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -984,8 +1004,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         super.unrender(true);
     }
-    
-    
+
+
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -1055,7 +1075,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     _remoteLoad(resetData=false, loadNextData=false) {
         return new Promise((resolve, reject) => {
             if (
-                this._facadeFnLoad
+                this._rpcLoadFn
                 && !this._isLoading
                 && (
                     !this._remoteDataLoaded // Erster Aufruf
@@ -1089,8 +1109,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 args.start = this._remoteDataStartIndex;
                 args.limit = this._remoteDataStep;
 
-                if (kijs.isObject(this._facadeFnArgs)) {
-                    args = Object.assign(args, this._facadeFnArgs);
+                if (kijs.isObject(this._rpcLoadArgs)) {
+                    args = Object.assign(args, this._rpcLoadArgs);
                 }
 
                 // Lademaske wird angezeigt, wenn das erste Mal geladen wird, oder
@@ -1099,9 +1119,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // RPC ausführen
                 this.rpc.do({
-                    facadeFn: this._facadeFnLoad,
+                    remoteFn: this._rpcLoadFn,
                     owner: this,
-                    data: args, 
+                    data: args,
                     cancelRunningRpcs: true,                                        // Cancel running
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property
@@ -1314,8 +1334,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
         }
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     /**
@@ -1332,7 +1352,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }, this);
         }
     }
-    
+
     #onKeyDown(e) {
         let kCode=e.nodeEvent.code, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
@@ -1486,11 +1506,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._topDom = null;
         this._middleDom = null;
         this._bottomDom = null;
-        
+
         this._rpc = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveArgs = null;
         
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

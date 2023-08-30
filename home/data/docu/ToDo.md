@@ -2,12 +2,12 @@ ToDo
 =====
 Allgemein
 ---------
+- kijs.gui.field.Email, kijs.gui.fieldNumber, kijs.gui.field.Phone, kijs.gui.field.Url:  
+  Für die Buttons-Rechts nicht mehr den innerContainer benutzen, sondern fixe-Buttons,  
+  so dass der innerContainer nur für eigene Buttons verwendet wird.  
 - **kijs.gui.container.Tab Kontextmenü (close, close all, close other)**
 - **kijs.gui.container.Tab disableTab, disableAll**
 - **kijs.gui.Tree überarbeiten**
-- drag & drop
-- kijs.gui.Dashboard (Beispiel: https://examples.sencha.com/extjs/7.6.0/examples/classic/portal/)
-- kijs.gui.container.Tab drag & drop
 - kijs.Storage überarbeiten
 - kijs.gui.grid.disable
 - kijs.gui.ButtonGroup
@@ -17,7 +17,9 @@ Allgemein
 - kijs.gui.UploadWindow überarbeiten
 - kijs.gui.DropZone überarbeiten
 - kijs.gui.Menu überarbeiten
-- Idee: kijs.gui.Element oder Container, Panel remote laden von Configs/Elements (loadConfig, loadElements)
+- Mehrsprachigkeit: Formatierung von Datum, Zahlen, Monats- und Wohentagsnamen
+- Chart.js Plugin
+- fullCalendar Plugin
 
 
 kijs.gui.Fields
@@ -52,3 +54,5 @@ Weiteres
 - Gestensteuerung (z.B. bei kijs.gui.field.Switch, kijs.gui.container.Stack oder Scrollen)
 - Tests auf verschiedenen Browsern/Geräten
 - Neues Design "Neomorphismus"
+- Import von kijs-core, kijs-gui und Plugins (aceEditor, quillEditor, chartJs)
+- BUG: Texte werden macnhmal unten abgeschnitten

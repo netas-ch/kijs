@@ -1,5 +1,7 @@
 /* global kijs, this */
 
+// TODO: Grundsätzlich überarbeiten
+// TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
 // kijs.gui.Tree
 // --------------------------------------------------------------
@@ -23,13 +25,14 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
         this._rpc = null;   // Instanz von kijs.gui.Rpc
-        this._facadeFnLoad = null;
-        this._facadeFnSave = null;
+        this._rpcLoadFn = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveFn = null;
+        this._rpcSaveArgs = null;
         this._autoLoad = true;
         this._loaded = false;
         this._nodeId = null;
         this._leaf = true;
-        this._rpcArgs = null;
         this._rootVisible = false;
 
         this._draggable = false;
@@ -83,9 +86,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             allowDrop                 : true,
 
             rpc                       : { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
-            rpcArgs                   : true,
-            facadeFnLoad              : true,
-            facadeFnSave              : true,
+            rpcLoadFn                 : true,
+            rpcLoadArgs               : true,
+            rpcSaveFn                 : true,
+            rpcSaveArgs               : true,
             nodeId                    : true,
 
             // leaf = true = keine Kindknoten
@@ -163,26 +167,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
     }
 
-    get facadeFnLoad() {
-        if (this._facadeFnLoad) {
-            return this._facadeFnLoad;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.facadeFnLoad;
-        }
-        return null;
-    }
-
-    get facadeFnSave() {
-        if (this._facadeFnSave) {
-            return this._facadeFnSave;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.facadeFnSave;
-        }
-        return null;
-    }
-
     set folderIcon(val) {
         if (val === 'auto') {
             val = (!this._iconEl.iconChar && !this._iconEl.iconCls);
@@ -240,7 +224,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._spinnerIconEl.iconSize = val;
     }
 
-    get isRemote() { return !!(this._facadeFnLoad || (this.parent && 
+    get isRemote() { return !!(this._rpcLoadFn || (this.parent && 
                 (this.parent instanceof kijs.gui.Tree) && this.parent.isRemote)); }
 
     get isRoot() { return !this.parent || !(this.parent instanceof kijs.gui.Tree); }
@@ -270,16 +254,48 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
     }
 
-    get rpcArgs() {
-        if (this._rpcArgs) {
-            return this._rpcArgs;
+    get rpcLoadArgs() {
+        if (this._rpcLoadArgs) {
+            return this._rpcLoadArgs;
         }
         if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpcArgs;
+            return this.parent.rpcLoadArgs;
         }
         return null;
     }
-    set rpcArgs(val) { this._rpcArgs = val; }
+    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
+
+    get rpcLoadFn() {
+        if (this._rpcLoadFn) {
+            return this._rpcLoadFn;
+        }
+        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+            return this.parent.rpcLoadFn;
+        }
+        return null;
+    }
+
+    get rpcSaveArgs() {
+        if (this._rpcSaveArgs) {
+            return this._rpcSaveArgs;
+        }
+        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+            return this.parent.rpcLoadArgs;
+        }
+        return null;
+    }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
+    
+    get rpcSaveFn() {
+        if (this._rpcSaveFn) {
+            return this._rpcSaveFn;
+        }
+        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+            return this.parent.rpcSaveFn;
+        }
+        return null;
+    }
+
 
     get selected() { return !!this._innerDom.clsHas('kijs-selected'); }
     set selected(val) {
@@ -419,7 +435,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     args = {};
                 }
 
-                let defaultRpcArgs = this.rpcArgs;
+                let defaultRpcArgs = this.rpcLoadArgs;
                 if (kijs.isObject(defaultRpcArgs)) {
                     args = Object.assign(args, defaultRpcArgs);
                 }
@@ -430,7 +446,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                 this.loadSpinner = true;
 
                 this.rpc.do({
-                    facadeFn: this.facadeFnLoad,
+                    remoteFn: this.rpcLoadFn,
                     owner: this,
                     data: args,
                     waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
@@ -484,7 +500,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
 
         if (this._autoLoad && this.isRemote && this.isRoot) {
-            this.load().catch(() => {});
+            this.load();
         }
     }
 
@@ -631,17 +647,24 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
             // neu laden
             if (this.isRemote) {
-
+                
+                let args = {
+                    movedId: eventData.movedId,
+                    targetId: eventData.targetId,
+                    position: eventData.position
+                };
+                
+                let defaultRpcArgs = this.rpcSaveArgs;
+                if (kijs.isObject(defaultRpcArgs)) {
+                    args = Object.assign(args, defaultRpcArgs);
+                }
+                
                 // verschieben über rpc melden
-                if (this.facadeFnSave && this.rpc) {
+                if (this.rpcSaveFn && this.rpc) {
                     this.rpc.do({
-                        facadeFn: this.facadeFnSave,
+                        remoteFn: this.rpcSaveFn,
                         owner: this,
-                        data: {
-                            movedId: eventData.movedId,
-                            targetId: eventData.targetId,
-                            position: eventData.position
-                        }
+                        data: args
                     });
                 }
 
@@ -651,12 +674,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                 // node A nur neu laden, wenn sie kein Kind von B ist.
                 if ((nodeA instanceof kijs.gui.Tree) && !nodeA.isChildOf(nodeB)) {
-                    nodeA.load(null, true).catch(() => {});
+                    nodeA.load(null, true);
                 }
 
                 // Node B nur neu laden, wenn sie kein Kind von A ist
                 if (nodeB !== nodeA && (nodeB instanceof kijs.gui.Tree) && !nodeB.isChildOf(nodeA)) {
-                    nodeB.load(null, true).catch(() => {});
+                    nodeB.load(null, true);
                 }
 
             // Elemente verschieben im Dom
@@ -801,6 +824,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         
         // Variablen (Objekte/Arrays) leeren
         this._rpc = null;
+        this._rpcLoadArgs = null;
+        this._rpcSaveArgs = null;
         
         // Basisklasse entladen
         super.destruct(true);

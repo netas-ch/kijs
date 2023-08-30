@@ -8,7 +8,7 @@ foreach ($requests as $request) {
     $response->tid = $request->tid;
     $response->responseData = new stdClass();
 
-    switch ($request->facadeFn) {
+    switch ($request->remoteFn) {
         case 'address.load':
             try {
                 $response->responseData->formData = array(
@@ -146,7 +146,7 @@ foreach ($requests as $request) {
                                 "xtype": "kijs.gui.field.Combo",
                                 "name": "Anrede",
                                 "label": "Anrede",
-                                "facadeFnLoad": "form.loadCombo",
+                                "rpcLoadFn": "form.loadCombo",
                                 "autoLoad": true
                             },{
                                 "xtype": "kijs.gui.field.Text",
@@ -449,7 +449,7 @@ foreach ($requests as $request) {
             break;
 
         default:
-            $response->errorMsg = 'FacadeFn "' . $request->facadeFn . '" existiert nicht.';
+            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
 
     $responses[] = $response;

@@ -13,7 +13,7 @@ foreach ($requests as $request) {
     $response->tid = $request->tid;
     $response->responseData = new stdClass();
 
-    switch ($request->facadeFn) {
+    switch ($request->remoteFn) {
 
         case 'colors.load':
             try {
@@ -77,6 +77,226 @@ foreach ($requests as $request) {
             }
             break;
             
+        case 'container.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            {
+                                "xtype": "kijs.gui.Button",
+                                "height": 40,
+                                "caption": "Button vom Server",
+                                "on": {
+                                    "click": "home.sc.Container.onRpcButtonClick"
+                                }
+                            }
+                        ]
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'containerStack.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "style": { "flex": 1 },
+                        
+                        "defaults":{
+                            "xtype": "kijs.gui.Container",
+                            "innerStyle": { "padding":"10px" }
+                        },
+                        "elements": [
+                            { "name":"s1", "html":"Seite 1", "style":{"backgroundColor":"#f99"} },
+                            { "name":"s2", "html":"Seite 2", "style":{"backgroundColor":"#9f9"} },
+                            { "name":"s3", "html":"Seite 3", "style":{"backgroundColor":"#99f"} },
+                            { "name":"s4", "html":"Seite 4", "style":{"backgroundColor":"#ff9"} },
+                            { "name":"s5", "html":"Seite 5", "style":{"backgroundColor":"#9ff"} }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'containerTab.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            { "name":"b1", "tabCaption":"B 1", "tabIconMap":"kijs.iconMap.Fa.house", "html":"B 1", "innerStyle":{ "color":"#f99"} },
+                            { "name":"b2", "tabCaption":"B 2", "tabIconMap":"kijs.iconMap.Fa.user", "html":"B 2", "innerStyle":{ "color":"#9f9"} },
+                            { "name":"b3", "tabCaption":"B 3", "tabIconMap":"kijs.iconMap.Fa.phone", "html":"B 3", "innerStyle":{ "color":"#99f"} },
+                            { "name":"b4", "tabCaption":"B 4", "tabIconMap":"kijs.iconMap.Fa.envelope", "html":"B 4", "innerStyle":{ "color":"#f9f" }, "disabled":true },
+                            { "name":"b5", "tabCaption":"B 5", "tabIconMap":"kijs.iconMap.Fa.location-dot", "html":"B 5", "innerStyle":{ "color":"#9ff" } }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'containerTab.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboard.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
+                            {
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"kijs.gui.dashboard.Panel",
+                                        "caption": "Info",
+                                        "iconMap":"kijs.iconMap.Fa.circle-info",
+                                        "html":"Dies ist ein <b>Info</b>-Text.",
+                                        "innerStyle": { "padding": "10px" }
+                                    },{
+                                        "xtype":"home.sc.DashboardItemPanel",
+                                        "caption": "Items 1",
+                                        "elements": [
+                                            {
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": true,
+                                                    "allowCopy": false,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 1 (move only)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "1px solid var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            }
+                                        ]
+                                    },{
+                                        "xtype":"home.sc.DashboardItemPanel",
+                                        "caption": "Items 2",
+                                        "elements": [
+                                            {
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": false,
+                                                    "allowCopy": true,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 2 (copy only)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },{
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"home.sc.DashboardFormPanel",
+                                        "caption": "Form",
+                                        "rpcLoadFn":"dashboardFormPanel.load",
+                                        "rpcSaveFn":"dashboardFormPanel.save",
+                                        "autoLoad":true
+                                    }
+                                ]
+                            },{
+                                "xtype": "kijs.gui.dashboard.Column",
+                                "elements": [
+                                    {
+                                        "xtype":"home.sc.DashboardFormPanel",
+                                        "caption": "Form",
+                                        "rpcLoadFn":"dashboardFormPanel.load",
+                                        "rpcSaveFn":"dashboardFormPanel.save",
+                                        "autoLoad":true
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ');
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboard.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+                //sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboardFormPanel.load':
+            try {
+                // config
+                $response->responseData->formData = json_decode('
+                    {
+                        "memo":"Ich bin eine Bemerkung!"
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dashboardFormPanel.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'dataview.load':
             try {
                 $rows = array();
@@ -135,17 +355,36 @@ foreach ($requests as $request) {
             }
             break;
         
+        case 'element.load':
+            try {
+                // config
+                $response->responseData->config = json_decode('
+                    {
+                        "html": "Ich wurde geladen :)",
+                        "tooltip": "Ich bin ein Tooltip vom Server"
+                    }
+                ');
+                
+                sleep(1);
+                
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
         case 'form.load':
             try {
                 // Formular
-                $response->responseData->form = json_decode('
-                        [
+                $response->responseData->config = json_decode('
+                    {
+                        "elements": [
                             {
                                 "xtype": "kijs.gui.field.Combo",
                                 "name": "Anrede",
                                 "label": "Anrede",
-                                "facadeFnLoad": "form.loadCombo",
-                                "autoLoad": true
+                                "rpcLoadFn": "form.loadCombo",
+                                "autoLoad": true,
+                                "disableFlex":true
                             },{
                                 "xtype": "kijs.gui.field.Text",
                                 "name": "Name",
@@ -156,7 +395,8 @@ foreach ($requests as $request) {
                                 "label": "Vorname"
                             }
                         ]
-                    ');
+                    }
+                ');
 
                 // Formulardaten
                 $response->responseData->formData = array(
@@ -164,6 +404,9 @@ foreach ($requests as $request) {
                     'Name' => 'Meier',
                     'Vorname' => 'Susanne'
                 );
+                
+                //sleep(1);
+                
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
             }
@@ -500,7 +743,7 @@ foreach ($requests as $request) {
             break;
             
         default:
-            $response->errorMsg = 'FacadeFn "' . $request->facadeFn . '" existiert nicht.';
+            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
 
     $responses[] = $response;

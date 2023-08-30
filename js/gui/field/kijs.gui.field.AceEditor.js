@@ -32,6 +32,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         });
 
         // Listeners
+        this.on('afterResize', this.#onAfterResize, this);
         this.on('input', this.#onInput, this);
 
         // Config anwenden
@@ -209,6 +210,12 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
     // PRIVATE
     // LISTENERS
+    #onAfterResize(e) {
+        if (this._aceEditor) {
+            this._aceEditor.resize();
+        }
+    }
+    
     #onAnnotationChange() {
         if (this._value) {
             this.validate();

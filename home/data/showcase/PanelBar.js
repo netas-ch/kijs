@@ -73,6 +73,8 @@ home.sc.PanelBar = class home_sc_PanelBar {
                             iconMap: 'kijs.iconMap.Fa.music',
                             badgeText: '5'
                         },{
+                            xtype: 'kijs.gui.Separator'
+                        },{
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.face-smile',
                             badgeText: '6'
@@ -103,6 +105,8 @@ home.sc.PanelBar = class home_sc_PanelBar {
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.music',
                             badgeText: '5'
+                        },{
+                            xtype: 'kijs.gui.Separator'
                         },{
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.face-smile',

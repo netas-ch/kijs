@@ -33,7 +33,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this._iconEl = new kijs.gui.Icon({ parent: this });
         this._textEl = new kijs.gui.Dom({cls:'kijs-mask-text'});
 
-        this._targetElement = null;      // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
+        this._targetElement = null;      // Zielelement (kijs.gui.Element) oder NULL=document.body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
 
         this._dom.clsAdd('kijs-mask');
@@ -138,8 +138,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     get parentNode() {
         if (this._targetElement instanceof kijs.gui.Element) {
             let domEl = this._targetElement[this._targetDomProperty];
-
-            if (domEl && domEl.isAppended) {
+            if (domEl && domEl.node && domEl.node.parentNode) {
                 return domEl.node.parentNode;
 
             } else {
@@ -147,7 +146,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             }
 
         } else {
-            return this._targetElement; // document.body
+            return document.body;
         }
     }
 
@@ -177,7 +176,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // Target ist der Body
         } else if (val === document.body || kijs.isEmpty(val)) {
-            this._targetElement = document.body;
+            this._targetElement = null;
 
         } else {
             throw new kijs.Error(`kijs.gui.Mask: Unkown format on config "target"`);
@@ -196,14 +195,12 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (this._targetElement instanceof kijs.gui.Element) {
             return this._targetElement[this._targetDomProperty].node;
         } else {
-            return this._targetElement;
+            return document.body;
         }
     }
 
-
     get text() { return this._textEl.html; }
     set text(val) { this._textEl.html = val; }
-
 
 
 
@@ -239,8 +236,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
-        this._iconEl.unrender();
-        this._textEl.unrender();
+        if (this._iconEl) {
+            this._iconEl.unrender();
+        }
+        if (this._textEl) {
+            this._textEl.unrender();
+        }
+        
         super.unrender(true);
     }
 
@@ -249,14 +251,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
      * @returns {undefined}
      */
     show() {
-
-        // falls das item noch nicht mit "renderTo" an einem Element angehängt wurde,
-        // können wir noch nichts anzeigen. show nochmals nach renderTo ausführen.
-        if ((this._targetElement instanceof kijs.gui.Element) && !this._targetElement.isAppended) {
-            this._targetElement.once('afterFirstRenderTo', this.#onceTargetAfterFirstRenderTo, this);
-
-        } else if (this.parentNode) {
-            this.renderTo(this.parentNode);
+        const parentNode = this.parentNode;
+        if (parentNode) {
+            this.renderTo(parentNode);
         }
     }
 
@@ -275,10 +272,6 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
     // PRIVATE
     // LISTENERS
-    #onceTargetAfterFirstRenderTo(e) {
-        this.show();
-    }
-
     #onTargetElAfterResize(e) {
         // Maskierung positionieren
         this._updateMaskPosition();
@@ -320,7 +313,6 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (this._iconEl) {
             this._iconEl.destruct();
         }
-
         if (this._textEl) {
             this._textEl.destruct();
         }
@@ -330,6 +322,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._iconEl = null;
+        this._textEl = null;
         this._targetElement = null;
     }
     

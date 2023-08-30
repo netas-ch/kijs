@@ -69,6 +69,22 @@ home.sc.Element = class home_sc_Element {
                             console.log(e.nodeEvent.keyCode);
                         }
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'Element mit HTML Inhalt von RPC:',
+                    style: { margin: '10px 0 4px 0'}
+                },{
+                    xtype: 'kijs.gui.Element',
+                    rpcLoadFn: 'element.load',
+                    autoLoad: true,
+                    html: 'HTML wird dynamisch geladen',
+                    style: { 
+                        backgroundColor:'#ddd',
+                        padding: '10px',
+                        border: '1px solid #333'
+                    }
                 }
             ]
         });

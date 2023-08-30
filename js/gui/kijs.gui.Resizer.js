@@ -29,7 +29,8 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            allowResizeWidth: true,
+            allowResizeHeight: true
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -38,7 +39,9 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
             targetMaxHeight: true,
             targetMaxWidth: true,
             targetMinHeight: true,
-            targetMinWidth: true
+            targetMinWidth: true,
+            allowResizeWidth: { target: 'allowResizeWidth' },
+            allowResizeHeight: { target: 'allowResizeHeight' }
         });
 
         // Listeners
@@ -56,6 +59,28 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get allowResizeHeight() {
+        return this._dom.clsHas('kijs-resizer-height');
+    }
+    set allowResizeHeight(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-resizer-height');
+        } else {
+            this._dom.clsRemove('kijs-resizer-height');
+        }
+    }
+    
+    get allowResizeWidth() {
+        return this._dom.clsHas('kijs-resizer-width');
+    }
+    set allowResizeWidth(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-resizer-width');
+        } else {
+            this._dom.clsRemove('kijs-resizer-width');
+        }
+    }
+    
     get target() { return this._targetEl; }
 
     get targetMaxHeight() { return this._targetMaxHeight; }
@@ -211,7 +236,15 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         if (minMaxSize.hMax !== null && h > minMaxSize.hMax) {
             h = minMaxSize.hMax;
         }
-
+        
+        // Wenn Breite nicht veränderbar
+        if (!this._dom.clsHas('kijs-resizer-width')) {
+            w = this._initialPos.w;
+        }
+        if (!this._dom.clsHas('kijs-resizer-height')) {
+            h = this._initialPos.h;
+        }
+        
         // Grösse zuweisen
         this._overlayDom.width = w;
         this._overlayDom.height = h;
@@ -243,8 +276,12 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         }
 
         // Grösse zuweisen
-        this._targetEl.width = w;
-        this._targetEl.height = h;
+        if (this._dom.clsHas('kijs-resizer-width')) {
+            this._targetEl.width = w;
+        }
+        if (this._dom.clsHas('kijs-resizer-height')) {
+            this._targetEl.height = h;
+        }
 
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
