@@ -209,6 +209,8 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     context: this
                 }
             },{
+                xtype: 'kijs.gui.Separator'
+            },{
                 xtype: 'kijs.gui.field.OptionGroup',
                 label: 'animation:',
                 cls: 'kijs-inline',
@@ -231,6 +233,8 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     context: this
                 }
             },{
+                xtype: 'kijs.gui.Separator'
+            },{
                 xtype: 'kijs.gui.field.OptionGroup',
                 label: 'tabBarPos:',
                 cls: 'kijs-inline',
@@ -250,6 +254,8 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.Separator'
             },{
                 xtype: 'kijs.gui.field.OptionGroup',
                 label: 'tabBarAlign:',

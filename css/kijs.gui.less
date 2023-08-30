@@ -192,6 +192,27 @@
     
     
     /* ******************
+       * Separator
+       ****************** */
+    div.kijs-separator {
+        display: inline-block;
+        min-height: 1px;
+        min-width: 1px;
+        margin: 0;
+        background-color: var(--separator-bkgrndColor);
+        
+        &.kijs-hidden {
+            display: none;
+        }
+
+        &.kijs-disabled {
+            background-color: var(--separator-disabled-bkgrndColor);
+        }
+    }
+    
+    
+    
+    /* ******************
        * Icon
        ****************** */
     span.kijs-icon {
@@ -1035,12 +1056,15 @@
                         }
                     }
                 }
+                
+                > .kijs-separator {
+                    margin: 4px 0;
+                }
             }
         }
 
 
         > .kijs-container-inner {
-            overflow: visible;
             flex: 1 1 auto;
             margin: 0;
             text-align: left;
@@ -2765,7 +2789,8 @@
         flex: 1 0 auto;
         flex-direction: row;
         min-height: 25px;
-
+        overflow: hidden;
+        
         > .kijs-label {
             display: block;
             flex: none;
@@ -2774,8 +2799,10 @@
             font-size: var(--field-fontSize);
             line-height: var(--field-lineHeight);
             padding: 6px 4px 3px 0;
+            overflow: hidden;
             overflow-wrap: break-word;
-
+            text-overflow: ellipsis;
+            
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;

@@ -137,6 +137,9 @@ Siehe Beispiel im Showcase.
 ### kijs.gui.field.ChekboxGroup
 Funktion checkedValues() ist nun DEPRECATED
 
+### kijs.gui.Separator (NEU)
+Einfaches Element um Trennlinien in Toolbars oder Formularen einzufügen.  
+
 ### CSS Anpassungen
  - Foglender globaler CSS-Code entfernt und direkt bei den Elementen eingefügt, wo 
    nötig:  

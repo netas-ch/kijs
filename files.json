@@ -39,7 +39,8 @@
    "js/gui/kijs.gui.Tooltip.js",
    "js/gui/kijs.gui.Element.js",
    "js/gui/kijs.gui.Container.js",
-   
+   "js/gui/kijs.gui.Separator.js",
+            
    "js/gui/container/kijs.gui.container.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
@@ -91,7 +92,7 @@
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",
-
+   
    "js/gui/field/kijs.gui.field.js",
    "js/gui/field/kijs.gui.field.Field.js",
    "js/gui/field/kijs.gui.field.Text.js",

@@ -74,7 +74,12 @@
     --default-fontSize: 12px;
     --default-lineHeight: 14px;
 
-
+    
+    /* Separator */
+    --separator-bkgrndColor: var(--grey4);
+    --separator-disabled-bkgrndColor: var(--grey5);
+    
+    
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: var(--grey4);
