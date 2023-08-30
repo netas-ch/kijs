@@ -5,16 +5,6 @@
 // --------------------------------------------------------------
 kijs.Dom = class kijs_Dom {
 
-    // --------------------------------------------------------------
-    // STATICS GETTERS
-    // --------------------------------------------------------------
-    /**
-     * Array mit den Propertys, die nicht direkt gesetzt werden können (node.Eigenschaft = Wert), sondern
-     * via die Funktion node.setAttribute(Eigenschaft, Wert) gesetzt werden müssen.
-     * @returns {Array}
-     */
-    //static get murgsPropertyNames() { return ['for']; }
-
 
     // --------------------------------------------------------------
     // STATICS
@@ -24,72 +14,7 @@ kijs.Dom = class kijs_Dom {
     //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss,
     //                                  wird das ergebnis hier gemerkt.
 
-    /**
-     * Lesen einer Eigenschaft eines Nodes.
-     * Dabei werden Murgs-Attribute automatisch anders gelesen.
-     * @param {Node} node
-     * @param {String} name
-     * @returns {String|null|Boolean|undefined}
-     */
-    /*static getAttribute(node, name) {
-        // Murgs-Attribute
-        if (kijs.Array.contains(this.murgsPropertyNames, name)) {
-            if (node.hasAttribute(name)) {
-                return node.getAttribute(name);
-            } else {
-                return null;
-            }
-
-        // Normale Attribute
-        } else {
-            return node[name];
-
-        }
-    }*/
-
-    /**
-     * Zuweisen einer Eigenschaft zu einem node.
-     * Dabei werden Murgs-Attribute automatisch anders zugewiesen.
-     * @param {Node} node
-     * @param {String} name
-     * @param {String|null|Boolean|undefined} value
-     * @returns {undefined}
-     */
-    /*static setAttribute(node, name, value) {
-        // Murgs-Attribute müssen über node.setAttribute(name, value) gesetzt werden.
-        if (kijs.Array.contains(this.murgsPropertyNames, name)) {
-            if (!kijs.isEmpty(value)) {
-                node.setAttribute(name, value);
-            } else {
-                node.removeAttribute(name);
-            }
-
-        // alle anderen können normal zugewiesen werden
-        } else {
-            node[name] = value;
-
-        }
-    }*/
-
-    /**
-     * Überprüft ob ein Node über eine Eigenschaft verfügt.
-     * Dabei werden Murgs-Attribute automatisch anders gelesen.
-     * @param {Node} node
-     * @param {String} name
-     * @returns {Boolean}
-     */
-    /*static hasAttribute(node, name) {
-        // Murgs-Attribute
-        if (kijs.Array.contains(this.murgsPropertyNames, name)) {
-            return node.hasAttribute(name);
-
-        // Normale Attribute
-        } else {
-            return kijs.isEmpty(node[name]);
-
-        }
-    }*/
-
+   
 
     /**
      * Erstellt einen Event-Listener auf ein HTMLElement
@@ -608,7 +533,265 @@ kijs.Dom = class kijs_Dom {
         }
     }
     
+    /**
+     * Scrollt den Node in den sichtbaren Bereich
+     * (rekursiv)
+     * @param {HTMLELement} node
+     * @param {Object} options
+     *  - verticalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (oben) positioniert
+     *     - 'end'    Node wird am Ende (unten) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node im sichtbaren Bereich ist.
+     *  - horizontalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (links) positioniert
+     *     - 'end'    Node wird am Ende (rechts) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node ganz im sichtbaren Bereich ist.
+     *  - verticalOffset (Number) default=0 Versatz auf Y-Achse
+     *  - horizontalOffset (Number) default=0 Versatz auf X-Achse
+     *  - behavior  (String) default='auto'
+     *     - 'smooth' Animiertes Scrollen
+     *     - 'instant' Scrollen ohne Animation
+     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
+     * @returns {undefined}
+     */
+    static scrollIntoView(node, options) {
+        if (!node.offsetParent) {
+            return;
+        }
+        
+        if (kijs.isEmpty(options)) {
+            options = {};
+        }
+        
+        options.horizontalPosition = options.horizontalPosition ? options.horizontalPosition : 'auto';
+        options.verticalPosition = options.verticalPosition ? options.verticalPosition : 'auto';
+        
+        options.horizontalOffset = options.horizontalOffset ? parseInt(options.horizontalOffset) : 0;
+        options.verticalOffset = options.verticalOffset ? parseInt(options.verticalOffset) : 0;
+        
+        options.behavior = options.behavior ? options.behavior : 'auto';
+        
+        options.scrollParentsTo = !!options.scrollParentsTo;
+        
+        // Bei den offeset den Kehwert nehmen
+        options.horizontalOffset = options.horizontalOffset * -1;
+        options.verticalOffset = options.verticalOffset * -1;
+        
+        
+        // Masse des node
+        const rNode = {
+            x: node.offsetLeft,
+            y: node.offsetTop,
+            w: node.offsetWidth,
+            h: node.offsetHeight
+        };
+        
+        // Elternknoten mit Scrollbar ermitteln
+        let parentNode = node.offsetParent;
+        
+        // Eltern duchgehen bis ein Scrollbarer gefunden wurde
+        while (parentNode) {
+            
+            // Ist der parentNode gültig?
+            if (!parentNode || !parentNode.offsetParent || parentNode.offsetParent.tagName.toLowerCase() === 'html') {
+                return;
+            }
+            
+            // hat der parentNode eine Scrollbar?
+            const hasXScrollbar = ["scroll", "auto"].indexOf(getComputedStyle(parentNode).overflowX) >= 0;
+            const hasYScrollbar = ["scroll", "auto"].indexOf(getComputedStyle(parentNode).overflowY) >= 0;
+            // oder overflow: hidden und hat einen übergrossen Inhalt (z.B. bei kijs.gui.container.Scrollable)
+            const hasXOverflowContent = getComputedStyle(parentNode).overflowX === 'hidden' && parentNode.scrollWidth > parentNode.clientWidth;
+            const hasYOverflowContent = getComputedStyle(parentNode).overflowY === 'hidden' && parentNode.scrollHeight > parentNode.clientHeight;
+            
+            // scrollbar: ja
+            if (hasXScrollbar || hasYScrollbar || hasXOverflowContent || hasYOverflowContent) {
+                break;
+                
+            // scrollbar: nein
+            } else {
+                // X- und Y-Position zum Node addieren
+                rNode.x += parentNode.offsetLeft;
+                rNode.y += parentNode.offsetTop;
+                
+                parentNode = parentNode.offsetParent;
+                
+            }
+        }
+        
+        // Masse des parentNode
+        const rParent = {
+            innerW: parentNode.clientWidth,
+            innerH: parentNode.clientHeight,
+            scrollX: parentNode.scrollLeft,
+            scrollY: parentNode.scrollTop,
+            scrollW: parentNode.scrollWidth,
+            scrollH: parentNode.scrollHeight,
+            isXScrollable: parentNode.scrollWidth > parentNode.clientWidth,
+            isYScrollable: parentNode.scrollHeight > parentNode.clientHeight
+        };
+        
+        
+        // Scrollkoordinaten, zu denen gescrollt werden soll. Null=Nicht scrollen
+        let scrollToX = null;
+        let scrollToY = null;
+        
+        // Horizontale Scrollkoordinaten ermitteln (scrollToX)
+        if (rParent.isXScrollable) {
+            switch (options.horizontalPosition) {
+                case 'start':
+                    scrollToX = rNode.x;
+                    break;
 
+                case 'end':
+                    scrollToX = rNode.x;
+                    scrollToX -= (rParent.innerW - rNode.w);
+                    break;
+
+                case 'center':
+                    let xOffsetFromScreenLeft = (rParent.innerW - rNode.w) / 2;
+                    scrollToX =  rNode.x;
+                    scrollToX -= xOffsetFromScreenLeft;
+                    break;
+
+                case 'auto':
+                    // Ist der Node im sichtbaren Scrollbereich?
+                    let x = rNode.x - rParent.scrollX;
+
+                    // position ist zuweit links
+                    if (x < 0) {
+                        // start
+                        scrollToX = rNode.x;
+
+                    // position ist zweit rechts
+                    } else if (x + rNode.w > rParent.innerW) {
+                        // end
+                        scrollToX = rNode.x;
+                        scrollToX -= (rParent.innerW - rNode.w);
+
+                    }
+                    break;
+                    
+                default:
+                    throw new kijs.Error(`Option "horizontalPosition" is not valid`);
+            }
+        }
+        
+        // Verticale Scrollkoordinaten ermitteln (scrollToY)
+        if (rParent.isYScrollable) {
+            switch (options.verticalPosition) {
+                case 'start':
+                    scrollToY = rNode.y;
+                    break;
+
+                case 'end':
+                    scrollToY = rNode.y - (rParent.innerH - rNode.h);
+                    break;
+
+                case 'center':
+                    let yOffsetFromScreenTop = (rParent.innerH - rNode.h) / 2;
+                    scrollToY =  rNode.y - yOffsetFromScreenTop;
+                    break;
+
+                case 'auto':
+                    // Ist der Node im sichtbaren Scrollbereich?
+                    let y = rNode.y - rParent.scrollY;
+
+                    // position ist oberhalb
+                    if (y < 0) {
+                        // start
+                        scrollToY = rNode.y;
+
+                    // position ist unterhalb
+                    } else if (y + rNode.h > rParent.innerH) {
+                        // end
+                        scrollToY = rNode.y - (rParent.innerH - rNode.h);
+
+                    }
+                    break;
+                    
+                default:
+                    throw new kijs.Error(`Option "verticalPosition" is not valid`);
+            }
+        }
+        
+        // Horizontaler Offset + Validierung
+        if (scrollToX !== null) {
+            // horizontalOffset
+            scrollToX += options.horizontalOffset;
+            
+            // Validierung
+            if (scrollToX > rParent.scrollW - rNode.w) {
+                scrollToX = rParent.scrollW - rNode.w;
+            }
+            if (scrollToX < 0) {
+                scrollToX = 0;
+            }
+        }
+        
+        // Vertikaler Offset + Validierung
+        if (scrollToY !== null) {
+            // verticalOffset
+            scrollToY += options.verticalOffset;
+            
+            // Validierung
+            if (scrollToY > rParent.scrollH - rNode.h) {
+                scrollToY = rParent.scrollH - rNode.h;
+            }
+            if (scrollToY < 0) {
+                scrollToY = 0;
+            }
+        }
+        
+        // scrollen, wenn nötig
+        if (scrollToX !== null || scrollToY !== null) {
+            let args = {};
+            
+            if (scrollToX !== null) {
+                args.left = scrollToX;
+            }
+            
+            if (scrollToY !== null) {
+                args.top = scrollToY;
+            }
+            
+            args.behavior = options.behavior;
+            
+            parentNode.scrollTo(args);
+        }
+        
+        // Evtl. die Eltern auch scrollen
+        if (options.scrollParentsTo && parentNode !== document.body && parentNode.offsetParent) {
+            
+            let args = {
+                horizontalPosition: options.horizontalPosition,
+                verticalPosition: options.verticalPosition,
+                horizontalOffset: options.horizontalOffset * -1,
+                verticalOffset: options.verticalOffset * -1,
+                behavior: options.behavior,
+                scrollParentsTo: true
+            };
+            
+            // falls gescrollt wurde, den Offset zurücksetzen
+            if (scrollToX !== null) {
+                args.horizontalOffset = 0;
+            }
+            if (scrollToY !== null) {
+                args.verticalOffset = 0;
+            }
+            
+            // rekursiver Aufruf
+            kijs.Dom.scrollIntoView(parentNode, args);
+        }
+        
+    }
+    
+    
     // Aktuelles Farbschema zurückgeben
     static themeGet() {
         return document.querySelector('html').dataset.theme;

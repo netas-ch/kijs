@@ -96,6 +96,8 @@ home.sc.Window = class home_sc_Window {
                         context: this
                     }
                 },{
+                    xtype: 'kijs.gui.Separator'
+                },{
                     xtype: 'kijs.gui.Button',
                     iconCls: 'icoWizard16',
                     caption: 'Toggle Text',
@@ -297,6 +299,8 @@ home.sc.Window = class home_sc_Window {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.Separator'
             },{
                 xtype: 'kijs.gui.Button',
                 caption: 'Top Win Caption',

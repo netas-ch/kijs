@@ -12,8 +12,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
         this._content = null;
     }
     
-    // TODO: Beispiel mit Autoload in einem eigenen Tab
-    
     
     
     // --------------------------------------------------------------
