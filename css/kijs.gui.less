@@ -798,10 +798,10 @@
         &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-start;
         }
-        .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+        &.kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: center;
         }
-        .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+        &.kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-end;
         }
         
@@ -857,71 +857,76 @@
        * Container Wizard
        ****************** */
     div.kijs-container-wizard {
-        > .kijs-container-scrollable {
-            min-height: 25px;
+        &.kijs-pos-left,
+        &.kijs-pos-right,
+        &.kijs-pos-bottom,
+        &.kijs-pos-top {
+            > .kijs-container-scrollable {
+                min-height: 25px;
+                background-color: transparent;
 
-            > .kijs-container-inner {
-                flex-wrap: wrap;
-                align-content: center;
+                > .kijs-container-inner {
+                    flex-wrap: wrap;
 
-                > .kijs-button {
-                    background: none;
-                    border: none;
-
-                    &:focus {
+                    > .kijs-button {
                         background: none;
                         border: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-focus-fontColor);
-                        }
-                    }
-
-                    &:hover {
-                        background: none;
-                        border: none;
-                    }
-
-                    &.kijs-disabled {
-                        border: none;
-                        background: none;
-
-                        > .kijs-caption,
-                        > .kijs-icon {
-                            color: var(--tabButton-fontColor);
-                        }
 
                         &:focus {
                             background: none;
                             border: none;
-                        }
-                    }
 
-                    &.kijs-current {
-                        background: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-current-fontColor);
-                            font-size: 10px;
+                            > .kijs-icon {
+                                color: var(--tabButton-focus-fontColor);
+                            }
                         }
 
-                        > .kijs-caption {
-                            color: var(--tabButton-current-fontColor);
+                        &:hover {
+                            background: none;
+                            border: none;
                         }
 
                         &.kijs-disabled {
+                            border: none;
+                            background: none;
+
+                            > .kijs-caption,
+                            > .kijs-icon {
+                                color: var(--tabButton-fontColor);
+                            }
+
+                            &:focus {
+                                background: none;
+                                border: none;
+                            }
+                        }
+
+                        &.kijs-current {
+                            background: none;
+
+                            > .kijs-icon {
+                                color: var(--tabButton-current-fontColor);
+                                font-size: 10px;
+                            }
+
                             > .kijs-caption {
                                 color: var(--tabButton-current-fontColor);
                             }
+
+                            &.kijs-disabled {
+                                > .kijs-caption {
+                                    color: var(--tabButton-current-fontColor);
+                                }
+                            }
                         }
-                    }
 
-                    > .kijs-icon {
-                        font-size: 8px;
-                    }
+                        > .kijs-icon {
+                            font-size: 8px;
+                        }
 
-                    > .kijs-caption {
-                        font-size: 10px;
+                        > .kijs-caption {
+                            font-size: 10px;
+                        }
                     }
                 }
             }
