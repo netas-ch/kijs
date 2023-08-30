@@ -1174,26 +1174,31 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * Scrollt den Node in den sichtbaren Bereich
-     * @param {object} options
+     * (rekursiv)
+     * @param {Object} options
+     *  - verticalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (oben) positioniert
+     *     - 'end'    Node wird am Ende (unten) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node im sichtbaren Bereich ist.
+     *  - horizontalPosition (String) default='auto'
+     *     - 'start'  Node wird am Anfang (links) positioniert
+     *     - 'end'    Node wird am Ende (rechts) positioniert
+     *     - 'center' Node wird in der Mitte positioniert
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *                sowenig, dass der node ganz im sichtbaren Bereich ist.
+     *  - verticalOffset (Number) default=0 Versatz auf Y-Achse
+     *  - horizontalOffset (Number) default=0 Versatz auf X-Achse
+     *  - behavior  (String) default='auto'
+     *     - 'smooth' Animiertes Scrollen
+     *     - 'instant' Scrollen ohne Animation
+     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
-    scrollIntoView(options={behavior:'auto', block:'start', inline: 'nearest'}){
-        this._node.scrollIntoView(options);
-    }
-    
-    /**
-     * Scrollt den Node in den sichtbaren Bereich, falls er nicht ganz sichtbar ist
-     * @param {object} options
-     * @returns {undefined}
-     */
-    scrollIntoViewIfNeeded(options={behavior:'auto', block:'start', inline: 'nearest'}) {
-        const rect = this._node.getBoundingClientRect();
-        const rectParent = this._node.parentNode.getBoundingClientRect();
-        
-        if (rect.top < rectParent.top || rect.bottom > rectParent.bottom ||
-                rect.right > rectParent.right || rect.left < rectParent.left) {
-            this._node.scrollIntoView(options);
-        }
+    scrollIntoView(options) {
+        kijs.Dom.scrollIntoView(this._node, options);
     }
 
     /**

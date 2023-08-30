@@ -68,10 +68,16 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
 ### kijs.gui.Dom
  - getter ```isAppended``` gibt es nicht mehr. Sie dazu auch den Kommentar unter 
    kijs.gui.Element.  
- - Die Methode ```scrollIntoView(options)``` hat neu ein optionales Argument ```options``` 
-   welches dem Standard entspricht 
-   https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView  
- - Neue Methode ```scrollIntoViewIfNeeded(options)```  
+ - Die Methode ```scrollIntoView()``` hat neu ein optionales Argument ```options``` 
+   Sie verhält sich nun anderes, als vorher. Standardmässig wird jetzt nur noch der 
+   erste 'Elterncontainer mit Scrollbar' gescrollt. Übergeordnete Container werden 
+   nicht mehr gescrollt. 
+   **UPDATE TIPP:** um die gleiche Funktionalität wie vorher zu haben:  
+   Projekt nach ```dom.scrollIntoView()``` durchsuchen und durch 
+   ```dom.scrollIntoView({ scrollParentsTo: true })``` ersetzen.  
+
+### kijs.Dom
+ - Neue statische Funktion ```scrollIntoView(node, options)```  
 
 ### kijs.gui.MsgBox
  - config-Argumente der statischen Funktion ```kijs.gui.MsgBox.show(config)``` 
