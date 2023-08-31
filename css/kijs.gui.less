@@ -232,6 +232,26 @@
     }
 
 
+    /* ******************
+       * Scrollbar
+       ****************** */
+    ::-webkit-scrollbar {
+        width: 10px;
+        height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbar-background-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-hover-color);
+    }
+
 
     /* ******************
        * Button
@@ -857,71 +877,76 @@
        * Container Wizard
        ****************** */
     div.kijs-container-wizard {
-        > .kijs-container-scrollable {
-            min-height: 25px;
+        &.kijs-pos-left,
+        &.kijs-pos-right,
+        &.kijs-pos-bottom,
+        &.kijs-pos-top {
+            > .kijs-container-scrollable {
+                min-height: 25px;
+                background-color: transparent;
 
-            > .kijs-container-inner {
-                flex-wrap: wrap;
-                align-content: center;
+                > .kijs-container-inner {
+                    flex-wrap: wrap;
 
-                > .kijs-button {
-                    background: none;
-                    border: none;
-
-                    &:focus {
+                    > .kijs-button {
                         background: none;
                         border: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-focus-fontColor);
-                        }
-                    }
-
-                    &:hover {
-                        background: none;
-                        border: none;
-                    }
-
-                    &.kijs-disabled {
-                        border: none;
-                        background: none;
-
-                        > .kijs-caption,
-                        > .kijs-icon {
-                            color: var(--tabButton-fontColor);
-                        }
 
                         &:focus {
                             background: none;
                             border: none;
-                        }
-                    }
 
-                    &.kijs-current {
-                        background: none;
-
-                        > .kijs-icon {
-                            color: var(--tabButton-current-fontColor);
-                            font-size: 10px;
+                            > .kijs-icon {
+                                color: var(--tabButton-focus-fontColor);
+                            }
                         }
 
-                        > .kijs-caption {
-                            color: var(--tabButton-current-fontColor);
+                        &:hover {
+                            background: none;
+                            border: none;
                         }
 
                         &.kijs-disabled {
+                            border: none;
+                            background: none;
+
+                            > .kijs-caption,
+                            > .kijs-icon {
+                                color: var(--tabButton-fontColor);
+                            }
+
+                            &:focus {
+                                background: none;
+                                border: none;
+                            }
+                        }
+
+                        &.kijs-current {
+                            background: none;
+
+                            > .kijs-icon {
+                                color: var(--tabButton-current-fontColor);
+                                font-size: 10px;
+                            }
+
                             > .kijs-caption {
                                 color: var(--tabButton-current-fontColor);
                             }
+
+                            &.kijs-disabled {
+                                > .kijs-caption {
+                                    color: var(--tabButton-current-fontColor);
+                                }
+                            }
                         }
-                    }
 
-                    > .kijs-icon {
-                        font-size: 8px;
-                    }
+                        > .kijs-icon {
+                            font-size: 8px;
+                        }
 
-                    > .kijs-caption {
-                        font-size: 10px;
+                        > .kijs-caption {
+                            font-size: 10px;
+                        }
                     }
                 }
             }
@@ -1120,7 +1145,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: 30px;
+        height: var(--panel-collapse-height);
         padding: 0 6px;
         gap: 4px;
         background-color: var(--bar-bkgrndColor);
@@ -1331,13 +1356,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: 30px;
+            height: var(--panel-collapse-height) !important;
             flex: none;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto;
-            width: 30px;
+            width: var(--panel-collapse-width) !important;
             flex: none;
             display: flex;
             flex-direction: row;
@@ -1366,7 +1391,7 @@
         /* PanelBar Minimiert */
         &.kijs-collapse-right, &.kijs-collapse-left {
             > .kijs-panelbar {
-                width: 30px;
+                width: var(--panel-collapse-width);
                 height: auto;
                 padding: 3px 0 3px 0;
                 flex-direction: column;
