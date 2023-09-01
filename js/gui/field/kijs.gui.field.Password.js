@@ -49,7 +49,9 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
                                                                     // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
             passwordChar: true,
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
-            placeholder: { target: 'placeholder' }
+            placeholder: { target: 'placeholder' },
+
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom

@@ -85,7 +85,8 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
             inputMode: { target: 'inputMode' },
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
-            placeholder: { target: 'placeholder' }
+            placeholder: { target: 'placeholder' },
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom

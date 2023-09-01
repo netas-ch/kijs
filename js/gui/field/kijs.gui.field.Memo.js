@@ -41,7 +41,8 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
             inputMode: { target: 'inputMode' },
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
-            placeholder: { target: 'placeholder' }
+            placeholder: { target: 'placeholder' },
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom

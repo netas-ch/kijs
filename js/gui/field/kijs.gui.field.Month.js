@@ -132,7 +132,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             minDate: { target: 'minDate', context: this._monthPicker },
             maxValue: { target: 'maxValue', context: this._monthPicker },
             minValue: { target: 'minValue', context: this._monthPicker },
-            placeholder: { target: 'placeholder' }
+            placeholder: { target: 'placeholder' },
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom

@@ -130,7 +130,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             date: { target: 'date' },           // Date Object
             dateEnd: { target: 'dateEnd' },     // Date Object
             value: { target: 'value' },         // Datum als SQL-String
-            valueEnd: { target: 'valueEnd' }    // End-Datum als SQL-String
+            valueEnd: { target: 'valueEnd' },    // End-Datum als SQL-String
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -196,7 +197,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     set date(val) {
         const datetime = kijs.Date.create(val);
-        
+
         if (kijs.isEmpty(datetime)) {
             this._datePicker.date = null;
             this._timePicker.value = '';
@@ -227,7 +228,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
     set dateEnd(val) {
         const date = kijs.Date.create(val);
-        
+
         if (kijs.isEmpty(date)) {
             this._datePicker.dateEnd = null;
         } else {
@@ -432,7 +433,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 ok = false;
             }
         }
-        
+
         // Datum
         if (ok && dateIndex !== null && arr.length >= dateIndex+1) {
             this._datePicker.value = arr[dateIndex];

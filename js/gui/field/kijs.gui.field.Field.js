@@ -154,9 +154,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
             validationFn: { target: 'validationFn' },
             validationFnContext: { target: 'validationFnContext' },
-            validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this },
-
-            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
+            validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this }
         });
 
         // Listeners

@@ -28,7 +28,8 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         Object.assign(this._configMap, {
             mode: true,          // 'javascript' (Default), 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
             theme: true,         // (siehe Ordner kijs\lib\ace)
-            valueTrimEnable: true // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrimEnable: true, // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Listeners
@@ -156,7 +157,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
                 kijs.Dom.addEventListener('blur', inputNode, this.#onInputNodeBlur, this);
             }, 200, this);
-            
+
             this._aceEditor.setHighlightActiveLine(false);
             //this._aceEditor.$blockScrolling = Infinity;
 
@@ -215,7 +216,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
             this._aceEditor.resize();
         }
     }
-    
+
     #onAnnotationChange() {
         if (this._value) {
             this.validate();

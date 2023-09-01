@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // TODO: load() Funktion überarbeiten, so dass sie einen Basisklassenaufruf macht.
-// TODO: force-Argument bei Load entfernen. Die Anzahl eingegebenen Zeichen nicht 
+// TODO: force-Argument bei Load entfernen. Die Anzahl eingegebenen Zeichen nicht
 //       in der Load Funktion überprüfen, sondern in #onInputDomKeyUp
 
 // --------------------------------------------------------------
@@ -109,10 +109,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Attribute für SpinBoxEl weiterreichen
             scrollableX: { target: 'scrollableX', context: this._spinboxEl },
-            scrollableY: { target: 'scrollableY', context: this._spinboxEl }
+            scrollableY: { target: 'scrollableY', context: this._spinboxEl },
+
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom
+        this._eventForwardsAdd('focus', this._inputDom);
         this._eventForwardsAdd('input', this._inputDom);
         this._eventForwardsAdd('keyDown', this._inputDom);
         this._eventForwardsAdd('afterLoad', this._listViewEl);
@@ -315,7 +318,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     load(args=null, forceLoad=false, query=null) {
         args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
-        
+
         if (this._remoteSort) {
             args.query = kijs.toString(query);
             args.value = this.value;

@@ -103,7 +103,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             spinButtonsVisible: { target: 'visible', context: this._spinContainerEl },  // Sichtbarkeit der Spin-Buttons
             spinDelay: true,            // Intervall in ms
             spinStep: true,             // Schrittgrösse
-            thousandsSeparator: true
+            thousandsSeparator: true,
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom
