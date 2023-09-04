@@ -659,6 +659,16 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @returns {kijs.gui.Element}
      */
     _getInstanceForAdd(obj) {
+        // String (Kurzform für einen xtype)
+        if (kijs.isString(obj)) {
+            switch (obj) {
+                // '-' -> kijs.gui.Separator
+                case '-':
+                    obj = new kijs.gui.Separator({});
+                    break;
+            }
+        }
+        
         // Falls eine Instanz übergeben wird
         if (obj instanceof kijs.gui.Element) {
             // Da das Element bereits erstellt wurde, werden hier keine defaults übernommen
