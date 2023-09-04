@@ -507,7 +507,7 @@ kijs.Dom = class kijs_Dom {
      * @param {HTMLELement} node
      * @param {String} html
      * @param {String} htmlDisplayType [optional]   'html': als html-Inhalt (innerHtml)
-     *                                              'code': Tags werden als als Text angezeigt
+     *                                              'code': Tags werden als Text angezeigt
      *                                              'text': Tags werden entfernt
      * @returns {undefined}
      */

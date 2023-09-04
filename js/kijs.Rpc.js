@@ -125,7 +125,7 @@ kijs.Rpc = class kijs_Rpc {
 
         // Evtl. bestehende RPCs vom gleichen owner an die gleiche remoteFn abbrechen
         // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
-        // die die gleiche remoteFn benutzen. 
+        // die die gleiche remoteFn benutzen.
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
                 if (this._queue[i].owner === config.owner && this._queue[i].remoteFn === config.remoteFn) {

@@ -118,7 +118,7 @@
 
     --tabButton-current-bkgrndColor: var(--grey1);
     --tabButton-current-borderColor: #8db2e3; /*var(--grey4);*/
-    --tabButton--currentfontColor: #15428b; /*var(--accentColor);*/
+    --tabButton-current-fontColor: #15428b; /*var(--accentColor);*/
 
     --tabButton-focus-bkgrndColor: var(--grey3);
     --tabButton-focus-borderColor: var(--grey4);

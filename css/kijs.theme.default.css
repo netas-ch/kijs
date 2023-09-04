@@ -74,12 +74,18 @@
     --default-fontSize: 12px;
     --default-lineHeight: 14px;
 
-    
+
+    /* Scrollbar */
+    --scrollbar-color: var(--grey4);
+    --scrollbar-background-color: var(--grey3);
+    --scrollbar-hover-color: var(--grey5);
+
+
     /* Separator */
     --separator-bkgrndColor: var(--grey4);
     --separator-disabled-bkgrndColor: var(--grey5);
-    
-    
+
+
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: var(--grey4);
@@ -140,7 +146,7 @@
     
     --tabButton-current-bkgrndColor: var(--grey1);
     --tabButton-current-borderColor: var(--grey4);
-    --tabButton--currentfontColor: var(--accentColor);
+    --tabButton-current-fontColor: var(--accentColor);
     
     --tabButton-focus-bkgrndColor: var(--grey3);
     --tabButton-focus-borderColor: var(--grey4);

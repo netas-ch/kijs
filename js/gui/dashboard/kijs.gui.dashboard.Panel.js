@@ -4,7 +4,7 @@
 // kijs.gui.dashboard.Panel
 // --------------------------------------------------------------
 /**
- * Panel Element, zur Verwendung in kijs.gui.Dasboard Elementen.
+ * Panel Element, zur Verwendung in kijs.gui.Dashboard Elementen.
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element

@@ -251,8 +251,8 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             if (oldEl === el) {
                 return;
             }
-            
-            // Wenn noch kein Element aktiv ist oder bei Dauer = 0 ist keine 
+
+            // Wenn noch kein Element aktiv ist oder bei Dauer = 0 ist keine
             // Animation nötig
             if (!oldEl || duration === 0) {
                 this.currentEl = el;
@@ -437,7 +437,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
                 this._currentEl = null;
             }
         }
-        
+
         for (let i=0; i<this._elements.length; i++) {
             this._elements[i].visible = this._elements[i] === this._currentEl;
         }

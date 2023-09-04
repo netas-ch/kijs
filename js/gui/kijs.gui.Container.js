@@ -580,14 +580,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Löscht alle untergeordeneten Elemente
+     * Löscht alle untergeordneten Elemente
      * @param {Boolean} [preventRender=false]
      * @param {Boolean} [preventDestruct=false]
      * @param {Boolean} [preventEvents=false]   // Das Auslösen des beforeRemove-Events verhindern?
      * @returns {undefined}
      */
     removeAll(preventRender, preventDestruct, preventEvents) {
-        if (this._elements.length > 0) {
+        if (this._elements && this._elements.length > 0) {
             this.remove(this._elements, preventRender, preventDestruct, preventEvents);
         }
     }
