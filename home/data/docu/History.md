@@ -37,9 +37,29 @@ Die alte Klasse ```kijs.DragDrop``` gibt es nicht mehr!
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
    auf dem Container ausgelöst. Dieses wird auch an alle elements weitergericht.  
- - Die Funktionen ```remove()``` und ```removeAll()``` machten bisher bei 
-   ```preventDestruct=true``` anstelle des desctruct ein unrender. Neu machen sie 
-   auch kein unrender mehr.  
+ - Die Funktionen ```remove()``` und ```removeAll()``` haben eine neue Anordnung 
+   der Argumente:  
+   Früher:  
+    ```remove(elements, preventRender, preventDestruct, preventEvents)```  
+    ```removeAll(preventRender, preventDestruct, preventEvents)```  
+   Neu:  
+    ```remove(elements, options={})```  
+    ```removeAll(options={})```  
+
+   options Eigenschaften:
+    - ```preventDestruct``` desctruct verhindern? (Boolean, Default=false)
+    - ```preventUnrender``` unrender verhindern? (Boolean, Default=false)
+    - ```preventRender```   render verhindern? (Boolean, Default=false)
+    - ```preventEvents```   Das Auslösen des beforeRemove und remove-Events verhindern? (Boolean, Default=false)
+
+   **UPDATE TIPP:** Projekt nach ```remove``` durchsuchen und die Argumente anpassen:  
+
+        {
+            preventRender: ...,   // Argument 1 bei removeAll / 2 bei remove
+            preventDestruct: ..., // Argument 2 bei removeAll / 3 bei remove
+            preventEvents: ...,   // Argument 3 bei removeAll / 4 bei remove
+        }
+
  - kijs.gui.Separator können neu einfach als ```'-'``` hinzugefügt werden.  
    Beispiel:
 

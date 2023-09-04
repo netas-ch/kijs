@@ -191,7 +191,11 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 if (isPanel) {
                     parentEl.close(true);
                 } else {
-                    parentEl.remove(elements, false, false, true);
+                    parentEl.remove(elements, {
+                        preventRender: false, 
+                        preventDestruct: false, 
+                        preventEvents: true
+                    });
                 }
             }
         });

@@ -196,13 +196,13 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     }
 
     // overwrite
-    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+    remove(elements, options, superCall) {
         if (!superCall) {
             if (!kijs.isArray(elements)) {
                 elements = [elements];
             }
             
-            if (!preventEvents) {
+            if (!options.preventEvents) {
                 // beforeRemove Event. Bei Rückgabe=false -> abbrechen
                 if (this.raiseEvent('beforeRemove', {removeElements: elements}) === false) {
                     return;
@@ -212,13 +212,13 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         
         // tabBarButton entfernen
         kijs.Array.each(elements, function(el) {
-            this._tabBarEl.remove(el.tabButtonEl, preventRender, preventDestruct);
+            this._tabBarEl.remove(el.tabButtonEl, options);
         }, this);
         
-        super.remove(elements, preventRender, preventDestruct, preventEvents, true);
+        super.remove(elements, options, true);
         
         // speichern
-        if (this._autoSave && this._rpcSaveFn && !preventEvents) {
+        if (this._autoSave && this._rpcSaveFn && !options.preventEvents) {
             this.save();
         }
     }
@@ -355,7 +355,11 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
             sourceButton.ddSource.off('drop');
 
             // Container vom alten Ort entfernen
-            sourceContainer.parent.remove(sourceContainer, false, true, true);
+            sourceContainer.parent.remove(sourceContainer, {
+                preventDestruct: true,
+                preventUnrender: true,
+                preventEvents: true
+            });
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {

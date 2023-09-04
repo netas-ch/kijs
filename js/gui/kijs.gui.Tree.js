@@ -443,8 +443,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     }
 
     // overwrite
-    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
-        super.remove(elements, preventRender, preventDestruct, preventEvents, superCall);
+    remove(elements, options={}, superCall) {
+        super.remove(elements, options, superCall);
         
         if (this._elements.length === 0) {
             this.collapse();

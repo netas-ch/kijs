@@ -30,7 +30,7 @@ kijs.Ajax = class kijs_Ajax {
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
     * @returns {Promise}
     */
-    static request(config = {}) {
+    static request(config={}) {
         return new Promise((resolve) => {
             let postData;
 

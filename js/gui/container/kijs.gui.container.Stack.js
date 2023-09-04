@@ -173,13 +173,13 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
     
     // overwrite
-    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+    remove(elements, options={}, superCall) {
         if (!superCall) {
             if (!kijs.isArray(elements)) {
                 elements = [elements];
             }
             
-            if (!preventEvents) {
+            if (!options.preventEvents) {
                 // beforeRemove Event. Bei Rückgabe=false -> abbrechen
                 if (this.raiseEvent('beforeRemove', {removeElements: elements}) === false) {
                     return;
@@ -187,7 +187,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             }
         }
         
-        super.remove(elements, preventRender, preventDestruct, preventEvents, true);
+        super.remove(elements, options, true);
         
         // Elemente auch aus elHistory entfernen
         kijs.Array.each(elements, function(el) {

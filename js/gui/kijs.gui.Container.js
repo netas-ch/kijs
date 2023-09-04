@@ -535,19 +535,22 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     /**
      * Löscht ein oder mehrere untergeordnete Elemente
      * @param {Object|Array} elements
-     * @param {Boolean} [preventRender=false]
-     * @param {Boolean} [preventDestruct=false]
-     * @param {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
+     * @param {Object} [options={}]
+     *  options Eigenschaften:
+     *    {Boolean} [preventDestruct=false] desctruct verhindern?
+     *    {Boolean} [preventUnrender=false] unrender verhindern?
+     *    {Boolean} [preventRender=false]   render verhindern?
+     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
      * @param {Boolean} [superCall=false]
      * @returns {undefined}
      */
-    remove(elements, preventRender, preventDestruct, preventEvents, superCall) {
+    remove(elements, options={}, superCall) {
         if (!superCall) {
             if (!kijs.isArray(elements)) {
                 elements = [elements];
             }
             
-            if (!preventEvents) {
+            if (!options.preventEvents) {
                 // beforeRemove Event. Bei Rückgabe=false -> abbrechen
                 if (this.raiseEvent('beforeRemove', {removeElements: elements}) === false) {
                     return;
@@ -561,34 +564,40 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
                 throw new kijs.Error(`el does not exist in elements.`);
             }
             
-            if (!preventDestruct && el.destruct) {
+            if (!options.preventDestruct && el.destruct) {
                 el.destruct();
+
+            } else if (el.isRendered && el.unrender && !options.preventUnrender) {
+                el.unrender();
             }
             el.off(null, null, this);
             kijs.Array.remove(this._elements, el);
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this.dom.node && !preventRender) {
+        if (this.dom.node && !options.preventRender) {
             this.render();
         }
 
         // Gelöscht, Event auslösen.
-        if (!preventEvents) {
+        if (!options.preventEvents) {
             this.raiseEvent('remove');
         }
     }
 
     /**
-     * Löscht alle untergeordeneten Elemente
-     * @param {Boolean} [preventRender=false]
-     * @param {Boolean} [preventDestruct=false]
-     * @param {Boolean} [preventEvents=false]   // Das Auslösen des beforeRemove-Events verhindern?
+     * Löscht alle untergeordneten Elemente
+     * @param {Object} [options={}]
+     *  options Eigenschaften:
+     *    {Boolean} [preventDestruct=false] desctruct verhindern?
+     *    {Boolean} [preventUnrender=false] unrender verhindern?
+     *    {Boolean} [preventRender=false]   render verhindern?
+     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
      * @returns {undefined}
      */
-    removeAll(preventRender, preventDestruct, preventEvents) {
-        if (this._elements.length > 0) {
-            this.remove(this._elements, preventRender, preventDestruct, preventEvents);
+    removeAll(options={}) {
+        if (this._elements && this._elements.length > 0) {
+            this.remove(this._elements, options);
         }
     }
 

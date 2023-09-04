@@ -201,22 +201,6 @@
     filter: grayscale(100%);
   }
   /* ******************
-       * Scrollbar
-       ****************** */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--scrollbar-background-color);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-color);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-hover-color);
-  }
-  /* ******************
        * Button
        ****************** */
   button.kijs-button {
@@ -662,40 +646,25 @@
     animation: kijs-slide-out-left 1s;
   }
   div.kijs-container-tab.kijs-pos-top,
-  div.kijs-container-tab.kijs-pos-top-center,
-  div.kijs-container-tab.kijs-pos-bottom,
-  div.kijs-container-tab.kijs-pos-bottom-center {
+  div.kijs-container-tab.kijs-pos-bottom {
     flex-direction: column;
   }
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-bottom-center > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-left-center > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable > .kijs-container-inner {
-    justify-content: center;
-  }
   div.kijs-container-tab.kijs-pos-left,
-  div.kijs-container-tab.kijs-pos-left-center,
-  div.kijs-container-tab.kijs-pos-right,
-  div.kijs-container-tab.kijs-pos-right-center {
+  div.kijs-container-tab.kijs-pos-right {
     flex-direction: row;
   }
   div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-left-center > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner {
     display: flex;
     flex-direction: column;
   }
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable,
-  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable {
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable {
     order: 2;
   }
-  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable,
-  div.kijs-container-tab.kijs-pos-bottom-center > .kijs-container-scrollable {
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable {
     order: 2;
   }
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
     margin: 4px 0 0 4px;
     border-radius: 6px 6px 0 0;
     border-top: 1px solid var(--tabButton-borderColor);
@@ -704,13 +673,9 @@
     border-left: 1px solid var(--tabButton-borderColor);
   }
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollup,
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollup,
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrolldown,
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrolldown,
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollleft,
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollleft,
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollright,
-  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollright {
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollright {
     margin-top: 4px;
   }
   div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
@@ -760,7 +725,7 @@
     border-color: var(--tabButton-current-borderColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
-    color: var(--tabButton-current-fontColor);
+    color: var(--tabButton--currentfontColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
@@ -768,10 +733,10 @@
   div.kijs-container-tab.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: flex-start;
   }
-  div.kijs-container-tab.kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: center;
   }
-  div.kijs-container-tab.kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: flex-end;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
@@ -797,132 +762,6 @@
   }
   div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
     margin: 4px 0 0 4px;
-  }
-  /* ******************
-       * Container Wizard
-       ****************** */
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable {
-    min-height: 25px;
-    background-color: transparent;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner {
-    flex-wrap: wrap;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
-    background: none;
-    border: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus {
-    background: none;
-    border: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon {
-    color: var(--tabButton-focus-fontColor);
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover {
-    background: none;
-    border: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled {
-    border: none;
-    background: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
-    color: var(--tabButton-fontColor);
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus {
-    background: none;
-    border: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current {
-    background: none;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon {
-    color: var(--tabButton-current-fontColor);
-    font-size: 10px;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
-    color: var(--tabButton-current-fontColor);
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
-    color: var(--tabButton-current-fontColor);
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon {
-    font-size: 8px;
-  }
-  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
-  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption {
-    font-size: 10px;
-  }
-  div.kijs-container-wizard > .kijs-arrow-left {
-    z-index: 1;
-    position: absolute;
-    top: 45%;
-    left: 10px;
-    cursor: pointer;
-    opacity: 0.2;
-  }
-  div.kijs-container-wizard > .kijs-arrow-left:hover {
-    opacity: 1;
-  }
-  div.kijs-container-wizard > .kijs-arrow-right {
-    z-index: 1;
-    position: absolute;
-    top: 45%;
-    right: 10px;
-    cursor: pointer;
-    opacity: 0.2;
-  }
-  div.kijs-container-wizard > .kijs-arrow-right:hover {
-    opacity: 1;
   }
   /* ******************
        * Tooltip
@@ -1059,7 +898,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: var(--panel-collapse-height);
+    height: 30px;
     padding: 0 6px;
     gap: 4px;
     background-color: var(--bar-bkgrndColor);
@@ -1136,8 +975,11 @@
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
     color: var(--bar-button-icon-disabled-fontColor);
   }
+  div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-separator,
+  div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-separator {
+    margin: 4px 0;
+  }
   div.kijs-panelbar > .kijs-container-inner {
-    overflow: visible;
     flex: 1 1 auto;
     margin: 0;
     text-align: left;
@@ -1255,13 +1097,13 @@
   }
   div.kijs-panel.kijs-collapse-top,
   div.kijs-panel.kijs-collapse-bottom {
-    height: var(--panel-collapse-height) !important;
+    height: 30px;
     flex: none;
   }
   div.kijs-panel.kijs-collapse-right,
   div.kijs-panel.kijs-collapse-left {
     height: auto;
-    width: var(--panel-collapse-width) !important;
+    width: 30px;
     flex: none;
     display: flex;
     flex-direction: row;
@@ -1284,7 +1126,7 @@
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar {
-    width: var(--panel-collapse-width);
+    width: 30px;
     height: auto;
     padding: 3px 0 3px 0;
     flex-direction: column;
@@ -1411,53 +1253,6 @@
   }
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled > * {
     color: var(--button-disabled-fontColor);
-  }
-  /* ******************
-       * Wizard
-       ****************** */
-  div.kijs-wizard > .kijs-container-inner {
-    display: flex;
-    flex-direction: column;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-container-stack {
-    flex: 1;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-dots-container > .kijs-container-inner {
-    margin: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-dots-container > .kijs-container-inner > .kijs-dot {
-    font-size: 6pt;
-    margin: 2px;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-dots-container > .kijs-container-inner > .kijs-dot.kijs-current {
-    font-size: 8pt;
-    color: var(--tabButton--currentfontColor);
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-dots-container > .kijs-container-inner > .kijs-dot.kijs-selectable {
-    cursor: pointer;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-arrow-left {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    cursor: pointer;
-    opacity: 0.2;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-arrow-left:hover {
-    opacity: 1;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-arrow-right {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    cursor: pointer;
-    opacity: 0.2;
-  }
-  div.kijs-wizard > .kijs-container-inner > .kijs-arrow-right:hover {
-    opacity: 1;
   }
   /* ******************
        * Mask
@@ -2645,6 +2440,7 @@
     flex: 1 0 auto;
     flex-direction: row;
     min-height: 25px;
+    overflow: hidden;
   }
   div.kijs-field > .kijs-label {
     display: block;
@@ -2654,7 +2450,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     padding: 6px 4px 3px 0;
+    overflow: hidden;
     overflow-wrap: break-word;
+    text-overflow: ellipsis;
     /* selektion von Text erlauben */
     -webkit-user-select: text;
     user-select: text;
@@ -3563,24 +3361,10 @@
   }
   div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar {
     flex: none;
-    z-index: 1;
-    overflow: visible;
     border-top: 1px solid var(--field-borderColor) !important;
     border-left: 1px solid var(--field-borderColor) !important;
     border-right: 1px solid var(--field-borderColor) !important;
     border-bottom: 0 !important;
-  }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar .ql-picker-options {
-    background-color: var(--panel-bkgrndColor) !important;
-  }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar span {
-    color: var(--button-fontColor) !important;
-  }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar svg > .ql-stroke:not(.ql-color-label) {
-    stroke: var(--button-fontColor) !important;
-  }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar svg > .ql-fill:not(.ql-color-label) {
-    fill: var(--button-fontColor) !important;
   }
   div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container {
     flex: 1;

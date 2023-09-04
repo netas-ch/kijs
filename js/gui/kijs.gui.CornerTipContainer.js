@@ -264,7 +264,10 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     // LISTENERS
     #onCornerTipDestruct(e) {
         if (e.element) {
-            this.remove(e.element, true, true);
+            this.remove(e.element, {
+                preventRender: true, 
+                preventDestruct: true
+            });
         }
     }
 

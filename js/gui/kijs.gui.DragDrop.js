@@ -162,7 +162,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // Verschiebt das Element an den neuen Ort
     static dropFnMoveEl(e) {
         // vom alten Ort entfernen
-        e.source.ownerEl.parent.remove(e.source.ownerEl, false, true, false);
+        e.source.ownerEl.parent.remove(e.source.ownerEl, {
+            preventDestruct: true,
+            preventUnrender: true,
+            preventRender: false,
+            preventEvents: false
+        });
         
         // und beim neuen Ort wieder einfügen
         switch (e.target.targetPos){

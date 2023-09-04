@@ -554,7 +554,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._spinBoxEl.add(this._datePicker, null, true);
         } else {
             if (this._spinBoxEl.hasChild(this._datePicker)) {
-                this._spinBoxEl.remove(this._datePicker, true, true);
+                this._spinBoxEl.remove(this._datePicker, {
+                    preventRender: true, 
+                    preventDestruct: true
+                });
             }
         }
 
@@ -562,7 +565,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._spinBoxEl.add(this._seperatorEl, null, true);
         } else {
             if (this._spinBoxEl.hasChild(this._seperatorEl)) {
-                this._spinBoxEl.remove(this._seperatorEl, true, true);
+                this._spinBoxEl.remove(this._seperatorEl, {
+                    preventRender: true, 
+                    preventDestruct: true
+                });
             }
         }
 
@@ -570,7 +576,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             this._spinBoxEl.add(this._timePicker, null, true);
         } else {
             if (this._spinBoxEl.hasChild(this._timePicker)) {
-                this._spinBoxEl.remove(this._timePicker, true, true);
+                this._spinBoxEl.remove(this._timePicker, {
+                    preventRender: true, 
+                    preventDestruct: true
+                });
             }
         }
 
