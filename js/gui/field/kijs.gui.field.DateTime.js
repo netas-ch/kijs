@@ -65,9 +65,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         });
 
-        this._seperatorEl = new kijs.gui.Element({
-            cls: 'kijs-separator'
-        });
+        this._seperatorEl = new kijs.gui.Separator({});
 
         this._timePicker = new kijs.gui.TimePicker({
             inputHide: false,

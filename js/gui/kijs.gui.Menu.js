@@ -177,7 +177,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // MEMBERS
     // --------------------------------------------------------------
     // overwerite
-    add(elements) {
+    /*add(elements) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -209,7 +209,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
         // parent
         super.add(newElements);
-    }
+    }*/
 
     /**
      * Schliesst das Dropdownmenu und alle Untermenus

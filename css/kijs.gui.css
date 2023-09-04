@@ -1626,18 +1626,6 @@
     margin: 0;
     border-radius: 0;
   }
-  div.kijs-menu-spinbox > .kijs-container-inner > div.separator {
-    background-color: var(--button-bkgrndColor);
-  }
-  div.kijs-menu-spinbox > .kijs-container-inner > div.separator > hr {
-    padding: 0;
-    height: 1px;
-    width: 96%;
-    margin: 0 0 0 2%;
-    border: 0;
-    background-color: var(--field-borderColor);
-    color: var(--field-borderColor);
-  }
   div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button {
     text-align: left;
     display: flex;
@@ -3082,10 +3070,6 @@
   }
   .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-datepicker {
     border: 0 none transparent;
-  }
-  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > .kijs-separator {
-    width: 1px;
-    background-color: var(--panel-borderColor);
   }
   .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-timepicker {
     border: 0 none transparent;

@@ -40,6 +40,14 @@ Die alte Klasse ```kijs.DragDrop``` gibt es nicht mehr!
  - Die Funktionen ```remove()``` und ```removeAll()``` machten bisher bei 
    ```preventDestruct=true``` anstelle des desctruct ein unrender. Neu machen sie 
    auch kein unrender mehr.  
+ - kijs.gui.Separator können neu einfach als ```'-'``` hinzugefügt werden.  
+   Beispiel:
+
+        elements: [
+            { xtype: 'kijs.gui.Button', caption: 'Button 1' },
+            '-',
+            { xtype: 'kijs.gui.Button', caption: 'Button 2' }
+        ]
 
 ### kijs.gui.Element
  - Neue config/getter/setter ```ddSource```. Siehe dazu den Leitfaden 'Drag&Drop'.  
@@ -214,6 +222,15 @@ Einfaches Element um Trennlinien in Toolbars oder Formularen einzufügen.
 Unterstützt vorerst kein Drag&Drop mehr.  
 Der kijs.gui.Tree wird noch komplett überarbeitet. Dann wird auch das neue Drag&Drop 
 eingebaut.  
+
+### kijs.gui.Menu
+ - Verwendet nun auch den ```kijs.gui.Separator``` für Trennlinien.  
+ - Als Element kann nun kein einfacher String mit einem Text mehr übergeben werden.  
+   Es muss ein Objekt sein.  
+   **UPDATE TIPP:** Projekt nach ```kijs.gui.Menu``` durchsuchen, und als String 
+   definierte Elemente in Objekte umwandeln:  
+   ```'Mein Menüpunkt'``` ==> ```{ caption: 'Text' }```  
+ - Als String werden nur noch Trennzeichen (kijs.gui.Separator) '-' unterstützt.  
 
 
 

@@ -39,15 +39,17 @@ home.sc.Menu = class home_sc_Menu {
                     iconMap: 'kijs.iconMap.Fa.bars',
                     menuElements: [
                         {
-                            caption:'Hallo 1'
+                            caption: 'Hallo 1'
                         },
-                        'Text',
                         {
-                            caption:'Hallo 3',
+                            caption: 'Text'
+                        },
+                        {
+                            caption: 'Hallo 3',
                             iconMap: 'kijs.iconMap.Fa.brain'
                         }, '-', {
                             xtype: 'kijs.gui.Button',
-                            caption:'MULTI',
+                            caption: 'MULTI',
                             menuElements: (function(){
                                 let steps=150, p = [];
                                 for (let i=0; i<steps; i++) {
@@ -59,17 +61,17 @@ home.sc.Menu = class home_sc_Menu {
                             })()
                         },{
                             xtype: 'kijs.gui.Button',
-                            caption:'ENDLESS',
+                            caption: 'ENDLESS',
                             menuElements: (function(){
                                 let steps=20, p = [{
-                                        caption:'ÄTSCH NICHTS DA'
+                                        caption: 'ÄTSCH NICHTS DA'
                                     }];
                                 for (let i=0; i<steps; i++) {
                                     p = [{
                                             caption: 'Stufe ' + i + ' von ' + steps
                                         },{
                                             xtype: 'kijs.gui.Button',
-                                            caption:'Nächste Stufe',
+                                            caption: 'Nächste Stufe',
                                             menuElements:p
                                         }];
                                 }
@@ -95,31 +97,31 @@ home.sc.Menu = class home_sc_Menu {
                                 closeOnClick: true,
                                 elements: [
                                     {
-                                        caption:'Windows',
+                                        caption: 'Windows',
                                         iconMap: 'kijs.iconMap.Fa.windows',
                                         on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Windows!'); }}
                                     },{
-                                        caption:'Apple',
+                                        caption: 'Apple',
                                         iconMap: 'kijs.iconMap.Fa.apple',
                                         on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'Apple!'); }}
                                     },{
-                                        caption:'Weitere',
+                                        caption: 'Weitere',
                                         iconMap: 'kijs.iconMap.Fa.angles-right',
                                         menuElements: [
                                             {
-                                                caption:'Linux',
+                                                caption: 'Linux',
                                                 iconMap: 'kijs.iconMap.Fa.linux',
                                                 on: {click:() => {
                                                         kijs.gui.MsgBox.alert('You choose:', 'Linux!');
                                                     }}
                                             },{
-                                                caption:'Android',
+                                                caption: 'Android',
                                                 iconMap: 'kijs.iconMap.Fa.android',
                                                 on: {click:() => {
                                                         kijs.gui.MsgBox.alert('You choose:', 'Android!');
                                                     }}
                                             },{
-                                                caption:'iOS',
+                                                caption: 'iOS',
                                                 iconMap: 'kijs.iconMap.Fa.apple',
                                                 on: {click:() => { kijs.gui.MsgBox.alert('You choose:', 'iOS!'); }}
                                             }
