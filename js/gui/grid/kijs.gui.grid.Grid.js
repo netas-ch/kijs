@@ -48,9 +48,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteSort = null;            // Remote-Sortierung
 
         this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
-        this._currentRow = null;            // Zeile, welche zurzeit fokussiert ist
+        this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
         this._selectType = 'single';        // multiselect: single|multi|simple|none
-        this._focusable = true;             // ob das grid fokussiert werden kann
+        this._focusable = true;             // ob das grid focusiert weden kann
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)

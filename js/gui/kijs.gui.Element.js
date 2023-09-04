@@ -739,24 +739,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Lädt die config via RPC
      * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
-     * @param {Object|Null} config
      * @returns {Promise}
      */
-    load(args=null, superCall=false, config = null) {
+    load(args=null, superCall=false) {
         return new Promise((resolve, reject) => {
             if (this._rpcLoadFn) {
-
-                // waitMaskTarget
-                let waitMaskTarget = this;
-                if (!kijs.isEmpty(config) && !kijs.isEmpty(config.waitMaskTarget)) {
-                    waitMaskTarget = config.waitMaskTarget;
-                }
-
-                // waitMaskTarget
-                let waitMaskTargetDomProperty = 'dom';
-                if (!kijs.isEmpty(config) && !kijs.isEmpty(config.waitMaskTargetDomProperty)) {
-                    waitMaskTargetDomProperty = config.waitMaskTargetDomProperty;
-                }
 
                 if (!kijs.isObject(args)) {
                     args = {};
@@ -768,8 +755,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     owner: this,
                     data: args,
                     cancelRunningRpcs: true,
-                    waitMaskTarget: waitMaskTarget,
-                    waitMaskTargetDomProperty: waitMaskTargetDomProperty,
+                    waitMaskTarget: this,
+                    waitMaskTargetDomProperty: 'dom',
                     context: this
 
                 }).then((e) => {

@@ -713,25 +713,7 @@ foreach ($requests as $request) {
                 $response->errorMsg = $ex->getMessage();
             }
             break;
-
-        case 'multicombo.load':
-            try {
-                $rows = array();
-
-                $berufe = file('../testData/beruf.csv');
-                foreach ($berufe as $beruf) {
-                    $beruf = explode(';', trim($beruf));
-                    $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
-                }
-
-
-                $response->responseData->rows = $rows;
-
-            } catch (Exception $ex) {
-                $response->errorMsg = $ex->getMessage();
-            }
-            break;
-
+        
         case 'rpc.simple':
             $response->infoMsg = 'Ich bin eine Nachricht vom Server';
             $response->responseData = $request->requestData;

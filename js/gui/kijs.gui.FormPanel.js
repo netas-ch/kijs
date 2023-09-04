@@ -232,16 +232,16 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
-    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
-            super.load(args, true, config).then((e) => {
-
+            super.load(args, true).then((e) => {
+                
                 // Falls des Formular destructed wurde: abbrechen
                 if (!this._dom) {
                     resolve(e);
                     return;
                 }
-
+                
                 if (e.responseData.config && e.responseData.config.elements) {
                     searchFields = true;
                 }
@@ -273,7 +273,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
             });
         });
     }
-
+    
     /**
      * Sendet die Formulardaten an den Server
      * @param {type} searchFields
@@ -322,13 +322,13 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
                     resolve(e);
                     return;
                 }
-
+                
                 // config Properties anwenden, falls vorhanden
                 if (e.responseData.config) {
                     // config Properties übernehmen
                     this.applyConfig(e.responseData.config);
                 }
-
+                
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
                     if (!kijs.isEmpty(this._fields)) {
@@ -398,7 +398,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
             }
         }
-
+        
         if (parent === this) {
             // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
             if (!kijs.isEmpty(this._fields)) {

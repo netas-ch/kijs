@@ -316,6 +316,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     
     #onDragOver(e) {
         e.nodeEvent.preventDefault();
+        
         // Validieren
         if (!kijs.gui.DragDrop.source || !kijs.gui.DragDrop.source.ownerEl) {
             return false;

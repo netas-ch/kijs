@@ -139,12 +139,11 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      * Füllt das Listview mit Daten vom Server
      * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
-     * @param {Object|Null} config
      * @returns {Promise}
      */
-    load(args, superCall=false, config=null) {
+    load(args, superCall=false) {
         return new Promise((resolve, reject) => {
-            super.load(args, true, config).then((e) => {
+            super.load(args, true).then((e) => {
 
                 this._listView.data = e.responseData.rows;
                 if (!kijs.isEmpty(e.responseData.selectFilters)) {
