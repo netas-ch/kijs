@@ -18,6 +18,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // overwrite
     constructor(config={}) {
         super(false);
+        
+        this._sortable = false;          // Elements sind per Drag&Drop verschiebbar
+        
+        this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
+        this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
+        this._ddName = kijs.uniqId('dataview.element');
+        this._ddTarget = null;
+        
+        this._rpcSaveFn = null;         // Name der remoteFn. Bsp: 'dataview.save'
+        this._rpcSaveArgs = {};         // Standard RPC-Argumente fürs Speichern
+        this._autoSave = false;         // Automatisches Speichern bei Änderungen
 
         this._currentEl = null;         // Aktuelles Element (Wenn der Fokus auf dem DataView ist,
                                         // hat dieses Element den Fokus)
@@ -43,10 +54,19 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            selectType: true            // 'none': Es kann nichts selektiert werden
+            selectType: true,           // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+            rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
+            rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
+            autoSave: true,     // Automatisches Speichern bei Änderungen
+            
+            ddName: true,
+            ddPosBeforeFactor: true,
+            ddPosAfterFactor: true,
+            sortable: { prio: 90, target: 'sortable' },
+            ddTarget: { prio: 100, target: 'ddTarget' }
         });
 
         // Config anwenden
@@ -76,7 +96,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
         }
     }
-
+    
+    get autoSave() { return this._autoSave; }
+    set autoSave(val) { this._autoSave = !!val; }
 
     get current() { return this._currentEl; }
     /**
@@ -125,16 +147,80 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
     }
 
-
     get data() { return this._data; }
     set data(val) {
         this._data = val;
-
         this._createElements(this._data);
 
         // Current Element ermitteln und setzen
         this.current = null;
     }
+
+    get ddName() { return this._ddName; }
+    set ddName(val) {
+        this._ddName = val;
+        if (this._ddTarget && this._sortable) {
+            // Elements neu laden
+            if (!kijs.isEmpty(this._elements)) {
+                this._createElements(this._data);
+                // Current Element ermitteln und setzen
+                this.current = null;
+            }
+        }
+    }
+    
+    get ddPosAfterFactor() { return this._ddPosAfterFactor; }
+    set ddPosAfterFactor(val) {
+        this._ddPosAfterFactor = val;
+        if (this._ddTarget) {
+            this._ddTarget.posAfterFactor = val;
+        }
+    }
+    
+    get ddPosBeforeFactor() { return this._ddPosBeforeFactor; }
+    set ddPosBeforeFactor(val) {
+        this._ddPosBeforeFactor = val;
+        if (this._ddTarget) {
+            this._ddTarget.posBeforeFactor = val;
+        }
+    }
+    
+    get ddTarget() { 
+        return this._ddTarget; 
+    }
+    set ddTarget(val) {
+        // config-object
+        if (kijs.isObject(val)) {
+            if (kijs.isEmpty(this._ddTarget)) {
+                val.ownerEl = this;
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'innerDom';
+                }
+                if (kijs.isEmpty(val.posBeforeFactor)) {
+                    val.posBeforeFactor = this._ddPosBeforeFactor;
+                }
+                if (kijs.isEmpty(val.posAfterFactor)) {
+                    val.posAfterFactor = this._ddPosAfterFactor;
+                }
+                this._ddTarget = new kijs.gui.dragDrop.Target(val);
+                this._eventForwardsAdd('ddTargetDrop', this.ddTarget, 'drop');
+            } else {
+                this._ddTarget.applyConfig(val);
+            }
+
+        // null
+        } else if (val === null) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+
+        } else {
+            throw new kijs.Error(`ddTarget must be a object or null`);
+
+        }
+    }
+    
 
     get filters() { return this._filters; }
     set filters(val) {
@@ -174,8 +260,54 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         return this._currentEl ? this._currentEl.hasFocus : false;
     }
 
+    get rpcSaveArgs() { return this._rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
+    
+    get rpcSaveFn() { return this._rpcSaveFn; }
+    set rpcSaveFn(val) { this._rpcSaveFn = val; }
+
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
+
+    get sortable() { return this._sortable; }
+    set sortable(val) { 
+        this._sortable = !!val;
+        
+        // Evtl. ddTarget erstellen
+        if (val && !this._ddTarget) {
+            this.ddTarget = {
+                posBeforeFactor: this._ddPosBeforeAfterFactor,
+                posAfterFactor: this._ddPosBeforeAfterFactor
+            };
+            this._ddTarget.on('drop', this.#onTargetDrop, this);
+        }
+        
+        // Mapping
+        if (val) {
+            this._ddTarget.mapping[this._ddName] = {
+                allowMove: true,
+                allowCopy: false,
+                allowLink: false
+            };
+        } else {
+            delete this._ddTarget.mapping[this._ddName];
+        }
+        
+        // evtl. ddTarget löschen
+        if (this._ddTarget && kijs.isEmpty(this._ddTarget.mapping)) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+        }
+
+        // Elements neu laden
+        if (!kijs.isEmpty(this._elements)) {
+            this._createElements(this._data);
+            // Current Element ermitteln und setzen
+            this.current = null;
+        }
+    }
 
 
 
@@ -268,6 +400,31 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         } else {
             return ret;
+
+        }
+    }
+    
+    /**
+     * Gibt die Data-rows der selektieten Elemente zurück
+     * @returns {Array|null}
+     */
+    getSelectedRows() {
+        let rows = [];
+        
+        for (let i=0, len=this._elements.length; i<len; i++) {
+            if (this._elements[i].selected) {
+                rows.push(this._elements[i].dataRow);
+            }
+        }
+
+        if (this._selectType === 'none') {
+            return null;
+
+        } else if (this._selectType === 'single') {
+            return rows.length ? [rows[0]] : null ;
+
+        } else {
+            return rows;
 
         }
     }
@@ -403,6 +560,42 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             });
         });
     }
+    
+    save() {
+        return new Promise((resolve, reject) => {
+            let args = {};
+            
+            args = Object.assign({}, args, this._rpcSaveArgs);
+            
+            // an den Server senden
+            this.rpc.do({
+                remoteFn: this.rpcSaveFn,
+                owner: this,
+                data: this._data,
+                cancelRunningRpcs: false,
+                waitMaskTarget: this,
+                waitMaskTargetDomProperty: 'dom',
+                context: this
+                
+            }).then((e) => {
+                // config Properties anwenden, falls vorhanden
+                if (e.responseData.config) {
+                    // config Properties übernehmen
+                    this.applyConfig(e.responseData.config);
+                }
+                
+                // 'afterSave' auslösen
+                this.raiseEvent('afterSave', e);
+                
+                // Promise auslösen
+                resolve(e);
+                
+            }).catch((ex) => {
+                reject(ex);
+                
+            });
+        });
+    }
 
     /**
      * Selektiert ein oder mehrere Elemente
@@ -429,17 +622,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             changed = changed || !el.selected;
             el.selected = true;
         }, this);
-
+        
         // current aktualisieren
         this._currentEl = null;
         this.current = null;
-
+        
         // SelectionChange auslösen
         if (!preventSelectionChange && changed) {
             this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
         }
     }
-
+    
     /**
      * Selektiert alle Elemente zwischen el1 und el2
      * @param {kijs.gui.Element} el1
@@ -473,6 +666,43 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         if (!kijs.isEmpty(elements)) {
             this.select(elements, true, preventSelectionChange);
+        }
+    }
+    
+    /**
+     * Selektiert ein oder mehrere Elemente
+     * @param {Array} rows Recordset mit rows der zu selektierenden Elementen
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectByDataRows(rows, keepExisting=false, preventSelectionChange=false) {
+        if (kijs.isEmpty(rows)) {
+            return;
+        }
+        
+        let selectedElements = [];
+        
+        if (!keepExisting){
+            this.clearSelections(true);
+        }
+
+        var changed = false;
+        kijs.Array.each(this._elements, function(el) {
+            if (kijs.Array.contains(rows, el.dataRow)) {
+                changed = changed || !el.selected;
+                el.selected = true;
+                selectedElements.push(el);
+            }
+        }, this);
+        
+        // current aktualisieren
+        this._currentEl = null;
+        this.current = null;
+        
+        // SelectionChange auslösen
+        if (!preventSelectionChange && changed) {
+            this.raiseEvent('selectionChange', { elements: selectedElements, unSelect: false } );
         }
     }
     
@@ -673,6 +903,22 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             const newEl = this.createElement(data[i], i);
             newEl.index = i;
             newEl.parent = this;
+            
+            // Drag&Drop
+            if (this._sortable) {
+                newEl.ddSource = { 
+                    allowMove: true,
+                    allowCopy: true,
+                    allowLink: false,
+                    name: this._ddName
+                };
+                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+            } else {
+                if (newEl.ddSource) {
+                    newEl.ddSource.destruct();
+                }
+                newEl.ddSource = null;
+            }
 
             // click-Event
             newEl.on('click', function(e) {
@@ -695,31 +941,37 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }, this);
 
             // dragstart-Event
+            // DEPRECATED
             newEl.on('dragStart', function(e) {
                 return this.raiseEvent('elementDragStart', e);
             }, this);
-
+            
             // dragover-Event
+            // DEPRECATED
             newEl.on('dragOver', function(e) {
                 return this.raiseEvent('elementDragOver', e);
             }, this);
-
+            
             // drag-Event
+            // DEPRECATED
             newEl.on('drag', function(e) {
                 return this.raiseEvent('elementDrag', e);
             }, this);
 
             // dragleave-Event
+            // DEPRECATED
             newEl.on('dragLeave', function(e) {
                 return this.raiseEvent('elementDragLeave', e);
             }, this);
 
             // dragend-Event
+            // DEPRECATED
             newEl.on('dragEnd', function(e) {
                 return this.raiseEvent('elementDragEnd', e);
             }, this);
 
             // drop-Event
+            // DEPRECATED
             newEl.on('drop', function(e) {
                 return this.raiseEvent('elementDrop', e);
             }, this);
@@ -862,6 +1114,86 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     #onKeyDown(e) {
         this.handleKeyDown(e.nodeEvent);
+    }
+    
+    #onSourceDrop(e) {
+        // Source Element
+        let sourceEl = e.source.ownerEl;
+        
+        // Source dataRow merken, damit beim Ziel wieder eingefügt werden kann
+        kijs.gui.DragDrop.data.sourceDataRow = sourceEl.dataRow;
+        
+        if (e.source.name === this._ddName && e.operation === 'move') {
+            // Zeile aus Source entfernen
+            kijs.Array.remove(this._data, sourceEl.dataRow);
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                // nur speichern, wenn das Target ein anderes Element ist
+                // (sonst wird ja beim target bereits gespeichert)
+                if (e.target.ownerEl !== this) {
+                    this.save();
+                }
+            }
+
+            // evtl. neu laden
+            if (e.target.ownerEl !== this) {
+                // rows der selektierten Zeilen ermitteln
+                let selectedDataRows = this.getSelectedRows();
+                
+                // neu laden
+                this._createElements(this._data);
+                
+                // und wieder selektieren
+                this.selectByDataRows(selectedDataRows, false, true);
+                
+                // Current Element ermitteln und setzen
+                this.current = null;
+            }
+        }
+    }
+    
+    #onTargetDrop(e) {
+        if (e.source.name === this._ddName) {
+            let targetIndex = null;
+
+            // before oder after
+            if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
+                // target index ermitteln
+                targetIndex = this._data.indexOf(e.target.targetEl.dataRow);
+                if (e.target.targetPos === 'after') {
+                    targetIndex++;
+                }
+
+                // dataRow bei gewünschtem Index einfügen
+                this._data.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // child
+            } else if (e.target.targetPos === 'child') {
+                this._data.push(kijs.gui.DragDrop.data.sourceDataRow);
+                targetIndex = this._data.length -1;
+            }
+
+            // rows der selektierten Zeilen ermitteln
+            let selectedDataRows = this.getSelectedRows();
+
+            // neu laden
+            this._createElements(this._data);
+
+            // und wieder selektieren
+            this.selectByDataRows(selectedDataRows, false, true);
+
+            // Current Element ermitteln und setzen
+            this.current = null;
+
+            // in sichtbaren Bereich scrollen?
+            this._elements[targetIndex].dom.scrollIntoView();
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
+        }
     }
 
 

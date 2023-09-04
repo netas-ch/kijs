@@ -35,10 +35,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._leaf = true;
         this._rootVisible = false;
 
-        this._draggable = false;
-        this._allowDrag = true;
-        this._allowDrop = true;
-
         this._nodeDom = new kijs.gui.Dom({cls: 'kijs-node'});
         this._elementsDom = new kijs.gui.Dom({cls: 'kijs-expandcontainer'});
         this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treecaption', htmlDisplayType: 'code'});
@@ -62,12 +58,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl.on('singleClick', this.#onNodeSingleClick, this);
         this._treeCaptionDom.on('singleClick', this.#onNodeSingleClick, this);
 
-        // Drag-Drop-Events
-        this.on('ddStart', this.#onDdStart, this);
-        this.on('ddOver', this.#onDdOver, this);
-        this.on('ddDrop', this.#onDdDrop, this);
-
-
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             scrollableY: 'auto',
@@ -80,10 +70,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autoLoad                  : true,
             rootVisible               : true,
-
-            draggable                 : { target: 'draggable', context: this, prio: 200 },
-            allowDrag                 : true,
-            allowDrop                 : true,
 
             rpc                       : { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
             rpcLoadFn                 : true,
@@ -138,25 +124,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get allowDrag() { return this._allowDrag; }
-    set allowDrag(val) { this._allowDrag = !!val; }
-
-    get allowDrop() { return this._allowDrop; }
-    set allowDrop(val) { this._allowDrop = !!val; }
-
     get caption() { return this._treeCaptionDom.html; }
-
-    get draggable() { return this._draggable; }
-    set draggable(val) {
-        this._draggable = !!val;
-
-        // drag events
-        if (this._draggable) {
-            this._nodeDom.nodeAttributeSet('draggable', true);
-            kijs.DragDrop.addDragEvents(this, this._nodeDom);
-            kijs.DragDrop.addDropEvents(this, this._nodeDom);
-        }
-    }
 
     get expanded() { return !!this._innerDom.clsHas('kijs-expanded'); }
     set expanded(val) {
@@ -571,7 +539,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                     element.xtype = element.xtype ? element.xtype : 'kijs.gui.Tree';
                     element.scrollableY = false;
-                    element.draggable = element.draggable ? element.draggable : this.getRootNode().draggable;
 
                     //element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;
                     //element.iconCls = element.iconCls ? element.iconCls : this.getRootNode().iconCls;
@@ -626,130 +593,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
     // PRIVATE
     // LISTENERS
-    /**
-     * Wenn ein Objekt auf dieses Element gesetzt wird
-     * @param {Object} dropData
-     * @returns {undefined}
-     */
-    #onDdDrop(dropData) {
-        if (this.disabled) {
-            return;
-        }
-        if (this.draggable) {
-            let eventData = {
-                movedNode   : dropData.sourceElement,
-                movedId     : dropData.sourceElement.nodeId,
-                targetNode  : this,
-                targetId    : this.nodeId,
-                position    : dropData.position.position
-            };
-            this._raiseRootEvent('dragDrop', eventData);
-
-            // neu laden
-            if (this.isRemote) {
-                
-                let args = {
-                    movedId: eventData.movedId,
-                    targetId: eventData.targetId,
-                    position: eventData.position
-                };
-                
-                let defaultRpcArgs = this.rpcSaveArgs;
-                if (kijs.isObject(defaultRpcArgs)) {
-                    args = Object.assign(args, defaultRpcArgs);
-                }
-                
-                // verschieben über rpc melden
-                if (this.rpcSaveFn && this.rpc) {
-                    this.rpc.do({
-                        remoteFn: this.rpcSaveFn,
-                        owner: this,
-                        data: args
-                    });
-                }
-
-                // Trees zum neu laden
-                let nodeA = eventData.movedNode.parent;
-                let nodeB = eventData.position === 'onto' ? this : this.parent;
-
-                // node A nur neu laden, wenn sie kein Kind von B ist.
-                if ((nodeA instanceof kijs.gui.Tree) && !nodeA.isChildOf(nodeB)) {
-                    nodeA.load(null, true);
-                }
-
-                // Node B nur neu laden, wenn sie kein Kind von A ist
-                if (nodeB !== nodeA && (nodeB instanceof kijs.gui.Tree) && !nodeB.isChildOf(nodeA)) {
-                    nodeB.load(null, true);
-                }
-
-            // Elemente verschieben im Dom
-            } else {
-                // Node entfernen
-                eventData.movedNode.parent.remove(eventData.movedNode, true, true);
-
-                // Node wieder einfügen.
-                if (eventData.position === 'onto') {
-                    this.add(eventData.movedNode);
-
-                } else {
-                    let index = this.parent.elements.indexOf(this);
-                    if (eventData.position === 'below') {
-                        index++;
-                    }
-
-                    this.parent.add(eventData.movedNode, index);
-                }
-            }
-        }
-    }
-    
-    /**
-     * Wenn ein Element über diesem Element ist
-     * @param {Object} dragData
-     * @returns {undefined}
-     */
-    #onDdOver(dragData) {
-        if (this.disabled) {
-            return;
-        }
-        
-        // Ein Ordner kann nicht in sein Kindordner gezogen werden
-        if (!this.draggable || this.isChildOf(dragData.sourceElement)) {
-            dragData.position.allowAbove = false;
-            dragData.position.allowBelow = false;
-            dragData.position.allowOnto = false;
-
-        } else {
-            // erlaubt der parent, dass neue elemente hinzugefügt werden?
-            let parentAllowDrop = false;
-            if (this.parent instanceof kijs.gui.Tree) {
-                parentAllowDrop = this.parent.allowDrop;
-            }
-
-            if (dragData.sourceElement.allowDrag) {
-                dragData.position.allowAbove = parentAllowDrop;
-                dragData.position.allowBelow = parentAllowDrop;
-                dragData.position.allowOnto = this._allowDrop;
-            }
-        }
-    }
-    
-    /**
-     * Wenn dieses Element verschoben wird.
-     * @param {Object} dragData
-     */
-    #onDdStart(dragData) {
-        if (this.disabled) {
-            return;
-        }
-        dragData.position.allowLeft = false;
-        dragData.position.allowRight = false;
-        dragData.position.allowAbove = false;
-        dragData.position.allowBelow = false;
-        dragData.position.allowRight = false;
-        dragData.position.margin = 4;
-    }
-    
     /**
      * Klick auf den 'expand' button
      * Öffnet die Node, selektion wird nicht verändert

@@ -16,13 +16,15 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         super(false);
 
         this._ownerEl = null;            // Eigentümmer kijs.gui.Element dieser Instanz
-        this._targetDomProperty = null;  // Property-Name des kijs.gui.Dom, der als 
+        this._ownerDomProperty = null;   // Property-Name des kijs.gui.Dom, der als 
                                          // Ziel dient.
         this._mapping = {};
         
         this._targetEl = null;      // Ziel kijs.gui.Element der aktuellen Drag&Drop-Operation
         this._targetPos = null;     // Einfügeposition beim Ziel {String} 'before', 'after', 'child'
-        this._direction = 'vertical'; // Richtung der Elemente 'vertical' (default) oder 'horizontal'
+        this._operation = 'none';   // operation 'move', 'copy', 'link' oder 'none'
+        
+        this._ddMarkerTagName = 'div';  // tagName des ddMarkers
         this._posBeforeFactor = 0.666;
         this._posAfterFactor = 0.666;
         
@@ -41,12 +43,12 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             ownerEl: true,
-            direction: true,
+            ddMarkerTagName: true,
             posBeforeFactor: true,
             posAfterFactor: true,
             on: { fn: 'assignListeners' },
             mapping: { target: 'mapping' },
-            targetDomProperty: { prio: 1000, target: 'targetDomProperty' } // Property-Name des kijs.gui.Dom, der als Ziel dient
+            ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' } // Property-Name des kijs.gui.Dom, der als Ziel dient
         };
 
         // Config anwenden
@@ -61,8 +63,10 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get direction() { return this._direction; }
-    set direction(val) { this._direction = val; }
+    get ddMarkerTagName() { return this._ddMarkerTagName; }
+    set ddMarkerTagName(val) {
+        this._ddMarkerTagName = val.toLowerCase();
+    }
     
     get mapping() { return this._mapping; }
     set mapping(val) { this._mapping = val; }
@@ -83,39 +87,36 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this._posBeforeFactor = val;
     }
 
-    // Eigentümmer kijs.gui.Element dieser Instanz
-    get ownerEl() { return this._ownerEl; }
-    set ownerEl(val) { this._ownerEl = val; }
-
-    get ownerEl() { return this._ownerEl; }
-    set ownerEl(val) { this._ownerEl = val; }
-
     // Verweis auf den kijs.gui.Dom, das als Ziel dient
-    get targetDom() {
+    get ownerDom() {
         if (kijs.isEmpty(this._ownerEl)) {
             throw new kijs.Error(`target Elements must have a 'ddTarget.ownerEl'`);
         }
         
-        let dom = kijs.getObjectFromString(this._targetDomProperty, this._ownerEl);
+        let dom = kijs.getObjectFromString(this._ownerDomProperty, this._ownerEl);
         
         if (kijs.isEmpty(dom)) {
-            throw new kijs.Error(`target Elements must have a valide 'ddTarget.targetDomProperty'`);
+            throw new kijs.Error(`target Elements must have a valide 'ddTarget.ownerDomProperty'`);
         }
         
         return dom;
     }
     
     // Property-Name des kijs.gui.Dom, das als Ziel dient
-    get targetDomProperty() { return this._targetDomProperty; }
-    set targetDomProperty(val) {
-        this._targetDomProperty = val;
+    get ownerDomProperty() { return this._ownerDomProperty; }
+    set ownerDomProperty(val) {
+        this._ownerDomProperty = val;
         
         // Drag&Drop Listeners
-        this.targetDom.on('dragEnter', this.#onDragEnter, this);
-        this.targetDom.on('dragLeave', this.#onDragLeave, this);
-        this.targetDom.on('dragOver', this.#onDragOver, this);
-        this.targetDom.on('drop', this.#onDrop, this);
+        this.ownerDom.on('dragEnter', this.#onDragEnter, this);
+        this.ownerDom.on('dragLeave', this.#onDragLeave, this);
+        this.ownerDom.on('dragOver', this.#onDragOver, this);
+        this.ownerDom.on('drop', this.#onDrop, this);
     }
+    
+    // Eigentümmer kijs.gui.Element dieser Instanz
+    get ownerEl() { return this._ownerEl; }
+    set ownerEl(val) { this._ownerEl = val; }
     
     // Zielelement, auf das, das Element gedroppt wurde
     get targetEl() { return this._targetEl; }
@@ -144,78 +145,150 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     }
 
     /**
-     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger befindet
+     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am nähesten befindet
      * @param {Array} elements  Elements-Array
      * @param {Number} clientX  Maus-Position vom nodeEvent
      * @param {Number} clientY  Maus-Position vom nodeEvent
-     * @param {String} [dir='vertical'] Anordnung der elements 'vertical' oder 'horizontal'
-     * @returns {Object} { el:..., closestElBefore:..., y:..., height:... };
-     *                   el: Element unter dem Mauszeiger oder null
-     *                   closestElBefore: Element unter dem Mauszeiger oder nächstes Element vorher auf Y/X-Achse
-     *                   y: y-Position des Mauszeiger innerhalb des closestElBefore
-     *                   x: x-Position des Mauszeiger innerhalb des closestElBefore
-     *                   height: Höhe des closestElBefore
-     *                   width: Breite des closestElBefore
+     * @returns {Object} { el:..., diffX,... diffY:..., w:..., h:... };
+     *                   el: Element unter dem Mauszeiger oder nähestes Element
+     *                   diffX Abstand des Mauszeiger zum linken Rand des gefundenen Elements
+     *                   diffY: Abstand des Mauszeiger zum oberen Rand des gefundenen Elements
+     *                   w: Breite des gefundenen Elements
+     *                   h: Höhe des gefundenen Elements
      */
-    _getDragOverChild(elements, clientX, clientY, dir='vertical') {
-        let ret = { 
-            el: null, 
-            closestElBefore: null, 
-            x: null,
-            y: null, 
-            w: null,
-            h: null
-        };
+    _getDragOverChild(elements, clientX, clientY) {
+        let ret = null;
         
         if (kijs.isEmpty(elements)) {
             return ret;
         }
         
-        // Wenn ein Element vorhanden ist, dieses schon mal nehmen, für den Fall,
-        // dass der Mauszeiger oberhalb/links des Elements ist.
-        let pos = kijs.Dom.getAbsolutePos(elements[0].node);
-        ret = {
-            el: null,
-            closestElBefore: elements[0],
-            x: clientX - pos.x,
-            y: clientY - pos.y,
-            w: pos.w,
-            h: pos.h
+        const rectMouse = { 
+            x: clientX,
+            y: clientY, 
+            w: 0,
+            h: 0
         };
         
-        // Elemente durchgehen
-        // Abstände zwischen Elementen gehören zum vorherigen Element
+        // Ausrichtung der Elemente ermitteln
+        const ndeParent = elements[0].dom.node.parentElement;
+        const ndeParentTagName = this.ownerDom.node.tagName.toLowerCase();
+        const ndeParentStyle = window.getComputedStyle(ndeParent);
+        const flexDirection = ndeParentStyle.flexDirection;
+        const flexWrap = ndeParentStyle.flexWrap;
+        const isFlex = ndeParentStyle.display === 'flex';
+        const isWrap = isFlex && flexWrap !== 'nowrap';
+        const isHorizontal = (isFlex && !!flexDirection.startsWith('row')) || ndeParentTagName === 'tr';
+        
+        let minDistance = null;
+        
+        // Elemente durchgehen und das näheste Element ermitteln
         kijs.Array.each(elements, function(el) {
-            let pos = kijs.Dom.getAbsolutePos(el.node);
+            let rectEl = kijs.Dom.getAbsolutePos(el.node);
             
-            ret.el = null;
+            let ok = false;
             
-            if ( (dir === 'vertical'   && clientY >= pos.y) 
-              || (dir === 'horizontal' && clientX >= pos.x) ) {
-                
-                ret = {
-                    el: null,
-                    closestElBefore: el,
-                    x: clientX - pos.x,
-                    y: clientY - pos.y,
-                    w: pos.w,
-                    h: pos.h
-                };
-                if (clientX >= pos.x && clientX <= pos.x + pos.w && 
-                    clientY >= pos.y && clientY <= pos.y + pos.h) {
-                    ret.el = el;
+            // Falls das Layout umgebrochen wird, muss sichergestellt werden, dass
+            // nicht zwischen zwei Einfügepositionen hin und her geflackert wird.
+            // Dies erreichen wir, indem der Mauszeiger in der aktuellen Spalte oder Zeile
+            // auch in der richtigen Spalte oder Zeile sein muss.
+            if (isWrap) {
+                if (isHorizontal) {
+                    let distanceY = clientY - rectEl.y;
+                    ok = distanceY >= 0 && distanceY <= rectEl.h;
+                } else {
+                    let distanceX = clientX - rectEl.x;
+                    ok = distanceX >= 0 && distanceX <= rectEl.w;
                 }
-                
-            } else if (!kijs.Array.contains(['horizontal', 'vertical'], dir)) {
-                throw new kijs.Error(`Argument "dir" is not valid.`);
-                
+
             } else {
-                return false;
+                ok = true;
+                
             }
             
+            if (ok) {
+                // Distanz zwischen Mauszeiger und Mitte des Elements ermitteln
+                let distance = kijs.Graphic.rectsDistance(rectMouse, rectEl);
+
+                if (minDistance === null || distance < minDistance) {
+                    ret = { 
+                        el: el, 
+                        diffX: clientX - rectEl.x,  // Abstand des Mauszeigers zum linken Rand
+                        diffY: clientY - rectEl.y,  // Abstand des Mauszeigers zum oberen Rand
+                        w: rectEl.w,
+                        h: rectEl.h
+                    };
+                    minDistance = distance;
+                }
+            }
         }, this);
         
         return ret;
+    }
+    
+    // Marker positionieren, Source ein-/ausblenden, CSS aktualisieren
+    _updateGuiIndicator(e, targetEl, targetPos=null, operation='none', mapping=null) {
+        
+        if (kijs.isEmpty(operation)) {
+            operation = 'none';
+        }
+        
+        // icon bei Mauszeiger (move, copy, link, none) aktualisieren
+        if (kijs.isEmpty(mapping)) {
+            e.nodeEvent.dataTransfer.effectAllowed = 'none';
+        } else {
+            e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
+                    kijs.gui.DragDrop.source.allowMove && mapping.allowMove, 
+                    kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy, 
+                    kijs.gui.DragDrop.source.allowLink && mapping.allowLink);
+        }
+        
+        // muss die Einfügeposition aktualisiert werden?
+        let update = false;
+        
+        // kein Ziel => Bei Source-Position belassen
+        if (!targetEl) {
+            update = true;
+            
+        // hat sich die Position verändert?
+        } else if (targetEl !== this._targetEl || targetPos !== this._targetPos || operation !== this._operation) {
+            update = true;
+        }
+        
+        // Einfügeposition hat sich verändert
+        if (update) {
+            // Bei move Source-Element ausblenden, sonst einblenden
+            if (targetPos && operation === 'move') {
+                kijs.gui.DragDrop.source.ownerEl.style.display = 'none';
+            } else {
+                kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
+            }
+
+            // CSS kijs-dragover
+            if (targetPos) {
+                kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
+            } else {
+                kijs.gui.DragDrop.source.ownerEl.dom.clsAdd('kijs-dragover');
+            }
+
+            // Grösse des Markers an Source-Element anpassen
+            let markerWidth = null;
+            let markerHeight = null;
+            if (mapping && targetPos && !mapping.disableMarkerAutoSize) {
+                markerWidth = kijs.gui.DragDrop.source.width;
+                markerHeight = kijs.gui.DragDrop.source.height;
+            }
+
+            // Marker positionieren
+            if (targetEl) {
+                kijs.gui.DragDrop.dropMarkerUpdate(targetEl.dom, targetPos, 
+                        this._ddMarkerTagName, markerWidth, markerHeight);
+            }
+        }
+        
+        this._targetEl = targetEl;
+        this._targetPos = targetPos;
+        this._operation = operation;
     }
     
     
@@ -231,9 +304,13 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         // Workaround, weil das dragLeave auch kommt, wenn die Maus von einem Kind-Element weggezogen wird.
         if (this._ddEnterTarget === e.nodeEvent.target) {
             if (kijs.gui.DragDrop.source) {
-                kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
+                let mapping = this._mapping[kijs.gui.DragDrop.source.name];
+                if (mapping) {
+                    this._updateGuiIndicator(e);
+                } else {
+                    return;
+                }
             }
-            kijs.gui.DragDrop.dropMarkerRemove();
         }
     }
     
@@ -248,95 +325,106 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             throw new kijs.Error(`'posBeforeFactor' must be smaller than 'posAfterFactor'`);
         }
         
+        // Mapping ermitteln
+        let mapping = this._mapping[kijs.gui.DragDrop.source.name];
+        if (!mapping) {
+            return;
+        }
+        let operation = e.nodeEvent.dataTransfer.dropEffect;
+        let targetEl = null;
+        let targetPos = null;
+       
         // Auf Targets, die disabled sind, kann nichts abgelegt werden.
         if (this.ownerEl.disabled) {
             return false;
         }
         
-        // Mapping ermitteln
-        let mapping = this._mapping[kijs.gui.DragDrop.source.name];
-        if (!mapping) {
-            return false;
-        }
+        // Ausrichtung der Elemente ermitteln
+        const ndeParentStyle = window.getComputedStyle(this.ownerDom.node);
+        const ndeParentTagName = this.ownerDom.node.tagName.toLowerCase();
+        const flexDirection = ndeParentStyle.flexDirection;
+        const isFlex = ndeParentStyle.display === 'flex';
+        const isHorizontal = (isFlex && !!flexDirection.startsWith('row')) || ndeParentTagName === 'tr';
+        const isReverse = isFlex && !!flexDirection.endsWith('-reverse');
         
-        e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
-                kijs.gui.DragDrop.source.allowMove && mapping.allowMove, 
-                kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy, 
-                kijs.gui.DragDrop.source.allowLink && mapping.allowLink);
-        
-        let operation = e.nodeEvent.dataTransfer.dropEffect;
-        
-        // nächstes Element mit Positionen ermitteln
+        // nähestes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
+        // x und y enthallten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
         let ddCPos = this._getDragOverChild(
                 this._ownerEl.elements, 
                 e.nodeEvent.clientX, 
-                e.nodeEvent.clientY, 
-                this._direction);
-
+                e.nodeEvent.clientY);
         
-        // Einfügeposition anzeigen
-        // In dem Container ist noch kein Element
-        if (kijs.isEmpty(ddCPos.closestElBefore)) {
-            this._targetEl = this._ownerEl;
-            this._targetPos = 'child';
-            kijs.gui.DragDrop.dropMarkerDom.renderTo(this.targetDom.node);
-            kijs.gui.DragDrop.dropMarkerDom.scrollIntoView();
-            
-        // Es gibt bereits min. ein Element im Container
-        } else {
-            let insertPos = 'none';
-            switch (this._direction) {
-                case 'vertical':
-                    if (ddCPos.y < ddCPos.h * this._posBeforeFactor) {
-                        insertPos = 'before';
-                    } else if (ddCPos.y > ddCPos.h * this._posAfterFactor) {
-                        insertPos = 'after';
-                    }
-                    break;
+        // Falls kein Element in der Nähe gefunden wurde
+        if (kijs.isEmpty(ddCPos)) {
+            // gibt es bereits Elemente im Container
+            if (!kijs.isEmpty(this._ownerEl.elements)) {
+                if (isReverse) {
+                    // am Anfang einfügen
+                    targetEl = this._ownerEl.elements[0];
+                    targetPos = 'after';
+                } else {
                     
-                case 'horizontal':
-                    if (ddCPos.x < ddCPos.w * this._posBeforeFactor) {
-                        insertPos = 'before';
-                    } else if (ddCPos.x > ddCPos.w * this._posAfterFactor) {
-                        insertPos = 'after';
-                    }
-                    break;
-            }
-            
-            // Bei move: Wenn Source=Target: Nichts tun
-            if (operation === 'move' && insertPos !== 'none') {
-                if (ddCPos.closestElBefore === kijs.gui.DragDrop.source.ownerEl) {
-                    insertPos = 'none';
-                } else if (insertPos === 'before' && ddCPos.closestElBefore.previous === kijs.gui.DragDrop.source.ownerEl) {
-                    insertPos = 'none';
-                } else if (insertPos === 'after' && ddCPos.closestElBefore.next === kijs.gui.DragDrop.source.ownerEl) {
-                    insertPos = 'none';
+                    // am Ende einfügen
+                    targetEl = this._ownerEl.elements[this._ownerEl.elements.length-1];
+                    targetPos = 'after';
                 }
-            }
-            
-            // Ist der Marker bereits dort vorhanden?
-            if (insertPos !== 'none') {
-                if (kijs.gui.DragDrop.dropMarkerDom.node === ddCPos.closestElBefore.dom.node) {
-                    insertPos = 'none';
-                }
-            }
-            
-            if (insertPos !== 'none') {
-                this._targetEl = ddCPos.closestElBefore;
-                this._targetPos = insertPos;
-                kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
-                kijs.gui.DragDrop.dropMarkerDom.renderTo(this.targetDom.node, ddCPos.closestElBefore.dom.node, insertPos);
-                kijs.gui.DragDrop.dropMarkerDom.scrollIntoView();
             } else {
-                this._targetEl = null;
-                this._targetPos = null;
-                kijs.gui.DragDrop.source.ownerEl.dom.clsAdd('kijs-dragover');
-                kijs.gui.DragDrop.dropMarkerRemove();
+                targetEl = this._ownerEl;
+                targetPos = 'child';
+            }
+            
+        // Es wurde ein Element in der Nähe gefunden
+        } else {
+            targetEl = ddCPos.el;
+
+            // bei horizontaler Ausrichtung (flex-direction = 'row' oder 'row-reverse')
+            if (isHorizontal) {
+                if (ddCPos.diffX < ddCPos.w * this._posBeforeFactor) {
+                    targetPos = 'before';
+                } else if (ddCPos.diffX > ddCPos.w * this._posAfterFactor) {
+                    targetPos = 'after';
+                }
+                
+           // bei vertikaler Ausrichtung (flex-direction = 'column' oder 'column-reverse')
+           } else {
+                if (ddCPos.diffY < ddCPos.h * this._posBeforeFactor) {
+                    targetPos = 'before';
+                } else if (ddCPos.diffY > ddCPos.h * this._posAfterFactor) {
+                    targetPos = 'after';
+                }
+
             }
         }
+        
+        // Bei flex-direction = '...-reverse' müssen 'before' und 'after' getauscht werden
+        if (targetPos && isReverse) {
+            if (targetPos === 'before') {
+                targetPos = 'after';
+            } else if (targetPos === 'after') {
+                targetPos = 'before';
+            }
+        }
+
+        // Bei move: Wenn Source=Target: Nichts tun
+        if (targetPos && operation === 'move') {
+            if (targetEl === kijs.gui.DragDrop.source.ownerEl) {
+                targetEl = null;
+                targetPos = null;
+            } else if (targetPos === 'before' && targetEl.previous === kijs.gui.DragDrop.source.ownerEl) {
+                targetEl = null;
+                targetPos = null;
+            } else if (targetPos === 'after' && targetEl.next === kijs.gui.DragDrop.source.ownerEl) {
+                targetEl = null;
+                targetPos = null;
+            }
+        }
+        
+        this._updateGuiIndicator(e, targetEl, targetPos, operation, mapping);
     }
     
     #onDrop(e) {
+        event.preventDefault();
+        
         // Validieren
         if (!kijs.gui.DragDrop.source) {
             return false;
@@ -347,8 +435,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (!mapping) {
             return false;
         }
-                
+        
         kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
+        
+        // Source-Element wieder einblenden
+        kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
         
         if (kijs.isEmpty(this._targetEl) || kijs.isEmpty(this._targetPos)) {
             return;
@@ -388,8 +479,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         }
 
         // Listeners entfernen
-        if (this.targetDom) {
-            this.targetDom.off(null, null, this);
+        if (this.ownerDom) {
+            this.ownerDom.off(null, null, this);
         }
 
         // Elemente/DOM-Objekte entladen

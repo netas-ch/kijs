@@ -39,8 +39,7 @@ home.sc.DataView = class home_sc_DataView {
                         {
                             xtype: 'kijs.gui.DataView',
                             selectType: 'multi',
-                            data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
-                            waitMaskTargetDomProperty: 'innerDom',
+                            data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}, {A:'A3', B:'B3'}],
                             //scrollableY: 'auto',
                             style: {
                                 flex: 1
@@ -54,11 +53,53 @@ home.sc.DataView = class home_sc_DataView {
                 
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'DataView RPC',
+                    caption: '2x DataView local mit Drag&Drop untereinander',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
                         flex: 1
+                    },
+                    
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.DataView',
+                            selectType: 'multi',
+                            ddName: 'kijs.gui.Dashboard.Test',
+                            sortable: true,
+                            data: [{key:'A1'}, {key:'A2'}, {key:'A3'}],
+                            //scrollableY: 'auto',
+                            style: {
+                                flex: 1,
+                                borderRight: '4px solid var(--panel-borderColor)'
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        },{
+                            xtype: 'kijs.gui.DataView',
+                            selectType: 'multi',
+                            ddName: 'kijs.gui.Dashboard.Test',
+                            sortable: true,
+                            data: [{key:'B1'}, {key:'B2'}, {key:'B3'}],
+                            //scrollableY: 'auto',
+                            style: {
+                                flex: 1
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        }
+                    ]
+                },
+                
+                
+                {
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'DataView RPC',
+                    scrollableY: 'auto',
+                    cls: 'kijs-flexrow',
+                    style: {
+                        flex: 2
                     },
                     
                     headerElements:[
@@ -83,6 +124,8 @@ home.sc.DataView = class home_sc_DataView {
                                 },
                                 context: this
                             }
+                        },{
+                            xtype: 'kijs.gui.Separator'
                         },{
                             xtype: 'kijs.gui.field.OptionGroup',
                             label: 'selectType',
@@ -113,10 +156,11 @@ home.sc.DataView = class home_sc_DataView {
                             xtype: 'kijs.gui.DataView',
                             name: 'dataViewRpc',
                             selectType: 'multi',
-                            //rpc: 'default',
-                            //data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}],
-                            autoLoad: true,
                             rpcLoadFn: 'dataview.load',
+                            rpcSaveFn: 'dataview.save',
+                            autoLoad: true,
+                            autoSave: true,
+                            sortable: true,
                             waitMaskTargetDomProperty: 'innerDom',
                             //scrollableY: 'auto',
                             style: {

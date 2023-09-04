@@ -22,8 +22,7 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
         this._dom.htmlDisplayType = 'html';
 
         //this._dom.nodeAttributeSet('tabIndex', -1);
-        this._dom.nodeAttributeSet('draggable', true);
-
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine

@@ -132,21 +132,6 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         // neue hinzufügen
         this._dom.clsAdd('kijs-pos-' + val.replace(/([A-Z])/g, '-$1').toLowerCase());
         
-        // Drag&Drop direction von tabBar nachführen
-        switch (val) {
-            case 'top':
-            case 'bottom':
-                this._tabBarEl.ddDirection = 'horizontal';
-                break;
-                
-            case 'left':
-            case 'right':
-                this._tabBarEl.ddDirection = 'vertical';
-                break;
-                       
-        }
-        
-        
         if (val !== oldTabParPos) {
             this._tabBarEl.render();
         }
@@ -173,7 +158,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                     throw new kijs.Error(`Element must be an instance of kijs.gui.container.tab.Container.`);
                 }
                 
-            // Falls eine Config übergeben wird den xtype checken.
+            // Falls eine Config übergeben wurde, den xtype checken.
             // Falls kein xtype angegeben wurde, kijs.gui.container.tab.Container
             // als Standard nehmen.
             } else {
@@ -252,7 +237,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
             
             args = Object.assign({}, args, this._rpcSaveArgs);
             
-            // Positionsdaten der Spalten + Panels ermitteln
+            // Positionsdaten der Tabs ermitteln
             args.elements = [];
             kijs.Array.each(this._elements, function(el) {
                 args.elements.push(el.posData);
@@ -269,6 +254,12 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 context: this
                 
             }).then((e) => {
+                // config Properties anwenden, falls vorhanden
+                if (e.responseData.config) {
+                    // config Properties übernehmen
+                    this.applyConfig(e.responseData.config);
+                }
+                
                 // 'afterSave' auslösen
                 this.raiseEvent('afterSave', e);
                 
@@ -350,55 +341,71 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // PRIVATE
     // LISTENERS
     #onTabBarSourceDrop(e) {
-        // Source Button+Container
-        let sourceButton = e.source.ownerEl;
-        let sourceContainer = sourceButton.parent.parent.elements[sourceButton.index];
-        
-        // Source Container merken, damit er beim Ziel wieder eingefügt werden kann
-        kijs.gui.DragDrop.data.sourceContainer = sourceContainer;
-                
-        // Events vom sourceButton entfernen
-        sourceButton.off('click', this.#onTabButtonElClick, this);
-        sourceButton.icon2.off('click', this.#onTabButtonElCloseClick, this);
-        sourceButton.ddSource.off('drop');
-        
-        // Container vom alten Ort entfernen
-        sourceContainer.parent.remove(sourceContainer, false, true, true);
-        
-        // speichern
-        if (this._autoSave && this._rpcSaveFn) {
-            // nur speichern, wenn das Target ein anderes Element ist
-            // (sonst wird ja beim target bereits gespeichert)
-            if (e.target.ownerEl !== this._tabBarEl) {
-                this.save();
+        if (e.source.name === this._tabBarEl.ddName && e.operation === 'move') {
+            // Source Button+Container
+            let sourceButton = e.source.ownerEl;
+            let sourceContainer = sourceButton.parent.parent.elements[sourceButton.index];
+            
+            // Source Container merken, damit er beim Ziel wieder eingefügt werden kann
+            kijs.gui.DragDrop.data.sourceContainer = sourceContainer;
+
+            // Events vom sourceButton entfernen
+            sourceButton.off('click', this.#onTabButtonElClick, this);
+            sourceButton.icon2.off('click', this.#onTabButtonElCloseClick, this);
+            sourceButton.ddSource.off('drop');
+
+            // Container vom alten Ort entfernen
+            sourceContainer.parent.remove(sourceContainer, false, true, true);
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                // nur speichern, wenn das Target ein anderes Element ist
+                // (sonst wird ja beim target bereits gespeichert)
+                if (e.target.ownerEl !== this._tabBarEl) {
+                    this.save();
+                }
             }
         }
     }
     
     #onTabBarTargetDrop(e) {
-        // target index ermitteln
-        let targetIndex = kijs.gui.DragDrop.dropFnGetTargetIndex(e);
-        
-        // Container, des gezogenen Tab-Buttons ermitteln
-        let sourceContainer = kijs.gui.DragDrop.data.sourceContainer;
-        
-        // Ist das geogene Tab das aktuell selektierte?
-        const isCurrent = e.source.ownerEl.dom.clsHas('kijs-current');
-        
-        // Container am neuen Ort wieder einfügen
-        this.add(sourceContainer, targetIndex);
-        
-        // in sichtbaren Bereich scrollen
-        sourceContainer.tabButtonEl.dom.scrollIntoView();
-        
-        // Fall der aktuelle Container gezigen wurde: wieder auswählen
-        if (isCurrent) {
-            this.currentEl = sourceContainer;
-        }
-        
-        // speichern
-        if (this._autoSave && this._rpcSaveFn) {
-            this.save();
+        if (e.source.name === this._tabBarEl.ddName) {
+            // target index ermitteln
+            let targetIndex = kijs.gui.DragDrop.dropFnGetTargetIndex(e);
+
+            // Container, des gezogenen Tab-Buttons ermitteln
+            let sourceContainer = kijs.gui.DragDrop.data.sourceContainer;
+
+            // Ist das geogene Tab das aktuell selektierte?
+            const isCurrent = e.source.ownerEl.dom.clsHas('kijs-current');
+
+            let newTabContainer = null;
+
+            // Falls der Drag von einem anderen kijs.gui.container.Tab kommt, können
+            // wir das vorhandene Tab gleich nehmen
+            if (sourceContainer instanceof kijs.gui.container.tab.Container) {
+                newTabContainer = sourceContainer;
+
+            } else {
+                throw new Error('Drag&Drop of elements other than kijs.gui.container.Tab.container is not yet implemented.');
+
+            }
+
+            // Container am neuen Ort einfügen
+            this.add(newTabContainer, targetIndex);
+
+            // Fall der aktuelle Container gezogen wurde: wieder auswählen
+            if (isCurrent) {
+                this.currentEl = newTabContainer;
+            } else {
+                // sonst nur in sichtbaren Bereich scrollen
+                newTabContainer.tabButtonEl.dom.scrollIntoView();
+            }
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
         }
     }
     

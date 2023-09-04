@@ -1,6 +1,8 @@
 /* global kijs, this */
 
 // TODO: load() ist nicht kompatibel mit Basisklasse
+// TODO: Sortable für Spaltenreihenfolge
+// TODO: Sortable für Zeilenreihenfolge
 // --------------------------------------------------------------
 // kijs.gui.grid.Grid
 // --------------------------------------------------------------

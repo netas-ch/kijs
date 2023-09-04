@@ -28,7 +28,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         super(false);
         
         this._ddName = kijs.uniqId('tab');
-        this._ddDirection = 'horizontal';
         this._ddPosBeforeAfterFactor = 0.666;  // Position, ab der nachher statt vorher eingefügt wird
         this._sortable = false; // Tabs sind per Drag&Drop verschiebbar
         this._ddMapping = {};
@@ -44,7 +43,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             ddPosBeforeAfterFactor: true,
-            ddDirection: { target: 'ddDirection' },
             ddTarget: { target: 'ddTarget' },
             ddName: { target: 'ddName' },
             
@@ -63,16 +61,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get ddDirection() {
-        return this._ddDirection;
-    }
-    set ddDirection(val) {
-        this._ddDirection = val;
-        if (this._ddTarget) {
-            this._ddTarget.direction = val;
-        }
-    }
-    
     get ddMapping() { return this._ddMapping; }
     set ddMappping(val) {
         if (!kijs.isObject(val)) {
@@ -100,8 +88,8 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         if (kijs.isObject(val)) {
             if (kijs.isEmpty(this._ddTarget)) {
                 val.ownerEl = this;
-                if (kijs.isEmpty(val.targetDomProperty)) {
-                    val.targetDomProperty = 'innerDom';
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'innerDom';
                 }
                 this._ddTarget = new kijs.gui.dragDrop.Target(val);
                 this._eventForwardsAdd('ddTargetDrop', this.ddTarget, 'drop');
@@ -178,7 +166,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         // target
         if (this._sortable) {
             this.ddTarget = {
-                direction: this._ddDirection,
                 posBeforeFactor: this._ddPosBeforeAfterFactor,
                 posAfterFactor: this._ddPosBeforeAfterFactor,
                 mapping: this._ddMapping

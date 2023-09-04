@@ -81,7 +81,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
 
                 {
                     xtype: 'kijs.gui.Element',
-                    html: 'mit RPC',
+                    html: 'mit RPC und Drg&Drop',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -99,7 +99,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     value: ['#0f0', '#ff0'],
                     minSelectCount: 2,
                     maxSelectCount: 3,
-                    ddSort: true
+                    sortable: true
                 },
 
                 {
@@ -119,6 +119,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     helpText: 'Hilfe Text!',
                     required: true,
                     width: 350,
+                    sortable: true,
                     data: [
                         {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' },
                         {id:2, Bezeichnung:'grün', Icon:'kijs.iconMap.Fa.droplet', Color:'#88ff00' },

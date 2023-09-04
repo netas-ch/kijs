@@ -23,7 +23,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
-        this._ddSort = false;
 
         this._dom.clsRemove('kijs-dataview');
         this._dom.clsAdd('kijs-listview');
@@ -44,7 +43,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             showCheckBoxes: true,
             tooltipField: true,
             valueField: true,
-            ddSort: true,
 
             value: { target: 'value' }
         });
@@ -69,9 +67,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
-
-    get ddSort() { return this._ddSort; }
-    set ddSort(val) { this._ddSort = !!val; }
 
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }
@@ -203,14 +198,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             tooltip: tooltip,
             cls: cls
         });
-
-        // Drag-Drop Events setzen
-        kijs.DragDrop.addDragEvents(dve, dve.dom);
-        kijs.DragDrop.addDropEvents(dve, dve.dom);
-
-        dve.on('ddOver', this.#onDdOver, this);
-        dve.on('ddDrop', this.#onDdDrop, this);
-
+        
         return dve;
     }
 
@@ -220,51 +208,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     #onAfterLoad(e) {
         if (!kijs.isEmpty(this._value)) {
             this.value = this._value;
-        }
-    }
-
-    #onDdDrop(e) {
-        let tIndex = this._elements.indexOf(e.targetElement);
-        let sIndex = this._elements.indexOf(e.sourceElement);
-        let pos = e.position.position;
-
-        if (this.raiseEvent('ddDrop', e) === false) {
-            return;
-        }
-
-        if (this._ddSort && tIndex !== -1 && sIndex !== -1 && 
-                tIndex !== sIndex && (pos === 'above' || pos === 'below')) {
-            if (pos === 'below') {
-                tIndex += 1;
-            }
-
-            // Element im Array an richtige Position schieben
-            kijs.Array.move(this._elements, sIndex, tIndex);
-
-            if (this.isRendered) {
-                this.render();
-            }
-
-        }
-    }
-
-    #onDdOver(e) {
-        if (!this._ddSort || this._elements.indexOf(e.sourceElement) === -1 || 
-                this.raiseEvent('ddOver', e) === false) {
-            // fremdes Element, kein Drop.
-            e.position.allowAbove = false;
-            e.position.allowBelow = false;
-            e.position.allowLeft = false;
-            e.position.allowOnto = false;
-            e.position.allowRight = false;
-
-        } else {
-            // erlaubte Positionen (ober-, unterhalb)
-            e.position.allowAbove = true;
-            e.position.allowBelow = true;
-            e.position.allowLeft = false;
-            e.position.allowOnto = false;
-            e.position.allowRight = false;
         }
     }
 

@@ -210,12 +210,10 @@ kit.App = class kit_App {
 //                                                    iconSize: 16,
                                                     rpc: this._rpc,
                                                     rpcLoadFn: 'tree.load',
-                                                    draggable: true,
                                                     on: {
                                                         expand: function(){ console.log('expand event'); },
                                                         collapse: function(){ console.log('collapse event'); },
                                                         select: function(){ console.log('select event'); },
-                                                        dragDrop: function(s) { console.log('dragDrop event'); console.log(s); },
                                                         context: this
                                                     },
                                                     style: {

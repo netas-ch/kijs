@@ -9,14 +9,14 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
         super(false);
         
         this.ddTarget = {
-            direction: 'vertical',
             posBeforeFactor: 0.666,
             posAfterFactor: 0.666,
             mapping: {
                 dashboardItem:{
                     allowMove: true,
                     allowCopy: true,
-                    allowLink: false
+                    allowLink: false,
+                    disableMarkerAutoSize: true
                 }
             },
             on: {
@@ -62,8 +62,8 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
         if (kijs.isObject(val)) {
             if (kijs.isEmpty(this._ddTarget)) {
                 val.ownerEl = this;
-                if (kijs.isEmpty(val.targetDomProperty)) {
-                    val.targetDomProperty = 'innerDom';
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'innerDom';
                 }
                 this._ddTarget = new kijs.gui.dragDrop.Target(val);
             } else {
@@ -91,6 +91,23 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
                 
             case 'copy':
                 const sourceEl = e.source.ownerEl;
+                
+                let html = '';
+                if (sourceEl.ddSource.allowMove) {
+                    if (html) {
+                        html += ', ';
+                    }
+                    html += 'move';
+                }
+                if (sourceEl.ddSource.allowCopy) {
+                    if (html) {
+                        html += ', ';
+                    }
+                    html += 'copy';
+                }
+                html = 'new item (' + html + ')';
+                
+                
                 const cloneEl = new kijs.gui.Element({
                     height: 31,
                     ddSource:{
@@ -99,7 +116,7 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
                         allowCopy: sourceEl.ddSource.allowCopy,
                         allowLink: sourceEl.ddSource.allowLink
                     },
-                    html: 'Item (copy)',
+                    html: html,
                     style: {
                         padding: '4px 10px',
                         border: '1px solid var(--panel-borderColor)',
@@ -296,6 +313,8 @@ home.sc.Dashboard = class home_sc_Dashboard {
                     context: this
                 }
             },{
+                xtype: 'kijs.gui.Separator'
+            },{
                 xtype: 'kijs.gui.Element',
                 height: 31,
                 ddSource:{
@@ -304,7 +323,7 @@ home.sc.Dashboard = class home_sc_Dashboard {
                     allowCopy: true,
                     allowLink: true
                 },
-                html: 'Item (move to Dasboard)',
+                html: 'Item (move or copy)',
                 style: {
                     padding: '4px 10px',
                     border: '1px solid var(--panel-borderColor)',

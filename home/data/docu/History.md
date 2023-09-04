@@ -32,7 +32,7 @@ Unterstützung von Drag&Drop. Dazu gibt es folgende neuen Klassen:
  - kijs.gui.dragDrop.Source  
  - kijs.gui.dragDrop.Target  
 Siehe dazu den Leitfaden 'Drag&Drop'.  
-Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.  
+Die alte Klasse ```kijs.DragDrop``` gibt es nicht mehr!
 
 ### kijs.gui.Container
  - Beim einfügen neuer Elemente in den Container wird neu noch das ```afterResize```-Event 
@@ -64,6 +64,17 @@ Die alte Klasse ```kijs.DragDrop``` funktioniert noch, ist aber DEPRECATED.
     - kijs.gui.grid.Grid
     - kijs.gui.Tree
     - kijs.gui.field.Combo
+ - Wegen der neuen Drag&Drop-Unterstützung gibt es folgende Events im 
+   ```kijs.gui.Element``` und allen vererbten Klassen nicht mehr:
+    - ```drag```  
+    - ```dragEnter```  
+    - ```dragOver```  
+    - ```dragStart```  
+    - ```dragLeave```  
+    - ```dragEnd```  
+    - ```drop```  
+   Falls sie trotzdem noch verwendet werden, kann ein Listener auf den ```kijs.gui.Dom``` 
+   erstellt werden (dort gibt es sie noch).  
 
 ### kijs.gui.Dom
  - getter ```isAppended``` gibt es nicht mehr. Sie dazu auch den Kommentar unter 
@@ -164,6 +175,22 @@ Einfaches Element um Trennlinien in Toolbars oder Formularen einzufügen.
 
  - verschiedene weitere kleinere CSS-Anpassungen.  
 
+### kijs.gui.DataView
+ - Unterstützt neu Drag&Drop
+ - Neue config/getter/setter
+    - ```rpcSaveFn```  
+    - ```rpcSaveArgs```  
+    - ```autoSave``` Automatisches Speichern bei Drag&Drop oder dem Schliessen  
+                     Tabs. Boolean, default: false  
+    - ```sortable``` Richtet Drag&Drop ein, so dass die Tabs verschoben werden  
+                     können. Boolean, default: false  
+
+    - ```ddName```   Siehe Leitfaden 'Drag & Drop'. Falls kein ddName angegeben  
+                     wird, wird automatisch eineindeutiger Name vergeben.  
+    - ```ddPosBeforeFactor``` Siehe Leitfaden 'Drag & Drop'  
+    - ```ddPosAfterFactor``` Siehe Leitfaden 'Drag & Drop'  
+    - ```ddMapping``` Siehe Leitfaden 'Drag & Drop'  
+
 ### kijs.gui.dataView.Element
  - ```kijs.gui.DataViewElement``` umenannt zu ```kijs.gui.dataView.Element```  
    **UPDATE TIPP:**  
@@ -171,6 +198,22 @@ Einfaches Element um Trennlinien in Toolbars oder Formularen einzufügen.
        ```kijs.gui.dataView.Element``` ersetzen.  
      - CSS nach ```kijs-dataviewelement``` durchsuchen und durch 
        ```kijs-dataview-element``` ersetzen.  
+
+### kijs.gui.ListView
+ - Unterstützt das neue Drag&Drop, Siehe dazu die Änderungen bei ```kijs.gui.DataView``` 
+   (Basisklasse).  
+   **UPDATE TIPP:** Projekt nach ```ddSort``` durchsuchen, und durch ```sortable``` 
+   ersetzen.  
+
+### kijs.gui.field.ListView, kijs.gui.field.CheckboxGroup, kijs.gui.field.OptionGroup 
+ - Unterstützt das neue Drag&Drop.  
+   **UPDATE TIPP:** Projekt nach ```ddSort``` durchsuchen, und durch ```sortable``` 
+   ersetzen.  
+
+### kijs.gui.Tree
+Unterstützt vorerst kein Drag&Drop mehr.  
+Der kijs.gui.Tree wird noch komplett überarbeitet. Dann wird auch das neue Drag&Drop 
+eingebaut.  
 
 
 

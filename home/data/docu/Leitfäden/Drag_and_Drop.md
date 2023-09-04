@@ -32,14 +32,14 @@ die Einstellungen mitzuteilen, die es benötigt:
             allowMove: true,    // Darf das Element per Drag&Drop verschoben werden?
             allowCopy: false,   // Darf das Element per Drag&Drop kopiert werden?
             allowLink: false,   // Darf per Drag&Drop eine Verknüpfung erstellt werden?
-            sourceDomProperty: 'dom' // Property-Name des draggable DOM-Elements.
+            ownerDomProperty: 'dom' // Property-Name des draggable DOM-Elements.
             on: {
                 drop: function(e) { // Falls beim Drop auch beim Source etwas gemacht 
                                     // werden muss. Kann hier ein Listener gemacht werden.
                     console.log('source save');
                 },
                 context: this
-            },
+            }
         }
     });
 
@@ -60,12 +60,12 @@ gewünschte Operation gewählt werden:
  - copy: Ctrl  
  - link: Ctrl + Shift  
 
-### sourceDomProperty
+### ownerDomProperty
 Falls nicht das ganze Element draggable sein soll, kann hier der Name des 
 Properties angegeben werden (Standard='dom').  
 
 Wenn z.B. ein Panel nur via Klicken und Ziehen auf dem PanelHeader gezogen werden 
-kann, kann dafür ```sourceDomProperty='headerBar.dom'``` eingestellt werden.  
+kann, kann dafür ```ownerDomProperty='headerBar.dom'``` eingestellt werden.  
 
 ### Listeners (on)
 Es gibt zwei Events, die über Listeners abgefragt werden können:  
@@ -101,14 +101,14 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
             super(false);
 
             this.ddTarget = {
-                direction: 'vertical',
                 posBeforeFactor: 0.666,
                 posAfterFactor: 0.666,
                 mapping: {
                     myAwesomeElement:{
                         allowMove: true,
                         allowCopy: false,
-                        allowLink: false
+                        allowLink: false,
+                        disableMarkerAutoSize: false
                     }
                 },
                 on: {
@@ -147,8 +147,8 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
             if (kijs.isObject(val)) {
                 if (kijs.isEmpty(this._ddTarget)) {
                     val.ownerEl = this;
-                    if (kijs.isEmpty(val.targetDomProperty)) {
-                        val.targetDomProperty = 'innerDom';
+                    if (kijs.isEmpty(val.ownerDomProperty)) {
+                        val.ownerDomProperty = 'innerDom';
                     }
                     this._ddTarget = new kijs.gui.dragDrop.Target(val);
                 } else {
@@ -214,18 +214,12 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
 
 Hier noch ein genauer Beschrieb der möglichen ddTarget-Einstellungen:  
 
-### targetDomProperty
+### ownerDomProperty
 Falls nicht das ganze Element als Ziel sein soll, kann hier der Name des 
 Properties angegeben werden (Z.B. 'innerDom').  
 
 Wenn z.B. bei einem Panel nur der innerDom als Ziel dienen soll, kann dafür 
-```targetDomProperty='innerDom'``` eingestellt werden.  
-
-### direction  
-Anordnung der Elemente innerhalb des Targets.  
- - ```'vertical'``` (default)  
- - ```'horizontal'```  
-(muss zum Wert der CSS-Eigenschaft ```flex-direction``` des Targets passen)  
+```ownerDomProperty='innerDom'``` eingestellt werden.  
 
 ### posBeforeFactor
 Zahl zwischen 0 und 1. Default=0.666  
@@ -241,7 +235,7 @@ Position des Splittpunkts für das Einfügen nachher (after).
 Wird vor nach Position gedroppt, so wird das Element nach eingefügt.  
 Wird vorher gedroppt, geschieht nichts.  
 
-    direction: 'vertical'       direction: 'horizontal'
+    flex-direction: 'column'    flex-direction: 'row'
     mit posBeforeFactor=0.333   mit posBeforeFactor=0.666
     und posAfterFactor=0.666    und posAfterFactor=0.666
     ----------------------      ------------------------------
@@ -263,6 +257,12 @@ Im Mapping wird für jeden ddSource-```name``` folgende Eigenschaften definiert:
 #### allowMove, allowCopy, allowLink
 Hier kann eingestellt werden, ob verschieben, kopieren oder verknüpfen auf dieses 
 Ziel erlaubt ist.  
+
+#### disableMarkerAutoSize
+Boolscher Wert. Default=false  
+Falls der Platzhalter für die Einfügeposition (DropMarker) nicht die gleiche Grösse, 
+wie das Quell-Element haben soll, kann dies hiermit ausgeschltet werden. Die Grösse 
+der DropMarkers muss dann mittels CSS definiert werden.  
 
 ### Listeners (on)
 Es gibt zwei Events, die über Listeners abgefragt werden können:  

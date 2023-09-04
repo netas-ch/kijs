@@ -267,13 +267,13 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
         this._eventForwardsAdd('rightClick', this._dom);
-        this._eventForwardsAdd('drag', this._dom);
-        this._eventForwardsAdd('dragEnter', this._dom);
-        this._eventForwardsAdd('dragOver', this._dom);
-        this._eventForwardsAdd('dragStart', this._dom);
-        this._eventForwardsAdd('dragLeave', this._dom);
-        this._eventForwardsAdd('dragEnd', this._dom);
-        this._eventForwardsAdd('drop', this._dom);
+        //this._eventForwardsAdd('drag', this._dom);
+        //this._eventForwardsAdd('dragEnter', this._dom);
+        //this._eventForwardsAdd('dragOver', this._dom);
+        //this._eventForwardsAdd('dragStart', this._dom);
+        //this._eventForwardsAdd('dragLeave', this._dom);
+        //this._eventForwardsAdd('dragEnd', this._dom);
+        //this._eventForwardsAdd('drop', this._dom);
         this._eventForwardsAdd('focus', this._dom);
         this._eventForwardsAdd('mouseDown', this._dom);
         this._eventForwardsAdd('mouseEnter', this._dom);
@@ -331,8 +331,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (kijs.isObject(val)) {
             if (kijs.isEmpty(this._ddSource)) {
                 val.ownerEl = this;
-                if (kijs.isEmpty(val.sourceDomProperty)) {
-                    val.sourceDomProperty = 'dom';
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'dom';
                 }
                 this._ddSource = new kijs.gui.dragDrop.Source(val);
             } else {

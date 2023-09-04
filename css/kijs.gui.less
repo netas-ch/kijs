@@ -835,9 +835,6 @@
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
-                &.kijs-dragging:not(.kijs-dragover) {
-                    display: none;
-                }
             }
         }
         /* Drop Marker */
@@ -848,25 +845,21 @@
         }
         &.kijs-pos-top {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                width: 40px;
                 margin: 4px 0 0 4px;
             }
         }
         &.kijs-pos-right {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                height: 20px;
                 margin: 4px 4px 0 0;
             }
         }
         &.kijs-pos-bottom {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                width: 40px;
                 margin: 0 0 4px 4px;
             }
         }
         &.kijs-pos-left {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                height: 20px;
                 margin: 4px 0 0 4px;
             }
         }
@@ -1015,17 +1008,16 @@
 
 
     /* ******************
-       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
-    body > div.kijs-dragdrop-marker {
+    /*body > div.kijs-dragdrop-marker {
         z-index: 20201;
         position: absolute;
         background-color: var(--dragover-ok-borderColor);
 
         &.top, &.bottom { height: 2px }
         &.left, &.right { width: 2px }
-    }
+    }*/
 
 
 
@@ -1470,13 +1462,6 @@
                         border: 2px solid var(--bar-bkgrndColor);
                         border-radius: 5px;
                         
-                        > .kijs-headerbar[draggable] {
-                            > .kijs-container-inner {
-                                cursor: move;
-                                user-select: none;
-                            }
-                        }
-                        
                         &.kijs-dragging {
                             opacity: 0.6
                         }
@@ -1493,7 +1478,6 @@
                     /* Drop Marker */
                     > .kijs-dropmarker {
                         flex: none;
-                        height: 100px;
                         border: 2px solid var(--accentColor3);
                         border-radius: 5px;
                     }
@@ -2070,6 +2054,14 @@
                     border-color: var(--item-selected-borderColor);
                 }
                 
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+
+                &.kijs-dragover {
+                    border-color: var(--accentColor3);
+                }
+                
                 &.kijs-disabled {
                     background-color: var(--item-disabled-bkgrndColor);
                     border-color: var(--item-disabled-borderColor);
@@ -2083,6 +2075,13 @@
                         color: var(--item-label-disabled-fontColor);
                     }
                 }
+            }
+            
+            /* Drop Marker */
+            > .kijs-dropmarker {
+                flex: none;
+                border: 1px solid var(--accentColor3);
+                border-radius: 5px;
             }
         }
 
@@ -2173,6 +2172,14 @@
                     }
                 }
 
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+
+                &.kijs-dragover {
+                    border-color: var(--accentColor3);
+                }
+                
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
@@ -2213,6 +2220,13 @@
                     }*/
                 }
 
+            }
+            
+            /* Drop Marker */
+            > .kijs-dropmarker {
+                flex: none;
+                border: 1px solid var(--accentColor3);
+                border-radius: 5px;
             }
         }
 
@@ -2751,6 +2765,21 @@
                     display: flex;
                     flex-direction: row;
                     padding: 2px 0 0 6px;
+                    
+                    
+                    &.kijs-dragging {
+                        opacity: 0.6
+                    }
+                    
+                    &.kijs-dragover {
+                        border: 2px solid var(--accentColor3);
+                    }
+                    
+                    /* Drop Marker */
+                    &.kijs-dropmarker {
+                        border: 2px solid var(--accentColor3);
+                        border-radius: 5px;
+                    }
 
                     &.kijs-hidden {
                         display: none;

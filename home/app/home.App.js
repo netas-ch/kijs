@@ -62,6 +62,7 @@ home.App = class home_App {
     // PROTECTED
     _createContent() {
         return new kijs.gui.container.Tab({
+            sortable: true,
             style: {
                 flex: 1
             },

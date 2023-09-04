@@ -85,7 +85,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             captionField: 'caption',
             data: data,
             value: values,
-            ddSort: true
+            sortable: true
         });
 
         this.down('fields').on('ddOver', this.#onDdOver, this);

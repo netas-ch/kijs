@@ -20,15 +20,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._splitterMove = false;
         this._sort = null;
 
-        // drag events
-        this._dom.nodeAttributeSet('draggable', false);
-        kijs.DragDrop.addDragEvents(this, this._dom);
-        kijs.DragDrop.addDropEvents(this, this._dom);
-
-        this.on('ddStart', this.#onDdStart, this);
-        this.on('ddOver', this.#onDdOver, this);
-        this.on('ddDrop', this.#onDdDrop, this);
-
         // DOM für label
         this._captionContainerDom = new kijs.gui.Dom({cls:'kijs-caption'});
         this._captionDom = new kijs.gui.Dom({nodeTagName:'span', htmlDisplayType: 'code'});
@@ -343,45 +334,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
     // PRIVATE
     // LISTENERS
-    #onDdDrop(e) {
-        let tIndex = this.header.cells.indexOf(e.targetElement);
-        let sIndex = this.header.cells.indexOf(e.sourceElement);
-        let pos = e.position.position;
-
-        if (!this._splitterMove && tIndex !== -1 && sIndex !== -1 && tIndex !== sIndex && (pos === 'left' || pos === 'right')) {
-            if (pos === 'right') {
-                tIndex += 1;
-            }
-            this.header.grid.columnConfigs[sIndex].position = tIndex;
-        }
-    }
-    
-    #onDdOver(e) {
-        if (this._splitterMove || this.header.cells.indexOf(e.sourceElement) === -1 || e.sourceElement.columnConfig.sortable === false) {
-            // fremdes Element, kein Drop.
-            e.position.allowAbove = false;
-            e.position.allowBelow = false;
-            e.position.allowLeft = false;
-            e.position.allowOnto = false;
-            e.position.allowRight = false;
-
-        } else {
-            // erlaubte Positionen (links, rechts)
-            e.position.allowAbove = false;
-            e.position.allowBelow = false;
-            e.position.allowLeft = true;
-            e.position.allowOnto = false;
-            e.position.allowRight = true;
-        }
-    }
-    
-    #onDdStart(e) {
-        // wenn splitter nicht bewegt wird, drag starten
-        if (this._splitterMove) {
-            return false;
-        }
-    }
-
     #onSplitterMouseDown(e) {
         if (!this._columnConfig.resizable) {
             return;

@@ -192,7 +192,55 @@ foreach ($requests as $request) {
                                                     "allowCopy": false,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 1 (move only)",
+                                                "html": "Item 1 (move)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "1px solid var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            },{
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": true,
+                                                    "allowCopy": false,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 2 (move)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "1px solid var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            },{
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": true,
+                                                    "allowCopy": false,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 3 (move)",
+                                                "style": {
+                                                    "padding": "4px 10px",
+                                                    "border": "1px solid var(--panel-borderColor)",
+                                                    "borderRadius": "5px",
+                                                    "backgroundColor": "var(--viewport-bkgrndColor)"
+                                                }
+                                            },{
+                                                "xtype": "kijs.gui.Element",
+                                                "height": 31,
+                                                "ddSource":{
+                                                    "name": "dashboardItem",
+                                                    "allowMove": true,
+                                                    "allowCopy": false,
+                                                    "allowLink": false
+                                                },
+                                                "html": "Item 4 (move)",
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "1px solid var(--panel-borderColor)",
@@ -214,7 +262,7 @@ foreach ($requests as $request) {
                                                     "allowCopy": true,
                                                     "allowLink": false
                                                 },
-                                                "html": "Item 2 (copy only)",
+                                                "html": "Item (copy)",
                                                 "style": {
                                                     "padding": "4px 10px",
                                                     "border": "var(--panel-borderColor)",
@@ -350,6 +398,18 @@ foreach ($requests as $request) {
                 
                 //sleep(1);
 
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+        
+        case 'dataview.save':
+            try {
+                // config
+                $response->cornerTipMsg = 'TODO: Speichern';
+                
+                //sleep(1);
+                
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
             }

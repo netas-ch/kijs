@@ -14,7 +14,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
         super(false);
         
         this._sortable = false;      // Panels sind per Drag&Drop verschiebbar
-        this._ddPosBeforeAfterFactor = 0.666;  // Position, ab der nachher statt vorher eingefügt wird
+        this._ddPosBeforeAfterFactor = 0.66;  // Position, ab der nachher statt vorher eingefügt wird
         this._ddPanelName = 'kijs.gui.dashboard.Panel';
         this._ddMapping = {};
         
@@ -128,6 +128,12 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
                 context: this
                 
             }).then((e) => {
+                // config Properties anwenden, falls vorhanden
+                if (e.responseData.config) {
+                    // config Properties übernehmen
+                    this.applyConfig(e.responseData.config);
+                }
+                
                 // 'afterSave' auslösen
                 this.raiseEvent('afterSave', e);
                 
@@ -153,12 +159,11 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
             if (el instanceof kijs.gui.dashboard.Column) {
                 if (this._sortable) {
                     el.ddTarget = {
-                        direction: 'vertical',
                         posBeforeFactor: this._ddPosBeforeAfterFactor,
                         posAfterFactor: this._ddPosBeforeAfterFactor,
                         mapping: this._ddMapping
                     };
-                    el.ddTarget.on('drop', this.#onDrop, this);
+                    el.ddTarget.on('drop', this.#onDdTargetDrop, this);
                     el.on('add', this.#onAddPanels, this);
                 } else {
                     if (el.ddTarget) {
@@ -216,10 +221,12 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     #onAddPanels(e) {
         this._initPanels(e.elements);
     }
-    #onDrop(e) {
-        kijs.gui.DragDrop.dropFnMoveEl(e);
-        if (this._autoSave && this._rpcSaveFn) {
-            this.save();
+    #onDdTargetDrop(e) {
+        if (e.source.name === this._ddPanelName) {
+            kijs.gui.DragDrop.dropFnMoveEl(e);
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
         }
     }
     

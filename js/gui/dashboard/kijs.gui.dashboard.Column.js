@@ -57,8 +57,8 @@ kijs.gui.dashboard.Column = class kijs_gui_dashboard_Column extends kijs.gui.Con
         if (kijs.isObject(val)) {
             if (kijs.isEmpty(this._ddTarget)) {
                 val.ownerEl = this;
-                if (kijs.isEmpty(val.targetDomProperty)) {
-                    val.targetDomProperty = 'innerDom';
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'innerDom';
                 }
                 this._ddTarget = new kijs.gui.dragDrop.Target(val);
             } else {

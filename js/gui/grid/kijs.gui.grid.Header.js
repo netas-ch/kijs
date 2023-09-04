@@ -1,5 +1,9 @@
 /* global kijs, this */
 
+// TODO: Damit Drag&Drop funktioniert, muss diese Klasse von kijs.gui.Container
+// erben!
+
+
 // --------------------------------------------------------------
 // kijs.gui.grid.Header
 // --------------------------------------------------------------
@@ -12,21 +16,41 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // overwrite
     constructor(config={}) {
         super(false);
-
+        
         // dom type
         this._dom.nodeTagName = 'tr';
-
+        
         this._cells = [];
-
+        
+        /*this._ddName = kijs.uniqId('kijs.gui.grid.HeaderCell');
+        
+        this.ddTarget = {
+            ddMarkerTagName: 'td',
+            posBeforeFactor: 0.666,
+            posAfterFactor: 0.666,
+            mapping: {
+                [this._ddName]:{
+                    allowMove: true,
+                    allowCopy: false,
+                    allowLink: false,
+                    disableMarkerAutoSize: false
+                }
+            },
+            on: {
+                drop: this.#onDrop,
+                context: this
+            }
+        };*/
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             cls: 'kijs-grid-header'
         });
-
+        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
         });
-
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -46,6 +70,35 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }
         return cells;
     }
+    
+    /*get ddTarget() { 
+        return this._ddTarget; 
+    }
+    set ddTarget(val) {
+        // config-object
+        if (kijs.isObject(val)) {
+            if (kijs.isEmpty(this._ddTarget)) {
+                val.ownerEl = this;
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'dom';
+                }
+                this._ddTarget = new kijs.gui.dragDrop.Target(val);
+            } else {
+                this._ddTarget.applyConfig(val);
+            }
+
+        // null
+        } else if (val === null) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+
+        } else {
+            throw new kijs.Error(`ddTarget must be a object or null`);
+
+        }
+    }*/
 
     get grid() { return this.parent; }
 
@@ -147,7 +200,14 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
             let cell = new kijs.gui.grid.HeaderCell({
                 parent: this,
-                columnConfig: columnConfig
+                columnConfig: columnConfig/*,
+                ddSource:{
+                    name: this._ddName,
+                    allowMove: true,
+                    allowCopy: false,
+                    allowLink: false,
+                    ownerDomProperty: 'dom'
+                }*/
             });
 
             // change listener
@@ -193,7 +253,22 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }
     }
 
+    // TODO !!!!!
+    /*#onDrop(e) {
+        console.log('drop');
+        //let tIndex = this.header.cells.indexOf(e.targetElement);
+        //let sIndex = this.header.cells.indexOf(e.sourceElement);
+        //let pos = e.position.position;
 
+        //if (!this._splitterMove && tIndex !== -1 && sIndex !== -1 && tIndex !== sIndex && (pos === 'left' || pos === 'right')) {
+        //    if (pos === 'right') {
+        //        tIndex += 1;
+        //    }
+        //    this.header.grid.columnConfigs[sIndex].position = tIndex;
+        //}
+    }*/
+    
+    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -207,7 +282,12 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-
+        
+        // Elemente/DOM-Objekte entladen
+        if (this._ddTarget) {
+            this._ddTarget.destruct();
+        }
+        
         // cells destructen
         kijs.Array.each(this.cells, function(cell) {
             cell.destruct();
@@ -215,9 +295,8 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._cells = null;
-        if (this._dataRow) {
-            this._dataRow = null;
-        }
+        this._dataRow = null;
+        //this._ddTarget = null;
 
         // Basisklasse entladen
         super.destruct(true);

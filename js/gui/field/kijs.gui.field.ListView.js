@@ -12,7 +12,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     constructor(config={}) {
         super(false);
-
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._previousChangeValue = [];
@@ -20,14 +19,17 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._listView = new kijs.gui.ListView({});
 
         this._dom.clsAdd('kijs-field-listview');
-
+        
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            ddName: kijs.uniqId('listView.element')
+        });
+        
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            ddSort: { target: 'ddSort', context: this._listView },
-
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
             selectType: { target: 'selectType', context: this._listView },
-
+            
             captionField: { target: 'captionField', context: this._listView },
             iconCharField: { target: 'iconCharField', context: this._listView },
             iconMapField: { target: 'iconMapField', context: this._listView },
@@ -35,7 +37,17 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             iconColorField: { target: 'iconColorField', context: this._listView },
             tooltipField: { target: 'tooltipField', context: this._listView },
             valueField: { target: 'valueField', context: this._listView },
-
+            
+            ddName: { target: 'ddName', context: this._listView },
+            ddPosAfterFactor: { target: 'ddPosAfterFactor', context: this._listView },
+            ddPosBeforeFactor: { target: 'ddPosBeforeFactor', context: this._listView },
+            sortable: { target: 'sortable', context: this._listView },
+            ddTarget: { target: 'ddTarget', context: this._listView },
+            
+            rpcSaveFn: { target: 'rpcSaveFn', context: this._listView },
+            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._listView },
+            autoSave: { target: 'autoSave', context: this._listView }, // Auto-Speichern bei DD
+            
             minSelectCount: true,
             maxSelectCount: true,
 
@@ -76,6 +88,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    get listView() { return this._listView; }
+    
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {

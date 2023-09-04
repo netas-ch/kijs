@@ -43,12 +43,10 @@ home.sc.Tree = class home_sc_Tree {
                     //iconSize: 16,
                     //rpc: 'default',
                     rpcLoadFn: 'tree.load',
-                    draggable: true,
                     on: {
                         expand: function(){ console.log('expand event'); },
                         collapse: function(){ console.log('collapse event'); },
                         select: function(){ console.log('select event'); },
-                        dragDrop: function(s) { console.log('dragDrop event'); console.log(s); },
                         context: this
                     },
                     style: {
@@ -69,12 +67,10 @@ home.sc.Tree = class home_sc_Tree {
                     expandedIconCls: 'icoFolderOpen32',
                     iconSize: 16,
                     rpcLoadFn: 'tree.load',
-                    draggable: true,
                     on: {
                         expand: function(){ console.log('expand event'); },
                         collapse: function(){ console.log('collapse event'); },
                         select: function(){ console.log('select event'); },
-                        dragDrop: function(s) { console.log('dragDrop event'); console.log(s); },
                         context: this
                     },
                     style: {

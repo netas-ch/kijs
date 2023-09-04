@@ -29,17 +29,6 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         }
     }
     
-    // Gibt den kijs.gui.Dom des DropMarkers zurück, der die Einfügeposition beim 
-    // dragOver anzeigt
-    static get dropMarkerDom() {
-        if (!kijs.isDefined(this.__dropMarkerDom)) {
-            this.__dropMarkerDom = new kijs.gui.Dom({
-                cls: 'kijs-dropmarker'
-            });
-        }
-        return this.__dropMarkerDom;
-    }
-    
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
     static get source() { 
         if (!kijs.isDefined(this.__source)) {
@@ -71,8 +60,61 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
      * @returns {undefined}
      */
     static dropMarkerRemove() {
-        if (this.dropMarkerDom.node && this.dropMarkerDom.node.parentNode) {
-            this.dropMarkerDom.node.parentNode.removeChild(this.dropMarkerDom.node);
+        if (this.__dropMarkerDom && this.__dropMarkerDom.node && this.__dropMarkerDom.node.parentNode) {
+            this.__dropMarkerDom.node.parentNode.removeChild(this.__dropMarkerDom.node);
+        }
+        this.__dropMarkerDom = null;
+    }
+    
+    /**
+     * Positioniert den dropMarker
+     * @param {kijs.gui.Dom|Null} [targetDom=null] Null = ausblenden
+     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum ausblenden
+     * @param {String|Null|} [tagName=null]
+     * @param {Number|Null} [width=null] Breite des Markers
+     * @param {Number|Null} [height=null] Höhe des Markers
+     * @returns {undefined}
+     */
+    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null, width=null, height=null) {
+        // evtl. nur ausblenden
+        if (kijs.isEmpty(targetDom) || kijs.isEmpty(targetPos) || kijs.isEmpty(tagName)) {
+            this.dropMarkerRemove();
+            return;
+        }
+        
+        let reCreate = true;
+        if (this.__dropMarkerDom && this.__dropMarkerDom.node) {
+            const currentTagName = this.__dropMarkerDom.node.tagName.toLowerCase();
+            
+            // falls das tagName noch stimmt, muss der node nicht neu erstellt werden
+            if (currentTagName === tagName) {
+                reCreate = false;
+            }
+        }
+        
+        // Evtl. den Marker neu erstellen
+        if (reCreate) {
+            this.dropMarkerRemove();
+            
+            this.__dropMarkerDom = new kijs.gui.Dom({
+                nodeTagName: tagName,
+                cls: 'kijs-dropmarker'
+            });
+        }
+        
+        // Grösse anpassen
+        this.__dropMarkerDom.width = width;
+        this.__dropMarkerDom.height = height;
+                    
+        switch (targetPos) {
+            case 'before':
+            case 'after':
+                this.__dropMarkerDom.renderTo(targetDom.node.parentNode, targetDom.node, targetPos);
+                break;
+
+            case 'child':
+                this.__dropMarkerDom.renderTo(targetDom.node);
+                break;
         }
     }
     

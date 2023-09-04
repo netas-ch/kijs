@@ -30,7 +30,7 @@ kijs.gui.dashboard.Panel = class kijs_gui_dashboard_Panel extends kijs.gui.Panel
         Object.assign(this._defaultConfig, {
             ddSource: {
                 name: 'dashboardPanel',
-                sourceDomProperty: 'headerBar.dom'
+                ownerDomProperty: 'headerBar.dom'
             }
         });
 

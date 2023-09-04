@@ -12,7 +12,6 @@
    "js/kijs.Dom.js",
    "js/kijs.Graphic.js",
    "js/kijs.Navigator.js",
-   "js/kijs.DragDrop.js",
    "js/kijs.Char.js",
    "js/kijs.Storage.js",
 

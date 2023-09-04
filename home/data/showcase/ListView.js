@@ -62,33 +62,64 @@ home.sc.ListView = class home_sc_ListView {
                             console.log(this.value);
                         }
                     }
-                },{
-                    xtype: 'kijs.gui.ListView',
-                    valueField: 'id',
-                    captionField: 'Bezeichnung',
-                    iconMapField: 'Icon',
-                    showCheckBoxes: false,
-                    selectType: 'single',
-                    width: 200,
-                    height: 100,
-                    data: [
-                        {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
-                        {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
-                        {id:3, Bezeichnung:'Instagram' },
-                        {id:4, Bezeichnung:'TikTok' }, 
-                        {id:5, Bezeichnung:'LinkedIn' }, 
-                        {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github' },
-                        {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' }, 
-                        {id:8, Bezeichnung:'YouTube' }, 
-                        {id:9, Bezeichnung:'WordPress' }
-                    ],
-                    value: 5,
-                    on: {
-                        selectionChange: function(e) {
-                            console.log(this.value);
-                        }
-                    }
                 },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: '2x ListView lokal mit Drag&Drop untereinander:',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexrow',
+                    height: 100,
+                    elements:[
+                        {
+                            name: 'test',
+                            xtype: 'kijs.gui.ListView',
+                            valueField: 'id',
+                            captionField: 'Bezeichnung',
+                            iconMapField: 'Icon',
+                            showCheckBoxes: false,
+                            selectType: 'single',
+                            ddName: 'kijs.gui.ListView.Test',
+                            sortable: true,
+                            width: 200,
+                            style: {
+                                flex: 'none',
+                                marginRight: '10px'
+                            },
+                            data: [
+                                {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
+                                {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
+                                {id:3, Bezeichnung:'Instagram', Icon:'kijs.iconMap.Fa.instagram' },
+                                {id:4, Bezeichnung:'TikTok', Icon:'kijs.iconMap.Fa.tiktok' }, 
+                                {id:5, Bezeichnung:'LinkedIn', Icon:'kijs.iconMap.Fa.linkedin' }, 
+                                {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github' },
+                                {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' }, 
+                                {id:8, Bezeichnung:'YouTube', Icon:'kijs.iconMap.Fa.youtube' }, 
+                                {id:9, Bezeichnung:'WordPress2', Icon:'kijs.iconMap.Fa.wordpress' }, 
+                                {id:10, Bezeichnung:'Slack', Icon:'kijs.iconMap.Fa.slack' }, 
+                                {id:11, Bezeichnung:'Figma', Icon:'kijs.iconMap.Fa.figma' }
+                            ]
+                        },{
+                            xtype: 'kijs.gui.ListView',
+                            valueField: 'id',
+                            captionField: 'Bezeichnung',
+                            iconMapField: 'Icon',
+                            showCheckBoxes: false,
+                            selectType: 'single',
+                            ddName: 'kijs.gui.ListView.Test',
+                            sortable: true,
+                            width: 200,
+                            style: {
+                                flex: 'none'
+                            }
+                        }
+                    ]
+                    
+                },
+                
+                        
                 
                 {
                     xtype: 'kijs.gui.Element',
