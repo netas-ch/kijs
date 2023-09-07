@@ -57,7 +57,7 @@
     --separator-bkgrndColor: #bdc4cd;
     --separator-disabled-bkgrndColor: #bdc4cd;
 
-    
+
     /* Button */
     --button-bkgrndColor: var(--grey2);
     --button-borderColor: #bdc4cd; /*var(--grey4);*/
@@ -234,6 +234,9 @@
 /* ----------------------- */
 /* kijs.gui.Button */
 .kijs-button {
+    height: 22px;
+    padding: 0 3px;
+    border-radius: 3px;
     background: linear-gradient(#f3f4f4, #ededed 12px, #dfdfdf 13px, #dfdfdf);
 }
 
@@ -245,6 +248,10 @@
 }
 .kijs-panel > .kijs-header {
     background-color: #d0def0;
+}
+.kijs-panel > .kijs-header > .kijs-container-inner {
+    padding: 2px;
+    gap: 3px;
 }
 .kijs-panel > .kijs-container-inner {
     background-color: #dfe8f6;
@@ -324,6 +331,23 @@
 }
 
 /* kijs.gui.field.* */
+.kijs-field {
+    min-height: 22px;
+}
+.kijs-field > .kijs-label {
+    padding: 4px 4px 3px 0;
+}
+.kijs-field > .kijs-inputwrapper,
+.kijs-field > .kijs-inputwrapper > input {
+    height: 22px;
+}
+.kijs-field-memo > .kijs-inputwrapper > textarea {
+    padding: 4px 4px 2px 4px;
+}
+.kijs-field > .kijs-inputwrapper > input,
+.kijs-field-memo > .kijs-inputwrapper > textarea {
+    box-shadow: inset 0 6px 3px -3px #eeeeee;
+}
 .kijs-field > .kijs-container-inner > .kijs-inline,
 .kijs-field > .kijs-icon-spindown {
     background: linear-gradient(#f3f4f4, #d1d1d1);
