@@ -239,6 +239,12 @@
     border-radius: 3px;
     background: linear-gradient(#f3f4f4, #ededed 12px, #dfdfdf 13px, #dfdfdf);
 }
+.kijs-field .kijs-button {
+    border-radius: 0;
+}
+button.kijs-button > .kijs-badge {
+    right: -3px;
+}
 
 
 /* kijs.gui.Panel */
@@ -287,23 +293,24 @@
 
 .kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button,
 .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
+    padding: 0 2px;
     background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(237,253,255,1) 7%, rgba(213,233,255,1) 94%, rgba(233,244,255,1) 100%);
-    /*width: 15px;*/
-    height: 15px;
+    height: 16px;
     border: 1px solid #99bbe8;
     border-radius: 3px;
     box-shadow: 0px 0px 1px 1px white inset;
 }
 .kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button > .kijs-icon,
 .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon {
-    width: 14px;
-    font-size: 12px;
+    width: 11px;
+    font-size: 11px;
     line-height: 14px;
     color: #39608B;
 }
 
 .kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button > .kijs-badge,
 .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-badge {
+    top: -2px;
     height: 10px;
     min-width: 10px;
     font-size: 8px;
@@ -337,15 +344,11 @@
 .kijs-field > .kijs-label {
     padding: 4px 4px 3px 0;
 }
-.kijs-field > .kijs-inputwrapper,
 .kijs-field > .kijs-inputwrapper > input {
     height: 22px;
 }
-.kijs-field-memo > .kijs-inputwrapper > textarea {
-    padding: 4px 4px 2px 4px;
-}
 .kijs-field > .kijs-inputwrapper > input,
-.kijs-field-memo > .kijs-inputwrapper > textarea {
+.kijs-field > .kijs-inputwrapper > textarea {
     box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
 .kijs-field > .kijs-container-inner > .kijs-inline,
@@ -354,13 +357,10 @@
 }
 
 
-/* kijs.gui.field.Display */
-.kijs-field-display > .kijs-inputwrapper * {
-    color: #5C8299;
-}
-
-
 /* kijs.gui.field.Checkbox */
+.kijs-field-checkbox > .kijs-inputwrapper {
+    height: 22px;
+}
 .kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-input {
     background-color: #fff;
     border-radius: 2px;
@@ -374,10 +374,59 @@
 }
 
 
+/* kijs.gui.field.Combo */
+.kijs-field-combo {
+    height: 22px;
+}
+
+
+/* kijs.gui.field.DateTime */
+.kijs-field-datetime > .kijs-inputwrapper {
+    height: 22px;
+}
+
+
+/* kijs.gui.field.Display */
+.kijs-field-display > .kijs-inputwrapper {
+    min-height: 22px;
+}
+.kijs-field-display > .kijs-inputwrapper > div {
+    padding: 4px 0 2px 0;
+}
+.kijs-field-display > .kijs-inputwrapper * {
+    color: #5C8299;
+}
+
+
+/* kijs.gui.field.ListView */
+.kijs-listview > .kijs-container-inner {
+    padding: 1px 0 2px 0;
+}
+
+
+/* kijs.gui.field.Memo */
+.kijs-field-memo > .kijs-inputwrapper > textarea {
+    padding: 4px 4px 2px 4px;
+}
+
+
+/* kijs.gui.field.Number */
+.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button {
+    margin: 0;
+    padding: 0;
+    height: 11px;
+}
+
+
 /* kijs.gui.field.OptionGroup */
 .kijs-listview > .kijs-container-inner > .kijs-display-options::before {
     background-color: #fff;
     border-radius: 50%;
+}
+
+/* kijs.gui.field.Switch */
+.kijs-field-switch > .kijs-inputwrapper {
+    height: 22px;
 }
 
 
