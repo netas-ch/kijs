@@ -61,6 +61,14 @@ home.App = class home_App {
     
     // PROTECTED
     _createContent() {
+        let html = '';
+        html += '<div style="margin: 420px 0 0 370px">';
+        html += ' <a href="../testApp">Test-App</a><br>';
+        html += ' <a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a><br>';
+        html += ' <br>';
+        html += ' <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a><br>';
+        html += '</div>';
+        
         return new kijs.gui.container.Tab({
             sortable: true,
             style: {
@@ -80,7 +88,7 @@ home.App = class home_App {
                     style:{
                         flex: 1
                     },
-                    html: '<div style="margin: 420px 0 0 370px"><a href="../testApp">Test-App</a><br><a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a></div>'
+                    html: html
                 }
             ]
         });
