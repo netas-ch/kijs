@@ -226,6 +226,98 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         return ret;
     }
     
+    // Ermittelt die Operation 'move', 'copy', 'link' oder 'none'
+    _getOperation(e, mapping) {
+        let operation = 'none';
+        
+        // operation ermitteln
+        if (!kijs.isEmpty(mapping)) {
+            
+            // Operation gemäss Tastenkombination ermitteln
+            let keyOperation = 'move';
+            
+            // Mac
+            if (kijs.Navigator.isMac) {
+                // Workaround für Safari
+                // Safari kann nicht auf die aktuellen Tastenkombinationen zugreifen, 
+                // sondern hat noch den Stand vom DragStart
+                if (kijs.Navigator.isSafari) {
+                    // Was gedrückt wurde kann man aber teilweise aus dem effectAllowed lesen
+                    switch (e.nodeEvent.dataTransfer.effectAllowed) {
+                        case 'move':
+                        case 'copyMove':
+                        case 'all':
+                            keyOperation = 'move';
+                            break;
+                        case 'copy':
+                            keyOperation = 'copy';
+                            break;
+                        case 'link': // link kommt in Safari leider nie vor :(
+                            keyOperation = 'link';
+                    }
+                    
+                } else {
+                    if (e.nodeEvent.altKey) {
+                        if (e.nodeEvent.metaKey) {
+                            keyOperation = 'link';
+                        } else {
+                            keyOperation = 'copy';
+                        }
+                    }
+                }
+                
+            // Windows + andere
+            } else {
+                if (e.nodeEvent.ctrlKey) {
+                    if (e.nodeEvent.shiftKey) {
+                        keyOperation = 'link';
+                    } else {
+                        keyOperation = 'copy';
+                    }
+                }
+            }
+            
+            // Falls es nur eine Variante gibt (move, copy, link) braucht es keine 
+            // Tastenkombination
+            let countSource = 0;
+            countSource += kijs.gui.DragDrop.source.allowMove && mapping.allowMove ? 1 : 0;
+            countSource += kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy ? 1 : 0;
+            countSource += kijs.gui.DragDrop.source.allowLink && mapping.allowLink ? 1 : 0;
+            if (countSource === 1) {
+                if (kijs.gui.DragDrop.source.allowMove && mapping.allowMove) {
+                    keyOperation = 'move';
+                } else if (kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy) {
+                    keyOperation = 'copy';
+                } else if (kijs.gui.DragDrop.source.allowLink && mapping.allowLink) {
+                    keyOperation = 'link';
+                }
+            }
+            
+            // Operation übernehmen, falls erlaubt
+            switch (keyOperation) {
+                case 'move':
+                    if (kijs.gui.DragDrop.source.allowMove && mapping.allowMove) {
+                        operation = 'move';
+                    }
+                    break;
+                    
+                case 'copy':
+                    if (kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy) {
+                        operation = 'copy';
+                    }
+                    break;
+                    
+                case 'link':
+                    if (kijs.gui.DragDrop.source.allowLink && mapping.allowLink) {
+                        operation = 'link';
+                    }
+                    break;
+                    
+            }
+        }
+        return operation;
+    }
+    
     // Marker positionieren, Source ein-/ausblenden, CSS aktualisieren
     _updateGuiIndicator(e, targetEl, targetPos=null, operation='none', mapping=null) {
         
@@ -234,14 +326,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         }
         
         // icon bei Mauszeiger (move, copy, link, none) aktualisieren
-        if (kijs.isEmpty(mapping)) {
-            e.nodeEvent.dataTransfer.effectAllowed = 'none';
-        } else {
-            e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
-                    kijs.gui.DragDrop.source.allowMove && mapping.allowMove, 
-                    kijs.gui.DragDrop.source.allowCopy && mapping.allowCopy, 
-                    kijs.gui.DragDrop.source.allowLink && mapping.allowLink);
-        }
+        e.nodeEvent.dataTransfer.dropEffect = operation;
         
         // muss die Einfügeposition aktualisiert werden?
         let update = false;
@@ -283,6 +368,9 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             if (targetEl) {
                 kijs.gui.DragDrop.dropMarkerUpdate(targetEl.dom, targetPos, 
                         this._ddMarkerTagName, markerWidth, markerHeight);
+            // oder ausblenden
+            } else {
+                kijs.gui.DragDrop.dropMarkerUpdate();
             }
         }
         
@@ -331,10 +419,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (!mapping) {
             return;
         }
-        let operation = e.nodeEvent.dataTransfer.dropEffect;
+        
+        let operation = this._getOperation(e, mapping);
         let targetEl = null;
         let targetPos = null;
-       
+
         // Auf Targets, die disabled sind, kann nichts abgelegt werden.
         if (this.ownerEl.disabled) {
             return false;
@@ -446,21 +535,18 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             return;
         }
         
-        // 'move', 'copy' oder 'link'
-        let operation = e.nodeEvent.dataTransfer.dropEffect;
-        
         // drop-Event bei source auslösen
         if (kijs.gui.DragDrop.source.raiseEvent('drop', { 
             source: kijs.gui.DragDrop.source, 
             target: this, 
-            operation: operation,
+            operation: this._operation,
             mapping: mapping
         }) !== false) {
             // Wenn kein Abbruch: drop-Event bei target auslösen
             this.raiseEvent('drop', { 
                 source: kijs.gui.DragDrop.source, 
                 target: this, 
-                operation: operation,
+                operation: this._operation,
                 mapping: mapping
             });
         }
