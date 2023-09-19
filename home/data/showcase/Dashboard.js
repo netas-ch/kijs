@@ -15,7 +15,7 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
                 dashboardItem:{
                     allowMove: true,
                     allowCopy: true,
-                    allowLink: false,
+                    allowLink: true,
                     disableMarkerAutoSize: true
                 }
             },
