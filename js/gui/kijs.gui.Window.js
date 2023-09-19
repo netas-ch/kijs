@@ -240,14 +240,14 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             }
         }
         
-        if (preventDestruct) {
-            this.unrender();
-        } else {
-            this.destruct();
-        }
+        this.unrender();
         
         if (!preventEvents) {
             this.raiseEvent('close');
+        }
+        
+        if (!preventDestruct) {
+            this.destruct();
         }
     }
     
