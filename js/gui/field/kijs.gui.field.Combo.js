@@ -310,6 +310,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     /**
      * Füllt das Combo mit Daten vom Server
+     * TODO: Funktion sollte folgende Argumente haben: load(args=null, superCall=false)
+     * TODO: Die Anzahl getippten Zeichen sollten vorher gezählt werden.
      * @param {Array} args Array mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} forceLoad true, wenn immer geladen werden soll
      * @param {String} query Suchstring
@@ -318,7 +320,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     load(args=null, forceLoad=false, query=null) {
         args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
-
+        
+        
+        
         if (this._remoteSort) {
             args.query = kijs.toString(query);
             args.value = this.value;
@@ -326,15 +330,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
                 this._listViewEl.load(args).then((e) => {
+                    let config = e.responseData.config ?? {};
+                    
                     // Nach dem Laden das value neu setzen,
                     // damit die caption erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
                     // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(e.responseData.value) && e.responseData.value !== null && this._isValueInStore(e.responseData.value)) {
-                        if (kijs.toString(e.responseData.value) !== kijs.toString(this.value)) {
-                            this.value = e.responseData.value;
+                    } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
+                        if (kijs.toString(config.value) !== kijs.toString(this.value)) {
+                            this.value = config.value;
                         }
 
                     }
@@ -349,15 +355,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // alle Datensätze laden
             this._listViewEl.load(args)
                 .then((e) => {
+                    let config = e.responseData.config ?? {};
+            
                     // Nach dem Laden das value neu setzen,
                     // damit das Label erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
                     // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(e.responseData.value) && e.responseData.value !== null && this._isValueInStore(e.responseData.value)) {
-                        if (kijs.toString(e.responseData.value) !== kijs.toString(this.value)) {
-                            this.value = e.responseData.value;
+                    } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
+                        if (kijs.toString(config.value) !== kijs.toString(this.value)) {
+                            this.value = config.value;
                         }
                     }
 
@@ -368,7 +376,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Flag setzen
         this._firstLoaded = true;
     }
-
+    
     // overwrite
     render(superCall) {
         super.render(true);

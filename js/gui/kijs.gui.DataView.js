@@ -53,7 +53,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
+            filters: { target: 'filters' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
+            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze das per default Selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
@@ -149,7 +151,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     get data() { return this._data; }
     set data(val) { 
-        this._data = val;
+        this._data = kijs.isEmpty(val) ? [] : val;
         this._createElements(this._data);
         
         // Current Element ermitteln und setzen
@@ -534,35 +536,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     
             }
         }
-    }
-    
-    /**
-     * Füllt das Dataview mit Daten vom Server
-     * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
-     * @param {Boolean} [superCall=false]
-     * @returns {Promise}
-     */
-    load(args, superCall=false) {
-        return new Promise((resolve, reject) => {
-            super.load(args, true).then((e) => {
-                this.data = e.responseData.rows;
-                if (!kijs.isEmpty(e.responseData.selectFilters)) {
-                    this.selectByFilters(e.responseData.selectFilters);
-                }
-                
-                // 'afterLoad' auslösen
-                if (!superCall) {
-                    this.raiseEvent('afterLoad', e);
-                }
-                
-                // Promise ausführen
-                resolve(e);
-                
-            }).catch((ex) => {
-                reject(ex);
-                
-            });
-        });
     }
     
     save() {

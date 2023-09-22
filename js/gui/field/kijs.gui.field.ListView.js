@@ -144,10 +144,12 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     load(args, superCall=false) {
         return new Promise((resolve, reject) => {
             super.load(args, true).then((e) => {
-
-                this._listView.data = e.responseData.rows;
-                if (!kijs.isEmpty(e.responseData.selectFilters)) {
-                    this._listView.selectByFilters(e.responseData.selectFilters);
+                
+                let config = e.responseData.config ?? {};
+                
+                this._listView.data = config.data;
+                if (!kijs.isEmpty(config.selectFilters)) {
+                    this._listView.selectByFilters(config.selectFilters);
                 }
                 
                 // 'afterLoad' auslösen

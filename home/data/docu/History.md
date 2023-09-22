@@ -20,11 +20,28 @@ Es sind evtl. Anpassungen am Projekt nötig.
   sein, dass angewendet wird (wie bei ```load()```).  
 - Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
   nach ```remoteFn```.  
-  **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen. Vorsicht! 
-  Nur ersetzen, wenn ein Argument von do(config)!  
+  **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen durch 
+  ```remoteFn```. Vorsicht! Nur ersetzen, wenn ein Argument von do(config)!  
 
 **UPDATE TIPP:** Zur Kontrolle kann im Projekt noch nach ```facade``` gesucht werden. 
 Dieses Wort/Wortbestandteil sollte nun nirgends mehr vorkommen.  
+
+
+### andere Benennung von Properties in RPC Antworten
+Betrifft alle kijs Klassen mit RPC!!!  
+Ausnahme: kijs.gui.Tree und kijs.gui.grid.Grid (diese werden erst in einer 
+zukünftigen Version überarbeitet)  
+
+ - ```responseData->rows``` NEU: ```responseData->config->data```
+ - ```responseData->selectFilters``` NEU: ```responseData->config->selectFilters```
+ - ```responseData->formData``` NEU: ```responseData->config->formData```
+
+**UPDATE TIPP:** PHP nach ```responseData``` durchsuchen und ```rows``` und 
+```selectFilters``` umbenennen.  
+
+Vorsicht: Das RPC Argument beim Speichern eines FormPanels heisst immer noch 
+```requestData->formData```.  
+
 
 ### Drag&Drop
 Unterstützung von Drag&Drop. Dazu gibt es folgende neuen Klassen:  

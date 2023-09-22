@@ -25,7 +25,9 @@ foreach ($requests as $request) {
                 $rows[] = array('Bez' => 'gelb', 'color' => '#ff0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
-                $response->responseData->rows = $rows;
+                
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = $rows;
 
                 //sleep(1);
 
@@ -69,8 +71,9 @@ foreach ($requests as $request) {
                         return 0;
                     });
                 }
-
-                $response->responseData->rows = $rows;
+                
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = $rows;
 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -321,8 +324,8 @@ foreach ($requests as $request) {
         
         case 'dashboardFormPanel.load':
             try {
-                // config
-                $response->responseData->formData = json_decode('
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = json_decode('
                     {
                         "memo":"Ich bin eine Bemerkung!"
                     }
@@ -371,8 +374,9 @@ foreach ($requests as $request) {
                 $rows[] = array('Name' => 'Kocher', 'Vorname' => 'Paul');
                 $rows[] = array('Name' => 'Schneeberger', 'Vorname' => 'Sandro');
 
-                $response->responseData->rows = $rows;
-                $response->responseData->selectFilters = array();
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = $rows;
+                $response->responseData->config->selectFilters = array();
 
                 $filter = array();
                 $flt = new stdClass();
@@ -383,7 +387,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Kurt';
                 $filter[] = $flt;
-                $response->responseData->selectFilters[] = $filter;
+                $response->responseData->config->selectFilters[] = $filter;
 
                 $filter = array();
                 $flt = new stdClass();
@@ -394,7 +398,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Silvia';
                 $filter[] = $flt;
-                $response->responseData->selectFilters[] = $filter;
+                $response->responseData->config->selectFilters[] = $filter;
                 
                 //sleep(1);
 
@@ -434,32 +438,32 @@ foreach ($requests as $request) {
         
         case 'form.load':
             try {
+                $response->responseData->config = new stdClass();
+                
                 // Formular
-                $response->responseData->config = json_decode('
-                    {
-                        "elements": [
-                            {
-                                "xtype": "kijs.gui.field.Combo",
-                                "name": "Anrede",
-                                "label": "Anrede",
-                                "rpcLoadFn": "form.loadCombo",
-                                "autoLoad": true,
-                                "disableFlex":true
-                            },{
-                                "xtype": "kijs.gui.field.Text",
-                                "name": "Name",
-                                "label": "Name"
-                            },{
-                                "xtype": "kijs.gui.field.Text",
-                                "name": "Vorname",
-                                "label": "Vorname"
-                            }
-                        ]
-                    }
+                $response->responseData->config->elements = json_decode('
+                    [
+                        {
+                            "xtype": "kijs.gui.field.Combo",
+                            "name": "Anrede",
+                            "label": "Anrede",
+                            "rpcLoadFn": "form.loadCombo",
+                            "autoLoad": true,
+                            "disableFlex":true
+                        },{
+                            "xtype": "kijs.gui.field.Text",
+                            "name": "Name",
+                            "label": "Name"
+                        },{
+                            "xtype": "kijs.gui.field.Text",
+                            "name": "Vorname",
+                            "label": "Vorname"
+                        }
+                    ]
                 ');
 
                 // Formulardaten
-                $response->responseData->formData = array(
+                $response->responseData->config->data = array(
                     'Anrede' => 'w',
                     'Name' => 'Meier',
                     'Vorname' => 'Susanne'
@@ -474,8 +478,8 @@ foreach ($requests as $request) {
         
         case 'form.loadCombo':
             try {
-                // Formular
-                $response->responseData->rows = [
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = [
                     ['caption' => 'Herr', 'value' => 'm'],
                     ['caption' => 'Frau', 'value' => 'w']
                 ];
@@ -686,8 +690,9 @@ foreach ($requests as $request) {
 //                $rows[] = array('value'=>'DE', 'caption'=>'Deutschland');
 //                $rows[] = array('value'=>'IT', 'caption'=>'Italien');
 //                $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
-
-                $response->responseData->rows = $rows;
+                
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = $rows;
                 //sleep(1);
 
             } catch (Exception $ex) {
@@ -705,7 +710,8 @@ foreach ($requests as $request) {
                 $rows[] = array('caption'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $rows[] = array('caption'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $rows[] = array('caption'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $response->responseData->rows = $rows;
+                $response->responseData->config = new stdClass();
+                $response->responseData->config->data = $rows;
 
                 //sleep(1);
 

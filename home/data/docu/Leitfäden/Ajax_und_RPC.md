@@ -211,7 +211,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                     ');
 
                     // Formulardaten
-                    $response->responseData->formData = array(
+                    $response->responseData->data = array(
                         'Anrede' => 'w',
                         'Name' => 'Meier',
                         'Vorname' => 'Susanne'
@@ -225,7 +225,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
 
             case 'module1.loadAnredeCombo':
                 try {
-                    $response->responseData->rows = [
+                    $response->responseData->data = [
                         ['caption' => 'Herr', 'value' => 'm'],
                         ['caption' => 'Frau', 'value' => 'w']
                     ];
