@@ -143,11 +143,22 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      */
     load(args, superCall=false) {
         return new Promise((resolve, reject) => {
+            let value = this._listView.value;
+            
             super.load(args, true).then((e) => {
-                
                 let config = e.responseData.config ?? {};
                 
+                // Falls ein neuer Wert zurückgegeben wird, diesen nehmen
+                if (kijs.isDefined(config.value)) {
+                    value = config.value;
+                }
+                
                 this._listView.data = config.data;
+                
+                if (!kijs.isEmpty(value)) {
+                    this.value = value;
+                }
+                
                 if (!kijs.isEmpty(config.selectFilters)) {
                     this._listView.selectByFilters(config.selectFilters);
                 }

@@ -88,8 +88,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
     get value() {
         let val = null;
-
-        if (this._valueField) {
+        
+        if (!kijs.isEmpty(this._data) && this._valueField) {
             let selElements = this.getSelected();
             if (kijs.isArray(selElements)) {
                 val = [];
@@ -99,6 +99,10 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             } else if (!kijs.isEmpty(selElements)) {
                 val = selElements.dataRow[this._valueField];
             }
+            
+        } else {
+            val = this._value;
+            
         }
 
         return val;
