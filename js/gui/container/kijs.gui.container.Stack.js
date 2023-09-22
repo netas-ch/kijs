@@ -228,6 +228,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     setCurrentAnimated(el, animation=null, duration=null) {
         return new Promise((resolve, reject) => {
             let oldEl = this._currentEl;
+
+            // Event ausführen
+            if (this._currentEl.raiseEvent('beforeChange', {element: this._currentEl}) === false) {
+                return;
+            }
             
             // Argumente
             if (!animation) {

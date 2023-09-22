@@ -201,6 +201,22 @@
     filter: grayscale(100%);
   }
   /* ******************
+       * Scrollbar
+       ****************** */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-background-color);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover-color);
+  }
+  /* ******************
        * Button
        ****************** */
   button.kijs-button {
@@ -646,25 +662,40 @@
     animation: kijs-slide-out-left 1s;
   }
   div.kijs-container-tab.kijs-pos-top,
-  div.kijs-container-tab.kijs-pos-bottom {
+  div.kijs-container-tab.kijs-pos-top-center,
+  div.kijs-container-tab.kijs-pos-bottom,
+  div.kijs-container-tab.kijs-pos-bottom-center {
     flex-direction: column;
   }
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-tab.kijs-pos-bottom-center > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-tab.kijs-pos-left-center > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable > .kijs-container-inner {
+    justify-content: center;
+  }
   div.kijs-container-tab.kijs-pos-left,
-  div.kijs-container-tab.kijs-pos-right {
+  div.kijs-container-tab.kijs-pos-left-center,
+  div.kijs-container-tab.kijs-pos-right,
+  div.kijs-container-tab.kijs-pos-right-center {
     flex-direction: row;
   }
   div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner,
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab.kijs-pos-left-center > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable > .kijs-container-inner {
     display: flex;
     flex-direction: column;
   }
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable {
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable,
+  div.kijs-container-tab.kijs-pos-right-center > .kijs-container-scrollable {
     order: 2;
   }
-  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable {
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable,
+  div.kijs-container-tab.kijs-pos-bottom-center > .kijs-container-scrollable {
     order: 2;
   }
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
     margin: 4px 0 0 4px;
     border-radius: 6px 6px 0 0;
     border-top: 1px solid var(--tabButton-borderColor);
@@ -673,9 +704,13 @@
     border-left: 1px solid var(--tabButton-borderColor);
   }
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollup,
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollup,
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrolldown,
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrolldown,
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollleft,
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollright {
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollleft,
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollright,
+  div.kijs-container-tab.kijs-pos-top-center > .kijs-container-scrollable > .kijs-btn-scrollright {
     margin-top: 4px;
   }
   div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
@@ -725,7 +760,7 @@
     border-color: var(--tabButton-current-borderColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
-    color: var(--tabButton--currentfontColor);
+    color: var(--tabButton-current-fontColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
@@ -733,10 +768,10 @@
   div.kijs-container-tab.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: flex-start;
   }
-  div.kijs-container-tab .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab.kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: center;
   }
-  div.kijs-container-tab .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+  div.kijs-container-tab.kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
     justify-content: flex-end;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
@@ -746,22 +781,155 @@
     border-color: var(--accentColor3);
     border-width: 2px;
   }
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging:not(.kijs-dragover) {
+    display: none;
+  }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
     flex: none;
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
   }
   div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
     margin: 4px 0 0 4px;
   }
   div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
     margin: 4px 4px 0 0;
   }
   div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    width: 40px;
     margin: 0 0 4px 4px;
   }
   div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+    height: 20px;
     margin: 4px 0 0 4px;
+  }
+  /* ******************
+       * Container Wizard
+       ****************** */
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable {
+    min-height: 25px;
+    background-color: transparent;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner {
+    flex-wrap: wrap;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+    background: none;
+    border: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus {
+    background: none;
+    border: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:focus > .kijs-icon {
+    color: var(--tabButton-focus-fontColor);
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button:hover {
+    background: none;
+    border: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled {
+    border: none;
+    background: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
+    color: var(--tabButton-fontColor);
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled:focus {
+    background: none;
+    border: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current {
+    background: none;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-icon {
+    color: var(--tabButton-current-fontColor);
+    font-size: 10px;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
+    color: var(--tabButton-current-fontColor);
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
+    color: var(--tabButton-current-fontColor);
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-icon {
+    font-size: 8px;
+  }
+  div.kijs-container-wizard.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption,
+  div.kijs-container-wizard.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button > .kijs-caption {
+    font-size: 10px;
+  }
+  div.kijs-container-wizard > .kijs-arrow-left {
+    z-index: 1;
+    position: absolute;
+    top: 45%;
+    left: 10px;
+    cursor: pointer;
+    opacity: 0.2;
+  }
+  div.kijs-container-wizard > .kijs-arrow-left:hover {
+    opacity: 1;
+  }
+  div.kijs-container-wizard > .kijs-arrow-right {
+    z-index: 1;
+    position: absolute;
+    top: 45%;
+    right: 10px;
+    cursor: pointer;
+    opacity: 0.2;
+  }
+  div.kijs-container-wizard > .kijs-arrow-right:hover {
+    opacity: 1;
   }
   /* ******************
        * Tooltip
@@ -793,16 +961,22 @@
     background-color: var(--icon-help-bkgrndColor);
   }
   /* ******************
+       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
-  /*body > div.kijs-dragdrop-marker {
-        z-index: 20201;
-        position: absolute;
-        background-color: var(--dragover-ok-borderColor);
-
-        &.top, &.bottom { height: 2px }
-        &.left, &.right { width: 2px }
-    }*/
+  body > div.kijs-dragdrop-marker {
+    z-index: 20201;
+    position: absolute;
+    background-color: var(--dragover-ok-borderColor);
+  }
+  body > div.kijs-dragdrop-marker.top,
+  body > div.kijs-dragdrop-marker.bottom {
+    height: 2px;
+  }
+  body > div.kijs-dragdrop-marker.left,
+  body > div.kijs-dragdrop-marker.right {
+    width: 2px;
+  }
   /* ******************
        * SpinBox
        ****************** */
@@ -898,7 +1072,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 30px;
+    height: var(--panel-collapse-height);
     padding: 0 6px;
     gap: 4px;
     background-color: var(--bar-bkgrndColor);
@@ -1097,13 +1271,13 @@
   }
   div.kijs-panel.kijs-collapse-top,
   div.kijs-panel.kijs-collapse-bottom {
-    height: 30px;
+    height: var(--panel-collapse-height) !important;
     flex: none;
   }
   div.kijs-panel.kijs-collapse-right,
   div.kijs-panel.kijs-collapse-left {
     height: auto;
-    width: 30px;
+    width: var(--panel-collapse-width) !important;
     flex: none;
     display: flex;
     flex-direction: row;
@@ -1126,7 +1300,7 @@
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar {
-    width: 30px;
+    width: var(--panel-collapse-width);
     height: auto;
     padding: 3px 0 3px 0;
     flex-direction: column;
@@ -1201,6 +1375,10 @@
     flex: none;
     border: 2px solid var(--bar-bkgrndColor);
     border-radius: 5px;
+  }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel > .kijs-headerbar[draggable] > .kijs-container-inner {
+    cursor: move;
+    user-select: none;
   }
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragging {
     opacity: 0.6;
@@ -1420,6 +1598,18 @@
   div.kijs-menu-spinbox > .kijs-container-inner > * {
     margin: 0;
     border-radius: 0;
+  }
+  div.kijs-menu-spinbox > .kijs-container-inner > div.separator {
+    background-color: var(--button-bkgrndColor);
+  }
+  div.kijs-menu-spinbox > .kijs-container-inner > div.separator > hr {
+    padding: 0;
+    height: 1px;
+    width: 96%;
+    margin: 0 0 0 2%;
+    border: 0;
+    background-color: var(--field-borderColor);
+    color: var(--field-borderColor);
   }
   div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button {
     text-align: left;
