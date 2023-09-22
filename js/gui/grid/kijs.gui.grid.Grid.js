@@ -462,22 +462,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._tableDom.width = null;
                 this._tableDom.height = null;
             }
-
-            if (
-                !this._tableDom.node.height
-                && !this._tableDom.node.scrollWidth
-                && this._header.node.scrollWidth
-            ) {
-
-                // Falls keine Zeilen vorhanden sind, lässt sich die Tabelle nicht mehr scrollen.
-                // Also geben wir der leeren Tabelle eine Grösse, damit man dort scrollen kann.
-                this._tableDom.width = this._header.node.scrollWidth;
-                this._tableDom.height = 200;
-            } else {
-                this._tableDom.width = null;
-                this._tableDom.height = null;
-            }
-
+            
             return responseData;
         });
     }
@@ -718,6 +703,42 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // SelectionChange auslösen
         if (!preventEvent) {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: false } );
+        }
+    }
+
+    /**
+     * Selektiert alle Zeilen zwischen row1 und row2
+     * @param {kijs.gui.grid.Row} row1
+     * @param {kijs.gui.grid.Row} row2
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    selectBetween(row1, row2, preventSelectionChange) {
+        let found = false;
+        let rows = [];
+
+        // Alle Zeilen zwischen dem vorher selektierten Row und dem aktuellen Row selektieren
+        kijs.Array.each(this._rows, function(row) {
+            if (!found) {
+                if (row === row1) {
+                    found = 'row1';
+                } else if (row === row2) {
+                    found = 'row2';
+                }
+            }
+
+            if (found) {
+                rows.push(row);
+            }
+
+            if ((found==='row1' && row===row2) || (found==='row2' && row===row1)) {
+                return false;
+            }
+        }, this);
+
+
+        if (!kijs.isEmpty(rows)) {
+            this.select(rows, true, preventSelectionChange);
         }
     }
 
@@ -1007,7 +1028,28 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         super.unrender(true);
     }
 
+    /**
+     * Deselektiert ein oder mehrere Zeilen
+     * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @returns {undefined}
+     */
+    unSelect(rows, preventSelectionChange) {
+        if (!kijs.isArray(rows)) {
+            rows = [rows];
+        }
 
+        kijs.Array.each(rows, function(row) {
+            row.selected = false;
+        }, this);
+
+        if (!preventSelectionChange) {
+            this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
+        }
+    }
+    
+    
+    
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -1280,64 +1322,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
         }
     }
-
-    /**
-     * Selektiert alle Zeilen zwischen row1 und row2
-     * @param {kijs.gui.grid.Row} row1
-     * @param {kijs.gui.grid.Row} row2
-     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
-     */
-    selectBetween(row1, row2, preventSelectionChange) {
-        let found = false;
-        let rows = [];
-
-        // Alle Zeilen zwischen dem vorher selektierten Row und dem aktuellen Row selektieren
-        kijs.Array.each(this._rows, function(row) {
-            if (!found) {
-                if (row === row1) {
-                    found = 'row1';
-                } else if (row === row2) {
-                    found = 'row2';
-                }
-            }
-
-            if (found) {
-                rows.push(row);
-            }
-
-            if ((found==='row1' && row===row2) || (found==='row2' && row===row1)) {
-                return false;
-            }
-        }, this);
-
-
-        if (!kijs.isEmpty(rows)) {
-            this.select(rows, true, preventSelectionChange);
-        }
-    }
-
-    /**
-     * Deselektiert ein oder mehrere Zeilen
-     * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
-     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
-     */
-    unSelect(rows, preventSelectionChange) {
-        if (!kijs.isArray(rows)) {
-            rows = [rows];
-        }
-
-        kijs.Array.each(rows, function(row) {
-            row.selected = false;
-        }, this);
-
-        if (!preventSelectionChange) {
-            this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
-        }
-    }
-
-
+    
+    
+    
     // PRIVATE
     // LISTENERS
     /**
