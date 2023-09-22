@@ -48,8 +48,6 @@
    "js/gui/container/tab/kijs.gui.container.tab.Bar.js",
    "js/gui/container/tab/kijs.gui.container.tab.Container.js",
    "js/gui/container/kijs.gui.container.Tab.js",
-
-   "js/gui/container/kijs.gui.container.Wizard.js",
    
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",

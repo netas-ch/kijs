@@ -58,7 +58,7 @@
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -200,7 +200,7 @@
         min-width: 1px;
         margin: 0;
         background-color: var(--separator-bkgrndColor);
-
+        
         &.kijs-hidden {
             display: none;
         }
@@ -209,9 +209,9 @@
             background-color: var(--separator-disabled-bkgrndColor);
         }
     }
-
-
-
+    
+    
+    
     /* ******************
        * Icon
        ****************** */
@@ -231,26 +231,6 @@
         }
     }
 
-
-    /* ******************
-       * Scrollbar
-       ****************** */
-    ::-webkit-scrollbar {
-        width: 10px;
-        height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--scrollbar-background-color);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-color);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-hover-color);
-    }
 
 
     /* ******************
@@ -685,32 +665,12 @@
         }
 
         /* tabBar Positionierung */
-
-        &.kijs-pos-top,
-        &.kijs-pos-top-center,
-        &.kijs-pos-bottom,
-        &.kijs-pos-bottom-center {
+        &.kijs-pos-top, &.kijs-pos-bottom {
             flex-direction: column;
         }
 
-        &.kijs-pos-top-center,
-        &.kijs-pos-bottom-center,
-        &.kijs-pos-left-center,
-        &.kijs-pos-right-center {
-
-            > .kijs-container-scrollable {
-                > .kijs-container-inner {
-                    justify-content: center;
-                }
-            }
-        }
-
-        &.kijs-pos-left,
-        &.kijs-pos-left-center,
-        &.kijs-pos-right,
-        &.kijs-pos-right-center {
+        &.kijs-pos-left, &.kijs-pos-right {
             flex-direction: row;
-
             > .kijs-container-scrollable {
                 > .kijs-container-inner {
                     display: flex;
@@ -719,37 +679,23 @@
             }
         }
 
-        &.kijs-pos-right,
-        &.kijs-pos-right-center {
-            > .kijs-container-scrollable {
-                order: 2;
+        &.kijs-pos-right > .kijs-container-scrollable { order: 2; }
+        &.kijs-pos-bottom > .kijs-container-scrollable { order: 2; }
+
+
+        &.kijs-pos-top > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 4px 0 0 4px;
+                border-radius: 6px 6px 0 0;
+                border-top: 1px solid var(--tabButton-borderColor);
+                border-right: 1px solid var(--tabButton-borderColor);
+                border-bottom: 0 none;
+                border-left: 1px solid var(--tabButton-borderColor);
             }
-        }
 
-        &.kijs-pos-bottom,
-        &.kijs-pos-bottom-center {
-            > .kijs-container-scrollable {
-                order: 2;
-            }
-        }
-
-
-        &.kijs-pos-top,
-        &.kijs-pos-top-center {
-            > .kijs-container-scrollable {
-                > .kijs-container-inner > .kijs-button {
-                    margin: 4px 0 0 4px;
-                    border-radius: 6px 6px 0 0;
-                    border-top: 1px solid var(--tabButton-borderColor);
-                    border-right: 1px solid var(--tabButton-borderColor);
-                    border-bottom: 0 none;
-                    border-left: 1px solid var(--tabButton-borderColor);
-                }
-
-                > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
-                > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
-                    margin-top: 4px;
-                }
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-top: 4px;
             }
         }
 
@@ -806,7 +752,7 @@
             border-color: var(--tabButton-current-borderColor);
 
             > .kijs-caption {
-                color: var(--tabButton-current-fontColor);
+                color: var(--tabButton--currentfontColor);
             }
 
             &.kijs-disabled > .kijs-caption {
@@ -818,10 +764,10 @@
         &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-start;
         }
-        &.kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
+        .kijs-align-center > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: center;
         }
-        &.kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
+        .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-end;
         }
         
@@ -835,9 +781,6 @@
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
-                &.kijs-dragging:not(.kijs-dragover) {
-                    display: none;
-                }
             }
         }
         /* Drop Marker */
@@ -848,136 +791,27 @@
         }
         &.kijs-pos-top {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                width: 40px;
                 margin: 4px 0 0 4px;
             }
         }
         &.kijs-pos-right {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                height: 20px;
                 margin: 4px 4px 0 0;
             }
         }
         &.kijs-pos-bottom {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                width: 40px;
                 margin: 0 0 4px 4px;
             }
         }
         &.kijs-pos-left {
             > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
-                height: 20px;
                 margin: 4px 0 0 4px;
             }
         }
     }
 
 
-    /* ******************
-       * Container Wizard
-       ****************** */
-    div.kijs-container-wizard {
-        &.kijs-pos-left,
-        &.kijs-pos-right,
-        &.kijs-pos-bottom,
-        &.kijs-pos-top {
-            > .kijs-container-scrollable {
-                min-height: 25px;
-                background-color: transparent;
-
-                > .kijs-container-inner {
-                    flex-wrap: wrap;
-
-                    > .kijs-button {
-                        background: none;
-                        border: none;
-
-                        &:focus {
-                            background: none;
-                            border: none;
-
-                            > .kijs-icon {
-                                color: var(--tabButton-focus-fontColor);
-                            }
-                        }
-
-                        &:hover {
-                            background: none;
-                            border: none;
-                        }
-
-                        &.kijs-disabled {
-                            border: none;
-                            background: none;
-
-                            > .kijs-caption,
-                            > .kijs-icon {
-                                color: var(--tabButton-fontColor);
-                            }
-
-                            &:focus {
-                                background: none;
-                                border: none;
-                            }
-                        }
-
-                        &.kijs-current {
-                            background: none;
-
-                            > .kijs-icon {
-                                color: var(--tabButton-current-fontColor);
-                                font-size: 10px;
-                            }
-
-                            > .kijs-caption {
-                                color: var(--tabButton-current-fontColor);
-                            }
-
-                            &.kijs-disabled {
-                                > .kijs-caption {
-                                    color: var(--tabButton-current-fontColor);
-                                }
-                            }
-                        }
-
-                        > .kijs-icon {
-                            font-size: 8px;
-                        }
-
-                        > .kijs-caption {
-                            font-size: 10px;
-                        }
-                    }
-                }
-            }
-        }
-
-        > .kijs-arrow-left {
-            z-index: 1;
-            position: absolute;
-            top: 45%;
-            left: 10px;
-            cursor: pointer;
-            opacity: 0.2;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-
-        > .kijs-arrow-right {
-            z-index: 1;
-            position: absolute;
-            top: 45%;
-            right: 10px;
-            cursor: pointer;
-            opacity: 0.2;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
-    }
 
     /* ******************
        * Tooltip
@@ -1005,7 +839,6 @@
             border: 1px solid var(--icon-error-borderColor);
             background-color: var(--icon-error-bkgrndColor);
         }
-
         &.kijs-help {
             border: 1px solid var(--icon-help-borderColor);
             background-color: var(--icon-help-bkgrndColor);
@@ -1015,17 +848,16 @@
 
 
     /* ******************
-       * DEPRECATED
        * TODO: Drag'n'Drop marker ???
        ****************** */
-    body > div.kijs-dragdrop-marker {
+    /*body > div.kijs-dragdrop-marker {
         z-index: 20201;
         position: absolute;
         background-color: var(--dragover-ok-borderColor);
 
         &.top, &.bottom { height: 2px }
         &.left, &.right { width: 2px }
-    }
+    }*/
 
 
 
@@ -1145,7 +977,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: var(--panel-collapse-height);
+        height: 30px;
         padding: 0 6px;
         gap: 4px;
         background-color: var(--bar-bkgrndColor);
@@ -1359,13 +1191,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: var(--panel-collapse-height) !important;
+            height: 30px;
             flex: none;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto;
-            width: var(--panel-collapse-width) !important;
+            width: 30px;
             flex: none;
             display: flex;
             flex-direction: row;
@@ -1394,7 +1226,7 @@
         /* PanelBar Minimiert */
         &.kijs-collapse-right, &.kijs-collapse-left {
             > .kijs-panelbar {
-                width: var(--panel-collapse-width);
+                width: 30px;
                 height: auto;
                 padding: 3px 0 3px 0;
                 flex-direction: column;
@@ -1473,13 +1305,6 @@
                         border: 2px solid var(--bar-bkgrndColor);
                         border-radius: 5px;
                         
-                        > .kijs-headerbar[draggable] {
-                            > .kijs-container-inner {
-                                cursor: move;
-                                user-select: none;
-                            }
-                        }
-
                         &.kijs-dragging {
                             opacity: 0.6
                         }
@@ -1551,6 +1376,8 @@
             }
         }
     }
+
+
 
     /* ******************
        * Mask
@@ -1750,21 +1577,7 @@
                 margin: 0;
                 border-radius: 0;
             }
-
-            > div.separator {
-                background-color: var(--button-bkgrndColor);
-
-                > hr {
-                    padding: 0;
-                    height: 1px;
-                    width: 96%;
-                    margin: 0 0 0 2%;
-                    border: 0;
-                    background-color: var(--field-borderColor);
-                    color: var(--field-borderColor);
-                }
-            }
-
+            
             > button.kijs-button {
                 text-align: left;
                 display: flex;
