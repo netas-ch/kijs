@@ -380,22 +380,23 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadFiles(e.nodeEvent.dataTransfer.files);
     }
 
-    #onEndUpload(val, config, error) {
-        kijs.Array.remove(this._currentUploadIds, config.uploadId);
+    #onEndUpload(e) {
+        kijs.Array.remove(this._currentUploadIds, e.request.uploadId);
 
         // Fehlermeldung vom server
-        if (!val || !val.success) {
-            error = error || val.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
+        let error = '';
+        if (!e.response || !e.response.success) {
+            error = error || e.response.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
         }
 
         // Antwort vom Server
-        let uploadResponse = val ? (val.upload || null) : null;
+        let uploadResponse = e.response ? (e.response.upload || null) : null;
 
         // Responses in Objekt sammeln
-        this._uploadResponses[config.uploadId] = uploadResponse;
+        this._uploadResponses[e.request.uploadId] = uploadResponse;
 
         // Event werfen
-        this.raiseEvent('upload', this, uploadResponse, error, config.uploadId);
+        this.raiseEvent('upload', this, uploadResponse, error, e.request.uploadId);
 
         // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
         if (this._currentUploadIds.length === 0) {
