@@ -432,6 +432,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // wird von kijs.gui.Combo verwendet
     // TODO: schönere Lösung?
     handleKeyDown(nodeEvent) {
+        let isShiftPress = !!nodeEvent.shiftKey;
+        let isCtrlPress = !!nodeEvent.ctrlKey;
+        
+        if (kijs.Navigator.isMac) {
+            isCtrlPress = !!nodeEvent.metaKey;
+        }
+        
         if (!this.disabled) {
             switch (nodeEvent.code) {
                 case 'ArrowLeft':
@@ -444,8 +451,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this.selectType === 'single' || this.selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        if (isShiftPress || (!isCtrlPress && (this.selectType === 'single' || this.selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
                     nodeEvent.preventDefault();
@@ -471,8 +478,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this, true);
                         
-                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
                     nodeEvent.preventDefault();
@@ -488,8 +495,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
                     nodeEvent.preventDefault();
@@ -514,15 +521,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this);
                         
-                        if (nodeEvent.shiftKey || (!nodeEvent.ctrlKey && (this._selectType === 'single' || this._selectType === 'multi'))) {
-                            this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
                     nodeEvent.preventDefault();
                     break;
                     
                 case 'Space':
-                    this._selectEl(this._currentEl, nodeEvent.shiftKey, nodeEvent.ctrlKey);
+                    this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                     break;
                     
             }
@@ -1087,7 +1094,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             if (this._focusable) {
                 e.raiseElement.focus();
             }
-            this._selectEl(this._currentEl, e.nodeEvent.shiftKey, e.nodeEvent.ctrlKey);
+            
+            let isShiftPress = !!e.nodeEvent.shiftKey;
+            let isCtrlPress = !!e.nodeEvent.ctrlKey;
+            
+            if (kijs.Navigator.isMac) {
+                isCtrlPress = !!e.nodeEvent.metaKey;
+            }
+            
+            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
         }
     }
     
