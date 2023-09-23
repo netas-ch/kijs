@@ -70,6 +70,14 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+
+    get content() {
+        return this._quillEditor.getContents();
+    }
+
+    set content(val) {
+        this._quillEditor.setContents(val);
+    }
     get hasFocus() {
         if (this._quillEditor) {
             return this._quillEditor.hasFocus();
@@ -92,9 +100,6 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
 
-    get valueTrimEnable() { return this._valueTrimEnable; }
-    set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
-
     // overwrite
     get value() {
         let val = '';
@@ -113,8 +118,8 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         this._value = val;
         this._previousChangeValue = val;
         if (this._quillEditor) {
-            this._quillEditor.setContents([]);
-            this._quillEditor.clipboard.dangerouslyPasteHTML(0, val);
+            const delta = this._quillEditor.clipboard.convert(val);
+            this._quillEditor.setContents(delta, 'silent');
         }
     }
 

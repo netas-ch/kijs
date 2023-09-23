@@ -462,7 +462,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._tableDom.width = null;
                 this._tableDom.height = null;
             }
-            
+
             return responseData;
         });
     }
@@ -1047,9 +1047,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
         }
     }
-    
-    
-    
+
+
+
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -1322,9 +1322,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
         }
     }
-    
-    
-    
+
+
+
     // PRIVATE
     // LISTENERS
     /**

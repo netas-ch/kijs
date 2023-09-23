@@ -229,7 +229,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     // PROTECTED
     /**
-     * Prüft, ob der Browser das hochladen von ganzen Ordner unterstützt.
+     * Prüft, ob der Browser das Hochladen von ganzen Ordner unterstützt.
      * @returns {Boolean}
      */
     _browserSupportsDirectoryUpload() {
