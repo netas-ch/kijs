@@ -375,7 +375,7 @@ button.kijs-button > .kijs-badge {
 
 
 /* kijs.gui.field.Combo */
-.kijs-field-combo {
+.kijs-field.kijs-field-combo {
     height: 22px;
 }
 
