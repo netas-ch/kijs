@@ -4,14 +4,15 @@
 // kijs.gui.Dom (Static)
 // --------------------------------------------------------------
 kijs.gui.DragDrop = class kijs_gui_DragDrop {
-     
+
     // PRIVATE VARS
     // __source {kijs.gui.Element} Element das aktuell gezogen wird
     // __target {kijs.gui.Element} Ziel-Element
     // __data   {Object} Objekt für die Zuweisung beliebiger Daten
+    // __dropMarkerCls {String} zusätzliche CSS-Klasse für den Drop Marker
     // __dropMarkerDom {kijs.gui.Dom} Marker, der die Einfügeposition visualisiert
-    
-    
+
+
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -28,18 +29,26 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             throw new kijs.Error(`kijs.gui.DragDrop.data must be an object.`);
         }
     }
-    
+
+    static get dropMarkerCls() {
+        return this.__dropMarkerCls;
+    }
+
+    static set dropMarkerCls(val) {
+        this.__dropMarkerCls = val;
+    }
+
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
-    static get source() { 
+    static get source() {
         if (!kijs.isDefined(this.__source)) {
             this.__source = null;
         }
-        return this.__source; 
-    }    
+        return this.__source;
+    }
     static set source(val) {
         this.__source = val;
     }
-    
+
     static get target() {
         if (!kijs.isDefined(this.__target)) {
             this.__target = null;
@@ -49,9 +58,9 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     static set target(val) {
         this.__target = val;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -65,7 +74,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         }
         this.__dropMarkerDom = null;
     }
-    
+
     /**
      * Positioniert den dropMarker
      * @param {kijs.gui.Dom|Null} [targetDom=null] Null = ausblenden
@@ -81,31 +90,36 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             this.dropMarkerRemove();
             return;
         }
-        
+
         let reCreate = true;
         if (this.__dropMarkerDom && this.__dropMarkerDom.node) {
             const currentTagName = this.__dropMarkerDom.node.tagName.toLowerCase();
-            
+
             // falls das tagName noch stimmt, muss der node nicht neu erstellt werden
             if (currentTagName === tagName) {
                 reCreate = false;
             }
         }
-        
+
         // Evtl. den Marker neu erstellen
         if (reCreate) {
             this.dropMarkerRemove();
-            
+
             this.__dropMarkerDom = new kijs.gui.Dom({
                 nodeTagName: tagName,
                 cls: 'kijs-dropmarker'
             });
         }
-        
+
+        // CSS-Klasse hinzufügen
+        if (this.dropMarkerCls) {
+            this.__dropMarkerDom.clsAdd(this.dropMarkerCls);
+        }
+
         // Grösse anpassen
         this.__dropMarkerDom.width = width;
         this.__dropMarkerDom.height = height;
-                    
+
         switch (targetPos) {
             case 'before':
             case 'after':
@@ -117,7 +131,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
                 break;
         }
     }
-    
+
     /**
      * Erstellt den effectAllowed-String aus boolschen Variablen
      * @param {Boolean} ddAllowMove
@@ -127,7 +141,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
      */
     static getddEffect(ddAllowMove, ddAllowCopy, ddAllowLink) {
         let ret = '';
-        
+
         if (ddAllowCopy) {
             ret += 'Copy';
         }
@@ -137,25 +151,25 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         if (ddAllowMove) {
             ret += 'Move';
         }
-        
+
         // nichts => 'none'
         if (!ret) {
             ret = 'none';
         }
-        
+
         // 1. Buchstaben klein machen
         ret = ret.substring(0,1).toLowerCase() + ret.substring(1);
-        
+
         // 'copyLinkMove' => 'all'
         if (ret === 'copyLinkMove') {
             ret = 'all';
         }
-        
+
         return ret;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // dropFn-Funktionen für Drag&Drop-mapping
     // --------------------------------------------------------------
@@ -168,53 +182,53 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             preventRender: false,
             preventEvents: false
         });
-        
+
         // und beim neuen Ort wieder einfügen
         switch (e.target.targetPos){
             case 'child':
                 e.target.targetEl.add(e.source.ownerEl);
                 break;
-                
+
             case 'before':
                 e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index);
                 break;
-                
+
             case 'after':
                 e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index+1);
                 break;
         }
     }
-    
+
     static dropFnGetSourceIndex(e) {
         return e.source.ownerEl.index;
     }
-    
+
     static dropFnGetSourceEl(e) {
         return e.source.ownerEl;
     }
-    
+
     // Gibt die Einfügeposition im Ziel Container zurück
     static dropFnGetTargetIndex(e) {
         let targetIndex = null;
-        
+
         // Zielindex ermitteln
         switch (e.target.targetPos){
             case 'child':
                 targetIndex = e.target.targetEl.elements.length;
                 break;
-                
+
             case 'before':
                 targetIndex =  e.target.targetEl.index;
                 break;
-                
+
             case 'after':
                 targetIndex =  e.target.targetEl.index + 1;
                 break;
         }
-        
+
         return targetIndex;
     }
-    
+
     static dropFnGetTargetEl(e) {
         return e.target.ownerEl;
     }
