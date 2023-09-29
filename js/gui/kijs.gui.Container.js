@@ -751,7 +751,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      */
     _replaceElements(elements) {
         // Bestehende Elemente löschen
-        this.removeAll(true, false, false);
+        this.removeAll({
+            preventRender: true,
+        });
         
         // Neue Elemente hinzufügen
         this.add(elements, null, false);
