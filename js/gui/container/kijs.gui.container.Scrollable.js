@@ -14,34 +14,33 @@
  * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
  * ----------------
  * disableSmoothScrolling Boolean [optional] default=false  Sanftes Scrollen ausschalten
- * 
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
- * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste 
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
+ *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
+ *
+ * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste
  *                                                          gehalten wird, wird in diesem Abstand gescrollt
- *                                                          
+ *
  * scrollStep   Number [optional] default=20                Anzahl Pixel, die bei einem Klick auf einen
  *                                                          Scroll-Button gescrollt wird
- * 
+ *
  * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
  * -------------
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  *
  * EVENTS
  * ----------
- * 
+ *
  */
 kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs.gui.Container {
-
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -49,14 +48,16 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // overwrite
     constructor(config={}) {
         super(false);
-        
+
         this._scrollableX = false;
         this._scrollableY = false;
         this._scrollDeferId = null;
         this._scrollStep = 20;
         this._scrollDelay = 150;
         this._disableSmoothScrolling = false;
-        
+        this._touchXStart = null;
+        this._touchYStart = null;
+
         this._btnUpDom = new kijs.gui.Dom({
             cls: 'kijs-btn-scrollup',
             on: {
@@ -67,7 +68,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._btnLeftDom = new kijs.gui.Dom({
             cls: 'kijs-btn-scrollleft',
             on: {
@@ -78,7 +79,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._btnRightDom = new kijs.gui.Dom({
             cls: 'kijs-btn-scrollright',
             on: {
@@ -89,7 +90,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._btnDownDom = new kijs.gui.Dom({
             cls: 'kijs-btn-scrolldown',
             on: {
@@ -100,14 +101,14 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
-        
+
+
         this._iconUpEl = new kijs.gui.Icon({
             parent: this,
             name: 'up',
             cls: 'kijs-icon-scrollup'
         });
-        
+
         this._iconLeftEl = new kijs.gui.Icon({
             parent: this,
             name: 'left',
@@ -118,7 +119,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._iconRightEl = new kijs.gui.Icon({
             parent: this,
             name: 'right',
@@ -129,7 +130,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._iconDownEl = new kijs.gui.Icon({
             parent: this,
             name: 'down',
@@ -140,10 +141,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 context: this
             }
         });
-        
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-container-scrollable');
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             iconDownMap: 'kijs.iconMap.Fa.chevron-down',
@@ -189,6 +190,9 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this.on('afterResize', this.#onAfterResize, this);
         this.on('childElementAfterResize', this.#onChildElementAfterResize, this);
         this.on('scrollEnd', this.#onScrollEnd, this);
+        this.on('touchEnd', this.#onTouchEnd, this);
+        this.on('touchMove', this.#onTouchMove, this);
+        this.on('touchStart', this.#onTouchStart, this);
         this.on('wheel', this.#onWheel, this);
 
         // Config anwenden
@@ -438,24 +442,24 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._btnRightDom.changeDisabled(!!val, true);
         this._btnDownDom.changeDisabled(!!val, true);
     }
-    
+
     // overwrite
     render(superCall) {
         super.render(true);
-        
+
         // Scroll-Buttons rendern/entfernen
         this._renderScrollButtons();
-        
+
         // Zeitverzögert kontrollieren, ob der Inhalt Platz hat oder ob Scrollbuttons nötig sind,
         // wenn Ja: diese noch rendern. Wenn nein: unrendern
         if (this._scrollableX === 'auto' || this._scrollableY === 'auto') {
             kijs.defer(this._renderScrollButtons, 20, this);
-            
-        // Wenn Scrollbar sichtbar Schaltflächen aktivieren/dekativieren
+
+        // Wenn Scrollbar sichtbar Schaltflächen aktivieren/deaktivieren
         } else if (this._scrollableX || this._scrollableY) {
             kijs.defer(this._updateButtons, 20, this);
         }
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -465,22 +469,22 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // overwrite
     unrender(superCall) {
         this._scrollStop();
-        
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-        
+
         this._iconUpEl.unrender();
         this._iconLeftEl.unrender();
         this._iconRightEl.unrender();
         this._iconDownEl.unrender();
-        
+
         this._btnUpDom.unrender();
         this._btnLeftDom.unrender();
         this._btnRightDom.unrender();
         this._btnDownDom.unrender();
-        
+
         super.unrender(true);
     }
 
@@ -490,11 +494,11 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     _renderScrollButtons() {
         let hasScrollX = false;
         let hasScrollY = false;
-        
+
         if (!this._innerDom || !this._innerDom.node) {
             return;
         }
-        
+
         // Buttons auf X-Achse nötig?
         if (this._scrollableX === 'auto') {
             if (this._innerDom.node.scrollWidth > this._dom.node.clientWidth) {
@@ -503,7 +507,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         } else if (this._scrollableX) {
             hasScrollX = true;
         }
-        
+
         // Buttons auf Y-Achse nötig?
         if (this._scrollableY === 'auto') {
             if (this._innerDom.node.scrollHeight > this._dom.node.clientHeight) {
@@ -512,22 +516,20 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         } else if (this._scrollableY) {
             hasScrollY = true;
         }
-        
-        
+
         // CSS hinzufügen/entfernen
         if (hasScrollX) {
             this._dom.clsAdd('kijs-scrollable-x-enable');
         } else {
             this._dom.clsRemove('kijs-scrollable-x-enable');
         }
-        
+
         if (hasScrollY) {
             this._dom.clsAdd('kijs-scrollable-y-enable');
         } else {
             this._dom.clsRemove('kijs-scrollable-y-enable');
         }
-        
-        
+
         // Rendern oder Unrendern
         // Up (kijs.guiDom)
         if (hasScrollY) {
@@ -547,7 +549,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._btnLeftDom.unrender();
         }
 
-         // Right (kijs.guiDom)
+        // Right (kijs.guiDom)
         if (hasScrollX) {
             this._btnRightDom.renderTo(this._dom.node);
             this._iconRightEl.renderTo(this._btnRightDom.node);
@@ -556,7 +558,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._btnRightDom.unrender();
         }
 
-         // Down (kijs.guiDom)
+        // Down (kijs.guiDom)
         if (hasScrollY) {
             this._btnDownDom.renderTo(this._dom.node);
             this._iconDownEl.renderTo(this._btnDownDom.node);
@@ -564,52 +566,52 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._iconDownEl.unrender();
             this._btnDownDom.unrender();
         }
-        
-        // Schaltflächen aktivieren/dekativieren
+
+        // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
-    
+
     // starten das Scrollen in eine Richtung
     _scrollStart(dir) {
         // falls bereits gescrollt wird: abbrechen
         this._scrollStop();
-        
+
         let opt = {};
-        
+
         switch (dir) {
             case 'up':    opt.top  = this._innerDom.node.scrollTop + this._scrollStep*-1; break;
             case 'left':  opt.left = this._innerDom.node.scrollLeft + this._scrollStep*-1; break;
             case 'right': opt.left = this._innerDom.node.scrollLeft + this._scrollStep; break;
             case 'down':  opt.top  = this._innerDom.node.scrollTop + this._scrollStep; break;
         }
-        
+
         if (!this._disableSmoothScrolling) {
             opt.behavior = 'smooth';
         }
-        
+
         this._innerDom.node.scrollTo(opt);
-        
+
         this._scrollDeferId = kijs.defer(this._scrollStart, this._scrollDelay, this, dir);
     }
-    
-    // stopt das Scrollen
+
+    // stoppt das Scrollen
     _scrollStop() {
         if (this._scrollDeferId) {
             clearTimeout(this._scrollDeferId);
             this._scrollDeferId = null;
         }
     }
-    
-    // Schaltflächen aktivieren/dekativieren
+
+    // Schaltflächen aktivieren/deaktivieren
     _updateButtons() {
         if (!this._innerDom) {
             return;
         }
-        
+
         if (this.disabled) {
             return;
         }
-        
+
         this._btnUpDom.disabled = this._innerDom.node.scrollTop <= 0;
         this._btnLeftDom.disabled = this._innerDom.node.scrollLeft <= 0;
         this._btnRightDom.disabled = Math.abs(this._innerDom.node.scrollWidth - 
@@ -619,8 +621,8 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 this._innerDom.node.clientHeight - 
                 this._innerDom.node.scrollTop) <= 1;
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     #onBtnScrollDownMouseDown(e) {
@@ -628,29 +630,29 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._scrollStart('down');
         }
     }
-    
+
     #onBtnScrollLeftMouseDown(e) {
         if (!this._btnLeftDom.disabled) {
             this._scrollStart('left');
         }
     }
-    
+
     #onBtnScrollMouseUp(e) {
         this._scrollStop();
     }
-    
+
     #onBtnScrollRightMouseDown(e) {
         if (!this._btnRightDom.disabled) {
             this._scrollStart('right');
         }
     }
-    
+
     #onBtnScrollUpMouseDown(e) {
         if (!this._btnUpDom.disabled) {
             this._scrollStart('up');
         }
     }
-    
+
     // Wenn die Grösse des Containers verändert wird, müssen evtl. 
     // die Buttons ein-/ausgeblendet werden
     #onAfterResize(e) {
@@ -660,7 +662,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             kijs.defer(this._updateButtons, 20, this);
         }
     }
-    
+
     // Wenn die Grösse eines Kind-Elements verändert wird, müssen evtl. 
     // die Buttons ein-/ausgeblendet werden
     #onChildElementAfterResize(e) {
@@ -670,26 +672,72 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             kijs.defer(this._updateButtons, 20, this);
         }
     }
-    
+
     #onScrollEnd(e) {
         // Schaltflächen aktivieren/dekativieren
         this._updateButtons();
     }
-    
+
+    #onTouchEnd(e) {
+        e.nodeEvent.preventDefault();
+
+        // Buttons rendern
+        this._renderScrollButtons();
+    }
+
+    #onTouchMove(e) {
+        const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
+        const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');
+
+        const deltaX = this._touchXStart - e.nodeEvent.touches[0].clientX;
+        const deltaY = this._touchXStart - e.nodeEvent.touches[0].clientY;
+
+        // Scrollbar auf Y + X Achse
+        if (hasScrollbarY && hasScrollbarX) {
+            this._innerDom.node.scrollTop += deltaY;
+            this._innerDom.node.scrollLeft += deltaX;
+
+            // Scrollbar nur auf Y Achse
+        } else if (hasScrollbarY) {
+            this._innerDom.node.scrollTop += deltaY;
+
+            // Scrollbar nur auf X Achse
+        } else if (hasScrollbarX) {
+            this._innerDom.node.scrollLeft += deltaX;
+        }
+
+        // Aktuelle Startpunkte setzen
+        this._touchXStart = e.nodeEvent.touches[0].clientX;
+        this._touchYStart = e.nodeEvent.touches[0].clientY;
+
+        if (hasScrollbarX || hasScrollbarY) {
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
+        }
+    }
+
+    #onTouchStart(e) {
+        e.nodeEvent.preventDefault();
+
+        // Startpunkte setzen
+        this._touchXStart = e.nodeEvent.touches[0].clientX;
+        this._touchYStart = e.nodeEvent.touches[0].clientY;
+    }
+
     #onWheel(e) {
         const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
         const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');
-        
+
         // Scrollbar auf Y + X Achse
         if (hasScrollbarY && hasScrollbarX) {
             this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
             this._innerDom.node.scrollLeft += e.nodeEvent.deltaX;
-            
-        // Scrollbar nur auf Y Achse
+
+            // Scrollbar nur auf Y Achse
         } else if (hasScrollbarY) {
             this._innerDom.node.scrollTop += e.nodeEvent.deltaY;
-            
-        // Scrollbar nur auf X Achse
+
+            // Scrollbar nur auf X Achse
         } else if (hasScrollbarX) {
             // Mit dem Mausrad kann auf der X-Achse gescrollt werden
             if (e.nodeEvent.deltaX) {
@@ -698,7 +746,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
                 this._innerDom.node.scrollLeft += e.nodeEvent.deltaY;
             }
         }
-        
+
         if (hasScrollbarX || hasScrollbarY) {
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
@@ -733,7 +781,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         if (this._iconDownEl) {
             this._iconDownEl.destruct();
         }
-        
+
         if (this._btnUpDom) {
             this._btnUpDom.destruct();
         }
@@ -746,20 +794,24 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         if (this._btnDownDom) {
             this._btnDownDom.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._iconUpEl = null;
         this._iconLeftEl = null;
         this._iconRightEl = null;
         this._iconDownEl = null;
-        
+
         this._btnUpDom = null;
         this._btnLeftDom = null;
         this._btnRightDom = null;
         this._btnDownDom = null;
 
+        this._disableSmoothScrolling = false;
+        this._touchXStart = null;
+        this._touchYStart = null;
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };
