@@ -679,7 +679,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
     #onTouchEnd(e) {
-        e.nodeEvent.preventDefault();
 
         // Buttons rendern
         this._renderScrollButtons();
@@ -717,7 +716,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
     #onTouchStart(e) {
-        e.nodeEvent.preventDefault();
 
         // Startpunkte setzen
         this._touchXStart = e.nodeEvent.touches[0].clientX;
