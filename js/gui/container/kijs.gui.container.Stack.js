@@ -306,6 +306,19 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             }, duration, this);
         });
     }
+
+    /**
+     * Aktiviert das vorherige Element
+     * @param {String} animation
+     * @param {Integer} duration
+     * @returns {Promise}
+     */
+    setPreviousAnimated(animation=null, duration=null) {
+        if (this._elHistory.length > 1) {
+            const el = this._elHistory[this._elHistory.length - 2];
+            this.setCurrentAnimated(el, animation, duration);
+        }
+    }
     
     // overwrite
     unrender(superCall) {
