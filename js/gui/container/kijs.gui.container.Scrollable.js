@@ -674,7 +674,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
     #onScrollEnd(e) {
-        // Schaltflächen aktivieren/dekativieren
+        // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
 
