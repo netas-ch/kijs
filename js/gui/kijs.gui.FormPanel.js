@@ -232,9 +232,9 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
-    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
         return new Promise((resolve) => {
-            super.load(args, true).then((e) => {
+            super.load(args, true, config).then((e) => {
                 let config = e.responseData.config ?? {};
                 
                 // Falls des Formular destructed wurde: abbrechen
