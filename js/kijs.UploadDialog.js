@@ -145,6 +145,14 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             this._fileExtensions.push(type);
         }, this);
     }
+    
+    get maxFilesize() {
+        return this._maxFilesize;
+    }
+    
+    set maxFilesize(val) {
+        this._maxFilesize = val;
+    }
 
     get multiple() { return this._multiple; }
     set multiple(val) { this._multiple = !!val; }
