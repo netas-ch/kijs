@@ -15,6 +15,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._previousChangeValue = [];
+        this._value = null;
 
         this._listView = new kijs.gui.ListView({});
 
@@ -103,8 +104,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     get value() { return this._listView.value; }
     set value(val) {
-        this._listView.value = val;
-        this._previousChangeValue = this._listView.value;
+        this._value = val;
+        this._listView.value = this._value;
+        this._previousChangeValue = this._value;
     }
 
     get valueField() { return this._listView.valueField; }
@@ -143,20 +145,18 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      */
     load(args, superCall=false) {
         return new Promise((resolve, reject) => {
-            let value = this._listView.value;
-            
             super.load(args, true).then((e) => {
                 let config = e.responseData.config ?? {};
                 
                 // Falls ein neuer Wert zurückgegeben wird, diesen nehmen
                 if (kijs.isDefined(config.value)) {
-                    value = config.value;
+                    this._value = config.value;
                 }
                 
                 this._listView.data = config.data;
-                
-                if (!kijs.isEmpty(value)) {
-                    this.value = value;
+
+                if (!kijs.isEmpty(this._value)) {
+                    this.value = this._value;
                 }
                 
                 if (!kijs.isEmpty(config.selectFilters)) {
@@ -277,7 +277,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
         // Variablen (Objekte/Arrays) leeren
         this._listView = null;
-        this._previousChangeValue = null;
+        this._minSelectCount = null;
+        this._maxSelectCount = null;
+        this._previousChangeValue = [];
+        this._value = null;
 
         // Basisklasse entladen
         super.destruct(true);
