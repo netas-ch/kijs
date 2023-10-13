@@ -320,7 +320,6 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     
     // Marker positionieren, Source ein-/ausblenden, CSS aktualisieren
     _updateGuiIndicator(e, targetEl, targetPos=null, operation='none', mapping=null) {
-        
         if (kijs.isEmpty(operation)) {
             operation = 'none';
         }
@@ -366,7 +365,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
 
             // Marker positionieren
             if (targetEl) {
-                kijs.gui.DragDrop.dropMarkerUpdate(targetEl.dom, targetPos, 
+                let domName = targetPos === 'child' ? this._ownerDomProperty : 'dom';
+                kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos, 
                         this._ddMarkerTagName, markerWidth, markerHeight);
             // oder ausblenden
             } else {

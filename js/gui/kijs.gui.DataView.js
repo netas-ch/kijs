@@ -884,11 +884,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     name: this._ddName
                 };
                 newEl.ddSource.on('drop', this.#onSourceDrop, this);
-            } else {
-                if (newEl.ddSource) {
-                    newEl.ddSource.destruct();
-                }
-                newEl.ddSource = null;
             }
             
             // click-Event

@@ -507,11 +507,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         
         if (this._parentEl && (this._parentEl instanceof kijs.gui.Container) && this._parentEl.hasChild(this)) {
-            this._parentEl.remove(this, {
+            this._parentEl.remove([this], {
                 preventRender: false,
                 preventDestruct: true,
                 preventEvents: preventEvents
-            }, true);
+            });
         } else {
             this.unrender();
         }
