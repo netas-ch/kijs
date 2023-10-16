@@ -73,10 +73,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
      * @param {String|Null|} [tagName=null]
      * @param {Number|Null} [width=null] Breite des Markers
      * @param {Number|Null} [height=null] Höhe des Markers
-     * @param {String|Null|} [markerCls=null]
+     * @param {String|Array|Null} [markerCls=null]  zusätzliche CSS Klassen für Marker
+     * @param {String|Null|} [markerHtml=null]       innerHTML für Marker
      * @returns {undefined}
      */
-    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null, width=null, height=null, markerCls=null) {
+    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null, 
+        width=null, height=null, markerCls=null, markerHtml=null) {
         // evtl. nur ausblenden
         if (kijs.isEmpty(targetDom) || kijs.isEmpty(targetPos) || kijs.isEmpty(tagName)) {
             this.dropMarkerRemove();
@@ -108,7 +110,14 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         if (markerCls) {
             this.__dropMarkerDom.clsAdd(markerCls);
         }
-
+        
+        // evtl. HTML-Inhalt einfügen
+        if (!kijs.isEmpty(markerHtml)) {
+            this.__dropMarkerDom.html = markerHtml;
+        } else {
+            this.__dropMarkerDom.html = '';
+        }
+        
         // Grösse anpassen
         this.__dropMarkerDom.width = width;
         this.__dropMarkerDom.height = height;

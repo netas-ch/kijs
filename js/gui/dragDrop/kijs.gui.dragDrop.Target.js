@@ -375,12 +375,18 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             if (mapping && !kijs.isEmpty(mapping.markerCls)) {
                 markerCls = mapping.markerCls;
             }
-
+            
+            // evtl. HTML in den Marker einfügen
+            let markerHtml = '';
+            if (mapping && !kijs.isEmpty(mapping.markerHtml)) {
+                markerHtml = mapping.markerHtml;
+            }
+            
             // Marker positionieren
             if (targetEl) {
                 let domName = targetPos === 'child' ? this._ownerDomProperty : 'dom';
                 kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos, 
-                        this._ddMarkerTagName, markerWidth, markerHeight, markerCls);
+                        this._ddMarkerTagName, markerWidth, markerHeight, markerCls, markerHtml);
             // oder ausblenden
             } else {
                 kijs.gui.DragDrop.dropMarkerUpdate();
