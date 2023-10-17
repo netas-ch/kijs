@@ -767,6 +767,7 @@
        * Tooltip
        ****************** */
   div.kijs-tooltip {
+    box-sizing: border-box;
     position: fixed;
     display: block;
     overflow: hidden;
@@ -779,6 +780,9 @@
     font-size: var(--default-fontSize);
     background-color: var(--viewport-bkgrndColor);
     max-width: 400px;
+  }
+  div.kijs-tooltip * {
+    box-sizing: border-box;
   }
   div.kijs-tooltip ul {
     margin: 0 0 0 14px;
@@ -807,6 +811,7 @@
        * SpinBox
        ****************** */
   div.kijs-spinbox {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     z-index: 50100;
@@ -818,6 +823,9 @@
     -webkit-user-select: none;
     /* Safari */
     user-select: none;
+  }
+  div.kijs-spinbox * {
+    box-sizing: border-box;
   }
   div.kijs-spinbox.kijs-pos-top {
     margin-top: 1px;
@@ -870,6 +878,7 @@
     cursor: ew-resize;
   }
   div.kijs-splitter-overlay-horizontal {
+    box-sizing: border-box;
     position: absolute;
     width: 5px;
     height: 100%;
@@ -883,6 +892,7 @@
     cursor: ns-resize;
   }
   div.kijs-splitter-overlay-vertical {
+    box-sizing: border-box;
     position: absolute;
     height: 5px;
     width: 100%;
@@ -1220,6 +1230,7 @@
        * Window
        ****************** */
   div.kijs-window {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     max-width: 100%;
@@ -1229,6 +1240,9 @@
     /* Safari */
     user-select: none;
     /* Buttons im Fuss eines Fensters sind blau */
+  }
+  div.kijs-window * {
+    box-sizing: border-box;
   }
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button {
     background-color: var(--window-footer-button-bkgrndColor);
@@ -1258,6 +1272,7 @@
        * Mask
        ****************** */
   div.kijs-mask {
+    box-sizing: border-box;
     position: absolute;
     display: flex;
     align-items: center;
@@ -1273,6 +1288,9 @@
     -webkit-user-select: none;
     /* Safari  */
     user-select: none;
+  }
+  div.kijs-mask * {
+    box-sizing: border-box;
   }
   div.kijs-mask > .kijs-icon {
     color: #F5F5F5;
@@ -1291,11 +1309,15 @@
        * ApertureMask
        ****************** */
   div.kijs-aperturemask {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     z-index: 9000;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
+  }
+  div.kijs-aperturemask * {
+    box-sizing: border-box;
   }
   div.kijs-aperturemask.top {
     top: 0;
@@ -1353,11 +1375,15 @@
        * CornerTipContainer
        ****************** */
   div.kijs-cornertipcontainer {
+    box-sizing: border-box;
     position: fixed;
     overflow: hidden;
     right: 0;
     bottom: 0;
     z-index: 70000;
+  }
+  div.kijs-cornertipcontainer * {
+    box-sizing: border-box;
   }
   div.kijs-cornertipcontainer .kijs-panel {
     border-radius: 4px;
@@ -1409,6 +1435,7 @@
     opacity: 1;
   }
   div.kijs-resizer-overlay {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.5);
