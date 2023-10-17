@@ -204,7 +204,9 @@
     --item-fontColor: var(--grey9);
     --item-fontSize: 12px;
     --item-lineHeight: 14px;
-
+    
+    --item-today-fontColor: var(--accentColor);
+    
     --item-focus-bkgrndColor: var(--grey2);
     --item-focus-borderColor: var(--grey2);
     --item-focus-fontColor: var(--grey9);

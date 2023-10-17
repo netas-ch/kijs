@@ -2228,7 +2228,7 @@
                     width: 22px;
                     height: 22px;
                     margin: 0;
-                    padding: 5px 5px 0 0;
+                    padding: 3px 4px 2px 1px;
                     border: 0;
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
@@ -2242,19 +2242,12 @@
                     }
 
                     &.kijs-head {
-                        padding: 5px 4px 0 0;
+                        padding: 3px 4px 2px 0;
                         color: var(--item-label-fontColor);
                         font-weight: bold;
                     }
                     &.kijs-outofmonth {
                         color: var(--item-label-fontColor);
-                    }
-                    &.kijs-today {
-                        color: var(--today-fontColor);
-
-                        &.kijs-range-start, &.kijs-range-end {
-                            color: var(--default-fontColor);
-                        }
                     }
                     &.kijs-weekend {
                         background-color: var(--viewport-bkgrndColor);
@@ -2264,27 +2257,28 @@
                         color: var(--item-label-fontColor);
                     }
                     &.kijs-value {
-                        padding: 4px 4px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
                         color: var(--item-selected-fontColor);
                         border: 1px solid var(--item-selected-borderColor);
+                        border-radius: 4px;
                     }
                     &.kijs-range {
-                        padding: 4px 5px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
                         color: var(--item-selected-fontColor);
                         border-top: 1px solid var(--item-selected-borderColor);
                         border-bottom: 1px solid var(--item-selected-borderColor);
                     }
                     &.kijs-rangestart {
-                        padding: 4px 5px 0 0;
                         border-left: 1px solid var(--item-selected-borderColor);
+                        border-radius: 4px 0 0 4px;
                     }
                     &.kijs-rangeend {
-                        padding: 4px 4px 0 0;
                         border-right: 1px solid var(--item-selected-borderColor);
+                        border-radius: 0 4px 4px 0;
                     }
-
+                    &.kijs-today {
+                        color: var(--item-today-fontColor);
+                    }
                     /*&:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }
