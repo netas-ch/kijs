@@ -32,6 +32,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         this._height = null;
 
         this._dropMarkerCls = null;
+        this._dropMarkerHeight = null;
+        this._dropMarkerWidth = null;
 
         this._display = null; // CSS-display Wert bei DragStart, damit nach dem
                               // Ausblenden des Source el wieder eingeblendet werden kann.
@@ -45,11 +47,13 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            allowMove: true,    // Darf das Element per Drag&Drop verschoben werden?
-            allowCopy: true,    // Darf das Element per Drag&Drop kopiert werden?
-            allowLink: true,    // Darf per Drag&Drop eine Verknüpfung auf das Element erstellt werden?
-            dropMarkerCls: true,// Zusätzliche CSS-Klasse für den DropMarker
-            name: true,         // Drag&Drop Name
+            allowMove: true,        // Darf das Element per Drag&Drop verschoben werden?
+            allowCopy: true,        // Darf das Element per Drag&Drop kopiert werden?
+            allowLink: true,        // Darf per Drag&Drop eine Verknüpfung auf das Element erstellt werden?
+            dropMarkerCls: true,    // Zusätzliche CSS-Klasse für den DropMarker
+            dropMarkerHeight: true, // Höhe des DropMarkers
+            dropMarkerWidth: true,  // Breite des DropMarkers
+            name: true,             // Drag&Drop Name
             on: { fn: 'assignListeners' },
             ownerEl: true,
             ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' } // Property-Name des kijs.gui.Dom, der draggable ist
@@ -79,6 +83,14 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     get dropMarkerCls() { return this._dropMarkerCls; }
 
     set dropMarkerCls(val) { this._dropMarkerCls = val; }
+
+    get dropMarkerHeight() { return this._dropMarkerHeight; }
+
+    set dropMarkerHeight(val) { this._dropMarkerHeight = val; }
+
+    get dropMarkerWidth() { return this._dropMarkerWidth; }
+
+    set dropMarkerWidth(val) { this._dropMarkerWidth = val; }
 
     get display() { return this._display; }
 
@@ -209,8 +221,25 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         // Elemente/DOM-Objekte entladen
 
         // Variablen (Objekte/Arrays) leeren
-        this._defaultConfig = null;
         this._ownerEl = null;
+        this._ownerDomProperty = null;
+
+        this._name = null;
+
+        this._allowMove = true;
+        this._allowCopy = false;
+        this._allowLink = false;
+
+        this._width = null;
+        this._height = null;
+
+        this._dropMarkerCls = null;
+        this._dropMarkerHeight = null;
+        this._dropMarkerWidth = null;
+
+        this._display = null;
+
+        this._defaultConfig = null;
 
         // Basisklasse entladen
         super.destruct();

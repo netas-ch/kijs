@@ -85,7 +85,8 @@
    "js/gui/kijs.gui.DataView.js",
    "js/gui/dataView/kijs.gui.dataView.js",
    "js/gui/dataView/kijs.gui.dataView.Element.js",
-   
+
+   "js/gui/kijs.gui.IconList.js",
    "js/gui/kijs.gui.ListView.js",
    "js/gui/kijs.gui.FormPanel.js",
 
@@ -105,6 +106,7 @@
    "js/gui/field/kijs.gui.field.Memo.js",
    "js/gui/field/kijs.gui.field.Password.js",
    "js/gui/field/kijs.gui.field.ListView.js",
+   "js/gui/field/kijs.gui.field.Icon.js",
    "js/gui/field/kijs.gui.field.Switch.js",
    "js/gui/field/kijs.gui.field.Checkbox.js",
    "js/gui/field/kijs.gui.field.CheckboxGroup.js",

@@ -22,6 +22,7 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
                 name: 'previous',
                 iconMap: 'kijs.iconMap.Fa.chevron-left',
                 cls: 'kijs-arrow-left',
+                parent: this,
                 visible: false,
                 on: {
                     click: this.previous,
@@ -34,6 +35,7 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
                 name: 'next',
                 iconMap: 'kijs.iconMap.Fa.chevron-right',
                 cls: 'kijs-arrow-right',
+                parent: this,
                 visible: false,
                 on: {
                     click: this.next,
@@ -42,9 +44,10 @@ kijs.gui.container.Wizard = class kijs_gui_container_Wizard extends kijs.gui.con
             }
         );
 
+        this._dom.clsAdd('kijs-container-wizard');
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-container-wizard',
             tabBarPos: 'bottom',
             tabBarAlign: 'center'
         });

@@ -14,12 +14,14 @@ Es sind evtl. Anpassungen am Projekt nötig.
  - ```facadeFnLoad``` ersetzen durch ```rpcLoadFn```  
  - ```facadeFnSave``` ersetzen durch ```rpcSaveFn```  
  - ```rpcArgs``` ersetzen durch ```rpcLoadArgs```  
+ - ```facadeFnArgs``` ersetzen durch ```rpcLoadArgs``` (hiess bei kijs.gui.Grid so)   
 
 ### kijs.rpc und kijs.gui.rpc
 - Bei allen ```save()``` Funktionen kann neu in der Antwort ein ```responseData.config``` 
   sein, dass angewendet wird (wie bei ```load()```).  
 - Bei der Funktion ```do(config)``` die config-Property ```facadeFn``` umbenannt 
   nach ```remoteFn```.  
+  
   **UPDATE TIPP:** Projekt nach ```facadeFn``` durchsuchen und ersetzen durch 
   ```remoteFn```. Vorsicht! Nur ersetzen, wenn ein Argument von do(config)!  
 
@@ -127,7 +129,8 @@ Die alte Klasse ```kijs.DragDrop``` gibt es nicht mehr!
  - Die Methode ```scrollIntoView()``` hat neu ein optionales Argument ```options``` 
    Sie verhält sich nun anderes, als vorher. Standardmässig wird jetzt nur noch der 
    erste 'Elterncontainer mit Scrollbar' gescrollt. Übergeordnete Container werden 
-   nicht mehr gescrollt. 
+   nicht mehr gescrollt.  
+   
    **UPDATE TIPP:** um die gleiche Funktionalität wie vorher zu haben:  
    Projekt nach ```dom.scrollIntoView()``` durchsuchen und durch 
    ```dom.scrollIntoView({ scrollParentsTo: true })``` ersetzen.  
@@ -154,6 +157,7 @@ Die alte Klasse ```kijs.DragDrop``` gibt es nicht mehr!
    neu: ```responseData.config.elements = [...]```  
    Damit ist load() kompatibel mit load() der Basisklasse kijs.gui.Element.  
    Neu können damit neben den elements auch andere configs gesendet werden.  
+   
    **UPDATE TIPP:** PHP nach ```form``` durchsuchen und ersetzen durch 
    ```config.elements```.  
 

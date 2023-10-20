@@ -942,6 +942,7 @@
        * Tooltip
        ****************** */
     div.kijs-tooltip {
+        box-sizing: border-box;
         position: fixed;
         display: block;
         overflow: hidden;
@@ -954,6 +955,10 @@
         font-size: var(--default-fontSize);
         background-color: var(--viewport-bkgrndColor);
         max-width: 400px;
+
+        * {
+            box-sizing: border-box;
+        }
 
         ul {
             margin: 0 0 0 14px;
@@ -990,6 +995,7 @@
        * SpinBox
        ****************** */
     div.kijs-spinbox {
+        box-sizing: border-box;
         position: absolute;
         overflow: hidden;
         z-index: 50100;
@@ -1001,6 +1007,10 @@
 
         -webkit-user-select: none;  /* Safari */
         user-select: none;
+
+        * {
+            box-sizing: border-box;
+        }
 
         &.kijs-pos-top {
             margin-top: 1px;
@@ -1069,6 +1079,7 @@
     }
 
     div.kijs-splitter-overlay-horizontal {
+        box-sizing: border-box;
         position: absolute;
         width: 5px;
         height: 100%;
@@ -1084,6 +1095,7 @@
     }
 
     div.kijs-splitter-overlay-vertical {
+        box-sizing: border-box;
         position: absolute;
         height: 5px;
         width: 100%;
@@ -1462,6 +1474,7 @@
        * Window
        ****************** */
     div.kijs-window {
+        box-sizing: border-box;
         position: absolute;
         overflow: hidden;
         max-width: 100%;
@@ -1470,6 +1483,10 @@
         
         -webkit-user-select: none;  /* Safari */
         user-select: none;
+
+        * {
+            box-sizing: border-box;
+        }
 
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
@@ -1508,6 +1525,7 @@
        * Mask
        ****************** */
     div.kijs-mask {
+        box-sizing: border-box;
         position: absolute;
         display: flex;
         align-items: center;
@@ -1524,6 +1542,10 @@
 
         -webkit-user-select: none;  /* Safari  */
         user-select: none;
+
+        * {
+            box-sizing: border-box;
+        }
 
         > .kijs-icon {
             color: #F5F5F5;
@@ -1547,11 +1569,16 @@
        * ApertureMask
        ****************** */
     div.kijs-aperturemask {
+        box-sizing: border-box;
         position: absolute;
         overflow: hidden;
         z-index: 9000;
         background-color: rgba(0, 0, 0, 0.5);
         opacity: 0;
+
+        * {
+            box-sizing: border-box;
+        }
 
         &.top {
             top: 0;
@@ -1621,11 +1648,16 @@
        * CornerTipContainer
        ****************** */
     div.kijs-cornertipcontainer {
+        box-sizing: border-box;
         position: fixed;
         overflow: hidden;
         right: 0;
         bottom: 0;
         z-index: 70000;
+
+        * {
+            box-sizing: border-box;
+        }
 
         .kijs-panel {
             border-radius: 4px;
@@ -1685,6 +1717,7 @@
     }
 
     div.kijs-resizer-overlay {
+        box-sizing: border-box;
         position: absolute;
         overflow: hidden;
         background-color: rgba(255, 255, 255, 0.5);
@@ -2140,6 +2173,89 @@
 
 
     /* ******************
+       * IconList
+       ****************** */
+    div.kijs-iconlist {
+        border: 1px solid var(--field-borderColor);
+        background-color: var(--field-bkgrndColor);
+        cursor: pointer;
+
+        &.kijs-borderless {
+            border: none;
+        }
+
+        > .kijs-container-inner {
+            display: flex;
+            flex-wrap: wrap;
+
+            /* falls die IconList eine Fixe höhe hat: flexen */
+            &[style="height:*"] {
+                flex: 1 0 0;
+                display: flex;
+                flex-direction: column;
+
+                > .kijs-dataview-element {
+                    flex: 1 0 auto;
+                }
+            }
+
+            > .kijs-dataview-element {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 18px;
+                width: 18px;
+                margin: 2px;
+                border: 1px solid transparent;
+                outline: none;
+
+                > .kijs-container-inner {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 4px;
+
+                    > .kijs-icon {
+                        flex: none;
+                        margin: 0;
+                    }
+                }
+
+                &:focus,
+                &:hover {
+                    background-color: var(--item-focus-bkgrndColor);
+                    border-color: var(--item-focus-borderColor);
+                    color: var(--item-focus-fontColor);
+                }
+
+                &.kijs-selected {
+                    border-color: var(--item-selected-borderColor);
+
+                    &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                        background-color: var(--item-selected-bkgrndColor);
+                    }
+                }
+            }
+        }
+
+        &.kijs-disabled {
+            background-color: var(--field-disabled-bkgrndColor);
+
+            div.kijs-dataview-element {
+                background-color: transparent;
+
+                &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                    border-color: var(--item-selected-disabled-borderColor);
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+
+
+
+    /* ******************
        * ProgressBar
        ****************** */
     div.kijs-progressbar {
@@ -2353,7 +2469,7 @@
                     width: 22px;
                     height: 22px;
                     margin: 0;
-                    padding: 5px 5px 0 0;
+                    padding: 3px 4px 2px 1px;
                     border: 0;
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
@@ -2367,19 +2483,12 @@
                     }
 
                     &.kijs-head {
-                        padding: 5px 4px 0 0;
+                        padding: 3px 4px 2px 0;
                         color: var(--item-label-fontColor);
                         font-weight: bold;
                     }
                     &.kijs-outofmonth {
                         color: var(--item-label-fontColor);
-                    }
-                    &.kijs-today {
-                        color: var(--today-fontColor);
-
-                        &.kijs-range-start, &.kijs-range-end {
-                            color: var(--default-fontColor);
-                        }
                     }
                     &.kijs-weekend {
                         background-color: var(--viewport-bkgrndColor);
@@ -2389,27 +2498,28 @@
                         color: var(--item-label-fontColor);
                     }
                     &.kijs-value {
-                        padding: 4px 4px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
                         color: var(--item-selected-fontColor);
                         border: 1px solid var(--item-selected-borderColor);
+                        border-radius: 4px;
                     }
                     &.kijs-range {
-                        padding: 4px 5px 0 0;
                         background-color: var(--item-selected-bkgrndColor);
                         color: var(--item-selected-fontColor);
                         border-top: 1px solid var(--item-selected-borderColor);
                         border-bottom: 1px solid var(--item-selected-borderColor);
                     }
                     &.kijs-rangestart {
-                        padding: 4px 5px 0 0;
                         border-left: 1px solid var(--item-selected-borderColor);
+                        border-radius: 4px 0 0 4px;
                     }
                     &.kijs-rangeend {
-                        padding: 4px 4px 0 0;
                         border-right: 1px solid var(--item-selected-borderColor);
+                        border-radius: 0 4px 4px 0;
                     }
-
+                    &.kijs-today {
+                        color: var(--item-today-fontColor);
+                    }
                     /*&:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }

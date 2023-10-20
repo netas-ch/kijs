@@ -108,7 +108,11 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
                         allowMove: true,
                         allowCopy: false,
                         allowLink: false,
-                        disableMarkerAutoSize: false
+                        disableMarkerAutoSize: false,
+                        markerWidth: 100,
+                        markerHeight: 50,
+                        markerCls: 'myCssClass',
+                        markerHtml: '<b>Ich bin ein Marker</b>'
                     }
                 },
                 on: {
@@ -263,6 +267,26 @@ Boolscher Wert. Default=false
 Falls der Platzhalter für die Einfügeposition (DropMarker) nicht die gleiche Grösse, 
 wie das Quell-Element haben soll, kann dies hiermit ausgeschltet werden. Die Grösse 
 der DropMarkers muss dann mittels CSS definiert werden.  
+
+#### markerWidth
+Zahl. Default=null  
+Falls ein Wert angegeben wird, hat der Marker eine fixe Breite.  
+Damit kann die automatische Breite oder die Breite aus dem CSS übersteuert werden.  
+
+#### markerHeight
+Zahl. Default=null  
+Falls ein Wert angegeben wird, hat der Marker eine fixe Höhe.  
+Damit kann die automatische Höhe oder die Höhe aus dem CSS übersteuert werden.  
+
+#### markerCls
+String oder Array mit Strings. Default=null  
+Damit kann dem Marker eine oder mehrere zusätzliche CSS-Klasse zu ```kijs-dropmarker``` 
+zugewiesen werden.  
+
+#### markerHtml
+String. Default=null  
+Damit kann dem Marker ein HTMl-Inhalt zugewiesen werden.  
+
 
 ### Listeners (on)
 Es gibt zwei Events, die über Listeners abgefragt werden können:  

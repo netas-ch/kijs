@@ -49,6 +49,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            // keine
         });
         
         // Config anwenden

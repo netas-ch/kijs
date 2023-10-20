@@ -9,7 +9,6 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // __source {kijs.gui.Element} Element das aktuell gezogen wird
     // __target {kijs.gui.Element} Ziel-Element
     // __data   {Object} Objekt für die Zuweisung beliebiger Daten
-    // __dropMarkerCls {String} zusätzliche CSS-Klasse für den Drop Marker
     // __dropMarkerDom {kijs.gui.Dom} Marker, der die Einfügeposition visualisiert
 
 
@@ -28,14 +27,6 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         } else {
             throw new kijs.Error(`kijs.gui.DragDrop.data must be an object.`);
         }
-    }
-
-    static get dropMarkerCls() {
-        return this.__dropMarkerCls;
-    }
-
-    static set dropMarkerCls(val) {
-        this.__dropMarkerCls = val;
     }
 
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
@@ -82,9 +73,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
      * @param {String|Null|} [tagName=null]
      * @param {Number|Null} [width=null] Breite des Markers
      * @param {Number|Null} [height=null] Höhe des Markers
+     * @param {String|Array|Null} [markerCls=null]  zusätzliche CSS Klassen für Marker
+     * @param {String|Null|} [markerHtml=null]       innerHTML für Marker
      * @returns {undefined}
      */
-    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null, width=null, height=null) {
+    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null,
+        width=null, height=null, markerCls=null, markerHtml=null) {
         // evtl. nur ausblenden
         if (kijs.isEmpty(targetDom) || kijs.isEmpty(targetPos) || kijs.isEmpty(tagName)) {
             this.dropMarkerRemove();
@@ -95,7 +89,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         if (this.__dropMarkerDom && this.__dropMarkerDom.node) {
             const currentTagName = this.__dropMarkerDom.node.tagName.toLowerCase();
 
-            // falls das tagName noch stimmt, muss der node nicht neu erstellt werden
+            // falls der tagName noch stimmt, muss der node nicht neu erstellt werden
             if (currentTagName === tagName) {
                 reCreate = false;
             }
@@ -106,14 +100,22 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             this.dropMarkerRemove();
 
             this.__dropMarkerDom = new kijs.gui.Dom({
-                nodeTagName: tagName,
-                cls: 'kijs-dropmarker'
+                nodeTagName: tagName
             });
         }
 
-        // CSS-Klasse hinzufügen
-        if (this.dropMarkerCls) {
-            this.__dropMarkerDom.clsAdd(this.dropMarkerCls);
+        // optionale CSS-Klassen hinzufügen
+        this.__dropMarkerDom.clsRemoveAll();
+        this.__dropMarkerDom.clsAdd('kijs-dropmarker');
+        if (markerCls) {
+            this.__dropMarkerDom.clsAdd(markerCls);
+        }
+
+        // evtl. HTML-Inhalt einfügen
+        if (!kijs.isEmpty(markerHtml)) {
+            this.__dropMarkerDom.html = markerHtml;
+        } else {
+            this.__dropMarkerDom.html = '';
         }
 
         // Grösse anpassen

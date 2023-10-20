@@ -857,7 +857,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Bestehende Elemente löschen
         if (this.elements && removeElements) {
             this.removeAll({
-                preventDestruct: true
+                preventRender: true
             });
             this._currentEl = null;
         }
