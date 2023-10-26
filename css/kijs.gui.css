@@ -742,25 +742,25 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragover {
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-sourceDragOver {
     border-color: var(--accentColor3);
     border-width: 2px;
   }
-  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
   }
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 0 0 4px;
   }
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 4px 0 0;
   }
-  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 0 0 4px 4px;
   }
-  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 0 0 4px;
   }
   /* ******************
@@ -796,17 +796,6 @@
     border: 1px solid var(--icon-help-borderColor);
     background-color: var(--icon-help-bkgrndColor);
   }
-  /* ******************
-       * TODO: Drag'n'Drop marker ???
-       ****************** */
-  /*body > div.kijs-dragdrop-marker {
-        z-index: 20201;
-        position: absolute;
-        background-color: var(--dragover-ok-borderColor);
-
-        &.top, &.bottom { height: 2px }
-        &.left, &.right { width: 2px }
-    }*/
   /* ******************
        * SpinBox
        ****************** */
@@ -1215,13 +1204,13 @@
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-disabled {
     border: 2px solid var(--bar-disabled-bkgrndColor);
   }
-  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
@@ -1647,7 +1636,7 @@
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-dragover {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled {
@@ -1661,7 +1650,7 @@
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > div > .label {
     color: var(--item-label-disabled-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 1px solid var(--accentColor3);
     border-radius: 5px;
@@ -1723,6 +1712,9 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
     line-height: var(--default-lineHeight);
@@ -1743,7 +1735,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-dragover {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
@@ -1778,7 +1770,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f05d';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-listview > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 1px solid var(--accentColor3);
     border-radius: 5px;
@@ -2244,10 +2236,10 @@
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dragover {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-sourceDragOver {
     border: 2px solid var(--accentColor3);
   }
-  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dropmarker {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dropMarker {
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
   }

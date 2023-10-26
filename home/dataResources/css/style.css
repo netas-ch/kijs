@@ -45,10 +45,10 @@
     .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-dragging {
         opacity: 0.6
     }
-    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-dragover {
+    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-sourceDragOver {
         border: 2px solid var(--accentColor3) !important;
     }
-    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > .kijs-dropmarker {
+    .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > .kijs-dropMarker {
         flex: none;
         height: 31px;
         border: 2px solid var(--accentColor3);

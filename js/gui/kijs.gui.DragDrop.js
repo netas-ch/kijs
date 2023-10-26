@@ -10,7 +10,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // __target {kijs.gui.Element} Ziel-Element
     // __data   {Object} Objekt für die Zuweisung beliebiger Daten
     // __dropMarkerDom {kijs.gui.Dom} Marker, der die Einfügeposition visualisiert
-
+    // __targetDragOverDom {kijs.gui.Dom} Dom, das aktuellen targets, dass die CSS-Klasse kijs-targetDragOver hat
 
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
@@ -28,7 +28,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             throw new kijs.Error(`kijs.gui.DragDrop.data must be an object.`);
         }
     }
-
+    
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
     static get source() {
         if (!kijs.isDefined(this.__source)) {
@@ -50,6 +50,26 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         this.__target = val;
     }
 
+    // CSS-Klasse kijs-targetDragOver einem DOM zuweisen/entfernen
+    static get targetDragOverDom() {
+        if (!kijs.isDefined(this.__targetDragOverDom)) {
+            this.__targetDragOverDom = null;
+        }
+        return this.__targetDragOverDom;
+    }
+    static set targetDragOverDom(val) {
+        if (kijs.isDefined(this.__targetDragOverDom) && !kijs.isEmpty(this.__targetDragOverDom)) {
+            this.__targetDragOverDom.clsRemove('kijs-targetDragOver');
+        }
+        
+        if (!kijs.isEmpty(val)) {
+            this.__targetDragOverDom = val;
+            this.__targetDragOverDom.clsAdd('kijs-targetDragOver');
+        } else {
+            this.__targetDragOverDom = null;
+        }
+    }
+    
 
 
     // --------------------------------------------------------------
@@ -106,7 +126,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
 
         // optionale CSS-Klassen hinzufügen
         this.__dropMarkerDom.clsRemoveAll();
-        this.__dropMarkerDom.clsAdd('kijs-dropmarker');
+        this.__dropMarkerDom.clsAdd('kijs-dropMarker');
         if (markerCls) {
             this.__dropMarkerDom.clsAdd(markerCls);
         }

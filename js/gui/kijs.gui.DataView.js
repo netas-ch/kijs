@@ -25,6 +25,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
         this._ddName = kijs.uniqId('dataview.element');
         this._ddTarget = null;
+        this._elementDdSourceConfig = null;
         
         this._rpcSaveFn = null;         // Name der remoteFn. Bsp: 'dataview.save'
         this._rpcSaveArgs = {};         // Standard RPC-Argumente fürs Speichern
@@ -67,6 +68,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             ddName: true,
             ddPosBeforeFactor: true,
             ddPosAfterFactor: true,
+            elementDdSourceConfig: true,
             sortable: { prio: 90, target: 'sortable' },
             ddTarget: { prio: 100, target: 'ddTarget' }
         });
@@ -223,6 +225,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
     
+    get elementDdSourceConfig() {
+        return this._elementDdSourceConfig;
+    }
+    set elementDdSourceConfig(val) {
+        this._elementDdSourceConfig = val;
+    }
     
     get filters() { return this._filters; }
     set filters(val) {
@@ -876,7 +884,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             newEl.parent = this;
             
             // Drag&Drop
-            if (this._sortable) {
+            if (this._elementDdSourceConfig) {
+                newEl.ddSource = this._elementDdSourceConfig;
+            } else if (this._sortable) {
                 newEl.ddSource = { 
                     allowMove: true,
                     allowCopy: true,
@@ -904,42 +914,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             // focus-Event
             newEl.on('focus', function(e) {
                 return this.raiseEvent('elementFocus', e);
-            }, this);
-            
-            // dragstart-Event
-            // DEPRECATED
-            newEl.on('dragStart', function(e) {
-                return this.raiseEvent('elementDragStart', e);
-            }, this);
-            
-            // dragover-Event
-            // DEPRECATED
-            newEl.on('dragOver', function(e) {
-                return this.raiseEvent('elementDragOver', e);
-            }, this);
-            
-            // drag-Event
-            // DEPRECATED
-            newEl.on('drag', function(e) {
-                return this.raiseEvent('elementDrag', e);
-            }, this);
-            
-            // dragleave-Event
-            // DEPRECATED
-            newEl.on('dragLeave', function(e) {
-                return this.raiseEvent('elementDragLeave', e);
-            }, this);
-            
-            // dragend-Event
-            // DEPRECATED
-            newEl.on('dragEnd', function(e) {
-                return this.raiseEvent('elementDragEnd', e);
-            }, this);
-            
-            // drop-Event
-            // DEPRECATED
-            newEl.on('drop', function(e) {
-                return this.raiseEvent('elementDrop', e);
             }, this);
             
             // Evtl. fokus setzen
@@ -1073,6 +1047,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
             
             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+            
+            // Eventuelle Browser eigene Funktionen ausschalten
+            e.nodeEvent.preventDefault();
+            
+            // keine weiteren bubbeling-Listeners mehr ausführen
+            e.nodeEvent.stopPropagation();
         }
     }
     
@@ -1182,9 +1162,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.raiseEvent('destruct');
         }
         
+        // Elemente/DOM-Objekte entladen
+        if (this._ddTarget) {
+            this._ddTarget.destruct();
+        }
+        
         // Variablen (Objekte/Arrays) leeren
         this._currentEl = null;
         this._lastSelectedEl = null;
+        this._ddTarget = null;
+        this._elementDdSourceConfig = null;
         this._data = null;
         
         // Basisklasse entladen

@@ -777,35 +777,35 @@
                 &.kijs-dragging {
                     opacity: 0.6
                 }
-                &.kijs-dragover {
+                &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
             }
         }
         /* Drop Marker */
-        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
             flex: none;
             border: 2px solid var(--accentColor3);
             border-radius: 5px;
         }
         &.kijs-pos-top {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 0 0 4px;
             }
         }
         &.kijs-pos-right {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 4px 0 0;
             }
         }
         &.kijs-pos-bottom {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 0 0 4px 4px;
             }
         }
         &.kijs-pos-left {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 0 0 4px;
             }
         }
@@ -849,20 +849,6 @@
             background-color: var(--icon-help-bkgrndColor);
         }
     }
-
-
-
-    /* ******************
-       * TODO: Drag'n'Drop marker ???
-       ****************** */
-    /*body > div.kijs-dragdrop-marker {
-        z-index: 20201;
-        position: absolute;
-        background-color: var(--dragover-ok-borderColor);
-
-        &.top, &.bottom { height: 2px }
-        &.left, &.right { width: 2px }
-    }*/
 
 
 
@@ -1321,7 +1307,7 @@
                             opacity: 0.6
                         }
                         
-                        &.kijs-dragover {
+                        &.kijs-sourceDragOver {
                             border-color: var(--accentColor3);
                         }
                         
@@ -1331,7 +1317,7 @@
                     }
                     
                     /* Drop Marker */
-                    > .kijs-dropmarker {
+                    > .kijs-dropMarker {
                         flex: none;
                         border: 2px solid var(--accentColor3);
                         border-radius: 5px;
@@ -1859,7 +1845,7 @@
                     opacity: 0.6
                 }
 
-                &.kijs-dragover {
+                &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                 }
                 
@@ -1879,7 +1865,7 @@
             }
             
             /* Drop Marker */
-            > .kijs-dropmarker {
+            > .kijs-dropMarker {
                 flex: none;
                 border: 1px solid var(--accentColor3);
                 border-radius: 5px;
@@ -1951,6 +1937,9 @@
                     > .kijs-caption {
                         flex: 1;
                         margin: 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
                         font-family: var(--default-fontFamily);
                         font-size: var(--default-fontSize);
                         line-height: var(--default-lineHeight);
@@ -1977,7 +1966,7 @@
                     opacity: 0.6
                 }
 
-                &.kijs-dragover {
+                &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                 }
                 
@@ -2024,7 +2013,7 @@
             }
             
             /* Drop Marker */
-            > .kijs-dropmarker {
+            > .kijs-dropMarker {
                 flex: none;
                 border: 1px solid var(--accentColor3);
                 border-radius: 5px;
@@ -2566,12 +2555,12 @@
                         opacity: 0.6
                     }
                     
-                    &.kijs-dragover {
+                    &.kijs-sourceDragOver {
                         border: 2px solid var(--accentColor3);
                     }
                     
                     /* Drop Marker */
-                    &.kijs-dropmarker {
+                    &.kijs-dropMarker {
                         border: 2px solid var(--accentColor3);
                         border-radius: 5px;
                     }

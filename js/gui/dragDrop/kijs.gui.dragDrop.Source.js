@@ -97,9 +97,7 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     }
 
     // Property-Name des kijs.gui.Dom, der draggable ist
-    get ownerDomProperty() {
-        return this._ownerDomProperty;
-    }
+    get ownerDomProperty() { return this._ownerDomProperty; }
     set ownerDomProperty(val) {
         this._ownerDomProperty = val;
 
@@ -112,9 +110,7 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     }
 
     // Eigentümer kijs.gui.Element dieser Instanz
-    get ownerEl() {
-        return this._ownerEl;
-    }
+    get ownerEl() { return this._ownerEl; }
     set ownerEl(val) {
         this._ownerEl = val;
     }
@@ -143,11 +139,25 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
     // Drag&Drop ist abgeschlossen (durch drop oder Abbruch)
     dragEnd() {
+        // dropMarker entfernen
         kijs.gui.DragDrop.dropMarkerRemove();
+        
+        // CSS-Klassen bei Source entfernen und Source einblenden, falls ausgeblendet
         if (this._ownerEl && this._ownerEl.dom) {
             this._ownerEl.dom.clsRemove('kijs-dragging');
-            this._ownerEl.dom.clsRemove('kijs-dragover');
+            this._ownerEl.dom.clsRemove('kijs-sourceDragOver');
+            this._ownerEl.style.display = this._display;
         }
+        
+        // CSS-Klasse kijs-targetDragOver entfernen
+        kijs.gui.DragDrop.targetDragOverDom = null;
+        
+        // dragEnd-Event bei source auslösen
+        this.raiseEvent('dragEnd', { 
+            source: this
+        });
+        
+        // Aufräumen
         this._width = null;
         this._height = null;
         this._display = null;
@@ -184,6 +194,14 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
         e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
                 this._allowMove, this._allowCopy, this._allowLink);
+        
+        // dragStart-Event bei source auslösen
+        this.raiseEvent('dragStart', { 
+            source: this
+        });
+        
+        // keine weiteren bubbeling-Listeners mehr ausführen
+        e.nodeEvent.stopPropagation();
     }
 
 
