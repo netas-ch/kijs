@@ -284,7 +284,7 @@
   button.kijs-button.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   button.kijs-button.kijs-disabled > .kijs-caption,
   button.kijs-button.kijs-disabled > .kijs-icon {
@@ -407,7 +407,7 @@
   div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-scrollable > .kijs-btn-scrollup.kijs-disabled > .kijs-icon,
   div.kijs-container-scrollable > .kijs-btn-scrolldown.kijs-disabled > .kijs-icon,
@@ -553,7 +553,7 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
@@ -598,7 +598,7 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollleft.kijs-disabled,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
     background-color: var(--tabBar-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollup.kijs-disabled > .kijs-icon,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrolldown.kijs-disabled > .kijs-icon,
@@ -966,7 +966,7 @@
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled {
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
@@ -1079,7 +1079,7 @@
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-panel.kijs-maximize {
     position: fixed;
@@ -1252,7 +1252,7 @@
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled > * {
     color: var(--button-disabled-fontColor);

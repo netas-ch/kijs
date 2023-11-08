@@ -313,8 +313,8 @@
             
         &:hover > .kijs-caption,
         &:focus > .kijs-caption {
-                color: var(--button-focus-fontColor);
-            }
+            color: var(--button-focus-fontColor);
+        }
         
         &.kijs-hidden {
             display: none;
@@ -327,7 +327,7 @@
         &.kijs-disabled {
             background-color: var(--button-bkgrndColor);
             border: 1px solid var(--button-borderColor);
-            cursor: auto;
+            cursor: default;
 
             > .kijs-caption,
             > .kijs-icon {
@@ -457,7 +457,7 @@
             &.kijs-disabled {
                 background-color: var(--button-bkgrndColor);
                 border: 1px solid var(--button-borderColor);
-                cursor: auto;
+                cursor: default;
 
                 > .kijs-icon {
                     color: var(--button-disabled-fontColor);
@@ -599,7 +599,7 @@
                     &.kijs-disabled {
                         background-color: var(--button-bkgrndColor);
                         border: 1px solid var(--button-borderColor);
-                        cursor: auto;
+                        cursor: default;
 
                         > .kijs-caption,
                         > .kijs-icon {
@@ -631,7 +631,7 @@
 
                 &.kijs-disabled {
                     background-color: var(--tabBar-bkgrndColor);
-                    cursor: auto;
+                    cursor: default;
 
                     > .kijs-icon {
                         color: var(--button-disabled-fontColor);
@@ -1038,7 +1038,7 @@
                     }
 
                     &.kijs-disabled {
-                        cursor: auto;
+                        cursor: default;
 
                         > .kijs-caption,
                         > .kijs-icon{
@@ -1167,7 +1167,7 @@
                     &.kijs-disabled {
                         border: 1px solid var(--footer-button-disabled-borderColor);
                         background-color: var(--footer-button-disabled-bkgrndColor);
-                        cursor: auto;
+                        cursor: default;
                     }
                 }
             }
@@ -1371,7 +1371,7 @@
                 &.kijs-disabled {
                     border: 1px solid var(--footer-button-disabled-borderColor);
                     background-color: var(--footer-button-disabled-bkgrndColor);
-                    cursor: auto;
+                    cursor: default;
                     > * {
                         color: var(--button-disabled-fontColor);
                     }
@@ -2487,7 +2487,7 @@
                     text-align: center;
                     font-family: 'Font Awesome 6 Free';
                     font-size: 14px;
-                padding: 2px 0 0 0;
+                    padding: 2px 0 0 0;
                 }
                 &.kijs-grid-cell-checkbox:hover {
                     color: var(--field-focus-borderColor);
@@ -2619,7 +2619,7 @@
                         margin-right: 20px;
                     }
                 }
-                    
+                
                 > table > tr.kijs-grid-filter {
                     background-color: var(--field-bkgrndColor);
                     transition: max-height 0.5s;
@@ -2688,7 +2688,7 @@
                                     transition: color 0.5s;
                                     color: var(--grid-border-color);
                                     font-size: 12px;
-                                    margin: -2px 0 0 0;
+                                margin: -2px 0 0 0;
 
                                 }
                             }
@@ -2714,7 +2714,7 @@
                         overflow: hidden;
                     }
                 }
-            }
+                }
             
             > .kijs-headercontainer-right {
                 overflow: hidden;
