@@ -2462,70 +2462,72 @@
                 &.kijs-selected {
                     background-color: var(--item-selected-bkgrndColor);
                 }
-            }
                 
-            > tr > td {
-                flex: none;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                height: 19px;
-                padding: 3px 6px;
-                color: var(--default-fontColor);
-                font-family: var(--default-fontFamily);
-                font-size: var(--default-fontSize);
+                > td {
+                    flex: none;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    height: 25px;
+                    padding: 4px 6px;
+                    color: var(--default-fontColor);
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--default-fontSize);
 
-                &.kijs-hidden {
-                    display: none;
-                }
+                    &.kijs-hidden {
+                        display: none;
+                    }
 
-                &.kijs-grid-cell-number {
-                    text-align: right;
-                }
+                    &.kijs-grid-cell-number {
+                        text-align: right;
+                    }
 
-                &.kijs-grid-cell-checkbox {
-                    text-align: center;
-                    font-family: 'Font Awesome 6 Free';
-                    font-size: 14px;
-                    padding: 2px 0 0 0;
-                }
-                &.kijs-grid-cell-checkbox:hover {
-                    color: var(--field-focus-borderColor);
-                }
-                &.kijs-grid-cell-checkbox.kijs-disabled {
-                    color: var(--field-disabled-fontColor);
-                }
+                    &.kijs-grid-cell-checkbox {
+                        text-align: center;
+                        font-family: 'Font Awesome 6 Free';
+                        font-size: 14px;
+                        padding: 6px 0 0 0;
+                    }
+                    &.kijs-grid-cell-checkbox:hover {
+                        color: var(--field-focus-borderColor);
+                    }
+                    &.kijs-grid-cell-checkbox.kijs-disabled {
+                        color: var(--field-disabled-fontColor);
+                    }
 
-                &.kijs-grid-cell-icon {
-                    text-align: center;
-                    font-family: 'Font Awesome 6 Free';
-                    font-weight: 900;
-                    font-size: 14px;
-                    padding: 2px 0 0 0;
-                }
+                    &.kijs-grid-cell-icon {
+                        text-align: center;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        font-size: 14px;
+                        padding: 6px 0 0 0;
+                    }
 
-                /* Daten verändert: rotes Dreieck oben links */
-                &.kijs-grid-cell-dirty {
-                    background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
-                    background-repeat: no-repeat;
-                    background-position: top left;
-                }
+                    /* Daten verändert: rotes Dreieck oben links */
+                    &.kijs-grid-cell-dirty {
+                        background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
+                        background-repeat: no-repeat;
+                        background-position: top left;
+                    }
 
-                /* Textfelder im Grid */
-                &.kijs-celledit {
-                    padding: 0;
+                    /* Textfelder im Grid */
+                    &.kijs-celledit {
+                        padding: 0;
 
-                    > div.kijs-field {
-                        height: 100%;
-                        width: 100%;
-
-                        div.kijs-inputwrapper, span.kijs-icon-spindown {
+                        > div.kijs-field {
                             height: 100%;
+                            width: 100%;
+
+                            div.kijs-inputwrapper, span.kijs-icon-spindown {
+                                height: 100%;
+                            }
                         }
                     }
+
                 }
 
             }
+
         }
 
 
@@ -2545,176 +2547,190 @@
                 overflow: hidden;
                 background-color: var(--grid-header-bkgrndColor);
                 
-                > table > tr.kijs-grid-header > td {
-                    display: flex;
-                    flex-direction: row;
-                    padding: 2px 0 0 6px;
+                > table {
+                    
+                    /* Header */
+                    > tr.kijs-grid-header {
+                        > td {
+                            display: flex;
+                            flex-direction: row;
+                            padding: 4px 0 0 6px;
 
 
-                    &.kijs-dragging {
-                        opacity: 0.6
-                    }
+                            &.kijs-dragging {
+                                opacity: 0.6
+                            }
 
-                    &.kijs-sourceDragOver {
-                        border: 2px solid var(--accentColor3);
-                    }
+                            &.kijs-sourceDragOver {
+                                border: 2px solid var(--accentColor3);
+                            }
 
-                    /* Drop Marker */
-                    &.kijs-dropMarker {
-                        border: 2px solid var(--accentColor3);
-                        border-radius: 5px;
-                    }
+                            /* Drop Marker */
+                            &.kijs-dropMarker {
+                                border: 2px solid var(--accentColor3);
+                                border-radius: 5px;
+                            }
 
-                    &.kijs-hidden {
-                        display: none;
-                    }
+                            &.kijs-hidden {
+                                display: none;
+                            }
 
-                    > .kijs-caption {
-                        flex: 1;
+                            > .kijs-caption {
+                                flex: 1;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
 
-                        > span.kijs-sort {
-                            color: #555;
-                            font-family: 'Font Awesome 6 Free';
-                            font-weight: 900;
-                            padding-left: 5px;
+                                > span.kijs-sort {
+                                    color: #555;
+                                    font-family: 'Font Awesome 6 Free';
+                                    vertical-align: middle;
+                                    font-weight: 900;
+                                    padding-left: 5px;
+                                }
+                            }
+
+                            > span.kijs-tooltip-icon {
+                                font-size: 11px;
+                                margin: 2px 4px 0 0;
+                            }
+
+                            > .kijs-button {
+                                flex: none;
+                                width: 0px;
+                                height: 17px;
+                                margin: 0;
+                                border: 0;
+                                padding: 0;
+                                background-color: transparent;
+                                opacity: 0;
+                                transition: opacity 0.5s, width 0.5s ease-in;
+
+                                > .kijs-icon2 {
+                                    margin: 0;
+                                }
+                            }
+                            &:hover > .kijs-button {
+                                width: 15px;
+                                opacity: 0.7;
+                                transition: opacity 0.5s;
+                            }
+                            > .kijs-button:hover {
+                                opacity: 1;
+                            }
+
+                            .kijs-splitter {
+                                flex: none;
+                                width: 3px;
+                                border-right: 1px solid var(--splitter-overlay-bkgrndColor);
+                                cursor: col-resize;
+                                margin: 0 0 0 2px;
+                            }
+
+                            /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
+                            &:last-child {
+                                margin-right: 20px;
+                            }
                         }
                     }
+                    
+                    /* Filterzeile */
+                    > tr.kijs-grid-filter {
+                        background-color: var(--field-bkgrndColor);
+                        transition: max-height 0.5s;
+                        max-height: 25px;
 
-                    > span.kijs-tooltip-icon {
-                        font-size: 11px;
-                        margin: 1px 4px 0 0;
-                    }
+                        /*border-bottom-width: 2px;*/
 
-                    > .kijs-button {
-                        flex: none;
-                        width: 0px;
-                        height: 17px;
-                        margin: 0;
-                        border: 0;
-                        padding: 0;
-                        background-color: transparent;
-                        opacity: 0;
-                        transition: opacity 0.5s, width 0.5s ease-in;
+                        > td {
+                            height: 25px;
+                            display: flex;
+                            flex-direction: row;
+                            padding: 1px 0 1px 1px;
 
-                        > .kijs-icon2 {
-                            margin: 0;
+                            &.kijs-hidden {
+                                display: none;
+                            }
+
+                            div:first-child {
+                                flex: 1;
+                            }
+
+                            div.kijs-field-text {
+                                margin-left: 4px;
+                                height: 22px;
+
+                                input {
+                                    flex: 1;
+                                    border:  0; /* 1px solid var(--grid-border-color);*/
+                                    outline: none;
+                                    padding: 0;
+                                    font-size: 11px;
+                                    line-height: 11px;
+                                    background-color: transparent;
+
+                                    &::placeholder {
+                                        transition: opacity 0.5s;
+                                        opacity: 0;
+                                        color: var(--default-fontColor);
+                                    }
+                                }
+                            }
+
+                            div.kijs-icon {
+                                font-family: 'Font Awesome 6 Free';
+                                text-align: center;
+                                font-size: 14px;
+                                padding: 4px 0 4px 18px;
+                            }
+
+
+                            .kijs-grid-filter-reset {
+                                width: 15px;
+                                margin: 2px 0;
+                                padding: 0;
+                                border-right: 1px solid var(--splitter-overlay-bkgrndColor);
+
+                                .kijs-button {
+                                    flex: none;
+                                    width: 15px;
+                                    margin: 0;
+                                    padding: 0;
+                                    background-color: transparent;
+                                    border: 0;
+
+                                    .kijs-icon {
+                                        transition: color 0.5s;
+                                        color: var(--grid-border-color);
+                                        font-size: 12px;
+                                        margin: -4px 0 0 0;
+
+                                    }
+                                }
+                            }
+
+                            &:hover {
+                                .kijs-button .kijs-icon {
+                                    color: var(--button-icon-fontColor);
+                                }
+
+                                div.kijs-field-text input::placeholder {
+                                    opacity: 0.5;
+                                }
+                            }
                         }
-                    }
-                    &:hover .kijs-button {
-                        width: 15px;
-                        opacity: 1;
-                        transition: opacity 0.5s;
-                    }
-
-                    .kijs-splitter {
-                        flex: none;
-                        width: 3px;
-                        border-right: 1px solid var(--splitter-overlay-bkgrndColor);
-                        cursor: col-resize;
-                        margin: 0 0 0 2px;
-                    }
-
-                    /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
-                    &:last-child {
-                        margin-right: 20px;
-                    }
-                }
-                
-                > table > tr.kijs-grid-filter {
-                    background-color: var(--field-bkgrndColor);
-                    transition: max-height 0.5s;
-                    max-height: 25px;
-
-                    /*border-bottom-width: 2px;*/
-
-                    > td {
-                        height: 25px;
-                        display: flex;
-                        flex-direction: row;
-                        padding: 1px 0 1px 1px;
 
                         &.kijs-hidden {
-                            display: none;
-                        }
-
-                        div:first-child {
-                            flex: 1;
-                        }
-
-                        div.kijs-field-text {
-                            margin-left: 4px;
-                            height: 22px;
-
-                            input {
-                                flex: 1;
-                                border:  0; /* 1px solid var(--grid-border-color);*/
-                                outline: none;
-                                padding: 0;
-                                font-size: 11px;
-                                line-height: 11px;
-                                background-color: transparent;
-
-                                &::placeholder {
-                                    transition: opacity 0.5s;
-                                    opacity: 0;
-                                    color: var(--default-fontColor);
-                                }
-                            }
-                        }
-
-                        div.kijs-icon {
-                            font-family: 'Font Awesome 6 Free';
-                            text-align: center;
-                            font-size: 14px;
-                            padding: 4px 0 4px 18px;
-                        }
-
-
-                        .kijs-grid-filter-reset {
-                            width: 20px;
-                            margin: 2px 0;
-                            padding: 0 4px;
-                            border-right: 1px solid var(--splitter-overlay-bkgrndColor);
-
-                            .kijs-button {
-                                flex: none;
-                                width: 15px;
-                                margin: 0;
-                                padding: 0;
-                                background-color: transparent;
-                                border: 0;
-
-                                .kijs-icon {
-                                    transition: color 0.5s;
-                                    color: var(--grid-border-color);
-                                    font-size: 12px;
-                                margin: -2px 0 0 0;
-
-                                }
-                            }
-                        }
-
-                        &:hover {
-                            .kijs-button .kijs-icon {
-                                color: var(--button-icon-fontColor);
-                            }
-
-                            div.kijs-field-text input::placeholder {
-                                opacity: 0.5;
-                            }
+                            /*display: none;*/
+                            max-height: 0;
+                            margin: 0;
+                            padding: 0;
+                            border: 0;
+                            overflow: hidden;
                         }
                     }
-
-                    &.kijs-hidden {
-                        /*display: none;*/
-                        max-height: 0;
-                        margin: 0;
-                        padding: 0;
-                        border: 0;
-                        overflow: hidden;
-                    }
                 }
-                }
+            }
             
             > .kijs-headercontainer-right {
                 overflow: hidden;
