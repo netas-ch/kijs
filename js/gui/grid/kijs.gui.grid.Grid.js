@@ -1131,9 +1131,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._isLoading = true;
 
                 let args = {};
-                args.sort = this._remoteSort;
-                args.getMetaData = this._getRemoteMetaData;
-                args.filter = this._filter.getFilters();
+                args.config = {};
+                args.config.sort = this._remoteSort;
+                args.config.getMetaData = this._getRemoteMetaData;
+                args.config.filter = this._filter.getFilters();
 
                 // alle Daten neu laden
                 if (resetData) {
@@ -1150,8 +1151,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     this._remoteDataStartIndex = 0;
                 }
 
-                args.start = this._remoteDataStartIndex;
-                args.limit = this._remoteDataStep;
+                args.config.start = this._remoteDataStartIndex;
+                args.config.limit = this._remoteDataStep;
 
                 if (kijs.isObject(this._rpcLoadArgs)) {
                     args = Object.assign(args, this._rpcLoadArgs);

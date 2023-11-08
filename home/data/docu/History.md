@@ -7,8 +7,9 @@ Version 2.3.2
 ### Anpassungen an Drag&Drop
  - CSS Klasse ```kijs-dragover``` umbenannt zu ```kijs-sourceDragOver```  
  - CSS Klasse ```kijs-dropmarker``` umbenannt zu ```kijs-dropMarker```  
-   **UPDATE TIPP:**: CSS nach ```kijs-dragover``` und ```kijs-dropmarker``` 
+   **UPDATE TIPP:** CSS nach ```kijs-dragover``` und ```kijs-dropmarker``` 
    durchsuchen und umbenennen.
+
  - Verschiedene zusätzliche Funktionen. Siehe dazu den Leitfaden ```Drag and Drop```  
 
 ### Anpassungen CSS
@@ -16,6 +17,24 @@ Version 2.3.2
  - CSS von kijs.gui.Button angepasst
  - CSS von kijs.gui.field.Range angepasst
  - weitere kleinere CSS anpassungen
+ - Retro Theme überarbeitet
+
+### kijs.gui.grid.Grid
+ - Argumente des RPC load angepasst:  
+   Früher:
+    - sort
+    - getMetaData
+    - filter
+    - start
+    - limit
+    - ... evtl. weitere eigene Argumente
+
+   Neu:
+    - config ```{ sort:... , getMetaData:..., filter:..., start:..., limit:... }```
+    - ... evtl. weitere eigene Argumente
+
+   **UPDATE TIPP:** In allen Facaden-Funktionen für grid.load die Argumente 
+   entsprechend  anpassen.  
 
 
 

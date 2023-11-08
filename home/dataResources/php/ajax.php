@@ -516,12 +516,15 @@ foreach ($requests as $request) {
             
         case 'grid.load':
             try {
-                $start = (int)$request->requestData->start;
-                $limit = (int)$request->requestData->limit;
+                $config = $request->requestData->config ?? new stdClass();
+            
+            
+                $start = (int)$config->start;
+                $limit = (int)$config->limit;
                 $vornamen = file('../testData/vornamen.txt');
 
                 // Spalten zurückgeben (wenn verlangt)
-                if ($request->requestData->getMetaData === true) {
+                if ($config->getMetaData === true) {
                     $response->responseData->columns = array();
 
                     $col = new stdClass();
