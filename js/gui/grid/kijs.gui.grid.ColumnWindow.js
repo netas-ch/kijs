@@ -17,7 +17,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            caption: 'Spalten',
+            caption: kijs.getText('Spalten'),
             iconMap: 'kijs.iconMap.Fa.table-columns',
             closable: true,
             maximizable: false,
@@ -33,10 +33,19 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             footerElements:[
                 {
                     xtype: 'kijs.gui.Button',
-                    caption: 'OK',
+                    caption: kijs.getText('OK'),
+                    style: { flex: 1 },
                     isDefault: true,
                     on: {
                         click: this.#onOkClick,
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: kijs.getText('Abbrechen'),
+                    isDefault: false,
+                    on: {
+                        click: this.#onCancelClick,
                         context: this
                     }
                 }
@@ -149,7 +158,12 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         // Fenster schliessen
         this.destruct();
     }
-
+    
+    #onCancelClick(e) {
+        // Fenster schliessen
+        this.destruct();
+    }
+    
 
 
     // --------------------------------------------------------------
