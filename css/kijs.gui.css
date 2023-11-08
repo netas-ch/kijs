@@ -275,6 +275,9 @@
   button.kijs-button:focus > .kijs-caption {
     color: var(--button-focus-fontColor);
   }
+  button.kijs-button:active {
+    background-color: var(--button-active-bkgrndColor);
+  }
   button.kijs-button.kijs-hidden {
     display: none;
   }

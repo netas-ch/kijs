@@ -309,13 +309,16 @@
         &:hover, &:focus {
             background-color: var(--button-focus-bkgrndColor);
             border: 1px solid var(--button-focus-borderColor);
-        }
             
-        &:hover > .kijs-caption,
-        &:focus > .kijs-caption {
-            color: var(--button-focus-fontColor);
+            > .kijs-caption {
+                color: var(--button-focus-fontColor);
+            }
         }
         
+        &:active {
+            background-color: var(--button-active-bkgrndColor);
+        }
+
         &.kijs-hidden {
             display: none;
         }
