@@ -1047,12 +1047,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
             
             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
-            
-            // Eventuelle Browser eigene Funktionen ausschalten
-            e.nodeEvent.preventDefault();
-            
-            // keine weiteren bubbeling-Listeners mehr ausführen
-            e.nodeEvent.stopPropagation();
         }
     }
     
