@@ -137,7 +137,7 @@ kijs.Rpc = class kijs_Rpc {
                         case 1: // queue
                             this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
                             this._receive({
-                                response: [ { tid: this._queue[i].tid } ],
+                                response: [ { tid: this._queue[i].tid, responseData: {} } ],
                                 request: { postData:[this._queue[i]] }
                             });
                             break;

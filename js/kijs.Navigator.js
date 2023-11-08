@@ -275,7 +275,7 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Öffnet einen mailto oder tel Link, das dass kein neues Fenster geöffnet wird 
+     * Öffnet einen mailto oder tel Link, so dass kein neues Fenster geöffnet wird
      * und auch das beforeunload Event nicht ausgelöst wird.
      * @param {String} href
      * @returns {undefined}
