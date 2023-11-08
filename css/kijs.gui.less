@@ -310,12 +310,12 @@
             background-color: var(--button-focus-bkgrndColor);
             border: 1px solid var(--button-focus-borderColor);
         }
-
+            
         &:hover > .kijs-caption,
         &:focus > .kijs-caption {
-            color: var(--button-focus-fontColor);
-        }
-
+                color: var(--button-focus-fontColor);
+            }
+        
         &.kijs-hidden {
             display: none;
         }
@@ -2463,7 +2463,7 @@
                     background-color: var(--item-selected-bkgrndColor);
                 }
             }
-
+                
             > tr > td {
                 flex: none;
                 overflow: hidden;
@@ -2487,7 +2487,7 @@
                     text-align: center;
                     font-family: 'Font Awesome 6 Free';
                     font-size: 14px;
-                    padding: 2px 0 0 0;
+                padding: 2px 0 0 0;
                 }
                 &.kijs-grid-cell-checkbox:hover {
                     color: var(--field-focus-borderColor);
@@ -2544,21 +2544,21 @@
                 position: relative;
                 overflow: hidden;
                 background-color: var(--grid-header-bkgrndColor);
-
+                
                 > table > tr.kijs-grid-header > td {
                     display: flex;
                     flex-direction: row;
                     padding: 2px 0 0 6px;
-                    
-                    
+
+
                     &.kijs-dragging {
                         opacity: 0.6
                     }
-                    
+
                     &.kijs-sourceDragOver {
                         border: 2px solid var(--accentColor3);
                     }
-                    
+
                     /* Drop Marker */
                     &.kijs-dropMarker {
                         border: 2px solid var(--accentColor3);
@@ -2619,7 +2619,7 @@
                         margin-right: 20px;
                     }
                 }
-
+                    
                 > table > tr.kijs-grid-filter {
                     background-color: var(--field-bkgrndColor);
                     transition: max-height 0.5s;
@@ -3530,8 +3530,8 @@
         }
     }
 
-    div.kijs-spinbox > .kijs-container-inner {
-        > .kijs-listview.kijs-field-combo {
+    div.kijs-field-combo-spinbox > .kijs-container-inner {
+        > .kijs-listview {
             height: 100%;
             border: 0;
 

@@ -3062,23 +3062,23 @@
   div.kijs-field-combo.kijs-readonly > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview {
     height: 100%;
     border: 0;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo > .kijs-container-inner {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview > .kijs-container-inner {
     display: flex;
     flex-direction: column;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner {
     display: flex;
     flex-direction: row;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     padding-bottom: 3px;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo .kijs-placeholder {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-placeholder {
     border: 1px solid transparent;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);

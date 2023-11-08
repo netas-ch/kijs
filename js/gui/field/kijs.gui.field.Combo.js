@@ -41,12 +41,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._listViewEl = new kijs.gui.ListView({
             scrollableY: false,
-            cls: 'kijs-field-combo',
             autoLoad: false,
             focusable: false
         });
 
         this._spinBoxEl = new kijs.gui.SpinBox({
+            cls: 'kijs-field-combo-spinbox',
             scrollableY: 'auto',
             parent: this,
             target: this,
@@ -320,12 +320,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     load(args=null, forceLoad=false, query=null) {
         args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
-        
-        
+        args.value = this.value;
+        args.query = null;
         
         if (this._remoteSort) {
             args.query = kijs.toString(query);
-            args.value = this.value;
 
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
