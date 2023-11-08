@@ -17,7 +17,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.3.1'; }
+    static get version() { return '2.3.2'; }
     
     
     

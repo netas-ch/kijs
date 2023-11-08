@@ -116,7 +116,9 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     
     // Eigentümmer kijs.gui.Element dieser Instanz
     get ownerEl() { return this._ownerEl; }
-    set ownerEl(val) { this._ownerEl = val; }
+    set ownerEl(val) {
+        this._ownerEl = val;
+    }
     
     // Zielelement, auf das, das Element gedroppt wurde
     get targetEl() { return this._targetEl; }
@@ -319,8 +321,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     }
     
     // Marker positionieren, Source ein-/ausblenden, CSS aktualisieren
-    _updateGuiIndicator(e, targetEl, targetPos=null, operation='none', mapping=null) {
-        
+    _updateGuiIndicator(e, targetEl=null, targetPos=null, operation='none', mapping=null, targetOwnerEl=null) {
         if (kijs.isEmpty(operation)) {
             operation = 'none';
         }
@@ -328,70 +329,69 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         // icon bei Mauszeiger (move, copy, link, none) aktualisieren
         e.nodeEvent.dataTransfer.dropEffect = operation;
         
-        // muss die Einfügeposition aktualisiert werden?
-        let update = false;
-        
-        // kein Ziel => Bei Source-Position belassen
-        if (!targetEl) {
-            update = true;
-            
-        // hat sich die Position verändert?
-        } else if (targetEl !== this._targetEl || targetPos !== this._targetPos || operation !== this._operation) {
-            update = true;
+        // Bei move Source-Element ausblenden, sonst einblenden
+        if (targetPos && operation === 'move') {
+            kijs.gui.DragDrop.source.ownerEl.style.display = 'none';
+        } else {
+            kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
         }
-        
-        // Einfügeposition hat sich verändert
-        if (update) {
-            // Bei move Source-Element ausblenden, sonst einblenden
-            if (targetPos && operation === 'move') {
-                kijs.gui.DragDrop.source.ownerEl.style.display = 'none';
-            } else {
-                kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
-            }
 
-            // CSS kijs-dragover
-            if (targetPos) {
-                kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
-            } else {
-                kijs.gui.DragDrop.source.ownerEl.dom.clsAdd('kijs-dragover');
-            }
+        // CSS Klassen hinzufügen/entfernen
+        // bei gültigem Target
+        if (targetPos && targetOwnerEl && mapping) {
+            // kijs-sourceDragOver bei Source entfernen
+            kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-sourceDragOver');
 
-            // Grösse des Markers an Source-Element anpassen
-            let markerWidth = null;
-            let markerHeight = null;
-            if (mapping && targetPos && !mapping.disableMarkerAutoSize) {
-                markerWidth = kijs.gui.DragDrop.source.width;
-                markerHeight = kijs.gui.DragDrop.source.height;
-            }
-            // Fixe Höhe oder Breite haben Priorität
-            if (mapping && !kijs.isEmpty(mapping.markerWidth)) {
-                markerWidth = mapping.markerWidth;
-            }
-            if (mapping && !kijs.isEmpty(mapping.markerHeight)) {
-                markerHeight = mapping.markerHeight;
-            }
+            // kijs-targetDragOver beim aktuellen target hinzufügen
+            kijs.gui.DragDrop.targetDragOverDom = targetOwnerEl.dom;
 
-            // Zusätzliche CSS Klasse(n) zuweisen
-            let markerCls = null;
-            if (mapping && !kijs.isEmpty(mapping.markerCls)) {
-                markerCls = mapping.markerCls;
-            }
+        // kein gültiges Target
+        } else {
+            // kijs-sourceDragOver wieder bei Source hinzufügen
+            kijs.gui.DragDrop.source.ownerEl.dom.clsAdd('kijs-sourceDragOver');
 
-            // evtl. HTML in den Marker einfügen
-            let markerHtml = '';
-            if (mapping && !kijs.isEmpty(mapping.markerHtml)) {
-                markerHtml = mapping.markerHtml;
-            }
+            // kijs-targetDragOver beim letzten target wieder entfernen
+            kijs.gui.DragDrop.targetDragOverDom = null;
+        }
 
-            // Marker positionieren
-            if (targetEl) {
-                let domName = targetPos === 'child' ? this._ownerDomProperty : 'dom';
-                kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos,
-                        this._ddMarkerTagName, markerWidth, markerHeight, markerCls, markerHtml);
-            // oder ausblenden
-            } else {
-                kijs.gui.DragDrop.dropMarkerUpdate();
-            }
+        // Marker disabled?
+        let disableMarker = mapping && targetPos && mapping.disableMarker;
+
+        // Grösse des Markers an Source-Element anpassen
+        let markerWidth = null;
+        let markerHeight = null;
+        if (mapping && targetPos && !mapping.disableMarkerAutoSize) {
+            markerWidth = kijs.gui.DragDrop.source.width;
+            markerHeight = kijs.gui.DragDrop.source.height;
+        }
+        // Fixe Höhe oder Breite haben Priorität
+        if (mapping && !kijs.isEmpty(mapping.markerWidth)) {
+            markerWidth = mapping.markerWidth;
+        }
+        if (mapping && !kijs.isEmpty(mapping.markerHeight)) {
+            markerHeight = mapping.markerHeight;
+        }
+
+        // Zusätzliche CSS Klasse(n) zuweisen
+        let markerCls = null;
+        if (mapping && !kijs.isEmpty(mapping.markerCls)) {
+            markerCls = mapping.markerCls;
+        }
+
+        // evtl. HTML in den Marker einfügen
+        let markerHtml = '';
+        if (mapping && !kijs.isEmpty(mapping.markerHtml)) {
+            markerHtml = mapping.markerHtml;
+        }
+
+        // Marker positionieren
+        if (targetEl && !disableMarker) {
+            let domName = targetPos === 'child' ? this._ownerDomProperty : 'dom';
+            kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos,
+                    this._ddMarkerTagName, markerWidth, markerHeight, markerCls, markerHtml);
+        // oder ausblenden
+        } else {
+            kijs.gui.DragDrop.dropMarkerUpdate();
         }
         
         this._targetEl = targetEl;
@@ -423,6 +423,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     }
     
     #onDragOver(e) {
+        // Eventuelle Browser eigene Funktionen ausschalten
         e.nodeEvent.preventDefault();
         
         // Validieren
@@ -515,26 +516,34 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             }
         }
 
-        // Bei move: Wenn Source=Target: Nichts tun
+        // Target = Source (nur bei Move) ?
+        let isTargetEqualSource = false;
         if (targetPos && operation === 'move') {
             if (targetEl === kijs.gui.DragDrop.source.ownerEl) {
-                targetEl = null;
-                targetPos = null;
+                isTargetEqualSource = true;
             } else if (targetPos === 'before' && targetEl.previous === kijs.gui.DragDrop.source.ownerEl) {
-                targetEl = null;
-                targetPos = null;
+                isTargetEqualSource = true;
             } else if (targetPos === 'after' && targetEl.next === kijs.gui.DragDrop.source.ownerEl) {
-                targetEl = null;
-                targetPos = null;
+                isTargetEqualSource = true;
             }
         }
+
+        // Wenn Target = Source: Nichts tun
+        if (isTargetEqualSource) {
+            targetEl = null;
+            targetPos = null;
+        }
+
+        // wenn gültiges Target oder Target = Source: keine weiteren bubbeling-Listeners mehr ausführen
+        if (targetPos || isTargetEqualSource) {
+            e.nodeEvent.stopPropagation();
+        }
         
-        this._updateGuiIndicator(e, targetEl, targetPos, operation, mapping);
+        // GUI aktualisieren (CSS, DropMarker)
+        this._updateGuiIndicator(e, targetEl, targetPos, operation, mapping, this._ownerEl);
     }
     
     #onDrop(e) {
-        event.preventDefault();
-        
         // Validieren
         if (!kijs.gui.DragDrop.source) {
             return false;
@@ -545,12 +554,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (!mapping) {
             return false;
         }
-        
-        kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-dragover');
-        
-        // Source-Element wieder einblenden
-        kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
-        
+
         if (kijs.isEmpty(this._targetEl) || kijs.isEmpty(this._targetPos)) {
             return;
         }

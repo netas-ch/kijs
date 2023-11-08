@@ -1,8 +1,19 @@
-Version 2.3.1
-=============
 Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.  
 Es sind evtl. Anpassungen am Projekt nötig.  
 
+
+Version 2.3.2
+=============
+### Anpassungen an Drag&Drop
+ - CSS Klasse ```kijs-dragover``` umbenannt zu ```kijs-sourceDragOver```  
+ - CSS Klasse ```kijs-dropmarker``` umbenannt zu ```kijs-dropMarker```  
+   **UPDATE TIPP:**: CSS nach ```kijs-dragover``` und ```kijs-dropmarker``` 
+   durchsuchen und umbenennen.
+ - Verschiedene zusätzliche Funktionen. Siehe dazu den Leitfaden ```Drag and Drop```  
+
+
+Version 2.3.1
+=============
 ### Neue Benennungen von RPC-configs/getters/setters
  - ```facadeFnLoad``` heisst nun ```rpcLoadFn```  
  - ```facadeFnSave``` heisst nun ```rpcSaveFn```  

@@ -742,31 +742,32 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragover {
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-sourceDragOver {
     border-color: var(--accentColor3);
     border-width: 2px;
   }
-  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
   }
-  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 0 0 4px;
   }
-  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 4px 0 0;
   }
-  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 0 0 4px 4px;
   }
-  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
     margin: 4px 0 0 4px;
   }
   /* ******************
        * Tooltip
        ****************** */
   div.kijs-tooltip {
+    box-sizing: border-box;
     position: fixed;
     display: block;
     overflow: hidden;
@@ -779,6 +780,9 @@
     font-size: var(--default-fontSize);
     background-color: var(--viewport-bkgrndColor);
     max-width: 400px;
+  }
+  div.kijs-tooltip * {
+    box-sizing: border-box;
   }
   div.kijs-tooltip ul {
     margin: 0 0 0 14px;
@@ -793,20 +797,10 @@
     background-color: var(--icon-help-bkgrndColor);
   }
   /* ******************
-       * TODO: Drag'n'Drop marker ???
-       ****************** */
-  /*body > div.kijs-dragdrop-marker {
-        z-index: 20201;
-        position: absolute;
-        background-color: var(--dragover-ok-borderColor);
-
-        &.top, &.bottom { height: 2px }
-        &.left, &.right { width: 2px }
-    }*/
-  /* ******************
        * SpinBox
        ****************** */
   div.kijs-spinbox {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     z-index: 50100;
@@ -818,6 +812,9 @@
     -webkit-user-select: none;
     /* Safari */
     user-select: none;
+  }
+  div.kijs-spinbox * {
+    box-sizing: border-box;
   }
   div.kijs-spinbox.kijs-pos-top {
     margin-top: 1px;
@@ -870,6 +867,7 @@
     cursor: ew-resize;
   }
   div.kijs-splitter-overlay-horizontal {
+    box-sizing: border-box;
     position: absolute;
     width: 5px;
     height: 100%;
@@ -883,6 +881,7 @@
     cursor: ns-resize;
   }
   div.kijs-splitter-overlay-vertical {
+    box-sizing: border-box;
     position: absolute;
     height: 5px;
     width: 100%;
@@ -1205,13 +1204,13 @@
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-dragover {
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel.kijs-disabled {
     border: 2px solid var(--bar-disabled-bkgrndColor);
   }
-  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
@@ -1220,6 +1219,7 @@
        * Window
        ****************** */
   div.kijs-window {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     max-width: 100%;
@@ -1229,6 +1229,9 @@
     /* Safari */
     user-select: none;
     /* Buttons im Fuss eines Fensters sind blau */
+  }
+  div.kijs-window * {
+    box-sizing: border-box;
   }
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button {
     background-color: var(--window-footer-button-bkgrndColor);
@@ -1258,6 +1261,7 @@
        * Mask
        ****************** */
   div.kijs-mask {
+    box-sizing: border-box;
     position: absolute;
     display: flex;
     align-items: center;
@@ -1273,6 +1277,9 @@
     -webkit-user-select: none;
     /* Safari  */
     user-select: none;
+  }
+  div.kijs-mask * {
+    box-sizing: border-box;
   }
   div.kijs-mask > .kijs-icon {
     color: #F5F5F5;
@@ -1291,11 +1298,15 @@
        * ApertureMask
        ****************** */
   div.kijs-aperturemask {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     z-index: 9000;
     background-color: rgba(0, 0, 0, 0.5);
     opacity: 0;
+  }
+  div.kijs-aperturemask * {
+    box-sizing: border-box;
   }
   div.kijs-aperturemask.top {
     top: 0;
@@ -1353,11 +1364,15 @@
        * CornerTipContainer
        ****************** */
   div.kijs-cornertipcontainer {
+    box-sizing: border-box;
     position: fixed;
     overflow: hidden;
     right: 0;
     bottom: 0;
     z-index: 70000;
+  }
+  div.kijs-cornertipcontainer * {
+    box-sizing: border-box;
   }
   div.kijs-cornertipcontainer .kijs-panel {
     border-radius: 4px;
@@ -1409,6 +1424,7 @@
     opacity: 1;
   }
   div.kijs-resizer-overlay {
+    box-sizing: border-box;
     position: absolute;
     overflow: hidden;
     background-color: rgba(255, 255, 255, 0.5);
@@ -1620,7 +1636,7 @@
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-dragover {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled {
@@ -1634,7 +1650,7 @@
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > div > .label {
     color: var(--item-label-disabled-fontColor);
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-dataview > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 1px solid var(--accentColor3);
     border-radius: 5px;
@@ -1696,6 +1712,9 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     margin: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
     line-height: var(--default-lineHeight);
@@ -1716,7 +1735,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-dragover {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
@@ -1751,7 +1770,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f05d';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dropmarker {
+  div.kijs-listview > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
     border: 1px solid var(--accentColor3);
     border-radius: 5px;
@@ -1948,7 +1967,7 @@
     width: 22px;
     height: 22px;
     margin: 0;
-    padding: 5px 5px 0 0;
+    padding: 3px 4px 2px 1px;
     border: 0;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -1973,19 +1992,12 @@
     /*display: none;*/
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-head {
-    padding: 5px 4px 0 0;
+    padding: 3px 4px 2px 0;
     color: var(--item-label-fontColor);
     font-weight: bold;
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-outofmonth {
     color: var(--item-label-fontColor);
-  }
-  div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-today {
-    color: var(--today-fontColor);
-  }
-  div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-today.kijs-range-start,
-  div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-today.kijs-range-end {
-    color: var(--default-fontColor);
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-weekend {
     background-color: var(--viewport-bkgrndColor);
@@ -1995,25 +2007,27 @@
     color: var(--item-label-fontColor);
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-value {
-    padding: 4px 4px 0 0;
     background-color: var(--item-selected-bkgrndColor);
     color: var(--item-selected-fontColor);
     border: 1px solid var(--item-selected-borderColor);
+    border-radius: 4px;
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-range {
-    padding: 4px 5px 0 0;
     background-color: var(--item-selected-bkgrndColor);
     color: var(--item-selected-fontColor);
     border-top: 1px solid var(--item-selected-borderColor);
     border-bottom: 1px solid var(--item-selected-borderColor);
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-rangestart {
-    padding: 4px 5px 0 0;
     border-left: 1px solid var(--item-selected-borderColor);
+    border-radius: 4px 0 0 4px;
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-rangeend {
-    padding: 4px 4px 0 0;
     border-right: 1px solid var(--item-selected-borderColor);
+    border-radius: 0 4px 4px 0;
+  }
+  div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-today {
+    color: var(--item-today-fontColor);
   }
   div.kijs-datepicker .kijs-datepicker-calendardiv > div > div.kijs-day:hover {
     background-color: var(--item-focus-bkgrndColor);
@@ -2222,10 +2236,10 @@
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dragging {
     opacity: 0.6;
   }
-  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dragover {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-sourceDragOver {
     border: 2px solid var(--accentColor3);
   }
-  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dropmarker {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td.kijs-dropMarker {
     border: 2px solid var(--accentColor3);
     border-radius: 5px;
   }

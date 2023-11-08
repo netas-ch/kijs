@@ -797,35 +797,35 @@
                 &.kijs-dragging {
                     opacity: 0.6
                 }
-                &.kijs-dragover {
+                &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                     border-width: 2px;
                 }
             }
         }
         /* Drop Marker */
-        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+        > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
             flex: none;
             border: 2px solid var(--accentColor3);
             border-radius: 5px;
         }
         &.kijs-pos-top {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 0 0 4px;
             }
         }
         &.kijs-pos-right {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 4px 0 0;
             }
         }
         &.kijs-pos-bottom {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 0 0 4px 4px;
             }
         }
         &.kijs-pos-left {
-            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropmarker {
+            > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
                 margin: 4px 0 0 4px;
             }
         }
@@ -974,20 +974,6 @@
             background-color: var(--icon-help-bkgrndColor);
         }
     }
-
-
-
-    /* ******************
-       * TODO: Drag'n'Drop marker ???
-       ****************** */
-    /*body > div.kijs-dragdrop-marker {
-        z-index: 20201;
-        position: absolute;
-        background-color: var(--dragover-ok-borderColor);
-
-        &.top, &.bottom { height: 2px }
-        &.left, &.right { width: 2px }
-    }*/
 
 
 
@@ -1446,7 +1432,7 @@
                             opacity: 0.6
                         }
                         
-                        &.kijs-dragover {
+                        &.kijs-sourceDragOver {
                             border-color: var(--accentColor3);
                         }
                         
@@ -1456,7 +1442,7 @@
                     }
                     
                     /* Drop Marker */
-                    > .kijs-dropmarker {
+                    > .kijs-dropMarker {
                         flex: none;
                         border: 2px solid var(--accentColor3);
                         border-radius: 5px;
@@ -2168,76 +2154,6 @@
                 &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                     border-color: var(--item-selected-disabled-borderColor);
                     background-color: transparent;
-                }
-            }
-        }
-    }
-
-
-
-    /* ******************
-       * IconList
-       ****************** */
-    div.kijs-iconlist {
-        border: 1px solid var(--field-borderColor);
-        background-color: var(--field-bkgrndColor);
-        cursor: pointer;
-
-        &.kijs-borderless {
-            border: none;
-        }
-
-        > .kijs-container-inner {
-            display: flex;
-            flex-wrap: wrap;
-
-            /* falls die IconList eine Fixe höhe hat: flexen */
-            &[style="height:*"] {
-                flex: 1 0 0;
-                display: flex;
-                flex-direction: column;
-
-                > .kijs-dataview-element {
-                    flex: 1 0 auto;
-                }
-            }
-
-            > .kijs-dataview-element {
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                height: 18px;
-                width: 18px;
-                margin: 2px;
-                border: 1px solid transparent;
-                outline: none;
-
-                > .kijs-container-inner {
-                    flex: 1;
-                    display: flex;
-                    flex-direction: row;
-                    align-items: center;
-                    gap: 4px;
-
-                    > .kijs-icon {
-                        flex: none;
-                        margin: 0;
-                    }
-                }
-
-                &:focus,
-                &:hover {
-                    background-color: var(--item-focus-bkgrndColor);
-                    border-color: var(--item-focus-borderColor);
-                    color: var(--item-focus-fontColor);
-                }
-
-                &.kijs-selected {
-                    border-color: var(--item-selected-borderColor);
-
-                    &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                        background-color: var(--item-selected-bkgrndColor);
-                    }
                 }
             }
         }

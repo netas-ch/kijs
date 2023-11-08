@@ -32,12 +32,16 @@ die Einstellungen mitzuteilen, die es benötigt:
             allowMove: true,    // Darf das Element per Drag&Drop verschoben werden?
             allowCopy: false,   // Darf das Element per Drag&Drop kopiert werden?
             allowLink: false,   // Darf per Drag&Drop eine Verknüpfung erstellt werden?
-            ownerDomProperty: 'dom' // Property-Name des draggable DOM-Elements.
+            ownerDomProperty: 'dom', // Property-Name des draggable DOM-Elements.
             on: {
                 drop: function(e) { // Falls beim Drop auch beim Source etwas gemacht 
                                     // werden muss. Kann hier ein Listener gemacht werden.
                     console.log('source save');
                 },
+                //dragStart: function(e) {}, // Falls beim DragStart etwas gemacht 
+                                             // werden muss.
+                //dragEnd: function(e) {},   // Falls beim DragEnd etwas gemacht 
+                                             // werden muss.
                 context: this
             }
         }
@@ -69,21 +73,40 @@ kann, kann dafür ```ownerDomProperty='headerBar.dom'``` eingestellt werden.
 
 ### Listeners (on)
 Es gibt zwei Events, die über Listeners abgefragt werden können:  
- - ```destruct``` Wird ausgelöst, wenn das Drag&Drop-Source entladen wird.  
- - ```drop```     Wird bei einem erfolgreichen Drop ausgelöst. Damit können beim 
-   Source Operationen gemacht werden.  
+ - ```destruct```  Wird ausgelöst, wenn das Drag&Drop-Source entladen wird.  
+ - ```dragEnd```   Wird beim Beenden/Abbruch de Drag&Drops ausgelöst. Wird 
+                   normalerweise aber nicht gebraucht.  
+ - ```dragStart``` Wird beim Beginn des Ziehens ausgelöst. Damit kann z.B. ein 
+                   Drop-Bereich markiert werden. Wird normalerweise aber nicht 
+                   gebraucht.  
+ - ```drop```      Wird bei einem erfolgreichen Drop ausgelöst. Damit können beim 
+                   Source Operationen gemacht werden.  
 
 
 Drag&Drop Target
 ----------------
 Targets sind meist Container, in die die Elemente gedroppt werden können.  
+
+Es gibt zwei Varianten, wie ein Target funktioniert:
+ - einfaches Ziel (ohne definierte Einfügeposition)
+ - Ziel mit Einfügeposition (Wahl der Einfügeposition in den elements) 
+
+### Einfaches Ziel
+Im mapping ist ```disableMarker:true``` eingestellt.  
+Auf dem Ziel wird somit kein Marker für die einzufügende Position angezeigt.  
+Dem Ziel wird während des DragOver lediglich die CSS-Klasse ```kijs-targetDragOver``` 
+hinzugefügt.  
+
+### Ziel mit Einfügeposition
+Im mapping ist ```disableMarker:false``` eingestellt.  
 Anhand der Mauszeigerposition wird die Position im Container ermittelt, an welcher 
-das Element gedroppt wird.  
+das Element gedroppt wird. An der entsprechenden Stelle wird ein Marker eingefügt. 
+Dieser hat die CSS-Klasse ```kijs-dropMarker```.  
 Folgende drop-Positionen sind möglich:  
  - before = Element wird vor einem bestehenden Element gedroppt.  
  - after = Element wird nach einem bestehenden Element gedroppt (oder falls noch kein 
    Element im Container ist, als erstes Kind eingefügt)  
- - child = Element wird als Kind bei einem bestehenden Element angehängt.  
+ - child = Element wird als letztes Kind im Container angehängt.  
 
 Um ein Container als Ziel zu aktivieren, reicht eine einfache config nicht aus. Es muss 
 eine eigene Klasse erstellt werden.  
@@ -100,6 +123,7 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
         constructor(config={}) {
             super(false);
 
+            this._ddTarget = null;
             this.ddTarget = {
                 posBeforeFactor: 0.666,
                 posAfterFactor: 0.666,
@@ -108,11 +132,12 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
                         allowMove: true,
                         allowCopy: false,
                         allowLink: false,
-                        disableMarkerAutoSize: false,
-                        markerWidth: 100,
-                        markerHeight: 50,
-                        markerCls: 'myCssClass',
-                        markerHtml: '<b>Ich bin ein Marker</b>'
+                        disableMarkerAutoSize: false
+                        //disableMarker: false
+                        //markerWidth: 100,
+                        //markerHeight: 50,
+                        //markerCls: 'myCssClass',
+                        //markerHtml: '<b>Ich bin ein Marker</b>'
                     }
                 },
                 on: {
@@ -219,8 +244,8 @@ Hier ist ein Beispiel, dass für eigene Klassen verwendet werden kann:
 Hier noch ein genauer Beschrieb der möglichen ddTarget-Einstellungen:  
 
 ### ownerDomProperty
-Falls nicht das ganze Element als Ziel sein soll, kann hier der Name des 
-Properties angegeben werden (Z.B. 'innerDom').  
+Falls nicht das ganze Element das Ziel sein soll, kann hier der Name des 
+DOM-Properties angegeben werden (Z.B. 'innerDom').  
 
 Wenn z.B. bei einem Panel nur der innerDom als Ziel dienen soll, kann dafür 
 ```ownerDomProperty='innerDom'``` eingestellt werden.  
@@ -262,6 +287,12 @@ Im Mapping wird für jeden ddSource-```name``` folgende Eigenschaften definiert:
 Hier kann eingestellt werden, ob verschieben, kopieren oder verknüpfen auf dieses 
 Ziel erlaubt ist.  
 
+#### disableMarker
+Boolscher Wert. Default=false  
+Soll kein DropMarker angezeigt werden?  
+Damit kann zweischen "Einfaches Ziel" und "Ziel mit Einfügeposition" umgeschaltet 
+werden.  
+
 #### disableMarkerAutoSize
 Boolscher Wert. Default=false  
 Falls der Platzhalter für die Einfügeposition (DropMarker) nicht die gleiche Grösse, 
@@ -280,13 +311,12 @@ Damit kann die automatische Höhe oder die Höhe aus dem CSS übersteuert werden
 
 #### markerCls
 String oder Array mit Strings. Default=null  
-Damit kann dem Marker eine oder mehrere zusätzliche CSS-Klasse zu ```kijs-dropmarker``` 
+Damit kann dem Marker eine oder mehrere zusätzliche CSS-Klasse zu ```kijs-dropMarker``` 
 zugewiesen werden.  
 
 #### markerHtml
 String. Default=null  
-Damit kann dem Marker ein HTMl-Inhalt zugewiesen werden.  
-
+Damit kann dem Marker ein HTML-Inhalt zugewiesen werden.  
 
 ### Listeners (on)
 Es gibt zwei Events, die über Listeners abgefragt werden können:  
@@ -302,31 +332,48 @@ kijs weist automatisch elementen automatisch CSS-Klassen zu:
 ### kijs-dragging
 Dem Source-Element wärend des ganzen Drag&Drop Vorgangs.  
 
-### kijs-dragover
-Dem Source-Element, wenn sich der Mauszeiger über ihm befindet.  
-
-### kijs-dropmarker
+### kijs-dropMarker
+Nur bei ```disableMarker: false```.  
 An der neuen Einfügeposition wird ein Platzhalter angezeigt. Dies ist ein 
 kijs.gui.Dom, dessen HTML-Node direkt in den Dom gerendert wird.  
-Dieses DIV hat die CSS-Klasse ```kijs-dropmarker```.  
+Dieses DIV hat die CSS-Klasse ```kijs-dropMarker```.  
+
+### kijs-sourceDragOver
+Dem Source-Element, wenn  
+ - sich der Mauszeiger über ihm befindet  
+ - bei der Operation ```move```, wenn kein gültiges Target vorhanden ist  
+
+### kijs-targetDragOver
+Dem Target-Element, wenn sich der Mauszeiger über ihm befindet und das Mapping 
+gültig ist.
+Diese Klasse wird in der Regel nur bei ```disableMarker:true``` verwendet.  
+
+### Beispiel CSS für Source
+    > .myItem {
+        &.kijs-dragging {
+            opacity: 0.6
+        }
+
+        &.kijs-sourceDragOver {
+            border: 2px solid var(--accentColor3);
+        }
+    }
 
 
-### Beispiel CSS
+### Beispiel CSS für Target (Einfaches Ziel)
+    .myContainer {
+        &.kijs-targetDragOver {
+            border: 2px solid var(--accentColor3);
+        }
+    }
+
+
+### Beispiel CSS für Target (Ziel mit Einfügeposition)
     .myContainer {
         > .kijs-container-inner {
-
-            > .myItem {
-                &.kijs-dragging {
-                    opacity: 0.6
-                }
-
-                &.kijs-dragover {
-                    border: 2px solid var(--accentColor3);
-                }
-            }
-
+            
             /* Drop Marker */
-            > .kijs-dropmarker {
+            > .kijs-dropMarker {
                 flex: none;
                 height: 30px;
                 border: 2px solid var(--accentColor3);
@@ -345,11 +392,11 @@ unterstützen:
  - kijs.gui.container.Tab  
  - kijs.gui.Tree (TODO)  
  - kijs.gui.Grid (TODO)  
- - kijs.gui.DataView (TODO)  
- - kijs.gui.ListView (TODO)  
- - kijs.gui.field.ListView (TODO)  
- - kijs.gui.field.CheckboxGroup (TODO)  
- - kijs.gui.field.OptionGroup (TODO)  
+ - kijs.gui.DataView
+ - kijs.gui.ListView
+ - kijs.gui.field.ListView
+ - kijs.gui.field.CheckboxGroup
+ - kijs.gui.field.OptionGroup
  
 Dafür kann einfach das property ```sortable``` auf ```true``` gesetzt werden.  
 
