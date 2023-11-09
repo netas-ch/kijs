@@ -92,7 +92,9 @@
     --button-focus-bkgrndColor: var(--grey4);
     --button-focus-borderColor: var(--accentColor);
     --button-focus-fontColor: var(--grey9);
-
+    
+    --button-active-bkgrndColor: var(--grey5);
+    
     --button-disabled-fontColor: var(--grey7);
 
 

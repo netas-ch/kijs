@@ -1,0 +1,739 @@
+/* ******************
+   * kijs Retro Theme
+   ****************** */
+
+
+/* LIGHT Farbeschema*/
+/* ---------------- */
+:root {
+    --accentColor: #83a5d9; /*#1f90f2;*/
+    --accentColor2: #dfe8f6; /*#d9ecfc;*/
+    --accentColor3: #ff9900;
+
+    --errorColor: #c23c45;
+    --errorColorLight: #f4d9d9;
+
+    --helpColor: #83a5d9; /*#1f90f2;*/
+    --helpColorLight: #d9ecfc;
+
+    --okColor: #61c259;
+
+    --grey0: #fff;
+    --grey1: #fff;
+    --grey2: #f6f6f6;
+    --grey3: #efefef;
+    --grey4: #ddd;
+    --grey5: #ccc;
+    --grey6: #aaa;
+    --grey7: #888;
+    --grey8: #555;
+    --grey9: #000;
+}
+
+
+/* DARK Farbeschema*/
+/* --------------- */
+/*gibt es nicht*/
+
+
+
+/* Farbzuweisungen */
+/* --------------- */
+:root {
+    /* Farbzuweisungen */
+    --viewport-bkgrndColor: #dfe8f6; /*var(--grey2);*/
+    --splitter-overlay-bkgrndColor: var(--grey5);
+
+
+    /* Default */
+    --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif; /*'Roboto', sans-serif;*/
+    --default-fontColor: var(--grey9);
+    --default-disabled-fontColor: var(--grey7);
+    --default-fontSize: 11px; /*12px;*/
+    --default-lineHeight: 14px; /*13px;*/
+
+
+    /* Separator */
+    --separator-bkgrndColor: #bdc4cd;
+    --separator-disabled-bkgrndColor: #bdc4cd;
+
+
+    /* Button */
+    --button-bkgrndColor: var(--grey2);
+    --button-borderColor: #bdc4cd; /*var(--grey4);*/
+    --button-fontColor: var(--grey9);
+    --button-fontSize: 11px; /*12px;*/
+    --button-lineHeight: 14px; /*13px;*/
+
+    --button-icon-fontColor: var(--grey8);
+
+    --button-focus-bkgrndColor: var(--grey4);
+    --button-focus-borderColor: var(--accentColor);
+    --button-focus-fontColor: var(--grey9);
+    
+    --button-active-bkgrndColor: var(--grey5);
+    
+    --button-disabled-fontColor: var(--grey7);
+
+
+    /* Toolbox-Button in einer Bar */
+    --bar-button-icon-fontColor: #15428b; /*var(--grey2);*/
+    --bar-button-icon-disabled-fontColor: var(--grey5);
+
+
+    /* Button im Panel-Header */
+    --buttonGroup-button-fontColor: var(--grey8);
+
+    --buttonGroup-button-bkgrndColor: var(--grey2);
+    --buttonGroup-button-borderColor: transparent;
+
+    --buttonGroup-button-focus-bkgrndColor: var(--grey4);
+    --buttonGroup-button-focus-fontColor: var(--grey9);
+
+
+    /* Buttons im Panel-Footer */
+    --footer-button-bkgrndColor: var(--grey2);
+    --footer-button-borderColor: var(--grey6);
+
+    --footer-button-focus-bkgrndColor: var(--grey4);
+    --footer-button-focus-borderColor: var(--accentColor);
+
+    --footer-button-disabled-bkgrndColor: var(--grey2);
+    --footer-button-disabled-borderColor: var(--grey6);
+
+
+    /* Buttons im Window-Footer */
+    --window-footer-button-bkgrndColor: var(--accentColor);
+    --window-footer-button-borderColor: var(--accentColor);
+    --window-footer-button-fontColor: var(--grey9);
+
+    --window-footer-button-focus-borderColor: var(--grey9);
+    --window-footer-button-focus-fontColor: var(--grey9);
+
+
+    /* Tab */
+    --tabBar-bkgrndColor: var(--grey2);
+
+    --tabButton-bkgrndColor: var(--grey3);
+    --tabButton-borderColor: #8db2e3; /*var(--grey4)*/;
+    --tabButton-fontColor: #15428b; /*var(--grey9);*/
+
+    --tabButton-current-bkgrndColor: var(--grey1);
+    --tabButton-current-borderColor: #8db2e3; /*var(--grey4);*/
+    --tabButton--currentfontColor: #15428b; /*var(--accentColor);*/
+
+    --tabButton-focus-bkgrndColor: var(--grey3);
+    --tabButton-focus-borderColor: var(--grey4);
+    --tabButton-focus-fontColor: var(--accentColor);
+
+
+    /* Badge */
+    --badge-bkgrndColor: var(--accentColor3);
+    --badge-fontColor: var(--grey9);
+    --badge-fontSize: 10px;
+    --badge-lineHeight: 13px;
+    --badge-disabled-bkgrndColor: var(--grey5);
+    --badge-disabled-fontColor: var(--grey7);
+
+
+    /* Panel */
+    --panel-bkgrndColor: var(--grey1);
+    --panel-borderColor: var(--grey4);
+
+
+    /* Bar */
+    --bar-fontColor: #15428b; /*var(--grey0);*/
+    --bar-bkgrndColor: #d9e7f6; /*var(--accentColor);*/
+    --bar-disabled-fontColor: #677da0; /*var(--grey2);*/
+    --bar-disabled-bkgrndColor: var(--grey6);
+
+    --headerBar-fontSize: 11px; /*14px;*/
+    --footerBar-fontSize: 11px; /*12px;*/
+
+
+    /* MsgBox */
+    --msgbox-fontColor: var(--grey9);
+    --msgbox-fontSize: 11px; /*12px;*/
+    --msgbox-lineHeight: 13px;
+
+
+    /* Field */
+    --field-fontSize: 11px; /*12px;*/
+    --field-lineHeight: 13px;
+    --field-fontColor: var(--grey9);
+    --field-bkgrndColor: var(--grey1);
+    --field-borderColor: #b5b8c8; /*var(--grey6);*/
+    --field-focus-borderColor: var(--accentColor);
+    --field-label-fontColor: var(--grey9);
+
+    --field-item-bkgrndColor: var(--grey8);
+    --field-item-focus-bkgrndColor: var(--accentColor);
+
+    --field-disabled-bkgrndColor: var(--grey2);
+    --field-disabled-fontColor: var(--grey7);
+
+    --field-error-bkgrndColor: var(--errorColorLight);
+
+    /* Range */
+    --range-bkgrndColor: var(--grey6);
+    --range-btnColor: var(--grey8);
+
+    /* Item */
+    --item-bkgrndColor: var(--grey1);
+    --item-borderColor: var(--grey2);
+    --item-fontColor: var(--grey9);
+    --item-fontSize: 11px; /*12px;*/
+    --item-lineHeight: 13px;
+
+    --item-today-fontColor: var(--accentColor);
+    
+    --item-focus-bkgrndColor: var(--grey2);
+    --item-focus-borderColor: var(--grey2);
+    --item-focus-fontColor: var(--grey9);
+
+    --item-selected-bkgrndColor: var(--accentColor2);
+    --item-selected-borderColor: var(--accentColor);
+    --item-selected-fontColor: var(--grey9);
+
+    --item-disabled-bkgrndColor: var(--grey2);
+    --item-disabled-borderColor: var(--grey4);
+    --item-disabled-fontColor: var(--grey9);
+
+    --item-selected-disabled-bkgrndColor: var(--grey2);
+    --item-selected-disabled-borderColor: var(--grey6);
+    --item-selected-disabled-fontColor: var(--grey9);
+
+    --item-label-fontColor: var(--grey7);
+    --item-label-disabled-fontColor: var(--grey7);
+    --item-label-fontSize: 10px;
+
+    /* Clock */
+    --clock-bkgrndColor: var(--grey3);
+    --clock-fontColor: var(--grey9);
+    --clock-pointer-bkgrndColor: var(--accentColor);
+    --clock-disabled-pointer-bkgrndColor: var(--grey6);
+
+
+    /* Help/Error Icon */
+    --icon-error-bkgrndColor: var(--errorColorLight);
+    --icon-error-borderColor: var(--errorColor);
+    --icon-error-fontColor: var(--errorColor);
+
+    --icon-help-bkgrndColor: var(--helpColorLight);
+    --icon-help-borderColor: var(--helpColor);
+    --icon-help-fontColor: var(--helpColor);
+
+
+    /* Drag & Drop */
+    --dragover-ok-borderColor: var(--accentColor3);
+    --dragover-forbidden-borderColor: var(--errorColor);
+
+    /* Grid */
+    --grid-header-bkgrndColor: var(--grey2);
+    --grid-border-color: var(--grey4);
+}
+
+
+
+/* Spezifische Anpassungen */
+/* ----------------------- */
+
+/* kijs.gui.Button */
+.kijs-button {
+    height: 22px;
+    border-radius: 3px;
+    background: linear-gradient(#f3f4f4, #ededed 12px, #dfdfdf 13px, #dfdfdf);
+    
+    > .kijs-badge {
+        right: -3px;
+    }
+    
+    &:hover, &:focus {
+        background: linear-gradient(#f3f4f4, #d5eafd 12px, #c3d9f3 13px, #c5dbf5);
+        border: 1px solid var(--button-focus-borderColor);
+
+        > .kijs-caption {
+            color: var(--button-focus-fontColor);
+        }
+    }
+
+    &:active {
+        background: linear-gradient(#c1d2e7, #bed1e6 12px, #8fc1f5 13px, #96c4f5);
+    }
+    
+    &.kijs-disabled {
+        background: linear-gradient(#f3f4f4, #ededed 12px, #dfdfdf 13px, #dfdfdf);
+        border: 1px solid var(--button-borderColor);
+        cursor: default;
+
+        > .kijs-caption,
+        > .kijs-icon {
+            color: var(--button-disabled-fontColor);
+        }
+
+        > .kijs-badge {
+            background-color: var(--badge-disabled-bkgrndColor);
+            color: var(--badge-disabled-fontColor);
+        }
+    }
+}
+
+
+/* kijs.gui.container.Scrollable */
+div.kijs-container-scrollable {
+    > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+    > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+        border-radius: 3px;
+        background: transparent;
+
+        &:hover,
+        &:focus {
+            background: linear-gradient(#f3f4f4, #d5eafd 12px, #c3d9f3 13px, #c5dbf5);
+        }
+
+        &.kijs-disabled {
+            background: transparent;
+            /*border: 1px solid var(--button-borderColor);*/
+            cursor: default;
+
+            /*> .kijs-icon {
+                color: var(--button-disabled-fontColor);
+            }*/
+        }
+    }
+}
+
+
+/* kijs.gui.Panel */
+.kijs-panel {
+    border: 1px solid #99bbe8;
+    font-size: var(--default-fontSize);
+    
+    
+    > .kijs-header {
+        background-color: #d9e4f4;
+        background: linear-gradient(180deg, #dae6f4 10%, #cadaed 60%);
+        border-bottom: 1px solid #99bbe8;
+
+        > .kijs-container-inner {
+            padding: 2px;
+            gap: 3px;
+
+            > button.kijs-button {
+                background: transparent;
+                border-color: transparent;
+
+                &:hover, &:focus {
+                    background: linear-gradient(#f3f4f4, #d5eafd 12px, #c3d9f3 13px, #c5dbf5);
+                    border: 1px solid var(--button-focus-borderColor);
+
+                    > .kijs-caption {
+                        color: var(--button-focus-fontColor);
+                    }
+                }
+
+                &:active {
+                    background: linear-gradient(#c1d2e7, #bed1e6 12px, #8fc1f5 13px, #96c4f5);
+                }
+
+                &.kijs-disabled {
+                    background: transparent;
+                    border: none;
+                    cursor: default;
+
+                    > .kijs-caption,
+                    > .kijs-icon {
+                        color: var(--button-disabled-fontColor);
+                    }
+
+                    > .kijs-badge {
+                        background-color: var(--badge-disabled-bkgrndColor);
+                        color: var(--badge-disabled-fontColor);
+                    }
+                }
+            }
+        }
+    }
+    
+    > .kijs-container-inner {
+        background-color: #dfe8f6;
+    }
+    
+    > .kijs-footer {
+        background-color: #dfe8f6;
+    }
+    
+    &.kijs-collapse-top,
+    &.kijs-collapse-bottom {
+        height: 27px;
+    }
+}
+
+
+/* kijs.gui.PanelBar */
+.kijs-panelbar {
+    height: 26px;
+    border-bottom: 1px solid #99bbe8;
+    background: linear-gradient(180deg, rgb(238, 243, 249) 0%, rgb(223, 235, 247) 10%, rgb(205, 222, 243) 42%, rgb(173, 200, 236) 45%, rgb(186, 208, 238) 60%, rgb(205,222,243) 100%);
+    
+    > .kijs-icon {
+        width: 16px;
+    }
+    .kijs-button.kijs-smallpaddings > span {
+        margin-right: 0;
+    }
+    
+    > .kijs-container-left,
+    > .kijs-container-right {
+        > .kijs-container-inner {
+            > .kijs-button {
+                padding: 0 2px;
+                /*background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(237,253,255,1) 7%, rgba(213,233,255,1) 94%, rgba(233,244,255,1) 100%);*/
+                height: 16px;
+                border: 1px solid #99bbe8;
+                border-radius: 3px;
+                box-shadow: 0px 0px 1px 1px white inset;
+                
+                > .kijs-caption {
+                    line-height: 26px;
+                }
+                > .kijs-icon {
+                    width: 11px;
+                    font-size: 11px;
+                    line-height: 14px;
+                    color: #39608B;
+                }
+                > .kijs-badge {
+                    top: -2px;
+                    height: 10px;
+                    min-width: 10px;
+                    font-size: 8px;
+                    line-height: 10px;
+                }
+                
+                &.kijs-disabled {
+                    background: transparent;
+                    border: none;
+                    box-shadow: none;
+                    cursor: default;
+                    
+                    > .kijs-caption,
+                    > .kijs-icon {
+                        color: var(--button-disabled-fontColor);
+                    }
+
+                    > .kijs-badge {
+                        background-color: var(--badge-disabled-bkgrndColor);
+                        color: var(--badge-disabled-fontColor);
+                    }
+                }
+            }
+        }
+    }
+
+    > .kijs-container-inner {
+        line-height: 25px;
+        font-weight: bold;
+    }
+}
+
+
+/* kijs.gui.container.Tab */
+.kijs-container-tab {
+    > .kijs-container-scrollable {
+        background: linear-gradient(#dce6f5, #cbdaef);
+        
+        > .kijs-container-inner > .kijs-button {
+            background: linear-gradient(#ccdef6, #deecfd);
+            
+            &:not(.kijs-current) {
+                border: 1px solid #8db2e3;
+            }
+            
+            &.kijs-current {
+                font-weight: bold;
+            }
+        }
+        
+    }
+}
+
+
+/* ******************
+   * ButtonGroup
+   ****************** */
+div.kijs-buttongroup {
+    border: 1px solid #b7c8d7;
+    border-radius: 3px;
+    box-shadow: 0px 0px 1px 1px #e4eaf0 inset;
+    
+    > .kijs-caption {
+        margin: 2px 0;
+        color: var(--buttonGroup-button-fontColor);
+        
+    }
+
+    > .kijs-container-inner {
+        padding: 3px;
+    }
+}
+
+
+/* kijs.gui.field.* */
+.kijs-field {
+    min-height: 22px;
+    
+    > .kijs-label {
+        padding: 4px 4px 3px 0;
+    }
+    
+    > .kijs-container-inner {
+        > .kijs-inline {
+            background: linear-gradient(#f3f4f4, #d1d1d1);
+            
+            &.kijs-button {
+                border-radius: 0;
+            }
+        }
+    }
+    
+    > .kijs-button {
+        border-radius: 0;
+    }
+
+    > .kijs-icon-spindown {
+        background: linear-gradient(#f3f4f4, #d1d1d1);
+    }
+}
+
+div.kijs-field-email,
+div.kijs-field-iban,
+div.kijs-field-month,
+div.kijs-field-password,
+div.kijs-field-phone,
+div.kijs-field-sozversnr,
+div.kijs-field-text,
+div.kijs-field-url {
+    > .kijs-inputwrapper {
+        > input {
+            height: 22px;
+            box-shadow: inset 0 6px 3px -3px #eeeeee;
+        }
+    }
+}
+
+/* kijs.gui.field.Memo */
+.div.kijs-field-memo {
+    > .kijs-inputwrapper {
+        > textarea {
+            padding: 4px 4px 2px 4px;
+            box-shadow: inset 0 6px 3px -3px #eeeeee;
+        }
+    }
+}
+
+
+/* kijs.gui.field.Checkbox */
+.kijs-field-checkbox {
+    > .kijs-inputwrapper {
+        height: 22px;
+        
+        > .kijs-checkbox-input {
+            background-color: #fff;
+            border-radius: 2px;
+        }
+    }
+}
+
+
+/* kijs.gui.field.Combo */
+div.kijs-field-combo {
+    height: 22px;
+    
+    > .kijs-inputwrapper {
+        > input {
+            height: 22px;
+            box-shadow: inset 0 6px 3px -3px #eeeeee;
+        }
+    }
+}
+
+
+/* kijs.gui.field.DateTime */
+div.kijs-field-datetime {
+    > .kijs-inputwrapper {
+        height: 22px;
+        
+        > input {
+            height: 22px;
+            box-shadow: inset 0 6px 3px -3px #eeeeee;
+        }
+    }
+    
+}
+
+
+/* kijs.gui.field.Display */
+div.kijs-field-display {
+    > .kijs-inputwrapper {
+        min-height: 22px;
+        
+        > div {
+            padding: 4px 0 2px 0;
+        }
+        
+        * {
+            color: #5C8299;
+        }
+    }
+}
+
+
+/* kijs.gui.field.ListView */
+div.kijs-listview {
+    > .kijs-container-inner {
+        padding: 1px 0 2px 0;
+    }
+}
+
+
+/* kijs.gui.field.Number */
+div.kijs-field-number {
+    > .kijs-inputwrapper {
+        > input {
+            height: 22px;
+            box-shadow: inset 0 6px 3px -3px #eeeeee;
+        }
+    }
+    
+    > .kijs-container-inner {
+        > .kijs-spinners {
+            > .kijs-container-inner {
+                > .kijs-button {
+                    margin: 0;
+                    border-radius: 0;
+                    height: 11px;
+                    padding: 0;
+                }
+            }
+        }
+            
+    }
+}
+
+
+/* kijs.gui.field.CheckboxGroup */
+.kijs-listview {
+    > .kijs-container-inner {
+        > .kijs-display-checkboxes::before {
+            background-color: #fff;
+            border-radius: 2px;
+        }
+    }
+}
+
+
+/* kijs.gui.field.OptionGroup */
+.kijs-listview {
+    > .kijs-container-inner {
+        > .kijs-display-options::before {
+            background-color: #fff;
+            border-radius: 50%;
+        }
+    }
+}
+
+
+/* kijs.gui.field.Switch */
+.kijs-field-switch {
+    > .kijs-inputwrapper {
+        height: 22px;
+    }
+}
+
+
+/* kijs.gui.Menu */
+.kijs-menu-spinbox {
+    > .kijs-container-inner {
+        background: #f0f0f0;
+        
+        > .kijs-button {
+            background: #f0f0f0;
+            border: 1px solid transparent;
+            border-radius: 3px;
+            margin: 1px;
+            
+            &:hover {
+                border-color: #aaccf6;
+                background: linear-gradient(0deg, rgba(217,232,251,1) 60%, rgba(235,243,253,1) 60%);
+            }
+        }
+    }
+}
+
+
+/* kijs.gui.Tooltip */
+.kijs-tooltip {
+    border: 1px solid #8eaace;
+    background-color: #e9f2ff;
+}
+
+
+/* kijs.gui.grid.Grid */
+div.kijs-grid {
+    table {
+        > tr {
+            > td {
+                height: 22px;
+                
+                &.kijs-grid-cell-checkbox {
+                    padding: 4px 0 0 0;
+                }
+                &.kijs-grid-cell-icon {
+                    padding: 4px 0 0 0;
+                }
+            }
+        }
+    }
+    
+    > .kijs-top {
+        > .kijs-headercontainer  {
+            > table {
+                /* Header */
+                > tr.kijs-grid-header {
+                    > td {
+                        > .kijs-button {
+                            height: 14px;
+                            border: none;
+                            background: transparent;
+                        }
+                    }
+                }
+                
+                /* Filterzeile */
+                > tr.kijs-grid-filter {
+                    > td {
+                        > div > .kijs-field {
+                            input {
+                                box-shadow: none;
+                            }
+                        }
+                        
+                        > .kijs-grid-filter-reset {
+                            > .kijs-button {
+                                border: none;
+                                border-radius: 0;
+                                background: transparent;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+

@@ -7,9 +7,35 @@ Version 2.3.2
 ### Anpassungen an Drag&Drop
  - CSS Klasse ```kijs-dragover``` umbenannt zu ```kijs-sourceDragOver```  
  - CSS Klasse ```kijs-dropmarker``` umbenannt zu ```kijs-dropMarker```  
-   **UPDATE TIPP:**: CSS nach ```kijs-dragover``` und ```kijs-dropmarker``` 
+   **UPDATE TIPP:** CSS nach ```kijs-dragover``` und ```kijs-dropmarker``` 
    durchsuchen und umbenennen.
+
  - Verschiedene zusätzliche Funktionen. Siehe dazu den Leitfaden ```Drag and Drop```  
+
+### Anpassungen CSS
+ - CSS von kijs.gui.grid.Grid angepasst
+ - CSS von kijs.gui.Button angepasst
+ - CSS von kijs.gui.field.Range angepasst
+ - weitere kleinere CSS anpassungen
+ - Retro Theme überarbeitet
+
+### kijs.gui.grid.Grid
+ - Argumente des RPC load angepasst:  
+   Früher:
+    - sort
+    - getMetaData
+    - filter
+    - start
+    - limit
+    - ... evtl. weitere eigene Argumente
+
+   Neu:
+    - config ```{ sort:... , getMetaData:..., filter:..., start:..., limit:... }```
+    - ... evtl. weitere eigene Argumente
+
+   **UPDATE TIPP:** In allen Facaden-Funktionen für grid.load die Argumente 
+   entsprechend  anpassen.  
+
 
 
 Version 2.3.1
@@ -406,17 +432,17 @@ Neue Features
 - Neues Icon ```'errorNotice'``` bei der statischen Funktion 
   ```kijs.gui.CornerTipContainer.show()```
 
-### globales RPC-Instanzen  
+### globale RPC-Instanzen  
 Damit nicht in jedem Element, dass ein RPC-Objekt benutzt eine Instanz von einem 
 ```kijs.gui.Rpc``` übergeben werden muss und es bisher auch nicht möglich war via 
 RPC einem Element eine RPC-Instanz zuzuweisen, können nun ```kijs.gui.Rpc```-Objekte 
 global mit einem Namen definiert werden.  
-Bei allen Elementen kann anstelle ```kijs.gui.Rpc````-Instanz auch nur der Name der 
-globalen Instanz übergeben werden. Wird gar nichts angegeben, wird standardmässig 
-die globale Instanz ```'default'``` verwendet.  
+Bei allen Elementen kann anstelle einer ```kijs.gui.Rpc```-Instanz auch nur der 
+Name der globalen Instanz übergeben werden. Wird gar nichts angegeben, wird 
+standardmässig die globale Instanz ```'default'``` verwendet.  
 Globale Instanzen können über folgende Funktionen definiert/abgerufen werden:  
  - ```kijs.setRpc(name, rpc)``` Erstellt eine neue globale Instanz.  
-   Die Standard-Instanz muss ```'default'``` heissen.
+   Die Standard-Instanz muss ```'default'``` heissen.  
  - ```kijs.getRpc(name)``` Gibt eine globale Instanz zurück. Falls kein ```name``` 
    angegeben wird, wird die globale Instanz ```'default'``` zurückgegeben.  
 

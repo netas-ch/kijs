@@ -117,7 +117,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._searchContainer.renderTo(this._dom.node);
         this._removeFilterIcon.renderTo(this._dom.node);
 
-        this._menuButton.menu.removeAll(true, true);
+        this._menuButton.menu.removeAll({
+            preventRender: true,
+            preventDestruct: true
+        });
         this._menuButton.menu.add(this._getMenuButtons());
         this._menuButton.renderTo(this._removeFilterIcon.node);
 

@@ -11,9 +11,10 @@ kijs.Rpc = class kijs_Rpc {
     // --------------------------------------------------------------
     constructor(config={}) {
         this._defaultConfig = {};
-        
-        this._url = '.';                    // URL Beispiel: '.' oder 'index.php'
-        this._parameters = {};              // Objekt mit optionalem GET-Parametern
+
+        this._url = '.';                        // URL Beispiel: '.' oder 'index.php'
+        this._parameters = {};                  // Objekt mit optionalem GET-Parametern
+        this._headers = {'X-LIBRARY': 'kijs'};  // Objekt mit Header
         this._defaultErrorType = 'errorNotice';
         this._defer = 10;
         this._timeout = 0;
@@ -22,12 +23,12 @@ kijs.Rpc = class kijs_Rpc {
         this._tid = 0;
 
         this._queue = [];
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
         });
-        
+
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             defaultErrorType: true, // Standard errorType, wenn eine errorMsg vorhanden ist ohne errorType
@@ -63,9 +64,12 @@ kijs.Rpc = class kijs_Rpc {
     // --------------------------------------------------------------
     get defaultErrorType() { return this._defaultErrorType; }
     set defaultErrorType(val) { this._defaultErrorType = val; }
-    
+
     get defer() { return this._defer; }
     set defer(val) { this._defer = val; }
+
+    get headers() { return this._headers; }
+    set headers(val) { this._headers = kijs.isObject(val) ? val : {}; }
 
     get url() { return this._url; }
     set url(val) { this._url = val; }
@@ -93,11 +97,11 @@ kijs.Rpc = class kijs_Rpc {
      * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
      * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
      *   werden.
-     * 
+     *
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} remoteFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
-     *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID, 
+     *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID,
      *                                           die das Element eindeutig identifiziert.
      *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
      *     {Function} [fn]                       Callback-Funktion
@@ -106,7 +110,7 @@ kijs.Rpc = class kijs_Rpc {
      *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
-     *                                           z.B. die loadMask, damit sie in der Callback-fn wieder entfernt 
+     *                                           z.B. die loadMask, damit sie in der Callback-fn wieder entfernt
      *                                           werden kann.
      * @returns {Promise|Null}
      */
@@ -145,7 +149,7 @@ kijs.Rpc = class kijs_Rpc {
                 }
             }
         }
-        
+
         const queueEl = {
             remoteFn: config.remoteFn,
             requestData: config.requestData,
@@ -158,15 +162,15 @@ kijs.Rpc = class kijs_Rpc {
             responseArgs: config.responseArgs,
             state: kijs.Rpc.states.QUEUE
         };
-        
+
         let ret = new Promise((resolve) => {
             queueEl.promiseResolve = resolve;
         });
-        
+
         this._queue.push(queueEl);
 
         this._deferId = kijs.defer(this._transmit, this.defer, this);
-        
+
         return ret;
     }
 
@@ -233,14 +237,14 @@ kijs.Rpc = class kijs_Rpc {
 
             // Transfer-ID aus der Queue entfernen
             this._removeTid(subRequest.tid);
-            
-            
+
+
             //if (!subResponse.canceled) {
                 // Standard errorType
                 if (!kijs.isEmpty(subResponse.errorMsg) && kijs.isEmpty(subResponse.errorType)) {
                     subResponse.errorType = this._defaultErrorType;
                 }
-                
+
                 // Argument vorbereiten
                 const e = {
                     response: subResponse,
@@ -248,12 +252,12 @@ kijs.Rpc = class kijs_Rpc {
                     errorType: subResponse.errorType,
                     errorMsg: subResponse.errorMsg
                 };
-                
+
                 // callback-fn ausführen
                 if (kijs.isFunction(subRequest.fn)) {
                     subRequest.fn.call(subRequest.context || this, e);
                 }
-                
+
                 // Promise auslösen
                 if (subRequest.promiseResolve) {
                     subRequest.promiseResolve(e);
@@ -277,7 +281,7 @@ kijs.Rpc = class kijs_Rpc {
         }
         this._queue = newQueue;
     }
-    
+
     /**
      * Übermittelt die subRequests in der queue an den Server
      * @returns {undefined}
@@ -302,7 +306,7 @@ kijs.Rpc = class kijs_Rpc {
         if (transmitData.length > 0) {
             kijs.Ajax.request({
                 method      : 'POST',
-                headers     : {'X-LIBRARY': 'kijs'},
+                headers     : this._headers,
                 postData    : transmitData,
                 url         : this.url,
                 parameters  : this._parameters,
@@ -313,8 +317,8 @@ kijs.Rpc = class kijs_Rpc {
         }
 
     }
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

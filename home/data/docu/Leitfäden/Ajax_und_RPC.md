@@ -63,6 +63,19 @@ Beispiel:
         }
     });
 
+#### globale RPC-Instanzen
+Damit nicht in jedem Element, dass ein RPC-Objekt benutzt, die Instanz eines 
+```kijs.gui.Rpc``` übergeben werden muss, können globale ```kijs.gui.Rpc```-Objekte 
+mit einem Namen definiert werden.  
+Bei allen Elementen kann dann anstelle einer kijs.gui.Rpc-Instanz auch nur der 
+Name der globalen Instanz als String übergeben werden. 
+Wird kein Name angegeben, wird standardmässig die globale Instanz 'default' 
+verwendet.  
+Globale Instanzen können über folgende Funktionen definiert/abgerufen werden:
+ - ```kijs.setRpc(name, rpc)``` Erstellt eine neue globale Instanz.  
+    Die Standard-Instanz muss 'default' heissen.  
+ - ```kijs.getRpc(name)``` Gibt eine globale Instanz zurück.  
+   Falls kein name angegeben wird, wird die globale Instanz 'default' zurückgegeben.  
 
 
 Callback Funktion ```fn```

@@ -275,6 +275,9 @@
   button.kijs-button:focus > .kijs-caption {
     color: var(--button-focus-fontColor);
   }
+  button.kijs-button:active {
+    background-color: var(--button-active-bkgrndColor);
+  }
   button.kijs-button.kijs-hidden {
     display: none;
   }
@@ -284,7 +287,7 @@
   button.kijs-button.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   button.kijs-button.kijs-disabled > .kijs-caption,
   button.kijs-button.kijs-disabled > .kijs-icon {
@@ -407,7 +410,7 @@
   div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-scrollable > .kijs-btn-scrollup.kijs-disabled > .kijs-icon,
   div.kijs-container-scrollable > .kijs-btn-scrolldown.kijs-disabled > .kijs-icon,
@@ -553,7 +556,7 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled {
     background-color: var(--button-bkgrndColor);
     border: 1px solid var(--button-borderColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-icon {
@@ -598,7 +601,7 @@
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollleft.kijs-disabled,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
     background-color: var(--tabBar-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrollup.kijs-disabled > .kijs-icon,
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-btn-scrolldown.kijs-disabled > .kijs-icon,
@@ -966,7 +969,7 @@
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled {
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled > .kijs-caption,
@@ -1079,7 +1082,7 @@
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-panel.kijs-maximize {
     position: fixed;
@@ -1252,7 +1255,7 @@
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
-    cursor: auto;
+    cursor: default;
   }
   div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled > * {
     color: var(--button-disabled-fontColor);
@@ -2162,8 +2165,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    height: 19px;
-    padding: 3px 6px;
+    height: 25px;
+    padding: 4px 6px;
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -2180,7 +2183,7 @@
     text-align: center;
     font-family: 'Font Awesome 6 Free';
     font-size: 14px;
-    padding: 2px 0 0 0;
+    padding: 6px 0 0 0;
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-checkbox:hover {
     color: var(--field-focus-borderColor);
@@ -2193,7 +2196,7 @@
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 14px;
-    padding: 2px 0 0 0;
+    padding: 6px 0 0 0;
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-dirty {
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
@@ -2226,10 +2229,14 @@
     overflow: hidden;
     background-color: var(--grid-header-bkgrndColor);
   }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table {
+    /* Header */
+    /* Filterzeile */
+  }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td {
     display: flex;
     flex-direction: row;
-    padding: 2px 0 0 6px;
+    padding: 4px 0 0 6px;
     /* Drop Marker */
     /* die letzte td-zeile im header braucht etwas platz, ansonsten wird nicht bis ganz rechts gescrollt (Breite der Scrollbar).*/
   }
@@ -2248,16 +2255,20 @@
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption {
     flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption > span.kijs-sort {
     color: #555;
     font-family: 'Font Awesome 6 Free';
+    vertical-align: middle;
     font-weight: 900;
     padding-left: 5px;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > span.kijs-tooltip-icon {
     font-size: 11px;
-    margin: 1px 4px 0 0;
+    margin: 2px 4px 0 0;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button {
     flex: none;
@@ -2273,10 +2284,13 @@
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button > .kijs-icon2 {
     margin: 0;
   }
-  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:hover .kijs-button {
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td:hover > .kijs-button {
     width: 15px;
-    opacity: 1;
+    opacity: 0.7;
     transition: opacity 0.5s;
+  }
+  div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-button:hover {
+    opacity: 1;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td .kijs-splitter {
     flex: none;
@@ -2332,9 +2346,9 @@
     padding: 4px 0 4px 18px;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td .kijs-grid-filter-reset {
-    width: 20px;
+    width: 15px;
     margin: 2px 0;
-    padding: 0 4px;
+    padding: 0;
     border-right: 1px solid var(--splitter-overlay-bkgrndColor);
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td .kijs-grid-filter-reset .kijs-button {
@@ -2349,7 +2363,7 @@
     transition: color 0.5s;
     color: var(--grid-border-color);
     font-size: 12px;
-    margin: -2px 0 0 0;
+    margin: -4px 0 0 0;
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td:hover .kijs-button .kijs-icon {
     color: var(--button-icon-fontColor);
@@ -3062,23 +3076,23 @@
   div.kijs-field-combo.kijs-readonly > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview {
     height: 100%;
     border: 0;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo > .kijs-container-inner {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview > .kijs-container-inner {
     display: flex;
     flex-direction: column;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner {
     display: flex;
     flex-direction: row;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
     flex: 1;
     padding-bottom: 3px;
   }
-  div.kijs-spinbox > .kijs-container-inner > .kijs-listview.kijs-field-combo .kijs-placeholder {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-placeholder {
     border: 1px solid transparent;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -3101,17 +3115,11 @@
   div.kijs-field-range > .kijs-inputwrapper > input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 15px;
     background: var(--range-btnColor);
     cursor: pointer;
   }
   div.kijs-field-range > .kijs-inputwrapper > input::-moz-range-thumb {
-    width: 15px;
-    height: 15px;
     border: 0;
-    border-radius: 15px;
     background-color: var(--range-btnColor);
     cursor: pointer;
   }
