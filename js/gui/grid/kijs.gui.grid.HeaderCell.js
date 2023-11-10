@@ -12,7 +12,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // overwrite
     constructor(config={}) {
         super(false);
-
+        
+        this._overflowTooltipDisable = false;   // Tooltip auf Spaltenkopf, wenn caption zu lang
+        
         // DOM type
         this._dom.nodeTagName = 'td';
         this._columnConfig = null;
@@ -110,6 +112,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             columnConfig: true,
+            
+            overflowTooltipDisable: true,
+            
             sort: { target: 'sort' },
 
             helpIcon: { target: 'helpIcon' },
@@ -119,7 +124,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             helpIconMap: { target: 'iconMap', context: this._helpIconEl },
             helpText: { target: 'helpText' }
         });
-
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -199,7 +204,15 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
         return null;
     }
-
+    
+    get overflowTooltipDisable() { return this.overflowTooltipDisable; }
+    set overflowTooltipDisable(val) {
+        this._overflowTooltipDisable = !!val;
+        if (this.isRendered) {
+            this._updateHeaderToolTip();
+        }
+    }
+    
     get sort() { return this._sort; }
     set sort(val) {
         if (val === 'DESC') {
@@ -289,6 +302,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
+        // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+        kijs.defer(this._updateHeaderToolTip, 50, this);
+        this._updateHeaderToolTip();
+        
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -329,6 +346,21 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         };
 
         this._overlayDom.left = newPos.x;
+    }
+    
+    
+    // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+    _updateHeaderToolTip() {
+        if (!this.isRendered) {
+            return;
+        }
+        if (!this._overflowTooltipDisable && this._captionContainerDom.width > 0) {
+            if (this._captionDom.width >= this._captionContainerDom.width) {
+                this._captionDom.tooltip = this.caption;
+            } else {
+                this._captionDom.tooltip = null;
+            }
+        }
     }
 
 
