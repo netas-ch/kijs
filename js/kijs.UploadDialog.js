@@ -36,6 +36,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._contentTypes = [];
         this._currentUploadIds = [];
         this._directory = false;
+        this._disabled = false;
         this._dropZones = [];
         this._fileExtensions = [];
         this._maxFilesize = null;
@@ -119,6 +120,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
+    get disabled() { return this._disabled; }
+    set disabled(val) { this._disabled = val; }
+
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }
 
@@ -140,6 +144,14 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
             this._fileExtensions.push(type);
         }, this);
+    }
+    
+    get maxFilesize() {
+        return this._maxFilesize;
+    }
+    
+    set maxFilesize(val) {
+        this._maxFilesize = val;
     }
 
     get multiple() { return this._multiple; }
@@ -196,34 +208,36 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      */
     // TODO: Umbenennen zu showFileOpenDialog !!!!!
     showFileSelectDialog(multiple=null, directory=null) {
-        multiple = multiple === null ? this._multiple : multiple;
-        directory = directory === null ? this._directory : directory;
+        if (!this.disabled) {
+            multiple = multiple === null ? this._multiple : multiple;
+            directory = directory === null ? this._directory : directory;
 
-        let input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        if (multiple) {
-            input.setAttribute('multiple', 'multiple');
-        }
-        if (directory) {
-            input.setAttribute('directory', 'directory');
-            input.setAttribute('webkitdirectory', 'webkitdirectory');
-            input.setAttribute('mozdirectory', 'mozdirectory');
-        }
-
-        let acceptTypes = kijs.Array.concat(this._contentTypes, this._fileExtensions);
-
-        if (acceptTypes.length > 0) {
-            input.setAttribute('accept', acceptTypes.join(','));
-        }
-
-        kijs.Dom.addEventListener('change', input, function(e) {
-            if (e.nodeEvent.target && e.nodeEvent.target.files) {
-                this._uploadFiles(e.nodeEvent.target.files);
+            let input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            if (multiple) {
+                input.setAttribute('multiple', 'multiple');
             }
-        }, this);
+            if (directory) {
+                input.setAttribute('directory', 'directory');
+                input.setAttribute('webkitdirectory', 'webkitdirectory');
+                input.setAttribute('mozdirectory', 'mozdirectory');
+            }
 
-        // öffnen
-        input.click();
+            let acceptTypes = kijs.Array.concat(this._contentTypes, this._fileExtensions);
+
+            if (acceptTypes.length > 0) {
+                input.setAttribute('accept', acceptTypes.join(','));
+            }
+
+            kijs.Dom.addEventListener('change', input, function (e) {
+                if (e.nodeEvent.target && e.nodeEvent.target.files) {
+                    this._uploadFiles(e.nodeEvent.target.files);
+                }
+            }, this);
+
+            // öffnen
+            input.click();
+        }
     }
 
 
@@ -377,7 +391,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // PRIVATE
     // LISTENERS
     #onDropZoneDrop(e) {
-        this._uploadFiles(e.nodeEvent.dataTransfer.files);
+        if (!this.disabled) {
+            this._uploadFiles(e.nodeEvent.dataTransfer.files);
+        }
     }
 
     #onEndUpload(e) {
@@ -405,7 +421,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
     
     #onFilePaste(e) {
-        if (!this._observePaste || !kijs.isArray(this._dropZones)) {
+        if (this.disabled || !this._observePaste || !kijs.isArray(this._dropZones)) {
             return;
         }
 
@@ -413,7 +429,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         if (this._dropZones.length > 0) {
             let rendered = false;
             kijs.Array.each(this._dropZones, function(dz) {
-                if (dz.rendered) {
+                if (dz.parent) {
                     rendered = true;
                 }
             }, this);
@@ -454,6 +470,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._contentTypes = null;
         this._currentUploadIds = null;
         this._directory = null;
+        this._disabled = null;
         this._dropZones = null;
         this._fileExtensions = null;
         this._maxFilesize = null;
