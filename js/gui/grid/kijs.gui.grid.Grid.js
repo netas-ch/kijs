@@ -416,17 +416,18 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad():
      *
      * Lädt die Daten im Grid neu.
-     * @param {Boolean} restoreSelection
-     * @param {Boolean} resetData Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
-     * @returns {Promise}
+     *
+     * resetData: Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
      */
-    reload(restoreSelection = true, resetData = true) {
-        let selected = this.getSelectedIds();
-        return this._remoteLoad(resetData).then((response) => {
+    reload(restoreSelection = true, resetData = true, selectIds = []) {
+        if (!selectIds) {
+            selectIds = this.getSelectedIds();
+        }
+        return this._remoteLoad(resetData, false, selectIds).then((response) => {
 
             // Selektion wiederherstellen
-            if (selected && restoreSelection) {
-                this.selectByIds(selected, false, true);
+            if (selectIds && restoreSelection) {
+                this.selectByIds(selectIds, false);
             }
 
             if (
@@ -912,7 +913,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return rowMatch;
     }
 
-    _remoteLoad(resetData=false, loadNextData=false) {
+    _remoteLoad(resetData= false, loadNextData= false, selectIds = []) {
         return new Promise((resolve) => {
             if (
                 this._facadeFnLoad
@@ -929,6 +930,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 let args = {};
                 args.sort = this._remoteSort;
+                args.selectIds = selectIds;
                 args.getMetaData = this._getRemoteMetaData;
                 args.filter = this._filter.getFilters();
 
@@ -959,12 +961,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 let showWaitMask = this._remoteDataStartIndex === 0;
 
                 // RPC ausführen
-                this._rpc.do(this._facadeFnLoad, args, function(response) {
+                this._rpc.do(
+                    this._facadeFnLoad, args, function(response) {
                         this._remoteProcess(response, args, resetData);
-
-                        // Promise auflösen
                         resolve(response);
-
                     },
                     this,                                           // Context
                     true,                                           // Cancel running
