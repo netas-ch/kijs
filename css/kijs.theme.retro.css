@@ -414,6 +414,7 @@ div.kijs-buttongroup > .kijs-container-inner {
 }
 .kijs-field > .kijs-icon-spindown {
   background: linear-gradient(#f3f4f4, #d1d1d1);
+  padding-top: 0;
 }
 div.kijs-field-email > .kijs-inputwrapper > input,
 div.kijs-field-iban > .kijs-inputwrapper > input,
