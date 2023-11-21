@@ -110,6 +110,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
+            labelPosition: { target: 'labelPosition' },
             isDirty: { target: 'isDirty', prio: 3000 },
 
             inputWidth: { target: 'inputWidth' },
@@ -323,6 +324,48 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get labelHtmlDisplayType() { return this._labelDom.htmlDisplayType; }
     set labelHtmlDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
+    get labelPosition() {
+        if (this._dom.clsHas('kijs-top')) {
+            return 'top';
+        } else if (this._dom.clsHas('kijs-auto')) {
+             return 'auto';
+        } else {
+            return 'left';
+        }
+    }
+    set labelPosition(val) {
+        if (!kijs.Array.contains(['auto', 'left', 'top'], val)) {
+            throw new kijs.Error(`config "labelPosition" is not valid.`);
+        }
+        
+        let cls = '';
+        switch (val) {
+            case 'top':
+                cls = 'kijs-labelpos-top';
+                break;
+                
+            case 'auto':
+                cls = 'kijs-labelpos-auto';
+                break;
+                
+            case 'left':
+                cls = '';
+                break;
+                
+        }
+        
+        this._dom.clsRemove('kijs-labelpos-top');
+        this._dom.clsRemove('kijs-labelpos-auto');
+        
+        if (cls) {
+            this._dom.clsAdd(cls);
+        }
+        
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+    
     get labelWidth() { return this._labelDom.width; }
     set labelWidth(val) { this._labelDom.width = val; }
 

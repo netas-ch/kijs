@@ -2603,6 +2603,14 @@
     align-self: start;
     flex: none;
   }
+  div.kijs-field.kijs-labelpos-top {
+    flex-direction: column;
+  }
+  @media all and (max-width: 500px) {
+    div.kijs-field.kijs-labelpos-auto {
+      flex-direction: column;
+    }
+  }
   div.kijs-field.kijs-label-ontop {
     flex-wrap: wrap;
   }

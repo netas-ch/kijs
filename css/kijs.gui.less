@@ -2993,12 +2993,22 @@
                 cursor: default;
             }
         }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
         }
-
+        
+        &.kijs-labelpos-top {
+            flex-direction: column;
+        }
+        
+        &.kijs-labelpos-auto {
+            @media all and (max-width: 500px) {
+                flex-direction: column;
+            }
+        }
+        
         &.kijs-label-ontop {
             flex-wrap: wrap;
 
