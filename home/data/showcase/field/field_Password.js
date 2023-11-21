@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Password = class home_sc_field_Password {
 
 

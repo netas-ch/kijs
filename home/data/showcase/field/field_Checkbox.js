@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Checkbox = class home_sc_field_Checkbox {
 
 

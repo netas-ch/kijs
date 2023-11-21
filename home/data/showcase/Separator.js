@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Separator = class home_sc_Separator {
     
     

@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.MonthPicker = class home_sc_MonthPicker {
     
     

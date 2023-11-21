@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Splitter = class home_sc_Splitter {
     
     

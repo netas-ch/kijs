@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Memo = class home_sc_field_Memo {
 
 

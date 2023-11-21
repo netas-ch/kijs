@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Rpc = class home_sc_Rpc {
     
     

@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.SpinBox = class home_sc_SpinBox {
     
     

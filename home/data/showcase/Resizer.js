@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Resizer = class home_sc_Resizer {
     
     

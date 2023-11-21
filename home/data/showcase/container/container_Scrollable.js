@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.container_Scrollable = class home_sc_container_Scrollable {
     
     

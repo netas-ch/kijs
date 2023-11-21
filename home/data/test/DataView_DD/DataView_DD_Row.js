@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
     
     

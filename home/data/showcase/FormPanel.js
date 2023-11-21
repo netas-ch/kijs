@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.FormPanel = class home_sc_FormPanel {
     
     
@@ -109,7 +108,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     name: 'Plz',
                                     label: 'PLZ',
                                     disableFlex: true,
-                                    width: 200
+                                    inputWidth: 100
                                 },{
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Ort',
@@ -201,8 +200,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     label: 'Alter',
                                     readOnly: true,
                                     disableFlex: true,
-                                    width: 80,
                                     labelWidth: null,
+                                    inputWidth: 40,
                                     labelStyle: { textAlign: 'right' }
                                 }
                             ]
@@ -454,7 +453,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             name: 'Plz',
                                             label: 'PLZ',
                                             disableFlex: true,
-                                            width: 200
+                                            inputWidth: 100
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Ort',
@@ -552,8 +551,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             label: 'Alter',
                                             readOnly: true,
                                             disableFlex: true,
-                                            width: 80,
                                             labelWidth: null,
+                                            inputWidth: 40,
                                             labelStyle: { textAlign: 'right' }
                                         }
                                     ]

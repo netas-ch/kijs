@@ -4,6 +4,8 @@
 // home.App
 // --------------------------------------------------------------
 window.home = {};
+window.home.sc = {};
+window.home.test = {};
 home.App = class home_App {
 
 
@@ -82,7 +84,7 @@ home.App = class home_App {
                 {
                     tabIconMap: 'kijs.iconMap.Fa.house',
                     tabTooltip: 'Home',
-                    tabClosable: true,
+                    tabClosable: false,
                     scrollableY: 'auto',
                     cls: 'tabHome',
                     style:{

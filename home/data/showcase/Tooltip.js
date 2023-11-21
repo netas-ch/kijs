@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Tooltip = class home_sc_Tooltip {
     
     

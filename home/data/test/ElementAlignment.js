@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.ElementAlignment = class home_test_ElementAlignment {
     
     
@@ -48,7 +47,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 },{
                     xtype: 'kijs.gui.field.Number',
                     label: 'field.Number',
-                    spinButtonsVisible: true,
+                    spinButtonsHide: false,
                     value: 1
                 },{
                     xtype: 'kijs.gui.field.Iban',

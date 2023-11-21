@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
     
     // --------------------------------------------------------------

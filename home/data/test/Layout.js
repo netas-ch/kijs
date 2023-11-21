@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.Layout = class home_test_Layout {
     
     

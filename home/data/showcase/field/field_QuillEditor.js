@@ -4,7 +4,6 @@
 //       Elementen. Tooltips und Kontextmenüs werden deshalb abgeschnitten.
 //       Das CSS ist ein gebastel.
 //       Evtl. bauen wir besser einen anderen Editor ein. Z.B. summernote.org
-window.home.sc = {};
 home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
 
 

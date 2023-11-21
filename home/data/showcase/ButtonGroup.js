@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.ButtonGroup = class home_sc_ButtonGroup {
     
     // --------------------------------------------------------------

@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.container_Stack = class home_sc_container_Stack {
     
     

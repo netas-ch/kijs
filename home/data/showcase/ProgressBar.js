@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.ProgressBar = class home_sc_ProgressBar {
     
     
