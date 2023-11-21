@@ -1744,13 +1744,12 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
     color: var(--field-fontColor);
     border-color: transparent;
-    /*> div.kijs-container-inner {
-                        display: inline-block;
-                    }*/
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:before {
     flex: none;
     margin: 0 4px 0 0;
+    border-radius: 2px;
+    background-color: var(--field-bkgrndColor);
     font: normal normal normal 15px/1 'Font Awesome 6 Free';
     content: '\f096';
   }
@@ -1760,13 +1759,12 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options {
     color: var(--field-fontColor);
     border-color: transparent;
-    /*> div.kijs-container-inner {
-                        display: inline-block;
-                    }*/
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
     flex: none;
     margin: 0 4px 0 0;
+    border-radius: 50%;
+    background-color: var(--field-bkgrndColor);
     font: normal normal normal 15px/1 'Font Awesome 6 Free';
     content: '\f10c';
   }
@@ -1787,6 +1785,10 @@
   div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
     border-color: var(--item-selected-disabled-borderColor);
     background-color: transparent;
+  }
+  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-display-checkboxes:before,
+  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-display-options:before {
+    background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * ProgressBar
@@ -2210,8 +2212,8 @@
     height: 100%;
     width: 100%;
   }
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field div.kijs-inputwrapper,
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field span.kijs-icon-spindown {
+  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > div.kijs-inputwrapper,
+  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > span.kijs-icon-spindown {
     height: 100%;
   }
   div.kijs-grid > .kijs-top {
@@ -2435,37 +2437,37 @@
   .kijs-filter-checkboxgroup {
     background-color: var(--button-bkgrndColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
     cursor: pointer;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before {
     padding: 3px 7px 3px 3px;
     color: var(--buttonGroup-button-fontColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon {
     width: 20px;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon:empty {
     display: none;
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
     background-color: var(--buttonGroup-button-focus-bkgrndColor);
   }
-  .kijs-filter-icon-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > *,
-  .kijs-filter-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > * {
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > *,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover > * {
     color: var(--buttonGroup-button-focus-fontColor);
   }
   /* ******************
        * Field
        ****************** */
   div.kijs-field {
-    display: flex;
     flex: 1 0 auto;
+    display: flex;
     flex-direction: row;
     min-height: 25px;
     overflow: hidden;
@@ -2489,78 +2491,75 @@
   div.kijs-field > .kijs-label:empty {
     padding-right: 0;
   }
-  div.kijs-field > .kijs-inputwrapper {
+  div.kijs-field > .kijs-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+  }
+  div.kijs-field > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
     position: relative;
     display: block;
-    flex: 1 1 auto;
   }
-  div.kijs-field > .kijs-inputwrapper > input {
+  div.kijs-field > .kijs-content > .kijs-inputwrapper > input {
     outline: none;
     color: var(--field-fontColor);
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-field > .kijs-icon-spindown {
+  div.kijs-field > .kijs-content > .kijs-buttons {
     flex: none;
-    margin: 0;
-    padding: 2px 3px 0 3px;
+    display: flex;
+    flex-direction: row;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button {
     border-top: 1px solid var(--field-borderColor);
     border-right: 1px solid var(--field-borderColor);
     border-bottom: 1px solid var(--field-borderColor);
-    background-color: transparent;
-    color: var(--button-icon-fontColor);
-    cursor: pointer;
+    border-left: none;
+    border-radius: 0;
+    padding: 0 2px;
   }
-  div.kijs-field > .kijs-icon-spindown:hover {
-    background-color: var(--viewport-bkgrndColor);
-  }
-  div.kijs-field > .kijs-icon-spindown.kijs-hidden {
-    display: none;
-  }
-  div.kijs-field > .kijs-icon-spindown.kijs-disabled {
-    background-color: var(--field-disabled-bkgrndColor);
-    color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  div.kijs-field > .kijs-container-inner {
+  div.kijs-field > .kijs-content > .kijs-container-inner {
     flex: none;
     display: flex;
     flex-direction: row;
     overflow: visible;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
     margin: 0 0 0 2px;
     height: 25px;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     margin: 0;
-    border-radius: 0px;
     border-top: 1px solid var(--field-borderColor);
     border-right: 1px solid var(--field-borderColor);
     border-bottom: 1px solid var(--field-borderColor);
-    border-left: 0;
+    border-left: none;
+    border-radius: 0;
     color: var(--button-icon-fontColor);
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
     width: 20px;
     margin: 0;
     padding: 0;
     justify-content: center;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
     margin: 0;
     padding: 0;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
     box-shadow: none;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-button.kijs-inline:hover {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon {
     margin: 0 0 0 2px;
     height: 25px;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon.kijs-inline {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline {
     margin: 0 0 0 0;
     padding: 3px 2px 0 2px;
     border-radius: 0px;
@@ -2572,28 +2571,28 @@
     color: var(--button-icon-fontColor);
     cursor: pointer;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-default {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-default {
     box-shadow: none;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-hidden {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-hidden {
     display: none;
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon.kijs-inline:hover {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline:hover {
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-field > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-disabled {
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-disabled {
     background-color: var(--field-disabled-bkgrndColor);
     color: var(--field-disabled-fontColor);
     cursor: default;
   }
-  div.kijs-field > .kijs-icon-error {
+  div.kijs-field > .kijs-content > .kijs-icon-error {
     flex: none;
     height: 16px;
     margin: 3px 0 0 2px;
     color: var(--icon-error-fontColor);
     cursor: default;
   }
-  div.kijs-field > .kijs-icon-help {
+  div.kijs-field > .kijs-content > .kijs-icon-help {
     flex: none;
     height: 16px;
     margin: 3px 0 0 2px;
@@ -2620,13 +2619,13 @@
        * Field Phone
        * Field Number
        ****************** */
-  div.kijs-field-text > .kijs-inputwrapper > input,
-  div.kijs-field-url > .kijs-inputwrapper > input,
-  div.kijs-field-email > .kijs-inputwrapper > input,
-  div.kijs-field-iban > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr > .kijs-inputwrapper > input,
-  div.kijs-field-phone > .kijs-inputwrapper > input,
-  div.kijs-field-number > .kijs-inputwrapper > input {
+  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input {
     display: block;
     height: 25px;
     width: 100%;
@@ -2637,13 +2636,13 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
   }
-  div.kijs-field-text > .kijs-inputwrapper > input:focus,
-  div.kijs-field-url > .kijs-inputwrapper > input:focus,
-  div.kijs-field-email > .kijs-inputwrapper > input:focus,
-  div.kijs-field-iban > .kijs-inputwrapper > input:focus,
-  div.kijs-field-sozversnr > .kijs-inputwrapper > input:focus,
-  div.kijs-field-phone > .kijs-inputwrapper > input:focus,
-  div.kijs-field-number > .kijs-inputwrapper > input:focus {
+  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-text.kijs-disableFlex,
@@ -2656,96 +2655,70 @@
     align-self: start;
     flex: none;
   }
-  div.kijs-field-text.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-url.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-email.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-iban.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-phone.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-number.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-text.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-iban.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-text.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-error > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-text.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-text.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-text.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-readonly > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-text.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-text.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners {
+  div.kijs-field-number > .kijs-content > .kijs-buttons {
     flex: none;
-  }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner {
     display: flex;
     flex-direction: column;
+    align-items: stretch;
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button {
-    height: 13px;
-    width: 12px;
-    /*margin: 0;*/
-    padding: 0;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: 0;
-    border-radius: 0;
-    background-color: var(--button-bkgrndColor);
-    color: var(--button-icon-fontColor);
-    cursor: pointer;
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button {
+    flex: 1;
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button:last-child {
-    height: 12px;
-    border-top: 0;
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button:last-child {
+    border-top: none;
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button > .kijs-icon {
-    margin: 0;
-    padding: 0 0 0 2px;
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button > .kijs-icon {
     font-size: 11px;
     line-height: 11px;
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button.kijs-default {
-    box-shadow: none;
-  }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button.kijs-hidden {
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-hidden {
     display: none;
   }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button:hover {
-    background-color: var(--viewport-bkgrndColor);
-  }
-  div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button.kijs-disabled {
-    background-color: var(--field-disabled-bkgrndColor);
-    color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  div.kijs-field-url.kijs-disableFlex > .kijs-inputwrapper,
-  div.kijs-field-email.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 160px;
   }
-  div.kijs-field-phone.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 130px;
   }
-  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 120px;
   }
-  div.kijs-field-number.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 80px;
   }
   /* ******************
@@ -2754,10 +2727,10 @@
   div.kijs-field-color {
     overflow: visible;
   }
-  div.kijs-field-color > .kijs-inputwrapper {
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper {
     overflow: visible;
   }
-  div.kijs-field-color > .kijs-inputwrapper > input {
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input {
     width: 25px;
     height: 25px;
     border: 1px solid var(--field-borderColor);
@@ -2766,21 +2739,21 @@
     overflow: hidden;
     cursor: pointer;
   }
-  div.kijs-field-color > .kijs-inputwrapper > input:hover,
-  div.kijs-field-color > .kijs-inputwrapper > input:focus {
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:hover,
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:focus {
     background-color: var(--button-focus-bkgrndColor);
   }
   div.kijs-field-color.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-color.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-color.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 25px;
   }
   /* ******************
        * Field Password
        ****************** */
-  div.kijs-field-password > .kijs-inputwrapper > input {
+  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input {
     display: block;
     height: 100%;
     width: 100%;
@@ -2791,27 +2764,27 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
   }
-  div.kijs-field-password > .kijs-inputwrapper > input:focus {
+  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-password.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-password.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-password.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-password.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-password.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-password.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-password.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-password.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-password.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * Field Month
        ****************** */
-  div.kijs-field-month > .kijs-inputwrapper > input {
+  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input {
     display: block;
     height: 100%;
     width: 100%;
@@ -2822,21 +2795,21 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
   }
-  div.kijs-field-month > .kijs-inputwrapper > input:focus {
+  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-month.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-month.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-month.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 130px;
   }
-  div.kijs-field-month.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-month.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-month.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-month.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-month.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-month.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
   .kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
@@ -2845,10 +2818,10 @@
   /* ******************
        * Field DateTime
        ****************** */
-  div.kijs-field-datetime > .kijs-inputwrapper {
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper {
     height: 25px;
   }
-  div.kijs-field-datetime > .kijs-inputwrapper > input {
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input {
     display: block;
     height: 100%;
     width: 100%;
@@ -2859,36 +2832,36 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
   }
-  div.kijs-field-datetime > .kijs-inputwrapper > input:focus {
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-datetime.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-datetime.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 170px;
   }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-date > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex.kijs-date > .kijs-content > .kijs-inputwrapper {
     width: 80px;
   }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-time > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex.kijs-time > .kijs-content > .kijs-inputwrapper {
     width: 80px;
   }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-dateTime > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex.kijs-dateTime > .kijs-content > .kijs-inputwrapper {
     width: 130px;
   }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-week > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex.kijs-week > .kijs-content > .kijs-inputwrapper {
     width: 80px;
   }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-range > .kijs-inputwrapper {
+  div.kijs-field-datetime.kijs-disableFlex.kijs-range > .kijs-content > .kijs-inputwrapper {
     width: 170px;
   }
-  div.kijs-field-datetime.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-datetime.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-datetime.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-datetime.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-datetime.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-datetime.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
   .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
@@ -2906,7 +2879,7 @@
   div.kijs-field-memo {
     min-height: 50px;
   }
-  div.kijs-field-memo > .kijs-inputwrapper > textarea {
+  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea {
     display: block;
     height: 100%;
     width: 100%;
@@ -2921,134 +2894,134 @@
     resize: none;
     outline: none;
   }
-  div.kijs-field-memo > .kijs-inputwrapper > textarea:focus {
+  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
-  div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline {
+  div.kijs-field-memo > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
     padding: 0 4px;
     align-items: flex-start;
   }
-  div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
+  div.kijs-field-memo > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
     padding: 3px 0 0 0;
   }
-  div.kijs-field-memo > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+  div.kijs-field-memo > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     padding: 6px 0 0 0;
   }
   div.kijs-field-memo.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-memo.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-memo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-memo.kijs-error > .kijs-inputwrapper > textarea {
+  div.kijs-field-memo.kijs-error > .kijs-content > .kijs-inputwrapper > textarea {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-memo.kijs-disabled > .kijs-inputwrapper > textarea,
-  div.kijs-field-memo.kijs-readonly > .kijs-inputwrapper > textarea {
+  div.kijs-field-memo.kijs-disabled > .kijs-content > .kijs-inputwrapper > textarea,
+  div.kijs-field-memo.kijs-readonly > .kijs-content > .kijs-inputwrapper > textarea {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * Field ListView
        ****************** */
-  div.kijs-field-listview > .kijs-inputwrapper {
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper {
     display: flex;
     flex-direction: column;
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-field-listview > .kijs-inputwrapper > .kijs-listview {
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview {
     flex: 1;
   }
-  div.kijs-field-listview > .kijs-inputwrapper > .kijs-listview:focus {
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
-  div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline {
+  div.kijs-field-listview > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
     padding: 0 4px;
     align-items: flex-start;
   }
-  div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
+  div.kijs-field-listview > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
     padding: 3px 0 0 0;
   }
-  div.kijs-field-listview > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+  div.kijs-field-listview > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     padding: 6px 0 0 0;
   }
-  div.kijs-field-listview.kijs-error > .kijs-inputwrapper > .kijs-listview {
+  div.kijs-field-listview.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
     background-color: var(--icon-error-bkgrndColor);
   }
-  div.kijs-field-listview.kijs-disabled > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-listview.kijs-readonly > .kijs-inputwrapper > .kijs-listview {
+  div.kijs-field-listview.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-listview.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview {
     border-color: var(--field-borderColor);
   }
   /* ******************
        * OptionGroup
        * CheckboxGroup
        ****************** */
-  div.kijs-field-optiongroup > .kijs-inputwrapper,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper {
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper {
     display: flex;
     flex-direction: column;
     background-color: transparent;
   }
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview {
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview {
     flex: 1;
     background-color: transparent;
     border-color: transparent;
   }
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
     background-color: transparent;
   }
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
-  div.kijs-field-optiongroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
-  div.kijs-field-checkboxgroup > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
     color: var(--field-focus-borderColor);
   }
-  div.kijs-field-optiongroup.kijs-error > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-checkboxgroup.kijs-error > .kijs-inputwrapper > .kijs-listview {
+  div.kijs-field-optiongroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-checkboxgroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
     background-color: var(--icon-error-bkgrndColor);
   }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     gap: 4px;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     flex: none;
     padding: 0;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
     margin: 0 2px 0 0;
   }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
     gap: 2px;
   }
   /* ******************
        * Field Combo
        ****************** */
-  div.kijs-field-combo > .kijs-inputwrapper > input {
+  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input {
     display: block;
     height: 100%;
     width: 100%;
@@ -3059,21 +3032,21 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
   }
-  div.kijs-field-combo > .kijs-inputwrapper > input:focus {
+  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-combo.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-combo.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-combo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 163px;
   }
-  div.kijs-field-combo.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-combo.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-combo.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-combo.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-combo.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-combo.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
   div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview {
@@ -3103,7 +3076,7 @@
   /* ******************
        * Field Range
        ****************** */
-  div.kijs-field-range > .kijs-inputwrapper > input {
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
@@ -3112,56 +3085,56 @@
     background: var(--range-bkgrndColor);
     outline: none;
   }
-  div.kijs-field-range > .kijs-inputwrapper > input::-webkit-slider-thumb {
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     background: var(--range-btnColor);
     cursor: pointer;
   }
-  div.kijs-field-range > .kijs-inputwrapper > input::-moz-range-thumb {
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
     border: 0;
     background-color: var(--range-btnColor);
     cursor: pointer;
   }
-  div.kijs-field-range > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
     background-color: var(--field-focus-borderColor);
   }
-  div.kijs-field-range > .kijs-inputwrapper > input:hover::-moz-range-thumb {
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
     background-color: var(--field-focus-borderColor);
   }
   div.kijs-field-range.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-range.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-range.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-range.kijs-error > .kijs-inputwrapper > input {
+  div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input,
-  div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
     background-color: var(--field-disabled-fontColor);
     cursor: default;
   }
-  div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
     background-color: var(--field-disabled-fontColor);
     cursor: default;
   }
-  div.kijs-field-range.kijs-disabled > .kijs-inputwrapper > input::-moz-range-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-inputwrapper > input::-moz-range-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
     background-color: var(--field-disabled-fontColor);
     cursor: default;
   }
   /* ******************
        * Field Checkbox
        ****************** */
-  div.kijs-field-checkbox > .kijs-inputwrapper {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     display: flex;
     flex-direction: row;
@@ -3169,47 +3142,53 @@
     height: 25px;
     outline: none;
   }
-  div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-input {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
     flex: none;
     margin: 0 4px 0 0;
     font-size: 15px;
     line-height: var(--field-lineHeight);
+    background-color: var(--field-bkgrndColor);
+    border-radius: 2px;
     color: var(--field-fontColor);
     cursor: pointer;
   }
-  div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-icon {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-icon {
     flex: none;
     margin: 0 4px 0 0;
     color: var(--button-icon-fontColor);
   }
-  div.kijs-field-checkbox > .kijs-inputwrapper > .kijs-caption {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-caption {
     flex: 1;
     font-family: var(--default-fontFamily);
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
   }
-  div.kijs-field-checkbox > .kijs-inputwrapper > *:last-child {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;
   }
-  div.kijs-field-checkbox > .kijs-inputwrapper:focus > .kijs-checkbox-input {
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper:focus > .kijs-checkbox-input {
     color: var(--field-focus-borderColor);
   }
-  div.kijs-field-checkbox.kijs-disabled > .kijs-inputwrapper > *,
-  div.kijs-field-checkbox.kijs-readonly > .kijs-inputwrapper > * {
+  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
+  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
     color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input,
+  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
+    background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * Field Switch
        ****************** */
-  div.kijs-field-switch > .kijs-inputwrapper {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     display: flex;
     flex-direction: row;
     align-items: center;
     height: 25px;
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
     flex: none;
     height: 20px;
     width: 34px;
@@ -3220,50 +3199,50 @@
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
     height: 16px;
     width: 16px;
     border-radius: 8px;
     background-color: var(--field-item-bkgrndColor);
     transition: margin-left 0.2s;
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder:focus {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus {
     border-color: var(--field-focus-borderColor);
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-toggleBorder:hover > .kijs-togglePoint {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:hover > .kijs-togglePoint {
     background-color: var(--field-item-focus-bkgrndColor);
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-icon {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-icon {
     flex: none;
     margin: 0 4px 0 0;
     color: var(--button-icon-fontColor);
   }
-  div.kijs-field-switch > .kijs-inputwrapper > .kijs-caption {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-caption {
     flex: 1;
     font-family: var(--field-fontFamily);
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
   }
-  div.kijs-field-switch > .kijs-inputwrapper > *:last-child {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;
   }
-  div.kijs-field-switch.kijs-checked > .kijs-inputwrapper > .kijs-toggleBorder {
+  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
     background-color: var(--okColor);
   }
-  div.kijs-field-switch.kijs-checked > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
     margin-left: 14px;
   }
-  div.kijs-field-switch.kijs-disabled > .kijs-inputwrapper > *,
-  div.kijs-field-switch.kijs-readonly > .kijs-inputwrapper > * {
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-switch.kijs-disabled > .kijs-inputwrapper > .kijs-toggleBorder,
-  div.kijs-field-switch.kijs-readonly > .kijs-inputwrapper > .kijs-toggleBorder {
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-field-switch.kijs-disabled > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint,
-  div.kijs-field-switch.kijs-readonly > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
     background-color: var(--field-disabled-fontColor);
   }
   /* ******************
@@ -3272,10 +3251,10 @@
   div.kijs-field-display {
     /* Ergänzungen */
   }
-  div.kijs-field-display > .kijs-inputwrapper {
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper {
     min-height: 25px;
   }
-  div.kijs-field-display > .kijs-inputwrapper > div {
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div {
     padding: 6px 0 2px 0;
     color: var(--field-fontColor);
     font-family: var(--default-fontFamily);
@@ -3286,7 +3265,7 @@
     user-select: text;
     cursor: default;
   }
-  div.kijs-field-display > .kijs-inputwrapper > div > a {
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div > a {
     color: var(--field-fontColor);
     cursor: pointer;
     text-decoration: underline;
@@ -3295,22 +3274,22 @@
     align-self: start;
     flex: none;
   }
-  div.kijs-field-display.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-display.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-display.kijs-title > .kijs-inputwrapper > div {
+  div.kijs-field-display.kijs-title > .kijs-content > .kijs-inputwrapper > div {
     font-weight: bold;
   }
-  div.kijs-field-display.kijs-error > .kijs-inputwrapper > div {
+  div.kijs-field-display.kijs-error > .kijs-content > .kijs-inputwrapper > div {
     color: var(--errorColor);
   }
-  div.kijs-field-display.kijs-help > .kijs-inputwrapper > div {
+  div.kijs-field-display.kijs-help > .kijs-content > .kijs-inputwrapper > div {
     color: var(--helpColor);
   }
-  div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > div {
+  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-display.kijs-disabled > .kijs-inputwrapper > div > a {
+  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div > a {
     color: var(--field-disabled-fontColor);
     text-decoration: none;
     pointer-events: none;
@@ -3318,121 +3297,121 @@
   /* ******************
        * Field AceEditor
        ****************** */
-  div.kijs-field-aceeditor > .kijs-inputwrapper {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     outline: none;
     min-width: 160px;
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor {
     height: 100%;
     border: 1px solid var(--field-borderColor);
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor .ace_gutter {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_gutter {
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor .ace_content {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_content {
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor .ace_scrollbar-v {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-v {
     overflow-y: auto;
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor .ace_scrollbar-h {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-h {
     overflow-x: auto;
   }
-  div.kijs-field-aceeditor > .kijs-inputwrapper > .ace_editor.ace_focus {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor.ace_focus {
     border: 1px solid var(--field-focus-borderColor);
   }
-  div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
     padding: 0 4px;
     align-items: flex-start;
   }
-  div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
     padding: 3px 0 0 0;
   }
-  div.kijs-field-aceeditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+  div.kijs-field-aceeditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     padding: 6px 0 0 0;
   }
   div.kijs-field-aceeditor.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-aceeditor.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-aceeditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-aceeditor.kijs-error > .kijs-inputwrapper > div {
+  div.kijs-field-aceeditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-aceeditor.kijs-disabled > .kijs-inputwrapper > div,
-  div.kijs-field-aceeditor.kijs-readonly > .kijs-inputwrapper > div {
+  div.kijs-field-aceeditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
+  div.kijs-field-aceeditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * Field QuillEditor
        ****************** */
-  div.kijs-field-quilleditor > .kijs-inputwrapper {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     display: flex;
     flex-direction: column;
     min-width: 160px;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper * {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper * {
     overflow: initial;
     margin: initial;
     padding: initial;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-toolbar {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar {
     flex: none;
     border-top: 1px solid var(--field-borderColor) !important;
     border-left: 1px solid var(--field-borderColor) !important;
     border-right: 1px solid var(--field-borderColor) !important;
     border-bottom: 0 !important;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container {
     flex: 1;
     border: 0 !important;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container.ql-snow {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-snow {
     overflow: hidden;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container.ql-bubble {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-bubble {
     overflow: visible;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container > .ql-editor {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor {
     overflow-y: auto;
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     font-family: var(--default-fontFamily) !important;
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container > .ql-editor:focus {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor:focus {
     border: 1px solid var(--field-focus-borderColor);
   }
-  div.kijs-field-quilleditor > .kijs-inputwrapper > .ql-container > .ql-tooltip {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-tooltip {
     position: fixed;
   }
-  div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     height: 100%;
     padding: 0 4px;
     align-items: flex-start;
   }
-  div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-icon {
     padding: 3px 0 0 0;
   }
-  div.kijs-field-quilleditor > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+  div.kijs-field-quilleditor > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     padding: 6px 0 0 0;
   }
   div.kijs-field-quilleditor.kijs-disableFlex {
     align-self: start;
     flex: none;
   }
-  div.kijs-field-quilleditor.kijs-disableFlex > .kijs-inputwrapper {
+  div.kijs-field-quilleditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
   }
-  div.kijs-field-quilleditor.kijs-error > .kijs-inputwrapper > div {
+  div.kijs-field-quilleditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-quilleditor.kijs-disabled > .kijs-inputwrapper > div,
-  div.kijs-field-quilleditor.kijs-readonly > .kijs-inputwrapper > div {
+  div.kijs-field-quilleditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
+  div.kijs-field-quilleditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************

@@ -403,67 +403,69 @@ div.kijs-buttongroup > .kijs-container-inner {
 .kijs-field > .kijs-label {
   padding: 4px 4px 3px 0;
 }
-.kijs-field > .kijs-container-inner > .kijs-inline {
-  background: linear-gradient(#f3f4f4, #d1d1d1);
-}
-.kijs-field > .kijs-container-inner > .kijs-inline.kijs-button {
+.kijs-field > .kijs-content > .kijs-buttons > .kijs-button {
+  border-top: 1px solid var(--field-borderColor);
+  border-right: 1px solid var(--field-borderColor);
+  border-bottom: 1px solid var(--field-borderColor);
+  border-left: none;
   border-radius: 0;
+  padding: 0 2px;
 }
-.kijs-field > .kijs-button {
+.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
+  height: auto;
+  align-self: auto;
+}
+.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
   border-radius: 0;
+  border-top: 1px solid var(--field-borderColor);
+  border-right: 1px solid var(--field-borderColor);
+  border-bottom: 1px solid var(--field-borderColor);
+  border-left: none;
 }
-.kijs-field > .kijs-icon-spindown {
-  background: linear-gradient(#f3f4f4, #d1d1d1);
-  padding-top: 0;
-}
-div.kijs-field-email > .kijs-inputwrapper > input,
-div.kijs-field-iban > .kijs-inputwrapper > input,
-div.kijs-field-month > .kijs-inputwrapper > input,
-div.kijs-field-password > .kijs-inputwrapper > input,
-div.kijs-field-phone > .kijs-inputwrapper > input,
-div.kijs-field-sozversnr > .kijs-inputwrapper > input,
-div.kijs-field-text > .kijs-inputwrapper > input,
-div.kijs-field-url > .kijs-inputwrapper > input {
+div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input,
+div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input {
   height: 22px;
   box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
 /* kijs.gui.field.Memo */
-.div.kijs-field-memo > .kijs-inputwrapper > textarea {
+.div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea {
   padding: 4px 4px 2px 4px;
   box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
 /* kijs.gui.field.Checkbox */
-.kijs-field-checkbox > .kijs-inputwrapper {
+.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper {
   height: 22px;
-}
-.kijs-field-checkbox > .kijs-inputwrapper > .kijs-checkbox-input {
-  background-color: #fff;
-  border-radius: 2px;
 }
 /* kijs.gui.field.Combo */
 div.kijs-field-combo {
   height: 22px;
 }
-div.kijs-field-combo > .kijs-inputwrapper > input {
+div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input {
   height: 22px;
   box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
 /* kijs.gui.field.DateTime */
-div.kijs-field-datetime > .kijs-inputwrapper {
+div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper {
   height: 22px;
 }
-div.kijs-field-datetime > .kijs-inputwrapper > input {
+div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input {
   height: 22px;
   box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
 /* kijs.gui.field.Display */
-div.kijs-field-display > .kijs-inputwrapper {
+div.kijs-field-display > .kijs-content > .kijs-inputwrapper {
   min-height: 22px;
 }
-div.kijs-field-display > .kijs-inputwrapper > div {
+div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div {
   padding: 4px 0 2px 0;
 }
-div.kijs-field-display > .kijs-inputwrapper * {
+div.kijs-field-display > .kijs-content > .kijs-inputwrapper * {
   color: #5C8299;
 }
 /* kijs.gui.field.ListView */
@@ -471,28 +473,31 @@ div.kijs-listview > .kijs-container-inner {
   padding: 1px 0 2px 0;
 }
 /* kijs.gui.field.Number */
-div.kijs-field-number > .kijs-inputwrapper > input {
+div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input {
   height: 22px;
   box-shadow: inset 0 6px 3px -3px #eeeeee;
 }
-div.kijs-field-number > .kijs-container-inner > .kijs-spinners > .kijs-container-inner > .kijs-button {
-  margin: 0;
-  border-radius: 0;
-  height: 11px;
-  padding: 0;
+div.kijs-field-number > .kijs-content > .kijs-buttons {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
-/* kijs.gui.field.CheckboxGroup */
-.kijs-listview > .kijs-container-inner > .kijs-display-checkboxes::before {
-  background-color: #fff;
-  border-radius: 2px;
+div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button {
+  flex: 1;
 }
-/* kijs.gui.field.OptionGroup */
-.kijs-listview > .kijs-container-inner > .kijs-display-options::before {
-  background-color: #fff;
-  border-radius: 50%;
+div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button:last-child {
+  border-top: none;
+}
+div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button > .kijs-icon {
+  font-size: 9px;
+  line-height: 9px;
+}
+div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-hidden {
+  display: none;
 }
 /* kijs.gui.field.Switch */
-.kijs-field-switch > .kijs-inputwrapper {
+.kijs-field-switch > .kijs-content > .kijs-inputwrapper {
   height: 22px;
 }
 /* kijs.gui.Menu */

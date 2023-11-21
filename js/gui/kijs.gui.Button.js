@@ -251,6 +251,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    get icon2Map() { return this._icon2El.iconMap; }
     set icon2Map(val) { 
         this._icon2El.iconMap = val; 
         if (this.isRendered) {

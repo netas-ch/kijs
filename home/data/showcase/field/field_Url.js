@@ -50,7 +50,7 @@ home.sc.field_Url = class home_sc_field_Url {
                     xtype: 'kijs.gui.field.Url',
                     label: 'Label',
                     value: 'www.netas.ch',
-                    linkButtonVisible: true,
+                    linkButtonHide: false,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

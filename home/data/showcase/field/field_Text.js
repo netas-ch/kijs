@@ -135,10 +135,6 @@ home.sc.field_Text = class home_sc_field_Text {
                             iconMap: 'kijs.iconMap.Fa.stamp'
                         }
                     ]
-                },{
-                    xtype: 'kijs.gui.field.Text',
-                    label: 'mit spinIcon',
-                    spinIconVisible: true
                 },
 
                 {

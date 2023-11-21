@@ -66,10 +66,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._inputId = kijs.uniqId('kijs_-_input_');
 
-        this._inputWrapperDom = new kijs.gui.Dom({
-            cls: 'kijs-inputwrapper'
-        });
-
         this._labelDom = new kijs.gui.Dom({
             cls: 'kijs-label',
             nodeTagName: 'label',
@@ -78,14 +74,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 htmlFor: this._inputId
             }
         });
-
-        this._spinIconEl = new kijs.gui.Icon({
-            parent: this,
-            iconMap: 'kijs.iconMap.Fa.caret-down',
-            cls: 'kijs-icon-spindown',
-            visible: false
+        
+        this._contentDom = new kijs.gui.Dom({
+            cls: 'kijs-content'
         });
 
+        this._inputWrapperDom = new kijs.gui.Dom({
+            cls: 'kijs-inputwrapper'
+        });
+        
         this._errorIconEl = new kijs.gui.Icon({
             parent: this,
             iconMap: 'kijs.iconMap.Fa.circle-info',
@@ -101,9 +98,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             tooltip: new kijs.gui.Tooltip({ cls: 'kijs-help' }),
             visible: false
         });
-
-        this._spinBoxEl = null;
-
+        
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-field');
 
@@ -117,6 +112,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             isDirty: { target: 'isDirty', prio: 3000 },
 
+            inputWidth: { target: 'inputWidth' },
+            
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,
@@ -145,20 +142,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             required: true,
             submitValueEnable: true,    // Soll der Wert in einem FormPanel übermittelt werden?
 
-            spinIcon: { target: 'spinIcon' },
-            spinIconChar: { target: 'iconChar', context: this._spinIconEl },
-            spinIconCls: { target: 'iconCls', context: this._spinIconEl },
-            spinIconColor: { target: 'iconColor', context: this._spinIconEl },
-            spinIconMap: { target: 'iconMap', context: this._spinIconEl },
-            spinIconVisible: { target: 'visible', context: this._spinIconEl },
-
             validationFn: { target: 'validationFn' },
             validationFnContext: { target: 'validationFnContext' },
             validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this }
         });
-
-        // Listeners
-        this._spinIconEl.on('click', this.#onSpinButtonClick, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -172,6 +159,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get contentDom() { return this._contentDom; }
+    
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -282,7 +271,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._helpIconEl.tooltip = val;
         this._helpIconEl.visible = this._helpIconEl.tooltip && !kijs.isEmpty(this._helpIconEl.tooltip.html);
     }
-
+    
+    get inputWidth() { return this._inputWrapperDom.width; }
+    set inputWidth(val) {
+        this._inputWrapperDom.width = val;
+        // Evtl. afterResize-Event zeitversetzt auslösen
+        if (this.isRendered && this._hasSizeChanged(null, val)) {
+            this._raiseAfterResizeEvent(true);
+        }
+    }
     get inputWrapperDom() { return this._inputWrapperDom; }
 
     get isDirty() {
@@ -318,7 +315,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             if (val) {
                 this._labelDom.unrender();
             } else {
-                this._labelDom.renderTo(this._dom.node, this._inputWrapperDom.node);
+                this._labelDom.renderTo(this._dom.node, this._contentDom.node);
             }
         }
     }
@@ -340,77 +337,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get required() { return this._required; }
     set required(val) { this._required = !!val; }
-
-    /**
-     * Berechnet die Höhe für die spinBox
-     * @returns {Number}
-     */
-    get spinBoxHeight() {
-        return this._inputWrapperDom.height;
-    }
-
-    /**
-     * Berechnet die Breite für die spinBox
-     * @returns {Number}
-     */
-    get spinBoxWidth() {
-        let width = this._inputWrapperDom.width;
-        if (this._spinIconEl.visible) {
-            width += this._spinIconEl.width;
-        }
-        return width;
-    }
-
-    get spinIcon() { return this._spinIconEl; }
-    /**
-     * Button zuweisen
-     * @param {kijs.gui.Button|Object} val     Button als icon-Config oder kijs.gui.Button Element
-     */
-    set spinIcon(val) {
-        // Button zurücksetzen?
-        if (kijs.isEmpty(val)) {
-            this._spinIconEl.iconChar = null;
-            this._spinIconEl.iconCls = null;
-            this._spinIconEl.iconColor = null;
-            if (this.isRendered) {
-                this.render();
-            }
-
-        // kijs.gui.Button Instanz
-        } else if (val instanceof kijs.gui.Button) {
-            this._spinIconEl.destruct();
-            this._spinIconEl = val;
-            if (this.isRendered) {
-                this.render();
-            }
-
-        // Config Objekt
-        } else if (kijs.isObject(val)) {
-            this._spinIconEl.applyConfig(val);
-            if (this.isRendered) {
-                this.render();
-            }
-
-        } else {
-            throw new kijs.Error(`config "spinIcon" is not valid.`);
-
-        }
-    }
-
-    get spinIconChar() { return this._spinIconEl.iconChar; }
-    set spinIconChar(val) { this._spinIconEl.iconChar = val; }
-
-    get spinIconCls() { return this._spinIconEl.iconCls; }
-    set spinIconCls(val) { this._spinIconEl.iconCls = val; }
-
-    get spinIconColor() { return this._spinIconEl.iconColor; }
-    set spinIconColor(val) { this._spinIconEl.iconColor = val; }
-
-    get spinIconMap() { return this._spinIconEl.iconMap; }
-    set spinIconMap(val) { this._spinIconEl.iconMap = val; }
-
-    get spinIconVisible() { return !!this._spinIconEl.visible; }
-    set spinIconVisible(val) { this._spinIconEl.visible = !!val; }
 
     // false, falls der Wert vom Feld nicht übermittelt werden soll.
     get submitValueEnable() { return this._submitValueEnable; }
@@ -534,13 +460,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         super.changeDisabled(!!val, callFromParent);
 
         // Icons auch aktivieren/deaktivieren
-        this._spinIconEl.changeDisabled(!!val, true);
         this._errorIconEl.changeDisabled(!!val, true);
         this._helpIconEl.changeDisabled(!!val, true);
-
-        if (this._spinBoxEl) {
-            this._spinBoxEl.changeDisabled(!!val, true);
-        }
 
         // Buttons auch aktivieren/deaktivieren
         const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
@@ -592,27 +513,37 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     // overwrite
     render(superCall) {
-        // dom mit elements rendern (innerDom)
-        super.render(true);
+        // Grosselternklassenaufruf von kijs.gui.Elements.render()
+        // den Aufruf von kijs.gui.Container überspringen
+        kijs.gui.Element.prototype.render.call(this, true);
+
+
 
         // Label rendern (kijs.guiDom)
         if (!this._labelHide) {
-            this._labelDom.renderTo(this._dom.node, this._innerDom.node);
+            this._labelDom.renderTo(this._dom.node);
         } else if (this._labelDom.isRendered) {
             this._labelDom.unrender();
         }
-
+        
+        // content rendern (kijs.guiDom)
+        this._contentDom.renderTo(this._dom.node);
+        
         // InputWrapper rendern (kijs.guiDom)
-        this._inputWrapperDom.renderTo(this._dom.node, this._innerDom.node);
+        this._inputWrapperDom.renderTo(this._contentDom.node);
 
-         // Spin icon rendern (kijs.gui.Icon)
-        this._spinIconEl.renderTo(this._dom.node, this._innerDom.node);
-
+        // innerDOM rendern (kijs.guiDom)
+        this._innerDom.renderTo(this._contentDom.node);
+        
         // Help icon rendern (kijs.gui.Icon)
-        this._helpIconEl.renderTo(this._dom.node);
+        this._helpIconEl.renderTo(this._contentDom.node);
 
         // Error icon rendern (kijs.gui.Icon)
-        this._errorIconEl.renderTo(this._dom.node);
+        this._errorIconEl.renderTo(this._contentDom.node);
+        
+        // Render der Elements in Funktion, damit dies
+        // in Vererbungen überschrieben werden könnte.
+        this._renderElements();
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -638,12 +569,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._labelDom.unrender();
         this._inputWrapperDom.unrender();
-        if (this._spinBoxEl) {
-            this._spinBoxEl.unrender();
-        }
-        this._spinIconEl.unrender();
         this._errorIconEl.unrender();
         this._helpIconEl.unrender();
+        this._contentDom.unrender();
         super.unrender(true);
     }
 
@@ -813,22 +741,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
 
-    // PRIVATE
-    // LISTENERS
-    #onSpinButtonClick(e) {
-        if (this.disabled || this.readOnly) {
-             return;
-        }
-        if (this._spinBoxEl) {
-            if (this._spinBoxEl.isRendered) {
-                this._spinBoxEl.close();
-            } else {
-                this._spinBoxEl.show();
-            }
-        }
-    }
-
-
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -850,27 +762,23 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._inputWrapperDom) {
             this._inputWrapperDom.destruct();
         }
-        if (this._spinBoxEl) {
-            this._spinBoxEl.destruct();
-        }
-        if (this._spinIconEl) {
-            this._spinIconEl.destruct();
-        }
         if (this._errorIconEl) {
             this._errorIconEl.destruct();
         }
         if (this._helpIconEl) {
             this._helpIconEl.destruct();
         }
+        if (this._contentDom) {
+            this._contentDom.destruct();
+        }
 
         // Variablen (Objekte/Arrays) leeren
         this._errors = null;
         this._labelDom = null;
         this._inputWrapperDom = null;
-        this._spinBoxEl = null;
-        this._spinIconEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
+        this._contentDom = null;
         this._validationFn = null;
         this._validationFnContext = null;
         this._validationRegExps = null;

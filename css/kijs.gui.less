@@ -1976,10 +1976,12 @@
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
-
+                    
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
+                        border-radius: 2px;
+                        background-color: var(--field-bkgrndColor);
                         font: normal normal normal 15px/1 'Font Awesome 6 Free';
                         content: '\f096';
                     }
@@ -1987,19 +1989,17 @@
                     &.kijs-selected:before {
                         content: '\f046';
                     }
-
-                    /*> div.kijs-container-inner {
-                        display: inline-block;
-                    }*/
                 }
 
                 &.kijs-display-options {
                     color: var(--field-fontColor);
                     border-color: transparent;
-
+                    
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
+                        border-radius: 50%;
+                        background-color: var(--field-bkgrndColor);
                         font: normal normal normal 15px/1 'Font Awesome 6 Free';
                         content: '\f10c';
                     }
@@ -2007,10 +2007,6 @@
                     &.kijs-selected:before {
                         content: '\f05d';
                     }
-
-                    /*> div.kijs-container-inner {
-                        display: inline-block;
-                    }*/
                 }
 
             }
@@ -2032,6 +2028,13 @@
                 &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                     border-color: var(--item-selected-disabled-borderColor);
                     background-color: transparent;
+                }
+                
+                &.kijs-display-checkboxes,
+                &.kijs-display-options {
+                    &:before {
+                        background-color: var(--field-disabled-bkgrndColor);
+                    }
                 }
             }
         }
@@ -2521,7 +2524,8 @@
                             height: 100%;
                             width: 100%;
 
-                            div.kijs-inputwrapper, span.kijs-icon-spindown {
+                            > .kijs-content > div.kijs-inputwrapper, 
+                            > .kijs-content > span.kijs-icon-spindown {
                                 height: 100%;
                             }
                         }
@@ -2804,7 +2808,7 @@
     .kijs-filter-icon-checkboxgroup, .kijs-filter-checkboxgroup {
         background-color: var(--button-bkgrndColor);
 
-        > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
+        > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
             cursor: pointer;
 
             &.kijs-display-checkboxes::before {
@@ -2835,8 +2839,8 @@
        * Field
        ****************** */
     div.kijs-field {
-        display: flex;
         flex: 1 0 auto;
+        display: flex;
         flex-direction: row;
         min-height: 25px;
         overflow: hidden;
@@ -2862,137 +2866,132 @@
                 padding-right: 0;
             }
         }
-
-        > .kijs-inputwrapper {
-            position: relative;
-            display: block;
-            flex: 1 1 auto;
-
-            > input {
-                outline: none;
-                color: var(--field-fontColor);
-                background-color: var(--field-bkgrndColor);
-            }
-        }
-
-        > .kijs-icon-spindown {
-            flex: none;
-            margin: 0;
-            padding: 2px 3px 0 3px;
-            border-top: 1px solid var(--field-borderColor);
-            border-right: 1px solid var(--field-borderColor);
-            border-bottom: 1px solid var(--field-borderColor);
-            background-color: transparent;
-            color: var(--button-icon-fontColor);
-            cursor: pointer;
-
-            &:hover {
-                background-color: var(--viewport-bkgrndColor);
-            }
-
-            &.kijs-hidden {
-                display: none;
-            }
-
-            &.kijs-disabled {
-                background-color: var(--field-disabled-bkgrndColor);
-                color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-        }
-
-        > .kijs-container-inner {
-            flex: none;
+        
+        > .kijs-content {
+            flex: 1;
             display: flex;
             flex-direction: row;
-            overflow: visible;
+            overflow: hidden;
             
-            > .kijs-button {
-                margin: 0 0 0 2px;
-                height: 25px;
+            > .kijs-inputwrapper {
+                flex: 1;
+                position: relative;
+                display: block;
 
-                &.kijs-inline {
-                    margin: 0;
-                    border-radius: 0px;
+                > input {
+                    outline: none;
+                    color: var(--field-fontColor);
+                    background-color: var(--field-bkgrndColor);
+                }
+            }
+
+            > .kijs-buttons {
+                flex: none;
+                display: flex;
+                flex-direction: row;
+                > .kijs-button {
                     border-top: 1px solid var(--field-borderColor);
                     border-right: 1px solid var(--field-borderColor);
                     border-bottom: 1px solid var(--field-borderColor);
-                    border-left: 0;
-                    color: var(--button-icon-fontColor);
+                    border-left: none;
+                    border-radius: 0;
+                    padding: 0 2px;
+                }
+            }
+            
+            > .kijs-container-inner {
+                flex: none;
+                display: flex;
+                flex-direction: row;
+                overflow: visible;
 
-                    &.kijs-smallpaddings {
-                        width: 20px;
+                > .kijs-button {
+                    margin: 0 0 0 2px;
+                    height: 25px;
+
+                    &.kijs-inline {
                         margin: 0;
-                        padding: 0;
-                        justify-content: center;
+                        border-top: 1px solid var(--field-borderColor);
+                        border-right: 1px solid var(--field-borderColor);
+                        border-bottom: 1px solid var(--field-borderColor);
+                        border-left: none;
+                        border-radius: 0;
+                        color: var(--button-icon-fontColor);
 
-                        > .kijs-icon {
+                        &.kijs-smallpaddings {
+                            width: 20px;
                             margin: 0;
                             padding: 0;
+                            justify-content: center;
+
+                            > .kijs-icon {
+                                margin: 0;
+                                padding: 0;
+                            }
+                        }
+
+                        &.kijs-default {
+                            box-shadow: none;
+                        }
+
+                        &:hover {
+                            background-color: var(--viewport-bkgrndColor);
                         }
                     }
+                }
 
-                    &.kijs-default {
-                        box-shadow: none;
-                    }
+                > .kijs-icon {
+                    margin: 0 0 0 2px;
+                    height: 25px;
 
-                    &:hover {
-                        background-color: var(--viewport-bkgrndColor);
+                    &.kijs-inline {
+                        margin: 0 0 0 0;
+                        padding: 3px 2px 0 2px;
+                        border-radius: 0px;
+                        border-top: 1px solid var(--field-borderColor);
+                        border-right: 1px solid var(--field-borderColor);
+                        border-bottom: 1px solid var(--field-borderColor);
+                        border-left: 0;
+                        background-color: var(--button-bkgrndColor);
+                        color: var(--button-icon-fontColor);
+                        cursor: pointer;
+
+                        &.kijs-default {
+                            box-shadow: none;
+                        }
+
+                        &.kijs-hidden {
+                            display: none;
+                        }
+
+                        &:hover {
+                            background-color: var(--viewport-bkgrndColor);
+                        }
+
+                        &.kijs-disabled {
+                            background-color: var(--field-disabled-bkgrndColor);
+                            color: var(--field-disabled-fontColor);
+                            cursor: default;
+                        }
                     }
                 }
             }
 
-            > .kijs-icon {
-                margin: 0 0 0 2px;
-                height: 25px;
-
-                &.kijs-inline {
-                    margin: 0 0 0 0;
-                    padding: 3px 2px 0 2px;
-                    border-radius: 0px;
-                    border-top: 1px solid var(--field-borderColor);
-                    border-right: 1px solid var(--field-borderColor);
-                    border-bottom: 1px solid var(--field-borderColor);
-                    border-left: 0;
-                    background-color: var(--button-bkgrndColor);
-                    color: var(--button-icon-fontColor);
-                    cursor: pointer;
-
-                    &.kijs-default {
-                        box-shadow: none;
-                    }
-
-                    &.kijs-hidden {
-                        display: none;
-                    }
-
-                    &:hover {
-                        background-color: var(--viewport-bkgrndColor);
-                    }
-
-                    &.kijs-disabled {
-                        background-color: var(--field-disabled-bkgrndColor);
-                        color: var(--field-disabled-fontColor);
-                        cursor: default;
-                    }
-                }
+            > .kijs-icon-error {
+                flex: none;
+                height: 16px;
+                margin: 3px 0 0 2px;
+                color: var(--icon-error-fontColor);
+                cursor: default;
             }
-        }
 
-        > .kijs-icon-error {
-            flex: none;
-            height: 16px;
-            margin: 3px 0 0 2px;
-            color: var(--icon-error-fontColor);
-            cursor: default;
-        }
-
-        > .kijs-icon-help {
-            flex: none;
-            height: 16px;
-            margin: 3px 0 0 2px;
-            color: var(--icon-help-fontColor);
-            cursor: default;
+            > .kijs-icon-help {
+                flex: none;
+                height: 16px;
+                margin: 3px 0 0 2px;
+                color: var(--icon-help-fontColor);
+                cursor: default;
+            }
         }
 
         &.kijs-disableFlex {
@@ -3028,20 +3027,22 @@
     div.kijs-field-sozversnr,
     div.kijs-field-phone,
     div.kijs-field-number {
-        > .kijs-inputwrapper {
-            > input {
-                display: block;
-                height: 25px;
-                width: 100%;
-                margin: 0;
-                border: 1px solid var(--field-borderColor);
-                padding: 0 4px;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                > input {
+                    display: block;
+                    height: 25px;
+                    width: 100%;
+                    margin: 0;
+                    border: 1px solid var(--field-borderColor);
+                    padding: 0 4px;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3049,92 +3050,64 @@
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
-
-            > .kijs-inputwrapper {
-                width: 180px;
+            
+            > .kijs-content {
+                > .kijs-inputwrapper {
+                    width: 180px;
+                }
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > input {
+            > .kijs-content > .kijs-inputwrapper > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
     }
-    div.kijs-field-number > .kijs-container-inner > .kijs-spinners {
+    div.kijs-field-number > .kijs-content > .kijs-buttons {
         flex: none;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        
+        > .kijs-button {
+            flex: 1;
 
-        > .kijs-container-inner {
-            display: flex;
-            flex-direction: column;
+            &:last-child {
+                border-top: none;
+            }
 
-            > .kijs-button {
-                height: 13px;
-                width: 12px;
-                /*margin: 0;*/
-                padding: 0;
-                border-top: 1px solid var(--field-borderColor);
-                border-right: 1px solid var(--field-borderColor);
-                border-bottom: 1px solid var(--field-borderColor);
-                border-left: 0;
-                border-radius: 0;
-                background-color: var(--button-bkgrndColor);
-                color: var(--button-icon-fontColor);
-                cursor: pointer;
+            > .kijs-icon {
+                font-size: 11px;
+                line-height: 11px;
+            }
 
-                &:last-child {
-                    height: 12px;
-                    border-top: 0;
-                }
-
-                > .kijs-icon {
-                    margin: 0;
-                    padding: 0 0 0 2px;
-                    font-size: 11px;
-                    line-height: 11px;
-                }
-
-                &.kijs-default {
-                    box-shadow: none;
-                }
-
-                &.kijs-hidden {
-                    display: none;
-                }
-
-                &:hover {
-                    background-color: var(--viewport-bkgrndColor);
-                }
-
-                &.kijs-disabled {
-                    background-color: var(--field-disabled-bkgrndColor);
-                    color: var(--field-disabled-fontColor);
-                    cursor: default;
-                }
+            &.kijs-hidden {
+                display: none;
             }
         }
     }
     div.kijs-field-url,
     div.kijs-field-email {
-        &.kijs-disableFlex > .kijs-inputwrapper {
+        &.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
             width: 160px;
         }
     }
     div.kijs-field-phone {
-        &.kijs-disableFlex > .kijs-inputwrapper {
+        &.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
             width: 130px;
         }
     }
     div.kijs-field-sozversnr {
-        &.kijs-disableFlex > .kijs-inputwrapper {
+        &.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
             width: 120px;
         }
     }
-    div.kijs-field-number.kijs-disableFlex > .kijs-inputwrapper {
+    div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
         width: 80px;
     }
 
@@ -3145,30 +3118,32 @@
        ****************** */
     div.kijs-field-color {
         overflow: visible;
+        
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                overflow: visible;
 
-        > .kijs-inputwrapper {
-            overflow: visible;
+                > input {
+                    width: 25px;
+                    height: 25px;
+                    border: 1px solid var(--field-borderColor);
+                    border-radius: 2px;
+                    padding: 2px;
+                    overflow: hidden;
+                    cursor: pointer;
 
-            > input {
-                width: 25px;
-                height: 25px;
-                border: 1px solid var(--field-borderColor);
-                border-radius: 2px;
-                padding: 2px;
-                overflow: hidden;
-                cursor: pointer;
-
-                &:hover, &:focus {
-                    background-color: var(--button-focus-bkgrndColor);
+                    &:hover, &:focus {
+                        background-color: var(--button-focus-bkgrndColor);
+                    }
                 }
             }
         }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 25px;
             }
         }
@@ -3180,20 +3155,22 @@
        * Field Password
        ****************** */
     div.kijs-field-password {
-        > .kijs-inputwrapper {
-            > input {
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                border: 1px solid var(--field-borderColor);
-                padding: 2px 4px;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                > input {
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    border: 1px solid var(--field-borderColor);
+                    padding: 2px 4px;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3202,17 +3179,17 @@
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error  > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > input {
+            > .kijs-content > .kijs-inputwrapper > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3224,39 +3201,41 @@
        * Field Month
        ****************** */
     div.kijs-field-month {
-        > .kijs-inputwrapper {
-            > input {
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                border: 1px solid var(--field-borderColor);
-                padding: 0 4px;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                > input {
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    border: 1px solid var(--field-borderColor);
+                    padding: 0 4px;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
             }
         }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 130px;
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > input {
+            > .kijs-content > .kijs-inputwrapper > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3272,46 +3251,48 @@
        * Field DateTime
        ****************** */
     div.kijs-field-datetime {
-        > .kijs-inputwrapper {
-            height: 25px;
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                height: 25px;
 
-            > input {
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                border: 1px solid var(--field-borderColor);
-                padding: 0 4px;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
+                > input {
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    border: 1px solid var(--field-borderColor);
+                    padding: 0 4px;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
             }
         }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 170px;
             }
-            &.kijs-date > .kijs-inputwrapper { width: 80px; }
-            &.kijs-time > .kijs-inputwrapper { width: 80px; }
-            &.kijs-dateTime > .kijs-inputwrapper { width: 130px; }
-            &.kijs-week > .kijs-inputwrapper { width: 80px; }
-            &.kijs-range > .kijs-inputwrapper { width: 170px; }
+            &.kijs-date > .kijs-content > .kijs-inputwrapper { width: 80px; }
+            &.kijs-time > .kijs-content > .kijs-inputwrapper { width: 80px; }
+            &.kijs-dateTime > .kijs-content > .kijs-inputwrapper { width: 130px; }
+            &.kijs-week > .kijs-content > .kijs-inputwrapper { width: 80px; }
+            &.kijs-range > .kijs-content > .kijs-inputwrapper { width: 170px; }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > input {
+            > .kijs-content > .kijs-inputwrapper > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3336,37 +3317,39 @@
        ****************** */
     div.kijs-field-memo {
         min-height: 50px;
-
-        > .kijs-inputwrapper > textarea {
-            display: block;
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            color: var(--field-fontColor);
-            border: 1px solid var(--field-borderColor);
-            background-color: var(--field-bkgrndColor);
-            padding: 6px 4px 2px 4px;
-            font-family: var(--default-fontFamily);
-            font-size: var(--field-fontSize);
-            line-height: var(--field-lineHeight);
-            resize: none;
-            outline: none;
-
-            &:focus {
-                border: 1px solid var(--field-focus-borderColor);
-            }
-        }
-
-        > .kijs-container-inner {
-            > .kijs-button.kijs-inline {
+        
+        > .kijs-content {
+            > .kijs-inputwrapper > textarea {
+                display: block;
                 height: 100%;
-                padding: 0 4px;
-                align-items: flex-start;
-                > .kijs-icon {
-                    padding: 3px 0 0 0;
+                width: 100%;
+                margin: 0;
+                color: var(--field-fontColor);
+                border: 1px solid var(--field-borderColor);
+                background-color: var(--field-bkgrndColor);
+                padding: 6px 4px 2px 4px;
+                font-family: var(--default-fontFamily);
+                font-size: var(--field-fontSize);
+                line-height: var(--field-lineHeight);
+                resize: none;
+                outline: none;
+
+                &:focus {
+                    border: 1px solid var(--field-focus-borderColor);
                 }
-                > .kijs-caption {
-                    padding: 6px 0 0 0;
+            }
+
+            > .kijs-container-inner {
+                > .kijs-button.kijs-inline {
+                    height: 100%;
+                    padding: 0 4px;
+                    align-items: flex-start;
+                    > .kijs-icon {
+                        padding: 3px 0 0 0;
+                    }
+                    > .kijs-caption {
+                        padding: 6px 0 0 0;
+                    }
                 }
             }
         }
@@ -3375,17 +3358,17 @@
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > textarea {
+        &.kijs-error  > .kijs-content > .kijs-inputwrapper > textarea {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > textarea {
+            > .kijs-content > .kijs-inputwrapper > textarea {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3397,47 +3380,49 @@
        * Field ListView
        ****************** */
     div.kijs-field-listview {
-        > .kijs-inputwrapper {
-            display: flex;
-            flex-direction: column;
-            background-color: var(--field-bkgrndColor);
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                display: flex;
+                flex-direction: column;
+                background-color: var(--field-bkgrndColor);
 
-            > .kijs-listview {
-                flex: 1;
+                > .kijs-listview {
+                    flex: 1;
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
+                }
+            }
+
+            > .kijs-container-inner {
+                > .kijs-button.kijs-inline {
+                    height: 100%;
+                    padding: 0 4px;
+                    align-items: flex-start;
+                    > .kijs-icon {
+                        padding: 3px 0 0 0;
+                    }
+                    > .kijs-caption {
+                        padding: 6px 0 0 0;
+                    }
                 }
             }
         }
-
-        > .kijs-container-inner {
-            > .kijs-button.kijs-inline {
-                height: 100%;
-                padding: 0 4px;
-                align-items: flex-start;
-                > .kijs-icon {
-                    padding: 3px 0 0 0;
-                }
-                > .kijs-caption {
-                    padding: 6px 0 0 0;
-                }
-            }
-        }
-
-        &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
+        
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
 
         &.kijs-disabled,
         &.kijs-readonly {
-            > .kijs-inputwrapper > .kijs-listview {
+            > .kijs-content > .kijs-inputwrapper > .kijs-listview {
                 border-color: var(--field-borderColor);
             }
         }
     }
 
-
+    
 
     /* ******************
        * OptionGroup
@@ -3445,86 +3430,93 @@
        ****************** */
     div.kijs-field-optiongroup,
     div.kijs-field-checkboxgroup{
-        > .kijs-inputwrapper {
-            display: flex;
-            flex-direction: column;
-            background-color: transparent;
-
-            > .kijs-listview {
-                flex: 1;
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                display: flex;
+                flex-direction: column;
                 background-color: transparent;
-                border-color: transparent;
 
-                .kijs-dataview-element {
+                > .kijs-listview {
+                    flex: 1;
                     background-color: transparent;
+                    border-color: transparent;
 
-                    &:focus,
-                    &:hover {
-                        color: var(--field-focus-borderColor);
+                    .kijs-dataview-element {
+                        background-color: transparent;
+                        
+                        &:focus,
+                        &:hover {
+                            color: var(--field-focus-borderColor);
+                        }
+
                     }
 
                 }
-
-
             }
         }
-
-        &.kijs-error  > .kijs-inputwrapper > .kijs-listview {
+        
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
 
         &.kijs-disabled,
         &.kijs-readonly {
-            > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
-                color: var(--field-disabled-fontColor);
-
-                > .kijs-caption {
+            > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+                > .kijs-container-inner > .kijs-dataview-element {
                     color: var(--field-disabled-fontColor);
+
+                    > .kijs-caption {
+                        color: var(--field-disabled-fontColor);
+                    }
                 }
             }
         }
 
-        &.kijs-inline > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            gap: 4px;
+        &.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+            > .kijs-container-inner {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 4px;
 
-            > .kijs-dataview-element {
-                flex: none;
-                padding: 0;
+                > .kijs-dataview-element {
+                    flex: none;
+                    padding: 0;
 
-                &.kijs-display-checkboxes, &.kijs-display-options:before {
-                    margin: 0 2px 0 0;
-                }
+                    &.kijs-display-checkboxes, &.kijs-display-options:before {
+                        margin: 0 2px 0 0;
+                    }
 
-                > .kijs-container-inner {
-                    gap: 2px;
+                    > .kijs-container-inner {
+                        gap: 2px;
+                    }
                 }
             }
         }
     }
 
-
+    
 
     /* ******************
        * Field Combo
        ****************** */
     div.kijs-field-combo {
-        > .kijs-inputwrapper {
-            > input {
-                display: block;
-                height: 100%;
-                width: 100%;
-                margin: 0;
-                border: 1px solid var(--field-borderColor);
-                padding: 0 4px;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                > input {
+                    display: block;
+                    height: 100%;
+                    width: 100%;
+                    margin: 0;
+                    border: 1px solid var(--field-borderColor);
+                    padding: 0 4px;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
 
-                &:focus {
-                    border: 1px solid var(--field-focus-borderColor);
+                    &:focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3533,17 +3525,17 @@
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 163px;
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > input {
+            > .kijs-content > .kijs-inputwrapper > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3589,36 +3581,38 @@
        * Field Range
        ****************** */
     div.kijs-field-range {
-        > .kijs-inputwrapper {
-            > input {
-                -webkit-appearance: none;
-                appearance: none;
-                width: 100%;
-                height: 1px;
-                margin: 0 0 4px 0;
-                background: var(--range-bkgrndColor);
-                outline: none;
-            }
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                > input {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    width: 100%;
+                    height: 1px;
+                    margin: 0 0 4px 0;
+                    background: var(--range-bkgrndColor);
+                    outline: none;
+                }
 
-            > input::-webkit-slider-thumb {
-                -webkit-appearance: none;
-                appearance: none;
-                background: var(--range-btnColor);
-                cursor: pointer;
-            }
+                > input::-webkit-slider-thumb {
+                    -webkit-appearance: none;
+                    appearance: none;
+                    background: var(--range-btnColor);
+                    cursor: pointer;
+                }
 
-            > input::-moz-range-thumb {
-                border: 0;
-                background-color: var(--range-btnColor);
-                cursor: pointer;
-            }
+                > input::-moz-range-thumb {
+                    border: 0;
+                    background-color: var(--range-btnColor);
+                    cursor: pointer;
+                }
 
-            > input:hover::-webkit-slider-thumb {
-                background-color: var(--field-focus-borderColor);
-            }
+                > input:hover::-webkit-slider-thumb {
+                    background-color: var(--field-focus-borderColor);
+                }
 
-            > input:hover::-moz-range-thumb {
-                background-color: var(--field-focus-borderColor);
+                > input:hover::-moz-range-thumb {
+                    background-color: var(--field-focus-borderColor);
+                }
             }
         }
 
@@ -3626,16 +3620,17 @@
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
-        &.kijs-error  > .kijs-inputwrapper > input {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
 
-        &.kijs-disabled > .kijs-inputwrapper , &.kijs-readonly > .kijs-inputwrapper {
+        &.kijs-disabled > .kijs-content > .kijs-inputwrapper,
+        &.kijs-readonly > .kijs-content > .kijs-inputwrapper {
             > input {
                 background-color: var(--field-disabled-bkgrndColor);
             }
@@ -3663,51 +3658,58 @@
        * Field Checkbox
        ****************** */
     div.kijs-field-checkbox {
-        > .kijs-inputwrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            height: 25px;
-            outline: none;
-
-            > .kijs-checkbox-input {
-                flex: none;
-                margin: 0 4px 0 0;
-                font-size: 15px;
-                line-height: var(--field-lineHeight);
-                color: var(--field-fontColor);
-                cursor: pointer;
-            }
-
-            > .kijs-checkbox-icon {
-                flex: none;
-                margin: 0 4px 0 0;
-                color: var(--button-icon-fontColor);
-            }
-
-            > .kijs-caption {
+        > .kijs-content {
+            > .kijs-inputwrapper {
                 flex: 1;
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
-                color: var(--field-fontColor);
-            }
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 25px;
+                outline: none;
 
-            > *:last-child {
-                margin: 0;
-            }
-
-            &:focus {
                 > .kijs-checkbox-input {
-                    color: var(--field-focus-borderColor);
+                    flex: none;
+                    margin: 0 4px 0 0;
+                    font-size: 15px;
+                    line-height: var(--field-lineHeight);
+                    background-color: var(--field-bkgrndColor);
+                    border-radius: 2px;
+                    color: var(--field-fontColor);
+                    cursor: pointer;
+                }
+
+                > .kijs-checkbox-icon {
+                    flex: none;
+                    margin: 0 4px 0 0;
+                    color: var(--button-icon-fontColor);
+                }
+
+                > .kijs-caption {
+                    flex: 1;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
+                    color: var(--field-fontColor);
+                }
+
+                > *:last-child {
+                    margin: 0;
+                }
+
+                &:focus {
+                    > .kijs-checkbox-input {
+                        color: var(--field-focus-borderColor);
+                    }
                 }
             }
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > * {
-                    color: var(--field-disabled-fontColor);
+            > .kijs-content > .kijs-inputwrapper > * {
+                color: var(--field-disabled-fontColor);
+            }
+            > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
+                background-color: var(--field-disabled-bkgrndColor);
             }
         }
     }
@@ -3718,63 +3720,65 @@
        * Field Switch
        ****************** */
     div.kijs-field-switch {
-        > .kijs-inputwrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            height: 25px;
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                flex: 1;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 25px;
 
-            > .kijs-toggleBorder {
-                flex: none;
-                height: 20px;
-                width: 34px;
-                margin: 0 4px 0 0;
-                padding: 1px 0 0 1px;
-                border-radius: 10px;
-                border: 1px solid var(--field-borderColor);
-                background-color: var(--field-bkgrndColor);
-                cursor: pointer;
+                > .kijs-toggleBorder {
+                    flex: none;
+                    height: 20px;
+                    width: 34px;
+                    margin: 0 4px 0 0;
+                    padding: 1px 0 0 1px;
+                    border-radius: 10px;
+                    border: 1px solid var(--field-borderColor);
+                    background-color: var(--field-bkgrndColor);
+                    cursor: pointer;
 
-                > .kijs-togglePoint {
-                    height: 16px;
-                    width: 16px;
-                    border-radius: 8px;
-                    background-color: var(--field-item-bkgrndColor);
-                    transition: margin-left 0.2s;
-                }
-
-                &:focus {
-                    border-color: var(--field-focus-borderColor);
-                }
-                &:hover {
                     > .kijs-togglePoint {
-                        background-color: var(--field-item-focus-bkgrndColor);
+                        height: 16px;
+                        width: 16px;
+                        border-radius: 8px;
+                        background-color: var(--field-item-bkgrndColor);
+                        transition: margin-left 0.2s;
+                    }
+
+                    &:focus {
+                        border-color: var(--field-focus-borderColor);
+                    }
+                    &:hover {
+                        > .kijs-togglePoint {
+                            background-color: var(--field-item-focus-bkgrndColor);
+                        }
                     }
                 }
-            }
 
-            > .kijs-icon {
-                flex: none;
-                margin: 0 4px 0 0;
-                color: var(--button-icon-fontColor);
-            }
+                > .kijs-icon {
+                    flex: none;
+                    margin: 0 4px 0 0;
+                    color: var(--button-icon-fontColor);
+                }
 
-            > .kijs-caption {
-                flex: 1;
-                font-family: var(--field-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
-                color: var(--field-fontColor);
-            }
+                > .kijs-caption {
+                    flex: 1;
+                    font-family: var(--field-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
+                    color: var(--field-fontColor);
+                }
 
-            > *:last-child {
-                margin: 0;
+                > *:last-child {
+                    margin: 0;
+                }
             }
         }
 
         &.kijs-checked {
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 > .kijs-toggleBorder {
                     background-color: var(--okColor);
 
@@ -3786,7 +3790,7 @@
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 > * {
                     color: var(--field-disabled-fontColor);
                 }
@@ -3808,60 +3812,62 @@
        * Field Display
        ****************** */
     div.kijs-field-display {
-        > .kijs-inputwrapper {
-            min-height: 25px;
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                min-height: 25px;
 
-            > div {
-                padding: 6px 0 2px 0;
-                color: var(--field-fontColor);
-                font-family: var(--default-fontFamily);
-                font-size: var(--field-fontSize);
-                line-height: var(--field-lineHeight);
-                overflow-wrap: break-word;
-                -webkit-user-select: text;
-                user-select: text;
-                cursor: default;
-
-                > a {
+                > div {
+                    padding: 6px 0 2px 0;
                     color: var(--field-fontColor);
-                    cursor: pointer;
-                    text-decoration: underline;
-                    &:hover {
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--field-fontSize);
+                    line-height: var(--field-lineHeight);
+                    overflow-wrap: break-word;
+                    -webkit-user-select: text;
+                    user-select: text;
+                    cursor: default;
 
+                    > a {
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        text-decoration: underline;
+                        &:hover {
+
+                        }
                     }
                 }
             }
         }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
         /* Ergänzungen */
         &.kijs-title {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 font-weight: bold;
             }
         }
         &.kijs-error {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 color: var(--errorColor);
             }
         }
         &.kijs-help {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 color: var(--helpColor);
             }
         }
         
         
         &.kijs-disabled {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 color: var(--field-disabled-fontColor);
 
                 > a {
@@ -3879,66 +3885,68 @@
        * Field AceEditor
        ****************** */
     div.kijs-field-aceeditor {
-        > .kijs-inputwrapper {
-            flex: 1;
-            outline: none;
-            min-width: 160px;
+        > .kijs-content {
+            > .kijs-inputwrapper {
+                flex: 1;
+                outline: none;
+                min-width: 160px;
 
-            > .ace_editor {
-                height: 100%;
-                border: 1px solid var(--field-borderColor);
+                > .ace_editor {
+                    height: 100%;
+                    border: 1px solid var(--field-borderColor);
 
-                .ace_gutter {
-                    background-color: var(--field-bkgrndColor);
+                    .ace_gutter {
+                        background-color: var(--field-bkgrndColor);
+                    }
+
+                    .ace_content {
+                        background-color: var(--field-bkgrndColor);
+                    }
+
+                    .ace_scrollbar-v {
+                        overflow-y: auto;
+                    }
+
+                    .ace_scrollbar-h {
+                        overflow-x: auto;
+                    }
+
+                    &.ace_focus {
+                        border: 1px solid var(--field-focus-borderColor);
+                    }
                 }
+            }
 
-                .ace_content {
-                    background-color: var(--field-bkgrndColor);
-                }
-
-                .ace_scrollbar-v {
-                    overflow-y: auto;
-                }
-
-                .ace_scrollbar-h {
-                    overflow-x: auto;
-                }
-
-                &.ace_focus {
-                    border: 1px solid var(--field-focus-borderColor);
+            > .kijs-container-inner {
+                > .kijs-button.kijs-inline {
+                    height: 100%;
+                    padding: 0 4px;
+                    align-items: flex-start;
+                    > .kijs-icon {
+                        padding: 3px 0 0 0;
+                    }
+                    > .kijs-caption {
+                        padding: 6px 0 0 0;
+                    }
                 }
             }
         }
-
-        > .kijs-container-inner {
-            > .kijs-button.kijs-inline {
-                height: 100%;
-                padding: 0 4px;
-                align-items: flex-start;
-                > .kijs-icon {
-                    padding: 3px 0 0 0;
-                }
-                > .kijs-caption {
-                    padding: 6px 0 0 0;
-                }
-            }
-        }
-
+        
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > div {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > div {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
@@ -3950,65 +3958,67 @@
        * Field QuillEditor
        ****************** */
     div.kijs-field-quilleditor {
-        > .kijs-inputwrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 160px;
-
-            * {
-                overflow: initial;
-                margin: initial;
-                padding: initial;
-            }
-
-            > .ql-toolbar {
-                flex: none;
-                border-top: 1px solid var(--field-borderColor) !important;
-                border-left: 1px solid var(--field-borderColor) !important;
-                border-right: 1px solid var(--field-borderColor) !important;
-                border-bottom: 0 !important;
-            }
-
-            > .ql-container {
+        > .kijs-content {
+            > .kijs-inputwrapper {
                 flex: 1;
-                border: 0 !important;
+                display: flex;
+                flex-direction: column;
+                min-width: 160px;
 
-                &.ql-snow {
-                    overflow: hidden;
+                * {
+                    overflow: initial;
+                    margin: initial;
+                    padding: initial;
                 }
-                &.ql-bubble {
-                    overflow: visible;
+
+                > .ql-toolbar {
+                    flex: none;
+                    border-top: 1px solid var(--field-borderColor) !important;
+                    border-left: 1px solid var(--field-borderColor) !important;
+                    border-right: 1px solid var(--field-borderColor) !important;
+                    border-bottom: 0 !important;
                 }
 
-                > .ql-editor {
-                    overflow-y: auto;
-                    border: 1px solid var(--field-borderColor);
-                    background-color: var(--field-bkgrndColor);
-                    font-family: var(--default-fontFamily) !important;
+                > .ql-container {
+                    flex: 1;
+                    border: 0 !important;
 
-                    &:focus {
-                        border: 1px solid var(--field-focus-borderColor);
+                    &.ql-snow {
+                        overflow: hidden;
+                    }
+                    &.ql-bubble {
+                        overflow: visible;
+                    }
+
+                    > .ql-editor {
+                        overflow-y: auto;
+                        border: 1px solid var(--field-borderColor);
+                        background-color: var(--field-bkgrndColor);
+                        font-family: var(--default-fontFamily) !important;
+
+                        &:focus {
+                            border: 1px solid var(--field-focus-borderColor);
+                        }
+                    }
+
+                    > .ql-tooltip {
+                        position: fixed;
                     }
                 }
 
-                > .ql-tooltip {
-                    position: fixed;
-                }
             }
 
-        }
-
-        > .kijs-container-inner {
-            > .kijs-button.kijs-inline {
-                height: 100%;
-                padding: 0 4px;
-                align-items: flex-start;
-                > .kijs-icon {
-                    padding: 3px 0 0 0;
-                }
-                > .kijs-caption {
-                    padding: 6px 0 0 0;
+            > .kijs-container-inner {
+                > .kijs-button.kijs-inline {
+                    height: 100%;
+                    padding: 0 4px;
+                    align-items: flex-start;
+                    > .kijs-icon {
+                        padding: 3px 0 0 0;
+                    }
+                    > .kijs-caption {
+                        padding: 6px 0 0 0;
+                    }
                 }
             }
         }
@@ -4017,17 +4027,17 @@
             align-self: start;
             flex: none;
 
-            > .kijs-inputwrapper {
+            > .kijs-content > .kijs-inputwrapper {
                 width: 180px;
             }
         }
 
-        &.kijs-error > .kijs-inputwrapper > div {
+        &.kijs-error > .kijs-content > .kijs-inputwrapper > div {
             background-color: var(--field-error-bkgrndColor);
         }
 
         &.kijs-disabled, &.kijs-readonly {
-            > .kijs-inputwrapper > div {
+            > .kijs-content > .kijs-inputwrapper > div {
                 background-color: var(--field-disabled-bkgrndColor);
             }
         }
