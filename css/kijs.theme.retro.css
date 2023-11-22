@@ -313,6 +313,7 @@ div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
   background: linear-gradient(180deg, #eef3f9 0%, #dfebf7 10%, #cddef3 42%, #adc8ec 45%, #bad0ee 60%, #cddef3 100%);
 }
 .kijs-panelbar > .kijs-icon {
+  height: 16px;
   width: 16px;
 }
 .kijs-panelbar .kijs-button.kijs-smallpaddings > span {
@@ -464,9 +465,6 @@ div.kijs-field-display > .kijs-content > .kijs-inputwrapper {
 }
 div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div {
   padding: 4px 0 2px 0;
-}
-div.kijs-field-display > .kijs-content > .kijs-inputwrapper * {
-  color: #5C8299;
 }
 /* kijs.gui.field.ListView */
 div.kijs-listview > .kijs-container-inner {
