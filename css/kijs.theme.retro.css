@@ -110,7 +110,7 @@
   --badge-disabled-fontColor: var(--grey7);
   /* Panel */
   --panel-bkgrndColor: var(--grey1);
-  --panel-borderColor: var(--grey4);
+  --panel-borderColor: #99bbe8;
   /* Bar */
   --bar-fontColor: #15428b;
   /*var(--grey0);*/
@@ -247,11 +247,7 @@ div.kijs-container-scrollable > .kijs-btn-scrolldown.kijs-disabled,
 div.kijs-container-scrollable > .kijs-btn-scrollleft.kijs-disabled,
 div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
   background: transparent;
-  /*border: 1px solid var(--button-borderColor);*/
   cursor: default;
-  /*> .kijs-icon {
-                color: var(--button-disabled-fontColor);
-            }*/
 }
 /* kijs.gui.Panel */
 .kijs-panel {
@@ -259,9 +255,7 @@ div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
   font-size: var(--default-fontSize);
 }
 .kijs-panel > .kijs-header {
-  background-color: #d9e4f4;
   background: linear-gradient(180deg, #dae6f4 10%, #cadaed 60%);
-  border-bottom: 1px solid #99bbe8;
 }
 .kijs-panel > .kijs-header > .kijs-container-inner {
   padding: 2px;
@@ -297,10 +291,7 @@ div.kijs-container-scrollable > .kijs-btn-scrollright.kijs-disabled {
   color: var(--badge-disabled-fontColor);
 }
 .kijs-panel > .kijs-container-inner {
-  background-color: #dfe8f6;
-}
-.kijs-panel > .kijs-footer {
-  background-color: #dfe8f6;
+  background-color: var(--viewport-bkgrndColor);
 }
 .kijs-panel.kijs-collapse-top,
 .kijs-panel.kijs-collapse-bottom {

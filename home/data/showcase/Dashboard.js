@@ -178,6 +178,7 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
         
         this._formPanel = new kijs.gui.FormPanel({
             cls: 'kijs-flexform',
+            style: { border: 'none' },
             innerStyle: { padding: '10px' },
             elements: [
                 {

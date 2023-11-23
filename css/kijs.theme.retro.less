@@ -138,7 +138,7 @@
 
     /* Panel */
     --panel-bkgrndColor: var(--grey1);
-    --panel-borderColor: var(--grey4);
+    --panel-borderColor: #99bbe8;
 
 
     /* Bar */
@@ -293,12 +293,7 @@ div.kijs-container-scrollable {
 
         &.kijs-disabled {
             background: transparent;
-            /*border: 1px solid var(--button-borderColor);*/
             cursor: default;
-
-            /*> .kijs-icon {
-                color: var(--button-disabled-fontColor);
-            }*/
         }
     }
 }
@@ -311,9 +306,7 @@ div.kijs-container-scrollable {
     
     
     > .kijs-header {
-        background-color: #d9e4f4;
         background: linear-gradient(180deg, #dae6f4 10%, #cadaed 60%);
-        border-bottom: 1px solid #99bbe8;
 
         > .kijs-container-inner {
             padding: 2px;
@@ -356,11 +349,7 @@ div.kijs-container-scrollable {
     }
     
     > .kijs-container-inner {
-        background-color: #dfe8f6;
-    }
-    
-    > .kijs-footer {
-        background-color: #dfe8f6;
+        background-color: var(--viewport-bkgrndColor);
     }
     
     &.kijs-collapse-top,
