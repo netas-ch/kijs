@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version 2.3.2
+Version 2.4.1
 =============
 ### Anpassungen an Drag&Drop
  - CSS Klasse ```kijs-dragover``` umbenannt zu ```kijs-sourceDragOver```  
@@ -18,6 +18,52 @@ Version 2.3.2
  - CSS von kijs.gui.field.Range angepasst
  - weitere kleinere CSS anpassungen
  - Retro Theme überarbeitet
+
+### kijs.gui.field.*
+ - neue config/getter/setter ```labelPosition```  
+   Mögliche Werte:  
+    - ```'left'``` das Label befindet sich auf der Linken Seite (Standard)
+    - ```'top'``` das Label befindet sich oberhalb
+    - ```'auto'``` bei einer Fensterbreite < 500px befindet sich das Label 
+      oberhalb, sonst links
+ - neue config/getter/setter ```inputWidth```. Damit kann die Breite des 
+   inputWrappers direkt eingestellt werden.  
+   Dies sollte in Kombination mit ```disableFlex: true``` gemacht werden.  
+ - Neuer DOM-Node mit CSS-Klasse ```kijs-content```, indem alle Elemente ausser 
+   das Label sind und einen neuen DOM-Node mit CSS-Klasse ```kijs-buttons```, 
+   indem, falls vorhanden fixe Buttons, wie z.B. der Spin-Button sind.  
+   Aufbau der DOM-Nodes (Namen der CSS-Klassen):  
+   - kijs-field
+     - kijs-label
+     - **kijs-content**
+       - kijs-inputwrapper (wrapper-DIV, das den INPUT-Node enthält)
+       - kijs-buttons (fixe Buttons, wie z.B. Spin-Button. Nicht in jedem Feld vorhanden.)
+       - kijs-container-inner (mit benutzerdefinierten elements)
+       - kijs-icon-help
+       - kijs-icon-error
+
+   **UPDATE TIPP:** Evtl. muss eigener CSS-Code von Fields angepasst werden.   
+
+ - Das Spin-Icon ist jetzt ein Spin-Button. Dadurch ändern sich folgende 
+   config/getter/setter:
+    - ```spinIcon``` -> ```spinButton``` (die config und den setter gibt es nicht mehr)
+    - ```spinIconChar``` -> ```spinButtonIconChar```
+    - ```spinIconCls``` -> ```spinButtonIconCls```
+    - ```spinIconColor``` -> ```spinButtonIconColor```
+    - ```spinIconMap``` -> ```spinButtonIconMap```
+    - ```spinIconVisible``` -> ```spinButtonHide``` (Vorsicht: Wert ist negiert)
+    - ```spinButtonsVisible``` -> ```spinButtonsHide``` (Vorsicht: Wert ist negiert)
+    - ```linkButtonVisible``` -> ```linkButtonHide``` (Vorsicht: Wert ist negiert)
+
+    **UPDATE TIPP:** Suchen & ersetzen in Projekt.  
+
+### kijs.gui.container.Tab
+ - Es gibt jetzt ein Kontext-Menü auf den Tab-Buttons, mit dem mehrere Tabs 
+   geschlossen werden können.  
+ - Beim ```kijs.gui.container.tab.Container``` gibt es eine neue config/getter/setter 
+   ```tabMenuHide```, mit dem das Menü ausgeblendet werden kann.  
+ - Neue Klasse kijs.gui.container.tab.Button für den Tab-Button.  
+   **UPDATE TIPP:** kijs.gui.container.tab.Button.js in Projekt aufnehmen.  
 
 ### kijs.gui.grid.Grid
  - Argumente des RPC load angepasst:  
@@ -35,7 +81,6 @@ Version 2.3.2
 
    **UPDATE TIPP:** In allen Facaden-Funktionen für grid.load die Argumente 
    entsprechend  anpassen.  
-
 
 
 Version 2.3.1

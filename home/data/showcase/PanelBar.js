@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.PanelBar = class home_sc_PanelBar {
     
     

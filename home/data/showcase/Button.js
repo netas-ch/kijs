@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.Button = class home_sc_Button {
     
     
@@ -87,6 +86,7 @@ home.sc.Button = class home_sc_Button {
                     tooltip: 'click to toggle isDefault',
                     on: {
                         click: function() {
+                            console.log(home.sc.Container);
                             console.log(this.xtype);
                             this.isDefault = !this.isDefault;
                         }

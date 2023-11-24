@@ -609,7 +609,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     set width(val) {
         this._dom.width = val;
         // Evtl. afterResize-Event zeitversetzt auslösen
-        if (this._hasSizeChanged(null, val)) {
+        if (this.isRendered && this._hasSizeChanged(null, val)) {
             this._raiseAfterResizeEvent(true);
         }
     }

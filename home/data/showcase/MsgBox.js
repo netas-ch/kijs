@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.MsgBox = class home_sc_MsgBox {
     
     

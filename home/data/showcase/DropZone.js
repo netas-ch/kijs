@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.DropZone = class home_sc_DropZone {
     
     

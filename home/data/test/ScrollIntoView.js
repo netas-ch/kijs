@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.ScrollIntoView = class home_test_ScrollIntoView {
     
     

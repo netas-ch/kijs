@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
 
 

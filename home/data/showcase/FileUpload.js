@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.FileUpload = class home_sc_FileUpload {
     
     

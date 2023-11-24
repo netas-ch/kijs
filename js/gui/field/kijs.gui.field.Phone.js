@@ -15,11 +15,12 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
         this._defaultCountryCallingCode = '+41';
         this._internationalCallPrefix = '00';
-        this._linkButtonVisible = true;
+        
+        this._inputDom.nodeAttributeSet('type', 'tel');
         
         this._linkButtonEl = new kijs.gui.Button({
+            parent: this,
             iconMap: 'kijs.iconMap.Fa.phone',
-            cls: 'kijs-inline',
             tooltip: kijs.getText('Anrufen'),
             nodeAttribute: {
                 tabIndex: -1
@@ -29,9 +30,10 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
                 context: this
             }
         });
-        this.add(this._linkButtonEl);
         
-        this._inputDom.nodeAttributeSet('type', 'tel');
+        this._buttonsDom = new kijs.gui.Dom({
+            cls: 'kijs-buttons'
+        });
         
         this._dom.clsRemove('kijs-field-text');
         this._dom.clsAdd('kijs-field-phone');
@@ -66,7 +68,12 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             defaultCountryCallingCode: true,    // Standard Landesvorwahl
-            linkButtonVisible: { target: 'visible', context: this._linkButtonEl }
+            
+            linkButtonHide: { target: 'linkButtonHide' },
+            linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
+            linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },
+            linkButtonIconColor: { target: 'iconColor', context: this._linkButtonEl },
+            linkButtonIconMap: { target: 'iconMap', context: this._linkButtonEl }
         });
 
         // Config anwenden
@@ -89,14 +96,61 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     
     get linkButton() { return this._linkButtonEl; }
     
-    get linkButtonVisible() { return this._linkButtonEl.visible; }
-    set linkButtonVisible(val) { this._linkButtonEl.visible = val; }
+    get linkButtonHide() { return !this._linkButtonEl.visible; }
+    set linkButtonHide(val) { this._linkButtonEl.visible = !val; }
 
+    get linkButtonIconChar() { return this._linkButtonEl.iconChar; }
+    set linkButtonIconChar(val) { this._linkButtonEl.iconChar = val; }
 
+    get linkButtonIconCls() { return this._linkButtonEl.iconCls; }
+    set linkButtonIconCls(val) { this._linkButtonEl.iconCls = val; }
+
+    get linkButtonIconColor() { return this._linkButtonEl.iconColor; }
+    set linkButtonIconColor(val) { this._linkButtonEl.iconColor = val; }
+
+    get linkButtonIconMap() { return this._linkButtonEl.iconMap; }
+    set linkButtonIconMap(val) { this._linkButtonEl.iconMap = val; }
+    
+    
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(!!val, callFromParent);
+        this._linkButtonEl.changeDisabled(!!val, true);
+    }
+    
+    // overwrite
+    render(superCall) {
+        super.render(true);
+        
+        // Buttons-Container rendern (kijs.gui.Dom)
+        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
+        
+        // Link Button rendern (kijs.gui.Button)
+        this._linkButtonEl.renderTo(this._buttonsDom.node);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._buttonsDom.unrender();
+        
+        super.unrender(true);
+    }
+    
+    
     // PROTECTED
     // overwrite
     _formatRules(value) {
@@ -198,11 +252,15 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         }
 
         // Elemente/DOM-Objekte entladen
+        if (this._buttonsDom) {
+            this._buttonsDom.destruct();
+        }
         if (this._linkButtonEl) {
             this._linkButtonEl.destruct();
         }
         
         // Variablen (Objekte/Arrays) leeren
+        this._buttonsDom = null;
         this._linkButtonEl = null;
         
         // Basisklasse entladen

@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.FormPanel = class home_sc_FormPanel {
     
     
@@ -91,8 +90,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     name: 'Name',
                                     label: 'Name',
                                     labelWidth: null,
-                                    style: { flex: 1 },
-                                    labelStyle: { textAlign: 'right' }
+                                    style: { flex: 1 }
                                 }
                             ]
                         },{
@@ -109,14 +107,13 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     name: 'Plz',
                                     label: 'PLZ',
                                     disableFlex: true,
-                                    width: 200
+                                    inputWidth: 100
                                 },{
                                     xtype: 'kijs.gui.field.Text',
                                     name: 'Ort',
                                     label: 'Ort',
                                     labelWidth: null,
-                                    style: { flex: 1 },
-                                    labelStyle: { textAlign: 'right' }
+                                    style: { flex: 1 }
                                 }
                             ]
                         },{
@@ -147,8 +144,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'TelefonG',
                                     label: 'Telefon G',
-                                    labelWidth: 60,
-                                    labelStyle: { textAlign: 'right' }
+                                    labelWidth: 60
                                 }
                             ]
                         },{
@@ -164,8 +160,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     xtype: 'kijs.gui.field.Phone',
                                     name: 'MobileG',
                                     label: 'Mobile G',
-                                    labelWidth: 60,
-                                    labelStyle: { textAlign: 'right' }
+                                    labelWidth: 60
                                 }
                             ]
                         },{
@@ -201,9 +196,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                     label: 'Alter',
                                     readOnly: true,
                                     disableFlex: true,
-                                    width: 80,
                                     labelWidth: null,
-                                    labelStyle: { textAlign: 'right' }
+                                    inputWidth: 40
                                 }
                             ]
                         },{
@@ -436,8 +430,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             name: 'Name',
                                             label: 'Name',
                                             labelWidth: null,
-                                            style: { flex: 1 },
-                                            labelStyle: { textAlign: 'right' }
+                                            style: { flex: 1 }
                                         }
                                     ]
                                 },{
@@ -454,14 +447,13 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             name: 'Plz',
                                             label: 'PLZ',
                                             disableFlex: true,
-                                            width: 200
+                                            inputWidth: 100
                                         },{
                                             xtype: 'kijs.gui.field.Text',
                                             name: 'Ort',
                                             label: 'Ort',
                                             labelWidth: null,
-                                            style: { flex: 1 },
-                                            labelStyle: { textAlign: 'right' }
+                                            style: { flex: 1 }
                                         }
                                     ]
                                 },{
@@ -495,8 +487,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'TelefonG',
                                             label: 'Telefon G',
-                                            labelWidth: 60,
-                                            labelStyle: { textAlign: 'right' }
+                                            labelWidth: 60
                                         }
                                     ]
                                 },{
@@ -512,8 +503,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             xtype: 'kijs.gui.field.Phone',
                                             name: 'MobileG',
                                             label: 'Mobile G',
-                                            labelWidth: 60,
-                                            labelStyle: { textAlign: 'right' }
+                                            labelWidth: 60
                                         }
                                     ]
                                 },{
@@ -552,9 +542,8 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                             label: 'Alter',
                                             readOnly: true,
                                             disableFlex: true,
-                                            width: 80,
                                             labelWidth: null,
-                                            labelStyle: { textAlign: 'right' }
+                                            inputWidth: 40
                                         }
                                     ]
                                 },{
@@ -617,8 +606,36 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'labelPosition:',
+                value: 'left',
+                width: 160,
+                data: [
+                    { caption: 'auto', value: 'auto' },
+                    { caption: 'left', value: 'left' },
+                    { caption: 'top', value: 'top' }
+                ],
+                on: {
+                    change: function(e) {
+                        this._updatePropertyRec(this._content, 'labelPosition', e.element.value);
+                    },
+                    context: this
+                }
             }
         ];
+    }
+    
+    _updatePropertyRec(parentEl, propertyName, value) {
+        kijs.Array.each(parentEl.elements, function(el) {
+            if (el instanceof kijs.gui.field.Field) {
+                el[propertyName] = value;
+            }
+            
+            if (el instanceof kijs.gui.Container) {
+                this._updatePropertyRec(el, propertyName, value);
+            }
+        }, this);
     }
     
 

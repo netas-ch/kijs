@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.container_Tab = class home_sc_container_Tab {
     
     

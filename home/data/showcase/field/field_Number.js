@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Number = class home_sc_field_Number {
 
 
@@ -47,7 +46,7 @@ home.sc.field_Number = class home_sc_field_Number {
                 },{
                     xtype: 'kijs.gui.field.Number',
                     label: 'mit Spin-Buttons',
-                    spinButtonsVisible: true
+                    spinButtonsHide: false
                     //spinStep: 1,
                     //spinAcceleration: 20,
                     //spinDelay: 400
@@ -77,7 +76,7 @@ home.sc.field_Number = class home_sc_field_Number {
                     maxValue:100,
                     value: 1000.12345,
                     thousandsSeparator: '\'',
-                    spinButtonsVisible: true,
+                    spinButtonsHide: false,
                     on: {
                         focus:  console.log,
 

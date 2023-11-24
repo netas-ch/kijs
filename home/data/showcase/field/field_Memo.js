@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Memo = class home_sc_field_Memo {
 
 
@@ -83,10 +82,6 @@ home.sc.field_Memo = class home_sc_field_Memo {
                             iconMap: 'kijs.iconMap.Fa.stamp'
                         }
                     ]
-                },{
-                    xtype: 'kijs.gui.field.Memo',
-                    label: 'mit spinIcon',
-                    spinIconVisible: true
                 }
             ]
         });

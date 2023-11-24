@@ -24,10 +24,11 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     constructor(config={}) {
         super(false);
 
-        this._tabClosableIcon = 'kijs.iconMap.Fa.xmark';
-
-        this._tabButtonEl = new kijs.gui.Button();
-
+        this._tabButtonEl = new kijs.gui.container.tab.Button({
+            parent: this,
+            tabContainerEl: this
+        });
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -36,7 +37,7 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             tabClosable: { target: 'tabClosable' },
-            tabClosableIcon: true,
+            tabClosableIconMap: { target: 'closableIconMap', context: this._tabButtonEl },
             tabBadgeText: { target: 'badgeText', context: this._tabButtonEl },
             tabBadgeCls: { target: 'badgeCls', context: this._tabButtonEl },
             tabBadgeTextHtmlDisplayType: { target: 'badgeTextHtmlDisplayType', context: this._tabButtonEl },
@@ -46,12 +47,6 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabCaptionHtmlDisplayType: { target: 'captionHtmlDisplayType', context: this._tabButtonEl },
             tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },
             
-            //tabDraggable: { target: 'draggable', context: this._tabButtonEl },
-            //tabDdName: { target: 'ddName', context: this._tabButtonEl },
-            //tabDdAllowMove: { target: 'ddAllowMove', context: this._tabButtonEl },
-            //tabDdAllowCopy: { target: 'ddAllowCopy', context: this._tabButtonEl },
-            //tabDdAllowLink: { target: 'ddAllowLink', context: this._tabButtonEl },
-            
             tabIcon: { target: 'icon', context: this._tabButtonEl },
             tabIconMap: { target: 'iconMap', context: this._tabButtonEl },
             tabIconChar: { target: 'iconChar', context: this._tabButtonEl },
@@ -59,7 +54,9 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabIconColor: { target: 'iconColor', context: this._tabButtonEl },
             tabStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl },
             tabTooltip: { target: 'tooltip', context: this._tabButtonEl },
-            tabWidth: { target: 'width', context: this._tabButtonEl }
+            tabWidth: { target: 'width', context: this._tabButtonEl },
+            
+            tabMenuHide: { target: 'menuHide', context: this._tabButtonEl }
         });
 
         // Config anwenden
@@ -95,22 +92,14 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     
     get tabButtonEl() { return this._tabButtonEl; }
 
-    get tabClosable() { return !!this._tabButtonEl.icon2Map; }
-    set tabClosable(val) {
-        if (val) {
-            this._tabButtonEl.icon2Map = this._tabClosableIcon;
-        } else {
-            this._tabButtonEl.icon2Map = null;
-        }
-    }
+    get tabClosable() { return !this._tabButtonEl.closeButtonHide; }
+    set tabClosable(val) { this._tabButtonEl.closeButtonHide = !val; }
 
-    get tabClosableIcon() { return this._tabClosableIcon; }
-    set tabClosableIcon(val) {
-        this._tabClosableIcon = val;
-        if (this._tabButtonEl.icon2Map) {
-            this._tabButtonEl.icon2Map = val;
-        }
-    }
+    get tabClosableIconMap() { return this._tabButtonEl.closeButtonIconMap; }
+    set tabClosableIconMap(val) { this._tabButtonEl.closeButtonIconMap = val; }
+
+    get tabMenuHide() { return this._tabButtonEl.menuHide; }
+    set tabMenuHide(val) { this._tabButtonEl.menuHide = val; }
 
 
 
@@ -159,7 +148,6 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
 
         // Variablen (Objekte/Arrays) leeren
         this._tabButtonEl = null;
-        this._tabClosableIcon = null;
 
         // Basisklasse entladen
         super.destruct(true);

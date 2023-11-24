@@ -86,7 +86,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                 context: this
             }
         });
-        this._dom.clsAdd('kijs-field-month');
 
         this._monthPicker = new kijs.gui.MonthPicker({
             headerBarHide: true,
@@ -102,21 +101,40 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             }
         });
 
+        this._spinButtonEl = new kijs.gui.Button({
+            parent: this,
+            iconMap: 'kijs.iconMap.Fa.calendar-days',
+            disableFlex: true,
+            nodeAttribute: {
+                tabIndex: -1
+            },
+            on: {
+                click: this.#onSpinButtonClick,
+                context: this
+            }
+        });
+        
         this._spinBoxEl = new kijs.gui.SpinBox({
+            parent: this,
             target: this,
             autoSize: 'none',
             targetDomProperty: 'inputWrapperDom',
-            ownerNodes: [this._inputWrapperDom, this._spinIconEl.dom],
-            parent: this
+            ownerNodes: [this._inputWrapperDom, this._spinButtonEl.dom],
+            elements: [
+                this._monthPicker
+            ]
         });
-        this._spinBoxEl.add(this._monthPicker);
+        
+        this._buttonsDom = new kijs.gui.Dom({
+            cls: 'kijs-buttons'
+        });
+        
+        this._dom.clsAdd('kijs-field-month');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
-            disableFlex: true,
-            spinIconVisible: true,
-            spinIconMap: 'kijs.iconMap.Fa.calendar-days'
+            disableFlex: true
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -132,6 +150,13 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             minDate: { target: 'minDate', context: this._monthPicker },
             maxValue: { target: 'maxValue', context: this._monthPicker },
             minValue: { target: 'minValue', context: this._monthPicker },
+            
+            spinButtonHide: { target: 'spinButtonHide' },
+            spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
+            spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },
+            spinButtonIconColor: { target: 'iconColor', context: this._spinButtonEl },
+            spinButtonIconMap: { target: 'iconMap', context: this._spinButtonEl },
+            
             placeholder: { target: 'placeholder' },
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
@@ -174,6 +199,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
+    get buttonsDom() { return this._buttonsDom; }
+
     get date() {
         return this._monthPicker.date;
     }
@@ -213,6 +240,43 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
+    /**
+     * Berechnet die Höhe für die spinBox
+     * @returns {Number}
+     */
+    get spinBoxHeight() {
+        return this._inputWrapperDom.height;
+    }
+
+    /**
+     * Berechnet die Breite für die spinBox
+     * @returns {Number}
+     */
+    get spinBoxWidth() {
+        let width = this._inputWrapperDom.width;
+        if (this._spinButtonEl.visible) {
+            width += this._spinButtonEl.width;
+        }
+        return width;
+    }
+
+    get spinButton() { return this._spinButtonEl; }
+
+    get spinButtonHide() { return !this._spinButtonEl.visible; }
+    set spinButtonHide(val) { this._spinButtonEl.visible = !val; }
+
+    get spinButtonIconChar() { return this._spinButtonEl.iconChar; }
+    set spinButtonIconChar(val) { this._spinButtonEl.iconChar = val; }
+
+    get spinButtonIconCls() { return this._spinButtonEl.iconCls; }
+    set spinButtonIconCls(val) { this._spinButtonEl.iconCls = val; }
+
+    get spinButtonIconColor() { return this._spinButtonEl.iconColor; }
+    set spinButtonIconColor(val) { this._spinButtonEl.iconColor = val; }
+
+    get spinButtonIconMap() { return this._spinButtonEl.iconMap; }
+    set spinButtonIconMap(val) { this._spinButtonEl.iconMap = val; }
+
     // overwrite
     get value() {
         return this._monthPicker.value;
@@ -239,6 +303,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
+        this._spinButtonEl.changeDisabled(!!val, true);
+        
+        if (this._spinBoxEl) {
+            this._spinBoxEl.changeDisabled(!!val, true);
+        }
+        
         this._inputDom.changeDisabled(!!val, true);
     }
 
@@ -262,9 +332,15 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     // overwrite
     render(superCall) {
         super.render(true);
-
+        
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
+
+        // Buttons-Container rendern (kijs.gui.Dom)
+        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
+        
+        // Spin Button rendern (kijs.gui.Button)
+        this._spinButtonEl.renderTo(this._buttonsDom.node);
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -279,8 +355,13 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             this.raiseEvent('unrender');
         }
         this._monthPicker.unrender();
-        this._spinBoxEl.unrender();
         this._inputDom.unrender();
+
+        this._buttonsDom.unrender();
+        
+        if (this._spinBoxEl) {
+            this._spinBoxEl.unrender();
+        }
 
         super.unrender(true);
     }
@@ -462,6 +543,19 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
+    
+    #onSpinButtonClick(e) {
+        if (this.disabled || this.readOnly) {
+             return;
+        }
+        if (this._spinBoxEl) {
+            if (this._spinBoxEl.isRendered) {
+                this._spinBoxEl.close();
+            } else {
+                this._spinBoxEl.show();
+            }
+        }
+    }
 
 
 
@@ -482,18 +576,26 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (this._inputDom) {
             this._inputDom.destruct();
         }
-        if (this._spinBoxEl) {
-            this._spinBoxEl.destruct();
-        }
         if (this._monthPicker) {
             this._monthPicker.destruct();
         }
-
+        if (this._spinBoxEl) {
+            this._spinBoxEl.destruct();
+        }
+        if (this._buttonsDom) {
+            this._buttonsDom.destruct();
+        }
+        if (this._spinButtonEl) {
+            this._spinButtonEl.destruct();
+        }
+        
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
-        this._spinBoxEl = null;
         this._monthPicker = null;
-
+        this._spinBoxEl = null;
+        this._buttonsDom = null;
+        this._spinButtonEl = null;
+        
         // Basisklasse entladen
         super.destruct(true);
     }

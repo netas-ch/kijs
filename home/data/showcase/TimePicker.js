@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.TimePicker = class home_sc_TimePicker {
     
     

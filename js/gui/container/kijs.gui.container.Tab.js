@@ -178,7 +178,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
             // Button für tabBar erstellen
             el.tabButtonEl.on('click', this.#onTabButtonElClick, this);
-            el.tabButtonEl.icon2.on('click', this.#onTabButtonElCloseClick, this);
+            el.tabButtonEl.on('closeClick', this.#onTabButtonElCloseClick, this);
+            el.tabButtonEl.on('closeAllClick', this.#onTabButtonElCloseAllClick, this);
+            el.tabButtonEl.on('closeOtherClick', this.#onTabButtonElCloseOtherClick, this);
             newTabBarButtons.push(el.tabButtonEl);
         }, this);
 
@@ -289,21 +291,6 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
 
     // PROTECTED
-    // Ermittelt das Element zu einem TabButton
-    _getElFromTabButton(elButton) {
-        let ret = null;
-
-        kijs.Array.each(this._elements, function(el) {
-            if (el.tabButtonEl === elButton) {
-                ret = el;
-                return false;
-            }
-        }, this);
-
-        return ret;
-    }
-
-
     // Ermittelt den Index eines TabButtons
     _getTabButtonElIndex(el) {
         let index = null;
@@ -414,21 +401,47 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     }
 
     #onTabButtonElClick(e) {
-        let el = this._getElFromTabButton(e.element);
-
         // Element wechseln
-        this.setCurrentAnimated(el);
+        this.setCurrentAnimated(e.element.tabContainerEl);
     }
 
+    // Alle Tabs schliessen
+    #onTabButtonElCloseAllClick(e) {
+        let elements = [];
+        
+        // alle Tabs durchgehen und schliessen, wenn closable
+        kijs.Array.each(this._tabBarEl.elements, function(el) {
+            if (!el.closeButtonHide) {
+                elements.push(el.tabContainerEl);
+            }
+        }, this);
+        
+        if (!kijs.isEmpty(elements)) {
+            this.remove(elements);
+        }
+    }
+    
+    // ein Tab schliessen
     #onTabButtonElCloseClick(e) {
-        let el = this._getElFromTabButton(e.element.parent);
-
         // Tab schliessen
-        this.remove(el);
-
-        // bubbeling verhindern, damit nicht das click-Event des Buttons
-        // auch noch ausgelöst wird
-        e.nodeEvent.stopPropagation();
+        this.remove(e.element.tabContainerEl);
+    }
+    
+    // Alle anderen Tabs schliessen, die closable sind
+    #onTabButtonElCloseOtherClick(e) {
+        let elements = [];
+        let elCur = e.element;
+        
+        // alle Tabs durchgehen und schliessen, wenn closable und nicht das aktuelle tab
+        kijs.Array.each(this._tabBarEl.elements, function(el) {
+            if (!el.closeButtonHide && el !== elCur) {
+                elements.push(el.tabContainerEl);
+            }
+        }, this);
+        
+        if (!kijs.isEmpty(elements)) {
+            this.remove(elements);
+        }
     }
 
 

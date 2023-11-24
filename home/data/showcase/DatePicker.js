@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.DatePicker = class home_sc_DatePicker {
     
     

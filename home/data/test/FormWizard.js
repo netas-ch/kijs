@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.test = {};
 home.test.FormWizard = class home_test_FormWizard {
     
     

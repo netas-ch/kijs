@@ -17,7 +17,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.3.2'; }
+    static get version() { return '2.4.1'; }
     
     
     
@@ -110,7 +110,7 @@ window.kijs = class kijs {
             }
 
             // Verweis auf eine bestehende Funktion als String Bsp: console.log
-            if (/^([a-zA-Z][a-zA-Z0-9_]*\.?)+$/s.match !== null) {
+            if (str.match(/^([a-zA-Z][a-zA-Z0-9_]*\.?)+$/s) !== null) {
                 let fn = kijs.getObjectFromString(str);
                 if (kijs.isFunction(fn)) {
                     return fn;

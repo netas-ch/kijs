@@ -48,6 +48,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         // Spin Up/Down Buttons
         this._spinUpButtonEl = new kijs.gui.Button({
+            parent: this,
             iconMap: 'kijs.iconMap.Fa.caret-up',
             disableFlex: false,
             nodeAttribute: {
@@ -56,10 +57,13 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             on: {
                 mouseDown: this.#onSpinUpButtonMouseDown,
                 mouseUp: this.#onSpinUpButtonMouseUp,
+                mouseLeave: this.#onSpinUpButtonMouseLeave,
                 context: this
             }
         });
+        
         this._spinDownButtonEl = new kijs.gui.Button({
+            parent: this,
             iconMap: 'kijs.iconMap.Fa.caret-down',
             disableFlex: false,
             nodeAttribute: {
@@ -68,22 +72,21 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             on: {
                 mouseDown: this.#onSpinDownButtonMouseDown,
                 mouseUp: this.#onSpinDownButtonMouseUp,
+                mouseLeave: this.#onSpinDownButtonMouseLeave,
                 context: this
             }
         });
-        this._spinContainerEl = new kijs.gui.Container({
-            cls: 'kijs-spinners',
-            elements:[ this._spinUpButtonEl, this._spinDownButtonEl ]
+        
+        this._buttonsDom = new kijs.gui.Dom({
+            cls: 'kijs-buttons'
         });
-        this.add(this._spinContainerEl);
 
         this._dom.clsAdd('kijs-field-number');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
-            disableFlex: true,
-            spinButtonsVisible: false
+            disableFlex: true
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
@@ -100,7 +103,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             maxValue: { target: 'maxValue'},
             placeholder: { target: 'placeholder' },
             spinAcceleration: true,     // Beschleunigung in %
-            spinButtonsVisible: { target: 'visible', context: this._spinContainerEl },  // Sichtbarkeit der Spin-Buttons
+            spinButtonsHide: { target: 'spinButtonsHide' },  // Spin-Buttons ausblenden
             spinDelay: true,            // Intervall in ms
             spinStep: true,             // Schrittgrösse
             thousandsSeparator: true,
@@ -197,20 +200,24 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinDownButtonEl.disabled = val;
     }
 
-    get spinButtonsVisible() { return this._spinContainerEl.visible; }
-    set spinButtonsVisible(val) { this._spinContainerEl.visible = val; }
-
     get spinAcceleration() { return this._spinAcceleration; }
     set spinAcceleration(val) { this._spinAcceleration = val; }
 
+    get spinButtonsHide() { return !this._spinUpButtonEl.visible; }
+    set spinButtonsHide(val) { 
+        this._spinUpButtonEl.visible = !val;
+        this._spinDownButtonEl.visible = !val;
+    }
+
     get spinDelay() { return this._spinDelay; }
     set spinDelay(val) { this._spinDelay = val; }
+
+    get spinDownButton() { return this._spinDownButtonEl; }
 
     get spinStep() { return this._spinStep; }
     set spinStep(val) { this._spinStep = val; }
 
     get spinUpButton() { return this._spinUpButtonEl; }
-    get spinDownButton() { return this._spinDownButtonEl; }
 
     get thousandsSeparator() { return this._thousandsSeparator; }
     set thousandsSeparator(val) {
@@ -248,8 +255,10 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val, true);
+        this._spinUpButtonEl.changeDisabled(!!val, true);
+        this._spinDownButtonEl.changeDisabled(!!val, true);
     }
-
+    
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -274,6 +283,13 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
+        // Buttons-Container rendern (kijs.gui.Dom)
+        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
+        
+        // Spin Buttons rendern (kijs.gui.Button)
+        this._spinUpButtonEl.renderTo(this._buttonsDom.node);
+        this._spinDownButtonEl.renderTo(this._buttonsDom.node);
+        
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -293,6 +309,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         }
 
         this._inputDom.unrender();
+        this._buttonsDom.unrender();
+        
         super.unrender(true);
     }
 
@@ -486,8 +504,14 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinStart('down');
     }
 
+    #onSpinDownButtonMouseLeave() {
+        this._spinStop();
+        this._inputDom.focus();
+    }
+    
     #onSpinDownButtonMouseUp() {
         this._spinStop();
+        this._inputDom.focus();
     }
 
     #onSpinUpButtonMouseDown() {
@@ -495,9 +519,15 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinStart('up');
     }
 
+    #onSpinUpButtonMouseLeave() {
+        this._spinStop();
+        this._inputDom.focus();
+    }
     #onSpinUpButtonMouseUp() {
         this._spinStop();
+        this._inputDom.focus();
     }
+    
 
 
 
@@ -521,20 +551,20 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinUpButtonEl) {
             this._spinUpButtonEl.destruct();
         }
+        if (this._buttonsDom) {
+            this._buttonsDom.destruct();
+        }
         if (this._spinDownButtonEl) {
             this._spinDownButtonEl.destruct();
-        }
-        if (this._spinContainerEl) {
-            this._spinContainerEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
         this._allowedDecimalSeparators = null;
         this._allowedThousandsSeparators = null;
         this._inputDom = null;
+        this._buttonsDom = null;
         this._spinUpButtonEl = null;
         this._spinDownButtonEl = null;
-        this._spinContainerEl = null;
 
         // Basisklasse entladen
         super.destruct(true);

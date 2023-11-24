@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
     
     

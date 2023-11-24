@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_ListView = class home_sc_field_ListView {
 
 

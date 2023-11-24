@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.ApertureMask = class home_sc_ApertureMask {
     
     

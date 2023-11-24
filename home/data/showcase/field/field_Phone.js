@@ -1,6 +1,5 @@
 /* global kijs */
 
-window.home.sc = {};
 home.sc.field_Phone = class home_sc_field_Phone {
 
 
@@ -48,7 +47,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                     value: '0311234567',
                     //defaultCountryCallingCode: '+41',
                     //internationalCallPrefix: '00',
-                    linkButtonVisible: true,
+                    linkButtonHide: false,
                     on: {
                         focus:  console.log,
 

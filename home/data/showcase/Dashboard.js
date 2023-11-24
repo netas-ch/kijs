@@ -1,7 +1,5 @@
 /* global kijs, this */
 
-window.home.sc = {};
-
 // Hilfsklasse home.sc.DashboardItemPanel
 home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.dashboard.Panel {
     // overwrite
