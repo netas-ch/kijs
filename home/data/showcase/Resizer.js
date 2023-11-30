@@ -20,6 +20,7 @@ home.sc.Resizer = class home_sc_Resizer {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Resizer',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -33,7 +34,6 @@ home.sc.Resizer = class home_sc_Resizer {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel mit Resizer',
                     iconMap: 'kijs.iconMap.Fa.up-right-and-down-left-from-center',
-                    shadow: true,
                     resizable: true,
                     resizableWidth: true,
                     resizableHeight: true,

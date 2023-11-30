@@ -19,6 +19,7 @@ home.sc.DropZone = class home_sc_DropZone {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DropZone',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -32,7 +33,6 @@ home.sc.DropZone = class home_sc_DropZone {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel mit DropZone',
                     iconCls: 'icoWizard16',
-                    shadow: true,
                     closable: true,
                     collapsible: 'top',
                     collapsed: false,

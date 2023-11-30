@@ -20,7 +20,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DatePicker',
             scrollableY: 'auto',
-            cls: 'kijs-flexform',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             style: {
                 flex: 1
             },

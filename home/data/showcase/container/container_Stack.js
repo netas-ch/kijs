@@ -19,6 +19,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.container.Stack',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -113,7 +114,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                     xtype: 'kijs.gui.container.Stack',
                     name: 'testcontainerstack',
                     height: 230,
-                    style: { marginTop: '10px', border: '1px solid #333' },
+                    style: { marginTop: '10px' },
                     defaults:{
                         innerStyle: {
                             padding: '4px'
@@ -252,6 +253,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Wizard mit RPC',
                     cls: 'kijs-flexcolumn',
+                    style: { marginTop: '10px' },
                     height: 200,
                     elements:[
                         {

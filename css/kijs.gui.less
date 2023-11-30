@@ -219,6 +219,7 @@
         display: inline-block;
         font-family: 'Font Awesome 6 Free';
         font-size: 16px;
+        color: var(--icon-fontColor);
         background-repeat: no-repeat;
         background-position: center center;
 
@@ -227,6 +228,7 @@
         }
 
         &.kijs-disabled {
+            color: var(--icon-disabled-fontColor);
             filter: grayscale(100%);
         }
     }
@@ -467,31 +469,31 @@
                 }
             }
         }
-
+        
         /* nur kijs-scrollable-y-enable */
         > .kijs-btn-scrollup {
             grid-row: 1;
             grid-column: 1;
-            margin-bottom: 2px;
+            margin: 2px 4px;
         }
         > .kijs-btn-scrolldown {
             grid-row: 3;
             grid-column: 1;
-            margin-top: 2px;
+            margin: 2px 4px;
         }
-
+        
         /* nur kijs-scrollable-x-enable */
         > .kijs-btn-scrollleft {
             grid-row: 1;
             grid-column: 1;
-            margin-right: 2px;
+            margin: 4px 2px;
         }
         > .kijs-btn-scrollright {
             grid-row: 1;
             grid-column: 3;
-            margin-left: 2px;
+            margin: 4px 2px;
         }
-
+        
         /* kijs-scrollable-x-enable und kijs-scrollable-y-enable */
         &.kijs-scrollable-x-enable.kijs-scrollable-y-enable {
             > .kijs-btn-scrollup {
@@ -789,7 +791,7 @@
         /* Drop Marker */
         > .kijs-container-scrollable > .kijs-container-inner > .kijs-dropMarker {
             flex: none;
-            border: 2px solid var(--accentColor3);
+            border: 1px solid var(--accentColor3);
             border-radius: 5px;
         }
         &.kijs-pos-top {
@@ -994,7 +996,7 @@
         > .kijs-icon {
             flex: none;
             margin: 0;
-            color: var(--bar-fontColor);
+            color: var(--bar-icon-fontColor);
         }
 
         > .kijs-container-left, > .kijs-container-right {
@@ -1067,27 +1069,39 @@
             color: var(--bar-fontColor);
         }
         
-        &.kijs-headerbar  > .kijs-container-inner {
-            font-family: var(--default-fontFamily);
-            font-size: var(--headerBar-fontSize);
-            text-align: left;
+        &.kijs-headerbar {
+            > .kijs-container-inner {
+                font-family: var(--default-fontFamily);
+                font-size: var(--headerBar-fontSize);
+                text-align: left;
+            }
         }
 
-        &.kijs-headerbar-center > .kijs-container-inner {
-            font-family: var(--default-fontFamily);
-            font-size: var(--headerBar-fontSize);
-            text-align: center;
+        &.kijs-headerbar-center {
+            border-bottom: 1px solid var(--bar-bkgrndColor);
+            > .kijs-container-inner {
+                font-family: var(--default-fontFamily);
+                font-size: var(--headerBar-fontSize);
+                text-align: center;
+            }
         }
 
-        &.kijs-footerbar > .kijs-container-inner {
-            font-family: var(--default-fontFamily);
-            font-size: var(--footerBar-fontSize);
-            text-align: right;
+        &.kijs-footerbar {
+            > .kijs-container-inner {
+                font-family: var(--default-fontFamily);
+                font-size: var(--footerBar-fontSize);
+                text-align: right;
+            }
         }
 
         &.kijs-disabled {
             background-color: var(--bar-disabled-bkgrndColor);
+            border-color: var(--bar-disabled-bkgrndColor);
             color:  var(--bar-disabled-fontColor);
+            
+            > .kijs-icon {
+                color: var(--bar-icon-disabled-fontColor);
+            }
 
             > .kijs-container-inner {
                 color:  var(--bar-disabled-fontColor);
@@ -1105,20 +1119,27 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        border: 1px solid var(--panel-borderColor);
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
-
+        
         &:focus {
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
+        }
+        
+        &.disabled {
+            border: 1px solid var(--panel-disabled-borderColor);
+        }
+        
+        &.kijs-borderless {
+            border: none;
         }
 
         > .kijs-header {
             overflow: hidden;
             flex: none;
-            border-left: 1px solid var(--panel-borderColor);
-            border-right: 1px solid var(--panel-borderColor);
-            border-bottom: 1px solid var(--panel-borderColor);
+            border-bottom: 1px solid var(--panel-innerBorderColor);
             background-color: var(--viewport-bkgrndColor);
 
             > .kijs-container-inner {
@@ -1139,9 +1160,7 @@
         > .kijs-footer {
             overflow: hidden;
             flex: none;
-            border-top: 1px solid var(--panel-borderColor);
-            border-left: 1px solid var(--panel-borderColor);
-            border-right: 1px solid var(--panel-borderColor);
+            border-top: 1px solid var(--panel-innerBorderColor);
             background-color: var(--viewport-bkgrndColor);
 
             > .kijs-container-inner {
@@ -1211,19 +1230,6 @@
             display: none;
         }
 
-        /* bei Schatten auch diverse Linien anzeigen */
-        &.kijs-shadow > .kijs-container-inner {
-            border-left: 1px solid var(--panel-borderColor);
-            border-right: 1px solid var(--panel-borderColor);
-        }
-        &.kijs-shadow > div:first-child:not(.kijs-panelbar) {
-            border-top: 1px solid var(--panel-borderColor);
-        }
-
-        &.kijs-shadow > div:last-child:not(.kijs-panelbar):not(.kijs-resizer) {
-            border-bottom: 1px solid var(--panel-borderColor);
-        }
-
         /* PanelBar Minimiert */
         &.kijs-collapse-right, &.kijs-collapse-left {
             > .kijs-panelbar {
@@ -1279,7 +1285,7 @@
         flex-direction: column;
         align-items: stretch;
         overflow: hidden;
-        background-color: var(--grey1);
+        background-color: var(--grey02);
         
         > .kijs-container-inner {
             flex: 1;
@@ -1304,7 +1310,6 @@
                     /* Panel */
                     > .kijs-dashboard-panel {
                         flex: none;
-                        border: 2px solid var(--bar-bkgrndColor);
                         border-radius: 5px;
                         
                         &.kijs-dragging {
@@ -1316,14 +1321,14 @@
                         }
                         
                         &.kijs-disabled {
-                            border: 2px solid var(--bar-disabled-bkgrndColor);
+                            border: 1px solid var(--panel-disabled-borderColor);
                         }
                     }
                     
                     /* Drop Marker */
                     > .kijs-dropMarker {
                         flex: none;
-                        border: 2px solid var(--accentColor3);
+                        border: 1px solid var(--accentColor3);
                         border-radius: 5px;
                     }
                     
@@ -1345,6 +1350,7 @@
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
+        box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
         
         -webkit-user-select: none;  /* Safari */
         user-select: none;
@@ -1381,6 +1387,14 @@
                     }
                 }
             }
+        }
+        
+        &.kijs-maximize {
+            border-radius: 0;
+        }
+        
+        &.kijs-disabled {
+            border: 1px solid var(--panel-disabled-borderColor);
         }
     }
 
@@ -1506,7 +1520,7 @@
             min-width: 80px;
         }
     }
-
+    
 
 
     /* ******************
@@ -1524,28 +1538,37 @@
             box-sizing: border-box;
         }
         
-        .kijs-panel {
-            border-radius: 4px;
-            margin: 0 10px 10px 0;
-        }
-
-        .kijs-panel > .kijs-container-inner {
-            display: flex;
-            flex-direction: row;
-            font-family: var(--default-fontFamily);
-            font-size: var(--default-fontSize);
-            color: var(--default-fontColor);
-        }
-        .kijs-panel > .kijs-container-inner > .kijs-icon {
-            flex: none;
-            font-size: 30px;
-            width: 40px;
-            margin: 10px 0 10px 10px;
-        }
-        .kijs-panel > .kijs-container-inner > .kijs-msgbox-inner {
-            flex: 1;
-            padding: 10px;
-            overflow: auto;
+        > .kijs-container-inner {
+            > .kijs-panel {
+                margin: 10px;
+                border-radius: 4px;
+                box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
+                
+                > .kijs-container-inner {
+                    display: flex;
+                    flex-direction: row;
+                    font-family: var(--default-fontFamily);
+                    font-size: var(--default-fontSize);
+                    color: var(--default-fontColor);
+                    
+                    > .kijs-icon {
+                        flex: none;
+                        font-size: 30px;
+                        width: 40px;
+                        margin: 10px 0 10px 10px;
+                    }
+                    
+                    > .kijs-msgbox-inner {
+                        flex: 1;
+                        padding: 10px;
+                        overflow: auto;
+                    }
+                }
+                
+                &.kijs-disabled {
+                    border: 1px solid var(--panel-disabled-borderColor);
+                }
+            }
         }
     }
 
@@ -1638,7 +1661,7 @@
         display: flex;
         flex-direction: column-reverse;
         overflow: hidden;
-        border-right: 1px solid var(--panel-borderColor);
+        border-right: 1px solid var(--panel-innerBorderColor);
 
         > .kijs-caption {
             flex: none;
@@ -1966,14 +1989,6 @@
                     }
                 }
 
-                &.kijs-dragging {
-                    opacity: 0.6
-                }
-
-                &.kijs-sourceDragOver {
-                    border-color: var(--accentColor3);
-                }
-                
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
@@ -1983,6 +1998,7 @@
                         margin: 0 4px 0 0;
                         border-radius: 2px;
                         background-color: var(--field-bkgrndColor);
+                        color: var(--icon-fontColor);
                         font: normal normal normal 15px/1 'Font Awesome 6 Free';
                         content: '\f096';
                     }
@@ -2001,6 +2017,7 @@
                         margin: 0 4px 0 0;
                         border-radius: 50%;
                         background-color: var(--field-bkgrndColor);
+                        color: var(--icon-fontColor);
                         font: normal normal normal 15px/1 'Font Awesome 6 Free';
                         content: '\f10c';
                     }
@@ -2009,7 +2026,15 @@
                         content: '\f05d';
                     }
                 }
+                
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
 
+                &.kijs-sourceDragOver {
+                    border-color: var(--accentColor3);
+                    border-radius: 5px;
+                }
             }
             
             /* Drop Marker */
@@ -2025,7 +2050,13 @@
 
             div.kijs-dataview-element {
                 background-color: transparent;
-
+                
+                > .kijs-container-inner {
+                    > .kijs-caption {
+                        color: var(--field-disabled-fontColor);
+                    }
+                }
+                
                 &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                     border-color: var(--item-selected-disabled-borderColor);
                     background-color: transparent;
@@ -2570,12 +2601,12 @@
                             }
 
                             &.kijs-sourceDragOver {
-                                border: 2px solid var(--accentColor3);
+                                border: 1px solid var(--accentColor3);
                             }
 
                             /* Drop Marker */
                             &.kijs-dropMarker {
-                                border: 2px solid var(--accentColor3);
+                                border: 1px solid var(--accentColor3);
                                 border-radius: 5px;
                             }
 
@@ -4125,9 +4156,9 @@
         display: none;
     }
 
-    /* Schatten (Bitte bei einem Panel dafür die Config shadow verwenden!!!)*/
+    /* Schatten */
     .kijs-shadow {
-        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     }
 
     

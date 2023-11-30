@@ -17,6 +17,7 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ButtonGroup',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -30,7 +31,6 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel',
                     iconCls: 'icoWizard16',
-                    shadow: true,
                     closable: true,
                     collapsible: 'top',
                     collapsed: false,

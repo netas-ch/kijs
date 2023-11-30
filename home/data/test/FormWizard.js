@@ -25,6 +25,7 @@ home.test.FormWizard = class home_test_FormWizard {
         // ContainerStack
         this._containerStack = new kijs.gui.container.Stack({
             xtype: 'kijs.gui.container.Stack',
+            cls: 'kijs-borderless',
             style: { flex: 1 },
             animation: 'fade',
             currentName: 's1',
@@ -38,7 +39,7 @@ home.test.FormWizard = class home_test_FormWizard {
                     xtype: 'kijs.gui.Panel',
                     name:'s1', 
                     caption: 'Seite 1',
-                    cls: 'kijs-flexform',
+                    cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
                     elements:[
@@ -53,7 +54,7 @@ home.test.FormWizard = class home_test_FormWizard {
                     xtype: 'kijs.gui.Panel',
                     name:'s2', 
                     caption: 'Seite 2',
-                    cls: 'kijs-flexform',
+                    cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
                     elements:[
@@ -68,7 +69,7 @@ home.test.FormWizard = class home_test_FormWizard {
                     xtype: 'kijs.gui.Panel',
                     name:'s3', 
                     caption: 'Seite 3',
-                    cls: 'kijs-flexform',
+                    cls: ['kijs-borderless', 'kijs-flexform'],
                     scrollableY: 'auto',
                     innerStyle: { padding:'10px' },
                     elements:[
@@ -106,7 +107,7 @@ home.test.FormWizard = class home_test_FormWizard {
         
         // FormPanel
         this._formPanel = new kijs.gui.FormPanel({
-            cls: 'kijs-flexcolumn',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             rpcSaveFn: 'form.save',
             style: {
                 flex: 1

@@ -19,7 +19,7 @@ home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DataView Drag&Drop mit row layout',
-            cls: 'kijs-flexcolumn',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1
             },
@@ -28,8 +28,7 @@ home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: nowrap',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: { flex: 1 },
                     headerBarStyle: { backgroundColor: '#0559a2' },
                     elements:[
@@ -52,8 +51,7 @@ home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: wrap',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: { flex: 1 },
                     headerBarStyle: { backgroundColor: '#7509a5' },
                     elements:[
@@ -76,8 +74,7 @@ home.test.DataView_DD_Row = class home_test_Dataview_DD_Row {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: wrap-reverse',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: { flex: 1 },
                     headerBarStyle: { backgroundColor: '#a50968' },
                     elements:[

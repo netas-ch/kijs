@@ -19,6 +19,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.FormPanel',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -36,7 +37,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     //rpcLoadFn: 'form.load',
                     //rpcSaveFn: 'form.save',
                     //autoLoad: false,
-                    shadow: true,
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
@@ -62,7 +62,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Adresse',
-                            style: { fontWeight: 'bold' }
+                            cls: 'kijs-title'
                         },{
                             xtype: 'kijs.gui.field.Combo',
                             name: 'Anrede',
@@ -130,7 +130,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Kontakt',
-                            style: { fontWeight: 'bold' }
+                            cls: 'kijs-title'
                         },{
                             xtype: 'kijs.gui.Container',
                             cls: 'kijs-flexline',
@@ -172,7 +172,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Weitere Angaben',
-                            style: { fontWeight: 'bold' }
+                            cls: 'kijs-title'
                         },{
                             xtype: 'kijs.gui.Container',
                             cls: 'kijs-flexline',
@@ -223,7 +223,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                         {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Bemerkungen',
-                            style: { fontWeight: 'bold' }
+                            cls: 'kijs-title'
                         },{
                             xtype: 'kijs.gui.field.Memo',
                             name: 'Bemerkungen',
@@ -287,7 +287,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
                     rpcLoadFn: 'form.load',
                     rpcSaveFn: 'form.save',
                     autoLoad: true,
-                    shadow: true,
                     collapsible: 'top',
                     closable: true,
                     resizable: true,
@@ -375,7 +374,6 @@ home.sc.FormPanel = class home_sc_FormPanel {
                 {
                     xtype: 'kijs.gui.FormPanel',
                     caption: 'Formular mit flex-Containern',
-                    shadow: true,
                     resizable: true,
                     scrollableY: 'auto',
                     width: 600,
@@ -402,7 +400,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                 {
                                     xtype: 'kijs.gui.field.Display',
                                     value: 'Adresse',
-                                    style: { fontWeight: 'bold' }
+                                    cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.field.Combo',
                                     name: 'Anrede',
@@ -473,7 +471,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                 {
                                     xtype: 'kijs.gui.field.Display',
                                     value: 'Kontakt',
-                                    style: { fontWeight: 'bold' }
+                                    cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.Container',
                                     cls: 'kijs-flexline',
@@ -518,7 +516,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                 {
                                     xtype: 'kijs.gui.field.Display',
                                     value: 'Weitere Angaben',
-                                    style: { fontWeight: 'bold' }
+                                    cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.Container',
                                     cls: 'kijs-flexline',
@@ -571,7 +569,7 @@ home.sc.FormPanel = class home_sc_FormPanel {
                                 {
                                     xtype: 'kijs.gui.field.Display',
                                     value: 'Bemerkungen',
-                                    style: { fontWeight: 'bold' }
+                                    cls: 'kijs-title'
                                 },{
                                     xtype: 'kijs.gui.field.Memo',
                                     name: 'Bemerkungen',

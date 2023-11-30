@@ -23,7 +23,7 @@
         background: var(--tabHomeBackground);
     }
     .tabHome a {
-        color: var(--grey8);
+        color: var(--grey09);
     }
 
     /* Icons */
@@ -39,15 +39,15 @@
     /* markdown */
     div.markdown {
         padding: 4px 10px;
-        background-color: var(--grey0);
+        background-color: var(--grey00);
         max-width: 620px;
         min-height: 100%;
     }
 
     div.markdown, div.markdown * {
         font-size: 12px;
-        line-height: 14px;
-        color: var(--grey8);
+        line-height: 15px;
+        color: var(--grey09);
 
         /* selektion von Text erlauben */
         -webkit-user-select: text;
@@ -91,7 +91,7 @@
         font-size: 12px;
         font-weight: normal;
         margin: 14px 0 0 0;
-        color: var(--grey6);
+        color: var(--grey07);
     }
 
     .markdown p {
@@ -99,7 +99,7 @@
     }
 
     .markdown a {
-        color: var(--grey7);
+        color: var(--grey08);
     }
 
     /* pre, code */

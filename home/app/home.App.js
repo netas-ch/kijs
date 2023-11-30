@@ -190,7 +190,7 @@ home.App = class home_App {
             caption: 'Navigation',
             collapsible: 'left',
             width: 180,
-            cls: 'kijs-flexcolumn',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 'none'
             },

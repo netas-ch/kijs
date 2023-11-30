@@ -19,8 +19,8 @@ home.sc.field_Color = class home_sc_field_Color {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.Color',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
-            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },

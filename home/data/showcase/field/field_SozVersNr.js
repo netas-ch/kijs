@@ -19,8 +19,8 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.field.SozVersNr',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
-            cls: 'kijs-flexform',
             style: {
                 flex: 1
             },

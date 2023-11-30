@@ -19,7 +19,7 @@ home.sc.Separator = class home_sc_Separator {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Separator',
-            cls: 'kijs-flexform',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -44,7 +44,6 @@ home.sc.Separator = class home_sc_Separator {
                 {
                     xtype: 'kijs.gui.FormPanel',
                     caption: 'Beispiel Toolbar und Formlayout',
-                    shadow: true,
                     scrollableY: 'auto',
                     width: 600,
                     cls: 'kijs-flexform',
@@ -89,7 +88,7 @@ home.sc.Separator = class home_sc_Separator {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Separators in einem Formular (horizontale Linien)',
                             labelHide: true,
-                            style: { fontWeight: 'bold' }
+                            cls: 'kijs-title'
                         },{
                             xtype: 'kijs.gui.Separator'
                         },{

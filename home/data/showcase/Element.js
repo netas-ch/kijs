@@ -19,6 +19,7 @@ home.sc.Element = class home_sc_Element {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Element',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1

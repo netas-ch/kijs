@@ -19,6 +19,7 @@ home.sc.Tooltip = class home_sc_Tooltip {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Tooltip',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1

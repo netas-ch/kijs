@@ -18,7 +18,7 @@ home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DataView Drag&Drop mit column-reverse layout',
-            cls: 'kijs-flexrow',
+            cls: ['kijs-borderless', 'kijs-flexrow'],
             style: {
                 flex: 1
             },
@@ -27,8 +27,7 @@ home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: nowrap',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: { flex: 1 },
                     headerBarStyle: { backgroundColor: '#0559a2' },
                     elements:[
@@ -39,7 +38,7 @@ home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
                             scrollableY: 'auto',
                             scrollableX: false,
                             data: [{A:'11111111'}, {A:'22222222'}, {A:'33333333'}, {A:'44444444'}, {A:'55555555'}],
-                            style: { flex: 1 },
+                            style: { flex: 1, borderRight: '1px solid var(--panel-innerBorderColor)' },
                             innerStyle: {
                                 flexDirection: 'column-reverse',
                                 flexWrap: 'nowrap',
@@ -51,9 +50,8 @@ home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: wrap',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
-                    style: { flex: 1 },
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
+                    style: { flex: 1, borderRight: '1px solid var(--panel-innerBorderColor)' },
                     headerBarStyle: { backgroundColor: '#7509a5' },
                     elements:[
                         {
@@ -75,8 +73,7 @@ home.test.DataView_DD_Col_Reverse = class home_test_Dataview_DD_Col_Reverse {
                     xtype: 'kijs.gui.Panel',
                     caption: 'flex-wrap: wrap-reverse',
                     scrollableY: false,
-                    shadow: true,
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: { flex: 1 },
                     headerBarStyle: { backgroundColor: '#a50968' },
                     elements:[

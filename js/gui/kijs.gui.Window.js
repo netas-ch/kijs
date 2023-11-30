@@ -51,8 +51,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             // defaults overwrite kijs.gui.Panel
             closable: true,
             maximizable: true,
-            resizable: true,
-            shadow: true
+            resizable: true
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften

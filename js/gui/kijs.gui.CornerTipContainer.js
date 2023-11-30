@@ -21,7 +21,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             dismissDelay: 5000,
-            width: 230
+            width: 240
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -202,7 +202,6 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             caption: config.caption,
             iconMap: config.iconMap ? config.iconMap : '',
             closable: true,
-            shadow: true,
             elements: elements,
             on: {
                 destruct: this.#onCornerTipDestruct,

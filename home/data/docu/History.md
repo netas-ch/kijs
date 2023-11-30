@@ -2,6 +2,62 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version x.x.x
+=============
+### Anpassungen CSS
+ - Das Theme Retro ist nun in einem CSS-Layer kijs-theme.  
+   
+   **UPDATE TIPP:** Damit die CSS in der richtigen Reihenfolge geladen werden, 
+   sollte in das ```<head>```-Tag der index.html folgender Code:  
+
+        <style>
+            @layer kijs, kijs-theme, app;
+        </style>
+
+ - CSS Variablen wurden anders durchnummeriert und es gibt neue.  
+
+   **UPDATE TIPP:**  
+   Suchen und ersetzen verwenden:  
+    - ```--grey9``` umbenennen zu ```--grey11```
+    - ```--grey8``` umbenennen zu ```--grey09```
+    - ```--grey7``` umbenennen zu ```--grey08```
+    - ```--grey6``` umbenennen zu ```--grey07```
+    - ```--grey5``` umbenennen zu ```--grey06```
+    - ```--grey4``` umbenennen zu ```--grey05```
+    - ```--grey3``` umbenennen zu ```--grey04```
+    - ```--grey2``` umbenennen zu ```--grey03```
+    - ```--grey1``` umbenennen zu ```--grey02```
+    - ```--grey0``` umbenennen zu ```--grey00```
+
+   Neue Variablen in eigenen Themes erstellen:  
+    - ```--grey01```
+    - ```--grey10```
+    - ```--icon-fontColor```
+    - ```--icon-disabled-fontColor```
+    - ```--bar-icon-fontColor```
+    - ```--bar-icon-disabled-fontColor```
+
+ - viele weitere kleinere CSS-Anpassungen.  
+
+
+
+### kijs.gui.Panel
+ - Panels haben neu Standardmässig einen Rahmen!  
+   Der Rahmen kann mit der CSS-Klasse ```kijs-borderless``` ausgeschaltet werden.  
+
+   **UPDATE TIPP:** Alle GUI-Ansichten im Programm manuell kontrollieren und dort 
+   wo nötig die CSS-Klasse ```kijs-borderless``` hinzufügen.  
+
+ - Das config/getter/setter ```shadow``` gibt es nicht mehr.  
+   Mit der CSS-Klasse ```kijs-shadow``` kann der Schatten hinzugefügt werden.  
+
+   **UPDATE TIPP:** Projekt nach ```shadow``` durchsuchen und überall die Eigenschaft 
+   ```shadow: true``` entfernen und dafür die CSS-Klasse ```kijs-shadow``` hinzufügen.  
+   Dies kann über ```cls: 'kijs-shadow``` geschehen oder falls schon eine Klasse  
+   vorhanden ist: ```cls: ['kijs-shadow', 'andereKlasse']```  
+
+
+
 Version 2.4.1
 =============
 ### Anpassungen an Drag&Drop

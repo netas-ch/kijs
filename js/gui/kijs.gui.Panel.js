@@ -125,7 +125,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
             resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Breite angezeigt werden.
             resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Höhe angezeigt werden.
-            shadow: { target: 'shadow' },       // Soll ein Schatten angezeigt werden?
             
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -436,16 +435,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     set resizableWidth(val) {
         this._setResizable(!!val, null);
     }
-
-    get shadow() { this._dom.clsHas('kijs-shadow'); }
-    set shadow(val) {
-        if (val) {
-            this._dom.clsAdd('kijs-shadow');
-        } else {
-            this._dom.clsRemove('kijs-shadow');
-        }
-    }
-
+    
     // overwrite
     get width() { return super.width; }
     set width(val) {

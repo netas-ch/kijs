@@ -46,12 +46,12 @@
         opacity: 0.6
     }
     .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > div.kijs-sourceDragOver {
-        border: 2px solid var(--accentColor3) !important;
+        border: 1px solid var(--accentColor3) !important;
     }
     .kijs-dashboard-panel.dashboardItemPanel > .kijs-container-inner > .kijs-dropMarker {
         flex: none;
         height: 31px;
-        border: 2px solid var(--accentColor3);
+        border: 1px solid var(--accentColor3);
         border-radius: 5px;
     }
     

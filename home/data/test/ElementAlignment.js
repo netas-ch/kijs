@@ -22,7 +22,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
         this._content = new kijs.gui.Panel({
             caption: 'Test zur Ausrichtung von Elementen',
             scrollableY: 'auto',
-            cls: 'kijs-flexform',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             innerCls: 'paperBkgrnd',
             style: {
                 flex: 1

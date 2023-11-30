@@ -19,6 +19,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.container.Tab',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -34,7 +35,6 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     cls: 'kijs-flexcolumn',
                     height: 400,
                     width: 600,
-                    shadow: true,
                     closable: true,
                     collapsible: 'top',
                     resizable: true,
@@ -75,7 +75,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                                 { name:'a2', tabCaption:'A 2', tabIconMap:'kijs.iconMap.Fa.user', html:'A 2', innerStyle:{ color:'#9f9'} },
                                 { name:'a3', tabCaption:'A 3', tabIconMap:'kijs.iconMap.Fa.phone', html:'A 3', innerStyle:{ color:'#99f'} },
                                 { name:'a4', tabCaption:'A 4', tabIconMap:'kijs.iconMap.Fa.envelope', html:'A 4', innerStyle:{ color:'#f9f'}, disabled: true },
-                                { name:'a5', tabCaption:'A 5', tabIconMap:'kijs.iconMap.Fa.location-dot', html:'A 5', innerStyle:{ color:'#9ff'} }
+                                { name:'a5', tabCaption:'A 5', tabIconMap:'kijs.iconMap.Fa.location-dot', html:'A 5', innerStyle:{ color:'#9ff'}, tabClosable: false }
                             ]
                         },{
                             xtype: 'kijs.gui.container.Tab',

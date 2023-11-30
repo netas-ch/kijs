@@ -32,11 +32,13 @@ home.sc.DashboardItemPanel = class home_sc_DashboardItemPanel extends kijs.gui.d
             collapsible: 'top',
             scrollableY: 'auto',
             resizableHeight: true,
+            cls: 'kijs-flexcolumn',
             style: {
                 minHeight: '100px'
             },
             innerStyle: { 
-                padding: '10px'
+                padding: '10px',
+                gap: '2px'
             }
         });
 
@@ -178,7 +180,6 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
         
         this._formPanel = new kijs.gui.FormPanel({
             cls: 'kijs-flexform',
-            style: { border: 'none' },
             innerStyle: { padding: '10px' },
             elements: [
                 {
@@ -275,7 +276,7 @@ home.sc.Dashboard = class home_sc_Dashboard {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Dashboard',
             scrollableY: false,
-            cls: 'kijs-flexfit',
+            cls: ['kijs-borderless', 'kijs-flexfit'],
             style: {
                 flex: 1
             },

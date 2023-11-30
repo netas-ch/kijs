@@ -21,6 +21,7 @@ home.sc.Window = class home_sc_Window {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Window',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
