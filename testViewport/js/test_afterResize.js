@@ -43,11 +43,11 @@ kit.App = class kit_App {
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     iconCls: 'icoWizard16',
                     collapsible: 'top',
                     collapsed: false,
                     height: 250,
-                    cls: 'kijs-flexrow',
                     headerBarElements:[
                         {
                             xtype: 'kijs.gui.Button',
@@ -62,6 +62,7 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            cls: 'kijs-borderless',
                             collapsible: 'left',
                             collapsed: false,
                             width: 300,
@@ -136,6 +137,7 @@ kit.App = class kit_App {
                             targetPos: 'left'
                         },{
                             xtype: 'kijs.gui.Panel',
+                            cls: 'kijs-borderless',
                             caption: 'Panel',
                             style: {
                                 flex: 1,
@@ -180,11 +182,11 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            cls: ['kijs-borderless', 'kijs-flexcolumn'],
                             iconMap: 'kijs.iconMap.Fa.compass',
                             iconCls: 'kijs-pulse',
                             collapsible: 'left',
                             width: 180,
-                            cls: 'kijs-flexcolumn',
                             on: {
                                 afterResize: function() {
                                     this.caption = 'afterResize: ' + kit.getCountPerElement(this, 'afterRender');
@@ -204,9 +206,9 @@ kit.App = class kit_App {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            cls: ['kijs-borderless', 'kijs-flexrow'],
                             iconMap: 'kijs.iconMap.Fa.map',
                             footerBarCaption: 'FooterBar',
-                            cls: 'kijs-flexrow',
                             scrollableY: 'auto',
                             style: {
                                 flex: 1,
@@ -232,6 +234,7 @@ kit.App = class kit_App {
                                 {
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel Header L',
+                                    cls: 'kijs-borderless',
                                     style: {
                                         flex: 1,
                                         minWidth: '40px'
@@ -254,6 +257,7 @@ kit.App = class kit_App {
                                 },{
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel Header R',
+                                    cls: 'kijs-borderless',
                                     collapsible: 'right',
                                     width: 200,
                                     on: {
@@ -273,6 +277,7 @@ kit.App = class kit_App {
                                 {
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel',
+                                    cls: 'kijs-borderless',
                                     collapsible: 'left',
                                     collapsed: false,
                                     width: 300,
@@ -293,6 +298,7 @@ kit.App = class kit_App {
                                 },{
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel',
+                                    cls: 'kijs-borderless',
                                     style: {
                                         flex: 1,
                                         minWidth: '40px'
@@ -321,6 +327,7 @@ kit.App = class kit_App {
                                 {
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel Footer L',
+                                    cls: 'kijs-borderless',
                                     style: {
                                         flex: 1,
                                         minWidth: '40px'
@@ -343,6 +350,7 @@ kit.App = class kit_App {
                                 },{
                                     xtype: 'kijs.gui.Panel',
                                     caption: 'Panel Footer R',
+                                    cls: 'kijs-borderless',
                                     collapsible: 'right',
                                     width: 200,
                                     on: {
@@ -384,10 +392,10 @@ kit.App = class kit_App {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            cls: ['kijs-borderless', 'kijs-flexrow'],
                             iconMap: 'kijs.iconMap.Fa.helicopter',
                             collapsible: 'right',
                             width: 240,
-                            cls: 'kijs-flexrow',
                             headerBarElements:[
                                 {
                                     xtype: 'kijs.gui.Button',
@@ -415,6 +423,7 @@ kit.App = class kit_App {
                 },{
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel',
+                    cls: 'kijs-borderless',
                     collapsible: 'bottom',
                     collapsed: false,
                     height: 100,
