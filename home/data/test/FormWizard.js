@@ -9,7 +9,7 @@ home.test.FormWizard = class home_test_FormWizard {
     constructor(config={}) {
         this._app = config.app;
         
-        this._formPanel = null;
+        this._panel = null;
         this._containerStack = null;
         this._btnPrevious = null;
         this._btnNext = null;
@@ -105,15 +105,21 @@ home.test.FormWizard = class home_test_FormWizard {
             }
         });
         
-        // FormPanel
-        this._formPanel = new kijs.gui.FormPanel({
-            cls: ['kijs-borderless', 'kijs-flexcolumn'],
-            rpcSaveFn: 'form.save',
+        // Form
+        this._panel = new kijs.gui.Panel({
+            cls: ['kijs-borderless', 'kijs-flexfit'],
             style: {
                 flex: 1
             },
             elements:[
-                this._containerStack
+                {
+                    xtype: 'kijs.gui.container.Form',
+                    cls: 'kijs-flexcolumn',
+                    rpcSaveFn: 'form.save',
+                    elements: [
+                        this._containerStack
+                    ]
+                }
             ],
             footerElements:[
                 this._btnPrevious,
@@ -121,7 +127,7 @@ home.test.FormWizard = class home_test_FormWizard {
             ]
         });
         
-        return this._formPanel;
+        return this._panel;
     }
 
     
@@ -181,7 +187,7 @@ home.test.FormWizard = class home_test_FormWizard {
                 this._btnNext.disabled = false;
                 
                 // Speichern
-                this._formPanel.save().then((e) => {
+                this._panel.downX('kijs.gui.container.Form').save().then((e) => {
                     // alles ok
                     if (kijs.isEmpty(e.errorType)) {
                         kijs.gui.CornerTipContainer.show('Titel', 'Daten wurden verschickt!');
@@ -246,7 +252,7 @@ home.test.FormWizard = class home_test_FormWizard {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
-        this._formPanel = null;
+        this._panel = null;
         this._containerStack = null;
         this._btnPrevious = null;
         this._btnNext = null;

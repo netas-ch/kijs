@@ -6,7 +6,10 @@ durch den Benutzer verändert wurde.
  - ```false```: es wurde nichts verändert  
 
 ```isDirty``` wird bei folgenden Aktionen verändert:  
- - Setzen der Feldwerte eines FormPanel mittels ```data``` setter (```ìsDirty``` wird auf false gesetzt).
- - Erfolgreiches Ausführen der Funktion ```save()``` im kijs.gui.FormPanel (```ìsDirty``` wird auf false gesetzt).
- - Direktes setzen via setter ```ìsDirty``` auf false. Dieser setter kann nicht auf true gesetzt werden. 
-   Ein Feld kann nur auf 'dirty' true gesetzt werden, indem der Wert verändert wird.
+ - Setzen der Feldwerte eines container.Form mittels ```data``` setter 
+   (```ìsDirty``` wird auf false gesetzt).  
+ - Erfolgreiches Ausführen der Funktion ```save()``` im kijs.gui.container.Form 
+   (```ìsDirty``` wird auf false gesetzt).  
+ - Direktes setzen via setter ```ìsDirty``` auf false. Dieser setter kann nicht 
+   auf true gesetzt werden.  
+   Ein Feld kann nur auf 'dirty' true gesetzt werden, indem der Wert verändert wird.  

@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version x.x.x
+Version 2.5.1
 =============
 ### Anpassungen CSS
  - Font Awesome Update auf Version 6.5.1.
@@ -57,6 +57,32 @@ Version x.x.x
    ```shadow: true``` entfernen und dafür die CSS-Klasse ```kijs-shadow``` hinzufügen.  
    Dies kann über ```cls: 'kijs-shadow``` geschehen oder falls schon eine Klasse  
    vorhanden ist: ```cls: ['kijs-shadow', 'andereKlasse']```  
+
+
+### kijs.gui.FormPanel umbennannt zu kijs.gui.container.Form
+Das ```kijs.gui.FormPanel``` gibt es nicht mehr.  
+Dafür gibt es neu das ```kijs.gui.container.Form```. Dieses ist diekt vom 
+```kijs.gui.Container``` vererbt und hat somit keine Panel-Funktionen mehr.  
+
+**UPDATE TIPP:** Das Projekt nach ```FormPanel``` durchsuchen und den xtype ändern. 
+Falls auch Panel-Funktionen (caption, headerbar, header, footer, footerbar, etc.) 
+verwendet werden, muss das container.Form in ein neues Panel getan werden:
+
+    {
+        xtype: 'kijs.gui.Panel',
+        cls: 'kijs-flexfit',
+        ... andere Eigenschaften des Panels, die im FormPanel waren
+        elements: [
+            {
+                xtype: 'kijs.container.Form',
+                cls: 'kijs-flexform',
+                ... weitere Eigenschaften des Forms
+            }
+        ]
+    }
+
+### weitere Anpassungen
+ - Die alte testApp wurde gelöscht.  
 
 
 

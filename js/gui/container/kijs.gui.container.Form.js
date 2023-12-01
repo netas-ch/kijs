@@ -1,9 +1,9 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.FormPanel
+// kijs.gui.container.Form
 // --------------------------------------------------------------
-kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
+kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -27,7 +27,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             rpcSaveFn: true,
@@ -50,17 +49,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-    }
-    set autoLoad(val) {
-        if (val) {
-            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        } else {
-            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        }
-    }
-
     get data() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -232,6 +220,7 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
+    // overwrite
     load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
@@ -277,8 +266,8 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
     
     /**
      * Sendet die Formulardaten an den Server
-     * @param {type} searchFields
-     * @param {type} args
+     * @param {Boolean} searchFields
+     * @param {Boolean} args
      * @param {type} waitMaskTarget
      * @returns {Promise}
      */
@@ -453,10 +442,6 @@ kijs.gui.FormPanel = class kijs_gui_FormPanel extends kijs.gui.Panel {
 
     // PRIVATE
     // LISTENERS
-    #onAfterFirstRenderTo(e) {
-        this.load();
-    }
-
     #onFieldBlur(e) {
         this.raiseEvent('blur', e);
     }

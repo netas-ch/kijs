@@ -6,7 +6,7 @@ Formularfelder werden bei folgenden Ereignissen formatiert:
 - Während der Eingabe
 - beim Verlassen des Felds
 
-Und auch bei folgenden Funktionen des FormPanels:
+Und auch bei folgenden Funktionen des container.Form:
 - load()
 
 Benutzerdefinierte Formatierungen sind nur in ```kijs.gui.field.Text``` Feldern, 

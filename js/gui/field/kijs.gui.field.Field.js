@@ -141,7 +141,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             minLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
             required: true,
-            submitValueEnable: true,    // Soll der Wert in einem FormPanel übermittelt werden?
+            submitValueEnable: true,    // Soll der Wert in einem container.Form übermittelt werden?
 
             validationFn: { target: 'validationFn' },
             validationFnContext: { target: 'validationFnContext' },

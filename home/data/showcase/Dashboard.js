@@ -178,7 +178,7 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
     constructor(config={}) {
         super(false);
         
-        this._formPanel = new kijs.gui.FormPanel({
+        this._form = new kijs.gui.container.Form({
             cls: 'kijs-flexform',
             innerStyle: { padding: '10px' },
             elements: [
@@ -186,7 +186,17 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
                     xtype: 'kijs.gui.field.Memo',
                     name: 'memo'
                 }
-            ],
+            ]
+        });
+        this.add(this._form);
+        
+        this._dom.clsAdd('kijs-flexfit');
+        
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            iconMap: 'kijs.iconMap.Fa.rectangle-list',
+            closable: true,
+            collapsible: 'top',
             footerElements:[
                 {
                     xtype: 'kijs.gui.Button',
@@ -198,25 +208,15 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
                 }
             ]
         });
-        this.add(this._formPanel);
-        
-        this._dom.clsAdd('kijs-flexfit');
-        
-        // Standard-config-Eigenschaften mergen
-        Object.assign(this._defaultConfig, {
-            iconMap: 'kijs.iconMap.Fa.rectangle-list',
-            closable: true,
-            collapsible: 'top'
-        });
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            rpc: { target: 'rpc', context: this._formPanel },
-            rpcLoadFn: { target: 'rpcLoadFn', context: this._formPanel },
-            rpcLoadArgs: { target: 'rpcLoadArgs', context: this._formPanel },
-            rpcSaveFn: { target: 'rpcSaveFn', context: this._formPanel },
-            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._formPanel },
-            autoLoad: { target: 'autoLoad', context: this._formPanel }
+            rpc: { target: 'rpc', context: this._form },
+            rpcLoadFn: { target: 'rpcLoadFn', context: this._form },
+            rpcLoadArgs: { target: 'rpcLoadArgs', context: this._form },
+            rpcSaveFn: { target: 'rpcSaveFn', context: this._form },
+            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._form },
+            autoLoad: { target: 'autoLoad', context: this._form }
         });
 
         // Config anwenden
@@ -229,27 +229,27 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
     }
     
     // GETTER / SETTER
-    get autoLoad() { return this._formPanel.autoLoad; }
-    set autoLoad(val) { this._formPanel.autoLoad = val; }
+    get autoLoad() { return this._form.autoLoad; }
+    set autoLoad(val) { this._form.autoLoad = val; }
 
-    get rpc() { return this._formPanel.rpc; }
-    set rpc(val) { this._formPanel.rpc = val; }
+    get rpc() { return this._form.rpc; }
+    set rpc(val) { this._form.rpc = val; }
 
-    get rpcLoadArgs() { return this._formPanel.rpcLoadArgs; }
-    set rpcLoadArgs(val) { this._formPanel.rpcLoadArgs = val; }
+    get rpcLoadArgs() { return this._form.rpcLoadArgs; }
+    set rpcLoadArgs(val) { this._form.rpcLoadArgs = val; }
     
-    get rpcLoadFn() { return this._formPanel.rpcLoadFn; }
-    set rpcLoadFn(val) { this._formPanel.rpcLoadFn = val; }
+    get rpcLoadFn() { return this._form.rpcLoadFn; }
+    set rpcLoadFn(val) { this._form.rpcLoadFn = val; }
     
-    get rpcSaveArgs() { return this._formPanel.rpcSaveArgs; }
-    set rpcSaveArgs(val) { this._formPanel.rpcSaveArgs = val; }
+    get rpcSaveArgs() { return this._form.rpcSaveArgs; }
+    set rpcSaveArgs(val) { this._form.rpcSaveArgs = val; }
 
-    get rpcSaveFn() { return this._formPanel.rpcSaveFn; }
-    set rpcSaveFn(val) { this._formPanel.rpcSaveFn = val; }
+    get rpcSaveFn() { return this._form.rpcSaveFn; }
+    set rpcSaveFn(val) { this._form.rpcSaveFn = val; }
     
     // LISTENERS
     #onBtnSaveClick(e) {
-        this._formPanel.save();
+        this._form.save();
     }
 
 };

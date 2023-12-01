@@ -42,22 +42,10 @@ home.sc.Separator = class home_sc_Separator {
                     xtype: 'kijs.gui.Separator'
                 },
                 {
-                    xtype: 'kijs.gui.FormPanel',
+                    xtype: 'kijs.gui.Panel',
                     caption: 'Beispiel Toolbar und Formlayout',
-                    scrollableY: 'auto',
+                    cls: 'kijs-flexfit',
                     width: 600,
-                    cls: 'kijs-flexform',
-                    innerStyle: {
-                        padding: '10px'
-                    },
-                    defaults: {
-                        labelWidth: 100,
-                        required: true,
-                        defaults: {
-                            labelWidth: 100,
-                            required: true
-                        }
-                    },
                     headerElements:[
                         {
                             xtype: 'kijs.gui.Button',
@@ -85,36 +73,53 @@ home.sc.Separator = class home_sc_Separator {
                     ],
                     elements: [
                         {
-                            xtype: 'kijs.gui.field.Display',
-                            value: 'Separators in einem Formular (horizontale Linien)',
-                            labelHide: true,
-                            cls: 'kijs-title'
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
-                            xtype: 'kijs.gui.field.Email',
-                            name: 'Email',
-                            label: 'E-Mail'
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
-                            xtype: 'kijs.gui.field.Color',
-                            name: 'Lieblingsfarbe',
-                            label: 'Lieblingsfarbe',
-                            value: '#fff'
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
-                            xtype: 'kijs.gui.field.OptionGroup',
-                            name: 'LieblingsBetriebssystem',
-                            label: 'Lieblings Betriebssystem',
-                            captionField: 'caption',
-                            valueField: 'value',
-                            iconMapField: 'iconMap',
-                            data: [
-                                { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                                { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                                { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                            xtype: 'kijs.gui.container.Form',
+                            cls: 'kijs-flexform',
+                            innerStyle: {
+                                padding: '10px'
+                            },
+                            defaults: {
+                                labelWidth: 100,
+                                required: true,
+                                defaults: {
+                                    labelWidth: 100,
+                                    required: true
+                                }
+                            },
+                            elements:[
+                                {
+                                    xtype: 'kijs.gui.field.Display',
+                                    value: 'Separators in einem Formular (horizontale Linien)',
+                                    labelHide: true,
+                                    cls: 'kijs-title'
+                                },{
+                                    xtype: 'kijs.gui.Separator'
+                                },{
+                                    xtype: 'kijs.gui.field.Email',
+                                    name: 'Email',
+                                    label: 'E-Mail'
+                                },{
+                                    xtype: 'kijs.gui.Separator'
+                                },{
+                                    xtype: 'kijs.gui.field.Color',
+                                    name: 'Lieblingsfarbe',
+                                    label: 'Lieblingsfarbe',
+                                    value: '#fff'
+                                },{
+                                    xtype: 'kijs.gui.Separator'
+                                },{
+                                    xtype: 'kijs.gui.field.OptionGroup',
+                                    name: 'LieblingsBetriebssystem',
+                                    label: 'Lieblings Betriebssystem',
+                                    captionField: 'caption',
+                                    valueField: 'value',
+                                    iconMapField: 'iconMap',
+                                    data: [
+                                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                                    ]
+                                }
                             ]
                         }
                     ]

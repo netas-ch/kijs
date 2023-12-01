@@ -6,7 +6,7 @@ Formularfelder werden bei folgenden Ereignissen validiert:
 - beim Verlassen des Felds
 - beim Aufrufen von validate()
 
-Und auch bei folgenden Funktionen des FormPanels:
+Und auch bei folgenden Funktionen des container.Form:
 - load() ???
 - save()
 - validate()
