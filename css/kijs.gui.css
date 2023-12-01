@@ -115,7 +115,7 @@
     font-style: italic;
   }
   /* ******************
-       * Font Awesome free Version 6.1.1  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
+       * Font Awesome free Version 6.5.1  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
        ****************** */
   /* fa-solid */
   @font-face {
@@ -123,7 +123,7 @@
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url('../fonts/font-awesome-6-1-1/fa-solid-900.woff2') format('woff2'), url('../fonts/font-awesome-6-1-1/fa-solid-900.ttf') format('truetype');
+    src: url('../fonts/font-awesome-6-5-1/fa-solid-900.woff2') format('woff2'), url('../fonts/font-awesome-6-5-1/fa-solid-900.ttf') format('truetype');
   }
   /* fa-regular */
   @font-face {
@@ -131,7 +131,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url('../fonts/font-awesome-6-1-1/fa-regular-400.woff2') format('woff2'), url('../fonts/font-awesome-6-1-1/fa-regular-400.ttf') format('truetype');
+    src: url('../fonts/font-awesome-6-5-1/fa-regular-400.woff2') format('woff2'), url('../fonts/font-awesome-6-5-1/fa-regular-400.ttf') format('truetype');
   }
   /* fa-brands */
   @font-face {
@@ -139,7 +139,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url('../fonts/font-awesome-6-1-1/fa-brands-400.woff2') format('woff2'), url('../fonts/font-awesome-6-1-1/fa-brands-400.ttf') format('truetype');
+    src: url('../fonts/font-awesome-6-5-1/fa-brands-400.woff2') format('woff2'), url('../fonts/font-awesome-6-5-1/fa-brands-400.ttf') format('truetype');
   }
   .fa-solid,
   span.kijs-icon.fa-solid {

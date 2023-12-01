@@ -5,6 +5,8 @@ Es sind evtl. Anpassungen am Projekt nötig.
 Version x.x.x
 =============
 ### Anpassungen CSS
+ - Font Awesome Update auf Version 6.5.1.
+
  - Das Theme Retro ist nun in einem CSS-Layer kijs-theme.  
    
    **UPDATE TIPP:** Damit die CSS in der richtigen Reihenfolge geladen werden, 
