@@ -22,7 +22,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
         this._content = new kijs.gui.Panel({
             caption: 'Test für kijs.gui.Dom.scrollIntoView()',
             scrollableY: 'auto',
-            cls: 'kijs-flexform',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             style: {
                 flex: 1
             },
@@ -44,7 +44,6 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                     xtype: 'kijs.gui.Panel',
                     name: 'panel1',
                     caption: 'Panel 1',
-                    shadow: true,
                     resizable: true,
                     scrollableY: 'auto',
                     height: 100,
@@ -95,7 +94,6 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                     xtype: 'kijs.gui.Panel',
                     name: 'panel2',
                     caption: 'Panel 2',
-                    shadow: true,
                     resizable: true,
                     scrollableX: 'auto',
                     height: 100,
@@ -146,7 +144,6 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                     xtype: 'kijs.gui.Panel',
                     name: 'panel3',
                     caption: 'Panel 3',
-                    shadow: true,
                     resizable: true,
                     width: 400,
                     cls: 'kijs-flexform',

@@ -19,7 +19,7 @@ home.sc.Tree = class home_sc_Tree {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Tree',
-            cls: 'kijs-flexform',
+            cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {
                 flex: 1

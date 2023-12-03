@@ -21,6 +21,7 @@ home.test.Layout = class home_test_Layout {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'Test für die verschiedenen Layouts',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -34,7 +35,6 @@ home.test.Layout = class home_test_Layout {
                     xtype: 'kijs.gui.Panel',
                     name: 'myPanel',
                     caption: 'Test-Panel',
-                    shadow: true,
                     resizable: true,
                     height: 400,
                     width: 400,

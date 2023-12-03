@@ -19,6 +19,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.ApertureMask',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -32,7 +33,6 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel',
                     iconCls: 'icoWizard16',
-                    shadow: true,
                     closable: true,
                     collapsible: 'top',
                     collapsed: false,
@@ -42,7 +42,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                     scrollableY: 'auto',
                     width: 500,
                     cls: 'kijs-flexrow',
-
+                    
                     elements: [
                         {
                             xtype: 'kijs.gui.Element',

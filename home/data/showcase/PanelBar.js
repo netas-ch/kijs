@@ -19,6 +19,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.PanelBar',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -116,7 +117,7 @@ home.sc.PanelBar = class home_sc_PanelBar {
 
                 {
                     xtype: 'kijs.gui.PanelBar',
-                    html: 'Meine HeaderBar Zentriert',
+                    html: 'Meine PanelBar (freistehend)',
                     cls: 'kijs-headerbar-center',
                     style: {
                         marginBottom: '10px'

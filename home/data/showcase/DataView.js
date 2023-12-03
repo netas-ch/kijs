@@ -19,9 +19,14 @@ home.sc.DataView = class home_sc_DataView {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DataView',
-            cls: 'kijs-flexcolumn',
+            scrollableY: 'auto',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1
+            },
+            innerStyle: {
+                padding: '10px',
+                gap: '10px'
             },
             headerElements: this._getHeaderElements(),
             elements:[
@@ -31,7 +36,8 @@ home.sc.DataView = class home_sc_DataView {
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
-                        flex: 1
+                        flex: 1,
+                        minHeight: '90px'
                     },
                     
                     elements:[
@@ -57,9 +63,9 @@ home.sc.DataView = class home_sc_DataView {
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
-                        flex: 1
+                        flex: 1,
+                        minHeight: '80px'
                     },
-                    
                     elements:[
                         {
                             xtype: 'kijs.gui.DataView',
@@ -70,7 +76,7 @@ home.sc.DataView = class home_sc_DataView {
                             //scrollableY: 'auto',
                             style: {
                                 flex: 1,
-                                borderRight: '4px solid var(--panel-borderColor)'
+                                borderRight: '1px solid var(--panel-borderColor)'
                             },
                             innerStyle: {
                                 padding: '4px'
@@ -99,7 +105,8 @@ home.sc.DataView = class home_sc_DataView {
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
-                        flex: 2
+                        flex: 2,
+                        minHeight: '80px'
                     },
                     
                     headerElements:[

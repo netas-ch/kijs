@@ -19,6 +19,7 @@ home.sc.Panel = class home_sc_Panel {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Panel',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -30,9 +31,10 @@ home.sc.Panel = class home_sc_Panel {
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
+                    name: 'myPanel',
                     caption: 'Mein Panel',
                     iconCls: 'icoWizard16',
-                    shadow: true,
+                    cls: 'kijs-shadow',
                     closable: true,
                     collapsible: 'top',
                     collapsed: false,
@@ -253,6 +255,28 @@ home.sc.Panel = class home_sc_Panel {
                 on: {
                     change: function(e) {
                         this._content.innerDisabled = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'CSS-Klasse:',
+                value: 'kijs-shadow',
+                width: 190,
+                data: [
+                    { caption: 'keine', value: 'none' },
+                    { caption: 'kijs-borderless', value: 'kijs-borderless' },
+                    { caption: 'kijs-shadow', value: 'kijs-shadow' }
+                ],
+                on: {
+                    change: function(e) {
+                        let panel = this._content.down('myPanel');
+                        
+                        
+                        panel.dom.clsRemove(['kijs-borderless', 'kijs-shadow']);
+                        if (e.element.value !== 'none') {
+                            panel.dom.clsAdd(e.element.value);
+                        }
                     },
                     context: this
                 }

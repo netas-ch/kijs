@@ -19,6 +19,7 @@ home.sc.Icon = class home_sc_Icon {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Icon',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1

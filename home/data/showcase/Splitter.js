@@ -19,7 +19,7 @@ home.sc.Splitter = class home_sc_Splitter {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Splitter',
-            cls: 'kijs-flexcolumn',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1
             },
@@ -28,6 +28,7 @@ home.sc.Splitter = class home_sc_Splitter {
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Top',
+                    cls: 'kijs-borderless',
                     collapsible: 'top',
                     collapsed: false,
                     height: 100,
@@ -40,7 +41,7 @@ home.sc.Splitter = class home_sc_Splitter {
                 },{
                     xtype: 'kijs.gui.Panel',
                     caption: 'Center',
-                    cls: 'kijs-flexrow',
+                    cls: ['kijs-borderless', 'kijs-flexrow'],
                     style: {
                         flex: 1
                     },
@@ -48,6 +49,7 @@ home.sc.Splitter = class home_sc_Splitter {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Left',
+                            cls: 'kijs-borderless',
                             collapsible: 'left',
                             collapsed: false,
                             width: 100,
@@ -60,6 +62,7 @@ home.sc.Splitter = class home_sc_Splitter {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Center',
+                            cls: 'kijs-borderless',
                             style: {
                                 flex: 1
                             },
@@ -72,6 +75,7 @@ home.sc.Splitter = class home_sc_Splitter {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Right',
+                            cls: 'kijs-borderless',
                             collapsible: 'right',
                             collapsed: false,
                             width: 100,
@@ -86,6 +90,7 @@ home.sc.Splitter = class home_sc_Splitter {
                 },{
                     xtype: 'kijs.gui.Panel',
                     caption: 'Bottom',
+                    cls: 'kijs-borderless',
                     collapsible: 'bottom',
                     collapsed: false,
                     height: 100,

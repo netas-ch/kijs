@@ -65,7 +65,6 @@ home.App = class home_App {
     _createContent() {
         let html = '';
         html += '<div style="margin: 420px 0 0 370px">';
-        html += ' <a href="../testApp">Test-App</a><br>';
         html += ' <a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a><br>';
         html += ' <br>';
         html += ' <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a><br>';
@@ -190,7 +189,7 @@ home.App = class home_App {
             caption: 'Navigation',
             collapsible: 'left',
             width: 180,
-            cls: 'kijs-flexcolumn',
+            cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 'none'
             },

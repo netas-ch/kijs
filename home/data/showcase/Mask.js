@@ -19,6 +19,7 @@ home.sc.Mask = class home_sc_Mask {
     getContent() {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Mask',
+            cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {
                 flex: 1
@@ -32,7 +33,6 @@ home.sc.Mask = class home_sc_Mask {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Panel',
                     iconCls: 'icoWizard16',
-                    shadow: true,
                     closable: true,
                     collapsible: 'top',
                     collapsed: false,
@@ -164,7 +164,6 @@ home.sc.Mask = class home_sc_Mask {
                         {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
-                            shadow: true,
                             displayWaitMask: true,
                             height: 100,
                             width: 200,
@@ -174,7 +173,6 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
-                            shadow: true,
                             waitMaskTargetDomProperty: 'innerDom',
                             displayWaitMask: true,
                             height: 100,

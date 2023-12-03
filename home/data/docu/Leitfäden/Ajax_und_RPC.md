@@ -155,7 +155,7 @@ Der Server sollte wie folgt antworten:
         {
             "tid":1,    // tid vom request nehmen
             "responseData": {
-                "fieldErrors":{                 // (optional) nur bei Save von kijs.gui.FormPanel 
+                "fieldErrors":{                 // (optional) nur bei Save von kijs.gui.container.Form 
                     "Anrede": "Ungültige Anrede."   // Fehlermeldungen, die direkt in den 
                                                     // Feldern angezeigt werden.
                 },

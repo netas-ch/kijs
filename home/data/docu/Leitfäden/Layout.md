@@ -47,7 +47,7 @@ Flext den Inhalt in eine Zeile.
 ### kijs-flexrowwrap
 Flext die Kinder in Zeilen mit Abständen zwischen den Elementen. Kinder die nicht 
 mehr platz in der Zeile haben gehen auf die nächste Zeile.  
-Ist geignet für FormPanel mit Containern als Inhalt die dann ```kijs-flexform``` 
+Ist geignet für container.Form mit Containern als Inhalt die dann ```kijs-flexform``` 
 zugewiesen haben.  
 
     .kijs-flexrowwrap > .kijs-container-inner {

@@ -41,6 +41,7 @@
    "js/gui/kijs.gui.Separator.js",
             
    "js/gui/container/kijs.gui.container.js",
+   "js/gui/container/kijs.gui.container.Form.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
     
@@ -93,7 +94,6 @@
    "js/gui/dataView/kijs.gui.dataView.Element.js",
    
    "js/gui/kijs.gui.ListView.js",
-   "js/gui/kijs.gui.FormPanel.js",
 
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
