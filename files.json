@@ -28,27 +28,27 @@
    "js/iconMap/kijs.iconMap.Fa.js",
 
    "js/gui/kijs.gui.js",
-   
+
    "js/gui/kijs.gui.DragDrop.js",
    "js/gui/dragDrop/kijs.gui.dragDrop.js",
    "js/gui/dragDrop/kijs.gui.dragDrop.Source.js",
    "js/gui/dragDrop/kijs.gui.dragDrop.Target.js",
-            
+
    "js/gui/kijs.gui.Dom.js",
    "js/gui/kijs.gui.Tooltip.js",
    "js/gui/kijs.gui.Element.js",
    "js/gui/kijs.gui.Container.js",
    "js/gui/kijs.gui.Separator.js",
-            
+
    "js/gui/container/kijs.gui.container.js",
    "js/gui/container/kijs.gui.container.Form.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
-   
+
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",
    "js/gui/kijs.gui.ViewPort.js",
-   
+
    "js/gui/kijs.gui.Icon.js",
    "js/gui/kijs.gui.Button.js",
    "js/gui/kijs.gui.ButtonGroup.js",
@@ -59,18 +59,18 @@
    "js/gui/container/tab/kijs.gui.container.tab.Bar.js",
    "js/gui/container/tab/kijs.gui.container.tab.Container.js",
    "js/gui/container/kijs.gui.container.Tab.js",
-   
+
    "js/gui/kijs.gui.Tree.js",
    "js/gui/kijs.gui.PanelBar.js",
    "js/gui/kijs.gui.Resizer.js",
    "js/gui/kijs.gui.Splitter.js",
    "js/gui/kijs.gui.Panel.js",
-            
+
    "js/gui/dashboard/kijs.gui.dashboard.js",
    "js/gui/dashboard/kijs.gui.dashboard.Panel.js",
    "js/gui/dashboard/kijs.gui.dashboard.Column.js",
    "js/gui/kijs.gui.Dashboard.js",
-            
+
    "js/gui/kijs.gui.Mask.js",
    "js/gui/kijs.gui.ApertureMask.js",
    "js/gui/kijs.gui.LayerManager.js",
@@ -82,17 +82,17 @@
    "js/gui/kijs.gui.CornerTipContainer.js",
 
    "js/gui/kijs.gui.Rpc.js",
-   
+
    "js/gui/kijs.gui.DataView.js",
    "js/gui/dataView/kijs.gui.dataView.js",
    "js/gui/dataView/kijs.gui.dataView.Element.js",
-   
+
    "js/gui/kijs.gui.ListView.js",
 
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",
-   
+
    "js/gui/field/kijs.gui.field.js",
    "js/gui/field/kijs.gui.field.Field.js",
    "js/gui/field/kijs.gui.field.Text.js",
@@ -155,7 +155,7 @@
    "lib/ace/src-min-noconflict/ace.js",
    "js/gui/field/kijs.gui.field.AceEditor.js"
   ],
-  
+
   "quillEditor":[
    "lib/quill/quill.min.js",
    "js/gui/field/kijs.gui.field.QuillEditor.js"
@@ -176,12 +176,12 @@
 
  "fonts":{
   "gui":[
-    "fonts/font-awesome-6-1-1/fa-regular-400.ttf",
-    "fonts/font-awesome-6-1-1/fa-regular-400.woff2",
-    "fonts/font-awesome-6-1-1/fa-brands-400.ttf",
-    "fonts/font-awesome-6-1-1/fa-brands-400.woff2",
-    "fonts/font-awesome-6-1-1/fa-solid-900.ttf",
-    "fonts/font-awesome-6-1-1/fa-solid-900.woff2",
+    "fonts/font-awesome-6-5-1/fa-regular-400.ttf",
+    "fonts/font-awesome-6-5-1/fa-regular-400.woff2",
+    "fonts/font-awesome-6-5-1/fa-brands-400.ttf",
+    "fonts/font-awesome-6-5-1/fa-brands-400.woff2",
+    "fonts/font-awesome-6-5-1/fa-solid-900.ttf",
+    "fonts/font-awesome-6-5-1/fa-solid-900.woff2",
 
     "fonts/roboto/Roboto-Regular.woff",
     "fonts/roboto/Roboto-Italic.woff",
