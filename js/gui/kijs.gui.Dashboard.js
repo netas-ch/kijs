@@ -193,10 +193,11 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
                 el.on('close', this.#onPanelClose, this);
                 if (this._sortable) {
                     el.ddSource = { 
+                        name: this._ddPanelName,
+                        ownerDomProperty: 'headerBar.dom',
                         allowMove: true,
                         allowCopy: false,
-                        allowLink: false,
-                        name: this._ddPanelName
+                        allowLink: false
                     };
                 } else {
                     if (el.ddSource) {
