@@ -2,6 +2,16 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.5.2
+=============
+### FontAwesome
+ - Neue Fonts waren nicht richtig in der files.json
+ 
+### kijs.gui.Dashboard
+ - Panels haben neu im Retro Design einen weissen Hintergrund
+
+
+
 Version 2.5.1
 =============
 ### Anpassungen CSS
