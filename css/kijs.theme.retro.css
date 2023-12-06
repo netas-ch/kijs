@@ -395,6 +395,9 @@
   div.kijs-dashboard {
     background-color: #edf1f7;
   }
+  div.kijs-dashboard > .kijs-container-inner > .kijs-dashboard-column > .kijs-container-inner > .kijs-dashboard-panel > .kijs-container-inner {
+    background-color: var(--grey00);
+  }
   /* kijs.gui.ButtonGroup */
   div.kijs-buttongroup {
     border: 1px solid #b7c8d7;

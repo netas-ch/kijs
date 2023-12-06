@@ -496,6 +496,14 @@
     /* kijs.gui.Dashboard */
     div.kijs-dashboard {
         background-color: #edf1f7;
+        
+        > .kijs-container-inner {
+            > .kijs-dashboard-column > .kijs-container-inner {
+                > .kijs-dashboard-panel > .kijs-container-inner {
+                    background-color: var(--grey00);
+                }
+            }
+        }
     }
 
 

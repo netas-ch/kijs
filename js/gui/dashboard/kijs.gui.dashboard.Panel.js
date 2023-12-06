@@ -28,10 +28,7 @@ kijs.gui.dashboard.Panel = class kijs_gui_dashboard_Panel extends kijs.gui.Panel
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            ddSource: {
-                name: 'dashboardPanel',
-                ownerDomProperty: 'headerBar.dom'
-            }
+            // nix
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
