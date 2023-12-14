@@ -1,5 +1,5 @@
 # IDE Ordner
 .idea/
 nbproject
-/css/kijs.gui.css.map
+/css/*.css.map
 kijs.code-workspace
