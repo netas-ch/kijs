@@ -188,9 +188,9 @@
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
     }
-    
-    
-    
+
+
+
     /* ******************
        * Separator
        ****************** */
@@ -200,7 +200,7 @@
         min-width: 1px;
         margin: 0;
         background-color: var(--separator-bkgrndColor);
-        
+
         &.kijs-hidden {
             display: none;
         }
@@ -209,9 +209,9 @@
             background-color: var(--separator-disabled-bkgrndColor);
         }
     }
-    
-    
-    
+
+
+
     /* ******************
        * Icon
        ****************** */
@@ -311,12 +311,12 @@
         &:hover, &:focus {
             background-color: var(--button-focus-bkgrndColor);
             border: 1px solid var(--button-focus-borderColor);
-            
+
             > .kijs-caption {
                 color: var(--button-focus-fontColor);
             }
         }
-        
+
         &:active {
             background-color: var(--button-active-bkgrndColor);
         }
@@ -381,7 +381,7 @@
         position: relative;
         overflow: hidden;
         flex: 1 1 auto;
-        
+
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
@@ -469,7 +469,7 @@
                 }
             }
         }
-        
+
         /* nur kijs-scrollable-y-enable */
         > .kijs-btn-scrollup {
             grid-row: 1;
@@ -481,7 +481,7 @@
             grid-column: 1;
             margin: 2px 4px;
         }
-        
+
         /* nur kijs-scrollable-x-enable */
         > .kijs-btn-scrollleft {
             grid-row: 1;
@@ -493,7 +493,7 @@
             grid-column: 3;
             margin: 4px 2px;
         }
-        
+
         /* kijs-scrollable-x-enable und kijs-scrollable-y-enable */
         &.kijs-scrollable-x-enable.kijs-scrollable-y-enable {
             > .kijs-btn-scrollup {
@@ -591,7 +591,7 @@
                     > .kijs-caption {
                         color: var(--tabButton-fontColor);
                     }
-                    
+
                     &:hover, &:focus {
                         background-color: var(--tabButton-focus-bkgrndColor);
                         border: 1px solid var(--tabButton-focus-borderColor);
@@ -600,7 +600,7 @@
                             color: var(--tabButton-focus-fontColor);
                         }
                     }
-                    
+
                     &.kijs-disabled {
                         background-color: var(--button-bkgrndColor);
                         border: 1px solid var(--button-borderColor);
@@ -764,7 +764,7 @@
                 color: var(--button-disabled-fontColor);
             }
         }
-        
+
         /* tabBar Align */
         &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-start;
@@ -775,7 +775,7 @@
         .kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-end;
         }
-        
+
         /* Drag&Drop */
         > .kijs-container-scrollable > .kijs-container-inner {
             > .kijs-button {
@@ -835,11 +835,11 @@
         font-size: var(--default-fontSize);
         background-color: var(--viewport-bkgrndColor);
         max-width: 400px;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         ul {
             margin: 0 0 0 14px;
             padding: 0;
@@ -873,11 +873,11 @@
 
         -webkit-user-select: none;  /* Safari */
         user-select: none;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         &.kijs-pos-top {
             margin-top: 1px;
             box-shadow: 0 -3px 3px 3px rgba(0, 0, 0, 0.1);
@@ -1051,7 +1051,7 @@
                         }
                     }
                 }
-                
+
                 > .kijs-separator {
                     margin: 4px 0;
                 }
@@ -1068,7 +1068,7 @@
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
         }
-        
+
         &.kijs-headerbar {
             > .kijs-container-inner {
                 font-family: var(--default-fontFamily);
@@ -1098,7 +1098,7 @@
             background-color: var(--bar-disabled-bkgrndColor);
             border-color: var(--bar-disabled-bkgrndColor);
             color:  var(--bar-disabled-fontColor);
-            
+
             > .kijs-icon {
                 color: var(--bar-icon-disabled-fontColor);
             }
@@ -1122,16 +1122,16 @@
         border: 1px solid var(--panel-borderColor);
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
-        
+
         &:focus {
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
         }
-        
+
         &.disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
-        
+
         &.kijs-borderless {
             border: none;
         }
@@ -1253,7 +1253,7 @@
 
                         > .kijs-button {
                             align-self: center;
-                            
+
                             > .kijs-caption, > .kijs-icon {
                                 line-height: 16px;
                             }
@@ -1286,19 +1286,19 @@
         align-items: stretch;
         overflow: hidden;
         background-color: var(--grey02);
-        
+
         > .kijs-container-inner {
             flex: 1;
             display: flex;
             flex-direction: row;
             padding: 5px;
             gap: 5px;
-            
+
             /* Spalten*/
             > .kijs-dashboard-column {
                 flex: 1;
                 overflow: visible;
-                
+
                 > .kijs-container-inner {
                     flex:none;
                     min-height:100%;
@@ -1306,39 +1306,39 @@
                     display: flex;
                     flex-direction: column;
                     gap: 5px;
-                    
+
                     /* Panel */
                     > .kijs-dashboard-panel {
                         flex: none;
                         border-radius: 5px;
-                        
+
                         &.kijs-dragging {
                             opacity: 0.6
                         }
-                        
+
                         &.kijs-sourceDragOver {
                             border-color: var(--accentColor3);
                         }
-                        
+
                         &.kijs-disabled {
                             border: 1px solid var(--panel-disabled-borderColor);
                         }
                     }
-                    
+
                     /* Drop Marker */
                     > .kijs-dropMarker {
                         flex: none;
                         border: 1px solid var(--accentColor3);
                         border-radius: 5px;
                     }
-                    
+
                 }
             }
         }
 
     }
-    
-    
+
+
 
     /* ******************
        * Window
@@ -1351,14 +1351,14 @@
         max-height: 100%;
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-        
+
         -webkit-user-select: none;  /* Safari */
         user-select: none;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
             > .kijs-button {
@@ -1388,11 +1388,11 @@
                 }
             }
         }
-        
+
         &.kijs-maximize {
             border-radius: 0;
         }
-        
+
         &.kijs-disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
@@ -1421,11 +1421,11 @@
 
         -webkit-user-select: none;  /* Safari  */
         user-select: none;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         > .kijs-icon {
             color: #F5F5F5;
             font-size: 40px;
@@ -1454,11 +1454,11 @@
         z-index: 9000;
         background-color: rgba(0, 0, 0, 0.5);
         opacity: 0;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         &.top {
             top: 0;
         }
@@ -1520,7 +1520,7 @@
             min-width: 80px;
         }
     }
-    
+
 
 
     /* ******************
@@ -1533,38 +1533,38 @@
         right: 0;
         bottom: 0;
         z-index: 70000;
-        
+
         * {
             box-sizing: border-box;
         }
-        
+
         > .kijs-container-inner {
             > .kijs-panel {
                 margin: 10px;
                 border-radius: 4px;
                 box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-                
+
                 > .kijs-container-inner {
                     display: flex;
                     flex-direction: row;
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
                     color: var(--default-fontColor);
-                    
+
                     > .kijs-icon {
                         flex: none;
                         font-size: 30px;
                         width: 40px;
                         margin: 10px 0 10px 10px;
                     }
-                    
+
                     > .kijs-msgbox-inner {
                         flex: 1;
                         padding: 10px;
                         overflow: auto;
                     }
                 }
-                
+
                 &.kijs-disabled {
                     border: 1px solid var(--panel-disabled-borderColor);
                 }
@@ -1598,7 +1598,7 @@
         &.kijs-resizer-width.kijs-resizer-height {
             cursor: nwse-resize;
         }
-        
+
         &:hover {
             opacity: 1;
         }
@@ -1623,7 +1623,7 @@
                 margin: 0;
                 border-radius: 0;
             }
-            
+
             > button.kijs-button {
                 text-align: left;
                 display: flex;
@@ -1815,7 +1815,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        
+
         > .kijs-container-inner {
             flex: 1;
             display: flex;
@@ -1861,13 +1861,13 @@
                 > div > .value {
                     display: inline-block;
                 }
-                
+
                 &.kijs-selected {
                     color: var(--item-selected-fontColor);
                     background-color: var(--item-selected-bkgrndColor);
                     border-color: var(--item-selected-borderColor);
                 }
-                
+
                 &.kijs-dragging {
                     opacity: 0.6
                 }
@@ -1875,7 +1875,7 @@
                 &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                 }
-                
+
                 &.kijs-disabled {
                     background-color: var(--item-disabled-bkgrndColor);
                     border-color: var(--item-disabled-borderColor);
@@ -1890,7 +1890,7 @@
                     }
                 }
             }
-            
+
             /* Drop Marker */
             > .kijs-dropMarker {
                 flex: none;
@@ -1992,7 +1992,7 @@
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
-                    
+
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
@@ -2011,7 +2011,7 @@
                 &.kijs-display-options {
                     color: var(--field-fontColor);
                     border-color: transparent;
-                    
+
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
@@ -2026,7 +2026,7 @@
                         content: '\f05d';
                     }
                 }
-                
+
                 &.kijs-dragging {
                     opacity: 0.6
                 }
@@ -2036,7 +2036,7 @@
                     border-radius: 5px;
                 }
             }
-            
+
             /* Drop Marker */
             > .kijs-dropMarker {
                 flex: none;
@@ -2050,18 +2050,18 @@
 
             div.kijs-dataview-element {
                 background-color: transparent;
-                
+
                 > .kijs-container-inner {
                     > .kijs-caption {
                         color: var(--field-disabled-fontColor);
                     }
                 }
-                
+
                 &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
                     border-color: var(--item-selected-disabled-borderColor);
                     background-color: transparent;
                 }
-                
+
                 &.kijs-display-checkboxes,
                 &.kijs-display-options {
                     &:before {
@@ -2079,7 +2079,7 @@
        ****************** */
     div.kijs-progressbar {
         overflow: hidden;
-        
+
         > .kijs-progressbar-caption {
             padding: 0 0 2px 0;
             font-family: var(--default-fontFamily);
@@ -2500,7 +2500,7 @@
                 &.kijs-selected {
                     background-color: var(--item-selected-bkgrndColor);
                 }
-                
+
                 > td {
                     flex: none;
                     overflow: hidden;
@@ -2556,7 +2556,7 @@
                             height: 100%;
                             width: 100%;
 
-                            > .kijs-content > div.kijs-inputwrapper, 
+                            > .kijs-content > div.kijs-inputwrapper,
                             > .kijs-content > span.kijs-icon-spindown {
                                 height: 100%;
                             }
@@ -2575,7 +2575,7 @@
             display: flex;
             overflow: hidden;
             flex-direction: row;
-            
+
             > .kijs-headercontainer-left {
                 overflow: hidden;
             }
@@ -2585,9 +2585,9 @@
                 position: relative;
                 overflow: hidden;
                 background-color: var(--grid-header-bkgrndColor);
-                
+
                 > table {
-                    
+
                     /* Header */
                     > tr.kijs-grid-header {
                         > td {
@@ -2672,7 +2672,7 @@
                             }
                         }
                     }
-                    
+
                     /* Filterzeile */
                     > tr.kijs-grid-filter {
                         background-color: var(--field-bkgrndColor);
@@ -2770,7 +2770,7 @@
                     }
                 }
             }
-            
+
             > .kijs-headercontainer-right {
                 overflow: hidden;
             }
@@ -2876,7 +2876,7 @@
         flex-direction: row;
         min-height: 25px;
         overflow: hidden;
-        
+
         > .kijs-label {
             display: block;
             flex: none;
@@ -2888,7 +2888,7 @@
             overflow: hidden;
             overflow-wrap: break-word;
             text-overflow: ellipsis;
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
@@ -2898,13 +2898,13 @@
                 padding-right: 0;
             }
         }
-        
+
         > .kijs-content {
             flex: 1;
             display: flex;
             flex-direction: row;
             overflow: hidden;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 position: relative;
@@ -2930,7 +2930,7 @@
                     padding: 0 2px;
                 }
             }
-            
+
             > .kijs-container-inner {
                 flex: none;
                 display: flex;
@@ -3025,22 +3025,22 @@
                 cursor: default;
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
         }
-        
+
         &.kijs-labelpos-top {
             flex-direction: column;
         }
-        
+
         &.kijs-labelpos-auto {
             @media all and (max-width: 500px) {
                 flex-direction: column;
             }
         }
-        
+
         &.kijs-label-ontop {
             flex-wrap: wrap;
 
@@ -3092,7 +3092,7 @@
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
-            
+
             > .kijs-content {
                 > .kijs-inputwrapper {
                     width: 180px;
@@ -3115,7 +3115,7 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        
+
         > .kijs-button {
             flex: 1;
 
@@ -3160,7 +3160,7 @@
        ****************** */
     div.kijs-field-color {
         overflow: visible;
-        
+
         > .kijs-content {
             > .kijs-inputwrapper {
                 overflow: visible;
@@ -3180,7 +3180,7 @@
                 }
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
@@ -3262,7 +3262,7 @@
                 }
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
@@ -3314,7 +3314,7 @@
                 }
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
@@ -3359,7 +3359,7 @@
        ****************** */
     div.kijs-field-memo {
         min-height: 50px;
-        
+
         > .kijs-content {
             > .kijs-inputwrapper > textarea {
                 display: block;
@@ -3451,7 +3451,7 @@
                 }
             }
         }
-        
+
         &.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
@@ -3464,7 +3464,7 @@
         }
     }
 
-    
+
 
     /* ******************
        * OptionGroup
@@ -3485,7 +3485,7 @@
 
                     .kijs-dataview-element {
                         background-color: transparent;
-                        
+
                         &:focus,
                         &:hover {
                             color: var(--field-focus-borderColor);
@@ -3496,7 +3496,7 @@
                 }
             }
         }
-        
+
         &.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
             background-color: var(--icon-error-bkgrndColor);
         }
@@ -3537,7 +3537,7 @@
         }
     }
 
-    
+
 
     /* ******************
        * Field Combo
@@ -3880,7 +3880,7 @@
                 }
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
@@ -3906,8 +3906,8 @@
                 color: var(--helpColor);
             }
         }
-        
-        
+
+
         &.kijs-disabled {
             > .kijs-content > .kijs-inputwrapper > div {
                 color: var(--field-disabled-fontColor);
@@ -3920,9 +3920,9 @@
             }
         }
     }
-    
-    
-    
+
+
+
     /* ******************
        * Field AceEditor
        ****************** */
@@ -3973,7 +3973,7 @@
                 }
             }
         }
-        
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;
@@ -4161,8 +4161,8 @@
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     }
 
-    
-    
+
+
     /* ******************
        * Ergänzungen für Icons
        ****************** */
@@ -4175,9 +4175,9 @@
     .kijs-pulse {
         animation: kijs-spin 1s infinite steps(8);
     }
-    
-    
-    
+
+
+
     /* ******************
        * Ergänzung für kijs.gui.Container (+ vererbte)
        ****************** */
@@ -4187,9 +4187,9 @@
 
     .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
     .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
-    
-    
-    
+
+
+
     /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
        ****************** */

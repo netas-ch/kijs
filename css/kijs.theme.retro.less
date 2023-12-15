@@ -140,8 +140,8 @@
     --panel-innerBorderColor: var(--grey05);
     --panel-borderColor: #99bbe8;
     --panel-disabled-borderColor: #bccde4;
-    
-    
+
+
     /* Bar */
     --bar-fontColor: #15428b;
     --bar-bkgrndColor: #99bbe8;
@@ -246,7 +246,7 @@
 /* Spezifische Anpassungen */
 /* ----------------------- */
 @layer kijs-theme {
-    
+
     /* kijs.gui.Button */
     .kijs-button {
         height: 22px;
@@ -351,7 +351,7 @@
 
                     &.kijs-disabled {
                         background: transparent;
-                        border: none;
+                        border-color: transparent;
                         box-shadow: none;
                         cursor: default;
 
@@ -445,7 +445,7 @@
 
                     &.kijs-disabled {
                         background: transparent;
-                        border: none;
+                        border-color: transparent;
                         cursor: default;
 
                         > .kijs-caption,
@@ -496,7 +496,7 @@
     /* kijs.gui.Dashboard */
     div.kijs-dashboard {
         background-color: #edf1f7;
-        
+
         > .kijs-container-inner {
             > .kijs-dashboard-column > .kijs-container-inner {
                 > .kijs-dashboard-panel > .kijs-container-inner {

@@ -279,7 +279,7 @@
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > button.kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > button.kijs-button.kijs-disabled {
     background: transparent;
-    border: none;
+    border-color: transparent;
     box-shadow: none;
     cursor: default;
   }
@@ -360,7 +360,7 @@
   }
   .kijs-panel > .kijs-header > .kijs-container-inner > button.kijs-button.kijs-disabled {
     background: transparent;
-    border: none;
+    border-color: transparent;
     cursor: default;
   }
   .kijs-panel > .kijs-header > .kijs-container-inner > button.kijs-button.kijs-disabled > .kijs-caption,
