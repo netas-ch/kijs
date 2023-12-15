@@ -174,7 +174,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                     name: 'duration',
                     label: 'duration:',
                     value: 3000,
-                    width: 100,
+                    inputWidth: 40,
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Checkbox',

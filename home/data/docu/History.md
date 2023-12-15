@@ -2,6 +2,23 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.5.3
+=============
+### kijs.gui.field.*
+ - neue config/getter/setter ```inputHeight```  
+   Setzt die Breite des Input-Feldes.  
+ - bei ```labelPosition='top'``` wird neu die ```labelWidth``` ignoriert und das 
+   Label kann so breit sein, wie das ganze Feld.  
+
+### kijs.gui.field.Number
+ - Die Spin-Buttons werden nun auch bei einem mehrzeiligen Label korrekt angezeigt.  
+
+### kijs.gui.Resizer
+ - Das Resizer-Overlay wird nun über allem angezeigt.  
+   Früher war es hinter anderen Fenstern.
+
+
+
 Version 2.5.2
 =============
 ### FontAwesome

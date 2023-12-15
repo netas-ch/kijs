@@ -112,7 +112,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             labelPosition: { target: 'labelPosition' },
             isDirty: { target: 'isDirty', prio: 3000 },
-
+            
+            inputHeight: { target: 'inputHeight' },
             inputWidth: { target: 'inputWidth' },
             
             label: { target: 'html', context: this._labelDom, prio: 2 },
@@ -273,9 +274,24 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._helpIconEl.visible = this._helpIconEl.tooltip && !kijs.isEmpty(this._helpIconEl.tooltip.html);
     }
     
+    get inputHeight() { return this._inputWrapperDom.height; }
+    set inputHeight(val) {
+        this._inputWrapperDom.height = val;
+        // Evtl. afterResize-Event zeitversetzt auslösen
+        if (this.isRendered && this._hasSizeChanged(null, val)) {
+            this._raiseAfterResizeEvent(true);
+        }
+    }
+
     get inputWidth() { return this._inputWrapperDom.width; }
     set inputWidth(val) {
         this._inputWrapperDom.width = val;
+        // Bei fixer Breite: flex:none verwenden
+        if (!kijs.isEmpty(val)) {
+            this._inputWrapperDom.style.flex = 'none';
+        } else {
+            this._inputWrapperDom.style.flex = null;
+        }
         // Evtl. afterResize-Event zeitversetzt auslösen
         if (this.isRendered && this._hasSizeChanged(null, val)) {
             this._raiseAfterResizeEvent(true);

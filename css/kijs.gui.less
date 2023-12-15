@@ -2875,9 +2875,10 @@
         flex: 1 0 auto;
         display: flex;
         flex-direction: row;
+        align-items: flex-start;
         min-height: 25px;
         overflow: hidden;
-
+        
         > .kijs-label {
             display: block;
             flex: none;
@@ -3034,20 +3035,19 @@
 
         &.kijs-labelpos-top {
             flex-direction: column;
+            align-items: normal;
+            > .kijs-label {
+                width: auto !important;
+            }
         }
 
         &.kijs-labelpos-auto {
             @media all and (max-width: 500px) {
                 flex-direction: column;
-            }
-        }
-
-        &.kijs-label-ontop {
-            flex-wrap: wrap;
-
-            > .kijs-label {
-                page-break-after: always;
-                margin-bottom: 4px;
+                align-items: normal;
+                > .kijs-label {
+                    width: auto !important;
+                }
             }
         }
     }
@@ -3359,9 +3359,9 @@
        * Field Memo
        ****************** */
     div.kijs-field-memo {
-        min-height: 50px;
-
         > .kijs-content {
+            align-self: stretch;
+            
             > .kijs-inputwrapper > textarea {
                 display: block;
                 height: 100%;
@@ -3424,6 +3424,8 @@
        ****************** */
     div.kijs-field-listview {
         > .kijs-content {
+            align-self: stretch;
+            
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3474,6 +3476,8 @@
     div.kijs-field-optiongroup,
     div.kijs-field-checkboxgroup{
         > .kijs-content {
+            align-self: stretch;
+            
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3929,6 +3933,8 @@
        ****************** */
     div.kijs-field-aceeditor {
         > .kijs-content {
+            align-self: stretch;
+            
             > .kijs-inputwrapper {
                 flex: 1;
                 outline: none;
@@ -4002,6 +4008,8 @@
        ****************** */
     div.kijs-field-quilleditor {
         > .kijs-content {
+            align-self: stretch;
+            
             > .kijs-inputwrapper {
                 flex: 1;
                 display: flex;

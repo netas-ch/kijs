@@ -233,7 +233,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                     name: 'Bemerkungen',
                                     label: 'Bemerkungen',
                                     helpText: 'Hier können Sie die Bermerkungen eintragen',
-                                    height: 50
+                                    inputHeight: 50
                                 }
                             ]
                         }
@@ -605,7 +605,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                             xtype: 'kijs.gui.field.Memo',
                                             name: 'Bemerkungen',
                                             label: 'Bemerkungen',
-                                            height: 50,
+                                            inputHeight: 50,
                                             helpText: 'Hier können Sie die Bermerkungen eintragen'
                                         }
                                     ]
@@ -641,7 +641,7 @@ home.sc.container_Form = class home_sc_container_Form {
                 xtype: 'kijs.gui.field.Combo',
                 label: 'labelPosition:',
                 value: 'left',
-                width: 160,
+                inputWidth: 40,
                 data: [
                     { caption: 'auto', value: 'auto' },
                     { caption: 'left', value: 'left' },

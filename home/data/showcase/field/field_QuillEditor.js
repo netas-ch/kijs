@@ -51,7 +51,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     required: true,
                     //theme: 'snow',
                     //value: '',
-                    height: 200,
+                    inputHeight: 200,
                     on: {
                         focus:  console.log,
 
@@ -76,7 +76,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     label: 'Label',
                     theme: 'bubble',
                     value: 'Dies ist mein <b>fetter</b> Text.',
-                    height: 100,
+                    inputHeight: 100,
                     toolbarOptions:[
                         ['bold', 'italic', 'underline']
                     ]
