@@ -633,7 +633,7 @@ home.sc.container_Form = class home_sc_container_Form {
                 label: 'disabled',
                 on: {
                     change: function(e) {
-                        this._content.disabled = !!e.element.value;
+                        this._content.innerDisabled = !!e.element.value;
                     },
                     context: this
                 }
