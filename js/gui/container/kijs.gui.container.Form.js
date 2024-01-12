@@ -221,7 +221,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * @returns {Promise}
      */
     // overwrite
-    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
         return new Promise((resolve) => {
             super.load(args, true, config).then((e) => {
                 let config = e.responseData.config ?? {};
