@@ -980,7 +980,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        height: 30px;
+        height: var(--panel-collapse-height);
         padding: 0 6px;
         gap: 4px;
         background-color: var(--bar-bkgrndColor);
@@ -1211,13 +1211,13 @@
         }
 
         &.kijs-collapse-top, &.kijs-collapse-bottom {
-            height: 30px;
+            height: var(--panel-collapse-height) !important;
             flex: none;
         }
 
         &.kijs-collapse-right, &.kijs-collapse-left {
             height: auto;
-            width: 30px;
+            width: var(--panel-collapse-width) !important;
             flex: none;
             display: flex;
             flex-direction: row;
@@ -1233,7 +1233,7 @@
         /* PanelBar Minimiert */
         &.kijs-collapse-right, &.kijs-collapse-left {
             > .kijs-panelbar {
-                width: 30px;
+                width: var(--panel-collapse-width);
                 height: auto;
                 padding: 3px 0 3px 0;
                 flex-direction: column;
