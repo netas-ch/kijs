@@ -730,7 +730,7 @@
     border-color: var(--tabButton-current-borderColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
-    color: var(--tabButton--currentfontColor);
+    color: var(--tabButton-current-fontColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
