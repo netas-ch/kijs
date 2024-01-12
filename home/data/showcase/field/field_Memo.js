@@ -44,6 +44,7 @@ home.sc.field_Memo = class home_sc_field_Memo {
                     xtype: 'kijs.gui.field.Memo',
                     label: 'Label',
                     value: 'Bemerkung\nmit zwei Zeilen',
+                    inputHeight: 100,
                     on: {
                         focus:  console.log,
 

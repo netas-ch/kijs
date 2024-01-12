@@ -117,7 +117,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     selectType: 'simple',
                     helpText: 'Hilfe Text!',
                     required: true,
-                    width: 350,
+                    inputWidth: 180,
                     sortable: true,
                     data: [
                         {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' },

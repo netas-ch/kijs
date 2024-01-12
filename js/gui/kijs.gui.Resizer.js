@@ -200,16 +200,18 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
             w: this._targetEl.width,
             h: this._targetEl.height
         };
-
+        
+        let targetElPos = kijs.Dom.getAbsolutePos(this._targetEl.dom.node);
+        
         // Overlay positionieren
-        this._overlayDom.top = this._targetEl.top;
-        this._overlayDom.left = this._targetEl.left;
-        this._overlayDom.width = this._targetEl.width;
-        this._overlayDom.height = this._targetEl.height;
+        this._overlayDom.top = targetElPos.y;
+        this._overlayDom.left = targetElPos.x;
+        this._overlayDom.width = targetElPos.w;
+        this._overlayDom.height = targetElPos.h;
 
         // Overlay rendern
         this._overlayDom.render();
-        this._targetEl.dom.node.parentNode.appendChild(this._overlayDom.node);
+        document.body.appendChild(this._overlayDom.node);
 
         // mousemove und mouseup Listeners auf das document setzen
         kijs.Dom.addEventListener('mousemove', document, this.#onMouseMove, this);

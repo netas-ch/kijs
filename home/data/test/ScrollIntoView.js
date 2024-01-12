@@ -322,7 +322,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                 name: 'elName',
                 label: 'Scroll to Element:',
                 value: 'button3.20',
-                width: 200,
+                inputWidth: 80,
                 data: [
                     { caption: 'Panel 1', value: 'panel1' },
                     { caption: 'Button 1.1', value: 'button1.1' },
@@ -410,7 +410,7 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                 name: 'verticalPosition',
                 label: 'verticalPosition:',
                 value: 'auto',
-                width: 170,
+                inputWidth: 50,
                 data: [
                     { caption: 'start', value: 'start' },
                     { caption: 'end', value: 'end' },
@@ -422,13 +422,13 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                 name: 'verticalOffset',
                 label: 'verticalOffset:',
                 value: 0,
-                width: 120
+                inputWidth: 30
             },{
                 xtype: 'kijs.gui.field.Combo',
                 name: 'horizontalPosition',
                 label: 'horizontalPosition:',
                 value: 'auto',
-                width: 170,
+                inputWidth: 50,
                 data: [
                     { caption: 'start', value: 'start' },
                     { caption: 'end', value: 'end' },
@@ -440,13 +440,13 @@ home.test.ScrollIntoView = class home_test_ScrollIntoView {
                 name: 'horizontalOffset',
                 label: 'horizontalOffset:',
                 value: 0,
-                width: 120
+                inputWidth: 30
             },{
                 xtype: 'kijs.gui.field.Combo',
                 name: 'behavior',
                 label: 'behavior:',
                 value: 'auto',
-                width: 120,
+                inputWidth: 50,
                 data: [
                     { caption: 'smooth', value: 'smooth' },
                     { caption: 'instant', value: 'instant' },

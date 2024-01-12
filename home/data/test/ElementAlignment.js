@@ -144,7 +144,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                     xtype: 'kijs.gui.field.Memo',
                     label: 'field.Memo',
                     value: 'Ich bin ein Mehr-\nzeiliger Text',
-                    height: 50,
+                    inputHeight: 50,
                     helpText: 'Info'
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -234,7 +234,7 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                 xtype: 'kijs.gui.field.Combo',
                 label: 'CSS-Klasse für Panel:',
                 value: 'kijs-flexform',
-                width: 230,
+                inputWidth: 90,
                 data: [
                     { caption: 'keine', value: 'none' },
                     { caption: 'kijs-flexrow', value: 'kijs-flexrow' },
@@ -249,6 +249,22 @@ home.test.ElementAlignment = class home_test_ElementAlignment {
                         if (e.element.value !== 'none') {
                             this._content.dom.clsAdd(e.element.value);
                         }
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'labelPosition:',
+                value: 'left',
+                inputWidth: 60,
+                data: [
+                    { caption: 'auto', value: 'auto' },
+                    { caption: 'left', value: 'left' },
+                    { caption: 'top', value: 'top' }
+                ],
+                on: {
+                    change: function(e) {
+                        this._updateProperty('labelPosition', e.element.value);
                     },
                     context: this
                 }

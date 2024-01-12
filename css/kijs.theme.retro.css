@@ -86,7 +86,7 @@
   --tabButton-fontColor: #15428b;
   --tabButton-current-bkgrndColor: var(--grey02);
   --tabButton-current-borderColor: #8db2e3;
-  --tabButton--currentfontColor: #15428b;
+  --tabButton-current-fontColor: #15428b;
   --tabButton-focus-bkgrndColor: var(--grey04);
   --tabButton-focus-borderColor: var(--grey05);
   --tabButton-focus-fontColor: var(--accentColor);
@@ -279,7 +279,7 @@
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > button.kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > button.kijs-button.kijs-disabled {
     background: transparent;
-    border: none;
+    border-color: transparent;
     box-shadow: none;
     cursor: default;
   }
@@ -360,7 +360,7 @@
   }
   .kijs-panel > .kijs-header > .kijs-container-inner > button.kijs-button.kijs-disabled {
     background: transparent;
-    border: none;
+    border-color: transparent;
     cursor: default;
   }
   .kijs-panel > .kijs-header > .kijs-container-inner > button.kijs-button.kijs-disabled > .kijs-caption,

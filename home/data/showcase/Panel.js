@@ -262,7 +262,7 @@ home.sc.Panel = class home_sc_Panel {
                 xtype: 'kijs.gui.field.Combo',
                 label: 'CSS-Klasse:',
                 value: 'kijs-shadow',
-                width: 190,
+                inputWidth: 90,
                 data: [
                     { caption: 'keine', value: 'none' },
                     { caption: 'kijs-borderless', value: 'kijs-borderless' },

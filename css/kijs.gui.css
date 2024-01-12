@@ -730,7 +730,7 @@
     border-color: var(--tabButton-current-borderColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
-    color: var(--tabButton--currentfontColor);
+    color: var(--tabButton-current-fontColor);
   }
   div.kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
     color: var(--button-disabled-fontColor);
@@ -1442,6 +1442,7 @@
     box-sizing: border-box;
     position: absolute;
     overflow: hidden;
+    z-index: 100000;
     background-color: rgba(255, 255, 255, 0.5);
     border: 1px dashed rgba(0, 0, 0, 0.5);
   }
@@ -2226,14 +2227,6 @@
   div.kijs-grid table > tr > td.kijs-celledit {
     padding: 0;
   }
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field {
-    height: 100%;
-    width: 100%;
-  }
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > div.kijs-inputwrapper,
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > span.kijs-icon-spindown {
-    height: 100%;
-  }
   div.kijs-grid > .kijs-top {
     flex: 0 0 auto;
     display: flex;
@@ -2487,6 +2480,7 @@
     flex: 1 0 auto;
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
     min-height: 25px;
     overflow: hidden;
   }
@@ -2623,18 +2617,19 @@
   }
   div.kijs-field.kijs-labelpos-top {
     flex-direction: column;
+    align-items: normal;
+  }
+  div.kijs-field.kijs-labelpos-top > .kijs-label {
+    width: auto !important;
   }
   @media all and (max-width: 500px) {
     div.kijs-field.kijs-labelpos-auto {
       flex-direction: column;
+      align-items: normal;
     }
-  }
-  div.kijs-field.kijs-label-ontop {
-    flex-wrap: wrap;
-  }
-  div.kijs-field.kijs-label-ontop > .kijs-label {
-    page-break-after: always;
-    margin-bottom: 4px;
+    div.kijs-field.kijs-labelpos-auto > .kijs-label {
+      width: auto !important;
+    }
   }
   /* ******************
        * Field Text
@@ -2902,8 +2897,8 @@
   /* ******************
        * Field Memo
        ****************** */
-  div.kijs-field-memo {
-    min-height: 50px;
+  div.kijs-field-memo > .kijs-content {
+    align-self: stretch;
   }
   div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea {
     display: block;
@@ -2951,6 +2946,9 @@
   /* ******************
        * Field ListView
        ****************** */
+  div.kijs-field-listview > .kijs-content {
+    align-self: stretch;
+  }
   div.kijs-field-listview > .kijs-content > .kijs-inputwrapper {
     display: flex;
     flex-direction: column;
@@ -2984,6 +2982,10 @@
        * OptionGroup
        * CheckboxGroup
        ****************** */
+  div.kijs-field-optiongroup > .kijs-content,
+  div.kijs-field-checkboxgroup > .kijs-content {
+    align-self: stretch;
+  }
   div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper,
   div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper {
     display: flex;
@@ -3323,6 +3325,9 @@
   /* ******************
        * Field AceEditor
        ****************** */
+  div.kijs-field-aceeditor > .kijs-content {
+    align-self: stretch;
+  }
   div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     outline: none;
@@ -3375,6 +3380,9 @@
   /* ******************
        * Field QuillEditor
        ****************** */
+  div.kijs-field-quilleditor > .kijs-content {
+    align-self: stretch;
+  }
   div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     display: flex;

@@ -188,9 +188,9 @@
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
     }
-    
-    
-    
+
+
+
     /* ******************
        * Separator
        ****************** */
@@ -401,7 +401,7 @@
         position: relative;
         overflow: hidden;
         flex: 1 1 auto;
-        
+
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
@@ -611,7 +611,7 @@
                     > .kijs-caption {
                         color: var(--tabButton-fontColor);
                     }
-                    
+
                     &:hover, &:focus {
                         background-color: var(--tabButton-focus-bkgrndColor);
                         border: 1px solid var(--tabButton-focus-borderColor);
@@ -620,7 +620,7 @@
                             color: var(--tabButton-focus-fontColor);
                         }
                     }
-                    
+
                     &.kijs-disabled {
                         background-color: var(--button-bkgrndColor);
                         border: 1px solid var(--button-borderColor);
@@ -784,7 +784,7 @@
                 color: var(--button-disabled-fontColor);
             }
         }
-        
+
         /* tabBar Align */
         &.kijs-align-start > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-start;
@@ -795,7 +795,7 @@
         &.kijs-align-end > .kijs-container-scrollable > .kijs-container-inner {
             justify-content: flex-end;
         }
-        
+
         /* Drag&Drop */
         > .kijs-container-scrollable > .kijs-container-inner {
             > .kijs-button {
@@ -1193,7 +1193,7 @@
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
         }
-        
+
         &.kijs-headerbar {
             > .kijs-container-inner {
                 font-family: var(--default-fontFamily);
@@ -1378,7 +1378,7 @@
 
                         > .kijs-button {
                             align-self: center;
-                            
+
                             > .kijs-caption, > .kijs-icon {
                                 line-height: 16px;
                             }
@@ -1418,12 +1418,12 @@
             flex-direction: row;
             padding: 5px;
             gap: 5px;
-            
+
             /* Spalten*/
             > .kijs-dashboard-column {
                 flex: 1;
                 overflow: visible;
-                
+
                 > .kijs-container-inner {
                     flex:none;
                     min-height:100%;
@@ -1431,7 +1431,7 @@
                     display: flex;
                     flex-direction: column;
                     gap: 5px;
-                    
+
                     /* Panel */
                     > .kijs-dashboard-panel {
                         flex: none;
@@ -1440,30 +1440,30 @@
                         &.kijs-dragging {
                             opacity: 0.6
                         }
-                        
+
                         &.kijs-sourceDragOver {
                             border-color: var(--accentColor3);
                         }
-                        
+
                         &.kijs-disabled {
                             border: 1px solid var(--panel-disabled-borderColor);
                         }
                     }
-                    
+
                     /* Drop Marker */
                     > .kijs-dropMarker {
                         flex: none;
                         border: 1px solid var(--accentColor3);
                         border-radius: 5px;
                     }
-                    
+
                 }
             }
         }
 
     }
-    
-    
+
+
 
     /* ******************
        * Window
@@ -1723,7 +1723,7 @@
         &.kijs-resizer-width.kijs-resizer-height {
             cursor: nwse-resize;
         }
-        
+
         &:hover {
             opacity: 1;
         }
@@ -1733,6 +1733,7 @@
         box-sizing: border-box;
         position: absolute;
         overflow: hidden;
+        z-index: 100000;
         background-color: rgba(255, 255, 255, 0.5);
         border: 1px dashed rgba(0, 0, 0, 0.5);
     }
@@ -1940,7 +1941,7 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        
+
         > .kijs-container-inner {
             flex: 1;
             display: flex;
@@ -1986,13 +1987,13 @@
                 > div > .value {
                     display: inline-block;
                 }
-                
+
                 &.kijs-selected {
                     color: var(--item-selected-fontColor);
                     background-color: var(--item-selected-bkgrndColor);
                     border-color: var(--item-selected-borderColor);
                 }
-                
+
                 &.kijs-dragging {
                     opacity: 0.6
                 }
@@ -2204,7 +2205,7 @@
        ****************** */
     div.kijs-progressbar {
         overflow: hidden;
-        
+
         > .kijs-progressbar-caption {
             padding: 0 0 2px 0;
             font-family: var(--default-fontFamily);
@@ -2676,16 +2677,6 @@
                     /* Textfelder im Grid */
                     &.kijs-celledit {
                         padding: 0;
-
-                        > div.kijs-field {
-                            height: 100%;
-                            width: 100%;
-
-                            > .kijs-content > div.kijs-inputwrapper,
-                            > .kijs-content > span.kijs-icon-spindown {
-                                height: 100%;
-                            }
-                        }
                     }
 
                 }
@@ -2700,7 +2691,7 @@
             display: flex;
             overflow: hidden;
             flex-direction: row;
-            
+
             > .kijs-headercontainer-left {
                 overflow: hidden;
             }
@@ -2895,7 +2886,7 @@
                     }
                 }
             }
-            
+
             > .kijs-headercontainer-right {
                 overflow: hidden;
             }
@@ -2999,6 +2990,7 @@
         flex: 1 0 auto;
         display: flex;
         flex-direction: row;
+        align-items: flex-start;
         min-height: 25px;
         overflow: hidden;
 
@@ -3158,20 +3150,19 @@
 
         &.kijs-labelpos-top {
             flex-direction: column;
+            align-items: normal;
+            > .kijs-label {
+                width: auto !important;
+            }
         }
 
         &.kijs-labelpos-auto {
             @media all and (max-width: 500px) {
                 flex-direction: column;
-            }
-        }
-
-        &.kijs-label-ontop {
-            flex-wrap: wrap;
-
-            > .kijs-label {
-                page-break-after: always;
-                margin-bottom: 4px;
+                align-items: normal;
+                > .kijs-label {
+                    width: auto !important;
+                }
             }
         }
     }
@@ -3483,9 +3474,9 @@
        * Field Memo
        ****************** */
     div.kijs-field-memo {
-        min-height: 50px;
-
         > .kijs-content {
+            align-self: stretch;
+
             > .kijs-inputwrapper > textarea {
                 display: block;
                 height: 100%;
@@ -3548,6 +3539,8 @@
        ****************** */
     div.kijs-field-listview {
         > .kijs-content {
+            align-self: stretch;
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3598,6 +3591,8 @@
     div.kijs-field-optiongroup,
     div.kijs-field-checkboxgroup{
         > .kijs-content {
+            align-self: stretch;
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -4031,8 +4026,8 @@
                 color: var(--helpColor);
             }
         }
-        
-        
+
+
         &.kijs-disabled {
             > .kijs-content > .kijs-inputwrapper > div {
                 color: var(--field-disabled-fontColor);
@@ -4045,14 +4040,16 @@
             }
         }
     }
-    
-    
-    
+
+
+
     /* ******************
        * Field AceEditor
        ****************** */
     div.kijs-field-aceeditor {
         > .kijs-content {
+            align-self: stretch;
+
             > .kijs-inputwrapper {
                 flex: 1;
                 outline: none;
@@ -4128,6 +4125,8 @@
         overflow: visible;
 
         > .kijs-content {
+            align-self: stretch;
+
             > .kijs-inputwrapper {
                 flex: 1;
                 display: flex;
@@ -4310,8 +4309,8 @@
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     }
 
-    
-    
+
+
     /* ******************
        * Ergänzungen für Icons
        ****************** */
@@ -4324,9 +4323,9 @@
     .kijs-pulse {
         animation: kijs-spin 1s infinite steps(8);
     }
-    
-    
-    
+
+
+
     /* ******************
        * Ergänzung für kijs.gui.Container (+ vererbte)
        ****************** */
@@ -4336,9 +4335,9 @@
 
     .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
     .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
-    
-    
-    
+
+
+
     /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)
        ****************** */

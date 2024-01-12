@@ -46,7 +46,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                     mode: 'javascript',
                     //theme: 'monokai',
                     value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
-                    height: 100,
+                    inputHeight: 100,
                     on: {
                         focus:  console.log,
 
@@ -62,6 +62,22 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
 
                         context: this
                     }
+                },
+                
+                {
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Geflexter ACE-Editor',
+                    cls: 'kijs-flexfit',
+                    maximizable: true,
+                    maximized: false,
+                    resizable: true,
+                    width: 500,
+                    height: 100,
+                    elements: [
+                        {
+                            xtype: 'kijs.gui.field.AceEditor'
+                        }
+                    ]
                 },
 
                 {
