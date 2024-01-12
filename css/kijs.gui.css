@@ -2227,14 +2227,6 @@
   div.kijs-grid table > tr > td.kijs-celledit {
     padding: 0;
   }
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field {
-    height: 100%;
-    width: 100%;
-  }
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > div.kijs-inputwrapper,
-  div.kijs-grid table > tr > td.kijs-celledit > div.kijs-field > .kijs-content > span.kijs-icon-spindown {
-    height: 100%;
-  }
   div.kijs-grid > .kijs-top {
     flex: 0 0 auto;
     display: flex;
