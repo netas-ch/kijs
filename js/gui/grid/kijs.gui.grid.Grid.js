@@ -238,9 +238,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             val = [val];
         }
         kijs.Array.each(val, function(k) {
-           if (!kijs.isString(k)) {
-               throw new kijs.Error('invalid primary key');
-           }
+            if (!kijs.isString(k)) {
+                throw new kijs.Error('invalid primary key');
+            }
         }, this);
         this._primaryKeys = val;
     }
@@ -405,7 +405,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (!hasPrimarys) {
             return rows;
 
-        // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
+            // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
         } else if (!multiPrimarys) {
             let ids = [], primaryKey = this._primaryKeys[0];
             kijs.Array.each(rows, function(row) {
@@ -414,7 +414,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             return ids;
 
-        // Mehrere primary keys: Pro Zeile ein Objekt mit dem Ids zurückgeben
+            // Mehrere primary keys: Pro Zeile ein Objekt mit dem Ids zurückgeben
         } else {
             let ids = [];
             kijs.Array.each(rows, function(row) {
@@ -682,7 +682,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // beforeSelectionChange-Event
         if (!preventEvent) {
-            let beforeSelectionChangeArgs = {rows: rows, keepExisting: keepExisting, cancel: false};
+            let beforeSelectionChangeArgs = {rows: rows, unSelect: false, keepExisting: keepExisting, cancel: false};
             this.raiseEvent('beforeSelectionChange', beforeSelectionChangeArgs);
 
             // selectionChange verhindern?
@@ -710,10 +710,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * Selektiert alle Zeilen zwischen row1 und row2
      * @param {kijs.gui.grid.Row} row1
      * @param {kijs.gui.grid.Row} row2
+     * @param {Boolean} [keepExisting=true]                Soll die bestehende Selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    selectBetween(row1, row2, preventSelectionChange) {
+    selectBetween(row1, row2, keepExisting=true, preventSelectionChange=false) {
         let found = false;
         let rows = [];
 
@@ -738,7 +739,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
 
         if (!kijs.isEmpty(rows)) {
-            this.select(rows, true, preventSelectionChange);
+            this.select(rows, keepExisting, preventSelectionChange);
         }
     }
 
@@ -936,8 +937,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
                 // Wird ein Array [1, 2] angegeben, wird nach [RowIndex, CellIndex] gesucht.
                 if (kijs.isArray(offset) && offset.length === 2
-                        && kijs.isInteger(offset[0]) && kijs.isInteger(offset[1])
-                        && ((offset[0] === rowIndex && cellIndex >= offset[1]) || rowIndex > offset[0])) {
+                    && kijs.isInteger(offset[0]) && kijs.isInteger(offset[1])
+                    && ((offset[0] === rowIndex && cellIndex >= offset[1]) || rowIndex > offset[0])) {
                     offsetMatch = true;
                 }
 
@@ -1031,19 +1032,30 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Deselektiert ein oder mehrere Zeilen
      * @param {kijs.gui.grid.Row|Array} rows Row oder Array mit Zeilen, die deselektiert werden sollen
-     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {Boolean} [preventEvent=false]     Soll das (Before-)SelectionChange-Event verhindert werden?
      * @returns {undefined}
      */
-    unSelect(rows, preventSelectionChange) {
+    unSelect(rows, preventEvent=false) {
         if (!kijs.isArray(rows)) {
             rows = [rows];
+        }
+
+        // beforeSelectionChange-Event
+        if (!preventEvent) {
+            let beforeSelectionChangeArgs = {rows: rows, unSelect: true, keepExisting: false, cancel: false};
+            this.raiseEvent('beforeSelectionChange', beforeSelectionChangeArgs);
+
+            // selectionChange verhindern?
+            if (beforeSelectionChangeArgs.cancel === true) {
+                return;
+            }
         }
 
         kijs.Array.each(rows, function(row) {
             row.selected = false;
         }, this);
 
-        if (!preventSelectionChange) {
+        if (!preventEvent) {
             this.raiseEvent('selectionChange', { rows: rows, unSelect: true } );
         }
     }
@@ -1268,31 +1280,25 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 return;
         }
 
-
+        // Shift: von der selektierten bis zur ausgewählten
         if (shift && this._lastSelectedRow) {
-            // bestehende Selektierung entfernen
-            if (!ctrl) {
-                this.clearSelections(true);
-            }
 
             // selektieren
-            this.selectBetween(this._lastSelectedRow, row);
+            this.selectBetween(this._lastSelectedRow, row, !!ctrl, false);
 
         } else {
 
-            // bestehende Selektierung entfernen
-            if (!ctrl) {
-                this.clearSelections(true);
-            }
-
-            if (row.selected) {
+            // ctrl und bereits selektiert: Abwählen
+            if (ctrl && row.selected) {
                 this.unSelect(row);
                 if (row === this._lastSelectedRow) {
                     this._lastSelectedRow = null;
                 }
             } else {
-                this.select(row, true);
-                this._lastSelectedRow = row;
+                this.select(row, !!ctrl);
+                if (row.selected) {
+                    this._lastSelectedRow = row;
+                }
             }
         }
     }
@@ -1376,11 +1382,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         let row = e.element, ctrl=e.nodeEvent.ctrlKey, shift=e.nodeEvent.shiftKey;
 
         if (!this.disabled) {
-            this.current = row;
-            if (this._focusable) {
-                row.focus();
-            }
-            this._selectRow(this._currentRow, shift, ctrl);
+            this._selectRow(row, shift, ctrl);
         }
 
         // Event weiterreichen
@@ -1500,7 +1502,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._rpc = null;
         this._rpcLoadArgs = null;
         this._rpcSaveArgs = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
