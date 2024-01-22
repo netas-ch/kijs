@@ -391,7 +391,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // PRIVATE
     // LISTENERS
     #onDropZoneDrop(e) {
-        if (!this.disabled) {
+        if (!this.disabled && e.validMime && e.allowed) {
             this._uploadFiles(e.nodeEvent.dataTransfer.files);
         }
     }
