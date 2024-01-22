@@ -2,6 +2,12 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.5.5
+=============
+kleinere Änderungen
+
+
+
 Version 2.5.4
 =============
 ### kijs.gui.DataView
