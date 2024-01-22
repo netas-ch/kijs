@@ -161,12 +161,12 @@
 
 
     /* Panel */
+    --panel-collapse-height: 30px;
+    --panel-collapse-width: 30px;
     --panel-bkgrndColor: var(--grey02);
     --panel-innerBorderColor: var(--grey05);
     --panel-borderColor: var(--accentColor);
     --panel-disabled-borderColor: var(--grey07);
-    --panel-collapse-height: 30px;
-    --panel-collapse-width: 30px;
 
 
     /* Bar */

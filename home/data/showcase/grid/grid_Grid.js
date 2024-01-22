@@ -1,8 +1,8 @@
 /* global kijs */
 
 home.sc.grid_Grid = class home_sc_grid_Grid {
-    
-    
+    #cancelSelectionChange = false;
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,11 +10,11 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
         this._app = config.app;
         this._content = null;
     }
-    
+
     // TODO: Beispiel mit Autoload in einem eigenen Tab
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -34,7 +34,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     rpcLoadFn: 'grid.load',
                     filterable: true,
                     filterVisible: true,
-                    
+
                     /*columnConfigs: (function(){
                         let cols = [ {caption:'Vorname', valueField:'vorname'} ];
                         for (let i=0; i<26; i++) {
@@ -47,7 +47,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     })(),
 
                     primaryKeys:'field_a',
-                    
+
                     data:(function(){
                         let rows = [];
                         for (let i=0; i<200; i++) {
@@ -62,23 +62,28 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     })(),*/
 
                     on: {
-                        rowClick: function(e){ console.log(e); },
-                        rowDblClick: function(e){ console.log(e); },
-                        change: function(e){ console.log('change!');console.log(e); },
+                        rowClick: (e) => { console.log(e); },
+                        rowDblClick: (e) => { console.log(e); },
+                        change: (e) => { console.log('change!');console.log(e); },
+                        beforeSelectionChange: (e) => {
+                            if (this.#cancelSelectionChange) {
+                                e.cancel = true;
+                            }
+                        },
                         context: this
                     }
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _getHeaderElements() {
         return [
@@ -91,10 +96,36 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     },
                     context: this
                 }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'cancel beforeSelectionChange',
+                on: {
+                    change: (e) => {
+                        this.#cancelSelectionChange = !!e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Combo',
+                label: 'selectType:',
+                value: 'single',
+                inputWidth: 60, // 'single', 'multi', 'simple', 'none'
+                data: [
+                    { caption: 'single', value: 'single' },
+                    { caption: 'multi', value: 'multi' },
+                    { caption: 'simple', value: 'simple' },
+                    { caption: 'none', value: 'none' }
+                ],
+                on: {
+                    change: function(e) {
+                        this._content.downX('kijs.gui.grid.Grid').selectType = e.element.value;
+                    },
+                    context: this
+                }
             }
         ];
     }
-    
+
 
 
     // --------------------------------------------------------------
@@ -103,5 +134,5 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
     destruct() {
         this._content = null;
     }
-    
+
 };

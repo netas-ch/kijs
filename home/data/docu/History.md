@@ -2,6 +2,24 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.5.4
+=============
+### kijs.gui.DataView
+ - neue Events:  
+    - ```elementMouseDown```
+    - ```elementMouseUp```
+ - Eine Zeile wird neu bei ```elementMouseDown``` selektiert und nicht mehr bei 
+   ```elementClick```.  
+
+## kijs.gui.Grid
+BugFix: Der ```beforeSelectionChange```-Event wird nun immer vor dem Ändern der 
+Selektierung ausgeführt.  
+
+## CSS
+ - Neue Variablen: ```--panel-collapse-height``` und ```--panel-collapse-width```  
+
+
+
 Version 2.5.3
 =============
 ### kijs.gui.field.*

@@ -81,7 +81,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Events
         this.on('keyDown', this.#onKeyDown, this);
-        this.on('elementClick', this.#onElementClick, this);
+        this.on('elementMouseDown', this.#onElementMouseDown, this);
         //this.on('elementFocus', this.#onElementFocus, this);
     }
     
@@ -906,6 +906,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementDblClick', e);
             }, this);
             
+            // mouseDown-Event
+            newEl.on('mouseDown', function(e) {
+                return this.raiseEvent('elementMouseDown', e);
+            }, this);
+            
+            // mouseUp-Event
+            newEl.on('mouseUp', function(e) {
+                return this.raiseEvent('elementMouseUp', e);
+            }, this);
+            
             // rightClick-Event
             newEl.on('rightClick', function(e) {
                 return this.raiseEvent('elementRightClick', e);
@@ -1032,7 +1042,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.load();
     }
     
-    #onElementClick(e) {
+    #onElementMouseDown(e) {
         if (!this.disabled) {
             this.current = e.raiseElement;
             if (this._focusable) {

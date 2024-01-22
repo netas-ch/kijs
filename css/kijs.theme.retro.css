@@ -98,6 +98,8 @@
   --badge-disabled-bkgrndColor: var(--grey06);
   --badge-disabled-fontColor: var(--grey08);
   /* Panel */
+  --panel-collapse-height: 30px;
+  --panel-collapse-width: 30px;
   --panel-bkgrndColor: var(--grey02);
   --panel-innerBorderColor: var(--grey05);
   --panel-borderColor: #99bbe8;
