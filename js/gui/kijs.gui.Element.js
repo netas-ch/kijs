@@ -1145,7 +1145,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Listener der Aufgerufen wird, wenn die Grösse des Parents geändert hat
+     * Listener der aufgerufen wird, wenn die Grösse des Parents geändert hat
      * @param {Object} e
      * @returns {undefined}
      */
@@ -1161,7 +1161,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     // overwrite
     destruct(superCall) {
-        // atferResize-Events verhindern
+        // afterResize-Events verhindern
         this._preventAfterResize = true;
             
         if (!superCall) {

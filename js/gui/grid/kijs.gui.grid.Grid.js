@@ -449,7 +449,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
 
             if (
-                !this._tableDom.node.height
+                this._tableDom.node
+                && !this._tableDom.node.height
                 && !this._tableDom.node.scrollWidth
                 && this._header.node.scrollWidth
             ) {

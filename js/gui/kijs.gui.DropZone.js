@@ -42,6 +42,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         this._dragOverCls = 'kijs-dragover';
         this._dragOverForbiddenCls = 'kijs-dragover-forbidden';
         this._contentTypes = [];
+        this._multiple = true;
         this._validMediaTypes = [
             'application',
             'audio',
@@ -70,10 +71,10 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         });
 
         // Drag-Events kommen nicht vom Element, sondern von dieser Klasse
-         this._eventForwardsRemove('dragEnter', this._dom);
-         this._eventForwardsRemove('dragOver', this._dom);
-         this._eventForwardsRemove('dragLeave', this._dom);
-         this._eventForwardsRemove('drop', this._dom);
+        this._eventForwardsRemove('dragEnter', this._dom);
+        this._eventForwardsRemove('dragOver', this._dom);
+        this._eventForwardsRemove('dragLeave', this._dom);
+        this._eventForwardsRemove('drop', this._dom);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -120,8 +121,9 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     _checkMime(dataTransferItems) {
         for (let i=0; i<dataTransferItems.length; i++) {
             if (dataTransferItems[i].type) {
-                let parts = dataTransferItems[i].type.split('/', 2);
-                if (!kijs.Array.contains(this._contentTypes, parts[0]) && !kijs.Array.contains(this._contentTypes, parts.join('/'))) {
+                let mime = dataTransferItems[i].type.toLowerCase();
+                let mimeParts = dataTransferItems[i].type.split('/', 2);
+                if (!kijs.Array.contains(this._contentTypes, mime) && !kijs.Array.contains(this._contentTypes, mimeParts[0] + '/*')) {
                     return false;
                 }
             }
@@ -138,7 +140,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
             this.raiseEvent('dragEnter', e);
         }
     }
-    
+
     #onDragLeave(e) {
         if (!this.disabled) {
             this._dom.clsRemove(this._dragOverCls);
@@ -149,14 +151,27 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
     #onDragOver(e) {
         e.nodeEvent.preventDefault();
-        
+
         if (!this.disabled) {
             // 'forbidden' Klasse, falls ungültiger Dateityp
+            let valid = true;
             if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
                 if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
+                    valid = false;
                     this._dom.clsAdd(this._dragOverForbiddenCls);
                 }
             }
+            e.validMime = valid;
+
+            // 'forbidden' Klasse, falls nicht mehrere Dateien hinzugefügt werden dürfen
+            let allowed = true;
+            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items) {
+                if (!this._multiple && e.nodeEvent.dataTransfer.items.length > 1) {
+                    allowed = false;
+                    this._dom.clsAdd(this._dragOverForbiddenCls);
+                }
+            }
+            e.allowed = allowed;
 
             this._dom.clsAdd(this._dragOverCls);
             this.raiseEvent('dragOver', e);
@@ -165,11 +180,12 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
     #onDrop(e) {
         e.nodeEvent.preventDefault();
-        
+
         if (!this.disabled) {
             this._dom.clsRemove(this._dragOverCls);
             this._dom.clsRemove(this._dragOverForbiddenCls);
 
+            // Dateityp überprüfen
             let valid = true;
             if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
                 if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
@@ -178,6 +194,13 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
             }
 
             e.validMime = valid;
+
+            // Mehrfachauswahl prüfen
+            let allowed = true;
+            if (!this._multiple && e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && e.nodeEvent.dataTransfer.items.length > 1) {
+                allowed = false;
+            }
+            e.allowed = allowed;
 
             this.raiseEvent('drop', e);
         }
@@ -197,6 +220,13 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
+
+        // Variablen (Objekte/Arrays) leeren
+        this._dragOverCls = null;
+        this._dragOverForbiddenCls = null;
+        this._contentTypes = null;
+        this._multiple = null;
+        this._validMediaTypes = null;
 
         // Basisklasse entladen
         super.destruct(true);
