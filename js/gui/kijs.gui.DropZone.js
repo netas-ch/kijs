@@ -112,7 +112,9 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         }, this);
     }
 
+    get multiple() { return this._multiple; }
 
+    set multiple(val) { this._multiple = val; }
 
     // --------------------------------------------------------------
     // MEMBERS
