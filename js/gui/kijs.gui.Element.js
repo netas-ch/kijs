@@ -206,6 +206,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                                         // bei mehreren wird trotzdem nur eine angezeigt.
                                         // Sobald der Zähler wieder auf 0 ist, wird sie dann entfernt.
 
+        this._waitMaskTarget = this;               // Element, für das die Lademaske angezeigt werden soll
         this._waitMaskTargetDomProperty = 'dom';   // Dom-Property, für das die Lademaske angezeigt werden soll
 
         this._preventAfterResize = false;    // Auslösen des afterResize-Events verhindern?
@@ -252,6 +253,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             userData: { target: 'userData' },
             visible : true,
             displayWaitMask: { target: 'displayWaitMask' },
+            waitMaskTarget: { target: 'waitMaskTarget' },
             waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
             xtype: { fn: 'manual' },
@@ -364,7 +366,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             if (kijs.isEmpty(this._waitMaskEl)) {
                 this._waitMaskEl = new kijs.gui.Mask({
                     displayWaitIcon: true,
-                    target: this,
+                    target: this._waitMaskTarget,
                     targetDomProperty: this._waitMaskTargetDomProperty
                 });
                 this._waitMaskCount = 1;
@@ -597,6 +599,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    get waitMaskTarget() { return this._waitMaskTarget; }
+    set waitMaskTarget(val) {
+        this._waitMaskTarget = val;
+        if (!kijs.isEmpty(this._waitMaskEl)) {
+            this._waitMaskEl.target = val;
+        }
+    }
+
     get waitMaskTargetDomProperty() { return this._waitMaskTargetDomProperty; }
     set waitMaskTargetDomProperty(val) {
         this._waitMaskTargetDomProperty = val;
@@ -667,7 +677,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        kijs.Object.assignConfig(this, config, this._configMap);
+        if (this._configMap) {
+            kijs.Object.assignConfig(this, config, this._configMap);
+        }
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
@@ -755,8 +767,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     owner: this,
                     data: args,
                     cancelRunningRpcs: true,
-                    waitMaskTarget: this,
-                    waitMaskTargetDomProperty: 'dom',
+                    waitMaskTarget: this._waitMaskTarget,
+                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,
                     context: this
 
                 }).then((e) => {
@@ -1190,17 +1202,26 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         
         // Variablen (Objekte/Arrays) leeren
         this._afterResizeDeferId = null;
-        this._dom = null;
-        this._parentEl = null;
+        this._afterResizeDelay = null;
+        this._defaultConfig = null;
+        this._ddSource = null;
+        this._disabledInitial = null;
         this._eventForwards = null;
-        this._configMap = null;
+        this._dom = null;
+        this._name = null;
+        this._parentEl = null;
+        this._preventAfterResize = null;
+        this._rpc = null;
+        this._rpcLoadFn = null;
+        this._rpcLoadArgs = null;
         this._lastSize = null;
         this._userData = null;
+        this._visible = null;
         this._waitMaskEl = null;
-        this._ddSource = null;
-        this._rpc = null;
-        this._rpcLoadArgs = null;
-        
+        this._waitMaskCount = null;
+        this._waitMaskTarget = null;
+        this._waitMaskTargetDomProperty = null;
+
         // Basisklasse entladen
         super.destruct();
     }
