@@ -359,7 +359,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Gibt die selektieten Zeilen zurück
+     * Gibt die selektierten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
      * @returns {Array|kijs.gui.DataViewRow|null}
      */
@@ -444,7 +444,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return this._remoteLoad(resetData).then((responseData) => {
 
             // Selektion wiederherstellen
-            if (selected && restoreSelection) {
+            if (restoreSelection && !kijs.isEmpty(selected)) {
                 this.selectByIds(selected, false, true);
             }
 
@@ -700,6 +700,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             row.selected = true;
             row.focus();
         }, this);
+
+        this._lastSelectedRow = rows[rows.length - 1];
 
         // SelectionChange auslösen
         if (!preventEvent) {
@@ -1297,9 +1299,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 }
             } else {
                 this.select(row, !!ctrl);
-                if (row.selected) {
-                    this._lastSelectedRow = row;
-                }
             }
         }
     }
