@@ -316,6 +316,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     setPreviousAnimated(animation=null, duration=null) {
         if (this._elHistory.length > 1) {
             const el = this._elHistory[this._elHistory.length - 2];
+            this._elHistory.pop();
             this.setCurrentAnimated(el, animation, duration);
         }
     }
