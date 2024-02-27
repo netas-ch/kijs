@@ -317,7 +317,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         kijs.Array.each(columnConfigs, function(columnConfig) {
             let inst = this._getInstance(columnConfig, 'kijs.gui.grid.columnConfig.Text', kijs.gui.grid.columnConfig.ColumnConfig);
-            inst.grid = this;
             this._columnConfigs.push(inst);
         }, this);
 
@@ -1080,6 +1079,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Standard-Objekt übergeben: instanz von xType erstellen und config übergeben
         if (kijs.isObject(configOrInstance) && configOrInstance.constructor === window.Object) {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
+            configOrInstance.grid = this;
+
             let constructor = kijs.getObjectFromString(configOrInstance.xtype);
             if (constructor === false) {
                 throw new kijs.Error('invalid xtype ' + configOrInstance.xtype);
@@ -1199,6 +1200,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // columns
         if (kijs.isArray(e.responseData.columns)) {
             kijs.Array.clear(this._columnConfigs);
+            this._header.clear();
             this.columnConfigAdd(e.responseData.columns);
 
             this._getRemoteMetaData = false;
