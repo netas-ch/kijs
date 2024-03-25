@@ -420,7 +420,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      * resetData: Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
      */
     reload(restoreSelection = true, resetData = true, selectIds = []) {
-        if (!selectIds) {
+        if (!selectIds?.length) {
             selectIds = this.getSelectedIds();
         }
         return this._remoteLoad(resetData, false, selectIds).then((response) => {
