@@ -677,9 +677,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        if (this._configMap) {
-            kijs.Object.assignConfig(this, config, this._configMap);
-        }
+        kijs.Object.assignConfig(this, config, this._configMap);
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
@@ -1202,26 +1200,18 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         
         // Variablen (Objekte/Arrays) leeren
         this._afterResizeDeferId = null;
-        this._afterResizeDelay = null;
         this._defaultConfig = null;
         this._ddSource = null;
-        this._disabledInitial = null;
         this._eventForwards = null;
         this._dom = null;
-        this._name = null;
         this._parentEl = null;
-        this._preventAfterResize = null;
         this._rpc = null;
-        this._rpcLoadFn = null;
         this._rpcLoadArgs = null;
         this._lastSize = null;
         this._userData = null;
-        this._visible = null;
         this._waitMaskEl = null;
-        this._waitMaskCount = null;
         this._waitMaskTarget = null;
-        this._waitMaskTargetDomProperty = null;
-
+        
         // Basisklasse entladen
         super.destruct();
     }
