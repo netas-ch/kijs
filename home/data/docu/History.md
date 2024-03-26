@@ -30,7 +30,7 @@ Version 2.5.3
 =============
 ### kijs.gui.field.*
  - neue config/getter/setter ```inputHeight```  
-   Setzt die Breite des Input-Feldes.  
+   Setzt die Höhe des Input-Feldes.  
  - bei ```labelPosition='top'``` wird neu die ```labelWidth``` ignoriert und das 
    Label kann so breit sein, wie das ganze Feld.  
 
