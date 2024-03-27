@@ -419,11 +419,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      *
      * resetData: Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
      */
-    reload(restoreSelection = true, resetData = true, selectIds = []) {
+    reload(restoreSelection = true, resetData = true, selectIds = [], putSelectedInWhere = false) {
         if (!selectIds?.length) {
             selectIds = this.getSelectedIds();
         }
-        return this._remoteLoad(resetData, false, selectIds).then((response) => {
+        return this._remoteLoad(resetData, false, selectIds, putSelectedInWhere).then((response) => {
 
             // Selektion wiederherstellen
             if (selectIds && restoreSelection) {
@@ -913,7 +913,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return rowMatch;
     }
 
-    _remoteLoad(resetData= false, loadNextData= false, selectIds = []) {
+    _remoteLoad(resetData= false, loadNextData= false, selectIds = [], putSelectedInWhere = false) {
         return new Promise((resolve) => {
             if (
                 this._facadeFnLoad
@@ -931,6 +931,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 let args = {};
                 args.sort = this._remoteSort;
                 args.selectIds = selectIds;
+                args.putSelectedInWhere = !!putSelectedInWhere;
                 args.getMetaData = this._getRemoteMetaData;
                 args.filter = this._filter.getFilters();
 
