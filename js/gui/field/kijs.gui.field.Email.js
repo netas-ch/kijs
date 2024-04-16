@@ -38,7 +38,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         Object.assign(this._defaultConfig, {
             inputMode: 'email',
             validationRegExp: { // Validierung ist hier, damit sie überschrieben werden kann
-                regExp: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                regExp: /^[^\s\:@]+@[^\s@]+\.[a-z]+$/,
                 msg: kijs.getText('Ungültige E-Mail-Adresse')
             }
         });
