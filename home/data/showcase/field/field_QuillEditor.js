@@ -52,6 +52,17 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     //theme: 'snow',
                     //value: '',
                     inputHeight: 200,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 

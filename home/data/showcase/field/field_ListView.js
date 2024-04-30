@@ -40,6 +40,17 @@ home.sc.field_ListView = class home_sc_field_ListView {
                         { caption: 'Apple', value: 1},
                         { caption: 'Linux', value: 2},
                         { caption: 'Windows', value: 3}
+                    ],
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
                     ]
                 },
 

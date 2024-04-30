@@ -47,6 +47,12 @@ home.sc.field_Range = class home_sc_field_Range {
                     max: 90,
                     step: 5,
                     value: 20,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 

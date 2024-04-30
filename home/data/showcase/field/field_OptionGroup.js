@@ -38,6 +38,12 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                         { caption: 'Apple', value: 1},
                         { caption: 'Linux', value: 2},
                         { caption: 'Windows', value: 3}
+                    ],
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
                     ]
                 },
 

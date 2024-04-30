@@ -47,6 +47,17 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                     //theme: 'monokai',
                     value: 'function test(x) {\n    console.log(x);\n}\n\ntest("Hallo Welt!");\nFehler',
                     inputHeight: 100,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 

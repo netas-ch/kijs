@@ -58,6 +58,17 @@ home.sc.field_Combo = class home_sc_field_Combo {
                         { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
                         { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                     ],
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 
