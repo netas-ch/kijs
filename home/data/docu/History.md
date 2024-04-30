@@ -2,6 +2,19 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.5.6
+=============
+### kijs.gui.field.DateTime
+ - Beim zuweisen eines Werts beim Setter ```mode```, wird neu der ```value```auf 
+   ```null``` gesetzt.  
+
+### kijs.gui.field.*
+ - CSS von zusätzlichen Buttons bei allen Formularfeldern vereinheitlicht.  
+   Buttons mit der CSS-Klasse ```kijs-inline``` übernehmen nun die Höhe 
+   ```inputHeight```.  
+
+
+
 Version 2.5.5
 =============
 kleinere Änderungen
