@@ -1272,7 +1272,9 @@
                 }
             }
         }
-
+        &.kijs-hidden {
+            display: none;
+        }
     }
 
 
@@ -4124,36 +4126,6 @@
 
 
     /* ******************
-       * Ergänzungen für kijs.gui.Element (+ vererbte)
-       ****************** */
-    /* Ausblenden (Bitte dafür die Config visible benutzen!!!) */
-    div.kijs-hidden, .kijs-hidden {
-        display: none;
-    }
-
-    /* Schatten */
-    .kijs-shadow {
-        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
-    }
-
-
-
-    /* ******************
-       * Ergänzungen für Icons
-       ****************** */
-    /* Dreh-Effekt */
-    .kijs-spin {
-        animation: kijs-spin 2s infinite linear;
-    }
-
-    /* Pulse-Effekt (für Load-Icons) */
-    .kijs-pulse {
-        animation: kijs-spin 1s infinite steps(8);
-    }
-
-
-
-    /* ******************
        * Ergänzung für kijs.gui.Container (+ vererbte)
        ****************** */
     /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
@@ -4242,6 +4214,36 @@
          > * {
             flex: none;
         }
+    }
+    
+    
+    
+    /* ******************
+       * Ergänzungen für kijs.gui.Element (+ vererbte)
+       ****************** */
+    /* Ausblenden (Bitte dafür die Config visible benutzen!!!) */
+    div.kijs-hidden, .kijs-hidden {
+        display: none;
+    }
+
+    /* Schatten */
+    .kijs-shadow {
+        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
+    }
+
+
+
+    /* ******************
+       * Ergänzungen für Icons
+       ****************** */
+    /* Dreh-Effekt */
+    .kijs-spin {
+        animation: kijs-spin 2s infinite linear;
+    }
+
+    /* Pulse-Effekt (für Load-Icons) */
+    .kijs-pulse {
+        animation: kijs-spin 1s infinite steps(8);
     }
 
 
