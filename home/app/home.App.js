@@ -245,6 +245,10 @@ home.App = class home_App {
         const spinBox = new kijs.gui.SpinBox({
             target: e.element,
             ownerNodes: e.element,
+            cls: 'kijs-flexform',
+            innerStyle: {
+                padding: '10px'
+            },
             elements: [
                 {
                     xtype: 'kijs.gui.field.OptionGroup',
@@ -253,13 +257,11 @@ home.App = class home_App {
                     labelWidth: 74,
                     valueField: 'id',
                     captionField: 'Bezeichnung',
-                    style: {
-                        margin: '10px'
-                    },
                     data: [
                         { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
                         {id:'kijs.theme.retro.css', Bezeichnung:'Retro' },
-                        { id:'kijs.theme.old.css', Bezeichnung:'Alt' }
+                        { id:'kijs.theme.old.css', Bezeichnung:'Alt' },
+                        { id:'kijs.theme.black.css', Bezeichnung:'Black' }
                     ],
                     value: this._currentDesign ? this._currentDesign : 'kijs.theme.default.css',
                     on: {
@@ -283,9 +285,6 @@ home.App = class home_App {
                     label: 'Dark mode',
                     labelWidth: 74,
                     value: kijs.Dom.themeGet() === 'dark',
-                    style: {
-                        margin: '10px'
-                    },
                     on: {
                         change: function(e) {
                             if (e.value) {
@@ -296,6 +295,68 @@ home.App = class home_App {
                         },
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Akzentfarben',
+                    icon2Map: 'kijs.iconMap.Fa.chevron-down',
+                    disableFlex: false,
+                    on: {
+                        click: function(e) {
+                            const el = e.element.parent.downX('kijs.gui.Container');
+                            el.visible = !el.visible;
+                            if (el.visible) {
+                                e.element.icon2Map = 'kijs.iconMap.Fa.chevron-up';
+                            } else {
+                                e.element.icon2Map = 'kijs.iconMap.Fa.chevron-down';
+                            }
+                            
+
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexform',
+                    visible: false,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.field.Color',
+                            name: 'color1',
+                            label: 'Farbe 1',
+                            labelWidth: 74,
+                            value: getComputedStyle(document.body).getPropertyValue('--accentColor'),
+                            on: {
+                                change: function(e) {
+                                    document.documentElement.style.setProperty('--accentColor', e.value);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.field.Color',
+                            name: 'color2',
+                            label: 'Farbe 2',
+                            labelWidth: 74,
+                            value: getComputedStyle(document.body).getPropertyValue('--accentColor2'),
+                            on: {
+                                change: function(e) {
+                                    document.documentElement.style.setProperty('--accentColor2', e.value);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.field.Color',
+                            name: 'color3',
+                            label: 'Farbe 3',
+                            labelWidth: 74,
+                            value: getComputedStyle(document.body).getPropertyValue('--accentColor3'),
+                            on: {
+                                change: function(e) {
+                                    document.documentElement.style.setProperty('--accentColor3', e.value);
+                                },
+                                context: this
+                            }
+                        }
+                    ]
                 }
             ]
         });
