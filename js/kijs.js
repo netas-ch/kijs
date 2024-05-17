@@ -17,7 +17,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.5.6'; }
+    static get version() { return '2.6.0'; }
     
     
     
@@ -184,13 +184,12 @@ window.kijs = class kijs {
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
-     * @param {String} comment          Kommentar für den Übersetzer. Wird nur zum generieren der Usages-Datei benötigt.
      * @param {String} languageId
      * @returns {String}
      */
-    static getText(key, variant='', args=null, comment='', languageId=null) {
+    static getText(key, variant='', args=null, languageId=null) {
         if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, comment, languageId);
+            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, languageId);
         }
 
         // keine getText-Fn definiert: Argumente ersetzen
@@ -400,7 +399,7 @@ window.kijs = class kijs {
 
     /**
      * Setzt eine individuelle getText-Funktion.
-     * Die fn erhält folgende Argumente: key, variant, args, comment, languageId
+     * Die fn erhält folgende Argumente: key, variant, args, languageId
      * @param {Function} fn
      * @param {Object} [context=this]
      * @returns {undefined}

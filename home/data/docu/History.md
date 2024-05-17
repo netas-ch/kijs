@@ -2,6 +2,18 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.6.0
+=============
+### Argumente bei der Funktion kijs.getText() haben geändert
+Früher: ```getText(key, variant='', args=null, comment='', languageId=null)```  
+Neu: ```getText(key, variant='', args=null, languageId=null)```  
+
+**UPDATE TIPP:** Quellcode nach ```getText(``` durchsuchen und falls irgendwo 
+ein Aufruf mit 4 oder mehr Argumenten existiert, das vierte Argument (comment) 
+löschen.
+
+
+
 Version 2.5.6
 =============
 ### kijs.gui.field.DateTime
