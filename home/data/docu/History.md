@@ -4,6 +4,9 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version ?
 =============
+### kijs.Navigator
+- Neuer Getter ```isTouch```. Bei Touch-Geräten ist diese Eigenschaft auf true.  
+
 ### initial-scale der Home-App auf 1 geändert.
 
 ### kijs.gui.field.Display
