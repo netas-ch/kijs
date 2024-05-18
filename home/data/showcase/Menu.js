@@ -89,10 +89,10 @@ home.sc.Menu = class home_sc_Menu {
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'Klicke mit Rechts',
+                    caption: 'Klicke mit Rechts oder long-touch',
                     iconMap: 'kijs.iconMap.Fa.bars',
                     on: {
-                        rightClick: function(e) {
+                        contextMenu: function(e) {
                             e.nodeEvent.preventDefault();
 
                             const menu = new kijs.gui.Menu({

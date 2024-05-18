@@ -15,24 +15,24 @@
  * ----------------
  * disableSmoothScrolling Boolean [optional] default=false  Sanftes Scrollen ausschalten
  * 
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ * 
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste 
  *                                                          gehalten wird, wird in diesem Abstand gescrollt
- *                                                          
+ * 
  * scrollStep   Number [optional] default=20                Anzahl Pixel, die bei einem Klick auf einen
  *                                                          Scroll-Button gescrollt wird
  * 
  * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
  * -------------
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ * 
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  *
@@ -56,7 +56,9 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._scrollStep = 20;
         this._scrollDelay = 150;
         this._disableSmoothScrolling = false;
-        
+        this._touchXStart = null;
+        this._touchYStart = null;
+
         this._btnUpDom = new kijs.gui.Dom({
             cls: 'kijs-btn-scrollup',
             on: {
@@ -189,6 +191,9 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this.on('afterResize', this.#onAfterResize, this);
         this.on('childElementAfterResize', this.#onChildElementAfterResize, this);
         this.on('scrollEnd', this.#onScrollEnd, this);
+        this.on('touchEnd', this.#onTouchEnd, this);
+        this.on('touchMove', this.#onTouchMove, this);
+        this.on('touchStart', this.#onTouchStart, this);                                           
         this.on('wheel', this.#onWheel, this);
 
         // Config anwenden
@@ -451,7 +456,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         if (this._scrollableX === 'auto' || this._scrollableY === 'auto') {
             kijs.defer(this._renderScrollButtons, 20, this);
             
-        // Wenn Scrollbar sichtbar Schaltflächen aktivieren/dekativieren
+        // Wenn Scrollbar sichtbar Schaltflächen aktivieren/deaktivieren
         } else if (this._scrollableX || this._scrollableY) {
             kijs.defer(this._updateButtons, 20, this);
         }
@@ -547,7 +552,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._btnLeftDom.unrender();
         }
 
-         // Right (kijs.guiDom)
+        // Right (kijs.guiDom)
         if (hasScrollX) {
             this._btnRightDom.renderTo(this._dom.node);
             this._iconRightEl.renderTo(this._btnRightDom.node);
@@ -556,7 +561,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._btnRightDom.unrender();
         }
 
-         // Down (kijs.guiDom)
+        // Down (kijs.guiDom)
         if (hasScrollY) {
             this._btnDownDom.renderTo(this._dom.node);
             this._iconDownEl.renderTo(this._btnDownDom.node);
@@ -565,7 +570,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             this._btnDownDom.unrender();
         }
         
-        // Schaltflächen aktivieren/dekativieren
+        // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
     
@@ -592,7 +597,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._scrollDeferId = kijs.defer(this._scrollStart, this._scrollDelay, this, dir);
     }
     
-    // stopt das Scrollen
+    // stoppt das Scrollen
     _scrollStop() {
         if (this._scrollDeferId) {
             clearTimeout(this._scrollDeferId);
@@ -600,7 +605,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
     
-    // Schaltflächen aktivieren/dekativieren
+    // Schaltflächen aktivieren/deaktivieren
     _updateButtons() {
         if (!this._innerDom) {
             return;
@@ -672,10 +677,52 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
     
     #onScrollEnd(e) {
-        // Schaltflächen aktivieren/dekativieren
+        // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
     
+    #onTouchEnd(e) {
+        // Buttons rendern
+        this._renderScrollButtons();
+    }
+
+    #onTouchMove(e) {
+        const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
+        const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');
+
+        const deltaX = this._touchXStart - e.nodeEvent.touches[0].clientX;
+        const deltaY = this._touchXStart - e.nodeEvent.touches[0].clientY;
+
+        // Scrollbar auf Y + X Achse
+        if (hasScrollbarY && hasScrollbarX) {
+            this._innerDom.node.scrollTop += deltaY;
+            this._innerDom.node.scrollLeft += deltaX;
+
+            // Scrollbar nur auf Y Achse
+        } else if (hasScrollbarY) {
+            this._innerDom.node.scrollTop += deltaY;
+
+            // Scrollbar nur auf X Achse
+        } else if (hasScrollbarX) {
+            this._innerDom.node.scrollLeft += deltaX;
+        }
+
+        // Aktuelle Startpunkte setzen
+        this._touchXStart = e.nodeEvent.touches[0].clientX;
+        this._touchYStart = e.nodeEvent.touches[0].clientY;
+
+        if (hasScrollbarX || hasScrollbarY) {
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
+        }
+    }
+
+    #onTouchStart(e) {
+        // Startpunkte setzen
+        this._touchXStart = e.nodeEvent.touches[0].clientX;
+        this._touchYStart = e.nodeEvent.touches[0].clientY;
+    }
+       
     #onWheel(e) {
         const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
         const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');

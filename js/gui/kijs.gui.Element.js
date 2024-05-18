@@ -268,7 +268,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Event-Weiterleitungen von this._dom
         this._eventForwardsAdd('click', this._dom);
         this._eventForwardsAdd('dblClick', this._dom);
-        this._eventForwardsAdd('rightClick', this._dom);
+        this._eventForwardsAdd('contextMenu', this._dom);
         //this._eventForwardsAdd('drag', this._dom);
         //this._eventForwardsAdd('dragEnter', this._dom);
         //this._eventForwardsAdd('dragOver', this._dom);
@@ -283,10 +283,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('mouseMove', this._dom);
         this._eventForwardsAdd('mouseUp', this._dom);
         this._eventForwardsAdd('singleClick', this._dom);
-        this._eventForwardsAdd('touchStart', this._dom);
-        this._eventForwardsAdd('touchEnd', this._dom);
-        this._eventForwardsAdd('touchMove', this._dom);
-        this._eventForwardsAdd('touchCancel', this._dom);
         this._eventForwardsAdd('wheel', this._dom);
 
         // key events
@@ -298,7 +294,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._eventForwardsAdd('escPress', this._dom);
         this._eventForwardsAdd('spacePress', this._dom);
 
-
+        // touch events
+        this._eventForwardsAdd('touchStart', this._dom);
+        this._eventForwardsAdd('touchEnd', this._dom);
+        this._eventForwardsAdd('touchMove', this._dom);
+        this._eventForwardsAdd('touchCancel', this._dom);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);

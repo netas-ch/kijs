@@ -36,7 +36,7 @@
  * changeVisibility
  * childElementAfterResize
  * dblClick
- * rightClick
+ * contextMenu
  * destruct
  * drag
  * dragEnd

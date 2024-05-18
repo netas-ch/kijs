@@ -4,6 +4,15 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version ?
 =============
+### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
+Das Event ```contextMenu``` kommt beim  
+ - drücken der Rechten Maustaste  
+ - drücken der Kontext-Menü-Taste auf der Tastatur  
+ - einem longTouch auf Touch-Geräten  
+
+**UPDATE TIPP:** Quellcode nach ```rightClick``` durchsuchen und durch 
+```contextMenu``` ersetzen.  
+
 ### kijs.Navigator
 - Neuer Getter ```isTouch```. Bei Touch-Geräten ist diese Eigenschaft auf true.  
 
