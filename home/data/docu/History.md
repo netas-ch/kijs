@@ -4,6 +4,8 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version ?
 =============
+### initial-scale der Home-App auf 1 geändert.
+
 ### kijs.gui.field.Display
 - Neue CSS-Klasse ```kijs-largeTitle```. Damit wird die font-size auf 16px gestellt.  
 
