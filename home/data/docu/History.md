@@ -2,6 +2,13 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version ?
+=============
+### kijs.gui.field.Display
+- Neue CSS-Klasse ```kijs-largeTitle```. Damit wird die font-size auf 16px gestellt.  
+
+
+
 Version 2.6.0
 =============
 ### Argumente bei der Funktion kijs.getText() haben geändert
