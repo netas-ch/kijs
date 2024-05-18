@@ -21,6 +21,8 @@ Das Event ```contextMenu``` kommt beim
 ### kijs.gui.field.Display
 - Neue CSS-Klasse ```kijs-largeTitle```. Damit wird die font-size auf 16px gestellt.  
 
+### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden
+
 
 
 Version 2.6.0

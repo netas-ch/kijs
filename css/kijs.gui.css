@@ -994,6 +994,9 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--bar-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-panelbar.kijs-headerbar > .kijs-container-inner {
     font-family: var(--default-fontFamily);
@@ -1369,6 +1372,14 @@
     flex: 1;
     padding: 10px;
     overflow: auto;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  div.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > .kijs-container-inner {
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > ul {
     margin: 0 0 0 10px;
@@ -1565,6 +1576,9 @@
     line-height: var(--default-lineHeight);
     font-family: var(--default-fontFamily);
     white-space: nowrap;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-tree > .kijs-container-inner > .kijs-expandcontainer {
     margin-left: 20px;
@@ -1628,6 +1642,11 @@
     font-size: var(--item-fontSize);
     line-height: var(--item-lineHeight);
     color: var(--item-fontColor);
+  }
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element * {
     font-family: var(--default-fontFamily);
@@ -1723,6 +1742,9 @@
     flex-direction: row;
     align-items: center;
     gap: 4px;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-icon {
     flex: none;
@@ -1827,6 +1849,9 @@
     font-size: var(--default-fontSize);
     line-height: var(--default-lineHeight);
     color: var(--default-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-progressbar > .kijs-progressbar-field {
     position: relative;
@@ -1844,6 +1869,9 @@
     background-color: var(--bar-bkgrndColor);
     color: var(--bar-fontColor);
     transition: width 2s;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-progressbar > .kijs-progressbar-field > .kijs-progressbar-text {
     position: relative;
@@ -1855,6 +1883,9 @@
     color: var(--bar-fontColor);
     opacity: 0;
     transition: opacity 2s;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-progressbar > .kijs-progressbar-caption-bottom {
     padding: 2px 0 0 0;
@@ -1862,6 +1893,9 @@
     font-size: var(--default-fontSize);
     line-height: var(--default-lineHeight);
     color: var(--default-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-progressbar > .kijs-progressbar-caption-bottom .error {
     padding: 0;
@@ -2197,6 +2231,9 @@
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
     /* Daten verändert: rotes Dreieck oben links */
     /* Textfelder im Grid */
   }

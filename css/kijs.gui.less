@@ -1071,6 +1071,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
             color: var(--bar-fontColor);
+            
+            /* selektion von Text erlauben */
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         &.kijs-headerbar {
@@ -1501,7 +1505,7 @@
             font-size: var(--msgbox-fontSize);
             line-height: var(--msgbox-lineHeight);
             color: var(--msgbox-fontColor);
-
+            
             > .kijs-icon {
                 flex: none;
                 font-size: 30px;
@@ -1514,7 +1518,17 @@
                 flex: 1;
                 padding: 10px;
                 overflow: auto;
-
+                
+                /* selektion von Text erlauben */
+                -webkit-user-select: text;
+                user-select: text;
+                
+                > .kijs-container-inner {
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
+                }
+                
                 > ul {
                     margin: 0 0 0 10px;
                     padding: 0;
@@ -1761,6 +1775,10 @@
                     line-height: var(--default-lineHeight);
                     font-family: var(--default-fontFamily);
                     white-space: nowrap;
+                    
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
                 }
             }
 
@@ -1844,7 +1862,13 @@
                 font-size: var(--item-fontSize);
                 line-height: var(--item-lineHeight);
                 color: var(--item-fontColor);
-
+                
+                > .kijs-container-inner {
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
+                }
+                
                 * {
                     font-family: var(--default-fontFamily);
                     font-size: var(--item-fontSize);
@@ -1959,6 +1983,10 @@
                     align-items: center;
                     gap: 4px;
 
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
+                    
                     > .kijs-icon {
                         flex: none;
                         margin: 0;
@@ -2093,6 +2121,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
+            
+            /* selektion von Text erlauben */
+            -webkit-user-select: text;
+            user-select: text;
+            
         }
 
         > .kijs-progressbar-field {
@@ -2111,6 +2144,10 @@
                 background-color: var(--bar-bkgrndColor);
                 color: var(--bar-fontColor);
                 transition: width 2s;
+                
+                /* selektion von Text erlauben */
+                -webkit-user-select: text;
+                user-select: text;
             }
 
             > .kijs-progressbar-text {
@@ -2123,6 +2160,10 @@
                 color: var(--bar-fontColor);
                 opacity: 0;
                 transition: opacity 2s;
+                
+                /* selektion von Text erlauben */
+                -webkit-user-select: text;
+                user-select: text;
             }
         }
 
@@ -2132,7 +2173,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-
+            
+            /* selektion von Text erlauben */
+            -webkit-user-select: text;
+            user-select: text;
+            
             .error {
                 padding: 0;
                 color: red;
@@ -2518,7 +2563,11 @@
                     color: var(--default-fontColor);
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
-
+                    
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
+                    
                     &.kijs-hidden {
                         display: none;
                     }
@@ -2616,7 +2665,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-
+                                
                                 > span.kijs-sort {
                                     color: #555;
                                     font-family: 'Font Awesome 6 Free';
