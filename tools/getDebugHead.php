@@ -56,7 +56,7 @@ foreach ($modules as $module) {
             
             switch ($fileType) {
                 case 'js':
-                    $return .= '<script type="text/javascript" src="' . $baseUrl . $file . '"></script>' . "\n";
+                    $return .= '<script type="text/javascript" src="' . $baseUrl . $file . '?v=' . filemtime('../' . $file) . '"></script>' . "\n";
                     break;
                 
                 case 'css':
@@ -65,7 +65,7 @@ foreach ($modules as $module) {
                         $file = substr($file, 0, strlen('.less')*-1) . '.css';
                     }
                     
-                    $return .= '<link rel="stylesheet" type="text/css" href="' . $baseUrl . $file . '">' . "\n";
+                    $return .= '<link rel="stylesheet" type="text/css" href="' . $baseUrl . $file . '?v=' . filemtime('../' . $file) . '">' . "\n";
                     break;
                     
             }
