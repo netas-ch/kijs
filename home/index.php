@@ -20,8 +20,8 @@
 <?php
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=css');
 ?>
-    <link rel="stylesheet" type="text/css" href="app/style.css?v=<?=filemtime('app/style.css')?>">;
-    <link rel="stylesheet" type="text/css" href="dataResources/css/style.css?v=<?=filemtime('dataResources/css/style.css')?>">;
+    <link rel="stylesheet" type="text/css" href="app/style.css?v=<?=filemtime('app/style.css')?>">
+    <link rel="stylesheet" type="text/css" href="dataResources/css/style.css?v=<?=filemtime('dataResources/css/style.css')?>">
 <?php
     // JS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=js');
