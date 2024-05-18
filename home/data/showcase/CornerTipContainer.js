@@ -30,8 +30,9 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'CornerTipContainer mit Icon:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'CornerTipContainer mit Icon:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',

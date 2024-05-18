@@ -34,15 +34,17 @@ home.sc.field_Iban = class home_sc_field_Iban {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Iban'
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Iban',

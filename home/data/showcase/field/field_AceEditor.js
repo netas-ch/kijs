@@ -30,15 +30,17 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.AceEditor'
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.AceEditor',
@@ -92,8 +94,10 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '<a href="https://ace.c9.io/" target="blank">ACE Webseite</a><br><a href="https://github.com/ajaxorg/ace-builds" target="blank">GitHub</a>',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ACE Webseite: https://ace.c9.io/ \nGitHub: https://github.com/ajaxorg/ace-builds',
+                    clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}
                 }
             ]

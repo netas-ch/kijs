@@ -30,15 +30,17 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.MonthPicker'
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit minValue und maxValue:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit minValue und maxValue:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
@@ -55,8 +57,9 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ohne headerBar:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ohne headerBar:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.MonthPicker',
@@ -66,8 +69,9 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.TimePicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.TimePicker\n- kijs.gui.field.DateTime\n- kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }
             ]

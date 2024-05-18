@@ -32,8 +32,9 @@ home.sc.Button = class home_sc_Button {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Buttons:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Buttons:'
                 },
                 
                 {

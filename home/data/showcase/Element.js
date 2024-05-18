@@ -30,8 +30,9 @@ home.sc.Element = class home_sc_Element {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Element mit HTML Inhalt:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Element mit HTML Inhalt:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',
@@ -72,8 +73,9 @@ home.sc.Element = class home_sc_Element {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Element mit HTML Inhalt von RPC:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Element mit HTML Inhalt von RPC:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',

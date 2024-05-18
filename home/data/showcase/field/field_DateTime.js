@@ -30,16 +30,18 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.DateTime',
                     required: true
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'date\'',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode: \'date\'',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -77,8 +79,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'dateTime\'',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode: \'dateTime\'',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -108,8 +111,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'time\'',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode: \'time\'',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -119,8 +123,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'week\'',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode: \'week\'',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -129,8 +134,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode: \'range\'',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode: \'range\'',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -143,8 +149,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode dynamisch ändern',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mode dynamisch ändern',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.DateTime',
@@ -174,8 +181,9 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '<b>Siehe auch:</b><br>kijs.gui.DatePicker<br>kijs.gui.MonthPicker<br>kijs.gui.TimePicker<br>kijs.gui.field.Month',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.MonthPicker\n- kijs.gui.TimePicker\n- kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }
             ]

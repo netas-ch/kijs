@@ -281,6 +281,10 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            
+            /* selektion von Text erlauben */
+            -webkit-user-select: text;
+            user-select: text;
         }
 
         > .kijs-badge {
@@ -3733,6 +3737,10 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
+                    
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
                 }
 
                 > *:last-child {
@@ -3812,6 +3820,10 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
+                    
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
                 }
 
                 > *:last-child {
@@ -3892,6 +3904,12 @@
         }
 
         /* Ergänzungen */
+        &.kijs-largeTitle {
+            > .kijs-content > .kijs-inputwrapper > div {
+                font-size: 16px;
+                line-height: 18px;
+            }
+        }
         &.kijs-title {
             > .kijs-content > .kijs-inputwrapper > div {
                 font-weight: bold;

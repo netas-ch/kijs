@@ -30,8 +30,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     data: [
@@ -42,8 +43,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -87,8 +89,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'RPC',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'RPC',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',

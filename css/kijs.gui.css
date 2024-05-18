@@ -244,6 +244,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   button.kijs-button > .kijs-badge {
     flex: none;
@@ -3212,6 +3215,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;
@@ -3272,6 +3278,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
   }
   div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;
@@ -3325,6 +3334,10 @@
   }
   div.kijs-field-display.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: 180px;
+  }
+  div.kijs-field-display.kijs-largeTitle > .kijs-content > .kijs-inputwrapper > div {
+    font-size: 16px;
+    line-height: 18px;
   }
   div.kijs-field-display.kijs-title > .kijs-content > .kijs-inputwrapper > div {
     font-weight: bold;

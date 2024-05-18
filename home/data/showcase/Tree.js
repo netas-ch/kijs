@@ -30,8 +30,9 @@ home.sc.Tree = class home_sc_Tree {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Tree mit RPC:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Tree mit RPC:'
                 },{
                     xtype: 'kijs.gui.Tree',
                     caption: 'Element 1',
@@ -54,8 +55,9 @@ home.sc.Tree = class home_sc_Tree {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Tree local:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Tree local:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Tree',

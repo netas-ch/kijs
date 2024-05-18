@@ -154,8 +154,9 @@ home.sc.Mask = class home_sc_Mask {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Masken bei Panels:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Masken bei Panels:',
                     style: { margin: '20px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Container',

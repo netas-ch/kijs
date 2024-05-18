@@ -88,8 +88,9 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ApertureMask für 3s anzeigen auf:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ApertureMask für 3s anzeigen auf:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',

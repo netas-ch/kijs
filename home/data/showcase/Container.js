@@ -40,8 +40,9 @@ home.sc.Container = class home_sc_Container {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Container mit HTML Inhalt:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Container mit HTML Inhalt:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -85,8 +86,9 @@ home.sc.Container = class home_sc_Container {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Container mit Elementen als Inhalt:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Container mit Elementen als Inhalt:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -178,8 +180,9 @@ home.sc.Container = class home_sc_Container {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Container mit HTML Inhalt von RPC:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Container mit HTML Inhalt von RPC:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',

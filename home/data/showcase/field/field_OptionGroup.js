@@ -30,8 +30,9 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
                     data: [
@@ -48,8 +49,9 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
@@ -82,8 +84,9 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'inline und mit RPC',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'inline und mit RPC',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',

@@ -30,8 +30,9 @@ home.sc.MsgBox = class home_sc_MsgBox {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Message Box standard:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Message Box standard:'
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'alert',
@@ -106,8 +107,9 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Message Box mit Callback Function:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Message Box mit Callback Function:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -122,8 +124,9 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Message Box individuell:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Message Box individuell:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',

@@ -30,8 +30,9 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'scrollableX=true',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'scrollableX=true',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.container.Scrollable',
@@ -58,8 +59,9 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'scrollableX="auto" (click on buttons to make them wider/smaller)',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'scrollableX="auto" (click on buttons to make them wider/smaller)',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.container.Scrollable',
@@ -93,8 +95,9 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'scrollableY=true',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'scrollableY=true',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.container.Scrollable',
@@ -124,8 +127,9 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'scrollableX="auto" und scrollableY="auto"',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'scrollableX="auto" und scrollableY="auto"',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Panel',

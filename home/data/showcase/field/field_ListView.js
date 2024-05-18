@@ -30,8 +30,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     valueField: 'value',
@@ -55,8 +56,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -90,8 +92,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit RPC und Drg&Drop',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'mit RPC und Drg&Drop',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -113,8 +116,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ListView local:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ListView local:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.ListView',

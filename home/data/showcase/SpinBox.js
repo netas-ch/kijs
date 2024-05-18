@@ -31,8 +31,9 @@ home.sc.SpinBox = class home_sc_SpinBox {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Button mit spinBox:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Button mit spinBox:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -57,8 +58,9 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'target:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'target:',
                     style: { margin: '100px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -107,8 +109,9 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'SpinBox-Einstellungen',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'SpinBox-Einstellungen',
                     style: { margin: '100px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',

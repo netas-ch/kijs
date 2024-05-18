@@ -30,8 +30,9 @@ home.sc.Menu = class home_sc_Menu {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Button mit menuElements:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Button mit menuElements:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -82,8 +83,9 @@ home.sc.Menu = class home_sc_Menu {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Button mit manuellem Menü bei Rechtsklick:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Button mit manuellem Menü bei Rechtsklick:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Button',

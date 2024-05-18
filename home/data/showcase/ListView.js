@@ -30,8 +30,9 @@ home.sc.ListView = class home_sc_ListView {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ListView lokal:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ListView lokal:'
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'id',
@@ -64,8 +65,9 @@ home.sc.ListView = class home_sc_ListView {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '2x ListView lokal mit Drag&Drop untereinander:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: '2x ListView lokal mit Drag&Drop untereinander:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Container',
@@ -121,8 +123,9 @@ home.sc.ListView = class home_sc_ListView {
                         
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ListView mit RPC und Optionen:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ListView mit RPC und Optionen:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',
@@ -145,8 +148,9 @@ home.sc.ListView = class home_sc_ListView {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ListView lokal mit Checkboxen:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'ListView lokal mit Checkboxen:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.ListView',

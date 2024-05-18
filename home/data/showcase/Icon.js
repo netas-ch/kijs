@@ -30,8 +30,9 @@ home.sc.Icon = class home_sc_Icon {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Icon aus IconMap:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Icon aus IconMap:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Icon',
@@ -39,8 +40,9 @@ home.sc.Icon = class home_sc_Icon {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Icon mit Bild:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Icon mit Bild:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Icon',
@@ -48,8 +50,9 @@ home.sc.Icon = class home_sc_Icon {
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Icon aus IconMap rotierend:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'Icon aus IconMap rotierend:',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Icon',
@@ -58,8 +61,10 @@ home.sc.Icon = class home_sc_Icon {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '<a href="https://fontawesome.com/search?o=r&m=free" target="blank">FontAwesome free Icons</a>',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-largeTitle',
+                    value: 'FontAwesome free Icons: https://fontawesome.com/search?o=r&m=free',
+                    clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}
                 }
             ]
