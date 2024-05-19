@@ -48,6 +48,17 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     date: new Date(),
                     minValue: kijs.Date.addDays(new Date(), -15),
                     maxValue: kijs.Date.addDays(new Date(), 15),
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 
@@ -129,6 +140,37 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     mode: 'range',
                     date: new Date(),
                     dateEnd: kijs.Date.addDays(new Date(), 3)
+                },
+                
+                {
+                    xtype: 'kijs.gui.Element',
+                    html: 'mode dynamisch ändern',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.field.DateTime',
+                    name: 'rangeStart',
+                    nameEnd: 'rangeEnd',
+                    label: 'date',
+                    mode: 'date',
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Modus ändern',
+                            on: {
+                                click: function(e) {
+                                    const el = this.parent;
+                                    switch (el.mode) {
+                                        case 'date': el.mode = 'time'; break;
+                                        case 'time': el.mode = 'dateTime'; break;
+                                        case 'dateTime': el.mode = 'week'; break;
+                                        case 'week': el.mode = 'range'; break;
+                                        case 'range': el.mode = 'date'; break;
+                                    }
+                                    el.label = el.mode;
+                                }
+                            }
+                        }
+                    ]
                 },
 
                 {

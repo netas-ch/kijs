@@ -48,6 +48,17 @@ home.sc.field_Iban = class home_sc_field_Iban {
                     xtype: 'kijs.gui.field.Iban',
                     label: 'Label',
                     value: 'DE07123412341234123412',
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            smallPaddings: false,
+                            cls: 'kijs-inline'
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp'
+                        }
+                    ],
                     on: {
                         focus:  console.log,
 

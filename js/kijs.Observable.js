@@ -110,7 +110,7 @@ kijs.Observable = class kijs_Observable {
             names = [names];
         }
 
-        // Listeners duchgehen und wenn sie mit den übergebenen Argumenten übereinstimmen: entfernen
+        // Listeners durchgehen und wenn sie mit den übergebenen Argumenten übereinstimmen: entfernen
         kijs.Array.each(names, function(name) {
             let skip = false;
 

@@ -158,7 +158,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         this._node = null;
 
-        this._nodeEventListeners = {}; // Delegates der DOM-Node Events, die mit kijs.Dom.addEventListener gesetzt wurden
+        this._nodeEventListeners = {};  // Delegates der DOM-Node Events, die mit kijs.Dom.addEventListener gesetzt wurden
                                         // {
                                         //     click: [
                                         //         {node: ..., useCapture: true/false, delegate: ...},
@@ -1066,7 +1066,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Evtl. die Listeners auf den DOM-Node aktualisieren
         if (this._node && eventsCountAfter - eventsCountBefore) {
-            this._nodeEventListenersAppy();
+            this._nodeEventListenersApply();
         }
     }
     
@@ -1083,7 +1083,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Evtl. die Listeners auf den DOM-Node aktualisieren
         if (this._node && eventsCountAfter - eventsCountBefore) {
-            this._nodeEventListenersAppy();
+            this._nodeEventListenersApply();
         }
     }
 
@@ -1137,7 +1137,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._clsApply();
 
         // DOM-Node-Event Listeners erstellen
-        this._nodeEventListenersAppy();
+        this._nodeEventListenersApply();
     }
 
     /**
@@ -1268,7 +1268,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Erstellt oder entfernt Listeners auf den DOM-Node aufgrund der _events
      * @returns {undefined}
      */
-    _nodeEventListenersAppy() {
+    _nodeEventListenersApply() {
         // kijs-Events-Namen ermitteln
         const kijsEvents = Object.keys(this._events);
 

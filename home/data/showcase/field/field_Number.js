@@ -46,7 +46,14 @@ home.sc.field_Number = class home_sc_field_Number {
                 },{
                     xtype: 'kijs.gui.field.Number',
                     label: 'mit Spin-Buttons',
-                    spinButtonsHide: false
+                    spinButtonsHide: false,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            iconMap: 'kijs.iconMap.Fa.stamp',
+                            cls: 'kijs-inline'
+                        }
+                    ]
                     //spinStep: 1,
                     //spinAcceleration: 20,
                     //spinDelay: 400

@@ -2,6 +2,31 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.6.0
+=============
+### Argumente bei der Funktion kijs.getText() haben geändert
+Früher: ```getText(key, variant='', args=null, comment='', languageId=null)```  
+Neu: ```getText(key, variant='', args=null, languageId=null)```  
+
+**UPDATE TIPP:** Quellcode nach ```getText(``` durchsuchen und falls irgendwo 
+ein Aufruf mit 4 oder mehr Argumenten existiert, das vierte Argument (comment) 
+löschen.
+
+
+
+Version 2.5.6
+=============
+### kijs.gui.field.DateTime
+ - Beim zuweisen eines Werts beim Setter ```mode```, wird neu der ```value```auf 
+   ```null``` gesetzt.  
+
+### kijs.gui.field.*
+ - CSS von zusätzlichen Buttons bei allen Formularfeldern vereinheitlicht.  
+   Buttons mit der CSS-Klasse ```kijs-inline``` übernehmen nun die Höhe 
+   ```inputHeight```.  
+
+
+
 Version 2.5.5
 =============
 kleinere Änderungen
@@ -30,7 +55,7 @@ Version 2.5.3
 =============
 ### kijs.gui.field.*
  - neue config/getter/setter ```inputHeight```  
-   Setzt die Breite des Input-Feldes.  
+   Setzt die Höhe des Input-Feldes.  
  - bei ```labelPosition='top'``` wird neu die ```labelWidth``` ignoriert und das 
    Label kann so breit sein, wie das ganze Feld.  
 

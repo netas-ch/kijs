@@ -29,7 +29,7 @@
  *
  * name         String [optional]       Element-Namen Siehe dazu auch kijs.gui.Container.getElementByName()
  *
- * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. 
+ * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen.
  *                                      Bsp: { id: 123, for: 'meinFeld' }
  *
  * nodeTagName   String [optional]      Tag-Name des DOM-node. Default='div'
@@ -677,9 +677,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        if (this._configMap) {
-            kijs.Object.assignConfig(this, config, this._configMap);
-        }
+        kijs.Object.assignConfig(this, config, this._configMap);
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
@@ -871,9 +869,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     /**
      * rendert das Element und fügt den DOM-Node einem Parent-DOM-Node hinzu
      * @param {HTMLElement} targetNode           Eltern-Node
-     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node
      *                                           statt angehängt eingefügt werden soll
-     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode
      *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
@@ -881,9 +879,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         const firstRender = !this.isRendered;
 
         this.render();
-        
+
         this._dom.renderTo(targetNode, referenceNode, insertPosition);
-        
+
         // Event afterFirstRenderTo auslösen
         if (firstRender) {
             this.raiseEvent('afterFirstRenderTo');
@@ -901,12 +899,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             window.clearTimeout(this._afterResizeDeferId);
             this._afterResizeDeferId = null;
         }
-        
+
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-        
+
         if (this._dom) {
             this._dom.unrender();
         }
@@ -1212,31 +1210,23 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (this._ddSource) {
             this._ddSource.destruct();
         }
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._afterResizeDeferId = null;
-        this._afterResizeDelay = null;
         this._defaultConfig = null;
         this._ddSource = null;
-        this._disabledInitial = null;
         this._eventForwards = null;
         this._dom = null;
-        this._name = null;
         this._parentEl = null;
-        this._preventAfterResize = null;
         this._rpc = null;
-        this._rpcLoadFn = null;
         this._rpcLoadArgs = null;
         this._lastSize = null;
         this._userData = null;
-        this._visible = null;
         this._waitMaskEl = null;
-        this._waitMaskCount = null;
         this._waitMaskTarget = null;
-        this._waitMaskTargetDomProperty = null;
 
         // Basisklasse entladen
         super.destruct();
     }
-    
+
 };
