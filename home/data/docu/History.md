@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version ?
+Version 2.7.0 (noch nicht freigegeben)
 =============
 ### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
 Das Event ```contextMenu``` kommt beim  
