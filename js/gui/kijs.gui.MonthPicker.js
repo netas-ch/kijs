@@ -21,7 +21,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         this._date = null;
         this._startYear = (new Date()).getFullYear() - 1;
-
+        this._yearsCount = 5;
+        
         this._headerBarHide = false;
         this._currentBtnHide = false;
         this._emptyBtnHide = false;
@@ -78,6 +79,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         // Jahre Scroll-Button up
         this._yearsScrollUpBtn = new kijs.gui.Button({
             caption: '▴',
+            disableFlex: false,
             on: {
                 click: this.#onYearsScrollUpBtnClick,
                 context: this
@@ -88,6 +90,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         // Jahre Scroll-Button down
         this._yearsScrollDownBtn = new kijs.gui.Button({
             caption: '▾',
+            disableFlex: false,
             on: {
                 click: this.#onYearsScrollDownBtnClick,
                 context: this
@@ -328,7 +331,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
 
         // Rendert die 5 Jahres kijs.gui.Dom
-        for (let i=0; i<5; i++) {
+        for (let i=0; i<this._yearsCount; i++) {
             this._yearsDom[i].renderTo(this._yearDivInnerDom.node);
         }
 
@@ -413,7 +416,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
 
         // Jahre aktualisieren
-        for (let i=0; i<5; i++) {
+        for (let i=0; i<this._yearsCount; i++) {
             let year = this._startYear + i;
 
             // html
@@ -456,7 +459,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
     // Erstellt die 5 Jahres kijs.gui.Dom beginnend bei startYear
     _createYearsDom() {
-        for (let i=0; i<5; i++) {
+        for (let i=0; i<this._yearsCount; i++) {
             this._yearsDom.push(new kijs.gui.Dom({
                 html: this._startYear + i,
                 on: {

@@ -190,7 +190,7 @@
   span.kijs-icon {
     display: inline-block;
     font-family: 'Font Awesome 6 Free';
-    font-size: 16px;
+    font-size: var(--icon-fontSize);
     color: var(--icon-fontColor);
     background-repeat: no-repeat;
     background-position: center center;
@@ -210,7 +210,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 25px;
+    height: var(--button-height);
     margin: 0;
     border-radius: 6px;
     padding: 0 8px;
@@ -301,20 +301,6 @@
   button.kijs-button.kijs-disabled > .kijs-badge {
     background-color: var(--badge-disabled-bkgrndColor);
     color: var(--badge-disabled-fontColor);
-  }
-  /* ******************
-       * Trigger Button
-       * DEPRECATED
-       * TODO: Wird niergends verwendet????????
-       ****************** */
-  button.kijs-button.kijs-trigger {
-    display: block;
-    margin: 0;
-    padding: 0 2px 0 1px;
-    border-radius: 0;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
   }
   /* ******************
        * Container
@@ -994,9 +980,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--bar-fontColor);
-    /* selektion von Text erlauben */
-    -webkit-user-select: text;
-    user-select: text;
   }
   div.kijs-panelbar.kijs-headerbar > .kijs-container-inner {
     font-family: var(--default-fontFamily);
@@ -1483,10 +1466,10 @@
     flex: 1;
   }
   div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-caption:first-child {
-    margin-left: 22px;
+    margin-left: calc(var(--icon-fontSize) + 4px);
   }
   div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-icon {
-    width: 18px;
+    width: calc(var(--icon-fontSize) + 4px);
   }
   div.kijs-menu-spinbox > .kijs-container-inner > button.kijs-button > .kijs-icon2 {
     text-align: right;
@@ -1731,7 +1714,6 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    height: 18px;
     border: 1px solid transparent;
     padding: 0 4px;
     outline: none;
@@ -1761,7 +1743,6 @@
     text-overflow: ellipsis;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
-    line-height: var(--default-lineHeight);
     color: var(--item-fontColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:focus,
@@ -1786,7 +1767,8 @@
     border-radius: 2px;
     background-color: var(--field-bkgrndColor);
     color: var(--icon-fontColor);
-    font: normal normal normal 15px/1 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 6 Free';
+    font-size: var(--checkbox-fontSize);
     content: '\f096';
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
@@ -1802,7 +1784,8 @@
     border-radius: 50%;
     background-color: var(--field-bkgrndColor);
     color: var(--icon-fontColor);
-    font: normal normal normal 15px/1 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 6 Free';
+    font-size: var(--checkbox-fontSize);
     content: '\f10c';
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
@@ -1921,7 +1904,7 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 176px;
+    width: calc(var(--default-fontSize) * 14.667);
     border: 1px solid var(--panel-borderColor);
   }
   div.kijs-monthpicker.kijs-borderless {
@@ -1950,6 +1933,7 @@
     padding: 0px 2px;
     margin: 1px;
     border: 1px solid transparent;
+    border-radius: 4px;
   }
   div.kijs-monthpicker .kijs-monthpicker-yearmonthdiv .kijs-monthpicker-monthdiv > div:hover {
     background-color: var(--item-focus-bkgrndColor);
@@ -1966,8 +1950,7 @@
   div.kijs-monthpicker .kijs-monthpicker-yearmonthdiv .kijs-monthpicker-yeardiv {
     flex: 1;
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
     justify-content: center;
   }
   div.kijs-monthpicker .kijs-monthpicker-yearmonthdiv .kijs-monthpicker-yeardiv > .kijs-button {
@@ -1981,6 +1964,7 @@
     padding: 0px 2px;
     margin: 1px;
     border: 1px solid transparent;
+    border-radius: 4px;
   }
   div.kijs-monthpicker .kijs-monthpicker-yearmonthdiv .kijs-monthpicker-yeardiv .kijs-monthpicker-yearinnerdiv > div:hover {
     background-color: var(--item-focus-bkgrndColor);
@@ -2011,7 +1995,7 @@
     flex: none;
     display: flex;
     flex-direction: column;
-    width: 176px;
+    width: calc(var(--default-fontSize) * 14.667);
     border: 1px solid var(--panel-borderColor);
   }
   div.kijs-datepicker.kijs-borderless {
@@ -2119,7 +2103,8 @@
   div.kijs-timepicker {
     display: flex;
     flex-direction: column;
-    width: 140px;
+    width: calc(var(--default-fontSize) * 11.667);
+    /*140px;*/
     border: 1px solid var(--panel-borderColor);
   }
   div.kijs-timepicker.kijs-borderless {
@@ -2164,8 +2149,7 @@
   div.kijs-timepicker > .kijs-timepicker-canvasdiv {
     flex: 1;
     margin: 4px;
-    width: 132px;
-    height: 132px;
+    aspect-ratio: 1 / 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2184,6 +2168,990 @@
     justify-content: center;
     padding: 6px;
     gap: 6px;
+  }
+  /* ******************
+       * Field
+       ****************** */
+  div.kijs-field {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    min-height: var(--field-height);
+    overflow: visible;
+    /* für Badges */
+  }
+  div.kijs-field > .kijs-label {
+    display: block;
+    flex: none;
+    color: var(--field-label-fontColor);
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+    padding-top: var(--field-label-paddingTop);
+    padding-right: 4px;
+    padding-bottom: 3px;
+    padding-left: 0;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
+    /* falls das Label leer ist: kein padding-right */
+  }
+  div.kijs-field > .kijs-label:empty {
+    padding-right: 0;
+  }
+  div.kijs-field > .kijs-content {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: visible;
+    /* für Badges */
+  }
+  div.kijs-field > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
+    position: relative;
+    display: block;
+  }
+  div.kijs-field > .kijs-content > .kijs-inputwrapper > input {
+    outline: none;
+    color: var(--field-fontColor);
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons,
+  div.kijs-field > .kijs-content > .kijs-container-inner {
+    flex: none;
+    display: flex;
+    flex-direction: row;
+    overflow: visible;
+    /* für Badges */
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
+    margin: 0 0 0 2px;
+    height: var(--field-height);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
+    margin: 0;
+    height: 100%;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    align-items: flex-start;
+    border-top: 1px solid var(--field-borderColor);
+    border-right: 1px solid var(--field-borderColor);
+    border-bottom: 1px solid var(--field-borderColor);
+    border-left: none;
+    border-radius: 0;
+    color: var(--button-icon-fontColor);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline > .kijs-caption,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+    margin-top: calc(var(--field-label-paddingTop) - 5px);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
+    width: calc(var(--icon-fontSize) + 4px);
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    justify-content: center;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
+    margin: 0;
+    padding: 0;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-default,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
+    box-shadow: none;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline:hover,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
+    background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon {
+    margin: 0 0 0 2px;
+    height: var(--field-height);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline {
+    margin: 0;
+    height: 100%;
+    padding: 3px 4px;
+    align-items: flex-start;
+    border-radius: 0px;
+    border-top: 1px solid var(--field-borderColor);
+    border-right: 1px solid var(--field-borderColor);
+    border-bottom: 1px solid var(--field-borderColor);
+    border-left: 0;
+    background-color: var(--button-bkgrndColor);
+    color: var(--button-icon-fontColor);
+    cursor: pointer;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-default,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-default {
+    box-shadow: none;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-hidden,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-hidden {
+    display: none;
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline:hover,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline:hover {
+    background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-disabled,
+  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-disabled {
+    background-color: var(--field-disabled-bkgrndColor);
+    color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  div.kijs-field > .kijs-content > .kijs-icon-error {
+    flex: none;
+    height: 16px;
+    margin: 3px 0 0 2px;
+    color: var(--icon-error-fontColor);
+    cursor: default;
+  }
+  div.kijs-field > .kijs-content > .kijs-icon-help {
+    flex: none;
+    height: 16px;
+    margin: 3px 0 0 2px;
+    color: var(--icon-help-fontColor);
+    cursor: default;
+  }
+  div.kijs-field.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field.kijs-labelpos-top {
+    flex-direction: column;
+    align-items: normal;
+  }
+  div.kijs-field.kijs-labelpos-top > .kijs-label {
+    width: auto !important;
+  }
+  @media all and (max-width: 500px) {
+    div.kijs-field.kijs-labelpos-auto {
+      flex-direction: column;
+      align-items: normal;
+    }
+    div.kijs-field.kijs-labelpos-auto > .kijs-label {
+      width: auto !important;
+    }
+  }
+  /* ******************
+       * Field Text
+       * Field Iban
+       * Field SozVersNr
+       * Field Url
+       * Field Email
+       * Field Phone
+       * Field Number
+       ****************** */
+  div.kijs-field-text > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-url > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-email > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-number > .kijs-content > .kijs-inputwrapper {
+    height: var(--field-height);
+  }
+  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--field-borderColor);
+    padding: 0 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+  }
+  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input:focus,
+  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-text.kijs-disableFlex,
+  div.kijs-field-url.kijs-disableFlex,
+  div.kijs-field-email.kijs-disableFlex,
+  div.kijs-field-iban.kijs-disableFlex,
+  div.kijs-field-sozversnr.kijs-disableFlex,
+  div.kijs-field-phone.kijs-disableFlex,
+  div.kijs-field-number.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-text.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-iban.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-text.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-error > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-text.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-text.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-url.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-email.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-iban.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-sozversnr.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-phone.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-number.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  div.kijs-field-number > .kijs-content > .kijs-buttons {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline {
+    flex: 1;
+    padding-top: 1px;
+    align-items: center;
+  }
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline:last-child {
+    border-top: none;
+  }
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline > .kijs-icon {
+    font-size: 11px;
+    line-height: 11px;
+  }
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-hidden {
+    display: none;
+  }
+  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultPhone-inputWidth);
+  }
+  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultSozVersNr-inputWidth);
+  }
+  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultNumber-inputWidth);
+  }
+  /* ******************
+       * Field Color
+       ****************** */
+  div.kijs-field-color {
+    overflow: visible;
+  }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper {
+    overflow: visible;
+    height: var(--field-height);
+  }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input {
+    width: var(--field-height);
+    height: 100%;
+    border: 1px solid var(--field-borderColor);
+    border-radius: 2px;
+    padding: 2px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:hover,
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:focus {
+    background-color: var(--button-focus-bkgrndColor);
+  }
+  div.kijs-field-color.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-color.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--field-height);
+  }
+  /* ******************
+       * Field Password
+       ****************** */
+  div.kijs-field-password > .kijs-content > .kijs-inputwrapper {
+    height: var(--field-height);
+  }
+  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--field-borderColor);
+    padding: 2px 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+  }
+  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-password.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-password.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-password.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-password.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-password.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  /* ******************
+       * Field Month
+       ****************** */
+  div.kijs-field-month > .kijs-content > .kijs-inputwrapper {
+    height: var(--field-height);
+  }
+  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--field-borderColor);
+    padding: 0 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+  }
+  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-month.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-month.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultMonth-inputWidth);
+  }
+  div.kijs-field-month.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-month.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-month.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  .kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
+    height: 100%;
+  }
+  /* ******************
+       * Field DateTime
+       ****************** */
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper {
+    height: var(--field-height);
+  }
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--field-borderColor);
+    padding: 0 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+  }
+  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-datetime.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-datetime.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultDateRange-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-disableFlex.kijs-date > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultDate-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-disableFlex.kijs-time > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultTime-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-disableFlex.kijs-dateTime > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultDateTime-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-disableFlex.kijs-week > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultWeek-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-disableFlex.kijs-range > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultDateRange-inputWidth);
+  }
+  div.kijs-field-datetime.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-datetime.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-datetime.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
+    height: 100%;
+  }
+  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-datepicker {
+    border: 0 none transparent;
+  }
+  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-timepicker {
+    border: 0 none transparent;
+  }
+  /* ******************
+       * Field Memo
+       ****************** */
+  div.kijs-field-memo > .kijs-content {
+    align-self: stretch;
+  }
+  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    color: var(--field-fontColor);
+    border: 1px solid var(--field-borderColor);
+    background-color: var(--field-bkgrndColor);
+    padding: 6px 4px 2px 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+    resize: none;
+    outline: none;
+  }
+  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-memo.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-memo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-memo.kijs-error > .kijs-content > .kijs-inputwrapper > textarea {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-memo.kijs-disabled > .kijs-content > .kijs-inputwrapper > textarea,
+  div.kijs-field-memo.kijs-readonly > .kijs-content > .kijs-inputwrapper > textarea {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  /* ******************
+       * Field ListView
+       ****************** */
+  div.kijs-field-listview > .kijs-content {
+    align-self: stretch;
+  }
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+    flex: 1;
+  }
+  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-listview.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+    background-color: var(--icon-error-bkgrndColor);
+  }
+  div.kijs-field-listview.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-listview.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+    border-color: var(--field-borderColor);
+  }
+  /* ******************
+       * OptionGroup
+       * CheckboxGroup
+       ****************** */
+  div.kijs-field-optiongroup > .kijs-content,
+  div.kijs-field-checkboxgroup > .kijs-content {
+    align-self: stretch;
+  }
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+  }
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+    flex: 1;
+    background-color: transparent;
+    border-color: transparent;
+  }
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
+    background-color: transparent;
+  }
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
+  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
+  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
+    color: var(--field-focus-borderColor);
+  }
+  div.kijs-field-optiongroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview,
+  div.kijs-field-checkboxgroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
+    background-color: var(--icon-error-bkgrndColor);
+  }
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
+    flex: none;
+    padding: 0;
+  }
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
+    margin: 0 3px 0 0;
+  }
+  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner,
+  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
+    gap: 3px;
+  }
+  /* ******************
+       * Field Combo
+       ****************** */
+  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper {
+    height: var(--field-height);
+  }
+  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    border: 1px solid var(--field-borderColor);
+    padding: 0 4px;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+  }
+  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-combo.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-combo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-combo.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-combo.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-combo.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview {
+    height: 100%;
+    border: 0;
+  }
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview > .kijs-container-inner {
+    display: flex;
+    flex-direction: column;
+  }
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner {
+    display: flex;
+    flex-direction: row;
+  }
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+    flex: 1;
+    padding-bottom: 3px;
+  }
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-placeholder {
+    border: 1px solid transparent;
+    font-family: var(--default-fontFamily);
+    font-size: var(--default-fontSize);
+    color: var(--default-fontColor);
+    background-color: var(--field-disabled-bkgrndColor);
+    font-style: italic;
+  }
+  /* ******************
+       * Field Range
+       ****************** */
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 1px;
+    margin: 0 0 4px 0;
+    background: var(--range-bkgrndColor);
+    outline: none;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--range-btnColor);
+    cursor: pointer;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
+    border: 0;
+    background-color: var(--range-btnColor);
+    cursor: pointer;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+    background-color: var(--field-focus-borderColor);
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
+    background-color: var(--field-focus-borderColor);
+  }
+  div.kijs-field-range.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-range.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    background-color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+    background-color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
+    background-color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  /* ******************
+       * Field Checkbox
+       ****************** */
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: var(--field-height);
+    outline: none;
+  }
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
+    flex: none;
+    margin: 0 4px 0 0;
+    font-size: var(--checkbox-fontSize);
+    line-height: var(--field-lineHeight);
+    background-color: var(--field-bkgrndColor);
+    border-radius: 2px;
+    color: var(--field-fontColor);
+    cursor: pointer;
+  }
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-icon {
+    flex: none;
+    margin: 0 4px 0 0;
+    color: var(--button-icon-fontColor);
+  }
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-caption {
+    flex: 1;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+    color: var(--field-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
+    margin: 0;
+  }
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper:focus > .kijs-checkbox-input {
+    color: var(--field-focus-borderColor);
+  }
+  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
+  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input,
+  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  /* ******************
+       * Field Switch
+       ****************** */
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: var(--field-height);
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
+    flex: none;
+    height: var(--switch-height);
+    width: calc(var(--switch-height) * 1.6);
+    margin: 0 4px 0 0;
+    padding: 0;
+    border-radius: calc(var(--switch-height) * 0.5);
+    border: 1px solid var(--field-borderColor);
+    background-color: var(--field-bkgrndColor);
+    cursor: pointer;
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+    height: calc(var(--switch-height) - 1.5px);
+    width: calc(var(--switch-height) - 1.5px);
+    border-radius: calc((var(--switch-height) - 1.5px) * 0.5);
+    background-color: var(--field-item-bkgrndColor);
+    transition: margin-left 0.2s;
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus {
+    border-color: var(--field-focus-borderColor);
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:hover > .kijs-togglePoint {
+    background-color: var(--field-item-focus-bkgrndColor);
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-icon {
+    flex: none;
+    margin: 0 4px 0 0;
+    color: var(--button-icon-fontColor);
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-caption {
+    flex: 1;
+    font-family: var(--field-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+    color: var(--field-fontColor);
+    /* selektion von Text erlauben */
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > *:last-child {
+    margin: 0;
+  }
+  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
+    background-color: var(--okColor);
+  }
+  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+    margin-left: calc(var(--switch-height) * 0.6);
+  }
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint,
+  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
+    background-color: var(--field-disabled-fontColor);
+  }
+  /* ******************
+       * Field Display
+       ****************** */
+  div.kijs-field-display {
+    /* Ergänzungen */
+  }
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper {
+    min-height: var(--field-height);
+  }
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div {
+    padding-top: var(--field-label-paddingTop);
+    padding-bottom: 2px;
+    padding-right: 0;
+    color: var(--field-fontColor);
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    line-height: var(--field-lineHeight);
+    overflow-wrap: break-word;
+    -webkit-user-select: text;
+    user-select: text;
+    cursor: default;
+  }
+  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div > a {
+    color: var(--field-fontColor);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  div.kijs-field-display.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-display.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-display.kijs-largeTitle > .kijs-content > .kijs-inputwrapper > div {
+    font-size: 16px;
+    line-height: 18px;
+  }
+  div.kijs-field-display.kijs-title > .kijs-content > .kijs-inputwrapper > div {
+    font-weight: bold;
+  }
+  div.kijs-field-display.kijs-error > .kijs-content > .kijs-inputwrapper > div {
+    color: var(--errorColor);
+  }
+  div.kijs-field-display.kijs-help > .kijs-content > .kijs-inputwrapper > div {
+    color: var(--helpColor);
+  }
+  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div > a {
+    color: var(--field-disabled-fontColor);
+    text-decoration: none;
+    pointer-events: none;
+  }
+  /* ******************
+       * Field AceEditor
+       ****************** */
+  div.kijs-field-aceeditor > .kijs-content {
+    align-self: stretch;
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
+    outline: none;
+    min-width: 160px;
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor {
+    height: 100%;
+    border: 1px solid var(--field-borderColor);
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_gutter {
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_content {
+    background-color: var(--field-bkgrndColor);
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-v {
+    overflow-y: auto;
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-h {
+    overflow-x: auto;
+  }
+  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor.ace_focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-aceeditor.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-aceeditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-aceeditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-aceeditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
+  div.kijs-field-aceeditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  /* ******************
+       * Field QuillEditor
+       ****************** */
+  div.kijs-field-quilleditor > .kijs-content {
+    align-self: stretch;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper * {
+    overflow: initial;
+    margin: initial;
+    padding: initial;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar {
+    flex: none;
+    border-top: 1px solid var(--field-borderColor) !important;
+    border-left: 1px solid var(--field-borderColor) !important;
+    border-right: 1px solid var(--field-borderColor) !important;
+    border-bottom: 0 !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container {
+    flex: 1;
+    border: 0 !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-snow {
+    overflow: hidden;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-bubble {
+    overflow: visible;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor {
+    overflow-y: auto;
+    border: 1px solid var(--field-borderColor);
+    background-color: var(--field-bkgrndColor);
+    font-family: var(--default-fontFamily) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor:focus {
+    border: 1px solid var(--field-focus-borderColor);
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-tooltip {
+    position: fixed;
+  }
+  div.kijs-field-quilleditor.kijs-disableFlex {
+    align-self: start;
+    flex: none;
+  }
+  div.kijs-field-quilleditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
+    width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-quilleditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
+    background-color: var(--field-error-bkgrndColor);
+  }
+  div.kijs-field-quilleditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
+  div.kijs-field-quilleditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
+    background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
        * Grid
@@ -2226,8 +3194,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    height: 25px;
-    padding: 4px 6px;
+    height: var(--field-height);
+    padding-top: 5px;
+    padding-right: 6px;
+    padding-bottom: 0;
+    padding-left: 4px;
     color: var(--default-fontColor);
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -2246,8 +3217,8 @@
   div.kijs-grid table > tr > td.kijs-grid-cell-checkbox {
     text-align: center;
     font-family: 'Font Awesome 6 Free';
-    font-size: 14px;
-    padding: 6px 0 0 0;
+    font-size: var(--checkbox-fontSize);
+    padding: 5px 0 0 0;
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-checkbox:hover {
     color: var(--field-focus-borderColor);
@@ -2259,8 +3230,8 @@
     text-align: center;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
-    font-size: 14px;
-    padding: 6px 0 0 0;
+    font-size: var(--icon-fontSize);
+    padding: 4px 0 0 0;
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-dirty {
     background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+PHN2ZyB3aWR0aD0iNSIgaGVpZ2h0PSI1IiB2aWV3Qm94PSIwIDAgNSA1IiB2ZXJzaW9uPSIxLjEiIGlkPSJzdmc1IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnN2Zz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiNjMDAwMDA7c3Ryb2tlOm5vbmU7ZmlsbC1vcGFjaXR5OjEiIGQ9Ik0gMCwwIEggNSBMIDAsNSBaIi8+PC9nPjwvc3ZnPgo=');
@@ -2517,987 +3488,6 @@
     color: var(--buttonGroup-button-focus-fontColor);
   }
   /* ******************
-       * Field
-       ****************** */
-  div.kijs-field {
-    flex: 1 0 auto;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    min-height: 25px;
-    overflow: visible;
-    /* für Badges */
-  }
-  div.kijs-field > .kijs-label {
-    display: block;
-    flex: none;
-    color: var(--field-label-fontColor);
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-    padding: 6px 4px 3px 0;
-    overflow: hidden;
-    overflow-wrap: break-word;
-    text-overflow: ellipsis;
-    /* selektion von Text erlauben */
-    -webkit-user-select: text;
-    user-select: text;
-    /* falls das Label leer ist: kein padding-right */
-  }
-  div.kijs-field > .kijs-label:empty {
-    padding-right: 0;
-  }
-  div.kijs-field > .kijs-content {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    overflow: visible;
-    /* für Badges */
-  }
-  div.kijs-field > .kijs-content > .kijs-inputwrapper {
-    flex: 1;
-    position: relative;
-    display: block;
-  }
-  div.kijs-field > .kijs-content > .kijs-inputwrapper > input {
-    outline: none;
-    color: var(--field-fontColor);
-    background-color: var(--field-bkgrndColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons {
-    flex: none;
-    display: flex;
-    flex-direction: row;
-    overflow: visible;
-    /* für Badges */
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button {
-    margin: 0;
-    height: 100%;
-    padding: 3px 4px;
-    align-items: flex-start;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: none;
-    border-radius: 0;
-    color: var(--button-icon-fontColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-smallpaddings {
-    width: 20px;
-    padding: 3px 4px;
-    justify-content: center;
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-smallpaddings > .kijs-icon {
-    margin: 0;
-    padding: 0;
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-default {
-    box-shadow: none;
-  }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button:hover {
-    background-color: var(--viewport-bkgrndColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner {
-    flex: none;
-    display: flex;
-    flex-direction: row;
-    overflow: visible;
-    /* für Badges */
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
-    margin: 0 0 0 2px;
-    height: 25px;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
-    margin: 0;
-    height: 100%;
-    padding: 3px 4px;
-    align-items: flex-start;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: none;
-    border-radius: 0;
-    color: var(--button-icon-fontColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
-    width: 20px;
-    padding: 3px 4px;
-    justify-content: center;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
-    margin: 0;
-    padding: 0;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
-    box-shadow: none;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
-    background-color: var(--viewport-bkgrndColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon {
-    margin: 0 0 0 2px;
-    height: 25px;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline {
-    margin: 0;
-    height: 100%;
-    padding: 3px 4px;
-    align-items: flex-start;
-    border-radius: 0px;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: 0;
-    background-color: var(--button-bkgrndColor);
-    color: var(--button-icon-fontColor);
-    cursor: pointer;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-default {
-    box-shadow: none;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-hidden {
-    display: none;
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline:hover {
-    background-color: var(--viewport-bkgrndColor);
-  }
-  div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-disabled {
-    background-color: var(--field-disabled-bkgrndColor);
-    color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  div.kijs-field > .kijs-content > .kijs-icon-error {
-    flex: none;
-    height: 16px;
-    margin: 3px 0 0 2px;
-    color: var(--icon-error-fontColor);
-    cursor: default;
-  }
-  div.kijs-field > .kijs-content > .kijs-icon-help {
-    flex: none;
-    height: 16px;
-    margin: 3px 0 0 2px;
-    color: var(--icon-help-fontColor);
-    cursor: default;
-  }
-  div.kijs-field.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field.kijs-labelpos-top {
-    flex-direction: column;
-    align-items: normal;
-  }
-  div.kijs-field.kijs-labelpos-top > .kijs-label {
-    width: auto !important;
-  }
-  @media all and (max-width: 500px) {
-    div.kijs-field.kijs-labelpos-auto {
-      flex-direction: column;
-      align-items: normal;
-    }
-    div.kijs-field.kijs-labelpos-auto > .kijs-label {
-      width: auto !important;
-    }
-  }
-  /* ******************
-       * Field Text
-       * Field Iban
-       * Field SozVersNr
-       * Field Url
-       * Field Email
-       * Field Phone
-       * Field Number
-       ****************** */
-  div.kijs-field-text > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-url > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-email > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-number > .kijs-content > .kijs-inputwrapper {
-    height: 25px;
-  }
-  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    border: 1px solid var(--field-borderColor);
-    padding: 0 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-  }
-  div.kijs-field-text > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-url > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-sozversnr > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-phone > .kijs-content > .kijs-inputwrapper > input:focus,
-  div.kijs-field-number > .kijs-content > .kijs-inputwrapper > input:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-text.kijs-disableFlex,
-  div.kijs-field-url.kijs-disableFlex,
-  div.kijs-field-email.kijs-disableFlex,
-  div.kijs-field-iban.kijs-disableFlex,
-  div.kijs-field-sozversnr.kijs-disableFlex,
-  div.kijs-field-phone.kijs-disableFlex,
-  div.kijs-field-number.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-text.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-iban.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-text.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-error > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-text.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-text.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-url.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-email.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-iban.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-sozversnr.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-phone.kijs-readonly > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-number.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  div.kijs-field-number > .kijs-content > .kijs-buttons {
-    flex: none;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button {
-    flex: 1;
-    padding: 0 3px;
-    align-items: center;
-  }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button:last-child {
-    border-top: none;
-  }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button > .kijs-icon {
-    font-size: 11px;
-    line-height: 11px;
-  }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-hidden {
-    display: none;
-  }
-  div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-email.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 160px;
-  }
-  div.kijs-field-phone.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 130px;
-  }
-  div.kijs-field-sozversnr.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 120px;
-  }
-  div.kijs-field-number.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 80px;
-  }
-  /* ******************
-       * Field Color
-       ****************** */
-  div.kijs-field-color {
-    overflow: visible;
-  }
-  div.kijs-field-color > .kijs-content > .kijs-inputwrapper {
-    overflow: visible;
-    height: 25px;
-  }
-  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input {
-    width: 25px;
-    height: 100%;
-    border: 1px solid var(--field-borderColor);
-    border-radius: 2px;
-    padding: 2px;
-    overflow: hidden;
-    cursor: pointer;
-  }
-  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:hover,
-  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:focus {
-    background-color: var(--button-focus-bkgrndColor);
-  }
-  div.kijs-field-color.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-color.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 25px;
-  }
-  /* ******************
-       * Field Password
-       ****************** */
-  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    border: 1px solid var(--field-borderColor);
-    padding: 2px 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-  }
-  div.kijs-field-password > .kijs-content > .kijs-inputwrapper > input:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-password.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-password.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-password.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-password.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-password.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  /* ******************
-       * Field Month
-       ****************** */
-  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    border: 1px solid var(--field-borderColor);
-    padding: 0 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-  }
-  div.kijs-field-month > .kijs-content > .kijs-inputwrapper > input:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-month.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-month.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 130px;
-  }
-  div.kijs-field-month.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-month.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-month.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  .kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
-    height: 100%;
-  }
-  /* ******************
-       * Field DateTime
-       ****************** */
-  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper {
-    height: 25px;
-  }
-  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    border: 1px solid var(--field-borderColor);
-    padding: 0 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-  }
-  div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-datetime.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-datetime.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 170px;
-  }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-date > .kijs-content > .kijs-inputwrapper {
-    width: 80px;
-  }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-time > .kijs-content > .kijs-inputwrapper {
-    width: 80px;
-  }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-dateTime > .kijs-content > .kijs-inputwrapper {
-    width: 130px;
-  }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-week > .kijs-content > .kijs-inputwrapper {
-    width: 80px;
-  }
-  div.kijs-field-datetime.kijs-disableFlex.kijs-range > .kijs-content > .kijs-inputwrapper {
-    width: 170px;
-  }
-  div.kijs-field-datetime.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-datetime.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-datetime.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
-    height: 100%;
-  }
-  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-datepicker {
-    border: 0 none transparent;
-  }
-  .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-timepicker {
-    border: 0 none transparent;
-  }
-  /* ******************
-       * Field Memo
-       ****************** */
-  div.kijs-field-memo > .kijs-content {
-    align-self: stretch;
-  }
-  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    color: var(--field-fontColor);
-    border: 1px solid var(--field-borderColor);
-    background-color: var(--field-bkgrndColor);
-    padding: 6px 4px 2px 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-    resize: none;
-    outline: none;
-  }
-  div.kijs-field-memo > .kijs-content > .kijs-inputwrapper > textarea:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-memo.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-memo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-memo.kijs-error > .kijs-content > .kijs-inputwrapper > textarea {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-memo.kijs-disabled > .kijs-content > .kijs-inputwrapper > textarea,
-  div.kijs-field-memo.kijs-readonly > .kijs-content > .kijs-inputwrapper > textarea {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  /* ******************
-       * Field ListView
-       ****************** */
-  div.kijs-field-listview > .kijs-content {
-    align-self: stretch;
-  }
-  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--field-bkgrndColor);
-  }
-  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview {
-    flex: 1;
-  }
-  div.kijs-field-listview > .kijs-content > .kijs-inputwrapper > .kijs-listview:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-listview.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
-    background-color: var(--icon-error-bkgrndColor);
-  }
-  div.kijs-field-listview.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-listview.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview {
-    border-color: var(--field-borderColor);
-  }
-  /* ******************
-       * OptionGroup
-       * CheckboxGroup
-       ****************** */
-  div.kijs-field-optiongroup > .kijs-content,
-  div.kijs-field-checkboxgroup > .kijs-content {
-    align-self: stretch;
-  }
-  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper,
-  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper {
-    display: flex;
-    flex-direction: column;
-    background-color: transparent;
-  }
-  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview {
-    flex: 1;
-    background-color: transparent;
-    border-color: transparent;
-  }
-  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element,
-  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
-    background-color: transparent;
-  }
-  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
-  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:focus,
-  div.kijs-field-optiongroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover,
-  div.kijs-field-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element:hover {
-    color: var(--field-focus-borderColor);
-  }
-  div.kijs-field-optiongroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview,
-  div.kijs-field-checkboxgroup.kijs-error > .kijs-content > .kijs-inputwrapper > .kijs-listview {
-    background-color: var(--icon-error-bkgrndColor);
-  }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 4px;
-  }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
-    flex: none;
-    padding: 0;
-  }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes,
-  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
-    margin: 0 2px 0 0;
-  }
-  div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner,
-  div.kijs-field-checkboxgroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
-    gap: 2px;
-  }
-  /* ******************
-       * Field Combo
-       ****************** */
-  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input {
-    display: block;
-    height: 100%;
-    width: 100%;
-    margin: 0;
-    border: 1px solid var(--field-borderColor);
-    padding: 0 4px;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-  }
-  div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-combo.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-combo.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 163px;
-  }
-  div.kijs-field-combo.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-combo.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-combo.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview {
-    height: 100%;
-    border: 0;
-  }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview > .kijs-container-inner {
-    display: flex;
-    flex-direction: column;
-  }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner {
-    display: flex;
-    flex-direction: row;
-  }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
-    flex: 1;
-    padding-bottom: 3px;
-  }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-placeholder {
-    border: 1px solid transparent;
-    font-family: var(--default-fontFamily);
-    font-size: var(--default-fontSize);
-    color: var(--default-fontColor);
-    background-color: var(--field-disabled-bkgrndColor);
-    font-style: italic;
-  }
-  /* ******************
-       * Field Range
-       ****************** */
-  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 1px;
-    margin: 0 0 4px 0;
-    background: var(--range-bkgrndColor);
-    outline: none;
-  }
-  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    background: var(--range-btnColor);
-    cursor: pointer;
-  }
-  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
-    border: 0;
-    background-color: var(--range-btnColor);
-    cursor: pointer;
-  }
-  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
-    background-color: var(--field-focus-borderColor);
-  }
-  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
-    background-color: var(--field-focus-borderColor);
-  }
-  div.kijs-field-range.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-range.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
-    background-color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
-    background-color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
-    background-color: var(--field-disabled-fontColor);
-    cursor: default;
-  }
-  /* ******************
-       * Field Checkbox
-       ****************** */
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 25px;
-    outline: none;
-  }
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
-    flex: none;
-    margin: 0 4px 0 0;
-    font-size: 15px;
-    line-height: var(--field-lineHeight);
-    background-color: var(--field-bkgrndColor);
-    border-radius: 2px;
-    color: var(--field-fontColor);
-    cursor: pointer;
-  }
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-icon {
-    flex: none;
-    margin: 0 4px 0 0;
-    color: var(--button-icon-fontColor);
-  }
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-caption {
-    flex: 1;
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-    color: var(--field-fontColor);
-    /* selektion von Text erlauben */
-    -webkit-user-select: text;
-    user-select: text;
-  }
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
-    margin: 0;
-  }
-  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper:focus > .kijs-checkbox-input {
-    color: var(--field-focus-borderColor);
-  }
-  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
-  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-field-checkbox.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input,
-  div.kijs-field-checkbox.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  /* ******************
-       * Field Switch
-       ****************** */
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    height: 25px;
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
-    flex: none;
-    height: 20px;
-    width: 34px;
-    margin: 0 4px 0 0;
-    padding: 1px 0 0 1px;
-    border-radius: 10px;
-    border: 1px solid var(--field-borderColor);
-    background-color: var(--field-bkgrndColor);
-    cursor: pointer;
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
-    height: 16px;
-    width: 16px;
-    border-radius: 8px;
-    background-color: var(--field-item-bkgrndColor);
-    transition: margin-left 0.2s;
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus {
-    border-color: var(--field-focus-borderColor);
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:hover > .kijs-togglePoint {
-    background-color: var(--field-item-focus-bkgrndColor);
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-icon {
-    flex: none;
-    margin: 0 4px 0 0;
-    color: var(--button-icon-fontColor);
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-caption {
-    flex: 1;
-    font-family: var(--field-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-    color: var(--field-fontColor);
-    /* selektion von Text erlauben */
-    -webkit-user-select: text;
-    user-select: text;
-  }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > *:last-child {
-    margin: 0;
-  }
-  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
-    background-color: var(--okColor);
-  }
-  div.kijs-field-switch.kijs-checked > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
-    margin-left: 14px;
-  }
-  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > *,
-  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > * {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder,
-  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder {
-    background-color: var(--field-bkgrndColor);
-  }
-  div.kijs-field-switch.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint,
-  div.kijs-field-switch.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder > .kijs-togglePoint {
-    background-color: var(--field-disabled-fontColor);
-  }
-  /* ******************
-       * Field Display
-       ****************** */
-  div.kijs-field-display {
-    /* Ergänzungen */
-  }
-  div.kijs-field-display > .kijs-content > .kijs-inputwrapper {
-    min-height: 25px;
-  }
-  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div {
-    padding: 6px 0 2px 0;
-    color: var(--field-fontColor);
-    font-family: var(--default-fontFamily);
-    font-size: var(--field-fontSize);
-    line-height: var(--field-lineHeight);
-    overflow-wrap: break-word;
-    -webkit-user-select: text;
-    user-select: text;
-    cursor: default;
-  }
-  div.kijs-field-display > .kijs-content > .kijs-inputwrapper > div > a {
-    color: var(--field-fontColor);
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  div.kijs-field-display.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-display.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-display.kijs-largeTitle > .kijs-content > .kijs-inputwrapper > div {
-    font-size: 16px;
-    line-height: 18px;
-  }
-  div.kijs-field-display.kijs-title > .kijs-content > .kijs-inputwrapper > div {
-    font-weight: bold;
-  }
-  div.kijs-field-display.kijs-error > .kijs-content > .kijs-inputwrapper > div {
-    color: var(--errorColor);
-  }
-  div.kijs-field-display.kijs-help > .kijs-content > .kijs-inputwrapper > div {
-    color: var(--helpColor);
-  }
-  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-field-display.kijs-disabled > .kijs-content > .kijs-inputwrapper > div > a {
-    color: var(--field-disabled-fontColor);
-    text-decoration: none;
-    pointer-events: none;
-  }
-  /* ******************
-       * Field AceEditor
-       ****************** */
-  div.kijs-field-aceeditor > .kijs-content {
-    align-self: stretch;
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper {
-    flex: 1;
-    outline: none;
-    min-width: 160px;
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor {
-    height: 100%;
-    border: 1px solid var(--field-borderColor);
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_gutter {
-    background-color: var(--field-bkgrndColor);
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_content {
-    background-color: var(--field-bkgrndColor);
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-v {
-    overflow-y: auto;
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor .ace_scrollbar-h {
-    overflow-x: auto;
-  }
-  div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper > .ace_editor.ace_focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-aceeditor.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-aceeditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-aceeditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-aceeditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
-  div.kijs-field-aceeditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  /* ******************
-       * Field QuillEditor
-       ****************** */
-  div.kijs-field-quilleditor > .kijs-content {
-    align-self: stretch;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-width: 160px;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper * {
-    overflow: initial;
-    margin: initial;
-    padding: initial;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar {
-    flex: none;
-    border-top: 1px solid var(--field-borderColor) !important;
-    border-left: 1px solid var(--field-borderColor) !important;
-    border-right: 1px solid var(--field-borderColor) !important;
-    border-bottom: 0 !important;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container {
-    flex: 1;
-    border: 0 !important;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-snow {
-    overflow: hidden;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container.ql-bubble {
-    overflow: visible;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor {
-    overflow-y: auto;
-    border: 1px solid var(--field-borderColor);
-    background-color: var(--field-bkgrndColor);
-    font-family: var(--default-fontFamily) !important;
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-editor:focus {
-    border: 1px solid var(--field-focus-borderColor);
-  }
-  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container > .ql-tooltip {
-    position: fixed;
-  }
-  div.kijs-field-quilleditor.kijs-disableFlex {
-    align-self: start;
-    flex: none;
-  }
-  div.kijs-field-quilleditor.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
-    width: 180px;
-  }
-  div.kijs-field-quilleditor.kijs-error > .kijs-content > .kijs-inputwrapper > div {
-    background-color: var(--field-error-bkgrndColor);
-  }
-  div.kijs-field-quilleditor.kijs-disabled > .kijs-content > .kijs-inputwrapper > div,
-  div.kijs-field-quilleditor.kijs-readonly > .kijs-content > .kijs-inputwrapper > div {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  /* ******************
        * Animationen
        ****************** */
   /* Animationen zu den Spin- und Pulse-Effekten */
@@ -3663,7 +3653,7 @@
   }
   .kijs-flexform > .kijs-container-inner > * {
     flex: none;
-    max-width: 500px;
+    max-width: 600px;
   }
   /* Um Elemente nebeneinander darstellen zu können, z.B. in Formularen */
   /* Dazu einen kijs.gui.Container mit den gewünschten kijs.gui.Fields */

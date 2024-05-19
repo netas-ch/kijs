@@ -95,6 +95,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         // Spinbox mit MonthPicker
         this._spinBoxEl = new kijs.gui.SpinBox({
             target: this._headerBar,
+            //offsetX: -1,
             autoSize: 'none',
             targetDomProperty: 'dom',
             ownerNodes: [this._headerBar.dom],

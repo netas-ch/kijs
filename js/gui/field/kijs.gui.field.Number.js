@@ -49,6 +49,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         // Spin Up/Down Buttons
         this._spinUpButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-up',
             disableFlex: false,
             nodeAttribute: {
@@ -64,6 +65,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         
         this._spinDownButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-down',
             disableFlex: false,
             nodeAttribute: {

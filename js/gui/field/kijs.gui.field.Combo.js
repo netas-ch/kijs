@@ -47,6 +47,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-down',
             disableFlex: true,
             nodeAttribute: {

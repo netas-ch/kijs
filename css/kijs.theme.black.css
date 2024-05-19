@@ -33,9 +33,55 @@
 }
 
 
-/* Farbzuweisungen */
-/* --------------- */
+/* Masse und Farbzuweisungen */
+/* ------------------------- */
 :root {
+    /* Masse */
+    --default-fontSize: 14px;
+    --default-lineHeight: 16px;
+    
+    --icon-fontSize: 20px;
+    
+    --button-fontSize: 14px;
+    --button-lineHeight: 16px;
+    --button-height: 30px;
+    
+    --field-fontSize: 14px;
+    --field-lineHeight: 16px;
+    --field-height: 30px;
+    --field-label-paddingTop: 7px;
+    --checkbox-fontSize: 20px;
+    --switch-height: 28px;
+    
+    --badge-fontSize: 12px;
+    --badge-lineHeight: 16px;
+    
+    --headerBar-fontSize: 16px;
+    --footerBar-fontSize: 14px;
+    
+    --msgbox-fontSize: 14px;
+    --msgbox-lineHeight: 16px;
+
+    --item-fontSize: 14px;
+    --item-lineHeight: 16px;
+    --item-label-fontSize: 12px;
+    
+    --panel-collapse-height: 36px;
+    --panel-collapse-width: 36px;
+    
+    /* Standard Feldbreiten */
+    --defaultField-inputWidth: 220px;
+    --defaultNumber-inputWidth: 100px;
+    --defaultMonth-inputWidth: 130px;
+    --defaultDate-inputWidth: 90px;
+    --defaultTime-inputWidth: 70px;
+    --defaultDateTime-inputWidth: 150px;
+    --defaultWeek-inputWidth: 90px;
+    --defaultDateRange-inputWidth: 190px;
+    --defaultPhone-inputWidth: 150px;
+    --defaultSozVersNr-inputWidth: 140px;
+    
+    
     /* Farbzuweisungen */
     --viewport-bkgrndColor: #111;
     --splitter-overlay-bkgrndColor: var(--grey06);
@@ -45,8 +91,6 @@
     --default-fontFamily: 'Roboto', sans-serif;
     --default-fontColor: var(--grey11);
     --default-disabled-fontColor: var(--grey08);
-    --default-fontSize: 12px;
-    --default-lineHeight: 14px;
 
     
     /* Separator */
@@ -61,8 +105,6 @@
     --button-bkgrndColor: var(--grey03);
     --button-borderColor: var(--grey05);
     --button-fontColor: var(--grey11);
-    --button-fontSize: 12px;
-    --button-lineHeight: 14px;
 
     --button-icon-fontColor: var(--grey10);
 
@@ -124,15 +166,11 @@
     /* Badge */
     --badge-bkgrndColor: var(--accentColor3);
     --badge-fontColor: var(--grey00);
-    --badge-fontSize: 10px;
-    --badge-lineHeight: 14px;
     --badge-disabled-bkgrndColor: var(--grey06);
     --badge-disabled-fontColor: var(--grey08);
 
 
     /* Panel */
-    --panel-collapse-height: 30px;
-    --panel-collapse-width: 30px;
     --panel-bkgrndColor: var(--grey02);
     --panel-innerBorderColor: var(--grey05);
     --panel-borderColor: var(--grey06);
@@ -152,19 +190,12 @@
     --bar-button-icon-fontColor: var(--grey11);
     --bar-button-icon-disabled-fontColor: var(--grey05);
 
-    --headerBar-fontSize: 14px;
-    --footerBar-fontSize: 12px;
-
 
     /* MsgBox */
     --msgbox-fontColor: var(--grey11);
-    --msgbox-fontSize: 12px;
-    --msgbox-lineHeight: 14px;
 
 
     /* Field */
-    --field-fontSize: 12px;
-    --field-lineHeight: 14px;
     --field-fontColor: var(--grey11);
     --field-bkgrndColor: var(--grey01);
     --field-borderColor: var(--grey07);
@@ -187,8 +218,6 @@
     --item-bkgrndColor: var(--grey02);
     --item-borderColor: var(--grey03);
     --item-fontColor: var(--grey11);
-    --item-fontSize: 12px;
-    --item-lineHeight: 14px;
     
     --item-today-fontColor: var(--accentColor);
     
@@ -210,7 +239,7 @@
 
     --item-label-fontColor: var(--grey08);
     --item-label-disabled-fontColor: var(--grey08);
-    --item-label-fontSize: 10px;
+
 
     /* Clock */
     --clock-bkgrndColor: var(--grey04);

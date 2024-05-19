@@ -76,6 +76,7 @@ home.sc.field_Memo = class home_sc_field_Memo {
                     xtype: 'kijs.gui.field.Memo',
                     label: 'Button inline',
                     helpText: 'Hilfe',
+                    inputHeight: 100,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

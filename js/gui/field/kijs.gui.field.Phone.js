@@ -20,6 +20,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         
         this._linkButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.phone',
             tooltip: kijs.getText('Anrufen'),
             nodeAttribute: {

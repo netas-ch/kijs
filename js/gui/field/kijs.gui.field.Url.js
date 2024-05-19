@@ -17,6 +17,7 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
         
         this._linkButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.arrow-up-right-from-square',
             tooltip: kijs.getText('Link in neuem Tab öffnen'),
             disableFlex: true,

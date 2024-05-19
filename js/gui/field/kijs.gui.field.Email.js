@@ -15,6 +15,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
         this._linkButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.envelope',
             tooltip: kijs.getText('E-Mail erstellen'),
             disableFlex: true,
