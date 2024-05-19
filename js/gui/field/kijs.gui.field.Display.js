@@ -364,6 +364,23 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     _linkify(txt) {
         let pattern;
         
+        // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
+        pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+        txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
+
+        // URLs beginnend mit 'www.'
+        // (without // before it, or it'd re-link the ones done above).
+        pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+        txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');
+
+        // E-Mailadressen
+        pattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');
+        
+        /*
+        // 19.05.2024/gkipfer: Negative Lookbehind (?<!...) lösen im Safari gleich beim laden der Javascript-Datei einen Fehler aus.
+        // Ich habe keine Möglichekit gefunden dies zu Umgehen. Deshalb wird nun ein vereinfachtes RegExp ausgeführt.
+        
         // Bei allen patterns darf vorher kein href=" stehen (?<!href\s*=\s*[\"\'])
         
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
@@ -377,7 +394,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // E-Mailadressen
         pattern = /(?<!href\s*=\s*[\"\'])(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-        txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');
+        txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');*/
 
         return txt;
     }
