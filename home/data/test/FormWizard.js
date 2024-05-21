@@ -122,6 +122,10 @@ home.test.FormWizard = class home_test_FormWizard {
                 }
             ],
             footerElements:[
+                {
+                    xtype: 'kijs.gui.Element',
+                    style: { flex: 1 }
+                },
                 this._btnPrevious,
                 this._btnNext
             ]

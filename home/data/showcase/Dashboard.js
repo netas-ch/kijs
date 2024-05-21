@@ -199,6 +199,9 @@ home.sc.DashboardFormPanel = class home_sc_DashboardFormPanel extends kijs.gui.d
             collapsible: 'top',
             footerElements:[
                 {
+                    xtype: 'kijs.gui.Element',
+                    style: { flex: 1 }
+                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'Übernehmen',
                     on: {

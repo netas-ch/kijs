@@ -28,6 +28,10 @@ Variablen für Standard-Feldbreiten:
  - ```--defaultPhone-inputWidth: 150px;```  
  - ```--defaultSozVersNr-inputWidth: 140px;```  
 
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
+in kijs.theme.default.css.  
+
+
 ### Theme kijs.theme.default.css angepasst
 Alles wurde um ca. 20% vergrössert, damit die Bedienung auf Mobilen-Geräten 
 besser ist.  
@@ -69,7 +73,21 @@ Hier die vorgenommenen Anpassungen:
 | --defaultPhone-inputWidth     | 130px      | 150px      |
 | --defaultSozVersNr-inputWidth | 120px      | 140px      |
 
+### kijs.gui.Panel: die footerElements werden nicht mehr rechtsbündig ausgerichtet
+Bisher wurden footerElements mit ```justify-content: end``` rechtsbündig 
+ausgerichtet. Falls die Elements nicht genügend Platz hatten, erschien daber keine 
+scrollbar. Der Grund ist, dass die Browser nicht in Minus scrollen können.  
+Wenn gesrollt werden soll, sollte ein Element dehalb immer ```justify-content: start``` 
+haben.  
+Um die Elemente trotzdem rechtsbündig auszurichten, kann als erstes Kind ein $
+```kijs.gui.Element``` mit ```flex: 1``` eingefügt werden.  
 
+**UPDATE TIPP:** Quellcode nach ```footerElements``` durchsuchen und überall zu 
+beginn folgendes Element einfügen:   
+    {
+        xtype: 'kijs.gui.Element',
+        style: { flex: 1 }
+    }
 
 ### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
 Das Event ```contextMenu``` kommt beim  
@@ -87,6 +105,9 @@ Das Event ```contextMenu``` kommt beim
 - Neue CSS-Klasse ```kijs-largeTitle```. Damit wird die font-size auf 16px gestellt.  
 
 ### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden
+
+### kijs.gui.container.Scroll
+Funktioniert jetzt auch auf Mobilen Geräten.  
 
 
 

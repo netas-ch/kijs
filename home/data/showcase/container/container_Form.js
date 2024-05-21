@@ -241,6 +241,9 @@ home.sc.container_Form = class home_sc_container_Form {
                     
                     footerElements: [
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'Leeren',
                             on: {
@@ -328,6 +331,9 @@ home.sc.container_Form = class home_sc_container_Form {
                     
                     footerElements: [
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'RPC Load',
                             on: {

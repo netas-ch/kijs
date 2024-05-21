@@ -85,6 +85,9 @@ home.sc.Mask = class home_sc_Mask {
                     footerBarCaption: 'Meine FooterBar',
                     footerElements: [
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'OK',
                             iconMap: 'kijs.iconMap.Fa.check',

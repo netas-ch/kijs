@@ -158,6 +158,9 @@ home.sc.container_Tab = class home_sc_container_Tab {
                     ],
                     footerElements: [
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.field.Display',
                             value: 'Die Registerkarten können per Drag&Drop verschoben werden.'
                         }

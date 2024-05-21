@@ -323,6 +323,12 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 
             }
             
+            // Abstandshalter
+            footerElements.push({
+                xtype: 'kijs.gui.Element',
+                style: { flex: 1 }
+            });
+                        
             // Buttons
             kijs.Array.each(config.buttons, function(button) {
                 if (!(button instanceof kijs.gui.Button)) {

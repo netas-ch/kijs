@@ -60,6 +60,9 @@ home.sc.container_Stack = class home_sc_container_Stack {
                     ],
                     footerElements:[
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'Element hinzufügen',
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
@@ -264,6 +267,9 @@ home.sc.container_Stack = class home_sc_container_Stack {
                     ],
                     footerElements:[
                         {
+                            xtype: 'kijs.gui.Element',
+                            style: { flex: 1 }
+                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'Element hinzufügen',
                             iconMap: 'kijs.iconMap.Fa.circle-plus',
