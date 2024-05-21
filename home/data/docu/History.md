@@ -125,6 +125,9 @@ Das Event ```contextMenu``` kommt beim
 ### kijs.gui.container.Scroll
 Funktioniert jetzt auch auf Mobilen Geräten.  
 
+### kijs.gui.field.Switch
+Der Knopf kann neu mit der Maus oder per Touch gezogen werden.  
+
 
 
 Version 2.6.0

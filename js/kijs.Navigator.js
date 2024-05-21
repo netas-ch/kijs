@@ -29,7 +29,7 @@ kijs.Navigator = class kijs_Navigator {
     static get isIOS() { return kijs.Navigator.getBrowserInfo().isIOS; }
     static get isLinux() { return kijs.Navigator.getBrowserInfo().isLinux; }
 
-    static get isTouch() { return kijs.Navigator.getBrowserInfo().isTouch;}
+    static get isTouch() { return navigator.maxTouchPoints > 0;}
     
     static get os() { return kijs.Navigator.getBrowserInfo().os; }
     static get osVendor()  { return kijs.Navigator.getBrowserInfo().osVendor; }
@@ -67,8 +67,7 @@ kijs.Navigator = class kijs_Navigator {
             isMac: false,
             isAndroid: false,
             isIOS: false,
-            isLinux: false,
-            isTouch: false
+            isLinux: false
         };
 
         // Edge
@@ -202,9 +201,6 @@ kijs.Navigator = class kijs_Navigator {
                 bi.osVersion = os[1];
             }
         }
-        
-        // isTouch
-        bi.isTouch = navigator.maxTouchPoints > 0;
         
         // Speichern für schnellerer Zugriff
         if (userAgent === null) {

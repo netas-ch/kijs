@@ -53,7 +53,9 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         this._valueChecked = true;
         this._valueUnchecked = false;
-
+        this._dragPosXStart = null;
+        this._dragHasDistance = false;
+        
         this._inputDom = new kijs.gui.Dom({
             cls: 'kijs-toggleBorder',
             nodeTagName: 'div'
@@ -62,8 +64,17 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         this._togglePointDom = new kijs.gui.Dom({
             cls: 'kijs-togglePoint',
-            nodeTagName: 'div'
+            nodeTagName: 'div',
+            on: {
+                mouseDown: this.#onMouseDown,
+                context: this
+            }
         });
+        
+        // Touch-Devices
+        if (kijs.Navigator.isTouch) {
+            this._togglePointDom.on('touchStart', this.#onTouchStart, this);
+        }
 
         this._iconEl = new kijs.gui.Icon({
             parent: this
@@ -148,7 +159,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         } else {
             throw new kijs.Error(`config "checked" is not valid.`);
         }
-        this._updateTogglePoint();
+        this._updateTogglePoint(this._checked);
     }
 
     // overwrite
@@ -224,7 +235,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         } else {
             throw new kijs.Error(`config "value" is not valid.`);
         }
-        this._updateTogglePoint();
+        this._updateTogglePoint(this._checked);
     }
 
     get valueChecked() { return this._valueChecked; }
@@ -252,7 +263,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         // Toggle-Punkt rendern (kijs.guiDom)
         this._togglePointDom.renderTo(this._inputDom.node);
-        this._updateTogglePoint();
+        this._updateTogglePoint(this._checked);
 
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
@@ -290,21 +301,83 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
 
     // PROTECTED
-    _updateTogglePoint() {
+    _dragEnd(e) {
+        const checked = this._dom.clsHas('kijs-checked') ? 1 : 0;
+
+        this._togglePointDom.style.marginLeft = null;
+        
+        // Wurde ein Weg von mehr als 1 Pixel zurückgelegt: Click-Event verhindern
+        if (this._dragHasDistance) {
+            kijs.defer(function(){
+                this._dragHasDistance = false;
+            }, 50, this);
+        }
+        
+        if (checked !== this._checked) {
+            // focus setzen
+            this.focus();
+
+            const oldChecked = this._checked;
+            const oldValue = this.value;
+
+            this._checked = checked;
+
+            //this._updateTogglePoint(this._checked);
+            this.validate();
+
+            this.raiseEvent('change', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
+        }
+        this._dragPosXStart = null;
+    }
+    
+    _dragMove(x) {
+        let deltaX = x - this._dragPosXStart;
+
+        // Max Position berechnen
+        const max = this._inputDom.width - this._togglePointDom.height;
+
+        // Falls Checked muss noch der bestehende margin addiert werden
+        if (this._checked) {
+            deltaX += max;
+        }
+
+        // Begrenzen auf Min/Max-Werte
+        if (deltaX > max) {
+            deltaX = max;
+        } else if (deltaX < 0) {
+            deltaX = 0;
+        }
+        
+        // Wurde ein Weg von mehr als 1 Pixel zurückgelegt, dann wird später das
+        // Click-Event verhindert.
+        if (deltaX > 1) {
+            this._dragHasDistance = true;
+        }
+        
+        // In der Mitte ist die Schaltschwelle
+        const checked = deltaX > max/2 ? 1 : 0;
+        this._updateTogglePoint(checked);
+
+        this._togglePointDom.style.marginLeft = deltaX + 'px';
+    }
+    
+    _dragStart(x) {
+        // Startposition merken
+        this._dragPosXStart = x;
+    }
+
+    _updateTogglePoint(checked) {
         let cls;
-
-        switch (this._checked) {
-            case 0:
-                cls = 'kijs-unchecked';
-                break;
-
-            case 1:
-                cls = 'kijs-checked';
-                break;
-
-            case 2:
-                cls = 'kijs-determinated';
-                break;
+        
+        if (checked) {
+            cls = 'kijs-checked';
+        } else {
+            cls = 'kijs-unchecked';
         }
 
         this._dom.clsRemove(['kijs-checked', 'kijs-unchecked']);
@@ -329,13 +402,13 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     // PRIVATE
     // LISTENERS
     #onClick(e) {
-        if (!this.readOnly && !this.disabled) {
+        if (!this.readOnly && !this.disabled && !this._dragHasDistance) {
             const oldChecked = this._checked;
             const oldValue = this.value;
 
             this._checked = this._checked ? 0 : 1;
 
-            this._updateTogglePoint();
+            this._updateTogglePoint(this._checked);
             this._inputDom.focus();
             this.validate();
 
@@ -362,7 +435,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
             this._checked = this._checked ? 0 : 1;
 
-            this._updateTogglePoint();
+            this._updateTogglePoint(this._checked);
             this.validate();
 
             this.raiseEvent('change', {
@@ -374,6 +447,58 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         }
         // Bildlauf der Space-Taste verhindern
         e.nodeEvent.preventDefault();
+    }
+    
+    #onMouseDown(e) {
+        if (!this.readOnly && !this.disabled) {
+            this._dragStart(e.nodeEvent.clientX);
+        
+            // mouseMove und mouseUp Listeners aufs document setzen
+            kijs.Dom.addEventListener('mousemove', document, this.#onMouseMove, this);
+            kijs.Dom.addEventListener('mouseup', document, this.#onMouseUp, this);
+        }
+    }
+    
+    #onMouseMove(e) {
+        if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
+            this._dragMove(e.nodeEvent.clientX);
+        }
+    }
+    
+    #onMouseUp(e) {
+        // Beim ersten Auslösen des Listeners, gleich wieder entfernen
+        kijs.Dom.removeEventListener('mousemove', document, this);
+        kijs.Dom.removeEventListener('mouseup', document, this);
+
+        if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
+            this._dragEnd(e);
+        }
+    }
+    
+    #onTouchEnd(e) {
+        // Beim ersten Auslösen des Listeners, gleich wieder entfernen
+        this._inputWrapperDom.off('touchMove', this.#onTouchMove, this);
+        this._inputWrapperDom.off('touchEnd', this.#onTouchEnd, this);
+        
+        if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
+            this._dragEnd(e);
+        }
+    }
+    
+    #onTouchMove(e) {
+        if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
+            this._dragMove(e.nodeEvent.touches[0].clientX);
+        }
+    }
+    
+    #onTouchStart(e) {
+        if (!this.readOnly && !this.disabled) {
+            this._dragStart(e.nodeEvent.touches[0].clientX);
+            
+            // touchMove und touchEnd Listeners setzen
+            this._inputWrapperDom.on('touchMove', this.#onTouchMove, this);
+            this._inputWrapperDom.on('touchEnd', this.#onTouchEnd, this);
+        }
     }
 
 
