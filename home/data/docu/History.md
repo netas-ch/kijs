@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version 2.7.0 (noch nicht freigegeben)
+Version 2.7.0
 =============
 ### initial-scale der Home-App auf 1 geändert.
 
