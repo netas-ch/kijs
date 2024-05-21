@@ -1062,7 +1062,7 @@
     flex-direction: row;
     flex-wrap: nowrap;
     align-content: start;
-    justify-content: end;
+    justify-content: left;
     padding: 6px;
     gap: 6px;
     /* Buttons im Fuss eines Panels haben einen Rahmen */
@@ -2149,7 +2149,10 @@
   div.kijs-timepicker > .kijs-timepicker-canvasdiv {
     flex: 1;
     margin: 4px;
-    aspect-ratio: 1 / 1;
+    width: calc(var(--default-fontSize) * 11.071);
+    /*155px;*/
+    height: calc(var(--default-fontSize) * 11.071);
+    /*155px;*/
     display: flex;
     justify-content: center;
     align-items: center;
