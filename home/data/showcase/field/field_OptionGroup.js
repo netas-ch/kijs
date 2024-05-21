@@ -31,7 +31,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
@@ -50,7 +50,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -85,7 +85,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'inline und mit RPC',
                     style: { margin: '10px 0 0 0'}
                 },{

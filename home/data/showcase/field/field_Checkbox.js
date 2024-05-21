@@ -31,7 +31,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Checkbox'
@@ -39,7 +39,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -65,7 +65,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'weitere Beispiele',
                     style: { margin: '10px 0 0 0'}
                 },{

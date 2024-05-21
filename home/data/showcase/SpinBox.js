@@ -32,7 +32,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Button mit spinBox:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -59,7 +59,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'target:',
                     style: { margin: '100px 0 4px 0'}
                 },{
@@ -110,7 +110,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'SpinBox-Einstellungen',
                     style: { margin: '100px 0 4px 0'}
                 },{

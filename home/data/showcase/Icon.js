@@ -31,7 +31,7 @@ home.sc.Icon = class home_sc_Icon {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Icon aus IconMap:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -41,7 +41,7 @@ home.sc.Icon = class home_sc_Icon {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Icon mit Bild:',
                     style: { margin: '10px 0 4px 0'}
                 },{
@@ -51,7 +51,7 @@ home.sc.Icon = class home_sc_Icon {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Icon aus IconMap rotierend:',
                     style: { margin: '10px 0 4px 0'}
                 },{
@@ -62,7 +62,7 @@ home.sc.Icon = class home_sc_Icon {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'FontAwesome free Icons: https://fontawesome.com/search?o=r&m=free',
                     clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}

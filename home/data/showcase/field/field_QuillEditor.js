@@ -35,7 +35,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.QuillEditor'
@@ -43,7 +43,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label und fixer Höhe',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -82,7 +82,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     }
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Theme bubble',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -98,7 +98,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Quill Webseite: https://quilljs.com/ \nGitHub: https://github.com/quilljs/quill/releases/',
                     clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}

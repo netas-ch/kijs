@@ -73,21 +73,37 @@ Hier die vorgenommenen Anpassungen:
 | --defaultPhone-inputWidth     | 130px      | 150px      |
 | --defaultSozVersNr-inputWidth | 120px      | 140px      |
 
+### kijs.gui.Spacer (NEU!)
+Ein Spacer ist ein leeres Element mit ```flex: 1```. 
+Er kann verwendet werden um z.B. in einer Toolbar eine Lücke einzufügen. 
+Die Elemente links vom Spacer sind dann Linksbündig und die rechts davon sind 
+rechtsbündig ausgerichtet.  
+
+Für den Spacer gibt es auch eine Kurzform: ```">"```.  
+
+**Hinweis:**  
+Damit gibt es nun zwei Kurzformen:  
+| Kurzform | Element            |
+| -------- | ------------------ |
+| "-"      | kijs.gui.Separator |
+| ">"      | kijs.gui.Spacer    |
+
+Siehe dazu auch die Beispiele im Showcase.  
+
+**UPDATE TIPP:** Neue Datei kijs.gui.Spacer.js einbinden.  
+
 ### kijs.gui.Panel: die footerElements werden nicht mehr rechtsbündig ausgerichtet
 Bisher wurden footerElements mit ```justify-content: end``` rechtsbündig 
-ausgerichtet. Falls die Elements nicht genügend Platz hatten, erschien daber keine 
-scrollbar. Der Grund ist, dass die Browser nicht in Minus scrollen können.  
+ausgerichtet. Falls die Elements nicht genügend Platz hatten, erschien aber keine 
+Scrollbar. Der Grund ist, dass die Browser nicht in Minus scrollen können.  
 Wenn gesrollt werden soll, sollte ein Element dehalb immer ```justify-content: start``` 
 haben.  
-Um die Elemente trotzdem rechtsbündig auszurichten, kann als erstes Kind ein $
-```kijs.gui.Element``` mit ```flex: 1``` eingefügt werden.  
+Die Funktionsweise des Footers ist damit nun identisch mit der des Headers.  
+Um die Elemente trotzdem rechtsbündig auszurichten, kann als erstes Kind ein 
+```kijs.gui.Spacer``` eingefügt werden (Kurzform = ```">"```).  
 
 **UPDATE TIPP:** Quellcode nach ```footerElements``` durchsuchen und überall zu 
-beginn folgendes Element einfügen:   
-    {
-        xtype: 'kijs.gui.Element',
-        style: { flex: 1 }
-    }
+Beginn folgendes Element einfügen: ```">"```  
 
 ### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
 Das Event ```contextMenu``` kommt beim  
@@ -102,7 +118,7 @@ Das Event ```contextMenu``` kommt beim
 - Neuer Getter ```isTouch```. Bei Touch-Geräten ist diese Eigenschaft auf true.  
 
 ### kijs.gui.field.Display
-- Neue CSS-Klasse ```kijs-largeTitle```. Damit wird die font-size auf 16px gestellt.  
+- Neue CSS-Klasse ```kijs-titleLarge```. Damit wird die font-size auf 16px gestellt.  
 
 ### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden
 

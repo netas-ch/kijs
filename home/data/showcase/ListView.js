@@ -31,7 +31,7 @@ home.sc.ListView = class home_sc_ListView {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ListView lokal:'
                 },{
                     xtype: 'kijs.gui.ListView',
@@ -66,7 +66,7 @@ home.sc.ListView = class home_sc_ListView {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: '2x ListView lokal mit Drag&Drop untereinander:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -124,7 +124,7 @@ home.sc.ListView = class home_sc_ListView {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ListView mit RPC und Optionen:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -149,7 +149,7 @@ home.sc.ListView = class home_sc_ListView {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ListView lokal mit Checkboxen:',
                     style: { margin: '10px 0 0 0'}
                 },{

@@ -35,7 +35,7 @@ home.sc.field_Url = class home_sc_field_Url {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -44,7 +44,7 @@ home.sc.field_Url = class home_sc_field_Url {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{

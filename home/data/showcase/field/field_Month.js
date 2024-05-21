@@ -31,7 +31,7 @@ home.sc.field_Month = class home_sc_field_Month {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Month'
@@ -39,7 +39,7 @@ home.sc.field_Month = class home_sc_field_Month {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -68,7 +68,7 @@ home.sc.field_Month = class home_sc_field_Month {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.MonthPicker\n- kijs.gui.TimePicker\n- kijs.gui.field.DateTime',
                     style: { margin: '10px 0 0 0'}
                 }

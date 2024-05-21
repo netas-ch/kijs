@@ -31,7 +31,7 @@ home.sc.Tree = class home_sc_Tree {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Tree mit RPC:'
                 },{
                     xtype: 'kijs.gui.Tree',
@@ -56,7 +56,7 @@ home.sc.Tree = class home_sc_Tree {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Tree local:',
                     style: { margin: '10px 0 0 0'}
                 },{

@@ -31,7 +31,7 @@ home.sc.Menu = class home_sc_Menu {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Button mit menuElements:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -84,7 +84,7 @@ home.sc.Menu = class home_sc_Menu {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Button mit manuellem Menü bei Rechtsklick:',
                     style: { margin: '10px 0 4px 0'}
                 },{

@@ -31,7 +31,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'scrollableX=true',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -60,7 +60,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'scrollableX="auto" (click on buttons to make them wider/smaller)',
                     style: { margin: '10px 0 4px 0'}
                 },{
@@ -96,7 +96,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'scrollableY=true',
                     style: { margin: '10px 0 4px 0'}
                 },{
@@ -128,7 +128,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'scrollableX="auto" und scrollableY="auto"',
                     style: { margin: '10px 0 4px 0'}
                 },{

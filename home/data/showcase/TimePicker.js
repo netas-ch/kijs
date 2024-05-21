@@ -31,7 +31,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.TimePicker'
@@ -39,7 +39,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit minValue und maxValue:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -56,7 +56,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ohne headerBar:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -69,7 +69,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.MonthPicker\n- kijs.gui.field.DateTime\n- kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }

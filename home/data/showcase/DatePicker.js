@@ -31,7 +31,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.DatePicker'
@@ -39,7 +39,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mode:  \'date\' mit minValue und maxValue:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -55,7 +55,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mode:  \'week\':',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -69,7 +69,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mode:  \'range\':',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -83,7 +83,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'weekNumbersHide: true:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -93,7 +93,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: '<b>Siehe auch:</b><br>kijs.gui.TimePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }

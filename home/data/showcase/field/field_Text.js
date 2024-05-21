@@ -31,7 +31,7 @@ home.sc.field_Text = class home_sc_field_Text {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Text'
@@ -39,7 +39,7 @@ home.sc.field_Text = class home_sc_field_Text {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -140,7 +140,7 @@ home.sc.field_Text = class home_sc_field_Text {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Validierungen',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -170,7 +170,7 @@ home.sc.field_Text = class home_sc_field_Text {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Formatierung',
                     style: { margin: '10px 0 0 0'}
                 },{

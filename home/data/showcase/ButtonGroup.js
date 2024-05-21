@@ -98,10 +98,8 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
 
                     footerBarCaption: 'Meine FooterBar',
                     footerElements: [
+                        '>',
                         {
-                            xtype: 'kijs.gui.Element',
-                            style: { flex: 1 }
-                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'OK',
                             iconMap: 'kijs.iconMap.Fa.check',

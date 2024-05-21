@@ -31,7 +31,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.CheckboxGroup',
@@ -44,7 +44,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -86,7 +86,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'inline und mit RPC',
                     style: { margin: '10px 0 0 0'}
                 },{

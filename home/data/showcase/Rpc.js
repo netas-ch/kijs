@@ -31,7 +31,7 @@ home.sc.Rpc = class home_sc_Rpc {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'RPC:'
                 },{
                     xtype: 'kijs.gui.Button',
@@ -145,7 +145,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'RPCs automatisch zusammenfassen (RPCs innerhalb von 10ms werden zusammengefasst:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -184,7 +184,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'RPC Meldungen:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -256,7 +256,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Fehlerbehandlung (errorTypes):',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -296,7 +296,7 @@ home.sc.Rpc = class home_sc_Rpc {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'RPC mit individueller Lademaske:',
                     style: { margin: '10px 0 0 0'}
                 },{

@@ -33,7 +33,7 @@ home.sc.Button = class home_sc_Button {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Buttons:'
                 },
                 

@@ -185,6 +185,15 @@
     background-color: var(--separator-disabled-bkgrndColor);
   }
   /* ******************
+       * Spacer
+       ****************** */
+  div.kijs-spacer {
+    flex: 1;
+  }
+  div.kijs-spacer.kijs-hidden {
+    display: none;
+  }
+  /* ******************
        * Icon
        ****************** */
   span.kijs-icon {
@@ -1051,6 +1060,9 @@
   div.kijs-panel > .kijs-header > .kijs-container-inner > * {
     flex: none;
   }
+  div.kijs-panel > .kijs-header > .kijs-container-inner > .kijs-spacer {
+    flex: 1;
+  }
   div.kijs-panel > .kijs-footer {
     overflow: hidden;
     flex: none;
@@ -1069,6 +1081,9 @@
   }
   div.kijs-panel > .kijs-footer > .kijs-container-inner > * {
     flex: none;
+  }
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-spacer {
+    flex: 1;
   }
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button {
     border: 1px solid var(--footer-button-borderColor);
@@ -3031,7 +3046,7 @@
   div.kijs-field-display.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: var(--defaultField-inputWidth);
   }
-  div.kijs-field-display.kijs-largeTitle > .kijs-content > .kijs-inputwrapper > div {
+  div.kijs-field-display.kijs-titleLarge > .kijs-content > .kijs-inputwrapper > div {
     font-size: 16px;
     line-height: 18px;
   }

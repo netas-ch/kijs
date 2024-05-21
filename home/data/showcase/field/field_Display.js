@@ -31,7 +31,7 @@ home.sc.field_Display = class home_sc_field_Display {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Display',
@@ -73,7 +73,7 @@ home.sc.field_Display = class home_sc_field_Display {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -118,14 +118,14 @@ home.sc.field_Display = class home_sc_field_Display {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Formatieren mit CSS-Klassen',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Display',
                     label: 'Label',
-                    value: 'kijs-largeTitle',
-                    cls: 'kijs-largeTitle'
+                    value: 'kijs-titleLarge',
+                    cls: 'kijs-titleLarge'
                 },{
                     xtype: 'kijs.gui.field.Display',
                     label: 'Label',

@@ -31,7 +31,7 @@ home.sc.Element = class home_sc_Element {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Element mit HTML Inhalt:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -74,7 +74,7 @@ home.sc.Element = class home_sc_Element {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Element mit HTML Inhalt von RPC:',
                     style: { margin: '10px 0 4px 0'}
                 },{

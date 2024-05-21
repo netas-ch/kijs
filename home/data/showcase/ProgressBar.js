@@ -36,7 +36,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ProgressBar:',
                     style: { margin: '0 0 4px 0'}
                 },{
@@ -86,10 +86,8 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                                         }
                                     ],
                                     footerElements:[
+                                        '>',
                                         {
-                                            xtype: 'kijs.gui.Element',
-                                            style: { flex: 1 }
-                                        },{
                                             xtype: 'kijs.gui.Button',
                                             caption: 'OK',
                                             isDefault: true,

@@ -58,10 +58,8 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                 padding: '10px'
             },
             footerElements:[
+                '>',
                 {
-                    xtype: 'kijs.gui.Element',
-                    style: { flex: 1 }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'OK',
                     isDefault: true,

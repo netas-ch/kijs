@@ -213,6 +213,19 @@
 
 
     /* ******************
+       * Spacer
+       ****************** */
+    div.kijs-spacer {
+        flex: 1;
+
+        &.kijs-hidden {
+            display: none;
+        }
+    }
+
+
+
+    /* ******************
        * Icon
        ****************** */
     span.kijs-icon {
@@ -1138,8 +1151,12 @@
                 padding: 6px;
                 gap: 6px;
 
-                 > * {
+                > * {
                     flex: none;
+                }
+                
+                > .kijs-spacer {
+                    flex: 1;
                 }
             }
         }
@@ -1159,8 +1176,12 @@
                 padding: 6px;
                 gap: 6px;
 
-                 > * {
+                > * {
                     flex: none;
+                }
+                
+                > .kijs-spacer {
+                    flex: 1;
                 }
 
                 /* Buttons im Fuss eines Panels haben einen Rahmen */
@@ -3521,7 +3542,7 @@
         }
 
         /* Ergänzungen */
-        &.kijs-largeTitle {
+        &.kijs-titleLarge {
             > .kijs-content > .kijs-inputwrapper > div {
                 font-size: 16px;
                 line-height: 18px;

@@ -31,7 +31,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.ListView',
@@ -57,7 +57,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -93,7 +93,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit RPC und Drg&Drop',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -117,7 +117,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ListView local:',
                     style: { margin: '10px 0 0 0'}
                 },{

@@ -60,10 +60,8 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
 
                     footerBarCaption: 'Meine FooterBar',
                     footerElements: [
+                        '>',
                         {
-                            xtype: 'kijs.gui.Element',
-                            style: { flex: 1 }
-                        },{
                             xtype: 'kijs.gui.Button',
                             caption: 'OK',
                             iconMap: 'kijs.iconMap.Fa.check',
@@ -92,7 +90,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'ApertureMask für 3s anzeigen auf:',
                     style: { margin: '10px 0 4px 0'}
                 },{

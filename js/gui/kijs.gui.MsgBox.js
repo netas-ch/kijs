@@ -323,10 +323,9 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 
             }
             
-            // Abstandshalter
+            // Spacer
             footerElements.push({
-                xtype: 'kijs.gui.Element',
-                style: { flex: 1 }
+                xtype: 'kijs.gui.Spacer'
             });
                         
             // Buttons

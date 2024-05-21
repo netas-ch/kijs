@@ -31,7 +31,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Message Box standard:'
                 },{
                     xtype: 'kijs.gui.Button',
@@ -108,7 +108,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Message Box mit Callback Function:',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -125,7 +125,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Message Box individuell:',
                     style: { margin: '10px 0 0 0'}
                 },{

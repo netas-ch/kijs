@@ -675,6 +675,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
                 case '-':
                     obj = new kijs.gui.Separator({});
                     break;
+                    
+                // '>' -> kijs.gui.Spacer
+                case '>':
+                    obj = new kijs.gui.Spacer({});
+                    break;
             }
         }
         

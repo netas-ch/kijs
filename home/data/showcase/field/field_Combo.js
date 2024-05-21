@@ -31,7 +31,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -44,7 +44,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -90,7 +90,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'RPC',
                     style: { margin: '10px 0 0 0'}
                 },{

@@ -1,6 +1,6 @@
 /* global kijs */
 
-home.sc.MonthPicker = class home_sc_MonthPicker {
+home.sc.Spacer = class home_sc_Spacer {
     
     
     // --------------------------------------------------------------
@@ -18,7 +18,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.MonthPicker',
+            caption: 'kijs.gui.Spacer',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {
@@ -29,51 +29,53 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
             },
             headerElements: this._getHeaderElements(),
             elements:[
-                {
-                    xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-titleLarge',
-                    value: 'Minimalkonfiguration:'
-                },{
-                    xtype: 'kijs.gui.MonthPicker'
-                },
                 
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'mit minValue und maxValue:',
-                    style: { margin: '10px 0 0 0'}
+                    value: 'kijs.gui.Spacer'
                 },{
-                    xtype: 'kijs.gui.MonthPicker',
-                    minValue: kijs.Date.addDays(new Date(), -62),
-                    maxValue: kijs.Date.addDays(new Date(), 62),
-                    value: new Date(),
-                    headerBarHide: false,
-                    currentBtnHide: false,
-                    closeBtnHide: true,
-                    on: {
-                        change: console.log,
-                        context: this
-                    }
-                },
-                
-                {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-titleLarge',
-                    value: 'ohne headerBar:',
-                    style: { margin: '10px 0 0 0'}
+                    value: 'Kurzform: ">"'
                 },{
-                    xtype: 'kijs.gui.MonthPicker',
-                    value: new Date(),
-                    headerBarHide: true,
-                    currentBtnHide: true
-                },
-                
-                {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-titleLarge',
-                    value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.TimePicker\n- kijs.gui.field.DateTime\n- kijs.gui.field.Month',
-                    style: { margin: '10px 0 0 0'}
+                    value: 'Mit dem kijs.gui.Spacer können Abstände z.B. in Toolbars eingefügt werden. Die Elemente nach einem Spacer sind rechtsbündig ausgerichtet.'
+                },
+                {
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Beispiele im header und footer',
+                    cls: 'kijs-flexfit',
+                    innerStyle: { minHeight:'50px' },
+                    width: 600,
+                    headerElements:[
+                        {
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'linksbündig'
+                        },
+                        '>',
+                        {
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'zentriert'
+                        },
+                        '>',
+                        {
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'rechtsbündig'
+                        }
+                    ],
+                    footerElements:[
+                        {
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'linksbündig'
+                        },{
+                            xtype: 'kijs.gui.Spacer'
+                        },{
+                            xtype: 'kijs.gui.field.Display',
+                            value: 'rechtsbündig'
+                        }
+                    ]
                 }
+                
             ]
         });
         
@@ -101,7 +103,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
         ];
     }
     
-    
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR

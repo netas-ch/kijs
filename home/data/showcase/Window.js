@@ -207,10 +207,8 @@ home.sc.Window = class home_sc_Window {
 
             footerBarCaption: 'Meine FooterBar',
             footerElements: [
+                '>',
                 {
-                    xtype: 'kijs.gui.Element',
-                    style: { flex: 1 }
-                },{
                     xtype: 'kijs.gui.Button',
                     caption: 'OK',
                     iconMap: 'kijs.iconMap.Fa.check',

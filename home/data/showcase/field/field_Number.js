@@ -31,7 +31,7 @@ home.sc.field_Number = class home_sc_field_Number {
             elements:[
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.field.Number'
@@ -39,7 +39,7 @@ home.sc.field_Number = class home_sc_field_Number {
 
                 {
                     xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-largeTitle',
+                    cls: 'kijs-titleLarge',
                     value: 'Weitere Konfigurationen',
                     style: { margin: '10px 0 0 0'}
                 },{
