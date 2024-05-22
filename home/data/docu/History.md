@@ -4,11 +4,7 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 2.7.0
 =============
-### initial-scale der Home-App auf 1 geändert.
-
-### Theme kijs.theme.old.css gelöscht
-
-### Neue CSS-Variablen
+### Neue CSS-Variablen  
  - ```--icon-fontSize: 20px;```  
  - ```--button-height: 30px;```  
  - ```--field-height: 30px;```  
@@ -28,11 +24,11 @@ Variablen für Standard-Feldbreiten:
  - ```--defaultPhone-inputWidth: 150px;```  
  - ```--defaultSozVersNr-inputWidth: 140px;```  
 
-**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe als Beispiel 
 in kijs.theme.default.css.  
 
 
-### Theme kijs.theme.default.css angepasst
+### Theme kijs.theme.default.css angepasst  
 Alles wurde um ca. 20% vergrössert, damit die Bedienung auf Mobilen-Geräten 
 besser ist.  
 Die Masse können nun mit CSS-Variablen individuell eingestellt werden.  
@@ -73,7 +69,8 @@ Hier die vorgenommenen Anpassungen:
 | --defaultPhone-inputWidth     | 130px      | 150px      |
 | --defaultSozVersNr-inputWidth | 120px      | 140px      |
 
-### kijs.gui.Spacer (NEU!)
+
+### kijs.gui.Spacer (NEU!)  
 Ein Spacer ist ein leeres Element mit ```flex: 1```. 
 Er kann verwendet werden um z.B. in einer Toolbar eine Lücke einzufügen. 
 Die Elemente links vom Spacer sind dann Linksbündig und die rechts davon sind 
@@ -92,7 +89,8 @@ Siehe dazu auch die Beispiele im Showcase.
 
 **UPDATE TIPP:** Neue Datei kijs.gui.Spacer.js einbinden.  
 
-### kijs.gui.Panel: die footerElements werden nicht mehr rechtsbündig ausgerichtet
+
+### kijs.gui.Panel: die footerElements werden nicht mehr rechtsbündig ausgerichtet  
 Bisher wurden footerElements mit ```justify-content: end``` rechtsbündig 
 ausgerichtet. Falls die Elements nicht genügend Platz hatten, erschien aber keine 
 Scrollbar. Der Grund ist, dass die Browser nicht in Minus scrollen können.  
@@ -105,6 +103,7 @@ Um die Elemente trotzdem rechtsbündig auszurichten, kann als erstes Kind ein
 **UPDATE TIPP:** Quellcode nach ```footerElements``` durchsuchen und überall zu 
 Beginn folgendes Element einfügen: ```">"```  
 
+
 ### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
 Das Event ```contextMenu``` kommt beim  
  - drücken der Rechten Maustaste  
@@ -114,19 +113,30 @@ Das Event ```contextMenu``` kommt beim
 **UPDATE TIPP:** Quellcode nach ```rightClick``` durchsuchen und durch 
 ```contextMenu``` ersetzen.  
 
-### kijs.Navigator
+
+### kijs.Navigator  
 - Neuer Getter ```isTouch```. Bei Touch-Geräten ist diese Eigenschaft auf true.  
 
-### kijs.gui.field.Display
+
+### kijs.gui.field.Display  
 - Neue CSS-Klasse ```kijs-titleLarge```. Damit wird die font-size auf 16px gestellt.  
 
-### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden
 
-### kijs.gui.container.Scroll
+### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden  
+
+
+### kijs.gui.container.Scroll  
 Funktioniert jetzt auch auf Mobilen Geräten.  
 
-### kijs.gui.field.Switch
+
+### kijs.gui.field.Switch  
 Der Knopf kann neu mit der Maus oder per Touch gezogen werden.  
+
+
+### kleinere Anpassungen
+ - initial-scale der Home-App auf 1 geändert  
+ - Schriftgrössen in Home-App Dokumentation vergrössert  
+ - Theme kijs.theme.old.css gelöscht  
 
 
 

@@ -29,9 +29,9 @@
     /* Icons */
     .icoKijs16 {
         background-image: url('../../favicon.ico');
-        background-size: 16px;
-        height: 16px;
-        width: 16px;
+        background-size: 20px;
+        height: 20px;
+        width: 20px;
     }
 
 
@@ -40,13 +40,13 @@
     div.markdown {
         padding: 4px 10px;
         background-color: var(--grey00);
-        max-width: 620px;
+        max-width: 750px;
         min-height: 100%;
     }
 
     div.markdown, div.markdown * {
-        font-size: 12px;
-        line-height: 15px;
+        font-size: 14px;
+        line-height: 18px;
         color: var(--grey09);
 
         /* selektion von Text erlauben */
@@ -55,47 +55,47 @@
     }
 
     .markdown h1 {
-        font-size: 22px;
+        font-size: 26px;
         font-weight: normal;
         margin: 40px 0 0 0;
     }
 
     .markdown h2 {
+        font-size: 19px;
+        font-weight: bold;
+        margin: 19px 0 0 0;
+        color: var(--accentColor);
+    }
+
+    .markdown h3 {
         font-size: 16px;
+        font-weight: bold;
+        margin: 16px 0 0 0;
+    }
+
+    .markdown h4 {
+        font-size: 14px;
         font-weight: bold;
         margin: 16px 0 0 0;
         color: var(--accentColor);
     }
 
-    .markdown h3 {
-        font-size: 13px;
-        font-weight: bold;
-        margin: 13px 0 0 0;
-    }
-
-    .markdown h4 {
-        font-size: 12px;
-        font-weight: bold;
-        margin: 14px 0 0 0;
-        color: var(--accentColor);
-    }
-
     .markdown h5 {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: normal;
-        margin: 14px 0 0 0;
+        margin: 16px 0 0 0;
         color: var(--accentColor);
     }
 
     .markdown h6 {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: normal;
-        margin: 14px 0 0 0;
+        margin: 16px 0 0 0;
         color: var(--grey07);
     }
 
     .markdown p {
-        margin: 12px 0 0 0;
+        margin: 14px 0 0 0;
     }
 
     .markdown a {
