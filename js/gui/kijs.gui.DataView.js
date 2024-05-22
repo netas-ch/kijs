@@ -916,9 +916,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementMouseUp', e);
             }, this);
             
-            // rightClick-Event
-            newEl.on('rightClick', function(e) {
-                return this.raiseEvent('elementRightClick', e);
+            // contextMenu-Event
+            newEl.on('contextMenu', function(e) {
+                return this.raiseEvent('elementContextMenu', e);
             }, this);
             
             // focus-Event

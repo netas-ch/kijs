@@ -34,16 +34,18 @@ home.sc.field_Url = class home_sc_field_Url {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Minimalkonfiguration:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.Url'
                 },
 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mit Label',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'mit Label',
                     style: { margin: '10px 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.field.Url',

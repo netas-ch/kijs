@@ -32,15 +32,20 @@ home.sc.Separator = class home_sc_Separator {
                 
                 {
                     xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'kijs.gui.Separator'
+                },
+                "-",
+                {
+                    xtype: 'kijs.gui.field.Display',
                     value: 'Mit dem kijs.gui.Separator können Trennlinien z.B. in Toolbars eingefügt werden.'
                 },{
                     xtype: 'kijs.gui.Separator'
                 },{
                     xtype: 'kijs.gui.field.Display',
                     value: 'Er passt seine Ausrichtung (horizontal/vertical) automatisch der aktuellen flex-direction an.'
-                },{
-                    xtype: 'kijs.gui.Separator'
                 },
+                "-",
                 {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Beispiel Toolbar und Formlayout',
@@ -56,17 +61,17 @@ home.sc.Separator = class home_sc_Separator {
                         },{
                             xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.windows'
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
+                        },
+                        "-",
+                        {
                             xtype: 'kijs.gui.Button',
                             caption: 'Sonnencreme',
                             on: {
                                 click: (e) => { kijs.gui.CornerTipContainer.show('Test', 'Bäh!', 'info'); }
                             }
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
+                        },
+                        "-",
+                        {
                             xtype: 'kijs.gui.field.Display',
                             value: 'Separators in einer Toolbar (vertikale Linien)'
                         }

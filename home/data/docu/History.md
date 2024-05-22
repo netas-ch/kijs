@@ -2,6 +2,144 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.7.0
+=============
+### Neue CSS-Variablen  
+ - ```--icon-fontSize: 20px;```  
+ - ```--button-height: 30px;```  
+ - ```--field-height: 30px;```  
+ - ```--field-label-paddingTop: 7px;``` ->Y-Position des Labels an Feld anpassen  
+ - ```--checkbox-fontSize: 20px;```  
+ - ```--switch-height: 28px;```  
+
+Variablen für Standard-Feldbreiten:  
+ - ```--defaultField-inputWidth: 220px;```  
+ - ```--defaultNumber-inputWidth: 100px;```  
+ - ```--defaultMonth-inputWidth: 130px;```  
+ - ```--defaultDate-inputWidth: 90px;```  
+ - ```--defaultTime-inputWidth: 70px;```  
+ - ```--defaultDateTime-inputWidth: 150px;```  
+ - ```--defaultWeek-inputWidth: 90px;```  
+ - ```--defaultDateRange-inputWidth: 190px;```  
+ - ```--defaultPhone-inputWidth: 150px;```  
+ - ```--defaultSozVersNr-inputWidth: 140px;```  
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe als Beispiel 
+in kijs.theme.default.css.  
+
+
+### Theme kijs.theme.default.css angepasst  
+Alles wurde um ca. 20% vergrössert, damit die Bedienung auf Mobilen-Geräten 
+besser ist.  
+Die Masse können nun mit CSS-Variablen individuell eingestellt werden.  
+Hier die vorgenommenen Anpassungen:  
+| CSS Variable                  | alter Wert | neuer Wert |
+| ----------------------------- | ---------- | ---------- |
+| --default-fontSize            | 12px       | 14px       |
+| --default-lineHeight          | 14px       | 16px       |
+| --icon-fontSize               | 16px       | 20px       |
+| --button-fontSize             | 12px       | 14px       |
+| --button-lineHeight           | 14px       | 16px       |
+| --button-height               | 25px       | 30px       |
+| --field-fontSize              | 12px       | 14px       |
+| --field-lineHeight            | 14px       | 16px       |
+| --field-height                | 25px       | 30px       |
+| --field-label-paddingTop      | 6px        | 7px        |
+| --checkbox-fontSize           | 15px       | 20px       |
+| --switch-height               | 20px       | 28px       |
+| --badge-fontSize              | 10px       | 12px       |
+| --badge-lineHeight            | 14px       | 16px       |
+| --headerBar-fontSize          | 14px       | 16px       |
+| --footerBar-fontSize          | 12px       | 14px       |
+| --msgbox-fontSize             | 12px       | 14px       |
+| --msgbox-lineHeight           | 14px       | 16px       |
+| --item-fontSize               | 12px       | 14px       |
+| --item-lineHeight             | 14px       | 16px       |
+| --item-label-fontSize         | 10px       | 12px       |
+| --panel-collapse-height       | 30px       | 36px       |
+| --panel-collapse-width        | 30px       | 36px       |
+| --defaultField-inputWidth     | 180px      | 220px      |
+| --defaultNumber-inputWidth    | 80px       | 100px      |
+| --defaultMonth-inputWidth     | 130px      | 130px      |
+| --defaultDate-inputWidth      | 80px       | 90px       |
+| --defaultTime-inputWidth      | 80px       | 70px       |
+| --defaultDateTime-inputWidth  | 130px      | 150px      |
+| --defaultWeek-inputWidth      | 80px       | 90px       |
+| --defaultDateRange-inputWidth | 170px      | 190px      |
+| --defaultPhone-inputWidth     | 130px      | 150px      |
+| --defaultSozVersNr-inputWidth | 120px      | 140px      |
+
+
+### kijs.gui.Spacer (NEU!)  
+Ein Spacer ist ein leeres Element mit ```flex: 1```. 
+Er kann verwendet werden um z.B. in einer Toolbar eine Lücke einzufügen. 
+Die Elemente links vom Spacer sind dann Linksbündig und die rechts davon sind 
+rechtsbündig ausgerichtet.  
+
+Für den Spacer gibt es auch eine Kurzform: ```">"```.  
+
+**Hinweis:**  
+Damit gibt es nun zwei Kurzformen:  
+| Kurzform | Element            |
+| -------- | ------------------ |
+| "-"      | kijs.gui.Separator |
+| ">"      | kijs.gui.Spacer    |
+
+Siehe dazu auch die Beispiele im Showcase.  
+
+**UPDATE TIPP:** Neue Datei kijs.gui.Spacer.js einbinden.  
+
+
+### kijs.gui.Panel: die footerElements werden nicht mehr rechtsbündig ausgerichtet  
+Bisher wurden footerElements mit ```justify-content: end``` rechtsbündig 
+ausgerichtet. Falls die Elements nicht genügend Platz hatten, erschien aber keine 
+Scrollbar. Der Grund ist, dass die Browser nicht in Minus scrollen können.  
+Wenn gesrollt werden soll, sollte ein Element dehalb immer ```justify-content: start``` 
+haben.  
+Die Funktionsweise des Footers ist damit nun identisch mit der des Headers.  
+Um die Elemente trotzdem rechtsbündig auszurichten, kann als erstes Kind ein 
+```kijs.gui.Spacer``` eingefügt werden (Kurzform = ```">"```).  
+
+**UPDATE TIPP:** Quellcode nach ```footerElements``` durchsuchen und überall zu 
+Beginn folgendes Element einfügen: ```">"```  
+
+
+### kijs Event ```rightClick``` umbenannt zu ```contextMenu```  
+Das Event ```contextMenu``` kommt beim  
+ - drücken der Rechten Maustaste  
+ - drücken der Kontext-Menü-Taste auf der Tastatur  
+ - einem longTouch auf Touch-Geräten  
+
+**UPDATE TIPP:** Quellcode nach ```rightClick``` durchsuchen und durch 
+```contextMenu``` ersetzen.  
+
+
+### kijs.Navigator  
+- Neuer Getter ```isTouch```. Bei Touch-Geräten ist diese Eigenschaft auf true.  
+
+
+### kijs.gui.field.Display  
+- Neue CSS-Klasse ```kijs-titleLarge```. Damit wird die font-size auf 16px gestellt.  
+
+
+### Die meisten Texte können nun vom Benutzer mit der Maus selektiert werden  
+
+
+### kijs.gui.container.Scroll  
+Funktioniert jetzt auch auf Mobilen Geräten.  
+
+
+### kijs.gui.field.Switch  
+Der Knopf kann neu mit der Maus oder per Touch gezogen werden.  
+
+
+### kleinere Anpassungen
+ - initial-scale der Home-App auf 1 geändert  
+ - Schriftgrössen in Home-App Dokumentation vergrössert  
+ - Theme kijs.theme.old.css gelöscht  
+
+
+
 Version 2.6.0
 =============
 ### Argumente bei der Funktion kijs.getText() haben geändert

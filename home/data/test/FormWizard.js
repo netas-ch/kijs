@@ -122,6 +122,7 @@ home.test.FormWizard = class home_test_FormWizard {
                 }
             ],
             footerElements:[
+                '>',
                 this._btnPrevious,
                 this._btnNext
             ]

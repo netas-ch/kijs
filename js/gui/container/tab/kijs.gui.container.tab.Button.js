@@ -70,7 +70,7 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
         });
         
         // Listeners
-        this.on('rightClick', this.#onRightClick, this);
+        this.on('contextMenu', this.#onContextMenu, this);
         this._icon2El.on('click', this.#onCloseClick, this);
         
         // Config anwenden
@@ -141,6 +141,20 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
         e.nodeEvent.stopPropagation();
     }
     
+    // Menü anzeigen, falls es Elemente enthält
+    #onContextMenu(e) {
+        e.nodeEvent.preventDefault();
+        
+        if (!this._menuHide) {
+            // aktiviert/deaktiviert den Schliessen-Button
+            this._menuEl.down('close').disabled = this.closeButtonHide;
+            this._menuEl.down('closeAll').disabled = this.closeButtonHide;
+
+            // Menü anzeigen
+            this._menuEl.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
+        }
+    }
+    
     // es wurde auf einen Schliessen-Button im Menü geklickt
     #onMenuCloseButtonClick(e) {
         switch (e.element.name) {
@@ -162,22 +176,8 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
         }
     }
     
-    // Menü anzeigen, falls es Elemente enthält
-    #onRightClick(e) {
-        e.nodeEvent.preventDefault();
-        
-        if (!this._menuHide) {
-            // ativiert/deaktiviert den Schliessen-Button
-            this._menuEl.down('close').disabled = this.closeButtonHide;
-            this._menuEl.down('closeAll').disabled = this.closeButtonHide;
+    
 
-            // Menü anzeigen
-            this._menuEl.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
-        }
-    }
-    
-    
-    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

@@ -30,15 +30,17 @@ home.sc.DatePicker = class home_sc_DatePicker {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Minimalkonfiguration:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Minimalkonfiguration:'
                 },{
                     xtype: 'kijs.gui.DatePicker'
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode:  \'date\' mit minValue und maxValue:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'mode:  \'date\' mit minValue und maxValue:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
@@ -52,8 +54,9 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode:  \'week\':',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'mode:  \'week\':',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
@@ -65,8 +68,9 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'mode:  \'range\':',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'mode:  \'range\':',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
@@ -78,8 +82,9 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'weekNumbersHide: true:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'weekNumbersHide: true:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.DatePicker',
@@ -87,8 +92,9 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: '<b>Siehe auch:</b><br>kijs.gui.TimePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: '<b>Siehe auch:</b><br>kijs.gui.TimePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }
             ]

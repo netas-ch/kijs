@@ -42,6 +42,7 @@
  */
 kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs.gui.Container {
 
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -62,8 +63,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             cls: 'kijs-btn-scrollup',
             on: {
                 mouseDown: this.#onBtnScrollUpMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
+                touchStart: this.#onBtnScrollUpMouseDown,
                 dragOver: this.#onBtnScrollUpMouseDown,
+                mouseUp: this.#onBtnScrollMouseUp,
+                touchEnd: this.#onBtnScrollMouseUp,
                 dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
@@ -73,8 +76,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             cls: 'kijs-btn-scrollleft',
             on: {
                 mouseDown: this.#onBtnScrollLeftMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
+                touchStart: this.#onBtnScrollLeftMouseDown,
                 dragOver: this.#onBtnScrollLeftMouseDown,
+                mouseUp: this.#onBtnScrollMouseUp,
+                touchEnd: this.#onBtnScrollMouseUp,
                 dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
@@ -84,8 +89,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             cls: 'kijs-btn-scrollright',
             on: {
                 mouseDown: this.#onBtnScrollRightMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
+                touchStart: this.#onBtnScrollRightMouseDown,
                 dragOver: this.#onBtnScrollRightMouseDown,
+                mouseUp: this.#onBtnScrollMouseUp,
+                touchEnd: this.#onBtnScrollMouseUp,
                 dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
@@ -95,8 +102,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             cls: 'kijs-btn-scrolldown',
             on: {
                 mouseDown: this.#onBtnScrollDownMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
+                touchStart: this.#onBtnScrollDownMouseDown,
                 dragOver: this.#onBtnScrollDownMouseDown,
+                mouseUp: this.#onBtnScrollMouseUp,
+                touchEnd: this.#onBtnScrollMouseUp,
                 dragLeave: this.#onBtnScrollMouseUp,
                 context: this
             }
@@ -679,7 +688,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
     #onTouchEnd(e) {
-
         // Buttons rendern
         this._renderScrollButtons();
     }
@@ -716,7 +724,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     }
 
     #onTouchStart(e) {
-
         // Startpunkte setzen
         this._touchXStart = e.nodeEvent.touches[0].clientX;
         this._touchYStart = e.nodeEvent.touches[0].clientY;
@@ -803,10 +810,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._btnLeftDom = null;
         this._btnRightDom = null;
         this._btnDownDom = null;
-
-        this._disableSmoothScrolling = false;
-        this._touchXStart = null;
-        this._touchYStart = null;
 
         // Basisklasse entladen
         super.destruct(true);

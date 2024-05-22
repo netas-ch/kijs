@@ -323,6 +323,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 
             }
             
+            // Spacer
+            footerElements.push({
+                xtype: 'kijs.gui.Spacer'
+            });
+                        
             // Buttons
             kijs.Array.each(config.buttons, function(button) {
                 if (!(button instanceof kijs.gui.Button)) {

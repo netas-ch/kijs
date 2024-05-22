@@ -30,8 +30,9 @@ home.sc.Tooltip = class home_sc_Tooltip {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: ' Die "tooltip"-Eigenschaft haben kijs.gui.Element und kijs.gui.Dom und alle davon vererbten Klassen:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: ' Die "tooltip"-Eigenschaft haben kijs.gui.Element und kijs.gui.Dom und alle davon vererbten Klassen:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Element',

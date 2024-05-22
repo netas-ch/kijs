@@ -30,8 +30,9 @@ home.sc.Rpc = class home_sc_Rpc {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'RPC:'
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'RPC:'
                 },{
                     xtype: 'kijs.gui.Button',
                     caption: 'RPC mit Promise',
@@ -143,8 +144,9 @@ home.sc.Rpc = class home_sc_Rpc {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'RPCs automatisch zusammenfassen (RPCs innerhalb von 10ms werden zusammengefasst:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'RPCs automatisch zusammenfassen (RPCs innerhalb von 10ms werden zusammengefasst:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -181,8 +183,9 @@ home.sc.Rpc = class home_sc_Rpc {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'RPC Meldungen:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'RPC Meldungen:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -252,8 +255,9 @@ home.sc.Rpc = class home_sc_Rpc {
                 
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'Fehlerbehandlung (errorTypes):',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Fehlerbehandlung (errorTypes):',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',
@@ -291,8 +295,9 @@ home.sc.Rpc = class home_sc_Rpc {
                 },
                 
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'RPC mit individueller Lademaske:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'RPC mit individueller Lademaske:',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.Button',

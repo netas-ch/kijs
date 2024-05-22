@@ -170,6 +170,7 @@ home.sc.Panel = class home_sc_Panel {
 
                     footerBarCaption: 'Meine FooterBar',
                     footerElements: [
+                        '>',
                         {
                             xtype: 'kijs.gui.Button',
                             caption: 'OK',

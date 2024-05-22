@@ -29,6 +29,8 @@ kijs.Navigator = class kijs_Navigator {
     static get isIOS() { return kijs.Navigator.getBrowserInfo().isIOS; }
     static get isLinux() { return kijs.Navigator.getBrowserInfo().isLinux; }
 
+    static get isTouch() { return navigator.maxTouchPoints > 0;}
+    
     static get os() { return kijs.Navigator.getBrowserInfo().os; }
     static get osVendor()  { return kijs.Navigator.getBrowserInfo().osVendor; }
     static get osVersion() { return kijs.Navigator.getBrowserInfo().osVersion; }

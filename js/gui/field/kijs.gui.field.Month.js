@@ -36,7 +36,7 @@
  * changeVisibility
  * childElementAfterResize
  * dblClick
- * rightClick
+ * contextMenu
  * destruct
  * drag
  * dragEnd
@@ -103,6 +103,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
+            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.calendar-days',
             disableFlex: true,
             nodeAttribute: {

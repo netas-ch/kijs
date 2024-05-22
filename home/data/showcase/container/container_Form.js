@@ -37,7 +37,7 @@ home.sc.container_Form = class home_sc_container_Form {
                     closable: true,
                     resizable: true,
                     scrollableY: 'auto',
-                    width: 600,
+                    width: 700,
                     cls: 'kijs-flexfit',
                     elements: [
                         {
@@ -51,10 +51,10 @@ home.sc.container_Form = class home_sc_container_Form {
                                 padding: '10px'
                             },
                             defaults: {
-                                labelWidth: 100,
+                                labelWidth: 110,
                                 required: true,
                                 defaults: {
-                                    labelWidth: 100,
+                                    labelWidth: 110,
                                     required: true
                                 }
                             },
@@ -240,6 +240,7 @@ home.sc.container_Form = class home_sc_container_Form {
                     ],
                     
                     footerElements: [
+                        '>',
                         {
                             xtype: 'kijs.gui.Button',
                             caption: 'Leeren',
@@ -327,6 +328,7 @@ home.sc.container_Form = class home_sc_container_Form {
                     ],
                     
                     footerElements: [
+                        '>',
                         {
                             xtype: 'kijs.gui.Button',
                             caption: 'RPC Load',

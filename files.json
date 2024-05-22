@@ -39,6 +39,7 @@
    "js/gui/kijs.gui.Element.js",
    "js/gui/kijs.gui.Container.js",
    "js/gui/kijs.gui.Separator.js",
+   "js/gui/kijs.gui.Spacer.js",
 
    "js/gui/container/kijs.gui.container.js",
    "js/gui/container/kijs.gui.container.Form.js",

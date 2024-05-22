@@ -60,14 +60,17 @@ function _readNavigationTree($nodeId, $rootDir) {
     if ($handle) {
         while ( ($filename = readdir($handle)) !== false ) {
             $path = $dirPath . '/' . $filename;
-
+            
             // Unbenötigte Dateien ignorieren
             if (in_array($filename, $excludeFiles)) {
                 continue;
             }
-
+            
+            // timestamp anhängen
+            $pathWithTimestamp = $path . '?v=' . filemtime('../' . $path);
+            
             $userData  = new stdClass();
-            $userData->path = $path;
+            $userData->path = $pathWithTimestamp;
             $userData->filename = $filename;
             $userData->filetype = $ext = pathinfo($path, PATHINFO_EXTENSION);
             $userData->caption = str_replace('_', ' ', $filename);
@@ -110,7 +113,7 @@ function _readNavigationTree($nodeId, $rootDir) {
 
             $node = new stdClass();
             $node->caption = $userData->caption;
-            $node->nodeId = $userData->path;
+            $node->nodeId = $path;
             if (!empty($userData->iconMap)) {
                 $node->iconMap = $userData->iconMap;
             }

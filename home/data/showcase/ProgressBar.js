@@ -35,8 +35,9 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.Element',
-                    html: 'ProgressBar:',
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'ProgressBar:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.ProgressBar',
@@ -85,6 +86,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                                         }
                                     ],
                                     footerElements:[
+                                        '>',
                                         {
                                             xtype: 'kijs.gui.Button',
                                             caption: 'OK',

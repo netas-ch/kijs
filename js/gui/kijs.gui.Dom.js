@@ -187,6 +187,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         this._tooltip = null;
         
+        this._contextMenuDeferId = null;
         this._scrollEndDeferId = null;
         
         // Standard-config-Eigenschaften mergen
@@ -221,7 +222,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             change: { nodeEventName: 'change', useCapture: false },
             click: { nodeEventName: 'click', useCapture: false },
             dblClick: { nodeEventName: 'dblclick', useCapture: false },
-            rightClick: { nodeEventName: 'contextmenu', useCapture: false },
+            contextMenu: { nodeEventName: 'contextmenu', useCapture: false }, // Wird ausgelöst bei rechter Maustaste, einem LongTouch oder mit der Kontext-Menü-Taste
             drag: { nodeEventName: 'drag', useCapture: false },
             dragEnd: { nodeEventName: 'dragend', useCapture: false },
             dragEnter: { nodeEventName: 'dragenter', useCapture: false },
@@ -239,12 +240,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             scroll: { nodeEventName: 'scroll', useCapture: false },
             scrollEnd: { nodeEventName: 'scrollend', useCapture: false },
             singleClick: { nodeEventName: 'click', useCapture: false, interrupt: this._doubleClickSpeed },
-            touchStart: { nodeEventName: 'touchstart', useCapture: false },
-            touchEnd: { nodeEventName: 'touchend', useCapture: false },
-            touchMove: { nodeEventName: 'touchmove', useCapture: false },
-            touchCancel: { nodeEventName: 'touchcancel', useCapture: false },
             wheel: { nodeEventName: 'wheel', useCapture: false },
-
+            
             // key events
             input: { nodeEventName: 'input', useCapture: false },
             keyDown: { nodeEventName: 'keydown', useCapture: false },
@@ -280,7 +277,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 ctrlKey: null,                  // Muss dazu ctgrl gedrückt werden? (null=egal)
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
-            }
+            },
+            
+            // touch events
+            touchStart: { nodeEventName: 'touchstart', useCapture: false },
+            touchEnd: { nodeEventName: 'touchend', useCapture: false },
+            touchMove: { nodeEventName: 'touchmove', useCapture: false },
+            touchCancel: { nodeEventName: 'touchcancel', useCapture: false }
         };
 
         // Config anwenden
@@ -1208,6 +1211,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     unrender() {
         if (this._node) {
             // timer abbrechen
+            if (this._contextMenuDeferId) {
+                clearTimeout(this._contextMenuDeferId);
+                this._contextMenuDeferId = null;
+            }
             if (this._scrollEndDeferId) {
                 clearTimeout(this._scrollEndDeferId);
                 this._scrollEndDeferId = null;
@@ -1284,8 +1291,27 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 const useCapture = !!this._eventMap[kijsEvent].useCapture;
                 
                 // unterstützt der Browser das Event?
-                if ('on'+nodeEventName in this._node) {
-                    
+                let eventIsSupported = ('on'+nodeEventName in this._node);
+                
+                // Workarounds für nur teilweise unterstütze Events
+                if (eventIsSupported) {
+                    switch (nodeEventName) {
+                        // Das contextmenu-Event wird unter iOS und Mac bei einem longTouch nicht ausgelöst
+                        case 'contextmenu':
+                            if ((kijs.Navigator.isIOS || kijs.Navigator.isMac) && kijs.Navigator.isTouch) {
+                                eventIsSupported = false;
+                                
+                                // Das normale contextmenu-event trotzdem noch abfragen
+                                if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
+                                    kijs.Dom.addEventListener(nodeEventName, this._node, this.#onNodeEvent, this, useCapture);
+                                }
+                            }
+                            break;
+                     }
+                }
+                
+                // unterstützt der Browser das Event?
+                if (eventIsSupported) {
                     // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
                     if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
                         kijs.Dom.addEventListener(nodeEventName, this._node, this.#onNodeEvent, this, useCapture);
@@ -1295,13 +1321,21 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 } else {
                     // Workaround vorhanden?
                     switch (nodeEventName) {
-                        case 'scrollend':
-                            // nodeEvent im eventMap überschreiben
-                            this._eventMap[kijsEvent].nodeEventName = 'scroll';
+                        // Unter iOS wird contextmenu bei einem longtouch nicht ausgelöst: selber machen
+                        case 'contextmenu':
+                            // kijs-Listeners auf touchStart und touchEnd erstellen
+                            if (!this.hasListener('touchStart', this.#onContextMenu_TouchStart, this)) {
+                                this.on('touchStart', this.#onContextMenu_TouchStart, this);
+                            }
+                            if (!this.hasListener('touchEnd', this.#onContextMenu_TouchEnd, this)) {
+                                this.on('touchEnd', this.#onContextMenu_TouchEnd, this);
+                            }
+                            break;
                             
-                            // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
-                            if (!kijs.Dom.hasEventListener('scroll', this, this)) {
-                                kijs.Dom.addEventListener('scroll', this._node, this.#onScroll, this);
+                        case 'scrollend':
+                            // kijs-Listener auf scroll erstellen
+                            if (!this.hasListener('scroll', this.#onScrollEnd_Scroll, this)) {
+                                this.on('scroll', this.#onScrollEnd_Scroll, this);
                             }
                             break;
                             
@@ -1325,7 +1359,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Listener für alle DOM-Node-Events, der die kijs-Events auslösen.
+     * Listener für alle DOM-Node-Events, der die kijs-Events auslöst.
      * @param {Object} e
      * @returns {Boolean}
      */
@@ -1393,15 +1427,48 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     
     // PRIVATE
+    // Workaround zum Erzeugen des contextMenu Events (wird von iOS oder Mac bei einem longTouch nicht ausgelöst)
+    #onContextMenu_TouchEnd(e) {
+        // bestehenden timer abbrechen
+        if (this._contextMenuDeferId) {
+            clearTimeout(this._contextMenuDeferId);
+            this._contextMenuDeferId = null;
+        }
+    }
+    #onContextMenu_TouchStart(e) {
+        // bestehenden timer abbrechen
+        if (this._contextMenuDeferId) {
+            clearTimeout(this._contextMenuDeferId);
+            this._contextMenuDeferId = null;
+        }
+        
+        if (this.disabled) {
+            return;
+        }
+        
+        // und neuen starten
+        this._contextMenuDeferId = kijs.defer(function() {
+            this._contextMenuDeferId = null;
+            
+            // falls dieser nicht mehr abgebrochen wurde, kann nun das 
+            // contextMenu Event ausgelöst werden.
+            e.dom = this;
+            e.eventName = 'contextMenu';
+            this.raiseEvent('contextMenu', e);
+        }, 500, this);
+    }
+    
     // Workaround zum Erzeugen des Events scrollEnd, das noch nicht von allen 
-    // Browsern unterstützt wird.
-    #onScroll(e) {
-        // bestehender timer abbrechen
+    // Browsern unterstützt wird (Safari auf Mac und iOS).
+    #onScrollEnd_Scroll(e) {
+        // bestehenden timer abbrechen
         clearTimeout(this._scrollEndDeferId);
         this._scrollEndDeferId = null;
         
-        // und neuer starten
+        // und neuen starten
         this._scrollEndDeferId = kijs.defer(function() {
+            this._scrollEndDeferId = null;
+            
             // falls dieser nicht mehr abgebrochen wurde, kann nun das 
             // scrollEnd Event ausgelöst werden.
             e.dom = this;
@@ -1434,6 +1501,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._nodeEventListeners = null;
         this._style = null;
         this._tooltip = null;
+        this._contextMenuDeferId = null;
         this._scrollEndDeferId = null;
         
         // Basisklasse entladen
