@@ -841,7 +841,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._value;
         }
 
-        if (this._selectFirst) {
+        if (this._selectFirst && this._listViewEl.data.length) {
             this.value = this._listViewEl.data[0].value;
         }
 

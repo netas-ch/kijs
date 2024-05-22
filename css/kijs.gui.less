@@ -234,6 +234,26 @@
     }
 
 
+    /* ******************
+       * Scrollbar
+       ****************** */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbar-background-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-hover-color);
+    }
+
 
     /* ******************
        * Button
@@ -2870,7 +2890,7 @@
         align-items: flex-start;
         min-height: 25px;
         overflow: visible; /* für Badges */
-        
+
         > .kijs-label {
             display: block;
             flex: none;
@@ -3385,7 +3405,7 @@
     div.kijs-field-memo {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper > textarea {
                 display: block;
                 height: 100%;
@@ -3435,7 +3455,7 @@
     div.kijs-field-listview {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3473,7 +3493,7 @@
     div.kijs-field-checkboxgroup{
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3930,7 +3950,7 @@
     div.kijs-field-aceeditor {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 outline: none;

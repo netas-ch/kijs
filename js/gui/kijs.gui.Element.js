@@ -677,7 +677,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        kijs.Object.assignConfig(this, config, this._configMap);
+        if (this._configMap) {
+            kijs.Object.assignConfig(this, config, this._configMap);
+        }
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
@@ -757,7 +759,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             if (this._rpcLoadFn) {
 
                 // waitMaskTarget
-                let waitMaskTarget = this;
+                let waitMaskTarget = this._waitMaskTarget;
                 if (!kijs.isEmpty(config) && !kijs.isEmpty(config.waitMaskTarget)) {
                     waitMaskTarget = config.waitMaskTarget;
                 }

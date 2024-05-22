@@ -272,47 +272,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         } else {
             this._innerDom.clsRemove('kijs-selected');
         }
-
-        this._raiseRootEvent('select');
-    }
-
-
-    get selectedNodeId() {
-        let nodeId = null;
-        if (this.selected) {
-            nodeId = this.nodeId;
-        } else {
-            kijs.Array.each(this.elements, function (element) {
-                if (element instanceof kijs.gui.Tree) {
-                    nodeId = element.selectedNodeId;
-                    if (nodeId) {
-                        return false;
-                    }
-                }
-            }, this);
-        }
-
-        return nodeId;
-    }
-    set selectedNodeId(val) {
-        if (this.nodeId === val) {
-            let element = this;
-            while (!element.parent.isRoot) {
-                element.parent.expand();
-                element = element.parent;
-            }
-            this._innerDom.clsAdd('kijs-selected');
-
-            this._raiseRootEvent('select');
-        } else {
-            this._innerDom.clsRemove('kijs-selected');
-
-            kijs.Array.each(this.elements, function (element) {
-                if (element instanceof kijs.gui.Tree) {
-                    element.selectedNodeId = val;
-                }
-            }, this);
-        }
     }
 
 
