@@ -1,6 +1,6 @@
 /* global kijs */
 
-home.sc.Tree = class home_sc_Tree {
+home.sc.TreeOld = class home_sc_TreeOld {
     
     
     // --------------------------------------------------------------
@@ -18,7 +18,7 @@ home.sc.Tree = class home_sc_Tree {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Tree',
+            caption: 'kijs.gui.TreeOld',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {
@@ -34,7 +34,7 @@ home.sc.Tree = class home_sc_Tree {
                     cls: 'kijs-titleLarge',
                     value: 'Tree mit RPC:'
                 },{
-                    xtype: 'kijs.gui.Tree',
+                    xtype: 'kijs.gui.TreeOld',
                     caption: 'Element 1',
                     //iconChar: 0xf114,
                     //elements: this.createTreeRecursive(6, 3),
@@ -42,7 +42,7 @@ home.sc.Tree = class home_sc_Tree {
                     //expandedIconCls: 'icoFolderOpen32',
                     //iconSize: 16,
                     //rpc: 'default',
-                    rpcLoadFn: 'tree.load',
+                    rpcLoadFn: 'treeOld.load',
                     on: {
                         expand: function(){ console.log('expand event'); },
                         collapse: function(){ console.log('collapse event'); },
@@ -60,14 +60,14 @@ home.sc.Tree = class home_sc_Tree {
                     value: 'Tree local:',
                     style: { margin: '10px 0 0 0'}
                 },{
-                    xtype: 'kijs.gui.Tree',
+                    xtype: 'kijs.gui.TreeOld',
                     caption: 'Element 1',
                     iconMap: 'kijs.iconMap.Fa.face-smile',
                     elements: this._createTreeRecursive(6, 3),
                     iconCls: 'icoFolder32',
                     expandedIconCls: 'icoFolderOpen32',
                     iconSize: 16,
-                    rpcLoadFn: 'tree.load',
+                    rpcLoadFn: 'treeOld.load',
                     on: {
                         expand: function(){ console.log('expand event'); },
                         collapse: function(){ console.log('collapse event'); },

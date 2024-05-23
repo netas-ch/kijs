@@ -783,7 +783,7 @@ foreach ($requests as $request) {
             }
             break;
         
-        case 'tree.load':
+        case 'treeOld.load':
             $tree = array();
             $nodeId = $request->requestData->nodeId;
 

@@ -3,7 +3,7 @@
 // TODO: Grundsätzlich überarbeiten
 // TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
-// kijs.gui.Tree
+// kijs.gui.TreeOld
 // --------------------------------------------------------------
 /**
  * EVENTS
@@ -15,7 +15,7 @@
  * rowDblClick
  *
  */
-kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
+kijs.gui.TreeOld = class kijs_gui_TreeOld extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -37,7 +37,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         this._nodeDom = new kijs.gui.Dom({cls: 'kijs-node'});
         this._elementsDom = new kijs.gui.Dom({cls: 'kijs-expandcontainer'});
-        this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treecaption', htmlDisplayType: 'code'});
+        this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treeOldCaption', htmlDisplayType: 'code'});
 
         this._iconEl = new kijs.gui.Icon({cls: 'fa-regular'});
         this._expandIconEl = new kijs.gui.Icon({cls: 'kijs-expandicon', iconMap: 'kijs.iconMap.Fa.angle-right'});
@@ -45,7 +45,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon kijs-pulse fa-solid', iconMap: 'kijs.iconMap.Fa.spinner'});
 
         this._dom.clsRemove('kijs-container');
-        this._dom.clsAdd('kijs-tree');
+        this._dom.clsAdd('kijs-treeOld');
 
         // Events
         this._expandIconEl.on('click', this.#onExpandClick, this);
@@ -115,7 +115,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
 
         if (this.isRoot) {
-            this._dom.clsAdd('kijs-tree-root');
+            this._dom.clsAdd('kijs-treeOld-root');
         }
     }
 
@@ -193,9 +193,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     }
 
     get isRemote() { return !!(this._rpcLoadFn || (this.parent && 
-                (this.parent instanceof kijs.gui.Tree) && this.parent.isRemote)); }
+                (this.parent instanceof kijs.gui.TreeOld) && this.parent.isRemote)); }
 
-    get isRoot() { return !this.parent || !(this.parent instanceof kijs.gui.Tree); }
+    get isRoot() { return !this.parent || !(this.parent instanceof kijs.gui.TreeOld); }
 
     get nodeId() { return this._nodeId; }
     set nodeId(val) { this._nodeId = val; }
@@ -204,7 +204,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     get rpc() {
         if (this._rpc) {
             return this._rpc;
-        } else if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        } else if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.rpc; 
         } else {
             return kijs.getRpc('default');
@@ -226,7 +226,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this._rpcLoadArgs) {
             return this._rpcLoadArgs;
         }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.rpcLoadArgs;
         }
         return null;
@@ -237,7 +237,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this._rpcLoadFn) {
             return this._rpcLoadFn;
         }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.rpcLoadFn;
         }
         return null;
@@ -247,7 +247,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this._rpcSaveArgs) {
             return this._rpcSaveArgs;
         }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.rpcLoadArgs;
         }
         return null;
@@ -258,7 +258,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this._rpcSaveFn) {
             return this._rpcSaveFn;
         }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.rpcSaveFn;
         }
         return null;
@@ -350,7 +350,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
      * @returns {kijs_gui_Tree}
      */
     getRootNode() {
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
+        if (this.parent && (this.parent instanceof kijs.gui.TreeOld)) {
             return this.parent.getRootNode();
         }
 
@@ -477,7 +477,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this.selected = !!selected;
         if (recursive) {
             kijs.Array.each(this.elements, function(element) {
-                if (element instanceof kijs.gui.Tree) {
+                if (element instanceof kijs.gui.TreeOld) {
                     element.setSelected(!!selected, true);
                 }
             }, this);
@@ -537,7 +537,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                         element.elements = this._recursiveSetProperties(element.elements);
                     }
 
-                    element.xtype = element.xtype ? element.xtype : 'kijs.gui.Tree';
+                    element.xtype = element.xtype ? element.xtype : 'kijs.gui.TreeOld';
                     element.scrollableY = false;
 
                     //element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;

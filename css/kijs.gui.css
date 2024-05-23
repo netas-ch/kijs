@@ -1515,31 +1515,31 @@
     height: 100%;
   }
   /* ******************
-       * Tree
+       * TreeOld
        ****************** */
-  div.kijs-tree {
+  div.kijs-treeOld {
     overflow: hidden;
     background-color: var(--field-bkgrndColor);
   }
-  div.kijs-tree.kijs-tree-root > .kijs-container-inner {
+  div.kijs-treeOld.kijs-treeOld-root > .kijs-container-inner {
     height: 100%;
   }
-  div.kijs-tree.kijs-tree-root > .kijs-container-inner > div {
+  div.kijs-treeOld.kijs-treeOld-root > .kijs-container-inner > div {
     flex-shrink: 0;
   }
-  div.kijs-tree > .kijs-container-inner {
+  div.kijs-treeOld > .kijs-container-inner {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node {
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     align-items: flex-start;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-expandicon {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-expandicon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1549,21 +1549,21 @@
     transform: rotate(0deg);
     transition: transform 0.2s;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-expandicon.kijs-leaf {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-expandicon.kijs-leaf {
     visibility: hidden;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-icon {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-icon {
     margin: 1px 5px;
     color: #555555;
     cursor: pointer;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-icon.kijs-expandedicon {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-icon.kijs-expandedicon {
     display: none;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-icon.kijs-spinnericon {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-icon.kijs-spinnericon {
     display: none;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-node > .kijs-treecaption {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-node > .kijs-treeOldCaption {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1578,37 +1578,37 @@
     -webkit-user-select: text;
     user-select: text;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-expandcontainer {
+  div.kijs-treeOld > .kijs-container-inner > .kijs-expandcontainer {
     margin-left: 20px;
     display: none;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-expandicon {
+  div.kijs-treeOld > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-expandicon {
     transform: rotate(90deg);
     transition: transform 0.2s;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-expanded > .kijs-expandcontainer {
+  div.kijs-treeOld > .kijs-container-inner.kijs-expanded > .kijs-expandcontainer {
     display: flex;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon {
+  div.kijs-treeOld > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon {
     display: none;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon.kijs-expandicon,
-  div.kijs-tree > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon.kijs-expandedicon {
+  div.kijs-treeOld > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon.kijs-expandicon,
+  div.kijs-treeOld > .kijs-container-inner.kijs-expanded > .kijs-node > .kijs-icon.kijs-expandedicon {
     display: inline-block;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-selected > .kijs-node > .kijs-icon,
-  div.kijs-tree > .kijs-container-inner.kijs-selected > .kijs-node > .kijs-treecaption {
+  div.kijs-treeOld > .kijs-container-inner.kijs-selected > .kijs-node > .kijs-icon,
+  div.kijs-treeOld > .kijs-container-inner.kijs-selected > .kijs-node > .kijs-treeOldCaption {
     font-weight: bold;
     color: var(--item-selected-fontColor);
   }
-  div.kijs-tree > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon {
+  div.kijs-treeOld > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon {
     display: none;
   }
-  div.kijs-tree > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon.kijs-expandicon,
-  div.kijs-tree > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon.kijs-spinnericon {
+  div.kijs-treeOld > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon.kijs-expandicon,
+  div.kijs-treeOld > .kijs-container-inner.kijs-loading > .kijs-node > .kijs-icon.kijs-spinnericon {
     display: inline-block;
   }
   /* ******************

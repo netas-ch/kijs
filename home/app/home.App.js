@@ -126,7 +126,7 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.Tree',
+                    xtype: 'kijs.gui.TreeOld',
                     name: 'treeShowcase',
                     rpc: 'app',
                     rpcLoadFn: 'naviShowcase.load',
@@ -148,7 +148,7 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.Tree',
+                    xtype: 'kijs.gui.TreeOld',
                     name: 'treeTest',
                     rpc: 'app',
                     rpcLoadFn: 'naviTest.load',
@@ -170,7 +170,7 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.Tree',
+                    xtype: 'kijs.gui.TreeOld',
                     name: 'treeDocu',
                     rpc: 'app',
                     rpcLoadFn: 'naviDocu.load',
@@ -377,15 +377,15 @@ home.App = class home_App {
         
         switch (e.element.name) {
             case 'treeDocu':
-                node = this._tabDocu.downX('kijs.gui.Tree').getSelected();
+                node = this._tabDocu.downX('kijs.gui.TreeOld').getSelected();
                 break;
                 
             case 'treeShowcase':
-                node = this._tabShowcase.downX('kijs.gui.Tree').getSelected();
+                node = this._tabShowcase.downX('kijs.gui.TreeOld').getSelected();
                 break;
                 
             case 'treeTest':
-                node = this._tabTest.downX('kijs.gui.Tree').getSelected();
+                node = this._tabTest.downX('kijs.gui.TreeOld').getSelected();
                 break;
                 
         }
