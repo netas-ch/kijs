@@ -2029,16 +2029,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 2px;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f096';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 4px;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f046';
+                        content: '\f00c';
                     }
                 }
 
@@ -2049,16 +2056,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 50%;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f10c';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 50%;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f05d';
+                        content: '\f00c';
                     }
                 }
 
@@ -3352,10 +3366,14 @@
                 > .kijs-checkbox-input {
                     flex: none;
                     margin: 0 4px 0 0;
+                    width: var(--checkbox-height);
+                    height: var(--checkbox-height);
                     font-size: var(--checkbox-fontSize);
-                    line-height: var(--field-lineHeight);
+                    line-height: var(--checkbox-lineHeight);
                     background-color: var(--field-bkgrndColor);
-                    border-radius: 2px;
+                    border: 2px solid var(--field-fontColor);
+                    border-radius: 4px;
+                    text-align: center;
                     color: var(--field-fontColor);
                     cursor: pointer;
                 }
@@ -3384,7 +3402,7 @@
 
                 &:focus {
                     > .kijs-checkbox-input {
-                        color: var(--field-focus-borderColor);
+                        border-color: var(--field-focus-borderColor);
                     }
                 }
             }

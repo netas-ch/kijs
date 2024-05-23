@@ -51,12 +51,9 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         this._checked = 0;                          // 0=checked, 1=unchecked, 2=indeterminated
 
-        this._checkedIconMap = 'kijs.iconMap.Fa.square-check';
-        this._checkedIconCls = null;
-        this._determinatedIconMap = 'kijs.iconMap.Fa.square-minus';
-        this._determinatedIconCls = null;
-        this._uncheckedIconMap = 'kijs.iconMap.Fa.square';
-        this._uncheckedIconCls = null;
+        this._checkedIconMap = 'kijs.iconMap.Fa.check';
+        this._determinatedIconMap = 'kijs.iconMap.Fa.minus';
+        this._uncheckedIconMap = null;
 
         this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
 
@@ -102,11 +99,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             captionWidth: { target: 'captionWidth' },
 
             checkedIconMap: true,
-            checkedIconCls: true,
             determinatedIconMap: true,
-            determinatedIconCls: true,
             uncheckedIconMap: true,
-            uncheckedIconCls: true,
 
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
@@ -188,28 +182,23 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._iconEl.iconChar = null;
             this._iconEl.iconCls = null;
             this._iconEl.iconColor = null;
-            if (this.isRendered) {
-                this.render();
-            }
 
         // kijs.gui.Icon Instanz
         } else if (val instanceof kijs.gui.Icon) {
             this._iconEl.destruct();
             this._iconEl = val;
-            if (this.isRendered) {
-                this.render();
-            }
 
         // Config Objekt
         } else if (kijs.isObject(val)) {
             this._iconEl.applyConfig(val);
-            if (this.isRendered) {
-                this.render();
-            }
 
         } else {
             throw new kijs.Error(`config "icon" is not valid.`);
 
+        }
+        
+        if (this.isRendered) {
+            this.render();
         }
     }
 
@@ -319,32 +308,28 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
     // PROTECTED
     _updateCheckboxIcon() {
-        let cls, iconMap, iconCls;
+        let cls, iconMap;
 
         switch (this._checked) {
             case 0:
                 cls = 'kijs-unchecked';
                 iconMap = this._uncheckedIconMap;
-                iconCls = this._uncheckedIconCls;
                 break;
 
             case 1:
                 cls = 'kijs-checked';
                 iconMap = this._checkedIconMap;
-                iconCls = this._checkedIconCls;
                 break;
 
             case 2:
                 cls = 'kijs-determinated';
                 iconMap = this._determinatedIconMap;
-                iconCls = this._determinatedIconCls;
                 break;
         }
 
         this._dom.clsRemove(['kijs-checked', 'kijs-determinated', 'kijs-unchecked']);
         this._dom.clsAdd(cls);
         this._checkboxIconEl.iconMap = iconMap;
-        this._checkboxIconEl.iconCls = iconCls;
     }
 
     // overwrite

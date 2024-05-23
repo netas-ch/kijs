@@ -80,7 +80,9 @@
     --field-lineHeight: 16px;
     --field-height: 30px;
     --field-label-paddingTop: 7px;
-    --checkbox-fontSize: 20px;
+    --checkbox-height: 20px;
+    --checkbox-fontSize: 14px;
+    --checkbox-lineHeight: 18px;
     --switch-height: 28px;
     
     --badge-fontSize: 12px;

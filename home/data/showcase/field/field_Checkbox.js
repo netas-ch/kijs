@@ -89,15 +89,15 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     helpText: 'Info'
                 },{
                     xtype: 'kijs.gui.field.Checkbox',
-                    name: 'CheckboxOption',
-                    label: '... als Option',
+                    name: 'CheckboxAndereIcons',
+                    label: 'andere Icons',
                     caption: 'Caption',
-                    checkedIconMap: 'kijs.iconMap.Fa.circle-check',
-                    uncheckedIconMap: 'kijs.iconMap.Fa.circle',
-                    determinatedIconMap: 'kijs.iconMap.Fa.circle-dot',
+                    checkedIconMap: 'kijs.iconMap.Fa.x',
+                    determinatedIconMap: 'kijs.iconMap.Fa.ellipsis',
                     valueChecked: 'Ein',
                     valueDeterminated: 'wedernoch',
                     valueUnchecked: 'Aus',
+                    threeState: true,
                     value: 'Ein',
                     helpText: 'Info',
                     elements: [
