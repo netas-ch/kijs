@@ -21,6 +21,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         this._sortable = false;          // Elements sind per Drag&Drop verschiebbar
         
+        this._elementXType = 'kijs.gui.dataView.Element';
+        
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
         this._ddName = kijs.uniqId('dataview.element');
@@ -52,6 +54,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            elementXType: true,         // xtype für DataView-Element. Muss 'kijs.gui.dataView.Element' oder davon vererbt sein.
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
@@ -159,6 +162,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Current Element ermitteln und setzen
         this.current = null;
     }
+    
+    get elementXType() { return this._elementXType; }
+    set elementXType(val) { this._elementXType = val; }
     
     get ddName() { return this._ddName; }
     set ddName(val) {
@@ -370,23 +376,35 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {kijs.gui.getDataViewElement}
      */
     createElement(dataRow, index) {
-        let html = '';
-        
-        html += '<div>';
-        html += ' <span class="label">Nr. ' + index + '</span>';
-        html += '</div>';
-        
-        kijs.Object.each(dataRow, function(key, val) {
-            html += '<div>';
-            html += ' <span class="label">' + key + ': </span>';
-            html += ' <span class="value">' + val + '</span>';
-            html += '</div>';
-        }, this);
-        
-        return new kijs.gui.dataView.Element({
-            dataRow: dataRow,
-            html: html
+        let el = this._getInstanceForAdd({
+            xtype: this._elementXType,
+            dataRow: dataRow
         });
+        
+        if (!(el instanceof kijs.gui.dataView.Element)) {
+            throw new kijs.Error(`Element must be an instance of kijs.gui.dataView.Element.`);
+        }
+        
+        if (this._elementXType === 'kijs.gui.dataView.Element') {
+            let html = '';
+            
+            html += '<div>';
+            html += ' <span class="label">Nr. ' + index + '</span>';
+            html += '</div>';
+
+
+
+            kijs.Object.each(dataRow, function(key, val) {
+                html += '<div>';
+                html += ' <span class="label">' + key + ': </span>';
+                html += ' <span class="value">' + val + '</span>';
+                html += '</div>';
+            }, this);
+            
+            el.html = html;
+        }
+        
+        return el;
     }
     
     /**

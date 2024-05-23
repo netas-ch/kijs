@@ -2,6 +2,15 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.7.1
+=============
+### kijs.gui.DataView
+ - Neue config/getter/setter ```elementXType```. xtype (String) des Elements, 
+   dass verwendet werden soll. Muss von kijs.gui.dataView.Element vererbt sein.  
+   Standard: ```kijs.gui.dataView.Element```  
+
+
+
 Version 2.7.0
 =============
 ### Neue CSS-Variablen  
