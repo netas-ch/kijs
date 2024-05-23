@@ -20,7 +20,7 @@ home.sc.DataView = class home_sc_DataView {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DataView',
             scrollableY: 'auto',
-            cls: ['kijs-borderless', 'kijs-flexcolumn'],
+            cls: ['kijs-borderless'],
             style: {
                 flex: 1
             },
@@ -141,10 +141,11 @@ home.sc.DataView = class home_sc_DataView {
                             captionField: 'id',
                             required: true,
                             data: [
-                                {id:'none' },
-                                {id:'single' },
-                                {id:'multi' },
-                                {id:'simple' }
+                                { id:'none' },
+                                { id:'single' },
+                                { id:'singleAndEmpty' },
+                                { id:'multi' },
+                                { id:'simple' }
                             ],
                             value: 'multi',
                             on: {

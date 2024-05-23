@@ -250,10 +250,11 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 captionField: 'id',
                 required: true,
                 data: [
-                    {id:'none' },
-                    {id:'single' },
-                    {id:'multi' },
-                    {id:'simple' }
+                    { id:'none' },
+                    { id:'single' },
+                    { id:'singleAndEmpty' },
+                    { id:'multi' },
+                    { id:'simple' }
                 ],
                 value: 'single',
                 on: {
@@ -386,7 +387,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
     
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
-            if (el instanceof kijs.gui.field.Field) {
+            if (el instanceof kijs.gui.field.ListView) {
                 el[propertyName] = value;
             }
         }, this);

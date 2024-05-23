@@ -61,7 +61,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze das per default Selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
-                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden
+                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
+                                        // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
             rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
@@ -409,7 +410,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     /**
      * Gibt die selektieten Elemente zurück
-     * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
+     * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.Element|null}
      */
     getSelected() {
@@ -423,7 +424,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
             
-        } else if (this._selectType === 'single') {
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
             return ret.length ? ret[0] : null ;
             
         } else {
@@ -448,7 +449,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
             
-        } else if (this._selectType === 'single') {
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
             return rows.length ? [rows[0]] : null ;
             
         } else {
@@ -479,7 +480,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (isShiftPress || (!isCtrlPress && (this.selectType === 'single' || this.selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -506,7 +507,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this, true);
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -523,7 +524,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -549,7 +550,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this);
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -1013,6 +1014,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 ctrl = false;
                 break;
                 
+            case 'singleAndEmpty':
+                shift = false;
+                ctrl = false;
+                
+                // Falls auf das selektierte Element geklickt wurde: Selektierung entfernen
+                if (this._lastSelectedEl && this._lastSelectedEl === el) {
+                    ctrl = true;
+                }
+                break;
+
+            
             case 'multi':
                 // nix
                 break;
