@@ -343,6 +343,92 @@
     color: var(--default-disabled-fontColor);
   }
   /* ******************
+       * Container Fieldset
+       ****************** */
+  div.kijs-container-fieldset {
+    flex: 1 0 auto;
+    min-height: var(--container-fieldset-label-height);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    overflow: hidden;
+    font-family: var(--default-fontFamily);
+    color: var(--default-fontColor);
+  }
+  div.kijs-container-fieldset > .kijs-header {
+    flex: none;
+    height: 8px;
+    overflow: visible;
+    margin-left: 18px;
+    transition: margin-left 0.5s;
+    display: flex;
+    flex-direction: row;
+    z-index: 1;
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-icon {
+    flex: none;
+    height: var(--container-fieldset-label-height);
+    padding: 0 2px;
+    font-size: var(--container-fieldset-icon-fontSize);
+    line-height: var(--container-fieldset-caption-lineHeight);
+    background-color: var(--panel-bkgrndColor);
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-caption {
+    flex: none;
+    height: var(--container-fieldset-label-height);
+    padding-top: var(--container-fieldset-caption-paddingTop);
+    padding-right: 2px;
+    padding-bottom: 0;
+    padding-left: 2px;
+    font-size: var(--container-fieldset-caption-fontSize);
+    line-height: var(--container-fieldset-caption-lineHeight);
+    background-color: var(--panel-bkgrndColor);
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button {
+    flex: none;
+    height: var(--container-fieldset-label-height);
+    border: 1px solid var(--panel-bkgrndColor);
+    background-color: var(--panel-bkgrndColor);
+    padding: 0;
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button > span.kijs-icon {
+    font-size: var(--container-fieldset-icon-fontSize);
+    line-height: var(--container-fieldset-caption-lineHeight);
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button:hover > span.kijs-icon,
+  div.kijs-container-fieldset > .kijs-header > .kijs-button:focus > span.kijs-icon {
+    color: var(--accentColor);
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button:active > span.kijs-icon {
+    color: var(--accentColor);
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button.kijs-disabled {
+    cursor: default;
+  }
+  div.kijs-container-fieldset > .kijs-header > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-container-fieldset > .kijs-header > .kijs-button.kijs-disabled > .kijs-icon {
+    color: var(--button-disabled-fontColor);
+  }
+  div.kijs-container-fieldset > .kijs-container-inner {
+    border: 1px solid var(--container-fieldset-borderColor);
+    border-radius: 5px;
+    padding: 8px 5px 5px 5px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+  div.kijs-container-fieldset > .kijs-container-inner > * {
+    flex: none;
+    max-width: 600px;
+  }
+  div.kijs-container-fieldset.kijs-collapse-top > .kijs-header {
+    margin-left: 0;
+  }
+  div.kijs-container-fieldset.kijs-collapse-top > .kijs-container-inner {
+    display: none;
+  }
+  /* ******************
        * Container Scrollable
        ****************** */
   div.kijs-container-scrollable {

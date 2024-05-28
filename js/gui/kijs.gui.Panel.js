@@ -212,7 +212,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     set collapseButton(val) {
         // Button entfernen
         if (kijs.isEmpty(val)) {
-            this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
+            if (this._collapseButtonEl) {
+                this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
+            }
             this._collapseButtonEl = null;
 
         // Instanz von kijs.gui.Button
@@ -435,7 +437,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     set resizableWidth(val) {
         this._setResizable(!!val, null);
     }
-
+    
     // overwrite
     get width() { return super.width; }
     set width(val) {
@@ -714,8 +716,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this.top = 0;
         this._dom.width = null;
         this._dom.height = null;
-        this._dom.style.width = 'auto';
-        this._dom.style.height = 'auto';
         this._dom.style.marginLeft = 0;
         this._dom.style.marginRight = 0;
         this._dom.style.marginTop = 0;

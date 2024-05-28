@@ -42,6 +42,7 @@
    "js/gui/kijs.gui.Spacer.js",
 
    "js/gui/container/kijs.gui.container.js",
+   "js/gui/container/kijs.gui.container.Fieldset.js",
    "js/gui/container/kijs.gui.container.Form.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
