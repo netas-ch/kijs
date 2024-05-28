@@ -46,6 +46,12 @@
     --button-lineHeight: 16px;
     --button-height: 30px;
     
+    --container-fieldset-label-height: 16px;
+    --container-fieldset-icon-fontSize: 16px;
+    --container-fieldset-caption-fontSize: 12px;
+    --container-fieldset-caption-lineHeight: 16px;
+    --container-fieldset-caption-paddingTop: 0px;
+
     --field-fontSize: 14px;
     --field-lineHeight: 16px;
     --field-height: 30px;
@@ -189,6 +195,10 @@
     
     --bar-button-icon-fontColor: var(--grey11);
     --bar-button-icon-disabled-fontColor: var(--grey05);
+
+
+    /* container.Fieldset */
+    --container-fieldset-borderColor: var(--grey07);
 
 
     /* MsgBox */

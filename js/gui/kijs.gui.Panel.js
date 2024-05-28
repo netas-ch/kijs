@@ -212,7 +212,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     set collapseButton(val) {
         // Button entfernen
         if (kijs.isEmpty(val)) {
-            this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
+            if (this._collapseButtonEl) {
+                this._headerBarEl.containerRightEl.remove(this._collapseButtonEl);
+            }
             this._collapseButtonEl = null;
 
         // Instanz von kijs.gui.Button
