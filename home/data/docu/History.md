@@ -41,6 +41,26 @@ in kijs.theme.default.css.
 
 
 
+Version 2.7.1
+=============
+### kijs.gui.container.Fieldset (NEU)
+Neue CSS-Variablen:  
+
+    --container-fieldset-label-height: 16px;
+    --container-fieldset-icon-fontSize: 16px;
+    --container-fieldset-caption-fontSize: 12px;
+    --container-fieldset-caption-lineHeight: 16px;
+    --container-fieldset-caption-paddingTop: 0px;
+
+    --container-fieldset-borderColor: var(--grey07);
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
+in kijs.theme.default.css.  
+
+**UPDATE TIPP:** Neue Datei kijs.gui.container.Fieldset.js einbinden.  
+
+
+
 Version 2.7.0
 =============
 ### Neue CSS-Variablen  

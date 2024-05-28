@@ -257,6 +257,7 @@ home.App = class home_App {
                     labelWidth: 74,
                     valueField: 'id',
                     captionField: 'Bezeichnung',
+                    required: true,
                     data: [
                         { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
                         {id:'kijs.theme.retro.css', Bezeichnung:'Retro' },
@@ -295,28 +296,10 @@ home.App = class home_App {
                         context: this
                     }
                 },{
-                    xtype: 'kijs.gui.Button',
+                    xtype: 'kijs.gui.container.Fieldset',
                     caption: 'Akzentfarben',
-                    icon2Map: 'kijs.iconMap.Fa.chevron-down',
-                    disableFlex: false,
-                    on: {
-                        click: function(e) {
-                            const el = e.element.parent.downX('kijs.gui.Container');
-                            el.visible = !el.visible;
-                            if (el.visible) {
-                                e.element.icon2Map = 'kijs.iconMap.Fa.chevron-up';
-                            } else {
-                                e.element.icon2Map = 'kijs.iconMap.Fa.chevron-down';
-                            }
-                            
-
-                        },
-                        context: this
-                    }
-                },{
-                    xtype: 'kijs.gui.Container',
-                    cls: 'kijs-flexform',
-                    visible: false,
+                    collapsible: true,
+                    collapsed: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.field.Color',

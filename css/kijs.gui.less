@@ -402,6 +402,115 @@
 
 
     /* ******************
+       * Container Fieldset
+       ****************** */
+    div.kijs-container-fieldset {
+        flex: 1 0 auto;
+        min-height: var(--container-fieldset-label-height);
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        overflow: hidden;
+        font-family: var(--default-fontFamily);
+        color: var(--default-fontColor);
+        
+        > .kijs-header {
+            flex: none;
+            height: 8px;
+            overflow: visible;
+            margin-left: 18px;
+            transition: margin-left 0.5s;
+            display: flex;
+            flex-direction: row;
+            z-index: 1;
+            
+            > .kijs-icon {
+                flex: none;
+                height: var(--container-fieldset-label-height);
+                padding: 0 2px;
+                font-size: var(--container-fieldset-icon-fontSize);
+                line-height: var(--container-fieldset-caption-lineHeight);
+                background-color: var(--panel-bkgrndColor);
+            }
+            
+            > .kijs-caption {
+                flex: none;
+                height: var(--container-fieldset-label-height);
+                padding-top: var(--container-fieldset-caption-paddingTop);
+                padding-right: 2px;
+                padding-bottom: 0;
+                padding-left: 2px;
+                font-size: var(--container-fieldset-caption-fontSize);
+                line-height: var(--container-fieldset-caption-lineHeight);
+                background-color: var(--panel-bkgrndColor);
+            }
+            
+            > .kijs-button {
+                flex: none;
+                height: var(--container-fieldset-label-height);
+                border: 1px solid var(--panel-bkgrndColor);
+                background-color: var(--panel-bkgrndColor);
+                padding: 0;
+                
+                > span.kijs-icon {
+                    font-size: var(--container-fieldset-icon-fontSize);
+                    line-height: var(--container-fieldset-caption-lineHeight);
+                }
+                
+                &:hover, &:focus {
+                    > span.kijs-icon {
+                        color: var(--accentColor);
+                    }
+                }
+
+                &:active {
+                    > span.kijs-icon {
+                        color: var(--accentColor);
+                    }
+                }
+
+                &.kijs-disabled {
+                    cursor: default;
+
+                    > .kijs-caption,
+                    > .kijs-icon {
+                        color: var(--button-disabled-fontColor);
+                    }
+                }
+            }
+        }
+        
+        > .kijs-container-inner {
+            border: 1px solid var(--container-fieldset-borderColor);
+            border-radius: 5px;
+            padding: 8px 5px 5px 5px;
+            
+            display: flex;
+            flex-direction: column;
+            flex-wrap: nowrap;
+
+            gap: 4px;
+
+            > * {
+                flex: none;
+                max-width: 600px;
+            }
+        }
+        
+        &.kijs-collapse-top {
+            > .kijs-header {
+                margin-left: 0;
+            }
+            
+            > .kijs-container-inner {
+                display: none;
+            }
+        }
+    }
+
+
+
+    /* ******************
        * Container Scrollable
        ****************** */
     div.kijs-container-scrollable {
