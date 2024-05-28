@@ -39,13 +39,13 @@
     /* Masse */
     --default-fontSize: 14px;
     --default-lineHeight: 16px;
-    
+
     --icon-fontSize: 20px;
-    
+
     --button-fontSize: 14px;
     --button-lineHeight: 16px;
     --button-height: 30px;
-    
+
     --container-fieldset-label-height: 16px;
     --container-fieldset-icon-fontSize: 16px;
     --container-fieldset-caption-fontSize: 12px;
@@ -58,23 +58,23 @@
     --field-label-paddingTop: 7px;
     --checkbox-fontSize: 20px;
     --switch-height: 28px;
-    
+
     --badge-fontSize: 12px;
     --badge-lineHeight: 16px;
-    
+
     --headerBar-fontSize: 16px;
     --footerBar-fontSize: 14px;
-    
+
     --msgbox-fontSize: 14px;
     --msgbox-lineHeight: 16px;
 
     --item-fontSize: 14px;
     --item-lineHeight: 16px;
     --item-label-fontSize: 12px;
-    
+
     --panel-collapse-height: 36px;
     --panel-collapse-width: 36px;
-    
+
     /* Standard Feldbreiten */
     --defaultField-inputWidth: 220px;
     --defaultNumber-inputWidth: 100px;
@@ -86,8 +86,8 @@
     --defaultDateRange-inputWidth: 190px;
     --defaultPhone-inputWidth: 150px;
     --defaultSozVersNr-inputWidth: 140px;
-    
-    
+
+
     /* Farbzuweisungen */
     --viewport-bkgrndColor: #111;
     --splitter-overlay-bkgrndColor: var(--grey06);
