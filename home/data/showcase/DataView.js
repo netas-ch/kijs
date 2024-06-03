@@ -35,9 +35,10 @@ home.sc.DataView = class home_sc_DataView {
                     caption: 'DataView local',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: true,
                     style: {
-                        flex: 1,
-                        minHeight: '90px'
+                        flex: 'none'
                     },
                     
                     elements:[
@@ -62,9 +63,10 @@ home.sc.DataView = class home_sc_DataView {
                     caption: '2x DataView local mit Drag&Drop untereinander',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: true,
                     style: {
-                        flex: 1,
-                        minHeight: '80px'
+                        flex: 'none'
                     },
                     elements:[
                         {
@@ -104,9 +106,10 @@ home.sc.DataView = class home_sc_DataView {
                     caption: 'DataView RPC',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: true,
                     style: {
-                        flex: 2,
-                        minHeight: '80px'
+                        flex: 'none'
                     },
                     
                     headerElements:[
