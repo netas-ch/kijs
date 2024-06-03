@@ -185,6 +185,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         if (this._showCheckBoxes) {
             switch (this._selectType) {
                 case 'single':
+                case 'singleAndEmpty':
                     cls = 'kijs-display-options';
                     break;
 

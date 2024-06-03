@@ -2,6 +2,25 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.7.x
+=============
+### kijs.gui.DataView  
+ - Neue config/getter/setter ```elementXType```. xtype (String) des Elements, 
+   dass verwendet werden soll. Muss von kijs.gui.dataView.Element vererbt sein.  
+   Standard: ```kijs.gui.dataView.Element```  
+ - Zusätzlicher möglicher Wert für ```selectType```: ```'singleAndEmpty'```  
+   Verhält sich gleich wie ```'single'``` der aktuelle Datensatz kann aber wieder 
+   abgewählt werden.  
+
+### kijs.gui.field.OptionGroup  
+ - Neu kann die gewählte Option wieder abgewählt werden.  
+   Ist ```required: true```, kann der Wert nicht abgewählt werden.  
+
+### kijs.String
+ - Neue Funktion ```kijs.String.toRegExp()```  
+
+
+
 Version 2.7.1
 =============
 ### kijs.gui.container.Fieldset (NEU)
@@ -15,11 +34,10 @@ Neue CSS-Variablen:
 
     --container-fieldset-borderColor: var(--grey07);
 
-
 **UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
 in kijs.theme.default.css.  
 
-**UPDATE TIPP:** Neue Datei kijs.gui.container.Fieldset.js einbinden. 
+**UPDATE TIPP:** Neue Datei kijs.gui.container.Fieldset.js einbinden.  
 
 
 
@@ -45,7 +63,7 @@ Variablen für Standard-Feldbreiten:
  - ```--defaultPhone-inputWidth: 150px;```  
  - ```--defaultSozVersNr-inputWidth: 140px;```  
 
-**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe als Beispiel 
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
 in kijs.theme.default.css.  
 
 

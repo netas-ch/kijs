@@ -21,6 +21,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         this._sortable = false;          // Elements sind per Drag&Drop verschiebbar
         
+        this._elementXType = 'kijs.gui.dataView.Element';
+        
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
         this._ddName = kijs.uniqId('dataview.element');
@@ -52,13 +54,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            elementXType: true,         // xtype für DataView-Element. Muss 'kijs.gui.dataView.Element' oder davon vererbt sein.
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze das per default Selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
-                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden
+                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
+                                        // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
             rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
@@ -159,6 +163,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Current Element ermitteln und setzen
         this.current = null;
     }
+    
+    get elementXType() { return this._elementXType; }
+    set elementXType(val) { this._elementXType = val; }
     
     get ddName() { return this._ddName; }
     set ddName(val) {
@@ -370,28 +377,38 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {kijs.gui.getDataViewElement}
      */
     createElement(dataRow, index) {
-        let html = '';
-        
-        html += '<div>';
-        html += ' <span class="label">Nr. ' + index + '</span>';
-        html += '</div>';
-        
-        kijs.Object.each(dataRow, function(key, val) {
-            html += '<div>';
-            html += ' <span class="label">' + key + ': </span>';
-            html += ' <span class="value">' + val + '</span>';
-            html += '</div>';
-        }, this);
-        
-        return new kijs.gui.dataView.Element({
-            dataRow: dataRow,
-            html: html
+        let el = this._getInstanceForAdd({
+            xtype: this._elementXType,
+            dataRow: dataRow
         });
+        
+        if (!(el instanceof kijs.gui.dataView.Element)) {
+            throw new kijs.Error(`Element must be an instance of kijs.gui.dataView.Element.`);
+        }
+        
+        if (this._elementXType === 'kijs.gui.dataView.Element') {
+            let html = '';
+            
+            html += '<div>';
+            html += ' <span class="label">Nr. ' + index + '</span>';
+            html += '</div>';
+
+            kijs.Object.each(dataRow, function(key, val) {
+                html += '<div>';
+                html += ' <span class="label">' + key + ': </span>';
+                html += ' <span class="value">' + val + '</span>';
+                html += '</div>';
+            }, this);
+            
+            el.html = html;
+        }
+        
+        return el;
     }
     
     /**
      * Gibt die selektieten Elemente zurück
-     * Bei selectType='single' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
+     * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.Element|null}
      */
     getSelected() {
@@ -405,7 +422,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
             
-        } else if (this._selectType === 'single') {
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
             return ret.length ? ret[0] : null ;
             
         } else {
@@ -430,7 +447,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
             
-        } else if (this._selectType === 'single') {
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
             return rows.length ? [rows[0]] : null ;
             
         } else {
@@ -461,7 +478,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (isShiftPress || (!isCtrlPress && (this.selectType === 'single' || this.selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -488,7 +505,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this, true);
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -505,7 +522,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -531,7 +548,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                             }
                         }, this);
                         
-                        if (isShiftPress || (!isCtrlPress && (this._selectType === 'single' || this._selectType === 'multi'))) {
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
                             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
                         }
                     }
@@ -995,6 +1012,25 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 ctrl = false;
                 break;
                 
+            case 'singleAndEmpty':
+                shift = false;
+                ctrl = false;
+                
+                // 1. Selektiertes Element ermitteln
+                let sel = this.getSelected();
+                if (!kijs.isEmpty(sel)) {
+                    if (kijs.isArray(sel)) {
+                        sel = sel[0];
+                    }
+                }
+
+                // Falls auf das selektierte Element geklickt wurde: Selektierung entfernen
+                if (sel && sel === el) {
+                    ctrl = true;
+                }
+                break;
+
+            
             case 'multi':
                 // nix
                 break;
