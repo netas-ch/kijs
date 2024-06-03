@@ -1018,8 +1018,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 shift = false;
                 ctrl = false;
                 
+                // 1. Selektiertes Element ermitteln
+                let sel = this.getSelected();
+                if (!kijs.isEmpty(sel)) {
+                    if (kijs.isArray(sel)) {
+                        sel = sel[0];
+                    }
+                }
+
                 // Falls auf das selektierte Element geklickt wurde: Selektierung entfernen
-                if (this._lastSelectedEl && this._lastSelectedEl === el) {
+                if (sel && sel === el) {
                     ctrl = true;
                 }
                 break;
