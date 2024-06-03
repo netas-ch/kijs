@@ -2,31 +2,8 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version 2.8.0
+Version 2.7.x
 =============
-### Anpassungen CSS  
- - Font Awesome Update auf Version 6.5.2.
-
- - Neue CSS-Variablen:  
-    - ```--checkbox-height: 20px;```  
-    - ```--checkbox-lineHeight: 18px;```  
-
- - Geänderte CSS-Variablen:  
-    - ```--checkbox-fontSize: 14px;```  (alter Wert: 20px)  
-
-**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel 
-in kijs.theme.default.css.  
-
-### kijs.gui.Checkbox  
- - Die Checkbox wird neu mit einem Border gezeichnet.  
- - Folgende configs wurden entfernt:  
-    - ```checkedIconCls```  
-    - ```determinatedIconCls```  
-    - ```uncheckedIconCls```  
-
-### kijs.gui.ListView  
- - Checkboxen/Optionen werden neu mit einem Border gezeichnet.  
-
 ### kijs.gui.DataView  
  - Neue config/getter/setter ```elementXType```. xtype (String) des Elements, 
    dass verwendet werden soll. Muss von kijs.gui.dataView.Element vererbt sein.  
@@ -38,6 +15,9 @@ in kijs.theme.default.css.
 ### kijs.gui.field.OptionGroup  
  - Neu kann die gewählte Option wieder abgewählt werden.  
    Ist ```required: true```, kann der Wert nicht abgewählt werden.  
+
+### kijs.String
+ - Neue Funktion ```kijs.String.toRegExp()```  
 
 
 

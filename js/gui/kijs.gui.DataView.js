@@ -393,8 +393,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             html += ' <span class="label">Nr. ' + index + '</span>';
             html += '</div>';
 
-
-
             kijs.Object.each(dataRow, function(key, val) {
                 html += '<div>';
                 html += ' <span class="label">' + key + ': </span>';
