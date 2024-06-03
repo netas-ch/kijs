@@ -367,35 +367,15 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
         pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
-
-        // URLs beginnend mit 'www.'
-        // (without // before it, or it'd re-link the ones done above).
+        
+        // URLs beginnend mit 'www.' Vorher darf kein '/' sein
         pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
         txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');
 
         // E-Mailadressen
-        pattern = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
+        // https://stackoverflow.com/questions/42407785/regex-extract-email-from-strings
+        pattern = /((?:[a-z0-9+!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\]))/gim;
         txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');
-        
-        /*
-        // 19.05.2024/gkipfer: Negative Lookbehind (?<!...) lösen im Safari gleich beim laden der Javascript-Datei einen Fehler aus.
-        // Ich habe keine Möglichekit gefunden dies zu Umgehen. Deshalb wird nun ein vereinfachtes RegExp ausgeführt.
-        
-        // Bei allen patterns darf vorher kein href=" stehen (?<!href\s*=\s*[\"\'])
-        
-        // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
-        pattern = /(?<!href\s*=\s*[\"\'])(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
-        txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
-
-        // URLs beginnend mit 'www.'
-        // (without // before it, or it'd re-link the ones done above).
-        pattern = /(?<!href\s*=\s*[\"\'])(^|[^\/])(www\.[\S]+(\b|$))/gim;
-        txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');
-
-        // E-Mailadressen
-        pattern = /(?<!href\s*=\s*[\"\'])(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-        txt = txt.replace(pattern, '<a href="mailto:$1" tabindex="-1">$1</a>');*/
-
         return txt;
     }
 
