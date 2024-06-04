@@ -2,8 +2,13 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version 2.7.x
+Version 2.7.2 (ist noch in Entwicklung)
 =============
+### Anpassungen CSS  
+ - Font Awesome Update auf Version 6.5.2.
+
+**UPDATE TIPP:**: Neue Fonts in files.json eintragen.
+
 ### kijs.gui.DataView  
  - Neue config/getter/setter ```elementXType```. xtype (String) des Elements, 
    dass verwendet werden soll. Muss von kijs.gui.dataView.Element vererbt sein.  

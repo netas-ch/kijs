@@ -90,7 +90,7 @@
    "js/gui/dataView/kijs.gui.dataView.Element.js",
 
    "js/gui/kijs.gui.ListView.js",
-
+   
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",
@@ -178,12 +178,12 @@
 
  "fonts":{
   "gui":[
-    "fonts/font-awesome-6-5-1/fa-regular-400.ttf",
-    "fonts/font-awesome-6-5-1/fa-regular-400.woff2",
-    "fonts/font-awesome-6-5-1/fa-brands-400.ttf",
-    "fonts/font-awesome-6-5-1/fa-brands-400.woff2",
-    "fonts/font-awesome-6-5-1/fa-solid-900.ttf",
-    "fonts/font-awesome-6-5-1/fa-solid-900.woff2",
+    "fonts/font-awesome-6-5-2/fa-regular-400.ttf",
+    "fonts/font-awesome-6-5-2/fa-regular-400.woff2",
+    "fonts/font-awesome-6-5-2/fa-brands-400.ttf",
+    "fonts/font-awesome-6-5-2/fa-brands-400.woff2",
+    "fonts/font-awesome-6-5-2/fa-solid-900.ttf",
+    "fonts/font-awesome-6-5-2/fa-solid-900.woff2",
 
     "fonts/roboto/Roboto-Regular.woff",
     "fonts/roboto/Roboto-Italic.woff",
