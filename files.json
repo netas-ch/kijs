@@ -91,8 +91,10 @@
    "js/gui/dataView/element/kijs.gui.dataView.element.Base.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.AutoHtml.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.ListView.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.Tree.js",
 
    "js/gui/kijs.gui.ListView.js",
+   "js/gui/kijs.gui.Tree.js",
    
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",

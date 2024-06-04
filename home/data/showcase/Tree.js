@@ -1,6 +1,6 @@
-/* global kijs */
+/* global kijs, home */
 
-home.sc.DataView = class home_sc_DataView {
+home.sc.Tree = class home_sc_Tree {
     
     
     // --------------------------------------------------------------
@@ -18,21 +18,20 @@ home.sc.DataView = class home_sc_DataView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.DataView',
+            caption: 'kijs.gui.Tree',
             scrollableY: 'auto',
-            cls: ['kijs-borderless', 'kijs-flexcolumn'],
+            cls: ['kijs-borderless', 'kijs-flexform'],
             style: {
                 flex: 1
             },
             innerStyle: {
-                padding: '10px',
-                gap: '10px'
+                padding: '10px'
             },
             headerElements: this._getHeaderElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.Panel',
-                    caption: 'DataView local',
+                    caption: 'Tree local',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
                     style: {
@@ -42,140 +41,22 @@ home.sc.DataView = class home_sc_DataView {
                     
                     elements:[
                         {
-                            xtype: 'kijs.gui.DataView',
-                            selectType: 'multi',
-                            data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}, {A:'A3', B:'B3'}],
-                            selectFilters: [{field:'A', 'value':'A2'}],
-                            //scrollableY: 'auto',
-                            style: {
-                                flex: 1
-                            },
-                            innerStyle: {
-                                padding: '4px'
-                            }
-                        }
-                    ]
-                },
-                
-                {
-                    xtype: 'kijs.gui.Panel',
-                    caption: '2x DataView local mit Drag&Drop untereinander',
-                    scrollableY: 'auto',
-                    cls: 'kijs-flexrow',
-                    style: {
-                        flex: 1,
-                        minHeight: '80px'
-                    },
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.DataView',
-                            selectType: 'multi',
-                            ddName: 'kijs.gui.Dashboard.Test',
-                            sortable: true,
-                            data: [{key:'A1'}, {key:'A2'}, {key:'A3'}],
-                            //scrollableY: 'auto',
-                            style: {
-                                flex: 1,
-                                borderRight: '1px solid var(--panel-borderColor)'
-                            },
-                            innerStyle: {
-                                padding: '4px'
-                            }
-                        },{
-                            xtype: 'kijs.gui.DataView',
-                            selectType: 'multi',
-                            ddName: 'kijs.gui.Dashboard.Test',
-                            sortable: true,
-                            data: [{key:'B1'}, {key:'B2'}, {key:'B3'}],
-                            //scrollableY: 'auto',
-                            style: {
-                                flex: 1
-                            },
-                            innerStyle: {
-                                padding: '4px'
-                            }
-                        }
-                    ]
-                },
-                
-                
-                {
-                    xtype: 'kijs.gui.Panel',
-                    caption: 'DataView RPC',
-                    scrollableY: 'auto',
-                    cls: 'kijs-flexrow',
-                    style: {
-                        flex: 2,
-                        minHeight: '80px'
-                    },
-                    
-                    headerElements:[
-                        {
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable',
-                            tooltip: 'Disable/Enable dataview',
-                            on: {
-                                click: function() {
-                                    const dv = this._content.down('dataViewRpc');
-                                    dv.disabled = !dv.disabled;
-                                },
-                                context: this
-                            }
-                        },{
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Disable/Enable first Child',
-                            on: {
-                                click: function() {
-                                    const dv = this._content.down('dataViewRpc');
-                                    dv.elements[0].disabled = !dv.elements[0].disabled;
-                                },
-                                context: this
-                            }
-                        },{
-                            xtype: 'kijs.gui.Separator'
-                        },{
-                            xtype: 'kijs.gui.field.OptionGroup',
-                            label: 'selectType',
-                            cls: 'kijs-inline',
+                            xtype: 'kijs.gui.Tree',
                             valueField: 'id',
-                            captionField: 'id',
-                            required: true,
+                            captionField: 'caption',
+                            iconMapField: 'icon',
+                            //iconColorField: 'Color',
+                            childsField: 'childs',
+                            //tooltipField: 'Color',
+                            showCheckBoxes: false,
+                            selectType: 'singleAndEmpty',
+                            width: 200,
                             data: [
-                                {id:'none' },
-                                {id:'single' },
-                                {id:'multi' },
-                                {id:'simple' }
+                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', childs:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', childs:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube' }] }, 
+                                {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', childs:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]}, 
+                                {id:3, caption:'Instagram', icon:'kijs.iconMap.Fa.instagram'}                                
                             ],
-                            value: 'multi',
-                            on: {
-                                change: function(e) {
-                                    const dv = this._content.down('dataViewRpc');
-                                    dv.clearSelections();
-                                    dv.selectType = e.value;
-                                },
-                                context: this
-                            }
-                        }
-                    ],
-                    
-                    elements:[
-                        {
-                            xtype: 'kijs.gui.DataView',
-                            name: 'dataViewRpc',
-                            selectType: 'multi',
-                            rpcLoadFn: 'dataview.load',
-                            rpcSaveFn: 'dataview.save',
-                            autoLoad: true,
-                            autoSave: true,
-                            sortable: true,
-                            waitMaskTargetDomProperty: 'innerDom',
-                            //scrollableY: 'auto',
-                            style: {
-                                flex: 1
-                            },
-                            innerStyle: {
-                                padding: '4px'
-                            }
+                            value: 2
                         }
                     ]
                 }

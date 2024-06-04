@@ -2233,6 +2233,202 @@
 
 
     /* ******************
+       * Tree
+       ****************** */
+    div.kijs-tree {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        overflow: hidden;
+        border: 1px solid var(--field-borderColor);
+        background-color: var(--field-bkgrndColor);
+        cursor: pointer;
+
+        &.kijs-borderless {
+            border: none;
+        }
+
+        > .kijs-container-inner {
+            padding: 3px 0 2px 0;
+
+            /* falls das Listview eine Fixe höhe hat: flexen */
+            &[style="height:*"] {
+                flex: 1 0 0;
+                display: flex;
+                flex-direction: column;
+
+                > .kijs-dataview-element {
+                    flex: 1 0 auto;
+                }
+            }
+
+            > .kijs-dataview-element {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                border: 1px solid transparent;
+                padding: 0 4px;
+                outline: none;
+
+                > .kijs-container-inner {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    gap: 4px;
+
+                    /* selektion von Text erlauben */
+                    -webkit-user-select: text;
+                    user-select: text;
+                    
+                    > .kijs-icon {
+                        flex: none;
+                        margin: 0;
+
+                        &:empty {
+                            display: none;
+                        }
+                    }
+                    
+                    > .kijs-expandIcon {
+                        flex: none;
+                        width: 16px;
+                        margin: 0;
+
+                        &:empty {
+                            display: none;
+                        }
+                    }
+
+                    > .kijs-caption {
+                        flex: 1;
+                        margin: 0;
+                        overflow: hidden;
+                        white-space: nowrap;
+                        text-overflow: ellipsis;
+                        font-family: var(--default-fontFamily);
+                        font-size: var(--default-fontSize);
+                        color: var(--item-fontColor);
+                    }
+                }
+
+                &:focus,
+                &:hover {
+                    background-color: var(--item-focus-bkgrndColor);
+                    border-color: var(--item-focus-borderColor);
+                    color: var(--item-focus-fontColor);
+                }
+
+                &.kijs-selected {
+                    border-color: var(--item-selected-borderColor);
+
+                    &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                        background-color: var(--item-selected-bkgrndColor);
+                    }
+                }
+
+                &.kijs-display-checkboxes {
+                    color: var(--field-fontColor);
+                    border-color: transparent;
+
+                    &:before {
+                        flex: none;
+                        margin: 0 4px 0 0;
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
+                        font-size: var(--checkbox-fontSize);
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 4px;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
+                    }
+
+                    &.kijs-selected:before {
+                        content: '\f00c';
+                    }
+                }
+
+                &.kijs-display-options {
+                    color: var(--field-fontColor);
+                    border-color: transparent;
+
+                    &:before {
+                        flex: none;
+                        margin: 0 4px 0 0;
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
+                        font-size: var(--checkbox-fontSize);
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 50%;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
+                    }
+
+                    &.kijs-selected:before {
+                        content: '\f00c';
+                    }
+                }
+
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+
+                &.kijs-sourceDragOver {
+                    border-color: var(--accentColor3);
+                    border-radius: 5px;
+                }
+            }
+
+            /* Drop Marker */
+            > .kijs-dropMarker {
+                flex: none;
+                border: 1px solid var(--accentColor3);
+                border-radius: 5px;
+            }
+        }
+
+        &.kijs-disabled {
+            background-color: var(--field-disabled-bkgrndColor);
+
+            div.kijs-dataview-element {
+                background-color: transparent;
+
+                > .kijs-container-inner {
+                    > .kijs-caption {
+                        color: var(--field-disabled-fontColor);
+                    }
+                }
+
+                &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                    border-color: var(--item-selected-disabled-borderColor);
+                    background-color: transparent;
+                }
+
+                &.kijs-display-checkboxes,
+                &.kijs-display-options {
+                    &:before {
+                        background-color: var(--field-disabled-bkgrndColor);
+                    }
+                }
+            }
+        }
+    }
+
+
+
+    /* ******************
        * ProgressBar
        ****************** */
     div.kijs-progressbar {
