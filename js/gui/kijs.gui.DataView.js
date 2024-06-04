@@ -21,8 +21,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         this._sortable = false;          // Elements sind per Drag&Drop verschiebbar
         
-        this._elementXType = 'kijs.gui.dataView.Element';
-        
+        this._elementXType = 'kijs.gui.dataView.element.AutoHtml';
+    
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
         this._ddName = kijs.uniqId('dataview.element');
@@ -54,7 +54,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            elementXType: true,         // xtype für DataView-Element. Muss 'kijs.gui.dataView.Element' oder davon vererbt sein.
+            elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
@@ -113,7 +113,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
-     * @param {kijs.gui.dataView.Element|null} el
+     * @param {kijs.gui.dataView.element.Base|null} el
      * @returns {undefined}
      */
     set current(el) {
@@ -265,11 +265,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     get focusable() { return this._focusable; }
     set focusable(val) { 
         this._focusable = val; 
-        if (val) {
-            //this._dom.nodeAttributeSet('tabIndex', -1);
-        } else {
-            //this._dom.nodeAttributeSet('tabIndex', undefined);
-        }
     }
     
     // overwrite
@@ -370,46 +365,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
     
     /**
-     * Erstellt aus einem Recordset ein getDataViewElement
-     * Diese Funktion muss überschrieben werden.
-     * @param {Array} dataRow   Datensatz, der gerendert werden soll
-     * @param {Number} index    Index des Datensatzes. Die Datensätze werden durchnummeriert 0 bis ...
-     * @returns {kijs.gui.getDataViewElement}
-     */
-    createElement(dataRow, index) {
-        let el = this._getInstanceForAdd({
-            xtype: this._elementXType,
-            dataRow: dataRow
-        });
-        
-        if (!(el instanceof kijs.gui.dataView.Element)) {
-            throw new kijs.Error(`Element must be an instance of kijs.gui.dataView.Element.`);
-        }
-        
-        if (this._elementXType === 'kijs.gui.dataView.Element') {
-            let html = '';
-            
-            html += '<div>';
-            html += ' <span class="label">Nr. ' + index + '</span>';
-            html += '</div>';
-
-            kijs.Object.each(dataRow, function(key, val) {
-                html += '<div>';
-                html += ' <span class="label">' + key + ': </span>';
-                html += ' <span class="value">' + val + '</span>';
-                html += '</div>';
-            }, this);
-            
-            el.html = html;
-        }
-        
-        return el;
-    }
-    
-    /**
      * Gibt die selektieten Elemente zurück
      * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
-     * @returns {Array|kijs.gui.dataView.Element|null}
+     * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
     getSelected() {
         let ret = [];
@@ -752,7 +710,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         const selElements = [];
         if (!kijs.isEmpty(filters)) {
             kijs.Array.each(this._elements, function(el) {
-                if (el instanceof kijs.gui.dataView.Element) {
+                if (el instanceof kijs.gui.dataView.element.Base) {
                     const row = el.dataRow;
 
                     kijs.Array.each(filters, function(filterFields) {
@@ -866,6 +824,27 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     // PROTECTED
     /**
+     * Erstellt aus einem Recordset ein kijs.gui.dataView.element....
+     * @param {Array} dataRow   Datensatz, der gerendert werden soll
+     * @param {Number} dataIndex  Index des Datensatzes im Recordset
+     * @returns {kijs.gui.getDataViewElement}
+     */
+    _createElement(dataRow, dataIndex) {
+        let el = this._getInstanceForAdd({
+            xtype: this._elementXType,
+            parent: this,
+            dataRow: dataRow,
+            dataIndex: dataIndex
+        });
+
+        if (!(el instanceof kijs.gui.dataView.element.Base)) {
+            throw new kijs.Error(`Element must be an instance of kijs.gui.dataView.element.Base.`);
+        }
+
+        return el;
+    }
+    
+    /**
      * Erstellt die Elemente
      * @param {array|string} data
      * @param {bool}  removeElements
@@ -875,7 +854,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         
         // index des aktuellen Elements merken (Element mit Fokus)
         let currentIndex = null;
-        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.Element) && kijs.isDefined(this._currentEl.index)) {
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.element.Base) && kijs.isDefined(this._currentEl.index)) {
             currentIndex = this._currentEl.index;
         }
         
@@ -896,8 +875,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 continue;
             }
             
-            const newEl = this.createElement(data[i], i);
-            newEl.index = i;
+            const newEl = this._createElement(data[i], i);
             newEl.parent = this;
             
             // Drag&Drop
