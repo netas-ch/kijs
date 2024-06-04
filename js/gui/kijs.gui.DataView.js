@@ -415,7 +415,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     // wird von kijs.gui.Combo verwendet
-    // TODO: schönere Lösung?
     handleKeyDown(nodeEvent) {
         let isShiftPress = !!nodeEvent.shiftKey;
         let isCtrlPress = !!nodeEvent.ctrlKey;
