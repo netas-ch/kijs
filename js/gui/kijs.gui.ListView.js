@@ -29,6 +29,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            elementXType: 'kijs.gui.dataView.element.ListView',
             selectType: 'single'
         });
 
@@ -142,72 +143,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // overwrite
-    createElement(dataRow, index) {
-        let iconArgs = {parent: this};
-
-        // Icon/Cls
-        if (!kijs.isEmpty(this._iconClsField) && !kijs.isEmpty(dataRow[this._iconClsField])) {
-            iconArgs.iconCls = dataRow[this._iconClsField];
-        }
-        if (!kijs.isEmpty(this._iconColorField) && !kijs.isEmpty(dataRow[this._iconColorField])) {
-            iconArgs.iconColor = dataRow[this._iconColorField];
-        }
-        if (!kijs.isEmpty(this._iconCharField) && !kijs.isEmpty(dataRow[this._iconCharField])) {
-            iconArgs.iconChar = dataRow[this._iconCharField];
-        }
-        if (!kijs.isEmpty(this._iconMapField) && !kijs.isEmpty(dataRow[this._iconMapField])) {
-            iconArgs.iconMap = dataRow[this._iconMapField];
-        }
-
-        let icon = new kijs.gui.Icon(iconArgs);
-
-        // Caption
-        let caption = '';
-        if (!kijs.isEmpty(this._captionField) && !kijs.isEmpty(dataRow[this._captionField])) {
-            caption = dataRow[this._captionField];
-        }
-        let captionDom = new kijs.gui.Element({
-            htmlDisplayType: this._captionHtmlDisplayType,
-            nodeTagName: 'span',
-            html: caption,
-            cls: 'kijs-caption'
-        });
-
-        // Tooltip
-        let tooltip = '';
-        if (!kijs.isEmpty(this._tooltipField) && !kijs.isEmpty(dataRow[this._tooltipField])) {
-            tooltip = dataRow[this._tooltipField];
-        }
-
-        // Checkbox
-        let cls = '';
-        if (this._showCheckBoxes) {
-            switch (this._selectType) {
-                case 'single':
-                case 'singleAndEmpty':
-                    cls = 'kijs-display-options';
-                    break;
-
-                case 'simple':
-                case 'multi':
-                    cls = 'kijs-display-checkboxes';
-                    break;
-
-            }
-        }
-
-        let dve = new kijs.gui.dataView.Element({
-            dataRow: dataRow,
-            elements: [icon, captionDom],
-            tooltip: tooltip,
-            cls: cls
-        });
-        
-        return dve;
-    }
-
-
     // PRIVATE
     // LISTENERS
     #onAfterLoad(e) {

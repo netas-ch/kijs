@@ -2,20 +2,48 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
-Version 2.7.2 (ist noch in Entwicklung)
+Version 2.8.0 (ist noch in Entwicklung)
 =============
 ### Anpassungen CSS  
  - Font Awesome Update auf Version 6.5.2.
+  **UPDATE TIPP:**: Neue Fonts in files.json eintragen.
 
-**UPDATE TIPP:**: Neue Fonts in files.json eintragen.
+### kijs.gui.dataView.Element entfernt
+Stattdessen gibt es neu verschiedene Möglichkeiten:
+ - ```kijs.gui.dataView.element.Base```     Basisklasse, die für eigene Klassen vererbt
+                                            werden kann.
+ - ```kijs.gui.dataView.element.autoHtml``` Erstellt automatisch aus dem Datensatz
+                                            HTML-Code (wie bisher).
+ - ```kijs.gui.dataView.element.ListView``` Wird für das kijs.gui.ListView verwendet.
 
 ### kijs.gui.DataView  
  - Neue config/getter/setter ```elementXType```. xtype (String) des Elements, 
-   dass verwendet werden soll. Muss von kijs.gui.dataView.Element vererbt sein.  
-   Standard: ```kijs.gui.dataView.Element```  
+   dass verwendet werden soll. Muss von kijs.gui.dataView.element.Base vererbt sein.
+   Standard: ```kijs.gui.dataView.element.AutoHtml```
  - Zusätzlicher möglicher Wert für ```selectType```: ```'singleAndEmpty'```  
    Verhält sich gleich wie ```'single'``` der aktuelle Datensatz kann aber wieder 
-   abgewählt werden.  
+   abgewählt werden.
+ - Funktion ```createElement()``` ist jetzt Protected: ```_createElement()```
+
+**UPDATE TIPP:**: Falls kijs.gui.DataView vererbt wurde und darin die Funktion
+```createElement()``` verwendet wurde. Gibt es zwei Möglichkeiten:
+- Möglichkeit einfach  
+  ```createElement()``` umbenennen zu ```_createElement()```
+
+- Möglichkeit schön und besser
+  - Die eigene Funktion ```createElement()``` löschen.  
+  - Eine eigene Element Klasse erstellen: ```kijs.gui.dataView.element.MeinElement```
+    und darin, in der Funktion ```update()``` den Inhalt generieren.
+
+  - Im DataView dann im Konstruktor folgendes einfügen:
+
+        // Standard-config-Eigenschaften mergen
+        Object.assign(this._defaultConfig, {
+            elementXType: 'kijs.gui.dataView.element.MeinElement'
+        });
+
+    Als Beispiel siehe ```kijs.gui.dataView.element.ListView```
+
 
 ### kijs.gui.field.OptionGroup  
  - Neu kann die gewählte Option wieder abgewählt werden.  

@@ -1,9 +1,9 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.dataView.Element
+// kijs.gui.dataView.element.Base
 // --------------------------------------------------------------
-kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Container {
+kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends kijs.gui.Container {
 
 
     // --------------------------------------------------------------
@@ -14,15 +14,14 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
         super(false);
 
         this._dataRow = {};     // Verweis auf den Data-Datensatz
-        this._index = null;
+        this._dataIndex = null; // Index des Datensatzes im Recordset
+
         this._selected = false;
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview-element');
         this._dom.htmlDisplayType = 'html';
 
-        //this._dom.nodeAttributeSet('tabIndex', -1);
-        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -30,8 +29,8 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            dataRow: true,
-            index: true,
+            dataIndex: { target: 'dataIndex' },
+            dataRow: { target: 'dataRow' },
             selected: { target: 'selected' }
         });
 
@@ -40,6 +39,9 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        // Inhalt erstellen
+        this.update();
     }
 
 
@@ -47,11 +49,11 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get dataIndex() { return this._dataIndex; }
+    set dataIndex(val) { this._dataIndex = val; }
+
     get dataRow() { return this._dataRow; }
     set dataRow(val) { this._dataRow = val; }
-
-    get index() { return this._index; }
-    set index(val) { this._index = val; }
 
     get selected() { return this._dom.clsHas('kijs-selected'); }
     set selected(val) {
@@ -60,6 +62,19 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
         } else {
             this._dom.clsRemove('kijs-selected');
         }
+    }
+
+
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+    /**
+     * Erstellt den Inhalt
+     * Diese Funktion muss überschrieben werden.
+     */
+    update() {
+
     }
 
 
@@ -83,5 +98,5 @@ kijs.gui.dataView.Element = class kijs_gui_dataView_Element extends kijs.gui.Con
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

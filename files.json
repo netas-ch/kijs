@@ -87,7 +87,10 @@
 
    "js/gui/kijs.gui.DataView.js",
    "js/gui/dataView/kijs.gui.dataView.js",
-   "js/gui/dataView/kijs.gui.dataView.Element.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.Base.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.AutoHtml.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.ListView.js",
 
    "js/gui/kijs.gui.ListView.js",
    
