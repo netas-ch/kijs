@@ -2,6 +2,18 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.7.2
+=============
+### kijs.gui.Rpc
+ - Die Standardwerte folgender Configs, werden nun erst gesetzt, wenn Sie verwendet 
+   werden:  
+    - ```defaultCornerTipTitle```  
+    - ```defaultErrorTitle```  
+    - ```defaultInfoTitle```  
+    - ```defaultWarningTitle```  
+
+
+
 Version 2.7.1
 =============
 ### kijs.gui.container.Fieldset (NEU)
