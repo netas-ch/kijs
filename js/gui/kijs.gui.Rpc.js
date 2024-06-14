@@ -15,10 +15,10 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         super(false);
         
         this._defaultCornerTipIcon = 'info';
-        this._defaultCornerTipTitle = kijs.getText('Info');
-        this._defaultErrorTitle = kijs.getText('Fehler');
-        this._defaultInfoTitle = kijs.getText('Info');
-        this._defaultWarningTitle = kijs.getText('Warnung');
+        this._defaultCornerTipTitle = null; // null=Standardwert: 'Info'
+        this._defaultErrorTitle = null;     // null=Standardwert: 'Fehler'
+        this._defaultInfoTitle = null;      // null=Standardwert: 'Info'
+        this._defaultWarningTitle = null;   // null=Standardwert: 'Warnung'
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -178,6 +178,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     // Standard errorTitle
                     if (kijs.isEmpty(rpcData.response.errorTitle)) {
                         rpcData.response.errorTitle = this._defaultErrorTitle;
+                        if (rpcData.response.errorTitle === null) {
+                             rpcData.response.errorTitle = kijs.getText('Fehler');
+                        }
                     }
 
                     // Fehler anzeigen
@@ -193,6 +196,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     // Standard warningTitle
                     if (kijs.isEmpty(rpcData.response.warningTitle)) {
                         rpcData.response.warningTitle = this._defaultWarningTitle;
+                        if (rpcData.response.warningTitle === null) {
+                             rpcData.response.warningTitle = kijs.getText('Warnung');
+                        }
                     }
 
                     // Warnung anzeigen
@@ -244,6 +250,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     // Standard infoTitle
                     if (kijs.isEmpty(rpcData.response.infoTitle)) {
                         rpcData.response.infoTitle = this._defaultInfoTitle;
+                        if (rpcData.response.infoTitle === null) {
+                             rpcData.response.infoTitle = kijs.getText('Info');
+                        }
                     }
                     kijs.gui.MsgBox.info(rpcData.response.infoTitle, rpcData.response.infoMsg);
                 }
@@ -259,6 +268,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     // Standard cornerTipTitle
                     if (kijs.isEmpty(rpcData.response.cornerTipTitle)) {
                         rpcData.response.cornerTipTitle = this._defaultCornerTipTitle;
+                        if (rpcData.response.cornerTipTitle === null) {
+                             rpcData.response.cornerTipTitle = kijs.getText('Info');
+                        }
                     }
 
                     kijs.gui.CornerTipContainer.show(rpcData.response.cornerTipTitle, 
