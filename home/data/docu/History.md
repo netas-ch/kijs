@@ -2,6 +2,12 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.  
 
 
+Version 2.7.3
+=============
+### kijs.gui.grid.Grid
+Bugfix: Navigation mit Pfeiltasten
+
+
 Version 2.7.2
 =============
 ### kijs.gui.Rpc
