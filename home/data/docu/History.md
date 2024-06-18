@@ -74,6 +74,12 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
 
 
 
+Version 2.7.3
+=============
+### kijs.gui.grid.Grid
+Bugfix: Navigation mit Pfeiltasten
+
+
 Version 2.7.2
 =============
 ### kijs.gui.Rpc
