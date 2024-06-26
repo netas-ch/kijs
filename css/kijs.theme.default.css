@@ -35,7 +35,7 @@
 /* --------------- */
 :root[data-theme='dark'] {
     --accentColor: #2299ff;
-    --accentColor2: #2D2D38;
+    --accentColor2: #40404f;
     --accentColor3: #ff9900;
     
     --errorColor: #be6280;
