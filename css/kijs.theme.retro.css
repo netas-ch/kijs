@@ -405,6 +405,10 @@
   .kijs-panel.kijs-collapse-bottom {
     height: 27px;
   }
+  .kijs-panel > .kijs-footer > .kijs-container-inner {
+    padding: 4px;
+    gap: 4px;
+  }
   /* kijs.gui.container.Tab */
   .kijs-container-tab > .kijs-container-scrollable {
     background: linear-gradient(#dce6f5, #cbdaef);
