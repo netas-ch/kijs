@@ -169,7 +169,11 @@ kijs.Rpc = class kijs_Rpc {
 
         this._queue.push(queueEl);
 
-        this._deferId = kijs.defer(this._transmit, this.defer, this);
+        if (!kijs.isEmpty(config.skipDefer) && config.skipDefer) {
+            this._transmit(queueEl.tid);
+        } else {
+            this._deferId = kijs.defer(this._transmit, this.defer, this);
+        }
 
         return ret;
     }
@@ -207,7 +211,7 @@ kijs.Rpc = class kijs_Rpc {
      *     {String} errorMsg Falls ein übertragungsfehler vorliegt, wird hier der Fehlertext übergeben
      * @returns {undefined}
      */
-   _receive(ajaxData) {
+    _receive(ajaxData) {
         // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;
@@ -286,7 +290,7 @@ kijs.Rpc = class kijs_Rpc {
      * Übermittelt die subRequests in der queue an den Server
      * @returns {undefined}
      */
-    _transmit() {
+    _transmit(tid=null) {
         this._deferId = null;
         const transmitData = [];
 
@@ -300,6 +304,10 @@ kijs.Rpc = class kijs_Rpc {
 
                 transmitData.push(subRequest);
                 this._queue[i].state = kijs.Rpc.states.TRANSMITTED;
+
+                if (tid) {
+                    break;
+                }
             }
         }
 

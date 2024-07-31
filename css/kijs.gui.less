@@ -132,7 +132,7 @@
 
 
     /* ******************
-       * Font Awesome free Version 6.5.1  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
+       * Font Awesome free Version 6.5.2  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
        ****************** */
     /* fa-solid */
     @font-face {
@@ -140,8 +140,8 @@
         font-style: normal;
         font-weight: 900;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-solid-900.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-solid-900.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-solid-900.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-solid-900.ttf') format('truetype');
     }
 
     /* fa-regular */
@@ -150,8 +150,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-regular-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-regular-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-regular-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-regular-400.ttf') format('truetype');
     }
 
     /* fa-brands */
@@ -160,8 +160,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-brands-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-brands-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-brands-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-brands-400.ttf') format('truetype');
     }
 
     .fa-solid, span.kijs-icon.fa-solid {
@@ -405,7 +405,6 @@
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
@@ -1000,7 +999,6 @@
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
         background-color: var(--panel-bkgrndColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         * {
@@ -1114,7 +1112,6 @@
         gap: 4px;
         background-color: var(--bar-bkgrndColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         font-family: var(--default-fontFamily);
@@ -1491,7 +1488,6 @@
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         * {
@@ -1558,7 +1554,6 @@
         left: 0;
         bottom: 0;
 
-        -webkit-user-select: none;  /* Safari  */
         user-select: none;
 
         * {
@@ -2158,16 +2153,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 2px;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f096';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 4px;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f046';
+                        content: '\f00c';
                     }
                 }
 
@@ -2178,16 +2180,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 50%;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f10c';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 50%;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f05d';
+                        content: '\f00c';
                     }
                 }
 
@@ -3481,10 +3490,14 @@
                 > .kijs-checkbox-input {
                     flex: none;
                     margin: 0 4px 0 0;
+                    width: var(--checkbox-height);
+                    height: var(--checkbox-height);
                     font-size: var(--checkbox-fontSize);
-                    line-height: var(--field-lineHeight);
+                    line-height: var(--checkbox-lineHeight);
                     background-color: var(--field-bkgrndColor);
-                    border-radius: 2px;
+                    border: 2px solid var(--field-fontColor);
+                    border-radius: 4px;
+                    text-align: center;
                     color: var(--field-fontColor);
                     cursor: pointer;
                 }
@@ -3513,7 +3526,7 @@
 
                 &:focus {
                     > .kijs-checkbox-input {
-                        color: var(--field-focus-borderColor);
+                        border-color: var(--field-focus-borderColor);
                     }
                 }
             }

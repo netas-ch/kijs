@@ -100,7 +100,7 @@
  * -------------
  * afterResizeDelay
  *
- * cls          kijs.helper.Cls         Verweis auf den Cls-Helper
+ * cls          String|Array            CSS-Klassenname(n)
  *
  * height       Number                  Höhe
  *

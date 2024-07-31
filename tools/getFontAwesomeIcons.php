@@ -6,7 +6,7 @@
  */
 
 $t = new getFontAwesomeIcons();
-$t->getData("6.1.1");
+$t->getData("6.5.2");
 
 
 class getFontAwesomeIcons {

@@ -1,8 +1,6 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.iconMap (namespace)
+// kijs.gui.dataView.element (namespace)
 // --------------------------------------------------------------
-kijs.iconMap = {
-    blank                                     : { char: 0x20, cls: "" }
-};
+kijs.gui.dataView.element = {};

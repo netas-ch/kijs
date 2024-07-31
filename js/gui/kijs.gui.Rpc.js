@@ -135,6 +135,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
             requestData: config.data,
             owner: config.owner,
             cancelRunningRpcs: config.cancelRunningRpcs,
+            skipDefer: config.skipDefer,
             rpcParams: {ignoreWarnings: !!config.ignoreWarnings},
             responseArgs: {waitMask: waitMask},
             context: this,

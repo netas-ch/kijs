@@ -361,7 +361,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Gibt die selektieten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
-     * @returns {Array|kijs.gui.DataViewRow|null}
+     * @returns {Array|kijs.gui.grid.Row|null}
      */
     getSelected() {
         let ret = [];
