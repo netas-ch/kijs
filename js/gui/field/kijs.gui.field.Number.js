@@ -398,9 +398,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this.validate();
         
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
+
+        // Event auslösen
+        this.raiseEvent('input', { oldValue: this._previousChangeValue, value: val } );
     }
 
-    // Stopt das Hoch-/Runterzählen von einem Spinnbutton
+    // Stoppt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
