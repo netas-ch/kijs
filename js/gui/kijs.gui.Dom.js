@@ -151,7 +151,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._disableEnterBubbeling = false;
         this._disableEscBubbeling = false;
         this._html = undefined;
-        this._htmlDisplayType = 'html', // Darstellung der Eigenschaft 'html'. Default: 'html'
+        this._htmlDisplayType = 'html'; // Darstellung der Eigenschaft 'html'. Default: 'html'
                                         // html: als html-Inhalt (innerHtml)
                                         // code: Tags werden als Text angezeigt
                                         // text: Tags werden entfernt
@@ -1416,7 +1416,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             // kijs-Event auslösen
             e.dom = this;
             e.eventName = eventName;
-            
+
             if (this.raiseEvent(eventName, e) === false) {
                 ret = false;
             }
@@ -1477,8 +1477,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }, 100, this);
     }
     
-
     
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

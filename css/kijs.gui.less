@@ -132,7 +132,7 @@
 
 
     /* ******************
-       * Font Awesome free Version 6.5.1  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
+       * Font Awesome free Version 6.5.2  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
        ****************** */
     /* fa-solid */
     @font-face {
@@ -140,8 +140,8 @@
         font-style: normal;
         font-weight: 900;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-solid-900.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-solid-900.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-solid-900.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-solid-900.ttf') format('truetype');
     }
 
     /* fa-regular */
@@ -150,8 +150,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-regular-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-regular-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-regular-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-regular-400.ttf') format('truetype');
     }
 
     /* fa-brands */
@@ -160,8 +160,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-1/fa-brands-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-1/fa-brands-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-5-2/fa-brands-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-5-2/fa-brands-400.ttf') format('truetype');
     }
 
     .fa-solid, span.kijs-icon.fa-solid {
@@ -314,7 +314,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
@@ -405,7 +405,6 @@
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         -webkit-overflow-scrolling: touch;  /* iOS Safari: Native Style Scrolling einschalten */
@@ -1000,7 +999,6 @@
         box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
         background-color: var(--panel-bkgrndColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         * {
@@ -1114,7 +1112,6 @@
         gap: 4px;
         background-color: var(--bar-bkgrndColor);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         font-family: var(--default-fontFamily);
@@ -1283,7 +1280,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1308,7 +1305,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1491,7 +1488,6 @@
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
 
-        -webkit-user-select: none;  /* Safari */
         user-select: none;
 
         * {
@@ -1558,7 +1554,6 @@
         left: 0;
         bottom: 0;
 
-        -webkit-user-select: none;  /* Safari  */
         user-select: none;
 
         * {
@@ -1634,7 +1629,7 @@
             font-size: var(--msgbox-fontSize);
             line-height: var(--msgbox-lineHeight);
             color: var(--msgbox-fontColor);
-            
+
             > .kijs-icon {
                 flex: none;
                 font-size: 30px;
@@ -1647,17 +1642,17 @@
                 flex: 1;
                 padding: 10px;
                 overflow: auto;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 > ul {
                     margin: 0 0 0 10px;
                     padding: 0;
@@ -1904,7 +1899,7 @@
                     line-height: var(--default-lineHeight);
                     font-family: var(--default-fontFamily);
                     white-space: nowrap;
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -1991,13 +1986,13 @@
                 font-size: var(--item-fontSize);
                 line-height: var(--item-lineHeight);
                 color: var(--item-fontColor);
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 * {
                     font-family: var(--default-fontFamily);
                     font-size: var(--item-fontSize);
@@ -2114,7 +2109,7 @@
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     > .kijs-icon {
                         flex: none;
                         margin: 0;
@@ -2158,16 +2153,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 2px;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f096';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 4px;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f046';
+                        content: '\f00c';
                     }
                 }
 
@@ -2178,16 +2180,23 @@
                     &:before {
                         flex: none;
                         margin: 0 4px 0 0;
-                        border-radius: 50%;
-                        background-color: var(--field-bkgrndColor);
-                        color: var(--icon-fontColor);
-                        font-family: 'Font Awesome 6 Free';
+                        width: var(--checkbox-height);
+                        height: var(--checkbox-height);
                         font-size: var(--checkbox-fontSize);
-                        content: '\f10c';
+                        line-height: var(--checkbox-lineHeight);
+                        background-color: var(--field-bkgrndColor);
+                        border: 2px solid var(--field-fontColor);
+                        border-radius: 50%;
+                        font-family: 'Font Awesome 6 Free';
+                        font-weight: 900;
+                        text-align: center;
+                        color: var(--field-fontColor);
+                        cursor: pointer;
+                        content: ' ';
                     }
 
                     &.kijs-selected:before {
-                        content: '\f05d';
+                        content: '\f00c';
                     }
                 }
 
@@ -2250,11 +2259,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
         }
 
         > .kijs-progressbar-field {
@@ -2273,7 +2282,7 @@
                 background-color: var(--bar-bkgrndColor);
                 color: var(--bar-fontColor);
                 transition: width 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2289,7 +2298,7 @@
                 color: var(--bar-fontColor);
                 opacity: 0;
                 transition: opacity 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2302,11 +2311,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
             .error {
                 padding: 0;
                 color: red;
@@ -2373,7 +2382,7 @@
                     margin: 1px;
                     border: 1px solid transparent;
                     border-radius: 4px;
-                    
+
                     &:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }
@@ -2409,7 +2418,7 @@
                         margin: 1px;
                         border: 1px solid transparent;
                         border-radius: 4px;
-                        
+
                         &:hover {
                             background-color: var(--item-focus-bkgrndColor);
                         }
@@ -2478,7 +2487,7 @@
                     color: var(--default-fontColor);
                     text-align: right;
                     background-color: var(--panel-bkgrndColor);
-                    
+
                     &.kijs-none {
                         /*display: none;*/
                     }
@@ -2568,7 +2577,7 @@
         flex-direction: column;
         width: calc(var(--default-fontSize) * 11.667); /*140px;*/
         border: 1px solid var(--panel-borderColor);
-        
+
         &.kijs-borderless {
             border: none;
         }
@@ -2729,7 +2738,7 @@
                         > .kijs-caption {
                             margin-top: calc(var(--field-label-paddingTop) - 5px);
                         }
-                        
+
                         &.kijs-smallpaddings {
                             width: calc(var(--icon-fontSize) + 4px);
                             padding-top: 4px;
@@ -2855,7 +2864,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -2987,7 +2996,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3035,7 +3044,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3313,7 +3322,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3481,10 +3490,14 @@
                 > .kijs-checkbox-input {
                     flex: none;
                     margin: 0 4px 0 0;
+                    width: var(--checkbox-height);
+                    height: var(--checkbox-height);
                     font-size: var(--checkbox-fontSize);
-                    line-height: var(--field-lineHeight);
+                    line-height: var(--checkbox-lineHeight);
                     background-color: var(--field-bkgrndColor);
-                    border-radius: 2px;
+                    border: 2px solid var(--field-fontColor);
+                    border-radius: 4px;
+                    text-align: center;
                     color: var(--field-fontColor);
                     cursor: pointer;
                 }
@@ -3501,7 +3514,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3513,7 +3526,7 @@
 
                 &:focus {
                     > .kijs-checkbox-input {
-                        color: var(--field-focus-borderColor);
+                        border-color: var(--field-focus-borderColor);
                     }
                 }
             }
@@ -3584,7 +3597,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3774,9 +3787,11 @@
        * Field QuillEditor
        ****************** */
     div.kijs-field-quilleditor {
+        overflow: visible;
+
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 display: flex;
@@ -3791,10 +3806,30 @@
 
                 > .ql-toolbar {
                     flex: none;
+                    z-index: 1;
+                    overflow: visible;
                     border-top: 1px solid var(--field-borderColor) !important;
                     border-left: 1px solid var(--field-borderColor) !important;
                     border-right: 1px solid var(--field-borderColor) !important;
                     border-bottom: 0 !important;
+
+                    .ql-picker-options {
+                        background-color: var(--panel-bkgrndColor) !important;
+                    }
+
+                    span {
+                        color: var(--button-fontColor) !important;
+                    }
+
+                    svg {
+                        > .ql-stroke:not(.ql-color-label) {
+                            stroke: var(--button-fontColor) !important;
+                        }
+
+                        > .ql-fill:not(.ql-color-label) {
+                            fill: var(--button-fontColor) !important;
+                        }
+                    }
                 }
 
                 > .ql-container {
@@ -3804,6 +3839,7 @@
                     &.ql-snow {
                         overflow: hidden;
                     }
+
                     &.ql-bubble {
                         overflow: visible;
                     }
@@ -3848,7 +3884,7 @@
     }
 
 
-    
+
     /* ******************
        * Grid
        ****************** */
@@ -3899,11 +3935,11 @@
                     color: var(--default-fontColor);
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     &.kijs-hidden {
                         display: none;
                     }
@@ -3943,9 +3979,9 @@
                     /* Textfelder im Grid */
                     &.kijs-celledit {
                         padding: 0;
-                        
+
                         > .kijs-field {
-                            
+
                         }
                     }
 
@@ -4005,7 +4041,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                
+
                                 > span.kijs-sort {
                                     color: #555;
                                     font-family: 'Font Awesome 6 Free';
@@ -4250,7 +4286,7 @@
             }
         }
     }
-    
+
 
 
     /* ******************

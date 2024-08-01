@@ -17,13 +17,13 @@
  * 
  * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- * 
+ *
  * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste 
  *                                                          gehalten wird, wird in diesem Abstand gescrollt
- * 
+ *
  * scrollStep   Number [optional] default=20                Anzahl Pixel, die bei einem Klick auf einen
  *                                                          Scroll-Button gescrollt wird
  * 
@@ -31,7 +31,7 @@
  * -------------
  * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- * 
+ *
  * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
@@ -201,7 +201,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this.on('scrollEnd', this.#onScrollEnd, this);
         this.on('touchEnd', this.#onTouchEnd, this);
         this.on('touchMove', this.#onTouchMove, this);
-        this.on('touchStart', this.#onTouchStart, this);                                           
+        this.on('touchStart', this.#onTouchStart, this);
         this.on('wheel', this.#onWheel, this);
 
         // Config anwenden
@@ -688,7 +688,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
-    
+
     #onTouchEnd(e) {
         // Buttons rendern
         this._renderScrollButtons();
@@ -730,7 +730,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._touchXStart = e.nodeEvent.touches[0].clientX;
         this._touchYStart = e.nodeEvent.touches[0].clientY;
     }
-       
+
     #onWheel(e) {
         const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
         const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');

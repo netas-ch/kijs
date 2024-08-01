@@ -221,9 +221,9 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * @returns {Promise}
      */
     // overwrite
-    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
         return new Promise((resolve) => {
-            super.load(args, true).then((e) => {
+            super.load(args, true, config).then((e) => {
                 let config = e.responseData.config ?? {};
                 
                 // Falls des Formular destructed wurde: abbrechen
@@ -429,13 +429,17 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * Setzt die Werte der Felder auf den Originalwert zurück
      * @returns {undefined}
      */
-    valuesReset() {
+    valuesReset(preventEvents = false) {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
         
         for (let i=0; i<this._fields.length; i++) {
             this._fields[i].valuesReset();
+        }
+
+        if (!preventEvents) {
+            this.raiseEvent('change');
         }
     }
     

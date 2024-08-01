@@ -100,7 +100,7 @@
  * -------------
  * afterResizeDelay
  *
- * cls          kijs.helper.Cls         Verweis auf den Cls-Helper
+ * cls          String|Array            CSS-Klassenname(n)
  *
  * height       Number                  Höhe
  *
@@ -678,7 +678,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        kijs.Object.assignConfig(this, config, this._configMap);
+        if (this._configMap) {
+            kijs.Object.assignConfig(this, config, this._configMap);
+        }
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
@@ -750,11 +752,24 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Lädt die config via RPC
      * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
+     * @param {Object|Null} config
      * @returns {Promise}
      */
-    load(args=null, superCall=false) {
+    load(args=null, superCall=false, config = null) {
         return new Promise((resolve, reject) => {
             if (this._rpcLoadFn) {
+
+                // waitMaskTarget
+                let waitMaskTarget = this._waitMaskTarget;
+                if (!kijs.isEmpty(config) && !kijs.isEmpty(config.waitMaskTarget)) {
+                    waitMaskTarget = config.waitMaskTarget;
+                }
+
+                // waitMaskTarget
+                let waitMaskTargetDomProperty = 'dom';
+                if (!kijs.isEmpty(config) && !kijs.isEmpty(config.waitMaskTargetDomProperty)) {
+                    waitMaskTargetDomProperty = config.waitMaskTargetDomProperty;
+                }
 
                 if (!kijs.isObject(args)) {
                     args = {};
@@ -766,8 +781,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     owner: this,
                     data: args,
                     cancelRunningRpcs: true,
-                    waitMaskTarget: this._waitMaskTarget,
-                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,
+                    waitMaskTarget: waitMaskTarget,
+                    waitMaskTargetDomProperty: waitMaskTargetDomProperty,
                     context: this
 
                 }).then((e) => {

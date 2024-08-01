@@ -238,9 +238,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             val = [val];
         }
         kijs.Array.each(val, function(k) {
-           if (!kijs.isString(k)) {
-               throw new kijs.Error('invalid primary key');
-           }
+            if (!kijs.isString(k)) {
+                throw new kijs.Error('invalid primary key');
+            }
         }, this);
         this._primaryKeys = val;
     }
@@ -361,7 +361,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Gibt die selektieten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
-     * @returns {Array|kijs.gui.DataViewRow|null}
+     * @returns {Array|kijs.gui.grid.Row|null}
      */
     getSelected() {
         let ret = [];
@@ -1088,6 +1088,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Standard-Objekt übergeben: instanz von xType erstellen und config übergeben
         if (kijs.isObject(configOrInstance) && configOrInstance.constructor === window.Object) {
             configOrInstance.xtype = configOrInstance.xtype || defaultXType;
+            configOrInstance.grid = this;
+
             let constructor = kijs.getObjectFromString(configOrInstance.xtype);
             if (constructor === false) {
                 throw new kijs.Error('invalid xtype ' + configOrInstance.xtype);

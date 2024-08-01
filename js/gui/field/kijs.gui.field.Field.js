@@ -141,7 +141,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             maxLength: true,
             minLength: true,
             readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
-            required: true,
+            required: { target: 'required' },   // Eingabe erforderlich?
             submitValueEnable: true,    // Soll der Wert in einem container.Form übermittelt werden?
 
             validationFn: { target: 'validationFn' },
@@ -718,72 +718,59 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
-    // Konventiert einen String in einen Regulären Ausdruck (RegExp)
-    _stringToRegExp(str) {
-        if (str[0] !== '/') {
-            return false;
-        }
-        let i = str.lastIndexOf('/');
-        if (i <= 0) {
-            return false;
-        }
-        try {
-            return new RegExp(str.slice(1, i), str.slice(i+1));
-        } catch (ex) {
-            return false;
-        }
-    }
-
-   /**
-     * Diese Funktion ist zum Überschreiben gedacht
+    /**
+     * Maximale Länge validieren
+     * Wird aufgerufen von _validationRules
      * @param {String} value
-     * @param {Boolean} [ignoreEmpty=false] nicht validieren, wenn das Feld leer ist.
+     * @param {Boolean} ignoreEmpty
      * @returns {undefined}
      */
-    _validationRules(value, ignoreEmpty) {
-        if (ignoreEmpty && kijs.isEmpty(value)) {
-            return;
-        }
-
-        // Eingabe erforderlich
-        if (this._required) {
-            if (kijs.isEmpty(value)) {
-                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
-            }
-        }
-
-        // Minimale Länge
-        if (!kijs.isEmpty(this._minLength)) {
-            if (!kijs.isEmpty(value) && value.length < this._minLength) {
-                this._errors.push(kijs.getText('Dieses Feld muss mindestens %1 Zeichen enthalten', '', this._minLength));
-            }
-        }
-
-        // Maximale Länge
+    _validateMaxLength(value, ignoreEmpty) {
         if (!kijs.isEmpty(this._maxLength)) {
             if (!kijs.isEmpty(value) && value.length > this._maxLength) {
                 this._errors.push(kijs.getText('Dieses Feld darf maximal %1 Zeichen enthalten', '', this._maxLength));
             }
         }
-
-        // validationRegExps
-        if (!kijs.isEmpty(this._validationRegExps)) {
-            if (value !== null && value.toString() !== '') {
-                kijs.Array.each(this._validationRegExps, function(regExp) {
-                    let r = this._stringToRegExp(regExp.regExp);
-                    if (!r.exec(value.toString())) {
-                        if (!kijs.isEmpty(regExp.msg)) {
-                            this._errors.push(regExp.msg);
-                        } else {
-                            this._errors.push(kijs.getText('Dieses Feld hat einen ungültigen Wert'));
-                        }
-                        return;
-                    }
-                }, this);
+    }
+    
+    /**
+     * Minimale Länge validieren
+     * Wird aufgerufen von _validationRules
+     * @param {String} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
+    _validateMinLength(value, ignoreEmpty) {
+        if (!kijs.isEmpty(this._minLength)) {
+            if (!kijs.isEmpty(value) && value.length < this._minLength) {
+                this._errors.push(kijs.getText('Dieses Feld muss mindestens %1 Zeichen enthalten', '', this._minLength));
             }
         }
+    }
+    
+    /**
+     * Eingabe erforderlich validieren
+     * Wird aufgerufen von _validationRules
+     * @param {String} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
+    _validateRequired(value, ignoreEmpty) {
+        if (this._required) {
+            if (kijs.isEmpty(value)) {
+                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
+            }
+        }
+    }
 
-        // validationFn
+    /**
+     * mit validationFn validieren
+     * Wird aufgerufen von _validationRules
+     * @param {String} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
+    _validateValidationFn(value, ignoreEmpty) {
         if (kijs.isFunction(this._validationFn)) {
             if (value !== null && value.toString() !== '') {
                 let error = this._validationFn.call(this._validationFnContext || this, value);
@@ -797,6 +784,60 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
                 }
             }
         }
+    }
+
+    /**
+     * mit validationRegExps validieren
+     * Wird aufgerufen von _validationRules
+     * @param {String} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
+    _validateValidationRegExps(value, ignoreEmpty) {
+        if (!kijs.isEmpty(this._validationRegExps)) {
+            if (value !== null && value.toString() !== '') {
+                kijs.Array.each(this._validationRegExps, function(regExp) {
+                    let r = kijs.String.toRegExp(regExp.regExp);
+                    if (!r.exec(value.toString())) {
+                        if (!kijs.isEmpty(regExp.msg)) {
+                            this._errors.push(regExp.msg);
+                        } else {
+                            this._errors.push(kijs.getText('Dieses Feld hat einen ungültigen Wert'));
+                        }
+                        return;
+                    }
+                }, this);
+            }
+        }
+    }
+    
+
+    
+   /**
+     * Diese Funktion ist zum Überschreiben gedacht
+     * @param {String} value
+     * @param {Boolean} [ignoreEmpty=false] nicht validieren, wenn das Feld leer ist.
+     * @returns {undefined}
+     */
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+
+        // Eingabe erforderlich
+        this._validateRequired(value, ignoreEmpty);
+
+        // Minimale Länge
+        this._validateMinLength(value, ignoreEmpty);
+
+        // Maximale Länge
+        this._validateMaxLength(value, ignoreEmpty);
+
+        // validationRegExps
+        this._validateValidationRegExps(value, ignoreEmpty);
+
+        // validationFn
+        this._validateValidationFn(value, ignoreEmpty);
     }
 
 

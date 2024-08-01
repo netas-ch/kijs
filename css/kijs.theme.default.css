@@ -86,7 +86,9 @@
     --field-lineHeight: 16px;
     --field-height: 30px;
     --field-label-paddingTop: 7px;
-    --checkbox-fontSize: 20px;
+    --checkbox-height: 20px;
+    --checkbox-fontSize: 14px;
+    --checkbox-lineHeight: 18px;
     --switch-height: 28px;
     
     --badge-fontSize: 12px;
@@ -136,7 +138,7 @@
     /* Icon */
     --icon-fontColor: var(--grey10);
     --icon-disabled-fontColor: var(--grey08);
-    
+
     /* Button */
     --button-bkgrndColor: var(--grey03);
     --button-borderColor: var(--grey05);
@@ -149,10 +151,10 @@
     --button-focus-fontColor: var(--grey11);
     
     --button-active-bkgrndColor: var(--grey06);
-    
+
     --button-disabled-fontColor: var(--grey08);
 
-    
+
     /* Button im Panel-Header */
     --buttonGroup-button-fontColor: var(--grey09);
 
@@ -219,10 +221,10 @@
     
     --bar-disabled-fontColor: var(--grey03);
     --bar-disabled-bkgrndColor: var(--grey07);
-    
+
     --bar-icon-fontColor: var(--grey00);
     --bar-icon-disabled-fontColor: var(--grey03);
-    
+
     --bar-button-icon-fontColor: var(--grey03);
     --bar-button-icon-disabled-fontColor: var(--grey06);
 
@@ -313,13 +315,13 @@
 :root[data-theme='dark'] {
     --bar-fontColor: var(--grey11);
     --badge-fontColor: var(--grey00);
-    
+
     --bar-bkgrndColor: var(--grey08);
     --panel-borderColor: var(--grey08);
     
     --bar-icon-fontColor: var(--grey10);
     --bar-icon-disabled-fontColor: var(--grey05);
-    
+
     --bar-button-icon-fontColor: var(--grey10);
     --bar-button-icon-disabled-fontColor: var(--grey05);
 }
