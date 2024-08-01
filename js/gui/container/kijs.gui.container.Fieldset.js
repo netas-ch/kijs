@@ -436,7 +436,6 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         }
 
         // Variablen (Objekte/Arrays) leeren
-        this._domPos = null;
         this._captionDom = null;
         this._collapseButtonEl = null;
 

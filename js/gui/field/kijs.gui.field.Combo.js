@@ -44,7 +44,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             autoLoad: false,
             focusable: false
         });
-        
+
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
             cls: 'kijs-inline',
@@ -540,12 +540,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _isValueInStore(val) {
         let found = false;
 
-        kijs.Array.each(this._listViewEl.data, function(row) {
-            if (row[this.valueField] === val) {
-                found = true;
-                return false;
-            }
-        }, this);
+        if (this._listViewEl) {
+            kijs.Array.each(this._listViewEl.data, function (row) {
+                if (row[this.valueField] === val) {
+                    found = true;
+                    return false;
+                }
+            }, this);
+        }
 
         return found;
     }
@@ -840,7 +842,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._value;
         }
 
-        if (this._selectFirst) {
+        if (this._selectFirst && !kijs.isEmpty(this._listViewEl.data)) {
             this.value = this._listViewEl.data[0].value;
         }
 

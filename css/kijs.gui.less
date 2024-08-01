@@ -58,7 +58,7 @@
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -246,6 +246,26 @@
         }
     }
 
+
+    /* ******************
+       * Scrollbar
+       ****************** */
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbar-background-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-hover-color);
+    }
 
 
     /* ******************
