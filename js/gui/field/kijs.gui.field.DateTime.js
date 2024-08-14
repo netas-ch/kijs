@@ -626,43 +626,28 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
-
+        
         // spinIcon
-        if (this._useDefaultSpinButtonIcon && !hasDate) {
-            this.spinButtonIconMap = 'kijs.iconMap.Fa.clock';
+        if (this._useDefaultSpinButtonIcon) {
+            this.spinButtonIconMap = hasDate ? 'kijs.iconMap.Fa.calendar' : 'kijs.iconMap.Fa.clock';
         }
+
+        // Inhalt zuerst entfernen
+        this._spinBoxEl.removeAll({
+            preventRender: true,
+            preventDestruct: true
+        });
 
         if (hasDate) {
             this._spinBoxEl.add(this._datePicker, null, true);
-        } else {
-            if (this._spinBoxEl.hasChild(this._datePicker)) {
-                this._spinBoxEl.remove(this._datePicker, {
-                    preventRender: true, 
-                    preventDestruct: true
-                });
-            }
         }
 
         if (hasDate && hasTime) {
             this._spinBoxEl.add(this._seperatorEl, null, true);
-        } else {
-            if (this._spinBoxEl.hasChild(this._seperatorEl)) {
-                this._spinBoxEl.remove(this._seperatorEl, {
-                    preventRender: true, 
-                    preventDestruct: true
-                });
-            }
         }
 
         if (hasTime) {
             this._spinBoxEl.add(this._timePicker, null, true);
-        } else {
-            if (this._spinBoxEl.hasChild(this._timePicker)) {
-                this._spinBoxEl.remove(this._timePicker, {
-                    preventRender: true, 
-                    preventDestruct: true
-                });
-            }
         }
 
         if (this._spinBoxEl.isRendered) {
