@@ -1011,16 +1011,6 @@
 
 
     /* ******************
-       * DEPRECATED
-       * TODO: Accordion ???
-       ****************** */
-    div.kijs-accordion > .kijs-container-inner > .kijs-panel {
-        flex: 1 1 auto
-    }
-
-
-
-    /* ******************
        * Viewport
        ****************** */
     .kijs-viewport {
@@ -1220,7 +1210,7 @@
     /* ******************
        * Panel
        ****************** */
-    div.kijs-panel {
+    div.kijs-panel, dialog.kijs-panel {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -1233,7 +1223,7 @@
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
         }
-
+        
         &.disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
@@ -1459,21 +1449,29 @@
     /* ******************
        * Window
        ****************** */
-    div.kijs-window {
+    dialog.kijs-window {
         box-sizing: border-box;
         position: absolute;
+        margin: 0; /* Wichtig */
         overflow: hidden;
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-
+        padding: 0px;
+        transition: 0s;
+        
         user-select: none;
 
         * {
             box-sizing: border-box;
         }
-
+        
+        /* Workaround: entfernt den Rahmen vom aktiven Dialog */
+        &:focus-visible {
+            outline: none;
+        }
+        
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
             > .kijs-button {
@@ -1599,7 +1597,7 @@
     /* ******************
        * MsgBox
        ****************** */
-    div.kijs-msgbox {
+    dialog.kijs-msgbox {
         min-width: 200px;
 
         > .kijs-container-inner {

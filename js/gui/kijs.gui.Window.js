@@ -33,7 +33,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren, falls das Virtual Keyboard eingeblendet wird.
 
-        this._modalMaskEl = null;
+        //this._modalMaskEl = null;
+        this._modal = false;
 
         this._draggable = false;
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
@@ -45,6 +46,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            nodeTagName: 'dialog',
             draggable: true,
             target: document.body,
 
@@ -98,26 +100,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._draggable = !!val;
     }
 
-    get modal() { return !kijs.isEmpty(this._modalMaskEl); }
+    get modal() { return !!this._modal; }
     set modal(val) {
-        if (val) {
-            if (kijs.isEmpty(this._modalMaskEl)) {
-                this._modalMaskEl = new kijs.gui.Mask({
-                    target: this.target,
-                    targetDomProperty: this.targetDomProperty
-                });
-                if (this.isRendered) {
-                    this.show();
-                }
-            }
-        } else {
-            if (!kijs.isEmpty(this._modalMaskEl)) {
-                this._modalMaskEl.destruct();
-                this._modalMaskEl = null;
-            }
+        this._modal = !!val;
+        if (this.isRendered) {
+            this.show();
         }
     }
-
 
     /**
      * Gibt den Node zurück in dem sich die Maske befindet (parentNode)
@@ -191,9 +180,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     get visible() { return super.visible; }
     set visible(val) {
         super.visible = val;
-        if (this._modalMaskEl) {
-            this._modalMaskEl.visible = val;
-        }
     }
 
 
@@ -282,18 +268,21 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
      * @returns {undefined}
      */
     show() {
-        // Evtl. Maske für modale Anzeige einblenden
-        if (this._modalMaskEl) {
-            if (!this._modalMaskEl.isRendered) {
-                this._modalMaskEl.renderTo(this.parentNode);
-            }
-            new kijs.gui.LayerManager().setActive(this._modalMaskEl);
-        }
-        
         // Fenster rendern und anzeigen
-        if (!this.isRendered) {
+        if (this.isRendered) {
+            this._dom.node.close();
+        } else {
             this.renderTo(this.parentNode);
         }
+
+
+
+        if (this._modal) {
+            this._dom.node.showModal();
+        } else {
+            this._dom.node.show();
+        }
+        
         this.visible = true;
 
         if (!this.maximized) {
@@ -326,11 +315,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
-        }
-
-        // Elemente/DOM-Objekte entladen
-        if (this._modalMaskEl) {
-            this._modalMaskEl.unrender();
         }
 
         super.unrender(true);
@@ -555,13 +539,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._modalMaskEl) {
-            this._modalMaskEl.destruct();
-        }
 
         // Variablen (Objekte/Arrays) leeren
         this._dragInitialPos = null;
-        this._modalMaskEl = null;
         this._resizeDeferHandle = null;
         this._targetX = null;
 

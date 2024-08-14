@@ -285,9 +285,9 @@
 button.kijs-button {
     border: 0;
 }
-div.kijs-panel {
+div.kijs-panel, dialog.kijs-panel {
     border: 0;
 }
-div.kijs-window {
+div.kijs-window, dialog.kijs-window {
     border: 1px solid var(--panel-borderColor);
 }

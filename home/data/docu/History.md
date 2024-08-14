@@ -28,6 +28,10 @@ in kijs.theme.default.css.
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.
 
+### kijs.gui.field.OptionGroup
+ - Neu kann die gewählte Option wieder abgewählt werden.
+   Ist ```required: true```, kann der Wert nicht abgewählt werden.
+
 ### kijs.gui.Container
  - Die Funktion ```add()```hat eine neue Anordnung der Argumente:
    Früher:
@@ -45,6 +49,17 @@ in kijs.theme.default.css.
             preventRender: ...,   // war in Argument 3
             preventEvents: ...,   // ist neu
         }
+
+### kijs.gui.Window
+Alle Fenster werden neu nicht mehr mit einem ```DIV``` gemacht, sondern mit einem ```DIALOG```.  
+Bei Modalen Fenstern ist es darum nicht mehr möglich mit der Tastatur zu verdeckten Elementen 
+zu Navigieren.
+
+**UPDATE TIPP:** LESS/CSS-Dateien nach folgenden Wörtern durchsuchen und wie 
+folgt ersetzen:  
+ - ```div.kijs-window``` --> ```dialog.kijs-window```  
+ - ```div.kijs-panel``` --> ```div.kijs-panel, dialog.kijs-panel```  
+ - ```div.kijs-msgox``` --> ```dialog.kijs-msgbox```  
 
 ### kijs.gui.dataView.Element entfernt
 Stattdessen gibt es neu verschiedene Möglichkeiten:
@@ -83,9 +98,7 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
     Als Beispiel siehe ```kijs.gui.dataView.element.ListView```
 
 
-### kijs.gui.field.OptionGroup
- - Neu kann die gewählte Option wieder abgewählt werden.
-   Ist ```required: true```, kann der Wert nicht abgewählt werden.
+
 
 ### kijs.String
  - Neue Funktion ```kijs.String.toRegExp()```

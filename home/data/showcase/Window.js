@@ -69,7 +69,8 @@ home.sc.Window = class home_sc_Window {
                     caption: 'Hide',
                     iconCls: 'icoWizard16',
                     badgeText: '1',
-                    tooltip: { html: '<p>Test</p>', followPointer: false },
+                    //tooltip: { html: '<p>Test</p>', followPointer: false },
+                    tooltip: 'Test',
                     on: {
                         click: function() {
                             this.visible = false;
