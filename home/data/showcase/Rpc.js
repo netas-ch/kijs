@@ -153,25 +153,65 @@ home.sc.Rpc = class home_sc_Rpc {
                     caption: 'Sende 3 RPCs',
                     on: {
                         click: function() {
-                            kijs.getRpc('default').do({ 
-                                remoteFn: 'rpc.simple', 
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
                                 data: 'RPC 1/3'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
                                 }
                             });
-                            kijs.getRpc('default').do({ 
-                                remoteFn: 'rpc.simple', 
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
                                 data: 'RPC 2/3'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
                                 }
                             });
-                            kijs.getRpc('default').do({ 
-                                remoteFn: 'rpc.simple', 
-                                data: 'RPC 3/3' 
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
+                                data: 'RPC 3/3'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
+                            });
+                        },
+                        context: this
+                    }
+                },
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Exklusiver RPC. Der nicht mit anderen zusammenfasst wird:',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Sende 3 RPCs. Der zweite davon ist exklusiv',
+                    on: {
+                        click: function() {
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
+                                data: 'RPC 1/3'
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
+                            });
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
+                                data: 'RPC 2/3',
+                                exclusive: true
+                            }).then((e) => {
+                                if (kijs.isEmpty(e.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                }
+                            });
+                            kijs.getRpc('default').do({
+                                remoteFn: 'rpc.simple',
+                                data: 'RPC 3/3'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
