@@ -406,8 +406,8 @@
     height: 27px;
   }
   .kijs-panel > .kijs-footer > .kijs-container-inner {
-    padding: 4px;
-    gap: 4px;
+    padding: 2px;
+    gap: 3px;
   }
   /* kijs.gui.container.Tab */
   .kijs-container-tab > .kijs-container-scrollable {
