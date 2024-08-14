@@ -28,6 +28,24 @@ in kijs.theme.default.css.
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.
 
+### kijs.gui.Container
+ - Die Funktion ```add()```hat eine neue Anordnung der Argumente:
+   Früher:
+    ```add(elements, index=null, preventRender=false)```
+   Neu:
+    ```add(elements, index=null, options={})```
+
+   options Eigenschaften:
+    - ```preventRender```   render verhindern? (Boolean, Default=false)
+    - ```preventEvents```   Das Auslösen des beforeAdd und add-Events verhindern? (Boolean, Default=false)
+
+   **UPDATE TIPP:** Projekt nach ```add(``` durchsuchen und die Argumente anpassen:
+
+        {
+            preventRender: ...,   // war in Argument 3
+            preventEvents: ...,   // ist neu
+        }
+
 ### kijs.gui.dataView.Element entfernt
 Stattdessen gibt es neu verschiedene Möglichkeiten:
  - ```kijs.gui.dataView.element.Base```     Basisklasse, die für eigene Klassen vererbt

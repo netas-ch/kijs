@@ -328,8 +328,6 @@
     flex: 1 1 auto;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
     -webkit-overflow-scrolling: touch;
     /* iOS Safari: Native Style Scrolling einschalten */
@@ -898,8 +896,6 @@
     border: 1px solid var(--field-borderColor);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     background-color: var(--panel-bkgrndColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
   }
   div.kijs-spinbox * {
@@ -990,8 +986,6 @@
     padding: 0 6px;
     gap: 4px;
     background-color: var(--bar-bkgrndColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -1323,8 +1317,6 @@
     max-height: 100%;
     border-radius: 5px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
     /* Buttons im Fuss eines Fensters sind blau */
   }
@@ -1378,8 +1370,6 @@
     right: 0;
     left: 0;
     bottom: 0;
-    -webkit-user-select: none;
-    /* Safari  */
     user-select: none;
   }
   div.kijs-mask * {

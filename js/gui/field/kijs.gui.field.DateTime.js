@@ -639,15 +639,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         });
 
         if (hasDate) {
-            this._spinBoxEl.add(this._datePicker, null, true);
+            this._spinBoxEl.add(this._datePicker, null, { preventRender: true });
         }
 
         if (hasDate && hasTime) {
-            this._spinBoxEl.add(this._seperatorEl, null, true);
+            this._spinBoxEl.add(this._seperatorEl, null, { preventRender: true });
         }
 
         if (hasTime) {
-            this._spinBoxEl.add(this._timePicker, null, true);
+            this._spinBoxEl.add(this._timePicker, null, { preventRender: true });
         }
 
         if (this._spinBoxEl.isRendered) {
