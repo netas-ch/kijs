@@ -1363,6 +1363,9 @@
     /* Workaround: entfernt den Rahmen vom aktiven Dialog */
     /* Buttons im Fuss eines Fensters sind blau */
   }
+  dialog.kijs-window::backdrop {
+    background-color: var(--mask-bkgrndColor);
+  }
   dialog.kijs-window * {
     box-sizing: border-box;
   }
@@ -1403,36 +1406,58 @@
        * Mask
        ****************** */
   div.kijs-mask {
-    box-sizing: border-box;
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    z-index: 60000;
-    background-color: rgba(0, 0, 0, 0.2);
-    flex-direction: column;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
+    background-color: var(--mask-bkgrndColor);
+  }
+  dialog.kijs-mask {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+  }
+  dialog.kijs-mask::backdrop {
+    background-color: var(--mask-bkgrndColor);
+  }
+  div.kijs-mask,
+  dialog.kijs-mask {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*flex-direction: column;*/
+    overflow: hidden;
+    z-index: 60000;
     user-select: none;
   }
-  div.kijs-mask * {
+  div.kijs-mask *,
+  dialog.kijs-mask * {
     box-sizing: border-box;
   }
-  div.kijs-mask > .kijs-icon {
-    color: #F5F5F5;
+  div.kijs-mask > .kijs-mask-center,
+  dialog.kijs-mask > .kijs-mask-center {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+  }
+  div.kijs-mask > .kijs-mask-center > .kijs-icon,
+  dialog.kijs-mask > .kijs-mask-center > .kijs-icon {
+    flex: none;
+    color: var(--mask-icon-fontColor);
     font-size: 40px;
   }
-  div.kijs-mask > .kijs-mask-text {
+  div.kijs-mask > .kijs-mask-center > .kijs-mask-text,
+  dialog.kijs-mask > .kijs-mask-center > .kijs-mask-text {
+    flex: none;
     margin-top: 20px;
-    color: #F5F5F5;
+    color: var(--mask-fontColor);
     font-size: 17px;
     font-family: var(--default-fontFamily);
-  }
-  div.kijs-mask > .kijs-mask-text:empty {
-    display: none;
   }
   /* ******************
        * ApertureMask
@@ -1442,7 +1467,7 @@
     position: absolute;
     overflow: hidden;
     z-index: 9000;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--mask-bkgrndColor);
     opacity: 0;
   }
   div.kijs-aperturemask * {

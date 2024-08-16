@@ -80,23 +80,7 @@ home.sc.Mask = class home_sc_Mask {
                                 textAlign: 'center'
                             }
                         }
-                    ],
-
-                    footerBarCaption: 'Meine FooterBar',
-                    footerElements: [
-                        '>',
-                        {
-                            xtype: 'kijs.gui.Button',
-                            caption: 'OK',
-                            iconMap: 'kijs.iconMap.Fa.check',
-                            isDefault: true
-                        },{
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Abbrechen',
-                            iconMap: 'kijs.iconMap.Fa.xmark'
-                        }
                     ]
-
                 },
                 
                 
@@ -182,6 +166,80 @@ home.sc.Mask = class home_sc_Mask {
                             style: { margin: '10px' },
                             innerStyle: { padding: '10px' },
                             html: 'Maske nur auf innerDom'
+                        }
+                    ]
+                },
+
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Maske mit Text:',
+                    style: { margin: '20px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexrow',
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Panel',
+                            caption: 'Panel',
+                            height: 100,
+                            width: 200,
+                            style: { margin: '10px' },
+                            innerStyle: { padding: '10px' },
+                            html: 'Maske mit Text',
+                            on: {
+                                afterFirstRenderTo: function(e) {
+                                    const waitMaskEl = new kijs.gui.Mask({
+                                        displayWaitIcon: true,
+                                        text: 'Bitte warten...',
+                                        target: e.raiseElement,
+                                        targetDomProperty: 'dom'
+                                    });
+                                    kijs.defer(()=>{
+                                        waitMaskEl.show();
+                                    }, 100, this);
+                                },
+                                context: this
+                            }
+                        }
+                    ]
+                },
+
+
+                {
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexline',
+                    elements :[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Maske auf Viewport für 2s',
+                            on: {
+                                click: function(e) {
+                                    const targetEl = this._app.viewport;
+                                    targetEl.waitMaskAdd();
+                                    kijs.defer(()=>{
+                                        targetEl.waitMaskRemove();
+                                    }, 2000, this);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Maske auf BODY für 2s',
+                            on: {
+                                click: function(e) {
+                                    const waitMaskEl = new kijs.gui.Mask({
+                                        displayWaitIcon: true,
+                                        target: document.body
+                                    });
+                                    waitMaskEl.show();
+                                    kijs.defer(()=>{
+                                        waitMaskEl.destruct();
+                                    }, 2000, this);
+                                },
+                                context: this
+                            }
                         }
                     ]
                 }

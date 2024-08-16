@@ -9,6 +9,9 @@ Version 2.8.0 (ist noch in Entwicklung)
   **UPDATE TIPP:**: Neue Fonts in files.json eintragen.
 
  - Neue CSS-Variablen:
+    - ```--mask-bkgrndColor: rgba(0, 0, 0, 0.35);```
+    - ```--mask-fontColor: #fff;```
+    - ```--mask-icon-fontColor: #fff;```
     - ```--checkbox-height: 20px;```
     - ```--checkbox-lineHeight: 18px;```
 
@@ -60,6 +63,12 @@ folgt ersetzen:
  - ```div.kijs-window``` --> ```dialog.kijs-window```  
  - ```div.kijs-panel``` --> ```div.kijs-panel, dialog.kijs-panel```  
  - ```div.kijs-msgox``` --> ```dialog.kijs-msgbox```  
+
+### kijs.gui.Mask
+Wenn eine Maske den ganzen document.body abdeckt, wird sie neu mit einem dialog-Tag 
+erstellt (sonst div-Tag). Bei einem dialog-Tag wird verhindert, dass mit der Tastatur 
+hinter die Maske navigiert werden kann.  
+Masken haben neu ein zusätzliches div, in dem das Icon und der Text angezeigt wird.  
 
 ### kijs.gui.dataView.Element entfernt
 Stattdessen gibt es neu verschiedene Möglichkeiten:

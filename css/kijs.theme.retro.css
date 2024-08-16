@@ -82,6 +82,10 @@
   --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif;
   --default-fontColor: var(--grey11);
   --default-disabled-fontColor: var(--grey08);
+  /* Mask */
+  --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
+  --mask-fontColor: #fff;
+  --mask-icon-fontColor: #fff;
   /* Separator */
   --separator-bkgrndColor: #bdc4cd;
   --separator-disabled-bkgrndColor: #bdc4cd;
