@@ -208,7 +208,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             width: true,
             height: true,
             nodeAttribute: { fn: 'assign' },
-            nodeTagName: { fn: 'nodeTagName' },
+            nodeTagName: { target: 'nodeTagName' },
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
             tooltip: { target: 'tooltip' },
