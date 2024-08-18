@@ -2933,8 +2933,6 @@
     outline: none;
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
     background: var(--range-btnColor);
     cursor: pointer;
   }

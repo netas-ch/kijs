@@ -107,6 +107,8 @@ kijs.Rpc = class kijs_Rpc {
      *     {Function} [fn]                       Callback-Funktion
      *     {Object} [context]                    Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe remoteFn abgebrochen
+     *     {Boolean} [exclusive=false]           Bei true, wird der RPC sofort gesendet
+     *                                           und nicht mit anderen RPCs zusammengefasst.
      *     {Object} [rpcParams]                  Hier können weitere Argumente, zum Datenverkehr (z.B. ignoreWarnings)
      *     {Mixed} [responseArgs]                Hier können Daten übergeben werden,
      *                                           die in der Callback-Fn dann wieder zur Verfügung stehen.
@@ -169,7 +171,7 @@ kijs.Rpc = class kijs_Rpc {
 
         this._queue.push(queueEl);
 
-        if (!kijs.isEmpty(config.skipDefer) && config.skipDefer) {
+        if (config.exclusive) {
             this._transmit(queueEl.tid);
         } else {
             this._deferId = kijs.defer(this._transmit, this.defer, this);
@@ -288,6 +290,7 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Übermittelt die subRequests in der queue an den Server
+     * @param {Number} tid tid des Requests, der gesendet werden soll oder null für alle
      * @returns {undefined}
      */
     _transmit(tid=null) {
@@ -295,18 +298,16 @@ kijs.Rpc = class kijs_Rpc {
         const transmitData = [];
 
         for (let i=0; i<this._queue.length; i++) {
-            if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
-                const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
-                subRequest.remoteFn = this._queue[i].remoteFn;
-                subRequest.requestData = this._queue[i].requestData;
-                subRequest.type = this._queue[i].type;
-                subRequest.tid = this._queue[i].tid;
+            if (!tid || tid === this._queue[i].tid) {
+                if (this._queue[i].state === kijs.Rpc.states.QUEUE) {
+                    const subRequest = kijs.isObject(this._queue[i].rpcParams) ? this._queue[i].rpcParams : {};
+                    subRequest.remoteFn = this._queue[i].remoteFn;
+                    subRequest.requestData = this._queue[i].requestData;
+                    subRequest.type = this._queue[i].type;
+                    subRequest.tid = this._queue[i].tid;
 
-                transmitData.push(subRequest);
-                this._queue[i].state = kijs.Rpc.states.TRANSMITTED;
-
-                if (tid) {
-                    break;
+                    transmitData.push(subRequest);
+                    this._queue[i].state = kijs.Rpc.states.TRANSMITTED;
                 }
             }
         }

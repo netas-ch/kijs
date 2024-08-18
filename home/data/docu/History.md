@@ -74,10 +74,28 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
 
 
 
+Version 2.7.4
+=============
+### kijs.Rpc, kijs.gui.Rpc
+ - Zusätzliche config bei do(): ```exclusive``` (boolean)  
+   RPC können nun exklusiv geschickt werden.  
+   Exklusive RPCs werden sofort geschickt und nicht mit anderen RPCs zusammengefasst.  
+   Damit können z.B. Anfragen, die eine lange Verarbeitungszeit auf dem Server haben 
+   getrennt von anderen Anfragen abgehandelt werden.  
+   Beispiel:  
+
+        kijs.getRpc('default').do({
+            ...
+            exclusive: true
+        });
+
+
+
 Version 2.7.3
 =============
 ### kijs.gui.grid.Grid
 Bugfix: Navigation mit Pfeiltasten
+
 
 
 Version 2.7.2
