@@ -14,9 +14,11 @@ Version 2.8.0 (ist noch in Entwicklung)
     - ```--mask-icon-fontColor: #fff;```
     - ```--checkbox-height: 20px;```
     - ```--checkbox-lineHeight: 18px;```
+    - ```--range-btnHeight: 20px;```
 
  - Geänderte CSS-Variablen:
     - ```--checkbox-fontSize: 14px;```  (alter Wert: 20px)
+    - ```--range-btnColor: var(--grey09);```  (alter Wert: var(--grey10))
 
 **UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
 in kijs.theme.default.css.
@@ -27,6 +29,9 @@ in kijs.theme.default.css.
     - ```checkedIconCls```
     - ```determinatedIconCls```
     - ```uncheckedIconCls```
+
+### kijs.gui.fieldRange
+ - CSS Überarbeitet, so dass das Feld in allen Browsern gleich aussieht.  
 
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.

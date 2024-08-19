@@ -2843,6 +2843,12 @@
                 }
             }
         }
+        
+        &.kijs-disabled {
+            > .kijs-label {
+                color: var(--field-disabled-fontColor);
+            }
+        }
     }
 
 
@@ -3406,32 +3412,60 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 > input {
+                    width: 100%;
+                    height: var(--range-btnHeight);
+                    margin: 4px 0 0 0;
+                    outline: none;
+                    background-color: transparent;
                     -webkit-appearance: none;
                     appearance: none;
-                    width: 100%;
-                    height: 1px;
-                    margin: 0 0 4px 0;
-                    background: var(--range-bkgrndColor);
-                    outline: none;
-                }
+                    
+                    /* Track */
+                    &::-webkit-slider-runnable-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    &::-moz-range-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    
+                    /* Track Progress */
+                    /* es gibt leider kein Äquivalent für Chrome */
+                    &::-moz-range-progress {
+                        height: 2px;
+                        background: var(--range-btnColor);
+                    }
+                    
+                    /* Thumb */
+                    &::-webkit-slider-thumb {
+                        margin-top: calc(var(--range-btnHeight) / 2 * -1);
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
+                    &::-moz-range-thumb {
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
 
-                > input::-webkit-slider-thumb {
-                    background: var(--range-btnColor);
-                    cursor: pointer;
-                }
-
-                > input::-moz-range-thumb {
-                    border: 0;
-                    background-color: var(--range-btnColor);
-                    cursor: pointer;
-                }
-
-                > input:hover::-webkit-slider-thumb {
-                    background-color: var(--field-focus-borderColor);
-                }
-
-                > input:hover::-moz-range-thumb {
-                    background-color: var(--field-focus-borderColor);
+                    &:focus::-webkit-slider-thumb,
+                    &:hover::-webkit-slider-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
+                    &:focus::-moz-range-thumb,
+                    &:hover::-moz-range-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3452,22 +3486,27 @@
         &.kijs-disabled > .kijs-content > .kijs-inputwrapper,
         &.kijs-readonly > .kijs-content > .kijs-inputwrapper {
             > input {
-                background-color: var(--field-disabled-bkgrndColor);
-            }
+                &::-webkit-slider-runnable-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                
+                &::-moz-range-progress {
+                    background: var(--field-disabled-fontColor);
+                }
 
-            > input::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input:hover::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input::-moz-range-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
+                &::-webkit-slider-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
             }
         }
     }

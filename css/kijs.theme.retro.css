@@ -52,6 +52,7 @@
   --checkbox-height: 15px;
   --checkbox-fontSize: 10px;
   --checkbox-lineHeight: 12px;
+  --range-btnHeight: 16px;
   --switch-height: 20px;
   --badge-fontSize: 10px;
   --badge-lineHeight: 13px;
@@ -168,7 +169,7 @@
   --field-error-bkgrndColor: var(--errorColorLight);
   /* Range */
   --range-bkgrndColor: var(--grey07);
-  --range-btnColor: var(--grey10);
+  --range-btnColor: var(--grey09);
   /* Item */
   --item-bkgrndColor: var(--grey02);
   --item-borderColor: var(--grey03);

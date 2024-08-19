@@ -2526,6 +2526,9 @@
       width: auto !important;
     }
   }
+  div.kijs-field.kijs-disabled > .kijs-label {
+    color: var(--field-disabled-fontColor);
+  }
   /* ******************
        * Field Text
        * Field Iban
@@ -2999,28 +3002,56 @@
        * Field Range
        ****************** */
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
+    width: 100%;
+    height: var(--range-btnHeight);
+    margin: 4px 0 0 0;
+    outline: none;
+    background-color: transparent;
     -webkit-appearance: none;
     appearance: none;
-    width: 100%;
+    /* Track */
+    /* Track Progress */
+    /* es gibt leider kein Äquivalent für Chrome */
+    /* Thumb */
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track {
     height: 1px;
-    margin: 0 0 4px 0;
     background: var(--range-bkgrndColor);
-    outline: none;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-track {
+    height: 1px;
+    background: var(--range-bkgrndColor);
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress {
+    height: 2px;
+    background: var(--range-btnColor);
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    margin-top: calc(var(--range-btnHeight) / 2 * -1);
+    height: var(--range-btnHeight);
+    width: var(--range-btnHeight);
+    border: 0;
+    border-radius: 50%;
+    -webkit-appearance: none;
     background: var(--range-btnColor);
     cursor: pointer;
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
+    height: var(--range-btnHeight);
+    width: var(--range-btnHeight);
     border: 0;
-    background-color: var(--range-btnColor);
+    border-radius: 50%;
+    -webkit-appearance: none;
+    background: var(--range-btnColor);
     cursor: pointer;
   }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:focus::-webkit-slider-thumb,
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
-    background-color: var(--field-focus-borderColor);
+    background: var(--field-focus-borderColor);
   }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:focus::-moz-range-thumb,
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
-    background-color: var(--field-focus-borderColor);
+    background: var(--field-focus-borderColor);
   }
   div.kijs-field-range.kijs-disableFlex {
     align-self: start;
@@ -3032,23 +3063,28 @@
   div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track {
     background-color: var(--field-disabled-fontColor);
     cursor: default;
   }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-track,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-track {
     background-color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress {
+    background: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    background: var(--field-disabled-fontColor);
     cursor: default;
   }
   div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb,
   div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
-    background-color: var(--field-disabled-fontColor);
+    background: var(--field-disabled-fontColor);
     cursor: default;
   }
   /* ******************
