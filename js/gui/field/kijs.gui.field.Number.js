@@ -358,6 +358,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         }
 
         let val = this.value;
+        const oldValue = val;
 
         if (kijs.isEmpty(val)) {
             val = 0;
@@ -393,10 +394,16 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinDelayCurrent < 10) {
             this._spinDelayCurrent = 10;
         }
-        
+
         // Validieren
         this.validate();
-        
+
+        // input-event auslösen
+        this.raiseEvent('input', {
+            value: val,
+            oldValue: oldValue
+        });
+
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
 
