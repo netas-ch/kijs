@@ -479,6 +479,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._headerEl.changeDisabled(!!val, true);
         this._footerEl.changeDisabled(!!val, true);
         this._footerBarEl.changeDisabled(!!val, true);
+        if (this._resizerEl) {
+            this._resizerEl.changeDisabled(!!val, true);
+        }
     }
     
     /**

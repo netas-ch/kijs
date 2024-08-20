@@ -942,6 +942,8 @@
   div.kijs-splitter-horizontal {
     width: 5px;
     background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-splitter-horizontal:not(.kijs-disabled) {
     cursor: ew-resize;
   }
   div.kijs-splitter-overlay-horizontal {
@@ -956,6 +958,8 @@
   div.kijs-splitter-vertical {
     height: 5px;
     background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-splitter-vertical:not(.kijs-disabled) {
     cursor: ns-resize;
   }
   div.kijs-splitter-overlay-vertical {
@@ -1588,13 +1592,13 @@
     background-position: bottom 2px right 2px;
     opacity: 0.3;
   }
-  div.kijs-resizer.kijs-resizer-width {
+  div.kijs-resizer.kijs-resizer-width:not(.kijs-disabled) {
     cursor: we-resize;
   }
-  div.kijs-resizer.kijs-resizer-height {
+  div.kijs-resizer.kijs-resizer-height:not(.kijs-disabled) {
     cursor: ns-resize;
   }
-  div.kijs-resizer.kijs-resizer-width.kijs-resizer-height {
+  div.kijs-resizer.kijs-resizer-width.kijs-resizer-height:not(.kijs-disabled) {
     cursor: nwse-resize;
   }
   div.kijs-resizer:hover {

@@ -1038,7 +1038,9 @@
     div.kijs-splitter-horizontal {
         width: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ew-resize;
+        &:not(.kijs-disabled) {
+            cursor: ew-resize;
+        }
     }
 
     div.kijs-splitter-overlay-horizontal {
@@ -1054,7 +1056,9 @@
     div.kijs-splitter-vertical {
         height: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ns-resize;
+        &:not(.kijs-disabled) {
+            cursor: ns-resize;
+        }
     }
 
     div.kijs-splitter-overlay-vertical {
@@ -1735,16 +1739,15 @@
         background-position: bottom 2px right 2px;
         opacity: 0.3;
 
-        &.kijs-resizer-width {
+        &.kijs-resizer-width:not(.kijs-disabled) {
             cursor: we-resize;
         }
-        &.kijs-resizer-height {
+        &.kijs-resizer-height:not(.kijs-disabled) {
             cursor: ns-resize;
         }
-        &.kijs-resizer-width.kijs-resizer-height {
+        &.kijs-resizer-width.kijs-resizer-height:not(.kijs-disabled) {
             cursor: nwse-resize;
         }
-
         &:hover {
             opacity: 1;
         }
