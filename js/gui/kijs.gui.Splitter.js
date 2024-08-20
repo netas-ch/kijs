@@ -224,14 +224,11 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         // Bubbeling verhindern;
         e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
     }
 
     #onTouchStart(e) {
-        if (this.disabled) {
-            return;
-        }
-        
-        if (e.nodeEvent.touches.length > 1) {
+        if (this.disabled || e.nodeEvent.touches.length > 1) {
             return;
         }
 
@@ -250,6 +247,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         // Bubbeling verhindern;
         e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
     }
 
 
