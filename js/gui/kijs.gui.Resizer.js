@@ -46,6 +46,9 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         // Listeners
         this.on('mouseDown', this.#onMouseDown, this);
+        this.on('touchStart', this.#onTouchStart, this);
+        this.on('touchMove', this.#onTouchMove, this);
+        this.on('touchEnd', this.#onTouchEnd, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -194,6 +197,10 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onMouseDown(e) {
+        if (this.disabled) {
+            return;
+        }
+
         this._initialPos = {
             x: e.nodeEvent.clientX,
             y: e.nodeEvent.clientY,
@@ -219,6 +226,10 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     }
 
     #onMouseMove(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
         // Neue Grösse ermitteln
         let w = this._initialPos.w + (e.nodeEvent.clientX - this._initialPos.x);
         let h = this._initialPos.h + (e.nodeEvent.clientY - this._initialPos.y);
@@ -287,6 +298,117 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
+    }
+
+    #onTouchEnd(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
+        // Neue Grösse ermitteln
+        let w = this._overlayDom.width;
+        let h = this._overlayDom.height;
+
+        // Max/min-Grösse begrenzen
+        const minMaxSize = this._getMinMaxSize();
+        if (minMaxSize.wMin !== null && w < minMaxSize.wMin) {
+            w = minMaxSize.wMin;
+        }
+        if (minMaxSize.hMin !== null && h < minMaxSize.hMin) {
+            h = minMaxSize.hMin;
+        }
+
+        if (minMaxSize.wMax !== null && w > minMaxSize.wMax) {
+            w = minMaxSize.wMax;
+        }
+        if (minMaxSize.hMax !== null && h > minMaxSize.hMax) {
+            h = minMaxSize.hMax;
+        }
+
+        // Grösse zuweisen
+        if (this._dom.clsHas('kijs-resizer-width')) {
+            this._targetEl.width = w;
+        }
+        if (this._dom.clsHas('kijs-resizer-height')) {
+            this._targetEl.height = h;
+        }
+
+        // Overlay wieder ausblenden
+        this._overlayDom.unrender();
+
+        this._initialPos = null;
+    }
+
+
+    #onTouchMove(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
+        // Neue Grösse ermitteln
+        let w = this._initialPos.w + (e.nodeEvent.touches[0].clientX - this._initialPos.x);
+        let h = this._initialPos.h + (e.nodeEvent.touches[0].clientY - this._initialPos.y);
+
+        // Max/min-Grösse begrenzen
+        const minMaxSize = this._getMinMaxSize();
+        if (minMaxSize.wMin !== null && w < minMaxSize.wMin) {
+            w = minMaxSize.wMin;
+        }
+        if (minMaxSize.hMin !== null && h < minMaxSize.hMin) {
+            h = minMaxSize.hMin;
+        }
+
+        if (minMaxSize.wMax !== null && w > minMaxSize.wMax) {
+            w = minMaxSize.wMax;
+        }
+        if (minMaxSize.hMax !== null && h > minMaxSize.hMax) {
+            h = minMaxSize.hMax;
+        }
+
+        // Wenn Breite nicht veränderbar
+        if (!this._dom.clsHas('kijs-resizer-width')) {
+            w = this._initialPos.w;
+        }
+        if (!this._dom.clsHas('kijs-resizer-height')) {
+            h = this._initialPos.h;
+        }
+
+        // Grösse zuweisen
+        this._overlayDom.width = w;
+        this._overlayDom.height = h;
+
+        // Bubbeling verhindern;
+        e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
+    }
+
+    #onTouchStart(e) {
+        if (this.disabled || e.nodeEvent.touches.length > 1) {
+            return;
+        }
+
+        this._initialPos = {
+            x: e.nodeEvent.touches[0].clientX,
+            y: e.nodeEvent.touches[0].clientY,
+            w: this._targetEl.width,
+            h: this._targetEl.height
+        };
+
+        let targetElPos = kijs.Dom.getAbsolutePos(this._targetEl.dom.node);
+
+        // Overlay positionieren
+        this._overlayDom.top = targetElPos.y;
+        this._overlayDom.left = targetElPos.x;
+        this._overlayDom.width = targetElPos.w;
+        this._overlayDom.height = targetElPos.h;
+
+        // Overlay rendern
+        this._overlayDom.render();
+        document.body.appendChild(this._overlayDom.node);
+
+        // Bubbeling verhindern;
+        e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
     }
 
 
