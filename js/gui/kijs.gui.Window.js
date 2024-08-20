@@ -92,8 +92,14 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     set draggable(val) {
         if (val && !this._draggable) {
             this._headerBarEl.on('mouseDown', this.#onHeaderBarMouseDown, this);
+            this._headerBarEl.on('touchStart', this.#onHeaderBarTouchStart, this);
+            this._headerBarEl.on('touchMove', this.#onHeaderBarTouchMove, this);
+            this._headerBarEl.on('touchEnd', this.#onHeaderBarTouchEnd, this);
         } else if (!val && this._draggable) {
             this._headerBarEl.off('mouseDown', this.#onHeaderBarMouseDown, this);
+            this._headerBarEl.off('touchStart', this.#onHeaderBarTouchStart, this);
+            this._headerBarEl.off('touchMove', this.#onHeaderBarTouchMove, this);
+            this._headerBarEl.off('touchEnd', this.#onHeaderBarTouchEnd, this);
             kijs.Dom.removeEventListener('mousemove', document, this);
             kijs.Dom.removeEventListener('mouseup', document, this);
         }
@@ -397,6 +403,81 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // (Workaround, weil sonst manchmal der Resizer stehen bleibt)
         kijs.Dom.addEventListener('mousemove', document, this.#onDocumentMouseMove, this);
         kijs.Dom.addEventListener('mouseup', document, this.#onDocumentMouseUp, this);
+    }
+
+    #onHeaderBarTouchEnd(e) {
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Transitions-sperre wieder aufheben
+        this.dom.style.transition = this._dragInitialPos.windowTransition;
+        this._dragInitialPos = null;
+    }
+
+    #onHeaderBarTouchMove(e) {
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Neue Position ermitteln
+        let x = this._dragInitialPos.windowX + (e.nodeEvent.touches[0].clientX - this._dragInitialPos.mouseX);
+        let y = this._dragInitialPos.windowY + (e.nodeEvent.touches[0].clientY - this._dragInitialPos.mouseY);
+
+        // Min-Position begrenzen
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+
+        // Evtl. max-Position begrenzen
+        const targetNode = this.targetNode;
+        if (x < targetNode.offsetLeft) {
+            x = targetNode.offsetLeft;
+        }
+        if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+            x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
+        }
+
+        if (y < targetNode.offsetTop) {
+            y = targetNode.offsetTop;
+        }
+        if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+            y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+        }
+
+        // Grösse zuweisen
+        this.left = x;
+        this.top = y;
+
+        // Bubbeling und native Listeners verhindern
+        e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
+    }
+
+    #onHeaderBarTouchStart(e) {
+        if (e.nodeEvent.touches.length > 1) {
+            return;
+        }
+
+        this.toFront();
+
+        if (this.maximized) {
+            return;
+        }
+
+        this._dragInitialPos = {
+            mouseX: e.nodeEvent.touches[0].clientX,
+            mouseY: e.nodeEvent.touches[0].clientY,
+            windowX: this.left,
+            windowY: this.top,
+            windowTransition: this.style.transition ? this.style.transition : ''
+        };
+
+        // Allfällige Transitionen temporär abschalten
+        this.style.transition = 'none';
     }
 
     #onDocumentMouseMove(e) {
