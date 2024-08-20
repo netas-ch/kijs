@@ -23,15 +23,12 @@ Version 2.8.0 (ist noch in Entwicklung)
 **UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
 in kijs.theme.default.css.
 
-### kijs.gui.Checkbox
+### kijs.gui.field.Checkbox
  - Die Checkbox wird neu mit einem Border gezeichnet.
  - Folgende configs wurden entfernt:
     - ```checkedIconCls```
     - ```determinatedIconCls```
     - ```uncheckedIconCls```
-
-### kijs.gui.fieldRange
- - CSS Überarbeitet, so dass das Feld in allen Browsern gleich aussieht.  
 
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.
@@ -39,6 +36,12 @@ in kijs.theme.default.css.
 ### kijs.gui.field.OptionGroup
  - Neu kann die gewählte Option wieder abgewählt werden.
    Ist ```required: true```, kann der Wert nicht abgewählt werden.
+
+### kijs.gui.field.Number
+ - Beim Drücken auf die Spinner-Buttons kommt nun auch das input-event.  
+
+### kijs.gui.field.Range
+ - CSS Überarbeitet, so dass das Feld in allen Browsern gleich aussieht.  
 
 ### kijs.gui.Container
  - Die Funktion ```add()```hat eine neue Anordnung der Argumente:
@@ -59,9 +62,10 @@ in kijs.theme.default.css.
         }
 
 ### kijs.gui.Window
-Alle Fenster werden neu nicht mehr mit einem ```DIV``` gemacht, sondern mit einem ```DIALOG```.  
-Bei Modalen Fenstern ist es darum nicht mehr möglich mit der Tastatur zu verdeckten Elementen 
-zu Navigieren.
+ - Alle Fenster werden neu nicht mehr mit einem ```DIV``` gemacht, sondern mit einem 
+   ```DIALOG```. Bei Modalen Fenstern ist es darum nicht mehr möglich mit der Tastatur 
+   zu verdeckten Elementen zu Navigieren.  
+ - Fenster können nun auch auf Touch-Geräten verschoben werden.  
 
 **UPDATE TIPP:** LESS/CSS-Dateien nach folgenden Wörtern durchsuchen und wie 
 folgt ersetzen:  
@@ -74,6 +78,12 @@ Wenn eine Maske den ganzen document.body abdeckt, wird sie neu mit einem dialog-
 erstellt (sonst div-Tag). Bei einem dialog-Tag wird verhindert, dass mit der Tastatur 
 hinter die Maske navigiert werden kann.  
 Masken haben neu ein zusätzliches div, in dem das Icon und der Text angezeigt wird.  
+
+### kijs.gui.Splitter
+ - Splitter können nun auch auf Touch-Geräten verschoben werden.  
+
+### kijs.gui.Resizer
+ - Splitter können nun auch auf Touch-Geräten bedient werden.  
 
 ### kijs.gui.dataView.Element entfernt
 Stattdessen gibt es neu verschiedene Möglichkeiten:
@@ -110,9 +120,6 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
         });
 
     Als Beispiel siehe ```kijs.gui.dataView.element.ListView```
-
-
-
 
 ### kijs.String
  - Neue Funktion ```kijs.String.toRegExp()```
