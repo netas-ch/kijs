@@ -484,8 +484,9 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
             this._dragMove(e.nodeEvent.touches[0].clientX);
 
-            // Bubbeling verhindern;
+            // Bubbeling und native Listeners verhindern
             e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
         }
     }
     
@@ -496,9 +497,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             // touchMove und touchEnd Listeners setzen
             this._inputWrapperDom.on('touchMove', this.#onTouchMove, this);
             this._inputWrapperDom.on('touchEnd', this.#onTouchEnd, this);
-
-            // Bubbeling verhindern;
-            e.nodeEvent.stopPropagation();
         }
     }
 

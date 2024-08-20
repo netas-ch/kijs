@@ -222,7 +222,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         // Overlay Positionieren
         this._updateOverlayPosition(e.nodeEvent.touches[0].clientX, e.nodeEvent.touches[0].clientY);
 
-        // Bubbeling verhindern;
+        // Bubbeling und native Listeners verhindern
         e.nodeEvent.stopPropagation();
         e.nodeEvent.preventDefault();
     }
@@ -244,10 +244,6 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         // Overlay rendern
         this._overlayDom.render();
         this._dom.node.parentNode.appendChild(this._overlayDom.node);
-
-        // Bubbeling verhindern;
-        e.nodeEvent.stopPropagation();
-        e.nodeEvent.preventDefault();
     }
 
 

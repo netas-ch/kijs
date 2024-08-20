@@ -377,7 +377,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         this._overlayDom.width = w;
         this._overlayDom.height = h;
 
-        // Bubbeling verhindern;
+        // Bubbeling und native Listeners verhindern
         e.nodeEvent.stopPropagation();
         e.nodeEvent.preventDefault();
     }
@@ -405,10 +405,6 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         // Overlay rendern
         this._overlayDom.render();
         document.body.appendChild(this._overlayDom.node);
-
-        // Bubbeling verhindern;
-        e.nodeEvent.stopPropagation();
-        e.nodeEvent.preventDefault();
     }
 
 
