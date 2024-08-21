@@ -1928,6 +1928,7 @@
     border-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     width: var(--checkbox-height);
@@ -1952,6 +1953,7 @@
     border-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     width: var(--checkbox-height);
