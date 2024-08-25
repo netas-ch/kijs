@@ -434,15 +434,6 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         if (this._captionDom) {
             this._captionDom.destruct();
         }
-        if (this._iconEl) {
-            this._iconEl.destruct();
-        }
-        if (this._collapseButtonEl) {
-            this._collapseButtonEl.destruct();
-        }
-        if (this._headerDom) {
-            this._headerDom.destruct();
-        }
 
         // Variablen (Objekte/Arrays) leeren
         this._captionDom = null;

@@ -49,7 +49,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     constructor(config={}) {
         super(false);
 
-        this._checked = 0;                          // 0=unchecked, 1=checked
+        this._checked = 0;                          // 0=checked, 1=unchecked
 
         this._valueChecked = true;
         this._valueUnchecked = false;
@@ -385,10 +385,15 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     }
 
     // overwrite
-    _validateRequired(value, ignoreEmpty) {
+    _validationRules(value, ignoreEmpty) {
+        if (ignoreEmpty && kijs.isEmpty(value)) {
+            return;
+        }
+
+        // Eingabe erforderlich
         if (this._required) {
             if (!value) {
-                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
+                this._errors.push(kijs.getText('Eingabe erforderlich'));
             }
         }
     }

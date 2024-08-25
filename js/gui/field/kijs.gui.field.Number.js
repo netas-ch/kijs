@@ -384,7 +384,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         val = this._formatNumber(val);
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
-        
+
         let step = 10; // Minimalintervall
         if (this._spinAcceleration > 0) {
             step = parseInt(this._spinDelayCurrent / 100 * this._spinAcceleration);
@@ -393,10 +393,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinDelayCurrent < 10) {
             this._spinDelayCurrent = 10;
         }
-        
-        // Validieren
-        this.validate();
-        
+
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
 
         // Event auslösen
@@ -496,7 +493,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         // Wert neu reinschreiben (evtl. wurde er Formatiert)
         this.value = val;
-        
+
         // und das change event auslösen
         if (val !== oldVal) {
             this.raiseEvent('change', { oldValue: oldVal, value: val } );

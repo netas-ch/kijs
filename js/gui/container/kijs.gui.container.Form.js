@@ -225,7 +225,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         return new Promise((resolve) => {
             super.load(args, true, config).then((e) => {
                 let config = e.responseData.config ?? {};
-                
+
                 // Falls des Formular destructed wurde: abbrechen
                 if (!this._dom) {
                     resolve(e);

@@ -387,7 +387,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
     
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
-            if (el instanceof kijs.gui.field.ListView) {
+            if (el instanceof kijs.gui.field.Field) {
                 el[propertyName] = value;
             }
         }, this);

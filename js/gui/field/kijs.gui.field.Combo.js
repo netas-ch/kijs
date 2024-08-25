@@ -639,21 +639,42 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             return;
         }
 
-        super._validationRules(value, ignoreEmpty);
+        // Eingabe erforderlich
+        if (this._required) {
+            if (kijs.isEmpty(value)) {
+                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
+            }
+        }
 
         // Wert muss in der Liste vorhanden sein.
-        if (this._forceSelection && !this._remoteSort) {
-            if (value !== null && value.toString() !== '') {
-                let match = false;
-                kijs.Array.each(this._listViewEl.data, function(row) {
-                    if (row[this.valueField] === value) {
-                        match = true;
-                        return false;
-                    }
-                }, this);
+        if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
+            let match = false;
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (row[this.valueField] === value) {
+                    match = true;
+                    return false;
+                }
+            }, this);
 
-                if (!match) {
-                    this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
+            if (!match) {
+                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
+            }
+        }
+
+        // minSelectCount
+        if (!kijs.isEmpty(this._minSelectCount) && this._minSelectCount >= 0) {
+            if (kijs.isArray(value)) {
+                if (kijs.isEmpty(value) && this._minSelectCount > 0 || value.length < this._minSelectCount) {
+                    this._errors.push(kijs.getText('Min. %1 Datensätze müssen ausgewählt werden', '', this._minSelectCount));
+                }
+            }
+        }
+
+        // maxSelectCount
+        if (!kijs.isEmpty(this._maxSelectCount) && this._maxSelectCount > 0) {
+            if (kijs.isArray(value)) {
+                if (value.length > this._maxSelectCount) {
+                    this._errors.push(kijs.getText('Max. %1 Datensätze dürfen ausgewählt werden', '', this._maxSelectCount));
                 }
             }
         }
@@ -821,7 +842,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._value;
         }
 
-        if (this._selectFirst && !kijs.isEmpty(this._listViewEl.data)) {
+        if (this._selectFirst && this._listViewEl.data.length) {
             this.value = this._listViewEl.data[0].value;
         }
 

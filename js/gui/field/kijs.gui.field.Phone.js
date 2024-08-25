@@ -154,7 +154,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     
     // PROTECTED
     // overwrite
-    _formatRules(value, whileTyping) {
+    _formatRules(value) {
         // führende 00 durch + ersetzen
         if (!kijs.isEmpty(this._internationalCallPrefix)) {
             if (value.substring(0, this._internationalCallPrefix.length) === this._internationalCallPrefix) {
@@ -184,7 +184,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
             origVal = val;
             
             // Formatierung temporär anwenden           
-            val = this._formatApplyFormatRegExp(value, whileTyping);
+            val = this._applyReplaceRegExps(this._formatRegExps, val);
             
             // hat eine Formatierung gepasst? 
             // Dann Formatierung anwenden. Sonst nicht formatieren
@@ -205,7 +205,11 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         }
         
         // formatFn
-        value = this._formatApplyFormatFn(value, whileTyping);
+        if (kijs.isFunction(this._formatFn)) {
+            if (value !== null && value.toString() !== '') {
+                value = this._formatFn.call(this._formatFnContext || this, value);
+            }
+        }
         
         return value;
     }

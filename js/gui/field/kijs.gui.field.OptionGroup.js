@@ -20,7 +20,7 @@ kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.f
         Object.assign(this._defaultConfig, {
             disableFlex: true,
             showCheckBoxes: true,
-            selectType: 'singleAndEmpty',
+            selectType: 'single',
             valueField: 'value',
             captionField: 'caption'
         });
@@ -30,18 +30,6 @@ kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.f
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-    }
-
-
-
-    // --------------------------------------------------------------
-    // GETTERS / SETTERS
-    // --------------------------------------------------------------
-    // overwrite
-    get required() { return super.required; }
-    set required(val) {
-        this.selectType = val ? 'single' : 'singleAndEmpty';
-        super.required = !!val;
     }
     
 };

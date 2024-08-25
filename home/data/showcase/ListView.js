@@ -41,7 +41,7 @@ home.sc.ListView = class home_sc_ListView {
                     //iconColorField: 'Color',
                     //tooltipField: 'Color',
                     showCheckBoxes: false,
-                    selectType: 'singleAndEmpty',
+                    selectType: 'single',
                     width: 200,
                     data: [
                         {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
