@@ -22,6 +22,9 @@ home.App = class home_App {
         this._tabDocu = null;
         
         this._viewport = null;
+
+        // Sprache
+        kijs.languageId = config.languageId ? config.languageId : 'de';
         
         // RPC-Instanz für das App
         let appRpcConfig = {};
@@ -109,9 +112,18 @@ home.App = class home_App {
             elementsRight:[
                 {
                     xtype: 'kijs.gui.Button',
+                    name: 'btnLanguage',
+                    iconMap: 'kijs.iconMap.Fa.earth-americas',
+                    tooltip: 'Sprache',
+                    on: {
+                        click: this.#onBtnLanguageClick,
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
                     name: 'btnTheme',
                     iconMap: 'kijs.iconMap.Fa.palette',
-                    tooltip: 'Design wählen',
+                    tooltip: 'Design',
                     on: {
                         click: this.#onBtnThemeClick,
                         context: this
@@ -347,7 +359,43 @@ home.App = class home_App {
         });
         spinBox.show();
     }
-    
+
+    #onBtnLanguageClick(e) {
+        const spinBox = new kijs.gui.SpinBox({
+            target: e.element,
+            ownerNodes: e.element,
+            cls: 'kijs-flexform',
+            innerStyle: {
+                padding: '10px'
+            },
+            elements: [
+                {
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    name: 'cssFile',
+                    label: 'Design',
+                    labelHide: true,
+                    valueField: 'id',
+                    captionField: 'Bezeichnung',
+                    required: true,
+                    data: [
+                        { id:'de', Bezeichnung:'Deutsch' },
+                        { id:'en', Bezeichnung:'English' },
+                        { id:'fr', Bezeichnung:'Français' }
+                    ],
+                    value: kijs.languageId,
+                    on: {
+                        change: function(e) {
+                            var loc = window.location;
+                            window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value;
+                        },
+                        context: this
+                    }
+                }
+            ]
+        });
+        spinBox.show();
+    }
+
     #onContentTabChange(e) {
         // TODO: im tree den passenden Node selektieren
     }
