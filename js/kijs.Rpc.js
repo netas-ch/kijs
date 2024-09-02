@@ -125,7 +125,7 @@ kijs.Rpc = class kijs_Rpc {
             throw new kijs.Error('RPC call without remote function');
         }
 
-        if (this._deferId) {
+        if (this._deferId && !config.exclusive) {
             clearTimeout(this._deferId);
         }
 
@@ -294,8 +294,13 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
     _transmit(tid=null) {
-        this._deferId = null;
         const transmitData = [];
+
+        // Defer nur löschen, wenn es kein exklusiver Request ist
+        if (!tid && this._deferId) {
+            clearTimeout(this._deferId);
+            this._deferId = null;
+        }
 
         for (let i=0; i<this._queue.length; i++) {
             if (!tid || tid === this._queue[i].tid) {
