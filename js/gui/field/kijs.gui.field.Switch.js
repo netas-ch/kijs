@@ -488,6 +488,10 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     #onTouchMove(e) {
         if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
             this._dragMove(e.nodeEvent.touches[0].clientX);
+
+            // Bubbeling und native Listeners verhindern
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
         }
     }
     

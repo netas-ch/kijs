@@ -279,15 +279,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    /**
-     * Fügt ein oder mehrere Elemente hinzu.
-     * @param {Object|Array} elements
-     * @param {Number} [index=null] Position an der Eingefügt werden soll null=am Schluss
-     * @returns {undefined}
-     */
-    add(elements, index=null) {
+    // overwrite
+    add(elements, index=null, options={}) {
         elements = this._recursiveSetProperties(elements);
-        super.add(elements, index);
+        super.add(elements, index, options);
     }
 
     /**

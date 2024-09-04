@@ -33,7 +33,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren, falls das Virtual Keyboard eingeblendet wird.
 
-        this._modalMaskEl = null;
+        //this._modalMaskEl = null;
+        this._modal = false;
 
         this._draggable = false;
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
@@ -45,6 +46,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            nodeTagName: 'dialog',
             draggable: true,
             target: document.body,
 
@@ -90,34 +92,27 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     set draggable(val) {
         if (val && !this._draggable) {
             this._headerBarEl.on('mouseDown', this.#onHeaderBarMouseDown, this);
+            this._headerBarEl.on('touchStart', this.#onHeaderBarTouchStart, this);
+            this._headerBarEl.on('touchMove', this.#onHeaderBarTouchMove, this);
+            this._headerBarEl.on('touchEnd', this.#onHeaderBarTouchEnd, this);
         } else if (!val && this._draggable) {
             this._headerBarEl.off('mouseDown', this.#onHeaderBarMouseDown, this);
+            this._headerBarEl.off('touchStart', this.#onHeaderBarTouchStart, this);
+            this._headerBarEl.off('touchMove', this.#onHeaderBarTouchMove, this);
+            this._headerBarEl.off('touchEnd', this.#onHeaderBarTouchEnd, this);
             kijs.Dom.removeEventListener('mousemove', document, this);
             kijs.Dom.removeEventListener('mouseup', document, this);
         }
         this._draggable = !!val;
     }
 
-    get modal() { return !kijs.isEmpty(this._modalMaskEl); }
+    get modal() { return !!this._modal; }
     set modal(val) {
-        if (val) {
-            if (kijs.isEmpty(this._modalMaskEl)) {
-                this._modalMaskEl = new kijs.gui.Mask({
-                    target: this.target,
-                    targetDomProperty: this.targetDomProperty
-                });
-                if (this.isRendered) {
-                    this.show();
-                }
-            }
-        } else {
-            if (!kijs.isEmpty(this._modalMaskEl)) {
-                this._modalMaskEl.destruct();
-                this._modalMaskEl = null;
-            }
+        this._modal = !!val;
+        if (this.isRendered) {
+            this.show();
         }
     }
-
 
     /**
      * Gibt den Node zurück in dem sich die Maske befindet (parentNode)
@@ -191,9 +186,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     get visible() { return super.visible; }
     set visible(val) {
         super.visible = val;
-        if (this._modalMaskEl) {
-            this._modalMaskEl.visible = val;
-        }
     }
 
 
@@ -282,18 +274,21 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
      * @returns {undefined}
      */
     show() {
-        // Evtl. Maske für modale Anzeige einblenden
-        if (this._modalMaskEl) {
-            if (!this._modalMaskEl.isRendered) {
-                this._modalMaskEl.renderTo(this.parentNode);
-            }
-            new kijs.gui.LayerManager().setActive(this._modalMaskEl);
-        }
-        
         // Fenster rendern und anzeigen
-        if (!this.isRendered) {
+        if (this.isRendered) {
+            this._dom.node.close();
+        } else {
             this.renderTo(this.parentNode);
         }
+
+
+
+        if (this._modal) {
+            this._dom.node.showModal();
+        } else {
+            this._dom.node.show();
+        }
+        
         this.visible = true;
 
         if (!this.maximized) {
@@ -326,11 +321,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
-        }
-
-        // Elemente/DOM-Objekte entladen
-        if (this._modalMaskEl) {
-            this._modalMaskEl.unrender();
         }
 
         super.unrender(true);
@@ -413,6 +403,81 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // (Workaround, weil sonst manchmal der Resizer stehen bleibt)
         kijs.Dom.addEventListener('mousemove', document, this.#onDocumentMouseMove, this);
         kijs.Dom.addEventListener('mouseup', document, this.#onDocumentMouseUp, this);
+    }
+
+    #onHeaderBarTouchEnd(e) {
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Transitions-sperre wieder aufheben
+        this.dom.style.transition = this._dragInitialPos.windowTransition;
+        this._dragInitialPos = null;
+    }
+
+    #onHeaderBarTouchMove(e) {
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Neue Position ermitteln
+        let x = this._dragInitialPos.windowX + (e.nodeEvent.touches[0].clientX - this._dragInitialPos.mouseX);
+        let y = this._dragInitialPos.windowY + (e.nodeEvent.touches[0].clientY - this._dragInitialPos.mouseY);
+
+        // Min-Position begrenzen
+        if (x < 0) {
+            x = 0;
+        }
+        if (y < 0) {
+            y = 0;
+        }
+
+        // Evtl. max-Position begrenzen
+        const targetNode = this.targetNode;
+        if (x < targetNode.offsetLeft) {
+            x = targetNode.offsetLeft;
+        }
+        if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+            x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
+        }
+
+        if (y < targetNode.offsetTop) {
+            y = targetNode.offsetTop;
+        }
+        if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+            y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+        }
+
+        // Grösse zuweisen
+        this.left = x;
+        this.top = y;
+
+        // Bubbeling und native Listeners verhindern
+        e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
+    }
+
+    #onHeaderBarTouchStart(e) {
+        if (e.nodeEvent.touches.length > 1) {
+            return;
+        }
+
+        this.toFront();
+
+        if (this.maximized) {
+            return;
+        }
+
+        this._dragInitialPos = {
+            mouseX: e.nodeEvent.touches[0].clientX,
+            mouseY: e.nodeEvent.touches[0].clientY,
+            windowX: this.left,
+            windowY: this.top,
+            windowTransition: this.style.transition ? this.style.transition : ''
+        };
+
+        // Allfällige Transitionen temporär abschalten
+        this.style.transition = 'none';
     }
 
     #onDocumentMouseMove(e) {
@@ -555,13 +620,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._modalMaskEl) {
-            this._modalMaskEl.destruct();
-        }
 
         // Variablen (Objekte/Arrays) leeren
         this._dragInitialPos = null;
-        this._modalMaskEl = null;
         this._resizeDeferHandle = null;
         this._targetX = null;
 

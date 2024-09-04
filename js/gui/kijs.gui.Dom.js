@@ -208,7 +208,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             width: true,
             height: true,
             nodeAttribute: { fn: 'assign' },
-            nodeTagName: true,
+            nodeTagName: { target: 'nodeTagName' },
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
             tooltip: { target: 'tooltip' },
@@ -455,10 +455,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     get nodeTagName() { return this._nodeTagName; }
     set nodeTagName(val) {
         this._nodeTagName = val;
-
-        if (!this._node) {
-            this._nodeTagName = val;
-        } else if (this._node.tagName.toLowerCase() !== val) {
+        if (this._node && this._node.tagName.toLowerCase() !== val) {
             throw new kijs.Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
         }
     }

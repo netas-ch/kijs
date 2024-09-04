@@ -328,8 +328,6 @@
     flex: 1 1 auto;
     font-family: var(--default-fontFamily);
     color: var(--default-fontColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
     -webkit-overflow-scrolling: touch;
     /* iOS Safari: Native Style Scrolling einschalten */
@@ -898,8 +896,6 @@
     border: 1px solid var(--field-borderColor);
     box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
     background-color: var(--panel-bkgrndColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
   }
   div.kijs-spinbox * {
@@ -921,13 +917,6 @@
   }
   div.kijs-spinbox.kijs-borderless {
     border: none;
-  }
-  /* ******************
-       * DEPRECATED
-       * TODO: Accordion ???
-       ****************** */
-  div.kijs-accordion > .kijs-container-inner > .kijs-panel {
-    flex: 1 1 auto;
   }
   /* ******************
        * Viewport
@@ -953,6 +942,8 @@
   div.kijs-splitter-horizontal {
     width: 5px;
     background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-splitter-horizontal:not(.kijs-disabled) {
     cursor: ew-resize;
   }
   div.kijs-splitter-overlay-horizontal {
@@ -967,6 +958,8 @@
   div.kijs-splitter-vertical {
     height: 5px;
     background-color: var(--viewport-bkgrndColor);
+  }
+  div.kijs-splitter-vertical:not(.kijs-disabled) {
     cursor: ns-resize;
   }
   div.kijs-splitter-overlay-vertical {
@@ -990,8 +983,6 @@
     padding: 0 6px;
     gap: 4px;
     background-color: var(--bar-bkgrndColor);
-    -webkit-user-select: none;
-    /* Safari */
     user-select: none;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
@@ -1108,7 +1099,8 @@
   /* ******************
        * Panel
        ****************** */
-  div.kijs-panel {
+  div.kijs-panel,
+  dialog.kijs-panel {
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1118,23 +1110,28 @@
     transition: 0.2s;
     /* PanelBar Minimiert */
   }
-  div.kijs-panel:focus {
+  div.kijs-panel:focus,
+  dialog.kijs-panel:focus {
     /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
     /*border: 1px solid var(--item-selected-borderColor);*/
   }
-  div.kijs-panel.disabled {
+  div.kijs-panel.disabled,
+  dialog.kijs-panel.disabled {
     border: 1px solid var(--panel-disabled-borderColor);
   }
-  div.kijs-panel.kijs-borderless {
+  div.kijs-panel.kijs-borderless,
+  dialog.kijs-panel.kijs-borderless {
     border: none;
   }
-  div.kijs-panel > .kijs-header {
+  div.kijs-panel > .kijs-header,
+  dialog.kijs-panel > .kijs-header {
     overflow: hidden;
     flex: none;
     border-bottom: 1px solid var(--panel-innerBorderColor);
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-panel > .kijs-header > .kijs-container-inner {
+  div.kijs-panel > .kijs-header > .kijs-container-inner,
+  dialog.kijs-panel > .kijs-header > .kijs-container-inner {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -1143,19 +1140,23 @@
     padding: 6px;
     gap: 6px;
   }
-  div.kijs-panel > .kijs-header > .kijs-container-inner > * {
+  div.kijs-panel > .kijs-header > .kijs-container-inner > *,
+  dialog.kijs-panel > .kijs-header > .kijs-container-inner > * {
     flex: none;
   }
-  div.kijs-panel > .kijs-header > .kijs-container-inner > .kijs-spacer {
+  div.kijs-panel > .kijs-header > .kijs-container-inner > .kijs-spacer,
+  dialog.kijs-panel > .kijs-header > .kijs-container-inner > .kijs-spacer {
     flex: 1;
   }
-  div.kijs-panel > .kijs-footer {
+  div.kijs-panel > .kijs-footer,
+  dialog.kijs-panel > .kijs-footer {
     overflow: hidden;
     flex: none;
     border-top: 1px solid var(--panel-innerBorderColor);
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-panel > .kijs-footer > .kijs-container-inner {
+  div.kijs-panel > .kijs-footer > .kijs-container-inner,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner {
     display: flex;
     flex-direction: row;
     flex-wrap: nowrap;
@@ -1165,27 +1166,34 @@
     gap: 6px;
     /* Buttons im Fuss eines Panels haben einen Rahmen */
   }
-  div.kijs-panel > .kijs-footer > .kijs-container-inner > * {
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > *,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > * {
     flex: none;
   }
-  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-spacer {
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-spacer,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-spacer {
     flex: 1;
   }
-  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button {
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button {
     border: 1px solid var(--footer-button-borderColor);
     background-color: var(--footer-button-bkgrndColor);
   }
   div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
-  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:focus,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
     background-color: var(--footer-button-focus-bkgrndColor);
     border: 1px solid var(--footer-button-focus-borderColor);
   }
-  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
+  div.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled,
+  dialog.kijs-panel > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
     cursor: default;
   }
-  div.kijs-panel.kijs-maximize {
+  div.kijs-panel.kijs-maximize,
+  dialog.kijs-panel.kijs-maximize {
     position: fixed;
     top: 0;
     left: 0;
@@ -1195,16 +1203,21 @@
     height: auto;
     margin: 0;
   }
-  div.kijs-panel.kijs-maximize > .kijs-resizer {
+  div.kijs-panel.kijs-maximize > .kijs-resizer,
+  dialog.kijs-panel.kijs-maximize > .kijs-resizer {
     display: none;
   }
   div.kijs-panel.kijs-collapse-top,
-  div.kijs-panel.kijs-collapse-bottom {
+  dialog.kijs-panel.kijs-collapse-top,
+  div.kijs-panel.kijs-collapse-bottom,
+  dialog.kijs-panel.kijs-collapse-bottom {
     height: var(--panel-collapse-height) !important;
     flex: none;
   }
   div.kijs-panel.kijs-collapse-right,
-  div.kijs-panel.kijs-collapse-left {
+  dialog.kijs-panel.kijs-collapse-right,
+  div.kijs-panel.kijs-collapse-left,
+  dialog.kijs-panel.kijs-collapse-left {
     height: auto;
     width: var(--panel-collapse-width) !important;
     flex: none;
@@ -1212,54 +1225,77 @@
     flex-direction: row;
   }
   div.kijs-panel.kijs-collapse-top > *:not(.kijs-panelbar),
+  dialog.kijs-panel.kijs-collapse-top > *:not(.kijs-panelbar),
   div.kijs-panel.kijs-collapse-right > *:not(.kijs-panelbar),
+  dialog.kijs-panel.kijs-collapse-right > *:not(.kijs-panelbar),
   div.kijs-panel.kijs-collapse-bottom > *:not(.kijs-panelbar),
-  div.kijs-panel.kijs-collapse-left > *:not(.kijs-panelbar) {
+  dialog.kijs-panel.kijs-collapse-bottom > *:not(.kijs-panelbar),
+  div.kijs-panel.kijs-collapse-left > *:not(.kijs-panelbar),
+  dialog.kijs-panel.kijs-collapse-left > *:not(.kijs-panelbar) {
     display: none;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar {
     width: var(--panel-collapse-width);
     height: auto;
     padding: 3px 0 3px 0;
     flex-direction: column;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-left,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-left {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-left,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-left,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-left {
     display: none;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right {
     order: 10;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner {
     height: auto;
     display: flex;
     flex-direction: column-reverse;
     align-items: center;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button {
     align-self: center;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-caption,
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button > .kijs-icon {
     line-height: 16px;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-icon,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-icon {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-icon,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-icon,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-icon {
     display: none;
   }
   div.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-inner,
-  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-inner {
+  dialog.kijs-panel.kijs-collapse-right > .kijs-panelbar > .kijs-container-inner,
+  div.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-inner,
+  dialog.kijs-panel.kijs-collapse-left > .kijs-panelbar > .kijs-container-inner {
     order: 20;
     writing-mode: tb-rl;
     margin: 0 0 3px 0;
   }
-  div.kijs-panel.kijs-hidden {
+  div.kijs-panel.kijs-hidden,
+  dialog.kijs-panel.kijs-hidden {
     display: none;
   }
   /* ******************
@@ -1315,88 +1351,117 @@
   /* ******************
        * Window
        ****************** */
-  div.kijs-window {
+  dialog.kijs-window {
     box-sizing: border-box;
     position: absolute;
+    margin: 0;
+    /* Wichtig */
     overflow: hidden;
     max-width: 100%;
     max-height: 100%;
     border-radius: 5px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-    -webkit-user-select: none;
-    /* Safari */
+    padding: 0px;
+    transition: 0s;
     user-select: none;
+    /* Workaround: entfernt den Rahmen vom aktiven Dialog */
     /* Buttons im Fuss eines Fensters sind blau */
   }
-  div.kijs-window * {
+  dialog.kijs-window::backdrop {
+    background-color: var(--mask-bkgrndColor);
+  }
+  dialog.kijs-window * {
     box-sizing: border-box;
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button {
+  dialog.kijs-window:focus-visible {
+    outline: none;
+  }
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button {
     background-color: var(--window-footer-button-bkgrndColor);
     border: 1px solid var(--window-footer-button-borderColor);
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button > * {
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button > * {
     color: var(--window-footer-button-fontColor);
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:hover,
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:focus {
     background-color: var(--window-footer-button-bkgrndColor);
     border: 1.5px solid var(--window-footer-button-focus-borderColor);
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:hover > *,
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:focus > * {
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:hover > *,
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button:focus > * {
     color: var(--window-footer-button-focus-fontColor);
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled {
     border: 1px solid var(--footer-button-disabled-borderColor);
     background-color: var(--footer-button-disabled-bkgrndColor);
     cursor: default;
   }
-  div.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled > * {
+  dialog.kijs-window > .kijs-footer > .kijs-container-inner > .kijs-button.kijs-disabled > * {
     color: var(--button-disabled-fontColor);
   }
-  div.kijs-window.kijs-maximize {
+  dialog.kijs-window.kijs-maximize {
     border-radius: 0;
   }
-  div.kijs-window.kijs-disabled {
+  dialog.kijs-window.kijs-disabled {
     border: 1px solid var(--panel-disabled-borderColor);
   }
   /* ******************
        * Mask
        ****************** */
   div.kijs-mask {
-    box-sizing: border-box;
     position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    z-index: 60000;
-    background-color: rgba(0, 0, 0, 0.2);
-    flex-direction: column;
     top: 0;
     right: 0;
     left: 0;
     bottom: 0;
-    -webkit-user-select: none;
-    /* Safari  */
+    background-color: var(--mask-bkgrndColor);
+  }
+  dialog.kijs-mask {
+    padding: 0;
+    border: 0;
+    background-color: transparent;
+  }
+  dialog.kijs-mask::backdrop {
+    background-color: var(--mask-bkgrndColor);
+  }
+  div.kijs-mask,
+  dialog.kijs-mask {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*flex-direction: column;*/
+    overflow: hidden;
+    z-index: 60000;
     user-select: none;
   }
-  div.kijs-mask * {
+  div.kijs-mask *,
+  dialog.kijs-mask * {
     box-sizing: border-box;
   }
-  div.kijs-mask > .kijs-icon {
-    color: #F5F5F5;
+  div.kijs-mask > .kijs-mask-center,
+  dialog.kijs-mask > .kijs-mask-center {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+  }
+  div.kijs-mask > .kijs-mask-center > .kijs-icon,
+  dialog.kijs-mask > .kijs-mask-center > .kijs-icon {
+    flex: none;
+    color: var(--mask-icon-fontColor);
     font-size: 40px;
   }
-  div.kijs-mask > .kijs-mask-text {
+  div.kijs-mask > .kijs-mask-center > .kijs-mask-text,
+  dialog.kijs-mask > .kijs-mask-center > .kijs-mask-text {
+    flex: none;
     margin-top: 20px;
-    color: #F5F5F5;
+    color: var(--mask-fontColor);
     font-size: 17px;
     font-family: var(--default-fontFamily);
-  }
-  div.kijs-mask > .kijs-mask-text:empty {
-    display: none;
   }
   /* ******************
        * ApertureMask
@@ -1406,7 +1471,7 @@
     position: absolute;
     overflow: hidden;
     z-index: 9000;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--mask-bkgrndColor);
     opacity: 0;
   }
   div.kijs-aperturemask * {
@@ -1434,10 +1499,10 @@
   /* ******************
        * MsgBox
        ****************** */
-  div.kijs-msgbox {
+  dialog.kijs-msgbox {
     min-width: 200px;
   }
-  div.kijs-msgbox > .kijs-container-inner {
+  dialog.kijs-msgbox > .kijs-container-inner {
     display: flex;
     flex-direction: row;
     font-family: var(--default-fontFamily);
@@ -1445,14 +1510,14 @@
     line-height: var(--msgbox-lineHeight);
     color: var(--msgbox-fontColor);
   }
-  div.kijs-msgbox > .kijs-container-inner > .kijs-icon {
+  dialog.kijs-msgbox > .kijs-container-inner > .kijs-icon {
     flex: none;
     font-size: 30px;
     line-height: 30px;
     width: 40px;
     margin: 10px 0 10px 10px;
   }
-  div.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner {
+  dialog.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner {
     flex: 1;
     padding: 10px;
     overflow: auto;
@@ -1460,16 +1525,16 @@
     -webkit-user-select: text;
     user-select: text;
   }
-  div.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > .kijs-container-inner {
+  dialog.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > .kijs-container-inner {
     /* selektion von Text erlauben */
     -webkit-user-select: text;
     user-select: text;
   }
-  div.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > ul {
+  dialog.kijs-msgbox > .kijs-container-inner > .kijs-msgbox-inner > ul {
     margin: 0 0 0 10px;
     padding: 0;
   }
-  div.kijs-msgbox > .kijs-footer > .kijs-container-inner > .kijs-button {
+  dialog.kijs-msgbox > .kijs-footer > .kijs-container-inner > .kijs-button {
     min-width: 80px;
   }
   /* ******************
@@ -1527,13 +1592,13 @@
     background-position: bottom 2px right 2px;
     opacity: 0.3;
   }
-  div.kijs-resizer.kijs-resizer-width {
+  div.kijs-resizer.kijs-resizer-width:not(.kijs-disabled) {
     cursor: we-resize;
   }
-  div.kijs-resizer.kijs-resizer-height {
+  div.kijs-resizer.kijs-resizer-height:not(.kijs-disabled) {
     cursor: ns-resize;
   }
-  div.kijs-resizer.kijs-resizer-width.kijs-resizer-height {
+  div.kijs-resizer.kijs-resizer-width.kijs-resizer-height:not(.kijs-disabled) {
     cursor: nwse-resize;
   }
   div.kijs-resizer:hover {
@@ -1863,6 +1928,7 @@
     border-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     border-radius: 2px;
@@ -1880,6 +1946,7 @@
     border-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     border-radius: 50%;
@@ -2053,6 +2120,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    padding: 0 4px;
   }
   div.kijs-monthpicker .kijs-monthpicker-yearmonthdiv .kijs-monthpicker-yeardiv > .kijs-button {
     height: 16px;
@@ -2450,6 +2518,9 @@
     div.kijs-field.kijs-labelpos-auto > .kijs-label {
       width: auto !important;
     }
+  }
+  div.kijs-field.kijs-disabled > .kijs-label {
+    color: var(--field-disabled-fontColor);
   }
   /* ******************
        * Field Text
@@ -2924,28 +2995,56 @@
        * Field Range
        ****************** */
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
+    width: 100%;
+    height: var(--range-btnHeight);
+    margin: 4px 0 0 0;
+    outline: none;
+    background-color: transparent;
     -webkit-appearance: none;
     appearance: none;
-    width: 100%;
+    /* Track */
+    /* Track Progress */
+    /* es gibt leider kein Äquivalent für Chrome */
+    /* Thumb */
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track {
     height: 1px;
-    margin: 0 0 4px 0;
     background: var(--range-bkgrndColor);
-    outline: none;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-track {
+    height: 1px;
+    background: var(--range-bkgrndColor);
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress {
+    height: 2px;
+    background: var(--range-btnColor);
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    margin-top: calc(var(--range-btnHeight) / 2 * -1);
+    height: var(--range-btnHeight);
+    width: var(--range-btnHeight);
+    border: 0;
+    border-radius: 50%;
+    -webkit-appearance: none;
     background: var(--range-btnColor);
     cursor: pointer;
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
+    height: var(--range-btnHeight);
+    width: var(--range-btnHeight);
     border: 0;
-    background-color: var(--range-btnColor);
+    border-radius: 50%;
+    -webkit-appearance: none;
+    background: var(--range-btnColor);
     cursor: pointer;
   }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:focus::-webkit-slider-thumb,
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
-    background-color: var(--field-focus-borderColor);
+    background: var(--field-focus-borderColor);
   }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:focus::-moz-range-thumb,
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
-    background-color: var(--field-focus-borderColor);
+    background: var(--field-focus-borderColor);
   }
   div.kijs-field-range.kijs-disableFlex {
     align-self: start;
@@ -2957,23 +3056,28 @@
   div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);
   }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input {
-    background-color: var(--field-disabled-bkgrndColor);
-  }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track {
     background-color: var(--field-disabled-fontColor);
     cursor: default;
   }
-  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb,
-  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input:hover::-webkit-slider-thumb {
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-track,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-track {
     background-color: var(--field-disabled-fontColor);
+    cursor: default;
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress {
+    background: var(--field-disabled-fontColor);
+  }
+  div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb,
+  div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    background: var(--field-disabled-fontColor);
     cursor: default;
   }
   div.kijs-field-range.kijs-disabled > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb,
   div.kijs-field-range.kijs-readonly > .kijs-content > .kijs-inputwrapper > input::-moz-range-thumb {
-    background-color: var(--field-disabled-fontColor);
+    background: var(--field-disabled-fontColor);
     cursor: default;
   }
   /* ******************

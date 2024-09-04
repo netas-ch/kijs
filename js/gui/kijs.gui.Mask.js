@@ -5,15 +5,24 @@
 // --------------------------------------------------------------
 // Halbtransparente Maske, die über den Body oder ein kijs.gui.Element gelegt wird
 // und so die Bedienung der dahinterliegenden Oberfläche verhindert.
+//
 // Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mitangezeigt werden.
+//
 // Das Element, dass überdeckt wird, wird mit der Eigenschaft target festgelegt.
 // Dies kann der document.body sein oder ein kijs.gui.Element.
-// Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode).
+//
+// Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode)
+// und die Maske wird mit dem nativen dialog-tag erstellt. Dies verhindert auch die 
+// Navigation via Tastatur unterhalb der Maske.
+//
 // Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node
-// des Elements, sondern dessen parentNode.
+// des Elements, sondern dessen parentNode und die Maske wird mit einem div-tag erstellt.
+// Eine Navigation via Tastatur wird damit nicht verhindert.
+//
 // Deshalb gibt es die Eigenschaften targetNode und parentNode, welche bei einem
 // kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body
 // als target, hingegen schon.
+//
 // Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
 // als target dient, wird nichts angegeben, so dient das ganze Element als target.
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
@@ -30,8 +39,18 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     constructor(config={}) {
         super(false);
 
-        this._iconEl = new kijs.gui.Icon({ parent: this });
-        this._textEl = new kijs.gui.Dom({cls:'kijs-mask-text'});
+        this._maskCenterDom = new kijs.gui.Dom({
+            cls:'kijs-mask-center'
+        });
+
+        this._iconEl = new kijs.gui.Icon({
+            parent: this,
+            cls:'kijs-mask-icon'
+        });
+
+        this._textDom = new kijs.gui.Dom({
+            cls:'kijs-mask-text'
+        });
 
         this._targetElement = null;      // Zielelement (kijs.gui.Element) oder NULL=document.body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
@@ -47,15 +66,15 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         Object.assign(this._configMap, {
             displayWaitIcon: { target: 'displayWaitIcon' },
             icon: { target: 'icon' },
+            text: { target: 'html', context: this._textDom },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
             target: { target: 'target' }, // kijs.gui.Element oder body
-            text: { target: 'html', context: this._textEl },
             targetDomProperty: true
         });
-
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -138,12 +157,16 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     get parentNode() {
         if (this._targetElement instanceof kijs.gui.Element) {
             let domEl = this._targetElement[this._targetDomProperty];
-            if (domEl && domEl.node && domEl.node.parentNode) {
-                return domEl.node.parentNode;
-
-            } else {
-                return null;
+            if (domEl && domEl.node) {
+                if (domEl.node === document.body) {
+                    return document.body;
+                } else if (domEl.node.parentNode) {
+                    return domEl.node.parentNode;
+                }
             }
+
+            // wenn node nicht im Dom
+            return null;
 
         } else {
             return document.body;
@@ -199,8 +222,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
     }
 
-    get text() { return this._textEl.html; }
-    set text(val) { this._textEl.html = val; }
+    get text() { return this._textDom.html; }
+    set text(val) { this._textDom.html = val; }
 
 
 
@@ -209,19 +232,30 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // Overwrite
     render(superCall) {
+        const isBody = this.parentNode === document.body;
+
+        // Bei body, wird ein dialog-Tag verwendet, sonst ein div-Tag
+        this._dom.nodeTagName = isBody ? 'dialog' : 'div';
+
         super.render(true);
 
         // Maskierung positionieren
         this._updateMaskPosition();
 
+        // centerDom rendern
+        this._maskCenterDom.renderTo(this._dom.node);
+        
         // Span icon rendern (kijs.gui.Icon)
         if (!this._iconEl.isEmpty) {
-            this._iconEl.renderTo(this._dom.node);
+            this._iconEl.renderTo(this._maskCenterDom.node);
         } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();
         }
 
-        this._textEl.renderTo(this._dom.node);
+        // Text rendern (kijs.gui.Dom)
+        if (!this._textDom.isEmpty) {
+            this._textDom.renderTo(this._maskCenterDom.node);
+        }
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -236,11 +270,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
-        if (this._iconEl) {
-            this._iconEl.unrender();
-        }
-        if (this._textEl) {
-            this._textEl.unrender();
+        if (this._maskCenterDom) {
+            this._maskCenterDom.unrender();
         }
         
         super.unrender(true);
@@ -254,6 +285,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         const parentNode = this.parentNode;
         if (parentNode) {
             this.renderTo(parentNode);
+        }
+        if (this._dom.nodeTagName === 'dialog') {
+            this._dom.node.showModal();
         }
     }
 
@@ -313,8 +347,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (this._iconEl) {
             this._iconEl.destruct();
         }
-        if (this._textEl) {
-            this._textEl.destruct();
+        if (this._textDom) {
+            this._textDom.destruct();
+        }
+        if (this._maskCenterDom) {
+            this._maskCenterDom.destruct();
         }
 
         // Basisklasse entladen
@@ -322,7 +359,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._iconEl = null;
-        this._textEl = null;
+        this._textDom = null;
+        this._maskCenterDom = null;
         this._targetElement = null;
     }
     

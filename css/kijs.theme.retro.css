@@ -49,7 +49,10 @@
   --field-lineHeight: 13px;
   --field-height: 22px;
   --field-label-paddingTop: 4px;
-  --checkbox-fontSize: 15px;
+  --checkbox-height: 15px;
+  --checkbox-fontSize: 10px;
+  --checkbox-lineHeight: 12px;
+  --range-btnHeight: 16px;
   --switch-height: 20px;
   --badge-fontSize: 10px;
   --badge-lineHeight: 13px;
@@ -80,6 +83,10 @@
   --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif;
   --default-fontColor: var(--grey11);
   --default-disabled-fontColor: var(--grey08);
+  /* Mask */
+  --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
+  --mask-fontColor: #fff;
+  --mask-icon-fontColor: #fff;
   /* Separator */
   --separator-bkgrndColor: #bdc4cd;
   --separator-disabled-bkgrndColor: #bdc4cd;
@@ -162,7 +169,7 @@
   --field-error-bkgrndColor: var(--errorColorLight);
   /* Range */
   --range-bkgrndColor: var(--grey07);
-  --range-btnColor: var(--grey10);
+  --range-btnColor: var(--grey09);
   /* Item */
   --item-bkgrndColor: var(--grey02);
   --item-borderColor: var(--grey03);
@@ -488,6 +495,11 @@
   /* kijs.gui.field.Combo */
   div.kijs-field-combo > .kijs-content > .kijs-inputwrapper > input {
     box-shadow: inset 0 6px 3px -3px #eeeeee;
+  }
+  /* kijs.gui.field.Checkbox */
+  div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > .kijs-checkbox-input {
+    border-width: 1.5px;
+    border-radius: 0;
   }
   /* kijs.gui.field.DateTime */
   div.kijs-field-datetime > .kijs-content > .kijs-inputwrapper > input {

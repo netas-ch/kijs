@@ -23,6 +23,11 @@
    "js/kijs.UploadDialog.js"
   ],
 
+  "translations":[
+   "js/translation/kijs.translation.en.js",
+   "js/translation/kijs.translation.fr.js"
+  ],
+
   "gui":[
    "js/iconMap/kijs.iconMap.js",
    "js/iconMap/kijs.iconMap.Fa.js",

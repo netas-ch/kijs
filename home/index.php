@@ -24,7 +24,7 @@
     <link rel="stylesheet" type="text/css" href="dataResources/css/style.css?v=<?=filemtime('dataResources/css/style.css')?>">
 <?php
     // JS Files
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=js');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui,grid,aceEditor,quillEditor&fileType=js');
 ?>
     <script type="text/javascript" src="app/marked.min.js?v=<?=filemtime('app/marked.min.js')?>"></script>
     <script type="text/javascript" src="app/home.App.js?v=<?=filemtime('app/home.App.js')?>"></script>
@@ -32,7 +32,8 @@
         kijs.isReady(function(){
             let app = new home.App({
                 appAjaxUrl: 'app/ajax.php',
-                dataAjaxUrl: 'dataResources/php/ajax.php'
+                dataAjaxUrl: 'dataResources/php/ajax.php',
+                language: kijs.Navigator.getGetParameter('lang')
             });
             app.run();
         });

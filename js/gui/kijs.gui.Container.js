@@ -59,6 +59,7 @@
  *  Args:
  *   elements   Array|Object            Es können sowohl Config-Objekte, als auch Instanzen der Klasse im Array sein.
  *   before     Number|Function [optional]  Index der Position oder Verweis auf das Element, vor dem eingefügt werden soll.
+ *   options
  *
  * getElementsByName                    Gibt untergeordnete Elemente aufgrund ihres 'name' zurück
  *  Args:
@@ -92,9 +93,12 @@
  * remove                               Löscht ein oder mehrere untergeordenete Elemente
  *  Args:
  *   elements    Object|Array
+ *   options
  *
  * removeAll                            Löscht alle untergeordeneten Elemente
- *
+ *  Args:
+ *   options
+ *   
  * down                                 Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
  *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
  *   name       String
@@ -300,10 +304,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Fügt ein oder mehrere Elemente hinzu.
      * @param {Object|Array} elements
      * @param {Number} [index=null] Position an der Eingefügt werden soll null=am Schluss
-     * @param {Boolean} [preventRender=false]
+     * @param {Object} [options={}]
+     *  options Eigenschaften:
+     *    {Boolean} [preventRender=false]   render verhindern?
+     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeAdd und add-Events verhindern?
      * @returns {undefined}
      */
-    add(elements, index=null, preventRender=false) {
+    add(elements, index=null, options={}) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -318,9 +325,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
         elements = null;
 
-        // event ausführen
-        if (this.raiseEvent('beforeAdd', {elements: newElements}) === false) {
-            return;
+        if (!options.preventEvents) {
+            // event ausführen
+            if (this.raiseEvent('beforeAdd', {elements: newElements}) === false) {
+                return;
+            }
         }
 
         // zu elements hinzufügen.
@@ -333,12 +342,14 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }, this);
 
         // Falls der DOM gemacht ist, wird neu gerendert.
-        if (this._innerDom.node && !preventRender) {
+        if (this._innerDom.node && !options.preventRender) {
             this.render();
         }
         
         // Hinzugefügt, Event auslösen.
-        this.raiseEvent('add', {elements: newElements});
+        if (!options.preventEvents) {
+            this.raiseEvent('add', {elements: newElements});
+        }
         
         this.raiseEvent('afterResize');
     }
@@ -761,7 +772,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         });
         
         // Neue Elemente hinzufügen
-        this.add(elements, null, false);
+        this.add(elements, null);
     }
 
 

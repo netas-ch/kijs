@@ -213,7 +213,7 @@ kijs.Rpc = class kijs_Rpc {
      *     {String} errorMsg Falls ein übertragungsfehler vorliegt, wird hier der Fehlertext übergeben
      * @returns {undefined}
      */
-    _receive(ajaxData) {
+   _receive(ajaxData) {
         // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;

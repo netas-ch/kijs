@@ -1031,16 +1031,6 @@
 
 
     /* ******************
-       * DEPRECATED
-       * TODO: Accordion ???
-       ****************** */
-    div.kijs-accordion > .kijs-container-inner > .kijs-panel {
-        flex: 1 1 auto
-    }
-
-
-
-    /* ******************
        * Viewport
        ****************** */
     .kijs-viewport {
@@ -1068,7 +1058,9 @@
     div.kijs-splitter-horizontal {
         width: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ew-resize;
+        &:not(.kijs-disabled) {
+            cursor: ew-resize;
+        }
     }
 
     div.kijs-splitter-overlay-horizontal {
@@ -1084,7 +1076,9 @@
     div.kijs-splitter-vertical {
         height: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ns-resize;
+        &:not(.kijs-disabled) {
+            cursor: ns-resize;
+        }
     }
 
     div.kijs-splitter-overlay-vertical {
@@ -1240,7 +1234,7 @@
     /* ******************
        * Panel
        ****************** */
-    div.kijs-panel {
+    div.kijs-panel, dialog.kijs-panel {
         position: relative;
         display: flex;
         flex-direction: column;
@@ -1253,7 +1247,7 @@
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
         }
-
+        
         &.disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
@@ -1479,21 +1473,33 @@
     /* ******************
        * Window
        ****************** */
-    div.kijs-window {
+    dialog.kijs-window {
         box-sizing: border-box;
         position: absolute;
+        margin: 0; /* Wichtig */
         overflow: hidden;
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-
+        padding: 0px;
+        transition: 0s;
+        
+        &::backdrop {
+            background-color: var(--mask-bkgrndColor);
+        }
+        
         user-select: none;
 
         * {
             box-sizing: border-box;
         }
-
+        
+        /* Workaround: entfernt den Rahmen vom aktiven Dialog */
+        &:focus-visible {
+            outline: none;
+        }
+        
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
             > .kijs-button {
@@ -1539,40 +1545,60 @@
        * Mask
        ****************** */
     div.kijs-mask {
-        box-sizing: border-box;
         position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        z-index: 60000;
-        background-color: rgba(0, 0, 0, 0.2);
-        flex-direction: column;
-
         top: 0;
         right: 0;
         left: 0;
         bottom: 0;
+        background-color: var(--mask-bkgrndColor);
+    }
+    
+    dialog.kijs-mask {
+        padding: 0;
+        border: 0;
+        background-color: transparent;
+        
+        &::backdrop {
+            background-color: var(--mask-bkgrndColor);
+        }
+    }
+    
+    div.kijs-mask, dialog.kijs-mask {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*flex-direction: column;*/
+        overflow: hidden;
+        z-index: 60000;
 
         user-select: none;
-
+        
         * {
             box-sizing: border-box;
         }
+        
+        > .kijs-mask-center {
+            flex: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            
+            > .kijs-icon {
+                flex: none;
+                color: var(--mask-icon-fontColor);
+                font-size: 40px;
+            }
 
-        > .kijs-icon {
-            color: #F5F5F5;
-            font-size: 40px;
-        }
-
-        > .kijs-mask-text {
-            margin-top: 20px;
-            color: #F5F5F5;
-            font-size: 17px;
-            font-family: var(--default-fontFamily);
-        }
-        > .kijs-mask-text:empty {
-            display: none;
+            > .kijs-mask-text {
+                flex: none;
+                margin-top: 20px;
+                color: var(--mask-fontColor);
+                font-size: 17px;
+                font-family: var(--default-fontFamily);
+            }
         }
     }
 
@@ -1586,7 +1612,7 @@
         position: absolute;
         overflow: hidden;
         z-index: 9000;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--mask-bkgrndColor);
         opacity: 0;
 
         * {
@@ -1619,7 +1645,7 @@
     /* ******************
        * MsgBox
        ****************** */
-    div.kijs-msgbox {
+    dialog.kijs-msgbox {
         min-width: 200px;
 
         > .kijs-container-inner {
@@ -1733,16 +1759,15 @@
         background-position: bottom 2px right 2px;
         opacity: 0.3;
 
-        &.kijs-resizer-width {
+        &.kijs-resizer-width:not(.kijs-disabled) {
             cursor: we-resize;
         }
-        &.kijs-resizer-height {
+        &.kijs-resizer-height:not(.kijs-disabled) {
             cursor: ns-resize;
         }
-        &.kijs-resizer-width.kijs-resizer-height {
+        &.kijs-resizer-width.kijs-resizer-height:not(.kijs-disabled) {
             cursor: nwse-resize;
         }
-
         &:hover {
             opacity: 1;
         }
@@ -2151,6 +2176,7 @@
                     border-color: transparent;
 
                     &:before {
+                        box-sizing: border-box;
                         flex: none;
                         margin: 0 4px 0 0;
                         width: var(--checkbox-height);
@@ -2178,6 +2204,7 @@
                     border-color: transparent;
 
                     &:before {
+                        box-sizing: border-box;
                         flex: none;
                         margin: 0 4px 0 0;
                         width: var(--checkbox-height);
@@ -2403,6 +2430,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                padding: 0 4px;
 
                 > .kijs-button {
                     height: 16px;
@@ -2839,6 +2867,12 @@
                 > .kijs-label {
                     width: auto !important;
                 }
+            }
+        }
+        
+        &.kijs-disabled {
+            > .kijs-label {
+                color: var(--field-disabled-fontColor);
             }
         }
     }
@@ -3404,32 +3438,60 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 > input {
+                    width: 100%;
+                    height: var(--range-btnHeight);
+                    margin: 4px 0 0 0;
+                    outline: none;
+                    background-color: transparent;
                     -webkit-appearance: none;
                     appearance: none;
-                    width: 100%;
-                    height: 1px;
-                    margin: 0 0 4px 0;
-                    background: var(--range-bkgrndColor);
-                    outline: none;
-                }
+                    
+                    /* Track */
+                    &::-webkit-slider-runnable-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    &::-moz-range-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    
+                    /* Track Progress */
+                    /* es gibt leider kein Äquivalent für Chrome */
+                    &::-moz-range-progress {
+                        height: 2px;
+                        background: var(--range-btnColor);
+                    }
+                    
+                    /* Thumb */
+                    &::-webkit-slider-thumb {
+                        margin-top: calc(var(--range-btnHeight) / 2 * -1);
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
+                    &::-moz-range-thumb {
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
 
-                > input::-webkit-slider-thumb {
-                    background: var(--range-btnColor);
-                    cursor: pointer;
-                }
-
-                > input::-moz-range-thumb {
-                    border: 0;
-                    background-color: var(--range-btnColor);
-                    cursor: pointer;
-                }
-
-                > input:hover::-webkit-slider-thumb {
-                    background-color: var(--field-focus-borderColor);
-                }
-
-                > input:hover::-moz-range-thumb {
-                    background-color: var(--field-focus-borderColor);
+                    &:focus::-webkit-slider-thumb,
+                    &:hover::-webkit-slider-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
+                    &:focus::-moz-range-thumb,
+                    &:hover::-moz-range-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3450,22 +3512,27 @@
         &.kijs-disabled > .kijs-content > .kijs-inputwrapper,
         &.kijs-readonly > .kijs-content > .kijs-inputwrapper {
             > input {
-                background-color: var(--field-disabled-bkgrndColor);
-            }
+                &::-webkit-slider-runnable-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                
+                &::-moz-range-progress {
+                    background: var(--field-disabled-fontColor);
+                }
 
-            > input::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input:hover::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input::-moz-range-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
+                &::-webkit-slider-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
             }
         }
     }

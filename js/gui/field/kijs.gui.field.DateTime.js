@@ -25,10 +25,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._timeRequired = false;
 
-        this._displayDateFormat = '';   // Anzeigeformat für Datums-Teil (leer=auto)
-        this._displayTimeFormat = '';   // Anzeigeformat für Uhrzeit-Teil (leer=auto)
         this._displayWeekFormat = 'W Y'; // Anzeigeformat für die Woche (nur bei mode='week')
-        this._displayWeekPrefix = 'KW '; // Präfix für die Anzeige der Woche (nur bei mode='week')
+        this._displayWeekPrefix = '';    // Präfix für die Anzeige der Woche (nur bei mode='week')
         this._valueDateFormat = '';     // Format für den Datums-Teil des value (leer=auto)
         this._valueTimeFormat = '';     // Format für den Uhrzeit-Teil des value (leer=auto)
 
@@ -121,6 +119,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             autocomplete: false,
             disableFlex: true,
             mode: 'date',
+            displayWeekPrefix: kijs.getText('KW %1', 'week number'),
             virtualKeyboardPolicy: 'manual'      // Mobile: Tastatur nicht automatisch öffnen
         });
 
@@ -136,8 +135,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             maxValue: { target: 'maxValue', context: this._datePicker },
             minValue: { target: 'minValue', context: this._datePicker },
             year2000Threshold: true,
-            displayDateFormat: true,            // Anzeigeformat für Datums-Teil (leer=auto)
-            displayTimeFormat: true,            // Anzeigeformat für Uhrzeit-Teil (leer=auto)
             displayWeekFormat: true,            // Anzeigeformat für die Woche (nur bei mode='week')
             displayWeekPrefix: true,            // Präfix für die Anzeige der Woche (nur bei mode='week')
             valueDateFormat: true,              // Format für den Datums-Teil des value (leer=auto)
@@ -436,6 +433,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                         } else {
                             timeFormat = 'H:i:s';
                         }
+                        break;
                 }
             } else {
                 timeFormat = this._valueTimeFormat;
@@ -639,15 +637,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         });
 
         if (hasDate) {
-            this._spinBoxEl.add(this._datePicker, null, true);
+            this._spinBoxEl.add(this._datePicker, null, { preventRender: true });
         }
 
         if (hasDate && hasTime) {
-            this._spinBoxEl.add(this._seperatorEl, null, true);
+            this._spinBoxEl.add(this._seperatorEl, null, { preventRender: true });
         }
 
         if (hasTime) {
-            this._spinBoxEl.add(this._timePicker, null, true);
+            this._spinBoxEl.add(this._timePicker, null, { preventRender: true });
         }
 
         if (this._spinBoxEl.isRendered) {
@@ -678,44 +676,49 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const valTime = this._timePicker.value;
 
         let ret = '';
-        let format = '';
 
         // DisplayValue zurückgeben
         switch (this._mode) {
             // range
             case 'range':
-                format = this._displayDateFormat ? this._displayDateFormat : 'd.m.Y';
+                let txtStart = '';
+                let txtEnd = '';
+
                 if (!kijs.isEmpty(valDateStart)) {
-                    ret += kijs.Date.format(valDateStart, format);
+                    txtStart = valDateStart.toLocaleDateString(kijs.language, {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
                 }
-                if (!kijs.isEmpty(valDateStart) || !kijs.isEmpty(valDateEnd)) {
-                    if (ret) {
-                        ret += ' ';
-                    }
-                    ret += 'bis';
-                }
+
                 if (!kijs.isEmpty(valDateEnd)) {
-                    if (ret) {
-                        ret += ' ';
-                    }
-                    ret += kijs.Date.format(valDateEnd, format);
+                    txtEnd = valDateEnd.toLocaleDateString(kijs.language, {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric'
+                    });
                 }
+
+                ret = kijs.getText('%1 bis %2', '', [txtStart, txtEnd]).trim();
                 break;
 
             // week
             case 'week':
-                format = this._displayWeekFormat;
                 if (!kijs.isEmpty(valDateStart) && !kijs.isEmpty(valDateEnd)) {
-                    if (!kijs.isEmpty(this._displayWeekPrefix)) {
-                        ret += this._displayWeekPrefix;
-                    }
+                   
                     // Der 1.1. eines Jahres kann noch zur letzten Woche des Vorjahres gehören
                     // und der 31.12. bereits zur 1. Woche des nächsten Jahres.
                     // damit das richtige Jahr angezeigt wird, je nachdem das start- oder enddatum nehmen.
                     if (valDateStart.getMonth >= 6) {
-                        ret += kijs.Date.format(valDateEnd, format);
+                        ret = kijs.Date.format(valDateEnd, this._displayWeekFormat);
                     } else {
-                        ret += kijs.Date.format(valDateStart, format);
+                        ret = kijs.Date.format(valDateStart, this._displayWeekFormat);
+                    }
+
+                    // Evtl. Präfix einfügen
+                    if (!kijs.isEmpty(this._displayWeekPrefix)) {
+                        ret = kijs.String.replaceAll(this._displayWeekPrefix, '%1', ret);
                     }
                 }
                 break;
@@ -725,8 +728,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             case 'time':
             case 'dateTime':
                 let datetime = null;
-                let dateFormat = '';
-                let timeFormat = '';
+                let formatOptions = {};
 
                 // Startdatum (und evtl. -Uhrzeit)
                 // Wenn noch eine Uhrzeit verwendet wird: mit Uhrzeit ergänzen
@@ -756,49 +758,41 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
                 // Format für den Datums-Teil ermitteln
                 if (!kijs.isEmpty(valDateStart)) {
-                    if (kijs.isEmpty(this._displayDateFormat)) {
-                        switch (this._mode) {
-                            case 'date':
-                            case 'dateTime':
-                                dateFormat = 'd.m.Y';
-                                break;
-                        }
-                    } else {
-                        dateFormat = this._displayDateFormat;
+                    switch (this._mode) {
+                        case 'date':
+                        case 'dateTime':
+                            formatOptions.day = '2-digit';
+                            formatOptions.month = '2-digit';
+                            formatOptions.year = 'numeric';
+                            break;
                     }
                 }
 
                 // Format für den Uhrzeit-Teil ermitteln
                 if (!kijs.isEmpty(valTime)) {
-                    if (kijs.isEmpty(this._displayTimeFormat)) {
-                        switch (this._mode) {
-                            case 'dateTime':
-                            case 'time':
-                                if (this._timePicker.minutesHide) {
-                                    timeFormat = 'H';
-                                } else if (this._timePicker.secondsHide) {
-                                    timeFormat = 'H:i';
-                                } else {
-                                    timeFormat = 'H:i:s';
-                                }
-                                break;
-                        }
-                    } else {
-                        timeFormat = this._displayTimeFormat;
+                    switch (this._mode) {
+                        case 'dateTime':
+                        case 'time':
+                            if (this._timePicker.minutesHide) {
+                                formatOptions.hour = '2-digit';
+                            } else if (this._timePicker.secondsHide) {
+                                formatOptions.hour = '2-digit';
+                                formatOptions.minute = '2-digit';
+                            } else {
+                                formatOptions.hour = '2-digit';
+                                formatOptions.minute = '2-digit';
+                                formatOptions.second = '2-digit';
+                            }
+                            break;
                     }
                 }
 
-                // Datums- und Uhrzeitformat zusammenfügen
-                if (dateFormat && timeFormat) {
-                    format = dateFormat + ' ' + timeFormat;
-                } else if (dateFormat) {
-                    format = dateFormat;
-                } else if (timeFormat) {
-                    format = timeFormat;
-                }
-
-                if (format) {
-                    ret = kijs.Date.format(datetime, format);
+                if (!kijs.isEmpty(formatOptions)) {
+                    if (formatOptions.year || formatOptions.month || formatOptions.day ) {
+                        ret = datetime.toLocaleDateString(kijs.language, formatOptions);
+                    } else {
+                        ret = datetime.toLocaleTimeString(kijs.language, formatOptions);
+                    }
                 }
 
             break;
@@ -824,11 +818,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     _parseString(strInput) {
-        let seperators, arr, matches, date, dateEnd, time, year, week, ok;
+        let ok = false;
 
         switch (this._mode) {
             case 'date':
-                this._datePicker.value = this._parseStringToDate(strInput);
+                this._datePicker.value = kijs.Date.parseLocalDateString(strInput, this._year2000Threshold);
                 this._datePicker.valueEnd = null;
                 this._timePicker.value = '';
                 break;
@@ -836,48 +830,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             case 'time':
                 this._datePicker.value = null;
                 this._datePicker.valueEnd = null;
-                this._timePicker.value = this._parseStringToTime(strInput);
+                this._timePicker.value = kijs.Date.parseLocalTimeString(strInput);
                 break;
 
             case 'dateTime':
-                seperators = [' '];
-                date = null;
-                time = '';
-                ok = true;
-
-                // Zulässige Trennzeichen durch #|@# ersetzen
-                for (let i=0; i<seperators.length; i++) {
-                    strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
-                }
-
-                // Splitten nach #|@#
-                arr = strInput.split('#|@#');
-
-                // Der String darf aus ein bis zwei Bestandteilen bestehen
-                if (arr.length < 1 || arr.length > 2) {
-                    ok = false;
-                }
-
-                // Datum
-                if (ok && arr.length >= 1) {
-                    date = this._parseStringToDate(arr[0]);
-                    if (kijs.isEmpty(date)) {
-                        ok = false;
-                    }
-                }
-
-                // Uhrzeit
-                if (ok && arr.length >= 2) {
-                    time = this._parseStringToTime(arr[1]);
-                    if (kijs.isEmpty(time)) {
-                        ok = false;
-                    }
-                }
-
-                if (ok) {
-                    this._datePicker.value = date;
+                let dateTime = kijs.Date.parseLocalDateTimeString(strInput, this._year2000Threshold);
+                if (dateTime) {
+                    this._datePicker.value = kijs.Date.getDatePart(dateTime);
                     this._datePicker.valueEnd = null;
-                    this._timePicker.value = time;
+                    this._timePicker.value = kijs.Date.format(dateTime, 'H:i:s');
                 } else {
                     this._datePicker.value = null;
                     this._datePicker.valueEnd = null;
@@ -886,32 +847,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 break;
 
             case 'week':
-                ok = true;
+                let date = kijs.Date.parseLocalWeekString(strInput, this._year2000Threshold);
 
-                matches = strInput.match(/^[^0-9]*([0-9]{1,2})[^0-9]?([0-9]{2,4})?/);
-                if (!matches) {
-                    ok = false;
-                }
-
-                if (ok) {
-                    // Wochen-Nr.
-                    week = parseInt(matches[1]);
-
-                    // Jahr (wenn leer = aktuelles Jahr
-                    year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
-
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
-                    if (!kijs.isEmpty(this._year2000Threshold) && year >= 10 && year <= 99) {
-                        if (year >= this._year2000Threshold) {
-                            year += 1900;
-                        } else {
-                            year += 2000;
-                        }
-                    }
-                    date = kijs.Date.getFirstOfWeek(week, year);
-                }
-
-                if (ok) {
+                if (date) {
                     this._datePicker.value = date;
                     this._datePicker.valueEnd = kijs.Date.getSunday(date);
                     this._timePicker.value = '';
@@ -921,12 +859,23 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     this._timePicker.value = '';
                 }
                 break;
-
+                
             case 'range':
-                seperators = ['-', 'bis', 'to', 'until', 'till', 'by', 'jusqu\'au', 'jusque', 'fino al', 'fino a', 'al', 'au', 'à'];
-                date = null;
-                dateEnd = null;
+                let seperators = ['-', 'bis', 'to', 'until', 'till', 'by', 'jusqu\'au', 'jusque', 'fino al', 'fino a', 'al', 'au', 'à'];
+                let dateStart = null;
+                let dateEnd = null;
+                let arr;
+                
                 ok = true;
+
+                // Falls noch nicht vorhanden, den Separator der aktuellen Sprache hinzufügen.
+                let sep = kijs.getText('%1 bis %2');
+                sep = sep.replace('%1', '');
+                sep = sep.replace('%2', '');
+                sep = sep.trim();
+                if (!kijs.Array.contains(seperators, sep)) {
+                    seperators.push(sep);
+                }
 
                 // Zulässige Trennzeichen durch #|@# ersetzen
                 for (let i=0; i<seperators.length; i++) {
@@ -948,22 +897,22 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
                 // Datum von
                 if (ok) {
-                    date = this._parseStringToDate(arr[0]);
-                    if (kijs.isEmpty(date)) {
+                    dateStart = kijs.Date.parseLocalDateString(arr[0], this._year2000Threshold);
+                    if (kijs.isEmpty(dateStart)) {
                         ok = false;
                     }
                 }
 
                 // Datum bis
                 if (ok) {
-                    dateEnd = this._parseStringToDate(arr[1]);
+                    dateEnd = kijs.Date.parseLocalDateString(arr[1], this._year2000Threshold);
                     if (kijs.isEmpty(dateEnd)) {
                         ok = false;
                     }
                 }
 
                 if (ok) {
-                    this._datePicker.value = date;
+                    this._datePicker.value = dateStart;
                     this._datePicker.valueEnd = dateEnd;
                     this._timePicker.value = '';
                 } else {
@@ -974,136 +923,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 break;
         }
     }
-
-    _parseStringToDate(strInput) {
-        const seperators = ['.', '/', ','];
-        let day = null;
-        let month = null;
-        let year = null;
-
-        // Zulässige Trennzeichen durch #|@# ersetzen
-        for (let i=0; i<seperators.length; i++) {
-            strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
-        }
-
-        // Splitten nach #|@#
-        const arr = strInput.split('#|@#');
-
-        // Der String darf aus ein bis drei Bestandteilen bestehen
-        if (arr.length < 1 || arr.length > 3) {
-            return null;
-        }
-
-        // Tag
-        if (arr.length >= 1) {
-            if (!kijs.isNumeric(arr[0])) {
-                return null;
-            }
-            day = parseInt(arr[0]);
-            if (day < 1 || day > 31) {
-                return null;
-            }
-        }
-
-        // Monat
-        if (arr.length >= 2 && !kijs.isEmpty(arr[1])) {
-            if (!kijs.isNumeric(arr[1])) {
-                return null;
-            }
-            month = parseInt(arr[1]);
-            if (month < 1 || month > 12) {
-                return null;
-            }
-        } else {
-            month = (new Date()).getMonth() + 1;
-        }
-
-        // Jahr
-        if (arr.length >= 3 && !kijs.isEmpty(arr[2])) {
-            if (!kijs.isNumeric(arr[2])) {
-                return null;
-            }
-            year = parseInt(arr[2]);
-
-            // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
-            if (!kijs.isEmpty(this._year2000Threshold) && year >= 10 && year <= 99) {
-                if (year >= this._year2000Threshold) {
-                    year += 1900;
-                } else {
-                    year += 2000;
-                }
-            }
-        } else {
-            year = (new Date()).getFullYear();
-        }
-
-        // Daraus nun ein Datum erstellen
-        return new Date(year, month-1, day);
-    }
-
-    _parseStringToTime(strInput) {
-        const seperators = [':', '.'];
-        let hours = null;
-        let minutes = null;
-        let seconds = null;
-
-        // Zulässige Trennzeichen durch #|@# ersetzen
-        for (let i=0; i<seperators.length; i++) {
-            strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
-        }
-
-        // Splitten nach #|@#
-        const arr = strInput.split('#|@#');
-
-        // Der String darf aus ein bis drei Bestandteilen bestehen
-        if (arr.length < 1 || arr.length > 3) {
-            return '';
-        }
-
-        // Stunden
-        if (arr.length >= 1) {
-            if (!kijs.isNumeric(arr[0])) {
-                return '';
-            }
-            hours = parseInt(arr[0]);
-            if (hours < 0 || hours > 24) {
-                return '';
-            }
-            if (hours === 24) {
-                hours = 0;
-            }
-        }
-
-        // Minuten
-        if (arr.length >= 2) {
-            if (!kijs.isNumeric(arr[1])) {
-                return '';
-            }
-            minutes = parseInt(arr[1]);
-            if (minutes < 0 || minutes > 59) {
-                return '';
-            }
-        } else {
-            minutes = 0;
-        }
-
-        // Sekunden
-        if (arr.length >= 3) {
-            if (!kijs.isNumeric(arr[2])) {
-                return '';
-            }
-            seconds = parseInt(arr[2]);
-            if (seconds < 0 || seconds > 59) {
-                return '';
-            }
-        } else {
-            seconds = 0;
-        }
-
-        // Uhrzeit als String zurückgeben
-        return this._zeroPad(hours) + ':' + this._zeroPad(minutes) + ':' + this._zeroPad(seconds);
-    }
-
+    
     // overwrite
     _validationRules(value, ignoreEmpty) {
         if (ignoreEmpty && kijs.isEmpty(value)) {
@@ -1113,7 +933,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const date = this._datePicker.date;
         const dateEnd = this._datePicker.dateEnd;
         const time = this._timePicker.value;
-        const dateFormat = this._displayDateFormat ? this._displayDateFormat : 'd.m.Y';
 
         // Datum validieren
         if (this._hasDate()) {
@@ -1132,9 +951,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                             || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.minDate) && dateEnd < this._datePicker.minDate) ) {
 
                         this._errors.push(
-                                kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
                                 '',
-                                kijs.Date.format(this._datePicker.minDate, dateFormat)));
+                                this._datePicker.minDate.toLocaleDateString(kijs.language, {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })
+                            )
+                        );
                     }
 
                     // Max. value
@@ -1142,9 +967,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                             || (!kijs.isEmpty(dateEnd) && !kijs.isEmpty(this._datePicker.maxDate) && dateEnd < this._datePicker.maxDate) ) {
 
                         this._errors.push(
-                                kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
                                 '',
-                                kijs.Date.format(this._datePicker.maxDate, dateFormat)));
+                                this._datePicker.maxDate.toLocaleDateString(kijs.language, {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })
+                            )
+                        );
                     }
 
                 // nur Startdatum validieren
@@ -1153,17 +984,29 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     // Min. value
                     if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.minDate) && date < this._datePicker.minDate) {
                         this._errors.push(
-                                kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                            kijs.getText('Der minimale Wert für dieses Feld ist %1',
                                 '',
-                                kijs.Date.format(this._datePicker.minDate, dateFormat)));
+                                this._datePicker.minDate.toLocaleDateString(kijs.language, {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })
+                            )
+                        );
                     }
 
                     // Max. value
                     if (!kijs.isEmpty(date) && !kijs.isEmpty(this._datePicker.maxDate) && date > this._datePicker.maxDate) {
                         this._errors.push(
-                                kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                            kijs.getText('Der maximale Wert für dieses Feld ist %1',
                                 '',
-                                kijs.Date.format(this._datePicker.maxDate, dateFormat)));
+                                this._datePicker.maxDate.toLocaleDateString(kijs.language, {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                })
+                            )
+                        );
                     }
 
                 }

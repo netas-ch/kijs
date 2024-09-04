@@ -176,41 +176,6 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // overwerite
-    /*add(elements) {
-        if (!kijs.isArray(elements)) {
-            elements = [elements];
-        }
-
-        let newElements = [];
-        kijs.Array.each(elements, function(element) {
-
-            // Linie
-            if (kijs.isString(element) && element === '-') {
-                newElements.push(new kijs.gui.Element({
-                    name: '<hr>',
-                    cls:  'separator',
-                    htmlDisplayType: 'html',
-                    html: '<hr />'
-                }));
-
-            // Sonstiger Text
-            } else if (kijs.isString(element)) {
-                newElements.push(new kijs.gui.Element({
-                    html: element
-                }));
-
-            // Sonstiges Element
-            } else {
-                newElements.push(element);
-                
-            }
-        });
-
-        // parent
-        super.add(newElements);
-    }*/
-
     /**
      * Schliesst das Dropdownmenu und alle Untermenus
      * @returns {undefined}

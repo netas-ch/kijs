@@ -358,6 +358,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         }
 
         let val = this.value;
+        const oldValue = val;
 
         if (kijs.isEmpty(val)) {
             val = 0;
@@ -394,13 +395,19 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             this._spinDelayCurrent = 10;
         }
 
-        this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
+        // Validieren
+        this.validate();
 
-        // Event auslösen
-        this.raiseEvent('input', { oldValue: this._previousChangeValue, value: val } );
+        // input-event auslösen
+        this.raiseEvent('input', {
+            value: val,
+            oldValue: oldValue
+        });
+
+        this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
 
-    // Stoppt das Hoch-/Runterzählen von einem Spinnbutton
+    // Stopt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
@@ -493,7 +500,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         // Wert neu reinschreiben (evtl. wurde er Formatiert)
         this.value = val;
-
+        
         // und das change event auslösen
         if (val !== oldVal) {
             this.raiseEvent('change', { oldValue: oldVal, value: val } );

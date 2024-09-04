@@ -720,6 +720,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._touchYStart = e.nodeEvent.touches[0].clientY;
 
         if (hasScrollbarX || hasScrollbarY) {
+            // Bubbeling und native Listeners verhindern
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
         }
@@ -755,6 +756,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
         
         if (hasScrollbarX || hasScrollbarY) {
+            // Bubbeling und native Listeners verhindern
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
         }

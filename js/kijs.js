@@ -6,21 +6,35 @@
 window.kijs = class kijs {
 
     // PRIVATE VARS
-    // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
     // __getTextFn {Function|null}      Verweise auf die getText()-Funktion
     // __getTextFnContext {Object|null} Kontext der getText()-Funktion
+    // __language {String}              Aktuelle Sprache. Z.B. 'de-CH' oder 'fr' (Standard='de')
     // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
     //                                  { default:..., myRpc2:... }
+    //                                  { en:{...}, fr:{...} }
+    // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
 
 
 
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.7.4'; }
-    
-    
-    
+    static get version() { return '2.8.0'; }
+
+    static get language() {
+        if (this.__language) {
+            return this.__language;
+        } else {
+            return 'de';
+        }
+    }
+
+    static set language(val) {
+        this.__language = val;
+    }
+
+
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -184,25 +198,52 @@ window.kijs = class kijs {
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
-     * @param {String} languageId
+     * @param {String} language
      * @returns {String}
      */
-    static getText(key, variant='', args=null, languageId=null) {
-        if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, languageId);
+    static getText(key, variant='', args=null, language=null) {
+        let ret;
+
+        // aktuelle Sprache
+        if (!language) {
+            language = kijs.language;
         }
 
-        // keine getText-Fn definiert: Argumente ersetzen
-        let text = key;
+        // Falls eine eigene getText-fn definiert ist, diese verwenden
+        if (kijs.isFunction(kijs.__getTextFn)) {
+            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, language);
+        }
+
+        // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
+        if (kijs.translation[language] && this.isDefined(kijs.translation[language][key])) {
+            let txt = kijs.translation[language][key];
+
+            // Evtl. sind Varianten vorhanden
+            if (kijs.isObject(txt)) {
+                if (Object.hasOwn(txt, variant)) {
+                    ret = txt[variant];
+                } else if (Object.hasOwn(txt, '')) {
+                    ret = txt[''];
+                } else {
+                    ret = key;
+                }
+            } else {
+                ret = txt;
+            }
+        } else {
+            ret = key;
+        }
+
+        // Evtl. noch Argumente ersetzen
         if (args !== null) {
             args = kijs.isArray(args) ? args : [args];
 
             for (let i=args.length; i>0; i--) {
-                text = kijs.String.replaceAll(text, '%' + i, args[i-1]);
+                ret = kijs.String.replaceAll(ret, '%' + i, args[i-1]);
             }
         }
 
-        return text;
+        return ret;
     }
 
     /**
@@ -376,6 +417,33 @@ window.kijs = class kijs {
     }
 
     /**
+     * Setzt eine individuelle getText-Funktion.
+     * Die fn erhält folgende Argumente: key, variant, args, language
+     * @param {Function} fn
+     * @param {Object} [context=this]
+     * @returns {undefined}
+     */
+    static setGetTextFn(fn, context) {
+        kijs.__getTextFn = fn;
+        kijs.__getTextFnContext = context || this;
+    }
+    
+    /**
+     * Erstellt einen globalen Verweis auf eine RPC-Klasse
+     * Der Standard-RPC sollte 'default' heissen.
+     * Weitere sind mit beliebigen Namen möglich.
+     * @param {String} name
+     * @param {kijs.gui.Rpc} rpc
+     * @returns {undefined}
+     */
+    static setRpc(name, rpc) {
+        if (!kijs.isObject(kijs.__rpcs)) {
+            kijs.__rpcs = {};
+        }
+        kijs.__rpcs[name] = rpc;
+    }
+
+    /**
      * Wandelt einen beliebigen Wert in einen String um.
      * @param {mixed} value
      * @returns {String}
@@ -396,34 +464,7 @@ window.kijs = class kijs {
 
         return (value + '');
     }
-
-    /**
-     * Setzt eine individuelle getText-Funktion.
-     * Die fn erhält folgende Argumente: key, variant, args, languageId
-     * @param {Function} fn
-     * @param {Object} [context=this]
-     * @returns {undefined}
-     */
-    static setGetTextFn(fn, context) {
-        kijs.__getTextFn = fn;
-        kijs.__getTextFnContext = context || this;
-    }
-
-    /**
-     * Erstellt einen globalen Verweis auf eine RPC-Klasse
-     * Der Standard-RPC sollte 'default' heissen.
-     * Weitere sind mit beliebigen Namen möglich.
-     * @param {String} name
-     * @param {kijs.gui.Rpc} rpc
-     * @returns {undefined}
-     */
-    static setRpc(name, rpc) {
-        if (!kijs.isObject(kijs.__rpcs)) {
-            kijs.__rpcs = {};
-        }
-        kijs.__rpcs[name] = rpc;
-    }
-
+    
     /**
      * Gibt eine eindeutige ID zurück.
      * @param {String} [prefix=''] Ein optionales Prefix
@@ -445,4 +486,5 @@ window.kijs = class kijs {
     static wait(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
+
 };
