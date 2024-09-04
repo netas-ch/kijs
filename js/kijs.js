@@ -8,7 +8,7 @@ window.kijs = class kijs {
     // PRIVATE VARS
     // __getTextFn {Function|null}      Verweise auf die getText()-Funktion
     // __getTextFnContext {Object|null} Kontext der getText()-Funktion
-    // __languageId {String}            Aktuelle Sprache (Standard='de')
+    // __language {String}              Aktuelle Sprache. Z.B. 'de-CH' oder 'fr' (Standard='de')
     // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
     //                                  { default:..., myRpc2:... }
     //                                  { en:{...}, fr:{...} }
@@ -21,16 +21,16 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     static get version() { return '2.8.0'; }
 
-    static get languageId() {
-        if (this.__languageId) {
-            return this.__languageId;
+    static get language() {
+        if (this.__language) {
+            return this.__language;
         } else {
             return 'de';
         }
     }
 
-    static set languageId(val) {
-        this.__languageId = val;
+    static set language(val) {
+        this.__language = val;
     }
 
 
@@ -198,25 +198,25 @@ window.kijs = class kijs {
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
-     * @param {String} languageId
+     * @param {String} language
      * @returns {String}
      */
-    static getText(key, variant='', args=null, languageId=null) {
+    static getText(key, variant='', args=null, language=null) {
         let ret;
 
         // aktuelle Sprache
-        if (!languageId) {
-            languageId = kijs.languageId;
+        if (!language) {
+            language = kijs.language;
         }
 
         // Falls eine eigene getText-fn definiert ist, diese verwenden
         if (kijs.isFunction(kijs.__getTextFn)) {
-            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, languageId);
+            return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, language);
         }
 
         // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
-        if (kijs.translation[languageId]) {
-            let txt = kijs.translation[languageId][key];
+        if (kijs.translation[language] && this.isDefined(kijs.translation[language][key])) {
+            let txt = kijs.translation[language][key];
 
             // Evtl. sind Varianten vorhanden
             if (kijs.isObject(txt)) {
@@ -418,7 +418,7 @@ window.kijs = class kijs {
 
     /**
      * Setzt eine individuelle getText-Funktion.
-     * Die fn erhält folgende Argumente: key, variant, args, languageId
+     * Die fn erhält folgende Argumente: key, variant, args, language
      * @param {Function} fn
      * @param {Object} [context=this]
      * @returns {undefined}

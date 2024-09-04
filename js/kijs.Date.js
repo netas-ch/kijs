@@ -37,88 +37,6 @@
 kijs.Date = class kijs_Date {
 
     // --------------------------------------------------------------
-    // STATIC GETTERS / SETTERS
-    // --------------------------------------------------------------
-    static get weekdays() {
-        return [
-            kijs.getText('Sonntag'),
-            kijs.getText('Montag'),
-            kijs.getText('Dienstag'),
-            kijs.getText('Mittwoch'),
-            kijs.getText('Donnerstag'),
-            kijs.getText('Freitag'),
-            kijs.getText('Samstag')
-        ];
-        /*{
-            en: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-            de: ['Sonntag', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag'],
-            fr: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi']
-        };*/
-    }
-
-    static get weekdays_short() {
-        return [
-            kijs.getText('So', '3'),
-            kijs.getText('Mo', '3'),
-            kijs.getText('Di', '3'),
-            kijs.getText('Mi', '3'),
-            kijs.getText('Do', '3'),
-            kijs.getText('Fr', '3'),
-            kijs.getText('Sa', '3')
-        ];
-        /*{
-            en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            de: ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'],
-            fr: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa']
-        };*/
-    }
-
-    static get months() {
-        return [
-            kijs.getText('Januar'),
-            kijs.getText('Februar'),
-            kijs.getText('März'),
-            kijs.getText('April'),
-            kijs.getText('Mai'),
-            kijs.getText('Juni'),
-            kijs.getText('Juli'),
-            kijs.getText('August'),
-            kijs.getText('September'),
-            kijs.getText('Oktober'),
-            kijs.getText('November'),
-            kijs.getText('Dezember')
-        ];
-        /*{
-            en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-            de: ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'],
-            fr: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
-        };*/
-    }
-
-    static get months_short() {
-        return [
-            kijs.getText('Jan', '3'),
-            kijs.getText('Feb', '3'),
-            kijs.getText('Mär', '3'),
-            kijs.getText('Apr', '3'),
-            kijs.getText('Mai', '3'),
-            kijs.getText('Jun', '3'),
-            kijs.getText('Jul', '3'),
-            kijs.getText('Aug', '3'),
-            kijs.getText('Sep', '3'),
-            kijs.getText('Okt', '3'),
-            kijs.getText('Nov', '3'),
-            kijs.getText('Dez', '3')
-        ];
-        /*{
-            en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            de: ['Jan', 'Feb', 'Mär', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dez'],
-            fr: ['JAN', 'FÉV', 'MAR', 'AVR', 'MAI', 'JUN', 'JUL', 'AOÛ', 'SEP', 'OCT', 'NOV', 'DÉC']
-        };*/
-    }
-
-
-    // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
     /**
@@ -210,11 +128,6 @@ kijs.Date = class kijs_Date {
         } else if (kijs.isString(arg) && arg.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/)) {
             ret = this.getDateFromSqlString(arg);
 
-        // Deutsches Datum (d.m.Y) Beispiele: '1.1.16', '01.04.2017', '2.4', '02.04.', '06', '6.'
-        // Falls Teile des Datums weggelassen wedrden, wird der aktuelle Monat/Jahr genommen.
-        } else if (kijs.isString(arg) && arg.match(/^[0-9]{1,2}\.?([0-9]{1,2}\.?([0-9]{2,4})?)?/)) {
-            ret = this.getDateFromGermanString(arg);
-
         // Woche
         // Beispiel: 'Woche 3 2017', 'W3 17', 'Wo 3 2017'
         } else if (kijs.isString(arg) && arg.match(/^[^0-9]+[0-9]{1,2}[^0-9]?([0-9]{2,4})?/)) {
@@ -248,7 +161,7 @@ kijs.Date = class kijs_Date {
 
         return ret;
     }
-    
+
     /**
      * Gibt die Anzahl Tage zwischen zwei Datum zurück (date2 - date1)
      * @param {Date} date1
@@ -300,61 +213,6 @@ kijs.Date = class kijs_Date {
         return Math.abs(ageDate.getUTCFullYear() - 1970);
     }
     
-    /**
-     * Konvertiert ein Datum im Format 'd.m.Y' oder 'd.m.Y h:i:s' in ein Datum-Objekt
-     * Die Uhrzeit kann hinten mit einem Leerzeichen getrennt angehängt werden. Sie muss mind. ein : enthalten,
-     * damit sie als Uhrzeit erkannt wird.
-     * Beispiele: '1.1.16', '01.04.2017', '2.4', '02.04.', '06', '6.'
-     * Beispiele mit Zeit: '1.1.16 20:00', '01.04.2017 20:00:05', '2.4 8:5', '20:07'
-     * @param {String} strDate
-     * @returns {Date}
-     */
-    static getDateFromGermanString(strDate) {
-        const args = strDate.split(' ');
-        let argsTmp;
-        let strTime = '';
-
-        // Teil 1 (kann Datum oder Uhrzeit sein
-        if (args.length >= 1) {
-            // Handelt es sich um eine Uhrzeit?
-            if (args[0].indexOf(':') >= 0) {
-                strTime = args[0];
-            } else {
-                strDate = args[0];
-            }
-        }
-
-        // Teil 2 (kann nur Uhrzeit sein
-        if (args.length >= 2) {
-            if (args[1].indexOf(':') >= 0) {
-                strTime = args[1];
-            }
-        }
-
-        // Datum ermitteln
-        argsTmp = strDate.split('.');
-        let day = argsTmp.length >= 1 && argsTmp[0] ? parseInt(argsTmp[0]) : (new Date).getDate();
-        let month = argsTmp.length >= 2 && argsTmp[1] ? parseInt(argsTmp[1]) : (new Date).getMonth()+1;
-        let year = argsTmp.length >= 3 && argsTmp[2] ? parseInt(argsTmp[2]) : (new Date).getFullYear();
-
-        // Kurzschreibweisen vom Jahr konventieren
-        if (year < 100) {
-            if (year < 70) {
-                year += 2000;
-            } else if (year >= 70) {
-                year += 1900;
-            }
-        }
-
-        // Uhrzeit ermitteln
-        argsTmp = strTime.split(':');
-        let hours = argsTmp.length >= 2 ? parseInt(argsTmp[0]) : 0;
-        let minutes = argsTmp.length >= 2 ? parseInt(argsTmp[1]) : 0;
-        let seconds = argsTmp.length >= 3 ? parseInt(argsTmp[2]) : 0;
-
-        return new Date(year, month-1, day, hours, minutes, seconds, 0);
-    }
-
     /**
      * Konvertiert eine Wochennummer ein Datum-Objekt
      * Format: [A-Z ]+([0-9]+) ([0-9]+)
@@ -492,15 +350,16 @@ kijs.Date = class kijs_Date {
     /**
      * Gibt den Namen eines Monats zurück
      * @param {Date} date                   Datum
-     * @param {Boolean} [short=false]       Kurzform
+     * @param {String} [format='long']      Länge
+     *                      'narrow': 1 Zeichen. Bsp: 'J'
+     *                      'short': 2-3 Zeichen. Bsp: 'Jan'
+     *                      'long': Ausgeschrieben. Bsp: 'Januar'
+     *                      'numeric': '1'
+     *                      '2-digit': '01'
      * @returns {String}
      */
-    static getMonthName(date, short=false) {
-        if (short) {
-            return this.months_short[date.getMonth()];
-        } else {
-            return this.months[date.getMonth()];
-        }
+    static getMonthName(date, format='long') {
+        return date.toLocaleDateString(kijs.language, { month: format });
     }
 
     /**
@@ -562,15 +421,14 @@ kijs.Date = class kijs_Date {
     /**
      * Gibt den Namen eines Wochentags zurück
      * @param {Date} date                   Datum
-     * @param {Boolean} [short=false]       Kurzform
+     * @param {String} [format='long']      Länge
+     *                      'narrow': 1 Zeichen. Bsp: 'M'
+     *                      'short': 2-3 Zeichen. Bsp: 'Mo'
+     *                      'long': Ausgeschrieben. Bsp: 'Montag'
      * @returns {String}
      */
-    static getWeekday(date, short) {
-        if (short) {
-            return this.weekdays_short[date.getDay()];
-        } else {
-            return this.weekdays[date.getDay()];
-        }
+    static getWeekday(date, format='long') {
+        return date.toLocaleDateString(kijs.language, { weekday: format });
     }
 
     /**
@@ -600,6 +458,289 @@ kijs.Date = class kijs_Date {
         return !!((year & 3) === 0 && (year % 100 || (year % 400 === 0 && year)));
     }
 
+
+    /**
+     * Erstellt ein Datum aus einem Länderspezifischen String
+     * @param {String} strInput Datum in einem länder-spezifischen Format
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @param {Number} year2000Threshold Wenn zweistellige Jahreszahlen eingegeben werden,
+     *                                   können sie automatisch in vierstellige umgewandelt
+     *                                   werden. Dazu kann hier der Schwellwert angegeben werden.
+     *                                   Ein guter Wert ist 30. Keine Umwandlung=Null
+     * @returns {Date|Null}
+     */
+    static parseLocalDateString(strInput, year2000Threshold, language='auto') {
+        let day = null;
+        let month = null;
+        let year = null;
+
+        // Lokales Datumsformat ohne Trennzeichen ermitteln:
+        // 'dmY', 'dYm', 'mdY', 'mYt', 'Ydm', 'Ymt' oder null
+        const format = this.#getLocalDateFormat(language);
+
+        if (format === null) {
+            return;
+        }
+
+        // Alle Trennzeichen durch Leerzeichen ersetzen
+        strInput = strInput.replace(/[^0-9]+/g, ' ');
+
+        // Sicherstellen, dass jeweils nur ein Leerzeichen vorkommt
+        // und Leerzeichen am Anfang und Ende entfernen
+        strInput = strInput.replace(/[ ]+/g, ' ').trim();
+
+        // Splitten nach Leerzeichen
+        const arr = strInput.split(' ');
+
+        // Der String darf aus ein bis drei Bestandteilen bestehen
+        if (arr.length < 1 || arr.length > 3) {
+            return null;
+        }
+
+        // Bestandtile durchgehen
+        for (let i=0; i<arr.length; i++) {
+            if (!kijs.isNumeric(arr[i])) {
+                return null;
+            }
+
+            switch (format[i]) {
+                // Tag
+                case 'd':
+                    day = parseInt(arr[i]);
+                    if (day < 1 || day > 31) {
+                        return null;
+                    }
+                    break;
+
+                // Monat
+                case 'm':
+                    month = parseInt(arr[i]);
+                    if (month < 1 || month > 12) {
+                        return null;
+                    }
+                    break;
+
+                // Jahr
+                case 'Y':
+                    year = parseInt(arr[i]);
+                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+                    if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
+                        if (year >= year2000Threshold) {
+                            year += 1900;
+                        } else {
+                            year += 2000;
+                        }
+                    }
+                    break;
+
+            }
+        }
+
+        // Fehlende Bestandteile vom aktuellen Datum nehmen
+        if (day === null) {
+            day = (new Date()).getDate();
+        }
+        if (month === null) {
+            month = (new Date()).getMonth() + 1;
+        }
+        if (year === null) {
+            year = (new Date()).getFullYear();
+        }
+
+        // Daraus nun ein Datum erstellen
+        return new Date(year, month-1, day);
+    }
+
+     /**
+     * Erstellt ein Datum mit Uhrzeit aus einem Länderspezifischen String
+     * @param {String} strInput Datum und Uhrzeit in einem länder-spezifischen Format
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @param {Number} year2000Threshold Wenn zweistellige Jahreszahlen eingegeben werden,
+     *                                   können sie automatisch in vierstellige umgewandelt
+     *                                   werden. Dazu kann hier der Schwellwert angegeben werden.
+     *                                   Ein guter Wert ist 30. Keine Umwandlung=Null
+     * @returns {Date|Null}
+     */
+    static parseLocalDateTimeString(strInput, year2000Threshold, language='auto') {
+        const seperators = [' '];
+        let date = null;
+        let time = '';
+
+        // Zulässige Trennzeichen durch #|@# ersetzen
+        for (let i=0; i<seperators.length; i++) {
+            strInput = kijs.String.replaceAll(strInput, seperators[i], '#|@#');
+        }
+
+        // Splitten nach #|@#
+        let arr = strInput.split('#|@#');
+
+        // Der String darf aus ein bis drei Bestandteilen bestehen (Datum, Uhrzeit, AM/PM)
+        if (arr.length < 1 || arr.length > 3) {
+            return null;
+        }
+
+         // Datum
+        if (arr.length >= 1) {
+            date = this.parseLocalDateString(arr[0], year2000Threshold);
+            if (kijs.isEmpty(date)) {
+                return null;
+            }
+        }
+
+        // Uhrzeit
+        if (arr.length >= 2) {
+            let tmp = arr[1];
+            // evtl. noch AM oder PM anhängen
+            if (arr.length >= 3) {
+                tmp += ' ' + arr[2];
+            }
+
+            time = this.parseLocalTimeString(tmp);
+            if (kijs.isEmpty(time)) {
+                return null;
+            }
+        }
+
+        return new Date(this.format(date, 'Y-m-d') + ' ' + time);
+    }
+
+    /**
+     * Erstellt ein Uhrzeit-String im Format 'H:i:s aus einem Länderspezifischen String
+     * @param {String} strInput Uhrzeit in einem länder-spezifischen Format
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @returns {String|Null}
+     */
+    static parseLocalTimeString(strInput, language='auto') {
+        let isPm = false;
+        let hour = null;
+        let minute = null;
+        let second = null;
+
+        // Lokales Uhrzeitformat ohne Trennzeichen ermitteln:
+        // 'His', 'Hsi', 'iHs', 'isH', 'sHi', 'siH' oder null
+        const format = this.#getLocalTimeFormat(language);
+
+        if (format === null) {
+            return;
+        }
+
+        // PM?
+        isPm = !!strInput.match(/PM/gi);
+
+        // Alle Trennzeichen durch Leerzeichen ersetzen
+        strInput = strInput.replace(/[^0-9]+/g, ' ');
+
+        // Sicherstellen, dass jeweils nur ein Leerzeichen vorkommt
+        // und Leerzeichen am Anfang und Ende entfernen
+        strInput = strInput.replace(/[ ]+/g, ' ').trim();
+
+        // Splitten nach Leerzeichen
+        let arr = strInput.split(' ');
+
+        // Der String darf aus ein bis drei Bestandteilen bestehen
+        if (arr.length < 1 || arr.length > 3) {
+            return null;
+        }
+
+        // Bestandtile durchgehen
+        for (let i=0; i<arr.length; i++) {
+            if (!kijs.isNumeric(arr[i])) {
+                return null;
+            }
+
+            switch (format[i]) {
+                // Stunde 24-Stunden-Format
+                case 'H':
+                    hour = parseInt(arr[i]);
+                    if (hour < 0 || hour > 23) {
+                        return null;
+                    }
+                    break;
+
+                // Stunde 12-Stunden-Format
+                case 'h':
+                    hour = parseInt(arr[i]);
+                    if (hour < 0 || hour > 23) {
+                        return null;
+                    }
+                    if (hour < 12 && isPm) {
+                        hour += 12;
+                    }
+                    break;
+
+                // Minute
+                case 'm':
+                    minute = parseInt(arr[i]);
+                    if (minute < 0 || minute > 60) {
+                        return null;
+                    }
+                    break;
+
+                // Sekunde
+                case 'i':
+                    second = parseInt(arr[i]);
+                    if (second < 0 || second > 60) {
+                        return null;
+                    }
+                    break;
+
+            }
+        }
+
+        // Fehlende Bestandteile vom aktuellen Datum nehmen
+        if (hour === null) {
+            hour = 0;
+        }
+        if (minute === null) {
+            minute = 0;
+        }
+        if (second === null) {
+            second = 0;
+        }
+
+        // Daraus nun ein Datum erstellen
+        let date = new Date(2000, 1, 1, hour, minute, second);
+
+        // und daraus die Uhrzeit im Format H:i:s zurückgeben
+        return this.format(date, 'H:i:s');
+    }
+
+    /**
+     * Erstellt ein Datum aus einem Länderspezifischen Wocehn-String z.B. 'KW 5 2024'
+     * Dabei wird der 1. Tag der Woche als Datum zurückgegeben.
+     * @param {String} strInput Woche in einem länder-spezifischen Format
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @param {Number} year2000Threshold Wenn zweistellige Jahreszahlen eingegeben werden,
+     *                                   können sie automatisch in vierstellige umgewandelt
+     *                                   werden. Dazu kann hier der Schwellwert angegeben werden.
+     *                                   Ein guter Wert ist 30. Keine Umwandlung=Null
+     * @returns {Date|Null}
+     */
+    static parseLocalWeekString(strInput, year2000Threshold, language='auto') {
+        let matches = strInput.match(/^[^0-9]*([0-9]{1,2})[^0-9]?([0-9]{2,4})?/);
+        if (!matches) {
+            return null;
+        }
+
+        // Wochen-Nr.
+        let week = parseInt(matches[1]);
+
+        // Jahr (wenn leer = aktuelles Jahr
+        let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
+
+        // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+        if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
+            if (year >= year2000Threshold) {
+                year += 1900;
+            } else {
+                year += 2000;
+            }
+        }
+
+        // Datum vom ersten Wochentag zurückgeben
+        return kijs.Date.getFirstOfWeek(week, year);
+    }
+
     /**
      * Gibt die Anzahl Sekunden seit dem 01.01.1970 zurück
      * @param {Date} date
@@ -616,20 +757,20 @@ kijs.Date = class kijs_Date {
             // Tag
             // d  Tag des Monats, 2-stellig mit führender Null  01 bis 31
             case 'd': return kijs.String.padding(date.getDate(), 2, '0', 'left');
-            // D  Wochentag, gekürzt auf zwei Buchstaben  Mo bis So
-            case 'D': return this.getWeekday(date, true);
+            // D  Wochentag, gekürzt auf zwei-drei Buchstaben  Mo bis So
+            case 'D': return this.getWeekday(date, 'short');
             // j  Tag des Monats ohne führende Nullen  1 bis 31
             case 'j': return date.getDate();
             // l (kleines 'L')  Ausgeschriebener Wochentag  Montag bis Sontag
-            case 'l': return this.getWeekday(date, false);
+            case 'l': return this.getWeekday(date, 'long');
 
             // Monat
             // F  Monat als ganzes Wort, wie Januar bis Dezember
-            case 'F': return this.getMonthName(date, false);
+            case 'F': return this.getMonthName(date, 'long');
             // m  Monat als Zahl, mit führenden Nullen  01 bis 12
             case 'm': return kijs.String.padding(date.getMonth()+1, 2, '0', 'left');
             // M  Monatsname mit drei Buchstaben  Jan bis Dez
-            case 'M': return this.getMonthName(date, true);
+            case 'M': return this.getMonthName(date, 'short');
             // n  Monatszahl, ohne führende Nullen  1 bis 12
             case 'n': return (date.getMonth()+1);
 
@@ -666,4 +807,78 @@ kijs.Date = class kijs_Date {
             default: return letter;
         }
     }
+
+    /**
+     * Ermittelt das Datumsformat zu einer Sprache
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @returns {String|Null}
+     */
+    static #getLocalDateFormat(language='auto') {
+        if (language === 'auto') {
+            language = kijs.language;
+        }
+
+        // Reihenfolge von d,m,Y ermitteln
+        // dazu das Datum 2000-01-02 in ein lokales Datum umwandeln
+        let format = new Date(2000, 0, 2);
+        format = format.toLocaleDateString(language, { day: '2-digit', month: '2-digit', year: 'numeric'  });
+        // 2000 durch Y ersetzen
+        format = format.replace(/2000/g, 'Y');
+        // 01 durch m ersetzen
+        format = format.replace(/01/g, 'm');
+        // 02 durch d ersetzen
+        format = format.replace(/02/g, 'd');
+        // Trennzeichen entfernen
+        format = format.replace(/[^Ymd]+/g, '').trim();
+
+        // Jetzt sollte tmp entweder 'dmY', 'dYm', 'mdY', 'mYt', 'Ydm' oder 'Ymt' sein
+        if (format.length !== 3) {
+            return null;
+        }
+        
+        return format;
+    }
+
+    /**
+     * Ermittelt das Uhrzeitformat zu einer Sprache
+     * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
+     * @returns {String|Null}
+     */
+    static #getLocalTimeFormat(language='auto') {
+        if (language === 'auto') {
+            language = kijs.language;
+        }
+
+        // Reihenfolge von H,i,s ermitteln
+        // dazu das Datum, Uhrzeit 2000-01-02 18:17:16 in eine lokales Uhrzeit umwandeln
+        let format = new Date(2000, 0, 2, 18, 17, 16);
+        format = format.toLocaleTimeString(language, {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: 'numeric'
+        });
+        // 18 durch H ersetzen (25-Stundenformat)
+        format = format.replace(/18/g, 'H');
+        // 06 durch h ersetzen (12-Stundenformat)
+        format = format.replace(/06/g, 'h');
+        // 17 durch m ersetzen
+        format = format.replace(/17/g, 'm');
+        // 16 durch i ersetzen
+        format = format.replace(/16/g, 'i');
+        // AM/PM entfernen
+        format = format.replace(/AM/gi, '');
+        format = format.replace(/PM/gi, '');
+
+        // Trennzeichen entfernen
+        format = format.replace(/[^Hhmi]+/g, '').trim();
+
+        // Jetzt sollte tmp entweder  'His', 'Hsi', 'iHs', 'isH', 'sHi' oder 'siH' sein
+        // oder das selbe mit einem kleinen h
+        if (format.length !== 3) {
+            return null;
+        }
+        
+        return format;
+    }
+
 };

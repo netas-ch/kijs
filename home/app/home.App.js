@@ -24,7 +24,7 @@ home.App = class home_App {
         this._viewport = null;
 
         // Sprache
-        kijs.languageId = config.languageId ? config.languageId : 'de';
+        kijs.language = config.language ? config.language : 'de';
         
         // RPC-Instanz für das App
         let appRpcConfig = {};
@@ -382,7 +382,7 @@ home.App = class home_App {
                         { id:'en', Bezeichnung:'English' },
                         { id:'fr', Bezeichnung:'Français' }
                     ],
-                    value: kijs.languageId,
+                    value: kijs.language,
                     on: {
                         change: function(e) {
                             var loc = window.location;

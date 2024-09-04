@@ -33,7 +33,7 @@
             let app = new home.App({
                 appAjaxUrl: 'app/ajax.php',
                 dataAjaxUrl: 'dataResources/php/ajax.php',
-                languageId: kijs.Navigator.getGetParameter('lang')
+                language: kijs.Navigator.getGetParameter('lang')
             });
             app.run();
         });

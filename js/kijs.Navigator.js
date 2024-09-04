@@ -234,48 +234,6 @@ kijs.Navigator = class kijs_Navigator {
         }
     }
 
-    static getGetParams(parameterName) {
-        console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.Navigator.getGetParams"`);
-        return kijs.Navigator.getGetParameter(parameterName);
-    }
-
-    /**
-     * Gibt den Code der Browser-Hauptsprache zurück.
-     * @returns {String} languageId Bsp: 'de'
-     */
-    static getLanguageId() {
-        let lang = kijs.Navigator.getLanguages().shift();
-        return lang ? lang.languageId : null;
-    }
-
-    /**
-     * Gibt ein Array mit den Browsersprachen zurück
-     * @return {Array} languages
-     */
-    static getLanguages() {
-        let languages = [];
-        if (navigator.languages) {
-            for (let i=0;i<navigator.languages.length; i++) {
-                let lang = kijs.toString(navigator.languages[i]);
-                if (lang.match(/[a-z]{2,6}\-[a-z]{2,6}/i)) {
-                    let tmp = lang.split('-');
-                    languages.push({
-                        languageId: tmp[0].toLowerCase(), 
-                        localization: tmp[1].toLowerCase(), 
-                        prio: i+1
-                    });
-                } else {
-                    languages.push({
-                        languageId: lang.toLowerCase(), 
-                        localization: null, 
-                        prio: i+1
-                    });
-                }
-            }
-        }
-        return languages;
-    }
-
     /**
      * Öffnet einen mailto oder tel Link, so dass kein neues Fenster geöffnet wird
      * und auch das beforeunload Event nicht ausgelöst wird.

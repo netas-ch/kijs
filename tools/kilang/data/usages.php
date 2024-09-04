@@ -3,9 +3,16 @@ $translations = [
     "" => [
         "" => [
             "Copyright" => ["2024 by Netas AG (www.netas.ch)"],
-            "Erstelldatum" => ["2024-08-26"],
+            "Erstelldatum" => ["2024-09-04"],
             "Info" => ["kijs Sprachdatei"],
             "Sprachdatei" => ["Usages"]
+        ]
+    ],
+    "%1 bis %2" => [
+        "" => [
+            "usagesJs" => [
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [703,901]
+            ]
         ]
     ],
     "%1 ist keine gültige Nummer" => [
@@ -33,7 +40,7 @@ $translations = [
     "Akt. Monat" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/kijs.gui.MonthPicker.js" => [109]
+                "../../js/gui/kijs.gui.MonthPicker.js" => [108]
             ]
         ]
     ],
@@ -79,38 +86,10 @@ $translations = [
             ]
         ]
     ],
-    "Apr" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [103]
-            ]
-        ]
-    ],
-    "April" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [81]
-            ]
-        ]
-    ],
     "Aufsteigend sortieren" => [
         "" => [
             "usagesJs" => [
                 "../../js/gui/grid/kijs.gui.grid.HeaderCell.js" => [49]
-            ]
-        ]
-    ],
-    "Aug" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [107]
-            ]
-        ]
-    ],
-    "August" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [85]
             ]
         ]
     ],
@@ -124,7 +103,7 @@ $translations = [
     "Das Datum darf nicht leer sein" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1174]
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1044]
             ]
         ]
     ],
@@ -152,8 +131,8 @@ $translations = [
     "Der maximale Wert für dieses Feld ist %1" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1145,1164],
-                "../../js/gui/field/kijs.gui.field.Month.js" => [462],
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [998,1029],
+                "../../js/gui/field/kijs.gui.field.Month.js" => [472],
                 "../../js/gui/field/kijs.gui.field.Number.js" => [488]
             ]
         ]
@@ -161,37 +140,16 @@ $translations = [
     "Der minimale Wert für dieses Feld ist %1" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1135,1156],
-                "../../js/gui/field/kijs.gui.field.Month.js" => [454],
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [982,1015],
+                "../../js/gui/field/kijs.gui.field.Month.js" => [459],
                 "../../js/gui/field/kijs.gui.field.Number.js" => [483]
-            ]
-        ]
-    ],
-    "Dez" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [111]
-            ]
-        ]
-    ],
-    "Dezember" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [89]
-            ]
-        ]
-    ],
-    "Di" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [63]
             ]
         ]
     ],
     "Die Uhrzeit darf nicht leer sein" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1181]
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1051]
             ]
         ]
     ],
@@ -206,13 +164,6 @@ $translations = [
         "" => [
             "usagesJs" => [
                 "../../js/kijs.Ajax.js" => [151,155]
-            ]
-        ]
-    ],
-    "Dienstag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [46]
             ]
         ]
     ],
@@ -243,20 +194,6 @@ $translations = [
         "" => [
             "usagesJs" => [
                 "../../js/gui/field/kijs.gui.field.Field.js" => [746]
-            ]
-        ]
-    ],
-    "Do" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [65]
-            ]
-        ]
-    ],
-    "Donnerstag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [48]
             ]
         ]
     ],
@@ -291,7 +228,7 @@ $translations = [
     "Es fehlt das Start- oder Enddatum" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/field/kijs.gui.field.DateTime.js" => [1127]
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [974]
             ]
         ]
     ],
@@ -299,20 +236,6 @@ $translations = [
         "" => [
             "usagesJs" => [
                 "../../js/kijs.UploadDialog.js" => [405]
-            ]
-        ]
-    ],
-    "Feb" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [101]
-            ]
-        ]
-    ],
-    "Februar" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [79]
             ]
         ]
     ],
@@ -344,20 +267,6 @@ $translations = [
             ]
         ]
     ],
-    "Fr" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [66]
-            ]
-        ]
-    ],
-    "Freitag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [49]
-            ]
-        ]
-    ],
     "Grösser als..." => [
         "" => [
             "usagesJs" => [
@@ -368,7 +277,7 @@ $translations = [
     "Heute" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/kijs.gui.DatePicker.js" => [109]
+                "../../js/gui/kijs.gui.DatePicker.js" => [108]
             ]
         ]
     ],
@@ -402,20 +311,6 @@ $translations = [
             ]
         ]
     ],
-    "Jan" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [100]
-            ]
-        ]
-    ],
-    "Januar" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [78]
-            ]
-        ]
-    ],
     "Jetzt" => [
         "" => [
             "usagesJs" => [
@@ -423,31 +318,10 @@ $translations = [
             ]
         ]
     ],
-    "Jul" => [
-        "3" => [
+    "KW %1" => [
+        "week number" => [
             "usagesJs" => [
-                "../../js/kijs.Date.js" => [106]
-            ]
-        ]
-    ],
-    "Juli" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [84]
-            ]
-        ]
-    ],
-    "Jun" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [105]
-            ]
-        ]
-    ],
-    "Juni" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [83]
+                "../../js/gui/field/kijs.gui.field.DateTime.js" => [122]
             ]
         ]
     ],
@@ -461,8 +335,8 @@ $translations = [
     "Leeren" => [
         "" => [
             "usagesJs" => [
-                "../../js/gui/kijs.gui.DatePicker.js" => [119],
-                "../../js/gui/kijs.gui.MonthPicker.js" => [119],
+                "../../js/gui/kijs.gui.DatePicker.js" => [118],
+                "../../js/gui/kijs.gui.MonthPicker.js" => [118],
                 "../../js/gui/kijs.gui.TimePicker.js" => [129]
             ]
         ]
@@ -474,78 +348,10 @@ $translations = [
             ]
         ]
     ],
-    "Mai" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [82]
-            ]
-        ],
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [104]
-            ]
-        ]
-    ],
-    "Mi" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [64]
-            ]
-        ]
-    ],
-    "Mittwoch" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [47]
-            ]
-        ]
-    ],
-    "Mo" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [62]
-            ]
-        ]
-    ],
-    "Montag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [45]
-            ]
-        ]
-    ],
-    "Mär" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [102]
-            ]
-        ]
-    ],
-    "März" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [80]
-            ]
-        ]
-    ],
     "Nein" => [
         "" => [
             "usagesJs" => [
                 "../../js/gui/kijs.gui.MsgBox.js" => [70]
-            ]
-        ]
-    ],
-    "Nov" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [110]
-            ]
-        ]
-    ],
-    "November" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [88]
             ]
         ]
     ],
@@ -557,40 +363,12 @@ $translations = [
             ]
         ]
     ],
-    "Okt" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [109]
-            ]
-        ]
-    ],
-    "Oktober" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [87]
-            ]
-        ]
-    ],
-    "Sa" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [67]
-            ]
-        ]
-    ],
-    "Samstag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [50]
-            ]
-        ]
-    ],
     "Schliessen" => [
         "" => [
             "usagesJs" => [
                 "../../js/gui/container/tab/kijs.gui.container.tab.Button.js" => [36],
-                "../../js/gui/kijs.gui.DatePicker.js" => [129],
-                "../../js/gui/kijs.gui.MonthPicker.js" => [129],
+                "../../js/gui/kijs.gui.DatePicker.js" => [128],
+                "../../js/gui/kijs.gui.MonthPicker.js" => [128],
                 "../../js/gui/kijs.gui.TimePicker.js" => [139]
             ]
         ]
@@ -599,34 +377,6 @@ $translations = [
         "" => [
             "usagesJs" => [
                 "../../js/gui/field/kijs.gui.field.Combo.js" => [416,875]
-            ]
-        ]
-    ],
-    "Sep" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [108]
-            ]
-        ]
-    ],
-    "September" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [86]
-            ]
-        ]
-    ],
-    "So" => [
-        "3" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [61]
-            ]
-        ]
-    ],
-    "Sonntag" => [
-        "" => [
-            "usagesJs" => [
-                "../../js/kijs.Date.js" => [44]
             ]
         ]
     ],

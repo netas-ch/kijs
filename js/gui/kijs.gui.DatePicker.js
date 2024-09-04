@@ -23,7 +23,6 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
                                         // verwendet wird. Diese berücksichtigt die Einstellung hier nicht.
 
         this._valueFormat = 'Y-m-d';    // Format, mit dem der value ausgeliefert wird
-        this._headerBarFormat = 'F Y';  // Anzeige Format für die HeaderBar
 
         this._mode = 'date';             // Modus: 'date', 'week' oder 'range'
 
@@ -142,7 +141,6 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             mode: true,                         // Modus: 'date', 'week' oder 'range'
             weekNumbersHide: true,              // Wochennummern ausblenden?
             valueFormat: true,                  // Format, mit dem der value ausgeliefert wird
-            headerBarFormat: true,              // Anzeige Format für die HeaderBar
             minValue: { target: 'minValue' },   // Kleinster zu wählender Wert     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
             maxValue: { target: 'maxValue' },   // Grösster zu wählender Wert      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
             headerBarHide: true,                // HeaderBar ausblenden
@@ -241,9 +239,6 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     set headerBarHide(val) { this._headerBarHide = !!val; }
 
     get headerBar() { return this._headerBar; }
-
-    get headerBarFormat() { return this._headerBarFormat; }
-    set headerBarFormat(val) { this._headerBarFormat = val; }
 
     get maxDate() {
         return this._maxDate;
@@ -507,7 +502,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             } else {
                 dom.clsRemove('kijs-weekend');
             }
-            dom.html = kijs.Date.weekdays_short[weekDay];
+            dom.html = kijs.Date.getWeekday(new Date(2001, 0, weekDay), 'narrow');
             index++;
         }
 
@@ -602,7 +597,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             if (kijs.isEmpty(this._monthPicker.date)) {
                 this._headerBar.html = '';
             } else {
-                this._headerBar.html = kijs.Date.format(this._monthPicker.date, this._headerBarFormat);
+                this._headerBar.html = this._monthPicker.date.toLocaleDateString(kijs.language, {
+                    month: 'long',
+                    year: 'numeric'
+                });
             }
         }
     }

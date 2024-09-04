@@ -30,6 +30,29 @@ in kijs.theme.default.css.
     - ```determinatedIconCls```
     - ```uncheckedIconCls```
 
+### kijs.gui.MonthPicker
+### kijs.gui.DatePicker
+Die Monatsbezeichnungen werden nun automatisch in der eingestellten Sprache 
+```kijs.language``` angezeigt.  
+ - config/getter/setter ```headerBarFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'headerBarFormat'``` durchsuchen und den entfernen.  
+
+### kijs.gui.field.Month
+Die Monatsbezeichnungen werden nun automatisch in der eingestellten Sprache 
+```kijs.language``` angezeigt.  
+ - config/getter/setter ```displayFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'displayFormat'``` durchsuchen und entfernen.  
+
+### kijs.gui.field.DateTime
+Das Datum und Uhrzeit werden nun automatisch in der eingestellten Sprache ```kijs.language``` formatiert.
+ - config ```displayDateFormat``` gibt es nicht mehr
+ - config ```displayTimeFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'displayDateFormat'``` und ```'displayTimeFormat'```  
+durchsuchen und diese config-Parameter entfernen.  
+
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.
 
@@ -121,8 +144,57 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
 
     Als Beispiel siehe ```kijs.gui.dataView.element.ListView```
 
+### kijs
+  - Getter/Setter ```kijs.languageId``` umbenannt zu ```kijs.language```  
+   **UPDATE TIPP:**: Projekt nach ```'kijs.languageId'``` durchsuchen und durch ```'kijs.language'``` ersetzen.  
+
+### kijs.Date
+ - Neue Funktion ```kijs.Date.parseLocalDateString(strInput, year2000Threshold, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalDateTimeString(strInput, year2000Threshold, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalTimeString(strInput, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalWeekString(strInput, language='auto')```  
+   Erstellt ein Datum aus einem String weiner beliebigen Sprache.
+ - Getter ```kijs.Date.weekdays``` entfernt
+ - Getter ```kijs.Date.weekdays_short``` entfernt
+ - Getter ```kijs.Date.months``` entfernt
+ - Getter ```kijs.Date.months_short``` entfernt
+ - ```kijs.Date.getWeekday(date, short=false)``` Argument short (boolean) geändert zu format (string)
+ - ```kijs.Date.getMonthName(date, short=false)``` Argument short (boolean) geändert zu format (string)
+ - Funktion ```kijs.Date.getDateFromGermanString(strDate)``` entfernt.
+ - Funktion ```kijs.Date.create(arg)``` kann nun keine Deutschen Daten und auch 
+   keine Kalenderwochen mehr parsen.
+
+ **UPDATE TIPP:**
+  - Projekt nach ```'kijs.Date.weekdays'``` durchsuchen. Falls
+    es eine Verwendung gibt, kann dafür die Funktion ```getWeekday(date, format='long')``` 
+    verwendet werden. 
+  - Projekt nach ```'kijs.Date.months'``` durchsuchen. Falls
+    es eine Verwendung gibt, kann dafür die Funktion ```getMonthName(date, format='long')``` 
+    verwendet werden. 
+  - Projekt nach ```kijs.Date.getWeekday``` suchen und das 2. Argument ändern.  
+  - Projekt nach ```kijs.Date.getMonthName``` suchen und das 2. Argument ändern.  
+  - Projekt nach ```kijs.Date.getDateFromGermanString``` suchen und durch die Funktion  
+    ```kijs.Date.parseLocalDateString(strInput, year2000Threshold, language='auto')``` ersetzen.  
+  - Projekt nach ```kijs.Date.create``` suchen und sicherstellen, dass keine Deutschen 
+    Daten und auch keine Kalenderwochen geparst werden. Es können dafür die neuen Funktionen 
+    ```kijs.Date.parseLocal...String(...) ``` verwendet werden.  
+
 ### kijs.String
  - Neue Funktion ```kijs.String.toRegExp()```
+
+### kijs.Navigator
+ - Funktion ```kijs.gui.Navigator.getLanguages()``` entfernt.  
+ - Funktion ```kijs.gui.Navigator.getLanguageId()``` entfernt.  
+
+   **UPDATE TIPP:**: Projekt nach ```'kijs.gui.Navigator.getLanguage'``` durchsuchen 
+   und die nativen JavaScript-Funktionen verwenden:  
+    - navigator.languages  
+    - navigator.language  
+
+   Vorsicht: Der Rückgabewert ist nicht identisch!  
+
+### Mehrsprachigkeit
+Siehe Leitfaden "Mehrsprachigkeit" in der Dokumentation.  
 
 
 
