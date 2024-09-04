@@ -17,13 +17,13 @@
  * 
  * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
+ * 
  * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste 
  *                                                          gehalten wird, wird in diesem Abstand gescrollt
- *
+ * 
  * scrollStep   Number [optional] default=20                Anzahl Pixel, die bei einem Klick auf einen
  *                                                          Scroll-Button gescrollt wird
  * 
@@ -31,7 +31,7 @@
  * -------------
  * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
+ * 
  * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
@@ -688,7 +688,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         // Schaltflächen aktivieren/deaktivieren
         this._updateButtons();
     }
-
+    
     #onTouchEnd(e) {
         // Buttons rendern
         this._renderScrollButtons();

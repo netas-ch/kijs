@@ -156,12 +156,12 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         }
 
         // Fenster schliessen
-        this.close();
+        this.destruct();
     }
     
     #onCancelClick(e) {
         // Fenster schliessen
-        this.close();
+        this.destruct();
     }
     
 

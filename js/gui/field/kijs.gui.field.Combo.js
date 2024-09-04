@@ -615,7 +615,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     _setScrollPositionToSelection() {
         let sel = this._listViewEl.getSelected();
-        if (kijs.isObject(sel) && (sel instanceof kijs.gui.dataView.Element)) {
+        if (kijs.isObject(sel) && (sel instanceof kijs.gui.dataView.element.Base)) {
             if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
                 let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
 
@@ -639,12 +639,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             return;
         }
 
-        // Eingabe erforderlich
-        if (this._required) {
-            if (kijs.isEmpty(value)) {
-                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
-            }
-        }
+        super._validationRules(value, ignoreEmpty);
 
         // Wert muss in der Liste vorhanden sein.
         if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
@@ -658,24 +653,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             if (!match) {
                 this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
-            }
-        }
-
-        // minSelectCount
-        if (!kijs.isEmpty(this._minSelectCount) && this._minSelectCount >= 0) {
-            if (kijs.isArray(value)) {
-                if (kijs.isEmpty(value) && this._minSelectCount > 0 || value.length < this._minSelectCount) {
-                    this._errors.push(kijs.getText('Min. %1 Datensätze müssen ausgewählt werden', '', this._minSelectCount));
-                }
-            }
-        }
-
-        // maxSelectCount
-        if (!kijs.isEmpty(this._maxSelectCount) && this._maxSelectCount > 0) {
-            if (kijs.isArray(value)) {
-                if (value.length > this._maxSelectCount) {
-                    this._errors.push(kijs.getText('Max. %1 Datensätze dürfen ausgewählt werden', '', this._maxSelectCount));
-                }
             }
         }
     }
@@ -782,7 +759,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             let dataViewElement = this._listViewEl.getSelected();
             this._spinBoxEl.close();
 
-            if (dataViewElement && (dataViewElement instanceof kijs.gui.dataView.Element)) {
+            if (dataViewElement && (dataViewElement instanceof kijs.gui.dataView.element.Base)) {
                 let newVal = dataViewElement.dataRow[this.valueField],
                     oldVal = this.value,
                     changed = newVal !== this.value;

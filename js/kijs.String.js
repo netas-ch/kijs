@@ -210,6 +210,39 @@ kijs.String = class kijs_String {
     }
 
     /**
+     * Konvertiert einen String in einen Regulären Ausdruck (RegExp)
+     * @param {String} text Regulärer Ausdruck als String Beispiel: '/^[0-9A-Z]{3,4}$/i'
+     * @returns {RegExp|Boolean} Regulärer Ausdruck oder false bei Fehler
+     */
+    static toRegExp(text) {
+        // Falls es bereits ein RegExp ist: direkt zurückgeben
+        if (kijs.isRegExp(text)) {
+            return text;
+        }
+
+        // Es muss ein String sein!
+        if (!kijs.isString(text)) {
+            return false;
+        }
+
+        // Der RegExp muss mit / eingeschlossen sein. Dahinter können noch modifiers sein.
+        if (text[0] !== '/') {
+            return false;
+        }
+        let i = text.lastIndexOf('/');
+        if (i <= 0) {
+            return false;
+        }
+
+        // RegExp erstellen
+        try {
+            return new RegExp(text.slice(1, i), text.slice(i+1));
+        } catch (ex) {
+            return false;
+        }
+    }
+
+    /**
      * Kürzt eine Zeichenkette auf eine maximale Länge und fügt ein "…"-Zeichen an
      * @param {String} text
      * @param {Number} length maximale Länge

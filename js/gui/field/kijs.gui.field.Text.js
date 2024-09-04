@@ -291,12 +291,35 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
 
     // PROTECTED
-    _applyReplaceRegExps(regExps, value) {
-        if (!kijs.isEmpty(regExps)) {
+    /**
+     * formatFn anwenden
+     * Wird aufgerufen von _formatRules
+     * @param {String} value
+     * @param {Boolean} whileTyping true=Aufruf kommt vom input-Event. false=change oder set value
+     * @returns {String}
+     */
+    _formatApplyFormatFn(value, whileTyping) {
+        if (kijs.isFunction(this._formatFn)) {
+            if (value !== null && value.toString() !== '') {
+                value = this._formatFn.call(this._formatFnContext || this, value, !!whileTyping);
+            }
+        }
+        return value;
+    }
+    
+    /**
+     * formatRegExp anwenden
+     * Wird aufgerufen von _formatRules
+     * @param {String} value
+     * @param {Boolean} whileTyping true=Aufruf kommt vom input-Event. false=change oder set value
+     * @returns {String}
+     */
+    _formatApplyFormatRegExp(value, whileTyping) {
+        if (!kijs.isEmpty(this._formatRegExps)) {
             value = value.toString();
             if (value !== '') {
-                kijs.Array.each(regExps, function(regExp) {
-                    let r = this._stringToRegExp(regExp.regExp);
+                kijs.Array.each(this._formatRegExps, function(regExp) {
+                    let r = kijs.String.toRegExp(regExp.regExp);
 
                     // in Grossbuchstaben umwandeln
                     if (regExp.toUpperCase) {
@@ -338,22 +361,16 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
-     * @param {Boolean} whileTyping Wird während der Eingabe formatiert (input) oder definitiv (change oder set value)
-     * @returns {undefined}
+     * @param {Boolean} whileTyping true=Aufruf kommt vom input-Event. false=change oder set value
+     * @returns {String}
      */
     _formatRules(value, whileTyping) {
         // formatRegExps
-        if (!kijs.isEmpty(this._formatRegExps)) {
-            value = this._applyReplaceRegExps(this._formatRegExps, value);
-        }
+        value = this._formatApplyFormatRegExp(value, whileTyping);
 
         // formatFn
-        if (kijs.isFunction(this._formatFn)) {
-            if (value !== null && value.toString() !== '') {
-                value = this._formatFn.call(this._formatFnContext || this, value, !!whileTyping);
-            }
-        }
-
+        value = this._formatApplyFormatFn(value, whileTyping);
+        
         return value;
     }
 

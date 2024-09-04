@@ -116,7 +116,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     
     // Eigentümmer kijs.gui.Element dieser Instanz
     get ownerEl() { return this._ownerEl; }
-    set ownerEl(val) {
+    set ownerEl(val) { 
         this._ownerEl = val;
     }
     
@@ -341,15 +341,15 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (targetPos && targetOwnerEl && mapping) {
             // kijs-sourceDragOver bei Source entfernen
             kijs.gui.DragDrop.source.ownerEl.dom.clsRemove('kijs-sourceDragOver');
-
+            
             // kijs-targetDragOver beim aktuellen target hinzufügen
             kijs.gui.DragDrop.targetDragOverDom = targetOwnerEl.dom;
-
+            
         // kein gültiges Target
         } else {
             // kijs-sourceDragOver wieder bei Source hinzufügen
             kijs.gui.DragDrop.source.ownerEl.dom.clsAdd('kijs-sourceDragOver');
-
+            
             // kijs-targetDragOver beim letzten target wieder entfernen
             kijs.gui.DragDrop.targetDragOverDom = null;
         }
@@ -383,11 +383,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (mapping && !kijs.isEmpty(mapping.markerHtml)) {
             markerHtml = mapping.markerHtml;
         }
-
+        
         // Marker positionieren
         if (targetEl && !disableMarker) {
             let domName = targetPos === 'child' ? this._ownerDomProperty : 'dom';
-            kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos,
+            kijs.gui.DragDrop.dropMarkerUpdate(targetEl[domName], targetPos, 
                     this._ddMarkerTagName, markerWidth, markerHeight, markerCls, markerHtml);
         // oder ausblenden
         } else {
@@ -515,7 +515,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                 targetPos = 'before';
             }
         }
-
+        
         // Target = Source (nur bei Move) ?
         let isTargetEqualSource = false;
         if (targetPos && operation === 'move') {
@@ -527,13 +527,13 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                 isTargetEqualSource = true;
             }
         }
-
+        
         // Wenn Target = Source: Nichts tun
         if (isTargetEqualSource) {
             targetEl = null;
             targetPos = null;
         }
-
+        
         // wenn gültiges Target oder Target = Source: keine weiteren bubbeling-Listeners mehr ausführen
         if (targetPos || isTargetEqualSource) {
             e.nodeEvent.stopPropagation();
@@ -554,7 +554,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         if (!mapping) {
             return false;
         }
-
+        
         if (kijs.isEmpty(this._targetEl) || kijs.isEmpty(this._targetPos)) {
             return;
         }

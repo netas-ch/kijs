@@ -141,22 +141,22 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     dragEnd() {
         // dropMarker entfernen
         kijs.gui.DragDrop.dropMarkerRemove();
-
+        
         // CSS-Klassen bei Source entfernen und Source einblenden, falls ausgeblendet
         if (this._ownerEl && this._ownerEl.dom) {
             this._ownerEl.dom.clsRemove('kijs-dragging');
             this._ownerEl.dom.clsRemove('kijs-sourceDragOver');
             this._ownerEl.style.display = this._display;
         }
-
+        
         // CSS-Klasse kijs-targetDragOver entfernen
         kijs.gui.DragDrop.targetDragOverDom = null;
-
+        
         // dragEnd-Event bei source auslösen
-        this.raiseEvent('dragEnd', {
+        this.raiseEvent('dragEnd', { 
             source: this
         });
-
+        
         // Aufräumen
         this._width = null;
         this._height = null;
@@ -194,12 +194,12 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
         e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
                 this._allowMove, this._allowCopy, this._allowLink);
-
+        
         // dragStart-Event bei source auslösen
-        this.raiseEvent('dragStart', {
+        this.raiseEvent('dragStart', { 
             source: this
         });
-
+        
         // keine weiteren bubbeling-Listeners mehr ausführen
         e.nodeEvent.stopPropagation();
     }

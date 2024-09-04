@@ -678,9 +678,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Config zuweisen
-        if (this._configMap) {
-            kijs.Object.assignConfig(this, config, this._configMap);
-        }
+        kijs.Object.assignConfig(this, config, this._configMap);
 
         // Evtl. afterResize-Event wieder zulassen
         if (preventEvents) {
