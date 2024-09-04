@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.8.0 (ist noch in Entwicklung)
+Version 2.8.0
 =============
 ### Anpassungen CSS
  - Font Awesome Update auf Version 6.5.2.

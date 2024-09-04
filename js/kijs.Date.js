@@ -107,8 +107,6 @@ kijs.Date = class kijs_Date {
      *  - Datum: Datum wird geklont
      *  - Unix-Zeitstempel (Sekunden)
      *  - SQL-Datums-String "2017-01-01 10:00:00"
-     *  - Deutscher Datums-String "01.04.2017"
-     *  - Deutscher Wochen-String "KW 4 2017"
      *  - Array mit folgenden Werten [Jahr, Monat, Tag, Stunden, Minuten, Sekunden]
      *  @param {String|Date|Number} arg
      * @returns {Date|null}
@@ -127,11 +125,6 @@ kijs.Date = class kijs_Date {
         // SQL-Zeitstempel '2017-01-01' oder '2017-01-01 10:00:00'
         } else if (kijs.isString(arg) && arg.match(/^[0-9]{4}-[0-9]{2}-[0-9]{2}/)) {
             ret = this.getDateFromSqlString(arg);
-
-        // Woche
-        // Beispiel: 'Woche 3 2017', 'W3 17', 'Wo 3 2017'
-        } else if (kijs.isString(arg) && arg.match(/^[^0-9]+[0-9]{1,2}[^0-9]?([0-9]{2,4})?/)) {
-            ret = this.getDateFromWeekString(arg);
 
         // Array
         // Beispiele: [2018, 05, 26, 14, 57, 12] => "2018-05-26 14:57:12"
