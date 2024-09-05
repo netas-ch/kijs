@@ -108,6 +108,14 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    clear() {
+        // cells entfernen
+        kijs.Array.each(this._cells, function(cell) {
+            cell.cell.destruct();
+        }, this);
+        kijs.Array.clear(this._cells);
+    }
+
     // Overwrite
     render(superCall) {
         super.render(true);

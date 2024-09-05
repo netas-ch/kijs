@@ -532,7 +532,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unknown format on config "rpc"`);
         }
     }
     
@@ -799,7 +799,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         // Event Weiterleitungen erstellen, falls noch nicht vorhanden
         kijs.Array.each(names, function(name) {
-            if (this._eventForwards[name]) {
+            if (kijs.isObject(this._eventForwards) && this._eventForwards[name]) {
                 kijs.Array.each(this._eventForwards[name], function(forward) {
                     forward.target.on(forward.targetEventName, this.#onForwardEvent, this);
                 }, this);

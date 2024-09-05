@@ -58,7 +58,7 @@
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -246,6 +246,26 @@
         }
     }
 
+
+    /* ******************
+       * Scrollbar
+       ****************** */
+    ::-webkit-scrollbar {
+        width: var(--scrollbar-size);
+        height: var(--scrollbar-size);
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbar-background-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-hover-color);
+    }
 
 
     /* ******************
@@ -1254,7 +1274,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1279,7 +1299,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1635,7 +1655,7 @@
             font-size: var(--msgbox-fontSize);
             line-height: var(--msgbox-lineHeight);
             color: var(--msgbox-fontColor);
-            
+
             > .kijs-icon {
                 flex: none;
                 font-size: 30px;
@@ -1648,17 +1668,17 @@
                 flex: 1;
                 padding: 10px;
                 overflow: auto;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 > ul {
                     margin: 0 0 0 10px;
                     padding: 0;
@@ -1904,7 +1924,7 @@
                     line-height: var(--default-lineHeight);
                     font-family: var(--default-fontFamily);
                     white-space: nowrap;
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -1991,13 +2011,13 @@
                 font-size: var(--item-fontSize);
                 line-height: var(--item-lineHeight);
                 color: var(--item-fontColor);
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 * {
                     font-family: var(--default-fontFamily);
                     font-size: var(--item-fontSize);
@@ -2114,7 +2134,7 @@
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     > .kijs-icon {
                         flex: none;
                         margin: 0;
@@ -2266,11 +2286,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
         }
 
         > .kijs-progressbar-field {
@@ -2289,7 +2309,7 @@
                 background-color: var(--bar-bkgrndColor);
                 color: var(--bar-fontColor);
                 transition: width 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2305,7 +2325,7 @@
                 color: var(--bar-fontColor);
                 opacity: 0;
                 transition: opacity 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2318,11 +2338,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
             .error {
                 padding: 0;
                 color: red;
@@ -2389,7 +2409,7 @@
                     margin: 1px;
                     border: 1px solid transparent;
                     border-radius: 4px;
-                    
+
                     &:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }
@@ -2426,7 +2446,7 @@
                         margin: 1px;
                         border: 1px solid transparent;
                         border-radius: 4px;
-                        
+
                         &:hover {
                             background-color: var(--item-focus-bkgrndColor);
                         }
@@ -2495,7 +2515,7 @@
                     color: var(--default-fontColor);
                     text-align: right;
                     background-color: var(--panel-bkgrndColor);
-                    
+
                     &.kijs-none {
                         /*display: none;*/
                     }
@@ -2585,7 +2605,7 @@
         flex-direction: column;
         width: calc(var(--default-fontSize) * 11.667); /*140px;*/
         border: 1px solid var(--panel-borderColor);
-        
+
         &.kijs-borderless {
             border: none;
         }
@@ -2746,7 +2766,7 @@
                         > .kijs-caption {
                             margin-top: calc(var(--field-label-paddingTop) - 5px);
                         }
-                        
+
                         &.kijs-smallpaddings {
                             width: calc(var(--icon-fontSize) + 4px);
                             padding-top: 4px;
@@ -2878,7 +2898,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3010,7 +3030,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3058,7 +3078,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3336,7 +3356,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3559,7 +3579,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3642,7 +3662,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3832,9 +3852,11 @@
        * Field QuillEditor
        ****************** */
     div.kijs-field-quilleditor {
+        overflow: visible;
+
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 display: flex;
@@ -3849,10 +3871,30 @@
 
                 > .ql-toolbar {
                     flex: none;
+                    z-index: 1;
+                    overflow: visible;
                     border-top: 1px solid var(--field-borderColor) !important;
                     border-left: 1px solid var(--field-borderColor) !important;
                     border-right: 1px solid var(--field-borderColor) !important;
                     border-bottom: 0 !important;
+
+                    .ql-picker-options {
+                        background-color: var(--panel-bkgrndColor) !important;
+                    }
+
+                    span {
+                        color: var(--button-fontColor) !important;
+                    }
+
+                    svg {
+                        > .ql-stroke:not(.ql-color-label) {
+                            stroke: var(--button-fontColor) !important;
+                        }
+
+                        > .ql-fill:not(.ql-color-label) {
+                            fill: var(--button-fontColor) !important;
+                        }
+                    }
                 }
 
                 > .ql-container {
@@ -3862,6 +3904,7 @@
                     &.ql-snow {
                         overflow: hidden;
                     }
+
                     &.ql-bubble {
                         overflow: visible;
                     }
@@ -3906,7 +3949,7 @@
     }
 
 
-    
+
     /* ******************
        * Grid
        ****************** */
@@ -3957,11 +4000,11 @@
                     color: var(--default-fontColor);
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     &.kijs-hidden {
                         display: none;
                     }
@@ -4001,9 +4044,9 @@
                     /* Textfelder im Grid */
                     &.kijs-celledit {
                         padding: 0;
-                        
+
                         > .kijs-field {
-                            
+
                         }
                     }
 
@@ -4063,7 +4106,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                
+
                                 > span.kijs-sort {
                                     color: #555;
                                     font-family: 'Font Awesome 6 Free';
@@ -4308,7 +4351,7 @@
             }
         }
     }
-    
+
 
 
     /* ******************

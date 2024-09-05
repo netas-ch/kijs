@@ -32,11 +32,11 @@
  *                                              html: 'Hallo Welt'
  *                                          })
  *                                      ]
- * 
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ *
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  *
@@ -118,10 +118,10 @@
  *
  * isEmpty      Boolean (readonly)
  *
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können? 
+ * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *                                        
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können? 
+ *
+ * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
  *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
  *
  *

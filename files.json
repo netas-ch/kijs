@@ -98,7 +98,7 @@
    "js/gui/dataView/element/kijs.gui.dataView.element.ListView.js",
 
    "js/gui/kijs.gui.ListView.js",
-   
+
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",
    "js/gui/kijs.gui.DatePicker.js",

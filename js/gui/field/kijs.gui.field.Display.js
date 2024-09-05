@@ -356,7 +356,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
         return value;
     }
-    
+
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
