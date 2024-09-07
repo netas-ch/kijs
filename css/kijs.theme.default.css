@@ -144,6 +144,12 @@
     /* Icon */
     --icon-fontColor: var(--grey10);
     --icon-disabled-fontColor: var(--grey08);
+
+    /* Scrollbar */
+    --scrollbar-size: 5px;
+    --scrollbar-color: var(--grey05);
+    --scrollbar-background-color: var(--grey04);
+    --scrollbar-hover-color: var(--grey06);
     
     /* Button */
     --button-bkgrndColor: var(--grey03);

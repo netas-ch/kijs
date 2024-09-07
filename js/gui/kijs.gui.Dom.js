@@ -1474,7 +1474,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }, 100, this);
     }
     
-    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
