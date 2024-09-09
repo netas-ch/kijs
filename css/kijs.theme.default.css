@@ -131,6 +131,15 @@
     --default-fontColor: var(--grey11);
     --default-disabled-fontColor: var(--grey08);
 
+
+    /* Scrollbar (nur Chrome) */
+    --scrollbar-width: 5px;
+    --scrollbar-border-radius: 2.5px;
+    --scrollbar-background-color: transparent;
+    --scrollbar-background-hover-color: var(--grey04);
+    --scrollbar-color: var(--grey07);
+    --scrollbar-hover-color: var(--grey08);
+
     
     /* Mask */
     --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
@@ -145,12 +154,6 @@
     --icon-fontColor: var(--grey10);
     --icon-disabled-fontColor: var(--grey08);
 
-    /* Scrollbar (nur Chrome) */
-    --scrollbar-size: 5px;
-    --scrollbar-color: var(--grey05);
-    --scrollbar-background-color: var(--grey04);
-    --scrollbar-hover-color: var(--grey06);
-    
     /* Button */
     --button-bkgrndColor: var(--grey03);
     --button-borderColor: var(--grey05);

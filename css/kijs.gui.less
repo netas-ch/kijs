@@ -187,6 +187,25 @@
     .kijs *, .kijs-viewport, .kijs-viewport *, .kijs-window, .kijs-window * {
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
+        
+        /* Scrollbar im Chrome */
+        ::-webkit-scrollbar {
+            height: var(--scrollbar-width);
+            width: var(--scrollbar-width);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-background-color);
+            &:hover {
+                background: var(--scrollbar-background-hover-color);
+            }
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: var(--scrollbar-border-radius);
+            &:hover {
+                background: var(--scrollbar-hover-color);
+            }
+        }
     }
 
 
@@ -246,26 +265,6 @@
         }
     }
 
-
-    /* ******************
-       * Scrollbar
-       ****************** */
-    ::-webkit-scrollbar {
-        width: var(--scrollbar-size);
-        height: var(--scrollbar-size);
-    }
-
-    ::-webkit-scrollbar-track {
-        background: var(--scrollbar-background-color);
-    }
-
-    ::-webkit-scrollbar-thumb {
-        background: var(--scrollbar-color);
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-        background: var(--scrollbar-hover-color);
-    }
 
 
     /* ******************
@@ -526,6 +525,19 @@
             }
         }
     }
+
+    
+    
+    /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
+
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
+
 
 
 
@@ -4416,17 +4428,6 @@
         to   { left: -100%; }
     }
 
-
-
-    /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
 
