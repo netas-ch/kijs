@@ -212,6 +212,22 @@
     filter: grayscale(100%);
   }
   /* ******************
+       * Scrollbar
+       ****************** */
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--scrollbar-background-color);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover-color);
+  }
+  /* ******************
        * Button
        ****************** */
   button.kijs-button {
@@ -3322,6 +3338,9 @@
   /* ******************
        * Field QuillEditor
        ****************** */
+  div.kijs-field-quilleditor {
+    overflow: visible;
+  }
   div.kijs-field-quilleditor > .kijs-content {
     align-self: stretch;
   }
@@ -3338,10 +3357,24 @@
   }
   div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar {
     flex: none;
+    z-index: 1;
+    overflow: visible;
     border-top: 1px solid var(--field-borderColor) !important;
     border-left: 1px solid var(--field-borderColor) !important;
     border-right: 1px solid var(--field-borderColor) !important;
     border-bottom: 0 !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar .ql-picker-options {
+    background-color: var(--panel-bkgrndColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar span {
+    color: var(--button-fontColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar svg > .ql-stroke:not(.ql-color-label) {
+    stroke: var(--button-fontColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar svg > .ql-fill:not(.ql-color-label) {
+    fill: var(--button-fontColor) !important;
   }
   div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container {
     flex: 1;

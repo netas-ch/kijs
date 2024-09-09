@@ -81,7 +81,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             // leaf = true = keine Kindknoten
             leaf                      : true,
 
-            // Beziechnung des node
+            // Bezeichnung des node
             caption                   : { target: 'html', context: this._treeCaptionDom },
 
             // Pfeil-Icon im Baum
@@ -96,7 +96,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             iconCls                   : { target: 'iconCls', context: this._iconEl },
             iconColor                 : { target: 'iconColor', context: this._iconEl },
 
-            // icon bei offenen Baum
+            // icon bei offenem Baum
             expandedIconMap           : { target: 'iconMap', context: this._expandedIconEl },
             expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl },
             expandedIconCls           : { target: 'iconCls', context: this._expandedIconEl },
@@ -169,7 +169,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { this._iconEl.iconColor = val; }
-    
+
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
@@ -192,7 +192,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._spinnerIconEl.iconSize = val;
     }
 
-    get isRemote() { return !!(this._rpcLoadFn || (this.parent && 
+    get isRemote() { return !!(this._rpcLoadFn || (this.parent &&
                 (this.parent instanceof kijs.gui.Tree) && this.parent.isRemote)); }
 
     get isRoot() { return !this.parent || !(this.parent instanceof kijs.gui.Tree); }
@@ -205,7 +205,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this._rpc) {
             return this._rpc;
         } else if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpc; 
+            return this.parent.rpc;
         } else {
             return kijs.getRpc('default');
         }
@@ -214,7 +214,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (kijs.isString(val)) {
             val = kijs.getRpc(val);
         }
-        
+
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
@@ -253,7 +253,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         return null;
     }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
-    
+
     get rpcSaveFn() {
         if (this._rpcSaveFn) {
             return this._rpcSaveFn;
@@ -284,7 +284,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         elements = this._recursiveSetProperties(elements);
         super.add(elements, index, options);
     }
-    
+
     /**
      * Klappt die Node zu.
      * @returns {undefined}
@@ -351,7 +351,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         return this;
     }
-    
+
     /**
      * Gibt den aktuell Selektierten Node zurück (Sollte vom Root-Node aus aufgerufen werden!)
      * @returns {kijs_gui_Tree|null}
@@ -359,7 +359,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     getSelected() {
         if (this.selected) {
             return this;
-            
+
         } else {
             let selectedNode = null;
 
@@ -378,8 +378,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             return selectedNode;
         }
     }
-    
-    
+
+
     /**
      * Lädt die Daten vom RPC
      * @param {Object|null} args
@@ -413,24 +413,24 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
                     owner: this,
                     data: args,
                     waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
-                    
+
                 }).then((e) => {
                     this.loadSpinner = false;
-                    
+
                     // alle unterelemente entfernen und destructen
                     this.removeAll();
-                    
+
                     if (e.responseData.tree) {
                         this.add(e.responseData.tree);
                     }
                     resolve(e.responseData);
-                    
+
                 }).catch((ex) => {
                     this.loadSpinner = false;
                     this.removeAll();
                     reject(ex);
                 });
-                
+
             } else {
                 resolve(null);
             }
@@ -440,7 +440,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // overwrite
     remove(elements, options={}, superCall) {
         super.remove(elements, options, superCall);
-        
+
         if (this._elements.length === 0) {
             this.collapse();
         }
@@ -497,7 +497,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
         super.unrender(true);
     }
-    
+
 
     // PROTECTED
     /**
@@ -553,7 +553,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
         return elements;
     }
-    
+
     // overwrite
     _renderElements() {
         // Beim Root-Element werden die Nodes
@@ -597,7 +597,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (this.loadSpinner || this.disabled) {
             return;
         }
-        
+
         if (this.expanded) {
             this.collapse();
         } else {
@@ -637,7 +637,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._raiseRootEvent('select');
     }
 
-    
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -659,14 +659,14 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl.destruct();
         this._spinnerIconEl.destruct();
         this._treeCaptionDom.destruct();
-        
+
         // Variablen (Objekte/Arrays) leeren
         this._rpc = null;
         this._rpcLoadArgs = null;
         this._rpcSaveArgs = null;
-        
+
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };

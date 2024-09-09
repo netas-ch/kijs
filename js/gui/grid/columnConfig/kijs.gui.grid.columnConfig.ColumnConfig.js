@@ -21,6 +21,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         this._caption = '';
         this._visible = true;
         this._hideable = true;
+        this._position = null;
         this._resizable = true;
         this._sortable = true;
         this._tooltip = '';
@@ -60,11 +61,12 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             headerCellXtype: true,
             editorXtype: true,
 
-            caption: {target: 'caption' },
+            caption: { target: 'caption' },
             editable: true,
             clicksToEdit: true,
             visible: true,
             hideable: true,
+            position: true,
             resizable: true,
             sortable: true,
             tooltip: true,
@@ -72,10 +74,9 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             displayField: true,
             width: true,
 
-            cellConfig: {target: 'cellConfig' },
-            filterConfig: {target: 'filterConfig' },
-            editorConfig: {target: 'editorConfig' }
-
+            cellConfig: { target: 'cellConfig' },
+            filterConfig: { target: 'filterConfig' },
+            editorConfig: { target: 'editorConfig' }
         };
 
         // Config anwenden
@@ -172,23 +173,16 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     }
 
     get position() {
-        if (this._grid) {
+        if (!kijs.isEmpty(this._position)) {
+            return this._position;
+        } else if (this._grid) {
             return this._grid.columnConfigs.indexOf(this);
         }
         return false;
     }
     set position(val) {
-        if (this._grid) {
-            let curPos = this.position;
-
-            if (!kijs.isInteger(val)) {
-                throw new kijs.Error('invalid position value');
-            }
-
-            if (val !== curPos) {
-                kijs.Array.move(this._grid.columnConfigs, curPos, val);
-                this.raiseEvent('change', {columnConfig: this, position: this.position});
-            }
+        if (val !== this.position) {
+            this.raiseEvent('change', {columnConfig: this, position: this.position});
         }
     }
 
@@ -218,8 +212,10 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         if (!val && !this.hideable) {
             return;
         }
-        this._visible = !!val;
-        this.raiseEvent('change', {columnConfig: this, visible: !!val});
+        if (val !== this._visible) {
+            this._visible = !!val;
+            this.raiseEvent('change', {columnConfig: this, visible: !!val});
+        }
     }
 
     get width() { return this._width; }
