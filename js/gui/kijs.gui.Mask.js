@@ -300,6 +300,28 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.left = this._targetElement[this._targetDomProperty].left;
             this.height = this._targetElement[this._targetDomProperty].height;
             this.width = this._targetElement[this._targetDomProperty].width;
+
+            // Border-Radius vom Target übernehmen
+            
+            // Bereits gerendert: Radius direkt aus CSS nehmen
+            if (this._targetElement.dom && this._targetElement.dom.node) {
+                let style = window.getComputedStyle(this._targetElement.dom.node);
+
+                this._dom.style.borderTopLeftRadius = style.borderTopLeftRadius;
+                this._dom.style.borderTopRightRadius = style.borderTopRightRadius;
+                this._dom.style.borderBottomLeftRadius = style.borderBottomLeftRadius;
+                this._dom.style.borderBottomRightRadius = style.borderBottomRightRadius;
+
+            // noch nicht gerendert: CSS kann noch nicht gelesen werden, deshalb nur
+            // Style lesen.
+            } else {
+                this._dom.style.borderTopLeftRadius = this._targetElement.style.borderTopLeftRadius;
+                this._dom.style.borderTopRightRadius = this._targetElement.style.borderTopRightRadius;
+                this._dom.style.borderBottomLeftRadius = this._targetElement.style.borderBottomLeftRadius;
+                this._dom.style.borderBottomRightRadius = this._targetElement.style.borderBottomRightRadius;
+
+            }
+
         }
     }
 
