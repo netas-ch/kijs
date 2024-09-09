@@ -1487,7 +1487,7 @@
         padding: 0px;
         transition: 0s;
         
-        &::backdrop {
+        &:modal::backdrop {
             background-color: var(--mask-bkgrndColor);
         }
         
@@ -1700,11 +1700,12 @@
        ****************** */
     div.kijs-cornertipcontainer {
         box-sizing: border-box;
-        position: fixed;
         overflow: hidden;
-        right: 0;
-        bottom: 0;
-        z-index: 70000;
+        margin: auto 0 0 auto;
+        padding: 0;
+        border: 0;
+        color: var(--default-fontColor);
+        background-color: transparent;
 
         * {
             box-sizing: border-box;

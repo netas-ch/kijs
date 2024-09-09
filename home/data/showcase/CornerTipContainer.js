@@ -66,9 +66,30 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
                             kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht!', 'error');
                         }
                     }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Innerhalb Modal-Fenster',
+                    on: {
+                        click: () => {
+                            (new kijs.gui.Window({
+                                caption: 'Modales Fenster',
+                                modal: true,
+                                innerStyle: {
+                                    padding: '10px'
+                                },
+                                elements:[{
+                                    xtype: 'kijs.gui.Button',
+                                    caption: 'CornerTipContainer aus modalem Fenster',
+                                    on: {
+                                        click: () => {
+                                            kijs.gui.CornerTipContainer.show('Test', 'Meine Nachricht aus modalem Fenster!', 'info');
+                                        }
+                                    }
+                                }]
+                            })).show();
+                        }
+                    }
                 }
-                
-                
             ]
         });
         

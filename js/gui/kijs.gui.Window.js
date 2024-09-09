@@ -34,7 +34,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren, falls das Virtual Keyboard eingeblendet wird.
 
         //this._modalMaskEl = null;
-        this._modal = false;
+        this._modal = !!document.querySelector('dialog:modal[open]'); // wenn ein modales Fenster offen ist, sollten die Unterfenster auch modal sein;
 
         this._draggable = false;
         this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events

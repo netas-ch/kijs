@@ -317,7 +317,7 @@ home.sc.Window = class home_sc_Window {
         ];
     }
 
-    _openWindow(isModal) {
+    _openWindow(isModal=false) {
         let no = this._wins2.length + 1;
         let win = new kijs.gui.Window({
             caption: 'Mein ' + no + '. Fenster',
@@ -333,6 +333,7 @@ home.sc.Window = class home_sc_Window {
                 {
                     xtype: 'kijs.gui.field.Switch',
                     label: 'modal',
+                    value: !!isModal,
                     on: {
                         change: function(e) {
                             this.upX('kijs.gui.Window').modal = !!e.element.value;
