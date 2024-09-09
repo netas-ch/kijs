@@ -43,6 +43,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-spinbox');
+        this._dom.nodeAttributeSet('popover', 'manual');
 
 
         // Standard-config-Eigenschaften mergen
@@ -284,7 +285,10 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
 
         // SpinBox anzeigen
-        this.renderTo(document.body);
+        this.renderTo(this.targetNode ?? document.body);
+
+        // popover mode
+        this._dom.node.showPopover();
 
         // Workaround um die Breite zu rechnen.
         // Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
@@ -331,6 +335,11 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
+        }
+
+        // hide popover
+        if (this._dom.node) {
+            this._dom.node.hidePopover();
         }
 
         kijs.Dom.removeEventListener('mousedown', document.body, this);

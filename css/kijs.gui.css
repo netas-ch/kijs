@@ -860,6 +860,7 @@
     overflow: hidden;
     z-index: 50101;
     border-radius: 4px;
+    margin: 0;
     padding: 4px;
     color: var(--default-fontColor);
     border: 1px solid var(--panel-borderColor);
@@ -889,6 +890,7 @@
   div.kijs-spinbox {
     box-sizing: border-box;
     position: absolute;
+    margin: 0;
     overflow: hidden;
     z-index: 50100;
     max-width: 100%;
