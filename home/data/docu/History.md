@@ -2,6 +2,33 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.8.1
+=============
+### Anpassungen CSS
+ - Neue CSS-Variablen für Scrollbar-Darstellung in Chrome:  
+    - ```--scrollbar-width: 5px;```
+    - ```--scrollbar-border-radius: 2.5px;```
+    - ```--scrollbar-background-color: transparent;```
+    - ```--scrollbar-background-hover-color: var(--grey04);```
+    - ```--scrollbar-color: var(--grey07);```
+    - ```--scrollbar-hover-color: var(--grey08);```
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
+in kijs.theme.default.css.
+
+
+### Verschiedene Bugfixes bei modalen Elementen
+ - kijs.gui.CornerTipContainer
+ - kijs.gui.Mask
+ - kijs.gui.SpinBox
+ - kijs.gui.Tooltip
+ - kijs.gui.Window
+
+**ACHTUNG: Sobald ein Modales kijs.gui.Window geöffnet wird, können neu nur noch 
+modale Fenster geöffnet werden. Bisher war das nicht so.**  
+
+
+
 Version 2.8.0
 =============
 ### Anpassungen CSS

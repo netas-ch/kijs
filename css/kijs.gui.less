@@ -187,6 +187,25 @@
     .kijs *, .kijs-viewport, .kijs-viewport *, .kijs-window, .kijs-window * {
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
+        
+        /* Scrollbar im Chrome */
+        ::-webkit-scrollbar {
+            height: var(--scrollbar-width);
+            width: var(--scrollbar-width);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-background-color);
+            &:hover {
+                background: var(--scrollbar-background-hover-color);
+            }
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: var(--scrollbar-border-radius);
+            &:hover {
+                background: var(--scrollbar-hover-color);
+            }
+        }
     }
 
 
@@ -526,6 +545,19 @@
             }
         }
     }
+
+    
+    
+    /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
+
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
+
 
 
 
@@ -956,6 +988,7 @@
         overflow: hidden;
         z-index: 50101;
         border-radius: 4px;
+        margin: 0;
         padding: 4px;
         color: var(--default-fontColor);
         border: 1px solid var(--panel-borderColor);
@@ -991,6 +1024,7 @@
     div.kijs-spinbox {
         box-sizing: border-box;
         position: absolute;
+        margin: 0;
         overflow: hidden;
         z-index: 50100;
         max-width: 100%;
@@ -1485,7 +1519,7 @@
         padding: 0px;
         transition: 0s;
         
-        &::backdrop {
+        &:modal::backdrop {
             background-color: var(--mask-bkgrndColor);
         }
         
@@ -1698,11 +1732,12 @@
        ****************** */
     div.kijs-cornertipcontainer {
         box-sizing: border-box;
-        position: fixed;
         overflow: hidden;
-        right: 0;
-        bottom: 0;
-        z-index: 70000;
+        margin: auto 0 0 auto;
+        padding: 0;
+        border: 0;
+        color: var(--default-fontColor);
+        background-color: transparent;
 
         * {
             box-sizing: border-box;
@@ -4413,17 +4448,6 @@
         to   { left: -100%; }
     }
 
-
-
-    /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
 

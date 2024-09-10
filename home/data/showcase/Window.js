@@ -10,7 +10,7 @@ home.sc.Window = class home_sc_Window {
         this._app = config.app;
         this._content = null;
         this._win1 = null;
-        this._win2 = null;
+        this._wins2 = [];
     }
     
     
@@ -48,7 +48,7 @@ home.sc.Window = class home_sc_Window {
     
     run() {
         this._win1 = new kijs.gui.Window({
-            caption: 'Mein Fenster',
+            caption: 'Fenster mit Maske',
             iconCls: 'icoWizard16',
             //modal: true,
             width: 450,
@@ -114,21 +114,36 @@ home.sc.Window = class home_sc_Window {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'remove WaitMask',
-                    badgeText: '2',
-                    on: {
-                        click: function() {
-                            this.upX('kijs.gui.Window').downX('kijs.gui.Container').waitMaskRemove();
+                    caption: 'WaitMask',
+                    badgeText: 1,
+                    menuElements: [
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'add',
+                            iconMap: 'kijs.iconMap.Fa.circle-plus',
+                                on: {
+                                click: function() {
+                                    this.upX('kijs.gui.Window').downX('kijs.gui.Container').waitMaskAdd();
+                                    this.upX('kijs.gui.Button').badgeText += 1;
+                                }
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'remove',
+                            iconMap: 'kijs.iconMap.Fa.circle-minus',
+                            on: {
+                                click: function() {
+                                    this.upX('kijs.gui.Window').downX('kijs.gui.Container').waitMaskRemove();
+                                    let count = this.upX('kijs.gui.Button').badgeText;
+                                    count -= 1;
+                                    if (count < 0) {
+                                        count = 0;
+                                    }
+                                    this.upX('kijs.gui.Button').badgeText = count;
+                                }
+                            }
                         }
-                    }
-                },{
-                    xtype: 'kijs.gui.Button',
-                    caption: 'add WaitMask',
-                    on: {
-                        click: function() {
-                            this.upX('kijs.gui.Window').downX('kijs.gui.Container').waitMaskAdd();
-                        }
-                    }
+                    ]
                 }
             ],
 
@@ -259,28 +274,7 @@ home.sc.Window = class home_sc_Window {
         });
         this._win1.show();
         
-        
-        this._win2 = new kijs.gui.Window({
-            caption: 'Mein 2. Fenster',
-            headerElements:[
-                {
-                    xtype: 'kijs.gui.field.Switch',
-                    label: 'modal',
-                    on: {
-                        change: function(e) {
-                            this._win2.modal = !!e.element.value;
-                        },
-                        context: this
-                    }
-                }
-            ],
-            html: 'Gugus',
-            //target: testCont,
-            //modal: true,
-            width: 400,
-            height: 300
-        });
-        this._win2.show();
+        this._openWindow();
     }
 
 
@@ -295,8 +289,11 @@ home.sc.Window = class home_sc_Window {
                         if (this._win1) {
                             this._win1.disabled = !!e.element.value;
                         }
-                        if (this._win2) {
-                            this._win2.disabled = !!e.element.value;
+
+                        if (!kijs.isEmpty(this._wins2)) {
+                            kijs.Array.each(this._wins2, (win)=>{
+                                win.disabled = !!e.element.value;
+                            }, this);
                         }
                     },
                     context: this
@@ -320,6 +317,64 @@ home.sc.Window = class home_sc_Window {
         ];
     }
 
+    _openWindow(isModal=false) {
+        let no = this._wins2.length + 1;
+        let win = new kijs.gui.Window({
+            caption: 'Mein ' + no + '. Fenster',
+            modal: !!isModal,
+            width: 400,
+            height: 300,
+            cls: 'kijs-flexform',
+            innerStyle: { 
+                padding: '10px'/*,
+                gap: '10px'*/
+            },
+            headerElements:[
+                {
+                    xtype: 'kijs.gui.field.Switch',
+                    label: 'modal',
+                    value: !!isModal,
+                    on: {
+                        change: function(e) {
+                            this.upX('kijs.gui.Window').modal = !!e.element.value;
+                        }
+                    }
+                }
+            ],
+            elements:[
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Weiteres Fenster normal öffnen',
+                    tooltip: 'Weiteres Fenster normal öffnen',
+                    on: {
+                        click: function(e) {
+                            this._openWindow(false);
+                        },
+                        context: this
+                    }
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Weiteres Fenster modal öffnen',
+                    tooltip: 'Weiteres Fenster modal öffnen',
+                    on: {
+                        click: function(e) {
+                            this._openWindow(true);
+                        },
+                        context: this
+                    }
+                }
+            ],
+            on: {
+                destruct: function(e) {
+                    kijs.Array.remove(this._wins2, e.raiseElement);
+                },
+                context: this
+            }
+        });
+        this._wins2.push(win);
+        win.show();
+    }
+
 
 
     // --------------------------------------------------------------
@@ -330,12 +385,14 @@ home.sc.Window = class home_sc_Window {
             this._win1.destruct();
         }
         
-        if (this._win2) {
-            this._win2.destruct();
+        if (!kijs.isEmpty(this._wins2)) {
+            kijs.Array.each(this._wins2, (win)=>{
+                win.destruct();
+            }, this);
         }
         
         this._win1 = null;
-        this._win2 = null;
+        this._wins2 = null;
         this._content = null;
     }
     

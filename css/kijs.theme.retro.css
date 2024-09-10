@@ -83,6 +83,13 @@
   --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif;
   --default-fontColor: var(--grey11);
   --default-disabled-fontColor: var(--grey08);
+  /* Scrollbar (nur Chrome) */
+  --scrollbar-width: 12px;
+  --scrollbar-border-radius: 0;
+  --scrollbar-background-color: var(--grey04);
+  --scrollbar-background-hover-color: var(--grey04);
+  --scrollbar-color: var(--grey06);
+  --scrollbar-hover-color: var(--grey07);
   /* Mask */
   --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
   --mask-fontColor: #fff;

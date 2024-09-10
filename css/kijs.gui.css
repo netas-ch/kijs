@@ -167,6 +167,44 @@
     box-sizing: border-box;
     z-index: 0;
     /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
+    /* Scrollbar im Chrome */
+  }
+  .kijs * ::-webkit-scrollbar,
+  .kijs-viewport ::-webkit-scrollbar,
+  .kijs-viewport * ::-webkit-scrollbar,
+  .kijs-window ::-webkit-scrollbar,
+  .kijs-window * ::-webkit-scrollbar {
+    height: var(--scrollbar-width);
+    width: var(--scrollbar-width);
+  }
+  .kijs * ::-webkit-scrollbar-track,
+  .kijs-viewport ::-webkit-scrollbar-track,
+  .kijs-viewport * ::-webkit-scrollbar-track,
+  .kijs-window ::-webkit-scrollbar-track,
+  .kijs-window * ::-webkit-scrollbar-track {
+    background: var(--scrollbar-background-color);
+  }
+  .kijs * ::-webkit-scrollbar-track:hover,
+  .kijs-viewport ::-webkit-scrollbar-track:hover,
+  .kijs-viewport * ::-webkit-scrollbar-track:hover,
+  .kijs-window ::-webkit-scrollbar-track:hover,
+  .kijs-window * ::-webkit-scrollbar-track:hover {
+    background: var(--scrollbar-background-hover-color);
+  }
+  .kijs * ::-webkit-scrollbar-thumb,
+  .kijs-viewport ::-webkit-scrollbar-thumb,
+  .kijs-viewport * ::-webkit-scrollbar-thumb,
+  .kijs-window ::-webkit-scrollbar-thumb,
+  .kijs-window * ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-color);
+    border-radius: var(--scrollbar-border-radius);
+  }
+  .kijs * ::-webkit-scrollbar-thumb:hover,
+  .kijs-viewport ::-webkit-scrollbar-thumb:hover,
+  .kijs-viewport * ::-webkit-scrollbar-thumb:hover,
+  .kijs-window ::-webkit-scrollbar-thumb:hover,
+  .kijs-window * ::-webkit-scrollbar-thumb:hover {
+    background: var(--scrollbar-hover-color);
   }
   /* ******************
        * Separator
@@ -423,6 +461,26 @@
   }
   div.kijs-container-fieldset.kijs-collapse-top > .kijs-container-inner {
     display: none;
+  }
+  /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+  .kijs-scrollable-x-enable,
+  div.kijs-scrollable-x-enable {
+    overflow-x: scroll;
+  }
+  .kijs-scrollable-x-auto,
+  div.kijs-scrollable-x-auto {
+    overflow-x: auto;
+  }
+  .kijs-scrollable-y-enable,
+  div.kijs-scrollable-y-enable {
+    overflow-y: scroll;
+  }
+  .kijs-scrollable-y-auto,
+  div.kijs-scrollable-y-auto {
+    overflow-y: auto;
   }
   /* ******************
        * Container Scrollable
@@ -860,6 +918,7 @@
     overflow: hidden;
     z-index: 50101;
     border-radius: 4px;
+    margin: 0;
     padding: 4px;
     color: var(--default-fontColor);
     border: 1px solid var(--panel-borderColor);
@@ -889,6 +948,7 @@
   div.kijs-spinbox {
     box-sizing: border-box;
     position: absolute;
+    margin: 0;
     overflow: hidden;
     z-index: 50100;
     max-width: 100%;
@@ -1367,7 +1427,7 @@
     /* Workaround: entfernt den Rahmen vom aktiven Dialog */
     /* Buttons im Fuss eines Fensters sind blau */
   }
-  dialog.kijs-window::backdrop {
+  dialog.kijs-window:modal::backdrop {
     background-color: var(--mask-bkgrndColor);
   }
   dialog.kijs-window * {
@@ -1542,11 +1602,12 @@
        ****************** */
   div.kijs-cornertipcontainer {
     box-sizing: border-box;
-    position: fixed;
     overflow: hidden;
-    right: 0;
-    bottom: 0;
-    z-index: 70000;
+    margin: auto 0 0 auto;
+    padding: 0;
+    border: 0;
+    color: var(--default-fontColor);
+    background-color: transparent;
   }
   div.kijs-cornertipcontainer * {
     box-sizing: border-box;
@@ -3302,6 +3363,9 @@
   /* ******************
        * Field QuillEditor
        ****************** */
+  div.kijs-field-quilleditor {
+    overflow: visible;
+  }
   div.kijs-field-quilleditor > .kijs-content {
     align-self: stretch;
   }
@@ -3318,10 +3382,24 @@
   }
   div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar {
     flex: none;
+    z-index: 1;
+    overflow: visible;
     border-top: 1px solid var(--field-borderColor) !important;
     border-left: 1px solid var(--field-borderColor) !important;
     border-right: 1px solid var(--field-borderColor) !important;
     border-bottom: 0 !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar .ql-picker-options {
+    background-color: var(--panel-bkgrndColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar span {
+    color: var(--button-fontColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar svg > .ql-stroke:not(.ql-color-label) {
+    stroke: var(--button-fontColor) !important;
+  }
+  div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-toolbar svg > .ql-fill:not(.ql-color-label) {
+    fill: var(--button-fontColor) !important;
   }
   div.kijs-field-quilleditor > .kijs-content > .kijs-inputwrapper > .ql-container {
     flex: 1;
@@ -3787,26 +3865,6 @@
     to {
       left: -100%;
     }
-  }
-  /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-  /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-  .kijs-scrollable-x-enable,
-  div.kijs-scrollable-x-enable {
-    overflow-x: scroll;
-  }
-  .kijs-scrollable-x-auto,
-  div.kijs-scrollable-x-auto {
-    overflow-x: auto;
-  }
-  .kijs-scrollable-y-enable,
-  div.kijs-scrollable-y-enable {
-    overflow-y: scroll;
-  }
-  .kijs-scrollable-y-auto,
-  div.kijs-scrollable-y-auto {
-    overflow-y: auto;
   }
   /* ******************
        * Ergänzungen für kijs.gui.Container (+ vererbte)

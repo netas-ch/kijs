@@ -55,7 +55,7 @@ home.sc.Mask = class home_sc_Mask {
                             height: 50,
                             style: { 
                                 flex: 1,
-                                border:'1px solid #f00',
+                                border:'4px solid #f00',
                                 textAlign: 'center'
                             }
                         },{
@@ -76,6 +76,7 @@ home.sc.Mask = class home_sc_Mask {
                             height: 50,
                             style: { 
                                 flex: 1,
+                                borderRadius: '20px',
                                 border:'1px solid #00f',
                                 textAlign: 'center'
                             }
