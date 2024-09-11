@@ -202,8 +202,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._targetElement = null;
 
         } else {
-            throw new kijs.Error(`kijs.gui.Mask: Unkown format on config "target"`);
-
+            throw new kijs.Error(`kijs.gui.Mask: Unknown format on config "target"`);
         }
     }
 
@@ -337,7 +336,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Maskierung positionieren
         this._updateMaskPosition();
 
-        // Sichbarkeit ändern
+        // Sichtbarkeit ändern
         this.visible = e.visible;
     }
 
