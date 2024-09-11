@@ -304,8 +304,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             // Border-Radius vom Target übernehmen
             
             // Bereits gerendert: Radius direkt aus CSS nehmen
-            if (this._targetElement.dom && this._targetElement.dom.node) {
-                let style = window.getComputedStyle(this._targetElement.dom.node);
+            if (this._targetElement[this._targetDomProperty] && this._targetElement[this._targetDomProperty].node) {
+                const style = window.getComputedStyle(this._targetElement[this._targetDomProperty].node);
 
                 this._dom.style.borderTopLeftRadius = style.borderTopLeftRadius;
                 this._dom.style.borderTopRightRadius = style.borderTopRightRadius;
