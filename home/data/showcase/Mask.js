@@ -152,6 +152,7 @@ home.sc.Mask = class home_sc_Mask {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
                             displayWaitMask: true,
+                            maximizable: true,
                             height: 100,
                             width: 200,
                             style: { margin: '10px' },
@@ -160,6 +161,7 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            maximizable: true,
                             waitMaskTargetDomProperty: 'innerDom',
                             displayWaitMask: true,
                             height: 100,
@@ -185,6 +187,7 @@ home.sc.Mask = class home_sc_Mask {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
                             height: 100,
+                            maximizable: true,
                             width: 200,
                             style: { margin: '10px' },
                             innerStyle: { padding: '10px' },
@@ -243,6 +246,28 @@ home.sc.Mask = class home_sc_Mask {
                             }
                         }
                     ]
+                },
+
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Grösse ändern',
+                    height: 30,
+                    style: { margin: '10px' },
+                    on: {
+                        click: function(e) {
+                            this.height = this.height === 30 ? 200 : 30;
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Panel',
+                    displayWaitMask: true,
+                    maximizable: true,
+                    height: 100,
+                    width: 200,
+                    style: { margin: '10px' },
+                    innerStyle: { padding: '10px' },
+                    html: 'Bitte Grösse ändern. Die Maske auf dem folgenden Panel sollte sich verschieben.'
                 }
             ]
         });
