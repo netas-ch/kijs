@@ -201,7 +201,7 @@ kijs.Navigator = class kijs_Navigator {
                 bi.osVersion = os[1];
             }
         }
-        
+
         // Speichern für schnellerer Zugriff
         if (userAgent === null) {
             kijs.Navigator._bi = bi;

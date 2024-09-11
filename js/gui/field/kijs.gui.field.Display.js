@@ -356,7 +356,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
         return value;
     }
-    
+
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value
@@ -385,7 +385,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         // URLs, beginnend mit 'http://', 'https://' oder 'ftp://'
         pattern = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
         txt = txt.replace(pattern, '<a href="$1" target="_blank" tabindex="-1">$1</a>');
-        
+
         // URLs beginnend mit 'www.' Vorher darf kein '/' sein
         pattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
         txt = txt.replace(pattern, '$1<a href="http://$2" target="_blank" tabindex="-1">$2</a>');

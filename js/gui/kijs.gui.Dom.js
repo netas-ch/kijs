@@ -1413,7 +1413,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             // kijs-Event auslösen
             e.dom = this;
             e.eventName = eventName;
-            
+
             if (this.raiseEvent(eventName, e) === false) {
                 ret = false;
             }
@@ -1475,7 +1475,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
 
-    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

@@ -201,7 +201,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this.on('scrollEnd', this.#onScrollEnd, this);
         this.on('touchEnd', this.#onTouchEnd, this);
         this.on('touchMove', this.#onTouchMove, this);
-        this.on('touchStart', this.#onTouchStart, this);                                           
+        this.on('touchStart', this.#onTouchStart, this);
         this.on('wheel', this.#onWheel, this);
 
         // Config anwenden

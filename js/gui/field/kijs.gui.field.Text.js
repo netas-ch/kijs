@@ -320,7 +320,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             if (value !== '') {
                 kijs.Array.each(this._formatRegExps, function(regExp) {
                     let r = kijs.String.toRegExp(regExp.regExp);
-                    
+
                     // in Grossbuchstaben umwandeln
                     if (regExp.toUpperCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
@@ -357,7 +357,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }
         return value;
     }
-    
+
     /**
      * Diese Funktion ist zum Überschreiben gedacht
      * @param {String} value

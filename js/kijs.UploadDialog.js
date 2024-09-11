@@ -289,7 +289,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         return match;
     }
-    
+
     /**
      * Prüft, ob die übergebene MIME-Grösse der maximal erlaubten Grösse entspricht
      * @param {String} mime
@@ -321,7 +321,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         return filename;
     }
-    
+
     /**
      * Schneidet den Dateinamen vom Pfad ab,
      * gibt das Verzeichnis zurück.
@@ -335,7 +335,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }
         return '';
     }
-    
+
     _uploadFile(file) {
         let uploadId = this._uploadId++,
             headers = {},
@@ -346,7 +346,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         // event
         this.raiseEvent('fileSelected', this, filename, filedir, filetype, file);
 
-        // Upload 
+        // Upload
         if (this._ajaxUrl) {
             headers[this._filenameHeader] = encodeURIComponent(filename);
             headers[this._pathnameHeader] = encodeURIComponent(filedir);
@@ -368,7 +368,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
         }
     }
-    
+
     _uploadFiles(fileList) {
         this._uploadResponses = {};
         if (fileList) {
@@ -419,7 +419,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             this.raiseEvent('endUpload', this, this._uploadResponses);   // TODO: Events sollten nur ein Argument (e) haben!
         }
     }
-    
+
     #onFilePaste(e) {
         if (this.disabled || !this._observePaste || !kijs.isArray(this._dropZones)) {
             return;

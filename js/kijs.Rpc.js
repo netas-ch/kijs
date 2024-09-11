@@ -176,7 +176,7 @@ kijs.Rpc = class kijs_Rpc {
         } else {
             this._deferId = kijs.defer(this._transmit, this.defer, this);
         }
-        
+
         return ret;
     }
 
