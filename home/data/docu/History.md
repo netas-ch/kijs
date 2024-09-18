@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.8.x
+Version 2.8.2
 =============
 ### kijs.gui.Mask
 Masken werden neu, wenn sie nicht den ganzen Body abdecken anders erstellt:
