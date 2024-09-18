@@ -1005,6 +1005,7 @@
         box-sizing: border-box;
         position: absolute;
         margin: 0;
+        padding: 0;
         overflow: hidden;
         z-index: 50100;
         max-width: 100%;
@@ -1254,6 +1255,7 @@
         flex-direction: column;
         overflow: hidden;
         border: 1px solid var(--panel-borderColor);
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
 
@@ -1491,6 +1493,7 @@
         box-sizing: border-box;
         position: absolute;
         margin: 0; /* Wichtig */
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         overflow: hidden;
         max-width: 100%;
         max-height: 100%;
@@ -1558,6 +1561,19 @@
     /* ******************
        * Mask
        ****************** */
+    div.kijs-mask-anchor {
+        position: relative !important;
+        flex: none !important;
+        overflow: visible !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        z-index: 60000 !important;
+    }
+    
     div.kijs-mask {
         position: absolute;
         top: 0;

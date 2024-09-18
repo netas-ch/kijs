@@ -2,6 +2,15 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.8.x
+=============
+### kijs.gui.Mask
+Masken werden neu, wenn sie nicht den ganzen Body abdecken anders erstellt:
+ - Innerhalb des Targets (als First Child) wird ein 1px x 1px anchor-Div erstellt
+ - In dieses Div wird dann die Maske gerendert.
+
+
+
 Version 2.8.1
 =============
 ### Anpassungen CSS

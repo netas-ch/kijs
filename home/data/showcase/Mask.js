@@ -51,7 +51,8 @@ home.sc.Mask = class home_sc_Mask {
                         {
                             xtype: 'kijs.gui.Element',
                             name: 'elRed',
-                            html: 'maskCount: 0',
+                            html: 'rot',
+                            tooltip: 'maskCount: 0',
                             height: 50,
                             style: { 
                                 flex: 1,
@@ -61,7 +62,8 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elGreen',
-                            html: 'maskCount: 1',
+                            html: 'grün',
+                            tooltip: 'maskCount: 1',
                             height: 50,
                             displayWaitMask: true,
                             style: { 
@@ -72,7 +74,8 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elBlue',
-                            html: 'maskCount: 0',
+                            html: 'blau',
+                            tooltip: 'maskCount: 0',
                             height: 50,
                             style: { 
                                 flex: 1,
@@ -118,7 +121,7 @@ home.sc.Mask = class home_sc_Mask {
                                 click: function(e) {
                                     const targetEl = this._content.down(this._content.down('targetElName').value);
                                     targetEl.waitMaskAdd();
-                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                    targetEl.tooltip = 'maskCount: ' + targetEl._waitMaskCount;
                                 },
                                 context: this
                             }
@@ -130,7 +133,7 @@ home.sc.Mask = class home_sc_Mask {
                                 click: function(e) {
                                     const targetEl = this._content.down(this._content.down('targetElName').value);
                                     targetEl.waitMaskRemove();
-                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                    targetEl.tooltip = 'maskCount: ' + targetEl._waitMaskCount;
                                 },
                                 context: this
                             }
@@ -255,7 +258,7 @@ home.sc.Mask = class home_sc_Mask {
                     style: { margin: '10px' },
                     on: {
                         click: function(e) {
-                            this.height = this.height === 30 ? 200 : 30;
+                            this.height = this.height === 30 ? 100 : 30;
                         }
                     }
                 },{

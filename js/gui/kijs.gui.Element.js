@@ -373,6 +373,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 this._waitMaskCount = 1;
 
                 this._waitMaskEl.show();
+            } else {
+                this._waitMaskEl.show();
             }
         } else {
             if (!kijs.isEmpty(this._waitMaskEl)) {
@@ -403,8 +405,13 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
-    get html() { return this._dom.html; }
-    set html(val) { this._dom.html = val; }
+    get html() { 
+        return this._dom.html;
+    }
+    set html(val) {
+        this._dom.html = val;
+        this._raiseAfterResizeEvent(true);
+    }
 
     get htmlDisplayType() { return this._dom.htmlDisplayType; }
     set htmlDisplayType(val) { this._dom.htmlDisplayType = val; }
@@ -942,6 +949,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
         if (!this._waitMaskEl) {
             this.displayWaitMask = true;
+        } else {
+            this._waitMaskEl.show();
         }
 
         return this._waitMaskEl;
