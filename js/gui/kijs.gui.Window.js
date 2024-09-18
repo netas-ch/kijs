@@ -32,6 +32,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._dragInitialPos = null;      // intern
 
         this._moveWhenVirtualKeyboard = false; // Fenster neu zentrieren, falls das Virtual Keyboard eingeblendet wird.
+        this._allowDragOutside = true; // Darf das Fenster ausserhalb des sichtbaren Bereichs gezogen werden?
 
         //this._modalMaskEl = null;
         this._modal = !!document.querySelector('dialog:modal[open]'); // wenn ein modales Fenster offen ist, sollten die Unterfenster auch modal sein;
@@ -59,10 +60,12 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             draggable: { target: 'draggable' },
+            allowDragOutside: true,         // Darf das Fenster ausserhalb des sichtbaren Bereichs gezogen werden?
             modal: { target: 'modal' },     // Soll das Fenster modal geöffnet werden (alles Andere wird mit einer halbtransparenten Maske verdeckt)?
             resizeDelay: true,
             target: { target: 'target' },
             targetDomProperty: true,
+
             moveWhenVirtualKeyboard: true
         });
 
@@ -88,6 +91,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get allowDragOutside() { return this._allowDragOutside; }
+    set allowDragOutside(val) {
+        this._allowDragOutside = val;
+    }
+
     get draggable() { return this._draggable; }
     set draggable(val) {
         if (val && !this._draggable) {
@@ -434,18 +442,41 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
-        if (x < targetNode.offsetLeft) {
-            x = targetNode.offsetLeft;
-        }
-        if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
-            x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
-        }
 
-        if (y < targetNode.offsetTop) {
-            y = targetNode.offsetTop;
-        }
-        if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
-            y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+        // Das Fenster darf auch ausserhalb des Target sein
+        if (this._allowDragOutside) {
+            // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
+            if (x < targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20) {
+                x = targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20;
+            }
+            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            // Min. die HeaderBar muss sichtbr sein
+            if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
+            }
+
+        } else {
+            if (x < targetNode.offsetLeft) {
+                x = targetNode.offsetLeft;
+            }
+            if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+            }
+
         }
 
         // Grösse zuweisen
@@ -489,28 +520,43 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         let x = this._dragInitialPos.windowX + (e.nodeEvent.clientX - this._dragInitialPos.mouseX);
         let y = this._dragInitialPos.windowY + (e.nodeEvent.clientY - this._dragInitialPos.mouseY);
 
-        // Min-Position begrenzen
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
-        if (x < targetNode.offsetLeft) {
-            x = targetNode.offsetLeft;
-        }
-        if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
-            x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
-        }
 
-        if (y < targetNode.offsetTop) {
-            y = targetNode.offsetTop;
-        }
-        if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
-            y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+        // Das Fenster darf auch ausserhalb des Target sein
+        if (this._allowDragOutside) {
+            // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
+            if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
+                x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
+            }
+            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            // Min. die HeaderBar muss sichtbr sein
+            if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
+            }
+
+        } else {
+            if (x < targetNode.offsetLeft) {
+                x = targetNode.offsetLeft;
+            }
+            if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+            }
+
         }
 
         // Grösse zuweisen

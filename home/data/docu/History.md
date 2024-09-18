@@ -9,6 +9,14 @@ Masken werden neu, wenn sie nicht den ganzen Body abdecken anders erstellt:
  - Innerhalb des Targets (als First Child) wird ein 1px x 1px anchor-Div erstellt
  - In dieses Div wird dann die Maske gerendert.
 
+### kijs.gui.Window
+Neue config/getter/setter: ```allowDragOutside```. (Boolean)  
+Gibt an, ob ein Fenster per Drag&Drop auch ausserhalb seines Targets sein darf.  
+Ein Teil der Headerbar bleibt jedoch immer sichtbar, damit das Fenter wieder 
+zurückgezogen werden kann.  
+Bisher konnten Fenster nicht ausserhalb des Targets sein.  
+Standard: ```true```  
+
 
 
 Version 2.8.1
