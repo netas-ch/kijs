@@ -525,7 +525,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
 
         } else {
-            throw new kijs.Error(`Unkown tooltip format`);
+            throw new kijs.Error(`Unknown tooltip format`);
 
         }
 

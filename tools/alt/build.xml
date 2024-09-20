@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+Zum minimieren in Konsole zu Verzeichnis tools/ wechseln und folgendes eingeben:
+php minifyer.php
+php phing-latest.phar build
+
+Nun Dateien von tools/build zu gewünschtem Projekt verschieben.
+-->
+
+<project name="kijs" default="build">
+
+    <!-- ============================================  -->
+    <!-- Target: prepare                               -->
+    <!-- ============================================  -->
+    <target name="prepare">
+        <mkdir dir="./build" />
+        <echo msg="Copying files to build directory..." />
+    </target>
+
+
+    <!-- ============================================  -->
+    <!-- (DEFAULT)  Target: build                      -->
+    <!-- ============================================  -->
+    <target name="build" depends="prepare">
+
+        <!-- css -->
+        <copy file="./../css/kijs.gui.css" todir="./build/css" />
+
+        <!--fonts-->
+        <copy todir="./build/fonts">
+            <fileset dir="./../fonts">
+                <include name="**" />
+            </fileset>
+        </copy>
+
+        <!-- js -->
+        <copy file="./../tools/kijs-min.js" todir="./build/js" />
+        <copy file="./../tools/kijs-debug.js" todir="./build/js" />
+
+        <!-- lib -->
+        <copy todir="./build/lib" >
+            <fileset dir="./../lib">
+                <exclude name="jsmin/**"/>
+                <exclude name="lessphp/**"/>
+                <exclude name="ace/snippets/**"/>
+            </fileset>
+        </copy>
+
+        <echo msg="Fertig" />
+
+    </target>
+
+</project>

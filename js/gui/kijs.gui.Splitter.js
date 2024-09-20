@@ -69,7 +69,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
     set target(val) {
         if (!val instanceof kijs.gui.Element) {
-            throw new kijs.Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unknown format on config "target"`);
         }
         this._targetEl = val;
     }

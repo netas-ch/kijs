@@ -200,7 +200,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
 
         } else {
-            throw new kijs.Error(`Unkown format on config "closeButton"`);
+            throw new kijs.Error(`Unknown format on config "closeButton"`);
         }
 
         if (this.isRendered) {
@@ -237,7 +237,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
 
         } else {
-            throw new kijs.Error(`Unkown format on config "collapseButton"`);
+            throw new kijs.Error(`Unknown format on config "collapseButton"`);
         }
 
         if (this.isRendered) {
@@ -290,7 +290,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             if (kijs.Array.contains(validePos, val)) {
                 this._collapsible = val;
             } else {
-                throw new kijs.Error(`Unkown pos on config "collapsible"`);
+                throw new kijs.Error(`Unknown pos on config "collapsible"`);
             }
         }
 
@@ -396,7 +396,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
 
         } else {
-            throw new kijs.Error(`Unkown format on config "maximizeButton"`);
+            throw new kijs.Error(`Unknown format on config "maximizeButton"`);
         }
 
         if (this.isRendered) {

@@ -269,7 +269,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unknown format on config "rpc"`);
         }
     }
 
@@ -861,7 +861,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     let ok = false;
                     kijs.Array.each(filterFields, function(filterField) {
                         if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new kijs.Error(`Unkown filter format.`);
+                            throw new kijs.Error(`Unknown filter format.`);
                         }
 
                         if (filterField.value === dataRow[filterField.field]) {

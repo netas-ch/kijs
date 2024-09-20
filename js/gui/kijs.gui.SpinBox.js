@@ -106,7 +106,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._ownPos = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "pos"`);
+            throw new kijs.Error(`Unknown format on config "pos"`);
         }
     }
     
@@ -169,7 +169,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl = null;
 
         } else {
-            throw new kijs.Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unknown format on config "target"`);
 
         }
     }
@@ -191,7 +191,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._targetPos = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "targetPos"`);
+            throw new kijs.Error(`Unknown format on config "targetPos"`);
         }
     }
 

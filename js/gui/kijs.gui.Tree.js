@@ -218,7 +218,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unknown format on config "rpc"`);
         }
     }
 

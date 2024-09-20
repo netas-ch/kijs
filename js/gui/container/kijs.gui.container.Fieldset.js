@@ -112,7 +112,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
 
         } else {
-            throw new kijs.Error(`Unkown format on config "collapseButton"`);
+            throw new kijs.Error(`Unknown format on config "collapseButton"`);
         }
 
         if (this.isRendered) {

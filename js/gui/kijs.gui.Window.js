@@ -170,8 +170,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
 
         } else {
-            throw new kijs.Error(`Unkown format on config "target"`);
-
+            throw new kijs.Error(`Unknown format on config "target"`);
         }
     }
 
