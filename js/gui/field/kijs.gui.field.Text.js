@@ -79,7 +79,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
@@ -123,7 +123,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -199,7 +199,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,

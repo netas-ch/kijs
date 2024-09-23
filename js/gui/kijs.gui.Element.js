@@ -47,7 +47,7 @@
  *                                          context: xy
  *                                      }
  *
- * parent       kijs.gui.Element [optional] Verweis auf das übergeordenete Element
+ * parent       kijs.gui.Element [optional] Verweis auf das übergeordnete Element
  *
  * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
  *                                      Beispiel: style:{background-color:'#ff8800'}
@@ -649,7 +649,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 }
             }
 
-            // Sonst den Funktionsname suchen (IE)
+            // Sonst den Funktionsnamen suchen (IE)
             if (!proto.__xtype) {
                 let results = /\s*function\s([a-zA-Z0-9_]+)\s*\(/.exec(this.constructor.toString());
                 if (results && results.length > 0) {
@@ -693,7 +693,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 
@@ -779,7 +779,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
                 }).then((e) => {
                     // config Properties
-                    if (e.responseData.config) {
+                    if (e.responseData.config && this._dom) {
                         // config Properties übernehmen
                         this.applyConfig(e.responseData.config);
                     }
@@ -1155,7 +1155,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Listener der Aufgerufen wird, wenn die Grösse des Parents geändert hat
+     * Listener der aufgerufen wird, wenn die Grösse des Parents geändert hat
      * @param {Object} e
      * @returns {undefined}
      */

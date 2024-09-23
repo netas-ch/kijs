@@ -5,8 +5,8 @@
 // --------------------------------------------------------------
 /**
  * Klasse zum Lesen und Schreiben in den Local- oder Sessionstorage.
- * Damit keine Konflikte entstehen, wenn mehrere KIJS-Frameworks unter
- * der selben Domain laufen, wird standardmässig der Titel der Webseite
+ * Damit keine Konflikte entstehen, wenn mehrere kijs-Frameworks unter
+ * derselben Domain laufen, wird standardmässig der Titel der Webseite
  * als prefix verwendet. Wenn dieses nicht sein soll, kann als argument
  * ein anderes Prefix übergeben werden.
  */

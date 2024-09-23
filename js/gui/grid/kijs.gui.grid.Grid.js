@@ -48,9 +48,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteSort = null;            // Remote-Sortierung
 
         this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
-        this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
+        this._currentRow = null;            // Zeile, welche zurzeit fokussiert ist
         this._selectType = 'single';        // multiselect: single|multi|simple|none
-        this._focusable = true;             // ob das grid focusiert weden kann
+        this._focusable = true;             // ob das grid fokussiert werden kann
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)
@@ -155,7 +155,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
 
-            // Falls es schon ein gültiges Current-Zeile gibt, dieses nehmen
+            // Falls es schon eine gültige Current-Zeile gibt, dieses nehmen
             if (this._currentRow && kijs.Array.contains(this._rows, this._currentRow)) {
                 cRow = this._currentRow;
             }
@@ -269,7 +269,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unknown format on config "rpc"`);
         }
     }
 
@@ -359,7 +359,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Gibt die selektieten Zeilen zurück
+     * Gibt die selektierten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
      * @returns {Array|kijs.gui.grid.Row|null}
      */
@@ -523,7 +523,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Daten laden
         if (this._autoLoad) {
-            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
+            this._autoLoad = false; // Daten nur beim ersten Rendern automatisch laden.
             kijs.defer(function() {
                 if (this._remoteDataLoaded === 0) {
                     this._remoteLoad(true);
@@ -861,7 +861,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     let ok = false;
                     kijs.Array.each(filterFields, function(filterField) {
                         if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                            throw new kijs.Error(`Unkown filter format.`);
+                            throw new kijs.Error(`Unknown filter format.`);
                         }
 
                         if (filterField.value === dataRow[filterField.field]) {

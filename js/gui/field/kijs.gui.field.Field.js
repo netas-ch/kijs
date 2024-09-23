@@ -442,7 +442,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get valueDisplayHtml() { return kijs.String.htmlspecialchars(this.value); }
 
     /**
-     * Gibt einen Objekt zurück mit den Werten des Felds
+     * Gibt ein Objekt zurück mit den Werten des Felds
      * Format {name: value}
      * Beispiel nur ein Wert: {value:'2021-02-01'}
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
@@ -482,7 +482,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck zum validieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke zum Validieren hinzu
      * @param {Object|String|Array} regExps Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Vierstellige Zahl erforderlich' }
      * @returns {undefined}
      */
@@ -600,7 +600,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Error icon rendern (kijs.gui.Icon)
         this._errorIconEl.renderTo(this._contentDom.node);
         
-        // Render der Elements in Funktion, damit dies
+        // Render der Elemente als Funktion, damit dies
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
@@ -749,7 +749,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
     
     /**
-     * Eingabe erforderlich validieren
+     * Eingabe erforderlich validieren.
      * Wird aufgerufen von _validationRules
      * @param {String} value
      * @param {Boolean} ignoreEmpty

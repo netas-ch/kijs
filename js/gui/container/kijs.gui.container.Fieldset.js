@@ -112,7 +112,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
 
         } else {
-            throw new kijs.Error(`Unkown format on config "collapseButton"`);
+            throw new kijs.Error(`Unknown format on config "collapseButton"`);
         }
 
         if (this.isRendered) {
@@ -170,7 +170,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
         }
         
-        // Höhe merken, damit beim aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
+        // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
             this._expandedHeight = val;
         }
@@ -296,7 +296,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         if (alsoSetIfNoTabIndex) {
             this._dom.node.focus();
 
-        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
         } else {
             const nde = kijs.Dom.getFirstFocusableNode(this._node);
             if (nde) {

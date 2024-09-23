@@ -81,7 +81,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Virtual Keyboard API (Nur in Chrome mit SSL)
         if (this._moveWhenVirtualKeyboard && 'virtualKeyboard' in navigator) {
             navigator.virtualKeyboard.overlaysContent = true;
-            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this.#onVirtualKeyboardGemoetryChange, this);
+            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this.#onVirtualKeyboardGeometryChange, this);
         }
 
     }
@@ -170,8 +170,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
 
         } else {
-            throw new kijs.Error(`Unkown format on config "target"`);
-
+            throw new kijs.Error(`Unknown format on config "target"`);
         }
     }
 
@@ -267,7 +266,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             this.center(true);
         }
 
-        // Sicherstellen, dass es platz hat
+        // Sicherstellen, dass es Platz hat
         this._adjustPositionToTarget(true);
 
         // afterResize-Event wieder aktivieren
@@ -333,6 +332,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         super.unrender(true);
     }
+
     // PROTECTED
     /**
      * Stellt sicher, dass das Fenster innerhalb des Targets angezeigt wird
@@ -443,13 +443,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
 
-        // Das Fenster darf auch ausserhalb des Target sein
+        // Das Fenster darf auch ausserhalb des Targets sein
         if (this._allowDragOutside) {
             // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
             if (x < targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20) {
                 x = targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20;
             }
-            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
             if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
                 x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
             }
@@ -457,7 +457,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             if (y < targetNode.offsetTop) {
                 y = targetNode.offsetTop;
             }
-            // Min. die HeaderBar muss sichtbr sein
+            // Min. die HeaderBar muss sichtbar sein
             if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
                 y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
             }
@@ -523,13 +523,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
 
-        // Das Fenster darf auch ausserhalb des Target sein
+        // Das Fenster darf auch ausserhalb des Targets sein
         if (this._allowDragOutside) {
             // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
             if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
                 x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
             }
-            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
             if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
                 x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
             }
@@ -565,7 +565,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onDocumentMouseUp(e) {
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
@@ -583,12 +583,12 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     /**
-     * Listener der Aufgerufen wird, wenn die Grösse des Target-Elements geändert hat
+     * Listener der aufgerufen wird, wenn die Grösse des Target-Elements geändert hat
      * @param {Object} e
      * @returns {undefined}
      */
     #onTargetElAfterResize(e) {
-        // Sicherstellen, dass das Fenster im Target platz hat
+        // Sicherstellen, dass das Fenster im Target Platz hat
         this._adjustPositionToTarget(true);
 
         // Falls die eigene Grösse geändert hat: das eigene afterResize-Event auslösen
@@ -596,7 +596,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onTargetElChangeVisibility(e) {
-        // Sichbarkeit ändern
+        // Sichtbarkeit ändern
         this.visible = e.visible;
     }
 
@@ -604,8 +604,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this.destruct();
     }
 
-    // Fenster neu zentrieren wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
-    #onVirtualKeyboardGemoetryChange(e) {
+    // Fenster neu zentrieren, wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
+    #onVirtualKeyboardGeometryChange(e) {
 
         if (this.isRendered && this._moveWhenVirtualKeyboard && e.nodeEvent.target) {
             const { x, y, width, height } = e.nodeEvent.target.boundingRect;
@@ -624,7 +624,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onWindowResize(e) {
-         // Sicherstellen, dass das Fenster im Target platz hat
+         // Sicherstellen, dass das Fenster im Target Platz hat
         this._adjustPositionToTarget(true);
 
         this._raiseAfterResizeEvent(true, e);

@@ -92,18 +92,17 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Führt einen RPC aus.
-     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt (auch im Fehlerfall).
+     * - Wird eine fn übergeben, wird diese nach Erhalt der Antwort ausgeführt (auch im Fehlerfall).
      *   Die Rückgabe der Funktion ist dann immer Null.
      * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
-     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
-     *   werden.
+     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragt werden.
      *
-     * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
+     * @param {Object} config   config-Objekt mit folgenden Eingenschaften
      *     {String} remoteFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID,
      *                                           die das Element eindeutig identifiziert.
-     *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
+     *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümer zu identifizieren.
      *     {Function} [fn]                       Callback-Funktion
      *     {Object} [context]                    Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe remoteFn abgebrochen
@@ -130,7 +129,7 @@ kijs.Rpc = class kijs_Rpc {
         }
 
         // Evtl. bestehende RPCs vom gleichen owner an die gleiche remoteFn abbrechen
-        // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
+        // Der owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren,
         // die die gleiche remoteFn benutzen. 
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {

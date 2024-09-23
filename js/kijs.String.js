@@ -41,7 +41,7 @@ kijs.String = class kijs_String {
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden
+     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden.
      * Es werden folgende Zeichen ersetzt
      *  - Unicode 00A0 - 9999
      *  - < und >
@@ -66,7 +66,7 @@ kijs.String = class kijs_String {
      */
     static htmlentities_decode(html) {
 
-        // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
+        // Geschwindigkeit optimieren, falls der String nur aus einem einzelnen entity ("&#xabab;") besteht
         if (kijs.isString(html) && (html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
             return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
         }

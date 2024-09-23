@@ -6,7 +6,7 @@
 // Halbtransparente Maske, die über den Body oder ein kijs.gui.Element gelegt wird
 // und so die Bedienung der dahinterliegenden Oberfläche verhindert.
 //
-// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mitangezeigt werden.
+// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mit angezeigt werden.
 //
 // Mit text kann ein Ladetext unterhalb des Icons angezeigt werden.
 //
@@ -36,7 +36,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         super(false);
 
         // Anker-Node von 0x0px mit position:relative in dem sich die Maske befindet.
-        // Nur nötig, wenn der Target nicht der Body ist
+        // Nur nötig, wenn das Target nicht der Body ist
         this._maskAnchorDom = new kijs.gui.Dom({
             cls:'kijs-mask-anchor'
         });

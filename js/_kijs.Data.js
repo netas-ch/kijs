@@ -43,7 +43,7 @@ kijs.Data = class kijs_Data {
     get rows() { return this._rows; }
 
     /**
-     * Setzt die Rows-Datenquelle.Das Array muss in einem der folgenden Formate sein:
+     * Setzt die Rows-Datenquelle. Das Array muss in einem der folgenden Formate sein:
      * - einfaches Wertearray = ['Herr', 'Frau', 'Familie'] (nur ein Wert pro Zeile)
      * - mehrdimensionales Wertearray = [['Herr', 'Muster'], ['Frau', 'Müller']]
      * - Recordset-Array = [{Anrede: 'Herr', Name='Muster'}, {Anrede: 'Frau', Name='Müller'}]
@@ -368,7 +368,7 @@ kijs.Data = class kijs_Data {
         // Ein Mix von Formaten im selben Array ist deshalb nicht erlaubt.
         let format;
 
-        // Objekt -> keine Konventierung notwendig
+        // Objekt -> keine Konvertierung notwendig
         if (kijs.isObject(rows[0])) {
             format = 'object';
 
@@ -381,7 +381,7 @@ kijs.Data = class kijs_Data {
                 throw new Error('The number of columns does not match.');
             }
 
-        // alle anderen Datentypen (String, Number, Boolean) -> enthalten direkt den Wert, sie werden konventiert.
+        // alle anderen Datentypen (String, Number, Boolean) -> enthalten direkt den Wert, sie werden konvertiert.
         } else {
             format = 'value';
 
@@ -390,7 +390,7 @@ kijs.Data = class kijs_Data {
 
         // Daten evtl. in den richtigen Datentyp konvertieren
         switch (format) {
-            // Objekt -> keine Konventierung notwendig
+            // Objekt -> keine Konvertierung notwendig
             case 'object':
                 // Sicherstellen, dass die Zeilen auch alle erforderlichen Spalten haben.
                 if (this._completeRowObject(rows[0]) && rows.length>1) {
@@ -415,7 +415,7 @@ kijs.Data = class kijs_Data {
                 }
                 break;
 
-            // alle anderen Datentypen -> enthalten direkt den Wert (nur ein Wert pro Zeile), sie werden konventiert.
+            // alle anderen Datentypen -> enthalten direkt den Wert (nur ein Wert pro Zeile), sie werden konvertiert.
             case 'value':
                 // Feldname ermitteln
                 let name;

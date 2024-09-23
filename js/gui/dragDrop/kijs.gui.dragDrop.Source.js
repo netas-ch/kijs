@@ -132,8 +132,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         // Config zuweisen
         kijs.Object.assignConfig(this, config, this._configMap);
 
-        // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Objekt versiegeln.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 

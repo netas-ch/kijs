@@ -37,7 +37,7 @@ kijs.Object = class kijs_Object {
                 }
                 
                 // sonst Fehler
-                throw new kijs.Error(`Unkown config "${cfgKey}"`);
+                throw new kijs.Error(`Unknown config "${cfgKey}"`);
             }
 
             // fn und target ermitteln
@@ -74,7 +74,7 @@ kijs.Object = class kijs_Object {
                     context = map.context;
                 }
             } else {
-                throw new kijs.Error(`Unkown format on configMap "${cfgKey}"`);
+                throw new kijs.Error(`Unknown format on configMap "${cfgKey}"`);
 
             }
 
@@ -88,12 +88,12 @@ kijs.Object = class kijs_Object {
             });
         }, this);
 
-        // 2. Sortieren nach Priorität je grösser die Zahl desto später wird die Eigenschaft zugewiesen
+        // 2. Sortieren nach Priorität je grösser die Zahl, desto später wird die Eigenschaft zugewiesen
         tmpConfigs.sort(function(a, b) {
             return a.prio - b.prio;
         });
 
-        // 3. Eigenschjaften in der Reihenfolge ihrer Priorität zuweisen
+        // 3. Eigenschaften in der Reihenfolge ihrer Priorität zuweisen
         kijs.Array.each(tmpConfigs, function(cfg) {
 
             // Je nach fn den Wert zuweisen
@@ -233,7 +233,7 @@ kijs.Object = class kijs_Object {
     * @param {Object} target Ziel-Objekt
     * @param {Object} source Quell-Objekt
     * @param {Boolean} [overwrite=true] Sollen bereits existierende Objekte überschrieben werden?
-    * @return {Object} Erweiteres Ziel-Objekt
+    * @return {Object} Erweitertes Ziel-Objekt
     */
     static assignDeep(target, source, overwrite=true) {
         kijs.Object.each(source, function(key, val){
@@ -276,7 +276,7 @@ kijs.Object = class kijs_Object {
     /**
      * Zählt die Anzahl Attribute in einem Objekt
      * @param {Object} object
-     * @param {Boolean} [ownPropertysOnly=false]  count only own propertys, ignore inherited propertys
+     * @param {Boolean} [ownPropertysOnly=false]  count only own properties, ignore inherited properties
      * @returns {Number}
      */
     static count(object, ownPropertysOnly=false) {
@@ -296,11 +296,11 @@ kijs.Object = class kijs_Object {
     }
 
     /**
-     * Durchläuft ein Objekt ruft pro Element die callback-Funktion auf.
+     * Durchläuft ein Objekt, ruft pro Element die callback-Funktion auf.
      * Die Iteration kann durch die Rückgabe von false gestoppt werden.
      * @param {Object} object
      * @param {Function} fn - Callback Funktion
-     * @param {Object} context - Gültigkeitebereich
+     * @param {Object} context - Gültigkeitsbereich
      * @returns {undefined}
      */
     static each(object, fn, context) {

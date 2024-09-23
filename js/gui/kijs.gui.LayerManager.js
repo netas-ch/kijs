@@ -3,7 +3,7 @@
 // --------------------------------------------------------------
 // kijs.gui.LayerManager (Singleton)
 // --------------------------------------------------------------
-// Der Layermanager wird verwendet um den z-index von Fenstern zu managen.
+// Der Layermanager wird verwendet, um den z-index von Fenstern zu managen.
 // Wird ein Fenster angeklickt, so wird der z-index aller Fenster mit dem gleichen
 // parentNode neu berechnet und es erscheint zuvorderst.
 // Neben kijs.gui.Window können auch Masken (kijs.gui.Mask) in den Layermanager
@@ -46,7 +46,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt eine Element an
+     * Fügt ein Element an
      * @param {kijs.gui.Element} el
      * @returns {undefined}
      */

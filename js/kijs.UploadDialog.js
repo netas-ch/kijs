@@ -243,7 +243,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     // PROTECTED
     /**
-     * Prüft, ob der Browser das hochladen von ganzen Ordner unterstützt.
+     * Prüft, ob der Browser das Hochladen von ganzen Ordner unterstützt.
      * @returns {Boolean}
      */
     _browserSupportsDirectoryUpload() {
@@ -425,7 +425,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             return;
         }
 
-        // Wenn die Klasse mit einer DropZone verknüpft ist, nur pasten wenn gerendert
+        // Wenn die Klasse mit einer DropZone verknüpft ist, nur pasten, wenn gerendert
         if (this._dropZones.length > 0) {
             let rendered = false;
             kijs.Array.each(this._dropZones, function(dz) {

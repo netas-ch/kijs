@@ -97,7 +97,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Erstellt aus einem String eine Funktion
+     * Erstellt aus einem String eine Funktion.
      * Dazu kann entweder eine neue Funktion als String übergeben werden:
      * 'function(myArg) { return myArg; }'
      * Oder ein Verweis auf eine bestehende Funktion:
@@ -181,7 +181,7 @@ window.kijs = class kijs {
 
     /**
      * Gibt den Verweis auf eine RPC-Instanz zurück.
-     * Wird kein Namen angegeben, wird der default-RPC zurück gegeben.
+     * Wird kein Name angegeben, wird der default-RPC zurückgegeben.
      * Die RPCs müssen vorgängig mit kijs.setRpc() definiert werden.
      * @param {String} [name='default']
      * @returns {undefined}
@@ -278,7 +278,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Prüft ob ein Wert ein gültiges Datum ist
+     * Prüft, ob ein Wert ein gültiges Datum ist
      * @param {Date} value
      * @returns {Boolean}
      */
@@ -429,7 +429,7 @@ window.kijs = class kijs {
     }
     
     /**
-     * Erstellt einen globalen Verweis auf eine RPC-Klasse
+     * Erstellt einen globalen Verweis auf eine RPC-Klasse.
      * Der Standard-RPC sollte 'default' heissen.
      * Weitere sind mit beliebigen Namen möglich.
      * @param {String} name
@@ -480,7 +480,7 @@ window.kijs = class kijs {
 
     /**
      * Kleine Hilfsfunktion, um ein Timeout in einer Async-Funktion zu nutzen.
-     * @param {Number} ms Miliseconds
+     * @param {Number} ms Milliseconds
      * @returns {Promise}
      */
     static wait(ms) {

@@ -69,7 +69,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
     set target(val) {
         if (!val instanceof kijs.gui.Element) {
-            throw new kijs.Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unknown format on config "target"`);
         }
         this._targetEl = val;
     }
@@ -133,13 +133,13 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
         const newPos = {
@@ -194,7 +194,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
