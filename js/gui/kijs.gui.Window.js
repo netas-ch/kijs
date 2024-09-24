@@ -432,22 +432,14 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         let x = this._dragInitialPos.windowX + (e.nodeEvent.touches[0].clientX - this._dragInitialPos.mouseX);
         let y = this._dragInitialPos.windowY + (e.nodeEvent.touches[0].clientY - this._dragInitialPos.mouseY);
 
-        // Min-Position begrenzen
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
 
         // Das Fenster darf auch ausserhalb des Targets sein
         if (this._allowDragOutside) {
             // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
-            if (x < targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20) {
-                x = targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20;
+            if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
+                x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
             }
             // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
             if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
