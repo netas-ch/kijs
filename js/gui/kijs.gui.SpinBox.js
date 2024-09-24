@@ -284,8 +284,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             return;
         }
 
-        // SpinBox anzeigen (Wenn ein modales Element vorhanden ist, an diesem anhängen, sonst an Body)
-        this.renderTo(document.querySelector('dialog:modal[open]') ?? document.body);
+        // SpinBox anzeigen (Wenn ein modales Element vorhanden ist, an oberstem geöffnetem anhängen, sonst an body)
+        const modalOpenNodes = document.querySelectorAll('dialog:modal[open]');
+        this.renderTo(modalOpenNodes.length > 0 ? modalOpenNodes.item(modalOpenNodes.length-1) : document.body);
 
         // popover mode
         this._dom.node.showPopover();
