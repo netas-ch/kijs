@@ -1,13 +1,20 @@
 Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.
 Es sind evtl. Anpassungen am Projekt nötig.
 
+
 Version 2.8.3
 =============
 ### kijs.gui.CornerTipContainer
-Neues, optionales Argument ```dismissDelay``` bei statischer Funktion ```show``` (default: 5s)
+Neues, optionales Argument ```dismissDelay``` bei statischer Funktion ```show``` 
+(default: 5s)  
 
 ### Bugfixes
- - kijs.gui.SpinBox: Das Element wird in den Body, oder falls ein modaler Dialog besteht, in diesen gerendert, statt in die targetNode. 
+ - kijs.gui.SpinBox: Das Element wird in den Body, oder falls ein modaler Dialog 
+   besteht, in diesen gerendert, statt in die targetNode.  
+ - kijs.gui.Window: Auf Touch-Geräten funktionierte das verschieben von Fenstern 
+   nicht richtig.  
+
+
 
 Version 2.8.2
 =============
