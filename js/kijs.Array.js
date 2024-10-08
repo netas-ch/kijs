@@ -119,6 +119,7 @@ kijs.Array = class kijs_Array {
 
     /**
      * Prüft, ob ein Wert in einem Array vorkommt
+     * Verglichen wird dabei case-sensitive
      * @param {Array} array
      * @param {mixed} value
      * @returns {Boolean}

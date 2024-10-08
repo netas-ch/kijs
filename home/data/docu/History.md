@@ -4,6 +4,17 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 2.x.x (ist noch in Entwicklung)
 =============
+### kijs.String
+Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
+ - ```beginsWith(text, search, caseInsensitive=false)```
+ - ```contains(text, search, caseInsensitive=false)```
+ - ```endsWith(text, search, caseInsensitive=false)```
+
+Neue Funktion:
+ - ```match(text, search, caseInsensitive=false)```
+   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
+
+
 
 ### kijs.gui.ListView
 - CSS: Elemente haben neu runde Ecken
