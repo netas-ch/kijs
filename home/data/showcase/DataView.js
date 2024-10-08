@@ -46,7 +46,7 @@ home.sc.DataView = class home_sc_DataView {
                             xtype: 'kijs.gui.DataView',
                             selectType: 'multi',
                             data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}, {A:'A3', B:'B3'}],
-                            selectFilters: [{field:'A', 'value':'A2'}],
+                            selectFilters: [{field:'A', value:'A2'}],
                             //scrollableY: 'auto',
                             style: {
                                 flex: 1
