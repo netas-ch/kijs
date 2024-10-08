@@ -5,7 +5,8 @@ Es sind evtl. Anpassungen am Projekt nötig.
 Version 2.x.x (ist noch in Entwicklung)
 =============
 ### kijs.Data
-Neue Klasse mit Statischen Funktionen für Recordsets.
+Neue Klasse mit Statischen Funktionen für Recordsets.  
+Siehe dazu den neuen Leitfaden ```Daten```.  
 
 ### kijs.String
 Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
