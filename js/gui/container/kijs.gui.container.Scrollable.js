@@ -201,7 +201,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this.on('scrollEnd', this.#onScrollEnd, this);
         this.on('touchEnd', this.#onTouchEnd, this);
         this.on('touchMove', this.#onTouchMove, this);
-        this.on('touchStart', this.#onTouchStart, this);                                           
+        this.on('touchStart', this.#onTouchStart, this);
         this.on('wheel', this.#onWheel, this);
 
         // Config anwenden
@@ -541,7 +541,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
         
         
-        // Rendern oder Unrendern
+        // Rendern oder unrendern
         // Up (kijs.guiDom)
         if (hasScrollY) {
             this._btnUpDom.renderTo(this._dom.node, this._innerDom.node);
@@ -720,6 +720,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._touchYStart = e.nodeEvent.touches[0].clientY;
 
         if (hasScrollbarX || hasScrollbarY) {
+            // Bubbeling und native Listeners verhindern
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
         }
@@ -755,6 +756,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
         
         if (hasScrollbarX || hasScrollbarY) {
+            // Bubbeling und native Listeners verhindern
             e.nodeEvent.stopPropagation();
             e.nodeEvent.preventDefault();
         }

@@ -59,6 +59,7 @@
     --checkbox-height: 20px;
     --checkbox-fontSize: 14px;
     --checkbox-lineHeight: 18px;
+    --range-btnHeight: 20px;
     --switch-height: 28px;
     
     --badge-fontSize: 12px;
@@ -100,7 +101,21 @@
     --default-fontColor: var(--grey11);
     --default-disabled-fontColor: var(--grey08);
 
+
+    /* Scrollbar (nur Chrome) */
+    --scrollbar-width: 5px;
+    --scrollbar-border-radius: 2.5px;
+    --scrollbar-background-color: transparent;
+    --scrollbar-background-hover-color: var(--grey04);
+    --scrollbar-color: var(--grey07);
+    --scrollbar-hover-color: var(--grey08);
     
+    
+    /* Mask */
+    --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
+    --mask-fontColor: #fff;
+    --mask-icon-fontColor: #fff;
+
     /* Separator */
     --separator-bkgrndColor: var(--grey05);
     --separator-disabled-bkgrndColor: var(--grey06);
@@ -224,7 +239,7 @@
     
     /* Range */
     --range-bkgrndColor: var(--grey07);
-    --range-btnColor: var(--grey10);
+    --range-btnColor: var(--grey09);
 
     /* Item */
     --item-bkgrndColor: var(--grey02);
@@ -285,9 +300,9 @@
 button.kijs-button {
     border: 0;
 }
-div.kijs-panel {
+div.kijs-panel, dialog.kijs-panel {
     border: 0;
 }
-div.kijs-window {
+div.kijs-window, dialog.kijs-window {
     border: 1px solid var(--panel-borderColor);
 }

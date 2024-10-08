@@ -13,6 +13,8 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     constructor(config={}) {
         super(false);
 
+        this._disabled = false;
+
         this._quillEditor = null;
         this._quillEditorContainerNode = null;
         this._quillEditorNode = null;
@@ -43,9 +45,12 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             ['clean']                                      // remove formatting button
         ];
 
+        // CSS Klasse hinzufügen
+        this.dom.clsAdd('kijs-field-quilleditor');
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-field-quilleditor'
+            // keine
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -64,12 +69,23 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        // Listener
+        this.on('afterRender', this.#onAfterRender, this);
     }
 
 
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+
+    get content() {
+        return this._quillEditor.getContents();
+    }
+
+    set content(val) {
+        this._quillEditor.setContents(val);
+    }
     get hasFocus() {
         if (this._quillEditor) {
             return this._quillEditor.hasFocus();
@@ -92,9 +108,6 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
 
-    get valueTrimEnable() { return this._valueTrimEnable; }
-    set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
-
     // overwrite
     get value() {
         let val = '';
@@ -116,6 +129,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             this._quillEditor.setContents([]);
             this._quillEditor.clipboard.dangerouslyPasteHTML(0, val);
         }
+        this.isDirty = false;
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }
@@ -129,10 +143,14 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        if (val) {
-            this._quillEditor.disable(true);
-        } else {
-            this._quillEditor.enable(true);
+
+        this._disabled = !!val;
+        if (this._quillEditor) {
+            if (this._disabled) {
+                this._quillEditor.disable(true);
+            } else {
+                this._quillEditor.enable(true);
+            }
         }
     }
 
@@ -207,6 +225,8 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             if (!isDirtyBeforeRender) {
                 this.isDirty = false;
             }
+        } else {
+            this._inputWrapperDom.node.appendChild(this._quillEditorNode);
         }
 
         // Event afterRender auslösen
@@ -218,7 +238,13 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
 
     // PRIVATE
     // LISTENERS
-    #onInput(e) {
+    #onAfterRender() {
+        if (this._disabled) {
+            this._quillEditor.disable(true);
+        }
+    }
+
+    #onInput() {
         this.validate();
     }
 
@@ -246,6 +272,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         // Elemente/DOM-Objekte entladen
 
         // Variablen (Objekte/Arrays) leeren
+        this._disabled = null;
         this._quillEditor = null;
         this._quillEditorNode = null;
         this._quillEditorContainerNode = null;

@@ -247,7 +247,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             throw new kijs.Error('invalid time: second');
         }
 
-        // zeichnen falls gerendert
+        // zeichnen, falls gerendert
         if (this._dom.node) {
             this._calculate();
         }
@@ -692,7 +692,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
     
     /**
-     * Beim bewegen der Maus wird die Kelle darunter angezeigt.
+     * Beim Bewegen der Maus wird die Kelle darunter angezeigt.
      * @param {Object} e
      * @returns {undefined}
      */
@@ -856,7 +856,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
         }
 
-        // wenn eine zahl eingegeben wurde, fokus evtl auf nächstes Feld.
+        // wenn eine zahl eingegeben wurde, fokus evtl. auf nächstes Feld.
         if (kijs.isString(e.nodeEvent.key) && e.nodeEvent.key.match(/^[0-9]$/)) {
             if (fld.node.value.length === 2) {
                 switch (type) {

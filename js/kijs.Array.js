@@ -57,7 +57,7 @@ kijs.Array = class kijs_Array {
     }
 
     /**
-     * Vergleicht zwei Arrays und Gibt bei gleichem Inhalt true zurück
+     * Vergleicht zwei Arrays und gibt bei gleichem Inhalt true zurück
      * @param {Array} array1
      * @param {Array} array2
      * @returns {Boolean}

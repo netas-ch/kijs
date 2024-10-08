@@ -51,17 +51,19 @@ home.sc.Mask = class home_sc_Mask {
                         {
                             xtype: 'kijs.gui.Element',
                             name: 'elRed',
-                            html: 'maskCount: 0',
+                            html: 'rot',
+                            tooltip: 'maskCount: 0',
                             height: 50,
                             style: { 
                                 flex: 1,
-                                border:'1px solid #f00',
+                                border:'4px solid #f00',
                                 textAlign: 'center'
                             }
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elGreen',
-                            html: 'maskCount: 1',
+                            html: 'grün',
+                            tooltip: 'maskCount: 1',
                             height: 50,
                             displayWaitMask: true,
                             style: { 
@@ -72,31 +74,17 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Element',
                             name: 'elBlue',
-                            html: 'maskCount: 0',
+                            html: 'blau',
+                            tooltip: 'maskCount: 0',
                             height: 50,
                             style: { 
                                 flex: 1,
+                                borderRadius: '20px',
                                 border:'1px solid #00f',
                                 textAlign: 'center'
                             }
                         }
-                    ],
-
-                    footerBarCaption: 'Meine FooterBar',
-                    footerElements: [
-                        '>',
-                        {
-                            xtype: 'kijs.gui.Button',
-                            caption: 'OK',
-                            iconMap: 'kijs.iconMap.Fa.check',
-                            isDefault: true
-                        },{
-                            xtype: 'kijs.gui.Button',
-                            caption: 'Abbrechen',
-                            iconMap: 'kijs.iconMap.Fa.xmark'
-                        }
                     ]
-
                 },
                 
                 
@@ -133,7 +121,7 @@ home.sc.Mask = class home_sc_Mask {
                                 click: function(e) {
                                     const targetEl = this._content.down(this._content.down('targetElName').value);
                                     targetEl.waitMaskAdd();
-                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                    targetEl.tooltip = 'maskCount: ' + targetEl._waitMaskCount;
                                 },
                                 context: this
                             }
@@ -145,7 +133,7 @@ home.sc.Mask = class home_sc_Mask {
                                 click: function(e) {
                                     const targetEl = this._content.down(this._content.down('targetElName').value);
                                     targetEl.waitMaskRemove();
-                                    targetEl.html = 'maskCount: ' + targetEl._waitMaskCount;
+                                    targetEl.tooltip = 'maskCount: ' + targetEl._waitMaskCount;
                                 },
                                 context: this
                             }
@@ -167,6 +155,7 @@ home.sc.Mask = class home_sc_Mask {
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
                             displayWaitMask: true,
+                            maximizable: true,
                             height: 100,
                             width: 200,
                             style: { margin: '10px' },
@@ -175,6 +164,7 @@ home.sc.Mask = class home_sc_Mask {
                         },{
                             xtype: 'kijs.gui.Panel',
                             caption: 'Panel',
+                            maximizable: true,
                             waitMaskTargetDomProperty: 'innerDom',
                             displayWaitMask: true,
                             height: 100,
@@ -184,6 +174,103 @@ home.sc.Mask = class home_sc_Mask {
                             html: 'Maske nur auf innerDom'
                         }
                     ]
+                },
+
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Maske mit Text:',
+                    style: { margin: '20px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexrow',
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Panel',
+                            caption: 'Panel',
+                            height: 100,
+                            maximizable: true,
+                            width: 200,
+                            style: { margin: '10px' },
+                            innerStyle: { padding: '10px' },
+                            html: 'Maske mit Text',
+                            on: {
+                                afterFirstRenderTo: function(e) {
+                                    const waitMaskEl = new kijs.gui.Mask({
+                                        displayWaitIcon: true,
+                                        text: 'Bitte warten...',
+                                        target: e.raiseElement,
+                                        targetDomProperty: 'dom'
+                                    });
+                                    kijs.defer(()=>{
+                                        waitMaskEl.show();
+                                    }, 100, this);
+                                },
+                                context: this
+                            }
+                        }
+                    ]
+                },
+
+
+                {
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexline',
+                    elements :[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Maske auf Viewport für 2s',
+                            on: {
+                                click: function(e) {
+                                    const targetEl = this._app.viewport;
+                                    targetEl.waitMaskAdd();
+                                    kijs.defer(()=>{
+                                        targetEl.waitMaskRemove();
+                                    }, 2000, this);
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Maske auf BODY für 2s',
+                            on: {
+                                click: function(e) {
+                                    const waitMaskEl = new kijs.gui.Mask({
+                                        displayWaitIcon: true,
+                                        target: document.body
+                                    });
+                                    waitMaskEl.show();
+                                    kijs.defer(()=>{
+                                        waitMaskEl.destruct();
+                                    }, 2000, this);
+                                },
+                                context: this
+                            }
+                        }
+                    ]
+                },
+
+                {
+                    xtype: 'kijs.gui.Button',
+                    caption: 'Grösse ändern',
+                    height: 30,
+                    style: { margin: '10px' },
+                    on: {
+                        click: function(e) {
+                            this.height = this.height === 30 ? 100 : 30;
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Panel',
+                    displayWaitMask: true,
+                    maximizable: true,
+                    height: 100,
+                    width: 200,
+                    style: { margin: '10px' },
+                    innerStyle: { padding: '10px' },
+                    html: 'Bitte Grösse ändern. Die Maske auf dem folgenden Panel sollte sich verschieben.'
                 }
             ]
         });

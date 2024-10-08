@@ -17,6 +17,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-cornertipcontainer');
+        this._dom.nodeAttributeSet('popover', 'manual');
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -46,15 +47,21 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      * @param {String} caption
      * @param {String} html
      * @param {String} [icon='alert'] 'alert', 'info', 'errorNotice' oder 'error'
+     * @param {Number} dismissDelay Anzeigedauer in ms
      * @returns {undefined}
      */
-    static show(caption, html, icon='alert') {
+    static show(caption, html, icon='alert', dismissDelay=5000) {
         // Singleton-Instanz ermitteln oder erstellen
         let instance = kijs.gui.CornerTipContainer._singletonInstance;
         if (!instance) {
-            instance = new kijs.gui.CornerTipContainer();
+            instance = new kijs.gui.CornerTipContainer({dismissDelay});
             instance.renderTo(document.body);
             kijs.gui.CornerTipContainer._singletonInstance = instance;
+
+        } else {
+            // als letzte node anhängen
+            document.body.appendChild(instance.dom.node);
+            instance.dismissDelay = dismissDelay;
         }
 
         switch (icon) {
@@ -202,11 +209,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
             caption: config.caption,
             iconMap: config.iconMap ? config.iconMap : '',
             closable: true,
-            elements: elements,
-            on: {
-                destruct: this.#onCornerTipDestruct,
-                context: this
-            }
+            elements: elements
         });
 
         // CornerTip anzeigen
@@ -215,9 +218,16 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         // Nach einer bestimmten Zeit wieder automatisch schliessen
         if (this._dismissDelay) {
             kijs.defer(function() {
-                if (tip) {
-                    tip.destruct();
+                if (this.hasChild(tip)) {
+                    this.remove(tip);
                 }
+
+                // Singleton löschen, wenn nicht mehr benötigt.
+                if (this.elements.length === 0 && kijs.gui.CornerTipContainer._singletonInstance === this) {
+                    this.destruct();
+                    delete kijs.gui.CornerTipContainer._singletonInstance;
+                }
+
             }, this._dismissDelay, this);
         }
     }
@@ -243,6 +253,21 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         });
     }
 
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        // popover
+        if (this._dom.node && this._dom.node.parentNode) {
+            this._dom.node.showPopover();
+        }
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+
 
     // PROTECTED
     _convertArrayToHtml(messages) {
@@ -256,18 +281,6 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         }, this);
          ret += '</ul>';
         return ret;
-    }
-
-
-    // PRIVATE
-    // LISTENERS
-    #onCornerTipDestruct(e) {
-        if (e.element) {
-            this.remove(e.element, {
-                preventRender: true, 
-                preventDestruct: true
-            });
-        }
     }
 
 

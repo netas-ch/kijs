@@ -58,7 +58,7 @@
     /* Italic */
     @font-face {
         font-family: Roboto;
-        src:url('../fonts/roboto/Roboto-Italic.woff') format('woff');
+        src: url('../fonts/roboto/Roboto-Italic.woff') format('woff');
         font-weight: 400;
         font-style: italic;
     }
@@ -187,6 +187,25 @@
     .kijs *, .kijs-viewport, .kijs-viewport *, .kijs-window, .kijs-window * {
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
+        
+        /* Scrollbar im Chrome */
+        ::-webkit-scrollbar {
+            height: var(--scrollbar-width);
+            width: var(--scrollbar-width);
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-background-color);
+            &:hover {
+                background: var(--scrollbar-background-hover-color);
+            }
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-color);
+            border-radius: var(--scrollbar-border-radius);
+            &:hover {
+                background: var(--scrollbar-hover-color);
+            }
+        }
     }
 
 
@@ -506,6 +525,19 @@
             }
         }
     }
+
+    
+    
+    /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
+
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
+
 
 
 
@@ -936,6 +968,7 @@
         overflow: hidden;
         z-index: 50101;
         border-radius: 4px;
+        margin: 0;
         padding: 4px;
         color: var(--default-fontColor);
         border: 1px solid var(--panel-borderColor);
@@ -971,6 +1004,8 @@
     div.kijs-spinbox {
         box-sizing: border-box;
         position: absolute;
+        margin: 0;
+        padding: 0;
         overflow: hidden;
         z-index: 50100;
         max-width: 100%;
@@ -1011,16 +1046,6 @@
 
 
     /* ******************
-       * DEPRECATED
-       * TODO: Accordion ???
-       ****************** */
-    div.kijs-accordion > .kijs-container-inner > .kijs-panel {
-        flex: 1 1 auto
-    }
-
-
-
-    /* ******************
        * Viewport
        ****************** */
     .kijs-viewport {
@@ -1048,7 +1073,9 @@
     div.kijs-splitter-horizontal {
         width: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ew-resize;
+        &:not(.kijs-disabled) {
+            cursor: ew-resize;
+        }
     }
 
     div.kijs-splitter-overlay-horizontal {
@@ -1064,7 +1091,9 @@
     div.kijs-splitter-vertical {
         height: 5px;
         background-color: var(--viewport-bkgrndColor);
-        cursor: ns-resize;
+        &:not(.kijs-disabled) {
+            cursor: ns-resize;
+        }
     }
 
     div.kijs-splitter-overlay-vertical {
@@ -1220,12 +1249,13 @@
     /* ******************
        * Panel
        ****************** */
-    div.kijs-panel {
+    div.kijs-panel, dialog.kijs-panel {
         position: relative;
         display: flex;
         flex-direction: column;
         overflow: hidden;
         border: 1px solid var(--panel-borderColor);
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
 
@@ -1233,7 +1263,7 @@
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
         }
-
+        
         &.disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
@@ -1260,7 +1290,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1285,7 +1315,7 @@
                 > * {
                     flex: none;
                 }
-                
+
                 > .kijs-spacer {
                     flex: 1;
                 }
@@ -1459,21 +1489,34 @@
     /* ******************
        * Window
        ****************** */
-    div.kijs-window {
+    dialog.kijs-window {
         box-sizing: border-box;
         position: absolute;
+        margin: 0; /* Wichtig */
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         overflow: hidden;
         max-width: 100%;
         max-height: 100%;
         border-radius: 5px;
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
-
+        padding: 0px;
+        transition: 0s;
+        
+        &:modal::backdrop {
+            background-color: var(--mask-bkgrndColor);
+        }
+        
         user-select: none;
 
         * {
             box-sizing: border-box;
         }
-
+        
+        /* Workaround: entfernt den Rahmen vom aktiven Dialog */
+        &:focus-visible {
+            outline: none;
+        }
+        
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
             > .kijs-button {
@@ -1518,41 +1561,81 @@
     /* ******************
        * Mask
        ****************** */
+    div.kijs-mask-anchor {
+        position: relative !important;
+        flex: none !important;
+        overflow: visible !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        z-index: 60000 !important;
+    }
+    
     div.kijs-mask {
-        box-sizing: border-box;
         position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        z-index: 60000;
-        background-color: rgba(0, 0, 0, 0.2);
-        flex-direction: column;
-
         top: 0;
         right: 0;
         left: 0;
         bottom: 0;
+        background-color: var(--mask-bkgrndColor);
+    }
+    
+    dialog.kijs-mask {
+        padding: 0;
+        margin: 0;
+        border: 0;
+        width: 100%;
+        height: 100%;
+        background-color: transparent;
+        
+        &::backdrop {
+            background-color: var(--mask-bkgrndColor);
+        }
+    }
+    
+    div.kijs-mask, dialog.kijs-mask {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /*flex-direction: column;*/
+        overflow: hidden;
+        z-index: 60000;
 
         user-select: none;
-
+        
         * {
             box-sizing: border-box;
         }
 
-        > .kijs-icon {
-            color: #F5F5F5;
-            font-size: 40px;
+        &:focus {
+            outline: none;
         }
+        
+        > .kijs-mask-center {
+            flex: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: transparent;
+            
+            > .kijs-icon {
+                flex: none;
+                color: var(--mask-icon-fontColor);
+                font-size: 40px;
+            }
 
-        > .kijs-mask-text {
-            margin-top: 20px;
-            color: #F5F5F5;
-            font-size: 17px;
-            font-family: var(--default-fontFamily);
-        }
-        > .kijs-mask-text:empty {
-            display: none;
+            > .kijs-mask-text {
+                flex: none;
+                margin-top: 20px;
+                color: var(--mask-fontColor);
+                font-size: 17px;
+                font-family: var(--default-fontFamily);
+            }
         }
     }
 
@@ -1566,7 +1649,7 @@
         position: absolute;
         overflow: hidden;
         z-index: 9000;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: var(--mask-bkgrndColor);
         opacity: 0;
 
         * {
@@ -1599,7 +1682,7 @@
     /* ******************
        * MsgBox
        ****************** */
-    div.kijs-msgbox {
+    dialog.kijs-msgbox {
         min-width: 200px;
 
         > .kijs-container-inner {
@@ -1609,7 +1692,7 @@
             font-size: var(--msgbox-fontSize);
             line-height: var(--msgbox-lineHeight);
             color: var(--msgbox-fontColor);
-            
+
             > .kijs-icon {
                 flex: none;
                 font-size: 30px;
@@ -1622,17 +1705,17 @@
                 flex: 1;
                 padding: 10px;
                 overflow: auto;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 > ul {
                     margin: 0 0 0 10px;
                     padding: 0;
@@ -1652,11 +1735,12 @@
        ****************** */
     div.kijs-cornertipcontainer {
         box-sizing: border-box;
-        position: fixed;
         overflow: hidden;
-        right: 0;
-        bottom: 0;
-        z-index: 70000;
+        margin: auto 0 0 auto;
+        padding: 0;
+        border: 0;
+        color: var(--default-fontColor);
+        background-color: transparent;
 
         * {
             box-sizing: border-box;
@@ -1713,16 +1797,15 @@
         background-position: bottom 2px right 2px;
         opacity: 0.3;
 
-        &.kijs-resizer-width {
+        &.kijs-resizer-width:not(.kijs-disabled) {
             cursor: we-resize;
         }
-        &.kijs-resizer-height {
+        &.kijs-resizer-height:not(.kijs-disabled) {
             cursor: ns-resize;
         }
-        &.kijs-resizer-width.kijs-resizer-height {
+        &.kijs-resizer-width.kijs-resizer-height:not(.kijs-disabled) {
             cursor: nwse-resize;
         }
-
         &:hover {
             opacity: 1;
         }
@@ -1879,7 +1962,7 @@
                     line-height: var(--default-lineHeight);
                     font-family: var(--default-fontFamily);
                     white-space: nowrap;
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -1966,13 +2049,13 @@
                 font-size: var(--item-fontSize);
                 line-height: var(--item-lineHeight);
                 color: var(--item-fontColor);
-                
+
                 > .kijs-container-inner {
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 * {
                     font-family: var(--default-fontFamily);
                     font-size: var(--item-fontSize);
@@ -2089,7 +2172,7 @@
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     > .kijs-icon {
                         flex: none;
                         margin: 0;
@@ -2131,6 +2214,7 @@
                     border-color: transparent;
 
                     &:before {
+                        box-sizing: border-box;
                         flex: none;
                         margin: 0 4px 0 0;
                         width: var(--checkbox-height);
@@ -2158,6 +2242,7 @@
                     border-color: transparent;
 
                     &:before {
+                        box-sizing: border-box;
                         flex: none;
                         margin: 0 4px 0 0;
                         width: var(--checkbox-height);
@@ -2435,11 +2520,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
         }
 
         > .kijs-progressbar-field {
@@ -2458,7 +2543,7 @@
                 background-color: var(--bar-bkgrndColor);
                 color: var(--bar-fontColor);
                 transition: width 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2474,7 +2559,7 @@
                 color: var(--bar-fontColor);
                 opacity: 0;
                 transition: opacity 2s;
-                
+
                 /* selektion von Text erlauben */
                 -webkit-user-select: text;
                 user-select: text;
@@ -2487,11 +2572,11 @@
             font-size: var(--default-fontSize);
             line-height: var(--default-lineHeight);
             color: var(--default-fontColor);
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
-            
+
             .error {
                 padding: 0;
                 color: red;
@@ -2558,7 +2643,7 @@
                     margin: 1px;
                     border: 1px solid transparent;
                     border-radius: 4px;
-                    
+
                     &:hover {
                         background-color: var(--item-focus-bkgrndColor);
                     }
@@ -2579,6 +2664,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
+                padding: 0 4px;
 
                 > .kijs-button {
                     height: 16px;
@@ -2594,7 +2680,7 @@
                         margin: 1px;
                         border: 1px solid transparent;
                         border-radius: 4px;
-                        
+
                         &:hover {
                             background-color: var(--item-focus-bkgrndColor);
                         }
@@ -2663,7 +2749,7 @@
                     color: var(--default-fontColor);
                     text-align: right;
                     background-color: var(--panel-bkgrndColor);
-                    
+
                     &.kijs-none {
                         /*display: none;*/
                     }
@@ -2753,7 +2839,7 @@
         flex-direction: column;
         width: calc(var(--default-fontSize) * 11.667); /*140px;*/
         border: 1px solid var(--panel-borderColor);
-        
+
         &.kijs-borderless {
             border: none;
         }
@@ -2914,7 +3000,7 @@
                         > .kijs-caption {
                             margin-top: calc(var(--field-label-paddingTop) - 5px);
                         }
-                        
+
                         &.kijs-smallpaddings {
                             width: calc(var(--icon-fontSize) + 4px);
                             padding-top: 4px;
@@ -3017,6 +3103,12 @@
                 }
             }
         }
+        
+        &.kijs-disabled {
+            > .kijs-label {
+                color: var(--field-disabled-fontColor);
+            }
+        }
     }
 
 
@@ -3040,7 +3132,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3172,7 +3264,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3220,7 +3312,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3421,7 +3513,7 @@
        * CheckboxGroup
        ****************** */
     div.kijs-field-optiongroup,
-    div.kijs-field-checkboxgroup{
+    div.kijs-field-checkboxgroup {
         > .kijs-content {
             align-self: stretch;
             
@@ -3498,7 +3590,7 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 height: var(--field-height);
-                
+
                 > input {
                     display: block;
                     height: 100%;
@@ -3580,34 +3672,60 @@
         > .kijs-content {
             > .kijs-inputwrapper {
                 > input {
-                    -webkit-appearance: none;
-                    appearance: none;
                     width: 100%;
-                    height: 1px;
-                    margin: 0 0 4px 0;
-                    background: var(--range-bkgrndColor);
+                    height: var(--range-btnHeight);
+                    margin: 4px 0 0 0;
                     outline: none;
-                }
-
-                > input::-webkit-slider-thumb {
+                    background-color: transparent;
                     -webkit-appearance: none;
                     appearance: none;
-                    background: var(--range-btnColor);
-                    cursor: pointer;
-                }
+                    
+                    /* Track */
+                    &::-webkit-slider-runnable-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    &::-moz-range-track {
+                        height: 1px;
+                        background: var(--range-bkgrndColor);
+                    }
+                    
+                    /* Track Progress */
+                    /* es gibt leider kein Äquivalent für Chrome */
+                    &::-moz-range-progress {
+                        height: 2px;
+                        background: var(--range-btnColor);
+                    }
+                    
+                    /* Thumb */
+                    &::-webkit-slider-thumb {
+                        margin-top: calc(var(--range-btnHeight) / 2 * -1);
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
+                    &::-moz-range-thumb {
+                        height: var(--range-btnHeight);
+                        width: var(--range-btnHeight);
+                        border: 0;
+                        border-radius: 50%;
+                        -webkit-appearance: none;
+                        background: var(--range-btnColor);
+                        cursor: pointer;
+                    }
 
-                > input::-moz-range-thumb {
-                    border: 0;
-                    background-color: var(--range-btnColor);
-                    cursor: pointer;
-                }
-
-                > input:hover::-webkit-slider-thumb {
-                    background-color: var(--field-focus-borderColor);
-                }
-
-                > input:hover::-moz-range-thumb {
-                    background-color: var(--field-focus-borderColor);
+                    &:focus::-webkit-slider-thumb,
+                    &:hover::-webkit-slider-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
+                    &:focus::-moz-range-thumb,
+                    &:hover::-moz-range-thumb {
+                        background: var(--field-focus-borderColor);
+                    }
                 }
             }
         }
@@ -3628,22 +3746,27 @@
         &.kijs-disabled > .kijs-content > .kijs-inputwrapper,
         &.kijs-readonly > .kijs-content > .kijs-inputwrapper {
             > input {
-                background-color: var(--field-disabled-bkgrndColor);
-            }
+                &::-webkit-slider-runnable-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-track {
+                    background-color: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                
+                &::-moz-range-progress {
+                    background: var(--field-disabled-fontColor);
+                }
 
-            > input::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input:hover::-webkit-slider-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
-            }
-
-            > input::-moz-range-thumb {
-                background-color: var(--field-disabled-fontColor);
-                cursor: default;
+                &::-webkit-slider-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
+                &::-moz-range-thumb {
+                    background: var(--field-disabled-fontColor);
+                    cursor: default;
+                }
             }
         }
     }
@@ -3690,7 +3813,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3773,7 +3896,7 @@
                     font-size: var(--field-fontSize);
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
@@ -3963,9 +4086,11 @@
        * Field QuillEditor
        ****************** */
     div.kijs-field-quilleditor {
+        overflow: visible;
+
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 display: flex;
@@ -3980,10 +4105,30 @@
 
                 > .ql-toolbar {
                     flex: none;
+                    z-index: 1;
+                    overflow: visible;
                     border-top: 1px solid var(--field-borderColor) !important;
                     border-left: 1px solid var(--field-borderColor) !important;
                     border-right: 1px solid var(--field-borderColor) !important;
                     border-bottom: 0 !important;
+
+                    .ql-picker-options {
+                        background-color: var(--panel-bkgrndColor) !important;
+                    }
+
+                    span {
+                        color: var(--button-fontColor) !important;
+                    }
+
+                    svg {
+                        > .ql-stroke:not(.ql-color-label) {
+                            stroke: var(--button-fontColor) !important;
+                        }
+
+                        > .ql-fill:not(.ql-color-label) {
+                            fill: var(--button-fontColor) !important;
+                        }
+                    }
                 }
 
                 > .ql-container {
@@ -3993,6 +4138,7 @@
                     &.ql-snow {
                         overflow: hidden;
                     }
+
                     &.ql-bubble {
                         overflow: visible;
                     }
@@ -4037,7 +4183,7 @@
     }
 
 
-    
+
     /* ******************
        * Grid
        ****************** */
@@ -4088,11 +4234,11 @@
                     color: var(--default-fontColor);
                     font-family: var(--default-fontFamily);
                     font-size: var(--default-fontSize);
-                    
+
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     &.kijs-hidden {
                         display: none;
                     }
@@ -4132,9 +4278,9 @@
                     /* Textfelder im Grid */
                     &.kijs-celledit {
                         padding: 0;
-                        
+
                         > .kijs-field {
-                            
+
                         }
                     }
 
@@ -4194,7 +4340,7 @@
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;
-                                
+
                                 > span.kijs-sort {
                                     color: #555;
                                     font-family: 'Font Awesome 6 Free';
@@ -4439,7 +4585,7 @@
             }
         }
     }
-    
+
 
 
     /* ******************
@@ -4501,17 +4647,6 @@
         to   { left: -100%; }
     }
 
-
-
-    /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
 

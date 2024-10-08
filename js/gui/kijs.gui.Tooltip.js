@@ -14,7 +14,11 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         super(false);
 
         this._disabled = false;
-        this._dom = new kijs.gui.Dom();
+        this._dom = new kijs.gui.Dom({
+            nodeAttribute: {
+                popover: 'manual'
+            }
+        });
         this._followPointer = true;    // Soll sich der TipText mit dem Mauszeiger verschieben?
         this._offsetX = 13;
         this._offsetY = 10;
@@ -26,7 +30,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             // keine
         });
 
-        // Mapping für die Zuweisung der Config-Eigenmschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },
             disabled        : true,
@@ -130,6 +134,9 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             updatePos = true;
         }
 
+        // show popover
+        this._dom.node.showPopover();
+
         if (this._followPointer) {
             updatePos = true;
         }
@@ -141,7 +148,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 x += this._offsetX;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (x+this._dom.node.offsetWidth > window.innerWidth) {
                 x = Math.abs(window.innerWidth - this._dom.node.offsetWidth - 5);
             }
@@ -157,7 +164,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 y += this._offsetY;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (y+this._dom.node.offsetHeight > window.innerHeight) {
                 y = Math.abs(window.innerHeight - this._dom.node.offsetHeight - 5);
             }
@@ -177,6 +184,11 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
+        }
+
+        // hide popover
+        if (this._dom.node) {
+            this._dom.node.hidePopover();
         }
 
         // Event entfernen

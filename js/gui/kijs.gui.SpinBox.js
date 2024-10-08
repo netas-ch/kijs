@@ -43,6 +43,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-spinbox');
+        this._dom.nodeAttributeSet('popover', 'manual');
 
 
         // Standard-config-Eigenschaften mergen
@@ -105,7 +106,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._ownPos = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "pos"`);
+            throw new kijs.Error(`Unknown format on config "pos"`);
         }
     }
     
@@ -168,7 +169,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl = null;
 
         } else {
-            throw new kijs.Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unknown format on config "target"`);
 
         }
     }
@@ -190,7 +191,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._targetPos = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "targetPos"`);
+            throw new kijs.Error(`Unknown format on config "targetPos"`);
         }
     }
 
@@ -211,7 +212,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {undefined}
      */
     close() {
-        // bei allen übergeordneten Spinboxes die aktuelle Spinbox wieder rausnehmen.
+        // Bei allen übergeordneten Spinboxen die aktuelle Spinbox wieder herausnehmen.
         // Siehe dazu auch den Kommentar in der Funktion show()
         let p = this.parent;
         while (p) {
@@ -283,8 +284,12 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             return;
         }
 
-        // SpinBox anzeigen
-        this.renderTo(document.body);
+        // SpinBox anzeigen (Wenn ein modales Element vorhanden ist, an oberstem geöffnetem anhängen, sonst an body)
+        const modalOpenNodes = document.querySelectorAll('dialog:modal[open]');
+        this.renderTo(modalOpenNodes.length > 0 ? modalOpenNodes.item(modalOpenNodes.length-1) : document.body);
+
+        // popover mode
+        this._dom.node.showPopover();
 
         // Workaround um die Breite zu rechnen.
         // Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
@@ -297,7 +302,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
 
         // allen übergeordneten Spinboxes mitteilen, dass beim Klick auf dieses Element
-        // die Spnbox nicht geschlossen werden soll.
+        // die Spinbox nicht geschlossen werden soll.
         let p = this.parent;
         while (p) {
             if (p instanceof kijs.gui.SpinBox) {
@@ -313,7 +318,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl.focus();
         }
 
-        // Listeners auf body/window zum ausblenden
+        // Listeners auf body/window zum Ausblenden
         kijs.Dom.addEventListener('mousedown', document.body, this.#onBodyMouseDown, this);
         kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
         kijs.Dom.addEventListener('wheel', window, this.#onWindowWheel, this);
@@ -331,6 +336,11 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
+        }
+
+        // hide popover
+        if (this._dom.node) {
+            this._dom.node.hidePopover();
         }
 
         kijs.Dom.removeEventListener('mousedown', document.body, this);
@@ -400,7 +410,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             }
         }
 
-        // Aurichten an X, Y
+        // Ausrichten an X, Y
         let positions = null;
         if (kijs.isNumber(x) && kijs.isNumber(y)) {
             positions = this._dom.alignToRect(
@@ -456,7 +466,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * Workaround um die Breite zu rechnen.
      * Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
      * auch wenn der Inhalt keine definierte Breite hat (z.B. bei einem Menu).
-     * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese Fix ein.
+     * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese fix ein.
      * @returns {undefined}
      */
     _widthWorkaround() {

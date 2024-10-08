@@ -44,9 +44,9 @@
     /* Masse */
     --default-fontSize: 11px;
     --default-lineHeight: 14px;
-    
+
     --icon-fontSize: 13px;
-    
+
     --button-fontSize: 11px;
     --button-lineHeight: 14px;
     --button-height: 22px;
@@ -64,11 +64,12 @@
     --checkbox-height: 15px;
     --checkbox-fontSize: 10px;
     --checkbox-lineHeight: 12px;
+    --range-btnHeight: 16px;
     --switch-height: 20px;
-    
+
     --badge-fontSize: 10px;
     --badge-lineHeight: 13px;
-    
+
     --headerBar-fontSize: 11px;
     --footerBar-fontSize: 11px;
 
@@ -78,7 +79,7 @@
     --item-fontSize: 11px;
     --item-lineHeight: 13px;
     --item-label-fontSize: 10px;
-    
+
     --panel-collapse-height: 26px;
     --panel-collapse-width: 30px;
 
@@ -93,7 +94,7 @@
     --defaultDateRange-inputWidth: 170px;
     --defaultPhone-inputWidth: 130px;
     --defaultSozVersNr-inputWidth: 120px;
-    
+
 
     /* Farbzuweisungen */
     --viewport-bkgrndColor: #dfe8f6;
@@ -104,7 +105,21 @@
     --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif;
     --default-fontColor: var(--grey11);
     --default-disabled-fontColor: var(--grey08);
+
+
+    /* Scrollbar (nur Chrome) */
+    --scrollbar-width: 12px;
+    --scrollbar-border-radius: 0;
+    --scrollbar-background-color:  var(--grey04);
+    --scrollbar-background-hover-color: var(--grey04);
+    --scrollbar-color: var(--grey06);
+    --scrollbar-hover-color: var(--grey07);
     
+    
+    /* Mask */
+    --mask-bkgrndColor: rgba(0, 0, 0, 0.35);
+    --mask-fontColor: #fff;
+    --mask-icon-fontColor: #fff;
 
     /* Separator */
     --separator-bkgrndColor: #bdc4cd;
@@ -113,7 +128,7 @@
     /* Icon */
     --icon-fontColor: var(--grey10);
     --icon-disabled-fontColor: var(--grey08);
-
+    
     /* Button */
     --button-bkgrndColor: var(--grey03);
     --button-borderColor: #bdc4cd;
@@ -227,7 +242,7 @@
 
     /* Range */
     --range-bkgrndColor: var(--grey07);
-    --range-btnColor: var(--grey10);
+    --range-btnColor: var(--grey09);
 
     /* Item */
     --item-bkgrndColor: var(--grey02);
@@ -255,7 +270,7 @@
     --item-label-fontColor: var(--grey08);
     --item-label-disabled-fontColor: var(--grey08);
 
-    
+
     /* Clock */
     --clock-bkgrndColor: var(--grey04);
     --clock-fontColor: var(--grey11);
@@ -509,6 +524,13 @@
         &.kijs-collapse-bottom {
             height: 27px;
         }
+
+        > .kijs-footer {
+            > .kijs-container-inner {
+                padding: 2px;
+                gap: 3px;
+            }
+        }
     }
 
     /* kijs.gui.container.Tab */
@@ -574,14 +596,14 @@
                     border-right: 1px solid var(--field-borderColor);
                     border-bottom: 1px solid var(--field-borderColor);
                     border-left: 1px solid var(--field-borderColor);
-                    
+
                     &.kijs-inline {
                         border-top: 1px solid var(--field-borderColor);
                         border-right: 1px solid var(--field-borderColor);
                         border-bottom: 1px solid var(--field-borderColor);
                         border-left: none;
                         border-radius: 0;
-                        
+
                         &.kijs-smallpaddings {
                             width: calc(var(--icon-fontSize) + 4px);
                             padding-top: 4px;
@@ -640,7 +662,7 @@
             }
         }
     }
-    
+
     /* kijs.gui.field.Checkbox */
     div.kijs-field-checkbox {
         > .kijs-content {

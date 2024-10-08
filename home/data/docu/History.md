@@ -2,31 +2,169 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.8.0 (ist noch in Entwicklung)
+Version 2.8.3
+=============
+### kijs.gui.CornerTipContainer
+Neues, optionales Argument ```dismissDelay``` bei statischer Funktion ```show``` 
+(default: 5s)  
+
+### Bugfixes
+ - kijs.gui.SpinBox: Das Element wird in den Body, oder falls ein modaler Dialog 
+   besteht, in diesen gerendert, statt in die targetNode.  
+ - kijs.gui.Window: Auf Touch-Geräten funktionierte das verschieben von Fenstern 
+   nicht richtig.  
+
+
+
+Version 2.8.2
+=============
+### kijs.gui.Mask
+Masken werden neu, wenn sie nicht den ganzen Body abdecken anders erstellt:
+ - Innerhalb des Targets (als First Child) wird ein 1px x 1px anchor-Div erstellt
+ - In dieses Div wird dann die Maske gerendert.
+
+### kijs.gui.Window
+Neue config/getter/setter: ```allowDragOutside```. (Boolean)  
+Gibt an, ob ein Fenster per Drag&Drop auch ausserhalb seines Targets sein darf.  
+Ein Teil der Headerbar bleibt jedoch immer sichtbar, damit das Fenter wieder 
+zurückgezogen werden kann.  
+Bisher konnten Fenster nicht ausserhalb des Targets sein.  
+Standard: ```true```  
+
+
+
+Version 2.8.1
+=============
+### Anpassungen CSS
+ - Neue CSS-Variablen für Scrollbar-Darstellung in Chrome:  
+    - ```--scrollbar-width: 5px;```
+    - ```--scrollbar-border-radius: 2.5px;```
+    - ```--scrollbar-background-color: transparent;```
+    - ```--scrollbar-background-hover-color: var(--grey04);```
+    - ```--scrollbar-color: var(--grey07);```
+    - ```--scrollbar-hover-color: var(--grey08);```
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
+in kijs.theme.default.css.
+
+
+### Verschiedene Bugfixes bei modalen Elementen
+ - kijs.gui.CornerTipContainer
+ - kijs.gui.Mask
+ - kijs.gui.SpinBox
+ - kijs.gui.Tooltip
+ - kijs.gui.Window
+
+**ACHTUNG: Sobald ein Modales kijs.gui.Window geöffnet wird, können neu nur noch 
+modale Fenster geöffnet werden. Bisher war das nicht so.**  
+
+
+
+Version 2.8.0
 =============
 ### Anpassungen CSS
  - Font Awesome Update auf Version 6.5.2.
   **UPDATE TIPP:**: Neue Fonts in files.json eintragen.
 
  - Neue CSS-Variablen:
+    - ```--mask-bkgrndColor: rgba(0, 0, 0, 0.35);```
+    - ```--mask-fontColor: #fff;```
+    - ```--mask-icon-fontColor: #fff;```
     - ```--checkbox-height: 20px;```
     - ```--checkbox-lineHeight: 18px;```
+    - ```--range-btnHeight: 20px;```
 
  - Geänderte CSS-Variablen:
     - ```--checkbox-fontSize: 14px;```  (alter Wert: 20px)
+    - ```--range-btnColor: var(--grey09);```  (alter Wert: var(--grey10))
 
 **UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
 in kijs.theme.default.css.
 
-### kijs.gui.Checkbox
+### kijs.gui.field.Checkbox
  - Die Checkbox wird neu mit einem Border gezeichnet.
  - Folgende configs wurden entfernt:
     - ```checkedIconCls```
     - ```determinatedIconCls```
     - ```uncheckedIconCls```
 
+### kijs.gui.MonthPicker
+### kijs.gui.DatePicker
+Die Monatsbezeichnungen werden nun automatisch in der eingestellten Sprache 
+```kijs.language``` angezeigt.  
+ - config/getter/setter ```headerBarFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'headerBarFormat'``` durchsuchen und den entfernen.  
+
+### kijs.gui.field.Month
+Die Monatsbezeichnungen werden nun automatisch in der eingestellten Sprache 
+```kijs.language``` angezeigt.  
+ - config/getter/setter ```displayFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'displayFormat'``` durchsuchen und entfernen.  
+
+### kijs.gui.field.DateTime
+Das Datum und Uhrzeit werden nun automatisch in der eingestellten Sprache ```kijs.language``` formatiert.
+ - config ```displayDateFormat``` gibt es nicht mehr
+ - config ```displayTimeFormat``` gibt es nicht mehr
+
+**UPDATE TIPP:**: Projekt nach ```'displayDateFormat'``` und ```'displayTimeFormat'```  
+durchsuchen und diese config-Parameter entfernen.  
+
 ### kijs.gui.ListView
  - Checkboxen/Optionen werden neu mit einem Border gezeichnet.
+
+### kijs.gui.field.OptionGroup
+ - Neu kann die gewählte Option wieder abgewählt werden.
+   Ist ```required: true```, kann der Wert nicht abgewählt werden.
+
+### kijs.gui.field.Number
+ - Beim Drücken auf die Spinner-Buttons kommt nun auch das input-event.  
+
+### kijs.gui.field.Range
+ - CSS Überarbeitet, so dass das Feld in allen Browsern gleich aussieht.  
+
+### kijs.gui.Container
+ - Die Funktion ```add()```hat eine neue Anordnung der Argumente:
+   Früher:
+    ```add(elements, index=null, preventRender=false)```
+   Neu:
+    ```add(elements, index=null, options={})```
+
+   options Eigenschaften:
+    - ```preventRender```   render verhindern? (Boolean, Default=false)
+    - ```preventEvents```   Das Auslösen des beforeAdd und add-Events verhindern? (Boolean, Default=false)
+
+   **UPDATE TIPP:** Projekt nach ```add(``` durchsuchen und die Argumente anpassen:
+
+        {
+            preventRender: ...,   // war in Argument 3
+            preventEvents: ...,   // ist neu
+        }
+
+### kijs.gui.Window
+ - Alle Fenster werden neu nicht mehr mit einem ```DIV``` gemacht, sondern mit einem 
+   ```DIALOG```. Bei Modalen Fenstern ist es darum nicht mehr möglich mit der Tastatur 
+   zu verdeckten Elementen zu Navigieren.  
+ - Fenster können nun auch auf Touch-Geräten verschoben werden.  
+
+**UPDATE TIPP:** LESS/CSS-Dateien nach folgenden Wörtern durchsuchen und wie 
+folgt ersetzen:  
+ - ```div.kijs-window``` --> ```dialog.kijs-window```  
+ - ```div.kijs-panel``` --> ```div.kijs-panel, dialog.kijs-panel```  
+ - ```div.kijs-msgox``` --> ```dialog.kijs-msgbox```  
+
+### kijs.gui.Mask
+Wenn eine Maske den ganzen document.body abdeckt, wird sie neu mit einem dialog-Tag 
+erstellt (sonst div-Tag). Bei einem dialog-Tag wird verhindert, dass mit der Tastatur 
+hinter die Maske navigiert werden kann.  
+Masken haben neu ein zusätzliches div, in dem das Icon und der Text angezeigt wird.  
+
+### kijs.gui.Splitter
+ - Splitter können nun auch auf Touch-Geräten verschoben werden.  
+
+### kijs.gui.Resizer
+ - Splitter können nun auch auf Touch-Geräten bedient werden.  
 
 ### kijs.gui.dataView.Element entfernt
 Stattdessen gibt es neu verschiedene Möglichkeiten:
@@ -64,13 +202,74 @@ Stattdessen gibt es neu verschiedene Möglichkeiten:
 
     Als Beispiel siehe ```kijs.gui.dataView.element.ListView```
 
+### kijs
+  - Getter/Setter ```kijs.languageId``` umbenannt zu ```kijs.language```  
+   **UPDATE TIPP:**: Projekt nach ```'kijs.languageId'``` durchsuchen und durch ```'kijs.language'``` ersetzen.  
 
-### kijs.gui.field.OptionGroup
- - Neu kann die gewählte Option wieder abgewählt werden.
-   Ist ```required: true```, kann der Wert nicht abgewählt werden.
+### kijs.Date
+ - Neue Funktion ```kijs.Date.parseLocalDateString(strInput, year2000Threshold, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalDateTimeString(strInput, year2000Threshold, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalTimeString(strInput, language='auto')```  
+ - Neue Funktion ```kijs.Date.parseLocalWeekString(strInput, language='auto')```  
+   Erstellt ein Datum aus einem String weiner beliebigen Sprache.
+ - Getter ```kijs.Date.weekdays``` entfernt
+ - Getter ```kijs.Date.weekdays_short``` entfernt
+ - Getter ```kijs.Date.months``` entfernt
+ - Getter ```kijs.Date.months_short``` entfernt
+ - ```kijs.Date.getWeekday(date, short=false)``` Argument short (boolean) geändert zu format (string)
+ - ```kijs.Date.getMonthName(date, short=false)``` Argument short (boolean) geändert zu format (string)
+ - Funktion ```kijs.Date.getDateFromGermanString(strDate)``` entfernt.
+ - Funktion ```kijs.Date.create(arg)``` kann nun keine Deutschen Daten und auch 
+   keine Kalenderwochen mehr parsen.
+
+ **UPDATE TIPP:**
+  - Projekt nach ```'kijs.Date.weekdays'``` durchsuchen. Falls
+    es eine Verwendung gibt, kann dafür die Funktion ```getWeekday(date, format='long')``` 
+    verwendet werden. 
+  - Projekt nach ```'kijs.Date.months'``` durchsuchen. Falls
+    es eine Verwendung gibt, kann dafür die Funktion ```getMonthName(date, format='long')``` 
+    verwendet werden. 
+  - Projekt nach ```kijs.Date.getWeekday``` suchen und das 2. Argument ändern.  
+  - Projekt nach ```kijs.Date.getMonthName``` suchen und das 2. Argument ändern.  
+  - Projekt nach ```kijs.Date.getDateFromGermanString``` suchen und durch die Funktion  
+    ```kijs.Date.parseLocalDateString(strInput, year2000Threshold, language='auto')``` ersetzen.  
+  - Projekt nach ```kijs.Date.create``` suchen und sicherstellen, dass keine Deutschen 
+    Daten und auch keine Kalenderwochen geparst werden. Es können dafür die neuen Funktionen 
+    ```kijs.Date.parseLocal...String(...) ``` verwendet werden.  
 
 ### kijs.String
  - Neue Funktion ```kijs.String.toRegExp()```
+
+### kijs.Navigator
+ - Funktion ```kijs.gui.Navigator.getLanguages()``` entfernt.  
+ - Funktion ```kijs.gui.Navigator.getLanguageId()``` entfernt.  
+
+   **UPDATE TIPP:**: Projekt nach ```'kijs.gui.Navigator.getLanguage'``` durchsuchen 
+   und die nativen JavaScript-Funktionen verwenden:  
+    - navigator.languages  
+    - navigator.language  
+
+   Vorsicht: Der Rückgabewert ist nicht identisch!  
+
+### Mehrsprachigkeit
+Siehe Leitfaden "Mehrsprachigkeit" in der Dokumentation.  
+
+
+
+Version 2.7.4
+=============
+### kijs.Rpc, kijs.gui.Rpc
+ - Zusätzliche config bei do(): ```exclusive``` (boolean)  
+   RPC können nun exklusiv geschickt werden.  
+   Exklusive RPCs werden sofort geschickt und nicht mit anderen RPCs zusammengefasst.  
+   Damit können z.B. Anfragen, die eine lange Verarbeitungszeit auf dem Server haben 
+   getrennt von anderen Anfragen abgehandelt werden.  
+   Beispiel:  
+
+        kijs.getRpc('default').do({
+            ...
+            exclusive: true
+        });
 
 
 
@@ -78,6 +277,7 @@ Version 2.7.3
 =============
 ### kijs.gui.grid.Grid
 Bugfix: Navigation mit Pfeiltasten
+
 
 
 Version 2.7.2

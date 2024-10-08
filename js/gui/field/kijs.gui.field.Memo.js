@@ -38,7 +38,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             inputMode: { target: 'inputMode' },
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             placeholder: { target: 'placeholder' },
@@ -79,7 +79,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 

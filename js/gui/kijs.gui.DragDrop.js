@@ -61,7 +61,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         if (kijs.isDefined(this.__targetDragOverDom) && !kijs.isEmpty(this.__targetDragOverDom)) {
             this.__targetDragOverDom.clsRemove('kijs-targetDragOver');
         }
-        
+
         if (!kijs.isEmpty(val)) {
             this.__targetDragOverDom = val;
             this.__targetDragOverDom.clsAdd('kijs-targetDragOver');
@@ -69,7 +69,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             this.__targetDragOverDom = null;
         }
     }
-    
+
 
 
     // --------------------------------------------------------------
@@ -89,7 +89,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     /**
      * Positioniert den dropMarker
      * @param {kijs.gui.Dom|Null} [targetDom=null] Null = ausblenden
-     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum ausblenden
+     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum Ausblenden
      * @param {String|Null|} [tagName=null]
      * @param {Number|Null} [width=null] Breite des Markers
      * @param {Number|Null} [height=null] Höhe des Markers
@@ -97,7 +97,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
      * @param {String|Null|} [markerHtml=null]       innerHTML für Marker
      * @returns {undefined}
      */
-    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null, 
+    static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null,
         width=null, height=null, markerCls=null, markerHtml=null) {
         // evtl. nur ausblenden
         if (kijs.isEmpty(targetDom) || kijs.isEmpty(targetPos) || kijs.isEmpty(tagName)) {
@@ -130,14 +130,14 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         if (markerCls) {
             this.__dropMarkerDom.clsAdd(markerCls);
         }
-        
+
         // evtl. HTML-Inhalt einfügen
         if (!kijs.isEmpty(markerHtml)) {
             this.__dropMarkerDom.html = markerHtml;
         } else {
             this.__dropMarkerDom.html = '';
         }
-        
+
         // Grösse anpassen
         this.__dropMarkerDom.width = width;
         this.__dropMarkerDom.height = height;

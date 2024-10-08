@@ -93,7 +93,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             autoLoad: { target: 'autoLoad' },
             inputMode: { target: 'inputMode' },
             remoteSort: true,
@@ -184,7 +184,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -540,12 +540,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     _isValueInStore(val) {
         let found = false;
 
-        kijs.Array.each(this._listViewEl.data, function(row) {
-            if (row[this.valueField] === val) {
-                found = true;
-                return false;
-            }
-        }, this);
+        if (this._listViewEl) {
+            kijs.Array.each(this._listViewEl.data, function (row) {
+                if (row[this.valueField] === val) {
+                    found = true;
+                    return false;
+                }
+            }, this);
+        }
 
         return found;
     }
@@ -640,19 +642,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         super._validationRules(value, ignoreEmpty);
 
         // Wert muss in der Liste vorhanden sein.
-        if (this._forceSelection && !this._remoteSort) {
-            if (value !== null && value.toString() !== '') {
-                let match = false;
-                kijs.Array.each(this._listViewEl.data, function(row) {
-                    if (row[this.valueField] === value) {
-                        match = true;
-                        return false;
-                    }
-                }, this);
-
-                if (!match) {
-                    this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
+        if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
+            let match = false;
+            kijs.Array.each(this._listViewEl.data, function(row) {
+                if (row[this.valueField] === value) {
+                    match = true;
+                    return false;
                 }
+            }, this);
+
+            if (!match) {
+                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
             }
         }
     }
@@ -819,7 +819,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._value;
         }
 
-        if (this._selectFirst) {
+        if (this._selectFirst && this._listViewEl.data.length) {
             this.value = this._listViewEl.data[0].value;
         }
 

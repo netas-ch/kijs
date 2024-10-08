@@ -4,7 +4,7 @@
 // kijs.gui.container.tab.Container
 // --------------------------------------------------------------
 /**
- * Container Element, zur Verwendung in kijs.gui.container.Tab.Elementen.
+ * Container Element, zur Verwendung in kijs.gui.container.tab.Elementen.
  * Es hat zusätzlich zum normalen Container noch ein paar Eigenschaften, für den
  * Tab-Button in der Tab-Bar.
  *

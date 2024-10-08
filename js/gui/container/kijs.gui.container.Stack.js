@@ -20,16 +20,16 @@
  * animation           String [optional]     Standard Animation. Gültige Werte:
  *                                              none:           Keine Animation
  *                                              fade:           Überblenden (default)
- *                                              slideLeft:      Ausfahren nach Links
- *                                              slideRight:     Ausfahren nach Rechts
+ *                                              slideLeft:      Ausfahren nach links
+ *                                              slideRight:     Ausfahren nach rechts
  *                                              slideTop:       Ausfahren nach oben
  *                                              slideBottom:    Ausfahren nach unten
  *
- * animationDuration   Integer [optional]   Dauer der Animation in Milisekunden (default: 1000).
+ * animationDuration   Integer [optional]   Dauer der Animation in Millisekunden (default: 1000).
  * 
- * currentEl           kijs.gui.Element [optional] Element, das als erstes angezeigt wird
- * currentIndex        Integer [optional]          Element, das als erstes angezeigt wird (default: 0)
- * currentName         String [optional]           Element, das als erstes angezeigt wird
+ * currentEl           kijs.gui.Element [optional] Element, das als Erstes angezeigt wird
+ * currentIndex        Integer [optional]          Element, das als Erstes angezeigt wird (default: 0)
+ * currentName         String [optional]           Element, das als Erstes angezeigt wird
  * 
  *
  * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
@@ -40,7 +40,7 @@
  *                                              Int = Index des Elements
  *                                              Object = Verweis auf das Element
  *        animation String [optional]       Art der Animation
- *        duration  Integer [optional]      Dauer der Animation in Milisekunden
+ *        duration  Integer [optional]      Dauer der Animation in Millisekunden
  *
  *
  * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
@@ -168,8 +168,8 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    add(elements, index=null, preventRender=false) {
-        super.add(elements, index, preventRender);
+    add(elements, index=null, options={}) {
+        super.add(elements, index, options);
     }
     
     // overwrite
@@ -316,6 +316,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     setPreviousAnimated(animation=null, duration=null) {
         if (this._elHistory.length > 1) {
             const el = this._elHistory[this._elHistory.length - 2];
+            this._elHistory.pop();
             this.setCurrentAnimated(el, animation, duration);
         }
     }
@@ -363,7 +364,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Fügt einen neues Element zur Element History hinzu
+    // Fügt ein neues Element zur Element History hinzu
     _elHistoryAdd(el) {
         // Falls das element bereits im Array ist: entfernen
         this._elHistory = kijs.Array.remove(this._elHistory, el);

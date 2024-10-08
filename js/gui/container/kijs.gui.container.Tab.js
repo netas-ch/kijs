@@ -143,7 +143,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // MEMBERS
     // --------------------------------------------------------------
     // overwrite
-    add(elements, index=null, preventRender=false) {
+    add(elements, index=null, options={}) {
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
@@ -185,10 +185,10 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         }, this);
 
         // Buttons zu tabBar hinzufügen
-        this._tabBarEl.add(newTabBarButtons, index, true);
+        this._tabBarEl.add(newTabBarButtons, index, { preventRender: true });
 
         // Elemente hinzufügen
-        super.add(newElements, index, preventRender);
+        super.add(newElements, index, options);
     }
 
     // overwrite

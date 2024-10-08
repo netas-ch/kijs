@@ -41,7 +41,7 @@ kijs.String = class kijs_String {
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden
+     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden.
      * Es werden folgende Zeichen ersetzt
      *  - Unicode 00A0 - 9999
      *  - < und >
@@ -66,7 +66,7 @@ kijs.String = class kijs_String {
      */
     static htmlentities_decode(html) {
 
-        // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
+        // Geschwindigkeit optimieren, falls der String nur aus einem einzelnen entity ("&#xabab;") besteht
         if (kijs.isString(html) && (html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
             return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
         }
@@ -208,9 +208,9 @@ kijs.String = class kijs_String {
         replace = kijs.toString(replace);
         return kijs.isFunction(text.replaceAll) ? text.replaceAll(search, replace) : text.split(search).join(replace);
     }
-    
+
     /**
-     * Konventiert einen String in einen Regulären Ausdruck (RegExp)
+     * Konvertiert einen String in einen Regulären Ausdruck (RegExp)
      * @param {String} text Regulärer Ausdruck als String Beispiel: '/^[0-9A-Z]{3,4}$/i'
      * @returns {RegExp|Boolean} Regulärer Ausdruck oder false bei Fehler
      */
@@ -219,12 +219,12 @@ kijs.String = class kijs_String {
         if (kijs.isRegExp(text)) {
             return text;
         }
-        
+
         // Es muss ein String sein!
         if (!kijs.isString(text)) {
             return false;
         }
-        
+
         // Der RegExp muss mit / eingeschlossen sein. Dahinter können noch modifiers sein.
         if (text[0] !== '/') {
             return false;
@@ -233,7 +233,7 @@ kijs.String = class kijs_String {
         if (i <= 0) {
             return false;
         }
-        
+
         // RegExp erstellen
         try {
             return new RegExp(text.slice(1, i), text.slice(i+1));

@@ -59,7 +59,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze das per default Selektiert sind.
+            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
                                         // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
@@ -365,7 +365,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Gibt die selektierten Elemente zurück
+     * Gibt die selektierten Elemente zurück.
      * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
@@ -390,7 +390,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Gibt die Data-rows der selektieten Elemente zurück
+     * Gibt die Data-rows der selektierten Elemente zurück
      * @returns {Array|null}
      */
     getSelectedRows() {
@@ -716,7 +716,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                         let ok = false;
                         kijs.Array.each(filterFields, function(filterField) {
                             if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                                throw new kijs.Error(`Unkown filter format.`);
+                                throw new kijs.Error(`Unknown filter format.`);
                             }
 
                             if (filterField.value === row[filterField.field]) {
@@ -768,7 +768,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Element festlegen, welches über die Tabulator-Taste den Fokus erhält
+     * Element festlegen, welches über die Tabulator-Taste den Fokus erhält.
      * Setzt den tabIndex des Elements auf 0
      * und bei allen anderen Elementen auf undefined
      * @param {Object} el

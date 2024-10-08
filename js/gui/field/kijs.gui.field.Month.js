@@ -8,7 +8,6 @@
  * ----------
  * date                     aktueller Wert als JavaScript Date-Objekt.
  * value                    aktueller Wert als SQL-String (siehe auch "valueFormat")
- * displayFormat            Format der Darstellung im Feld. Default="H Y"
  * valueFormat              Format des SQL-Strings default:'Y-m-d (gilt für value, minValue und maxValue)
  * lastDayOfMonthAsValue    als date oder value wird normalerweise der 1. Tag des Monats zurückgegeben,
  *                          falls der letzte Tag gewünscht wird, lastDayOfMonthAsValue=true setzen.
@@ -69,11 +68,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._previousChangeDate = null;  // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeDate = null;  // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
-        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
-                                        // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
-                                        // Null=Umwandlung ausgeschaltet.
+        this._year2000Threshold = 30;     // Wenn zweistellige Jahreszahlen eingegeben werden,
+                                          // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
+                                          // Null=Umwandlung ausgeschaltet.
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -140,10 +139,9 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             year2000Threshold: true,
             emptyBtnHide: { target: 'maxDate', context: this._monthPicker },
-            displayFormat: { target: 'headerBarFormat', context: this._monthPicker },
             inputMode: { target: 'inputMode' },
             valueFormat: { target: 'valueFormat', context: this._monthPicker },
             lastDayOfMonthAsValue: { target: 'lastDayOfMonthAsValue', context: this._monthPicker },
@@ -196,7 +194,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -210,9 +208,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._updateInputValue();
         this._previousChangeDate = this._monthPicker.date;
     }
-
-    get displayFormat() { return this._monthPicker.headerBarFormat; }
-    set displayFormat(val) { this._monthPicker.headerBarFormat = val; }
 
     get emptyBtnHide() { return this._monthPicker.emptyBtnHide; }
     set emptyBtnHide(val) { this._monthPicker.emptyBtnHide = !!val; }
@@ -374,8 +369,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         let monthIndex = null; // 0=Jan, 1=Feb, ...
         let index;
 
-        const months = kijs.Date.months;
-        const monthsShort = kijs.Date.months_short;
+        const months = [];
+        const monthsShort = [];
+        for (let i=0; i<12; i++) {
+            months[i] = kijs.Date.getMonthName(new Date(2000, i, 1), 'long');
+            monthsShort[i] = kijs.Date.getMonthName(new Date(2000, i, 1), 'short');
+        }
 
         // String in Bestandteile (Wörter) aufteilen
         strInput = kijs.toString(strInput).trim();
@@ -394,8 +393,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             if (kijs.isNumeric(str)) {
                 if (kijs.isEmpty(year)) {
                     year = parseInt(str);
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
-                    if (!kijs.isEmpty(this._year2000Threshold) && year >= 10 && year <= 99) {
+                    // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
+                    if (!kijs.isEmpty(this._year2000Threshold) && year >= 0 && year <= 99) {
                         if (year >= this._year2000Threshold) {
                             year += 1900;
                         } else {
@@ -435,7 +434,13 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     }
 
     _updateInputValue() {
-        let val = kijs.isEmpty(this._monthPicker.date) ? '' : kijs.Date.format(this._monthPicker.date, this._monthPicker.headerBarFormat);
+        let val = '';
+        if (!kijs.isEmpty(this._monthPicker.date)) {
+            val = this._monthPicker.date.toLocaleDateString(kijs.language, {
+                month: 'long',
+                year: 'numeric'
+            });
+        }
         this._inputDom.nodeAttributeSet('value', val);
     }
 
@@ -451,17 +456,27 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             // Min. value
             if (this._monthPicker.minDate !== null && date < this._monthPicker.minDate) {
                 this._errors.push(
-                        kijs.getText('Der minimale Wert für dieses Feld ist %1',
+                    kijs.getText('Der minimale Wert für dieses Feld ist %1',
                         '',
-                        kijs.Date.format(this._monthPicker.minDate, this._monthPicker.headerBarFormat)));
+                        this._monthPicker.minDate.toLocaleDateString(kijs.language, {
+                            month: 'long',
+                            year: 'numeric'
+                        })
+                    )
+                );
             }
 
             // Max. value
             if (this._monthPicker.maxDate !== null && date > this._monthPicker.maxDate) {
                 this._errors.push(
-                        kijs.getText('Der maximale Wert für dieses Feld ist %1',
+                    kijs.getText('Der maximale Wert für dieses Feld ist %1',
                         '',
-                        kijs.Date.format(this._monthPicker.maxDate, this._monthPicker.headerBarFormat)));
+                        this._monthPicker.maxDate.toLocaleDateString(kijs.language, {
+                            month: 'long',
+                            year: 'numeric'
+                        })
+                    )
+                );
             }
         }
 

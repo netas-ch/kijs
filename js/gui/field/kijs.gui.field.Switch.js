@@ -341,7 +341,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         // Max Position berechnen
         const max = this._inputDom.width - this._togglePointDom.height;
 
-        // Falls Checked muss noch der bestehende margin addiert werden
+        // Falls checked muss noch das bestehende margin addiert wird
         if (this._checked) {
             deltaX += max;
         }
@@ -483,6 +483,10 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     #onTouchMove(e) {
         if (!this.readOnly && !this.disabled && this._dragPosXStart !== null) {
             this._dragMove(e.nodeEvent.touches[0].clientX);
+
+            // Bubbeling und native Listeners verhindern
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
         }
     }
     

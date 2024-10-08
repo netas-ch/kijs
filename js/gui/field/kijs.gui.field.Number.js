@@ -97,7 +97,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             allowedDecimalSeparators: true,
             allowedThousandsSeparators: true,
             alwaysDisplayDecimals: true,
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             decimalPrecision: { target: 'decimalPrecision'},
             decimalSeparator: true,
             inputMode: { target: 'inputMode' },
@@ -154,7 +154,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -358,6 +358,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         }
 
         let val = this.value;
+        const oldValue = val;
 
         if (kijs.isEmpty(val)) {
             val = 0;
@@ -384,7 +385,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         val = this._formatNumber(val);
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
-        
+
         let step = 10; // Minimalintervall
         if (this._spinAcceleration > 0) {
             step = parseInt(this._spinDelayCurrent / 100 * this._spinAcceleration);
@@ -393,14 +394,20 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         if (this._spinDelayCurrent < 10) {
             this._spinDelayCurrent = 10;
         }
-        
+
         // Validieren
         this.validate();
-        
+
+        // input-event auslösen
+        this.raiseEvent('input', {
+            value: val,
+            oldValue: oldValue
+        });
+
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
 
-    // Stopt das Hoch-/Runterzählen von einem Spinnbutton
+    // Stoppt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
@@ -486,12 +493,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     // PRIVATE
     // LISTENERS
     #onInputDomChange(e) {
-        // Beim verlassen des Feldes, Zahl auf eingestelltes Format ändern.
+        // Beim Verlassen des Feldes, Zahl auf eingestelltes Format ändern.
         // Wenn Nummer ungültig, die Nummer belassen
         let val = this.value;
         let oldVal = this._previousChangeValue;
 
-        // Wert neu reinschreiben (evtl. wurde er Formatiert)
+        // Wert neu reinschreiben (evtl. wurde er formatiert)
         this.value = val;
         
         // und das change event auslösen

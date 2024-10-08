@@ -181,7 +181,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
             this._cellEditor = new editor(eArgs);
 
-            // Nach dem rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
+            // Nach dem Rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
             this._cellEditor.on('afterRender', function() {
                 kijs.defer(function() {
                     this._cellEditor.focus(false, true);
@@ -296,7 +296,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     /**
      * Setzt das HTML im DOM. Kann in abgeleiteter Klasse überschrieben werden,
-     * falls ein anderer Wert angezeigt werden soll als das Value.
+     * falls ein anderer Wert angezeigt werden soll als Wert.
      * @param {String} value
      * @returns {undefined}
      */

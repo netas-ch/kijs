@@ -31,6 +31,9 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         // Listeners
         this.on('mouseDown', this.#onMouseDown, this);
+        this.on('touchStart', this.#onTouchStart, this);
+        this.on('touchMove', this.#onTouchMove, this);
+        this.on('touchEnd', this.#onTouchEnd, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -66,7 +69,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
     set target(val) {
         if (!val instanceof kijs.gui.Element) {
-            throw new kijs.Error(`Unkown format on config "target"`);
+            throw new kijs.Error(`Unknown format on config "target"`);
         }
         this._targetEl = val;
     }
@@ -108,14 +111,35 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
+    _updateSplitterPosition() {
+        // Differenz zur vorherigen Position ermitteln
+        let offset;
+        if (this.direction === 'horizontal') {
+            offset = this._overlayDom.left - this._initialPos;
+        } else {
+            offset = this._overlayDom.top - this._initialPos;
+        }
+        
+        // Overlay wieder ausblenden
+        this._overlayDom.unrender();
+
+        // Neue Breite des Zielelements berechnen und zuweisen
+        switch (this._targetPos) {
+            case 'top': this.target.height = this.target.height + offset; break;
+            case 'right': this.target.width = this.target.width - offset; break;
+            case 'bottom': this.target.height = this.target.height - offset; break;
+            case 'left': this.target.width = this.target.width + offset; break;
+        }
+    }
+
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
         const newPos = {
@@ -130,10 +154,14 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         }
     }
 
-    
+
     // PRIVATE
     // LISTENERS
     #onMouseDown(e) {
+        if (this.disabled) {
+            return;
+        }
+
         if (this.direction === 'horizontal') {
             this._initialPos = e.nodeEvent.clientX;
         } else {
@@ -153,33 +181,69 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     #onMouseMove(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
         // Overlay Positionieren
         this._updateOverlayPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
     }
 
     #onMouseUp(e) {
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
-        // Overlay wieder ausblenden
-        this._overlayDom.unrender();
+        this._updateSplitterPosition();
 
-        // Differenz zur vorherigen Position ermitteln
-        let offset;
+        this._initialPos = null;
+    }
+
+    #onTouchEnd(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
+        this._updateSplitterPosition();
+
+        this._initialPos = null;
+    }
+
+
+    #onTouchMove(e) {
+        if (this.disabled || this._initialPos === null) {
+            return;
+        }
+
+        // Overlay Positionieren
+        this._updateOverlayPosition(e.nodeEvent.touches[0].clientX, e.nodeEvent.touches[0].clientY);
+
+        // Bubbeling und native Listeners verhindern
+        e.nodeEvent.stopPropagation();
+        e.nodeEvent.preventDefault();
+    }
+
+    #onTouchStart(e) {
+        if (this.disabled || e.nodeEvent.touches.length > 1) {
+            return;
+        }
+
         if (this.direction === 'horizontal') {
-            offset = e.nodeEvent.clientX - this._initialPos;
+            this._initialPos = e.nodeEvent.touches[0].clientX;
         } else {
-            offset = e.nodeEvent.clientY - this._initialPos;
+            this._initialPos = e.nodeEvent.touches[0].clientY;
         }
 
-        // Neue Breite des Zielelements berechnen und zuweisen
-        switch (this._targetPos) {
-            case 'top': this.target.height = this.target.height + offset; break;
-            case 'right': this.target.width = this.target.width - offset; break;
-            case 'bottom': this.target.height = this.target.height - offset; break;
-            case 'left': this.target.width = this.target.width + offset; break;
-        }
+        // Overlay Positionieren
+        this._updateOverlayPosition(e.nodeEvent.touches[0].clientX, e.nodeEvent.touches[0].clientY);
+
+        // Overlay rendern
+        this._overlayDom.render();
+        this._dom.node.parentNode.appendChild(this._overlayDom.node);
     }
 
 

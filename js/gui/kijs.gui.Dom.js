@@ -208,7 +208,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             width: true,
             height: true,
             nodeAttribute: { fn: 'assign' },
-            nodeTagName: true,
+            nodeTagName: { target: 'nodeTagName' },
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
             tooltip: { target: 'tooltip' },
@@ -455,11 +455,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     get nodeTagName() { return this._nodeTagName; }
     set nodeTagName(val) {
         this._nodeTagName = val;
-
-        if (!this._node) {
-            this._nodeTagName = val;
-        } else if (this._node.tagName.toLowerCase() !== val) {
-            throw new kijs.Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
+        if (this._node && this._node.tagName.toLowerCase() !== val) {
+            throw new kijs.Error(`Property "nodeTagName" can not be set. The node has already been rendered.`);
         }
     }
 
@@ -528,7 +525,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
 
         } else {
-            throw new kijs.Error(`Unkown tooltip format`);
+            throw new kijs.Error(`Unknown tooltip format`);
 
         }
 
@@ -596,7 +593,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Richtet ein Element nach einem Ziel aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
-     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
      * gewechselt werden (allowSwapX & allowSwapY)
      * @param {Object} target Objekt mit x, y, w, h
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
@@ -611,7 +608,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @param {Boolean} [swapOffset=true]   Der Offset wird mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
     alignToRect(target, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true) {
@@ -646,7 +643,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         let setHeight = false;
         let setWidth = false;
 
-        // Wenns inder Höhe nicht passt...
+        // Wenns in der Höhe nicht passt...
         if (!overlap.fitY) {
             fit = false;
 
@@ -674,7 +671,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 }
             }
 
-            // Wenns immer noch nicht passt: unten oder oben am Body-Rand beginnen und über das Target hinausfahren
+            // Wenns immer noch nicht passt: unten oder oben am Body-Rand beginnen und über das Target hinausfahren.
             // Dabei sicherstellen, dass das Element nicht grösser als der Body ist. Sonst Scrollbar.
             if (!fit) {
                 // Höhe darf nicht grösser als Body höhe sein, sonst begrenzen und Scrollbar
@@ -725,7 +722,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 }
             }
 
-            // Wenns immer noch nicht passt: links oder rechts am Body-Rand beginnen und über das Target hinausfahren
+            // Wenns immer noch nicht passt: links oder rechts am Body-Rand beginnen und über das Target hinausfahren.
             // Dabei sicherstellen, dass das Element nicht grösser als der Body ist. Sonst Scrollbar.
             if (!fit) {
                 // Breite darf nicht grösser als Body breite sein, sonst begrenzen und Scrollbar
@@ -765,7 +762,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Richtet ein Element nach einem Ziel-Element aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
-     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
      * gewechselt werden (allowSwapX & allowSwapY)
      * @param {kijs.gui.Element|HTMLElement} targetNode
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
@@ -780,7 +777,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @param {Boolean} [swapOffset=true]   Der Offset wird mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
     alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true)  {
@@ -813,7 +810,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     changeDisabled(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -847,7 +844,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     changeReadOnly(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -958,7 +955,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
@@ -1196,7 +1193,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *  - behavior  (String) default='auto'
      *     - 'smooth' Animiertes Scrollen
      *     - 'instant' Scrollen ohne Animation
-     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *     - 'auto'    Die CSS Einstellung 'scroll-behavior' wird berücksichtigt.
      *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
@@ -1264,7 +1261,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     _nodeAttributeApply() {
         kijs.Object.each(this._nodeAttribute, function(name, value) {
             this._node[name] = value;
-            // Kleiner murgs, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
+            // Kleiner Murks, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
             if (kijs.isEmpty(value)) {
                 this._node.removeAttribute(name);
             }
@@ -1416,7 +1413,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             // kijs-Event auslösen
             e.dom = this;
             e.eventName = eventName;
-            
+
             if (this.raiseEvent(eventName, e) === false) {
                 ret = false;
             }
@@ -1478,13 +1475,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
     
 
-    
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     // overwrite
     destruct() {
-        // Unrender
+        // unrender
         this.unrender();
 
         // Tooltip entladen

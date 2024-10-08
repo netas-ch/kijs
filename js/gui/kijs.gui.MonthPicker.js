@@ -16,7 +16,6 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._minDate = null; // Min Value (Date Object mit Datum vom 1. Tag des Monats)
         this._maxDate = null; // Max Value (Date Object mit Datum vom letzten Tag des Monats)
         this._valueFormat = 'Y-m-d';    // Format, mit dem der value ausgeliefert wird
-        this._headerBarFormat = 'F Y';  // Anzeige Format für die HeaderBar
         this._lastDayOfMonthAsValue = false;   // Soll beim Abfragen des Value oder Date der letzte Tag des Monats zurückgegeben werden?
 
         this._date = null;
@@ -141,7 +140,6 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         Object.assign(this._configMap, {
             lastDayOfMonthAsValue: true,       // Soll beim Abfragen des Value oder Date der letzte Tag des Monats zurückgegeben werden?
             valueFormat: true,                  // Format, mit dem der value ausgeliefert wird
-            headerBarFormat: true,              // Anzeige Format für die HeaderBar
             minValue: { target: 'minValue' },   // Kleinster zu wählender Monat     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
             maxValue: { target: 'maxValue' },   // Grösster zu wählender Monat      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
             headerBarHide: true,                // HeaderBar ausblenden
@@ -200,8 +198,8 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
     get headerBar() { return this._headerBar; }
 
-    get headerBarFormat() { return this._headerBarFormat; }
-    set headerBarFormat(val) { this._headerBarFormat = val; }
+    //get headerBarFormat() { return this._headerBarFormat; }
+    //set headerBarFormat(val) { this._headerBarFormat = val; }
 
     get headerBarHide() { return this._headerBarHide; }
     set headerBarHide(val) { this._headerBarHide = !!val; }
@@ -292,7 +290,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
+    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -438,7 +436,10 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
             if (kijs.isEmpty(this._date)) {
                 this._headerBar.html = '';
             } else {
-                this._headerBar.html = kijs.Date.format(this._date, this._headerBarFormat);
+                this._headerBar.html = this._date.toLocaleDateString(kijs.language, {
+                    month: 'long',
+                    year: 'numeric'
+                });
             }
         }
     }
@@ -447,7 +448,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     _createMonthsDom() {
         for (let i=0; i<12; i++) {
             this._monthsDom.push(new kijs.gui.Dom({
-                html: kijs.Date.months_short[i],
+                html: kijs.Date.getMonthName(new Date(2000, i, 1), 'short'),
                 on: {
                     click: this.#onMonthDomClick,
                     dblClick: this.#onMonthDomDblClick,

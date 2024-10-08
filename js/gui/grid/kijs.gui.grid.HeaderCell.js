@@ -302,7 +302,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
-        // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+        // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
         kijs.defer(this._updateHeaderToolTip, 50, this);
         this._updateHeaderToolTip();
         
@@ -331,13 +331,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     
     // PROTECTED
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this.parent.grid.dom.node);
         const newPos = {
@@ -349,7 +349,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
     
     
-    // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
     _updateHeaderToolTip() {
         if (!this.isRendered) {
             return;
