@@ -167,7 +167,7 @@ kijs.Storage = class kijs_Storage {
     // --------------------------------------------------------------
 
     /**
-     * Gibt die instanz auf den Storage zurück.
+     * Gibt die Instanz auf den Storage zurück.
      * @param {String} mode 'session' oder 'local'
      * @returns {window.localStorage|window.sessionStorage}
      */

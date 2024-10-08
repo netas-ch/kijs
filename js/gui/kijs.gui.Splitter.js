@@ -111,7 +111,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
-    _updateSpliterPosition() {
+    _updateSplitterPosition() {
         // Differenz zur vorherigen Position ermitteln
         let offset;
         if (this.direction === 'horizontal') {
@@ -198,7 +198,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
-        this._updateSpliterPosition();
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }
@@ -208,7 +208,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        this._updateSpliterPosition();
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }

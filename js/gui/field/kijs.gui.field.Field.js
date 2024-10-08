@@ -341,9 +341,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set labelHtmlDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
     get labelPosition() {
-        if (this._dom.clsHas('kijs-top')) {
+        if (this._dom.clsHas('kijs-labelpos-top')) {
             return 'top';
-        } else if (this._dom.clsHas('kijs-auto')) {
+        } else if (this._dom.clsHas('kijs-labelpos-auto')) {
              return 'auto';
         } else {
             return 'left';
