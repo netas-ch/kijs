@@ -4,6 +4,9 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 2.x.x (ist noch in Entwicklung)
 =============
+### kijs.Data
+Neue Klasse mit Statischen Funktionen für Recordsets.
+
 ### kijs.String
 Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
  - ```beginsWith(text, search, caseInsensitive=false)```
@@ -13,8 +16,6 @@ Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funkti
 Neue Funktion:
  - ```match(text, search, caseInsensitive=false)```
    Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
-
-
 
 ### kijs.gui.ListView
 - CSS: Elemente haben neu runde Ecken
