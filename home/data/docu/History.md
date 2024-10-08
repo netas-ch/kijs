@@ -2,6 +2,14 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.x.x (ist noch in Entwicklung)
+=============
+
+### kijs.gui.ListView
+- CSS: Elemente haben neu runde Ecken
+
+
+
 Version 2.8.3
 =============
 ### kijs.gui.CornerTipContainer
