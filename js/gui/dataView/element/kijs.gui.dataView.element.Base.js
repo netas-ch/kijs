@@ -14,7 +14,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
         super(false);
 
         this._dataRow = {};     // Verweis auf den Data-Datensatz
-        this._dataIndex = null; // Index des Datensatzes im Recordset
+        this._primaryKey = null; // Primary-Key-String
 
         this._selected = false;
 
@@ -29,7 +29,6 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            dataIndex: { target: 'dataIndex' },
             dataRow: { target: 'dataRow' },
             selected: { target: 'selected' }
         });
@@ -53,7 +52,12 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     set dataIndex(val) { this._dataIndex = val; }
 
     get dataRow() { return this._dataRow; }
-    set dataRow(val) { this._dataRow = val; }
+    set dataRow(val) {
+        this._dataRow = val;
+        this._primaryKey = kijs.Data.getPrimaryKeyString(this._dataRow, this.parent.primaryKeyFields);
+    }
+
+    get primaryKey() { return this._primaryKey; }
 
     get selected() { return this._dom.clsHas('kijs-selected'); }
     set selected(val) {

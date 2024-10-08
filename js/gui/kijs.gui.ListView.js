@@ -115,13 +115,18 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         this._value = val;
 
-        let filters = [];
+        let filters = null;
 
         if (kijs.isArray(val)) {
+            filters = {
+                operator: 'OR',
+                parts:[]
+            };
             kijs.Array.each(val, function(v) {
                 if (!kijs.isEmpty(v)) {
-                    filters.push({
+                    filters.parts.push({
                         field: this._valueField,
+                        operator: '=',
                         value: v
                     });
                 }
@@ -129,6 +134,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         } else if (!kijs.isEmpty(val)) {
             filters = {
                 field: this._valueField,
+                operator: '=',
                 value: val
             };
         }

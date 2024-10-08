@@ -21,6 +21,41 @@ Neue Funktion:
 ### kijs.gui.ListView
 - CSS: Elemente haben neu runde Ecken
 
+### kijs.gui.DataView
+- Neue config/getter/setter: ```primaryKeyFields```  
+  Enthält ein Array mit den Namen der Primärschlüssel-Felder  
+
+- Neue Funktion ```getSelectedPrimaryKeys()```  
+  Gibt die Primary-Key-Strings der selektierten Elemente als Array zurück.  
+  Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String 
+  zurückgegeben sonst ein Array mit den Keys-Strings.  
+
+- Funktion ```selectByIndex()``` umbenannt zu ```selectByIndexes()```
+
+- Neue Funktion ```selectByPrimaryKeys(primaryKeys, keepExisting=false, preventSelectionChange=false)```  
+  Selektiert ein oder mehrere Elemente mittels Primary-Key-Strings.  
+
+- Funktion ```_createElement(dataRow`, index)```:
+  Argument ```index``` entfernt: ```_createElement(dataRow)``` 
+  Der Index wird nach dem Erstellen automatisch zugewiesen und kann über den 
+  Getter ```index``` abgefragt werden.  
+  Er steht aber zum Zeitpunkt des Erstellens noch nicht fest.   
+
+- Funktion ```_filterMatch(record)``` entfernt.  
+  Stattdessen kann die Funktion ```kijs.Data.rowMatchFilters()``` verwendet werden.  
+
+- Filtern  
+  Die Filter wurden überarbeitet und in die Klasse ```kijs.Data``` ausgelagert.  
+  Die Idee ist, dass mit dieser Klasse eine Einheitliche Art des Filterns über das 
+  ganze kijs hinweg möglich ist.  
+
+  Grundsätzlich funktionieren die Filter noch gleich. Es gibt aber kleine Änderungen:  
+   - ```filter.compare``` heisst neu ```filter.operator```
+   - der ```operator``` ```"full"``` heisst neu ```"MATCH"```
+
+**UPDATE TIPP:**: Alle verwendeten DataViews, LisViews oder Combos gut testen und 
+evtl. die Filter anpassen.
+
 
 
 Version 2.8.3
