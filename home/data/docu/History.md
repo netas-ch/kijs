@@ -14,10 +14,18 @@ Neue Funktion:
  - ```match(text, search, caseInsensitive=false)```
    Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
 
-
-
 ### kijs.gui.ListView
 - CSS: Elemente haben neu runde Ecken
+
+### kijs.gui.container.Stack
+- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
+  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:
+  - newEl
+  - oldEl
+
+**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
+direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
+anpassen.  
 
 
 

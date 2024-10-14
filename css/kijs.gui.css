@@ -617,34 +617,34 @@
     height: 100%;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-fade-in {
-    animation: kijs-fade-in 1s;
+    animation: kijs-fade-in forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-in-top {
-    animation: kijs-slide-in-top 1s;
+    animation: kijs-slide-in-top forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-in-right {
-    animation: kijs-slide-in-right 1s;
+    animation: kijs-slide-in-right forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-in-bottom {
-    animation: kijs-slide-in-bottom 1s;
+    animation: kijs-slide-in-bottom forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-in-left {
-    animation: kijs-slide-in-left 1s;
+    animation: kijs-slide-in-left forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-fade-out {
     animation: kijs-fade-out 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-out-top {
-    animation: kijs-slide-out-top 1s;
+    animation: kijs-slide-out-top forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-out-right {
-    animation: kijs-slide-out-right 1s;
+    animation: kijs-slide-out-right forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-out-bottom {
-    animation: kijs-slide-out-bottom 1s;
+    animation: kijs-slide-out-bottom forwards 1s;
   }
   div.kijs-container-stack > .kijs-container-inner > *.kijs-slide-out-left {
-    animation: kijs-slide-out-left 1s;
+    animation: kijs-slide-out-left forwards 1s;
   }
   /* ******************
        * Container Tab
@@ -761,34 +761,34 @@
     height: 100%;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-fade-in {
-    animation: kijs-fade-in 1s;
+    animation: kijs-fade-in forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-in-top {
-    animation: kijs-slide-in-top 1s;
+    animation: kijs-slide-in-top forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-in-right {
-    animation: kijs-slide-in-right 1s;
+    animation: kijs-slide-in-right forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-in-bottom {
-    animation: kijs-slide-in-bottom 1s;
+    animation: kijs-slide-in-bottom forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-in-left {
-    animation: kijs-slide-in-left 1s;
+    animation: kijs-slide-in-left forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-fade-out {
-    animation: kijs-fade-out 1s;
+    animation: kijs-fade-out forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-out-top {
-    animation: kijs-slide-out-top 1s;
+    animation: kijs-slide-out-top forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-out-right {
-    animation: kijs-slide-out-right 1s;
+    animation: kijs-slide-out-right forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-out-bottom {
-    animation: kijs-slide-out-bottom 1s;
+    animation: kijs-slide-out-bottom forwards 1s;
   }
   div.kijs-container-tab > .kijs-container-inner > *.kijs-slide-out-left {
-    animation: kijs-slide-out-left 1s;
+    animation: kijs-slide-out-left forwards 1s;
   }
   div.kijs-container-tab.kijs-pos-top,
   div.kijs-container-tab.kijs-pos-bottom {
