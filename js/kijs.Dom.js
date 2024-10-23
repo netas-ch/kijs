@@ -12,7 +12,7 @@ kijs.Dom = class kijs_Dom {
 
     // Static Properties in this Class
     //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss,
-    //                                  wird das ergebnis hier gemerkt.
+    //                                  wird das Ergebnis hier gemerkt.
 
    
 
@@ -87,8 +87,8 @@ kijs.Dom = class kijs_Dom {
     /**
      * Fügt eine CSS Datei hinzu
      * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
-     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
-     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @param {String} [srcReference=''] Referenz-Node vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenz-Node
      * @returns {Promise}
      */
     static cssFileAdd(src, srcReference='', before=false) {
@@ -175,7 +175,7 @@ kijs.Dom = class kijs_Dom {
 
 
     /**
-     * Gibt die absolute Position eines HTMLElements bezogen zum Browserrand zurück
+     * Gibt die absolute Position eines HTMLElements bezogen zum Browser-Rand zurück
      * @param {Node} node
      * @returns {Object} im Format {x: 100, y: 80, w: 20, h: 40}
      */
@@ -194,10 +194,10 @@ kijs.Dom = class kijs_Dom {
     }
 
     /**
-     * Gibt das erste untegeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
-     *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
+     * Gibt das Erste untergeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
+     *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst funktioniert es nicht)
      *     tabIndex -1: nur via focus() Befehl fokussierbar
-     *     tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
+     *     tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *     tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @param {Node} node
      * @returns {Node|null}
@@ -340,8 +340,8 @@ kijs.Dom = class kijs_Dom {
     /**
      * Fügt eine Javascript Datei hinzu
      * @param {String} src Beispiel: 'myFile.js'
-     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'myPreviousFile.js'
-     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @param {String} [srcReference=''] Referenz-Node vor oder nach diesem wird eingefügt. Beispiel: 'myPreviousFile.js'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenz-Node
      * @returns {Promise}
      */
     static jsFileAdd(src, srcReference='', before=false) {
@@ -507,7 +507,7 @@ kijs.Dom = class kijs_Dom {
      * @param {HTMLELement} node
      * @param {String} html
      * @param {String} htmlDisplayType [optional]   'html': als html-Inhalt (innerHtml)
-     *                                              'code': Tags werden als als Text angezeigt
+     *                                              'code': Tags werden als Text angezeigt
      *                                              'text': Tags werden entfernt
      * @returns {undefined}
      */
@@ -555,7 +555,7 @@ kijs.Dom = class kijs_Dom {
      *  - behavior  (String) default='auto'
      *     - 'smooth' Animiertes Scrollen
      *     - 'instant' Scrollen ohne Animation
-     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *     - 'auto'    Die CSS Einstellung 'scroll-behavior' wird berücksichtigt.
      *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
@@ -578,7 +578,7 @@ kijs.Dom = class kijs_Dom {
         
         options.scrollParentsTo = !!options.scrollParentsTo;
         
-        // Bei den offeset den Kehwert nehmen
+        // Bei den Offset den Kehrwert nehmen
         options.horizontalOffset = options.horizontalOffset * -1;
         options.verticalOffset = options.verticalOffset * -1;
         
@@ -594,7 +594,7 @@ kijs.Dom = class kijs_Dom {
         // Elternknoten mit Scrollbar ermitteln
         let parentNode = node.offsetParent;
         
-        // Eltern duchgehen bis ein Scrollbarer gefunden wurde
+        // Eltern durchgehen bis ein Scrollbarer gefunden wurde
         while (parentNode) {
             
             // Ist der parentNode gültig?
@@ -663,12 +663,12 @@ kijs.Dom = class kijs_Dom {
                     // Ist der Node im sichtbaren Scrollbereich?
                     let x = rNode.x - rParent.scrollX;
 
-                    // position ist zuweit links
+                    // Position ist zu weit links
                     if (x < 0) {
                         // start
                         scrollToX = rNode.x;
 
-                    // position ist zweit rechts
+                    // position ist an zweiter Position von rechts
                     } else if (x + rNode.w > rParent.innerW) {
                         // end
                         scrollToX = rNode.x;
@@ -682,7 +682,7 @@ kijs.Dom = class kijs_Dom {
             }
         }
         
-        // Verticale Scrollkoordinaten ermitteln (scrollToY)
+        // Vertikale Scrollkoordinaten ermitteln (scrollToY)
         if (rParent.isYScrollable) {
             switch (options.verticalPosition) {
                 case 'start':
@@ -797,7 +797,7 @@ kijs.Dom = class kijs_Dom {
         return document.querySelector('html').dataset.theme;
     }
 
-    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder ein benutzerdefiniertes Farbschema
     static themeSet(theme) {
         if (theme === null) {
             if (!!window.matchMedia('(prefers-color-scheme: dark)').matches) {

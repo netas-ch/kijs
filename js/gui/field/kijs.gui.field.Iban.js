@@ -30,7 +30,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
                     regExp: /\s$/, // Whitespace am Ende entfernen
                     replace: ''
                 },{ 
-                    regExp: /(.*)/g, // Buchstaben in Grossbauchstaben umwandeln
+                    regExp: /(.*)/g, // Buchstaben in Grossbuchstaben umwandeln
                     toUpperCase: true
                 }
             ]

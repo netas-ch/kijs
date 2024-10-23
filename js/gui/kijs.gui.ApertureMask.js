@@ -7,7 +7,7 @@
 // das unmaskiert bleibt.
 // Das Element, dass nicht überdeckt wird, wird mit der Eigenschaft target festgelegt.
 // Der Rest des Bildschirms wird von der Maske überdeckt und kann nicht mehr bedient werden.
-// Fals der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
+// Falls der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
 // Bei target = kijs.gui.Dom muss die Grösse manuell nachgeführt werden.
 kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     
@@ -271,7 +271,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             this.raiseEvent('destruct');
         }
 
-        // Node-Event Listener auf Window entfernen
+        // Node-Event Listener von Window entfernen
         kijs.Dom.removeEventListener('resize', window, this);
 
         // Listeners entfernen

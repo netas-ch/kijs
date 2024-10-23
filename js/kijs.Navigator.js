@@ -235,13 +235,13 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Öffnet einen mailto oder tel Link, so dass kein neues Fenster geöffnet wird
+     * Öffnet einen mailto oder tel Link so, dass kein neues Fenster geöffnet wird
      * und auch das beforeunload Event nicht ausgelöst wird.
      * @param {String} href
      * @returns {undefined}
      */
     static openEmailPhoneLink(href) {
-        // kleiner Murgs, damit das Event window.onbeforeunload abgemurgst wird.
+        // kleiner Murks, damit das Event window.onbeforeunload abgemurkst wird.
         // Dafür werden im Listener kijs.Navigator.__onWindowBeforeUnload alle 
         // anderen Listeners ausschaltet.
         kijs.Navigator.__disableBeforeUnload = true;

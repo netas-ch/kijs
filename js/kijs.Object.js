@@ -276,7 +276,7 @@ kijs.Object = class kijs_Object {
     /**
      * Zählt die Anzahl Attribute in einem Objekt
      * @param {Object} object
-     * @param {Boolean} [ownPropertysOnly=false]  count only own propertys, ignore inherited propertys
+     * @param {Boolean} [ownPropertysOnly=false]  count only own properties, ignore inherited properties
      * @returns {Number}
      */
     static count(object, ownPropertysOnly=false) {

@@ -2,6 +2,47 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.x.x (ist noch in Entwicklung)
+=============
+### kijs.String
+Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
+ - ```beginsWith(text, search, caseInsensitive=false)```
+ - ```contains(text, search, caseInsensitive=false)```
+ - ```endsWith(text, search, caseInsensitive=false)```
+
+Neue Funktion:
+ - ```match(text, search, caseInsensitive=false)```
+   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
+
+### kijs.gui.ListView
+- CSS: Elemente haben neu runde Ecken
+
+### kijs.gui.container.Stack
+- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
+  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:
+  - newEl
+  - oldEl
+
+**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
+direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
+anpassen.  
+
+
+
+Version 2.8.3
+=============
+### kijs.gui.CornerTipContainer
+Neues, optionales Argument ```dismissDelay``` bei statischer Funktion ```show``` 
+(default: 5s)  
+
+### Bugfixes
+ - kijs.gui.SpinBox: Das Element wird in den Body, oder falls ein modaler Dialog 
+   besteht, in diesen gerendert, statt in die targetNode.  
+ - kijs.gui.Window: Auf Touch-Geräten funktionierte das verschieben von Fenstern 
+   nicht richtig.  
+
+
+
 Version 2.8.2
 =============
 ### kijs.gui.Mask

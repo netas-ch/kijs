@@ -70,7 +70,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Erstellt den Inhalt
+     * Erstellt den Inhalt.
      * Diese Funktion muss überschrieben werden.
      */
     update() {

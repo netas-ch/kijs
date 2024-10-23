@@ -45,9 +45,12 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             ['clean']                                      // remove formatting button
         ];
 
+        // CSS Klasse hinzufügen
+        this.dom.clsAdd('kijs-field-quilleditor');
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-field-quilleditor'
+            // keine
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften

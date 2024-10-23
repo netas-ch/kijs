@@ -55,7 +55,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._determinatedIconMap = 'kijs.iconMap.Fa.minus';
         this._uncheckedIconMap = null;
 
-        this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
+        this._threeState = false;                   // Erreichen des dritten Statuses "Intermediate" per Klick möglich?
 
         this._valueChecked = true;
         this._valueDeterminated = 2;
@@ -90,7 +90,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHide: true,

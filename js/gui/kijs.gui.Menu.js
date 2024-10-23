@@ -112,7 +112,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
     get direction() { return this._direction; }
     set direction(val) {
-        // auto: Falls der Button nicht im Menu ist ist, nach unten, sonst nach rechts
+        // auto: Falls der Button nicht im Menu ist, nach unten, sonst nach rechts
         if (val === 'auto') {
             if (this._button && !this.upX('kijs.gui.Menu')) {
                 val = 'down';

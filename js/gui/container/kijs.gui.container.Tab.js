@@ -307,7 +307,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
     // overwrite
     _setCurrent(element) {
-        super._setCurrent(element);
+        let ret = super._setCurrent(element);
 
         // Aktueller TabButton hervorheben
         kijs.Array.each(this._tabBarEl.elements, function(el) {
@@ -322,6 +322,8 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         if (element && element.tabButtonEl && element.tabButtonEl.isRendered) {
             element.tabButtonEl.dom.scrollIntoView();
         }
+
+        return ret;
     }
 
 

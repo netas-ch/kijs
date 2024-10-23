@@ -110,6 +110,94 @@ home.sc.container_Stack = class home_sc_container_Stack {
                         }
                     ]
                 },
+
+                {
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Navigation',
+                    cls: 'kijs-flexfit',
+                    style: { marginTop: '10px' },
+                    innerStyle: {
+                        padding: '4px'
+                    },
+                    height: 200,
+                    width: 102,
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.container.Stack',
+                            elements: [
+                                {
+                                    xtype: 'kijs.gui.Container',
+                                    name: 'container1',
+                                    elements: [
+                                        {
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 1',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 2',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        }
+                                    ]
+                                },{
+                                    xtype: 'kijs.gui.Container',
+                                    name: 'container2',
+                                    elements: [
+                                        {
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 1',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 2',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 3',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 4',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        },{
+                                            xtype: 'kijs.gui.Button',
+                                            iconMap: 'kijs.iconMap.Fa.calendar',
+                                            caption: 'Button 5',
+                                            on: {
+                                                click: this.#onNaviButtonClick,
+                                                context: this
+                                            }
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                },
                 
                 {
                     xtype: 'kijs.gui.container.Stack',
@@ -341,6 +429,18 @@ home.sc.container_Stack = class home_sc_container_Stack {
                 }
             }
         ];
+    }
+
+
+    // PRIVATE
+    // LISTENERS
+    #onNaviButtonClick(e) {
+        let ctStackEl = e.raiseElement.upX('kijs.gui.container.Stack');
+        if (e.raiseElement.parent.name === 'container1') {
+            ctStackEl.setCurrentAnimated(ctStackEl.down('container2'), 'slideLeft');
+        } else {
+            ctStackEl.setPreviousAnimated('slideRight');
+        }
     }
 
 

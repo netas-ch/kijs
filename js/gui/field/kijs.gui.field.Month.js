@@ -68,11 +68,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._previousChangeDate = null;  // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeDate = null;  // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
-        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
-                                        // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
-                                        // Null=Umwandlung ausgeschaltet.
+        this._year2000Threshold = 30;     // Wenn zweistellige Jahreszahlen eingegeben werden,
+                                          // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
+                                          // Null=Umwandlung ausgeschaltet.
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -139,7 +139,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             year2000Threshold: true,
             emptyBtnHide: { target: 'maxDate', context: this._monthPicker },
             inputMode: { target: 'inputMode' },
@@ -194,7 +194,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -393,7 +393,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             if (kijs.isNumeric(str)) {
                 if (kijs.isEmpty(year)) {
                     year = parseInt(str);
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+                    // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
                     if (!kijs.isEmpty(this._year2000Threshold) && year >= 0 && year <= 99) {
                         if (year >= this._year2000Threshold) {
                             year += 1900;

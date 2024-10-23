@@ -4,7 +4,7 @@
 // kijs.gui.container.tab.Button
 // --------------------------------------------------------------
 /**
- * Tab-Button Element, das in kijs.gui.container.Tab.Elementen verwendet wird.
+ * Tab-Button Element, das in kijs.gui.container.tab.Elementen verwendet wird.
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element
@@ -136,7 +136,7 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
     #onCloseClick(e) {
         this.raiseEvent('closeClick', e);
         
-        // bubbeling verhindern, damit nicht das click-Event des Buttons
+        // Bubbeling verhindern, damit nicht das click-Event des Buttons
         // auch noch ausgelöst wird
         e.nodeEvent.stopPropagation();
     }

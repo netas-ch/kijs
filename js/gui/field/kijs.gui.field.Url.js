@@ -131,7 +131,7 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
         let val = this.value;
         
         if (!this.disabled && !kijs.isEmpty(val) && this.validate(val)) {
-            // Evt. Standardprotocol hinzufügen
+            // Evt. Standardprotokoll hinzufügen
             if (!kijs.isEmpty(this._defaultProtocol)) {
                 if (!val.match(/^[a-z0-9]+\:\/\//i)) {
                     val = this._defaultProtocol + val;

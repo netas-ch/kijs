@@ -122,9 +122,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
-            resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
-            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Breite angezeigt werden.
-            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Höhe angezeigt werden.
+            resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Grösse angezeigt werden.
+            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Breite angezeigt werden.
+            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Höhe angezeigt werden.
             
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -330,7 +330,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         
-        // Höhe merken, damit beim aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
+        // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
             this._expandedSize.height = val;
         }
@@ -451,7 +451,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         
-        // Breite merken, damit beim aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
+        // Breite merken, damit beim Aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseWidth) && val > kijs.isNumber(this._collapseWidth)) {
             this._expandedSize.width = val;
         }
@@ -670,7 +670,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (alsoSetIfNoTabIndex) {
             this._dom.node.focus();
 
-        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
         } else {
             const nde = kijs.Dom.getFirstFocusableNode(this._node);
             if (nde) {

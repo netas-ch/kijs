@@ -46,7 +46,7 @@ home.sc.DataView = class home_sc_DataView {
                             xtype: 'kijs.gui.DataView',
                             selectType: 'multi',
                             data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}, {A:'A3', B:'B3'}],
-                            selectFilters: [{field:'A', 'value':'A2'}],
+                            selectFilters: [{field:'A', value:'A2'}],
                             //scrollableY: 'auto',
                             style: {
                                 flex: 1
@@ -72,7 +72,7 @@ home.sc.DataView = class home_sc_DataView {
                         {
                             xtype: 'kijs.gui.DataView',
                             selectType: 'multi',
-                            ddName: 'kijs.gui.Dashboard.Test',
+                            ddName: 'kijs.gui.DataView.Test',
                             sortable: true,
                             data: [{key:'A1'}, {key:'A2'}, {key:'A3'}],
                             //scrollableY: 'auto',
@@ -86,7 +86,7 @@ home.sc.DataView = class home_sc_DataView {
                         },{
                             xtype: 'kijs.gui.DataView',
                             selectType: 'multi',
-                            ddName: 'kijs.gui.Dashboard.Test',
+                            ddName: 'kijs.gui.DataView.Test',
                             sortable: true,
                             data: [{key:'B1'}, {key:'B2'}, {key:'B3'}],
                             //scrollableY: 'auto',

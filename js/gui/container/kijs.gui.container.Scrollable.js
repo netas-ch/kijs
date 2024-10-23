@@ -541,7 +541,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
         
         
-        // Rendern oder Unrendern
+        // Rendern oder unrendern
         // Up (kijs.guiDom)
         if (hasScrollY) {
             this._btnUpDom.renderTo(this._dom.node, this._innerDom.node);

@@ -30,7 +30,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             // keine
         });
 
-        // Mapping für die Zuweisung der Config-Eigenmschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },
             disabled        : true,
@@ -148,7 +148,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 x += this._offsetX;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (x+this._dom.node.offsetWidth > window.innerWidth) {
                 x = Math.abs(window.innerWidth - this._dom.node.offsetWidth - 5);
             }
@@ -164,7 +164,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 y += this._offsetY;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (y+this._dom.node.offsetHeight > window.innerHeight) {
                 y = Math.abs(window.innerHeight - this._dom.node.offsetHeight - 5);
             }

@@ -53,7 +53,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         super(false);
 
         this._previousChangeValue = '';
-        this._defaultColor = '#ffffff'; // Standardfarbe wenn leer.
+        this._defaultColor = '#ffffff'; // Standardfarbe, wenn leer.
                                         // Weil das native Color-Field kann nicht leer sein.
 
         this._inputDom = new kijs.gui.Dom({
@@ -80,7 +80,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browser-Vorschläge
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -116,7 +116,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 

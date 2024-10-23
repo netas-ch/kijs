@@ -73,7 +73,7 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         // alte AHV-Nr.(Format: xxx.xx.xxx.xxx)
         // während der Eingabe nur formatieren, wenn die neue nicht möglich ist, 
         // weil sonst bereits nach 11 Zeichen die alte formatiert wird.
-        // bei set value oder beim verlassen des Feldes wird aber richtig formatiert.
+        // bei set value oder beim Verlassen des Feldes wird aber richtig formatiert.
         if (this._allowAhvNr && (!this._allowSozVersNr || !whileTyping)) {
             val = val.replace(/^([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{3})$/, '$1.$2.$3.$4');
         }

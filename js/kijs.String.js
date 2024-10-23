@@ -14,34 +14,49 @@ kijs.String = class kijs_String {
      * Überprüft, ob ein String mit einem gesuchten String beginnt
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static beginsWith(text, search) {
-        return text.indexOf(search) === 0;
+    static beginsWith(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.startsWith(search);
     }
 
     /**
      * Überprüft, ob ein String einen gesuchten String enthält
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static contains(text, search) {
-        return text.indexOf(search) >= 0;
+    static contains(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.includes(search);
     }
 
     /**
      * Überprüft, ob ein String mit einem gesuchten String endet
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static endsWith(text, search) {
-        return text.indexOf(search, text.length - search.length) !== -1;
+    static endsWith(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.endsWith(search);
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden
+     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden.
      * Es werden folgende Zeichen ersetzt
      *  - Unicode 00A0 - 9999
      *  - < und >
@@ -66,7 +81,7 @@ kijs.String = class kijs_String {
      */
     static htmlentities_decode(html) {
 
-        // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
+        // Geschwindigkeit optimieren, falls der String nur aus einem einzelnen entity ("&#xabab;") besteht
         if (kijs.isString(html) && (html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
             return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
         }
@@ -137,6 +152,21 @@ kijs.String = class kijs_String {
         }, this);
 
         return text;
+    }
+
+    /**
+     * Überprüft, ob ein String mit einem gesuchten String übereinstimmt
+     * @param {String} text
+     * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
+     * @returns {Boolean}
+     */
+    static match(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text === search;
     }
 
     /**

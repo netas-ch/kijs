@@ -290,7 +290,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
+    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;

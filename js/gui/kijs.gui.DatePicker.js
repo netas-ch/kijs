@@ -330,7 +330,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
     
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
+    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -767,7 +767,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             // nur das Datum übernehmen, wenn es gültig ist
             if (kijs.Date.compare(date, e.dom.date)) {
 
-                // Wenn bei Range nur das Start und kein Enddatum gesetzt ist, setzen wir das Enddatum
+                // Wenn bei Range nur das Start- und kein Enddatum gesetzt ist, setzen wir das Enddatum
                 if (this._mode === 'range' && !kijs.isEmpty(this._date) && kijs.isEmpty(this._dateEnd)) {
                     this._dateEnd = date;
                     inputFinished = true;

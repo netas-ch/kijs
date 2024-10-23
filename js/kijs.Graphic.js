@@ -116,13 +116,13 @@ kijs.Graphic = class kijs_Graphic {
     
     
     /**
-     * Schaut ob ein Rechteck in einem anderen Platz hat
+     * Schaut, ob ein Rechteck in einem anderen Platz hat
      * @param {Object} rect Masse des Rechtecks im Format: {x:..., y:..., w:..., h:...}
      * @param {Object} rectOuter Masse des äusseren Rechtecks im Format: {x:..., y:..., w:..., h:...}
      * @returns {Object} Beispiel: {
-     *                              fit: false      // Hat das Rechteck ganz im äusseren platz?
-     *                              fitX: false,    // Hat es auf der X-Achse platz?
-     *                              fitY: true,     // Hat es auf der Y-Achse platz?
+     *                              fit: false      // Hat das Rechteck ganz im äusseren Platz?
+     *                              fitX: false,    // Hat es auf der X-Achse Platz?
+     *                              fitY: true,     // Hat es auf der Y-Achse Platz?
      *                              sizeL: 0,       // Abstand zwischen den linken Rändern der beiden Rechtecke (Minuswert=inneres ragt heraus)
      *                              sizeR: -10,
      *                              sizeT: 10,

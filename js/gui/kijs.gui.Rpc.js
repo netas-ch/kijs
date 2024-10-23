@@ -67,15 +67,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
     // --------------------------------------------------------------
     /**
      * Führt einen RPC aus
-     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt (auch im Fehlerfall).
+     * - Wird eine fn übergeben, wird diese nach Erhalt der Antwort ausgeführt (auch im Fehlerfall).
      *   Die Rückgabe der Funktion ist dann immer Null.
      * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
-     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
-     *   werden.
+     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragt werden.
      * - Es gibt folgende errorTypes:
      *    - 'errorNotice'   Es wurde eine errorMsg vom Server zurückgegeben mit errorType='errorNotice' 
      *                      oder ohne errorType (dann wird der errorType automatisch auf 'errorNotice' 
-     *                      gesetzt. 
+     *                      gesetzt.)
      *    - 'error'         Es wurde eine errorMsg vom Server zurückgegeben mit errorType='error'.
      *    - 'warning'       Es wurde vom Server eine warningMsg zurückgegeben und der Benutzer 
      *                      hat auf Abbrechen geklickt.
@@ -87,7 +86,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *     {String} remoteFn                    Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} data                         Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                     Verweis auf das Aufzurufende Element oder eine ID, die das Element eindeutig identifiziert.
-     *                                          Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
+     *                                          Wird verwendet um bei cancelRunningRpcs den Eigentümer zu identifizieren.
      *     {Function} fn                        Callback-Funktion
      *     {Object} context                     Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false]  Bei true, werden alle laufenden Requests
@@ -193,7 +192,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                         kijs.gui.MsgBox.errorNotice(rpcData.response.errorTitle, rpcData.response.errorMsg);
                     }
 
-                // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
+                // Warning -> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
                 // rpcData.response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 } else if (!kijs.isEmpty(rpcData.response.warningMsg)) {
                     // Standard warningTitle
@@ -247,7 +246,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     return;
                 }
 
-                // Info --> Msg ohne Icon
+                // Info -> Msg ohne Icon
                 // rpcData.response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (!kijs.isEmpty(rpcData.response.infoMsg)) {
                     // Standard infoTitle

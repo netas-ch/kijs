@@ -166,7 +166,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         }
 
-        // Max/min Grösse aufgrund der config des resizers
+        // Max/min Grösse aufgrund der config des Resizers
         // -------------
         if (!kijs.isEmpty(this._targetMaxWidth)) {
             if (ret.wMax === null || this._targetMaxWidth < ret.wMax) {
