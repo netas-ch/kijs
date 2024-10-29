@@ -318,7 +318,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
             // store leeren, wenn value gelöscht wird.
             if (this._value === '' || this._value === null) {
-//                this._listViewEl.data = [];
+               this._listViewEl.data = [];
             }
         }
 

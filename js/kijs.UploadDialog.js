@@ -121,7 +121,13 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     }
 
     get disabled() { return this._disabled; }
-    set disabled(val) { this._disabled = val; }
+    set disabled(val) {
+        this._disabled = val;
+
+        kijs.Array.each(this._dropZones, dropZone => {
+            dropZone.disabled = val;
+        }, this);
+    }
 
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }

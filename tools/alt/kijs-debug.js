@@ -19,7 +19,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.8.2'; }
+    static get version() { return '2.8.3'; }
 
     static get language() {
         if (this.__language) {
@@ -97,7 +97,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Erstellt aus einem String eine Funktion
+     * Erstellt aus einem String eine Funktion.
      * Dazu kann entweder eine neue Funktion als String übergeben werden:
      * 'function(myArg) { return myArg; }'
      * Oder ein Verweis auf eine bestehende Funktion:
@@ -181,7 +181,7 @@ window.kijs = class kijs {
 
     /**
      * Gibt den Verweis auf eine RPC-Instanz zurück.
-     * Wird kein Namen angegeben, wird der default-RPC zurück gegeben.
+     * Wird kein Name angegeben, wird der default-RPC zurückgegeben.
      * Die RPCs müssen vorgängig mit kijs.setRpc() definiert werden.
      * @param {String} [name='default']
      * @returns {undefined}
@@ -278,7 +278,7 @@ window.kijs = class kijs {
     }
 
     /**
-     * Prüft ob ein Wert ein gültiges Datum ist
+     * Prüft, ob ein Wert ein gültiges Datum ist
      * @param {Date} value
      * @returns {Boolean}
      */
@@ -429,7 +429,7 @@ window.kijs = class kijs {
     }
     
     /**
-     * Erstellt einen globalen Verweis auf eine RPC-Klasse
+     * Erstellt einen globalen Verweis auf eine RPC-Klasse.
      * Der Standard-RPC sollte 'default' heissen.
      * Weitere sind mit beliebigen Namen möglich.
      * @param {String} name
@@ -480,7 +480,7 @@ window.kijs = class kijs {
 
     /**
      * Kleine Hilfsfunktion, um ein Timeout in einer Async-Funktion zu nutzen.
-     * @param {Number} ms Miliseconds
+     * @param {Number} ms Milliseconds
      * @returns {Promise}
      */
     static wait(ms) {
@@ -542,7 +542,7 @@ kijs.String = class kijs_String {
     }
 
     /**
-     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden
+     * Konvertiert einen HTML-String in einen String, in dem Unicode-Zeichen durch HTML-Entities ersetzt werden.
      * Es werden folgende Zeichen ersetzt
      *  - Unicode 00A0 - 9999
      *  - < und >
@@ -567,7 +567,7 @@ kijs.String = class kijs_String {
      */
     static htmlentities_decode(html) {
 
-        // Geschwindigkeit optimieren, falls der String nur aus einem einzelen entity ("&#xabab;") besteht
+        // Geschwindigkeit optimieren, falls der String nur aus einem einzelnen entity ("&#xabab;") besteht
         if (kijs.isString(html) && (html.length === 7 || (html.length === 8 && html[7] === ';')) && html.substr(0,3) === '&#x') {
             return String.fromCodePoint(window.parseInt(html.substr(3,4), 16));
         }
@@ -837,7 +837,7 @@ kijs.Array = class kijs_Array {
     }
 
     /**
-     * Vergleicht zwei Arrays und Gibt bei gleichem Inhalt true zurück
+     * Vergleicht zwei Arrays und gibt bei gleichem Inhalt true zurück
      * @param {Array} array1
      * @param {Array} array2
      * @returns {Boolean}
@@ -1119,7 +1119,8 @@ kijs.Array = class kijs_Array {
 
         return ret;
     }
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.Object (Static)
@@ -1397,7 +1398,7 @@ kijs.Object = class kijs_Object {
     /**
      * Zählt die Anzahl Attribute in einem Objekt
      * @param {Object} object
-     * @param {Boolean} [ownPropertysOnly=false]  count only own propertys, ignore inherited propertys
+     * @param {Boolean} [ownPropertysOnly=false]  count only own properties, ignore inherited properties
      * @returns {Number}
      */
     static count(object, ownPropertysOnly=false) {
@@ -1504,7 +1505,7 @@ kijs.Number = class kijs_String {
     
     /**
      * Parst ein String zu einer Nummer und rundet auf die angegebenen Decimals.
-     * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer  aufgerundet.
+     * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer aufgerundet.
      * @param {String} number
      * @param {Number} decimals
      * @param {String} decPoint
@@ -1554,7 +1555,7 @@ kijs.Number = class kijs_String {
     }
 
     /**
-     * Rundet einen Fliesskommawert.
+     * Rundet einen Fliesskomma-Wert.
      * Halbe werden aufgerundet: Somit wird 1.5 zu 2 und -1.5 zu -2 (Kaufmännisches Runden).
      * @param {Number} number
      * @param {Number} precision
@@ -1578,7 +1579,8 @@ kijs.Number = class kijs_String {
         }
     }
 
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.Date (Static)
@@ -1736,7 +1738,7 @@ kijs.Date = class kijs_Date {
     }
 
     /**
-     * Gibt die Anzahl Tage zwischen zwei Datum zurück (date2 - date1)
+     * Gibt die Anzahl Tage zwischen zwei Daten zurück (date2 - date1)
      * @param {Date} date1
      * @param {Date} date2
      * @return {Number}
@@ -1804,7 +1806,7 @@ kijs.Date = class kijs_Date {
         const week = parseInt(matches[1]);
         let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
 
-        // Kurzschreibweisen vom Jahr konventieren
+        // Kurzschreibweisen vom Jahr konvertieren
         if (year < 100) {
             if (year < 70) {
                 year += 2000;
@@ -2070,7 +2072,7 @@ kijs.Date = class kijs_Date {
             return null;
         }
 
-        // Bestandtile durchgehen
+        // Bestandteile durchgehen
         for (let i=0; i<arr.length; i++) {
             if (!kijs.isNumeric(arr[i])) {
                 return null;
@@ -2096,7 +2098,7 @@ kijs.Date = class kijs_Date {
                 // Jahr
                 case 'Y':
                     year = parseInt(arr[i]);
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+                    // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
                     if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
                         if (year >= year2000Threshold) {
                             year += 1900;
@@ -2215,7 +2217,7 @@ kijs.Date = class kijs_Date {
             return null;
         }
 
-        // Bestandtile durchgehen
+        // Bestandteile durchgehen
         for (let i=0; i<arr.length; i++) {
             if (!kijs.isNumeric(arr[i])) {
                 return null;
@@ -2279,7 +2281,7 @@ kijs.Date = class kijs_Date {
     }
 
     /**
-     * Erstellt ein Datum aus einem Länderspezifischen Wocehn-String z.B. 'KW 5 2024'
+     * Erstellt ein Datum aus einem Länderspezifischen Wochen-String z.B. 'KW 5 2024'
      * Dabei wird der 1. Tag der Woche als Datum zurückgegeben.
      * @param {String} strInput Woche in einem länder-spezifischen Format
      * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
@@ -2301,7 +2303,7 @@ kijs.Date = class kijs_Date {
         // Jahr (wenn leer = aktuelles Jahr
         let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
 
-        // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+        // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
         if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
             if (year >= year2000Threshold) {
                 year += 1900;
@@ -2423,7 +2425,7 @@ kijs.Date = class kijs_Date {
         }
 
         // Reihenfolge von H,i,s ermitteln
-        // dazu das Datum, Uhrzeit 2000-01-02 18:17:16 in eine lokales Uhrzeit umwandeln
+        // dazu das Datum, Uhrzeit 2000-01-02 18:17:16 in eine lokale Uhrzeit umwandeln
         let format = new Date(2000, 0, 2, 18, 17, 16);
         format = format.toLocaleTimeString(language, {
             hour: '2-digit',
@@ -2446,7 +2448,7 @@ kijs.Date = class kijs_Date {
         format = format.replace(/[^Hhmi]+/g, '').trim();
 
         // Jetzt sollte tmp entweder  'His', 'Hsi', 'iHs', 'isH', 'sHi' oder 'siH' sein
-        // oder das selbe mit einem kleinen h
+        // oder dasselbe mit einem kleinen h
         if (format.length !== 3) {
             return null;
         }
@@ -2469,7 +2471,7 @@ kijs.Dom = class kijs_Dom {
 
     // Static Properties in this Class
     //__scrollbarWidth {Number|null}    Damit die Funktion getScrollbarWidth() nur einmal rechnen muss,
-    //                                  wird das ergebnis hier gemerkt.
+    //                                  wird das Ergebnis hier gemerkt.
 
    
 
@@ -2544,8 +2546,8 @@ kijs.Dom = class kijs_Dom {
     /**
      * Fügt eine CSS Datei hinzu
      * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
-     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
-     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @param {String} [srcReference=''] Referenz-Node vor oder nach diesem wird eingefügt. Beispiel: 'kijs.gui.css'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenz-Node
      * @returns {Promise}
      */
     static cssFileAdd(src, srcReference='', before=false) {
@@ -2632,7 +2634,7 @@ kijs.Dom = class kijs_Dom {
 
 
     /**
-     * Gibt die absolute Position eines HTMLElements bezogen zum Browserrand zurück
+     * Gibt die absolute Position eines HTMLElements bezogen zum Browser-Rand zurück
      * @param {Node} node
      * @returns {Object} im Format {x: 100, y: 80, w: 20, h: 40}
      */
@@ -2651,10 +2653,10 @@ kijs.Dom = class kijs_Dom {
     }
 
     /**
-     * Gibt das erste untegeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
-     *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
+     * Gibt das Erste untergeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
+     *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst funktioniert es nicht)
      *     tabIndex -1: nur via focus() Befehl fokussierbar
-     *     tabIndex  0: Fokussierbar - Browser betimmt die Tabreihenfolge
+     *     tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *     tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @param {Node} node
      * @returns {Node|null}
@@ -2797,8 +2799,8 @@ kijs.Dom = class kijs_Dom {
     /**
      * Fügt eine Javascript Datei hinzu
      * @param {String} src Beispiel: 'myFile.js'
-     * @param {String} [srcReference=''] Referenznode vor oder nach diesem wird eingefügt. Beispiel: 'myPreviousFile.js'
-     * @param {Boolean} [before=false] Vor oder nach dem Referenznode
+     * @param {String} [srcReference=''] Referenz-Node vor oder nach diesem wird eingefügt. Beispiel: 'myPreviousFile.js'
+     * @param {Boolean} [before=false] Vor oder nach dem Referenz-Node
      * @returns {Promise}
      */
     static jsFileAdd(src, srcReference='', before=false) {
@@ -2964,7 +2966,7 @@ kijs.Dom = class kijs_Dom {
      * @param {HTMLELement} node
      * @param {String} html
      * @param {String} htmlDisplayType [optional]   'html': als html-Inhalt (innerHtml)
-     *                                              'code': Tags werden als als Text angezeigt
+     *                                              'code': Tags werden als Text angezeigt
      *                                              'text': Tags werden entfernt
      * @returns {undefined}
      */
@@ -3012,7 +3014,7 @@ kijs.Dom = class kijs_Dom {
      *  - behavior  (String) default='auto'
      *     - 'smooth' Animiertes Scrollen
      *     - 'instant' Scrollen ohne Animation
-     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *     - 'auto'    Die CSS Einstellung 'scroll-behavior' wird berücksichtigt.
      *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
@@ -3035,7 +3037,7 @@ kijs.Dom = class kijs_Dom {
         
         options.scrollParentsTo = !!options.scrollParentsTo;
         
-        // Bei den offeset den Kehwert nehmen
+        // Bei den Offset den Kehrwert nehmen
         options.horizontalOffset = options.horizontalOffset * -1;
         options.verticalOffset = options.verticalOffset * -1;
         
@@ -3051,7 +3053,7 @@ kijs.Dom = class kijs_Dom {
         // Elternknoten mit Scrollbar ermitteln
         let parentNode = node.offsetParent;
         
-        // Eltern duchgehen bis ein Scrollbarer gefunden wurde
+        // Eltern durchgehen bis ein Scrollbarer gefunden wurde
         while (parentNode) {
             
             // Ist der parentNode gültig?
@@ -3120,12 +3122,12 @@ kijs.Dom = class kijs_Dom {
                     // Ist der Node im sichtbaren Scrollbereich?
                     let x = rNode.x - rParent.scrollX;
 
-                    // position ist zuweit links
+                    // Position ist zu weit links
                     if (x < 0) {
                         // start
                         scrollToX = rNode.x;
 
-                    // position ist zweit rechts
+                    // position ist an zweiter Position von rechts
                     } else if (x + rNode.w > rParent.innerW) {
                         // end
                         scrollToX = rNode.x;
@@ -3139,7 +3141,7 @@ kijs.Dom = class kijs_Dom {
             }
         }
         
-        // Verticale Scrollkoordinaten ermitteln (scrollToY)
+        // Vertikale Scrollkoordinaten ermitteln (scrollToY)
         if (rParent.isYScrollable) {
             switch (options.verticalPosition) {
                 case 'start':
@@ -3254,7 +3256,7 @@ kijs.Dom = class kijs_Dom {
         return document.querySelector('html').dataset.theme;
     }
 
-    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder ein benutzerdefiniertes Farbschema
     static themeSet(theme) {
         if (theme === null) {
             if (!!window.matchMedia('(prefers-color-scheme: dark)').matches) {
@@ -3385,13 +3387,13 @@ kijs.Graphic = class kijs_Graphic {
     
     
     /**
-     * Schaut ob ein Rechteck in einem anderen Platz hat
+     * Schaut, ob ein Rechteck in einem anderen Platz hat
      * @param {Object} rect Masse des Rechtecks im Format: {x:..., y:..., w:..., h:...}
      * @param {Object} rectOuter Masse des äusseren Rechtecks im Format: {x:..., y:..., w:..., h:...}
      * @returns {Object} Beispiel: {
-     *                              fit: false      // Hat das Rechteck ganz im äusseren platz?
-     *                              fitX: false,    // Hat es auf der X-Achse platz?
-     *                              fitY: true,     // Hat es auf der Y-Achse platz?
+     *                              fit: false      // Hat das Rechteck ganz im äusseren Platz?
+     *                              fitX: false,    // Hat es auf der X-Achse Platz?
+     *                              fitY: true,     // Hat es auf der Y-Achse Platz?
      *                              sizeL: 0,       // Abstand zwischen den linken Rändern der beiden Rechtecke (Minuswert=inneres ragt heraus)
      *                              sizeR: -10,
      *                              sizeT: 10,
@@ -3661,7 +3663,8 @@ kijs.Graphic = class kijs_Graphic {
         });
     }
 
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.Navigator (Static)
@@ -3898,13 +3901,13 @@ kijs.Navigator = class kijs_Navigator {
     }
 
     /**
-     * Öffnet einen mailto oder tel Link, so dass kein neues Fenster geöffnet wird
+     * Öffnet einen mailto oder tel Link so, dass kein neues Fenster geöffnet wird
      * und auch das beforeunload Event nicht ausgelöst wird.
      * @param {String} href
      * @returns {undefined}
      */
     static openEmailPhoneLink(href) {
-        // kleiner Murgs, damit das Event window.onbeforeunload abgemurgst wird.
+        // kleiner Murks, damit das Event window.onbeforeunload abgemurkst wird.
         // Dafür werden im Listener kijs.Navigator.__onWindowBeforeUnload alle 
         // anderen Listeners ausschaltet.
         kijs.Navigator.__disableBeforeUnload = true;
@@ -4710,8 +4713,8 @@ kijs.Char = class kijs_Char {
 // --------------------------------------------------------------
 /**
  * Klasse zum Lesen und Schreiben in den Local- oder Sessionstorage.
- * Damit keine Konflikte entstehen, wenn mehrere KIJS-Frameworks unter
- * der selben Domain laufen, wird standardmässig der Titel der Webseite
+ * Damit keine Konflikte entstehen, wenn mehrere kijs-Frameworks unter
+ * derselben Domain laufen, wird standardmässig der Titel der Webseite
  * als prefix verwendet. Wenn dieses nicht sein soll, kann als argument
  * ein anderes Prefix übergeben werden.
  */
@@ -4872,7 +4875,7 @@ kijs.Storage = class kijs_Storage {
     // --------------------------------------------------------------
 
     /**
-     * Gibt die instanz auf den Storage zurück.
+     * Gibt die Instanz auf den Storage zurück.
      * @param {String} mode 'session' oder 'local'
      * @returns {window.localStorage|window.sessionStorage}
      */
@@ -4897,7 +4900,8 @@ kijs.Storage = class kijs_Storage {
         }
         return prefix;
     }
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.Observable (Abstract)
@@ -4952,7 +4956,7 @@ kijs.Observable = class kijs_Observable {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Überprüft ob ein Listener existiert
+     * Überprüft, ob ein Listener existiert
      * @param {String} name                     Name des Listeners
      * @param {function|null} [callback=null]   Callback Funktion oder null für alle
      * @param {object|null} [context=null]      Kontext oder null für alle
@@ -5148,7 +5152,8 @@ kijs.Observable = class kijs_Observable {
         this.off();
     }
 
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.Ajax (Static)
@@ -5174,7 +5179,7 @@ kijs.Ajax = class kijs_Ajax {
     *     {function} fn                Callback Funktion
     *     {function} progressFn        Progress Funktion
     *     {Object} context             Kontext für die Callback Funktion
-    *     {Object} [headers]           Objekt mit heders die mitgesendet werden
+    *     {Object} [headers]           Objekt mit Headers die mitgesendet werden
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
     *     {Boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
@@ -5511,18 +5516,17 @@ kijs.Rpc = class kijs_Rpc {
 
     /**
      * Führt einen RPC aus.
-     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt (auch im Fehlerfall).
+     * - Wird eine fn übergeben, wird diese nach Erhalt der Antwort ausgeführt (auch im Fehlerfall).
      *   Die Rückgabe der Funktion ist dann immer Null.
      * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
-     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
-     *   werden.
+     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragt werden.
      *
-     * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
+     * @param {Object} config   config-Objekt mit folgenden Eingenschaften
      *     {String} remoteFn                     Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} requestData                   Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                      Verweis auf das Aufzurufende Element oder eine ID,
      *                                           die das Element eindeutig identifiziert.
-     *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
+     *                                           Wird verwendet um bei cancelRunningRpcs den Eigentümer zu identifizieren.
      *     {Function} [fn]                       Callback-Funktion
      *     {Object} [context]                    Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false]   Bei true, werden alle laufenden Requests vom selben owner an dieselbe remoteFn abgebrochen
@@ -5549,7 +5553,7 @@ kijs.Rpc = class kijs_Rpc {
         }
 
         // Evtl. bestehende RPCs vom gleichen owner an die gleiche remoteFn abbrechen
-        // Der  owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren, 
+        // Der owner ist wichtig, weil z.B. mehrere Combos in einem Formular existieren,
         // die die gleiche remoteFn benutzen. 
         if (config.cancelRunningRpcs) {
             for (let i=0; i<this._queue.length; i++) {
@@ -6012,7 +6016,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     // PROTECTED
     /**
-     * Prüft, ob der Browser das hochladen von ganzen Ordner unterstützt.
+     * Prüft, ob der Browser das Hochladen von ganzen Ordner unterstützt.
      * @returns {Boolean}
      */
     _browserSupportsDirectoryUpload() {
@@ -6194,7 +6198,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             return;
         }
 
-        // Wenn die Klasse mit einer DropZone verknüpft ist, nur pasten wenn gerendert
+        // Wenn die Klasse mit einer DropZone verknüpft ist, nur pasten, wenn gerendert
         if (this._dropZones.length > 0) {
             let rendered = false;
             kijs.Array.each(this._dropZones, function(dz) {
@@ -8398,7 +8402,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     /**
      * Positioniert den dropMarker
      * @param {kijs.gui.Dom|Null} [targetDom=null] Null = ausblenden
-     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum ausblenden
+     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum Ausblenden
      * @param {String|Null|} [tagName=null]
      * @param {Number|Null} [width=null] Breite des Markers
      * @param {Number|Null} [height=null] Höhe des Markers
@@ -8705,8 +8709,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         // Config zuweisen
         kijs.Object.assignConfig(this, config, this._configMap);
 
-        // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Objekt versiegeln.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 
@@ -8944,17 +8948,17 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         kijs.Object.assignConfig(this, config, this._configMap);
         
         // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 
     /**
-     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am nähesten befindet
+     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am Nächsten befindet
      * @param {Array} elements  Elements-Array
      * @param {Number} clientX  Maus-Position vom nodeEvent
      * @param {Number} clientY  Maus-Position vom nodeEvent
      * @returns {Object} { el:..., diffX,... diffY:..., w:..., h:... };
-     *                   el: Element unter dem Mauszeiger oder nähestes Element
+     *                   el: Element unter dem Mauszeiger oder nächstes Element
      *                   diffX Abstand des Mauszeiger zum linken Rand des gefundenen Elements
      *                   diffY: Abstand des Mauszeiger zum oberen Rand des gefundenen Elements
      *                   w: Breite des gefundenen Elements
@@ -8986,7 +8990,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         
         let minDistance = null;
         
-        // Elemente durchgehen und das näheste Element ermitteln
+        // Elemente durchgehen und das Nächste Element ermitteln
         kijs.Array.each(elements, function(el) {
             let rectEl = kijs.Dom.getAbsolutePos(el.node);
             
@@ -9260,8 +9264,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         const isHorizontal = (isFlex && !!flexDirection.startsWith('row')) || ndeParentTagName === 'tr';
         const isReverse = isFlex && !!flexDirection.endsWith('-reverse');
         
-        // nähestes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
-        // x und y enthallten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
+        // Nächstes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
+        // x und y enthalten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
         let ddCPos = this._getDragOverChild(
                 this._ownerEl.elements, 
                 e.nodeEvent.clientX, 
@@ -9869,7 +9873,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     set nodeTagName(val) {
         this._nodeTagName = val;
         if (this._node && this._node.tagName.toLowerCase() !== val) {
-            throw new kijs.Error(`Property "nodeTagName" can not be set. The node has allready been rendered.`);
+            throw new kijs.Error(`Property "nodeTagName" can not be set. The node has already been rendered.`);
         }
     }
 
@@ -10006,7 +10010,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Richtet ein Element nach einem Ziel aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
-     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
      * gewechselt werden (allowSwapX & allowSwapY)
      * @param {Object} target Objekt mit x, y, w, h
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
@@ -10021,7 +10025,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @param {Boolean} [swapOffset=true]   Der Offset wird mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
     alignToRect(target, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true) {
@@ -10056,7 +10060,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         let setHeight = false;
         let setWidth = false;
 
-        // Wenns inder Höhe nicht passt...
+        // Wenns in der Höhe nicht passt...
         if (!overlap.fitY) {
             fit = false;
 
@@ -10084,7 +10088,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 }
             }
 
-            // Wenns immer noch nicht passt: unten oder oben am Body-Rand beginnen und über das Target hinausfahren
+            // Wenns immer noch nicht passt: unten oder oben am Body-Rand beginnen und über das Target hinausfahren.
             // Dabei sicherstellen, dass das Element nicht grösser als der Body ist. Sonst Scrollbar.
             if (!fit) {
                 // Höhe darf nicht grösser als Body höhe sein, sonst begrenzen und Scrollbar
@@ -10135,7 +10139,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 }
             }
 
-            // Wenns immer noch nicht passt: links oder rechts am Body-Rand beginnen und über das Target hinausfahren
+            // Wenns immer noch nicht passt: links oder rechts am Body-Rand beginnen und über das Target hinausfahren.
             // Dabei sicherstellen, dass das Element nicht grösser als der Body ist. Sonst Scrollbar.
             if (!fit) {
                 // Breite darf nicht grösser als Body breite sein, sonst begrenzen und Scrollbar
@@ -10175,7 +10179,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Richtet ein Element nach einem Ziel-Element aus.
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
-     * Falls das Element an der neuen Position nicht platz haben sollte, kann die Position automatisch
+     * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
      * gewechselt werden (allowSwapX & allowSwapY)
      * @param {kijs.gui.Element|HTMLElement} targetNode
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
@@ -10190,7 +10194,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
      * @param {Number} [offsetX=0]          Verschiebung aus dem Ankerpunkt auf der X-Achse
      * @param {Number} [offsetY=0]          Verschiebung aus dem Ankerpunkt auf der Y-Achse
-     * @param {Boolean} [swapOffset=true]   Der Offset wird Mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
+     * @param {Boolean} [swapOffset=true]   Der Offset wird mitgeswappt (* -1 gerechnet), wenn das Element kein Platz hat
      * @returns {Object}    Gibt die endgültige Positionierung zurück: { pos:..., targetPos:... }
      */
     alignToTarget(targetNode, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset=true)  {
@@ -10223,7 +10227,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     changeDisabled(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -10257,7 +10261,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     changeReadOnly(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim zurücksetzen von 
+        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
         // disabled wieder der vorherige Wert zugewiesen.
         if (callFromParent) {
             if (!val) {
@@ -10368,7 +10372,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} [alsoSetIfNoTabIndex=false]    Fokus auch setzen, wenn tabIndex === -1
      *                                                 undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst klappts nicht)
      *                                                 tabIndex -1: nur via focus() Befehl oder click fokussierbar
-     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tabreihenfolge
+     *                                                 tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
      *                                                 tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @returns {HTMLElement|null|false}               HTML-Node, das den Fokus erhalten hat oder false, wenn nicht gerendert.
      */
@@ -10606,7 +10610,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *  - behavior  (String) default='auto'
      *     - 'smooth' Animiertes Scrollen
      *     - 'instant' Scrollen ohne Animation
-     *     - 'auto'    Die CSS Eintellung 'scroll-behavior' wird berücksichtigt.
+     *     - 'auto'    Die CSS Einstellung 'scroll-behavior' wird berücksichtigt.
      *  - scrollParentsTo (Boolean) default=false. Sollen Eltern-Knoten auch gescrollt werden?
      * @returns {undefined}
      */
@@ -10674,7 +10678,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     _nodeAttributeApply() {
         kijs.Object.each(this._nodeAttribute, function(name, value) {
             this._node[name] = value;
-            // Kleiner murgs, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
+            // Kleiner Murks, weil obige Zeile nicht zum Entfernen der Eigenschaft 'tabIndex' funktioniert
             if (kijs.isEmpty(value)) {
                 this._node.removeAttribute(name);
             }
@@ -10893,7 +10897,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     // overwrite
     destruct() {
-        // Unrender
+        // unrender
         this.unrender();
 
         // Tooltip entladen
@@ -10950,7 +10954,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
             // keine
         });
 
-        // Mapping für die Zuweisung der Config-Eigenmschaften
+        // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },
             disabled        : true,
@@ -11068,7 +11072,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 x += this._offsetX;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (x+this._dom.node.offsetWidth > window.innerWidth) {
                 x = Math.abs(window.innerWidth - this._dom.node.offsetWidth - 5);
             }
@@ -11084,7 +11088,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
                 y += this._offsetY;
             }
 
-            // Sicherstellen, dass der Tooltip auf dem Bildschirm platz hat
+            // Sicherstellen, dass der Tooltip auf dem Bildschirm Platz hat
             if (y+this._dom.node.offsetHeight > window.innerHeight) {
                 y = Math.abs(window.innerHeight - this._dom.node.offsetHeight - 5);
             }
@@ -11191,7 +11195,8 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         super.destruct(true);
     }
     
-};/* global kijs, this */
+};
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.Element
@@ -11240,7 +11245,7 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
  *                                          context: xy
  *                                      }
  *
- * parent       kijs.gui.Element [optional] Verweis auf das übergeordenete Element
+ * parent       kijs.gui.Element [optional] Verweis auf das übergeordnete Element
  *
  * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
  *                                      Beispiel: style:{background-color:'#ff8800'}
@@ -11842,7 +11847,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 }
             }
 
-            // Sonst den Funktionsname suchen (IE)
+            // Sonst den Funktionsnamen suchen (IE)
             if (!proto.__xtype) {
                 let results = /\s*function\s([a-zA-Z0-9_]+)\s*\(/.exec(this.constructor.toString());
                 if (results && results.length > 0) {
@@ -11886,7 +11891,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
 
         // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 
@@ -12348,7 +12353,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Listener der Aufgerufen wird, wenn die Grösse des Parents geändert hat
+     * Listener der aufgerufen wird, wenn die Grösse des Parents geändert hat
      * @param {Object} e
      * @returns {undefined}
      */
@@ -12512,12 +12517,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
  *   element    kijs.gui.Element
  *  Return: Boolean
  *
- * remove                               Löscht ein oder mehrere untergeordenete Elemente
+ * remove                               Löscht ein oder mehrere untergeordnete Elemente
  *  Args:
  *   elements    Object|Array
  *   options
  *
- * removeAll                            Löscht alle untergeordeneten Elemente
+ * removeAll                            Löscht alle untergeordneten Elemente
  *  Args:
  *   options
  *   
@@ -12536,7 +12541,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
  * -------------
  * innerDom     HTML-Element            Verweis auf den inneren dom-Node
  *
- * elements     Array                   Array mit den untergeordeten elements
+ * elements     Array                   Array mit den untergeordneten Elementen
  *
  * isEmpty      Boolean (readonly)
  *
@@ -13062,7 +13067,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // innerDOM rendern
         this._innerDom.renderTo(this._dom.node);
 
-        // Render der Elements in Funktion, damit dies
+        // Render der Elemente als Funktion, damit dies
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
@@ -13182,7 +13187,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Entfernt alle elements und fügt neue hinzu
+     * Entfernt alle elements und fügt neue hinzu.
      * Wird intern von der config elements verwendet
      * @param {Object|Array} elements
      * @returns {undefined}
@@ -13548,7 +13553,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
         }
         
-        // Höhe merken, damit beim aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
+        // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
             this._expandedHeight = val;
         }
@@ -13674,7 +13679,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         if (alsoSetIfNoTabIndex) {
             this._dom.node.focus();
 
-        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
         } else {
             const nde = kijs.Dom.getFirstFocusableNode(this._node);
             if (nde) {
@@ -14851,7 +14856,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
         
         
-        // Rendern oder Unrendern
+        // Rendern oder unrendern
         // Up (kijs.guiDom)
         if (hasScrollY) {
             this._btnUpDom.renderTo(this._dom.node, this._innerDom.node);
@@ -15152,16 +15157,16 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
  * animation           String [optional]     Standard Animation. Gültige Werte:
  *                                              none:           Keine Animation
  *                                              fade:           Überblenden (default)
- *                                              slideLeft:      Ausfahren nach Links
- *                                              slideRight:     Ausfahren nach Rechts
+ *                                              slideLeft:      Ausfahren nach links
+ *                                              slideRight:     Ausfahren nach rechts
  *                                              slideTop:       Ausfahren nach oben
  *                                              slideBottom:    Ausfahren nach unten
  *
- * animationDuration   Integer [optional]   Dauer der Animation in Milisekunden (default: 1000).
+ * animationDuration   Integer [optional]   Dauer der Animation in Millisekunden (default: 1000).
  * 
- * currentEl           kijs.gui.Element [optional] Element, das als erstes angezeigt wird
- * currentIndex        Integer [optional]          Element, das als erstes angezeigt wird (default: 0)
- * currentName         String [optional]           Element, das als erstes angezeigt wird
+ * currentEl           kijs.gui.Element [optional] Element, das als Erstes angezeigt wird
+ * currentIndex        Integer [optional]          Element, das als Erstes angezeigt wird (default: 0)
+ * currentName         String [optional]           Element, das als Erstes angezeigt wird
  * 
  *
  * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
@@ -15172,7 +15177,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
  *                                              Int = Index des Elements
  *                                              Object = Verweis auf das Element
  *        animation String [optional]       Art der Animation
- *        duration  Integer [optional]      Dauer der Animation in Milisekunden
+ *        duration  Integer [optional]      Dauer der Animation in Millisekunden
  *
  *
  * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
@@ -15496,7 +15501,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Fügt einen neues Element zur Element History hinzu
+    // Fügt ein neues Element zur Element History hinzu
     _elHistoryAdd(el) {
         // Falls das element bereits im Array ist: entfernen
         this._elHistory = kijs.Array.remove(this._elHistory, el);
@@ -16073,7 +16078,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * @returns {undefined}
      */
     close() {
-        // bei allen übergeordneten Spinboxes die aktuelle Spinbox wieder rausnehmen.
+        // Bei allen übergeordneten Spinboxen die aktuelle Spinbox wieder herausnehmen.
         // Siehe dazu auch den Kommentar in der Funktion show()
         let p = this.parent;
         while (p) {
@@ -16145,8 +16150,9 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             return;
         }
 
-        // SpinBox anzeigen
-        this.renderTo(this.targetNode ?? document.body);
+        // SpinBox anzeigen (Wenn ein modales Element vorhanden ist, an oberstem geöffnetem anhängen, sonst an body)
+        const modalOpenNodes = document.querySelectorAll('dialog:modal[open]');
+        this.renderTo(modalOpenNodes.length > 0 ? modalOpenNodes.item(modalOpenNodes.length-1) : document.body);
 
         // popover mode
         this._dom.node.showPopover();
@@ -16162,7 +16168,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
 
         // allen übergeordneten Spinboxes mitteilen, dass beim Klick auf dieses Element
-        // die Spnbox nicht geschlossen werden soll.
+        // die Spinbox nicht geschlossen werden soll.
         let p = this.parent;
         while (p) {
             if (p instanceof kijs.gui.SpinBox) {
@@ -16178,7 +16184,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             this._targetEl.focus();
         }
 
-        // Listeners auf body/window zum ausblenden
+        // Listeners auf body/window zum Ausblenden
         kijs.Dom.addEventListener('mousedown', document.body, this.#onBodyMouseDown, this);
         kijs.Dom.addEventListener('resize', window, this.#onWindowResize, this);
         kijs.Dom.addEventListener('wheel', window, this.#onWindowWheel, this);
@@ -16270,7 +16276,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             }
         }
 
-        // Aurichten an X, Y
+        // Ausrichten an X, Y
         let positions = null;
         if (kijs.isNumber(x) && kijs.isNumber(y)) {
             positions = this._dom.alignToRect(
@@ -16326,7 +16332,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
      * Workaround um die Breite zu rechnen.
      * Ist z.T. nötig, damit sich die Breite richtig an die Breite des Inhalts anpasst,
      * auch wenn der Inhalt keine definierte Breite hat (z.B. bei einem Menu).
-     * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese Fix ein.
+     * Schaut, wie breit das Element ohne Scrollbar ist, und stellt diese fix ein.
      * @returns {undefined}
      */
     _widthWorkaround() {
@@ -16475,7 +16481,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         Object.assign(this._configMap, {
             disableDrop: { target: 'disableDrop' },
             disableContextMenu: { target: 'disableContextMenu' },
-            theme: { target: 'theme'}         // 'dark', 'light' oder null=auto oder einen benutzerdefiniertes Farbschema
+            theme: { target: 'theme'}         // 'dark', 'light' oder null=auto oder ein benutzerdefiniertes Farbschema
         });
 
         // onResize überwachen
@@ -16541,7 +16547,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     get theme() {
         return kijs.Dom.themeGet();
     }
-    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder ein benutzerdefiniertes Farbschema
     set theme(val) {
         kijs.Dom.themeSet(val);
         this._autoTheme = val === null;
@@ -17655,7 +17661,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
     get direction() { return this._direction; }
     set direction(val) {
-        // auto: Falls der Button nicht im Menu ist ist, nach unten, sonst nach rechts
+        // auto: Falls der Button nicht im Menu ist, nach unten, sonst nach rechts
         if (val === 'auto') {
             if (this._button && !this.upX('kijs.gui.Menu')) {
                 val = 'down';
@@ -17865,7 +17871,8 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         super.destruct(true);
     }
 
-};/* global kijs */
+};
+/* global kijs */
 
 // --------------------------------------------------------------
 // kijs.gui.container.tab (namespace)
@@ -17877,7 +17884,7 @@ kijs.gui.container.tab = {};
 // kijs.gui.container.tab.Button
 // --------------------------------------------------------------
 /**
- * Tab-Button Element, das in kijs.gui.container.Tab.Elementen verwendet wird.
+ * Tab-Button Element, das in kijs.gui.container.tab.Elementen verwendet wird.
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element
@@ -18009,7 +18016,7 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
     #onCloseClick(e) {
         this.raiseEvent('closeClick', e);
         
-        // bubbeling verhindern, damit nicht das click-Event des Buttons
+        // Bubbeling verhindern, damit nicht das click-Event des Buttons
         // auch noch ausgelöst wird
         e.nodeEvent.stopPropagation();
     }
@@ -18306,7 +18313,7 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
 // kijs.gui.container.tab.Container
 // --------------------------------------------------------------
 /**
- * Container Element, zur Verwendung in kijs.gui.container.Tab.Elementen.
+ * Container Element, zur Verwendung in kijs.gui.container.tab.Elementen.
  * Es hat zusätzlich zum normalen Container noch ein paar Eigenschaften, für den
  * Tab-Button in der Tab-Bar.
  *
@@ -20001,7 +20008,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         }
 
-        // Max/min Grösse aufgrund der config des resizers
+        // Max/min Grösse aufgrund der config des Resizers
         // -------------
         if (!kijs.isEmpty(this._targetMaxWidth)) {
             if (ret.wMax === null || this._targetMaxWidth < ret.wMax) {
@@ -20385,7 +20392,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
-    _updateSpliterPosition() {
+    _updateSplitterPosition() {
         // Differenz zur vorherigen Position ermitteln
         let offset;
         if (this.direction === 'horizontal') {
@@ -20407,13 +20414,13 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
         const newPos = {
@@ -20468,11 +20475,11 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
-        this._updateSpliterPosition();
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }
@@ -20482,7 +20489,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        this._updateSpliterPosition();
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }
@@ -20672,9 +20679,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
             footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
 
-            resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Grösse angezeigt werden.
-            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Breite angezeigt werden.
-            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Sybmol zum ändern der Höhe angezeigt werden.
+            resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Grösse angezeigt werden.
+            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Breite angezeigt werden.
+            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Höhe angezeigt werden.
             
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -20880,7 +20887,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         
-        // Höhe merken, damit beim aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
+        // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
             this._expandedSize.height = val;
         }
@@ -21001,7 +21008,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             }
         }
         
-        // Breite merken, damit beim aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
+        // Breite merken, damit beim Aufklappen, wieder die gleiche Breite wiederhergestellt werden kann
         if (kijs.isNumber(this._collapseWidth) && val > kijs.isNumber(this._collapseWidth)) {
             this._expandedSize.width = val;
         }
@@ -21220,7 +21227,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         if (alsoSetIfNoTabIndex) {
             this._dom.node.focus();
 
-        // sonst den Fokus auf den ersten möglichen untegeordneten Node settzen
+        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
         } else {
             const nde = kijs.Dom.getFirstFocusableNode(this._node);
             if (nde) {
@@ -21633,7 +21640,7 @@ kijs.gui.dashboard = {};
 // kijs.gui.dashboard.Panel
 // --------------------------------------------------------------
 /**
- * Panel Element, zur Verwendung in kijs.gui.Dasboard Elementen.
+ * Panel Element, zur Verwendung in kijs.gui.dashboard Elementen.
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element
@@ -21744,7 +21751,7 @@ kijs.gui.dashboard.Panel = class kijs_gui_dashboard_Panel extends kijs.gui.Panel
 // kijs.gui.dashboard.Column
 // --------------------------------------------------------------
 /**
- * Panel Element, zur Verwendung in kijs.gui.Dasboard Elementen.
+ * Panel Element, zur Verwendung in kijs.gui.dashboard Elementen.
  *
  * KLASSENHIERARCHIE
  * kijs.gui.Element
@@ -22149,7 +22156,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
 // Halbtransparente Maske, die über den Body oder ein kijs.gui.Element gelegt wird
 // und so die Bedienung der dahinterliegenden Oberfläche verhindert.
 //
-// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mitangezeigt werden.
+// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mit angezeigt werden.
 //
 // Mit text kann ein Ladetext unterhalb des Icons angezeigt werden.
 //
@@ -22179,7 +22186,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         super(false);
 
         // Anker-Node von 0x0px mit position:relative in dem sich die Maske befindet.
-        // Nur nötig, wenn der Target nicht der Body ist
+        // Nur nötig, wenn das Target nicht der Body ist
         this._maskAnchorDom = new kijs.gui.Dom({
             cls:'kijs-mask-anchor'
         });
@@ -22576,7 +22583,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 // das unmaskiert bleibt.
 // Das Element, dass nicht überdeckt wird, wird mit der Eigenschaft target festgelegt.
 // Der Rest des Bildschirms wird von der Maske überdeckt und kann nicht mehr bedient werden.
-// Fals der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
+// Falls der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
 // Bei target = kijs.gui.Dom muss die Grösse manuell nachgeführt werden.
 kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     
@@ -22840,7 +22847,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             this.raiseEvent('destruct');
         }
 
-        // Node-Event Listener auf Window entfernen
+        // Node-Event Listener von Window entfernen
         kijs.Dom.removeEventListener('resize', window, this);
 
         // Listeners entfernen
@@ -22873,12 +22880,13 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         super.destruct();
     }
 
-};/* global kijs, HTMLElement */
+};
+/* global kijs, HTMLElement */
 
 // --------------------------------------------------------------
 // kijs.gui.LayerManager (Singleton)
 // --------------------------------------------------------------
-// Der Layermanager wird verwendet um den z-index von Fenstern zu managen.
+// Der Layermanager wird verwendet, um den z-index von Fenstern zu managen.
 // Wird ein Fenster angeklickt, so wird der z-index aller Fenster mit dem gleichen
 // parentNode neu berechnet und es erscheint zuvorderst.
 // Neben kijs.gui.Window können auch Masken (kijs.gui.Mask) in den Layermanager
@@ -22921,7 +22929,7 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt eine Element an
+     * Fügt ein Element an
      * @param {kijs.gui.Element} el
      * @returns {undefined}
      */
@@ -23125,7 +23133,8 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
         this._parents = null;
     }
 
-};/* global kijs, this, HTMLElement */
+};
+/* global kijs, this, HTMLElement */
 
 // --------------------------------------------------------------
 // kijs.gui.Window
@@ -23208,7 +23217,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Virtual Keyboard API (Nur in Chrome mit SSL)
         if (this._moveWhenVirtualKeyboard && 'virtualKeyboard' in navigator) {
             navigator.virtualKeyboard.overlaysContent = true;
-            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this.#onVirtualKeyboardGemoetryChange, this);
+            kijs.Dom.addEventListener('geometrychange', navigator.virtualKeyboard, this.#onVirtualKeyboardGeometryChange, this);
         }
 
     }
@@ -23393,7 +23402,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             this.center(true);
         }
 
-        // Sicherstellen, dass es platz hat
+        // Sicherstellen, dass es Platz hat
         this._adjustPositionToTarget(true);
 
         // afterResize-Event wieder aktivieren
@@ -23459,6 +23468,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         super.unrender(true);
     }
+
     // PROTECTED
     /**
      * Stellt sicher, dass das Fenster innerhalb des Targets angezeigt wird
@@ -23558,24 +23568,16 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         let x = this._dragInitialPos.windowX + (e.nodeEvent.touches[0].clientX - this._dragInitialPos.mouseX);
         let y = this._dragInitialPos.windowY + (e.nodeEvent.touches[0].clientY - this._dragInitialPos.mouseY);
 
-        // Min-Position begrenzen
-        if (x < 0) {
-            x = 0;
-        }
-        if (y < 0) {
-            y = 0;
-        }
-
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
 
-        // Das Fenster darf auch ausserhalb des Target sein
+        // Das Fenster darf auch ausserhalb des Targets sein
         if (this._allowDragOutside) {
             // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
-            if (x < targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20) {
-                x = targetNode.offsetLeft + this._headerBarEl.containerRightEl.width + 20;
+            if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
+                x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
             }
-            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
             if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
                 x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
             }
@@ -23583,7 +23585,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             if (y < targetNode.offsetTop) {
                 y = targetNode.offsetTop;
             }
-            // Min. die HeaderBar muss sichtbr sein
+            // Min. die HeaderBar muss sichtbar sein
             if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
                 y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
             }
@@ -23649,13 +23651,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Evtl. max-Position begrenzen
         const targetNode = this.targetNode;
 
-        // Das Fenster darf auch ausserhalb des Target sein
+        // Das Fenster darf auch ausserhalb des Targets sein
         if (this._allowDragOutside) {
             // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
             if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
                 x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
             }
-            // Min. eine Breite die der HeaderBar-Höhe entspricht muss sichtbar sein
+            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
             if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
                 x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
             }
@@ -23691,7 +23693,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onDocumentMouseUp(e) {
-        // Beim ersten auslösen Listeners gleich wieder entfernen
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
@@ -23709,12 +23711,12 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     /**
-     * Listener der Aufgerufen wird, wenn die Grösse des Target-Elements geändert hat
+     * Listener der aufgerufen wird, wenn die Grösse des Target-Elements geändert hat
      * @param {Object} e
      * @returns {undefined}
      */
     #onTargetElAfterResize(e) {
-        // Sicherstellen, dass das Fenster im Target platz hat
+        // Sicherstellen, dass das Fenster im Target Platz hat
         this._adjustPositionToTarget(true);
 
         // Falls die eigene Grösse geändert hat: das eigene afterResize-Event auslösen
@@ -23722,7 +23724,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onTargetElChangeVisibility(e) {
-        // Sichbarkeit ändern
+        // Sichtbarkeit ändern
         this.visible = e.visible;
     }
 
@@ -23730,8 +23732,8 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this.destruct();
     }
 
-    // Fenster neu zentrieren wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
-    #onVirtualKeyboardGemoetryChange(e) {
+    // Fenster neu zentrieren, wenn eine virtuelle Tastatur eingeblendet wird (Mobile)
+    #onVirtualKeyboardGeometryChange(e) {
 
         if (this.isRendered && this._moveWhenVirtualKeyboard && e.nodeEvent.target) {
             const { x, y, width, height } = e.nodeEvent.target.boundingRect;
@@ -23750,7 +23752,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     #onWindowResize(e) {
-         // Sicherstellen, dass das Fenster im Target platz hat
+         // Sicherstellen, dass das Fenster im Target Platz hat
         this._adjustPositionToTarget(true);
 
         this._raiseAfterResizeEvent(true, e);
@@ -24763,19 +24765,21 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      * @param {String} caption
      * @param {String} html
      * @param {String} [icon='alert'] 'alert', 'info', 'errorNotice' oder 'error'
+     * @param {Number} dismissDelay Anzeigedauer in ms
      * @returns {undefined}
      */
-    static show(caption, html, icon='alert') {
+    static show(caption, html, icon='alert', dismissDelay=5000) {
         // Singleton-Instanz ermitteln oder erstellen
         let instance = kijs.gui.CornerTipContainer._singletonInstance;
         if (!instance) {
-            instance = new kijs.gui.CornerTipContainer();
+            instance = new kijs.gui.CornerTipContainer({dismissDelay});
             instance.renderTo(document.body);
             kijs.gui.CornerTipContainer._singletonInstance = instance;
 
         } else {
             // als letzte node anhängen
             document.body.appendChild(instance.dom.node);
+            instance.dismissDelay = dismissDelay;
         }
 
         switch (icon) {
@@ -24938,7 +24942,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
                 // Singleton löschen, wenn nicht mehr benötigt.
                 if (this.elements.length === 0 && kijs.gui.CornerTipContainer._singletonInstance === this) {
-                    this.unrender();
+                    this.destruct();
                     delete kijs.gui.CornerTipContainer._singletonInstance;
                 }
 
@@ -25088,15 +25092,14 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
     // --------------------------------------------------------------
     /**
      * Führt einen RPC aus
-     * - Wird eine fn übergeben, wird diese bei erhalt der Antwort ausgeführt (auch im Fehlerfall).
+     * - Wird eine fn übergeben, wird diese nach Erhalt der Antwort ausgeführt (auch im Fehlerfall).
      *   Die Rückgabe der Funktion ist dann immer Null.
      * - Es wird ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
-     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragen
-     *   werden.
+     * - Um festzustellen, ob es einen Fehler gegeben hat können errorType und errorMsg abgefragt werden.
      * - Es gibt folgende errorTypes:
      *    - 'errorNotice'   Es wurde eine errorMsg vom Server zurückgegeben mit errorType='errorNotice' 
      *                      oder ohne errorType (dann wird der errorType automatisch auf 'errorNotice' 
-     *                      gesetzt. 
+     *                      gesetzt.)
      *    - 'error'         Es wurde eine errorMsg vom Server zurückgegeben mit errorType='error'.
      *    - 'warning'       Es wurde vom Server eine warningMsg zurückgegeben und der Benutzer 
      *                      hat auf Abbrechen geklickt.
@@ -25108,7 +25111,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *     {String} remoteFn                    Modul/Facaden-name und Methodenname Bsp: 'address.save'
      *     {Mixed} data                         Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                     Verweis auf das Aufzurufende Element oder eine ID, die das Element eindeutig identifiziert.
-     *                                          Wird verwendet um bei cancelRunningRpcs den Eigentümmer zu identifizieren.
+     *                                          Wird verwendet um bei cancelRunningRpcs den Eigentümer zu identifizieren.
      *     {Function} fn                        Callback-Funktion
      *     {Object} context                     Kontext für die Callback-Funktion
      *     {Boolean} [cancelRunningRpcs=false]  Bei true, werden alle laufenden Requests
@@ -25214,7 +25217,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                         kijs.gui.MsgBox.errorNotice(rpcData.response.errorTitle, rpcData.response.errorMsg);
                     }
 
-                // Warning --> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
+                // Warning -> WarnungMsg mit OK, Cancel. Bei Ok wird der gleiche request nochmal gesendet mit dem Flag ignoreWarnings
                 // rpcData.response.warningMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 } else if (!kijs.isEmpty(rpcData.response.warningMsg)) {
                     // Standard warningTitle
@@ -25268,7 +25271,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                     return;
                 }
 
-                // Info --> Msg ohne Icon
+                // Info -> Msg ohne Icon
                 // rpcData.response.infoMsg (String oder Array mit Strings, die mit Aufzählungszeichen angezeigt werden)
                 if (!kijs.isEmpty(rpcData.response.infoMsg)) {
                     // Standard infoTitle
@@ -25382,7 +25385,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze das per default Selektiert sind.
+            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
                                         // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
@@ -25688,7 +25691,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Gibt die selektierten Elemente zurück
+     * Gibt die selektierten Elemente zurück.
      * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
@@ -25713,7 +25716,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Gibt die Data-rows der selektieten Elemente zurück
+     * Gibt die Data-rows der selektierten Elemente zurück
      * @returns {Array|null}
      */
     getSelectedRows() {
@@ -26091,7 +26094,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Element festlegen, welches über die Tabulator-Taste den Fokus erhält
+     * Element festlegen, welches über die Tabulator-Taste den Fokus erhält.
      * Setzt den tabIndex des Elements auf 0
      * und bei allen anderen Elementen auf undefined
      * @param {Object} el
@@ -26605,7 +26608,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Erstellt den Inhalt
+     * Erstellt den Inhalt.
      * Diese Funktion muss überschrieben werden.
      */
     update() {
@@ -27166,7 +27169,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             throw new kijs.Error('invalid time: second');
         }
 
-        // zeichnen falls gerendert
+        // zeichnen, falls gerendert
         if (this._dom.node) {
             this._calculate();
         }
@@ -27611,7 +27614,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     }
     
     /**
-     * Beim bewegen der Maus wird die Kelle darunter angezeigt.
+     * Beim Bewegen der Maus wird die Kelle darunter angezeigt.
      * @param {Object} e
      * @returns {undefined}
      */
@@ -27775,7 +27778,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             }
         }
 
-        // wenn eine zahl eingegeben wurde, fokus evtl auf nächstes Feld.
+        // wenn eine zahl eingegeben wurde, fokus evtl. auf nächstes Feld.
         if (kijs.isString(e.nodeEvent.key) && e.nodeEvent.key.match(/^[0-9]$/)) {
             if (fld.node.value.length === 2) {
                 switch (type) {
@@ -28186,7 +28189,7 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
+    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -28975,7 +28978,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
     
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächst möglichen Wert verändert.
+    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -29412,7 +29415,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
             // nur das Datum übernehmen, wenn es gültig ist
             if (kijs.Date.compare(date, e.dom.date)) {
 
-                // Wenn bei Range nur das Start und kein Enddatum gesetzt ist, setzen wir das Enddatum
+                // Wenn bei Range nur das Start- und kein Enddatum gesetzt ist, setzen wir das Enddatum
                 if (this._mode === 'range' && !kijs.isEmpty(this._date) && kijs.isEmpty(this._dateEnd)) {
                     this._dateEnd = date;
                     inputFinished = true;
@@ -29954,9 +29957,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     set labelHtmlDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
     get labelPosition() {
-        if (this._dom.clsHas('kijs-top')) {
+        if (this._dom.clsHas('kijs-labelpos-top')) {
             return 'top';
-        } else if (this._dom.clsHas('kijs-auto')) {
+        } else if (this._dom.clsHas('kijs-labelpos-auto')) {
              return 'auto';
         } else {
             return 'left';
@@ -30055,7 +30058,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get valueDisplayHtml() { return kijs.String.htmlspecialchars(this.value); }
 
     /**
-     * Gibt einen Objekt zurück mit den Werten des Felds
+     * Gibt ein Objekt zurück mit den Werten des Felds
      * Format {name: value}
      * Beispiel nur ein Wert: {value:'2021-02-01'}
      * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
@@ -30095,7 +30098,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck zum validieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke zum Validieren hinzu
      * @param {Object|String|Array} regExps Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Vierstellige Zahl erforderlich' }
      * @returns {undefined}
      */
@@ -30213,7 +30216,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // Error icon rendern (kijs.gui.Icon)
         this._errorIconEl.renderTo(this._contentDom.node);
         
-        // Render der Elements in Funktion, damit dies
+        // Render der Elemente als Funktion, damit dies
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
@@ -30362,7 +30365,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
     
     /**
-     * Eingabe erforderlich validieren
+     * Eingabe erforderlich validieren.
      * Wird aufgerufen von _validationRules
      * @param {String} value
      * @param {Boolean} ignoreEmpty
@@ -30582,7 +30585,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
@@ -30626,7 +30629,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -30702,7 +30705,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
@@ -31065,7 +31068,7 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
         let val = this.value;
         
         if (!this.disabled && !kijs.isEmpty(val) && this.validate(val)) {
-            // Evt. Standardprotocol hinzufügen
+            // Evt. Standardprotokoll hinzufügen
             if (!kijs.isEmpty(this._defaultProtocol)) {
                 if (!val.match(/^[a-z0-9]+\:\/\//i)) {
                     val = this._defaultProtocol + val;
@@ -31571,7 +31574,7 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
                     regExp: /\s$/, // Whitespace am Ende entfernen
                     replace: ''
                 },{ 
-                    regExp: /(.*)/g, // Buchstaben in Grossbauchstaben umwandeln
+                    regExp: /(.*)/g, // Buchstaben in Grossbuchstaben umwandeln
                     toUpperCase: true
                 }
             ]
@@ -31740,7 +31743,7 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         // alte AHV-Nr.(Format: xxx.xx.xxx.xxx)
         // während der Eingabe nur formatieren, wenn die neue nicht möglich ist, 
         // weil sonst bereits nach 11 Zeichen die alte formatiert wird.
-        // bei set value oder beim verlassen des Feldes wird aber richtig formatiert.
+        // bei set value oder beim Verlassen des Feldes wird aber richtig formatiert.
         if (this._allowAhvNr && (!this._allowSozVersNr || !whileTyping)) {
             val = val.replace(/^([0-9]{3})([0-9]{2})([0-9]{3})([0-9]{3})$/, '$1.$2.$3.$4');
         }
@@ -32006,7 +32009,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             allowedDecimalSeparators: true,
             allowedThousandsSeparators: true,
             alwaysDisplayDecimals: true,
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             decimalPrecision: { target: 'decimalPrecision'},
             decimalSeparator: true,
             inputMode: { target: 'inputMode' },
@@ -32063,7 +32066,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -32316,7 +32319,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
 
-    // Stopt das Hoch-/Runterzählen von einem Spinnbutton
+    // Stoppt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
@@ -32402,12 +32405,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     // PRIVATE
     // LISTENERS
     #onInputDomChange(e) {
-        // Beim verlassen des Feldes, Zahl auf eingestelltes Format ändern.
+        // Beim Verlassen des Feldes, Zahl auf eingestelltes Format ändern.
         // Wenn Nummer ungültig, die Nummer belassen
         let val = this.value;
         let oldVal = this._previousChangeValue;
 
-        // Wert neu reinschreiben (evtl. wurde er Formatiert)
+        // Wert neu reinschreiben (evtl. wurde er formatiert)
         this.value = val;
         
         // und das change event auslösen
@@ -32532,7 +32535,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             inputMode: { target: 'inputMode' },
             valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
             placeholder: { target: 'placeholder' },
@@ -32573,7 +32576,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -32725,7 +32728,8 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         super.destruct(true);
     }
 
-};/* global kijs, this */
+};
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.field.Password
@@ -32980,7 +32984,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
             this._value = kijs.isEmpty(this._value) ? '' : this._value;
 
-            // Neue Zeichen ermittteln
+            // Neue Zeichen ermitteln
             var newChars = kijs.String.replaceAll(val, this._passwordChar, '');
 
             // Ist das Feld nun leer?
@@ -33678,7 +33682,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         // Max Position berechnen
         const max = this._inputDom.width - this._togglePointDom.height;
 
-        // Falls Checked muss noch der bestehende margin addiert werden
+        // Falls checked muss noch das bestehende margin addiert wird
         if (this._checked) {
             deltaX += max;
         }
@@ -33937,7 +33941,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._determinatedIconMap = 'kijs.iconMap.Fa.minus';
         this._uncheckedIconMap = null;
 
-        this._threeState = false;                   // Erreichen des dritte Status "Intermediate" per Klick möglich?
+        this._threeState = false;                   // Erreichen des dritten Statuses "Intermediate" per Klick möglich?
 
         this._valueChecked = true;
         this._valueDeterminated = 2;
@@ -33972,7 +33976,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHide: true,
@@ -34523,7 +34527,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         super(false);
 
         this._previousChangeValue = '';
-        this._defaultColor = '#ffffff'; // Standardfarbe wenn leer.
+        this._defaultColor = '#ffffff'; // Standardfarbe, wenn leer.
                                         // Weil das native Color-Field kann nicht leer sein.
 
         this._inputDom = new kijs.gui.Dom({
@@ -34550,7 +34554,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browser-Vorschläge
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -34586,7 +34590,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -34851,7 +34855,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             autoLoad: { target: 'autoLoad' },
             inputMode: { target: 'inputMode' },
             remoteSort: true,
@@ -34942,7 +34946,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -35076,7 +35080,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
             // store leeren, wenn value gelöscht wird.
             if (this._value === '' || this._value === null) {
-//                this._listViewEl.data = [];
+               this._listViewEl.data = [];
             }
         }
 
@@ -35759,7 +35763,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            clickableLinks: true,         // Weblink zum anklicken machen
+            clickableLinks: true,         // Weblink zum Anklicken machen
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
@@ -35869,7 +35873,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
@@ -36176,11 +36180,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._previousChangeDate = null;  // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeDate = null;  // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
-        this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
-                                        // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
-                                        // Null=Umwandlung ausgeschaltet.
+        this._year2000Threshold = 30;     // Wenn zweistellige Jahreszahlen eingegeben werden,
+                                          // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
+                                          // Null=Umwandlung ausgeschaltet.
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -36247,7 +36251,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             year2000Threshold: true,
             emptyBtnHide: { target: 'maxDate', context: this._monthPicker },
             inputMode: { target: 'inputMode' },
@@ -36302,7 +36306,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -36501,7 +36505,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             if (kijs.isNumeric(str)) {
                 if (kijs.isEmpty(year)) {
                     year = parseInt(str);
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+                    // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
                     if (!kijs.isEmpty(this._year2000Threshold) && year >= 0 && year <= 99) {
                         if (year >= this._year2000Threshold) {
                             year += 1900;
@@ -36763,8 +36767,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._useDefaultSpinButtonIcon = !kijs.isDefined(config.spinButtonIconChar);
 
-        this._previousChangeValue = null;         // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
-        this._previousChangeValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValue = null;         // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValueEnd = null;      // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -36852,7 +36856,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             inputMode: { target: 'inputMode' },
             nameEnd: true,
             mode: { target: 'mode' },           // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
@@ -36917,7 +36921,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
     
@@ -37033,7 +37037,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._dom.clsAdd('kijs-' + val);
 
         this._createSpinBoxElements();
-        this.value = null;
+        this.value = this.value;
     }
 
     get nameEnd() { return this._nameEnd; }
@@ -37146,7 +37150,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (!kijs.isEmpty(valTime)) {
             if (kijs.isEmpty(this._valueTimeFormat)) {
                 switch (this._mode) {
-                    // Falls ein ganzer SQL-Date-String verlangt wird, die komplete Uhrzeit nehmen
+                    // Falls ein ganzer SQL-Date-String verlangt wird, die komplette Uhrzeit nehmen
                     case 'dateTime':
                         timeFormat = 'H:i:s';
                         break;
@@ -37394,7 +37398,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     /**
      * Ermittelt den Wert für die Anzeige (display) im entsprechenden Format.
-     * Falls keine Format definiert wurde, wird aufgrund der Einstellungen eines definiert
+     * Falls kein Format definiert wurde, wird aufgrund der Einstellungen eines definiert
      * @return {String}
      */
     _getDisplayValue() {
@@ -38117,9 +38121,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteSort = null;            // Remote-Sortierung
 
         this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
-        this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
+        this._currentRow = null;            // Zeile, welche zurzeit fokussiert ist
         this._selectType = 'single';        // multiselect: single|multi|simple|none
-        this._focusable = true;             // ob das grid focusiert weden kann
+        this._focusable = true;             // ob das grid fokussiert werden kann
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)
@@ -38224,7 +38228,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
 
-            // Falls es schon ein gültiges Current-Zeile gibt, dieses nehmen
+            // Falls es schon eine gültige Current-Zeile gibt, dieses nehmen
             if (this._currentRow && kijs.Array.contains(this._rows, this._currentRow)) {
                 cRow = this._currentRow;
             }
@@ -38428,7 +38432,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Gibt die selektieten Zeilen zurück
+     * Gibt die selektierten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
      * @returns {Array|kijs.gui.grid.Row|null}
      */
@@ -38592,7 +38596,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Daten laden
         if (this._autoLoad) {
-            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
+            this._autoLoad = false; // Daten nur beim ersten Rendern automatisch laden.
             kijs.defer(function() {
                 if (this._remoteDataLoaded === 0) {
                     this._remoteLoad(true);
@@ -39960,7 +39964,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Gibt die Filter-Objekte als Array  zurück, welche auf dem Server angewendet werden.
+     * Gibt die Filter-Objekte als Array zurück, welche auf dem Server angewendet werden.
      * @returns {undefined}
      */
     getFilters() {
@@ -40776,7 +40780,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
-        // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+        // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
         kijs.defer(this._updateHeaderToolTip, 50, this);
         this._updateHeaderToolTip();
         
@@ -40805,13 +40809,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     
     // PROTECTED
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this.parent.grid.dom.node);
         const newPos = {
@@ -40823,7 +40827,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
     
     
-    // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
     _updateHeaderToolTip() {
         if (!this.isRendered) {
             return;
@@ -41533,7 +41537,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
             if (!kijs.isObject(editorConfig)) {
                 editorConfig = {};
             }
-            // config für Nummerfeld übernehmen
+            // config für Nummernfeld übernehmen
             if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
                 editorConfig.decimalPrecision = this._decimalPrecision;
             }
@@ -41551,7 +41555,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         super.editorConfig = val;
     }
     
-};/* global kijs, this */
+};
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
@@ -41853,7 +41858,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
             this._cellEditor = new editor(eArgs);
 
-            // Nach dem rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
+            // Nach dem Rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
             this._cellEditor.on('afterRender', function() {
                 kijs.defer(function() {
                     this._cellEditor.focus(false, true);
@@ -41968,7 +41973,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     /**
      * Setzt das HTML im DOM. Kann in abgeleiteter Klasse überschrieben werden,
-     * falls ein anderer Wert angezeigt werden soll als das Value.
+     * falls ein anderer Wert angezeigt werden soll als Wert.
      * @param {String} value
      * @returns {undefined}
      */
@@ -43397,7 +43402,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                         if (cell.columnConfig.iconCharField === this.columnConfig.iconCharField){
                             let contains = false;
 
-                            // Überprüfen ob Icon schon in einem der Arrays ist
+                            // Überprüfen, ob Icon schon in einem der Arrays ist
                             if (icons.length > 0) {
                                 kijs.Array.each(icons, function(value){
                                         if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){
@@ -43567,9 +43572,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteSort = null;            // Remote-Sortierung
 
         this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
-        this._currentRow = null;            // Zeile, welche zurzeit fokusiert ist
+        this._currentRow = null;            // Zeile, welche zurzeit fokussiert ist
         this._selectType = 'single';        // multiselect: single|multi|simple|none
-        this._focusable = true;             // ob das grid focusiert weden kann
+        this._focusable = true;             // ob das grid fokussiert werden kann
         this._filterable = false;
 
         // Intersection Observer (endless grid loader)
@@ -43674,7 +43679,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
 
-            // Falls es schon ein gültiges Current-Zeile gibt, dieses nehmen
+            // Falls es schon eine gültige Current-Zeile gibt, dieses nehmen
             if (this._currentRow && kijs.Array.contains(this._rows, this._currentRow)) {
                 cRow = this._currentRow;
             }
@@ -43878,7 +43883,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Gibt die selektieten Zeilen zurück
+     * Gibt die selektierten Zeilen zurück
      * Bei selectType='single' wird das Row direkt zurückgegeben, sonst ein Array mit den Zeilen
      * @returns {Array|kijs.gui.grid.Row|null}
      */
@@ -44042,7 +44047,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Daten laden
         if (this._autoLoad) {
-            this._autoLoad = false; // Daten nur beim ersten rendern automatisch laden.
+            this._autoLoad = false; // Daten nur beim ersten Rendern automatisch laden.
             kijs.defer(function() {
                 if (this._remoteDataLoaded === 0) {
                     this._remoteLoad(true);
@@ -45410,7 +45415,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Gibt die Filter-Objekte als Array  zurück, welche auf dem Server angewendet werden.
+     * Gibt die Filter-Objekte als Array zurück, welche auf dem Server angewendet werden.
      * @returns {undefined}
      */
     getFilters() {
@@ -46226,7 +46231,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // sichtbar?
         this.visible = this._columnConfig.visible;
 
-        // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+        // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
         kijs.defer(this._updateHeaderToolTip, 50, this);
         this._updateHeaderToolTip();
         
@@ -46255,13 +46260,13 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     
     // PROTECTED
     /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeigerposition
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
      * @param {Number} yAbs     Mausposition clientY
      * @returns {undefined}
      */
     _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browserrand,
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
         // die relative Position bezogen zum übergeordneten DOM-Node
         const parentPos = kijs.Dom.getAbsolutePos(this.parent.grid.dom.node);
         const newPos = {
@@ -46273,7 +46278,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
     
     
-    // Caption als Tooltip anzeigen, wenn nicht genung Platz im Spaltenkopf
+    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
     _updateHeaderToolTip() {
         if (!this.isRendered) {
             return;
@@ -46983,7 +46988,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
             if (!kijs.isObject(editorConfig)) {
                 editorConfig = {};
             }
-            // config für Nummerfeld übernehmen
+            // config für Nummernfeld übernehmen
             if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
                 editorConfig.decimalPrecision = this._decimalPrecision;
             }
@@ -47001,7 +47006,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         super.editorConfig = val;
     }
     
-};/* global kijs, this */
+};
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
@@ -47303,7 +47309,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
             this._cellEditor = new editor(eArgs);
 
-            // Nach dem rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
+            // Nach dem Rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
             this._cellEditor.on('afterRender', function() {
                 kijs.defer(function() {
                     this._cellEditor.focus(false, true);
@@ -47418,7 +47424,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     /**
      * Setzt das HTML im DOM. Kann in abgeleiteter Klasse überschrieben werden,
-     * falls ein anderer Wert angezeigt werden soll als das Value.
+     * falls ein anderer Wert angezeigt werden soll als Wert.
      * @param {String} value
      * @returns {undefined}
      */
@@ -48847,7 +48853,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                         if (cell.columnConfig.iconCharField === this.columnConfig.iconCharField){
                             let contains = false;
 
-                            // Überprüfen ob Icon schon in einem der Arrays ist
+                            // Überprüfen, ob Icon schon in einem der Arrays ist
                             if (icons.length > 0) {
                                 kijs.Array.each(icons, function(value){
                                         if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){
@@ -49300,9 +49306,12 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             ['clean']                                      // remove formatting button
         ];
 
+        // CSS Klasse hinzufügen
+        this.dom.clsAdd('kijs-field-quilleditor');
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            cls: 'kijs-field-quilleditor'
+            // keine
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
