@@ -161,12 +161,14 @@ kijs.Ajax = class kijs_Ajax {
                         config.fn.call(config.context || this, {
                             response: val,
                             request: config,
+                            errorType: 'error',
                             errorMsg: error
                         });
                     }
                     resolve({
                         response: null,
                         request: config,
+                        errorType: 'error',
                         errorMsg: error
                     });
                 }
