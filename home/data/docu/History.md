@@ -2,6 +2,21 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.8.4
+=============
+### kijs.UploadDialog / kijs.gui.UploadWindow
+Events wurden umbenennt:
+- ```startUpload``` --> ```uploadStart```
+- ```endUpload``` --> ```uploadEnd```
+- ```failUpload``` --> ```uploadFailed```
+
+**UPDATE TIPP:** Die Event-Listener Funktionen mit suchen/ersetzen anpassen.
+
+Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem Argument enthalten.
+
+**UPDATE TIPP:** Mit suchen alle Listeners suchen und die Argumente von Hand anpassen.
+
+
 Version 2.8.3
 =============
 ### kijs.gui.CornerTipContainer
