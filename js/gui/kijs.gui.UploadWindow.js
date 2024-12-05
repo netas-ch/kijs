@@ -133,6 +133,19 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadDialog.showFileSelectDialog(multiple, directory);
     }
 
+    // overwrite
+    unrender(superCall) {
+
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this.removeAll();
+        this._uploads = [];
+
+        super.unrender(superCall);
+    }
 
     // PROTECTED
     _getUploadProgressBar(uploadId) {
@@ -159,15 +172,15 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         }
     }
     
-    #onFailUpload(ud, filename, filetype) {
+    #onFailUpload() {
         this._autoClose = false;
     }
 
-    #onStartUpload(ud, filename, filedir, filetype, uploadId) {
-        let progressBar = new kijs.gui.ProgressBar({
-            caption: kijs.String.htmlspecialchars(filename),
+    #onStartUpload(e) {
+        const progressBar = new kijs.gui.ProgressBar({
+            caption: kijs.String.htmlspecialchars(e.fileName),
             uploadDialog: this._uploadDialog,
-            uploadDialogId: uploadId,
+            uploadDialogId: e.uploadId,
             style: {
                 marginBottom: '10px'
             }
@@ -175,7 +188,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         this._uploads.push({
             progressBar: progressBar,
-            uploadId: uploadId
+            uploadId: e.uploadId
         });
 
         this.add(progressBar);
@@ -190,11 +203,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadRunning = true;
     }
 
-    #onUpload(ud, response, errorMsg, uploadId) {
-        let pg = this._getUploadProgressBar(uploadId);
-        if (errorMsg && pg) {
+    #onUpload(e) {
+        let pg = this._getUploadProgressBar(e.uploadId);
+        if (e.errorMsg && pg) {
             this._autoClose = false;
-            pg.bottomCaption = '<span class="error">' + kijs.String.htmlspecialchars(errorMsg) + '</span>';
+            pg.bottomCaption = '<span class="error">' + kijs.String.htmlspecialchars(e.errorMsg) + '</span>';
         }
     }
 

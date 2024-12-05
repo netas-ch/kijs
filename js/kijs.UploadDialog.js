@@ -48,8 +48,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._observePaste = false;
         this._pasteCb = null;
 
-        this._filenameHeader = 'X-Filename';
-        this._pathnameHeader = 'X-Filepath';
+        this._fileNameHeader = 'X-Filename';
+        this._pathNameHeader = 'X-Filepath';
 
         this._validMediaTypes = [
             'application',
@@ -74,8 +74,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             directory: { target: 'directory' },
             multiple: { target: 'multiple' },
             fileExtensions:  { target: 'fileExtensions' },
-            filenameHeader: true,
-            pathnameHeader: true,
+            fileNameHeader: true,
+            pathNameHeader: true,
             maxFilesize: true,
             sanitizeFilename: true,
             dropZones: { target: 'dropZones' },
@@ -311,21 +311,21 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return true;
     }
 
-    _getFilename(filename) {
+    _getFilename(fileName) {
         if (this._sanitizeFilename) {
-            filename = kijs.Char.replaceSpecialChars(filename);
-            let filenameParts = filename.split('.'), extension = '';
-            if (filenameParts.length > 1) {
-                extension = filenameParts.pop().replace(/[^a-zA-Z0-9]/g, '');
+            fileName = kijs.Char.replaceSpecialChars(fileName);
+            let fileNameParts = fileName.split('.'), extension = '';
+            if (fileNameParts.length > 1) {
+                extension = fileNameParts.pop().replace(/[^a-zA-Z0-9]/g, '');
             }
-            filename = filenameParts.join('_').replace(/[^a-zA-Z0-9\-]/g, '_');
+            fileName = fileNameParts.join('_').replace(/[^a-zA-Z0-9\-]/g, '_');
 
             if (extension) {
-                filename += '.' + extension;
+                fileName += '.' + extension;
             }
         }
 
-        return filename;
+        return fileName;
     }
 
     /**
@@ -345,18 +345,18 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     _uploadFile(file) {
         let uploadId = this._uploadId++,
             headers = {},
-            filename = this._getFilename(file.name),
-            filedir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
-            filetype = file.type || 'application/octet-stream';
+            fileName = this._getFilename(file.name),
+            fileDir = this._getRelativeDir(file.name, file.relativePath || file.webkitRelativePath),
+            fileType = file.type || 'application/octet-stream';
 
         // event
-        this.raiseEvent('fileSelected', this, filename, filedir, filetype, file);
+        this.raiseEvent('fileSelected', { uploadDialog: this, fileName: fileName, fileDir: fileDir, fileType: fileType, file: file });
 
         // Upload
         if (this._ajaxUrl) {
-            headers[this._filenameHeader] = encodeURIComponent(filename);
-            headers[this._pathnameHeader] = encodeURIComponent(filedir);
-            headers['Content-Type'] = filetype;
+            headers[this._fileNameHeader] = encodeURIComponent(fileName);
+            headers[this._pathNameHeader] = encodeURIComponent(fileDir);
+            headers['Content-Type'] = fileType;
 
             kijs.Ajax.request({
                 url: this._ajaxUrl,
@@ -371,7 +371,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             });
 
             this._currentUploadIds.push(uploadId);
-            this.raiseEvent('startUpload', this, filename, filedir, filetype, uploadId);
+            this.raiseEvent('startUpload', { uploadDialog: this, fileName: fileName, fileDir: fileDir, fileType: fileType, uploadId: uploadId });
         }
     }
 
@@ -387,7 +387,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
                         this.raiseEvent('failUpload', { errMsg: errMsg });
                     }
                 } else {
-                    this.raiseEvent('failUpload', this, this._getFilename(fileList[i].name), fileList[i].type);
+                    this.raiseEvent('failUpload', { uploadDialog: this, fileName: this._getFilename(fileList[i].name), fileType: fileList[i].type });
                 }
             }
         }
@@ -405,10 +405,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     #onEndUpload(e) {
         kijs.Array.remove(this._currentUploadIds, e.request.uploadId);
 
-        // Fehlermeldung vom server
-        let error = '';
-        if (!e.response || !e.response.success) {
-            error = error || e.response.msg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
+        // Fehlermeldung vom Server
+        let errorMsg = '';
+        if (!e.response || !kijs.isEmpty(e.errorType)) {
+            errorMsg = errorMsg || e.errorMsg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
         }
 
         // Antwort vom Server
@@ -418,11 +418,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._uploadResponses[e.request.uploadId] = uploadResponse;
 
         // Event werfen
-        this.raiseEvent('upload', this, uploadResponse, error, e.request.uploadId);
+        this.raiseEvent('upload', { uploadDialog: this, uploadResponse: uploadResponse, errorMsg: errorMsg, uploadId: e.request.uploadId });
 
-        // wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
+        // Wenn alle laufenden Uploads abgeschlossen sind, endUpload ausführen.
         if (this._currentUploadIds.length === 0) {
-            this.raiseEvent('endUpload', this, this._uploadResponses);   // TODO: Events sollten nur ein Argument (e) haben!
+            this.raiseEvent('endUpload', { uploadDialog: this, uploadResponses: this._uploadResponses });
         }
     }
 
@@ -463,7 +463,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             percent = Math.min(100, Math.max(0, percent)); // Wert zwischen 0-100
         }
 
-        this.raiseEvent('progress', this, e.nodeEvent, e.ajaxConfig.uploadId, percent);   // TODO: Events sollten nur ein Argument (e) haben!
+        this.raiseEvent('progress', { uploadDialog: this, nodeEvent: e.nodeEvent, uploadId: e.ajaxConfig.uploadId, percent: percent });
     }
 
 
@@ -484,8 +484,8 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         this._sanitizeFilename = null;
         this._uploadId = null;
         this._uploadResponses = null;
-        this._filenameHeader = null;
-        this._pathnameHeader = null;
+        this._fileNameHeader = null;
+        this._pathNameHeader = null;
         this._validMediaTypes = null;
         super.destruct();
 
