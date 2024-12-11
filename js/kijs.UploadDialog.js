@@ -119,15 +119,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
-    get disabled() { return this._disabled; }
-    set disabled(val) {
-        this._disabled = val;
-
-        kijs.Array.each(this._dropZones, dropZone => {
-            dropZone.disabled = val;
-        }, this);
-    }
-
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }
 
@@ -170,6 +161,15 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // MEMBERS
     // --------------------------------------------------------------
     /**
+     * Wendet die Konfigurations-Eigenschaften an
+     * @param {Object} config
+     * @returns {undefined}
+     */
+    applyConfig(config={}) {
+        kijs.Object.assignConfig(this, config, this._configMap);
+    }
+
+    /**
      * Verbindet eine Dropzone mit dem UploadDialog. Wird eine
      * Datei auf die Dropzone gezogen, wird sie mit der Upload-Funktion
      * von dieser Klasse hochgeladen.
@@ -196,13 +196,16 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
-    /**
-     * Wendet die Konfigurations-Eigenschaften an
-     * @param {Object} config
-     * @returns {undefined}
-     */
-    applyConfig(config={}) {
-        kijs.Object.assignConfig(this, config, this._configMap);
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._disabled = !!val;
+
+        if (this._dropZones) {
+            kijs.Array.each(this._dropZones, dropZone => {
+                dropZone.disabled = !!val;
+            }, this);
+        }
     }
 
     /**
