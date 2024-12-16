@@ -119,6 +119,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
+    get disabled() {  return this._disabled; }
+    set disabled(val) {
+        this.changeDisabled(val, false);
+    }
+
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }
 
@@ -198,7 +203,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     // overwrite
     changeDisabled(val, callFromParent) {
-        super.changeDisabled(val, callFromParent);
         this._disabled = !!val;
 
         if (this._dropZones) {
@@ -248,6 +252,23 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }
     }
 
+    /**
+     * Löst eine Verbindung mit einer Dropzone mit dem UploadDialog.
+     * @param {kijs.gui.DropZone|Array} dropZones
+     * @returns {undefined}
+     */
+    unbindDropZone(dropZone) {
+
+        // Überprüfen, ob die DropZone im Array ist
+        if (kijs.Array.contains(this._dropZones, dropZone)) {
+
+            // Alle Listener entfernen
+            dropZone.off(null, null, this);
+
+            // DropZone aus Array entfernen
+            kijs.Array.remove(this._dropZones, dropZone);
+        }
+    }
 
     // PROTECTED
     /**
@@ -474,7 +495,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
-        this._dropZones = null;
         this._contentTypes = null;
         this._currentUploadIds = null;
         this._directory = null;
