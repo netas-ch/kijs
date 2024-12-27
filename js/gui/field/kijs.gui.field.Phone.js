@@ -15,6 +15,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
         this._defaultCountryCallingCode = '+41';
         this._internationalCallPrefix = '00';
+        this._preventLinkButtonDisable = false;
         
         this._inputDom.nodeAttributeSet('type', 'tel');
         
@@ -74,7 +75,8 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },
             linkButtonIconColor: { target: 'iconColor', context: this._linkButtonEl },
-            linkButtonIconMap: { target: 'iconMap', context: this._linkButtonEl }
+            linkButtonIconMap: { target: 'iconMap', context: this._linkButtonEl },
+            preventLinkButtonDisable: { target: 'preventLinkButtonDisable' }
         });
 
         // Config anwenden
@@ -111,8 +113,11 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
 
     get linkButtonIconMap() { return this._linkButtonEl.iconMap; }
     set linkButtonIconMap(val) { this._linkButtonEl.iconMap = val; }
-    
-    
+
+    get preventLinkButtonDisable() { return this._preventLinkButtonDisable; }
+    set preventLinkButtonDisable(val) { this._preventLinkButtonDisable = val; }
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -120,7 +125,12 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._linkButtonEl.changeDisabled(!!val, true);
+
+        if (this._preventLinkButtonDisable) {
+            this._linkButtonEl.changeDisabled(false, true);
+        } else {
+            this._linkButtonEl.changeDisabled(!!val, true);
+        }
     }
     
     // overwrite
@@ -215,7 +225,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     // LISTENERS
     #onLinkButtonClick() {
         let val = this.value;
-        if (!this.disabled && !kijs.isEmpty(val) && this.validate(val)) {
+        if ((this._preventLinkButtonDisable && !this._linkButtonEl.disabled || !this.disabled) && !kijs.isEmpty(val) && this.validate(val)) {
             
             // Alles andere als Zahlen und das + am Anfang entfernen
             val = val.replace(/(?!^\+)[^0-9]+/g, '');
@@ -257,8 +267,11 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         }
         
         // Variablen (Objekte/Arrays) leeren
+        this._defaultCountryCallingCode = null;
+        this._internationalCallPrefix = null;
         this._buttonsDom = null;
         this._linkButtonEl = null;
+        this._preventLinkButtonDisable = null;
         
         // Basisklasse entladen
         super.destruct(true);
