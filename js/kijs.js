@@ -215,7 +215,7 @@ window.kijs = class kijs {
         }
 
         // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
-        if (kijs.translation[language] && this.isDefined(kijs.translation[language][key])) {
+        if (this.isDefined(kijs.translation) && kijs.translation[language] && this.isDefined(kijs.translation[language][key])) {
             let txt = kijs.translation[language][key];
 
             // Evtl. sind Varianten vorhanden
