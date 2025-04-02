@@ -53,26 +53,34 @@ function _readNavigationTree($nodeId, $rootDir) {
 
     $nodes = [];
 
-    $dirPath = $nodeId ? $nodeId : $rootDir;
+    $dirPath = $rootDir;
+    if ($nodeId) {
+
+        // sicherstellen, dass der übergebene Pfad ein Unterverzeichnis ist.
+        if (!str_starts_with(realpath($nodeId), realpath($rootDir))) {
+            die('invalid nodeId');
+        }
+        $dirPath = $nodeId;
+    }
 
     $handle = opendir('../' . $dirPath);
 
     if ($handle) {
         while ( ($filename = readdir($handle)) !== false ) {
             $path = $dirPath . '/' . $filename;
-            
+
             // Unbenötigte Dateien ignorieren
             if (in_array($filename, $excludeFiles)) {
                 continue;
             }
-            
+
             // timestamp anhängen
             $pathWithTimestamp = $path . '?v=' . filemtime('../' . $path);
-            
+
             $userData  = new stdClass();
             $userData->path = $pathWithTimestamp;
             $userData->filename = $filename;
-            $userData->filetype = $ext = pathinfo($path, PATHINFO_EXTENSION);
+            $userData->filetype = pathinfo($path, PATHINFO_EXTENSION);
             $userData->caption = str_replace('_', ' ', $filename);
             if ($userData->filetype) {
                 $userData->caption = substr($userData->caption, 0, (strlen($userData->filetype)+1) * -1);

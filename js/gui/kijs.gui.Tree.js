@@ -58,6 +58,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl.on('singleClick', this.#onNodeSingleClick, this);
         this._treeCaptionDom.on('singleClick', this.#onNodeSingleClick, this);
 
+        this._iconEl.on('contextMenu', this.#onNodeContextMenu, this);
+        this._expandedIconEl.on('contextMenu', this.#onNodeContextMenu, this);
+        this._treeCaptionDom.on('contextMenu', this.#onNodeContextMenu, this);
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             scrollableY: 'auto',
@@ -637,6 +641,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._raiseRootEvent('select');
     }
 
+
+    #onNodeContextMenu(e) {
+        if (this.loadSpinner || this.disabled) {
+            return;
+        }
+        this._raiseRootEvent('nodeContextMenu', e);
+    }
 
 
     // --------------------------------------------------------------

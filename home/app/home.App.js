@@ -20,19 +20,19 @@ home.App = class home_App {
         this._tabShowcase = null;
         this._tabTest = null;
         this._tabDocu = null;
-        
+
         this._viewport = null;
 
         // Sprache
         kijs.language = config.language ? config.language : 'de';
-        
+
         // RPC-Instanz für das App
         let appRpcConfig = {};
         if (config.appAjaxUrl) {
             appRpcConfig.url = config.appAjaxUrl;
         }
         kijs.setRpc('app', new kijs.gui.Rpc(appRpcConfig));
-        
+
         // RPC-Instanz für den Inhalt (data)
         let dataRpcConfig = {};
         if (config.dataAjaxUrl) {
@@ -40,9 +40,9 @@ home.App = class home_App {
         }
         kijs.setRpc('default', new kijs.gui.Rpc(dataRpcConfig));
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -57,16 +57,16 @@ home.App = class home_App {
     // --------------------------------------------------------------
     run() {
         document.title = 'kijs ' + kijs.version + ' - Home';
-        
+
         this._header = this._createHeader();
         this._navigation = this._createNavigation();
         this._content = this._createContent();
         this._viewport = this._createViewport();
-        
+
         this._viewport.render();
     }
-    
-    
+
+
     // PROTECTED
     _createContent() {
         let html = '';
@@ -75,7 +75,7 @@ home.App = class home_App {
         html += ' <br>';
         html += ' <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a><br>';
         html += '</div>';
-        
+
         return new kijs.gui.container.Tab({
             sortable: true,
             style: {
@@ -100,7 +100,7 @@ home.App = class home_App {
             ]
         });
     }
-    
+
     _createHeader() {
         return new kijs.gui.PanelBar({
             html: 'kijs ' + kijs.version + ' - Home',
@@ -132,7 +132,7 @@ home.App = class home_App {
             ]
         });
     }
-    
+
     _createNavigation() {
         this._tabShowcase = new kijs.gui.container.tab.Container({
             //tabCaption: 'Showcase',
@@ -150,12 +150,13 @@ home.App = class home_App {
                     },
                     on: {
                         select: this.#onTreeNodeSelect,
+                        nodeContextMenu: this.#onTreeNodeRightClick,
                         context: this
                     }
                 }
             ]
         });
-        
+
         this._tabTest = new kijs.gui.container.tab.Container({
             //tabCaption: 'Tests',
             tabIconMap: 'kijs.iconMap.Fa.code',
@@ -177,7 +178,7 @@ home.App = class home_App {
                 }
             ]
         });
-        
+
         this._tabDocu = new kijs.gui.container.tab.Container({
             //tabCaption: 'Doku',
             tabIconMap: 'kijs.iconMap.Fa.book',
@@ -199,7 +200,7 @@ home.App = class home_App {
                 }
             ]
         });
-        
+
         return new kijs.gui.Panel({
             caption: 'Navigation',
             collapsible: 'left',
@@ -223,14 +224,14 @@ home.App = class home_App {
             ]
         });
     }
-    
+
     _createViewport() {
         return new kijs.gui.ViewPort({
             cls: 'kijs-flexcolumn',
             elements: [
                 // TOP: Header
                 this._header,
-                
+
                 {
                     xtype: 'kijs.gui.Container',
                     cls: 'kijs-flexrow',
@@ -252,8 +253,8 @@ home.App = class home_App {
             ]
         });
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     #onBtnThemeClick(e) {
@@ -396,10 +397,90 @@ home.App = class home_App {
         spinBox.show();
     }
 
+    async #onBtnShowCodeClick(path) {
+        const f = await fetch(path);
+        let rawCode = await f.text();
+
+        // Simples Syntax-Hightlighting
+        // ----------------------------
+
+        rawCode = rawCode.replace(/\'[^\n\']+\'/g, (rp) => {
+            return '@@START_STRING@@' + rp + '@@END_STRING@@';
+        });
+
+        rawCode = rawCode.replace(/(?<=\s)(async|true|false|const|let|class|extends)(?=(?:\s|,|\.))/g, (rp) => {
+            return '@@START_KEYWORD@@' + rp + '@@END_KEYWORD@@';
+        });
+
+        rawCode = kijs.String.htmlspecialchars(rawCode);
+        rawCode = kijs.String.replaceAll(rawCode, "\r", '');
+        rawCode = kijs.String.replaceAll(rawCode, ' ', '&nbsp;');
+        rawCode = kijs.String.replaceAll(rawCode, '@@START_STRING@@', '<span style="color:#2fb500">');
+        rawCode = kijs.String.replaceAll(rawCode, '@@END_STRING@@', '</span>');
+        rawCode = kijs.String.replaceAll(rawCode, '@@START_KEYWORD@@', '<span style="color:#b34d00">');
+        rawCode = kijs.String.replaceAll(rawCode, '@@END_KEYWORD@@', '</span>');
+
+        rawCode = rawCode.replace(/\/\/[^\n]+/g, (rp) => {
+            return '<span style="color:#8e8e8e">' + rp + '</span>';
+        });
+        rawCode = rawCode.replace(/\/\*[^\n\*]+\*\//g, (rp) => {
+            return '<span style="color:#8e8e8e">' + rp + '</span>';
+        });
+        rawCode = rawCode.replace(/[a-zA-Z0-9\_]+\(/g, (rp) => {
+            return '<span style="color:#3379ff">' + rp.substring(0, rp.length-1) + '</span>(';
+        });
+        rawCode = rawCode.replace(/(this|kijs|window|document)\./g, (rp) => {
+            return '<span style="color:#c69904;font-style:italic">' + rp.substring(0, rp.length-1) + '</span>.';
+        });
+
+        rawCode = kijs.String.replaceAll(rawCode, "\n", '<br />');
+
+        const win = new kijs.gui.Window({
+            caption: path,
+            scrollableY: true,
+            scrollableX: true,
+            elements: [{
+                xtype: 'kijs.gui.Element',
+                htmlDisplayType: 'html',
+                html: rawCode,
+                style: {
+                    fontFamily: 'monospace',
+                    fontSize: '1em',
+                    padding: '10px',
+                    cursor: 'text',
+                    userSelect: 'text'
+                }
+            }]
+        });
+        win.show();
+    }
+
     #onContentTabChange(e) {
         // TODO: im tree den passenden Node selektieren
     }
-    
+
+    #onTreeNodeRightClick(e) {
+        const path = e.raiseElement.nodeId;
+
+        if (path.endsWith('.js')) {
+            e.nodeEvent.preventDefault();
+
+            const menu = new kijs.gui.Menu({
+                closeOnClick: true,
+                elements: [
+                    {
+                        caption: 'Code anzeigen',
+                        iconMap: 'kijs.iconMap.Fa.code',
+                        on: {
+                            click: () => { this.#onBtnShowCodeClick(path); }
+                        }
+                    }
+                ]
+            });
+            menu.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
+        }
+    }
+
     #onContentTabContainerDestruct(e) {
         if (e.element.userData && e.element.userData.destruct) {
             e.element.userData.destruct();
@@ -408,20 +489,20 @@ home.App = class home_App {
 
     #onTreeNodeSelect(e) {
         let node = null;
-        
+
         switch (e.element.name) {
             case 'treeDocu':
                 node = this._tabDocu.downX('kijs.gui.Tree').getSelected();
                 break;
-                
+
             case 'treeShowcase':
                 node = this._tabShowcase.downX('kijs.gui.Tree').getSelected();
                 break;
-                
+
             case 'treeTest':
                 node = this._tabTest.downX('kijs.gui.Tree').getSelected();
                 break;
-                
+
         }
 
         // Ordner: Auf-/Zuklappen
@@ -431,14 +512,14 @@ home.App = class home_App {
             } else {
                 node.expand();
             }
-            
+
         // Datei
         } else {
-            
+
             // Wenn die Datei bereits offen ist: selektieren
             if (this._content.down(node.userData.path)) {
                 this._content.currentName = node.userData.path;
-                
+
             // sonst öffnen
             } else {
                 // Neues Tab erstellen
@@ -463,7 +544,7 @@ home.App = class home_App {
                         tabCont.innerDom.clsAdd('markdown');
                         tabCont.html = node.userData.html;
                         break;
-                        
+
                     case 'js':
                         tabCont.displayWaitMask = true;
                         tabCont.dom.clsAdd('kijs-flexrow');
@@ -480,14 +561,14 @@ home.App = class home_App {
                                 throw ex;
                             });
                         break;
-                        
+
                     case 'md':
                         tabCont.scrollableY = 'auto';
                         //tabCont.innerDom.clsAdd('markdown');
                         //tabCont.html = marked.parse(node.userData.markdown);
-                        tabCont.html = '<div class="markdown">' + 
+                        tabCont.html = '<div class="markdown">' +
                                 marked.parse(node.userData.markdown) + '</div>';
-                        
+
                         /*tabCont.add({
                             xtype: 'kijs.gui.field.AceEditor',
                             style: {
@@ -501,12 +582,12 @@ home.App = class home_App {
 
                 }
             }
-            
+
         }
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
