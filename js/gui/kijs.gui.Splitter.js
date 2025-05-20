@@ -111,15 +111,15 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
-    _updateSplitterPosition() {
+    _updateSplitterPosition(clientX, clientY) {
         // Differenz zur vorherigen Position ermitteln
         let offset;
         if (this.direction === 'horizontal') {
-            offset = this._overlayDom.left - this._initialPos;
+            offset = clientX - this._initialPos;
         } else {
-            offset = this._overlayDom.top - this._initialPos;
+            offset = clientY - this._initialPos;
         }
-        
+
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
 
@@ -198,7 +198,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
-        this._updateSplitterPosition();
+        this._updateSplitterPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
 
         this._initialPos = null;
     }
@@ -208,7 +208,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        this._updateSplitterPosition();
+        this._updateSplitterPosition(e.nodeEvent.touches[0].clientX, e.nodeEvent.touches[0].clientY);
 
         this._initialPos = null;
     }
