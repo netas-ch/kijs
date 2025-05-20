@@ -3,7 +3,7 @@
 // --------------------------------------------------------------
 // home.App
 // --------------------------------------------------------------
-window.home = {};
+window.home = window.home ?? {};
 window.home.sc = {};
 window.home.test = {};
 home.App = class home_App {
@@ -150,7 +150,6 @@ home.App = class home_App {
                     },
                     on: {
                         select: this.#onTreeNodeSelect,
-                        nodeContextMenu: this.#onTreeNodeRightClick,
                         context: this
                     }
                 }
@@ -397,88 +396,8 @@ home.App = class home_App {
         spinBox.show();
     }
 
-    async #onBtnShowCodeClick(path) {
-        const f = await fetch(path);
-        let rawCode = await f.text();
-
-        // Simples Syntax-Hightlighting
-        // ----------------------------
-
-        rawCode = rawCode.replace(/\'[^\n\']+\'/g, (rp) => {
-            return '@@START_STRING@@' + rp + '@@END_STRING@@';
-        });
-
-        rawCode = rawCode.replace(/(?<=\s)(async|true|false|const|let|class|extends)(?=(?:\s|,|\.))/g, (rp) => {
-            return '@@START_KEYWORD@@' + rp + '@@END_KEYWORD@@';
-        });
-
-        rawCode = kijs.String.htmlspecialchars(rawCode);
-        rawCode = kijs.String.replaceAll(rawCode, "\r", '');
-        rawCode = kijs.String.replaceAll(rawCode, ' ', '&nbsp;');
-        rawCode = kijs.String.replaceAll(rawCode, '@@START_STRING@@', '<span style="color:#2fb500">');
-        rawCode = kijs.String.replaceAll(rawCode, '@@END_STRING@@', '</span>');
-        rawCode = kijs.String.replaceAll(rawCode, '@@START_KEYWORD@@', '<span style="color:#b34d00">');
-        rawCode = kijs.String.replaceAll(rawCode, '@@END_KEYWORD@@', '</span>');
-
-        rawCode = rawCode.replace(/\/\/[^\n]+/g, (rp) => {
-            return '<span style="color:#8e8e8e">' + rp + '</span>';
-        });
-        rawCode = rawCode.replace(/\/\*[^\n\*]+\*\//g, (rp) => {
-            return '<span style="color:#8e8e8e">' + rp + '</span>';
-        });
-        rawCode = rawCode.replace(/[a-zA-Z0-9\_]+\(/g, (rp) => {
-            return '<span style="color:#3379ff">' + rp.substring(0, rp.length-1) + '</span>(';
-        });
-        rawCode = rawCode.replace(/(this|kijs|window|document)\./g, (rp) => {
-            return '<span style="color:#c69904;font-style:italic">' + rp.substring(0, rp.length-1) + '</span>.';
-        });
-
-        rawCode = kijs.String.replaceAll(rawCode, "\n", '<br />');
-
-        const win = new kijs.gui.Window({
-            caption: path,
-            scrollableY: true,
-            scrollableX: true,
-            elements: [{
-                xtype: 'kijs.gui.Element',
-                htmlDisplayType: 'html',
-                html: rawCode,
-                style: {
-                    fontFamily: 'monospace',
-                    fontSize: '1em',
-                    padding: '10px',
-                    cursor: 'text',
-                    userSelect: 'text'
-                }
-            }]
-        });
-        win.show();
-    }
-
     #onContentTabChange(e) {
         // TODO: im tree den passenden Node selektieren
-    }
-
-    #onTreeNodeRightClick(e) {
-        const path = e.raiseElement.nodeId;
-
-        if (path.endsWith('.js')) {
-            e.nodeEvent.preventDefault();
-
-            const menu = new kijs.gui.Menu({
-                closeOnClick: true,
-                elements: [
-                    {
-                        caption: 'Code anzeigen',
-                        iconMap: 'kijs.iconMap.Fa.code',
-                        on: {
-                            click: () => { this.#onBtnShowCodeClick(path); }
-                        }
-                    }
-                ]
-            });
-            menu.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
-        }
     }
 
     #onContentTabContainerDestruct(e) {
@@ -523,7 +442,8 @@ home.App = class home_App {
             // sonst öffnen
             } else {
                 // Neues Tab erstellen
-                let tabCont = new kijs.gui.container.tab.Container({
+                let tabCont = new home.TabContainer({
+                    app: this,
                     name: node.userData.path,
                     tabCaption: node.userData.caption,
                     tabClosable: true,
@@ -535,52 +455,21 @@ home.App = class home_App {
                 if (node.userData.iconMap) {
                     tabCont.tabButtonEl.iconMap = node.userData.iconMap;
                 }
+                if (node.userData.filetype) {
+                    tabCont.filetype = node.userData.filetype;
+                }
+                if (node.userData.namespace) {
+                    tabCont.namespace = node.userData.namespace;
+                }
+                if (node.userData.className) {
+                    tabCont.className = node.userData.className;
+                }
                 this._content.add(tabCont);
                 this._content.currentName = node.userData.path;
 
-                switch (node.userData.filetype) {
-                    case 'html':
-                        tabCont.scrollableY = 'auto';
-                        tabCont.innerDom.clsAdd('markdown');
-                        tabCont.html = node.userData.html;
-                        break;
-
-                    case 'js':
-                        tabCont.displayWaitMask = true;
-                        tabCont.dom.clsAdd('kijs-flexrow');
-                        kijs.Dom.jsFileAdd(node.userData.path)
-                            .then((nde) => {
-                                tabCont.displayWaitMask = false;
-                                tabCont.userData = new window.home[node.userData.namespace][node.userData.className]({app: this});
-                                tabCont.add(tabCont.userData.getContent());
-                                if (tabCont.userData.run) {
-                                    tabCont.userData.run();
-                                }
-                            })
-                            .catch((ex) => {
-                                throw ex;
-                            });
-                        break;
-
-                    case 'md':
-                        tabCont.scrollableY = 'auto';
-                        //tabCont.innerDom.clsAdd('markdown');
-                        //tabCont.html = marked.parse(node.userData.markdown);
-                        tabCont.html = '<div class="markdown">' +
-                                marked.parse(node.userData.markdown) + '</div>';
-
-                        /*tabCont.add({
-                            xtype: 'kijs.gui.field.AceEditor',
-                            style: {
-                                flex: 1
-                            },
-                            mode: 'markdown',
-                            value: node.userData.markdown,
-                            readOnly: true
-                        });*/
-                        break;
-
-                }
+                // html/js/md laden und ausführen
+                tabCont.reset();
+                
             }
 
         }

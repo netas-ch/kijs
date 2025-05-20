@@ -34,7 +34,7 @@
         height: 32px;
         width: 32px;
     }
-
+    
     /* Paper Background */
     .paperBkgrnd {
         background: var(--paperBkgrnd);
@@ -53,6 +53,19 @@
         height: 31px;
         border: 1px solid var(--accentColor3);
         border-radius: 5px;
+    }
+    
+    /* Bei Zugeklapptem Source-Code: Icons ausblenden */
+    .home-tabcontainer-source.kijs-collapse-right {
+        > .kijs-headerbar > .kijs-container-right > .kijs-container-inner {
+            > .kijs-button {
+                display: none;
+                
+                &:last-child {
+                    display: flex;
+                }
+            }
+        }
     }
     
 
