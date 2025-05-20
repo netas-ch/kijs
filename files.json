@@ -167,7 +167,7 @@
   ],
 
   "quillEditor":[
-   "lib/quill/quill.min.js",
+   "lib/quill/quill.js",
    "js/gui/field/kijs.gui.field.QuillEditor.js"
   ]
  },
