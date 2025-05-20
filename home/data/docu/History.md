@@ -2,31 +2,19 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.x.x (ist noch in Entwicklung)
+Version 2.8.4
 =============
-### kijs.String
-Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
- - ```beginsWith(text, search, caseInsensitive=false)```
- - ```contains(text, search, caseInsensitive=false)```
- - ```endsWith(text, search, caseInsensitive=false)```
+### kijs.UploadDialog / kijs.gui.UploadWindow
+Events wurden umbenennt:
+- ```startUpload``` --> ```uploadStart```
+- ```endUpload``` --> ```uploadEnd```
+- ```failUpload``` --> ```uploadFailed```
 
-Neue Funktion:
- - ```match(text, search, caseInsensitive=false)```
-   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
+**UPDATE TIPP:** Die Event-Listener Funktionen mit suchen/ersetzen anpassen.
 
-### kijs.gui.ListView
-- CSS: Elemente haben neu runde Ecken
+Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem Argument enthalten.
 
-### kijs.gui.container.Stack
-- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
-  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:
-  - newEl
-  - oldEl
-
-**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
-direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
-anpassen.  
-
+**UPDATE TIPP:** Mit suchen alle Listeners suchen und die Argumente von Hand anpassen.
 
 
 Version 2.8.3

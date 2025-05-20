@@ -270,7 +270,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         
         if (val === 'auto') {
             this._innerDom.clsAdd('kijs-scrollable-x-auto');
-        } else if(val) {
+        } else if (val) {
             this._innerDom.clsAdd('kijs-scrollable-x-enable');
         }
     }
@@ -290,7 +290,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             
         if (val === 'auto') {
             this._innerDom.clsAdd('kijs-scrollable-y-auto');
-        } else if(val) {
+        } else if (val) {
             this._innerDom.clsAdd('kijs-scrollable-y-enable');
         }
     }
