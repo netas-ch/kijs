@@ -2,19 +2,66 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.8.4
+Version 2.9.0
 =============
+### Home-App  
+Neu kann der Quellcode angezeigt und bearbeitet werden.  
+
+### kijs.gui.field.AceEditor  
+ACE-Editor Update auf Version 1.41.0  
+
+### kijs.gui.field.QuillEditor  
+Quill-Editor Update auf Version 2.0.3  
+**UPDATE TIPP:**: Datei ```lib/quill/quill.min.js``` umbenannt zu ```quill.js```.  
+
+### kijs.String  
+Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
+ - ```beginsWith(text, search, caseInsensitive=false)```  
+ - ```contains(text, search, caseInsensitive=false)```  
+ - ```endsWith(text, search, caseInsensitive=false)```  
+
+Neue Funktion:  
+ - ```match(text, search, caseInsensitive=false)```  
+   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.  
+
+### kijs.gui.Splitter  
+Bugfix: Manchmal stimmte nach dem Verschieben die Position nicht.  
+
+### kijs.gui.ListView  
+- CSS: Elemente haben neu runde Ecken  
+- CSS: Checkboxe/Optionen mit Fokus werden stärker hervorgehoben  
+
+### kijs.gui.container.Stack  
+- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
+  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:  
+  - newEl  
+  - oldEl  
+
+**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
+direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
+anpassen.  
+
+### kijs.gui.container.Form  
+- Beim suchen nach Feldern  ```searchFields()``` werden neu auch Felder innerhalb 
+  von Containern gefunden.  
+
 ### kijs.UploadDialog / kijs.gui.UploadWindow
-Events wurden umbenennt:
-- ```startUpload``` --> ```uploadStart```
-- ```endUpload``` --> ```uploadEnd```
-- ```failUpload``` --> ```uploadFailed```
+- Events wurden umbenennt:
+  - ```startUpload``` --> ```uploadStart```
+  - ```endUpload``` --> ```uploadEnd```
+  - ```failUpload``` --> ```uploadFailed```
+- Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem 
+  Argument enthalten.  
 
-**UPDATE TIPP:** Die Event-Listener Funktionen mit suchen/ersetzen anpassen.
+**UPDATE TIPP:** 
+Projekt durchsuchen nach den alten Event-Namen  
+- Namen umbenennen  
+- Argumente anpassen  
 
-Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem Argument enthalten.
+### kijs.gui.field.Email, kijs.gui.field.Phone  
+Neue config/getter/setter: ```preventLinkButtonDisable```. (Boolean)  
+Bei ```true``` bleibt der Hyperlink-Button auch bei ```disable=true``` noch aktiv.  
 
-**UPDATE TIPP:** Mit suchen alle Listeners suchen und die Argumente von Hand anpassen.
 
 
 Version 2.8.3
