@@ -2011,6 +2011,10 @@
     cursor: pointer;
     content: ' ';
   }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
+    border: 2px solid var(--field-focus-borderColor);
+  }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f00c';
   }
@@ -2035,6 +2039,10 @@
     color: var(--field-fontColor);
     cursor: pointer;
     content: ' ';
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
+    border: 2px solid var(--field-focus-borderColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f00c';
@@ -3799,10 +3807,10 @@
        ****************** */
   /* Animationen zu den Spin- und Pulse-Effekten */
   @keyframes kijs-spin {
-    0% {
+    from {
       transform: rotate(0deg);
     }
-    100% {
+    to {
       transform: rotate(359deg);
     }
   }

@@ -2200,7 +2200,7 @@
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
-
+                    
                     &:before {
                         box-sizing: border-box;
                         flex: none;
@@ -2220,6 +2220,13 @@
                         content: ' ';
                     }
 
+                    &:focus,
+                    &:hover {
+                        &:before {
+                            border: 2px solid var(--field-focus-borderColor);
+                        }
+                    }
+                    
                     &.kijs-selected:before {
                         content: '\f00c';
                     }
@@ -2248,6 +2255,13 @@
                         content: ' ';
                     }
 
+                    &:focus,
+                    &:hover {
+                        &:before {
+                            border: 2px solid var(--field-focus-borderColor);
+                        }
+                    }
+                    
                     &.kijs-selected:before {
                         content: '\f00c';
                     }
@@ -4385,12 +4399,8 @@
        ****************** */
     /* Animationen zu den Spin- und Pulse-Effekten */
     @keyframes kijs-spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(359deg);
-        }
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(359deg); }
     }
 
     /* fade */
