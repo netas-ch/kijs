@@ -111,13 +111,16 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
-    _updateSplitterPosition(clientX, clientY) {
+    _updateSplitterPosition() {
+        // Berechnet die absolute Position bezogen zum Browser-Rand für das Overlay
+        const overlayPos = kijs.Dom.getAbsolutePos(this._overlayDom.node);
+
         // Differenz zur vorherigen Position ermitteln
         let offset;
         if (this.direction === 'horizontal') {
-            offset = clientX - this._initialPos;
+            offset = overlayPos.x - this._initialPos;
         } else {
-            offset = clientY - this._initialPos;
+            offset = overlayPos.y - this._initialPos;
         }
 
         // Overlay wieder ausblenden
@@ -158,7 +161,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onMouseDown(e) {
-        if (this.disabled) {
+        if (this.disabled || this._initialPos) {
             return;
         }
 
@@ -198,7 +201,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         kijs.Dom.removeEventListener('mousemove', document, this);
         kijs.Dom.removeEventListener('mouseup', document, this);
 
-        this._updateSplitterPosition(e.nodeEvent.clientX, e.nodeEvent.clientY);
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }
@@ -208,7 +211,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             return;
         }
 
-        this._updateSplitterPosition(e.nodeEvent.touches[0].clientX, e.nodeEvent.touches[0].clientY);
+        this._updateSplitterPosition();
 
         this._initialPos = null;
     }
@@ -228,7 +231,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     #onTouchStart(e) {
-        if (this.disabled || e.nodeEvent.touches.length > 1) {
+        if (this.disabled || this._initialPos || e.nodeEvent.touches.length > 1) {
             return;
         }
 
