@@ -62,6 +62,15 @@ Projekt durchsuchen nach den alten Event-Namen
 Neue config/getter/setter: ```preventLinkButtonDisable```. (Boolean)  
 Bei ```true``` bleibt der Hyperlink-Button auch bei ```disable=true``` noch aktiv.  
 
+### kijs.gui.field.Color  
+CSS angepasst  
+
+### kijs.gui.field.Switch  
+CSS bei Fokus angepasst  
+
+### kijs.gui.field.Checkbox, kijs.gui.field.CheckboxGroup, kijs.gui.field.OptionGroup  
+CSS angepasst: Kästchen-Rahmen ist dünner
+
 
 
 Version 2.8.3

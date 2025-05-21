@@ -1085,6 +1085,11 @@
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button:focus > .kijs-icon {
     color: var(--bar-fontColor);
   }
+  div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button:focus,
+  div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button:focus {
+    outline: 1px dotted var(--bar-button-icon-fontColor);
+    border-radius: 2px;
+  }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button.kijs-disabled {
     cursor: default;
@@ -1925,6 +1930,9 @@
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
+  div.kijs-listview:focus-within {
+    border-color: var(--field-focus-borderColor);
+  }
   div.kijs-listview.kijs-borderless {
     border: none;
   }
@@ -2002,7 +2010,7 @@
     font-size: var(--checkbox-fontSize);
     line-height: var(--checkbox-lineHeight);
     background-color: var(--field-bkgrndColor);
-    border: 2px solid var(--field-fontColor);
+    border: 1.5px solid var(--field-fontColor);
     border-radius: 4px;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
@@ -2013,7 +2021,7 @@
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
-    border: 2px solid var(--field-focus-borderColor);
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f00c';
@@ -2031,7 +2039,7 @@
     font-size: var(--checkbox-fontSize);
     line-height: var(--checkbox-lineHeight);
     background-color: var(--field-bkgrndColor);
-    border: 2px solid var(--field-fontColor);
+    border: 1.5px solid var(--field-fontColor);
     border-radius: 50%;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
@@ -2042,7 +2050,7 @@
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
-    border: 2px solid var(--field-focus-borderColor);
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f00c';
@@ -2576,14 +2584,14 @@
   div.kijs-field > .kijs-content > .kijs-icon-error {
     flex: none;
     height: 16px;
-    margin: 3px 0 0 2px;
+    margin: 4px 0 0 2px;
     color: var(--icon-error-fontColor);
     cursor: default;
   }
   div.kijs-field > .kijs-content > .kijs-icon-help {
     flex: none;
     height: 16px;
-    margin: 3px 0 0 2px;
+    margin: 4px 0 0 2px;
     color: var(--icon-help-fontColor);
     cursor: default;
   }
@@ -2744,16 +2752,25 @@
   }
   div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input {
     width: var(--field-height);
-    height: 100%;
+    height: var(--field-height);
     border: 1px solid var(--field-borderColor);
-    border-radius: 2px;
-    padding: 2px;
+    border-radius: 50%;
+    padding: 3px;
     overflow: hidden;
     cursor: pointer;
   }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input::-webkit-color-swatch {
+    border-radius: 50%;
+  }
+  div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input::-moz-color-swatch {
+    border-radius: 50%;
+  }
   div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:hover,
   div.kijs-field-color > .kijs-content > .kijs-inputwrapper > input:focus {
-    background-color: var(--button-focus-bkgrndColor);
+    border: 1px solid var(--field-focus-borderColor);
   }
   div.kijs-field-color.kijs-disableFlex {
     align-self: start;
@@ -3187,7 +3204,7 @@
     font-size: var(--checkbox-fontSize);
     line-height: var(--checkbox-lineHeight);
     background-color: var(--field-bkgrndColor);
-    border: 2px solid var(--field-fontColor);
+    border: 1.5px solid var(--field-fontColor);
     border-radius: 4px;
     text-align: center;
     color: var(--field-fontColor);
@@ -3240,6 +3257,7 @@
     padding: 0;
     border-radius: calc(var(--switch-height) * 0.5);
     border: 1px solid var(--field-borderColor);
+    outline: none;
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
@@ -3250,9 +3268,11 @@
     background-color: var(--field-item-bkgrndColor);
     transition: margin-left 0.2s;
   }
-  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus {
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus,
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:hover {
     border-color: var(--field-focus-borderColor);
   }
+  div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:focus > .kijs-togglePoint,
   div.kijs-field-switch > .kijs-content > .kijs-inputwrapper > .kijs-toggleBorder:hover > .kijs-togglePoint {
     background-color: var(--field-item-focus-bkgrndColor);
   }

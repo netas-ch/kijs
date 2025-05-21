@@ -181,7 +181,7 @@
     --tabButton-borderColor: #8db2e3;
     --tabButton-fontColor: #15428b;
 
-    --tabButton-current-bkgrndColor: var(--grey02);
+    --tabButton-current-bkgrndColor: #dfe8f6;
     --tabButton-current-borderColor: #8db2e3;
     --tabButton-current-fontColor: #15428b;
 
@@ -402,7 +402,12 @@
                         font-size: 8px;
                         line-height: 10px;
                     }
-
+                    
+                    &:focus {
+                        outline: 1px solid var(--bar-button-icon-fontColor);
+                        border-radius: 3px;
+                    }
+                    
                     &.kijs-disabled {
                         background: transparent;
                         border-color: transparent;
@@ -549,7 +554,97 @@
                     font-weight: bold;
                 }
             }
+            
+        }
+        
+        &.kijs-pos-top > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 4px 0 0 4px;
+                border-radius: 6px 6px 0 0;
+                border-top: 1px solid var(--tabButton-borderColor);
+                border-right: 1px solid var(--tabButton-borderColor);
+                border-bottom: 0 none;
+                border-left: 1px solid var(--tabButton-borderColor);
+            }
 
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-top: 4px;
+            }
+        }
+
+        &.kijs-pos-right > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 4px 4px 0 0;
+                border-radius: 0 6px 6px 0;
+                border-top: 1px solid var(--tabButton-borderColor);
+                border-right: 1px solid var(--tabButton-borderColor);
+                border-bottom: 1px solid var(--tabButton-borderColor);
+                border-left: 0 none;
+            }
+
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-right: 4px;
+            }
+        }
+
+        &.kijs-pos-bottom > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 0 0 4px 4px;
+                border-radius: 0 0 6px 6px;
+                border-top: 0 none;
+                border-right: 1px solid var(--tabButton-borderColor);
+                border-bottom: 1px solid var(--tabButton-borderColor);
+                border-left: 1px solid var(--tabButton-borderColor);
+            }
+
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-bottom: 4px;
+            }
+        }
+
+        &.kijs-pos-left > .kijs-container-scrollable {
+            > .kijs-container-inner > .kijs-button {
+                margin: 4px 0 0 4px;
+                border-radius: 6px 0 0 6px;
+                border-top: 1px solid var(--tabButton-borderColor);
+                border-right: 0 none;
+                border-bottom: 1px solid var(--tabButton-borderColor);
+                border-left: 1px solid var(--tabButton-borderColor);
+            }
+
+            > .kijs-btn-scrollup, > .kijs-btn-scrolldown,
+            > .kijs-btn-scrollleft, > .kijs-btn-scrollright {
+                margin-left: 4px;
+            }
+        }
+        
+        > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current {
+            background: linear-gradient(#ffffff, #deecfd);
+            border-color: var(--tabButton-current-borderColor);
+
+            > .kijs-caption {
+                color: var(--tabButton-current-fontColor);
+            }
+
+            &.kijs-disabled > .kijs-caption {
+                color: var(--button-disabled-fontColor);
+            }
+        }
+        
+        /* Drag&Drop */
+        > .kijs-container-scrollable > .kijs-container-inner {
+            > .kijs-button {
+                &.kijs-dragging {
+                    opacity: 0.6
+                }
+                &.kijs-sourceDragOver {
+                    border-color: var(--accentColor3);
+                    border-width: 2px;
+                }
+            }
         }
     }
 
