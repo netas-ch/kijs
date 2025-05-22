@@ -7,6 +7,10 @@ Version 2.9.0
 ### Home-App  
 Neu kann der Quellcode angezeigt und bearbeitet werden.  
 
+### Font Awesome  
+Update auf Version 6.7.2  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+
 ### kijs.gui.field.AceEditor  
 ACE-Editor Update auf Version 1.41.0  
 
