@@ -2900,7 +2900,7 @@
     background-color: var(--field-disabled-bkgrndColor);
   }
   .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
-    height: 100%;
+    min-height: 100%;
   }
   .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner > div.kijs-datepicker {
     border: 0 none transparent;
