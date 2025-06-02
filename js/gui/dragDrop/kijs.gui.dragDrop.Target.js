@@ -15,7 +15,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     constructor(config={}) {
         super(false);
 
-        this._ownerEl = null;            // Eigentümmer kijs.gui.Element dieser Instanz
+        this._ownerEl = null;            // Eigentümer kijs.gui.Element dieser Instanz
         this._ownerDomProperty = null;   // Property-Name des kijs.gui.Dom, der als 
                                          // Ziel dient.
         this._mapping = {};
@@ -114,7 +114,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this.ownerDom.on('drop', this.#onDrop, this);
     }
     
-    // Eigentümmer kijs.gui.Element dieser Instanz
+    // Eigentümer kijs.gui.Element dieser Instanz
     get ownerEl() { return this._ownerEl; }
     set ownerEl(val) { 
         this._ownerEl = val;
