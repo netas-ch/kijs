@@ -81,7 +81,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            clickableLinks: true,         // Weblink zum anklicken machen
+            clickableLinks: true,         // Weblink zum Anklicken machen
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
@@ -191,7 +191,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere regulären Ausdruck (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,

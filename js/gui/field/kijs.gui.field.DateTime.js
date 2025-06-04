@@ -36,8 +36,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._useDefaultSpinButtonIcon = !kijs.isDefined(config.spinButtonIconChar);
 
-        this._previousChangeValue = null;         // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
-        this._previousChangeValueEnd = null;      // Wird verwendet um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValue = null;         // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
+        this._previousChangeValueEnd = null;      // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
         this._inputDom = new kijs.gui.Dom({
             nodeTagName: 'input',
@@ -125,7 +125,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             inputMode: { target: 'inputMode' },
             nameEnd: true,
             mode: { target: 'mode' },           // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
@@ -190,7 +190,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
     
@@ -419,7 +419,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (!kijs.isEmpty(valTime)) {
             if (kijs.isEmpty(this._valueTimeFormat)) {
                 switch (this._mode) {
-                    // Falls ein ganzer SQL-Date-String verlangt wird, die komplete Uhrzeit nehmen
+                    // Falls ein ganzer SQL-Date-String verlangt wird, die komplette Uhrzeit nehmen
                     case 'dateTime':
                         timeFormat = 'H:i:s';
                         break;
@@ -667,7 +667,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     /**
      * Ermittelt den Wert für die Anzeige (display) im entsprechenden Format.
-     * Falls keine Format definiert wurde, wird aufgrund der Einstellungen eines definiert
+     * Falls kein Format definiert wurde, wird aufgrund der Einstellungen eines definiert
      * @return {String}
      */
     _getDisplayValue() {

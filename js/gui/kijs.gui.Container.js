@@ -90,12 +90,12 @@
  *   element    kijs.gui.Element
  *  Return: Boolean
  *
- * remove                               Löscht ein oder mehrere untergeordenete Elemente
+ * remove                               Löscht ein oder mehrere untergeordnete Elemente
  *  Args:
  *   elements    Object|Array
  *   options
  *
- * removeAll                            Löscht alle untergeordeneten Elemente
+ * removeAll                            Löscht alle untergeordneten Elemente
  *  Args:
  *   options
  *   
@@ -114,7 +114,7 @@
  * -------------
  * innerDom     HTML-Element            Verweis auf den inneren dom-Node
  *
- * elements     Array                   Array mit den untergeordeten elements
+ * elements     Array                   Array mit den untergeordneten Elementen
  *
  * isEmpty      Boolean (readonly)
  *
@@ -270,7 +270,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         
         if (val === 'auto') {
             this._innerDom.clsAdd('kijs-scrollable-x-auto');
-        } else if(val) {
+        } else if (val) {
             this._innerDom.clsAdd('kijs-scrollable-x-enable');
         }
     }
@@ -290,7 +290,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             
         if (val === 'auto') {
             this._innerDom.clsAdd('kijs-scrollable-y-auto');
-        } else if(val) {
+        } else if (val) {
             this._innerDom.clsAdd('kijs-scrollable-y-enable');
         }
     }
@@ -640,7 +640,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         // innerDOM rendern
         this._innerDom.renderTo(this._dom.node);
 
-        // Render der Elements in Funktion, damit dies
+        // Render der Elemente als Funktion, damit dies
         // in Vererbungen überschrieben werden könnte.
         this._renderElements();
 
@@ -760,7 +760,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Entfernt alle elements und fügt neue hinzu
+     * Entfernt alle elements und fügt neue hinzu.
      * Wird intern von der config elements verwendet
      * @param {Object|Array} elements
      * @returns {undefined}

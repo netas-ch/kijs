@@ -91,7 +91,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                         if (cell.columnConfig.iconCharField === this.columnConfig.iconCharField){
                             let contains = false;
 
-                            // Überprüfen ob Icon schon in einem der Arrays ist
+                            // Überprüfen, ob Icon schon in einem der Arrays ist
                             if (icons.length > 0) {
                                 kijs.Array.each(icons, function(value){
                                         if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){

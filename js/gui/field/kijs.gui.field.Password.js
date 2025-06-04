@@ -253,7 +253,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
             this._value = kijs.isEmpty(this._value) ? '' : this._value;
 
-            // Neue Zeichen ermittteln
+            // Neue Zeichen ermitteln
             var newChars = kijs.String.replaceAll(val, this._passwordChar, '');
 
             // Ist das Feld nun leer?

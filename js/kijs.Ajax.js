@@ -24,7 +24,7 @@ kijs.Ajax = class kijs_Ajax {
     *     {function} fn                Callback Funktion
     *     {function} progressFn        Progress Funktion
     *     {Object} context             Kontext für die Callback Funktion
-    *     {Object} [headers]           Objekt mit heders die mitgesendet werden
+    *     {Object} [headers]           Objekt mit Headers die mitgesendet werden
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
     *     {Boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
@@ -161,12 +161,14 @@ kijs.Ajax = class kijs_Ajax {
                         config.fn.call(config.context || this, {
                             response: val,
                             request: config,
+                            errorType: 'error',
                             errorMsg: error
                         });
                     }
                     resolve({
                         response: null,
                         request: config,
+                        errorType: 'error',
                         errorMsg: error
                     });
                 }

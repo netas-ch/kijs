@@ -53,7 +53,7 @@ kijs.Observable = class kijs_Observable {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Überprüft ob ein Listener existiert
+     * Überprüft, ob ein Listener existiert
      * @param {String} name                     Name des Listeners
      * @param {function|null} [callback=null]   Callback Funktion oder null für alle
      * @param {object|null} [context=null]      Kontext oder null für alle

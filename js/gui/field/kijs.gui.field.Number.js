@@ -97,7 +97,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             allowedDecimalSeparators: true,
             allowedThousandsSeparators: true,
             alwaysDisplayDecimals: true,
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browservorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             decimalPrecision: { target: 'decimalPrecision'},
             decimalSeparator: true,
             inputMode: { target: 'inputMode' },
@@ -154,7 +154,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             value = 'off';
         }
 
-        // De-/aktiviert die Browservorschläge
+        // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
@@ -407,7 +407,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinDeferId = kijs.defer(this._spinStart, this._spinDelayCurrent, this, dir);
     }
 
-    // Stopt das Hoch-/Runterzählen von einem Spinnbutton
+    // Stoppt das Hoch-/Runterzählen von einem Spinnbutton
     _spinStop() {
         if (this._spinDeferId) {
             clearTimeout(this._spinDeferId);
@@ -493,12 +493,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     // PRIVATE
     // LISTENERS
     #onInputDomChange(e) {
-        // Beim verlassen des Feldes, Zahl auf eingestelltes Format ändern.
+        // Beim Verlassen des Feldes, Zahl auf eingestelltes Format ändern.
         // Wenn Nummer ungültig, die Nummer belassen
         let val = this.value;
         let oldVal = this._previousChangeValue;
 
-        // Wert neu reinschreiben (evtl. wurde er Formatiert)
+        // Wert neu reinschreiben (evtl. wurde er formatiert)
         this.value = val;
         
         // und das change event auslösen

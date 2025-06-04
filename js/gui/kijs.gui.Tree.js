@@ -58,6 +58,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._expandedIconEl.on('singleClick', this.#onNodeSingleClick, this);
         this._treeCaptionDom.on('singleClick', this.#onNodeSingleClick, this);
 
+        this._iconEl.on('contextMenu', this.#onNodeContextMenu, this);
+        this._expandedIconEl.on('contextMenu', this.#onNodeContextMenu, this);
+        this._treeCaptionDom.on('contextMenu', this.#onNodeContextMenu, this);
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             scrollableY: 'auto',
@@ -218,7 +222,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         if (val instanceof kijs.gui.Rpc) {
             this._rpc = val;
         } else {
-            throw new kijs.Error(`Unkown format on config "rpc"`);
+            throw new kijs.Error(`Unknown format on config "rpc"`);
         }
     }
 
@@ -637,6 +641,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         this._raiseRootEvent('select');
     }
 
+
+    #onNodeContextMenu(e) {
+        if (this.loadSpinner || this.disabled) {
+            return;
+        }
+        this._raiseRootEvent('nodeContextMenu', e);
+    }
 
 
     // --------------------------------------------------------------

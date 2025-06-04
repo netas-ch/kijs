@@ -278,8 +278,8 @@
     
     --item-today-fontColor: var(--accentColor);
     
-    --item-focus-bkgrndColor: var(--grey03);
-    --item-focus-borderColor: var(--grey03);
+    --item-focus-bkgrndColor: var(--grey04);
+    --item-focus-borderColor: var(--grey04);
     --item-focus-fontColor: var(--grey11);
 
     --item-selected-bkgrndColor: var(--accentColor2);

@@ -74,7 +74,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
             if (!kijs.isObject(editorConfig)) {
                 editorConfig = {};
             }
-            // config für Nummerfeld übernehmen
+            // config für Nummernfeld übernehmen
             if (this._decimalPrecision !== null && !kijs.isDefined(editorConfig.decimalPrecision)) {
                 editorConfig.decimalPrecision = this._decimalPrecision;
             }

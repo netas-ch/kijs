@@ -156,7 +156,7 @@ kijs.Date = class kijs_Date {
     }
 
     /**
-     * Gibt die Anzahl Tage zwischen zwei Datum zurück (date2 - date1)
+     * Gibt die Anzahl Tage zwischen zwei Daten zurück (date2 - date1)
      * @param {Date} date1
      * @param {Date} date2
      * @return {Number}
@@ -224,7 +224,7 @@ kijs.Date = class kijs_Date {
         const week = parseInt(matches[1]);
         let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
 
-        // Kurzschreibweisen vom Jahr konventieren
+        // Kurzschreibweisen vom Jahr konvertieren
         if (year < 100) {
             if (year < 70) {
                 year += 2000;
@@ -490,7 +490,7 @@ kijs.Date = class kijs_Date {
             return null;
         }
 
-        // Bestandtile durchgehen
+        // Bestandteile durchgehen
         for (let i=0; i<arr.length; i++) {
             if (!kijs.isNumeric(arr[i])) {
                 return null;
@@ -516,7 +516,7 @@ kijs.Date = class kijs_Date {
                 // Jahr
                 case 'Y':
                     year = parseInt(arr[i]);
-                    // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+                    // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
                     if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
                         if (year >= year2000Threshold) {
                             year += 1900;
@@ -635,7 +635,7 @@ kijs.Date = class kijs_Date {
             return null;
         }
 
-        // Bestandtile durchgehen
+        // Bestandteile durchgehen
         for (let i=0; i<arr.length; i++) {
             if (!kijs.isNumeric(arr[i])) {
                 return null;
@@ -699,7 +699,7 @@ kijs.Date = class kijs_Date {
     }
 
     /**
-     * Erstellt ein Datum aus einem Länderspezifischen Wocehn-String z.B. 'KW 5 2024'
+     * Erstellt ein Datum aus einem Länderspezifischen Wochen-String z.B. 'KW 5 2024'
      * Dabei wird der 1. Tag der Woche als Datum zurückgegeben.
      * @param {String} strInput Woche in einem länder-spezifischen Format
      * @param {String} [language='auto'] Sprache. z.B: 'de', 'en-US' oder 'auto'=kijs.language
@@ -721,7 +721,7 @@ kijs.Date = class kijs_Date {
         // Jahr (wenn leer = aktuelles Jahr
         let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
 
-        // Evtl. aus zweistelliger Jahrezahl eine vierstellige machen
+        // Evtl. aus zweistelliger Jahreszahl eine vierstellige machen
         if (!kijs.isEmpty(year2000Threshold) && year >= 0 && year <= 99) {
             if (year >= year2000Threshold) {
                 year += 1900;
@@ -843,7 +843,7 @@ kijs.Date = class kijs_Date {
         }
 
         // Reihenfolge von H,i,s ermitteln
-        // dazu das Datum, Uhrzeit 2000-01-02 18:17:16 in eine lokales Uhrzeit umwandeln
+        // dazu das Datum, Uhrzeit 2000-01-02 18:17:16 in eine lokale Uhrzeit umwandeln
         let format = new Date(2000, 0, 2, 18, 17, 16);
         format = format.toLocaleTimeString(language, {
             hour: '2-digit',
@@ -866,7 +866,7 @@ kijs.Date = class kijs_Date {
         format = format.replace(/[^Hhmi]+/g, '').trim();
 
         // Jetzt sollte tmp entweder  'His', 'Hsi', 'iHs', 'isH', 'sHi' oder 'siH' sein
-        // oder das selbe mit einem kleinen h
+        // oder dasselbe mit einem kleinen h
         if (format.length !== 3) {
             return null;
         }

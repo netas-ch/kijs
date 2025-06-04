@@ -47,19 +47,21 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      * @param {String} caption
      * @param {String} html
      * @param {String} [icon='alert'] 'alert', 'info', 'errorNotice' oder 'error'
+     * @param {Number} dismissDelay Anzeigedauer in ms
      * @returns {undefined}
      */
-    static show(caption, html, icon='alert') {
+    static show(caption, html, icon='alert', dismissDelay=5000) {
         // Singleton-Instanz ermitteln oder erstellen
         let instance = kijs.gui.CornerTipContainer._singletonInstance;
         if (!instance) {
-            instance = new kijs.gui.CornerTipContainer();
+            instance = new kijs.gui.CornerTipContainer({dismissDelay});
             instance.renderTo(document.body);
             kijs.gui.CornerTipContainer._singletonInstance = instance;
 
         } else {
             // als letzte node anhängen
             document.body.appendChild(instance.dom.node);
+            instance.dismissDelay = dismissDelay;
         }
 
         switch (icon) {
@@ -222,7 +224,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
                 // Singleton löschen, wenn nicht mehr benötigt.
                 if (this.elements.length === 0 && kijs.gui.CornerTipContainer._singletonInstance === this) {
-                    this.unrender();
+                    this.destruct();
                     delete kijs.gui.CornerTipContainer._singletonInstance;
                 }
 

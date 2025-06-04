@@ -58,7 +58,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Gibt die Filter-Objekte als Array  zurück, welche auf dem Server angewendet werden.
+     * Gibt die Filter-Objekte als Array zurück, welche auf dem Server angewendet werden.
      * @returns {undefined}
      */
     getFilters() {

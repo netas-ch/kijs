@@ -2,6 +2,112 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.9.0
+=============
+### Home-App  
+Neu kann der Quellcode angezeigt und bearbeitet werden.  
+
+### Font Awesome  
+Update auf Version 6.7.2  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+
+### kijs.gui.field.AceEditor  
+ACE-Editor Update auf Version 1.41.0  
+
+### kijs.gui.field.QuillEditor  
+Quill-Editor Update auf Version 2.0.3  
+**UPDATE TIPP:**: Datei ```lib/quill/quill.min.js``` umbenannt zu ```quill.js```.  
+
+### kijs.String  
+Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
+ - ```beginsWith(text, search, caseInsensitive=false)```  
+ - ```contains(text, search, caseInsensitive=false)```  
+ - ```endsWith(text, search, caseInsensitive=false)```  
+
+Neue Funktion:  
+ - ```match(text, search, caseInsensitive=false)```  
+   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.  
+
+### kijs.gui.Splitter  
+Bugfix: Manchmal stimmte nach dem Verschieben die Position nicht.  
+
+### kijs.gui.ListView  
+- CSS: Elemente haben neu runde Ecken  
+- CSS: Checkboxe/Optionen mit Fokus werden stärker hervorgehoben  
+
+### kijs.gui.container.Stack  
+- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
+  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:  
+  - newEl  
+  - oldEl  
+
+**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
+direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
+anpassen.  
+
+### kijs.gui.container.Form  
+- Beim suchen nach Feldern  ```searchFields()``` werden neu auch Felder innerhalb 
+  von Containern gefunden.  
+
+### kijs.UploadDialog / kijs.gui.UploadWindow
+- Events wurden umbenennt:
+  - ```startUpload``` --> ```uploadStart```
+  - ```endUpload``` --> ```uploadEnd```
+  - ```failUpload``` --> ```uploadFailed```
+- Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem 
+  Argument enthalten.  
+
+**UPDATE TIPP:** 
+Projekt durchsuchen nach den alten Event-Namen  
+- Namen umbenennen  
+- Argumente anpassen  
+
+### kijs.gui.field.Email, kijs.gui.field.Phone  
+Neue config/getter/setter: ```preventLinkButtonDisable```. (Boolean)  
+Bei ```true``` bleibt der Hyperlink-Button auch bei ```disable=true``` noch aktiv.  
+
+### kijs.gui.field.Color  
+CSS angepasst  
+
+### kijs.gui.field.Switch  
+CSS bei Fokus angepasst  
+
+### kijs.gui.field.Checkbox, kijs.gui.field.CheckboxGroup, kijs.gui.field.OptionGroup  
+CSS angepasst: Kästchen-Rahmen ist dünner
+
+
+
+Version 2.8.3
+=============
+### kijs.gui.CornerTipContainer
+Neues, optionales Argument ```dismissDelay``` bei statischer Funktion ```show``` 
+(default: 5s)  
+
+### Bugfixes
+ - kijs.gui.SpinBox: Das Element wird in den Body, oder falls ein modaler Dialog 
+   besteht, in diesen gerendert, statt in die targetNode.  
+ - kijs.gui.Window: Auf Touch-Geräten funktionierte das verschieben von Fenstern 
+   nicht richtig.  
+
+
+
+Version 2.8.2
+=============
+### kijs.gui.Mask
+Masken werden neu, wenn sie nicht den ganzen Body abdecken anders erstellt:
+ - Innerhalb des Targets (als First Child) wird ein 1px x 1px anchor-Div erstellt
+ - In dieses Div wird dann die Maske gerendert.
+
+### kijs.gui.Window
+Neue config/getter/setter: ```allowDragOutside```. (Boolean)  
+Gibt an, ob ein Fenster per Drag&Drop auch ausserhalb seines Targets sein darf.  
+Ein Teil der Headerbar bleibt jedoch immer sichtbar, damit das Fenter wieder 
+zurückgezogen werden kann.  
+Bisher konnten Fenster nicht ausserhalb des Targets sein.  
+Standard: ```true```  
+
+
+
 Version 2.8.1
 =============
 ### Anpassungen CSS

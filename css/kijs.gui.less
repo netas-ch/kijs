@@ -132,7 +132,7 @@
 
 
     /* ******************
-       * Font Awesome free Version 6.5.2  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
+       * Font Awesome free Version 6.7.2  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
        ****************** */
     /* fa-solid */
     @font-face {
@@ -140,8 +140,8 @@
         font-style: normal;
         font-weight: 900;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-2/fa-solid-900.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-2/fa-solid-900.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-7-2/fa-solid-900.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-7-2/fa-solid-900.ttf') format('truetype');
     }
 
     /* fa-regular */
@@ -150,8 +150,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-2/fa-regular-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-2/fa-regular-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-7-2/fa-regular-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-7-2/fa-regular-400.ttf') format('truetype');
     }
 
     /* fa-brands */
@@ -160,8 +160,8 @@
         font-style: normal;
         font-weight: 400;
         font-display: block;
-        src: url('../fonts/font-awesome-6-5-2/fa-brands-400.woff2') format('woff2'),
-             url('../fonts/font-awesome-6-5-2/fa-brands-400.ttf') format('truetype');
+        src: url('../fonts/font-awesome-6-7-2/fa-brands-400.woff2') format('woff2'),
+             url('../fonts/font-awesome-6-7-2/fa-brands-400.ttf') format('truetype');
     }
 
     .fa-solid, span.kijs-icon.fa-solid {
@@ -546,19 +546,6 @@
         }
     }
 
-    
-    
-    /* ******************
-       * Ergänzung für kijs.gui.Container (+ vererbte)
-       ****************** */
-    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
-    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
-    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
-
-    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
-    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
-
-
 
 
     /* ******************
@@ -696,18 +683,18 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
-
-                &.kijs-fade-in { animation: kijs-fade-in 1s; }
-                &.kijs-slide-in-top { animation: kijs-slide-in-top 1s; }
-                &.kijs-slide-in-right { animation: kijs-slide-in-right 1s; }
-                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom 1s; }
-                &.kijs-slide-in-left { animation: kijs-slide-in-left 1s; }
+                
+                &.kijs-fade-in { animation: kijs-fade-in forwards 1s; }
+                &.kijs-slide-in-top { animation: kijs-slide-in-top forwards 1s; }
+                &.kijs-slide-in-right { animation: kijs-slide-in-right forwards 1s; }
+                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom forwards 1s; }
+                &.kijs-slide-in-left { animation: kijs-slide-in-left forwards 1s; }
 
                 &.kijs-fade-out { animation: kijs-fade-out 1s; }
-                &.kijs-slide-out-top { animation: kijs-slide-out-top 1s; }
-                &.kijs-slide-out-right { animation: kijs-slide-out-right 1s; }
-                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom 1s; }
-                &.kijs-slide-out-left { animation: kijs-slide-out-left 1s; }
+                &.kijs-slide-out-top { animation: kijs-slide-out-top forwards 1s; }
+                &.kijs-slide-out-right { animation: kijs-slide-out-right forwards 1s; }
+                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom forwards 1s; }
+                &.kijs-slide-out-left { animation: kijs-slide-out-left forwards 1s; }
             }
         }
     }
@@ -814,18 +801,18 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
+                
+                &.kijs-fade-in { animation: kijs-fade-in forwards 1s; }
+                &.kijs-slide-in-top { animation: kijs-slide-in-top forwards 1s; }
+                &.kijs-slide-in-right { animation: kijs-slide-in-right forwards 1s; }
+                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom forwards 1s; }
+                &.kijs-slide-in-left { animation: kijs-slide-in-left forwards 1s; }
 
-                &.kijs-fade-in { animation: kijs-fade-in 1s; }
-                &.kijs-slide-in-top { animation: kijs-slide-in-top 1s; }
-                &.kijs-slide-in-right { animation: kijs-slide-in-right 1s; }
-                &.kijs-slide-in-bottom { animation: kijs-slide-in-bottom 1s; }
-                &.kijs-slide-in-left { animation: kijs-slide-in-left 1s; }
-
-                &.kijs-fade-out { animation: kijs-fade-out 1s; }
-                &.kijs-slide-out-top { animation: kijs-slide-out-top 1s; }
-                &.kijs-slide-out-right { animation: kijs-slide-out-right 1s; }
-                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom 1s; }
-                &.kijs-slide-out-left { animation: kijs-slide-out-left 1s; }
+                &.kijs-fade-out { animation: kijs-fade-out forwards 1s; }
+                &.kijs-slide-out-top { animation: kijs-slide-out-top forwards 1s; }
+                &.kijs-slide-out-right { animation: kijs-slide-out-right forwards 1s; }
+                &.kijs-slide-out-bottom { animation: kijs-slide-out-bottom forwards 1s; }
+                &.kijs-slide-out-left { animation: kijs-slide-out-left forwards 1s; }
             }
         }
 
@@ -1025,6 +1012,7 @@
         box-sizing: border-box;
         position: absolute;
         margin: 0;
+        padding: 0;
         overflow: hidden;
         z-index: 50100;
         max-width: 100%;
@@ -1195,6 +1183,11 @@
                             color: var(--bar-fontColor);
                         }
                     }
+                    
+                    &:focus {
+                        outline: 1px dotted var(--bar-button-icon-fontColor);
+                        border-radius: 2px;
+                    }
 
                     &.kijs-disabled {
                         cursor: default;
@@ -1274,6 +1267,7 @@
         flex-direction: column;
         overflow: hidden;
         border: 1px solid var(--panel-borderColor);
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         background-color:var(--panel-bkgrndColor);
         transition: 0.2s;
 
@@ -1511,6 +1505,7 @@
         box-sizing: border-box;
         position: absolute;
         margin: 0; /* Wichtig */
+        padding: 0; /* nötig wegen dialog-BrowserDefault */
         overflow: hidden;
         max-width: 100%;
         max-height: 100%;
@@ -1578,6 +1573,19 @@
     /* ******************
        * Mask
        ****************** */
+    div.kijs-mask-anchor {
+        position: relative !important;
+        flex: none !important;
+        overflow: visible !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        border: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        z-index: 60000 !important;
+    }
+    
     div.kijs-mask {
         position: absolute;
         top: 0;
@@ -2140,6 +2148,10 @@
         background-color: var(--field-bkgrndColor);
         cursor: pointer;
 
+        &:focus-within {
+            border-color: var(--field-focus-borderColor);
+        }
+        
         &.kijs-borderless {
             border: none;
         }
@@ -2163,6 +2175,7 @@
                 flex-direction: row;
                 align-items: center;
                 border: 1px solid transparent;
+                border-radius: 4px;
                 padding: 0 4px;
                 outline: none;
 
@@ -2216,7 +2229,7 @@
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
-
+                    
                     &:before {
                         box-sizing: border-box;
                         flex: none;
@@ -2226,7 +2239,7 @@
                         font-size: var(--checkbox-fontSize);
                         line-height: var(--checkbox-lineHeight);
                         background-color: var(--field-bkgrndColor);
-                        border: 2px solid var(--field-fontColor);
+                        border: 1.5px solid var(--field-fontColor);
                         border-radius: 4px;
                         font-family: 'Font Awesome 6 Free';
                         font-weight: 900;
@@ -2236,6 +2249,13 @@
                         content: ' ';
                     }
 
+                    &:focus,
+                    &:hover {
+                        &:before {
+                            border: 1.5px solid var(--field-focus-borderColor);
+                        }
+                    }
+                    
                     &.kijs-selected:before {
                         content: '\f00c';
                     }
@@ -2254,7 +2274,7 @@
                         font-size: var(--checkbox-fontSize);
                         line-height: var(--checkbox-lineHeight);
                         background-color: var(--field-bkgrndColor);
-                        border: 2px solid var(--field-fontColor);
+                        border: 1.5px solid var(--field-fontColor);
                         border-radius: 50%;
                         font-family: 'Font Awesome 6 Free';
                         font-weight: 900;
@@ -2264,6 +2284,13 @@
                         content: ' ';
                     }
 
+                    &:focus,
+                    &:hover {
+                        &:before {
+                            border: 1.5px solid var(--field-focus-borderColor);
+                        }
+                    }
+                    
                     &.kijs-selected:before {
                         content: '\f00c';
                     }
@@ -2875,7 +2902,7 @@
             > .kijs-icon-error {
                 flex: none;
                 height: 16px;
-                margin: 3px 0 0 2px;
+                margin: 4px 0 0 2px;
                 color: var(--icon-error-fontColor);
                 cursor: default;
             }
@@ -2883,7 +2910,7 @@
             > .kijs-icon-help {
                 flex: none;
                 height: 16px;
-                margin: 3px 0 0 2px;
+                margin: 4px 0 0 2px;
                 color: var(--icon-help-fontColor);
                 cursor: default;
             }
@@ -3039,15 +3066,29 @@
                 
                 > input {
                     width: var(--field-height);
-                    height: 100%;
+                    height: var(--field-height);
                     border: 1px solid var(--field-borderColor);
-                    border-radius: 2px;
-                    padding: 2px;
+                    border-radius: 50%;
+                    padding: 3px;
                     overflow: hidden;
                     cursor: pointer;
 
+                    
+                    &::-webkit-color-swatch-wrapper {
+                        padding: 0;
+                    }
+                    
+                    &::-webkit-color-swatch {
+                        border-radius: 50%;
+                    }
+                    
+                    &::-moz-color-swatch {
+                        border-radius: 50%;
+                    }
+
+                    
                     &:hover, &:focus {
-                        background-color: var(--button-focus-bkgrndColor);
+                        border: 1px solid var(--field-focus-borderColor);
                     }
                 }
             }
@@ -3160,7 +3201,7 @@
     }
 
     .kijs-spinbox.kijs-spinbox-month > .kijs-container-inner {
-        height: 100%;
+        min-height: 100%;
     }
 
 
@@ -3217,7 +3258,7 @@
     }
 
     .kijs-spinbox.kijs-spinbox-datetime > .kijs-container-inner {
-        height: 100%;
+        min-height: 100%;
 
         > div.kijs-datepicker {
             border: 0 none transparent;
@@ -3321,7 +3362,7 @@
        * CheckboxGroup
        ****************** */
     div.kijs-field-optiongroup,
-    div.kijs-field-checkboxgroup{
+    div.kijs-field-checkboxgroup {
         > .kijs-content {
             align-self: stretch;
             
@@ -3602,7 +3643,7 @@
                     font-size: var(--checkbox-fontSize);
                     line-height: var(--checkbox-lineHeight);
                     background-color: var(--field-bkgrndColor);
-                    border: 2px solid var(--field-fontColor);
+                    border: 1.5px solid var(--field-fontColor);
                     border-radius: 4px;
                     text-align: center;
                     color: var(--field-fontColor);
@@ -3671,6 +3712,7 @@
                     padding: 0;
                     border-radius: calc(var(--switch-height) * 0.5);
                     border: 1px solid var(--field-borderColor);
+                    outline: none;
                     background-color: var(--field-bkgrndColor);
                     cursor: pointer;
 
@@ -3682,10 +3724,10 @@
                         transition: margin-left 0.2s;
                     }
 
-                    &:focus {
-                        border-color: var(--field-focus-borderColor);
-                    }
+                    &:focus,
                     &:hover {
+                        border-color: var(--field-focus-borderColor);
+                        
                         > .kijs-togglePoint {
                             background-color: var(--field-item-focus-bkgrndColor);
                         }
@@ -4401,12 +4443,8 @@
        ****************** */
     /* Animationen zu den Spin- und Pulse-Effekten */
     @keyframes kijs-spin {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(359deg);
-        }
+        from { transform: rotate(0deg); }
+        to   { transform: rotate(359deg); }
     }
 
     /* fade */
@@ -4551,6 +4589,18 @@
     .kijs-shadow {
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5);
     }
+
+
+
+    /* ******************
+       * Ergänzung für kijs.gui.Container (+ vererbte)
+       ****************** */
+    /* Scrollbar (Bitte dafür die Configs scrollableX, scrollableY benutzen!!!) */
+    .kijs-scrollable-x-enable, div.kijs-scrollable-x-enable { overflow-x: scroll; }
+    .kijs-scrollable-x-auto, div.kijs-scrollable-x-auto { overflow-x: auto; }
+
+    .kijs-scrollable-y-enable, div.kijs-scrollable-y-enable { overflow-y: scroll; }
+    .kijs-scrollable-y-auto, div.kijs-scrollable-y-auto { overflow-y: auto; }
 
 
 

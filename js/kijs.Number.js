@@ -67,7 +67,7 @@ kijs.Number = class kijs_String {
     
     /**
      * Parst ein String zu einer Nummer und rundet auf die angegebenen Decimals.
-     * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer  aufgerundet.
+     * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer aufgerundet.
      * @param {String} number
      * @param {Number} decimals
      * @param {String} decPoint
@@ -117,7 +117,7 @@ kijs.Number = class kijs_String {
     }
 
     /**
-     * Rundet einen Fliesskommawert.
+     * Rundet einen Fliesskomma-Wert.
      * Halbe werden aufgerundet: Somit wird 1.5 zu 2 und -1.5 zu -2 (Kaufmännisches Runden).
      * @param {Number} number
      * @param {Number} precision

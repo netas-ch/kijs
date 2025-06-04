@@ -15,7 +15,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     constructor(config={}) {
         super(false);
 
-        this._ownerEl = null;            // Eigentümmer kijs.gui.Element dieser Instanz
+        this._ownerEl = null;            // Eigentümer kijs.gui.Element dieser Instanz
         this._ownerDomProperty = null;   // Property-Name des kijs.gui.Dom, der als 
                                          // Ziel dient.
         this._mapping = {};
@@ -114,7 +114,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this.ownerDom.on('drop', this.#onDrop, this);
     }
     
-    // Eigentümmer kijs.gui.Element dieser Instanz
+    // Eigentümer kijs.gui.Element dieser Instanz
     get ownerEl() { return this._ownerEl; }
     set ownerEl(val) { 
         this._ownerEl = val;
@@ -142,17 +142,17 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         kijs.Object.assignConfig(this, config, this._configMap);
         
         // Objekt versiegeln
-        // Bewirkt, dass keine neuen propertys hinzugefügt werden dürfen.
+        // Bewirkt, dass keine neuen Properties hinzugefügt werden dürfen.
         Object.seal(this);
     }
 
     /**
-     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am nähesten befindet
+     * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am Nächsten befindet
      * @param {Array} elements  Elements-Array
      * @param {Number} clientX  Maus-Position vom nodeEvent
      * @param {Number} clientY  Maus-Position vom nodeEvent
      * @returns {Object} { el:..., diffX,... diffY:..., w:..., h:... };
-     *                   el: Element unter dem Mauszeiger oder nähestes Element
+     *                   el: Element unter dem Mauszeiger oder nächstes Element
      *                   diffX Abstand des Mauszeiger zum linken Rand des gefundenen Elements
      *                   diffY: Abstand des Mauszeiger zum oberen Rand des gefundenen Elements
      *                   w: Breite des gefundenen Elements
@@ -184,7 +184,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         
         let minDistance = null;
         
-        // Elemente durchgehen und das näheste Element ermitteln
+        // Elemente durchgehen und das Nächste Element ermitteln
         kijs.Array.each(elements, function(el) {
             let rectEl = kijs.Dom.getAbsolutePos(el.node);
             
@@ -458,8 +458,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         const isHorizontal = (isFlex && !!flexDirection.startsWith('row')) || ndeParentTagName === 'tr';
         const isReverse = isFlex && !!flexDirection.endsWith('-reverse');
         
-        // nähestes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
-        // x und y enthallten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
+        // Nächstes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
+        // x und y enthalten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
         let ddCPos = this._getDragOverChild(
                 this._ownerEl.elements, 
                 e.nodeEvent.clientX, 

@@ -30,7 +30,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         Object.assign(this._configMap, {
             disableDrop: { target: 'disableDrop' },
             disableContextMenu: { target: 'disableContextMenu' },
-            theme: { target: 'theme'}         // 'dark', 'light' oder null=auto oder einen benutzerdefiniertes Farbschema
+            theme: { target: 'theme'}         // 'dark', 'light' oder null=auto oder ein benutzerdefiniertes Farbschema
         });
 
         // onResize überwachen
@@ -96,7 +96,7 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     get theme() {
         return kijs.Dom.themeGet();
     }
-    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder einen benutzerdefiniertes Farbschema
+    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder ein benutzerdefiniertes Farbschema
     set theme(val) {
         kijs.Dom.themeSet(val);
         this._autoTheme = val === null;

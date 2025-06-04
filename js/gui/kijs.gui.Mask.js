@@ -6,28 +6,24 @@
 // Halbtransparente Maske, die über den Body oder ein kijs.gui.Element gelegt wird
 // und so die Bedienung der dahinterliegenden Oberfläche verhindert.
 //
-// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mitangezeigt werden.
+// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mit angezeigt werden.
+//
+// Mit text kann ein Ladetext unterhalb des Icons angezeigt werden.
 //
 // Das Element, dass überdeckt wird, wird mit der Eigenschaft target festgelegt.
 // Dies kann der document.body sein oder ein kijs.gui.Element.
 //
-// Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode)
-// und die Maske wird mit dem nativen dialog-tag erstellt. Dies verhindert auch die 
-// Navigation via Tastatur unterhalb der Maske.
+// Beim Body als target wird die Maske mit dem nativen dialog-Tag dem body angefügt.
+// Dies verhindert auch die Navigation via Tastatur unterhalb der Maske.
 //
-// Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node
-// des Elements, sondern dessen parentNode und die Maske wird mit einem div-tag erstellt.
+// Bei allen anderen targets, wird in den target zuerst ein Anchor-Div (0x0px div)
+// als erster Node eingefügt und darin befindet sich das div der Maske.
 // Eine Navigation via Tastatur wird damit nicht verhindert.
 //
-// Deshalb gibt es die Eigenschaften targetNode und parentNode, welche bei einem
-// kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body
-// als target, hingegen schon.
-//
 // Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
-// als target dient, wird nichts angegeben, so dient das ganze Element als target.
+// als target dient. Wird nichts angegeben, so dient das ganze Element als target.
 // Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
 // Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
-// Mit dem Attribut "text" kann ein Text unterhalb des icons angezeigt werden.
 // --------------------------------------------------------------
 kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
@@ -39,15 +35,24 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     constructor(config={}) {
         super(false);
 
+        // Anker-Node von 0x0px mit position:relative in dem sich die Maske befindet.
+        // Nur nötig, wenn das Target nicht der Body ist
+        this._maskAnchorDom = new kijs.gui.Dom({
+            cls:'kijs-mask-anchor'
+        });
+
+        // Zetriertes div, in dem sich das Ladeicon und der Ladetext befindet
         this._maskCenterDom = new kijs.gui.Dom({
             cls:'kijs-mask-center'
         });
 
+        // Ladeicon
         this._iconEl = new kijs.gui.Icon({
             parent: this,
             cls:'kijs-mask-icon'
         });
 
+        // Ladetext
         this._textDom = new kijs.gui.Dom({
             cls:'kijs-mask-text'
         });
@@ -150,29 +155,6 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // overwrite
     get isEmpty() { return this._iconEl.isEmpty; }
 
-    /**
-     * Gibt den Node zurück in dem sich die Maske befindet (parentNode)
-     * @returns {HTMLElement}
-     */
-    get parentNode() {
-        if (this._targetElement instanceof kijs.gui.Element) {
-            let domEl = this._targetElement[this._targetDomProperty];
-            if (domEl && domEl.node) {
-                if (domEl.node === document.body) {
-                    return document.body;
-                } else if (domEl.node.parentNode) {
-                    return domEl.node.parentNode;
-                }
-            }
-
-            // wenn node nicht im Dom
-            return null;
-
-        } else {
-            return document.body;
-        }
-    }
-
     get target() {
         return this._targetElement;
     }
@@ -184,43 +166,29 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             }
         }
 
+        // Target ist der Viewport
+        if (val instanceof kijs.gui.ViewPort) {
+            this._targetElement = null;
+            
         // Target ist ein kijs.gui.Element
-        if (val instanceof kijs.gui.Element) {
+        } else if ((val instanceof kijs.gui.Element) && !(val instanceof kijs.gui.ViewPort)) {
             this._targetElement = val;
 
             this._targetElement.on('afterResize', this.#onTargetElAfterResize, this);
             this._targetElement.on('changeVisibility', this.#onTargetElChangeVisibility, this);
             this._targetElement.on('destruct', this.#onTargetElDestruct, this);
 
-            // Falls das target ein z-index hat, übernehmen wir diesen für diese Maske und rechnen + 2
-            if (!isNaN(parseInt(this._targetElement.dom.style.zIndex))) {
-                this._dom.style.zIndex = parseInt(this._targetElement.dom.style.zIndex) + 2;
-            }
-
         // Target ist der Body
         } else if (val === document.body || kijs.isEmpty(val)) {
             this._targetElement = null;
 
         } else {
-            throw new kijs.Error(`kijs.gui.Mask: Unkown format on config "target"`);
-
+            throw new kijs.Error(`kijs.gui.Mask: Unknown format on config "target"`);
         }
     }
 
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
-
-    /**
-     * Gibt den Ziel-Node zurück, über den die Maske gelegt wird
-     * @returns {HTMLElement}
-     */
-    get targetNode() {
-        if (this._targetElement instanceof kijs.gui.Element) {
-            return this._targetElement[this._targetDomProperty].node;
-        } else {
-            return document.body;
-        }
-    }
 
     get text() { return this._textDom.html; }
     set text(val) { this._textDom.html = val; }
@@ -232,15 +200,43 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // Overwrite
     render(superCall) {
-        const isBody = this.parentNode === document.body;
+        const isBody = !(this._targetElement instanceof kijs.gui.Element);
 
         // Bei body, wird ein dialog-Tag verwendet, sonst ein div-Tag
         this._dom.nodeTagName = isBody ? 'dialog' : 'div';
 
-        super.render(true);
+        // Falls target != Body: Muss die Maske in ein Anchor-Element.
+        if (!isBody) {
+            this._maskAnchorDom.render();
+        }
 
-        // Maskierung positionieren
-        this._updateMaskPosition();
+        // DOM Rendern
+        if (isBody) {
+            this._dom.render();
+        } else {
+            this._dom.renderTo(this._maskAnchorDom.node);
+        }
+
+        // Sichtbarkeit
+        if (kijs.isDefined(this._visible)) {
+            this.visible = this._visible;
+        }
+
+        if (this._waitMaskEl) {
+            kijs.defer(function() {
+                if (this._waitMaskEl) {
+                    this._waitMaskEl.show();
+                }
+            }, 300, this);
+        }
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+
+        // Grösse der Maske an target anpassen
+        this._updateMaskSize();
 
         // centerDom rendern
         this._maskCenterDom.renderTo(this._dom.node);
@@ -264,6 +260,26 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     }
 
     // overwrite
+    renderTo(targetNode, referenceNode=null, insertPosition='before') {
+        // Wenn nicht im Viewport, wird die Maske in ein 0x0px Anker-Div gerendert
+        if (this._targetElement instanceof kijs.gui.Element) {
+            const firstRender = !this.isRendered;
+
+            this.render();
+
+            this._maskAnchorDom.renderTo(targetNode, referenceNode, insertPosition);
+
+            // Event afterFirstRenderTo auslösen
+            if (firstRender) {
+                this.raiseEvent('afterFirstRenderTo');
+            }
+
+        } else {
+            super.renderTo(targetNode, referenceNode, insertPosition);
+        }
+    }
+
+    // overwrite
     unrender(superCall) {
         // Event auslösen.
         if (!superCall) {
@@ -272,6 +288,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         if (this._maskCenterDom) {
             this._maskCenterDom.unrender();
+        }
+
+        if (this._maskAnchorDom) {
+            this._maskAnchorDom.unrender();
         }
         
         super.unrender(true);
@@ -282,46 +302,62 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
      * @returns {undefined}
      */
     show() {
-        const parentNode = this.parentNode;
-        if (parentNode) {
-            this.renderTo(parentNode);
-        }
-        if (this._dom.nodeTagName === 'dialog') {
+        if (this._targetElement instanceof kijs.gui.Element) {
+            let nde = this._targetElement[this._targetDomProperty].node;
+
+            if (nde) {
+                if (nde.hasChildNodes()) {
+                    this.renderTo(nde, nde.firstChild);
+                } else {
+                    this.renderTo(nde);
+                }
+            }
+            
+        } else {
+            this.renderTo(document.body);
             this._dom.node.showModal();
         }
     }
 
 
     // PROTECTED
-    _updateMaskPosition() {
-        // targetX === kijs.gui.Element
+    _updateMaskSize() {
+        // nur nötig, wenn Target != Body
         if (this._targetElement instanceof kijs.gui.Element) {
-            this.top = this._targetElement[this._targetDomProperty].top;
-            this.left = this._targetElement[this._targetDomProperty].left;
-            this.height = this._targetElement[this._targetDomProperty].height;
-            this.width = this._targetElement[this._targetDomProperty].width;
+            let style;
 
-            // Border-Radius vom Target übernehmen
-            
-            // Bereits gerendert: Radius direkt aus CSS nehmen
+            let top = 0;
+            let left = 0;
+            let height = this._targetElement[this._targetDomProperty].height;
+            let width = this._targetElement[this._targetDomProperty].width;
+
+            // Weitere Eigenschaften
+            // Bereits gerendert: direkt aus CSS nehmen
             if (this._targetElement[this._targetDomProperty] && this._targetElement[this._targetDomProperty].node) {
-                const style = window.getComputedStyle(this._targetElement[this._targetDomProperty].node);
-
-                this._dom.style.borderTopLeftRadius = style.borderTopLeftRadius;
-                this._dom.style.borderTopRightRadius = style.borderTopRightRadius;
-                this._dom.style.borderBottomLeftRadius = style.borderBottomLeftRadius;
-                this._dom.style.borderBottomRightRadius = style.borderBottomRightRadius;
-
-            // noch nicht gerendert: CSS kann noch nicht gelesen werden, deshalb nur
-            // Style lesen.
+                style = window.getComputedStyle(this._targetElement[this._targetDomProperty].node);
             } else {
-                this._dom.style.borderTopLeftRadius = this._targetElement.style.borderTopLeftRadius;
-                this._dom.style.borderTopRightRadius = this._targetElement.style.borderTopRightRadius;
-                this._dom.style.borderBottomLeftRadius = this._targetElement.style.borderBottomLeftRadius;
-                this._dom.style.borderBottomRightRadius = this._targetElement.style.borderBottomRightRadius;
-
+                style = this._targetElement.style;
             }
 
+            // Border abziehen
+            top -= style.borderTopWidth ? parseFloat(style.borderTopWidth) : 0;
+            left -= style.borderLeftWidth ? parseFloat(style.borderLeftWidth) : 0;
+
+            // Padding abziehen
+            top -= style.paddingTop ? parseFloat(style.paddingTop) : 0;
+            left -= style.paddingLeft ? parseFloat(style.paddingLeft) : 0;
+
+            // Masse übernehmen
+            this.top = top;
+            this.left = left;
+            this.height = height;
+            this.width = width;
+
+            // Border-Radius auch von target übernehmen
+            this._dom.style.borderTopLeftRadius = style.borderTopLeftRadius;
+            this._dom.style.borderTopRightRadius = style.borderTopRightRadius;
+            this._dom.style.borderBottomLeftRadius = style.borderBottomLeftRadius;
+            this._dom.style.borderBottomRightRadius = style.borderBottomRightRadius;
         }
     }
 
@@ -329,15 +365,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onTargetElAfterResize(e) {
-        // Maskierung positionieren
-        this._updateMaskPosition();
+        this._updateMaskSize();
     }
 
     #onTargetElChangeVisibility(e) {
-        // Maskierung positionieren
-        this._updateMaskPosition();
-
-        // Sichbarkeit ändern
+        this._updateMaskSize();
         this.visible = e.visible;
     }
 
@@ -376,6 +408,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this._maskCenterDom.destruct();
         }
 
+        if (this._maskAnchorDom) {
+            this._maskAnchorDom.destruct();
+        }
+
         // Basisklasse entladen
         super.destruct(true);
 
@@ -384,6 +420,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this._textDom = null;
         this._maskCenterDom = null;
         this._targetElement = null;
+        this._maskAnchorDom = null;
     }
     
 };
