@@ -10,6 +10,8 @@ window.kijs = class kijs {
     // __getTextFnContext {Object|null} Kontext der getText()-Funktion
     // __language {String}              Aktuelle Sprache. Z.B. 'de-CH' oder 'fr' (Standard='de')
     // __rpcs {Object}                  Objekt mit Verweisen auf eine kijs.gui.Rpc-Instanz
+    // __waitMaskIcon {String}          Icon das bei einer Wait-Maske angezeigt wird
+    // __waitMaskCls {String}           CSS-Klasse die dem Wait-Icon hinzugefügt wird
     //                                  { default:..., myRpc2:... }
     //                                  { en:{...}, fr:{...} }
     // __uniqueId {Number|null}         Zähler der eindeutigen UniqueId
@@ -215,7 +217,7 @@ window.kijs = class kijs {
         }
 
         // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
-        if (this.isDefined(kijs.translation) && kijs.translation[language] && 
+        if (this.isDefined(kijs.translation) && kijs.translation[language] &&
                 this.isDefined(kijs.translation[language][key])) {
             let txt = kijs.translation[language][key];
 
@@ -245,6 +247,26 @@ window.kijs = class kijs {
         }
 
         return ret;
+    }
+
+    /**
+     * Gibt das Icon für die Wait-Maske zurück.
+     * @param {String} name
+     * @param {kijs.gui.Rpc} rpc
+     * @returns {undefined}
+     */
+    static getWaitMaskIcon() {
+        return kijs.__waitMaskIcon ?? 'kijs.iconMap.Fa.spinner';
+    }
+
+    /**
+     * Gibt die CSS-Klasse für die Wait-Maske zurück.
+     * @param {String} name
+     * @param {kijs.gui.Rpc} rpc
+     * @returns {undefined}
+     */
+    static getWaitMaskCls() {
+        return kijs.__waitMaskCls ? kijs.__waitMaskCls : 'kijs-pulse';
     }
 
     /**
@@ -428,7 +450,7 @@ window.kijs = class kijs {
         kijs.__getTextFn = fn;
         kijs.__getTextFnContext = context || this;
     }
-    
+
     /**
      * Erstellt einen globalen Verweis auf eine RPC-Klasse.
      * Der Standard-RPC sollte 'default' heissen.
@@ -442,6 +464,22 @@ window.kijs = class kijs {
             kijs.__rpcs = {};
         }
         kijs.__rpcs[name] = rpc;
+    }
+
+    /**
+     * Definiert das Icon und die CSS-Klasse,
+     * die bei einer Wait-Maske angezeigt wird.
+     * @param {String} name
+     * @param {kijs.gui.Rpc} rpc
+     * @returns {undefined}
+     */
+    static setWaitMaskIcon(iconMap, cssCls = null) {
+        if (kijs.isEmpty(iconMap)) {
+            iconMap = 'kijs.iconMap.Fa.spinner';
+            cssCls = 'kijs-pulse';
+        }
+        kijs.__waitMaskIcon = iconMap;
+        kijs.__waitMaskCls = cssCls;
     }
 
     /**
@@ -465,7 +503,7 @@ window.kijs = class kijs {
 
         return (value + '');
     }
-    
+
     /**
      * Gibt eine eindeutige ID zurück.
      * @param {String} [prefix=''] Ein optionales Prefix

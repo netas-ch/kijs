@@ -93,15 +93,15 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get displayWaitIcon() {
-        return this._iconEl.iconChar === kijs.iconMap.Fa.spinner.char;
+        return this._iconEl.iconMap === kijs.getWaitMaskIcon();
     }
     set displayWaitIcon(val) {
         if (val) {
-            this.iconMap = 'kijs.iconMap.Fa.spinner';
-            this._iconEl.dom.clsAdd('kijs-pulse');
+            this.iconMap = kijs.getWaitMaskIcon();
+            this._iconEl.dom.clsAdd(kijs.getWaitMaskCls());
         } else {
             this.iconChar = null;
-            this._iconEl.dom.clsRemove('kijs-pulse');
+            this._iconEl.dom.clsRemove(kijs.getWaitMaskCls());
         }
     }
     get icon() { return this._iconEl; }
