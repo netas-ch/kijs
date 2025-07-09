@@ -2,6 +2,28 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 2.9.1
+=============
+### kijs.gui.Icon
+Neue config/getter/setter: ```iconAnimationCls```. (String)  
+Falls das Icon animiert werden soll, kann hier eine CSS-Klasse zum animieren 
+angegeben werden. Z.B:  
+ - ```'kijs-spin'```  Dreht das Icon  
+ - ```'kijs-pulse'``` Pulsiert das Icon  
+
+### kijs.gui.Mask
+Es wird Standardmässig ein anderes Ladeicon angezeigt: 
+ - Neu: ```iconMap: 'kijs.iconMap.Fa.circle-notch', iconAnimationCls: 'kijs-spin'```  
+ - Alt: ```iconMap: 'kijs.iconMap.Fa.spinner', iconAnimationCls: 'kijs-pulse'```  
+
+Falls noch das alte Icon verwendet werden soll, kann dies mit folgender statischer 
+Einstellungen gemacht werden (gilt dann für alle Ladenmasken):  
+
+    kijs.gui.Mask.defaultIconMap = 'kijs.iconMap.Fa.spinner';
+    kijs.gui.Mask.defaultIconAnimationCls = 'kijs-pulse';
+
+
+
 Version 2.9.0
 =============
 ### Home-App  
