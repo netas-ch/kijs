@@ -106,6 +106,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
 
@@ -175,6 +176,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         if (kijs.isEmpty(val)) {
             this._iconEl.iconChar = null;
             this._iconEl.iconCls = null;
+            this._iconEl.iconAnimationCls = null;
             this._iconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
@@ -200,6 +202,9 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         }
     }
+
+    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }

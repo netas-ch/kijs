@@ -18,6 +18,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._valueField = null;
         this._iconCharField = null;
         this._iconClsField = null;
+        this._iconAnimationClsField = null;
         this._iconColorField = null;
         this._iconMapField = null;
         this._tooltipField = null;
@@ -39,6 +40,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             captionHtmlDisplayType: true,
             iconCharField: true,
             iconClsField: true,
+            iconAnimationClsField: true,
             iconColorField: true,
             iconMapField: true,
             showCheckBoxes: true,
@@ -68,6 +70,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
+
+    get iconAnimationClsField() { return this._iconAnimationClsField; }
+    set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
 
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }

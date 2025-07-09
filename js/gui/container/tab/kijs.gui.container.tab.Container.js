@@ -51,6 +51,7 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabIconMap: { target: 'iconMap', context: this._tabButtonEl },
             tabIconChar: { target: 'iconChar', context: this._tabButtonEl },
             tabIconCls: { target: 'iconCls', context: this._tabButtonEl },
+            tabIconAnimationCls: { target: 'iconAnimationCls', context: this._tabButtonEl },
             tabIconColor: { target: 'iconColor', context: this._tabButtonEl },
             tabStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl },
             tabTooltip: { target: 'tooltip', context: this._tabButtonEl },
