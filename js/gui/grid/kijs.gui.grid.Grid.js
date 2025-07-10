@@ -1211,6 +1211,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             kijs.Array.clear(this._columnConfigs);
             this.columnConfigAdd(e.responseData.columns);
 
+            if (!kijs.isEmpty(e.responseData.resetColumns) && e.responseData.resetColumns) {
+                this._header.clear();
+            }
+
             this._getRemoteMetaData = false;
         }
 

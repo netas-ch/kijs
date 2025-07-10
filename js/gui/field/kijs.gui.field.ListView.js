@@ -144,9 +144,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
      */
-    load(args, superCall=false, config=null) {
+    load(args, superCall=false) {
         return new Promise((resolve, reject) => {
-            super.load(args, true, config).then((e) => {
+            super.load(args, true).then((e) => {
                 let config = e.responseData.config ?? {};
                 
                 // Falls ein neuer Wert zurückgegeben wird, diesen nehmen

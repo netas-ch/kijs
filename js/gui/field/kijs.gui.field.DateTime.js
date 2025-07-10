@@ -306,7 +306,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._dom.clsAdd('kijs-' + val);
 
         this._createSpinBoxElements();
-        this.value = this.value;
+        this.value = null;
     }
 
     get nameEnd() { return this._nameEnd; }
