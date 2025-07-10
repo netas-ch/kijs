@@ -35,6 +35,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             iconCharField: { target: 'iconCharField', context: this._listView },
             iconMapField: { target: 'iconMapField', context: this._listView },
             iconClsField: { target: 'iconClsField', context: this._listView },
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listView },
             iconColorField: { target: 'iconColorField', context: this._listView },
             tooltipField: { target: 'tooltipField', context: this._listView },
             valueField: { target: 'valueField', context: this._listView },

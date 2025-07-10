@@ -16,6 +16,9 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
         if (!kijs.isEmpty(this.parent.iconClsField) && !kijs.isEmpty(this.dataRow[this.parent.iconClsField])) {
             iconArgs.iconCls = this.dataRow[this.parent.iconClsField];
         }
+        if (!kijs.isEmpty(this.parent.iconAnimationClsField) && !kijs.isEmpty(this.dataRow[this.parent.iconAnimationClsField])) {
+            iconArgs.iconAnimationCls = this.dataRow[this.parent.iconAnimationClsField];
+        }
         if (!kijs.isEmpty(this.parent.iconColorField) && !kijs.isEmpty(this.dataRow[this.parent.iconColorField])) {
             iconArgs.iconColor = this.dataRow[this.parent.iconColorField];
         }

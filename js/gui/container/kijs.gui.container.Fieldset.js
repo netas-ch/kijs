@@ -56,6 +56,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
             

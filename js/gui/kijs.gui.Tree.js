@@ -92,18 +92,21 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             expandIconMap             : { target: 'iconMap', context: this._expandIconEl },
             expandIconChar            : { target: 'iconChar', context: this._expandIconEl },
             expandIconCls             : { target: 'iconCls', context: this._expandIconEl },
+            expandIconAnimationCls    : { target: 'iconAnimationCls', context: this._expandIconEl },
             expandIconColor           : { target: 'iconColor', context: this._expandIconEl },
 
             // icon bei geschlossenem Baum
             iconMap                   : { target: 'iconMap', context: this._iconEl },
             iconChar                  : { target: 'iconChar', context: this._iconEl },
             iconCls                   : { target: 'iconCls', context: this._iconEl },
+            iconAnimationCls          : { target: 'iconAnimationCls', context: this._iconEl },
             iconColor                 : { target: 'iconColor', context: this._iconEl },
 
             // icon bei offenem Baum
             expandedIconMap           : { target: 'iconMap', context: this._expandedIconEl },
             expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl },
             expandedIconCls           : { target: 'iconCls', context: this._expandedIconEl },
+            expandedIconAnimationCls  : { target: 'iconAnimationCls', context: this._expandedIconEl },
             expandedIconColor         : { target: 'iconColor', context: this._expandedIconEl },
 
             // setzt das 'iconChar' und das 'expandedIconChar' auf ein Ordner-Symbol.
@@ -165,6 +168,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
         }
     }
 
+    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconEl.AnimationiconCls = val; }
+
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }
 
@@ -176,6 +182,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
+
+    get expandedIconAnimationCls() { return this._expandedIconEl.iconAnimationCls; }
+    set expandedIconAnimationCls(val) { this._expandedIconEl.iconAnimationCls = val; }
 
     get expandedIconChar() { return this._expandedIconEl.iconChar; }
     set expandedIconChar(val) { this._expandedIconEl.iconChar = val; }
@@ -541,11 +550,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
 
                     //element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;
                     //element.iconCls = element.iconCls ? element.iconCls : this.getRootNode().iconCls;
+                    //element.iconAnimationCls = element.iconAnimationCls ? element.iconAnimationCls : this.getRootNode().iconAnimationCls;
                     //element.iconColor = element.iconColor ? element.iconColor : this.getRootNode().iconColor;
                     element.iconMap = element.iconMap ? element.iconMap : this.getRootNode().iconMap;
 
                     //element.expandedIconChar = element.expandedIconChar ? element.expandedIconChar : this.getRootNode().expandedIconChar;
                     //element.expandedIconCls = element.expandedIconCls ? element.expandedIconCls : this.getRootNode().expandedIconCls;
+                    //element.expandedIconAnimationCls = element.expandedIconAnimationCls ? element.expandedIconAnimationCls : this.getRootNode().expandedIconAnimationCls;
                     //element.expandedIconColor = element.expandedIconColor ? element.expandedIconColor : this.getRootNode().expandedIconColor;
                     element.expandedIconMap = element.expandedIconMap ? element.expandedIconMap : this.getRootNode().expandedIconMap;
 
