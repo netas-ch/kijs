@@ -121,7 +121,22 @@ einem vorgegebenen Wert benutzt.
 
 Sortieren
 ---------
-Comming soon...
+Um Daten in einem Recordset zu sortieren, wird die Funktion sort zur Verfügung gestellt:  
+```sort(rows, fields, clone=true)```
+
+### Argumente
+ - ```rows```   Recordset das sortiert werden soll (Array)
+ - ```fields``` Array mit Sortierungskonfigurationen (Array)
+ - ```clone```  Soll das original rows-Array unverändert bleiben (true, false. Default=true)
+
+Beispiel für eine fields-Konfiguration:
+
+    [
+     { "field":"Alter", "desc":true },  // Absteigend nach Alter
+     { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
+     { "field":"Name" },                // Aufsteigend nach Name
+     "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
+    ]
 
 
 Identifizieren von Datensätzen

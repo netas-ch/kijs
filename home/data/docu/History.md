@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.9.x
+Version 2.9.2
 =============
 ### kijs.Data
 Neue Klasse mit Statischen Funktionen für Recordsets.  

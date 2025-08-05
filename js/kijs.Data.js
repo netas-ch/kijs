@@ -208,13 +208,74 @@ kijs.Data = class kijs_Data {
 
     /**
      * Sortiert ein Recordset
+     *
+     * Beispiel:
+     *  [
+     *   { "field":"Alter", "desc":true },  // Absteigend nach Alter
+     *   { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
+     *   { "field":"Name" },                // Aufsteigend nach Name
+     *   "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
+     *  ]
+     *
+     * "field"      Feldname des zu sortierenden Felds
+     * "desc"       Aufsteigend (false, default) oder Absteigend (true) sortieren
+     *      *
      * @param {Array} rows
-     * @param {Array} sortConfigs  Array mit Sortierungskonfigurationen.
-     *                             Beispiel: [ { "field":"Alter", "desc":true }, { "field":"Name" } ]
-     * @returns {undefined}
+     * @param {Array} fields       Array mit Sortierungskonfigurationen.
+     *                             Beispiel: [ { "field":"Alter", "desc":true }, "Vorname" ]
+     * @param {Array} [clone=true] Soll das original-Array rows unverändert bleiben?
+     * @returns {Array}
      */
-    static sort(rows, fields) {
-        // TODO !!!!!!!!!!!!!!!!
+    static sort(rows, fields, clone=true) {
+        let ret;
+
+        // Evtl. Kopie des Arrays erstellen
+        if (clone) {
+            ret = [...rows];
+        } else {
+            ret = rows;
+        }
+
+        // Funktion zum Sortieren basierend auf den Feldern und Sortierrichtungen
+        ret.sort((a, b) => {
+            for (let field of fields) {
+                let fieldName = field.field;
+                let desc = field.desc;
+
+                if (kijs.isObject(field)) {
+                    fieldName = field.field;
+                    desc = field.desc ?? false;
+
+                } else {
+                    fieldName = field;
+                    desc = false;
+
+                }
+
+                // Vergleich der Werte
+                let comparison = 0;
+                if (a[fieldName] > b[fieldName]) {
+                    comparison = 1;
+                } else if (a[fieldName] < b[fieldName]) {
+                    comparison = -1;
+                }
+
+                // Evtl. Sortierrichtung drehen
+                if (desc) {
+                    comparison = -comparison;
+                }
+
+                // Wenn ein Unterschied gefunden wurde, den Vergleich zurückgeben
+                if (comparison !== 0) {
+                    return comparison;
+                }
+            }
+
+            // Wenn alle Felder gleich sind, keine Änderung vornehmen
+            return 0;
+        });
+
+        return ret;
     }
 
 
