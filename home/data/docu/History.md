@@ -12,6 +12,12 @@ Siehe dazu den neuen Leitfaden ```Daten```.
 - Neue config/getter/setter: ```primaryKeyFields```  
   Enthält ein Array mit den Namen der Primärschlüssel-Felder  
 
+- Neue config/getter/setter: ```sortFields```  
+  Enthält ein Array mit den Namen der Felder nach denen Sortiert wird  
+
+- Neue Funktion ```applySortFields(sortFields)```  
+  Sortiert das Dataview gemäss den übergebenen ```sortFields```   
+
 - Neue Funktion ```getSelectedPrimaryKeys()```  
   Gibt die Primary-Key-Strings der selektierten Elemente als Array zurück.  
   Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String 
@@ -33,7 +39,7 @@ Siehe dazu den neuen Leitfaden ```Daten```.
 
 - Filtern  
   Die Filter wurden überarbeitet und in die Klasse ```kijs.Data``` ausgelagert.  
-  Die Idee ist, dass mit dieser Klasse eine Einheitliche Art des Filterns über das 
+  Die Idee ist, dass mit dieser Klasse eine einheitliche Art des Filterns über das 
   ganze kijs hinweg möglich ist.  
 
   Grundsätzlich funktionieren die Filter noch gleich. Es gibt aber kleine Änderungen:  

@@ -38,6 +38,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._filters = [];             // Wenn Filter definiert sind, werden nicht
                                         // alle Daten angezeigt, sondern nur Datensätze,
                                         // die die Filter passieren.
+
+        this._sortFields = [];          // Wenn eine Sortierung definiert ist, werden die
+                                        // Daten entsprechend sortiert
+
         this._focusable = true;
         this._selectType = 'none';
 
@@ -58,6 +62,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             filters: { target: 'filters' },
+            sortFields: { target: 'sortFields' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
             selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
@@ -314,6 +319,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    get sortFields() { return this._sortFields; }
+    set sortFields(val) { this._sortFields = val; }
+
 
 
     // --------------------------------------------------------------
@@ -338,7 +346,21 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {undefined}
      */
     applyFilters(filters) {
-        this.filters = filters;
+        this._filters = filters;
+        if (this.isRendered) {
+            this._createElements(this._data);
+            // Current Element ermitteln und setzen
+            this.current = null;
+        }
+    }
+
+    /**
+     * Wendet eine Sortierung auf das DataView an.
+     * @param {Array} sortFields
+     * @returns {undefined}
+     */
+    applySortFields(sortFields) {
+        this._sortFields = sortFields;
         if (this.isRendered) {
             this._createElements(this._data);
             // Current Element ermitteln und setzen
@@ -823,6 +845,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         let currentIndex = null;
         if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.element.Base) && kijs.isDefined(this._currentEl.index)) {
             currentIndex = this._currentEl.index;
+        }
+
+        // Evtl. sortieren
+        if (this._sortFields) {
+            kijs.Data.sort(data, this._sortFields, false);
         }
 
         // Bestehende Elemente löschen

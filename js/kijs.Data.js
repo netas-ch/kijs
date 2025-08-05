@@ -221,12 +221,12 @@ kijs.Data = class kijs_Data {
      * "desc"       Aufsteigend (false, default) oder Absteigend (true) sortieren
      *      *
      * @param {Array} rows
-     * @param {Array} fields       Array mit Sortierungskonfigurationen.
+     * @param {Array} sortFields   Array mit der Sortierungskonfiguration
      *                             Beispiel: [ { "field":"Alter", "desc":true }, "Vorname" ]
      * @param {Array} [clone=true] Soll das original-Array rows unverändert bleiben?
      * @returns {Array}
      */
-    static sort(rows, fields, clone=true) {
+    static sort(rows, sortFields, clone=true) {
         let ret;
 
         // Evtl. Kopie des Arrays erstellen
@@ -238,7 +238,7 @@ kijs.Data = class kijs_Data {
 
         // Funktion zum Sortieren basierend auf den Feldern und Sortierrichtungen
         ret.sort((a, b) => {
-            for (let field of fields) {
+            for (let field of sortFields) {
                 let fieldName = field.field;
                 let desc = field.desc;
 

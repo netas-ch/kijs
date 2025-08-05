@@ -159,6 +159,29 @@ home.sc.DataView = class home_sc_DataView {
                                 },
                                 context: this
                             }
+                        },{
+                            xtype: 'kijs.gui.field.Combo',
+                            label: 'Sortierung:',
+                            value: 'none',
+                            inputWidth: 90,
+                            data: [
+                                { caption: 'keine', value: 'none' },
+                                { caption: 'Name', value: 'Name' },
+                                { caption: 'Vorname', value: 'Vorname' }
+                            ],
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('dataViewRpc');
+                                    let sortFields = [];
+
+                                    if (e.element.value !== 'none') {
+                                        sortFields.push(e.element.value);
+                                    }
+
+                                    dv.applySortFields(sortFields);
+                                },
+                                context: this
+                            }
                         }
                     ],
                     
