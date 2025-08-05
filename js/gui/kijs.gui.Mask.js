@@ -27,6 +27,11 @@
 // --------------------------------------------------------------
 kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
+    // PRIVATE VARS
+    // __defaultIconAnimationCls {String|null}   Standard Icon animation. Default: 'kijs-spin'
+    // __defaultIconMap {String|null}   Standard IconMap. Default: 'kijs.iconMap.Fa.circle-notch'
+
+
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -34,6 +39,8 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // overwrite
     constructor(config={}) {
         super(false);
+
+        this._displayWaitIcon = false; // Lade Icon anzeigen?
 
         // Anker-Node von 0x0px mit position:relative in dem sich die Maske befindet.
         // Nur nötig, wenn das Target nicht der Body ist
@@ -49,12 +56,22 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Ladeicon
         this._iconEl = new kijs.gui.Icon({
             parent: this,
-            cls:'kijs-mask-icon'
+            cls: 'kijs-mask-icon'
         });
+
+        // Statische Standardwerte für Ladeicon
+        if (kijs.gui.Mask.defaultIconMap) {
+            this._iconEl.iconMap = kijs.gui.Mask.defaultIconMap;
+        }
+        if (kijs.gui.Mask.defaultIconAnimationCls) {
+            this._iconEl.iconAnimationCls = kijs.gui.Mask.defaultIconAnimationCls;
+        }
+
+
 
         // Ladetext
         this._textDom = new kijs.gui.Dom({
-            cls:'kijs-mask-text'
+            cls: 'kijs-mask-text'
         });
 
         this._targetElement = null;      // Zielelement (kijs.gui.Element) oder NULL=document.body (HTMLElement)
@@ -69,10 +86,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            displayWaitIcon: { target: 'displayWaitIcon' },
-            icon: { target: 'icon' },
+            displayWaitIcon: true,
+            icon: { target: 'icon' },       // Lade Icon anzeigen?
             text: { target: 'html', context: this._textDom },
             iconChar: { target: 'iconChar', context: this._iconEl },
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
@@ -90,18 +108,42 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
 
     // --------------------------------------------------------------
+    // STATIC GETTERS / SETTERS
+    // --------------------------------------------------------------
+    static get defaultIconAnimationCls() {
+        if (kijs.isDefined(kijs.gui.Mask.__defaultIconAnimationCls)) {
+            return kijs.gui.Mask.__defaultIconAnimationCls;
+        } else {
+            return 'kijs-spin';
+            //return 'kijs-pulse';
+        }
+    }
+    static set defaultIconAnimationCls(iconAnimationCls) {
+        kijs.gui.Mask.__defaultIconAnimationCls = iconAnimationCls;
+    }
+
+    static get defaultIconMap() {
+        if (kijs.isDefined(kijs.gui.Mask.__defaultIconMap)) {
+            return kijs.gui.Mask.__defaultIconMap;
+        } else {
+            return 'kijs.iconMap.Fa.circle-notch';
+            //return 'kijs.iconMap.Fa.spinner';
+        }
+    }
+    static set defaultIconMap(iconMap) {
+        kijs.gui.Mask.__defaultIconMap = iconMap;
+    }
+
+
+
+    // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get displayWaitIcon() {
-        return this._iconEl.iconChar === kijs.iconMap.Fa.spinner.char;
-    }
+    get displayWaitIcon() { return !!this._displayWaitIcon; }
     set displayWaitIcon(val) {
-        if (val) {
-            this.iconMap = 'kijs.iconMap.Fa.spinner';
-            this._iconEl.dom.clsAdd('kijs-pulse');
-        } else {
-            this.iconChar = null;
-            this._iconEl.dom.clsRemove('kijs-pulse');
+        this._displayWaitIcon = !!val;
+        if (this.isRendered) {
+            this.render();
         }
     }
     get icon() { return this._iconEl; }
@@ -114,6 +156,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (kijs.isEmpty(val)) {
             this._iconEl.iconChar = null;
             this._iconEl.iconCls = null;
+            this._iconEl.iconAnimationCls = null;
             this._iconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
@@ -139,6 +182,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         }
     }
+
+    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }
@@ -242,7 +288,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this._maskCenterDom.renderTo(this._dom.node);
         
         // Span icon rendern (kijs.gui.Icon)
-        if (!this._iconEl.isEmpty) {
+        if (this._displayWaitIcon && !this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._maskCenterDom.node);
         } else if (this._iconEl.isRendered) {
             this._iconEl.unrender();

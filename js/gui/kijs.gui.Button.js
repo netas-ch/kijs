@@ -56,11 +56,13 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             iconMap: { target: 'iconMap', context: this._iconEl },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             icon2: { target: 'icon2' },
             icon2Map: { target: 'iconMap', context: this._icon2El },
             icon2Char: { target: 'iconChar', context: this._icon2El },
             icon2Cls: { target: 'iconCls', context: this._icon2El },
+            icon2AnimationCls: { target: 'iconAnimationCls', context: this._icon2El },
             icon2Color: { target: 'iconColor', context: this._icon2El },
             isDefault: { target: 'isDefault' },
             menu: { target: 'menu' },
@@ -134,6 +136,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         if (kijs.isEmpty(val)) {
             this._iconEl.iconChar = null;
             this._iconEl.iconCls = null;
+            this._iconEl.iconAnimationCls = null;
             this._iconEl.iconColor = null;
             if (this.isRendered) {
                 this.render();
@@ -159,6 +162,14 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
+    set iconAnimationCls(val) {
+        this._iconEl.iconAnimationCls = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { 
         this._iconEl.iconChar = val;
@@ -168,7 +179,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     }
 
     get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) { 
+    set iconCls(val) {
         this._iconEl.iconCls = val;
         if (this.isRendered) {
             this.render();
@@ -201,6 +212,7 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         if (kijs.isEmpty(val)) {
             this._icon2El.iconChar = null;
             this._icon2El.iconCls = null;
+            this._icon2El.iconAnimationCls = null;
             this._icon2El.iconColor = null;
             if (this.isRendered) {
                 this.render();
@@ -224,6 +236,14 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         } else {
             throw new kijs.Error(`config "icon2" is not valid.`);
 
+        }
+    }
+
+    get icon2AnimationCls() { return this._icon2El.iconAnimationCls; }
+    set icon2AnimationCls(val) {
+        this._icon2El.iconAnimationCls = val;
+        if (this.isRendered) {
+            this.render();
         }
     }
 

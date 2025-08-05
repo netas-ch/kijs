@@ -2,24 +2,108 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.x.x (ist noch in Entwicklung)
+Version 2.9.2
 =============
 ### kijs.Data
 Neue Klasse mit Statischen Funktionen für Recordsets.  
 Siehe dazu den neuen Leitfaden ```Daten```.  
 
-### kijs.String
+
+
+Version 2.9.1
+=============
+### kijs.gui.Icon
+Neue config/getter/setter: ```iconAnimationCls```. (String)  
+Falls das Icon animiert werden soll, kann hier eine CSS-Klasse zum animieren 
+angegeben werden. Z.B:  
+ - ```'kijs-spin'```  Dreht das Icon  
+ - ```'kijs-pulse'``` Pulsiert das Icon  
+
+### kijs.gui.Mask
+Es wird Standardmässig ein anderes Ladeicon angezeigt: 
+ - Neu: ```iconMap: 'kijs.iconMap.Fa.circle-notch', iconAnimationCls: 'kijs-spin'```  
+ - Alt: ```iconMap: 'kijs.iconMap.Fa.spinner', iconAnimationCls: 'kijs-pulse'```  
+
+Falls noch das alte Icon verwendet werden soll, kann dies mit folgender statischer 
+Einstellungen gemacht werden (gilt dann für alle Ladenmasken):  
+
+    kijs.gui.Mask.defaultIconMap = 'kijs.iconMap.Fa.spinner';
+    kijs.gui.Mask.defaultIconAnimationCls = 'kijs-pulse';
+
+
+
+Version 2.9.0
+=============
+### Home-App  
+Neu kann der Quellcode angezeigt und bearbeitet werden.  
+
+### Font Awesome  
+Update auf Version 6.7.2  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+
+### kijs.gui.field.AceEditor  
+ACE-Editor Update auf Version 1.41.0  
+
+### kijs.gui.field.QuillEditor  
+Quill-Editor Update auf Version 2.0.3  
+**UPDATE TIPP:**: Datei ```lib/quill/quill.min.js``` umbenannt zu ```quill.js```.  
+
+### kijs.String  
 Zusätzliches optionales Argument ```caseSensitive=false``` bei folgenden Funktionen:  
- - ```beginsWith(text, search, caseInsensitive=false)```
- - ```contains(text, search, caseInsensitive=false)```
- - ```endsWith(text, search, caseInsensitive=false)```
+ - ```beginsWith(text, search, caseInsensitive=false)```  
+ - ```contains(text, search, caseInsensitive=false)```  
+ - ```endsWith(text, search, caseInsensitive=false)```  
 
-Neue Funktion:
- - ```match(text, search, caseInsensitive=false)```
-   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.
+Neue Funktion:  
+ - ```match(text, search, caseInsensitive=false)```  
+   Überprüft, ob ein String mit einem gesuchten String übereinstimmt.  
 
-### kijs.gui.ListView
-- CSS: Elemente haben neu runde Ecken
+### kijs.gui.Splitter  
+Bugfix: Manchmal stimmte nach dem Verschieben die Position nicht.  
+
+### kijs.gui.ListView  
+- CSS: Elemente haben neu runde Ecken  
+- CSS: Checkboxe/Optionen mit Fokus werden stärker hervorgehoben  
+
+### kijs.gui.container.Stack  
+- Das Event "beforeChange" wird nun nicht mehr auf dem Container innerhalb, sondern 
+  direkt auf dem container.Stack geworfen. Die Argumente haben auch geändert:  
+  - newEl  
+  - oldEl  
+
+**UPDATE TIPP:**: Projekt nach ```'beforeChange'``` durchsuchen und das Event neu 
+direkt auf den container.Stack setzen und anhand der neuen Argumente den Code 
+anpassen.  
+
+### kijs.gui.container.Form  
+- Beim suchen nach Feldern  ```searchFields()``` werden neu auch Felder innerhalb 
+  von Containern gefunden.  
+
+### kijs.UploadDialog / kijs.gui.UploadWindow
+- Events wurden umbenennt:
+  - ```startUpload``` --> ```uploadStart```
+  - ```endUpload``` --> ```uploadEnd```
+  - ```failUpload``` --> ```uploadFailed```
+- Die Events haben nur noch ein Argument. Alle bisherigen Argumente sind in diesem 
+  Argument enthalten.  
+
+**UPDATE TIPP:** 
+Projekt durchsuchen nach den alten Event-Namen  
+- Namen umbenennen  
+- Argumente anpassen  
+
+### kijs.gui.field.Email, kijs.gui.field.Phone  
+Neue config/getter/setter: ```preventLinkButtonDisable```. (Boolean)  
+Bei ```true``` bleibt der Hyperlink-Button auch bei ```disable=true``` noch aktiv.  
+
+### kijs.gui.field.Color  
+CSS angepasst  
+
+### kijs.gui.field.Switch  
+CSS bei Fokus angepasst  
+
+### kijs.gui.field.Checkbox, kijs.gui.field.CheckboxGroup, kijs.gui.field.OptionGroup  
+CSS angepasst: Kästchen-Rahmen ist dünner
 
 ### kijs.gui.DataView
 - Neue config/getter/setter: ```primaryKeyFields```  

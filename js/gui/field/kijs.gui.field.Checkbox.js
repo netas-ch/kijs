@@ -105,6 +105,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             icon: { target: 'icon' },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
 
@@ -181,6 +182,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         if (kijs.isEmpty(val)) {
             this._iconEl.iconChar = null;
             this._iconEl.iconCls = null;
+            this._iconEl.iconAnimationCls = null;
             this._iconEl.iconColor = null;
 
         // kijs.gui.Icon Instanz
@@ -201,6 +203,9 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this.render();
         }
     }
+
+    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }

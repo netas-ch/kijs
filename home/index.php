@@ -27,6 +27,7 @@
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui,grid,aceEditor,quillEditor&fileType=js');
 ?>
     <script type="text/javascript" src="app/marked.min.js?v=<?=filemtime('app/marked.min.js')?>"></script>
+    <script type="text/javascript" src="app/home.TabContainer.js?v=<?=filemtime('app/home.TabContainer.js')?>"></script>
     <script type="text/javascript" src="app/home.App.js?v=<?=filemtime('app/home.App.js')?>"></script>
     <script type="text/javascript">
         kijs.isReady(function(){

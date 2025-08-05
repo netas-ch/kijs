@@ -87,6 +87,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minChars: 'auto',
             valueField: 'value',
             captionField: 'caption',
+            iconClsField: 'iconCls',
+            iconAnimationClsField: 'iconAnimationCls',
             iconCharField: 'iconChar',
             iconMapField: 'iconMap'
         });
@@ -113,6 +115,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             captionField: { target: 'captionField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
             iconMapField: { target: 'iconMapField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },

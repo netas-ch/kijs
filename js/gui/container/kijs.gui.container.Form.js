@@ -167,7 +167,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
-    
+
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
@@ -231,7 +231,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                     resolve(e);
                     return;
                 }
-                
+
                 if (e.responseData.config && e.responseData.config.elements) {
                     searchFields = true;
                 }
@@ -249,7 +249,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 if (resetValidation) {
                     this.errorsClear();
                 }
-                
+
                 // rendern
                 this.render();
 
@@ -257,13 +257,13 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 if (!superCall) {
                     this.raiseEvent('afterLoad', e);
                 }
-                
+
                 // promise ausführen
                 resolve(e);
             });
         });
     }
-    
+
     /**
      * Sendet die Formulardaten an den Server
      * @param {Boolean} searchFields
@@ -276,9 +276,9 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             if (!kijs.isObject(args)) {
                 args = {};
             }
-            
+
             args = Object.assign({}, args, this._rpcSaveArgs);
-            
+
             if (!waitMaskTarget) {
                 waitMaskTarget = this;
             }
@@ -305,20 +305,20 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 waitMaskTarget: waitMaskTarget,
                 waitMaskTargetDomProperty: 'dom',
                 context: this
-                
+
             }).then((e) => {
                 // Falls des Formular destructed wurde: abbrechen
                 if (!this._dom) {
                     resolve(e);
                     return;
                 }
-                
+
                 // config Properties anwenden, falls vorhanden
                 if (e.responseData.config) {
                     // config Properties übernehmen
                     this.applyConfig(e.responseData.config);
                 }
-                
+
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
                 if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
                     if (!kijs.isEmpty(this._fields)) {
@@ -345,13 +345,13 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
                 // 'afterSave' auslösen
                 this.raiseEvent('afterSave', e);
-                
+
                 // Promise auslösen
                 resolve(e);
-                
+
             }).catch((ex) => {
                 reject(ex);
-                
+
             });
         });
     }
@@ -368,7 +368,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         for (let i=0; i<parent.elements.length; i++) {
             let el = parent.elements[i];
 
-            // field
+            // Field
             if (el instanceof kijs.gui.field.Field && !kijs.isEmpty(el.name)) {
                 ret.push(el);
 
@@ -381,20 +381,21 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 if (!el.hasListener('change', this.#onFieldChange, this)) {
                     el.on('change', this.#onFieldChange, this);
                 }
+            }
 
-            // container
-            } else if (el instanceof kijs.gui.Container) {
+            // Container: Rekursiv Unterelemente abfragen
+            if (el instanceof kijs.gui.Container && el.elements.length > 0) {
                 ret = ret.concat(this.searchFields(el));
-
             }
         }
-        
+
+        // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
         if (parent === this) {
-            // Felder, die nicht mehr gefunden wurden, werden nicht mehr überwacht.
             if (!kijs.isEmpty(this._fields)) {
                 this._fields.forEach((oldField) => {
                     if (ret.indexOf(oldField) === -1) {
                         oldField.off('change', this.#onFieldChange, this);
+                        oldField.off('blur', this.#onFieldBlur, this);
                     }
                 });
             }
@@ -433,12 +434,12 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
-        
+
         for (let i=0; i<this._fields.length; i++) {
             this._fields[i].valuesReset();
         }
     }
-    
+
 
     // PRIVATE
     // LISTENERS

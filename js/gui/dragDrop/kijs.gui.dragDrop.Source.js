@@ -216,6 +216,10 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
             this.raiseEvent('destruct');
         }
 
+        // Drag&Drop Listeners entfernen
+        this.ownerDom.off('dragStart', this.#onDragStart, this);
+        this.ownerDom.off('dragEnd', this.#onDragEnd, this);
+
         // Elemente/DOM-Objekte entladen
 
         // Variablen (Objekte/Arrays) leeren

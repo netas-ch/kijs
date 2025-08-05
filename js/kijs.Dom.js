@@ -157,7 +157,7 @@ kijs.Dom = class kijs_Dom {
                 if (sameBaseDir) {
                     let baseDir = node.href;
                     baseDir = baseDir.split('?')[0];                            // remove any ?query
-                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
+                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last fileName part of path
                     srcNew = baseDir + srcNew;
                 }
 
@@ -410,7 +410,7 @@ kijs.Dom = class kijs_Dom {
                 if (sameBaseDir) {
                     let baseDir = node.src;
                     baseDir = baseDir.split('?')[0];                            // remove any ?query
-                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last filename part of path
+                    baseDir = baseDir.split('/').slice(0, -1).join('/')+'/';    // remove last fileName part of path
                     srcNew = baseDir + srcNew;
                 }
 

@@ -134,7 +134,7 @@
   --tabButton-bkgrndColor: var(--grey04);
   --tabButton-borderColor: #8db2e3;
   --tabButton-fontColor: #15428b;
-  --tabButton-current-bkgrndColor: var(--grey02);
+  --tabButton-current-bkgrndColor: #dfe8f6;
   --tabButton-current-borderColor: #8db2e3;
   --tabButton-current-fontColor: #15428b;
   --tabButton-focus-bkgrndColor: var(--grey04);
@@ -315,6 +315,11 @@
     font-size: 8px;
     line-height: 10px;
   }
+  div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > button.kijs-button:focus,
+  div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > button.kijs-button:focus {
+    outline: 1px solid var(--bar-button-icon-fontColor);
+    border-radius: 3px;
+  }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > button.kijs-button.kijs-disabled,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > button.kijs-button.kijs-disabled {
     background: transparent;
@@ -422,6 +427,9 @@
     gap: 3px;
   }
   /* kijs.gui.container.Tab */
+  .kijs-container-tab {
+    /* Drag&Drop */
+  }
   .kijs-container-tab > .kijs-container-scrollable {
     background: linear-gradient(#dce6f5, #cbdaef);
   }
@@ -433,6 +441,79 @@
   }
   .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current {
     font-weight: bold;
+  }
+  .kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+    margin: 4px 0 0 4px;
+    border-radius: 6px 6px 0 0;
+    border-top: 1px solid var(--tabButton-borderColor);
+    border-right: 1px solid var(--tabButton-borderColor);
+    border-bottom: 0 none;
+    border-left: 1px solid var(--tabButton-borderColor);
+  }
+  .kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollup,
+  .kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrolldown,
+  .kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollleft,
+  .kijs-container-tab.kijs-pos-top > .kijs-container-scrollable > .kijs-btn-scrollright {
+    margin-top: 4px;
+  }
+  .kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+    margin: 4px 4px 0 0;
+    border-radius: 0 6px 6px 0;
+    border-top: 1px solid var(--tabButton-borderColor);
+    border-right: 1px solid var(--tabButton-borderColor);
+    border-bottom: 1px solid var(--tabButton-borderColor);
+    border-left: 0 none;
+  }
+  .kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-btn-scrollup,
+  .kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-btn-scrolldown,
+  .kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-btn-scrollleft,
+  .kijs-container-tab.kijs-pos-right > .kijs-container-scrollable > .kijs-btn-scrollright {
+    margin-right: 4px;
+  }
+  .kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+    margin: 0 0 4px 4px;
+    border-radius: 0 0 6px 6px;
+    border-top: 0 none;
+    border-right: 1px solid var(--tabButton-borderColor);
+    border-bottom: 1px solid var(--tabButton-borderColor);
+    border-left: 1px solid var(--tabButton-borderColor);
+  }
+  .kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-btn-scrollup,
+  .kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-btn-scrolldown,
+  .kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-btn-scrollleft,
+  .kijs-container-tab.kijs-pos-bottom > .kijs-container-scrollable > .kijs-btn-scrollright {
+    margin-bottom: 4px;
+  }
+  .kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-container-inner > .kijs-button {
+    margin: 4px 0 0 4px;
+    border-radius: 6px 0 0 6px;
+    border-top: 1px solid var(--tabButton-borderColor);
+    border-right: 0 none;
+    border-bottom: 1px solid var(--tabButton-borderColor);
+    border-left: 1px solid var(--tabButton-borderColor);
+  }
+  .kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-btn-scrollup,
+  .kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-btn-scrolldown,
+  .kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-btn-scrollleft,
+  .kijs-container-tab.kijs-pos-left > .kijs-container-scrollable > .kijs-btn-scrollright {
+    margin-left: 4px;
+  }
+  .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current {
+    background: linear-gradient(#ffffff, #deecfd);
+    border-color: var(--tabButton-current-borderColor);
+  }
+  .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current > .kijs-caption {
+    color: var(--tabButton-current-fontColor);
+  }
+  .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-current.kijs-disabled > .kijs-caption {
+    color: var(--button-disabled-fontColor);
+  }
+  .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-dragging {
+    opacity: 0.6;
+  }
+  .kijs-container-tab > .kijs-container-scrollable > .kijs-container-inner > .kijs-button.kijs-sourceDragOver {
+    border-color: var(--accentColor3);
+    border-width: 2px;
   }
   /* kijs.gui.Dashboard */
   div.kijs-dashboard {

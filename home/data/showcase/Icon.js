@@ -57,7 +57,7 @@ home.sc.Icon = class home_sc_Icon {
                 },{
                     xtype: 'kijs.gui.Icon',
                     iconMap: 'kijs.iconMap.Fa.gamepad',
-                    cls: 'kijs-spin'
+                    iconAnimationCls: 'kijs-spin'
                 },
                 
                 {
