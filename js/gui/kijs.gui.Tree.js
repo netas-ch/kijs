@@ -52,6 +52,14 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.ListView {
 
 
 
+    #onNodeContextMenu(e) {
+        if (this.loadSpinner || this.disabled) {
+            return;
+        }
+        this._raiseRootEvent('nodeContextMenu', e);
+    }
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

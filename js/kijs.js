@@ -19,7 +19,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.8.3'; }
+    static get version() { return '2.9.2'; }
 
     static get language() {
         if (this.__language) {
@@ -215,7 +215,8 @@ window.kijs = class kijs {
         }
 
         // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
-        if (kijs.translation[language] && this.isDefined(kijs.translation[language][key])) {
+        if (this.isDefined(kijs.translation) && kijs.translation[language] && 
+                this.isDefined(kijs.translation[language][key])) {
             let txt = kijs.translation[language][key];
 
             // Evtl. sind Varianten vorhanden

@@ -27,7 +27,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            
+            // keine
         });
 
         // Config anwenden
@@ -93,7 +93,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // PRIVATE
     // LISTENERS
     #onClick() {
-        if (this._disabled) {
+        if (!this._editable) {
             return;
         }
 

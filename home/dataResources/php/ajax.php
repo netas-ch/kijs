@@ -376,9 +376,31 @@ foreach ($requests as $request) {
 
                 $response->responseData->config = new stdClass();
                 $response->responseData->config->data = $rows;
-                $response->responseData->config->selectFilters = array();
 
                 $filter = array();
+                $selectFilters = '
+                    {
+                     "operator":"OR",
+                     "parts":[
+                      {
+                       "operator":"AND",
+                       "parts": [
+                        { "field":"Name", "value":"Meier" },
+                        { "field":"Vorname", "value":"Kurt" }
+                       ]
+                      },{
+                       "operator":"AND",
+                       "parts": [
+                        { "field":"Name", "value":"Tobler" },
+                        { "field":"Vorname", "value":"Silvia" }
+                       ]
+                      }
+                     ]
+                    }
+                ';
+                $response->responseData->config->selectFilters = json_decode($selectFilters);
+
+                /*$filter = array();
                 $flt = new stdClass();
                 $flt->field = 'Name';
                 $flt->value = 'Meier';
@@ -398,7 +420,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Silvia';
                 $filter[] = $flt;
-                $response->responseData->config->selectFilters[] = $filter;
+                $response->responseData->config->selectFilters[] = $filter;*/
                 
                 //sleep(1);
 
@@ -620,7 +642,7 @@ foreach ($requests as $request) {
                     $col->xtype = 'kijs.gui.grid.columnConfig.Checkbox';
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
-                    $col->disabled = false;
+                    $col->editable = false;
                     $response->responseData->columns[] = $col;
                     unset ($col);
 

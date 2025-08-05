@@ -87,6 +87,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minChars: 'auto',
             valueField: 'value',
             captionField: 'caption',
+            iconClsField: 'iconCls',
+            iconAnimationClsField: 'iconAnimationCls',
             iconCharField: 'iconChar',
             iconMapField: 'iconMap'
         });
@@ -113,6 +115,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             captionField: { target: 'captionField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
             iconMapField: { target: 'iconMapField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },
@@ -601,10 +604,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
 
         } else {
 
@@ -744,7 +747,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else if (e.nodeEvent.key === 'ArrowDown') {
             let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
             if (indx !== null) {
-                this._listViewEl.selectByIndex(indx);
+                this._listViewEl.selectByIndexes(indx);
             }
         }
 

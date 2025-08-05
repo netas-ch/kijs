@@ -106,10 +106,10 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
                 throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');
             }
 
-            this._uploadDialog.on('startUpload', this.#onStartUpload, this);
-            this._uploadDialog.on('failUpload', this.#onFailUpload, this);
+            this._uploadDialog.on('uploadStart', this.#onUploadStart, this);
+            this._uploadDialog.on('uploadFailed', this.#onUploadFailed, this);
             this._uploadDialog.on('upload', this.#onUpload, this);
-            this._uploadDialog.on('endUpload', this.#onEndUpload, this);
+            this._uploadDialog.on('uploadEnd', this.#onUploadEnd, this);
         }
     }
 
@@ -133,6 +133,19 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         this._uploadDialog.showFileSelectDialog(multiple, directory);
     }
 
+    // overwrite
+    unrender(superCall) {
+
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this.removeAll();
+        this._uploads = [];
+
+        super.unrender(superCall);
+    }
 
     // PROTECTED
     _getUploadProgressBar(uploadId) {
@@ -147,7 +160,15 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
     // PRIVATE
     // LISTENERS
-    #onEndUpload() {
+    #onUpload(e) {
+        let pg = this._getUploadProgressBar(e.uploadId);
+        if (e.errorMsg && pg) {
+            this._autoClose = false;
+            pg.bottomCaption = '<span class="error">' + kijs.String.htmlspecialchars(e.errorMsg) + '</span>';
+        }
+    }
+
+    #onUploadEnd() {
         // uploads fertig
         this._uploadRunning = false;
         if (this._autoClose) {
@@ -159,15 +180,15 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         }
     }
     
-    #onFailUpload(ud, filename, filetype) {
+    #onUploadFailed() {
         this._autoClose = false;
     }
 
-    #onStartUpload(ud, filename, filedir, filetype, uploadId) {
-        let progressBar = new kijs.gui.ProgressBar({
-            caption: kijs.String.htmlspecialchars(filename),
+    #onUploadStart(e) {
+        const progressBar = new kijs.gui.ProgressBar({
+            caption: kijs.String.htmlspecialchars(e.fileName),
             uploadDialog: this._uploadDialog,
-            uploadDialogId: uploadId,
+            uploadDialogId: e.uploadId,
             style: {
                 marginBottom: '10px'
             }
@@ -175,7 +196,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         this._uploads.push({
             progressBar: progressBar,
-            uploadId: uploadId
+            uploadId: e.uploadId
         });
 
         this.add(progressBar);
@@ -188,14 +209,6 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
         // uploads laufen
         this._uploadRunning = true;
-    }
-
-    #onUpload(ud, response, errorMsg, uploadId) {
-        let pg = this._getUploadProgressBar(uploadId);
-        if (errorMsg && pg) {
-            this._autoClose = false;
-            pg.bottomCaption = '<span class="error">' + kijs.String.htmlspecialchars(errorMsg) + '</span>';
-        }
     }
 
 

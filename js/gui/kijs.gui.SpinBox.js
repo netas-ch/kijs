@@ -222,8 +222,10 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             p = p.parent;
         }
 
-        this.unrender();
-        this.raiseEvent('close');
+        if (this.isRendered) {
+            this.unrender();
+            this.raiseEvent('close');
+        }
     }
 
     /**

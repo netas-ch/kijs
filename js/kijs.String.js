@@ -14,30 +14,45 @@ kijs.String = class kijs_String {
      * Überprüft, ob ein String mit einem gesuchten String beginnt
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static beginsWith(text, search) {
-        return text.indexOf(search) === 0;
+    static beginsWith(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.startsWith(search);
     }
 
     /**
      * Überprüft, ob ein String einen gesuchten String enthält
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static contains(text, search) {
-        return text.indexOf(search) >= 0;
+    static contains(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.includes(search);
     }
 
     /**
      * Überprüft, ob ein String mit einem gesuchten String endet
      * @param {String} text
      * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
      * @returns {Boolean}
      */
-    static endsWith(text, search) {
-        return text.indexOf(search, text.length - search.length) !== -1;
+    static endsWith(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text.endsWith(search);
     }
 
     /**
@@ -137,6 +152,21 @@ kijs.String = class kijs_String {
         }, this);
 
         return text;
+    }
+
+    /**
+     * Überprüft, ob ein String mit einem gesuchten String übereinstimmt
+     * @param {String} text
+     * @param {String} search
+     * @param {Boolean} [caseInsensitive=false] Gross-/Kleinschreibung nicht berücksichtigen
+     * @returns {Boolean}
+     */
+    static match(text, search, caseInsensitive=false) {
+        if (caseInsensitive) {
+            text = String(text).toLocaleUpperCase();
+            search = String(search).toLocaleUpperCase();
+        }
+        return text === search;
     }
 
     /**

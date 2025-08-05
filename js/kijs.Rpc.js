@@ -237,37 +237,33 @@ kijs.Rpc = class kijs_Rpc {
             if (subRequest.state === kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT ||
                     subRequest.state === kijs.Rpc.states.CANCELED_AFTER_TRANSMIT) {
                 subResponse.errorType = 'cancel';
-                //subResponse.canceled = true;
             }
 
             // Transfer-ID aus der Queue entfernen
             this._removeTid(subRequest.tid);
 
+            // Standard errorType
+            if (!kijs.isEmpty(subResponse.errorMsg) && kijs.isEmpty(subResponse.errorType)) {
+                subResponse.errorType = this._defaultErrorType;
+            }
 
-            //if (!subResponse.canceled) {
-                // Standard errorType
-                if (!kijs.isEmpty(subResponse.errorMsg) && kijs.isEmpty(subResponse.errorType)) {
-                    subResponse.errorType = this._defaultErrorType;
-                }
+            // Argument vorbereiten
+            const e = {
+                response: subResponse,
+                request: subRequest,
+                errorType: subResponse.errorType,
+                errorMsg: subResponse.errorMsg
+            };
 
-                // Argument vorbereiten
-                const e = {
-                    response: subResponse,
-                    request: subRequest,
-                    errorType: subResponse.errorType,
-                    errorMsg: subResponse.errorMsg
-                };
+            // callback-fn ausführen
+            if (kijs.isFunction(subRequest.fn)) {
+                subRequest.fn.call(subRequest.context || this, e);
+            }
 
-                // callback-fn ausführen
-                if (kijs.isFunction(subRequest.fn)) {
-                    subRequest.fn.call(subRequest.context || this, e);
-                }
-
-                // Promise auslösen
-                if (subRequest.promiseResolve) {
-                    subRequest.promiseResolve(e);
-                }
-            //}
+            // Promise auslösen
+            if (subRequest.promiseResolve) {
+                subRequest.promiseResolve(e);
+            }
         }
     }
 

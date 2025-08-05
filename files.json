@@ -13,6 +13,7 @@
    "js/kijs.Graphic.js",
    "js/kijs.Navigator.js",
    "js/kijs.Char.js",
+   "js/kijs.Data.js",
    "js/kijs.Storage.js",
 
    "js/kijs.Observable.js",
@@ -169,7 +170,7 @@
   ],
 
   "quillEditor":[
-   "lib/quill/quill.min.js",
+   "lib/quill/quill.js",
    "js/gui/field/kijs.gui.field.QuillEditor.js"
   ]
  },
@@ -188,12 +189,12 @@
 
  "fonts":{
   "gui":[
-    "fonts/font-awesome-6-5-2/fa-regular-400.ttf",
-    "fonts/font-awesome-6-5-2/fa-regular-400.woff2",
-    "fonts/font-awesome-6-5-2/fa-brands-400.ttf",
-    "fonts/font-awesome-6-5-2/fa-brands-400.woff2",
-    "fonts/font-awesome-6-5-2/fa-solid-900.ttf",
-    "fonts/font-awesome-6-5-2/fa-solid-900.woff2",
+    "fonts/font-awesome-6-7-2/fa-regular-400.ttf",
+    "fonts/font-awesome-6-7-2/fa-regular-400.woff2",
+    "fonts/font-awesome-6-7-2/fa-brands-400.ttf",
+    "fonts/font-awesome-6-7-2/fa-brands-400.woff2",
+    "fonts/font-awesome-6-7-2/fa-solid-900.ttf",
+    "fonts/font-awesome-6-7-2/fa-solid-900.woff2",
 
     "fonts/roboto/Roboto-Regular.woff",
     "fonts/roboto/Roboto-Italic.woff",

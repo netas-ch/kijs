@@ -112,14 +112,17 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     _updateSplitterPosition() {
+        // Berechnet die absolute Position bezogen zum Browser-Rand für das Overlay
+        const overlayPos = kijs.Dom.getAbsolutePos(this._overlayDom.node);
+
         // Differenz zur vorherigen Position ermitteln
         let offset;
         if (this.direction === 'horizontal') {
-            offset = this._overlayDom.left - this._initialPos;
+            offset = overlayPos.x - this._initialPos;
         } else {
-            offset = this._overlayDom.top - this._initialPos;
+            offset = overlayPos.y - this._initialPos;
         }
-        
+
         // Overlay wieder ausblenden
         this._overlayDom.unrender();
 
@@ -158,7 +161,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onMouseDown(e) {
-        if (this.disabled) {
+        if (this.disabled || this._initialPos) {
             return;
         }
 
@@ -228,7 +231,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     }
 
     #onTouchStart(e) {
-        if (this.disabled || e.nodeEvent.touches.length > 1) {
+        if (this.disabled || this._initialPos || e.nodeEvent.touches.length > 1) {
             return;
         }
 

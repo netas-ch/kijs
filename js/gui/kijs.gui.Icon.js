@@ -14,6 +14,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         super(false);
 
         this._iconCls = null;
+        this._iconAnimationCls = null;    // 'kijs-spin' oder 'kijs-pulse'
         this._iconSize = null;
         this._iconMapName = null;
 
@@ -31,6 +32,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             iconMap: { target: 'iconMap', prio: 1 },
             iconChar: { target: 'iconChar', prio: 2 },
             iconCls: { target: 'iconCls', prio: 2 },
+            iconAnimationCls: { target: 'iconAnimationCls', prio: 2 },
             iconColor: { target: 'iconColor', prio: 2 },
             iconSize: { target: 'iconSize', prio: 2 }
         });
@@ -47,6 +49,22 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get iconAnimationCls() { return this._iconAnimationCls; }
+    set iconAnimationCls(val) {
+        if (kijs.isEmpty(val)) {
+            val = null;
+        }
+        if (!kijs.isString && !val) {
+            throw new kijs.Error(`config "iconAnimationCls" is not a string`);
+        }
+        if (this._iconAnimationCls) {
+            this._dom.clsRemove(this._iconAnimationCls);
+        }
+        this._iconAnimationCls = val;
+        if (this._iconAnimationCls) {
+            this._dom.clsAdd(this._iconAnimationCls);
+        }
+    }
     get iconChar() {
         let chr = kijs.toString(this._dom.html);
         if (chr.length > 0) {
