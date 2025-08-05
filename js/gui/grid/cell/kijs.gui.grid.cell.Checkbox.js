@@ -15,6 +15,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
 
         // value
         this._checked = false;
+        this._disabled = false;
 
         // class
         this._dom.clsAdd('kijs-grid-cell-checkbox');
@@ -53,7 +54,11 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(val, callFromParent);
+        this._disabled = !!val;
+    }
 
     /**
      * Setzt das value der Zelle.

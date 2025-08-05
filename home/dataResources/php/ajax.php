@@ -642,7 +642,7 @@ foreach ($requests as $request) {
                     $col->xtype = 'kijs.gui.grid.columnConfig.Checkbox';
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
-                    $col->disabled = false;
+                    $col->editable = false;
                     $response->responseData->columns[] = $col;
                     unset ($col);
 

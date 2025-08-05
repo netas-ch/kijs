@@ -19,6 +19,8 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
 
         this._editorXtype = null;
 
+        this._disabled = false;
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -26,7 +28,7 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            // keine
+            disabled: true
         });
 
         // Config anwenden
@@ -34,6 +36,10 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
+
+        this.cellConfig = {
+            disabled: this._disabled
+        };
     }
     
 };
