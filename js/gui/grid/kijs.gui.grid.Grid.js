@@ -405,7 +405,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (!hasPrimarys) {
             return rows;
 
-        // Falls nur ein primary existiert, wird ein array mit den Ids zurückgegeben
+        // Falls nur ein primaryKey existiert, wird ein array mit den Ids zurückgegeben
         } else if (!multiPrimarys) {
             let ids = [], primaryKey = this._primaryKeys[0];
             kijs.Array.each(rows, function(row) {
@@ -414,7 +414,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             return ids;
 
-        // Mehrere primary keys: Pro Zeile ein Objekt mit dem Ids zurückgeben
+        // Mehrere primaryKeys: Pro Zeile ein Objekt mit dem Ids zurückgeben
         } else {
             let ids = [];
             kijs.Array.each(rows, function(row) {
@@ -561,7 +561,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             } else {
 
-                // row per primary key suchen
+                // row per primaryKey suchen
                 let pRow = this._getRowByPrimaryKey(row);
 
                 if (pRow) {
@@ -809,19 +809,19 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     /**
      * Selektiert eine oder mehrere Zeilen
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Zeilen, die selektiert werden sollen
-     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
      *                                                  { field: "Id", value: 123 }
      *
-     *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem Primary-Field):
+     *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem PrimaryKey-Field):
      *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
      *
-     *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren Primary-Fields):
+     *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren PrimaryKey-Fields):
      *                                                  [
      *                                                    { field: "Name", value: "Muster" },
      *                                                    { field: "Vorname", value: "Max" }
      *                                                  ]
      *
-     *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren Primary-Fields):
+     *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren PrimaryKey-Fields):
      *                                                  [
      *                                                    [
      *                                                      { field: "Name", value: "Muster" },
@@ -1112,7 +1112,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Sucht eine Row anhand des Primary keys
+     * Sucht eine Row anhand des PrimaryKeys
      * @param {Object} data
      * @returns {kijs.gui.grid.Row|null} die Row oder null, wenn nicht gefunden.
      */
@@ -1214,7 +1214,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this._getRemoteMetaData = false;
         }
 
-        // primary keys
+        // primaryKeys
         if (e.responseData.primaryKeys) {
             this.primaryKeys = e.responseData.primaryKeys;
         }

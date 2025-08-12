@@ -22,7 +22,7 @@ Beispiel:
 
     { "addressId":1, "name":"Max", "vorname":"Muster" }
 
-### primary
+### primaryKey
 Beinhaltet einen String mit einem Primärschlüssel eines Datensatzes.
 Beispiel:
 
@@ -42,14 +42,20 @@ Filtern
 -------
 Um Daten in einem Recordset zu filtern, werden folgende Funktionen zur verfügung 
 gestellt:  
- - ```filter(rows, filters)```         Filtert ein Recordset und gibt die Datensätze  
-                                       zurück, die durch den Filter passen.  
+ - ```getRowByPrimaryKey(rows, primaryKey, primaryKeyFields)```  
+   Gibt den Datensatz zurück, der dem primaryKey entspricht.  
 
- - ```rowMatchFilters(row, filters)``` Überprüft, ob ein einzelner Datensatz (row)  
-                                       einem Filter entspricht.  
+ - ```filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields)```  
+   Gibt die Datensätze zurück, die den primaryKeys entsprechen.  
 
- - ```search(rows, filters)```         Filtert ein Recordset und gibt die Indexe der  
-                                       Datensätze zurück, die durch den Filter passen.  
+ - ```filter(rows, filters)```  
+   Filtert ein Recordset und gibt die Datensätze zurück, die durch den Filter passen.  
+
+ - ```rowMatchFilters(row, filters)```
+   Überprüft, ob ein einzelner Datensatz (row) einem Filter entspricht.  
+
+ - ```search(rows, filters)```  
+   Filtert ein Recordset und gibt die Indexe der Datensätze zurück, die durch den Filter passen.  
 
 ### Aufbau eines Filters
 Beispiel:
@@ -141,16 +147,18 @@ Beispiel für eine sortFields-Konfiguration:
 
 Identifizieren von Datensätzen
 ------------------------------
-Es gibt zwei Ansätze um Datensätze in einem Recordset zu identifizieren:
+Es gibt verschiedene Ansätze um Datensätze in einem Recordset zu identifizieren:
+ - ```primaryKey```: Die Datensätze werden über den Primärschlüssel angesprochen
+ - ```dataRows```: Die Datensätze werden via Verweis auf die Datenzeile (row) identifiziert
  - ```index```: Die Datensätze werden über den Index 0 bis ... angesprochen
- - ```primaryKey``` Die Datensätze werden über den Primärschlüssel angesprochen
 
-Beide Ansätze haben Vor- und Nachteile:
+Die Ansätze haben Vor- und Nachteile:
 
 | Art        | Vorteile           | Nachteile |
 |------------|--------------------|-----------|
-| index      | schnell, einfach   | funktioniert nicht mehr, wenn Zeilen eingefügt oder gelöscht wurden oder anders sortiert wurde |
-| primaryKey | funktioniert immer | langsam, es muss ein Primärschlüssel definiert werden |
+| primaryKey | beste Lösung       | es muss ein Primärschlüssel definiert werden |
+| dataRow    | einfach            | nach dem neu Laden via RPC stimmen die Verweise nicht mehr. Siehe dazu die Funktion ```kijs.Data.updateRowsReferences()``` |
+| index      | schnell            | funktioniert nicht mehr, wenn Zeilen eingefügt oder gelöscht wurden oder anders sortiert wurde |
 
 ### Primärschlüssel
 Primärschlüssel bestehen aus einem String, der den Primärschlüssel des Datensatzes 

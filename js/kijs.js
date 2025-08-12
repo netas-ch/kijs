@@ -39,6 +39,20 @@ window.kijs = class kijs {
     // STATICS
     // --------------------------------------------------------------
     /**
+     * Gibt das erste Argument zurück, der nicht empty ist
+     * @param {Array} args
+     * @returns {Mixed}
+     */
+    static coalesce(...args) {
+        for (let i=0; i<args.length; i++) {
+            if (!kijs.isEmpty(args[i])) {
+                return args[i];
+            }
+        }
+        return null;
+    }
+
+    /**
      * Erstellt eine Delegate
      * @param {Function} fn
      * @param {Object} context

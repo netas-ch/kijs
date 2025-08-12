@@ -1839,6 +1839,13 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
+    border: 1px solid var(--field-borderColor);
+  }
+  div.kijs-dataview:focus-within {
+    border-color: var(--field-focus-borderColor);
+  }
+  div.kijs-dataview.kijs-borderless {
+    border: none;
   }
   div.kijs-dataview > .kijs-container-inner {
     flex: 1;
@@ -2096,6 +2103,9 @@
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
   }
+  div.kijs-tree:focus-within {
+    border-color: var(--field-focus-borderColor);
+  }
   div.kijs-tree.kijs-borderless {
     border: none;
   }
@@ -2117,6 +2127,7 @@
     flex-direction: row;
     align-items: center;
     border: 1px solid transparent;
+    border-radius: 4px;
     padding: 0 4px;
     outline: none;
   }
@@ -2141,6 +2152,7 @@
     flex: none;
     width: 16px;
     margin: 0;
+    color: var(--tree-expandIcon-color);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-expandIcon:empty {
     display: none;
@@ -2172,6 +2184,7 @@
     border-color: transparent;
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     width: var(--checkbox-height);
@@ -2179,7 +2192,7 @@
     font-size: var(--checkbox-fontSize);
     line-height: var(--checkbox-lineHeight);
     background-color: var(--field-bkgrndColor);
-    border: 2px solid var(--field-fontColor);
+    border: 1.5px solid var(--field-fontColor);
     border-radius: 4px;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
@@ -2187,6 +2200,10 @@
     color: var(--field-fontColor);
     cursor: pointer;
     content: ' ';
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f00c';
@@ -2196,6 +2213,7 @@
     border-color: transparent;
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:before {
+    box-sizing: border-box;
     flex: none;
     margin: 0 4px 0 0;
     width: var(--checkbox-height);
@@ -2203,7 +2221,7 @@
     font-size: var(--checkbox-fontSize);
     line-height: var(--checkbox-lineHeight);
     background-color: var(--field-bkgrndColor);
-    border: 2px solid var(--field-fontColor);
+    border: 1.5px solid var(--field-fontColor);
     border-radius: 50%;
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
@@ -2211,6 +2229,10 @@
     color: var(--field-fontColor);
     cursor: pointer;
     content: ' ';
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f00c';

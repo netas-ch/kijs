@@ -87,9 +87,11 @@ kijs.Data = class kijs_Data {
      *
      * @param {Array} rows
      * @param {Array|Object} filters
+     * @param {Array|String|null} [childsField=null] Für rekursives Filtern: Name des
+     *                                               Feldes, dass die Kinder enthält
      * @returns {Array}
      */
-    static filter(rows, filters) {
+    static filter(rows, filters, childsField=null) {
         if (kijs.isEmpty(filters)) {
             return rows;
         }
@@ -100,15 +102,60 @@ kijs.Data = class kijs_Data {
             if (kijs.Data.rowMatchFilters(row, filters)) {
                 newRows.push(row);
             }
+
+            // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
+            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(row[childsField])) {
+                let childsRows = kijs.Data.filter(row[childsField],
+                        filters, childsField);
+                if (!kijs.isEmpty(childsRows)) {
+                    newRows = kijs.Array.concat(newRows, childsRows);
+                }
+            }
         });
 
         return newRows;
     }
 
     /**
-     * Generiert einen Primary-Key-String aus den Primärschlüssel-Daten
+     * Gibt Zeilen aus einem Recordset zurück, die einem übergebenen primaryKey entsprechen
+     * @param {Array} rows
+     * @param {Array} primaryKeys
+     * @param {Array|String} primaryKeyFields
+     * @param {Array|String|null} [childsField=null] Für rekursives Filtern: Name des
+     *                                               Feldes, dass die Kinder enthält
+     * @returns {Array}
+     */
+    static filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields, childsField=null) {
+        let newRows = [];
+
+        if (kijs.isString(primaryKeyFields)) {
+            primaryKeyFields = [primaryKeyFields];
+        }
+
+        kijs.Array.each(rows, function(row) {
+            let key = kijs.Data.getPrimaryKeyString(row, primaryKeyFields);
+
+            if (kijs.Array.contains(primaryKeys, key)) {
+                newRows.push(row);
+            }
+
+            // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
+            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(row[childsField])) {
+                let childsRows = kijs.Data.filterByPrimaryKeys(row[childsField],
+                        primaryKeys, primaryKeyFields, childsField);
+                if (!kijs.isEmpty(childsRows)) {
+                    newRows = kijs.Array.concat(newRows, childsRows);
+                }
+            }
+        });
+
+        return newRows;
+    }
+
+    /**
+     * Generiert einen PrimaryKey-String aus den Primärschlüssel-Daten
      * @param {Array} row
-     * @param {Array} primaryKeyFields
+     * @param {Array|String} primaryKeyFields
      * @returns {String}
      */
     static getPrimaryKeyString(row, primaryKeyFields) {
@@ -134,14 +181,48 @@ kijs.Data = class kijs_Data {
             if (!kijs.isEmpty(key)) {
                 key += this.primaryKeyDelimiter;
             }
-            key + row[field];
+            key += row[field];
         }, this);
 
         return key;
     }
 
     /**
-     * Passiert eine Data-Row einen Filter
+     * Gibt die Zeile aus einem Recordset zurück, die dem übergebenen primaryKey entspricht
+     * @param {Array} rows
+     * @param {String} primaryKey
+     * @param {Array|String} primaryKeyFields
+     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     *                                               Feldes, dass die Kinder enthält
+     * @returns {Array}
+     */
+    getRowByPrimaryKey(rows, primaryKey, primaryKeyFields, childsField=null) {
+        if (kijs.isString(primaryKeyFields)) {
+            primaryKeyFields = [primaryKeyFields];
+        }
+
+        for (let i=0; i<rows.length; i++) {
+            let key = kijs.Data.getPrimaryKeyString(rows[i], primaryKeyFields);
+
+            if (primaryKey === key) {
+                return rows[i];
+            }
+
+            // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
+            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(rows[i][childsField])) {
+                let childRow = kijs.Data.getRowByPrimaryKey(rows[i][childsField],
+                        primaryKey, primaryKeyFields, childsField);
+                if (!kijs.isEmpty(childRow)) {
+                    return childRow;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Passiert eine Data-Row einen Filter?
      * @param {Array} row
      * @param {Array|Object} filters
      * @returns {Boolean}
@@ -190,6 +271,7 @@ kijs.Data = class kijs_Data {
 
     /**
      * Gibt ein Array mit den indexen der Datensätzen zurück, die dem Filter entsprechen
+     * Achtung: Funktioniert nicht mit rekursiven Recordsets!
      * @param {Array} rows
      * @param {Array|Object} filters
      * @returns {Array}
@@ -223,10 +305,12 @@ kijs.Data = class kijs_Data {
      * @param {Array} rows
      * @param {Array} sortFields   Array mit der Sortierungskonfiguration
      *                             Beispiel: [ { "field":"Alter", "desc":true }, "Vorname" ]
+     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     *                                               Feldes, dass die Kinder enthält
      * @param {Array} [clone=true] Soll das original-Array rows unverändert bleiben?
      * @returns {Array}
      */
-    static sort(rows, sortFields, clone=true) {
+    static sort(rows, sortFields, childsField=null, clone=true) {
         let ret;
 
         // Evtl. Kopie des Arrays erstellen
@@ -275,9 +359,50 @@ kijs.Data = class kijs_Data {
             return 0;
         });
 
+        // Falls auch Kinder sortiert werden sollen: Rekursiver Aufruf
+        if (!kijs.isEmpty(childsField)) {
+            for (let i=0, len=ret.length; i<len; i++) {
+                if (!kijs.isEmpty(ret[i][childsField])) {
+                    let childsRows = kijs.Data.sort(ret[i][childsField], sortFields, childsField, clone);
+                    if (clone) {
+                        ret[i][childsField] = childsRows;
+                    }
+                }
+            }
+        }
+
         return ret;
     }
 
+    /**
+     * Verweise in einem Recordset aktualiseren
+     * Falls kein Primärschlüssel definiert wurde, arbeitet kijs mit den Verweisen
+     * auf die einzelnen Zeilen (row). Werden die Daten neu via RPC geladen,
+     * stimmen die Verweise nicht mehr, da sie auf das alte Recordset verweisen.
+     * Mit dieser Funktion können die Verweise aktualisiert werden.
+     * @param {Array} rows Array mit alten Verweisen
+     * @param {Array} data Array mit dem neuen Recordset
+     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     *                                               Feldes, dass die Kinder enthält
+     * @returns {Array} Gibt ein Array mit den neuen Verweisen zurück
+     */
+    static updateRowsReferences(rows, data, childsField=null) {
+        if (kijs.isEmpty(rows) || kijs.isEmpty(data)) {
+            return [];
+        }
+
+        // ein PrimaryKey über alle Spalten anlegen
+        let tempPrimaryKeyFields = Object.keys(rows[0]);
+
+        // Die PrimaryKeys der Zeilen ermitteln
+        let tempPrimaryKeys = [];
+        for (let i=0, len=rows.length; i<len; i++) {
+            tempPrimaryKeys.push(kijs.Data.getPrimaryKeyString(rows[i], tempPrimaryKeyFields));
+        }
+
+        // Die Zeilen zu den erstellten PrimaryKeys aus dem neuen Recordset ermitteln
+        return kijs.Data.filterByPrimaryKeys(data, tempPrimaryKeys, tempPrimaryKeyFields, childsField);
+    }
 
 
     // PROTECTED

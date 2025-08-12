@@ -16,11 +16,21 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._captionField = null;
         this._captionHtmlDisplayType = 'code';
         this._valueField = null;
+
+        // Standard-Icon (optional)
+        this._iconMap = null;
+        this._iconChar = null;
+        this._iconCls = null;
+        this._iconAnimationCls = null;
+        this._iconColor = null;
+
+        // Feldnamen für Icon (optional)
+        this._iconMapField = null;
         this._iconCharField = null;
         this._iconClsField = null;
         this._iconAnimationClsField = null;
         this._iconColorField = null;
-        this._iconMapField = null;
+        
         this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
@@ -38,16 +48,24 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         Object.assign(this._configMap, {
             captionField: true,
             captionHtmlDisplayType: true,
+
+            iconMap: true,
+            iconChar: true,
+            iconCls: true,
+            iconAnimationCls: true,
+            iconColor: true,
+
+            iconMapField: true,
             iconCharField: true,
             iconClsField: true,
             iconAnimationClsField: true,
             iconColorField: true,
-            iconMapField: true,
+
             showCheckBoxes: true,
             tooltipField: true,
             valueField: true,
 
-            value: { target: 'value' }
+            value: { prio: 200, target: 'value' }
         });
 
         // Config anwenden
@@ -71,17 +89,32 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
 
+    get iconAnimationCls() { return this._iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconAnimationCls = val; }
+
     get iconAnimationClsField() { return this._iconAnimationClsField; }
     set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
+
+    get iconChar() { return this._iconChar; }
+    set iconChar(val) { this._iconChar = val; }
 
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }
 
+    get iconCls() { return this._iconCls; }
+    set iconCls(val) { this._iconCls= val; }
+
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
+    get iconColor() { return this._iconColor; }
+    set iconColor(val) { this._iconColor = val; }
+
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
+
+    get iconMap() { return this._iconMap; }
+    set iconMap(val) { this._iconMap = val; }
 
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }

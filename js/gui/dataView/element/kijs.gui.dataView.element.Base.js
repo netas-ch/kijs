@@ -14,7 +14,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
         super(false);
 
         this._dataRow = {};     // Verweis auf den Data-Datensatz
-        this._primaryKey = null; // Primary-Key-String
+        this._primaryKey = null; // PrimaryKey-String
 
         this._selected = false;
 
@@ -29,7 +29,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            dataRow: { target: 'dataRow' },
+            dataRow: { target: 'dataRow', prio: 1000 },
             selected: { target: 'selected' }
         });
 
@@ -38,9 +38,6 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        // Inhalt erstellen
-        this.update();
     }
 
 
@@ -54,7 +51,19 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     get dataRow() { return this._dataRow; }
     set dataRow(val) {
         this._dataRow = val;
-        this._primaryKey = kijs.Data.getPrimaryKeyString(this._dataRow, this.parent.primaryKeyFields);
+        this._primaryKey = kijs.Data.getPrimaryKeyString(this._dataRow, this._parentEl.primaryKeyFields);
+    }
+
+    /*
+     * Falls primaryKeyFields definiert sind, wird der PrimaryKey zurück gegeben, sonst die dataRow
+     * @returns {String|Array}
+     */
+    get keyRow() {
+        if (this._parentEl.primaryKeyFields) {
+            return this.primaryKey;
+        } else {
+            return this.dataRow;
+        }
     }
 
     get primaryKey() { return this._primaryKey; }
@@ -63,8 +72,22 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     set selected(val) {
         if (val) {
             this._dom.clsAdd('kijs-selected');
+
+            if (!kijs.isEmpty(this._parentEl.primaryKeyFields)) {
+                this._parentEl.selectedKeysRows.push(this.primaryKey);
+            } else {
+                this._parentEl.selectedKeysRows.push(this.dataRow);
+            }
+
         } else {
             this._dom.clsRemove('kijs-selected');
+
+            if (!kijs.isEmpty(this._parentEl.primaryKeyFields)) {
+                kijs.Array.remove(this._parentEl.selectedKeysRows, this.primaryKey);
+            } else {
+                kijs.Array.remove(this._parentEl.selectedKeysRows, this.dataRow);
+            }
+
         }
     }
 

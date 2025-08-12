@@ -4,11 +4,24 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 2.9.2
 =============
+### Anpassungen CSS
+ - Neue CSS-Variable für kijs.gui.Tree:  
+    - ```--tree-expandIcon-color: var(--grey08);```
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
+in kijs.theme.default.css.
+
+### kijs
+Neue Funktion ```kijs.coalesce(...args)```  
+Die Funktion gibt das erste Argument zurück, dass nicht empty ist.  
+
 ### kijs.Data
 Neue Klasse mit Statischen Funktionen für Recordsets.  
 Siehe dazu den neuen Leitfaden ```Daten```.  
 
 ### kijs.gui.DataView
+- Hat neu Standardmässig einen Border. Dieser kann mit der CSS-Klasse ```kijs-borderless``` 
+  ausgeschaltet werden.  
 - Neue config/getter/setter: ```primaryKeyFields```  
   Enthält ein Array mit den Namen der Primärschlüssel-Felder  
 
@@ -23,16 +36,33 @@ Siehe dazu den neuen Leitfaden ```Daten```.
   Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String 
   zurückgegeben sonst ein Array mit den Keys-Strings.  
 
+- Neue Funktion ```reload(noRpc=false)```
+  Lädt das DataView neu
+
 - Funktion ```selectByIndex()``` umbenannt zu ```selectByIndexes()```
 
 - Neue Funktion ```selectByPrimaryKeys(primaryKeys, keepExisting=false, preventSelectionChange=false)```  
   Selektiert ein oder mehrere Elemente mittels Primary-Key-Strings.  
 
+- Neue Funktion ```getElementByDataRow(dataRow)```  
+
+- Neue Funktion ```getElementByPrimaryKey(primaryKey)```  
+
+- Neue Funktion ```unselectByDataRows(dataRows, preventSelectionChange=false)```  
+
+- Neue Funktion ```unselectByPrimaryKeys(primaryKeys, preventSelectionChange=false)```  
+
+- Funktion ```selectByPrimaryKey()``` umbenannt zu ```selectByPrimaryKeys()```  
+
+**UPDATE TIPP:**: Projekt durchsuchen nach ```selectByPrimaryKey``` und umbenennen.  
+
 - Funktion ```_createElement(dataRow`, index)```:
-  Argument ```index``` entfernt: ```_createElement(dataRow)``` 
+  Argument ```index``` entfernt und Argument ```dataRow``` durch ```config``` 
+  ersetzt: ```_createElement(config)```  
   Der Index wird nach dem Erstellen automatisch zugewiesen und kann über den 
   Getter ```index``` abgefragt werden.  
-  Er steht aber zum Zeitpunkt des Erstellens noch nicht fest.   
+  Er steht aber zum Zeitpunkt des Erstellens noch nicht fest.  
+  Das Argument ```config``` muss wie folgt aufgebaut sein: ```{ dataRow:... }```  
 
 - Funktion ```_filterMatch(record)``` entfernt.  
   Stattdessen kann die Funktion ```kijs.Data.rowMatchFilters()``` verwendet werden.  
@@ -46,8 +76,42 @@ Siehe dazu den neuen Leitfaden ```Daten```.
    - ```filter.compare``` heisst neu ```filter.operator```
    - der ```operator``` ```"full"``` heisst neu ```"MATCH"```
 
+- Folgende Funktionen haben neu einen Rückgabewert 
+  - ```clearSelections(preventSelectionChange)```  
+  - ```select(elements, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectBetween(el1, el2, preventSelectionChange=false)```  
+  - ```selectByDataRows(rows, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectByFilters(filters, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectByIndexes(indexes, keepExisting=false, preventSelectionChange=false)```  
+  - ```unSelect(elements, preventSelectionChange)```  
+
+ - Das Event ```selectionChange``` hat andere Argumente:  
+
+        {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: true
+        }
+
+   Bei ```selectedKeysRows``` und ```unselectedKeysRows``` sind, je nachdem ob 
+   die Eigenschaft ```primaryKeyFields``` angegeben wurde, die betroffenen 
+   primaryKeys drin oder die betroffenen dataRows.  
+
+**UPDATE TIPP:**: Projekt durchsuchen nach ```selectionChange``` und falls nötig 
+die behandlung der Argumente anpassen.  
+
 **UPDATE TIPP:**: Alle verwendeten DataViews, LisViews oder Combos gut testen und 
 evtl. die Filter anpassen.
+
+### kijs.gui.Tree
+Element wurde von Grundauf überarbeitet. Es erbt neu von ```kijs.gui.DataView```.
+
+**UPDATE TIPP:**: Falls der alte ```kijs.gui.Tree``` verwendet wurde, muss er durch 
+den neuen ersetzt werden.
+Der neue ```kijs.gui.Tree``` unterstützt aktuell kein dynamisches Nachladen von 
+einzelnen Knoten. Es müssen immer die Daten des ganzen Baums zurückgegeben werden.  
 
 
 

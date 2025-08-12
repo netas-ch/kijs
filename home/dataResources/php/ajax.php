@@ -375,6 +375,7 @@ foreach ($requests as $request) {
                 $rows[] = array('Name' => 'Schneeberger', 'Vorname' => 'Sandro');
 
                 $response->responseData->config = new stdClass();
+                $response->responseData->config->primaryKeyFields = ['Name','Vorname'];
                 $response->responseData->config->data = $rows;
 
                 $filter = array();
@@ -804,7 +805,22 @@ foreach ($requests as $request) {
                 $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
             }
             break;
-        
+
+        case 'tree.largeData.load':
+            $response->responseData = $request->requestData;
+
+            //$rows = [];
+
+            $rows = _generateRecordset(16, 16, 16, '', ['15', '15.15']);
+
+            // Verzögerung um Lademaske anzuzeigen
+            //sleep(rand(0, 2));
+
+            $response->responseData->config = new stdClass();
+            $response->responseData->config->data = $rows;
+            $response->responseData->config->value = '15.15.15';
+            break;
+
         case 'treeOld.load':
             $tree = array();
             $nodeId = $request->requestData->nodeId;
@@ -825,7 +841,7 @@ foreach ($requests as $request) {
 
             }
 
-            // verzögerung um Lademaske anzuzeigen
+            // Verzögerung um Lademaske anzuzeigen
             if ($nodeId !== null) {
                 sleep(rand(0, 2));
             }
@@ -916,5 +932,47 @@ function _getIcon($id) {
         0xf87b,0xf87c,0xf87d,0xf881,0xf882,0xf884,0xf885,0xf886,0xf887,0xf891,0xf897,0xf8c0,0xf8c1,0xf8cc,0xf8d7,0xf8d9,0xf8ef,0xf8ff];
     $cnt = count($icons);
     return $icons[$id % $cnt];
+}
 
+
+function _generateRecordset($rowsCount, $childsCount=0, $subChildsCount=0, $prefix='', $expandedIds) {
+    $rows = [];
+
+    if (!is_array($expandedIds)) {
+        if ($expandedIds) {
+            $expandedIds = [$expandedIds];
+        } else {
+            $expandedIds = [];
+        }
+    }
+
+    for ($i=1; $i<=$rowsCount; $i++) {
+        $id = $prefix;
+        if ($id) {
+            $id .= '.';
+        }
+        $id .= $i;
+        
+        $childs = [];
+        if ($childsCount) {
+            $childs = _generateRecordset($childsCount, $subChildsCount, 0, $id, $expandedIds);
+        }
+
+        $row = [];
+        $row['id'] = $id;
+        $row['caption'] = $id;
+        $row['color'] = '#' . dechex(rand(0, 240)) . dechex(rand(0, 240)) . dechex(rand(0, 240));
+        $row['icon'] = $childs ? 'kijs.iconMap.Fa.folder' : 'kijs.iconMap.Fa.' . ( $i % 10);
+        $row['allowChilds'] = !!$childs;
+        if ($childs) {
+            $row['childs'] = $childs;
+
+            if (in_array($id, $expandedIds)) {
+                $row['expanded'] = true;
+            }
+        }
+        $rows[] = $row;
+    }
+
+    return $rows;
 }
