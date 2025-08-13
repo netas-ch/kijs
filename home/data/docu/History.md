@@ -2,7 +2,7 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 2.9.2
+Version 3.0.0
 =============
 ### Anpassungen CSS
  - Neue CSS-Variable für kijs.gui.Tree:  
