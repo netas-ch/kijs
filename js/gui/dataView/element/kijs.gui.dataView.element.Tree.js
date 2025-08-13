@@ -46,11 +46,11 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
      * true=Ordner, false=Datei
      * @returns {Boolean}
      */
-    get allowChilds() {
-        if (this._parentEl.allowChildsField) {
-            return !!this._dataRow[this._parentEl.allowChildsField];
+    get allowChildren() {
+        if (this._parentEl.allowChildrenField) {
+            return !!this._dataRow[this._parentEl.allowChildrenField];
         } else {
-            return this.hasChilds;
+            return this.hasChildren;
         }
     }
 
@@ -100,9 +100,9 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
      * Sind Kinder vorhanden?
      * @returns {Boolean}
      */
-    get hasChilds() {
-        if (!kijs.isEmpty(this._parentEl.childsField)) {
-            if (!kijs.isEmpty(this.dataRow[this._parentEl.childsField])) {
+    get hasChildren() {
+        if (!kijs.isEmpty(this._parentEl.childrenField)) {
+            if (!kijs.isEmpty(this.dataRow[this._parentEl.childrenField])) {
                 return true;
             }
         }
@@ -147,7 +147,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
 
     update() {
         let iconArgs = null;
-        let allowChilds = this.allowChilds;
+        let allowChildren = this.allowChildren;
         let expanded = this.expanded;
         let marginLeft = this._depth * this._parentEl.indent;
         
@@ -162,7 +162,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
                 mouseDown: this.#onExpandIconMouseDown
             }
         };
-        if (this.hasChilds) {
+        if (this.hasChildren) {
             // Expandiert?
             if (expanded) {
                 iconArgs.iconMap = this._parentEl.expandButtonExpandedIconMap;
@@ -181,7 +181,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         let iconAnimationCls = null;
         let iconColor = null;
 
-        if (allowChilds) {
+        if (allowChildren) {
             if (expanded) {
                 iconMapField = this.parent.expandedIconMapField;
             } else {
@@ -194,7 +194,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         if (!kijs.isEmpty(iconMapField)) {
             iconMap = this.dataRow[iconMapField];
         } else {
-            if (allowChilds) {
+            if (allowChildren) {
                 if (expanded) {
                     iconMap = this.parent.expandedIconMap;
                 } else {

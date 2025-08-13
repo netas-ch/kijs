@@ -180,11 +180,11 @@ verwendet werden.
 Rekursive Datensätze
 --------------------
 kijs unterstützt auch rekursive Datensätze. Z.B. für ```kijs.gui.Tree```.  
-Bei den Funktionen in ```kijs.Data``` kann dafür das optionale Argument ```childsField``` 
+Bei den Funktionen in ```kijs.Data``` kann dafür das optionale Argument ```childrenField``` 
 angegeben werden. Es enthält den Feldnamen des Felds, dass das Recordset der Kinder 
 enthält.  
 
-Beispiel für ein Recordset mit ```childsField = 'kinder'```:  
+Beispiel für ein Recordset mit ```childrenField = 'kinder'```:  
 
     [
      {

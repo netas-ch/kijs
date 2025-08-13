@@ -87,11 +87,11 @@ kijs.Data = class kijs_Data {
      *
      * @param {Array} rows
      * @param {Array|Object} filters
-     * @param {Array|String|null} [childsField=null] Für rekursives Filtern: Name des
+     * @param {Array|String|null} [childrenField=null] Für rekursives Filtern: Name des
      *                                               Feldes, dass die Kinder enthält
      * @returns {Array}
      */
-    static filter(rows, filters, childsField=null) {
+    static filter(rows, filters, childrenField=null) {
         if (kijs.isEmpty(filters)) {
             return rows;
         }
@@ -104,11 +104,11 @@ kijs.Data = class kijs_Data {
             }
 
             // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
-            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(row[childsField])) {
-                let childsRows = kijs.Data.filter(row[childsField],
-                        filters, childsField);
-                if (!kijs.isEmpty(childsRows)) {
-                    newRows = kijs.Array.concat(newRows, childsRows);
+            if (!kijs.isEmpty(childrenField) && !kijs.isEmpty(row[childrenField])) {
+                let childrenRows = kijs.Data.filter(row[childrenField],
+                        filters, childrenField);
+                if (!kijs.isEmpty(childrenRows)) {
+                    newRows = kijs.Array.concat(newRows, childrenRows);
                 }
             }
         });
@@ -121,11 +121,11 @@ kijs.Data = class kijs_Data {
      * @param {Array} rows
      * @param {Array} primaryKeys
      * @param {Array|String} primaryKeyFields
-     * @param {Array|String|null} [childsField=null] Für rekursives Filtern: Name des
+     * @param {Array|String|null} [childrenField=null] Für rekursives Filtern: Name des
      *                                               Feldes, dass die Kinder enthält
      * @returns {Array}
      */
-    static filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields, childsField=null) {
+    static filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields, childrenField=null) {
         let newRows = [];
 
         if (kijs.isString(primaryKeyFields)) {
@@ -140,11 +140,11 @@ kijs.Data = class kijs_Data {
             }
 
             // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
-            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(row[childsField])) {
-                let childsRows = kijs.Data.filterByPrimaryKeys(row[childsField],
-                        primaryKeys, primaryKeyFields, childsField);
-                if (!kijs.isEmpty(childsRows)) {
-                    newRows = kijs.Array.concat(newRows, childsRows);
+            if (!kijs.isEmpty(childrenField) && !kijs.isEmpty(row[childrenField])) {
+                let childrenRows = kijs.Data.filterByPrimaryKeys(row[childrenField],
+                        primaryKeys, primaryKeyFields, childrenField);
+                if (!kijs.isEmpty(childrenRows)) {
+                    newRows = kijs.Array.concat(newRows, childrenRows);
                 }
             }
         });
@@ -192,11 +192,11 @@ kijs.Data = class kijs_Data {
      * @param {Array} rows
      * @param {String} primaryKey
      * @param {Array|String} primaryKeyFields
-     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     * @param {Array|String|null} [childrenField=null] Für rekursive Recordsets: Name des
      *                                               Feldes, dass die Kinder enthält
      * @returns {Array}
      */
-    getRowByPrimaryKey(rows, primaryKey, primaryKeyFields, childsField=null) {
+    getRowByPrimaryKey(rows, primaryKey, primaryKeyFields, childrenField=null) {
         if (kijs.isString(primaryKeyFields)) {
             primaryKeyFields = [primaryKeyFields];
         }
@@ -209,9 +209,9 @@ kijs.Data = class kijs_Data {
             }
 
             // Falls auch Kinder durchsucht werden sollen: Rekursiver Aufruf
-            if (!kijs.isEmpty(childsField) && !kijs.isEmpty(rows[i][childsField])) {
-                let childRow = kijs.Data.getRowByPrimaryKey(rows[i][childsField],
-                        primaryKey, primaryKeyFields, childsField);
+            if (!kijs.isEmpty(childrenField) && !kijs.isEmpty(rows[i][childrenField])) {
+                let childRow = kijs.Data.getRowByPrimaryKey(rows[i][childrenField],
+                        primaryKey, primaryKeyFields, childrenField);
                 if (!kijs.isEmpty(childRow)) {
                     return childRow;
                 }
@@ -305,12 +305,12 @@ kijs.Data = class kijs_Data {
      * @param {Array} rows
      * @param {Array} sortFields   Array mit der Sortierungskonfiguration
      *                             Beispiel: [ { "field":"Alter", "desc":true }, "Vorname" ]
-     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     * @param {Array|String|null} [childrenField=null] Für rekursive Recordsets: Name des
      *                                               Feldes, dass die Kinder enthält
      * @param {Array} [clone=true] Soll das original-Array rows unverändert bleiben?
      * @returns {Array}
      */
-    static sort(rows, sortFields, childsField=null, clone=true) {
+    static sort(rows, sortFields, childrenField=null, clone=true) {
         let ret;
 
         // Evtl. Kopie des Arrays erstellen
@@ -360,12 +360,12 @@ kijs.Data = class kijs_Data {
         });
 
         // Falls auch Kinder sortiert werden sollen: Rekursiver Aufruf
-        if (!kijs.isEmpty(childsField)) {
+        if (!kijs.isEmpty(childrenField)) {
             for (let i=0, len=ret.length; i<len; i++) {
-                if (!kijs.isEmpty(ret[i][childsField])) {
-                    let childsRows = kijs.Data.sort(ret[i][childsField], sortFields, childsField, clone);
+                if (!kijs.isEmpty(ret[i][childrenField])) {
+                    let childrenRows = kijs.Data.sort(ret[i][childrenField], sortFields, childrenField, clone);
                     if (clone) {
-                        ret[i][childsField] = childsRows;
+                        ret[i][childrenField] = childrenRows;
                     }
                 }
             }
@@ -382,11 +382,11 @@ kijs.Data = class kijs_Data {
      * Mit dieser Funktion können die Verweise aktualisiert werden.
      * @param {Array} rows Array mit alten Verweisen
      * @param {Array} data Array mit dem neuen Recordset
-     * @param {Array|String|null} [childsField=null] Für rekursive Recordsets: Name des
+     * @param {Array|String|null} [childrenField=null] Für rekursive Recordsets: Name des
      *                                               Feldes, dass die Kinder enthält
      * @returns {Array} Gibt ein Array mit den neuen Verweisen zurück
      */
-    static updateRowsReferences(rows, data, childsField=null) {
+    static updateRowsReferences(rows, data, childrenField=null) {
         if (kijs.isEmpty(rows) || kijs.isEmpty(data)) {
             return [];
         }
@@ -401,7 +401,7 @@ kijs.Data = class kijs_Data {
         }
 
         // Die Zeilen zu den erstellten PrimaryKeys aus dem neuen Recordset ermitteln
-        return kijs.Data.filterByPrimaryKeys(data, tempPrimaryKeys, tempPrimaryKeyFields, childsField);
+        return kijs.Data.filterByPrimaryKeys(data, tempPrimaryKeys, tempPrimaryKeyFields, childrenField);
     }
 
 

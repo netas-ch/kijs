@@ -43,11 +43,11 @@ home.sc.Tree = class home_sc_Tree {
                             xtype: 'kijs.gui.Tree',
                             valueField: 'id',
                             captionField: 'caption',
-                            childsField: 'childs',
+                            childrenField: 'children',
                             width: 200,
                             data: [
-                                {id:1, caption:'Facebook', childs:[{id:11, caption:'GitHub', childs:[{id:111, caption:'TikTok'},{id:112, caption:'LinkedIn'}]},{id:12, caption:'Discord'},{id:13, caption:'YouTube'}] },
-                                {id:2, caption:'Twitter',childs:[{id:21, caption:'WordPress'},{id:22, caption:'Slack'},{id:23, caption:'Figma'}]},
+                                {id:1, caption:'Facebook', children:[{id:11, caption:'GitHub', children:[{id:111, caption:'TikTok'},{id:112, caption:'LinkedIn'}]},{id:12, caption:'Discord'},{id:13, caption:'YouTube'}] },
+                                {id:2, caption:'Twitter',children:[{id:21, caption:'WordPress'},{id:22, caption:'Slack'},{id:23, caption:'Figma'}]},
                                 {id:3, caption:'Instagram'}
                             ],
                             value: 2
@@ -71,15 +71,15 @@ home.sc.Tree = class home_sc_Tree {
                             expandedIconMapField: 'icon',
                             collapsedIconMapField: 'icon',
                             //iconColorField: 'color',
-                            childsField: 'childs',
+                            childrenField: 'children',
                             expandedField: 'expanded',
                             //tooltipField: 'Color',
                             //showCheckBoxes: true,
                             //selectType: 'singleAndEmpty',
                             width: 200,
                             data: [
-                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, childs:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', expanded:true, childs:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube' }] },
-                                {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', childs:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
+                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', expanded:true, children:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube' }] },
+                                {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
                                 {id:3, caption:'Instagram', icon:'kijs.iconMap.Fa.instagram'}
                             ],
                             value: 2
@@ -105,6 +105,16 @@ home.sc.Tree = class home_sc_Tree {
                                 },
                                 context: this
                             }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'get value',
+                            on: {
+                                click: function() {
+                                    const el = this._content.down('treeRemote');
+                                    kijs.gui.CornerTipContainer.show('value', el.value);
+                                },
+                                context: this
+                            }
                         }
                     ],
 
@@ -117,7 +127,7 @@ home.sc.Tree = class home_sc_Tree {
                             captionField: 'caption',
                             iconMapField: 'icon',
                             iconColorField: 'color',
-                            childsField: 'childs',
+                            childrenField: 'children',
                             expandedField: 'expanded',
                             tooltipField: 'color',
                             //showCheckBoxes: true,

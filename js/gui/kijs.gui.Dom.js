@@ -1227,7 +1227,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 kijs.Dom.removeAllEventListenersFromContext(this);
             }
 
-            // Childs löschen
+            // Children löschen
             kijs.Dom.removeAllChildNodes(this._node);
 
             // Node selber löschen

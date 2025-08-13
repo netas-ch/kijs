@@ -32,6 +32,8 @@
  * [x] Auch bei ListView testen
  * [x] Auch bei Tree testen
  * [x] Selektieren innerhalb von Ordnern
+ * [x] Children (plural) umbenennen zu Children. Child (singular) bleibt Child
+ * [ ] Code vom Element zum Tree zügeln
  */
 
 // --------------------------------------------------------------
@@ -76,10 +78,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._expandedIconMapField = null;
 
         // Feldnamen für weitere Eigenschaften
-        this._childsField = null;       // Feldname für Kinder
+        this._childrenField = null;       // Feldname für Kinder
         this._expandedField = null;     // Feldname für expandiert-Feld (optional)
 
-        this._allowChildsField = null;  // Sind Kinder erlaubt? Ja=Ordner, Nein=leaf/Datei
+        this._allowChildrenField = null;  // Sind Kinder erlaubt? Ja=Ordner, Nein=leaf/Datei
         this._indent = 16;              // Einrückungstiefe pro Hierarchiestufe in Pixel
         this._expandedKeysRows = [];    // Bei primaryKeyFields: Array mit PrimaryKeys der expandierten Elemente
                                         // sonst: Array mit den dataRows der expandierten Elemente
@@ -126,9 +128,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             tooltipField: true,
             valueField: true,
 
-            childsField: true,
+            childrenField: true,
             expandedField: true,
-            allowChildsField: true,
+            allowChildrenField: true,
 
             indent: true,
 
@@ -152,8 +154,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get allowChildsField() { return this._allowChildsField; }
-    set allowChildsField(val) { this._allowChildsField = val; }
+    get allowChildrenField() { return this._allowChildrenField; }
+    set allowChildrenField(val) { this._allowChildrenField = val; }
 
     get captionHtmlDisplayType() { return this._captionHtmlDisplayType; }
     set captionHtmlDisplayType(val) { this._captionHtmlDisplayType = val; }
@@ -161,8 +163,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
 
-    get childsField() { return this._childsField; }
-    set childsField(val) { this._childsField = val; }
+    get childrenField() { return this._childrenField; }
+    set childrenField(val) { this._childrenField = val; }
 
     get collapsedIconMap() { return this._collapsedIconMap; }
     set collapsedIconMap(val) { this._collapsedIconMap = val; }
@@ -380,7 +382,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
             rows = kijs.Data.filterByPrimaryKeys(this._data, this._selectedKeysRows,
-                    this._primaryKeyFields, this._childsField);
+                    this._primaryKeyFields, this._childrenField);
 
         } else {
             rows = kijs.Array.clone(this._selectedKeysRows);
@@ -401,7 +403,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     // overwrite
     selectByFilters(filters, keepExisting=false, preventSelectionChange=false) {
-        let rows = kijs.Data.filter(this._data, filters, this._childsField);
+        let rows = kijs.Data.filter(this._data, filters, this._childrenField);
 
         let ret = this.selectByDataRows(rows, keepExisting, preventSelectionChange);
 
@@ -516,7 +518,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
         // Evtl. sortieren
         if (this._sortFields) {
-            kijs.Data.sort(data, this._sortFields, this._childsField, false);
+            kijs.Data.sort(data, this._sortFields, this._childrenField, false);
         }
 
         // Bestehende Elemente löschen
@@ -643,10 +645,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             newElements.push(newEl);
 
             // Falls Kinder existieren und der Knoten expandiert ist: die Kinder auch laden
-            if (!kijs.isEmpty(this._childsField)) {
-                if (newEl.expanded && !kijs.isEmpty(data[i][this._childsField])) {
+            if (!kijs.isEmpty(this._childrenField)) {
+                if (newEl.expanded && !kijs.isEmpty(data[i][this._childrenField])) {
                     let newChildElements = this._createElementsRec(
-                            data[i][this._childsField],
+                            data[i][this._childrenField],
                             depth+1,
                             newEl,
                             currentPrimaryKey,

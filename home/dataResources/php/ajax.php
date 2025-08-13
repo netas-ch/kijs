@@ -935,7 +935,7 @@ function _getIcon($id) {
 }
 
 
-function _generateRecordset($rowsCount, $childsCount=0, $subChildsCount=0, $prefix='', $expandedIds) {
+function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $prefix='', $expandedIds) {
     $rows = [];
 
     if (!is_array($expandedIds)) {
@@ -953,19 +953,19 @@ function _generateRecordset($rowsCount, $childsCount=0, $subChildsCount=0, $pref
         }
         $id .= $i;
         
-        $childs = [];
-        if ($childsCount) {
-            $childs = _generateRecordset($childsCount, $subChildsCount, 0, $id, $expandedIds);
+        $children = [];
+        if ($childrenCount) {
+            $children = _generateRecordset($childrenCount, $subChildrenCount, 0, $id, $expandedIds);
         }
 
         $row = [];
         $row['id'] = $id;
         $row['caption'] = $id;
         $row['color'] = '#' . dechex(rand(0, 240)) . dechex(rand(0, 240)) . dechex(rand(0, 240));
-        $row['icon'] = $childs ? 'kijs.iconMap.Fa.folder' : 'kijs.iconMap.Fa.' . ( $i % 10);
-        $row['allowChilds'] = !!$childs;
-        if ($childs) {
-            $row['childs'] = $childs;
+        $row['icon'] = $children ? 'kijs.iconMap.Fa.folder' : 'kijs.iconMap.Fa.' . ( $i % 10);
+        $row['allowChildren'] = !!$children;
+        if ($children) {
+            $row['children'] = $children;
 
             if (in_array($id, $expandedIds)) {
                 $row['expanded'] = true;
