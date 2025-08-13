@@ -20,12 +20,9 @@ home.sc.Tree = class home_sc_Tree {
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.Tree',
             scrollableY: 'auto',
-            cls: ['kijs-borderless', 'kijs-flexform'],
+            cls: ['kijs-borderless', 'kijs-flexrowwrap'],
             style: {
                 flex: 1
-            },
-            innerStyle: {
-                padding: '10px'
             },
             headerElements: this._getHeaderElements(),
             elements:[
@@ -33,9 +30,9 @@ home.sc.Tree = class home_sc_Tree {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Tree simple',
                     scrollableY: 'auto',
-                    cls: 'kijs-flexrow',
+                    cls: 'kijs-flexfit',
                     style: {
-                        height: '200px'
+                        maxHeight: '300px'
                     },
 
                     elements:[
@@ -44,7 +41,6 @@ home.sc.Tree = class home_sc_Tree {
                             valueField: 'id',
                             captionField: 'caption',
                             childrenField: 'children',
-                            width: 200,
                             data: [
                                 {id:1, caption:'Facebook', children:[{id:11, caption:'GitHub', children:[{id:111, caption:'TikTok'},{id:112, caption:'LinkedIn'}]},{id:12, caption:'Discord'},{id:13, caption:'YouTube'}] },
                                 {id:2, caption:'Twitter',children:[{id:21, caption:'WordPress'},{id:22, caption:'Slack'},{id:23, caption:'Figma'}]},
@@ -57,9 +53,9 @@ home.sc.Tree = class home_sc_Tree {
                     xtype: 'kijs.gui.Panel',
                     caption: 'Tree local',
                     scrollableY: 'auto',
-                    cls: 'kijs-flexrow',
+                    cls: 'kijs-flexfit',
                     style: {
-                        height: '200px'
+                        maxHeight: '300px'
                     },
 
                     elements:[
@@ -76,7 +72,6 @@ home.sc.Tree = class home_sc_Tree {
                             //tooltipField: 'Color',
                             //showCheckBoxes: true,
                             //selectType: 'singleAndEmpty',
-                            width: 200,
                             data: [
                                 {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', expanded:true, children:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube' }] },
                                 {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
@@ -87,11 +82,57 @@ home.sc.Tree = class home_sc_Tree {
                     ]
                 },{
                     xtype: 'kijs.gui.Panel',
-                    caption: 'Tree remote',
+                    caption: '2x Tree local mit Drag&Drop untereinander',
                     scrollableY: 'auto',
                     cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: false,
                     style: {
-                        height: '200px'
+                        maxHeight: '300px'
+                    },
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Tree',
+                            valueField: 'key',
+                            captionField: 'key',
+                            childrenField: 'children',
+                            selectType: 'multi',
+                            ddName: 'kijs.gui.Tree.Test',
+                            sortable: true,
+                            data: [{key:'A1',children:[{key:'A1.1'},{key:'A1.2'},{key:'A1.3'}]}, {key:'A2',children:[{key:'A2.1'},{key:'A2.2'},{key:'A2.3'}]}, {key:'A3'}],
+                            expandFilters: { field:'key', operator:'IN', value:['A1'] },
+                            style: {
+                                flex: 1,
+                                borderRight: '1px solid var(--panel-borderColor)'
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        },{
+                            xtype: 'kijs.gui.Tree',
+                            valueField: 'key',
+                            captionField: 'key',
+                            childrenField: 'children',
+                            selectType: 'multi',
+                            ddName: 'kijs.gui.Tree.Test',
+                            sortable: true,
+                            data: [{key:'B1'}, {key:'B2'}, {key:'B3',children:[{key:'B3.1'},{key:'B3.2'},{key:'B3.3'}]}],
+                            expandFilters: { field:'key', operator:'IN', value:['B3'] },
+                            style: {
+                                flex: 1
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        }
+                    ]
+                },{
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'Tree remote',
+                    scrollableY: 'auto',
+                    cls: 'kijs-flexfit',
+                    style: {
+                        maxHeight: '300px'
                     },
 
                     headerElements:[
@@ -150,6 +191,16 @@ home.sc.Tree = class home_sc_Tree {
                                 },
                                 context: this
                             }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'scroll to focus',
+                            on: {
+                                click: function() {
+                                    const el = this._content.down('treeRemote');
+                                    el.scrollToFocus();
+                                },
+                                context: this
+                            }
                         }
                     ],
 
@@ -166,7 +217,6 @@ home.sc.Tree = class home_sc_Tree {
                             tooltipField: 'color',
                             //showCheckBoxes: true,
                             //selectType: 'simple',
-                            width: 200,
                             rpcLoadFn: 'tree.largeData.load',
                             autoLoad: true,
 

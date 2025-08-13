@@ -16,8 +16,6 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
         this._dataRow = {};     // Verweis auf den Data-Datensatz
         this._primaryKey = null; // PrimaryKey-String
 
-        this._selected = false;
-
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview-element');
         this._dom.htmlDisplayType = 'html';

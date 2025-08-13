@@ -697,6 +697,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
+     * Scrollt zu dem currentEl (dem Element mit Fokus)
+     * @returns {undefined}
+     */
+    scrollToFocus() {
+        if (this._currentEl) {
+            this._currentEl.dom.scrollIntoView();
+        }
+    }
+
+    /**
      * Selektiert ein oder mehrere Elemente
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
@@ -1336,7 +1346,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (!options.skipFilters && !kijs.Data.rowMatchFilters(data[i], this._filters)) {
+            if (!options.skipFilters && !kijs.isEmpty(this._filters) &&
+                    !kijs.Data.rowMatchFilters(data[i], this._filters)) {
                 continue;
             }
 

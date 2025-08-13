@@ -47,6 +47,9 @@ Siehe dazu den neuen Leitfaden ```Daten```.
                                 // wenn es ihn vorher hatte?
         }
 
+- Neue Funktion ```scrollToFocus()```  
+  Scrollt zu dem Element das den Fokus hat.  
+
 - Funktion ```selectByIndex()``` umbenannt zu ```selectByIndexes()```
 
 - Neue Funktion ```selectByPrimaryKeys(primaryKeys, keepExisting=false, preventSelectionChange=false)```  

@@ -4,20 +4,17 @@
 /*
  * TODO
  * [x] Wenn Fokus auf Baum/DataView: blauer Rahmen
- * [ ] Drag & Drop
  * [x] Aktueller DS wieder selektieren nach reload()
  * [x] Bedienung über Tastatur (Pfeiltasten, evtl. Space)
  * [x] Design (expand Button & runde Ecken bei blauem Rahmen)
  * [x] Daten von Remote
  * [o] Dynamisch nachladen reload() bei remoteData?
  * [x] Sollte auch ohne expandedField funktionieren
- * [ ] Scrollen zum 1. selektierten
  * [x] Mehrfachselektion
  * [x] Checkboxen
  * [x] ob expandiert oder nicht muss in einem Array im Tree gespeichert sein,
  *     nicht im Node. Die Daten sollten dabei nicht verändert werden.
  * [x] config expandFilters und function expandByFilters
- * [ ] kijs.gui.ListView, kijs.gui.Tree: valueField sollte evtl. direkt primaryKeyFields setzen?
  * [x] icons für Ordner
  * [-] expand mit doppelklick oder single click
  * [x] expand/collapse event: Abfragemöglichkeit auf Tree
@@ -30,12 +27,14 @@
  * [x] Wenn Sortierung ändert, trotzdem die Selektierung wieder anwenden.
  * [x] Auch bei ListView testen
  * [x] Auch bei Tree testen
- * [ ] Auch Combo testen (BUG bei Local Sort)
+ * [x] Auch Combo testen (BUG bei Local Sort)
  * [x] Selektieren innerhalb von Ordnern
  * [x] Children (plural) umbenennen zu Children. Child (singular) bleibt Child
  * [x] Code vom Element zum Tree zügeln
  * [x] Node umbenennen (node wird bereits zur Bezeichnung von DOM-Nodes verwendet
  * [x] expandAll, collapseAll, collapseByFilters
+ * [x] Scrollen zum Element mit Fokus
+ * [ ] Drag & Drop
  */
 
 // --------------------------------------------------------------
@@ -377,26 +376,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         // Neu Laden
         if (this.isRendered) {
             this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
-        }
-    }
-
-    _expandAllRec(rows, deep) {
-        if (deep === null || deep >= 1) {
-            for (let i=0, len=rows.length; i<len; i++) {
-                // Sind Kinder vorhanden
-                if (!kijs.isEmpty(rows[i][this._childrenField])) {
-                    // expandieren
-                    if (kijs.isEmpty(this._primaryKeyFields)) {
-                        this._expandedKeysRows.push(rows[i]);
-                    } else {
-                        this._expandedKeysRows.push(
-                                kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
-                    }
-
-                    // rekursiver Aufruf
-                    this._expandAllRec(rows[i][this._childrenField], deep ? deep-1 : null);
-                }
-            }
         }
     }
 
@@ -794,7 +773,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (!kijs.Data.rowMatchFilters(data[i], this._filters)) {
+            if (!options.skipFilters && !kijs.isEmpty(this._filters) &&
+                    !kijs.Data.rowMatchFilters(data[i], this._filters)) {
                 continue;
             }
 
@@ -903,6 +883,32 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         }
 
         return newElements;
+    }
+
+    /**
+     * Expandiert die Knoten des Recordsets rekursiv auf
+     * @param {Array} rows
+     * @param {Number|Null} deep
+     * @returns {undefined}
+     */
+    _expandAllRec(rows, deep) {
+        if (deep === null || deep >= 1) {
+            for (let i=0, len=rows.length; i<len; i++) {
+                // Sind Kinder vorhanden
+                if (!kijs.isEmpty(rows[i][this._childrenField])) {
+                    // expandieren
+                    if (kijs.isEmpty(this._primaryKeyFields)) {
+                        this._expandedKeysRows.push(rows[i]);
+                    } else {
+                        this._expandedKeysRows.push(
+                                kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                    }
+
+                    // rekursiver Aufruf
+                    this._expandAllRec(rows[i][this._childrenField], deep ? deep-1 : null);
+                }
+            }
+        }
     }
 
 

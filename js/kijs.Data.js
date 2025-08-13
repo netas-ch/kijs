@@ -93,7 +93,7 @@ kijs.Data = class kijs_Data {
      */
     static filter(rows, filters, childrenField=null) {
         if (kijs.isEmpty(filters)) {
-            return rows;
+            return [];
         }
 
         let newRows = [];
@@ -229,7 +229,7 @@ kijs.Data = class kijs_Data {
      */
     static rowMatchFilters(row, filters) {
         if (kijs.isEmpty(filters)) {
-            return true;
+            return false;
         }
 
         let parts = null;
@@ -277,6 +277,10 @@ kijs.Data = class kijs_Data {
      * @returns {Array}
      */
     static search(rows, filters) {
+        if (kijs.isEmpty(filters)) {
+            return [];
+        }
+
         let indexes = [];
 
         for (let i=0; i<rows.length; i++) {

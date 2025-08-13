@@ -873,7 +873,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         this._listViewEl.applyFilters();
-
+        
         if (this._listViewEl.data.length === 0 && this._remoteSort) {
             this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
         }
