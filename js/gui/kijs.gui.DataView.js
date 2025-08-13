@@ -344,7 +344,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             data = [data];
         }
         this._data = kijs.Array.concat(this._data, data);
-        this._createElements(data, false);
+        this._createElements(data, { skipRemoveElements: true });
     }
 
     /**
@@ -506,7 +506,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    // wird von kijs.gui.Combo verwendet
+    // wird auch von kijs.gui.Combo verwendet
     handleKeyDown(nodeEvent) {
         let isShiftPress = !!nodeEvent.shiftKey;
         let isCtrlPress = !!nodeEvent.ctrlKey;
@@ -614,31 +614,48 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Aktualisiert das DataView
-     * @param {Boolean} [noRpc=false] Soll kein RPC gemacht werden?
+     * @param {Object} [options={}] options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
      * @returns {undefined}
      */
-    reload(noRpc=false) {
+    reload(options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
+
         // Eigenschaften merken, die nach dem Laden wiederhergestellt werden sollen
-        let currentConfig = this._beforeReload();
+        let currentConfig = this._beforeReload(options);
 
         // Daten neu von RPC holen
-        if (this._rpcLoadFn && !noRpc) {
+        if (this._rpcLoadFn && !options.noRpc) {
             this.load()
                 .then((e) => {
                     // Elemente neu erstellen
                     this._createElements(this._data);
 
                     // Eigenschaften wiederherstellen
-                    this._afterReload(currentConfig, true);
+                    this._afterReload(options, currentConfig, true);
                 });
 
         // reload mit lokalen Daten
         } else {
             // Elemente neu erstellen
-            this._createElements(this._data);
+            this._createElements(this._data, options);
 
             // Eigenschaften wiederherstellen
-            this._afterReload(currentConfig, false);
+            this._afterReload(options, currentConfig, false);
 
         }
     }
@@ -1138,32 +1155,45 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // PROTECTED
     /**
      * Stellt die gemerkten Eigenschaften nach dem reload wieder her
+     * @param {Object} options  options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
      * @param {Object} currentConfig
      * @param {Boolean} isRpc Wurde ein RPC gemacht?
      * @returns {undefined}
      */
-    _afterReload(currentConfig, isRpc) {
+    _afterReload(options, currentConfig, isRpc) {
         // Elemente wieder selektieren
-        if (!kijs.isEmpty(this._primaryKeyFields)) {
-            this.selectByPrimaryKeys(currentConfig.selectedKeysRows, false, true);
-        } else {
-            // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
-            // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
-            // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
-            // Spalten angelegt und damit verglichen
-            if (isRpc) {
-                currentConfig.selectedKeysRows = kijs.Data.updateRowsReferences(
-                        currentConfig.selectedKeysRows, this._data);
-            }
+        if (!options.skipSelected) {
+            if (!kijs.isEmpty(this._primaryKeyFields)) {
+                this.selectByPrimaryKeys(currentConfig.selectedKeysRows, false, true);
+            } else {
+                // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
+                // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
+                // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
+                // Spalten angelegt und damit verglichen
+                if (isRpc) {
+                    currentConfig.selectedKeysRows = kijs.Data.updateRowsReferences(
+                            currentConfig.selectedKeysRows, this._data);
+                }
 
-            this.selectByDataRows(currentConfig.selectedKeysRows, false, true);
+                this.selectByDataRows(currentConfig.selectedKeysRows, false, true);
+            }
         }
 
         // Current Element ermitteln und setzen
         this.current = null;
 
         // evtl. Fokus wieder setzen
-        if (this._focusable && currentConfig.hasFocus) {
+        if (this._focusable && !options.skipFocus && currentConfig.hasFocus) {
             this.focus();
         }
 
@@ -1174,9 +1204,20 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Merkt sich vor dem reload die Eigenschaften, die nach dem reload wiederhergestellt
      * werden sollen
+     * @param {Object} options  options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
      * @returns {Object}
      */
-    _beforeReload() {
+    _beforeReload(options) {
         // Eigenschaften merken, die nach dem Laden wiederhergestellt werden sollen
         let currentConfig = {
             hasFocus: false,
@@ -1230,10 +1271,27 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Erstellt die Elemente
      * @param {array|string} data
-     * @param {bool}  removeElements
+     * @param {Object} [options={}] options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
      * @returns {undefined}
      */
-    _createElements(data, removeElements=true) {
+    _createElements(data, options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
+
         // aktuelles Element merken (Element mit Fokus)
         let currentPrimaryKey = '';
         let currentDataRow = null;
@@ -1261,12 +1319,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         // Evtl. sortieren
-        if (!kijs.isEmpty(this._sortFields)) {
+        if (!options.skipSort && !kijs.isEmpty(this._sortFields)) {
             kijs.Data.sort(data, this._sortFields, null, false);
         }
 
         // Bestehende Elemente löschen
-        if (!kijs.isEmpty(this.elements) && removeElements) {
+        if (!options.skipRemoveElements && !kijs.isEmpty(this.elements)) {
             this.removeAll({
                 preventRender: true
             });
@@ -1278,7 +1336,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (!kijs.Data.rowMatchFilters(data[i], this._filters)) {
+            if (!options.skipFilters && !kijs.Data.rowMatchFilters(data[i], this._filters)) {
                 continue;
             }
 
@@ -1286,13 +1344,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             newEl.parent = this;
 
             // Selektierung anwenden
-            if (!kijs.isEmpty(this._primaryKeyFields)) {
-                if (kijs.Array.contains(this._selectedKeysRows, newEl.primaryKey)) {
-                    newEl.selected = true;
-                }
-            } else {
-                if (kijs.Array.contains(this._selectedKeysRows, newEl.dataRow)) {
-                    newEl.selected = true;
+            if (!options.skipSelected) {
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    if (kijs.Array.contains(this._selectedKeysRows, newEl.primaryKey)) {
+                        newEl.selected = true;
+                    }
+                } else {
+                    if (kijs.Array.contains(this._selectedKeysRows, newEl.dataRow)) {
+                        newEl.selected = true;
+                    }
                 }
             }
 

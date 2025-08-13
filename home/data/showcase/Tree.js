@@ -107,6 +107,41 @@ home.sc.Tree = class home_sc_Tree {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
+                            caption: 'expand+select 1.1.2',
+                            on: {
+                                click: function() {
+                                    const el = this._content.down('treeRemote');
+                                    el.expandByFilters({ field:'id', operator:'IN', value:['1','1.1'] });
+                                    el.value = '1.1.2';
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'collapse 1.1',
+                            on: {
+                                click: function() {
+                                    const el = this._content.down('treeRemote');
+                                    el.collapseByFilters({ field:'id', operator:'IN', value:['1.1'] });
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'expand/collapse all',
+                            on: {
+                                click: function() {
+                                    const el = this._content.down('treeRemote');
+                                    if (kijs.isEmpty(el.getExpanded())) {
+                                        el.expandAll();
+                                    } else {
+                                        el.collapseAll();
+                                    }
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
                             caption: 'get value',
                             on: {
                                 click: function() {
@@ -128,13 +163,15 @@ home.sc.Tree = class home_sc_Tree {
                             iconMapField: 'icon',
                             iconColorField: 'color',
                             childrenField: 'children',
-                            expandedField: 'expanded',
                             tooltipField: 'color',
                             //showCheckBoxes: true,
                             //selectType: 'simple',
                             width: 200,
                             rpcLoadFn: 'tree.largeData.load',
-                            autoLoad: true
+                            autoLoad: true,
+
+                            expandedField: 'expanded',
+                            value: '1.1.2'
                         }
                     ]
                 }

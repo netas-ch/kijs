@@ -17,13 +17,12 @@
  * [x] ob expandiert oder nicht muss in einem Array im Tree gespeichert sein,
  *     nicht im Node. Die Daten sollten dabei nicht verändert werden.
  * [x] config expandFilters und function expandByFilters
- * [ ] kijs.gui.ListView: valueField sollte evtl. direkt primaryKeyFields setzen?
- * [o] reload Funktion mit reset Argument
+ * [ ] kijs.gui.ListView, kijs.gui.Tree: valueField sollte evtl. direkt primaryKeyFields setzen?
  * [x] icons für Ordner
  * [-] expand mit doppelklick oder single click
  * [x] expand/collapse event: Abfragemöglichkeit auf Tree
- * [ ] Wenn lokaler value und rpc, wird der value nicht zugewiesen?
- * [ ] value beibehalten, wenn der übergeordnete Knoten zugeklappt wird
+ * [x] Wenn lokaler value und rpc, wird der value nicht zugewiesen?
+ * [x] value beibehalten, wenn der übergeordnete Knoten zugeklappt wird
  * [x] destruct()
  * [x] DataView: Selektionen sind neu in this._selectedKeysRows gespeichert. Muss noch fertig programmiert und getestet werden.
  * [x] DataView: Reload bei RPC testen() --> selektierte anschliessend wieder selektieren
@@ -31,9 +30,12 @@
  * [x] Wenn Sortierung ändert, trotzdem die Selektierung wieder anwenden.
  * [x] Auch bei ListView testen
  * [x] Auch bei Tree testen
+ * [ ] Auch Combo testen (BUG bei Local Sort)
  * [x] Selektieren innerhalb von Ordnern
  * [x] Children (plural) umbenennen zu Children. Child (singular) bleibt Child
- * [ ] Code vom Element zum Tree zügeln
+ * [x] Code vom Element zum Tree zügeln
+ * [x] Node umbenennen (node wird bereits zur Bezeichnung von DOM-Nodes verwendet
+ * [x] expandAll, collapseAll, collapseByFilters
  */
 
 // --------------------------------------------------------------
@@ -134,7 +136,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
             indent: true,
 
-            expandFilters: { prio: 85, fn: 'function', target: this.expandByFilters, context: this }, // Filter, die definieren, welche Knoten die expandiert werden.
+            expandFilters: { prio: 90, fn: 'function', target: this.expandByFilters, context: this }, // Filter, die definieren, welche Knoten die expandiert werden.
 
             value: { prio: 200, target: 'value' }
         });
@@ -231,14 +233,19 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         let val = null;
 
         if (!kijs.isEmpty(this._data) && this._valueField) {
-            let selElements = this.getSelected();
-            if (kijs.isArray(selElements)) {
+            let rows = this.getSelectedRows();
+            if (!kijs.isEmpty(rows)) {
                 val = [];
-                kijs.Array.each(selElements, function(el) {
-                    val.push(el.dataRow[this._valueField]);
+                kijs.Array.each(rows, function(row) {
+                    val.push(row[this._valueField]);
                 }, this);
-            } else if (!kijs.isEmpty(selElements)) {
-                val = selElements.dataRow[this._valueField];
+
+                // bei nur einem Wert direkt den Wert, ohne Array zurückgeben
+                if (val.length === 1) {
+                    val = val[0];
+                } else if (val.length === 0) {
+                    val = null;
+                }
             }
 
         } else {
@@ -290,6 +297,110 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // MEMBERS
     // --------------------------------------------------------------
     /**
+     * Alle Knoten zuklappen
+     * @returns {undefined}
+     */
+    collapseAll() {
+        this._expandedKeysRows = [];
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
+    }
+
+    /**
+     * Expandiert ein oder mehrere Elemente
+     * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die expandiert werden sollen
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
+     *                                                  { field: "Id", value: 123 }
+     *
+     *                                                  Beispiel 2 (mehrere werden expandiert bei nur einem PrimaryKey-Field):
+     *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
+     *
+     *                                                  Beispiel 3 (nur ein Datensatz wird expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    { field: "Name", value: "Muster" },
+     *                                                    { field: "Vorname", value: "Max" }
+     *                                                  ]
+     *
+     *                                                  Beispiel 4 (mehrere Datensätze werden expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    [
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ],[
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ]
+     *                                                  ]
+     *
+     * @returns {undefined}
+     */
+    collapseByFilters(filters) {
+
+        // Die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
+        if (!kijs.isEmpty(this._expandedKeysRows) && !kijs.isEmpty(filters)) {
+
+            let keysRows = [];
+            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                keysRows = rows;
+            } else if (!kijs.isEmpty(rows)) {
+                for (let i=0, len=rows.length; i<len; i++) {
+                    keysRows.push(kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                }
+            }
+
+            if (!kijs.isEmpty(keysRows)) {
+                this._expandedKeysRows = kijs.Array.diff(this._expandedKeysRows, keysRows);
+            }
+        }
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
+    }
+    
+    /**
+     * Alle Knoten aufklappen
+     * @param {Boolean} [deep=null] Tiefe. 1=nur 1. Hierarchiestufe, 2=..., null=alle Stufen
+     * @returns {undefined}
+     */
+    expandAll(deep=null) {
+        this._expandedKeysRows = [];
+
+        this._expandAllRec(this._data, deep);
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
+    }
+
+    _expandAllRec(rows, deep) {
+        if (deep === null || deep >= 1) {
+            for (let i=0, len=rows.length; i<len; i++) {
+                // Sind Kinder vorhanden
+                if (!kijs.isEmpty(rows[i][this._childrenField])) {
+                    // expandieren
+                    if (kijs.isEmpty(this._primaryKeyFields)) {
+                        this._expandedKeysRows.push(rows[i]);
+                    } else {
+                        this._expandedKeysRows.push(
+                                kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                    }
+
+                    // rekursiver Aufruf
+                    this._expandAllRec(rows[i][this._childrenField], deep ? deep-1 : null);
+                }
+            }
+        }
+    }
+
+    /**
      * Expandiert ein oder mehrere Elemente
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die expandiert werden sollen
      *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
@@ -319,30 +430,57 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      * @returns {undefined}
      */
     expandByFilters(filters, keepExisting=false) {
-
         if (!keepExisting) {
             this._expandedKeysRows = [];
         }
 
         // Die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
         if (!kijs.isEmpty(filters)) {
-            kijs.Array.each(this._elements, function(el) {
-                if (el instanceof kijs.gui.dataView.element.Base) {
-                    if (kijs.Data.rowMatchFilters(el.dataRow, filters)) {
-                        if (!kijs.isEmpty(this._primaryKeyFields)) {
-                            this._expandedKeysRows.push(el.primaryKey);
-                        } else {
-                            this._expandedKeysRows.push(el.dataRow);
-                        }
-                    }
+
+            let keysRows = [];
+            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                keysRows = rows;
+            } else if (!kijs.isEmpty(rows)) {
+                for (let i=0, len=rows.length; i<len; i++) {
+                    keysRows.push(kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
                 }
-            }, this);
+            }
+
+            if (!kijs.isEmpty(keysRows)) {
+                if (kijs.isEmpty(this._expandedKeysRows)) {
+                    this._expandedKeysRows = keysRows;
+                } else {
+                    this._expandedKeysRows = kijs.Array.concatUnique(keysRows, this._expandedKeysRows);
+                }
+            }
         }
 
         // Neu Laden
-        this._parentEl.reload(true);
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
     }
 
+    /**
+     * Gibt die expandierten Elemente zurück.
+     * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
+     * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
+     * Dafür besser die Funktionen getExpandedPrimaryKeys() und getExpandedRows() verwenden!
+     * @returns {Array}
+     */
+    getExpanded() {
+        let ret = [];
+        for (let i=0, len=this._elements.length; i<len; i++) {
+            if (this._elements[i].expanded) {
+                ret.push(this._elements[i]);
+            }
+        }
+
+        return ret;
+    }
+    
     /**
      * Gibt die PrimaryKey-Strings der expandierten Elemente als Array zurück
      * Siehe dazu kijs.Data.getPrimaryKey()
@@ -351,29 +489,37 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     getExpandedPrimaryKeys() {
         let primaryKeys = [];
 
-        for (let i=0, len=this._elements.length; i<len; i++) {
-            if (this._elements[i].expanded) {
-                primaryKeys.push(this._elements[i].primaryKey);
+        if (kijs.isEmpty(this._primaryKeyFields)) {
+            throw new kijs.Error(`No primaryKeyFields were defined.`);
+        } else  {
+            for (let i=0, len=this._expandedKeysRows.length; i<len; i++) {
+                primaryKeys.push(kijs.Data.getPrimaryKeyString(
+                        this._expandedKeysRows[i], this._primaryKeyFields));
             }
         }
-
+        
         return primaryKeys;
     }
 
     /**
-     * Gibt die Data-rows der expandierten Elemente zurück
+     * Gibt die dataRows der expandierten Elemente zurück
      * @returns {Array}
      */
     getExpandedRows() {
         let rows = [];
 
-        for (let i=0, len=this._elements.length; i<len; i++) {
-            if (this._elements[i].expanded) {
-                rows.push(this._elements[i].dataRow);
+        if (!kijs.isEmpty(this._expandedKeysRows)) {
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                rows = kijs.Array.clone(this._expandedKeysRows);
+            } else {
+                for (let i=0, len=this._expandedKeysRows.length; i<len; i++) {
+                    rows = filterByPrimaryKeys(this._data, this._expandedKeysRows,
+                            this._primaryKeyFields, this._childrenField);
+                }
             }
         }
 
-        return rows;
+         return rows;
     }
 
     // overwrite
@@ -402,6 +548,141 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     }
 
     // overwrite
+    handleKeyDown(nodeEvent) {
+        let isShiftPress = !!nodeEvent.shiftKey;
+        let isCtrlPress = !!nodeEvent.ctrlKey;
+
+        if (kijs.Navigator.isMac) {
+            isCtrlPress = !!nodeEvent.metaKey;
+        }
+
+        let expanded = this._currentEl ? this._currentEl.expanded : false;
+
+        if (!this.disabled) {
+            switch (nodeEvent.code) {
+                case 'ArrowLeft':
+                    // falls expandiert: zusammenklappen
+                    if (this._currentEl) {
+                        if (expanded) {
+                            this._currentEl.collapse();
+
+                        // falls nicht expandiert und Eltern-Knoten vorhanden:
+                        // den Fokus auf Eltern-Knoten setzen
+                        } else if (this._currentEl.parentElement) {
+                            this.current = this._currentEl.parentElement;
+                            if (this._focusable) {
+                                this._currentEl.focus();
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+
+                        // falls nicht expandiert und kein Eltern-Knoten vorhanden:
+                        // den Fokus auf vorherigen Knoten setzen
+                        } else {
+                            const prev = this._currentEl.previous;
+                            if (prev) {
+                                this.current = prev;
+                                if (this._focusable) {
+                                    prev.focus();
+                                }
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowUp':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this, true);
+
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowRight':
+                    if (this._currentEl) {
+                        // falls nicht expandiert und Kinder: expandieren
+                        if (!expanded && this._currentEl.hasChildren) {
+                            this._currentEl.expand();
+
+                        // sonst zum nächsten Knoten gehen
+                        } else {
+                            const next = this._currentEl.next;
+                            if (next) {
+                                this.current = next;
+                                if (this._focusable) {
+                                    next.focus();
+                                }
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowDown':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this);
+
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'Space':
+                    this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                    break;
+
+            }
+        }
+    }
+
+    // overwrite
     selectByFilters(filters, keepExisting=false, preventSelectionChange=false) {
         let rows = kijs.Data.filter(this._data, filters, this._childrenField);
 
@@ -414,91 +695,40 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         return ret;
     }
 
-// TODO: Unschön !!!!!!!!!!!!!!!¨¨¨
-    selectEl(el, shift, ctrl) {
-        this._selectEl(el, shift, ctrl);
-    }
-
 
     // PROTECTED
-    // overwrite
-    /*_afterReload(currentConfig, isRpc) {
-        // TODO: Funktion entspricht noch der vom DataView: Kann evtl. hier gelöscht werden.
-
-        // Elemente wieder selektieren
-        if (!kijs.isEmpty(this._primaryKeyFields)) {
-            this.selectByPrimaryKeys(currentConfig.selectedKeysRows, false, true);
-        } else {
-            // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
-            // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
-            // Aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
-            // Spalten angelegt und damit verglichen
-            if (isRpc) {
-                currentConfig.selectedKeysRows = kijs.Data.updateRowsReferences(
-                        currentConfig.selectedKeysRows, this._data);
-            }
-
-            this.selectByDataRows(currentConfig.selectedKeysRows, false, true);
-        }
-
-        // Current Element ermitteln und setzen
-        this.current = null;
-
-        // evtl. Fokus wieder setzen
-        if (this._focusable && currentConfig.hasFocus) {
-            this.focus();
-        }
-
-        // zur vorherigen Position scrollen
-        this._innerDom.node.scrollTo(currentConfig.scrollPosition);
-    }*/
-
-
-    // overwrite
-    /*_beforeReload() {
-        // TODO: Kann evtl. gelöscht werden, weil expandedPrimaryKeys nicht nötig ist.
-
-        // Eigenschaften merken, die nach dem Laden wiederhergestellt werden sollen
-        let currentConfig = {
-            hasFocus: false,
-            expandedPrimaryKeys: null,
-            expandedDataRows: null,
-            selectedPrimaryKeys: null,
-            selectedDataRows: null,
-            scrollPosition: null
-        };
-
-        // Ist der Fokus auf dem DataView?
-        currentConfig.hasFocus = this.hasFocus;
-
-        // Position der Scrollbars merken
-        currentConfig.scrollPosition = {
-            top: this._innerDom.node.scrollTop,
-            left: this._innerDom.node.scrollLeft,
-            behavior: 'instant'
-        };
-
-        // expandierte und selektierte Elemente merken
-        // Zuerst via PrimaryKey versuchen
-        if (!kijs.isEmpty(this._primaryKeyFields)) {
-            currentConfig.expandedPrimaryKeys = this.getExpandedPrimaryKeys();
-            currentConfig.selectedPrimaryKeys = this.getSelectedPrimaryKeys();
-
-        // sonst muss die ganze dataRow verglichen werden
-        } else {
-            currentConfig.expandedDataRows = this.getExpandedRows();
-            currentConfig.selectedDataRows = this.getSelectedRows();
-
-        }
-
-        return currentConfig;
-    }*/
-
-    // overwrite
-    _createElements(data, removeElements=true) {
+    /**
+     * Erstellt die Elemente
+     * overwrite
+     * @param {array|string} data
+     * @param {Object} [options={}] options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipExpandedFromExpandedField: false  // Soll nicht gemäss expandedField
+     *                                  // expandiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
+     * @returns {undefined}
+     */
+    _createElements(data, options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipExpandedFromExpandedField = !!options.skipExpandedFromExpandedField;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
 
         // Sollen gemäss recordset expandiert werden?
-        let expandFromData = !!this._expandedField && kijs.isEmpty(this._expandedKeysRows);
+        if (kijs.isEmpty(this._expandedField) && !kijs.isEmpty(this._expandedKeysRows)) {
+            options.skipExpandedFromExpandedField = true;
+        }
 
         // aktuelles Element merken (Element mit Fokus)
         let currentPrimaryKey = '';
@@ -517,12 +747,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         }
 
         // Evtl. sortieren
-        if (this._sortFields) {
+        if (!options.skipSort && this._sortFields) {
             kijs.Data.sort(data, this._sortFields, this._childrenField, false);
         }
 
         // Bestehende Elemente löschen
-        if (this.elements && removeElements) {
+        if (!options.skipRemoveElements && this.elements) {
             this.removeAll({
                 preventRender: true
             });
@@ -530,7 +760,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         }
         
         // Neue Elemente generieren
-        let newElements = this._createElementsRec(data, 0, null, currentPrimaryKey, currentDataRow, expandFromData);
+        let newElements = this._createElementsRec(data, 0, null, currentPrimaryKey, currentDataRow, options);
         
         // neue Elemente einfügen
         this.add(newElements);
@@ -540,14 +770,25 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      * Neue Elemente Rekursiv generieren
      * @param {Array} data
      * @param {Number} depth  Stufe in der Hierarchie (0=oberste Stufe)
-     * @param {kijs.gui.dataView.element.Tree} parentNode
+     * @param {kijs.gui.dataView.element.Tree} parentElement
      * @param {String} currentPrimaryKey
      * @param {Array} currentDataRow
-     * @param {Boolean} expandFromData Sollen die expandierten Elemente aus dem
-     *                                 Recordset ermittelt werden?
+     * @param {Object} options  options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipExpandedFromExpandedField: false  // Soll nicht gemäss expandedField
+     *                                  // expandiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *      }
      * @returns {Array}
      */
-    _createElementsRec(data, depth, parentNode, currentPrimaryKey, currentDataRow, expandFromData) {
+    _createElementsRec(data, depth, parentElement, currentPrimaryKey, currentDataRow, options) {
         let newElements = [];
 
         for (let i=0, len=data.length; i<len; i++) {
@@ -558,7 +799,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             }
 
             // Primärschlüssel oder rows der expandierten Elemente aus den Daten holen
-            if (expandFromData && data[i][this._expandedField]) {
+            if (!options.skipExpandedFromExpandedField && data[i][this._expandedField]) {
                 // Falls vorhanden, die primaryKeys merken
                 if (!kijs.isEmpty(this._primaryKeyFields)) {
                     this._expandedKeysRows.push(
@@ -574,7 +815,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             const newEl = this._createElement({ 
                 dataRow: data[i],
                 depth: depth,
-                parentNode: parentNode
+                parentElement: parentElement
             });
             newEl.parent = this;
 
@@ -653,7 +894,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                             newEl,
                             currentPrimaryKey,
                             currentDataRow,
-                            expandFromData);
+                            options);
 
                     newElements = kijs.Array.concat(newElements, newChildElements);
                 }

@@ -48,6 +48,7 @@ foreach ($requests as $request) {
                 
                 $berufe = file('../testData/beruf.csv');
                 foreach ($berufe as $beruf) {
+                    $count++;
                     $beruf = explode(';', trim($beruf));
                     
                     if ($noRemoteSort) {
@@ -59,8 +60,6 @@ foreach ($requests as $request) {
                             $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
                         }
                     }
-                    
-                    $count++;
                 }
 
                 if ($query) {
@@ -819,6 +818,7 @@ foreach ($requests as $request) {
             $response->responseData->config = new stdClass();
             $response->responseData->config->data = $rows;
             $response->responseData->config->value = '15.15.15';
+            //$response->responseData->config->expandFilters = json_decode('{ "field":"id", "operator":"IN", "value":["1","1.1"] }');
             break;
 
         case 'treeOld.load':

@@ -15,7 +15,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
 
         this._depth = 0;    // Stufe in der Hierarchie (0=oberste Stufe)
 
-        this._parentNodeEl = null; // Verweis auf den Eltern-Knoten
+        this._parentElementEl = null; // Verweis auf den Eltern-Knoten
 
 
         // Standard-config-Eigenschaften mergen
@@ -26,7 +26,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             depth: true,
-            parentNode: { target: '_parentNodeEl' }
+            parentElement: { target: '_parentElementEl' }
         });
 
         // Config anwenden
@@ -113,7 +113,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
      * // Verweis auf den übergeordneten Knoten
      * @returns {kijs.gui.dataView.element.Tree}
      */
-    get parentNodeEl() { return this._parentNodeEl; }
+    get parentElement() { return this._parentElementEl; }
 
 
 
@@ -127,7 +127,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
     collapse() {
         if (this.expanded) {
             this.expanded = false;
-            this._parentEl.reload(true);
+            this._parentEl.reload({ noRpc:true, skipExpandedFromExpandedField:true });
             this.raiseEvent('collapse');
         }
     }
@@ -139,7 +139,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
     expand() {
         if (!this.expanded) {
             this.expanded = true;
-            this._parentEl.reload(true);
+            this._parentEl.reload({ noRpc:true, skipExpandedFromExpandedField:true });
             this.raiseEvent('expand');
         }
 
@@ -290,9 +290,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
 
         this.tooltip = tooltip;
 
-        // Navigation mit Pfeiltasten
-        this.on('keyDown', this.#onKeyDown, this);
-
         this.removeAll();
         this.add([expandIconEl, iconEl, captionEl]);
     }
@@ -310,56 +307,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         // Bubbeling und native Listeners verhindern
         e.nodeEvent.stopPropagation();
         e.nodeEvent.preventDefault();
-    }
-
-    #onKeyDown(e) {
-        let isShiftPress = !!e.nodeEvent.shiftKey;
-        let isCtrlPress = !!e.nodeEvent.ctrlKey;
-
-        if (kijs.Navigator.isMac) {
-            isCtrlPress = !!e.nodeEvent.metaKey;
-        }
-
-        let expanded = this.expanded;
-
-        if (!this.disabled) {
-            switch (e.nodeEvent.code) {
-                // falls expandiert: zusammenklappen
-                // sonst den Fokus auf Eltern-Knoten setzen
-                case 'ArrowLeft':
-                    if (expanded) {
-                        this.collapse();
-
-                    } else if (this._parentNodeEl) {
-                        this._parentEl.current = this._parentNodeEl;
-                        if (this._parentEl.focusable) {
-                            this._parentNodeEl.focus();
-                        }
-
-                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._parentEl.selectType))) {
-                            this._parentEl.selectEl(this._parentNodeEl, isShiftPress, isCtrlPress);
-                        }
-
-                    }
-
-                    // Bubbeling und native Listeners verhindern
-                    e.nodeEvent.stopPropagation();
-                    e.nodeEvent.preventDefault();
-                    break;
-
-                // expandieren
-                case 'ArrowRight':
-                    if (!expanded) {
-                        this.expand();
-                    }
-
-                    // Bubbeling und native Listeners verhindern
-                    e.nodeEvent.stopPropagation();
-                    e.nodeEvent.preventDefault();
-                    break;
-
-            }
-        }
     }
 
 };

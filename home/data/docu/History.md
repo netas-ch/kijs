@@ -36,8 +36,16 @@ Siehe dazu den neuen Leitfaden ```Daten```.
   Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String 
   zurückgegeben sonst ein Array mit den Keys-Strings.  
 
-- Neue Funktion ```reload(noRpc=false)```
-  Lädt das DataView neu
+- Neue Funktion ```reload(options={})```
+  Lädt das DataView neu  
+
+        options = {
+         noRpc: false,          // Soll kein RPC gemacht werden?
+         skipSelected: false    // Sollen wieder die gleichen Elemente wie vorher
+                                // selektiert werden?
+         skipFocus: false,      // Soll wieder das DataView den Fokus erhalten,
+                                // wenn es ihn vorher hatte?
+        }
 
 - Funktion ```selectByIndex()``` umbenannt zu ```selectByIndexes()```
 
@@ -55,6 +63,10 @@ Siehe dazu den neuen Leitfaden ```Daten```.
 - Funktion ```selectByPrimaryKey()``` umbenannt zu ```selectByPrimaryKeys()```  
 
 **UPDATE TIPP:**: Projekt durchsuchen nach ```selectByPrimaryKey``` und umbenennen.  
+
+- Funktion ```createElements(data, removeElements=true)```:  
+  Argument ```removeElements``` durch ```options``` ersetzt:  ```createElements(data, options={})```  
+  ```options``` entspricht dem ```options``` bei ```reload(options={})```.  
 
 - Funktion ```_createElement(dataRow`, index)```:
   Argument ```index``` entfernt und Argument ```dataRow``` durch ```config``` 

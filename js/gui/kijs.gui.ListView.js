@@ -127,21 +127,26 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
     get value() {
         let val = null;
-        
+
         if (!kijs.isEmpty(this._data) && this._valueField) {
-            let selElements = this.getSelected();
-            if (kijs.isArray(selElements)) {
+            let rows = this.getSelectedRows();
+            if (!kijs.isEmpty(rows)) {
                 val = [];
-                kijs.Array.each(selElements, function(el) {
-                    val.push(el.dataRow[this._valueField]);
+                kijs.Array.each(rows, function(row) {
+                    val.push(row[this._valueField]);
                 }, this);
-            } else if (!kijs.isEmpty(selElements)) {
-                val = selElements.dataRow[this._valueField];
+
+                // bei nur einem Wert direkt den Wert, ohne Array zurückgeben
+                if (val.length === 1) {
+                    val = val[0];
+                } else if (val.length === 0) {
+                    val = null;
+                }
             }
-            
+
         } else {
             val = this._value;
-            
+
         }
 
         return val;
