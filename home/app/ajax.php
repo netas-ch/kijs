@@ -10,26 +10,26 @@ $requests = json_decode(file_get_contents("php://input"));
 foreach ($requests as $request) {
     $response = new stdClass();
     $response->tid = $request->tid;
-    $response->responseData = new stdClass();
+    $response->responseData = $request->requestData;
 
     switch ($request->remoteFn) {
 
         case 'naviDocu.load':
-            $nodeId = $request->requestData->nodeId;
-            $nodes = _readNavigationTree($nodeId, 'data/docu');
-            $response->responseData->tree = $nodes;
+            $rows = _getNavigationRowsRec('data/docu', 'treeDocu', null);
+            $response->responseData->config = new stdClass();
+            $response->responseData->config->data = $rows;
             break;
 
         case 'naviShowcase.load':
-            $nodeId = $request->requestData->nodeId;
-            $nodes = _readNavigationTree($nodeId, 'data/showcase');
-            $response->responseData->tree = $nodes;
+            $rows = _getNavigationRowsRec('data/showcase', 'treeShowcase', null);
+            $response->responseData->config = new stdClass();
+            $response->responseData->config->data = $rows;
             break;
 
         case 'naviTest.load':
-            $nodeId = $request->requestData->nodeId;
-            $nodes = _readNavigationTree($nodeId, 'data/test');
-            $response->responseData->tree = $nodes;
+            $rows = _getNavigationRowsRec('data/test', 'treeTest', null);
+            $response->responseData->config = new stdClass();
+            $response->responseData->config->data = $rows;
             break;
 
         default:
@@ -43,15 +43,13 @@ print(json_encode($responses));
 
 
 
-
-
 // ------------------------------------
 // Hilfsfunktionen
 // ------------------------------------
-function _readNavigationTree($nodeId, $rootDir) {
+function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
     $excludeFiles = ['.', '..'];
 
-    $nodes = [];
+    $rows = [];
 
     $dirPath = $rootDir;
     if ($nodeId) {
@@ -78,6 +76,8 @@ function _readNavigationTree($nodeId, $rootDir) {
             $pathWithTimestamp = $path . '?v=' . filemtime('../' . $path);
 
             $userData  = new stdClass();
+            $userData->nodeId = $path;
+            $userData->treeName = $treeName;
             $userData->path = $pathWithTimestamp;
             $userData->filename = $filename;
             $userData->filetype = pathinfo($path, PATHINFO_EXTENSION);
@@ -118,25 +118,25 @@ function _readNavigationTree($nodeId, $rootDir) {
 
             }
 
-
-            $node = new stdClass();
-            $node->caption = $userData->caption;
-            $node->nodeId = $path;
+            $row = [];
+            $row['caption'] = $userData->caption;
+            $row['nodeId'] = $path;
             if (!empty($userData->iconMap)) {
-                $node->iconMap = $userData->iconMap;
+                $row['iconMap'] = $userData->iconMap;
             }
-            $node->leaf = $userData->filetype !== '';
-            $node->userData = $userData;
-            $nodes[] = $node;
+            $row['allowChildren'] = $userData->filetype === '';
+            $row['userData'] = $userData;
+            $row['children'] = _getNavigationRowsRec($rootDir, $treeName, $path);
+            $rows[] = $row;
         }
 
         closedir($handle);
     }
 
-    // Sortieren
-    usort($nodes, function($a, $b) {
-        return strcmp(strtolower($a->caption ?? ''), strtolower($b->caption ?? ''));
+    // rows Sortieren
+    usort($rows, function($a, $b) {
+        return strcmp(strtolower($a['caption'] ?? ''), strtolower($b['caption'] ?? ''));
     });
 
-    return $nodes;
+    return $rows;
 }

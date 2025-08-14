@@ -53,6 +53,9 @@ Siehe dazu den neuen Leitfaden ```Daten```.
                                    // werden?
         }
 
+- Neue Funtion ```reassignCurrent()```  
+  Ermittelt das Element mit Fokus neu.  Standard=1. Selektiertes Element.  
+
 - Neue Funktion ```scrollToFocus()```  
   Scrollt zu dem Element das den Fokus hat.  
 

@@ -72,6 +72,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                                         // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                        // 'manual': Die Datensätze werden manuell selektiert
             rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
             rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
             autoSave: true,     // Automatisches Speichern bei Änderungen
@@ -373,7 +374,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Boolean} [preventSelectionChange=false]    Soll das SelectionChange-Event verhindert werden?
      * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    clearSelections(preventSelectionChange) {
+    clearSelections(preventSelectionChange=false) {
         if (!kijs.isEmpty(this._primaryKeyFields)) {
             return this.unselectByPrimaryKeys(this._selectedKeysRows, preventSelectionChange);
         } else {
@@ -652,6 +653,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this._afterReload(options, currentConfig, false);
 
         }
+    }
+
+    // Element mit Fokus neu ermitteln
+    reassignCurrent() {
+        this._currentEl = null;
+        this.current = null;
     }
 
     save() {
@@ -1475,6 +1482,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 ctrl = true;
                 break;
 
+            case 'manual':
             case 'none':
             default:
                 return;

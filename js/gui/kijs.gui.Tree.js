@@ -1,42 +1,5 @@
 /* global kijs, this */
 
-
-/*
- * TODO
- * [x] Wenn Fokus auf Baum/DataView: blauer Rahmen
- * [x] Aktueller DS wieder selektieren nach reload()
- * [x] Bedienung über Tastatur (Pfeiltasten, evtl. Space)
- * [x] Design (expand Button & runde Ecken bei blauem Rahmen)
- * [x] Daten von Remote
- * [ ] Dynamisch nachladen via RPC?
- * [x] Sollte auch ohne expandedField funktionieren
- * [x] Mehrfachselektion
- * [x] Checkboxen
- * [x] ob expandiert oder nicht muss in einem Array im Tree gespeichert sein,
- *     nicht im Node. Die Daten sollten dabei nicht verändert werden.
- * [x] config expandFilters und function expandByFilters
- * [x] icons für Ordner
- * [-] expand mit doppelklick oder single click
- * [x] expand/collapse event: Abfragemöglichkeit auf Tree
- * [x] Wenn lokaler value und rpc, wird der value nicht zugewiesen?
- * [x] value beibehalten, wenn der übergeordnete Knoten zugeklappt wird
- * [x] destruct()
- * [x] DataView: Selektionen sind neu in this._selectedKeysRows gespeichert. Muss noch fertig programmiert und getestet werden.
- * [x] DataView: Reload bei RPC testen() --> selektierte anschliessend wieder selektieren
- * [x] DataView: _afterReload() selektiert nicht
- * [x] Wenn Sortierung ändert, trotzdem die Selektierung wieder anwenden.
- * [x] Auch bei ListView testen
- * [x] Auch bei Tree testen
- * [x] Auch Combo testen (BUG bei Local Sort)
- * [x] Selektieren innerhalb von Ordnern
- * [x] Children (plural) umbenennen zu Children. Child (singular) bleibt Child
- * [x] Code vom Element zum Tree zügeln
- * [x] Node umbenennen (node wird bereits zur Bezeichnung von DOM-Nodes verwendet
- * [x] expandAll, collapseAll, collapseByFilters
- * [x] Scrollen zum Element mit Fokus
- * [x] Drag & Drop
- */
-
 // --------------------------------------------------------------
 // kijs.gui.Tree
 // --------------------------------------------------------------

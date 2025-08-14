@@ -141,15 +141,24 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.TreeOld',
+                    xtype: 'kijs.gui.Tree',
                     name: 'treeShowcase',
+                    selectType: 'manual',
+                    primaryKeyFields: ['nodeId'],
+                    valueField: 'nodeId',
+                    captionField: 'caption',
+                    iconMapField: 'iconMap',
+                    allowChildrenField: 'allowChildren',
+                    childrenField: 'children',
                     rpc: 'app',
                     rpcLoadFn: 'naviShowcase.load',
+                    autoLoad: true,
                     style: {
                         flex: 1
                     },
                     on: {
-                        select: this.#onTreeNodeSelect,
+                        keyDown: this.#onTreeKeyDown,
+                        elementClick: this.#onTreeElementClick,
                         context: this
                     }
                 }
@@ -163,15 +172,24 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.TreeOld',
+                    xtype: 'kijs.gui.Tree',
                     name: 'treeTest',
+                    selectType: 'manual',
+                    primaryKeyFields: ['nodeId'],
+                    valueField: 'nodeId',
+                    captionField: 'caption',
+                    iconMapField: 'iconMap',
+                    allowChildrenField: 'allowChildren',
+                    childrenField: 'children',
                     rpc: 'app',
                     rpcLoadFn: 'naviTest.load',
+                    autoLoad: true,
                     style: {
                         flex: 1
                     },
                     on: {
-                        select: this.#onTreeNodeSelect,
+                        keyDown: this.#onTreeKeyDown,
+                        elementClick: this.#onTreeElementClick,
                         context: this
                     }
                 }
@@ -185,15 +203,24 @@ home.App = class home_App {
             cls: 'kijs-flexcolumn',
             elements: [
                 {
-                    xtype: 'kijs.gui.TreeOld',
+                    xtype: 'kijs.gui.Tree',
                     name: 'treeDocu',
+                    selectType: 'manual',
+                    primaryKeyFields: ['nodeId'],
+                    valueField: 'nodeId',
+                    captionField: 'caption',
+                    iconMapField: 'iconMap',
+                    allowChildrenField: 'allowChildren',
+                    childrenField: 'children',
                     rpc: 'app',
                     rpcLoadFn: 'naviDocu.load',
+                    autoLoad: true,
                     style: {
                         flex: 1
                     },
                     on: {
-                        select: this.#onTreeNodeSelect,
+                        keyDown: this.#onTreeKeyDown,
+                        elementClick: this.#onTreeElementClick,
                         context: this
                     }
                 }
@@ -251,6 +278,83 @@ home.App = class home_App {
                 }
             ]
         });
+    }
+
+    _getTreeByName(name) {
+        let el = null;
+
+        switch (name) {
+            case 'treeDocu':
+                el = this._tabDocu.downX('kijs.gui.Tree');
+                break;
+
+            case 'treeShowcase':
+                el = this._tabShowcase.downX('kijs.gui.Tree');
+                break;
+
+            case 'treeTest':
+                el = this._tabTest.downX('kijs.gui.Tree');
+                break;
+
+        }
+
+        return el;
+    }
+
+    _openFocusTreeElement(focusEl) {
+        // Ordner: Auf-/Zuklappen
+        if (focusEl.hasChildren) {
+            if (focusEl.expanded) {
+                focusEl.collapse();
+            } else {
+                focusEl.expand();
+            }
+
+        // Datei
+        } else {
+            let userData = focusEl.dataRow['userData'];
+
+            // Wenn die Datei bereits offen ist: selektieren
+            if (this._content.down(userData.path)) {
+                this._content.currentName = userData.path;
+
+            // sonst öffnen
+            } else {
+                // Neues Tab erstellen
+                let tabCont = new home.TabContainer({
+                    app: this,
+                    name: userData.path,
+                    tabCaption: userData.caption,
+                    tabClosable: true,
+                    userData: userData,
+                    on: {
+                        destruct: this.#onContentTabContainerDestruct,
+                        context: this
+                    }
+                });
+                if (userData.iconMap) {
+                    tabCont.tabButtonEl.iconMap = userData.iconMap;
+                }
+                if (userData.filetype) {
+                    tabCont.filetype = userData.filetype;
+                }
+                if (userData.namespace) {
+                    tabCont.namespace = userData.namespace;
+                }
+                if (userData.className) {
+                    tabCont.className = userData.className;
+                }
+                this._content.add(tabCont);
+                this._content.currentName = userData.path;
+
+                // html/js/md laden und ausführen
+                tabCont.reset();
+
+            }
+
+            // TreeElement selektieren
+            focusEl.parent.select(focusEl, false, false);
+        }
     }
 
 
@@ -397,7 +501,37 @@ home.App = class home_App {
     }
 
     #onContentTabChange(e) {
-        // TODO: im tree den passenden Node selektieren
+        let oldTreeEl = null;
+        let newTreeEl = null;
+
+        // betroffene Trees ermitteln
+        if (!kijs.isEmpty(e.oldEl.userData) && e.oldEl.userData.treeName) {
+            oldTreeEl = this._getTreeByName(e.oldEl.userData.treeName);
+        }
+        if (!kijs.isEmpty(e.currentEl.userData) && e.currentEl.userData.treeName) {
+            newTreeEl = this._getTreeByName(e.currentEl.userData.treeName);
+        }
+
+        // vorheriges und aktuelles Tab sind im gleichen Tree
+        if (oldTreeEl === newTreeEl) {
+            newTreeEl.selectByPrimaryKeys(e.currentEl.userData.nodeId, false, false);
+            newTreeEl.reassignCurrent();
+            newTreeEl.scrollToFocus();
+
+        // vorheriges und aktuelles Tab sind in unterschiedlichen Trees
+        } else {
+            // alter Tree aktualisieren
+            if (oldTreeEl) {
+                oldTreeEl.clearSelections(false);
+            }
+
+            // neuer Tree aktualisieren
+            if (newTreeEl) {
+                newTreeEl.selectByPrimaryKeys(e.currentEl.userData.nodeId, false, false);
+                newTreeEl.reassignCurrent();
+                newTreeEl.scrollToFocus();
+            }
+        }
     }
 
     #onContentTabContainerDestruct(e) {
@@ -406,72 +540,24 @@ home.App = class home_App {
         }
     }
 
-    #onTreeNodeSelect(e) {
-        let node = null;
+    #onTreeElementClick(e) {
+        let focusEl = this._getTreeByName(e.element.name).current;
 
-        switch (e.element.name) {
-            case 'treeDocu':
-                node = this._tabDocu.downX('kijs.gui.TreeOld').getSelected();
-                break;
-
-            case 'treeShowcase':
-                node = this._tabShowcase.downX('kijs.gui.TreeOld').getSelected();
-                break;
-
-            case 'treeTest':
-                node = this._tabTest.downX('kijs.gui.TreeOld').getSelected();
-                break;
-
+        if (focusEl) {
+            this._openFocusTreeElement(focusEl);
         }
+    }
 
-        // Ordner: Auf-/Zuklappen
-        if (!node.leaf) {
-            if (node.expanded) {
-                node.collapse();
-            } else {
-                node.expand();
-            }
+    #onTreeKeyDown(e) {
+        switch (e.nodeEvent.code) {
+            case 'Enter':
+            case 'Space':
+                let focusEl = this._getTreeByName(e.element.name).current;
 
-        // Datei
-        } else {
-
-            // Wenn die Datei bereits offen ist: selektieren
-            if (this._content.down(node.userData.path)) {
-                this._content.currentName = node.userData.path;
-
-            // sonst öffnen
-            } else {
-                // Neues Tab erstellen
-                let tabCont = new home.TabContainer({
-                    app: this,
-                    name: node.userData.path,
-                    tabCaption: node.userData.caption,
-                    tabClosable: true,
-                    on: {
-                        destruct: this.#onContentTabContainerDestruct,
-                        context: this
-                    }
-                });
-                if (node.userData.iconMap) {
-                    tabCont.tabButtonEl.iconMap = node.userData.iconMap;
+                if (focusEl) {
+                    this._openFocusTreeElement(focusEl);
                 }
-                if (node.userData.filetype) {
-                    tabCont.filetype = node.userData.filetype;
-                }
-                if (node.userData.namespace) {
-                    tabCont.namespace = node.userData.namespace;
-                }
-                if (node.userData.className) {
-                    tabCont.className = node.userData.className;
-                }
-                this._content.add(tabCont);
-                this._content.currentName = node.userData.path;
-
-                // html/js/md laden und ausführen
-                tabCont.reset();
-                
-            }
-
+                break;
         }
     }
 

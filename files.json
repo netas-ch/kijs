@@ -68,7 +68,6 @@
    "js/gui/container/tab/kijs.gui.container.tab.Container.js",
    "js/gui/container/kijs.gui.container.Tab.js",
 
-   "js/gui/kijs.gui.TreeOld.js",
    "js/gui/kijs.gui.PanelBar.js",
    "js/gui/kijs.gui.Resizer.js",
    "js/gui/kijs.gui.Splitter.js",
