@@ -8,7 +8,7 @@
  * [x] Bedienung über Tastatur (Pfeiltasten, evtl. Space)
  * [x] Design (expand Button & runde Ecken bei blauem Rahmen)
  * [x] Daten von Remote
- * [o] Dynamisch nachladen reload() bei remoteData?
+ * [ ] Dynamisch nachladen via RPC?
  * [x] Sollte auch ohne expandedField funktionieren
  * [x] Mehrfachselektion
  * [x] Checkboxen
@@ -34,7 +34,7 @@
  * [x] Node umbenennen (node wird bereits zur Bezeichnung von DOM-Nodes verwendet
  * [x] expandAll, collapseAll, collapseByFilters
  * [x] Scrollen zum Element mit Fokus
- * [ ] Drag & Drop
+ * [x] Drag & Drop
  */
 
 // --------------------------------------------------------------
@@ -53,6 +53,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._captionField = null;
         this._captionHtmlDisplayType = 'code';
         this._valueField = null;
+
+        this._elementDdTargetConfig = null; // Konfiguration Ordner, damit ein Drop
+        //                                  // in den Ordner gemacht werden kann.
 
         // Icons für expand-Button
         this._expandButtonCollapsedIconMap = 'kijs.iconMap.Fa.caret-right';
@@ -96,7 +99,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             elementXType: 'kijs.gui.dataView.element.Tree',
-            selectType: 'single'
+            selectType: 'single',
+            ddName: kijs.uniqId('tree.element'),
+            ddPosBeforeFactor: 0.5,
+            ddPosAfterFactor: 0.8
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -135,6 +141,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
             indent: true,
 
+            elementDdTargetConfig: true,
+
             expandFilters: { prio: 90, fn: 'function', target: this.expandByFilters, context: this }, // Filter, die definieren, welche Knoten die expandiert werden.
 
             value: { prio: 200, target: 'value' }
@@ -172,6 +180,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     get collapsedIconMapField() { return this._collapsedIconMapField; }
     set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
+
+    get elementDdTargetConfig() {
+        return this._elementDdTargetConfig;
+    }
+    set elementDdTargetConfig(val) {
+        this._elementDdTargetConfig = val;
+    }
 
     get expandButtonCollapsedIconMap() { return this._expandButtonCollapsedIconMap; }
     set expandButtonCollapsedIconMap(val) { this._expandButtonCollapsedIconMap = val; }
@@ -674,6 +689,47 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         return ret;
     }
 
+    // overwrite
+    get sortable() { return this._sortable; }
+    // overwrite
+    set sortable(val) {
+        this._sortable = !!val;
+
+        // Evtl. ddTarget erstellen
+        if (val && !this._ddTarget) {
+            this.ddTarget = {
+                posBeforeFactor: this._ddPosBeforeAfterFactor,
+                posAfterFactor: this._ddPosBeforeAfterFactor
+            };
+            this._ddTarget.on('drop', this.#onTargetDrop, this);
+        }
+
+        // Mapping
+        if (val) {
+            this._ddTarget.mapping[this._ddName] = {
+                allowMove: true,
+                allowCopy: false,
+                allowLink: false
+            };
+        } else {
+            delete this._ddTarget.mapping[this._ddName];
+        }
+
+        // evtl. ddTarget löschen
+        if (this._ddTarget && kijs.isEmpty(this._ddTarget.mapping)) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+        }
+
+        // Elements neu laden
+        if (!kijs.isEmpty(this._elements)) {
+            this.reload({ noRpc:true });
+            this._createElements(this._data);
+        }
+    }
+
 
     // PROTECTED
     /**
@@ -692,6 +748,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @returns {undefined}
      */
@@ -764,6 +821,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @returns {Array}
      */
@@ -810,6 +868,31 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     name: this._ddName
                 };
                 newEl.ddSource.on('drop', this.#onSourceDrop, this);
+            }
+
+            if (this._elementDdTargetConfig) {
+                newEl.ddTarget = this._elementDdTargetConfig;
+            } else if (this._sortable) {
+                if (newEl.allowChildren) {
+                    let ddTarget = {
+                        posBeforeFactor: this._ddPosBeforeFactor,
+                        posAfterFactor: this._ddPosAfterFactor,
+                        on: {
+                            drop: this.#onTargetChildDrop,
+                            context: this
+                        }
+                    };
+
+                    ddTarget.mapping = {};
+                    ddTarget.mapping[this._ddName] = {
+                        allowMove: true,
+                        allowCopy: false,
+                        allowLink: false,
+                        disableMarker: true
+                    };
+
+                    newEl.ddTarget = ddTarget;
+                }
             }
 
             // click-Event
@@ -922,38 +1005,116 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     // overwrite
     #onSourceDrop(e) {
+        let dataRows = [];
+
         // Source Element
         let sourceEl = e.source.ownerEl;
+
+        let targetOwnerTree = e.target.ownerEl;
+        if (targetOwnerTree instanceof kijs.gui.dataView.element.Tree) {
+            targetOwnerTree = targetOwnerTree.parent;
+        }
 
         // Source dataRow merken, damit beim Ziel wieder eingefügt werden kann
         kijs.gui.DragDrop.data.sourceDataRow = sourceEl.dataRow;
 
         if (e.source.name === this._ddName && e.operation === 'move') {
+            // betroffene dataRows ermitteln
+            if (sourceEl.parentElement) {
+                dataRows = sourceEl.parentElement.dataRow[this._childrenField];
+            } else {
+                dataRows = this._data;
+            }
+
             // Zeile aus Source entfernen
-            kijs.Array.remove(this._data, sourceEl.dataRow);
+            kijs.Array.remove(dataRows, sourceEl.dataRow);
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {
                 // nur speichern, wenn das Target ein anderes Element ist
                 // (sonst wird ja beim target bereits gespeichert)
-                if (e.target.ownerEl !== this) {
+                if (targetOwnerTree !== this) {
                     this.save();
                 }
             }
 
             // evtl. neu laden
-            if (e.target.ownerEl !== this) {
-                // rows der selektierten Zeilen ermitteln
-                let selectedDataRows = this.getSelectedRows();
+            if (targetOwnerTree !== this) {
+                this.reload({ noRpc:true });
+            }
+        }
+    }
 
-                // neu laden
-                this._createElements(this._data);
+    // overwrite
+    #onTargetDrop(e) {
+        if (e.source.name === this._ddName) {
+            let dataRows = [];
+            let targetIndex = null;
 
-                // und wieder selektieren
-                this.selectByDataRows(selectedDataRows, false, true);
+            // after auf einen geöffneten Ordner: einfügen als 1. Kind
+            if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
 
-                // Current Element ermitteln und setzen
-                this.current = null;
+                // betroffene dataRows ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                targetIndex = 0;
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // before oder after
+            } else if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
+                // betroffene dataRows ermitteln
+                if (e.target.targetEl.parentElement) {
+                    dataRows = e.target.targetEl.parentElement.dataRow[this._childrenField];
+                } else {
+                    dataRows = this._data;
+                }
+
+                // target index ermitteln
+                targetIndex = dataRows.indexOf(e.target.targetEl.dataRow);
+                if (e.target.targetPos === 'after') {
+                    targetIndex++;
+                }
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // child
+            } else if (e.target.targetPos === 'child') {
+                // betroffene dataRow ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
+
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
+        }
+    }
+
+    // Drop als Child
+    #onTargetChildDrop(e) {
+        if (e.source.name === this._ddName) {
+            
+            // dataRow am Ende anfügen
+            if (e.target.ownerEl) {
+                e.target.ownerEl.dataRow[this._childrenField].push(kijs.gui.DragDrop.data.sourceDataRow);
+
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
             }
         }
     }
@@ -976,7 +1137,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         // Variablen (Objekte/Arrays) leeren
         this._value = null;
         this._expandedKeysRows = null;
-        
+        this._elementDdTargetConfig = null;
+
         // Basisklasse entladen
         super.destruct(true);
     }

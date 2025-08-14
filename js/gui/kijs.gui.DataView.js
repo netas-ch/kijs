@@ -185,9 +185,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._ddTarget && this._sortable) {
             // Elements neu laden
             if (!kijs.isEmpty(this._elements)) {
-                this._createElements(this._data);
-                // Current Element ermitteln und setzen
-                this.current = null;
+                this.reload({ noRpc:true });
             }
         }
     }
@@ -320,9 +318,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Elements neu laden
         if (!kijs.isEmpty(this._elements)) {
+            this.reload({ noRpc:true });
             this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
         }
     }
 
@@ -355,9 +352,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     applyFilters(filters) {
         this._filters = filters;
         if (this.isRendered) {
-            this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
+            this.reload({ noRpc:true });
         }
     }
 
@@ -369,9 +364,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     applySortFields(sortFields) {
         this._sortFields = sortFields;
         if (this.isRendered) {
-            this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
+            this.reload({ noRpc:true });
         }
     }
 
@@ -624,6 +617,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @returns {undefined}
      */
@@ -1175,6 +1169,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @param {Object} currentConfig
      * @param {Boolean} isRpc Wurde ein RPC gemacht?
@@ -1203,12 +1198,14 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
 
         // evtl. Fokus wieder setzen
-        if (this._focusable && !options.skipFocus && currentConfig.hasFocus) {
+        if (!options.skipFocus && this._focusable && currentConfig.hasFocus) {
             this.focus();
         }
 
         // zur vorherigen Position scrollen
-        this._innerDom.node.scrollTo(currentConfig.scrollPosition);
+        if (!options.skipScroll && this.isRendered) {
+            this._innerDom.node.scrollTo(currentConfig.scrollPosition);
+        }
     }
 
     /**
@@ -1224,6 +1221,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @returns {Object}
      */
@@ -1239,11 +1237,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         currentConfig.hasFocus = this.hasFocus;
 
         // Position der Scrollbars merken
-        currentConfig.scrollPosition = {
-            top: this._innerDom.node.scrollTop,
-            left: this._innerDom.node.scrollLeft,
-            behavior: 'instant'
-        };
+        if (this.isRendered) {
+            currentConfig.scrollPosition = {
+                top: this._innerDom.node.scrollTop,
+                left: this._innerDom.node.scrollLeft,
+                behavior: 'instant'
+            };
+        }
 
         // selektierte Elemente merken
         // Zuerst via PrimaryKey versuchen
@@ -1291,6 +1291,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
      *                                  // erhalten, wenn es ihn vorher hatte?
      *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
      *      }
      * @returns {undefined}
      */
@@ -1506,7 +1507,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-
+    
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
@@ -1557,17 +1558,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             // evtl. neu laden
             if (e.target.ownerEl !== this) {
-                // rows der selektierten Zeilen ermitteln
-                let selectedDataRows = this.getSelectedRows();
-
-                // neu laden
-                this._createElements(this._data);
-
-                // und wieder selektieren
-                this.selectByDataRows(selectedDataRows, false, true);
-
-                // Current Element ermitteln und setzen
-                this.current = null;
+                this.reload({ noRpc:true });
             }
         }
     }
@@ -1593,20 +1584,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 targetIndex = this._data.length -1;
             }
 
-            // rows der selektierten Zeilen ermitteln
-            let selectedDataRows = this.getSelectedRows();
-
             // neu laden
-            this._createElements(this._data);
-
-            // und wieder selektieren
-            this.selectByDataRows(selectedDataRows, false, true);
-
-            // Current Element ermitteln und setzen
-            this.current = null;
+            this.reload({ noRpc:true });
 
             // in sichtbaren Bereich scrollen?
-            this._elements[targetIndex].dom.scrollIntoView();
+            //this._elements[targetIndex].dom.scrollIntoView();
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {

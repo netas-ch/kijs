@@ -390,7 +390,7 @@ In kijs gibt es einige Elemente, die ein sortieren per Elemente per Drag&Drop
 unterstützen:  
  - kijs.gui.Dashboard  
  - kijs.gui.container.Tab  
- - kijs.gui.Tree (TODO)  
+ - kijs.gui.Tree  
  - kijs.gui.Grid (TODO)  
  - kijs.gui.DataView
  - kijs.gui.ListView

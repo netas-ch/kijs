@@ -17,7 +17,9 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
 
         this._parentElementEl = null; // Verweis auf den Eltern-Knoten
 
-
+        this._ddName = kijs.uniqId('tree.element');
+        this._ddTarget = null;
+        
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -26,7 +28,9 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             depth: true,
-            parentElement: { target: '_parentElementEl' }
+            parentElement: { target: '_parentElementEl' },
+            ddName: true,
+            ddTarget: { prio: 10, target: 'ddTarget' }
         });
 
         // Config anwenden
@@ -51,6 +55,35 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
             return !!this._dataRow[this._parentEl.allowChildrenField];
         } else {
             return this.hasChildren;
+        }
+    }
+
+    get ddTarget() {
+        return this._ddTarget;
+    }
+    set ddTarget(val) {
+        // config-object
+        if (kijs.isObject(val)) {
+            if (kijs.isEmpty(this._ddTarget)) {
+                val.ownerEl = this;
+                if (kijs.isEmpty(val.ownerDomProperty)) {
+                    val.ownerDomProperty = 'innerDom';
+                }
+                this._ddTarget = new kijs.gui.dragDrop.Target(val);
+            } else {
+                this._ddTarget.applyConfig(val);
+            }
+
+        // null
+        } else if (val === null) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+
+        } else {
+            throw new kijs.Error(`ddTarget must be a object or null`);
+
         }
     }
 
@@ -307,6 +340,34 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         // Bubbeling und native Listeners verhindern
         e.nodeEvent.stopPropagation();
         e.nodeEvent.preventDefault();
+    }
+
+
+
+    // --------------------------------------------------------------
+    // DESTRUCTOR
+    // --------------------------------------------------------------
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrender
+            this.unrender(superCall);
+
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+
+        // Elemente/DOM-Objekte entladen
+        if (this._ddTarget) {
+            this._ddTarget.destruct();
+        }
+
+        // Variablen (Objekte/Arrays) leeren
+        this._ddTarget = null;
+        this._parentElementEl = null;
+
+        // Basisklasse entladen
+        super.destruct(true);
     }
 
 };

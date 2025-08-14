@@ -40,11 +40,17 @@ Siehe dazu den neuen Leitfaden ```Daten```.
   Lädt das DataView neu  
 
         options = {
-         noRpc: false,          // Soll kein RPC gemacht werden?
-         skipSelected: false    // Sollen wieder die gleichen Elemente wie vorher
-                                // selektiert werden?
-         skipFocus: false,      // Soll wieder das DataView den Fokus erhalten,
-                                // wenn es ihn vorher hatte?
+         noRpc: false,             // Soll kein RPC gemacht werden?
+         skipSelected: false       // Sollen nicht wieder die gleichen Elemente wie
+                                   // vorher selektiert werden?
+         skipFilters: false        // Soll nicht gefiltert werden?
+         skipSort: false           // Soll nicht sortiert werden?
+         skipFocus: false,         // Soll das DataView nicht wieder den Fokus
+                                   // erhalten, wenn es ihn vorher hatte?
+         skipRemoveElements: false // Sollen die bestehenden Elemente nicht entfernt
+                                   // werden?
+         skipScroll: false         // Soll nicht wieder zur gleichen Position gescrollt
+                                   // werden?
         }
 
 - Neue Funktion ```scrollToFocus()```  

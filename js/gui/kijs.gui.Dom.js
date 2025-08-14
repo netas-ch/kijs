@@ -900,7 +900,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     clsRemove(cls) {
-        if (!cls) {
+        if (kijs.isEmpty(cls)) {
+            return;
+        }
+        if (kijs.isEmpty(this._cls)) {
             return;
         }
 

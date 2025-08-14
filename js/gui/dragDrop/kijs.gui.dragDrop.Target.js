@@ -425,7 +425,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     #onDragOver(e) {
         // Eventuelle Browser eigene Funktionen ausschalten
         e.nodeEvent.preventDefault();
-        
+
         // Validieren
         if (!kijs.gui.DragDrop.source || !kijs.gui.DragDrop.source.ownerEl) {
             return false;
@@ -464,7 +464,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                 this._ownerEl.elements, 
                 e.nodeEvent.clientX, 
                 e.nodeEvent.clientY);
-        
+
         // Falls kein Element in der Nähe gefunden wurde
         if (kijs.isEmpty(ddCPos)) {
             // gibt es bereits Elemente im Container
@@ -515,7 +515,7 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
                 targetPos = 'before';
             }
         }
-        
+
         // Target = Source (nur bei Move) ?
         let isTargetEqualSource = false;
         if (targetPos && operation === 'move') {
