@@ -600,6 +600,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
                 case 'Space':
                     this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                    nodeEvent.preventDefault();
                     break;
 
             }

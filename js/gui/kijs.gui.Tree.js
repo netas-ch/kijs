@@ -633,6 +633,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
                 case 'Space':
                     this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                    nodeEvent.preventDefault();
                     break;
 
             }
