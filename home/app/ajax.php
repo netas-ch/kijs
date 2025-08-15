@@ -126,7 +126,10 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
             }
             $row['allowChildren'] = $userData->filetype === '';
             $row['userData'] = $userData;
-            $row['children'] = _getNavigationRowsRec($rootDir, $treeName, $path);
+            $row['children'] = null;
+            if ($userData->filetype === '') {
+                $row['children'] = _getNavigationRowsRec($rootDir, $treeName, $path);
+            }
             $rows[] = $row;
         }
 
