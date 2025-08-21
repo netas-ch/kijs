@@ -269,7 +269,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // PRIVATE
     // LISTENERS
     #onBtnClick() {
-        if (this.dom.node) {
+        if (this.dom.node && !this._button.disabled) {
             this.close();
         } else {
             this.show();
@@ -277,7 +277,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     }
 
     #onBtnMouseEnter() {
-        if (!this._expandDeferId) {
+        if (!this._expandDeferId && !this._button.disabled) {
             this._expandDeferId = kijs.defer(function() {
                 if (!this.isRendered) {
                     this.show();
