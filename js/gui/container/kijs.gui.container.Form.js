@@ -218,13 +218,13 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
      * @param {Boolean} [superCall=false]
+     * @param {Object|Null} [config]
      * @returns {Promise}
      */
     // overwrite
-    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
         return new Promise((resolve) => {
-            super.load(args, true).then((e) => {
-                let config = e.responseData.config ?? {};
+            super.load(args, true, config).then((e) => {
 
                 // Falls des Formular destructed wurde: abbrechen
                 if (!this._dom) {
