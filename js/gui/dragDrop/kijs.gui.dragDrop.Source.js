@@ -141,22 +141,22 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     dragEnd() {
         // dropMarker entfernen
         kijs.gui.DragDrop.dropMarkerRemove();
-        
+
         // CSS-Klassen bei Source entfernen und Source einblenden, falls ausgeblendet
         if (this._ownerEl && this._ownerEl.dom) {
             this._ownerEl.dom.clsRemove('kijs-dragging');
             this._ownerEl.dom.clsRemove('kijs-sourceDragOver');
             this._ownerEl.style.display = this._display;
         }
-        
+
         // CSS-Klasse kijs-targetDragOver entfernen
         kijs.gui.DragDrop.targetDragOverDom = null;
-        
+
         // dragEnd-Event bei source auslösen
-        this.raiseEvent('dragEnd', { 
+        this.raiseEvent('dragEnd', {
             source: this
         });
-        
+
         // Aufräumen
         this._width = null;
         this._height = null;
@@ -193,13 +193,13 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         e.nodeEvent.dataTransfer.setData('application/' + this._name, '');
 
         e.nodeEvent.dataTransfer.effectAllowed = kijs.gui.DragDrop.getddEffect(
-                this._allowMove, this._allowCopy, this._allowLink);
-        
+            this._allowMove, this._allowCopy, this._allowLink);
+
         // dragStart-Event bei source auslösen
-        this.raiseEvent('dragStart', { 
+        this.raiseEvent('dragStart', {
             source: this
         });
-        
+
         // keine weiteren bubbeling-Listeners mehr ausführen
         e.nodeEvent.stopPropagation();
     }
@@ -217,9 +217,12 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         }
 
         // Drag&Drop Listeners entfernen
-        if (this.ownerDom) {
-            this.ownerDom.off('dragStart', this.#onDragStart, this);
-            this.ownerDom.off('dragEnd', this.#onDragEnd, this);
+        if (!kijs.isEmpty(this._ownerEl)) {
+            let dom = kijs.getObjectFromString(this._ownerDomProperty, this._ownerEl);
+            if (dom) {
+                this.ownerDom.off('dragStart', this.#onDragStart, this);
+                this.ownerDom.off('dragEnd', this.#onDragEnd, this);
+            }
         }
 
         // Elemente/DOM-Objekte entladen

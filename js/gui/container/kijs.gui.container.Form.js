@@ -240,11 +240,6 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                     this.searchFields();
                 }
 
-                // Formulardaten in Formular einfüllen
-                if (config.data) {
-                    this.data = config.data;
-                }
-
                 // Validierung zurücksetzen?
                 if (resetValidation) {
                     this.errorsClear();
@@ -430,17 +425,13 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * Setzt die Werte der Felder auf den Originalwert zurück
      * @returns {undefined}
      */
-    valuesReset(preventEvents = false) {
+    valuesReset() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
         }
 
         for (let i=0; i<this._fields.length; i++) {
             this._fields[i].valuesReset();
-        }
-
-        if (!preventEvents) {
-            this.raiseEvent('change');
         }
     }
 
