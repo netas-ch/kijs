@@ -770,7 +770,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         this.removeAll({
             preventRender: true
         });
-
+        
         // Neue Elemente hinzufügen
         this.add(elements, null);
     }

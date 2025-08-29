@@ -40,8 +40,8 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
             this.applyConfig(config, true);
         }
 
-        // Inhalt erstellen
-        this.update();
+        // Listener
+        this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
 
 
@@ -75,6 +75,14 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
      */
     update() {
 
+    }
+
+    // PRIVATE
+    // LISTENER
+    #onAfterFirstRenderTo() {
+
+        // Inhalt erstellen
+        this.update();
     }
 
 

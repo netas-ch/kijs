@@ -266,6 +266,26 @@
     }
 
 
+    /* ******************
+       * Scrollbar
+       ****************** */
+    ::-webkit-scrollbar {
+        width: var(--scrollbar-size);
+        height: var(--scrollbar-size);
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--scrollbar-background-color);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--scrollbar-color);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollbar-hover-color);
+    }
+
 
     /* ******************
        * Button
@@ -313,7 +333,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;

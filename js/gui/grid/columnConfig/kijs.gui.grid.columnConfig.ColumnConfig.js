@@ -253,5 +253,4 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             this._preventAfterResize = prevAfterRes;
         }
     }
-    
 };

@@ -731,7 +731,7 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._touchXStart = e.nodeEvent.touches[0].clientX;
         this._touchYStart = e.nodeEvent.touches[0].clientY;
     }
-       
+
     #onWheel(e) {
         const hasScrollbarX = this._dom.clsHas('kijs-scrollable-x-enable');
         const hasScrollbarY = this._dom.clsHas('kijs-scrollable-y-enable');
