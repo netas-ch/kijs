@@ -240,11 +240,6 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                     this.searchFields();
                 }
 
-                // Formulardaten in Formular einfüllen
-                if (config.data) {
-                    this.data = config.data;
-                }
-
                 // Validierung zurücksetzen?
                 if (resetValidation) {
                     this.errorsClear();

@@ -11,6 +11,8 @@ Version 3.0.0
 **UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
 in kijs.theme.default.css.
 
+### Bibliothek lib/jsmin ersetzt durch lib/jshrink
+
 ### kijs
 Neue Funktion ```kijs.coalesce(...args)```  
 Die Funktion gibt das erste Argument zurück, dass nicht empty ist.  

@@ -82,6 +82,9 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     get percent() { return this._percent; }
     set percent(val) { this.setProgress(val); }
 
+    get showPercent() { return this._showPercent; }
+    set showPercent(val) { this._showPercent = val; }
+
     get uploadDialog() { return this._uploadDialog; }
     set uploadDialog(val) { this.bindUploadDialog(val); }
 
