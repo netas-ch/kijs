@@ -19,7 +19,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '2.9.1'; }
+    static get version() { return '3.0.0'; }
 
     static get language() {
         if (this.__language) {
@@ -38,6 +38,20 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
+    /**
+     * Gibt das erste Argument zurück, der nicht empty ist
+     * @param {Array} args
+     * @returns {Mixed}
+     */
+    static coalesce(...args) {
+        for (let i=0; i<args.length; i++) {
+            if (!kijs.isEmpty(args[i])) {
+                return args[i];
+            }
+        }
+        return null;
+    }
+
     /**
      * Erstellt eine Delegate
      * @param {Function} fn

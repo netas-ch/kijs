@@ -10,34 +10,67 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
     // MEMBERS
     // --------------------------------------------------------------
     update() {
-        let iconArgs = {parent: this};
 
-        // Icon/Cls
-        if (!kijs.isEmpty(this.parent.iconClsField) && !kijs.isEmpty(this.dataRow[this.parent.iconClsField])) {
-            iconArgs.iconCls = this.dataRow[this.parent.iconClsField];
+        // Icon
+        let iconMap = null;
+        let iconChar = null;
+        let iconCls = null;
+        let iconAnimationCls = null;
+        let iconColor = null;
+
+        if (!kijs.isEmpty(this._parentEl.iconMapField)) {
+            iconMap = this.dataRow[this._parentEl.iconMapField];
+        } else {
+            iconMap = this._parentEl.iconMap;
         }
-        if (!kijs.isEmpty(this.parent.iconAnimationClsField) && !kijs.isEmpty(this.dataRow[this.parent.iconAnimationClsField])) {
-            iconArgs.iconAnimationCls = this.dataRow[this.parent.iconAnimationClsField];
+        if (!kijs.isEmpty(this._parentEl.iconCharField)) {
+            iconChar = this.dataRow[this._parentEl.iconCharField];
+        } else {
+            iconChar = this._parentEl.iconChar;
         }
-        if (!kijs.isEmpty(this.parent.iconColorField) && !kijs.isEmpty(this.dataRow[this.parent.iconColorField])) {
-            iconArgs.iconColor = this.dataRow[this.parent.iconColorField];
+        if (!kijs.isEmpty(this._parentEl.iconClsField)) {
+            iconCls = this.dataRow[this._parentEl.iconClsField];
+        } else {
+            iconCls = this._parentEl.iconCls;
         }
-        if (!kijs.isEmpty(this.parent.iconCharField) && !kijs.isEmpty(this.dataRow[this.parent.iconCharField])) {
-            iconArgs.iconChar = this.dataRow[this.parent.iconCharField];
+        if (!kijs.isEmpty(this._parentEl.iconAnimationClsField)) {
+            iconAnimationCls = this.dataRow[this._parentEl.iconAnimationClsField];
+        } else {
+            iconAnimationCls = this._parentEl.iconAnimationCls;
         }
-        if (!kijs.isEmpty(this.parent.iconMapField) && !kijs.isEmpty(this.dataRow[this.parent.iconMapField])) {
-            iconArgs.iconMap = this.dataRow[this.parent.iconMapField];
+        if (!kijs.isEmpty(this._parentEl.iconColorField)) {
+            iconColor = this.dataRow[this._parentEl.iconColorField];
+        } else {
+            iconColor = this._parentEl.iconColor;
         }
-        
+
+        let iconArgs = {parent: this};
+        if (!kijs.isEmpty(iconMap)) {
+            iconArgs.iconMap = iconMap;
+        }
+        if (!kijs.isEmpty(iconChar)) {
+            iconArgs.iconChar = iconChar;
+        }
+        if (!kijs.isEmpty(iconCls)) {
+            iconArgs.iconCls = iconCls;
+        }
+        if (!kijs.isEmpty(iconAnimationCls)) {
+            iconArgs.iconAnimationCls = iconAnimationCls;
+        }
+        if (!kijs.isEmpty(iconColor)) {
+            iconArgs.iconColor = iconColor;
+        }
+
         let iconEl = new kijs.gui.Icon(iconArgs);
+
 
         // Caption
         let caption = '';
-        if (!kijs.isEmpty(this.parent.captionField) && !kijs.isEmpty(this.dataRow[this.parent.captionField])) {
-            caption = this.dataRow[this.parent.captionField];
+        if (!kijs.isEmpty(this._parentEl.captionField) && !kijs.isEmpty(this.dataRow[this._parentEl.captionField])) {
+            caption = this.dataRow[this._parentEl.captionField];
         }
         let captionEl = new kijs.gui.Element({
-            htmlDisplayType: this.parent.captionHtmlDisplayType,
+            htmlDisplayType: this._parentEl.captionHtmlDisplayType,
             nodeTagName: 'span',
             html: caption,
             cls: 'kijs-caption'
@@ -45,14 +78,14 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
 
         // Tooltip
         let tooltip = '';
-        if (!kijs.isEmpty(this.parent.tooltipField) && !kijs.isEmpty(this.dataRow[this.parent.tooltipField])) {
-            tooltip = this.dataRow[this.parent.tooltipField];
+        if (!kijs.isEmpty(this._parentEl.tooltipField) && !kijs.isEmpty(this.dataRow[this._parentEl.tooltipField])) {
+            tooltip = this.dataRow[this._parentEl.tooltipField];
         }
 
         // Checkbox
         let cls = '';
-        if (this.parent.showCheckBoxes) {
-            switch (this.parent.selectType) {
+        if (this._parentEl.showCheckBoxes) {
+            switch (this._parentEl.selectType) {
                 case 'single':
                 case 'singleAndEmpty':
                     cls = 'kijs-display-options';

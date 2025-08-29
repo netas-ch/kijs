@@ -540,6 +540,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * @returns {Boolean}
      */
     hasChild(element) {
+        if (kijs.isEmpty(this._elements) || kijs.isEmpty(element)) {
+            return false;
+        }
         return kijs.Array.contains(this._elements, element);
     }
 

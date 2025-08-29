@@ -292,6 +292,9 @@
     /* Grid */
     --grid-header-bkgrndColor: var(--grey03);
     --grid-border-color: var(--grey05);
+    
+    /* Tree */
+    --tree-expandIcon-color: var(--grey08);
 }
 
 

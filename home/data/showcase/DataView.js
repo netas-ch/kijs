@@ -39,12 +39,97 @@ home.sc.DataView = class home_sc_DataView {
                         flex: 1,
                         minHeight: '90px'
                     },
+
+                    headerElements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Disable/Enable',
+                            tooltip: 'Disable/Enable dataview',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('dataViewLocal');
+                                    dv.disabled = !dv.disabled;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Disable/Enable first Child',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('dataViewLocal');
+                                    dv.elements[0].disabled = !dv.elements[0].disabled;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Reload',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('dataViewLocal');
+                                    dv.reload();
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Separator'
+                        },{
+                            xtype: 'kijs.gui.field.OptionGroup',
+                            label: 'selectType',
+                            cls: 'kijs-inline',
+                            valueField: 'id',
+                            captionField: 'id',
+                            required: true,
+                            data: [
+                                { id:'none' },
+                                { id:'single' },
+                                { id:'singleAndEmpty' },
+                                { id:'multi' },
+                                { id:'simple' }
+                            ],
+                            value: 'single',
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('dataViewLocal');
+                                    dv.clearSelections();
+                                    dv.selectType = e.value;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.field.Combo',
+                            label: 'Sortierung:',
+                            value: 'none',
+                            inputWidth: 90,
+                            data: [
+                                { caption: 'keine', value: 'none' },
+                                { caption: 'A', value: 'A' },
+                                { caption: 'B', value: 'B' }
+                            ],
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('dataViewLocal');
+                                    let sortFields = [];
+
+                                    if (e.element.value !== 'none') {
+                                        sortFields.push(e.element.value);
+                                    }
+
+                                    dv.applySortFields(sortFields);
+                                },
+                                context: this
+                            }
+                        }
+                    ],
                     
                     elements:[
                         {
                             xtype: 'kijs.gui.DataView',
-                            selectType: 'multi',
-                            data: [{A:'A1', B:'B1'}, {A:'A2', B:'B2'}, {A:'A3', B:'B3'}],
+                            name: 'dataViewLocal',
+                            selectType: 'single',
+                            primaryKeyFields:['A'],
+                            data: [{A:'A1', B:'B3'}, {A:'A2', B:'B2'}, {A:'A3', B:'B1'}],
                             selectFilters: [{field:'A', value:'A2'}],
                             //scrollableY: 'auto',
                             style: {
@@ -52,6 +137,13 @@ home.sc.DataView = class home_sc_DataView {
                             },
                             innerStyle: {
                                 padding: '4px'
+                            },
+                            on: {
+                                selectionChange: function(e) {
+                                    console.log(e);
+                                    console.log(e.element.selectedKeysRows);
+                                },
+                                context: this
                             }
                         }
                     ]
@@ -132,6 +224,16 @@ home.sc.DataView = class home_sc_DataView {
                                 context: this
                             }
                         },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Reload',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('dataViewRpc');
+                                    dv.reload();
+                                },
+                                context: this
+                            }
+                        },{
                             xtype: 'kijs.gui.Separator'
                         },{
                             xtype: 'kijs.gui.field.OptionGroup',
@@ -152,6 +254,29 @@ home.sc.DataView = class home_sc_DataView {
                                     const dv = this._content.down('dataViewRpc');
                                     dv.clearSelections();
                                     dv.selectType = e.value;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.field.Combo',
+                            label: 'Sortierung:',
+                            value: 'none',
+                            inputWidth: 90,
+                            data: [
+                                { caption: 'keine', value: 'none' },
+                                { caption: 'Name', value: 'Name' },
+                                { caption: 'Vorname', value: 'Vorname' }
+                            ],
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('dataViewRpc');
+                                    let sortFields = [];
+
+                                    if (e.element.value !== 'none') {
+                                        sortFields.push(e.element.value);
+                                    }
+
+                                    dv.applySortFields(sortFields);
                                 },
                                 context: this
                             }

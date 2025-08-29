@@ -48,6 +48,7 @@ foreach ($requests as $request) {
                 
                 $berufe = file('../testData/beruf.csv');
                 foreach ($berufe as $beruf) {
+                    $count++;
                     $beruf = explode(';', trim($beruf));
                     
                     if ($noRemoteSort) {
@@ -59,8 +60,6 @@ foreach ($requests as $request) {
                             $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
                         }
                     }
-                    
-                    $count++;
                 }
 
                 if ($query) {
@@ -375,10 +374,33 @@ foreach ($requests as $request) {
                 $rows[] = array('Name' => 'Schneeberger', 'Vorname' => 'Sandro');
 
                 $response->responseData->config = new stdClass();
+                $response->responseData->config->primaryKeyFields = ['Name','Vorname'];
                 $response->responseData->config->data = $rows;
-                $response->responseData->config->selectFilters = array();
 
                 $filter = array();
+                $selectFilters = '
+                    {
+                     "operator":"OR",
+                     "parts":[
+                      {
+                       "operator":"AND",
+                       "parts": [
+                        { "field":"Name", "value":"Meier" },
+                        { "field":"Vorname", "value":"Kurt" }
+                       ]
+                      },{
+                       "operator":"AND",
+                       "parts": [
+                        { "field":"Name", "value":"Tobler" },
+                        { "field":"Vorname", "value":"Silvia" }
+                       ]
+                      }
+                     ]
+                    }
+                ';
+                $response->responseData->config->selectFilters = json_decode($selectFilters);
+
+                /*$filter = array();
                 $flt = new stdClass();
                 $flt->field = 'Name';
                 $flt->value = 'Meier';
@@ -398,7 +420,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Silvia';
                 $filter[] = $flt;
-                $response->responseData->config->selectFilters[] = $filter;
+                $response->responseData->config->selectFilters[] = $filter;*/
                 
                 //sleep(1);
 
@@ -620,7 +642,7 @@ foreach ($requests as $request) {
                     $col->xtype = 'kijs.gui.grid.columnConfig.Checkbox';
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
-                    $col->disabled = false;
+                    $col->editable = false;
                     $response->responseData->columns[] = $col;
                     unset ($col);
 
@@ -782,35 +804,23 @@ foreach ($requests as $request) {
                 $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
             }
             break;
-        
-        case 'tree.load':
-            $tree = array();
-            $nodeId = $request->requestData->nodeId;
 
-            for ($i = 0; $i < 3; $i++) {
-                $node = new stdClass();
+        case 'tree.largeData.load':
+            $response->responseData = $request->requestData;
 
-                if ($nodeId === null) {
-                    $node->caption = 'Root ' . $i;
-                    $node->nodeId = $i;
-                    $node->leaf = $i <> 1;
-                } else {
-                    $node->caption = 'Knoten ' . $nodeId . '-' . $i;
-                    $node->nodeId = $nodeId . '-' . $i;
-                    $node->leaf = $i <> 1;
-                }
-                $tree[] = $node;
+            //$rows = [];
 
-            }
+            $rows = _generateRecordset(16, 16, 16, '', ['15', '15.15']);
 
-            // verzögerung um Lademaske anzuzeigen
-            if ($nodeId !== null) {
-                sleep(rand(0, 2));
-            }
+            // Verzögerung um Lademaske anzuzeigen
+            //sleep(rand(0, 2));
 
-            $response->responseData->tree = $tree;
+            $response->responseData->config = new stdClass();
+            $response->responseData->config->data = $rows;
+            $response->responseData->config->value = '15.15.15';
+            //$response->responseData->config->expandFilters = json_decode('{ "field":"id", "operator":"IN", "value":["1","1.1"] }');
             break;
-            
+
         default:
             $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
@@ -894,5 +904,47 @@ function _getIcon($id) {
         0xf87b,0xf87c,0xf87d,0xf881,0xf882,0xf884,0xf885,0xf886,0xf887,0xf891,0xf897,0xf8c0,0xf8c1,0xf8cc,0xf8d7,0xf8d9,0xf8ef,0xf8ff];
     $cnt = count($icons);
     return $icons[$id % $cnt];
+}
 
+
+function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $prefix='', $expandedIds) {
+    $rows = [];
+
+    if (!is_array($expandedIds)) {
+        if ($expandedIds) {
+            $expandedIds = [$expandedIds];
+        } else {
+            $expandedIds = [];
+        }
+    }
+
+    for ($i=1; $i<=$rowsCount; $i++) {
+        $id = $prefix;
+        if ($id) {
+            $id .= '.';
+        }
+        $id .= $i;
+        
+        $children = [];
+        if ($childrenCount) {
+            $children = _generateRecordset($childrenCount, $subChildrenCount, 0, $id, $expandedIds);
+        }
+
+        $row = [];
+        $row['id'] = $id;
+        $row['caption'] = $id;
+        $row['color'] = '#' . dechex(rand(0, 240)) . dechex(rand(0, 240)) . dechex(rand(0, 240));
+        $row['icon'] = $children ? 'kijs.iconMap.Fa.folder' : 'kijs.iconMap.Fa.' . ( $i % 10);
+        $row['allowChildren'] = !!$children;
+        if ($children) {
+            $row['children'] = $children;
+
+            if (in_array($id, $expandedIds)) {
+                $row['expanded'] = true;
+            }
+        }
+        $rows[] = $row;
+    }
+
+    return $rows;
 }

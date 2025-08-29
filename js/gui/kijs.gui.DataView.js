@@ -1,11 +1,5 @@
 /* global kijs, this */
 
-// TODO: Es gibt zwei unterschiedliche Möglichkeiten um zu Filtern 
-// - selectByFilters()
-// - this.filters (Entfernen: Ist nicht dokumentiert)
-// Es sollte nur eine Möglichkeit geben!
-
-
 // --------------------------------------------------------------
 // kijs.gui.DataView
 // --------------------------------------------------------------
@@ -23,6 +17,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         this._elementXType = 'kijs.gui.dataView.element.AutoHtml';
 
+        this._primaryKeyFields = null; // Array mit den Namen der Primärschlüssel-Felder
+
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
         this._ddName = kijs.uniqId('dataview.element');
@@ -37,8 +33,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                                         // hat dieses Element den Fokus)
         this._lastSelectedEl = null;    // Letztes Element das Selektiert wurde. Wird gebraucht,
                                         // wenn mit der Shift-Taste mehrere selektiert werden.
-        this._data = [];
-        this._filters = [];
+        this._data = [];                // Recordset mit den Daten
+
+        this._filters = [];             // Wenn Filter definiert sind, werden nicht
+                                        // alle Daten angezeigt, sondern nur Datensätze,
+                                        // die die Filter passieren.
+
+        this._selectedKeysRows = [];    // Bei primaryKeyFields: Array mit PrimaryKeys der selektierten Elemente
+                                        // sonst: Array mit den dataRows der selektierten Elemente
+
+        this._sortFields = [];          // Wenn eine Sortierung definiert ist, werden die
+                                        // Daten entsprechend sortiert
+
         this._focusable = true;
         this._selectType = 'none';
 
@@ -55,16 +61,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
+            primaryKeyFields: { target: 'primaryKeyFields' }, // Array mit den Namen der Primärschlüssel-Felder
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            data: { target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
+            
             filters: { target: 'filters' },
+            sortFields: { target: 'sortFields' },
             focusable: { target: 'focusable'},  // Kann das Dataview den Fokus erhalten?
-            selectFilters: { fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             selectType: true,           // 'none': Es kann nichts selektiert werden
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
                                         // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
                                         // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                        // 'manual': Die Datensätze werden manuell selektiert
             rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
             rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
             autoSave: true,     // Automatisches Speichern bei Änderungen
@@ -73,8 +81,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             ddPosBeforeFactor: true,
             ddPosAfterFactor: true,
             elementDdSourceConfig: true,
-            sortable: { prio: 90, target: 'sortable' },
-            ddTarget: { prio: 100, target: 'ddTarget' }
+
+            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
+            sortable: { prio: 100, target: 'sortable' },
+            selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
+            ddTarget: { prio: 120, target: 'ddTarget' }
         });
 
         // Config anwenden
@@ -86,7 +97,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Events
         this.on('keyDown', this.#onKeyDown, this);
         this.on('elementMouseDown', this.#onElementMouseDown, this);
-        //this.on('elementFocus', this.#onElementFocus, this);
     }
 
 
@@ -111,6 +121,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     get current() { return this._currentEl; }
     /**
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
+     * Vorsicht current und selected ist nicht das gleiche!
+     *  current = Element das den Fokus (Tastaturnavagation) hat
+     *  selected = Element oder Elemente, die selektiert sind.
      * Null = automatische Ermittlung
      * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
      * @param {kijs.gui.dataView.element.Base|null} el
@@ -173,9 +186,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._ddTarget && this._sortable) {
             // Elements neu laden
             if (!kijs.isEmpty(this._elements)) {
-                this._createElements(this._data);
-                // Current Element ermitteln und setzen
-                this.current = null;
+                this.reload({ noRpc:true });
             }
         }
     }
@@ -240,27 +251,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     get filters() { return this._filters; }
-    set filters(val) {
-        if (!val) {
-            this._filters = [];
-        } else {
-            if (!kijs.isArray(val)) {
-                val = [val];
-            }
-
-            // einzelne Filter validieren
-            kijs.Array.each(val, function(filter) {
-                if (!kijs.isObject(filter) || !('field' in filter) || !('value' in filter) || !kijs.isString(filter.field) || !kijs.isString(filter.value)) {
-                    throw new kijs.Error(`invalid argument for filters in kijs.gui.DataView`);
-                }
-                if (!('compare' in filter) || !kijs.Array.contains(['begin', 'part', 'end', 'full'], filter.compare)) {
-                    filter.compare = 'begin';
-                }
-            }, this);
-
-            this._filters = val;
-        }
-    }
+    set filters(val) { this._filters = val; }
 
     get focusable() { return this._focusable; }
     set focusable(val) {
@@ -272,12 +263,25 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         return this._currentEl ? this._currentEl.hasFocus : false;
     }
 
+    get primaryKeyFields() { return this._primaryKeyFields; }
+    set primaryKeyFields(val) {
+        if (kijs.isString(val)) {
+            this._primaryKeyFields = [val];
+        } else if (kijs.isArray(val)) {
+            this._primaryKeyFields = val;
+        } else {
+            throw new kijs.Error(`primaryKeyFields must be a string or an array.`);
+        }
+    };
+
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
+    get selectedKeysRows() { return this._selectedKeysRows; }
+    
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
 
@@ -315,11 +319,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Elements neu laden
         if (!kijs.isEmpty(this._elements)) {
+            this.reload({ noRpc:true });
             this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
         }
     }
+
+    get sortFields() { return this._sortFields; }
+    set sortFields(val) { this._sortFields = val; }
 
 
 
@@ -335,10 +341,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (!kijs.isArray(data)) {
             data = [data];
         }
-
         this._data = kijs.Array.concat(this._data, data);
-
-        this._createElements(data, false);
+        this._createElements(data, { skipRemoveElements: true });
     }
 
     /**
@@ -347,25 +351,72 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {undefined}
      */
     applyFilters(filters) {
-        this.filters = filters;
+        this._filters = filters;
         if (this.isRendered) {
-            this._createElements(this._data);
-            // Current Element ermitteln und setzen
-            this.current = null;
+            this.reload({ noRpc:true });
+        }
+    }
+
+    /**
+     * Wendet eine Sortierung auf das DataView an.
+     * @param {Array} sortFields
+     * @returns {undefined}
+     */
+    applySortFields(sortFields) {
+        this._sortFields = sortFields;
+        if (this.isRendered) {
+            this.reload({ noRpc:true });
         }
     }
 
     /**
      * Entfernt alle Selektionen
      * @param {Boolean} [preventSelectionChange=false]    Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    clearSelections(preventSelectionChange) {
-        this.unSelect(this._elements, preventSelectionChange);
+    clearSelections(preventSelectionChange=false) {
+        if (!kijs.isEmpty(this._primaryKeyFields)) {
+            return this.unselectByPrimaryKeys(this._selectedKeysRows, preventSelectionChange);
+        } else {
+            return this.unselectByDataRows(this._selectedKeysRows, preventSelectionChange);
+        }
+    }
+
+    /**
+     * Gibt ein Element zu einer dataRow zurück
+     * @param {Array} dataRow
+     * @returns {kijs.gui.dataView.element.Base}
+     */
+    getElementByDataRow(dataRow) {
+        for (let i=0, len=this._elements.length; i<len; i++) {
+            if (this._elements[i].dataRow === dataRow) {
+                return this._elements[i];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Gibt ein Element zu einem PrimaryKey zurück
+     * @param {String} primaryKey
+     * @returns {kijs.gui.dataView.element.Base}
+     */
+    getElementByPrimaryKey(primaryKey) {
+        for (let i=0, len=this._elements.length; i<len; i++) {
+            if (this._elements[i].primaryKey === primaryKey) {
+                return this._elements[i];
+            }
+        }
+
+        return null;
     }
 
     /**
      * Gibt die selektierten Elemente zurück.
+     * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
+     * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
+     * Dafür besser die Funktionen getSelectedPrimaryKeys() und getSelectedRows() verwenden!
      * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
@@ -390,16 +441,51 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
+     * Gibt die PrimaryKey-Strings der selektierten Elemente als Array zurück
+     * Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String
+     * zurückgegeben sonst ein Array mit den Keys-Strings
+     * Siehe dazu kijs.Data.getPrimaryKey()
+     * @returns {Array|String|null}
+     */
+    getSelectedPrimaryKeys() {
+        let primaryKeys = [];
+
+        if (!kijs.isEmpty(this._primaryKeyFields)) {
+            primaryKeys = kijs.Array.clone(this._selectedKeysRows);
+
+        } else {
+            throw new kijs.Error(`No primaryKeyFields were defined.`);
+
+        }
+
+        if (this._selectType === 'none') {
+            return null;
+
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+            return primaryKeys.length ? [primaryKeys[0]] : null ;
+
+        } else {
+            return primaryKeys;
+
+        }
+    }
+
+    /**
      * Gibt die Data-rows der selektierten Elemente zurück
+     * Bei selectType='single' oder 'singleAndEmpty' wird direkt die row
+     * zurückgegeben sonst ein Array mit den rows
      * @returns {Array|null}
      */
     getSelectedRows() {
         let rows = [];
 
-        for (let i=0, len=this._elements.length; i<len; i++) {
-            if (this._elements[i].selected) {
-                rows.push(this._elements[i].dataRow);
-            }
+        if (!kijs.isEmpty(this._primaryKeyFields)) {
+            rows = kijs.Data.filterByPrimaryKeys(this._data, this._selectedKeysRows,
+                    this._primaryKeyFields);
+
+        } else {
+            rows = kijs.Array.clone(this._selectedKeysRows);
+
         }
 
         if (this._selectType === 'none') {
@@ -414,7 +500,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    // wird von kijs.gui.Combo verwendet
+    // wird auch von kijs.gui.Combo verwendet
     handleKeyDown(nodeEvent) {
         let isShiftPress = !!nodeEvent.shiftKey;
         let isCtrlPress = !!nodeEvent.ctrlKey;
@@ -514,10 +600,66 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
                 case 'Space':
                     this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                    nodeEvent.preventDefault();
                     break;
 
             }
         }
+    }
+
+    /**
+     * Aktualisiert das DataView
+     * @param {Object} [options={}] options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
+     * @returns {undefined}
+     */
+    reload(options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
+
+        // Eigenschaften merken, die nach dem Laden wiederhergestellt werden sollen
+        let currentConfig = this._beforeReload(options);
+
+        // Daten neu von RPC holen
+        if (this._rpcLoadFn && !options.noRpc) {
+            this.load()
+                .then((e) => {
+                    // Elemente neu erstellen
+                    this._createElements(this._data);
+
+                    // Eigenschaften wiederherstellen
+                    this._afterReload(options, currentConfig, true);
+                });
+
+        // reload mit lokalen Daten
+        } else {
+            // Elemente neu erstellen
+            this._createElements(this._data, options);
+
+            // Eigenschaften wiederherstellen
+            this._afterReload(options, currentConfig, false);
+
+        }
+    }
+
+    // Element mit Fokus neu ermitteln
+    reassignCurrent() {
+        this._currentEl = null;
+        this.current = null;
     }
 
     save() {
@@ -557,35 +699,58 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
+     * Scrollt zu dem currentEl (dem Element mit Fokus)
+     * @returns {undefined}
+     */
+    scrollToFocus() {
+        if (this._currentEl) {
+            this._currentEl.dom.scrollIntoView();
+        }
+    }
+
+    /**
      * Selektiert ein oder mehrere Elemente
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
     select(elements, keepExisting=false, preventSelectionChange=false) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
         if (kijs.isEmpty(elements)) {
             elements = [];
-        }
-
-        if (!kijs.isArray(elements)) {
-            elements = [elements];
+        } else {
+            if (!kijs.isArray(elements)) {
+                elements = [elements];
+            }
         }
 
         if (!keepExisting){
-            this.clearSelections(true);
+            args = this.clearSelections(true);
         }
 
-        var changed = false;
-        kijs.Array.each(elements, function(el) {
-            changed = changed || !el.selected;
-            el.selected = true;
-        }, this);
+        for (let i=0, len=elements.length; i<len; i++) {
+            if (!elements[i].selected) {
+                args.selectedElements.push(elements[i]);
+                args.selectedKeysRows.push(elements[i].keyRow);
+                elements[i].selected = true;
+                args.changed = true;
+            }
+        }
 
         // SelectionChange auslösen
-        if (!preventSelectionChange && changed) {
-            this.raiseEvent('selectionChange', { elements: elements, unSelect: false } );
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
         }
+
+        return args;
     }
 
     /**
@@ -593,10 +758,19 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {kijs.gui.Element} el1
      * @param {kijs.gui.Element} el2
      * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
     selectBetween(el1, el2, preventSelectionChange=false) {
         let found = false;
+
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
         let elements = [];
 
         // Alle Elemente zwischen dem vorher selektierten Element und dem aktuellen Element selektieren
@@ -619,7 +793,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
 
         if (!kijs.isEmpty(elements)) {
-            this.select(elements, true, preventSelectionChange);
+            return this.select(elements, true, preventSelectionChange);
+        } else {
+            return args;
         }
     }
 
@@ -628,54 +804,78 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {Array} rows Recordset mit rows der zu selektierenden Elementen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
     selectByDataRows(rows, keepExisting=false, preventSelectionChange=false) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
+        if (!keepExisting) {
+            args = this.clearSelections(true);
+        }
+
         if (kijs.isEmpty(rows)) {
-            return;
+            return args;
         }
 
-        let selectedElements = [];
+        // Sichtbare Elemente selektieren (bei einem Baum kann es sein, dass
+        // ein übergeordneter Ordner zugeklappt ist)
+        // Bei nicht sichtbaren Elemente wird der key/row nur in das Array this._selectedKeysRows
+        // aufgenommen
+        for (let i=0, len=rows.length; i<len; i++) {
+            let el = this.getElementByDataRow(rows[i]);
 
-        if (!keepExisting){
-            this.clearSelections(true);
-        }
+            if (el) {
+                if (!el.selected) {
+                    args.selectedElements.push(el);
+                    el.selected = true;
+                    args.changed = true;
+                }
+            } else {
+                let keyRow;
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    keyRow = kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields);
+                } else {
+                    keyRow = rows[i];
+                }
 
-        var changed = false;
-        kijs.Array.each(this._elements, function(el) {
-            if (kijs.Array.contains(rows, el.dataRow)) {
-                changed = changed || !el.selected;
-                el.selected = true;
-                selectedElements.push(el);
+                if (!kijs.Array.contains(this._selectedKeysRows, keyRow)) {
+                    this._selectedKeysRows.push(keyRow);
+                    args.selectedKeysRows.push(keyRow);
+                    args.changed = true;
+                }
             }
-        }, this);
-
-        // current aktualisieren
-        this._currentEl = null;
-        this.current = null;
+        }
 
         // SelectionChange auslösen
-        if (!preventSelectionChange && changed) {
-            this.raiseEvent('selectionChange', { elements: selectedElements, unSelect: false } );
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
         }
+
+        return args;
     }
 
     /**
      * Selektiert ein oder mehrere Elemente
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die selektiert werden sollen
-     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem Primary-Field):
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
      *                                                  { field: "Id", value: 123 }
      *
-     *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem Primary-Field):
+     *                                                  Beispiel 2 (mehrere werden selektiert bei nur einem PrimaryKey-Field):
      *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
      *
-     *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren Primary-Fields):
+     *                                                  Beispiel 3 (nur ein Datensatz wird selektiert bei mehreren PrimaryKey-Fields):
      *                                                  [
      *                                                    { field: "Name", value: "Muster" },
      *                                                    { field: "Vorname", value: "Max" }
      *                                                  ]
      *
-     *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren Primary-Fields):
+     *                                                  Beispiel 4 (mehrere Datensätze werden selektiert bei mehreren PrimaryKey-Fields):
      *                                                  [
      *                                                    [
      *                                                      { field: "Name", value: "Muster" },
@@ -688,196 +888,493 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      *
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    selectByFilters(filters, keepExisting, preventSelectionChange) {
-        if (kijs.isEmpty(filters)) {
-            filters = [];
-        }
+    selectByFilters(filters, keepExisting=false, preventSelectionChange=false) {
+        let rows = kijs.Data.filter(this._data, filters);
 
-        // Evtl. das Format ändern auf: [ [{...}, {...}], [{...}, {...}] ]
-        if (kijs.isObject(filters)) {
-            filters = [filters];
-        }
-        for (let i=0; i<filters.length; i++) {
-            if (kijs.isObject(filters[i])) {
-                filters[i] = [filters[i]];
-            }
-        }
-
-        // Nun die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
-        const selElements = [];
-        if (!kijs.isEmpty(filters)) {
-            kijs.Array.each(this._elements, function(el) {
-                if (el instanceof kijs.gui.dataView.element.Base) {
-                    const row = el.dataRow;
-
-                    kijs.Array.each(filters, function(filterFields) {
-                        let ok = false;
-                        kijs.Array.each(filterFields, function(filterField) {
-                            if (kijs.isEmpty(filterField.value) || kijs.isEmpty(filterField.field)) {
-                                throw new kijs.Error(`Unknown filter format.`);
-                            }
-
-                            if (filterField.value === row[filterField.field]) {
-                                ok = true;
-                            } else {
-                                ok = false;
-                                return false;
-                            }
-                        }, this);
-                        if (ok) {
-                            selElements.push(el);
-                            return false;
-                        }
-                    }, this);
-                }
-            }, this);
-        }
-
-        // Elemente selektieren
-        this.select(selElements, keepExisting, preventSelectionChange);
+        let ret = this.selectByDataRows(rows, keepExisting, preventSelectionChange);
 
         // Element mit Fokus neu ermitteln
         this._currentEl = null;
         this.current = null;
+
+        return ret;
     }
 
     /**
-     * Selektiert ein oder mehrere Elemente
-     * @param {Array|Int} indexes Index oder Array mit Indexes, die selektiert werden sollen
+     * Selektiert ein oder mehrere Elemente mit Index
+     * @param {Array|Int} indexes Index oder Array mit Indexen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    selectByIndex(indexes, keepExisting=false, preventSelectionChange=false) {
-        if (!kijs.isArray(indexes)) {
-            indexes = [indexes];
-        }
+    selectByIndexes(indexes, keepExisting=false, preventSelectionChange=false) {
         let selectElements = [];
-        kijs.Array.each(indexes, function(index) {
-            kijs.Array.each(this.elements, function(element) {
-                if (element.index === index) {
-                    selectElements.push(element);
-                    return false;
-                }
-            }, this);
+        
+        if (kijs.isEmpty(indexes)) {
+            indexes = [];
+        } else {
+            if (!kijs.isArray(indexes)) {
+                indexes = [indexes];
+            }
+        }
+
+        kijs.Array.each(this.elements, function(element) {
+            if (kijs.Array.contains(indexes, element.index)) {
+                selectElements.push(element);
+            }
         }, this);
 
-        this.select(selectElements, keepExisting, preventSelectionChange);
+        return this.select(selectElements, keepExisting, preventSelectionChange);
     }
 
     /**
-     * Element festlegen, welches über die Tabulator-Taste den Fokus erhält.
-     * Setzt den tabIndex des Elements auf 0
-     * und bei allen anderen Elementen auf undefined
-     * @param {Object} el
-     * @returns {undefined}
+     * Selektiert ein oder mehrere Elemente mittels PrimaryKey-Strings
+     * @param {Array|String} primaryKeys PrimaryKey-String oder Array mit PrimaryKey-Strings, die selektiert werden sollen
+     * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    /*setFocusableElement(el) {
-        // Sicherstellen, dass alle anderen Elemente den Fokus nicht mehr über die Tabulator-Taste erhalten können
-        kijs.Array.each(this._elements, function(elem) {
-            elem.dom.nodeAttributeSet('tabIndex', undefined);
-        }, this);
-        
-        //if (!el && !kijs.isEmpty(this._elements)) {
-        //    el = this._elements[0];
-        //}
+    selectByPrimaryKeys(primaryKeys, keepExisting=false, preventSelectionChange=false) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
 
-        // Beim neuen Element: tabIndex einschalten
-        // kann nun auch über die Tastatur und Maus fokussiert werden.
-        if (this._focusable) {
-            if (el) {
-                el.dom.nodeAttributeSet('tabIndex', 0);
-                //this._dom.nodeAttributeSet('tabIndex', undefined);
-            } else {
-                //this._dom.nodeAttributeSet('tabIndex', 0);
-            }
-        } else {
-            //this._dom.nodeAttributeSet('tabIndex', undefined);
+        if (!keepExisting) {
+            args = this.clearSelections(true);
         }
-    }*/
+
+        if (kijs.isEmpty(primaryKeys)) {
+            return args;
+        }
+
+        if (!kijs.isArray(primaryKeys)) {
+            primaryKeys = [primaryKeys];
+        }
+
+        // Sichtbare Elemente selektieren (bei einem Baum kann es sein, dass
+        // ein übergeordneter Ordner zugeklappt ist)
+        // Bei nicht sichtbaren Elemente wird der key/row nur in das Array this._selectedKeysRows
+        // aufgenommen
+        for (let i=0, len=primaryKeys.length; i<len; i++) {
+            let el = this.getElementByPrimaryKey(primaryKeys[i]);
+            if (el) {
+                if (!el.selected) {
+                    args.selectedElements.push(el);
+                    el.selected = true;
+                    args.changed = true;
+                }
+            } else {
+                let keyRow;
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    keyRow = primaryKeys[i];
+                } else {
+                    throw new kijs.Error(`No primaryKeyFields were defined.`);
+                }
+
+                if (!kijs.Array.contains(this._selectedKeysRows, keyRow)) {
+                    this._selectedKeysRows.push(keyRow);
+                    args.selectedKeysRows.push(keyRow);
+                    args.changed = true;
+                }
+            }
+        }
+
+        // SelectionChange auslösen
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
+        }
+
+        return args;
+    }
 
     /**
      * Deselektiert ein oder mehrere Elemente
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die deselektiert werden sollen
-     * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
-     * @returns {undefined}
+     * @param {Boolean} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
     unSelect(elements, preventSelectionChange) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
+        if (kijs.isEmpty(elements)) {
+            return args;
+        }
+
         if (!kijs.isArray(elements)) {
             elements = [elements];
         }
 
         kijs.Array.each(elements, function(el) {
-            if ('selected' in el) {
+            if (el.selected) {
+                args.unselectedKeysRows.push(el.keyRow);
+                args.unselectedElements.push(el);
                 el.selected = false;
+                args.changed = true;
             }
         }, this);
 
-        if (!preventSelectionChange) {
-            this.raiseEvent('selectionChange', { elements: elements, unSelect: true } );
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
         }
+
+        return args;
+    }
+
+    /**
+     * Deselektiert ein oder mehrere Elemente mittels dataRow
+     * @param {Array} dataRows die deselektiert werden sollen
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
+     */
+    unselectByDataRows(dataRows, preventSelectionChange=false) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
+        if (kijs.isEmpty(dataRows)) {
+            return args;
+        }
+
+        // Klonen
+        dataRows = kijs.Array.clone(dataRows);
+
+
+        // Sichtbare Elemente deselektieren (bei einem Baum kann es sein, dass
+        // ein übergeordneter Ordner zugeklappt ist)
+        // Bei nicht sichtbaren Elemente wird der key/row nur aus dem Array this._selectedKeysRows
+        // entfernt
+        for (let i=0, len=dataRows.length; i<len; i++) {
+            let ok = false;
+
+            let el = this.getElementByDataRow(dataRows[i]);
+            if (el) {
+                if (el.selected) {
+                    args.unselectedElements.push(el);
+                    el.selected = false;
+                    args.changed = true;
+                    ok = true;
+                }
+            }
+
+            if (!ok) {
+                let keyRow;
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    keyRow = kijs.Data.getPrimaryKeyString(dataRows[i], this._primaryKeyFields);
+                } else {
+                    keyRow = dataRows[i];
+                }
+
+                if (kijs.Array.contains(this._selectedKeysRows, keyRow)) {
+                    kijs.Array.remove(this._selectedKeysRows, keyRow);
+                    args.unselectedKeysRows.push(keyRow);
+                    args.changed = true;
+                }
+            }
+        }
+
+        // SelectionChange auslösen
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
+        }
+
+        return args;
+    }
+
+    /**
+     * Deselektiert ein oder mehrere Elemente mittels PrimaryKey-Strings
+     * @param {Array|String} primaryKeys PrimaryKey-String oder Array mit PrimaryKey-Strings, die deselektiert werden sollen
+     * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
+     * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
+     */
+    unselectByPrimaryKeys(primaryKeys, preventSelectionChange=false) {
+        let args = {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: false
+        };
+
+        if (kijs.isEmpty(primaryKeys)) {
+            return args;
+        }
+
+        if (!kijs.isArray(primaryKeys)) {
+            primaryKeys = [primaryKeys];
+        }
+
+        // Klonen
+        primaryKeys = kijs.Array.clone(primaryKeys);
+
+        // Sichtbare Elemente deselektieren (bei einem Baum kann es sein, dass
+        // ein übergeordneter Ordner zugeklappt ist)
+        // Bei nicht sichtbaren Elemente wird der key/row nur aus dem Array this._selectedKeysRows
+        // entfernt
+        for (let i=0, len=primaryKeys.length; i<len; i++) {
+            let ok = false;
+
+            let el = this.getElementByPrimaryKey(primaryKeys[i]);
+            if (el) {
+                if (el.selected) {
+                    args.unselectedElements.push(el);
+                    el.selected = false;
+                    args.changed = true;
+                    ok = true;
+                }
+            }
+
+            if (!ok) {
+                let keyRow;
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    keyRow = primaryKeys[i];
+                } else {
+                    throw new kijs.Error(`No primaryKeyFields were defined.`);
+                }
+
+                if (kijs.Array.contains(this._selectedKeysRows, keyRow)) {
+                    kijs.Array.remove(this._selectedKeysRows, keyRow);
+                    args.unselectedKeysRows.push(keyRow);
+                    args.changed = true;
+                }
+            }
+        }
+
+        // SelectionChange auslösen
+        if (!preventSelectionChange && args.changed) {
+            this.raiseEvent('selectionChange', args);
+        }
+
+        return args;
     }
 
 
     // PROTECTED
     /**
-     * Erstellt aus einem Recordset ein kijs.gui.dataView.element....
-     * @param {Array} dataRow   Datensatz, der gerendert werden soll
-     * @param {Number} dataIndex  Index des Datensatzes im Recordset
-     * @returns {kijs.gui.getDataViewElement}
+     * Stellt die gemerkten Eigenschaften nach dem reload wieder her
+     * @param {Object} options  options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
+     * @param {Object} currentConfig
+     * @param {Boolean} isRpc Wurde ein RPC gemacht?
+     * @returns {undefined}
      */
-    _createElement(dataRow, dataIndex) {
-        let el = this._getInstanceForAdd({
-            xtype: this._elementXType,
-            parent: this,
-            dataRow: dataRow,
-            dataIndex: dataIndex
-        });
+    _afterReload(options, currentConfig, isRpc) {
+        // Elemente wieder selektieren
+        if (!options.skipSelected) {
+            if (!kijs.isEmpty(this._primaryKeyFields)) {
+                this.selectByPrimaryKeys(currentConfig.selectedKeysRows, false, true);
+            } else {
+                // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
+                // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
+                // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
+                // Spalten angelegt und damit verglichen
+                if (isRpc) {
+                    currentConfig.selectedKeysRows = kijs.Data.updateRowsReferences(
+                            currentConfig.selectedKeysRows, this._data);
+                }
 
-        if (!(el instanceof kijs.gui.dataView.element.Base)) {
+                this.selectByDataRows(currentConfig.selectedKeysRows, false, true);
+            }
+        }
+
+        // Current Element ermitteln und setzen
+        this.current = null;
+
+        // evtl. Fokus wieder setzen
+        if (!options.skipFocus && this._focusable && currentConfig.hasFocus) {
+            this.focus();
+        }
+
+        // zur vorherigen Position scrollen
+        if (!options.skipScroll && this.isRendered) {
+            this._innerDom.node.scrollTo(currentConfig.scrollPosition);
+        }
+    }
+
+    /**
+     * Merkt sich vor dem reload die Eigenschaften, die nach dem reload wiederhergestellt
+     * werden sollen
+     * @param {Object} options  options mit Einstellungen zum reload
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
+     * @returns {Object}
+     */
+    _beforeReload(options) {
+        // Eigenschaften merken, die nach dem Laden wiederhergestellt werden sollen
+        let currentConfig = {
+            hasFocus: false,
+            selectedKeysRows: null,
+            scrollPosition: null
+        };
+
+        // Ist der Fokus auf dem DataView?
+        currentConfig.hasFocus = this.hasFocus;
+
+        // Position der Scrollbars merken
+        if (this.isRendered) {
+            currentConfig.scrollPosition = {
+                top: this._innerDom.node.scrollTop,
+                left: this._innerDom.node.scrollLeft,
+                behavior: 'instant'
+            };
+        }
+
+        // selektierte Elemente merken
+        // Zuerst via PrimaryKey versuchen
+        if (!kijs.isEmpty(this._primaryKeyFields)) {
+            currentConfig.selectedKeysRows = this.getSelectedPrimaryKeys();
+
+        // sonst muss die ganze dataRow verglichen werden
+        } else {
+            currentConfig.selectedKeysRows = this.getSelectedRows();
+
+        }
+
+        return currentConfig;
+    }
+
+    _createElement(config) {
+        let newConfig = { ...config };
+
+        if (kijs.isEmpty(newConfig.xtype)) {
+            newConfig.xtype = this._elementXType;
+        }
+
+        let el = this._getInstanceForAdd(newConfig);
+        if ((el instanceof kijs.gui.dataView.element.Base)) {
+            // Inhalt laden
+            el.update();
+        } else {
             throw new kijs.Error(`Element must be an instance of kijs.gui.dataView.element.Base.`);
         }
 
         return el;
     }
 
+
     /**
      * Erstellt die Elemente
      * @param {array|string} data
-     * @param {bool}  removeElements
+     * @param {Object} [options={}] options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
      * @returns {undefined}
      */
-    _createElements(data, removeElements = true) {
+    _createElements(data, options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
 
-        // index des aktuellen Elements merken (Element mit Fokus)
-        let currentIndex = null;
-        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.element.Base) && kijs.isDefined(this._currentEl.index)) {
-            currentIndex = this._currentEl.index;
+        // aktuelles Element merken (Element mit Fokus)
+        let currentPrimaryKey = '';
+        let currentDataRow = null;
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.element.Base)) {
+            // Zuerst via PrimaryKey versuchen
+            if (!kijs.isEmpty(this._currentEl.primaryKey)) {
+                currentPrimaryKey = this._currentEl.primaryKey;
+            }
+
+            // sonst muss die ganze dataRow verglichen werden
+            if (kijs.isEmpty(currentPrimaryKey) && kijs.isDefined(this._currentEl.dataRow)) {
+                currentDataRow = this._currentEl.dataRow;
+            }
+        }
+
+        // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
+        // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
+        // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
+        // Spalten angelegt und damit verglichen
+        if (kijs.isEmpty(this._primaryKeyFields)) {
+            if (!kijs.isEmpty(this._selectedKeysRows)) {
+                this._selectedKeysRows = kijs.Data.updateRowsReferences(
+                        this._selectedKeysRows, this._data);
+            }
+        }
+
+        // Evtl. sortieren
+        if (!options.skipSort && !kijs.isEmpty(this._sortFields)) {
+            kijs.Data.sort(data, this._sortFields, null, false);
         }
 
         // Bestehende Elemente löschen
-        if (this.elements && removeElements) {
+        if (!options.skipRemoveElements && !kijs.isEmpty(this.elements)) {
             this.removeAll({
                 preventRender: true
             });
             this._currentEl = null;
         }
 
-        let indexOffset = this.elements.length;
-
         // Neue Elemente generieren
         let newElements = [];
         for (let i=0, len=data.length; i<len; i++) {
 
             // Zeile überspringen, falls sie im Filter hängen bleibt.
-            if (this._filterMatch(data[i])) {
+            if (!options.skipFilters && !kijs.isEmpty(this._filters) &&
+                    !kijs.Data.rowMatchFilters(data[i], this._filters)) {
                 continue;
             }
 
-            const newEl = this._createElement(data[i], indexOffset+i);
+            const newEl = this._createElement({ dataRow: data[i] });
             newEl.parent = this;
+
+            // Selektierung anwenden
+            if (!options.skipSelected) {
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    if (kijs.Array.contains(this._selectedKeysRows, newEl.primaryKey)) {
+                        newEl.selected = true;
+                    }
+                } else {
+                    if (kijs.Array.contains(this._selectedKeysRows, newEl.dataRow)) {
+                        newEl.selected = true;
+                    }
+                }
+            }
 
             // Drag&Drop
             if (this._elementDdSourceConfig) {
@@ -922,9 +1419,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementFocus', e);
             }, this);
 
-            // Evtl. fokus setzen
-            if (newEl.index === currentIndex) {
-                this._currentEl = newEl;
+            // Evtl. fokus wieder setzen
+            if (!kijs.isEmpty(currentPrimaryKey)) {
+                if (newEl.primaryKey === currentPrimaryKey) {
+                    this._currentEl = newEl;
+                }
+            } else if (!kijs.isEmpty(currentDataRow)) {
+                if (newEl.dataRow === currentDataRow) {
+                    this._currentEl = newEl;
+                }
             }
 
             newElements.push(newEl);
@@ -932,44 +1435,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // neue Elemente einfügen
         this.add(newElements);
-    }
-
-    /**
-     * Prüft, ob ein Filter auf einen Record matcht
-     * @param {Object} record
-     * @returns {Boolean}
-     */
-    _filterMatch(record) {
-        let filterMatch = false;
-
-        kijs.Array.each(this.filters, function(filter) {
-            if (!kijs.isDefined(record[filter.field])) {
-                filterMatch = true;
-            }
-
-            let rgx;
-            if (filter.compare === 'begin') {
-                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
-
-            } else if (filter.compare === 'part') {
-                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)), 'i');
-
-            } else if (filter.compare === 'end') {
-                rgx = new RegExp(kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
-
-            } else if (filter.compare === 'full') {
-                rgx = new RegExp('^' + kijs.Char.getRegexPattern(kijs.String.regexpEscape(filter.value)) + '$', 'i');
-
-            } else {
-                throw new kijs.Error(`invalid value for filter.compare in kijs.gui.DataView`);
-            }
-
-            if (!kijs.toString(record[filter.field]).match(rgx)) {
-                filterMatch = true;
-            }
-        }, this);
-
-        return filterMatch;
     }
 
     /**
@@ -1018,11 +1483,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 ctrl = true;
                 break;
 
+            case 'manual':
             case 'none':
             default:
                 return;
         }
-
+        
         if (shift && this._lastSelectedEl) {
             // bestehende Selektierung entfernen
             if (!ctrl) {
@@ -1050,7 +1516,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-
+    
     // PRIVATE
     // LISTENERS
     #onAfterFirstRenderTo(e) {
@@ -1074,13 +1540,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
         }
     }
-
-    /*#onElementFocus(e) {
-        if (!this.disabled) {
-            // Element festlegen, welches über die Tabulator-Taste den Fokus erhält
-            //this.setFocusableElement(e.raiseElement);
-        }
-    }*/
 
     #onKeyDown(e) {
         this.handleKeyDown(e.nodeEvent);
@@ -1108,17 +1567,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             // evtl. neu laden
             if (e.target.ownerEl !== this) {
-                // rows der selektierten Zeilen ermitteln
-                let selectedDataRows = this.getSelectedRows();
-
-                // neu laden
-                this._createElements(this._data);
-
-                // und wieder selektieren
-                this.selectByDataRows(selectedDataRows, false, true);
-
-                // Current Element ermitteln und setzen
-                this.current = null;
+                this.reload({ noRpc:true });
             }
         }
     }
@@ -1144,20 +1593,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 targetIndex = this._data.length -1;
             }
 
-            // rows der selektierten Zeilen ermitteln
-            let selectedDataRows = this.getSelectedRows();
-
             // neu laden
-            this._createElements(this._data);
-
-            // und wieder selektieren
-            this.selectByDataRows(selectedDataRows, false, true);
-
-            // Current Element ermitteln und setzen
-            this.current = null;
+            this.reload({ noRpc:true });
 
             // in sichtbaren Bereich scrollen?
-            this._elements[targetIndex].dom.scrollIntoView();
+            //this._elements[targetIndex].dom.scrollIntoView();
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {

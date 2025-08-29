@@ -604,10 +604,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, compare: 'part'});
+            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
 
         } else {
 
@@ -747,7 +747,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         } else if (e.nodeEvent.key === 'ArrowDown') {
             let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
             if (indx !== null) {
-                this._listViewEl.selectByIndex(indx);
+                this._listViewEl.selectByIndexes(indx);
             }
         }
 
@@ -873,7 +873,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         this._listViewEl.applyFilters();
-
+        
         if (this._listViewEl.data.length === 0 && this._remoteSort) {
             this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
         }

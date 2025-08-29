@@ -1,21 +1,9 @@
 /* global kijs, this */
 
-// TODO: Grundsätzlich überarbeiten
-// TODO: load() ist nicht kompatibel mit Basisklasse
 // --------------------------------------------------------------
 // kijs.gui.Tree
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- * afterLoad
- * beforeSelectionChange
- * selectionChange
- * rowClick
- * rowDblClick
- *
- */
-kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
+kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
 
     // --------------------------------------------------------------
@@ -24,95 +12,103 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // overwrite
     constructor(config={}) {
         super(false);
-        this._rpc = null;   // Instanz von kijs.gui.Rpc
-        this._rpcLoadFn = null;
-        this._rpcLoadArgs = null;
-        this._rpcSaveFn = null;
-        this._rpcSaveArgs = null;
-        this._autoLoad = true;
-        this._loaded = false;
-        this._nodeId = null;
-        this._leaf = true;
-        this._rootVisible = false;
 
-        this._nodeDom = new kijs.gui.Dom({cls: 'kijs-node'});
-        this._elementsDom = new kijs.gui.Dom({cls: 'kijs-expandcontainer'});
-        this._treeCaptionDom = new kijs.gui.Dom({cls: 'kijs-treecaption', htmlDisplayType: 'code'});
+        this._captionField = null;
+        this._captionHtmlDisplayType = 'code';
+        this._valueField = null;
 
-        this._iconEl = new kijs.gui.Icon({cls: 'fa-regular'});
-        this._expandIconEl = new kijs.gui.Icon({cls: 'kijs-expandicon', iconMap: 'kijs.iconMap.Fa.angle-right'});
-        this._expandedIconEl = new kijs.gui.Icon({cls: 'kijs-expandedicon fa-regular'});
-        this._spinnerIconEl = new kijs.gui.Icon({cls: 'kijs-spinnericon kijs-pulse fa-solid', iconMap: 'kijs.iconMap.Fa.spinner'});
+        this._elementDdTargetConfig = null; // Konfiguration Ordner, damit ein Drop
+        //                                  // in den Ordner gemacht werden kann.
 
-        this._dom.clsRemove('kijs-container');
+        // Icons für expand-Button
+        this._expandButtonCollapsedIconMap = 'kijs.iconMap.Fa.caret-right';
+        this._expandButtonExpandedIconMap = 'kijs.iconMap.Fa.caret-down';
+
+        // Standard-Icon (optional)
+        this._iconMap = 'kijs.iconMap.Fa.file';                 // Datei (overwrite)
+        this._iconChar = null;
+        this._iconCls = null;
+        this._iconAnimationCls = null;
+        this._iconColor = null;
+
+        this._collapsedIconMap = 'kijs.iconMap.Fa.folder';      // Ordner zu
+        this._expandedIconMap = 'kijs.iconMap.Fa.folder-open';  // Ordner auf
+
+        // Feldnamen für Icons (optional)
+        this._iconMapField = null;
+        this._iconCharField = null;
+        this._iconClsField = null;
+        this._iconAnimationClsField = null;
+        this._iconColorField = null;
+
+        this._collapsedIconMapField = null;
+        this._expandedIconMapField = null;
+
+        // Feldnamen für weitere Eigenschaften
+        this._childrenField = null;       // Feldname für Kinder
+        this._expandedField = null;     // Feldname für expandiert-Feld (optional)
+
+        this._allowChildrenField = null;  // Sind Kinder erlaubt? Ja=Ordner, Nein=leaf/Datei
+        this._indent = 16;              // Einrückungstiefe pro Hierarchiestufe in Pixel
+        this._expandedKeysRows = [];    // Bei primaryKeyFields: Array mit PrimaryKeys der expandierten Elemente
+                                        // sonst: Array mit den dataRows der expandierten Elemente
+        this._tooltipField = null;
+        this._showCheckBoxes = false;
+        this._value = null;
+
+        this._dom.clsRemove('kijs-dataview');
         this._dom.clsAdd('kijs-tree');
-
-        // Events
-        this._expandIconEl.on('click', this.#onExpandClick, this);
-
-        this._iconEl.on('dblClick', this.#onNodeDblClick, this);
-        this._expandedIconEl.on('dblClick', this.#onNodeDblClick, this);
-        this._treeCaptionDom.on('dblClick', this.#onNodeDblClick, this);
-
-        this._iconEl.on('singleClick', this.#onNodeSingleClick, this);
-        this._expandedIconEl.on('singleClick', this.#onNodeSingleClick, this);
-        this._treeCaptionDom.on('singleClick', this.#onNodeSingleClick, this);
-
-        this._iconEl.on('contextMenu', this.#onNodeContextMenu, this);
-        this._expandedIconEl.on('contextMenu', this.#onNodeContextMenu, this);
-        this._treeCaptionDom.on('contextMenu', this.#onNodeContextMenu, this);
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            scrollableY: 'auto',
-          //  waitMaskTarget           : this,
-          //  waitMaskTargetDomProperty: 'dom',
-            folderIcon               : 'auto'
+            elementXType: 'kijs.gui.dataView.element.Tree',
+            selectType: 'single',
+            ddName: kijs.uniqId('tree.element'),
+            ddPosBeforeFactor: 0.5,
+            ddPosAfterFactor: 0.8
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad                  : true,
-            rootVisible               : true,
+            expandButtonExpandedIconMap: true,
+            expandButtonCollapsedIconMap: true,
 
-            rpc                       : { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
-            rpcLoadFn                 : true,
-            rpcLoadArgs               : true,
-            rpcSaveFn                 : true,
-            rpcSaveArgs               : true,
-            nodeId                    : true,
+            captionField: true,
+            captionHtmlDisplayType: true,
 
-            // leaf = true = keine Kindknoten
-            leaf                      : true,
+            iconMap: true,
+            iconChar: true,
+            iconCls: true,
+            iconAnimationCls: true,
+            iconColor: true,
 
-            // Bezeichnung des node
-            caption                   : { target: 'html', context: this._treeCaptionDom },
+            collapsedIconMap: true,
+            expandedIconMap: true,
 
-            // Pfeil-Icon im Baum
-            expandIconMap             : { target: 'iconMap', context: this._expandIconEl },
-            expandIconChar            : { target: 'iconChar', context: this._expandIconEl },
-            expandIconCls             : { target: 'iconCls', context: this._expandIconEl },
-            expandIconAnimationCls    : { target: 'iconAnimationCls', context: this._expandIconEl },
-            expandIconColor           : { target: 'iconColor', context: this._expandIconEl },
+            iconMapField: true,
+            iconCharField: true,
+            iconClsField: true,
+            iconAnimationClsField: true,
+            iconColorField: true,
 
-            // icon bei geschlossenem Baum
-            iconMap                   : { target: 'iconMap', context: this._iconEl },
-            iconChar                  : { target: 'iconChar', context: this._iconEl },
-            iconCls                   : { target: 'iconCls', context: this._iconEl },
-            iconAnimationCls          : { target: 'iconAnimationCls', context: this._iconEl },
-            iconColor                 : { target: 'iconColor', context: this._iconEl },
+            collapsedIconMapField: true,
+            expandedIconMapField: true,
 
-            // icon bei offenem Baum
-            expandedIconMap           : { target: 'iconMap', context: this._expandedIconEl },
-            expandedIconChar          : { target: 'iconChar', context: this._expandedIconEl },
-            expandedIconCls           : { target: 'iconCls', context: this._expandedIconEl },
-            expandedIconAnimationCls  : { target: 'iconAnimationCls', context: this._expandedIconEl },
-            expandedIconColor         : { target: 'iconColor', context: this._expandedIconEl },
+            showCheckBoxes: true,
+            tooltipField: true,
+            valueField: true,
 
-            // setzt das 'iconChar' und das 'expandedIconChar' auf ein Ordner-Symbol.
-            folderIcon                : { target: 'folderIcon', prio: 10 },
+            childrenField: true,
+            expandedField: true,
+            allowChildrenField: true,
 
-            iconSize                  : { target: 'iconSize' }
+            indent: true,
+
+            elementDdTargetConfig: true,
+
+            expandFilters: { prio: 90, fn: 'function', target: this.expandByFilters, context: this }, // Filter, die definieren, welche Knoten die expandiert werden.
+
+            value: { prio: 200, target: 'value' }
         });
 
         // Config anwenden
@@ -121,9 +117,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
             this.applyConfig(config, true);
         }
 
-        if (this.isRoot) {
-            this._dom.clsAdd('kijs-tree-root');
-        }
+        // Events
+        this.on('afterLoad', this.#onAfterLoad, this);
     }
 
 
@@ -131,534 +126,963 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get caption() { return this._treeCaptionDom.html; }
+    get allowChildrenField() { return this._allowChildrenField; }
+    set allowChildrenField(val) { this._allowChildrenField = val; }
 
-    get expanded() { return !!this._innerDom.clsHas('kijs-expanded'); }
-    set expanded(val) {
-        if (val) {
-            this._innerDom.clsAdd('kijs-expanded');
+    get captionHtmlDisplayType() { return this._captionHtmlDisplayType; }
+    set captionHtmlDisplayType(val) { this._captionHtmlDisplayType = val; }
+
+    get captionField() { return this._captionField; }
+    set captionField(val) { this._captionField = val; }
+
+    get childrenField() { return this._childrenField; }
+    set childrenField(val) { this._childrenField = val; }
+
+    get collapsedIconMap() { return this._collapsedIconMap; }
+    set collapsedIconMap(val) { this._collapsedIconMap = val; }
+
+    get collapsedIconMapField() { return this._collapsedIconMapField; }
+    set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
+
+    get elementDdTargetConfig() {
+        return this._elementDdTargetConfig;
+    }
+    set elementDdTargetConfig(val) {
+        this._elementDdTargetConfig = val;
+    }
+
+    get expandButtonCollapsedIconMap() { return this._expandButtonCollapsedIconMap; }
+    set expandButtonCollapsedIconMap(val) { this._expandButtonCollapsedIconMap = val; }
+
+    get expandButtonExpandedIconMap() { return this._expandButtonExpandedIconMap; }
+    set expandButtonExpandedIconMap(val) { this._expandButtonExpandedIconMap = val; }
+
+    get expandedField() { return this._expandedField; }
+    set expandedField(val) { this._expandedField = val; }
+
+    get expandedIconMap() { return this._expandedIconMap; }
+    set expandedIconMap(val) { this._expandedIconMap = val; }
+
+    get expandedIconMapField() { return this._expandedIconMapField; }
+    set expandedIconMapField(val) { this._expandedIconMapField = val; }
+
+    get expandedKeysRows() { return this._expandedKeysRows; }
+
+    get iconAnimationCls() { return this._iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconAnimationCls = val; }
+
+    get iconAnimationClsField() { return this._iconAnimationClsField; }
+    set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
+
+    get iconChar() { return this._iconChar; }
+    set iconChar(val) { this._iconChar = val; }
+
+    get iconCharField() { return this._iconCharField; }
+    set iconCharField(val) { this._iconCharField = val; }
+
+    get iconCls() { return this._iconCls; }
+    set iconCls(val) { this._iconCls= val; }
+
+    get iconClsField() { return this._iconClsField; }
+    set iconClsField(val) { this._iconClsField = val; }
+
+    get iconColor() { return this._iconColor; }
+    set iconColor(val) { this._iconColor = val; }
+
+    get iconColorField() { return this._iconColorField; }
+    set iconColorField(val) { this._iconColorField = val; }
+
+    get iconMap() { return this._iconMap; }
+    set iconMap(val) { this._iconMap = val; }
+
+    get iconMapField() { return this._iconMapField; }
+    set iconMapField(val) { this._iconMapField = val; }
+
+    get indent() { return this._indent; }
+
+    get showCheckBoxes() { return this._showCheckBoxes; }
+    set showCheckBoxes(val) { this._showCheckBoxes = val; }
+
+    get tooltipField() { return this._tooltipField; }
+    set tooltipField(val) { this._tooltipField = val; }
+
+    get value() {
+        let val = null;
+
+        if (!kijs.isEmpty(this._data) && this._valueField) {
+            let rows = this.getSelectedRows();
+            if (!kijs.isEmpty(rows)) {
+                val = [];
+                kijs.Array.each(rows, function(row) {
+                    val.push(row[this._valueField]);
+                }, this);
+
+                // bei nur einem Wert direkt den Wert, ohne Array zurückgeben
+                if (val.length === 1) {
+                    val = val[0];
+                } else if (val.length === 0) {
+                    val = null;
+                }
+            }
+
         } else {
-            this._innerDom.clsRemove('kijs-expanded');
+            val = this._value;
+
         }
+
+        return val;
+    }
+    set value(val) {
+        if (kijs.isEmpty(this._valueField)) {
+            throw new kijs.Error(`Es wurde kein "valueField" definiert.`);
+        }
+
+        this._value = val;
+
+        let filters = null;
+
+        if (kijs.isArray(val)) {
+            filters = {
+                operator: 'OR',
+                parts:[]
+            };
+            kijs.Array.each(val, function(v) {
+                if (!kijs.isEmpty(v)) {
+                    filters.parts.push({
+                        field: this._valueField,
+                        operator: '=',
+                        value: v
+                    });
+                }
+            }, this);
+        } else if (!kijs.isEmpty(val)) {
+            filters = {
+                field: this._valueField,
+                operator: '=',
+                value: val
+            };
+        }
+        this.selectByFilters(filters, false, true);
     }
 
-    set folderIcon(val) {
-        if (val === 'auto') {
-            val = (!this._iconEl.iconChar && !this._iconEl.iconCls);
-        }
-
-        if (val) {
-            this._iconEl.iconMap = 'kijs.iconMap.Fa.folder';
-            this._expandedIconEl.iconMap = 'kijs.iconMap.Fa.folder-open';
-        }
-    }
-    get folderIcon() {
-        return (this._iconEl.iconChar === kijs.iconMap.Fa.folder.char && this._expandedIconEl.iconChar === kijs.iconMap.Fa['folder-open'].char);
-    }
-
-    get leaf() { return this.elements.length === 0 && this._leaf; }
-    set leaf(val) { this._leaf = !!val; }
-
-    get loadSpinner() { return !!this._innerDom.clsHas('kijs-loading'); }
-    set loadSpinner(val) {
-        if (val) {
-            this._innerDom.clsAdd('kijs-loading');
-        } else {
-            this._innerDom.clsRemove('kijs-loading');
-        }
-    }
-
-    get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
-    set iconAnimationCls(val) { this._iconEl.AnimationiconCls = val; }
-
-    get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) { this._iconEl.iconChar = val; }
-
-    get iconCls() { return this._iconEl.iconCls; }
-    set iconCls(val) { this._iconEl.iconCls = val; }
-
-    get iconColor() { return this._iconEl.iconColor; }
-    set iconColor(val) { this._iconEl.iconColor = val; }
-
-    get iconMap() { return this._iconEl.iconMap; }
-    set iconMap(val) { this._iconEl.iconMap = val; }
-
-    get expandedIconAnimationCls() { return this._expandedIconEl.iconAnimationCls; }
-    set expandedIconAnimationCls(val) { this._expandedIconEl.iconAnimationCls = val; }
-
-    get expandedIconChar() { return this._expandedIconEl.iconChar; }
-    set expandedIconChar(val) { this._expandedIconEl.iconChar = val; }
-
-    get expandedIconCls() { return this._expandedIconEl.iconCls; }
-    set expandedIconCls(val) { this._expandedIconEl.iconCls = val; }
-
-    get expandedIconColor() { return this._expandedIconEl.iconColor; }
-    set expandedIconColor(val) { this._expandedIconEl.iconColor = val; }
-
-    get expandedIconMap() { return this._expandedIconEl.iconMap; }
-    set expandedIconMap(val) { this._expandedIconEl.iconMap = val; }
-
-    get iconSize() { return this._iconEl.iconSize; }
-    set iconSize(val) {
-        this._iconEl.iconSize = val;
-        this._expandedIconEl.iconSize = val;
-        this._spinnerIconEl.iconSize = val;
-    }
-
-    get isRemote() { return !!(this._rpcLoadFn || (this.parent &&
-                (this.parent instanceof kijs.gui.Tree) && this.parent.isRemote)); }
-
-    get isRoot() { return !this.parent || !(this.parent instanceof kijs.gui.Tree); }
-
-    get nodeId() { return this._nodeId; }
-    set nodeId(val) { this._nodeId = val; }
-
-
-    get rpc() {
-        if (this._rpc) {
-            return this._rpc;
-        } else if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpc;
-        } else {
-            return kijs.getRpc('default');
-        }
-    }
-    set rpc(val) {
-        if (kijs.isString(val)) {
-            val = kijs.getRpc(val);
-        }
-
-        if (val instanceof kijs.gui.Rpc) {
-            this._rpc = val;
-        } else {
-            throw new kijs.Error(`Unknown format on config "rpc"`);
-        }
-    }
-
-    get rpcLoadArgs() {
-        if (this._rpcLoadArgs) {
-            return this._rpcLoadArgs;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpcLoadArgs;
-        }
-        return null;
-    }
-    set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
-
-    get rpcLoadFn() {
-        if (this._rpcLoadFn) {
-            return this._rpcLoadFn;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpcLoadFn;
-        }
-        return null;
-    }
-
-    get rpcSaveArgs() {
-        if (this._rpcSaveArgs) {
-            return this._rpcSaveArgs;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpcLoadArgs;
-        }
-        return null;
-    }
-    set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
-
-    get rpcSaveFn() {
-        if (this._rpcSaveFn) {
-            return this._rpcSaveFn;
-        }
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.rpcSaveFn;
-        }
-        return null;
-    }
-
-
-    get selected() { return !!this._innerDom.clsHas('kijs-selected'); }
-    set selected(val) {
-        if (val) {
-            this._innerDom.clsAdd('kijs-selected');
-        } else {
-            this._innerDom.clsRemove('kijs-selected');
-        }
-    }
+    get valueField() { return this._valueField; }
+    set valueField(val) { this._valueField = val; }
 
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // overwrite
-    add(elements, index=null, options={}) {
-        elements = this._recursiveSetProperties(elements);
-        super.add(elements, index, options);
-    }
-
     /**
-     * Klappt die Node zu.
+     * Alle Knoten zuklappen
      * @returns {undefined}
      */
-    collapse() {
-        if (this.expanded) {
-            this.expanded = false;
-            this._raiseRootEvent('collapse');
+    collapseAll() {
+        this._expandedKeysRows = [];
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
         }
     }
 
     /**
-     * Klappt die Node auf.
+     * Expandiert ein oder mehrere Elemente
+     * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die expandiert werden sollen
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
+     *                                                  { field: "Id", value: 123 }
+     *
+     *                                                  Beispiel 2 (mehrere werden expandiert bei nur einem PrimaryKey-Field):
+     *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
+     *
+     *                                                  Beispiel 3 (nur ein Datensatz wird expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    { field: "Name", value: "Muster" },
+     *                                                    { field: "Vorname", value: "Max" }
+     *                                                  ]
+     *
+     *                                                  Beispiel 4 (mehrere Datensätze werden expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    [
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ],[
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ]
+     *                                                  ]
+     *
      * @returns {undefined}
      */
-    expand() {
-        if (!this.leaf) {
-            if (this.isRemote && !this.expanded) {
-                this.load().then(() => {
-                    this.expanded = true;
-                    this._raiseRootEvent('expand');
-                });
-            } else if (!this.expanded) {
-                this.expanded = true;
-                this._raiseRootEvent('expand');
+    collapseByFilters(filters) {
+
+        // Die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
+        if (!kijs.isEmpty(this._expandedKeysRows) && !kijs.isEmpty(filters)) {
+
+            let keysRows = [];
+            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                keysRows = rows;
+            } else if (!kijs.isEmpty(rows)) {
+                for (let i=0, len=rows.length; i<len; i++) {
+                    keysRows.push(kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                }
+            }
+
+            if (!kijs.isEmpty(keysRows)) {
+                this._expandedKeysRows = kijs.Array.diff(this._expandedKeysRows, keysRows);
             }
         }
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
+    }
+    
+    /**
+     * Alle Knoten aufklappen
+     * @param {Boolean} [deep=null] Tiefe. 1=nur 1. Hierarchiestufe, 2=..., null=alle Stufen
+     * @returns {undefined}
+     */
+    expandAll(deep=null) {
+        this._expandedKeysRows = [];
+
+        this._expandAllRec(this._data, deep);
+
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
+        }
     }
 
     /**
-     * Gibt den Pfad im Baum zur aktuellen Node zurück.
-     * @param {String} separator
-     * @returns {String}
+     * Expandiert ein oder mehrere Elemente
+     * @param {Array|Object} filters                    Array mit Objektdefinitionen der Elemente, die expandiert werden sollen
+     *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
+     *                                                  { field: "Id", value: 123 }
+     *
+     *                                                  Beispiel 2 (mehrere werden expandiert bei nur einem PrimaryKey-Field):
+     *                                                  [ { field: "Id", value: 123 }, { field: "Id", value: 124 } ]
+     *
+     *                                                  Beispiel 3 (nur ein Datensatz wird expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    { field: "Name", value: "Muster" },
+     *                                                    { field: "Vorname", value: "Max" }
+     *                                                  ]
+     *
+     *                                                  Beispiel 4 (mehrere Datensätze werden expandiert bei mehreren PrimaryKey-Fields):
+     *                                                  [
+     *                                                    [
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ],[
+     *                                                      { field: "Name", value: "Muster" },
+     *                                                      { field: "Vorname", value: "Max" }
+     *                                                    ]
+     *                                                  ]
+     *
+     * @param {Boolean} [keepExisting=false]            Sollen die bereits Expandierten expandiert bleiben?
+     * @returns {undefined}
      */
-    getPath(separator='/') {
-        let path = '';
-        if (this.isRoot) {
-            path += separator;
-        } else {
-            path += this.parent.getPath(separator) + separator;
+    expandByFilters(filters, keepExisting=false) {
+        if (!keepExisting) {
+            this._expandedKeysRows = [];
         }
 
-        if (this._nodeId !== null) {
-            path += kijs.toString(this._nodeId);
+        // Die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
+        if (!kijs.isEmpty(filters)) {
 
-        } else if (this.isRoot) {
-            path += 'root';
+            let keysRows = [];
+            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
 
-        } else {
-            path += '<no-id>';
-        }
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                keysRows = rows;
+            } else if (!kijs.isEmpty(rows)) {
+                for (let i=0, len=rows.length; i<len; i++) {
+                    keysRows.push(kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                }
+            }
 
-        return path;
-    }
-
-    /**
-     * Gibt die Root-Node des aktuellen Baums zurück.
-     * @returns {kijs_gui_Tree}
-     */
-    getRootNode() {
-        if (this.parent && (this.parent instanceof kijs.gui.Tree)) {
-            return this.parent.getRootNode();
-        }
-
-        return this;
-    }
-
-    /**
-     * Gibt den aktuell Selektierten Node zurück (Sollte vom Root-Node aus aufgerufen werden!)
-     * @returns {kijs_gui_Tree|null}
-     */
-    getSelected() {
-        if (this.selected) {
-            return this;
-
-        } else {
-            let selectedNode = null;
-
-            kijs.Array.each(this.elements, function(el) {
-                if (el.selected) {
-                    selectedNode = el;
-                    return false;
+            if (!kijs.isEmpty(keysRows)) {
+                if (kijs.isEmpty(this._expandedKeysRows)) {
+                    this._expandedKeysRows = keysRows;
                 } else {
-                    selectedNode = el.getSelected();
-                    if (selectedNode) {
-                        return false;
-                    }
+                    this._expandedKeysRows = kijs.Array.concatUnique(keysRows, this._expandedKeysRows);
                 }
-            }, this);
+            }
+        }
 
-            return selectedNode;
+        // Neu Laden
+        if (this.isRendered) {
+            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
         }
     }
-
 
     /**
-     * Lädt die Daten vom RPC
-     * @param {Object|null} args
-     * @param {bool} force
-     * @returns {Promise}
+     * Gibt die expandierten Elemente zurück.
+     * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
+     * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
+     * Dafür besser die Funktionen getExpandedPrimaryKeys() und getExpandedRows() verwenden!
+     * @returns {Array}
      */
-    load(args=null, force=false) {
-        return new Promise((resolve, reject) => {
-            if (!this.isRemote) {
-                reject(new kijs.Error('tree not remotable'));
-
-            } else  if ((!this._loaded && this.elements.length === 0) || force) {
-                this._loaded = true;
-
-                if (!kijs.isObject(args)) {
-                    args = {};
-                }
-
-                let defaultRpcArgs = this.rpcLoadArgs;
-                if (kijs.isObject(defaultRpcArgs)) {
-                    args = Object.assign(args, defaultRpcArgs);
-                }
-
-                args.nodeId = this._nodeId;
-
-                // spinner icon aktivieren
-                this.loadSpinner = true;
-
-                this.rpc.do({
-                    remoteFn: this.rpcLoadFn,
-                    owner: this,
-                    data: args,
-                    waitMaskTarget: (!this._rootVisible && this.isRoot) ? this : 'none'
-
-                }).then((e) => {
-                    this.loadSpinner = false;
-
-                    // alle unterelemente entfernen und destructen
-                    this.removeAll();
-
-                    if (e.responseData.tree) {
-                        this.add(e.responseData.tree);
-                    }
-                    resolve(e.responseData);
-
-                }).catch((ex) => {
-                    this.loadSpinner = false;
-                    this.removeAll();
-                    reject(ex);
-                });
-
-            } else {
-                resolve(null);
+    getExpanded() {
+        let ret = [];
+        for (let i=0, len=this._elements.length; i<len; i++) {
+            if (this._elements[i].expanded) {
+                ret.push(this._elements[i]);
             }
-        });
+        }
+
+        return ret;
+    }
+    
+    /**
+     * Gibt die PrimaryKey-Strings der expandierten Elemente als Array zurück
+     * Siehe dazu kijs.Data.getPrimaryKey()
+     * @returns {Array}
+     */
+    getExpandedPrimaryKeys() {
+        let primaryKeys = [];
+
+        if (kijs.isEmpty(this._primaryKeyFields)) {
+            throw new kijs.Error(`No primaryKeyFields were defined.`);
+        } else  {
+            for (let i=0, len=this._expandedKeysRows.length; i<len; i++) {
+                primaryKeys.push(kijs.Data.getPrimaryKeyString(
+                        this._expandedKeysRows[i], this._primaryKeyFields));
+            }
+        }
+        
+        return primaryKeys;
     }
 
-    // overwrite
-    remove(elements, options={}, superCall) {
-        super.remove(elements, options, superCall);
+    /**
+     * Gibt die dataRows der expandierten Elemente zurück
+     * @returns {Array}
+     */
+    getExpandedRows() {
+        let rows = [];
 
-        if (this._elements.length === 0) {
-            this.collapse();
-        }
-    }
-
-    // Overwrite
-    render(superCall) {
-        super.render(true);
-
-        // leerer ordner
-        if (this.leaf) {
-            this._expandIconEl.dom.clsAdd('kijs-leaf');
-        } else {
-            this._expandIconEl.dom.clsRemove('kijs-leaf');
-        }
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-
-        if (this._autoLoad && this.isRemote && this.isRoot) {
-            this.load();
-        }
-    }
-
-    // Setzt den 'selected' Status rekursiv
-    setSelected(selected, recursive=false) {
-        this.selected = !!selected;
-        if (recursive) {
-            kijs.Array.each(this.elements, function(element) {
-                if (element instanceof kijs.gui.Tree) {
-                    element.setSelected(!!selected, true);
+        if (!kijs.isEmpty(this._expandedKeysRows)) {
+            if (kijs.isEmpty(this._primaryKeyFields)) {
+                rows = kijs.Array.clone(this._expandedKeysRows);
+            } else {
+                for (let i=0, len=this._expandedKeysRows.length; i<len; i++) {
+                    rows = filterByPrimaryKeys(this._data, this._expandedKeysRows,
+                            this._primaryKeyFields, this._childrenField);
                 }
-            }, this);
+            }
         }
 
+         return rows;
     }
 
     // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
+    getSelectedRows() {
+        let rows = [];
+
+        if (!kijs.isEmpty(this._primaryKeyFields)) {
+            rows = kijs.Data.filterByPrimaryKeys(this._data, this._selectedKeysRows,
+                    this._primaryKeyFields, this._childrenField);
+
+        } else {
+            rows = kijs.Array.clone(this._selectedKeysRows);
+
         }
 
-        this._nodeDom.unrender();
-        this._elementsDom.unrender();
-        this._expandIconEl.unrender();
-        this._iconEl.unrender();
-        this._expandedIconEl.unrender();
-        this._spinnerIconEl.unrender();
-        this._treeCaptionDom.unrender();
+        if (this._selectType === 'none') {
+            return null;
 
-        super.unrender(true);
+        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+            return rows.length ? [rows[0]] : null ;
+
+        } else {
+            return rows;
+
+        }
+    }
+
+    // overwrite
+    handleKeyDown(nodeEvent) {
+        let isShiftPress = !!nodeEvent.shiftKey;
+        let isCtrlPress = !!nodeEvent.ctrlKey;
+
+        if (kijs.Navigator.isMac) {
+            isCtrlPress = !!nodeEvent.metaKey;
+        }
+
+        let expanded = this._currentEl ? this._currentEl.expanded : false;
+
+        if (!this.disabled) {
+            switch (nodeEvent.code) {
+                case 'ArrowLeft':
+                    // falls expandiert: zusammenklappen
+                    if (this._currentEl) {
+                        if (expanded) {
+                            this._currentEl.collapse();
+
+                        // falls nicht expandiert und Eltern-Knoten vorhanden:
+                        // den Fokus auf Eltern-Knoten setzen
+                        } else if (this._currentEl.parentElement) {
+                            this.current = this._currentEl.parentElement;
+                            if (this._focusable) {
+                                this._currentEl.focus();
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+
+                        // falls nicht expandiert und kein Eltern-Knoten vorhanden:
+                        // den Fokus auf vorherigen Knoten setzen
+                        } else {
+                            const prev = this._currentEl.previous;
+                            if (prev) {
+                                this.current = prev;
+                                if (this._focusable) {
+                                    prev.focus();
+                                }
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowUp':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this, true);
+
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowRight':
+                    if (this._currentEl) {
+                        // falls nicht expandiert und Kinder: expandieren
+                        if (!expanded && this._currentEl.hasChildren) {
+                            this._currentEl.expand();
+
+                        // sonst zum nächsten Knoten gehen
+                        } else {
+                            const next = this._currentEl.next;
+                            if (next) {
+                                this.current = next;
+                                if (this._focusable) {
+                                    next.focus();
+                                }
+                            }
+
+                            if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                            }
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'ArrowDown':
+                    if (this._currentEl && this._elements) {
+                        let found = false;
+                        kijs.Array.each(this._elements, function(el) {
+                            if (found) {
+                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
+                                    this.current = el;
+                                    if (this._focusable) {
+                                        el.focus();
+                                    }
+                                    return false;
+                                }
+                            } else {
+                                if (el === this._currentEl) {
+                                    found = true;
+                                }
+                            }
+                        }, this);
+
+                        if (isShiftPress || (!isCtrlPress && kijs.Array.contains(['single', 'singleAndEmpty', 'multi'], this._selectType))) {
+                            this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                        }
+                    }
+                    nodeEvent.preventDefault();
+                    break;
+
+                case 'Space':
+                    this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+                    nodeEvent.preventDefault();
+                    break;
+
+            }
+        }
+    }
+
+    // overwrite
+    selectByFilters(filters, keepExisting=false, preventSelectionChange=false) {
+        let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+
+        let ret = this.selectByDataRows(rows, keepExisting, preventSelectionChange);
+
+        // Element mit Fokus neu ermitteln
+        this._currentEl = null;
+        this.current = null;
+
+        return ret;
+    }
+
+    // overwrite
+    get sortable() { return this._sortable; }
+    // overwrite
+    set sortable(val) {
+        this._sortable = !!val;
+
+        // Evtl. ddTarget erstellen
+        if (val && !this._ddTarget) {
+            this.ddTarget = {
+                posBeforeFactor: this._ddPosBeforeAfterFactor,
+                posAfterFactor: this._ddPosBeforeAfterFactor
+            };
+            this._ddTarget.on('drop', this.#onTargetDrop, this);
+        }
+
+        // Mapping
+        if (val) {
+            this._ddTarget.mapping[this._ddName] = {
+                allowMove: true,
+                allowCopy: false,
+                allowLink: false
+            };
+        } else {
+            delete this._ddTarget.mapping[this._ddName];
+        }
+
+        // evtl. ddTarget löschen
+        if (this._ddTarget && kijs.isEmpty(this._ddTarget.mapping)) {
+            if (this._ddTarget) {
+                this._ddTarget.destruct();
+            }
+            this._ddTarget = null;
+        }
+
+        // Elements neu laden
+        if (!kijs.isEmpty(this._elements)) {
+            this.reload({ noRpc:true });
+            this._createElements(this._data);
+        }
     }
 
 
     // PROTECTED
     /**
-     * Führt einen Event nicht nur beim aktuellen, sondern auch beim root-Element aus.
-     * @param {Mixed} args
-     * @returns {unresolved}
+     * Erstellt die Elemente
+     * overwrite
+     * @param {array|string} data
+     * @param {Object} [options={}] options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipExpandedFromExpandedField: false  // Soll nicht gemäss expandedField
+     *                                  // expandiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
+     * @returns {undefined}
      */
-    _raiseRootEvent(...args) {
-        let ret = this.raiseEvent.apply(this, args);
+    _createElements(data, options={}) {
+        options.noRpc = !!options.noRpc;
+        options.skipSelected = !!options.skipSelected;
+        options.skipExpandedFromExpandedField = !!options.skipExpandedFromExpandedField;
+        options.skipFilters = !!options.skipFilters;
+        options.skipSort = !!options.skipSort;
+        options.skipFocus = !!options.skipFocus;
+        options.skipRemoveElements = !!options.skipRemoveElements;
 
-        if (!this.isRoot) {
-            this.getRootNode().raiseEvent.apply(this.getRootNode(), args);
+        // Sollen gemäss recordset expandiert werden?
+        if (kijs.isEmpty(this._expandedField) && !kijs.isEmpty(this._expandedKeysRows)) {
+            options.skipExpandedFromExpandedField = true;
         }
-        return ret;
+
+        // aktuelles Element merken (Element mit Fokus)
+        let currentPrimaryKey = '';
+        let currentDataRow = null;
+        if (this._currentEl && (this._currentEl instanceof kijs.gui.dataView.element.Base)) {
+
+            // Zuerst via PrimaryKey versuchen
+            if (!kijs.isEmpty(this._currentEl.primaryKey)) {
+                currentPrimaryKey = this._currentEl.primaryKey;
+            }
+
+            // sonst muss die ganze dataRow verglichen werden
+            if (kijs.isEmpty(currentPrimaryKey) && kijs.isDefined(this._currentEl.dataRow)) {
+                currentDataRow = this._currentEl.dataRow;
+            }
+        }
+
+        // Evtl. sortieren
+        if (!options.skipSort && this._sortFields) {
+            kijs.Data.sort(data, this._sortFields, this._childrenField, false);
+        }
+
+        // Bestehende Elemente löschen
+        if (!options.skipRemoveElements && this.elements) {
+            this.removeAll({
+                preventRender: true
+            });
+            this._currentEl = null;
+        }
+        
+        // Neue Elemente generieren
+        let newElements = this._createElementsRec(data, 0, null, currentPrimaryKey, currentDataRow, options);
+        
+        // neue Elemente einfügen
+        this.add(newElements);
     }
 
     /**
-     * Setzt den xtype von Unterelementen
-     * @param elements
-     * @returns {mixed}
-     * @private
+     * Neue Elemente Rekursiv generieren
+     * @param {Array} data
+     * @param {Number} depth  Stufe in der Hierarchie (0=oberste Stufe)
+     * @param {kijs.gui.dataView.element.Tree} parentElement
+     * @param {String} currentPrimaryKey
+     * @param {Array} currentDataRow
+     * @param {Object} options  options mit Einstellungen zum _laden
+     *      {
+     *       noRpc: false,              // Soll kein RPC gemacht werden?
+     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
+     *                                  // vorher selektiert werden?
+     *       skipExpandedFromExpandedField: false  // Soll nicht gemäss expandedField
+     *                                  // expandiert werden?
+     *       skipFilters: false         // Soll nicht gefiltert werden?
+     *       skipSort: false            // Soll nicht sortiert werden?
+     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
+     *                                  // erhalten, wenn es ihn vorher hatte?
+     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
+     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
+     *      }
+     * @returns {Array}
      */
-    _recursiveSetProperties(elements) {
-        if (kijs.isObject(elements)) {
-            elements = [elements];
-        }
-        if (kijs.isArray(elements)) {
-            for (let i = 0; i < elements.length; i++) {
-                let element = elements[i];
-                if (kijs.isStandardObject(element)) {
-                    if (element.elements) {
-                        element.elements = this._recursiveSetProperties(element.elements);
-                    }
+    _createElementsRec(data, depth, parentElement, currentPrimaryKey, currentDataRow, options) {
+        let newElements = [];
 
-                    element.xtype = element.xtype ? element.xtype : 'kijs.gui.Tree';
-                    element.scrollableY = false;
+        for (let i=0, len=data.length; i<len; i++) {
 
-                    //element.iconChar = element.iconChar ? element.iconChar : this.getRootNode().iconChar;
-                    //element.iconCls = element.iconCls ? element.iconCls : this.getRootNode().iconCls;
-                    //element.iconAnimationCls = element.iconAnimationCls ? element.iconAnimationCls : this.getRootNode().iconAnimationCls;
-                    //element.iconColor = element.iconColor ? element.iconColor : this.getRootNode().iconColor;
-                    element.iconMap = element.iconMap ? element.iconMap : this.getRootNode().iconMap;
+            // Zeile überspringen, falls sie im Filter hängen bleibt.
+            if (!options.skipFilters && !kijs.isEmpty(this._filters) &&
+                    !kijs.Data.rowMatchFilters(data[i], this._filters)) {
+                continue;
+            }
 
-                    //element.expandedIconChar = element.expandedIconChar ? element.expandedIconChar : this.getRootNode().expandedIconChar;
-                    //element.expandedIconCls = element.expandedIconCls ? element.expandedIconCls : this.getRootNode().expandedIconCls;
-                    //element.expandedIconAnimationCls = element.expandedIconAnimationCls ? element.expandedIconAnimationCls : this.getRootNode().expandedIconAnimationCls;
-                    //element.expandedIconColor = element.expandedIconColor ? element.expandedIconColor : this.getRootNode().expandedIconColor;
-                    element.expandedIconMap = element.expandedIconMap ? element.expandedIconMap : this.getRootNode().expandedIconMap;
+            // Primärschlüssel oder rows der expandierten Elemente aus den Daten holen
+            if (!options.skipExpandedFromExpandedField && data[i][this._expandedField]) {
+                // Falls vorhanden, die primaryKeys merken
+                if (!kijs.isEmpty(this._primaryKeyFields)) {
+                    this._expandedKeysRows.push(
+                            kijs.Data.getPrimaryKeyString(data[i], this._primaryKeyFields));
 
-                    if (!element.iconSize && this.getRootNode().iconSize) {
-                        element.iconSize = this.getRootNode().iconSize;
-                    }
+                // sonst muss die gesammte dataRow gemerkt werden
+                } else {
+                    this._expandedKeysRows.push(data[i]);
+
                 }
             }
+
+            const newEl = this._createElement({ 
+                dataRow: data[i],
+                depth: depth,
+                parentElement: parentElement
+            });
+            newEl.parent = this;
+
+            // Drag&Drop
+            if (this._elementDdSourceConfig) {
+                newEl.ddSource = this._elementDdSourceConfig;
+            } else if (this._sortable) {
+                newEl.ddSource = {
+                    allowMove: true,
+                    allowCopy: true,
+                    allowLink: false,
+                    name: this._ddName
+                };
+                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+            }
+
+            if (this._elementDdTargetConfig) {
+                newEl.ddTarget = this._elementDdTargetConfig;
+            } else if (this._sortable) {
+                if (newEl.allowChildren) {
+                    let ddTarget = {
+                        posBeforeFactor: this._ddPosBeforeFactor,
+                        posAfterFactor: this._ddPosAfterFactor,
+                        on: {
+                            drop: this.#onTargetChildDrop,
+                            context: this
+                        }
+                    };
+
+                    ddTarget.mapping = {};
+                    ddTarget.mapping[this._ddName] = {
+                        allowMove: true,
+                        allowCopy: false,
+                        allowLink: false,
+                        disableMarker: true
+                    };
+
+                    newEl.ddTarget = ddTarget;
+                }
+            }
+
+            // click-Event
+            newEl.on('click', function(e) {
+                return this.raiseEvent('elementClick', e);
+            }, this);
+
+            // dblclick-Event
+            newEl.on('dblClick', function(e) {
+                return this.raiseEvent('elementDblClick', e);
+            }, this);
+
+            // mouseDown-Event
+            newEl.on('mouseDown', function(e) {
+                return this.raiseEvent('elementMouseDown', e);
+            }, this);
+
+            // mouseUp-Event
+            newEl.on('mouseUp', function(e) {
+                return this.raiseEvent('elementMouseUp', e);
+            }, this);
+
+            // contextMenu-Event
+            newEl.on('contextMenu', function(e) {
+                return this.raiseEvent('elementContextMenu', e);
+            }, this);
+
+            // focus-Event
+            newEl.on('focus', function(e) {
+                return this.raiseEvent('elementFocus', e);
+            }, this);
+
+            // expand-Event
+            newEl.on('expand', function(e) {
+                return this.raiseEvent('elementExpand', e);
+            }, this);
+
+            // collapse-Event
+            newEl.on('collapse', function(e) {
+                return this.raiseEvent('elementCollapse', e);
+            }, this);
+
+            // Evtl. fokus wieder setzen
+            if (!kijs.isEmpty(currentPrimaryKey)) {
+                if (newEl.primaryKey === currentPrimaryKey) {
+                    this._currentEl = newEl;
+                }
+            } else if (!kijs.isEmpty(currentDataRow)) {
+                if (newEl.dataRow === currentDataRow) {
+                    this._currentEl = newEl;
+                }
+            }
+
+            newElements.push(newEl);
+
+            // Falls Kinder existieren und der Knoten expandiert ist: die Kinder auch laden
+            if (!kijs.isEmpty(this._childrenField)) {
+                if (newEl.expanded && !kijs.isEmpty(data[i][this._childrenField])) {
+                    let newChildElements = this._createElementsRec(
+                            data[i][this._childrenField],
+                            depth+1,
+                            newEl,
+                            currentPrimaryKey,
+                            currentDataRow,
+                            options);
+
+                    newElements = kijs.Array.concat(newElements, newChildElements);
+                }
+            }
+
         }
-        return elements;
+
+        return newElements;
     }
 
-    // overwrite
-    _renderElements() {
-        // Beim Root-Element werden die Nodes
-        // direkt in den innerDom gerendert.
-        // Es gibt kein Icon, etc.
-        if (!this._rootVisible && this.isRoot) {
-            // elements im innerDom rendern
-            kijs.Array.each(this._elements, function(el) {
-                el.renderTo(this._innerDom.node);
-            }, this);
+    /**
+     * Expandiert die Knoten des Recordsets rekursiv auf
+     * @param {Array} rows
+     * @param {Number|Null} deep
+     * @returns {undefined}
+     */
+    _expandAllRec(rows, deep) {
+        if (deep === null || deep >= 1) {
+            for (let i=0, len=rows.length; i<len; i++) {
+                // Sind Kinder vorhanden
+                if (!kijs.isEmpty(rows[i][this._childrenField])) {
+                    // expandieren
+                    if (kijs.isEmpty(this._primaryKeyFields)) {
+                        this._expandedKeysRows.push(rows[i]);
+                    } else {
+                        this._expandedKeysRows.push(
+                                kijs.Data.getPrimaryKeyString(rows[i], this._primaryKeyFields));
+                    }
 
-        } else {
-            // node in den innerDom
-            this._nodeDom.renderTo(this._innerDom.node);
-
-            // elementDom in den innerDom
-            this._elementsDom.renderTo(this._innerDom.node);
-
-            // elements im elementDom rendern
-            kijs.Array.each(this._elements, function(el) {
-                el.renderTo(this._elementsDom.node);
-            }, this);
-
-            this._expandIconEl.renderTo(this._nodeDom.node);
-            this._iconEl.renderTo(this._nodeDom.node);
-            this._expandedIconEl.renderTo(this._nodeDom.node);
-            this._spinnerIconEl.renderTo(this._nodeDom.node);
-            this._treeCaptionDom.renderTo(this._nodeDom.node);
+                    // rekursiver Aufruf
+                    this._expandAllRec(rows[i][this._childrenField], deep ? deep-1 : null);
+                }
+            }
         }
     }
 
 
     // PRIVATE
     // LISTENERS
-    /**
-     * Klick auf den 'expand' button
-     * Öffnet die Node, selektion wird nicht verändert
-     * @private
-     */
-    #onExpandClick() {
-        if (this.loadSpinner || this.disabled) {
-            return;
+    #onAfterLoad(e) {
+        if (!kijs.isEmpty(this._value)) {
+            this.value = this._value;
         }
-
-        if (this.expanded) {
-            this.collapse();
-        } else {
-            this.expand();
-        }
-
-        // Event beim Root auslösen
-        this._raiseRootEvent('nodeClick');
     }
 
-    /**
-     * Öffnet die Node
-     * @returns {undefined}
-     */
-    #onNodeDblClick() {
-        if (this.loadSpinner || this.disabled) {
-            return;
-        }
-        if (this.expanded) {
-            this.collapse();
-        } else {
-            this.expand();
+    // overwrite
+    #onSourceDrop(e) {
+        let dataRows = [];
+
+        // Source Element
+        let sourceEl = e.source.ownerEl;
+
+        let targetOwnerTree = e.target.ownerEl;
+        if (targetOwnerTree instanceof kijs.gui.dataView.element.Tree) {
+            targetOwnerTree = targetOwnerTree.parent;
         }
 
-        // Event beim Root auslösen
-        this._raiseRootEvent('nodeDblClick');
+        // Source dataRow merken, damit beim Ziel wieder eingefügt werden kann
+        kijs.gui.DragDrop.data.sourceDataRow = sourceEl.dataRow;
+
+        if (e.source.name === this._ddName && e.operation === 'move') {
+            // betroffene dataRows ermitteln
+            if (sourceEl.parentElement) {
+                dataRows = sourceEl.parentElement.dataRow[this._childrenField];
+            } else {
+                dataRows = this._data;
+            }
+
+            // Zeile aus Source entfernen
+            kijs.Array.remove(dataRows, sourceEl.dataRow);
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                // nur speichern, wenn das Target ein anderes Element ist
+                // (sonst wird ja beim target bereits gespeichert)
+                if (targetOwnerTree !== this) {
+                    this.save();
+                }
+            }
+
+            // evtl. neu laden
+            if (targetOwnerTree !== this) {
+                this.reload({ noRpc:true });
+            }
+        }
     }
 
-    // Selektiert die Node
-    #onNodeSingleClick() {
-        if (this.loadSpinner || this.disabled) {
-            return;
+    // overwrite
+    #onTargetDrop(e) {
+        if (e.source.name === this._ddName) {
+            let dataRows = [];
+            let targetIndex = null;
+
+            // after auf einen geöffneten Ordner: einfügen als 1. Kind
+            if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
+
+                // betroffene dataRows ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                targetIndex = 0;
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // before oder after
+            } else if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
+                // betroffene dataRows ermitteln
+                if (e.target.targetEl.parentElement) {
+                    dataRows = e.target.targetEl.parentElement.dataRow[this._childrenField];
+                } else {
+                    dataRows = this._data;
+                }
+
+                // target index ermitteln
+                targetIndex = dataRows.indexOf(e.target.targetEl.dataRow);
+                if (e.target.targetPos === 'after') {
+                    targetIndex++;
+                }
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // child
+            } else if (e.target.targetPos === 'child') {
+                // betroffene dataRow ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
+
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
         }
-        // alles deselektieren, nur aktuelle selektiert
-        this.getRootNode().setSelected(false, true);
-        this.selected = true;
-        this._raiseRootEvent('select');
     }
 
+    // Drop als Child
+    #onTargetChildDrop(e) {
+        if (e.source.name === this._ddName) {
+            
+            // dataRow am Ende anfügen
+            if (e.target.ownerEl) {
+                e.target.ownerEl.dataRow[this._childrenField].push(kijs.gui.DragDrop.data.sourceDataRow);
 
-    #onNodeContextMenu(e) {
-        if (this.loadSpinner || this.disabled) {
-            return;
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
         }
-        this._raiseRootEvent('nodeContextMenu', e);
     }
+
 
 
     // --------------------------------------------------------------
@@ -667,25 +1091,17 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.Container {
     // overwrite
     destruct(superCall) {
         if (!superCall) {
-            // unrendern
+            // unrender
             this.unrender(superCall);
 
             // Event auslösen.
             this.raiseEvent('destruct');
         }
 
-        this._nodeDom.destruct();
-        this._elementsDom.destruct();
-        this._expandIconEl.destruct();
-        this._iconEl.destruct();
-        this._expandedIconEl.destruct();
-        this._spinnerIconEl.destruct();
-        this._treeCaptionDom.destruct();
-
         // Variablen (Objekte/Arrays) leeren
-        this._rpc = null;
-        this._rpcLoadArgs = null;
-        this._rpcSaveArgs = null;
+        this._value = null;
+        this._expandedKeysRows = null;
+        this._elementDdTargetConfig = null;
 
         // Basisklasse entladen
         super.destruct(true);

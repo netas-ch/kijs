@@ -16,11 +16,21 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._captionField = null;
         this._captionHtmlDisplayType = 'code';
         this._valueField = null;
+
+        // Standard-Icon (optional)
+        this._iconMap = null;
+        this._iconChar = null;
+        this._iconCls = null;
+        this._iconAnimationCls = null;
+        this._iconColor = null;
+
+        // Feldnamen für Icon (optional)
+        this._iconMapField = null;
         this._iconCharField = null;
         this._iconClsField = null;
         this._iconAnimationClsField = null;
         this._iconColorField = null;
-        this._iconMapField = null;
+        
         this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
@@ -38,16 +48,24 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         Object.assign(this._configMap, {
             captionField: true,
             captionHtmlDisplayType: true,
+
+            iconMap: true,
+            iconChar: true,
+            iconCls: true,
+            iconAnimationCls: true,
+            iconColor: true,
+
+            iconMapField: true,
             iconCharField: true,
             iconClsField: true,
             iconAnimationClsField: true,
             iconColorField: true,
-            iconMapField: true,
+
             showCheckBoxes: true,
             tooltipField: true,
             valueField: true,
 
-            value: { target: 'value' }
+            value: { prio: 200, target: 'value' }
         });
 
         // Config anwenden
@@ -71,17 +89,32 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
 
+    get iconAnimationCls() { return this._iconAnimationCls; }
+    set iconAnimationCls(val) { this._iconAnimationCls = val; }
+
     get iconAnimationClsField() { return this._iconAnimationClsField; }
     set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
+
+    get iconChar() { return this._iconChar; }
+    set iconChar(val) { this._iconChar = val; }
 
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }
 
+    get iconCls() { return this._iconCls; }
+    set iconCls(val) { this._iconCls= val; }
+
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
+    get iconColor() { return this._iconColor; }
+    set iconColor(val) { this._iconColor = val; }
+
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
+
+    get iconMap() { return this._iconMap; }
+    set iconMap(val) { this._iconMap = val; }
 
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }
@@ -94,21 +127,26 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
     get value() {
         let val = null;
-        
+
         if (!kijs.isEmpty(this._data) && this._valueField) {
-            let selElements = this.getSelected();
-            if (kijs.isArray(selElements)) {
+            let rows = this.getSelectedRows();
+            if (!kijs.isEmpty(rows)) {
                 val = [];
-                kijs.Array.each(selElements, function(el) {
-                    val.push(el.dataRow[this._valueField]);
+                kijs.Array.each(rows, function(row) {
+                    val.push(row[this._valueField]);
                 }, this);
-            } else if (!kijs.isEmpty(selElements)) {
-                val = selElements.dataRow[this._valueField];
+
+                // bei nur einem Wert direkt den Wert, ohne Array zurückgeben
+                if (val.length === 1) {
+                    val = val[0];
+                } else if (val.length === 0) {
+                    val = null;
+                }
             }
-            
+
         } else {
             val = this._value;
-            
+
         }
 
         return val;
@@ -120,13 +158,18 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         this._value = val;
 
-        let filters = [];
+        let filters = null;
 
         if (kijs.isArray(val)) {
+            filters = {
+                operator: 'OR',
+                parts:[]
+            };
             kijs.Array.each(val, function(v) {
                 if (!kijs.isEmpty(v)) {
-                    filters.push({
+                    filters.parts.push({
                         field: this._valueField,
+                        operator: '=',
                         value: v
                     });
                 }
@@ -134,6 +177,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         } else if (!kijs.isEmpty(val)) {
             filters = {
                 field: this._valueField,
+                operator: '=',
                 value: val
             };
         }

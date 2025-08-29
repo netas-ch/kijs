@@ -107,7 +107,7 @@
     
     --panel-collapse-height: 36px;
     --panel-collapse-width: 36px;
-
+    
     /* Standard Feldbreiten */
     --defaultField-inputWidth: 220px;
     --defaultNumber-inputWidth: 100px;
@@ -322,6 +322,10 @@
     /* Grid */
     --grid-header-bkgrndColor: var(--grey03);
     --grid-border-color: var(--grey05);
+    
+    /* Tree */
+    --tree-expandIcon-color: var(--grey08);
+    
 }
 
 

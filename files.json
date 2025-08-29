@@ -13,6 +13,7 @@
    "js/kijs.Graphic.js",
    "js/kijs.Navigator.js",
    "js/kijs.Char.js",
+   "js/kijs.Data.js",
    "js/kijs.Storage.js",
 
    "js/kijs.Observable.js",
@@ -51,7 +52,7 @@
    "js/gui/container/kijs.gui.container.Form.js",
    "js/gui/container/kijs.gui.container.Scrollable.js",
    "js/gui/container/kijs.gui.container.Stack.js",
-   
+
    "js/gui/kijs.gui.DropZone.js",
    "js/gui/kijs.gui.SpinBox.js",
    "js/gui/kijs.gui.ViewPort.js",
@@ -66,9 +67,7 @@
    "js/gui/container/tab/kijs.gui.container.tab.Bar.js",
    "js/gui/container/tab/kijs.gui.container.tab.Container.js",
    "js/gui/container/kijs.gui.container.Tab.js",
-   "js/gui/container/kijs.gui.container.Wizard.js",
 
-   "js/gui/kijs.gui.Tree.js",
    "js/gui/kijs.gui.PanelBar.js",
    "js/gui/kijs.gui.Resizer.js",
    "js/gui/kijs.gui.Splitter.js",
@@ -97,8 +96,10 @@
    "js/gui/dataView/element/kijs.gui.dataView.element.Base.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.AutoHtml.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.ListView.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.Tree.js",
 
    "js/gui/kijs.gui.ListView.js",
+   "js/gui/kijs.gui.Tree.js",
 
    "js/gui/kijs.gui.TimePicker.js",
    "js/gui/kijs.gui.MonthPicker.js",

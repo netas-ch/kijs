@@ -52,18 +52,21 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             smallPaddings: true,                    // false=breite Abstände, true=schmale Abstände, 'auto'=automatisch (default)
+
             icon: { target: 'icon' },
             iconMap: { target: 'iconMap', context: this._iconEl },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconCls: { target: 'iconCls', context: this._iconEl },
             iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
             iconColor: { target: 'iconColor', context: this._iconEl },
+
             icon2: { target: 'icon2' },
             icon2Map: { target: 'iconMap', context: this._icon2El },
             icon2Char: { target: 'iconChar', context: this._icon2El },
             icon2Cls: { target: 'iconCls', context: this._icon2El },
             icon2AnimationCls: { target: 'iconAnimationCls', context: this._icon2El },
             icon2Color: { target: 'iconColor', context: this._icon2El },
+            
             isDefault: { target: 'isDefault' },
             menu: { target: 'menu' },
             menuElements: { target: 'menuElements', prio: 200 },

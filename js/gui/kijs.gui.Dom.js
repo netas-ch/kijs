@@ -900,7 +900,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     clsRemove(cls) {
-        if (!cls) {
+        if (kijs.isEmpty(cls)) {
+            return;
+        }
+        if (kijs.isEmpty(this._cls)) {
             return;
         }
 
@@ -1227,7 +1230,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 kijs.Dom.removeAllEventListenersFromContext(this);
             }
 
-            // Childs löschen
+            // Children löschen
             kijs.Dom.removeAllChildNodes(this._node);
 
             // Node selber löschen

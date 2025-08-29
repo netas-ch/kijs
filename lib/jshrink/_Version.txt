@@ -1,0 +1,3 @@
+https://github.com/tedious/JShrink
+
+1.8.0

@@ -2,6 +2,145 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.0.0
+=============
+### Anpassungen CSS
+ - Neue CSS-Variable für kijs.gui.Tree:  
+    - ```--tree-expandIcon-color: var(--grey08);```
+
+**UPDATE TIPP:**: Die obigen Variablen in eigene Themes übernehmen. Siehe Beispiel
+in kijs.theme.default.css.
+
+### Bibliothek lib/jsmin ersetzt durch lib/jshrink
+
+### kijs
+Neue Funktion ```kijs.coalesce(...args)```  
+Die Funktion gibt das erste Argument zurück, dass nicht empty ist.  
+
+### kijs.Data
+Neue Klasse mit Statischen Funktionen für Recordsets.  
+Siehe dazu den neuen Leitfaden ```Daten```.  
+
+### kijs.gui.DataView
+- Hat neu Standardmässig einen Border. Dieser kann mit der CSS-Klasse ```kijs-borderless``` 
+  ausgeschaltet werden.  
+- Neue config/getter/setter: ```primaryKeyFields```  
+  Enthält ein Array mit den Namen der Primärschlüssel-Felder  
+
+- Neue config/getter/setter: ```sortFields```  
+  Enthält ein Array mit den Namen der Felder nach denen Sortiert wird  
+
+- Neue Funktion ```applySortFields(sortFields)```  
+  Sortiert das Dataview gemäss den übergebenen ```sortFields```   
+
+- Neue Funktion ```getSelectedPrimaryKeys()```  
+  Gibt die Primary-Key-Strings der selektierten Elemente als Array zurück.  
+  Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String 
+  zurückgegeben sonst ein Array mit den Keys-Strings.  
+
+- Neue Funktion ```reload(options={})```
+  Lädt das DataView neu  
+
+        options = {
+         noRpc: false,             // Soll kein RPC gemacht werden?
+         skipSelected: false       // Sollen nicht wieder die gleichen Elemente wie
+                                   // vorher selektiert werden?
+         skipFilters: false        // Soll nicht gefiltert werden?
+         skipSort: false           // Soll nicht sortiert werden?
+         skipFocus: false,         // Soll das DataView nicht wieder den Fokus
+                                   // erhalten, wenn es ihn vorher hatte?
+         skipRemoveElements: false // Sollen die bestehenden Elemente nicht entfernt
+                                   // werden?
+         skipScroll: false         // Soll nicht wieder zur gleichen Position gescrollt
+                                   // werden?
+        }
+
+- Neue Funtion ```reassignCurrent()```  
+  Ermittelt das Element mit Fokus neu.  Standard=1. Selektiertes Element.  
+
+- Neue Funktion ```scrollToFocus()```  
+  Scrollt zu dem Element das den Fokus hat.  
+
+- Funktion ```selectByIndex()``` umbenannt zu ```selectByIndexes()```
+
+- Neue Funktion ```selectByPrimaryKeys(primaryKeys, keepExisting=false, preventSelectionChange=false)```  
+  Selektiert ein oder mehrere Elemente mittels Primary-Key-Strings.  
+
+- Neue Funktion ```getElementByDataRow(dataRow)```  
+
+- Neue Funktion ```getElementByPrimaryKey(primaryKey)```  
+
+- Neue Funktion ```unselectByDataRows(dataRows, preventSelectionChange=false)```  
+
+- Neue Funktion ```unselectByPrimaryKeys(primaryKeys, preventSelectionChange=false)```  
+
+- Funktion ```selectByPrimaryKey()``` umbenannt zu ```selectByPrimaryKeys()```  
+
+**UPDATE TIPP:**: Projekt durchsuchen nach ```selectByPrimaryKey``` und umbenennen.  
+
+- Funktion ```createElements(data, removeElements=true)```:  
+  Argument ```removeElements``` durch ```options``` ersetzt:  ```createElements(data, options={})```  
+  ```options``` entspricht dem ```options``` bei ```reload(options={})```.  
+
+- Funktion ```_createElement(dataRow`, index)```:
+  Argument ```index``` entfernt und Argument ```dataRow``` durch ```config``` 
+  ersetzt: ```_createElement(config)```  
+  Der Index wird nach dem Erstellen automatisch zugewiesen und kann über den 
+  Getter ```index``` abgefragt werden.  
+  Er steht aber zum Zeitpunkt des Erstellens noch nicht fest.  
+  Das Argument ```config``` muss wie folgt aufgebaut sein: ```{ dataRow:... }```  
+
+- Funktion ```_filterMatch(record)``` entfernt.  
+  Stattdessen kann die Funktion ```kijs.Data.rowMatchFilters()``` verwendet werden.  
+
+- Filtern  
+  Die Filter wurden überarbeitet und in die Klasse ```kijs.Data``` ausgelagert.  
+  Die Idee ist, dass mit dieser Klasse eine einheitliche Art des Filterns über das 
+  ganze kijs hinweg möglich ist.  
+
+  Grundsätzlich funktionieren die Filter noch gleich. Es gibt aber kleine Änderungen:  
+   - ```filter.compare``` heisst neu ```filter.operator```
+   - der ```operator``` ```"full"``` heisst neu ```"MATCH"```
+
+- Folgende Funktionen haben neu einen Rückgabewert 
+  - ```clearSelections(preventSelectionChange)```  
+  - ```select(elements, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectBetween(el1, el2, preventSelectionChange=false)```  
+  - ```selectByDataRows(rows, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectByFilters(filters, keepExisting=false, preventSelectionChange=false)```  
+  - ```selectByIndexes(indexes, keepExisting=false, preventSelectionChange=false)```  
+  - ```unSelect(elements, preventSelectionChange)```  
+
+ - Das Event ```selectionChange``` hat andere Argumente:  
+
+        {
+            selectedElements: [],
+            selectedKeysRows: [],
+            unselectedElements: [],
+            unselectedKeysRows: [],
+            changed: true
+        }
+
+   Bei ```selectedKeysRows``` und ```unselectedKeysRows``` sind, je nachdem ob 
+   die Eigenschaft ```primaryKeyFields``` angegeben wurde, die betroffenen 
+   primaryKeys drin oder die betroffenen dataRows.  
+
+**UPDATE TIPP:**: Projekt durchsuchen nach ```selectionChange``` und falls nötig 
+die behandlung der Argumente anpassen.  
+
+**UPDATE TIPP:**: Alle verwendeten DataViews, LisViews oder Combos gut testen und 
+evtl. die Filter anpassen.
+
+### kijs.gui.Tree
+Element wurde von Grundauf überarbeitet. Es erbt neu von ```kijs.gui.DataView```.
+
+**UPDATE TIPP:**: Falls der alte ```kijs.gui.Tree``` verwendet wurde, muss er durch 
+den neuen ersetzt werden.
+Der neue ```kijs.gui.Tree``` unterstützt aktuell kein dynamisches Nachladen von 
+einzelnen Knoten. Es müssen immer die Daten des ganzen Baums zurückgegeben werden.  
+
+
+
 Version 2.9.1
 =============
 ### kijs.gui.Icon

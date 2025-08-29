@@ -1,5 +1,7 @@
 /* global kijs */
 
+// DEPRECATED: Bitte nicht mehr verwenden. Wird gelöscht sobald nicht mehr in Gebrauch
+
 // --------------------------------------------------------------
 // kijs.Storage (Static)
 // --------------------------------------------------------------

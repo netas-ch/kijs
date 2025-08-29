@@ -116,7 +116,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         kijs.Array.clear(this._cells);
     }
 
-    // Overwrite
+    // overwrite
     render(superCall) {
         super.render(true);
 
