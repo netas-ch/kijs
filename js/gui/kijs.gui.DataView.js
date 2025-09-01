@@ -1274,6 +1274,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             newConfig.xtype = this._elementXType;
         }
 
+        newConfig.parent = this;
+
         let el = this._getInstanceForAdd(newConfig);
         if ((el instanceof kijs.gui.dataView.element.Base)) {
             // Inhalt laden
@@ -1361,7 +1363,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
 
             const newEl = this._createElement({ dataRow: data[i] });
-            newEl.parent = this;
 
             // Selektierung anwenden
             if (!options.skipSelected) {
