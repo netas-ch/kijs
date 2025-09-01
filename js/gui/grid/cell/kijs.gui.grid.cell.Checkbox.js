@@ -93,7 +93,7 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // PRIVATE
     // LISTENERS
     #onClick() {
-        if (!this._editable) {
+        if (this._disabled) {
             return;
         }
 
