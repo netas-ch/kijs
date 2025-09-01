@@ -2,6 +2,13 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.0.1
+=============
+### kijs.gui.grid.cell.Checkbox
+BUGFIX: Checkbox funktionierte nicht mehr
+
+
+
 Version 3.0.0
 =============
 ### Anpassungen CSS
