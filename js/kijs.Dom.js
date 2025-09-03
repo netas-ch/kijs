@@ -186,8 +186,8 @@ kijs.Dom = class kijs_Dom {
         let h = node.offsetHeight;
 
         while (node) {
-            x += node.offsetLeft - node.scrollLeft;
-            y += node.offsetTop - node.scrollTop;
+            x += node.offsetLeft - node.scrollLeft + node.clientLeft;
+            y += node.offsetTop - node.scrollTop + node.clientTop;
             node = node.offsetParent;
         }
         return {x: x,y: y, w: w, h: h};
