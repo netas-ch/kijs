@@ -4,10 +4,6 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 3.1.0
 =============
-### Font Awesome  
-Update auf Version 7.0.1  
-**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
-
 ### kijs.gui.field.*, kijs.gui.container.Form
 Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
 oder ```readOnly: true```.  
