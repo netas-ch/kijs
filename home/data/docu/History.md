@@ -4,6 +4,11 @@ Es sind evtl. Anpassungen am Projekt nötig.
 
 Version 3.1.0
 =============
+### Font Awesome  
+Update auf Version 7.0.1  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+Die *.ttf Dateien werden nicht mehr gebrauch: aus ```files.json``` löschen.  
+
 ### kijs.gui.field.*, kijs.gui.container.Form
 Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
 oder ```readOnly: true```.  
@@ -21,6 +26,20 @@ wird, kann der Container auf ```disabled: true``` gestellt werden. Die Eigenscha
 
 **UPDATE TIPP:**: Formulare evtl. anpassen und testen. Sicherstellen, dass keine 
 Felder mit ```disabled: true``` übermittelt werden sollen.  
+
+### kijs.gui.container.Fieldset
+- Neue config/getter/setter: ```captionPos```  
+  Damit kann festegelegt werden, wo sich die cpation befindet:  
+   - ```tl``` Oben Links (Standard)  
+   - ```tc``` Oben in der Mitte  
+   - ```tr``` Oben Rechts  
+   - ```bl``` Unten Links  
+   - ```bc``` Unten in der Mitte  
+   - ```br``` Unten Rechts  
+
+- Ein Fieldset kann auch in einer Toolbar als ButtonGroup verwendet werden,  
+  dafür einfach die Klasse ```cls: 'kijs-toolbarFieldset'``` zuweisen und 
+  ```captionPos: 'bc'```.  
 
 
 

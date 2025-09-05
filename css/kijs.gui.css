@@ -115,45 +115,45 @@
     font-style: italic;
   }
   /* ******************
-       * Font Awesome free Version 6.7.2  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
+       * Font Awesome free Version 7.0.1  (https://github.com/FortAwesome/Font-Awesome, https://www.fontawesome.com)
        ****************** */
   /* fa-solid */
   @font-face {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-style: normal;
     font-weight: 900;
     font-display: block;
-    src: url('../fonts/font-awesome-6-7-2/fa-solid-900.woff2') format('woff2'), url('../fonts/font-awesome-6-7-2/fa-solid-900.ttf') format('truetype');
+    src: url('../fonts/font-awesome-7-0-1/fa-solid-900.woff2') format('woff2');
   }
   /* fa-regular */
   @font-face {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url('../fonts/font-awesome-6-7-2/fa-regular-400.woff2') format('woff2'), url('../fonts/font-awesome-6-7-2/fa-regular-400.ttf') format('truetype');
+    src: url('../fonts/font-awesome-7-0-1/fa-regular-400.woff2') format('woff2');
   }
   /* fa-brands */
   @font-face {
-    font-family: 'Font Awesome 6 Brands';
+    font-family: 'Font Awesome 7 Brands';
     font-style: normal;
     font-weight: 400;
     font-display: block;
-    src: url('../fonts/font-awesome-6-7-2/fa-brands-400.woff2') format('woff2'), url('../fonts/font-awesome-6-7-2/fa-brands-400.ttf') format('truetype');
+    src: url('../fonts/font-awesome-7-0-1/fa-brands-400.woff2') format('woff2');
   }
   .fa-solid,
   span.kijs-icon.fa-solid {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
   }
   .fa-regular,
   span.kijs-icon.fa-regular {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 400;
   }
   .fa-brands,
   span.kijs-icon.fa-brands {
-    font-family: 'Font Awesome 6 Brands';
+    font-family: 'Font Awesome 7 Brands';
     font-weight: 400;
   }
   /* ******************
@@ -236,9 +236,10 @@
        ****************** */
   span.kijs-icon {
     display: inline-block;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-size: var(--icon-fontSize);
     color: var(--icon-fontColor);
+    text-align: center;
     background-repeat: no-repeat;
     background-position: center center;
   }
@@ -1922,7 +1923,7 @@
     background-color: var(--field-bkgrndColor);
     border: 1.5px solid var(--field-fontColor);
     border-radius: 4px;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     text-align: center;
     color: var(--field-fontColor);
@@ -1951,7 +1952,7 @@
     background-color: var(--field-bkgrndColor);
     border: 1.5px solid var(--field-fontColor);
     border-radius: 50%;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     text-align: center;
     color: var(--field-fontColor);
@@ -2100,7 +2101,7 @@
     background-color: var(--field-bkgrndColor);
     border: 1.5px solid var(--field-fontColor);
     border-radius: 4px;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     text-align: center;
     color: var(--field-fontColor);
@@ -2129,7 +2130,7 @@
     background-color: var(--field-bkgrndColor);
     border: 1.5px solid var(--field-fontColor);
     border-radius: 50%;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     text-align: center;
     color: var(--field-fontColor);
@@ -3639,7 +3640,7 @@
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-checkbox {
     text-align: center;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-size: var(--checkbox-fontSize);
     padding: 5px 0 0 0;
   }
@@ -3651,7 +3652,7 @@
   }
   div.kijs-grid table > tr > td.kijs-grid-cell-icon {
     text-align: center;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     font-weight: 900;
     font-size: var(--icon-fontSize);
     padding: 4px 0 0 0;
@@ -3711,7 +3712,7 @@
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-header > td > .kijs-caption > span.kijs-sort {
     color: #555;
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     vertical-align: middle;
     font-weight: 900;
     padding-left: 5px;
@@ -3790,7 +3791,7 @@
     color: var(--default-fontColor);
   }
   div.kijs-grid > .kijs-top > .kijs-headercontainer > table > tr.kijs-grid-filter > td div.kijs-icon {
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 7 Free';
     text-align: center;
     font-size: 14px;
     padding: 4px 0 4px 18px;
@@ -4010,22 +4011,26 @@
        ****************** */
   /* Passt den Inhalt an die Containergrösse an */
   /* (nur für Container mit einem Kind geeignet) */
+  div.kijs-flexfit > .kijs-container-inner,
   .kijs-flexfit > .kijs-container-inner {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
   }
+  div.kijs-flexfit > .kijs-container-inner > *,
   .kijs-flexfit > .kijs-container-inner > * {
     flex: 1 1 auto;
   }
   /* Flext den Inhalt in eine Spalte */
+  div.kijs-flexcolumn > .kijs-container-inner,
   .kijs-flexcolumn > .kijs-container-inner {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
   }
   /* Flext den Inhalt in eine Zeile */
+  div.kijs-flexrow > .kijs-container-inner,
   .kijs-flexrow > .kijs-container-inner {
     display: flex;
     flex-direction: row;
@@ -4034,6 +4039,7 @@
   /* Flext den Inhalt in Zeilen mit Umbruch und Abständen zwischen den Elementen */
   /* Ist geignet für FormPanel mit Containern als Inhalt die dann kijs-flexform */
   /* zugewiesen haben */
+  div.kijs-flexrowwrap > .kijs-container-inner,
   .kijs-flexrowwrap > .kijs-container-inner {
     display: flex;
     flex-direction: row;
@@ -4044,16 +4050,19 @@
     padding: 10px;
     gap: 6px 18px;
   }
+  div.kijs-flexrowwrap > .kijs-container-inner > *,
   .kijs-flexrowwrap > .kijs-container-inner > * {
     flex: 1 0 auto;
   }
   /* für Container mit Formularfeldern */
+  div.kijs-flexform > .kijs-container-inner,
   .kijs-flexform > .kijs-container-inner {
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
     gap: 4px;
   }
+  div.kijs-flexform > .kijs-container-inner > *,
   .kijs-flexform > .kijs-container-inner > * {
     flex: none;
     max-width: 600px;
@@ -4061,6 +4070,7 @@
   /* Um Elemente nebeneinander darstellen zu können, z.B. in Formularen */
   /* Dazu einen kijs.gui.Container mit den gewünschten kijs.gui.Fields */
   /* erstellen und diese Klasse zuweisen */
+  div.kijs-flexline > .kijs-container-inner,
   .kijs-flexline > .kijs-container-inner {
     display: flex;
     flex-direction: row;
@@ -4070,6 +4080,7 @@
     align-items: start;
     gap: 4px;
   }
+  div.kijs-flexline > .kijs-container-inner > *,
   .kijs-flexline > .kijs-container-inner > * {
     flex: none;
   }

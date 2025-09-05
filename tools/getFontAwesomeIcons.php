@@ -1,12 +1,18 @@
 <?php
 
 /*
- * Copyright © 2022 Netas Ltd., Switzerland.
- * @date    2022-05-18
+ * Copyright © 2025 Netas AG, Switzerland.
+ * @date    2025-09-05
+ * Erstellt den Inhalt der Datei kijs/js/iconMap/kijs.iconMap.Fa.js
+ * Anleitung:
+ *  1. In der Variable $version die gewünschte Versionsnummer eintragen
+ *  2. getFontAwesomeIcons.php im Browser öffnen
+ *  3. den Inhalt des Browsers in die Datei kijs.iconMap.Fa.js kopieren
  */
+$version = '7.0.1'; // Hier die gewünschte Version eintragen
 
 $t = new getFontAwesomeIcons();
-$t->getData("6.5.2");
+$t->getData($version);
 
 
 class getFontAwesomeIcons {
@@ -34,10 +40,14 @@ class getFontAwesomeIcons {
 
         $json = $this->_makeRequest($graphSql);
 
+        //echo('<pre>');
+        //print_r($json->data->release);
+        //die('</pre>');
+
         $icons = $json->data->release->icons ?? [];
 
         if (!$icons) {
-            throw new Exception('no icons found');
+            die('no icons found');
         }
 
         $maxLen = 0;
@@ -69,6 +79,8 @@ class getFontAwesomeIcons {
 
         });
 
+        $lines = [];
+
         foreach ($icons as $icon) {
             $id = $icon->id;
             $unicode = $icon->unicode;
@@ -80,20 +92,37 @@ class getFontAwesomeIcons {
                 throw new Exception('not solid, not brands');
             }
 
-            print(str_pad(str_replace("_", "_", '\'' . $id . '\''), $maxLen, ' ') . ': { char: 0x' . str_pad($unicode, 4, '0', STR_PAD_LEFT) . '');
+            $line = '    ';
+            $line .= str_pad("'" . $id . "'", $maxLen, ' ');
+            $line .= ': ';
+            $line .= '{ ';
+            $line .= 'char: 0x' . str_pad($unicode, 4, '0', STR_PAD_LEFT);
+
             if (in_array('solid', $styles)) {
-                print(', cls: "fa-solid"');
+                $line .= ', cls: "fa-solid"';
             } else if (in_array('brands', $styles)) {
-                print(', cls: "fa-brands"');
+                $line .= ', cls: "fa-brands"';
             }
 
-            print(' },' . "\n");
-
-
+            $line .= ' }';
+            $lines[] = $line;
         }
+
+        echo '<pre>';
+        echo '/* global kijs */' . "\n";
+        echo "\n";
+        echo '// --------------------------------------------------------------' . "\n";
+        echo '// kijs.iconMap.Fa' . "\n";
+        echo '// --------------------------------------------------------------' . "\n";
+        echo '// Font Awesome Icons' . "\n";
+        echo '// Version ' . $version . "\n";
+        echo 'kijs.iconMap.Fa = {' . "\n";
+
+        echo implode(",\n", $lines) . "\n";
+
+        echo '};' . "\n";
+        echo '</pre>';
     }
-
-
 
     protected function _makeRequest($post) {
         $ch = curl_init();
@@ -125,6 +154,5 @@ class getFontAwesomeIcons {
 
         return $response;
     }
-
 
 }
