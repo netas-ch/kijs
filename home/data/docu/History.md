@@ -2,6 +2,32 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.1.0
+=============
+### Font Awesome  
+Update auf Version 7.0.1  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+
+### kijs.gui.field.*, kijs.gui.container.Form
+Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
+oder ```readOnly: true```.  
+
+Bei Feldern mit ```disabled: true``` ...  
+ - ... ist ```isDirty``` ist immer ```false```
+ - ... werden nicht validiert (das war bereits so)  
+ - ... werden vom ```kijs.gui.container.Form``` nicht mehr übermittelt  
+
+**TIPP:** Wenn Felder in einem Formular dynamisch ausgeblendet werden und nicht  
+mehr übermittelt werden sollen, macht es Sinn, sie nicht nur auszublenden, sondern
+auch auf ```disabled: true``` zu stellen. Falls ein ganzer Container ausgleblendet 
+wird, kann der Container auf ```disabled: true``` gestellt werden. Die Eigenschaft 
+```disabled````wird ja an alle Kinder rekursiv weitergegeben.  
+
+**UPDATE TIPP:**: Formulare evtl. anpassen und testen. Sicherstellen, dass keine 
+Felder mit ```disabled: true``` übermittelt werden sollen.  
+
+
+
 Version 3.0.1
 =============
 ### kijs.gui.grid.cell.Checkbox

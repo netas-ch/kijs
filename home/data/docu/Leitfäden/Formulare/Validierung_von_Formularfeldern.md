@@ -7,9 +7,11 @@ Formularfelder werden bei folgenden Ereignissen validiert:
 - beim Aufrufen von validate()
 
 Und auch bei folgenden Funktionen des container.Form:
-- load() ???
-- save()
-- validate()
+- ```load()``` (wenn das Argument ```resetValidation=true``` ist)
+- ```save()```
+- ```validate()```
+
+**Hinweis:** Felder, mit ```disabled: true``` werden nicht validiert.  
 
 **Hinweis:** Beim Aufruf des Setters ```value``` wird nicht validiert! Darum muss 
 anschliessend noch ```validate()``` aufgerufen werden.
