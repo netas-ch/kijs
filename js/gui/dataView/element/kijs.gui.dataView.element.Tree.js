@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.dataView.element.ListView
+// kijs.gui.dataView.element.Tree
 // --------------------------------------------------------------
 kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends kijs.gui.dataView.element.Base {
 
