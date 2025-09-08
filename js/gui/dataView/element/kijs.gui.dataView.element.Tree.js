@@ -331,15 +331,17 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
     // PRIVATE
     // LISTENERS
     #onExpandIconMouseDown(e) {
-        if (this.expanded) {
-            this.collapse();
-        } else {
-            this.expand();
+        if (!this._parentEl.disabled) {
+            if (this.expanded) {
+                this.collapse();
+            } else {
+                this.expand();
+            }
+
+            // Bubbeling und native Listeners verhindern
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
         }
-        
-        // Bubbeling und native Listeners verhindern
-        e.nodeEvent.stopPropagation();
-        e.nodeEvent.preventDefault();
     }
 
 
