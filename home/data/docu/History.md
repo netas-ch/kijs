@@ -32,6 +32,13 @@ Felder mit ```disabled: true``` übermittelt werden sollen.
   Namen des Felds, das einen CSS-Klassennamen enthalten kann, diese Klasse wird 
   dem Element zugewiesen.  
 
+### kijs.gui.DataView, kijs.gui.ListView, kijs.gui.Tree
+- Neue CSS-Klasse, ```kijs-transparentborder```  
+  Das Element hat damit einen unsichtbaren Rand.  
+  Wenn es den Fokus erhält, ist er aber sichtbar.  
+  Die bestehende Klasse ```kijs-borderless``` gibt es immer noch, 
+  sie deaktivert den Rand komplett.  
+  
 
 
 Version 3.0.1

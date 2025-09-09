@@ -1893,6 +1893,10 @@
         overflow: hidden;
         border: 1px solid var(--field-borderColor);
 
+        &.kijs-transparentborder {
+            border-color: transparent;
+        }
+
         &:focus-within {
             border-color: var(--field-focus-borderColor);
         }
@@ -2008,6 +2012,10 @@
         border: 1px solid var(--field-borderColor);
         background-color: var(--field-bkgrndColor);
         cursor: pointer;
+
+        &.kijs-transparentborder {
+            border-color: transparent;
+        }
 
         &:focus-within {
             border-color: var(--field-focus-borderColor);
@@ -2216,6 +2224,10 @@
         background-color: var(--field-bkgrndColor);
         cursor: pointer;
 
+        &.kijs-transparentborder {
+            border-color: transparent;
+        }
+        
         &:focus-within {
             border-color: var(--field-focus-borderColor);
         }
@@ -2223,7 +2235,7 @@
         &.kijs-borderless {
             border: none;
         }
-
+        
         > .kijs-container-inner {
             padding: 3px 0 2px 0;
 

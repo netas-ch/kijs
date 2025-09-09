@@ -1745,6 +1745,9 @@
     overflow: hidden;
     border: 1px solid var(--field-borderColor);
   }
+  div.kijs-dataview.kijs-transparentborder {
+    border-color: transparent;
+  }
   div.kijs-dataview:focus-within {
     border-color: var(--field-focus-borderColor);
   }
@@ -1840,6 +1843,9 @@
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
+  }
+  div.kijs-listview.kijs-transparentborder {
+    border-color: transparent;
   }
   div.kijs-listview:focus-within {
     border-color: var(--field-focus-borderColor);
@@ -2006,6 +2012,9 @@
     border: 1px solid var(--field-borderColor);
     background-color: var(--field-bkgrndColor);
     cursor: pointer;
+  }
+  div.kijs-tree.kijs-transparentborder {
+    border-color: transparent;
   }
   div.kijs-tree:focus-within {
     border-color: var(--field-focus-borderColor);
