@@ -38,7 +38,12 @@ Felder mit ```disabled: true``` übermittelt werden sollen.
   Wenn es den Fokus erhält, ist er aber sichtbar.  
   Die bestehende Klasse ```kijs-borderless``` gibt es immer noch, 
   sie deaktivert den Rand komplett.  
-  
+
+### kijs.gui.Panel
+- Neue config: ```headerBarCaption``` (optional, string)  
+- Neue config: ```headerBarIconCls``` (optional, string)  
+- Neue config: ```footerBarIconCls``` (optional, string)  
+
 
 
 Version 3.0.1
