@@ -81,6 +81,12 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
         if (!kijs.isEmpty(this._parentEl.tooltipField) && !kijs.isEmpty(this.dataRow[this._parentEl.tooltipField])) {
             tooltip = this.dataRow[this._parentEl.tooltipField];
         }
+        this.tooltip = tooltip;
+
+        // cls
+        if (!kijs.isEmpty(this._parentEl.clsField) && !kijs.isEmpty(this.dataRow[this._parentEl.clsField])) {
+            this._dom.clsAdd(this.dataRow[this._parentEl.clsField]);
+        }
 
         // Checkbox
         let cls = '';
@@ -103,8 +109,6 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
         if (cls) {
             this._dom.clsAdd(cls);
         }
-
-        this.tooltip = tooltip;
 
         this.removeAll();
         this.add([iconEl, captionEl]);

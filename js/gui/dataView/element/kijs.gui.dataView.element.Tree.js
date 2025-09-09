@@ -205,7 +205,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         }
         let expandIconEl = new kijs.gui.Icon(iconArgs);
 
-
         // Icon
         let iconMapField = null;
         let iconMap = null;
@@ -297,7 +296,12 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         if (!kijs.isEmpty(this._parentEl.tooltipField) && !kijs.isEmpty(this.dataRow[this._parentEl.tooltipField])) {
             tooltip = this.dataRow[this._parentEl.tooltipField];
         }
+        this.tooltip = tooltip;
 
+        // cls
+        if (!kijs.isEmpty(this._parentEl.clsField) && !kijs.isEmpty(this.dataRow[this._parentEl.clsField])) {
+            this._dom.clsAdd(this.dataRow[this._parentEl.clsField]);
+        }
 
         // Checkbox
         let cls = '';
@@ -320,8 +324,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         if (cls) {
             this._dom.clsAdd(cls);
         }
-
-        this.tooltip = tooltip;
 
         this.removeAll();
         this.add([expandIconEl, iconEl, captionEl]);

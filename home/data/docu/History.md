@@ -27,6 +27,11 @@ wird, kann der Container auf ```disabled: true``` gestellt werden. Die Eigenscha
 **UPDATE TIPP:**: Formulare evtl. anpassen und testen. Sicherstellen, dass keine 
 Felder mit ```disabled: true``` übermittelt werden sollen.  
 
+### kijs.gui.ListView, kijs.gui.Tree
+- Neue config/getter/setter: ```clsField``` (optional, string)  
+  Namen des Felds, das einen CSS-Klassennamen enthalten kann, diese Klasse wird 
+  dem Element zugewiesen.  
+
 
 
 Version 3.0.1
