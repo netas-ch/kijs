@@ -143,6 +143,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeShowcase',
+                    cls: 'kijs-transparentborder',
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
