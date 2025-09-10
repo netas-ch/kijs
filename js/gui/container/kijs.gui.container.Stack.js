@@ -108,11 +108,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // --------------------------------------------------------------
     get animation() { return this._animation; }
     set animation(val) {
-        if (this._validateAnimation(val)) {
-            this._animation = val;
-        } else {
+        if (this._getAnimationCls(val, 'in') === null) {
             throw new kijs.Error(`unknown animation.`);
         }
+
+        this._animation = val;
     }
     
     get animationDuration() { return this._animationDuration; }
@@ -190,9 +190,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
 
         // Elemente aus elHistory entfernen
-        kijs.Array.each(elements, function(el) {
-            this._elHistoryRemove(el);
-        }, this);
+        kijs.Array.removeMultiple(this._elHistory, elements);
 
         // Falls das aktuelle Element gelöscht wurde, das vorherige aktivieren
         if (kijs.Array.contains(elements, this._currentEl)) {
@@ -258,7 +256,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
                 duration = 0;
             }
 
-            if (!this._validateAnimation(animation)) {
+            if (this._getAnimationCls(animation, 'in') === null) {
                 throw new kijs.Error(`unknown animation.`);
             }
 
@@ -386,20 +384,6 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Fügt ein neues Element zur Element History hinzu
-    _elHistoryAdd(el) {
-        // Falls das element bereits im Array ist: entfernen
-        this._elHistory = kijs.Array.remove(this._elHistory, el);
-        
-        // Neues Element am Ende anfügen
-        this._elHistory.push(el);
-    }
-    
-    // Entfernt ein Element aus der Element History.
-    _elHistoryRemove(el) {
-        this._elHistory = kijs.Array.remove(this._elHistory, el);
-    }
-    
     _getAnimationCls(animation, dir) {
         let ret = null;
         
@@ -450,14 +434,19 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     
     // Setzt das aktuelle Element, aktualisiert die History und wirft das change-Event
     // Falls das aktuelle Element geändert hat, wird true zurückgegeben, sonst false
-    _setCurrent(element) {
-        if (element !== this._currentEl) {
+    _setCurrent(el) {
+        if (el !== this._currentEl) {
             let oldEl = this._currentEl;
 
-            this._elHistoryAdd(element);
-            this._currentEl = element;
+            // Falls das element bereits in der History ist: entfernen
+            kijs.Array.remove(this._elHistory, el);
+
+            // Neues Element am Ende der History anfügen
+            this._elHistory.push(el);
+
+            this._currentEl = el;
             if (this.isRendered) {
-                this.raiseEvent('change', {currentEl: element, oldEl: oldEl});
+                this.raiseEvent('change', {currentEl: el, oldEl: oldEl});
             }
             return true;
         }
@@ -470,14 +459,9 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             this._elements[i].visible = this._elements[i] === this._currentEl;
         }
     }
-    
-    // Überprüft, ob eine animation gültig ist
-    _validateAnimation(animation) {
-        return this._getAnimationCls(animation, 'in') !== null;
-    }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -493,7 +477,8 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         
         // Variablen (Objekte/Arrays) leeren
         this._currentEl = null;
-        
+        this._elHistory = null;
+
         // Basisklasse entladen
         super.destruct(true);
     }
