@@ -516,7 +516,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             ret.push(el);
         }, this);
 
-        // Evtl. untergeordnete Container rekursiv duchsuchen
+        // Evtl. untergeordnete Container rekursiv durchsuchen
         if (deep !== 0) {
             if (deep>0) {
                 deep--;

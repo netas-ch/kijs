@@ -113,7 +113,12 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
     get iconChar() { return this._iconEl.iconChar; }
-    set iconChar(val) { this._iconEl.iconChar = val; }
+    set iconChar(val) {
+        this._iconEl.iconChar = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) { this._iconEl.iconCls = val; }
@@ -122,7 +127,12 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     set iconColor(val) { this._iconEl.iconColor = val; }
 
     get iconMap() { return this._iconEl.iconMap; }
-    set iconMap(val) { this._iconEl.iconMap = val; }
+    set iconMap(val) {
+        this._iconEl.iconMap = val;
+        if (this.isRendered) {
+            this.render();
+        }
+    }
 
     // overwrite
     get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
@@ -197,8 +207,8 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         this._containerLeftEl.changeDisabled(!!val, true);
         this._containerRightEl.changeDisabled(!!val, true);
     }
-    
-    
+
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
