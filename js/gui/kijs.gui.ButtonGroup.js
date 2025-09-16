@@ -32,9 +32,9 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columns: true,
-            rowSizes: { target: 'rowSizes' },
-            colSizes: { target: 'colSizes' },
+            columns: true,  // Anzahl Spalten
+            rowSizes: { target: 'rowSizes' }, // pro Element: Anzahl verwendete Zeilen
+            colSizes: { target: 'colSizes' }, // pro Element: Anzahl verwendete Spalten
 
             caption: { target: 'html', context: this._captionDom },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
@@ -131,19 +131,21 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
     // PROTECTED
     _getTableMatrix() {
-        let colSizes = this.colSizes, rowSizes = this.rowSizes, matrix = [];
+        let colSizes = this.colSizes;
+        let rowSizes = this.rowSizes;
+        let matrix = [];
 
         // Anzahl Felder
-        let numberOfCells = 0;
+        let cellCount = 0;
         for (let i=0; i<this.elements.length; i++) {
-            numberOfCells += Math.max(1, colSizes[i] * rowSizes[i]);
+            cellCount += Math.max(1, colSizes[i] * rowSizes[i]);
         }
 
         // Anzahl rows
-        let rows = Math.ceil(numberOfCells / this._columns);
+        let rowCount = Math.ceil(cellCount / this._columns);
 
         // rows in matrix
-        for (let i=0; i<rows; i++) {
+        for (let i=0; i<rowCount; i++) {
             matrix[i] = [];
         }
 
@@ -151,9 +153,10 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         let rowPointer = 0;
         let colPointer = 0;
         for (let i=0; i<this.elements.length; i++) {
-            let colSize = colSizes[i], rowSize = rowSizes[i];
+            let colSize = colSizes[i];
+            let rowSize = rowSizes[i];
 
-            // weitere benötigte felder markieren
+            // weitere benötigte Felder markieren
             for (let ri=0; ri<rowSize; ri++) {
                 for (let ci=0; ci<colSize; ci++) {
                     if (!matrix[rowPointer + ri]) {
@@ -169,7 +172,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
                 while (!nextFound) {
                     rowPointer++;
 
-                    if (rowPointer >= rows && (colPointer+1) < this._columns) {
+                    if (rowPointer >= rowCount && (colPointer+1) < this._columns) {
                         colPointer++;
                         rowPointer = 0;
                     }

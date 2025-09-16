@@ -282,7 +282,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     }
 
     // overwrite
-    validate() {
+    validate(ignoreEmpty) {
         // display kann nicht invalid sein,
         // da der User nichts ändern kann.
         return true;

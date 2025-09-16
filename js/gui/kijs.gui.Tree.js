@@ -34,7 +34,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._collapsedIconMap = 'kijs.iconMap.Fa.folder';      // Ordner zu
         this._expandedIconMap = 'kijs.iconMap.Fa.folder-open';  // Ordner auf
 
-        // Feldnamen für Icons (optional)
+        // Feldnamen (optional)
+        this._clsField = null;
         this._iconMapField = null;
         this._iconCharField = null;
         this._iconClsField = null;
@@ -85,6 +86,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             collapsedIconMap: true,
             expandedIconMap: true,
 
+            clsField: true,
             iconMapField: true,
             iconCharField: true,
             iconClsField: true,
@@ -134,6 +136,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
+
+    get clsField() { return this._clsField; }
+    set clsField(val) { this._clsField = val; }
 
     get childrenField() { return this._childrenField; }
     set childrenField(val) { this._childrenField = val; }

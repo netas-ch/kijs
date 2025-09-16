@@ -301,9 +301,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     get isDirty() {
         let isDirty = false;
-        kijs.Array.each(this._valuesMapping, function(map) {
-            isDirty = isDirty || this._compareIsDirty(this._initialValues[map.valueProperty], this[map.valueProperty]);
-        }, this);
+        if (!this.disabled) {
+            kijs.Array.each(this._valuesMapping, function(map) {
+                isDirty = isDirty || this._compareIsDirty(this._initialValues[map.valueProperty], this[map.valueProperty]);
+            }, this);
+        }
         return isDirty;
     }
     set isDirty(val) {
@@ -643,7 +645,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errors = [];
 
         // Validierungen anwenden
-        if (this.visible && !this.readOnly && !this.disabled) {
+        if (!this.disabled) {
             this._validationRules(this.value, ignoreEmpty);
         }
 

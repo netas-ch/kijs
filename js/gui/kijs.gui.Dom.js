@@ -27,7 +27,7 @@
  *                                      code: Tags werden als als Text angezeigt
  *                                      text: Tags werden entfernt
  *
- * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen. 
+ * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen.
  *                                      Bsp: { id: 123, for: 'meinFeld' }
  *
  * nodeTagName  String [optional]       Tag-Name des DOM-node. Default='div'
@@ -186,10 +186,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._style = {};
 
         this._tooltip = null;
-        
+
         this._contextMenuDeferId = null;
         this._scrollEndDeferId = null;
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -212,7 +212,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             on: { fn: 'assignListeners' },
             style : { fn: 'assign' },
             tooltip: { target: 'tooltip' },
-            
+
             disabled: { prio: 2000, target: 'disabled' }
         };
 
@@ -241,7 +241,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             scrollEnd: { nodeEventName: 'scrollend', useCapture: false },
             singleClick: { nodeEventName: 'click', useCapture: false, interrupt: this._doubleClickSpeed },
             wheel: { nodeEventName: 'wheel', useCapture: false },
-            
+
             // key events
             input: { nodeEventName: 'input', useCapture: false },
             keyDown: { nodeEventName: 'keydown', useCapture: false },
@@ -278,7 +278,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 altKey: null,                   // Muss dazu alt gedrückt werden? (null=egal)
                 usecapture: false               // Soll das Event in der Capturing- statt der Bubbeling-Phase ausgelöst werden?
             },
-            
+
             // touch events
             touchStart: { nodeEventName: 'touchstart', useCapture: false },
             touchEnd: { nodeEventName: 'touchend', useCapture: false },
@@ -347,7 +347,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !kijs.isEmpty(this._height);
         }
     }
-    
+
     /**
      * Wurde die Eigenschaft "left" manuell zugewiesen?
      * @returns {Boolean}
@@ -419,7 +419,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     get htmlDisplayType() { return this._htmlDisplayType; }
     set htmlDisplayType(val) { this._htmlDisplayType = val; }
-    
+
     get isEmpty() { return kijs.isEmpty(this.html); }
 
     get isRendered() { return !!this._node; }
@@ -450,7 +450,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     get node() { return this._node; }
-    set node(val) { this._node = val; }
+    set node(val) {
+        this._node = val;
+        if (this._node && this._node.tagName) {
+            this._nodeTagName = this._node.tagName.toLowerCase();
+        }
+    }
 
     get nodeTagName() { return this._nodeTagName; }
     set nodeTagName(val) {
@@ -473,7 +478,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         } else {
             this._style = val;
         }
-        
+
         // Falls bereits gerendert wurde: styles anwenden
         if (this._node) {
             Object.assign(this._node.style, this._style);
@@ -790,7 +795,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         return this.alignToRect(t, targetPos, pos, allowSwapX, allowSwapY, offsetX, offsetY, swapOffset);
     }
-    
+
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -805,7 +810,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * Sollte nicht direkt aufgerufen werden.
      * Bitte den Setter disabled verwenden.
      * @param {Boolean} val
-     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled 
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled
      *                                          des Elternelements kommt.
      * @returns {undefined}
      */
@@ -816,30 +821,30 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (!val) {
                 val = !!this._disabledInitial;
             }
-            
+
         } else {
             this._disabledInitial = !!val;
-            
+
         }
-        
+
         this.nodeAttributeSet('disabled', !!val);
         if (this._tooltip) {
             this._tooltip.disabled = !!val;
         }
-        
+
         if (val) {
             this.clsAdd('kijs-disabled');
         } else {
             this.clsRemove('kijs-disabled');
         }
     }
-    
+
     /**
      * Ändert die Eigenschaft disabled.
      * Sollte nicht direkt aufgerufen werden.
      * Bitte den Setter disabled verwenden.
      * @param {Boolean} val
-     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled 
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled
      *                                          des Elternelements kommt.
      * @returns {undefined}
      */
@@ -850,24 +855,24 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (!val) {
                 val = !!this._disabledInitial;
             }
-            
+
         } else {
             this._disabledInitial = !!val;
-            
+
         }
-        
+
         this.nodeAttributeSet('disabled', !!val);
         if (this._tooltip) {
             this._tooltip.disabled = !!val;
         }
-        
+
         if (val) {
             this.clsAdd('kijs-disabled');
         } else {
             this.clsRemove('kijs-disabled');
         }
     }
-    
+
     /**
      * Fügt eine oder mehrere CSS-Klassen hinzu
      * @param {String|Array} cls
@@ -1016,7 +1021,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             return !!this._nodeAttribute.hasOwnProperty(name);
         }
     }
-    
+
     /**
      * Fügt eine Eigenschaft zum DOM-Node hinzu, oder löscht sie.
      * @param {String|Object} name oder Objekt mit mehreren:  { tabIndex:-1, type:'button' }
@@ -1072,7 +1077,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             this._nodeEventListenersApply();
         }
     }
-    
+
     // overwrite
     on(names, callback, context) {
         // Anzahl kijs-Events ermitteln
@@ -1146,9 +1151,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     /**
      * rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
      * @param {HTMLElement} targetNode           Eltern-Node
-     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node 
+     * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node
      *                                           statt angehängt eingefügt werden soll
-     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode 
+     * @param {String} [insertPosition='before'] 'before': Einfügen vor dem referenceNode
      *                                           'after': Einfügen nach dem referenceNode
      * @returns {undefined}
      */
@@ -1183,13 +1188,13 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      *     - 'start'  Node wird am Anfang (oben) positioniert
      *     - 'end'    Node wird am Ende (unten) positioniert
      *     - 'center' Node wird in der Mitte positioniert
-     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur
      *                sowenig, dass der node im sichtbaren Bereich ist.
      *  - horizontalPosition (String) default='auto'
      *     - 'start'  Node wird am Anfang (links) positioniert
      *     - 'end'    Node wird am Ende (rechts) positioniert
      *     - 'center' Node wird in der Mitte positioniert
-     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur
      *                sowenig, dass der node ganz im sichtbaren Bereich ist.
      *  - verticalOffset (Number) default=0 Versatz auf Y-Achse
      *  - horizontalOffset (Number) default=0 Versatz auf X-Achse
@@ -1219,7 +1224,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                 clearTimeout(this._scrollEndDeferId);
                 this._scrollEndDeferId = null;
             }
-            
+
             // Damit beim erneuten Rendern die Werte wieder vorhanden sind
             kijs.Object.each(this._nodeAttribute, function (key) {
                 this._nodeAttribute[key] = this.nodeAttributeGet(key);
@@ -1289,10 +1294,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             if (this._eventMap[kijsEvent]) {
                 const nodeEventName = this._eventMap[kijsEvent].nodeEventName;
                 const useCapture = !!this._eventMap[kijsEvent].useCapture;
-                
+
                 // unterstützt der Browser das Event?
                 let eventIsSupported = ('on'+nodeEventName in this._node);
-                
+
                 // Workarounds für nur teilweise unterstütze Events
                 if (eventIsSupported) {
                     switch (nodeEventName) {
@@ -1300,7 +1305,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                         case 'contextmenu':
                             if ((kijs.Navigator.isIOS || kijs.Navigator.isMac) && kijs.Navigator.isTouch) {
                                 eventIsSupported = false;
-                                
+
                                 // Das normale contextmenu-event trotzdem noch abfragen
                                 if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
                                     kijs.Dom.addEventListener(nodeEventName, this._node, this.#onNodeEvent, this, useCapture);
@@ -1309,14 +1314,14 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                             break;
                      }
                 }
-                
+
                 // unterstützt der Browser das Event?
                 if (eventIsSupported) {
                     // Wenn der DOM-Node Listener noch nicht vorhanden ist: erstellen
                     if (!kijs.Dom.hasEventListener(nodeEventName, this._node, this, useCapture)) {
                         kijs.Dom.addEventListener(nodeEventName, this._node, this.#onNodeEvent, this, useCapture);
                     }
-                    
+
                 // Event wird nicht unterstützt
                 } else {
                     // Workaround vorhanden?
@@ -1331,20 +1336,20 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
                                 this.on('touchEnd', this.#onContextMenu_TouchEnd, this);
                             }
                             break;
-                            
+
                         case 'scrollend':
                             // kijs-Listener auf scroll erstellen
                             if (!this.hasListener('scroll', this.#onScrollEnd_Scroll, this)) {
                                 this.on('scroll', this.#onScrollEnd_Scroll, this);
                             }
                             break;
-                            
+
                         default:
                             // keine Fehlermeldung, weil nicht alle Browser alle Events unterstützen.
                     }
-                    
+
                 }
-                
+
             } else {
                 throw new kijs.Error(`kijsEvent "${kijsEvent}" is not mapped`);
             }
@@ -1425,7 +1430,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         return ret;
     }
 
-    
+
     // PRIVATE
     // Workaround zum Erzeugen des contextMenu Events (wird von iOS oder Mac bei einem longTouch nicht ausgelöst)
     #onContextMenu_TouchEnd(e) {
@@ -1441,42 +1446,42 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             clearTimeout(this._contextMenuDeferId);
             this._contextMenuDeferId = null;
         }
-        
+
         if (this.disabled) {
             return;
         }
-        
+
         // und neuen starten
         this._contextMenuDeferId = kijs.defer(function() {
             this._contextMenuDeferId = null;
-            
-            // falls dieser nicht mehr abgebrochen wurde, kann nun das 
+
+            // falls dieser nicht mehr abgebrochen wurde, kann nun das
             // contextMenu Event ausgelöst werden.
             e.dom = this;
             e.eventName = 'contextMenu';
             this.raiseEvent('contextMenu', e);
         }, 500, this);
     }
-    
-    // Workaround zum Erzeugen des Events scrollEnd, das noch nicht von allen 
+
+    // Workaround zum Erzeugen des Events scrollEnd, das noch nicht von allen
     // Browsern unterstützt wird (Safari auf Mac und iOS).
     #onScrollEnd_Scroll(e) {
         // bestehenden timer abbrechen
         clearTimeout(this._scrollEndDeferId);
         this._scrollEndDeferId = null;
-        
+
         // und neuen starten
         this._scrollEndDeferId = kijs.defer(function() {
             this._scrollEndDeferId = null;
-            
-            // falls dieser nicht mehr abgebrochen wurde, kann nun das 
+
+            // falls dieser nicht mehr abgebrochen wurde, kann nun das
             // scrollEnd Event ausgelöst werden.
             e.dom = this;
             e.eventName = 'scrollEnd';
             this.raiseEvent('scrollEnd', e);
         }, 100, this);
     }
-    
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -1502,9 +1507,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         this._tooltip = null;
         this._contextMenuDeferId = null;
         this._scrollEndDeferId = null;
-        
+
         // Basisklasse entladen
         super.destruct();
     }
-    
+
 };

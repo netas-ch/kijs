@@ -56,7 +56,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
         // Evtl. Daten aus Formular holen
         kijs.Array.each(this._fields, function(field) {
-            if (field.submitValueEnable) {
+            if (field.submitValueEnable && !field.disabled) {
                 // Bestehendes Recordset mit Daten aus dem Feld ergänzen
                 Object.assign(this._data, field.values);
             } else {

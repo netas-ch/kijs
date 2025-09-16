@@ -32,11 +32,22 @@ home.sc.Icon = class home_sc_Icon {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Icon aus IconMap:',
+                    value: 'Icons aus IconMap:',
                     style: { margin: '0 0 4px 0'}
                 },{
                     xtype: 'kijs.gui.Icon',
                     iconMap: 'kijs.iconMap.Fa.gamepad'
+                },{
+                    xtype: 'kijs.gui.Icon',
+                    iconMap: 'kijs.iconMap.Fa.house'
+                },{
+                    xtype: 'kijs.gui.Icon',
+                    iconMap: 'kijs.iconMap.Fa.house',
+                    cls: 'fa-regular'
+                },{
+                    xtype: 'kijs.gui.Icon',
+                    iconMap: 'kijs.iconMap.Fa.apple'/*,
+                    cls: 'fa-brands'*/
                 },
                 
                 {

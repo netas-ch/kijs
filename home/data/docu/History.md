@@ -2,6 +2,57 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.1.0
+=============
+### Font Awesome  
+Update auf Version 7.0.1  
+**UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
+Die *.ttf Dateien werden nicht mehr gebrauch: aus ```files.json``` löschen.  
+
+### kijs.gui.field.*, kijs.gui.container.Form
+Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
+oder ```readOnly: true```.  
+
+Bei Feldern mit ```disabled: true``` ...  
+ - ... ist ```isDirty``` ist immer ```false```
+ - ... werden nicht validiert (das war bereits so)  
+ - ... werden vom ```kijs.gui.container.Form``` nicht mehr übermittelt  
+
+**TIPP:** Wenn Felder in einem Formular dynamisch ausgeblendet werden und nicht  
+mehr übermittelt werden sollen, macht es Sinn, sie nicht nur auszublenden, sondern
+auch auf ```disabled: true``` zu stellen. Falls ein ganzer Container ausgleblendet 
+wird, kann der Container auf ```disabled: true``` gestellt werden. Die Eigenschaft 
+```disabled````wird ja an alle Kinder rekursiv weitergegeben.  
+
+**UPDATE TIPP:**: Formulare evtl. anpassen und testen. Sicherstellen, dass keine 
+Felder mit ```disabled: true``` übermittelt werden sollen.  
+
+### kijs.gui.ListView, kijs.gui.Tree
+- Neue config/getter/setter: ```clsField``` (optional, string)  
+  Namen des Felds, das einen CSS-Klassennamen enthalten kann, diese Klasse wird 
+  dem Element zugewiesen.  
+
+### kijs.gui.DataView, kijs.gui.ListView, kijs.gui.Tree
+- Neue CSS-Klasse, ```kijs-transparentborder```  
+  Das Element hat damit einen unsichtbaren Rand.  
+  Wenn es den Fokus erhält, ist er aber sichtbar.  
+  Die bestehende Klasse ```kijs-borderless``` gibt es immer noch, 
+  sie deaktivert den Rand komplett.  
+
+### kijs.gui.Panel
+- Neue config: ```headerBarCaption``` (optional, string)  
+- Neue config: ```headerBarIconCls``` (optional, string)  
+- Neue config: ```footerBarIconCls``` (optional, string)  
+
+
+
+Version 3.0.1
+=============
+### kijs.gui.grid.cell.Checkbox
+BUGFIX: Checkbox funktionierte nicht mehr
+
+
+
 Version 3.0.0
 =============
 ### Anpassungen CSS

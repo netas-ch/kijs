@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.gui.dataView.element.ListView
+// kijs.gui.dataView.element.Tree
 // --------------------------------------------------------------
 kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends kijs.gui.dataView.element.Base {
 
@@ -205,7 +205,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         }
         let expandIconEl = new kijs.gui.Icon(iconArgs);
 
-
         // Icon
         let iconMapField = null;
         let iconMap = null;
@@ -297,7 +296,12 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         if (!kijs.isEmpty(this._parentEl.tooltipField) && !kijs.isEmpty(this.dataRow[this._parentEl.tooltipField])) {
             tooltip = this.dataRow[this._parentEl.tooltipField];
         }
+        this.tooltip = tooltip;
 
+        // cls
+        if (!kijs.isEmpty(this._parentEl.clsField) && !kijs.isEmpty(this.dataRow[this._parentEl.clsField])) {
+            this._dom.clsAdd(this.dataRow[this._parentEl.clsField]);
+        }
 
         // Checkbox
         let cls = '';
@@ -321,8 +325,6 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
             this._dom.clsAdd(cls);
         }
 
-        this.tooltip = tooltip;
-
         this.removeAll();
         this.add([expandIconEl, iconEl, captionEl]);
     }
@@ -331,15 +333,17 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
     // PRIVATE
     // LISTENERS
     #onExpandIconMouseDown(e) {
-        if (this.expanded) {
-            this.collapse();
-        } else {
-            this.expand();
+        if (!this._parentEl.disabled) {
+            if (this.expanded) {
+                this.collapse();
+            } else {
+                this.expand();
+            }
+
+            // Bubbeling und native Listeners verhindern
+            e.nodeEvent.stopPropagation();
+            e.nodeEvent.preventDefault();
         }
-        
-        // Bubbeling und native Listeners verhindern
-        e.nodeEvent.stopPropagation();
-        e.nodeEvent.preventDefault();
     }
 
 
