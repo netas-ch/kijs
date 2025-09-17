@@ -1282,7 +1282,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         newConfig.parent = this;
 
         let el = this._getInstanceForAdd(newConfig);
-        if ((el instanceof kijs.gui.dataView.element.Base)) {
+        if (el instanceof kijs.gui.dataView.element.Base) {
             // Inhalt laden
             el.update();
         } else {
