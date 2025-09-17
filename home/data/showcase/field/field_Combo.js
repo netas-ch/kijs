@@ -86,6 +86,20 @@ home.sc.field_Combo = class home_sc_field_Combo {
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.field.Combo',
+                    label: 'Disabled',
+                    captionField: 'caption',
+                    valueField: 'value',
+                    iconMapField: 'iconMap',
+                    iconColorField: '',
+                    disabledField: 'disabled',
+                    value: 2,
+                    data: [
+                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1, disabled: true },
+                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
+                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
+                    ]
                 },
 
                 {

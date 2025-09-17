@@ -2185,27 +2185,46 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
+        }
 
-            div.kijs-dataview-element {
+        &.kijs-disabled > .kijs-container-inner > div.kijs-dataview-element,
+        div.kijs-dataview-element.kijs-disabled {
+            background-color: transparent;
+
+            > .kijs-container-inner {
+                > .kijs-caption {
+                    color: var(--field-disabled-fontColor);
+                }
+
+                > .kijs-icon {
+                    color: var(--icon-disabled-fontColor);
+                }
+            }
+
+            &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                border-color: var(--item-selected-disabled-borderColor);
                 background-color: transparent;
+            }
 
-                > .kijs-container-inner {
-                    > .kijs-caption {
-                        color: var(--field-disabled-fontColor);
-                    }
+            &.kijs-display-checkboxes,
+            &.kijs-display-options {
+                &:before {
+                    color: var(--field-disabled-fontColor);
+                    border: 1.5px solid var(--field-disabled-fontColor);
+                    background-color: var(--field-disabled-bkgrndColor);
                 }
 
-                &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                    border-color: var(--item-selected-disabled-borderColor);
-                    background-color: transparent;
-                }
-
-                &.kijs-display-checkboxes,
-                &.kijs-display-options {
+                &:hover {
                     &:before {
-                        background-color: var(--field-disabled-bkgrndColor);
+                        color: var(--field-disabled-fontColor);
+                        border: 1.5px solid var(--field-disabled-fontColor);
                     }
                 }
+            }
+
+            &:hover {
+                border-color: transparent;
+                background-color: unset;
             }
         }
     }
@@ -3478,9 +3497,7 @@
                         &:hover {
                             color: var(--field-focus-borderColor);
                         }
-
                     }
-
                 }
             }
         }

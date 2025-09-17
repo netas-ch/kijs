@@ -113,6 +113,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             minChars: { target: 'minChars', prio: 2}, // Nicht beachtet, wenn remoteSort false ist
 
             captionField: { target: 'captionField', context: this._listViewEl },
+            disabledField: { target: 'disabledField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
             iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
@@ -160,7 +161,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.on('keyUp', this.#onInputDomKeyUp, this);
         this._inputDom.on('keyDown', this.#onInputDomKeyDown, this);
         this._listViewEl.on('afterLoad', this.#onListViewElAfterLoad, this);
-        this._listViewEl.on('click', this.#onListViewElClick, this);
+        this._listViewEl.on('elementClick', this.#onListViewElClick, this);
         this._spinBoxEl.on('click', this.#onSpinBoxElClick, this);
         this._spinBoxEl.on('close', this.#onSpinBoxElClose, this);
         this._spinBoxEl.on('show', this.#onSpinBoxElShow, this);
@@ -833,17 +834,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onListViewElClick(e) {
-        this._spinBoxEl.close();
+        if (!e.raiseElement.disabled) {
+            this._spinBoxEl.close();
 
-        if (this.value !== this._listViewEl.value) {
-            let oldVal = this.value;
-            this.value = this._listViewEl.value;
+            if (this.value !== this._listViewEl.value) {
+                let oldVal = this.value;
+                this.value = this._listViewEl.value;
 
-            // validieren
-            this.validate();
+                // validieren
+                this.validate();
 
-            this.raiseEvent('input', {value: this.value, oldValue: oldVal});
-            this.raiseEvent('change', {value: this.value, oldValue: oldVal});
+                this.raiseEvent('input', { value: this.value, oldValue: oldVal });
+                this.raiseEvent('change', { value: this.value, oldValue: oldVal });
+            }
         }
     }
 

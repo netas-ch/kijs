@@ -82,6 +82,19 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
 
                         context: this
                     }
+                },{
+                    xtype: 'kijs.gui.field.CheckboxGroup',
+                    label: 'Disabled',
+                    captionField: 'caption',
+                    valueField: 'value',
+                    iconMapField: 'iconMap',
+                    iconColorField: '',
+                    disabledField: 'disabled',
+                    data: [
+                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1, disabled: true },
+                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
+                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
+                    ]
                 },
 
                 {

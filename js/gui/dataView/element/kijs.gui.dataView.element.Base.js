@@ -39,6 +39,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
 
         // Listener
         this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
+        this.on('afterUpdate', this.#onAfterUpdate, this);
     }
 
 
@@ -111,6 +112,14 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
 
         // Inhalt erstellen
         this.update();
+    }
+
+    #onAfterUpdate() {
+
+        // Disabled
+        if (!kijs.isEmpty(this._parentEl.disabledField) && !kijs.isEmpty(this.dataRow[this._parentEl.disabledField]) && !!this.dataRow[this._parentEl.disabledField]) {
+            this.disabled = true;
+        }
     }
 
 
