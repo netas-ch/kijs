@@ -18,6 +18,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._elementXType = 'kijs.gui.dataView.element.AutoHtml';
 
         this._primaryKeyFields = null; // Array mit den Namen der Primärschlüssel-Felder
+        this._disabledField = null;    // Feldnamen für disabled (optional)
 
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
@@ -62,6 +63,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
             primaryKeyFields: { target: 'primaryKeyFields' }, // Array mit den Namen der Primärschlüssel-Felder
+            disabledField: true,                // Feldnamen für disabled (optional)
             autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
             
             filters: { target: 'filters' },
@@ -176,6 +178,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Current Element ermitteln und setzen
         this.current = null;
     }
+
+    get disabledField() { return this._disabledField; }
+    set disabledField(val) { this._disabledField = val; }
 
     get elementXType() { return this._elementXType; }
     set elementXType(val) { this._elementXType = val; }

@@ -83,6 +83,11 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
         }
         this.tooltip = tooltip;
 
+        // Disabled
+        if (!kijs.isEmpty(this._parentEl.disabledField) && !kijs.isEmpty(this.dataRow[this._parentEl.disabledField]) && !!this.dataRow[this._parentEl.disabledField]) {
+            this.disabled = true;
+        }
+
         // cls
         if (!kijs.isEmpty(this._parentEl.clsField) && !kijs.isEmpty(this.dataRow[this._parentEl.clsField])) {
             this._dom.clsAdd(this.dataRow[this._parentEl.clsField]);

@@ -20,6 +20,11 @@ kijs.gui.dataView.element.AutoHtml = class kijs_gui_dataView_element_AutoHtml ex
         }, this);
 
         this.html = html;
+
+        // Disabled
+        if (!kijs.isEmpty(this._parentEl.disabledField) && !kijs.isEmpty(this.dataRow[this._parentEl.disabledField]) && !!this.dataRow[this._parentEl.disabledField]) {
+            this.disabled = true;
+        }
     }
 
 };
