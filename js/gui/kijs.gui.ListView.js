@@ -138,7 +138,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             if (!kijs.isEmpty(rows)) {
                 val = [];
                 kijs.Array.each(rows, function(row) {
-                    val.push(row[this._valueField]);
+                    if (kijs.isEmpty(this.disabledField) || kijs.isEmpty(row[this.disabledField]) || !row[this.disabledField]) {
+                        val.push(row[this._valueField]);
+                    }
                 }, this);
 
                 // bei nur einem Wert direkt den Wert, ohne Array zurückgeben
