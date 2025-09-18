@@ -90,11 +90,16 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     disabledField: 'disabled',
+                    value: 1,
                     data: [
                         { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1, disabled: true },
                         { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
                         { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
-                    ]
+                    ],
+                    on: {
+                        change: console.log,
+                        context: this
+                    }
                 },
 
                 {

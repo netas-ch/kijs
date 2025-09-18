@@ -758,7 +758,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         for (let i=0, len=elements.length; i<len; i++) {
-            if (!elements[i].selected) {
+            if (!elements[i].selected && !elements[i].disabled) {
                 args.selectedElements.push(elements[i]);
                 args.selectedKeysRows.push(elements[i].keyRow);
                 elements[i].selected = true;
@@ -804,7 +804,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
             }
 
-            if (found) {
+            if (found && !el.disabled) {
                 elements.push(el);
             }
 
@@ -852,7 +852,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             let el = this.getElementByDataRow(rows[i]);
 
             if (el) {
-                if (!el.selected) {
+                if (!el.selected && !el.disabled) {
                     args.selectedElements.push(el);
                     el.selected = true;
                     args.changed = true;
@@ -942,7 +942,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         kijs.Array.each(this.elements, function(element) {
-            if (kijs.Array.contains(indexes, element.index)) {
+            if (kijs.Array.contains(indexes, element.index) && !element.disabled) {
                 selectElements.push(element);
             }
         }, this);
@@ -985,7 +985,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=primaryKeys.length; i<len; i++) {
             let el = this.getElementByPrimaryKey(primaryKeys[i]);
             if (el) {
-                if (!el.selected) {
+                if (!el.selected && !el.disabled) {
                     args.selectedElements.push(el);
                     el.selected = true;
                     args.changed = true;
