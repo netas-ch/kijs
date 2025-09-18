@@ -543,7 +543,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                         // falls nicht expandiert und kein Eltern-Knoten vorhanden:
                         // den Fokus auf vorherigen Knoten setzen
                         } else {
-                            const prev = this._currentEl.previous;
+                            let prev = this._currentEl.previous;
+
+                            while (prev && prev.disabled) {
+                                prev = prev.previous;
+                            }
+
                             if (prev) {
                                 this.current = prev;
                                 if (this._focusable) {
@@ -563,9 +568,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     if (this._currentEl && this._elements) {
                         let found = false;
 
-                        kijs.Array.each(this._elements, function(el) {
+                        kijs.Array.each(this._elements, function (el) {
                             if (found) {
-                                if (el.top < this._currentEl.top && el.left === this._currentEl.left) {
+                                if (!el.disabled && el.top < this._currentEl.top && el.left === this._currentEl.left) {
                                     this.current = el;
                                     if (this._focusable) {
                                         el.focus();
@@ -594,7 +599,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
                         // sonst zum nächsten Knoten gehen
                         } else {
-                            const next = this._currentEl.next;
+                            let next = this._currentEl.next;
+
+                            while (next && next.disabled) {
+                                next = next.next;
+                            }
+
                             if (next) {
                                 this.current = next;
                                 if (this._focusable) {
@@ -615,7 +625,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                         let found = false;
                         kijs.Array.each(this._elements, function(el) {
                             if (found) {
-                                if (el.top > this._currentEl.top && el.left === this._currentEl.left) {
+                                if (!el.disabled && el.top > this._currentEl.top && el.left === this._currentEl.left) {
                                     this.current = el;
                                     if (this._focusable) {
                                         el.focus();

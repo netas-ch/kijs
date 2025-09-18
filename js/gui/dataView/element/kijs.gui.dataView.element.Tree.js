@@ -19,7 +19,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
 
         this._ddName = kijs.uniqId('tree.element');
         this._ddTarget = null;
-        
+
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             // keine
@@ -183,7 +183,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         let allowChildren = this.allowChildren;
         let expanded = this.expanded;
         let marginLeft = this._depth * this._parentEl.indent;
-        
+
         // expand-Button Icon
         iconArgs = {
             parent: this,

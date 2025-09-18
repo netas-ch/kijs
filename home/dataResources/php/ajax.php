@@ -363,11 +363,11 @@ foreach ($requests as $request) {
                 $rows[] = array('Name' => 'Schneider', 'Vorname' => 'Peter');
                 $rows[] = array('Name' => 'Koch', 'Vorname' => 'Marlies');
                 $rows[] = array('Name' => 'Koch', 'Vorname' => 'Stephan');
-                $rows[] = array('Name' => 'Wenger', 'Vorname' => 'Sandro');
-                $rows[] = array('Name' => 'Schuster', 'Vorname' => 'Lia');
+                $rows[] = array('Name' => 'Wenger', 'Vorname' => 'Sandro', 'Deaktiviert' => 1);
+                $rows[] = array('Name' => 'Schuster', 'Vorname' => 'Lia', 'Deaktiviert' => 1);
                 $rows[] = array('Name' => 'Schuster', 'Vorname' => 'Franz');
                 $rows[] = array('Name' => 'Zürcher', 'Vorname' => 'Benjamin');
-                $rows[] = array('Name' => 'Kaiser', 'Vorname' => 'Sigfried');
+                $rows[] = array('Name' => 'Kaiser', 'Vorname' => 'Sigfried', 'Deaktiviert' => 1);
                 $rows[] = array('Name' => 'Tanner', 'Vorname' => 'Ursula');
                 $rows[] = array('Name' => 'Tanner', 'Vorname' => 'Fred');
                 $rows[] = array('Name' => 'Kocher', 'Vorname' => 'Paul');
@@ -375,6 +375,7 @@ foreach ($requests as $request) {
 
                 $response->responseData->config = new stdClass();
                 $response->responseData->config->primaryKeyFields = ['Name','Vorname'];
+                $response->responseData->config->disabledField = 'Deaktiviert';
                 $response->responseData->config->data = $rows;
 
                 $filter = array();
