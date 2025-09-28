@@ -37,7 +37,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._waitMaskTarget = null;
         this._waitMaskTargetDomProperty = null;
 
-        this._autoLoad = true;              // Datensätze nach dem Rendern automatisch vom Server laden
         this._remoteDataLoaded = 0;         // Anzahl im Grid geladener Datensätze
         this._remoteDataStartIndex = 0;     // Start-Index für Datensätze, die als nächstes geladen werden
         this._remoteDataStep = 100;         // Anzahl Datensätze, die pro request hinzugefügt werden.
@@ -106,7 +105,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autoLoad:       true,
             rpc:            { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
             rpcLoadFn:      true,
             rpcLoadArgs:    true,
@@ -519,16 +517,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
-        }
-
-        // Daten laden
-        if (this._autoLoad) {
-            this._autoLoad = false; // Daten nur beim ersten Rendern automatisch laden.
-            kijs.defer(function() {
-                if (this._remoteDataLoaded === 0) {
-                    this._remoteLoad(true);
-                }
-            }, 30, this);
         }
     }
 

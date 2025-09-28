@@ -410,7 +410,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         if (kijs.toString(config.value) !== kijs.toString(this.value)) {
                             this.value = config.value;
                         }
-
                     }
                 });
 

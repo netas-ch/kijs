@@ -108,6 +108,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
         return false;
     }
+
     // setzt bei allen Felder isDirty auf true oder false
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {
@@ -177,7 +178,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Löscht allen Werte aus dem Formular
+     * Löscht alle Werte aus dem Formular
      * @returns {undefined}
      */
     clear() {
@@ -226,7 +227,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             super.load(args, true).then((e) => {
                 let config = e.responseData.config ?? {};
 
-                // Falls des Formular destructed wurde: abbrechen
+                // Falls das Formular destructed wurde: abbrechen
                 if (!this._dom) {
                     resolve(e);
                     return;

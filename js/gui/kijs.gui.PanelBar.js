@@ -146,7 +146,16 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // Overwrite
+
+    // overwrite
+    changeDisabled(val, callFromParent) {
+        super.changeDisabled(!!val, callFromParent);
+        this._iconEl.changeDisabled(!!val, true);
+        this._containerLeftEl.changeDisabled(!!val, true);
+        this._containerRightEl.changeDisabled(!!val, true);
+    }
+
+    // overwrite
     render(superCall) {
         // Schematischer Aufbau des DOMs:
         // + panelBar
@@ -199,16 +208,6 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     }
 
 
-    // PROTECTED
-    // overwrite
-    changeDisabled(val, callFromParent) {
-        super.changeDisabled(!!val, callFromParent);
-        this._iconEl.changeDisabled(!!val, true);
-        this._containerLeftEl.changeDisabled(!!val, true);
-        this._containerRightEl.changeDisabled(!!val, true);
-    }
-    
-    
 
     // --------------------------------------------------------------
     // DESTRUCTOR
