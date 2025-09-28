@@ -427,6 +427,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
+    // Normales Load überbrücken
+    load(args = {}) {
+        this.reload(args.restoreSelection, args.resetData);
+    }
+
     /**
      * TODO: Wir müssten nur einzelne Rows updaten können.
      * Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
