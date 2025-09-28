@@ -501,9 +501,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
 
             if (ok) {
+                if (kijs.isString(regExp.regExp)) {
+                    regExp.regExp = kijs.String.toRegExp(regExp.regExp);
+                }
                 if (kijs.isRegExp(regExp.regExp)) {
                     regExp.regExp = regExp.regExp.toString();
-                } else if (kijs.isString(regExp.regExp)) {
+                } else {
                     ok = false;
                 }
             }

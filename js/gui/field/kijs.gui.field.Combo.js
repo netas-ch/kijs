@@ -411,7 +411,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         if (kijs.toString(config.value) !== kijs.toString(this.value)) {
                             this.value = config.value;
                         }
-
                     }
                 });
 
@@ -438,7 +437,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         }
                     }
 
-                    this.validate(true);
+                    // Falls das Feld nicht destructed wurde validieren
+                    if (this._dom) {
+                        this.validate(true);
+                    }
                 });
         }
 
