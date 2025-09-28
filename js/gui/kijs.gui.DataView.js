@@ -49,6 +49,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._focusable = true;
         this._selectType = 'none';
 
+        this._dblTouchTime = null;
+        this._touchDeferId = null;
+        this._touchMultiSelectMode = false;
+
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview');
 
@@ -64,7 +68,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
             primaryKeyFields: { target: 'primaryKeyFields' }, // Array mit den Namen der Primärschlüssel-Felder
             disabledField: true,                // Feldnamen für disabled (optional)
-            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
 
             filters: { target: 'filters' },
             sortFields: { target: 'sortFields' },
@@ -99,6 +102,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Events
         this.on('keyDown', this.#onKeyDown, this);
         this.on('elementMouseDown', this.#onElementMouseDown, this);
+        this.on('elementTouchStart', this.#onElementTouchStart, this);
+        this.on('elementTouchEnd', this.#onElementTouchEnd, this);
     }
 
 
@@ -106,21 +111,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-    }
-    set autoLoad(val) {
-        if (val) {
-            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        } else {
-            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        }
+    get autoSave() {
+        return this._autoSave;
     }
 
-    get autoSave() { return this._autoSave; }
-    set autoSave(val) { this._autoSave = !!val; }
+    set autoSave(val) {
+        this._autoSave = !!val;
+    }
 
-    get current() { return this._currentEl; }
+    get current() {
+        return this._currentEl;
+    }
+
     /**
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
      * Vorsicht current und selected ist nicht das gleiche!
@@ -932,7 +934,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      */
     selectByIndexes(indexes, keepExisting=false, preventSelectionChange=false) {
         let selectElements = [];
-        
+
         if (kijs.isEmpty(indexes)) {
             indexes = [];
         } else {
@@ -1444,6 +1446,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 return this.raiseEvent('elementFocus', e);
             }, this);
 
+            // touchStart-Event
+            newEl.on('touchStart', function(e) {
+                return this.raiseEvent('elementTouchStart', e);
+            }, this);
+
+            // touchEnd-Event
+            newEl.on('touchEnd', function(e) {
+                return this.raiseEvent('elementTouchEnd', e);
+            }, this);
+
             // Evtl. fokus wieder setzen
             if (!kijs.isEmpty(currentPrimaryKey)) {
                 if (newEl.primaryKey === currentPrimaryKey) {
@@ -1499,7 +1511,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
                 break;
 
-
             case 'multi':
                 // nix
                 break;
@@ -1544,8 +1555,39 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     // PRIVATE
     // LISTENERS
-    #onAfterFirstRenderTo(e) {
-        this.load();
+    #onDocumentTouchEnd(e) {
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - this._dblTouchTime;
+
+        if (tapLength < 200 && tapLength > 0) {
+            e.nodeEvent.preventDefault();
+
+            this._dblTouchTime = null;
+
+            this.clearSelections();
+
+            // Listener entfernen
+            kijs.Dom.removeEventListener('touchend', document, this);
+
+            // Event werfen
+            this.raiseEvent('dblTouch', e);
+        } else {
+            this._dblTouchTime = currentTime;
+        }
+    }
+
+    #onDocumentTouchStart(e) {
+        if (this._touchMultiSelectMode) {
+            if (e.nodeEvent.target.closest('.kijs-dataview-element') === null) {
+                this._touchMultiSelectMode = false;
+
+                // Listener entfernen
+                kijs.Dom.removeEventListener('touchstart', document, this);
+
+                // Event werfen
+                this.raiseEvent('multiSelectModeEnd');
+            }
+        }
     }
 
     #onElementMouseDown(e) {
@@ -1556,13 +1598,51 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
 
             let isShiftPress = !!e.nodeEvent.shiftKey;
-            let isCtrlPress = !!e.nodeEvent.ctrlKey;
+            let isCtrlPress = !!e.nodeEvent.ctrlKey || this._touchMultiSelectMode;
 
             if (kijs.Navigator.isMac) {
                 isCtrlPress = !!e.nodeEvent.metaKey;
             }
 
             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+        }
+    }
+
+    #onElementTouchEnd() {
+        if (!kijs.isEmpty(this._touchDeferId)) {
+            clearTimeout(this._touchDeferId);
+        }
+    }
+
+    #onElementTouchStart(e) {
+        if (this._selectType === 'multi' && !this._touchMultiSelectMode) {
+            if (!this.disabled && !e.raiseElement.disabled) {
+
+                // long-click ignorieren
+                e.raiseElement.on('contextMenu', function (c) {
+                    c.nodeEvent.preventDefault();
+                });
+
+                this._touchDeferId = kijs.defer(() => {
+                    e.nodeEvent.preventDefault();
+
+                    this._touchMultiSelectMode = true;
+
+                    // Dokument Touch-Listener setzen
+                    kijs.Dom.addEventListener('touchend', document, this.#onDocumentTouchEnd, this);
+                    kijs.Dom.addEventListener('touchstart', document, this.#onDocumentTouchStart, this);
+
+                    // Element selektieren und fokussieren
+                    this.current = e.raiseElement;
+                    if (this._focusable) {
+                        e.raiseElement.focus();
+                    }
+                    this._selectEl(this._currentEl, false, this._touchMultiSelectMode);
+
+                    // Event werfen
+                    this.raiseEvent('multiSelectModeStart');
+                }, 500, this);
+            }
         }
     }
 
@@ -1657,6 +1737,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._ddTarget = null;
         this._elementDdSourceConfig = null;
         this._data = null;
+
+        this._dblTouchTime = null;
+        this._touchDeferId = null;
+        this._touchMultiSelectMode = null;
 
         // Basisklasse entladen
         super.destruct(true);
