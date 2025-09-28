@@ -907,7 +907,6 @@
     font-size: var(--default-fontSize);
     background-color: var(--viewport-bkgrndColor);
     max-width: 400px;
-    pointer-events: none;
   }
   div.kijs-tooltip * {
     box-sizing: border-box;
