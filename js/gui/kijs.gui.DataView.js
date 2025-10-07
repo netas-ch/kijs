@@ -695,7 +695,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: this._data,
+                data: { data: this._data },
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
