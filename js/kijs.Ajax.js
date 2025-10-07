@@ -78,16 +78,16 @@ kijs.Ajax = class kijs_Ajax {
 
             }
 
-            const xmlhttp = new XMLHttpRequest();
+            const xmlHttp = new XMLHttpRequest();
 
             // Timeout übergeben
             if ('timeout' in config && kijs.isInteger(config.timeout)) {
-                xmlhttp.timeout = config.timeout;
+                xmlHttp.timeout = config.timeout;
             }
 
             // Fortschritt überwachen
             if (kijs.isFunction(config.progressFn)) {
-                xmlhttp.onprogress = function(e) {
+                xmlHttp.onprogress = function(e) {
                     config.progressFn.call(config.context || this, {
                         nodeEventName : 'onprogress',
                         ajaxConfig: config,
@@ -98,54 +98,57 @@ kijs.Ajax = class kijs_Ajax {
                 };
             }
 
-            xmlhttp.onabort = function() {
+            xmlHttp.onabort = function() {
                 config.abortHappened = true;
             };
-            xmlhttp.ontimeout = function() {
+            xmlHttp.ontimeout = function() {
                 config.timeoutHappened = true;
             };
 
-            xmlhttp.onloadend = function() {
+            xmlHttp.onloadend = function() {
                 let val = null;
                 
                 // Progress Listener wieder entfernen
-                xmlhttp.onprogress = null;
+                xmlHttp.onprogress = null;
                 
-                if (xmlhttp.status >= 200 && xmlhttp.status <= 299) {
+                if (xmlHttp.status >= 200 && xmlHttp.status <= 299) {
                     switch (config.format) {
                         case 'text':
-                            val = xmlhttp.responseText;
+                            val = xmlHttp.responseText;
                             break;
 
                         case 'json':
                             try {
-                                val = JSON.parse(xmlhttp.responseText);
+                                val = JSON.parse(xmlHttp.responseText);
                             } catch (ex) {
-                                val = xmlhttp.responseText;
+                                val = xmlHttp.responseText;
                             }
                             break;
 
                         case 'xml':
-                            val = kijs.Ajax.parseXml(xmlhttp.responseXML);
+                            val = kijs.Ajax.parseXml(xmlHttp.responseXML);
                             break;
                     }
                     
                     if (kijs.isFunction(config.fn)) {
                         config.fn.call(config.context || this, {
                             response: val,
-                            request: config
+                            request: config,
+                            xmlHttp: xmlHttp
                         });
                     }
                     
                     resolve({
                         response: val,
-                        request: config
+                        request: config,
+                        xmlHttp: xmlHttp,
+                        test: '123'
                     });
                     
                 } else {
                     let error = '';
-                    if (xmlhttp.status > 0) {
-                        error = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlhttp.statusText + ' (Code ' + xmlhttp.status + ')';
+                    if (xmlHttp.status > 0) {
+                        error = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlHttp.statusText + ' (Code ' + xmlHttp.status + ')';
 
                     } else if (config.abortHappened) {
                         error = kijs.getText('Die Verbindung wurde abgebrochen') + '.';
@@ -162,27 +165,29 @@ kijs.Ajax = class kijs_Ajax {
                             response: val,
                             request: config,
                             errorType: 'error',
-                            errorMsg: error
+                            errorMsg: error,
+                            xmlHttp: xmlHttp
                         });
                     }
                     resolve({
                         response: null,
                         request: config,
                         errorType: 'error',
-                        errorMsg: error
+                        errorMsg: error,
+                        xmlHttp: xmlHttp
                     });
                 }
             };
 
-            xmlhttp.open(config.method, config.url, true);
+            xmlHttp.open(config.method, config.url, true);
             if (config.headers) {
                 for (let name in config.headers) {
                     if (config.headers[name] !== null) {
-                        xmlhttp.setRequestHeader(name, config.headers[name]);
+                        xmlHttp.setRequestHeader(name, config.headers[name]);
                     }
                 }
             }
-            xmlhttp.send(postData);
+            xmlHttp.send(postData);
         });
     }
 

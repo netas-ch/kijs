@@ -9,6 +9,9 @@ Update auf Version 7.0.1
 **UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
 Die *.ttf Dateien werden nicht mehr gebrauch: aus ```files.json``` löschen.  
 
+### kijs.Rpc, kijs.gui.Rpc
+Es gibt nun ein Event ```response(e)```, dass bei jedem response geworfen wird.  
+
 ### kijs.gui.field.*, kijs.gui.container.Form
 Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
 oder ```readOnly: true```.  
@@ -31,6 +34,8 @@ Felder mit ```disabled: true``` übermittelt werden sollen.
 - Neue config/getter/setter: ```clsField``` (optional, string)  
   Namen des Felds, das einen CSS-Klassennamen enthalten kann, diese Klasse wird 
   dem Element zugewiesen.  
+- Bei get value wir neu je nach ```selectType``` ein Array oder ein einzelner Wert 
+  zurückgegeben.  
 
 ### kijs.gui.DataView, kijs.gui.ListView, kijs.gui.Tree
 - Neue CSS-Klasse, ```kijs-transparentborder```  

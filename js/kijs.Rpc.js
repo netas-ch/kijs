@@ -3,13 +3,15 @@
 // --------------------------------------------------------------
 // kijs.Rpc
 // --------------------------------------------------------------
-kijs.Rpc = class kijs_Rpc {
+kijs.Rpc = class kijs_Rpc extends kijs.Observable {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
     constructor(config={}) {
+        super(false);
+        
         this._defaultConfig = {};
 
         this._url = '.';                        // URL Beispiel: '.' oder 'index.php'
@@ -213,6 +215,9 @@ kijs.Rpc = class kijs_Rpc {
      * @returns {undefined}
      */
    _receive(ajaxData) {
+        // response-event auslösen
+        this.raiseEvent('response', ajaxData);
+
         // Antworten für die einzelnen Requests durchgehen
         for (let i=0; i<ajaxData.request.postData.length; i++) {
             let subResponse = kijs.isArray(ajaxData.response) ? ajaxData.response[i] : null;
