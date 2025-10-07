@@ -9,6 +9,9 @@ Update auf Version 7.0.1
 **UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
 Die *.ttf Dateien werden nicht mehr gebrauch: aus ```files.json``` löschen.  
 
+### kijs.Rpc, kijs.gui.Rpc
+Es gibt nun ein Event ```response(e)```, dass bei jedem response geworfen wird.  
+
 ### kijs.gui.field.*, kijs.gui.container.Form
 Die funktion ```validate()``` validiert nun auch Felder mit ```visible: false``` 
 oder ```readOnly: true```.  
