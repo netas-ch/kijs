@@ -417,7 +417,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      */
     getElementByPrimaryKey(primaryKey) {
         for (let i=0, len=this._elements.length; i<len; i++) {
-            if (this._elements[i].primaryKey === primaryKey) {
+            if (this._elements[i].primaryKey === kijs.toString(primaryKey)) {
                 return this._elements[i];
             }
         }
