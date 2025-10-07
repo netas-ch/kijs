@@ -326,7 +326,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
     
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
-            if (el instanceof kijs.gui.field.Field) {
+            if (el instanceof kijs.gui.field.CheckboxGroup) {
                 el[propertyName] = value;
             }
         }, this);

@@ -34,6 +34,8 @@ Felder mit ```disabled: true``` übermittelt werden sollen.
 - Neue config/getter/setter: ```clsField``` (optional, string)  
   Namen des Felds, das einen CSS-Klassennamen enthalten kann, diese Klasse wird 
   dem Element zugewiesen.  
+- Bei get value wir neu je nach ```selectType``` ein Array oder ein einzelner Wert 
+  zurückgegeben.  
 
 ### kijs.gui.DataView, kijs.gui.ListView, kijs.gui.Tree
 - Neue CSS-Klasse, ```kijs-transparentborder```  
