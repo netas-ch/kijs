@@ -438,7 +438,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         }
                     }
 
-                    this.validate(true);
+                    // validieren
+                    if (this._dom) {
+                        this.validate(true);
+                    }
                 });
         }
 
