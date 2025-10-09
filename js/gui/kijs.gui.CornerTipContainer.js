@@ -223,7 +223,7 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
                 }
 
                 // Singleton löschen, wenn nicht mehr benötigt.
-                if (this.elements.length === 0 && kijs.gui.CornerTipContainer._singletonInstance === this) {
+                if (this.elements && this.elements.length === 0 && kijs.gui.CornerTipContainer._singletonInstance === this) {
                     this.destruct();
                     delete kijs.gui.CornerTipContainer._singletonInstance;
                 }

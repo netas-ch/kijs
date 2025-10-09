@@ -5,6 +5,13 @@
 // --------------------------------------------------------------
 kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
+    // PRIVATE VARS
+    // History, in der die geöffneten Fenster gespeichert werden. Diese wird verwendet,
+    // um zu verhindern, dass mehrere gleiche Fenster geöffnet werden.
+    // __historyConfigString [Array|null] mit Config-JSON-Strings der geöffneten Fenster
+    // __historyWin          [Array|null] mit kijs.gui.Win der geöffneten Fenster
+
+
 
     // --------------------------------------------------------------
     // STATICS
@@ -355,6 +362,13 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
                 footerElements.push(button);
             }, this);
 
+
+            // Falls bereits ein gleiches Fenster offen ist: das vorherige Schliessen
+            let historyIndex = this._getHistoryIndex(config);
+            if (historyIndex >= 0) {
+                this._closeHistoryWin(historyIndex);
+            }
+
             // Fenster erstellen
             const win = new kijs.gui.Window({
                 caption: kijs.isEmpty(config.caption) ? ' ' :  config.caption,
@@ -371,16 +385,23 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
             });
 
             // Listener
-            win.on('destruct', function(e){
+            win.on('destruct', function(e) {
                 e.btn = btn;
                 e.value = value;
+
+                // Fenster aus History entfernen
+                this._removeFromHistory(win);
+
                 if (config.fn) {
                     config.fn.call(config.context, e);
                 }
 
                 // Promise auflösen
                 resolve(e);
-            });
+            }, this);
+
+            // Fenster in History aufnehmen
+            this._writeToHistory(config, win);
 
             // Fenster anzeigen
             win.show();
@@ -436,6 +457,82 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         }, this);
          ret += '</ul>';
         return ret;
+    }
+
+    static _closeHistoryWin(index) {
+        this.__historyWin[index].close();
+    }
+
+    static _getConfigStringForHistory(config) {
+        let c = {};
+
+        if (!kijs.isEmpty(config.caption)) {
+            c.caption = config.caption;
+        }
+        if (!kijs.isEmpty(config.msg)) {
+            c.msg = config.msg;
+        }
+        if (!kijs.isEmpty(config.closable)) {
+            c.closable = config.closable;
+        }
+        if (!kijs.isEmpty(config.icon)) {
+            if (!kijs.isEmpty(config.icon.iconMap)) {
+                c.iconMap = config.icon.iconMap;
+            }
+            if (!kijs.isEmpty(config.icon.iconColor)) {
+                c.iconColor = config.icon.iconColor;
+            }
+        }
+        if (!kijs.isEmpty(config.fieldConfig)) {
+            c.fieldConfig = config.fieldConfig;
+        }
+        if (!kijs.isEmpty(config.buttons)) {
+            c.buttons = [];
+            kijs.Array.each(config.buttons, function(btn) {
+                if (!kijs.isEmpty(btn.name)) {
+                    c.buttons.push(btn.name);
+                }
+            }, this);
+        }
+
+        return JSON.stringify(c);
+    }
+
+    static _getHistoryIndex(config) {
+        let cfgStr = this._getConfigStringForHistory(config);
+
+        if (kijs.isEmpty(this.__historyConfigString)) {
+            this.__historyConfigString = [];
+            this.__historyWin = [];
+        }
+
+        return this.__historyConfigString.indexOf(cfgStr);
+    }
+
+    static _removeFromHistory(win) {
+        let index = this.__historyWin.indexOf(win);
+
+        if (kijs.isEmpty(this.__historyConfigString)) {
+            this.__historyConfigString = [];
+            this.__historyWin = [];
+        }
+
+        if (index >= 0) {
+            this.__historyConfigString.splice(index, 1);
+            this.__historyWin.splice(index, 1);
+        }
+    }
+
+    static _writeToHistory(config, win) {
+        let cfgStr = this._getConfigStringForHistory(config);
+
+        if (kijs.isEmpty(this.__historyConfigString)) {
+            this.__historyConfigString = [];
+            this.__historyWin = [];
+        }
+
+        this.__historyConfigString.push(cfgStr);
+        this.__historyWin.push(win);
     }
 
 };

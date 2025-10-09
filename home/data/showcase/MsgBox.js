@@ -171,6 +171,54 @@ home.sc.MsgBox = class home_sc_MsgBox {
                             });
                         }
                     }
+                },
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'Mehrere Fenster gleichzeitig öffnen (gleiche bereits geöffnete Fenster werden automatisch geschlossen):',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'show',
+                    on: {
+                        click: function() {
+                            // 3 x Altert
+                            kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+                            kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+                            kijs.gui.MsgBox.alert('Test', 'Test').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+
+                            // 2 x Alert 2
+                            kijs.gui.MsgBox.alert('Test', 'Test 2').then((e) => {
+                                    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                });
+                            kijs.gui.MsgBox.alert('Test', 'Test 2').then((e) => {
+                                    kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                                });
+
+                            // 2 x der gleiche als Info
+                            kijs.gui.MsgBox.info('Test', 'Test').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+                            kijs.gui.MsgBox.info('Test', 'Test').then((e) => {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf', e.btn);
+                            });
+
+                            // 2 x prompts
+                            kijs.gui.MsgBox.prompt('Test', 'Test', 'Eingabe', 'Wert!', function(e) {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                            });
+                            kijs.gui.MsgBox.prompt('Test', 'Test', 'Eingabe', 'Wert!', function(e) {
+                                kijs.gui.CornerTipContainer.show('Es wurde geklickt auf ', e.btn + ' / Eingabe ' + e.value);
+                            });
+                        }
+                    }
                 }
             ]
         });
