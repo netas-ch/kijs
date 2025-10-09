@@ -2030,7 +2030,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes,
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-options {
     background-color: var(--field-bkgrndColor);
-    border-color: var(--field-bkgrndColor);
+    border-color: transparent;
     color: var(--field-disabled-fontColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes:before,
