@@ -108,7 +108,6 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
         return false;
     }
-
     // setzt bei allen Felder isDirty auf true oder false
     set isDirty(val) {
         if (kijs.isEmpty(this._fields)) {

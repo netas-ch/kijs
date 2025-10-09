@@ -55,12 +55,13 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.OptionGroup',
-                    label: 'Label',
+                    label: 'zurücksetzbar',
                     captionField: 'caption',
                     valueField: 'value',
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     value: 2,
+                    selectType: 'singleAndEmpty',
                     data: [
                         { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},

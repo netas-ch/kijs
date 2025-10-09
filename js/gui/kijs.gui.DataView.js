@@ -49,10 +49,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._focusable = true;
         this._selectType = 'none';
 
-        this._dblTouchTime = null;
-        this._touchDeferId = null;
-        this._touchMultiSelectMode = false;
-
         this._dom.clsRemove('kijs-container');
         this._dom.clsAdd('kijs-dataview');
 
@@ -102,8 +98,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // Events
         this.on('keyDown', this.#onKeyDown, this);
         this.on('elementMouseDown', this.#onElementMouseDown, this);
-        this.on('elementTouchStart', this.#onElementTouchStart, this);
-        this.on('elementTouchEnd', this.#onElementTouchEnd, this);
     }
 
 
@@ -111,17 +105,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get autoSave() {
-        return this._autoSave;
-    }
-
+    get autoSave() { return this._autoSave; }
     set autoSave(val) {
         this._autoSave = !!val;
     }
 
-    get current() {
-        return this._currentEl;
-    }
+    get current() { return this._currentEl; }
 
     /**
      * Setzt das aktuelle Element, dass den Fokus erhalten wird.
@@ -134,11 +123,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @returns {undefined}
      */
     set current(el) {
-
         // Falls kein el übergeben wurde:
         if (!el && !kijs.isEmpty(this._elements)) {
             // Falls es schon ein gültiges Current-Element gibt, dieses nehmen
-            if (this._currentEl && kijs.Array.contains(this._elements, this._currentEl) && !this._currentEl.disabled) {
+            if (this._currentEl && kijs.Array.contains(this._elements, this._currentEl)) {
                 el = this._currentEl;
             }
             // Sonst das erste selektierte Element
@@ -151,7 +139,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     el = sel;
                 }
             }
-            // Sonst halt das erste nicht deaktivierte Element
+            // Sonst das erste nicht deaktivierte Element
             if (!el) {
                 kijs.Array.each(this._elements, element => {
                     if (!element.disabled) {
@@ -159,6 +147,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                         return false;
                     }
                 }, this);
+            }
+            // Sonst das erste Element
+            if (!el) {
+                el = this._elements[0];
             }
         }
 
@@ -527,7 +519,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 case 'ArrowLeft':
                     if (this._currentEl) {
                         let prev = this._currentEl.previous;
-
                         while (prev && prev.disabled) {
                             prev = prev.previous;
                         }
@@ -576,7 +567,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 case 'ArrowRight':
                     if (this._currentEl) {
                         let next = this._currentEl.next;
-
                         while (next && next.disabled) {
                             next = next.next;
                         }
@@ -695,7 +685,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: { data: this._data },
+                data: this._data,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
@@ -760,7 +750,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         for (let i=0, len=elements.length; i<len; i++) {
-            if (!elements[i].selected && !elements[i].disabled) {
+            if (!elements[i].selected) {
                 args.selectedElements.push(elements[i]);
                 args.selectedKeysRows.push(elements[i].keyRow);
                 elements[i].selected = true;
@@ -806,7 +796,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
             }
 
-            if (found && !el.disabled) {
+            if (found) {
                 elements.push(el);
             }
 
@@ -854,7 +844,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             let el = this.getElementByDataRow(rows[i]);
 
             if (el) {
-                if (!el.selected && !el.disabled) {
+                if (!el.selected) {
                     args.selectedElements.push(el);
                     el.selected = true;
                     args.changed = true;
@@ -944,7 +934,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         kijs.Array.each(this.elements, function(element) {
-            if (kijs.Array.contains(indexes, element.index) && !element.disabled) {
+            if (kijs.Array.contains(indexes, element.index)) {
                 selectElements.push(element);
             }
         }, this);
@@ -987,7 +977,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         for (let i=0, len=primaryKeys.length; i<len; i++) {
             let el = this.getElementByPrimaryKey(primaryKeys[i]);
             if (el) {
-                if (!el.selected && !el.disabled) {
+                if (!el.selected) {
                     args.selectedElements.push(el);
                     el.selected = true;
                     args.changed = true;
@@ -1390,6 +1380,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             const newEl = this._createElement({ dataRow: data[i] });
 
+            // Disabled
+            if (!kijs.isEmpty(this._disabledField) && !kijs.isEmpty(data[i][this._disabledField])
+                    && !!data[i][this._disabledField]) {
+                newEl.disabled = true;
+            }
+
             // Selektierung anwenden
             if (!options.skipSelected) {
                 if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -1444,16 +1440,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             // focus-Event
             newEl.on('focus', function(e) {
                 return this.raiseEvent('elementFocus', e);
-            }, this);
-
-            // touchStart-Event
-            newEl.on('touchStart', function(e) {
-                return this.raiseEvent('elementTouchStart', e);
-            }, this);
-
-            // touchEnd-Event
-            newEl.on('touchEnd', function(e) {
-                return this.raiseEvent('elementTouchEnd', e);
             }, this);
 
             // Evtl. fokus wieder setzen
@@ -1555,41 +1541,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     
     // PRIVATE
     // LISTENERS
-    #onDocumentTouchEnd(e) {
-        const currentTime = new Date().getTime();
-        const tapLength = currentTime - this._dblTouchTime;
-
-        if (tapLength < 200 && tapLength > 0) {
-            e.nodeEvent.preventDefault();
-
-            this._dblTouchTime = null;
-
-            this.clearSelections();
-
-            // Listener entfernen
-            kijs.Dom.removeEventListener('touchend', document, this);
-
-            // Event werfen
-            this.raiseEvent('dblTouch', e);
-        } else {
-            this._dblTouchTime = currentTime;
-        }
-    }
-
-    #onDocumentTouchStart(e) {
-        if (this._touchMultiSelectMode) {
-            if (e.nodeEvent.target.closest('.kijs-dataview-element') === null) {
-                this._touchMultiSelectMode = false;
-
-                // Listener entfernen
-                kijs.Dom.removeEventListener('touchstart', document, this);
-
-                // Event werfen
-                this.raiseEvent('multiSelectModeEnd');
-            }
-        }
-    }
-
     #onElementMouseDown(e) {
         if (!this.disabled && !e.raiseElement.disabled) {
             this.current = e.raiseElement;
@@ -1598,51 +1549,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
 
             let isShiftPress = !!e.nodeEvent.shiftKey;
-            let isCtrlPress = !!e.nodeEvent.ctrlKey || this._touchMultiSelectMode;
+            let isCtrlPress = !!e.nodeEvent.ctrlKey;
 
             if (kijs.Navigator.isMac) {
                 isCtrlPress = !!e.nodeEvent.metaKey;
             }
 
             this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
-        }
-    }
-
-    #onElementTouchEnd() {
-        if (!kijs.isEmpty(this._touchDeferId)) {
-            clearTimeout(this._touchDeferId);
-        }
-    }
-
-    #onElementTouchStart(e) {
-        if (this._selectType === 'multi' && !this._touchMultiSelectMode) {
-            if (!this.disabled && !e.raiseElement.disabled) {
-
-                // long-click ignorieren
-                e.raiseElement.on('contextMenu', function (c) {
-                    c.nodeEvent.preventDefault();
-                });
-
-                this._touchDeferId = kijs.defer(() => {
-                    e.nodeEvent.preventDefault();
-
-                    this._touchMultiSelectMode = true;
-
-                    // Dokument Touch-Listener setzen
-                    kijs.Dom.addEventListener('touchend', document, this.#onDocumentTouchEnd, this);
-                    kijs.Dom.addEventListener('touchstart', document, this.#onDocumentTouchStart, this);
-
-                    // Element selektieren und fokussieren
-                    this.current = e.raiseElement;
-                    if (this._focusable) {
-                        e.raiseElement.focus();
-                    }
-                    this._selectEl(this._currentEl, false, this._touchMultiSelectMode);
-
-                    // Event werfen
-                    this.raiseEvent('multiSelectModeStart');
-                }, 500, this);
-            }
         }
     }
 
@@ -1736,11 +1649,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._lastSelectedEl = null;
         this._ddTarget = null;
         this._elementDdSourceConfig = null;
+        this._primaryKeyFields = null;
+        this._selectedKeysRows = null;
+        this._sortFields = null;
+        this._rpcSaveArgs = null;
         this._data = null;
-
-        this._dblTouchTime = null;
-        this._touchDeferId = null;
-        this._touchMultiSelectMode = null;
+        this._filters = null;
 
         // Basisklasse entladen
         super.destruct(true);

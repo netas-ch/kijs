@@ -80,7 +80,7 @@
   --viewport-bkgrndColor: #dfe8f6;
   --splitter-overlay-bkgrndColor: var(--grey06);
   /* Default */
-  --default-fontFamily: 'Tahoma','Arial','Helvetica', sans-serif;
+  --default-fontFamily: 'Tahoma', 'Arial', 'Helvetica', sans-serif;
   --default-fontColor: var(--grey11);
   --default-disabled-fontColor: var(--grey08);
   /* Scrollbar (nur Chrome) */
@@ -191,9 +191,6 @@
   --item-disabled-bkgrndColor: var(--grey03);
   --item-disabled-borderColor: var(--grey05);
   --item-disabled-fontColor: var(--grey11);
-  --item-selected-disabled-bkgrndColor: var(--grey03);
-  --item-selected-disabled-borderColor: var(--grey07);
-  --item-selected-disabled-fontColor: var(--grey11);
   --item-label-fontColor: var(--grey08);
   --item-label-disabled-fontColor: var(--grey08);
   /* Clock */

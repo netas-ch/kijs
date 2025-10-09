@@ -146,7 +146,6 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);

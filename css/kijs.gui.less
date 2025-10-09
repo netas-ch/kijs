@@ -1960,11 +1960,24 @@
                     line-height: var(--item-lineHeight);
                     color: var(--item-fontColor);
                 }
+                
+                &.kijs-selected {
+                    color: var(--item-selected-fontColor);
+                    background-color: var(--item-selected-bkgrndColor);
+                    border-color: var(--item-selected-borderColor);
+                }
+                
                 &:focus,
                 &:hover {
                     background-color: var(--item-focus-bkgrndColor);
                     border-color: var(--item-focus-borderColor);
                     color: var(--item-focus-fontColor);
+                    
+                    &.kijs-selected {
+                        background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
+                        border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+                        color: color-mix(in srgb, var(--item-focus-fontColor), var(--item-selected-fontColor));
+                    }
                 }
 
                 > div > .label {
@@ -1978,12 +1991,6 @@
                     display: inline-block;
                 }
 
-                &.kijs-selected {
-                    color: var(--item-selected-fontColor);
-                    background-color: var(--item-selected-bkgrndColor);
-                    border-color: var(--item-selected-borderColor);
-                }
-
                 &.kijs-dragging {
                     opacity: 0.6
                 }
@@ -1991,12 +1998,18 @@
                 &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                 }
-
+                
                 &.kijs-disabled {
                     background-color: var(--item-disabled-bkgrndColor);
                     border-color: var(--item-disabled-borderColor);
                     color: var(--item-disabled-fontColor);
-
+                    
+                    &.kijs-selected {
+                        background-color: color-mix(in srgb, var(--item-disabled-bkgrndColor), var(--item-selected-bkgrndColor));
+                        border-color: color-mix(in srgb, var(--item-disabled-borderColor), var(--item-selected-borderColor));
+                        color: color-mix(in srgb, var(--item-disabled-fontColor), var(--item-selected-fontColor));
+                    }
+                    
                     * {
                         color: var(--item-disabled-fontColor);
                     }
@@ -2017,6 +2030,10 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
+            
+            > .kijs-container-inner > .kijs-dataview-element {
+                background-color: var(--field-disabled-bkgrndColor);
+            }
         }
     }
 
@@ -2049,7 +2066,7 @@
         > .kijs-container-inner {
             padding: 3px 0 2px 0;
 
-            /* falls das Listview eine Fixe höhe hat: flexen */
+            /* falls das Listview eine fixe Höhe hat: flexen */
             &[style="height:*"] {
                 flex: 1 0 0;
                 display: flex;
@@ -2101,18 +2118,19 @@
                     }
                 }
 
-                &:focus,
-                &:hover {
-                    background-color: var(--item-focus-bkgrndColor);
-                    border-color: var(--item-focus-borderColor);
-                    color: var(--item-focus-fontColor);
-                }
-
                 &.kijs-selected {
                     border-color: var(--item-selected-borderColor);
+                    background-color: var(--item-selected-bkgrndColor);
+                }
 
-                    &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                        background-color: var(--item-selected-bkgrndColor);
+                &:focus,
+                &:hover {
+                    border-color: var(--item-focus-borderColor);
+                    background-color: var(--item-focus-bkgrndColor);
+                    
+                    &.kijs-selected {
+                        border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+                        background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
                     }
                 }
 
@@ -2139,15 +2157,23 @@
                         content: ' ';
                     }
 
+                    &.kijs-selected {
+                        border-color: transparent;
+                        background-color: transparent;
+
+                        &:before {
+                            content: '\f00c';
+                        }
+                    }
+
                     &:focus,
                     &:hover {
+                        border-color: transparent;
+                        background-color: transparent;
+
                         &:before {
                             border: 1.5px solid var(--field-focus-borderColor);
                         }
-                    }
-                    
-                    &.kijs-selected:before {
-                        content: '\f00c';
                     }
                 }
 
@@ -2173,16 +2199,24 @@
                         cursor: pointer;
                         content: ' ';
                     }
+                    
+                    &.kijs-selected {
+                        border-color: transparent;
+                        background-color: transparent;
+                        
+                        &:before {
+                            content: '\f00c';
+                        }
+                    }
 
                     &:focus,
                     &:hover {
+                        border-color: transparent;
+                        background-color: transparent;
+                        
                         &:before {
                             border: 1.5px solid var(--field-focus-borderColor);
                         }
-                    }
-                    
-                    &.kijs-selected:before {
-                        content: '\f00c';
                     }
                 }
 
@@ -2193,6 +2227,37 @@
                 &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                     border-radius: 5px;
+                }
+                
+                &.kijs-disabled {
+                    background-color: var(--field-bkgrndColor);
+                    border-color: transparent;
+                    color: var(--field-disabled-fontColor);
+
+                    > .kijs-container-inner {
+                        > .kijs-caption {
+                            color: var(--field-disabled-fontColor);
+                        }
+                    }
+
+                    &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                        background-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-bkgrndColor));
+                        border-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-borderColor));
+                        color: color-mix(in srgb, var(--field-disabled-fontColor), var(--item-selected-fontColor));
+                    }
+
+                    &.kijs-display-checkboxes,
+                    &.kijs-display-options {
+                        background-color: var(--field-bkgrndColor);
+                        border-color: var(--field-bkgrndColor);
+                        color: var(--field-disabled-fontColor);
+                        
+                        &:before {
+                            border: 1.5px solid var(--field-borderColor);
+                            color: var(--field-disabled-fontColor);
+                            background-color: var(--field-disabled-bkgrndColor);
+                        }
+                    }
                 }
             }
 
@@ -2206,46 +2271,9 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
-        }
-
-        &.kijs-disabled > .kijs-container-inner > div.kijs-dataview-element,
-        div.kijs-dataview-element.kijs-disabled {
-            background-color: transparent;
-
-            > .kijs-container-inner {
-                > .kijs-caption {
-                    color: var(--field-disabled-fontColor);
-                }
-
-                > .kijs-icon {
-                    color: var(--icon-disabled-fontColor);
-                }
-            }
-
-            &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                border-color: var(--item-selected-disabled-borderColor);
-                background-color: transparent;
-            }
-
-            &.kijs-display-checkboxes,
-            &.kijs-display-options {
-                &:before {
-                    color: var(--field-disabled-fontColor);
-                    border: 1.5px solid var(--field-disabled-fontColor);
-                    background-color: var(--field-disabled-bkgrndColor);
-                }
-
-                &:hover {
-                    &:before {
-                        color: var(--field-disabled-fontColor);
-                        border: 1.5px solid var(--field-disabled-fontColor);
-                    }
-                }
-            }
-
-            &:hover {
-                border-color: transparent;
-                background-color: unset;
+            
+            > .kijs-container-inner > .kijs-dataview-element {
+                background-color: var(--field-disabled-bkgrndColor);
             }
         }
     }
@@ -2279,7 +2307,7 @@
         > .kijs-container-inner {
             padding: 3px 0 2px 0;
 
-            /* falls das Listview eine Fixe höhe hat: flexen */
+            /* falls der Tree eine fixe Höhe hat: flexen */
             &[style="height:*"] {
                 flex: 1 0 0;
                 display: flex;
@@ -2346,18 +2374,19 @@
                     border: 1px solid var(--accentColor3);
                 }
                 
-                &:focus,
-                &:hover {
-                    background-color: var(--item-focus-bkgrndColor);
-                    border-color: var(--item-focus-borderColor);
-                    color: var(--item-focus-fontColor);
-                }
-
                 &.kijs-selected {
                     border-color: var(--item-selected-borderColor);
+                    background-color: var(--item-selected-bkgrndColor);
+                }
 
-                    &:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                        background-color: var(--item-selected-bkgrndColor);
+                &:focus,
+                &:hover {
+                    border-color: var(--item-focus-borderColor);
+                    background-color: var(--item-focus-bkgrndColor);
+                    
+                    &.kijs-selected {
+                        border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+                        background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
                     }
                 }
 
@@ -2384,15 +2413,23 @@
                         content: ' ';
                     }
 
-                    &:focus,
-                    &:hover {
+                    &.kijs-selected {
+                        border-color: transparent;
+                        background-color: transparent;
+
                         &:before {
-                            border: 1.5px solid var(--field-focus-borderColor);
+                            content: '\f00c';
                         }
                     }
 
-                    &.kijs-selected:before {
-                        content: '\f00c';
+                    &:focus,
+                    &:hover {
+                        border-color: transparent;
+                        background-color: transparent;
+
+                        &:before {
+                            border: 1.5px solid var(--field-focus-borderColor);
+                        }
                     }
                 }
 
@@ -2419,15 +2456,23 @@
                         content: ' ';
                     }
 
-                    &:focus,
-                    &:hover {
+                    &.kijs-selected {
+                        border-color: transparent;
+                        background-color: transparent;
+                        
                         &:before {
-                            border: 1.5px solid var(--field-focus-borderColor);
+                            content: '\f00c';
                         }
                     }
 
-                    &.kijs-selected:before {
-                        content: '\f00c';
+                    &:focus,
+                    &:hover {
+                        border-color: transparent;
+                        background-color: transparent;
+                        
+                        &:before {
+                            border: 1.5px solid var(--field-focus-borderColor);
+                        }
                     }
                 }
 
@@ -2438,6 +2483,37 @@
                 &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                     border-radius: 5px;
+                }
+                
+                &.kijs-disabled {
+                    background-color: var(--field-bkgrndColor);
+                    border-color: transparent;
+                    color: var(--field-disabled-fontColor);
+
+                    > .kijs-container-inner {
+                        > .kijs-caption {
+                            color: var(--field-disabled-fontColor);
+                        }
+                    }
+
+                    &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+                        background-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-bkgrndColor));
+                        border-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-borderColor));
+                        color: color-mix(in srgb, var(--field-disabled-fontColor), var(--item-selected-fontColor));
+                    }
+
+                    &.kijs-display-checkboxes,
+                    &.kijs-display-options {
+                        background-color: var(--field-bkgrndColor);
+                        border-color: var(--field-bkgrndColor);
+                        color: var(--field-disabled-fontColor);
+                        
+                        &:before {
+                            border: 1.5px solid var(--field-borderColor);
+                            color: var(--field-disabled-fontColor);
+                            background-color: var(--field-disabled-bkgrndColor);
+                        }
+                    }
                 }
             }
 
@@ -2451,27 +2527,9 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
-
-            div.kijs-dataview-element {
-                background-color: transparent;
-
-                > .kijs-container-inner {
-                    > .kijs-caption {
-                        color: var(--field-disabled-fontColor);
-                    }
-                }
-
-                &.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-                    border-color: var(--item-selected-disabled-borderColor);
-                    background-color: transparent;
-                }
-
-                &.kijs-display-checkboxes,
-                &.kijs-display-options {
-                    &:before {
-                        background-color: var(--field-disabled-bkgrndColor);
-                    }
-                }
+            
+            > .kijs-container-inner > .kijs-dataview-element {
+                background-color: var(--field-disabled-bkgrndColor);
             }
         }
     }
