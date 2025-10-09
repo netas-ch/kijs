@@ -9,6 +9,15 @@ Update auf Version 7.0.1
 **UPDATE TIPP:**: Dateinamen der Schriften in der Datei ```files.json``` umbenennen.  
 Die *.ttf Dateien werden nicht mehr gebrauch: aus ```files.json``` löschen.  
 
+### CSS
+Folgende CSS-Variablen werden nicht mehr gebraucht. Neu werden die Farben von 
+selected und disabled gemischt:  
+ - ```--item-selected-disabled-bkgrndColor```
+ - ```--item-selected-disabled-borderColor```
+ - ```--item-selected-disabled-fontColor```
+
+**UPDATE TIPP:**: Eigene CSS-Dateien nach den Variablen durchsuchen und löschen/ersetzen.  
+
 ### kijs.Rpc, kijs.gui.Rpc
 Es gibt nun ein Event ```response(e)```, dass bei jedem response geworfen wird.  
 

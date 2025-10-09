@@ -286,13 +286,9 @@
     --item-selected-borderColor: var(--accentColor);
     --item-selected-fontColor: var(--grey11);
 
-    --item-disabled-bkgrndColor: var(--grey03);
+    --item-disabled-bkgrndColor: var(--grey02);
     --item-disabled-borderColor: var(--grey05);
-    --item-disabled-fontColor: var(--grey11);
-
-    --item-selected-disabled-bkgrndColor: var(--grey03);
-    --item-selected-disabled-borderColor: var(--grey07);
-    --item-selected-disabled-fontColor: var(--grey11);
+    --item-disabled-fontColor: var(--grey08);
 
     --item-label-fontColor: var(--grey08);
     --item-label-disabled-fontColor: var(--grey08);

@@ -1787,11 +1787,22 @@
     line-height: var(--item-lineHeight);
     color: var(--item-fontColor);
   }
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
+    color: var(--item-selected-fontColor);
+    background-color: var(--item-selected-bkgrndColor);
+    border-color: var(--item-selected-borderColor);
+  }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:focus,
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:hover {
     background-color: var(--item-focus-bkgrndColor);
     border-color: var(--item-focus-borderColor);
     color: var(--item-focus-fontColor);
+  }
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:focus.kijs-selected,
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element:hover.kijs-selected {
+    background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
+    border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+    color: color-mix(in srgb, var(--item-focus-fontColor), var(--item-selected-fontColor));
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > div > .label {
     display: inline-block;
@@ -1801,11 +1812,6 @@
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > div > .value {
     display: inline-block;
-  }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
-    color: var(--item-selected-fontColor);
-    background-color: var(--item-selected-bkgrndColor);
-    border-color: var(--item-selected-borderColor);
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
@@ -1817,6 +1823,11 @@
     background-color: var(--item-disabled-bkgrndColor);
     border-color: var(--item-disabled-borderColor);
     color: var(--item-disabled-fontColor);
+  }
+  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-selected {
+    background-color: color-mix(in srgb, var(--item-disabled-bkgrndColor), var(--item-selected-bkgrndColor));
+    border-color: color-mix(in srgb, var(--item-disabled-borderColor), var(--item-selected-borderColor));
+    color: color-mix(in srgb, var(--item-disabled-fontColor), var(--item-selected-fontColor));
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled * {
     color: var(--item-disabled-fontColor);
@@ -1830,6 +1841,9 @@
     border-radius: 5px;
   }
   div.kijs-dataview.kijs-disabled {
+    background-color: var(--field-disabled-bkgrndColor);
+  }
+  div.kijs-dataview.kijs-disabled > .kijs-container-inner > .kijs-dataview-element {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
@@ -1855,7 +1869,7 @@
   }
   div.kijs-listview > .kijs-container-inner {
     padding: 3px 0 2px 0;
-    /* falls das Listview eine Fixe höhe hat: flexen */
+    /* falls das Listview eine fixe Höhe hat: flexen */
     /* Drop Marker */
   }
   div.kijs-listview > .kijs-container-inner[style="height:*"] {
@@ -1902,17 +1916,19 @@
     font-size: var(--default-fontSize);
     color: var(--item-fontColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:focus,
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:hover {
-    background-color: var(--item-focus-bkgrndColor);
-    border-color: var(--item-focus-borderColor);
-    color: var(--item-focus-fontColor);
-  }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     border-color: var(--item-selected-borderColor);
-  }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
     background-color: var(--item-selected-bkgrndColor);
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:focus,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:hover {
+    border-color: var(--item-focus-borderColor);
+    background-color: var(--item-focus-bkgrndColor);
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:focus.kijs-selected,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element:hover.kijs-selected {
+    border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+    background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
     color: var(--field-fontColor);
@@ -1936,12 +1952,21 @@
     cursor: pointer;
     content: ' ';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
-    border: 1.5px solid var(--field-focus-borderColor);
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected {
+    border-color: transparent;
+    background-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f00c';
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options {
     color: var(--field-fontColor);
@@ -1965,12 +1990,21 @@
     cursor: pointer;
     content: ' ';
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
-    border: 1.5px solid var(--field-focus-borderColor);
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected {
+    border-color: transparent;
+    background-color: transparent;
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f00c';
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
@@ -1978,6 +2012,31 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
     border-radius: 5px;
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled {
+    background-color: var(--field-bkgrndColor);
+    border-color: transparent;
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-caption {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+    background-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-bkgrndColor));
+    border-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-borderColor));
+    color: color-mix(in srgb, var(--field-disabled-fontColor), var(--item-selected-fontColor));
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-options {
+    background-color: var(--field-bkgrndColor);
+    border-color: var(--field-bkgrndColor);
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes:before,
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-options:before {
+    border: 1.5px solid var(--field-borderColor);
+    color: var(--field-disabled-fontColor);
+    background-color: var(--field-disabled-bkgrndColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
@@ -1987,18 +2046,7 @@
   div.kijs-listview.kijs-disabled {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-listview.kijs-disabled div.kijs-dataview-element {
-    background-color: transparent;
-  }
-  div.kijs-listview.kijs-disabled div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-    border-color: var(--item-selected-disabled-borderColor);
-    background-color: transparent;
-  }
-  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-display-checkboxes:before,
-  div.kijs-listview.kijs-disabled div.kijs-dataview-element.kijs-display-options:before {
+  div.kijs-listview.kijs-disabled > .kijs-container-inner > .kijs-dataview-element {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************
@@ -2024,7 +2072,7 @@
   }
   div.kijs-tree > .kijs-container-inner {
     padding: 3px 0 2px 0;
-    /* falls das Listview eine Fixe höhe hat: flexen */
+    /* falls der Tree eine fixe Höhe hat: flexen */
     /* Drop Marker */
   }
   div.kijs-tree > .kijs-container-inner[style="height:*"] {
@@ -2083,17 +2131,19 @@
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-targetDragOver {
     border: 1px solid var(--accentColor3);
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:focus,
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:hover {
-    background-color: var(--item-focus-bkgrndColor);
-    border-color: var(--item-focus-borderColor);
-    color: var(--item-focus-fontColor);
-  }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     border-color: var(--item-selected-borderColor);
-  }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
     background-color: var(--item-selected-bkgrndColor);
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:focus,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:hover {
+    border-color: var(--item-focus-borderColor);
+    background-color: var(--item-focus-bkgrndColor);
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:focus.kijs-selected,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element:hover.kijs-selected {
+    border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
+    background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes {
     color: var(--field-fontColor);
@@ -2117,12 +2167,21 @@
     cursor: pointer;
     content: ' ';
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
-    border: 1.5px solid var(--field-focus-borderColor);
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected {
+    border-color: transparent;
+    background-color: transparent;
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes.kijs-selected:before {
     content: '\f00c';
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:focus:before,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-checkboxes:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options {
     color: var(--field-fontColor);
@@ -2146,12 +2205,21 @@
     cursor: pointer;
     content: ' ';
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
-    border: 1.5px solid var(--field-focus-borderColor);
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected {
+    border-color: transparent;
+    background-color: transparent;
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options.kijs-selected:before {
     content: '\f00c';
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover {
+    border-color: transparent;
+    background-color: transparent;
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:focus:before,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-display-options:hover:before {
+    border: 1.5px solid var(--field-focus-borderColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-dragging {
     opacity: 0.6;
@@ -2159,6 +2227,31 @@
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-sourceDragOver {
     border-color: var(--accentColor3);
     border-radius: 5px;
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled {
+    background-color: var(--field-bkgrndColor);
+    border-color: transparent;
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-caption {
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
+    background-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-bkgrndColor));
+    border-color: color-mix(in srgb, var(--field-bkgrndColor), var(--item-selected-borderColor));
+    color: color-mix(in srgb, var(--field-disabled-fontColor), var(--item-selected-fontColor));
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-options {
+    background-color: var(--field-bkgrndColor);
+    border-color: var(--field-bkgrndColor);
+    color: var(--field-disabled-fontColor);
+  }
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-checkboxes:before,
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-display-options:before {
+    border: 1.5px solid var(--field-borderColor);
+    color: var(--field-disabled-fontColor);
+    background-color: var(--field-disabled-bkgrndColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dropMarker {
     flex: none;
@@ -2168,18 +2261,7 @@
   div.kijs-tree.kijs-disabled {
     background-color: var(--field-disabled-bkgrndColor);
   }
-  div.kijs-tree.kijs-disabled div.kijs-dataview-element {
-    background-color: transparent;
-  }
-  div.kijs-tree.kijs-disabled div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
-    color: var(--field-disabled-fontColor);
-  }
-  div.kijs-tree.kijs-disabled div.kijs-dataview-element.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
-    border-color: var(--item-selected-disabled-borderColor);
-    background-color: transparent;
-  }
-  div.kijs-tree.kijs-disabled div.kijs-dataview-element.kijs-display-checkboxes:before,
-  div.kijs-tree.kijs-disabled div.kijs-dataview-element.kijs-display-options:before {
+  div.kijs-tree.kijs-disabled > .kijs-container-inner > .kijs-dataview-element {
     background-color: var(--field-disabled-bkgrndColor);
   }
   /* ******************

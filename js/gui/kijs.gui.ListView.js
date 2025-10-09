@@ -138,9 +138,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             if (!kijs.isEmpty(rows)) {
                 val = [];
                 kijs.Array.each(rows, function(row) {
-                    if (kijs.isEmpty(this.disabledField) || kijs.isEmpty(row[this.disabledField]) || !row[this.disabledField]) {
-                        val.push(row[this._valueField]);
-                    }
+                    val.push(row[this._valueField]);
                 }, this);
 
                 let returnAsArray = true;

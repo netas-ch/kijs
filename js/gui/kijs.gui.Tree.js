@@ -522,7 +522,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             return null;
 
         } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
-            return rows.length ? [rows[0]] : null ;
+            return rows.length ? [rows[0]] : null;
 
         } else {
             return rows;
@@ -546,7 +546,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                 case 'ArrowLeft':
                     // falls expandiert: zusammenklappen
                     if (this._currentEl) {
-                        if (expanded) {
+                        if (expanded && !this._currentEl.disabled) {
                             this._currentEl.collapse();
 
                         // falls nicht expandiert und Eltern-Knoten vorhanden:
@@ -565,7 +565,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                         // den Fokus auf vorherigen Knoten setzen
                         } else {
                             let prev = this._currentEl.previous;
-
                             while (prev && prev.disabled) {
                                 prev = prev.previous;
                             }
@@ -621,7 +620,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                         // sonst zum nächsten Knoten gehen
                         } else {
                             let next = this._currentEl.next;
-
                             while (next && next.disabled) {
                                 next = next.next;
                             }
@@ -687,47 +685,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this.current = null;
 
         return ret;
-    }
-
-    // overwrite
-    get sortable() { return this._sortable; }
-    // overwrite
-    set sortable(val) {
-        this._sortable = !!val;
-
-        // Evtl. ddTarget erstellen
-        if (val && !this._ddTarget) {
-            this.ddTarget = {
-                posBeforeFactor: this._ddPosBeforeAfterFactor,
-                posAfterFactor: this._ddPosBeforeAfterFactor
-            };
-            this._ddTarget.on('drop', this.#onTargetDrop, this);
-        }
-
-        // Mapping
-        if (val) {
-            this._ddTarget.mapping[this._ddName] = {
-                allowMove: true,
-                allowCopy: false,
-                allowLink: false
-            };
-        } else {
-            delete this._ddTarget.mapping[this._ddName];
-        }
-
-        // evtl. ddTarget löschen
-        if (this._ddTarget && kijs.isEmpty(this._ddTarget.mapping)) {
-            if (this._ddTarget) {
-                this._ddTarget.destruct();
-            }
-            this._ddTarget = null;
-        }
-
-        // Elements neu laden
-        if (!kijs.isEmpty(this._elements)) {
-            this.reload({ noRpc:true });
-            this._createElements(this._data);
-        }
     }
 
 
@@ -850,12 +807,18 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                 }
             }
 
-            const newEl = this._createElement({ 
+            const newEl = this._createElement({
                 dataRow: data[i],
                 depth: depth,
                 parentElement: parentElement
             });
             newEl.parent = this;
+
+            // Disabled
+            if (!kijs.isEmpty(this._disabledField) && !kijs.isEmpty(data[i][this._disabledField])
+                    && !!data[i][this._disabledField]) {
+                newEl.disabled = true;
+            }
 
             // Drag&Drop
             if (this._elementDdSourceConfig) {

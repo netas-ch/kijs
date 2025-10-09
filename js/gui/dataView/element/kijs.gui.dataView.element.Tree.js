@@ -333,7 +333,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
     // PRIVATE
     // LISTENERS
     #onExpandIconMouseDown(e) {
-        if (!this._parentEl.disabled) {
+        if (!this._parentEl.disabled && ! this.disabled) {
             if (this.expanded) {
                 this.collapse();
             } else {

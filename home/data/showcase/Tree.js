@@ -64,6 +64,7 @@ home.sc.Tree = class home_sc_Tree {
                             valueField: 'id',
                             captionField: 'caption',
                             iconMapField: 'icon',
+                            disabledField: 'disabled',
                             expandedIconMapField: 'icon',
                             collapsedIconMapField: 'icon',
                             //iconColorField: 'color',
@@ -73,7 +74,7 @@ home.sc.Tree = class home_sc_Tree {
                             //showCheckBoxes: true,
                             //selectType: 'singleAndEmpty',
                             data: [
-                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', expanded:true, children:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube' }] },
+                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', disabled:1, expanded:true, children:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube', disabled:1 }] },
                                 {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
                                 {id:3, caption:'Instagram', icon:'kijs.iconMap.Fa.instagram'}
                             ],
