@@ -58,6 +58,10 @@ Felder mit ```disabled: true``` übermittelt werden sollen.
 - Neue config: ```headerBarIconCls``` (optional, string)  
 - Neue config: ```footerBarIconCls``` (optional, string)  
 
+### kijs.gui.MsgBox
+ - Falls die gleiche Meldung mehrmals geöffnet wird, wird automatisch die vorherige 
+   Meldung geschlossen, so bleibt eine gleiche Meldung nur noch 1x geöffnet.  
+
 
 
 Version 3.0.1

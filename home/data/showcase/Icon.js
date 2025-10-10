@@ -74,7 +74,7 @@ home.sc.Icon = class home_sc_Icon {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'FontAwesome free Icons: https://fontawesome.com/search?o=r&m=free',
+                    value: 'FontAwesome free Icons: https://fontawesome.com/search?ic=free&o=r',
                     clickableLinks: true,
                     style: { margin: '20px 0 4px 0'}
                 }
