@@ -224,7 +224,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
-                let config = e.responseData.config ?? {};
+                let config = e.response.config ?? {};
 
                 // Falls das Formular destructed wurde: abbrechen
                 if (!this._dom) {
@@ -232,7 +232,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                     return;
                 }
 
-                if (e.responseData.config && e.responseData.config.elements) {
+                if (e.response.config && e.response.config.elements) {
                     searchFields = true;
                 }
 
@@ -309,17 +309,17 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 }
 
                 // config Properties anwenden, falls vorhanden
-                if (e.responseData.config) {
+                if (e.response.config) {
                     // config Properties übernehmen
-                    this.applyConfig(e.responseData.config);
+                    this.applyConfig(e.response.config);
                 }
 
                 // Evtl. Fehler bei den entsprechenden Feldern anzeigen
-                if (e.responseData && !kijs.isEmpty(e.responseData.fieldErrors)) {
+                if (e.response && !kijs.isEmpty(e.response.fieldErrors)) {
                     if (!kijs.isEmpty(this._fields)) {
                         kijs.Array.each(this._fields, function(field) {
-                            if (e.responseData.fieldErrors[field.name]) {
-                                field.errorsAdd(e.responseData.fieldErrors[field.name]);
+                            if (e.response.fieldErrors[field.name]) {
+                                field.errorsAdd(e.response.fieldErrors[field.name]);
                             }
                         }, this);
                     }
@@ -334,7 +334,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 }
 
                 // Falls alles OK: 'dirty' zurücksetzen
-                if (kijs.isEmpty(e.errorType)) {
+                if (kijs.isEmpty(e.response.errorType)) {
                     this.isDirty = false;
                 }
 

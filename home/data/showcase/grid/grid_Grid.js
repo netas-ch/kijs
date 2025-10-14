@@ -34,6 +34,7 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                     rpcLoadFn: 'grid.load',
                     filterable: true,
                     filterVisible: true,
+                    autoLoad: true,
 
                     /*columnConfigs: (function(){
                         let cols = [ {caption:'Vorname', valueField:'vorname'} ];

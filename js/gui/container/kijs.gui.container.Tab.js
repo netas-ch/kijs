@@ -257,9 +257,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
             }).then((e) => {
                 // config Properties anwenden, falls vorhanden
-                if (e.responseData.config) {
+                if (e.response.config) {
                     // config Properties übernehmen
-                    this.applyConfig(e.responseData.config);
+                    this.applyConfig(e.response.config);
                 }
 
                 // 'afterSave' auslösen

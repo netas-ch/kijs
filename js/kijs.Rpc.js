@@ -140,7 +140,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
                         case 1: // queue
                             this._queue[i].state = kijs.Rpc.states.CANCELED_BEFORE_TRANSMIT;
                             this._receive({
-                                response: [ { tid: this._queue[i].tid, responseData: {} } ],
+                                response: [ { tid: this._queue[i].tid } ],
                                 request: { postData:[this._queue[i]] }
                             });
                             break;
@@ -255,9 +255,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
             // Argument vorbereiten
             const e = {
                 response: subResponse,
-                request: subRequest,
-                errorType: subResponse.errorType,
-                errorMsg: subResponse.errorMsg
+                request: subRequest
             };
 
             // callback-fn ausführen

@@ -2,6 +2,120 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.2.0
+=============
+### kijs.Ajax, kijs.Rpc, kijs.gui.Rpc
+#### Format des response des Servers hat geändert.  
+Das Objekt ```responseData``` gibt es nicht mehr. Sein Inhalt wird neu direkt eine 
+Stufe höher geschrieben.  
+
+Früher:  
+
+    [
+      {
+        "tid":1,    // tid vom request nehmen
+            "responseData": {
+                "fieldErrors":{                 // (optional) nur bei Save von kijs.gui.container.Form 
+                    "Anrede": "Ungültige Anrede."   // Fehlermeldungen, die direkt in den 
+                                                    // Feldern angezeigt werden.
+                },
+                ...     // beliebige Daten die zurückgegeben werden
+            },
+
+        "errorTitle": "kijs",                   // (optional)
+        "errorMsg": "Ich bin eine errorMsg",    // (optional)
+        "errorType": "errorNotice",             // oder "error" (optional)
+            
+        "infoTitle": "kijs",                    // (optional)
+        "infoMsg": "Ich bin eine infoMsg",      // (optional)
+
+        "cornerTipTitle": "kijs",               // (optional)
+        "cornerTipMsg": "Ich bin eine cornerTipMsg",  // (optional)
+        "cornerTipIcon": "Ich bin eine cornerTipMsg", // (optional: info [default], 
+                                                      // warning, error, errorNotice, 
+                                                      // alert)
+
+        "warningTitle": "kijs",             // (optional)
+        "warningMsg": "Sind Sie sicher?",   // Wird bei der Meldung auf "ok" geklickt,
+                                            // wird der gleiche Request automatisch 
+                                            // nochmal mit "ignoreWarnings": true
+                                            // gesendet.
+      },{
+        "tid":2,
+        ...
+      }
+    ]
+
+Neu:  
+
+    [
+      {
+        "tid":1,    // tid vom request nehmen
+
+        "errorTitle": "kijs",                   // (optional)
+        "errorMsg": "Ich bin eine errorMsg",    // (optional)
+        "errorType": "errorNotice",             // oder "error" (optional)
+            
+        "infoTitle": "kijs",                    // (optional)
+        "infoMsg": "Ich bin eine infoMsg",      // (optional)
+
+        "cornerTipTitle": "kijs",               // (optional)
+        "cornerTipMsg": "Ich bin eine cornerTipMsg",  // (optional)
+        "cornerTipIcon": "Ich bin eine cornerTipMsg", // (optional: info [default], 
+                                                      // warning, error, errorNotice, 
+                                                      // alert)
+
+        "warningTitle": "kijs",             // (optional)
+        "warningMsg": "Sind Sie sicher?",   // Wird bei der Meldung auf "ok" geklickt,
+                                            // wird der gleiche Request automatisch 
+                                            // nochmal mit "ignoreWarnings": true
+                                            // gesendet.
+
+        "fieldErrors":{                     // (optional) nur bei Save von 
+                                            // kijs.gui.container.Form 
+          "Anrede": "Ungültige Anrede."     // Fehlermeldungen, die direkt in den Feldern
+                                            // angezeigt werden.
+        },
+
+        ...     // beliebige weitere Daten die zurückgegeben werden
+
+      },{
+        "tid":2,
+        ...
+      }
+    ]
+
+**UPDATE TIPP:**: Serverseitig nach ```responseData``` suchen und die Eigenschaften 
+eine Stufe höher zuweisen.  
+
+#### Format des ```e```-Arguments der Callback-fn hat geändert.  
+
+Früher:  
+
+    e: {
+      responseData: { ... },
+      requestData: { ... },
+      errorType: '',
+      errorMsg: ''
+    }
+
+Neu:  
+
+    e: {
+      response: {
+        errorType: '',
+        errorMsg: ''
+      },
+      request: { ... },
+    }
+
+**UPDATE TIPP:**: Ganzer Code nach ```responseData``` suchen und anpassen.  
+In der Regel reicht es folgendes zu ersetzen:  
+ - ```responseData``` durch ```response```
+ - ```e.errorType``` durch ```e.response.errorType```
+
+
+
 Version 3.1.0
 =============
 ### Font Awesome  

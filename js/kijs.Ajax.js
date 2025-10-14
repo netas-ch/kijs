@@ -146,26 +146,26 @@ kijs.Ajax = class kijs_Ajax {
                     });
                     
                 } else {
-                    let error = '';
+                    let errorMsg = '';
                     if (xmlHttp.status > 0) {
-                        error = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlHttp.statusText + ' (Code ' + xmlHttp.status + ')';
+                        errorMsg = kijs.getText('Der Server hat mit einem Fehler geantwortet') + ': ' + xmlHttp.statusText + ' (Code ' + xmlHttp.status + ')';
 
                     } else if (config.abortHappened) {
-                        error = kijs.getText('Die Verbindung wurde abgebrochen') + '.';
+                        errorMsg = kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                     } else if (config.timeoutHappened) {
-                        error = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden') + '. ' +
+                        errorMsg = kijs.getText('Der Server brauchte zu lange, um eine Antwort zu senden') + '. ' +
                                 kijs.getText('Die Verbindung wurde abgebrochen') + '.';
 
                     } else {
-                        error = kijs.getText('Die Verbindung konnte nicht aufgebaut werden') + '.';
+                        errorMsg = kijs.getText('Die Verbindung konnte nicht aufgebaut werden') + '.';
                     }
                     if (kijs.isFunction(config.fn)) {
                         config.fn.call(config.context || this, {
                             response: val,
                             request: config,
                             errorType: 'error',
-                            errorMsg: error,
+                            errorMsg: errorMsg,
                             xmlHttp: xmlHttp
                         });
                     }
@@ -173,7 +173,7 @@ kijs.Ajax = class kijs_Ajax {
                         response: null,
                         request: config,
                         errorType: 'error',
-                        errorMsg: error,
+                        errorMsg: errorMsg,
                         xmlHttp: xmlHttp
                     });
                 }

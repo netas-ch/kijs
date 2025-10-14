@@ -13,6 +13,7 @@ Diese Klasse bietet grundlegende Funktionen um Daten mit Servern auszutauschen.
 Auf ihr bauen auch die anderen beiden Klassen ```kijs.Rpc``` und ```kijs.gui.Rpc``` 
 auf.  
 In den meisten Fällen ist die direkte Verwendung dieser Klasse nicht sinnvoll.  
+In der Regel wird ```kijs.gui.Rpc``` die beste Wahl.  
 
 ### kijs.RPC
 Mit dieser Klasse könne "remote procedure calls" an einen Server erstellt werden.  
@@ -28,10 +29,11 @@ Die dann verwendet werden kann:
         remoteFn: 'myModule.myFunction',    // Gewünschte Funktion des Servers
         owner: this,                        // wird gebraucht um bei cancelRunningRpcs
                                             // den owner zu unterscheiden
-        requestData: { ... },               // Argumente, die an den Server übermittelt werden
+        requestData: { ... },               // Argumente, die an den Server übermittelt 
+                                            // werden
     }).then((e) => {
-        console.log(e.responseData);
-        if (kijs.isEmpty(e.errorType)) {
+        console.log(e.response);
+        if (kijs.isEmpty(e.response.errorType)) {
             // ...
         }
     });
@@ -57,8 +59,8 @@ Beispiel:
         cancelRunningRpcs: true  // Sollen bereits laufende Requests an die gleiche 
                                  // remoteFn abgebrochen werden
     }).then((e) => {
-        console.log(e.responseData);
-        if (kijs.isEmpty(e.errorType)) {
+        console.log(e.response);
+        if (kijs.isEmpty(e.response.errorType)) {
             // ...
         }
     });
@@ -99,7 +101,7 @@ ausgewertet wird. Meistens muss der Code in der Callback-fn ja nur ausgeführt w
 wenn auf dem Server alles ok ist. Dazu kann folgender Code verwendet werden:  
 
     #myCallbackFn(e) {
-        if (kijs.isEmpty(e.errorType)) {  
+        if (kijs.isEmpty(e.response.errorType)) {  
             // ...
         }
     }
@@ -119,7 +121,7 @@ Beispiel:
         owner: this,
         data: { ... }
     }).then((e) => {
-        if (kijs.isEmpty(e.errorType)) {
+        if (kijs.isEmpty(e.response.errorType)) {
             // mach dies
         }
     });
@@ -134,53 +136,58 @@ Der Datenverkehr mit kijs ist in JSON mit UTF-8.
 kijs generiert automatisch Requests mit folgendem Aufbau:  
 
     [
-        {
-            "tid":1,                            // eindeutige Id (wird automatisch 
-                                                // vergeben und eingefügt)
-            "remoteFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
-            "requestData": {
-                ...                             // beliebige Daten die zurückgegeben werden
-            },
-            "ignoreWarnings": false             // Sollen Warnungen ignoriert werden?
-        },{
-            "tid":2,
-            ...
-        }
+      {
+        "tid":1,                            // eindeutige Id (wird automatisch 
+                                            // vergeben und eingefügt)
+        "remoteFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
+        "requestData": {
+          ...                               // beliebige Daten die zurückgegeben werden
+      },
+        "ignoreWarnings": false             // Sollen Warnungen ignoriert werden?
+      },{
+        "tid":2,
+        ...
+      }
     ]
 
 ### Aufbau der Antwort vom Server
 Der Server sollte wie folgt antworten:  
 
     [
-        {
-            "tid":1,    // tid vom request nehmen
-            "responseData": {
-                "fieldErrors":{                 // (optional) nur bei Save von kijs.gui.container.Form 
-                    "Anrede": "Ungültige Anrede."   // Fehlermeldungen, die direkt in den 
-                                                    // Feldern angezeigt werden.
-                },
-                ...     // beliebige Daten die zurückgegeben werden
-            },
+      {
+        "tid":1,    // tid vom request nehmen
 
-            "errorTitle": "kijs",               // (optional)
-            "errorMsg": "Ich bin eine errorMsg",// (optional)
-            "errorType": "errorNotice",         // oder "error" (optional)
+        "errorTitle": "kijs",                   // (optional)
+        "errorMsg": "Ich bin eine errorMsg",    // (optional)
+        "errorType": "errorNotice",             // oder "error" (optional)
             
-            "infoTitle": "kijs",                // (optional)
-            "infoMsg": "Ich bin eine infoMsg",  // (optional)
+        "infoTitle": "kijs",                    // (optional)
+        "infoMsg": "Ich bin eine infoMsg",      // (optional)
 
-            "cornerTipTitle": "kijs",           // (optional)
-            "cornerTipMsg": "Ich bin eine cornerTipMsg", // (optional)
+        "cornerTipTitle": "kijs",               // (optional)
+        "cornerTipMsg": "Ich bin eine cornerTipMsg",  // (optional)
+        "cornerTipIcon": "Ich bin eine cornerTipMsg", // (optional: info [default], 
+                                                      // warning, error, errorNotice, 
+                                                      // alert)
 
-            "warningTitle": "kijs",             // (optional)
-            "warningMsg": "Sind Sie sicher?",   // wird bei der Meldung auf "ok" 
-                                                // geklickt. Wird der gleiche Request
-                                                // automatisch nochmal mit 
-                                                // "ignoreWarnings": true geschickt. 
-        },{
-            "tid":2,
-            ...
-        }
+        "warningTitle": "kijs",             // (optional)
+        "warningMsg": "Sind Sie sicher?",   // Wird bei der Meldung auf "ok" geklickt,
+                                            // wird der gleiche Request automatisch 
+                                            // nochmal mit "ignoreWarnings": true
+                                            // gesendet.
+
+        "fieldErrors":{                     // (optional) nur bei Save von 
+                                            // kijs.gui.container.Form 
+          "Anrede": "Ungültige Anrede."     // Fehlermeldungen, die direkt in den Feldern
+                                            // angezeigt werden.
+        },
+
+        ...     // beliebige weitere Daten die zurückgegeben werden
+
+      },{
+        "tid":2,
+        ...
+      }
     ]
 
 
@@ -195,13 +202,12 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
     foreach ($requests as $request) {
         $response = new stdClass();
         $response->tid = $request->tid;
-        $response->responseData = new stdClass();
 
         switch ($request->remoteFn) {
             case 'module1.formLoad':
                 try {
                     // Formular
-                    $response->responseData->config = json_decode('
+                    $response->config = json_decode('
                         {
                             "elements": [
                                 {
@@ -224,7 +230,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                     ');
 
                     // Formulardaten
-                    $response->responseData->data = array(
+                    $response->data = array(
                         'Anrede' => 'w',
                         'Name' => 'Meier',
                         'Vorname' => 'Susanne'
@@ -238,7 +244,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
 
             case 'module1.loadAnredeCombo':
                 try {
-                    $response->responseData->data = [
+                    $response->data = [
                         ['caption' => 'Herr', 'value' => 'm'],
                         ['caption' => 'Frau', 'value' => 'w']
                     ];
@@ -259,7 +265,7 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
                     }
 
                     if (count(get_object_vars($fieldErrors))) {
-                        $response->responseData->fieldErrors = $fieldErrors;
+                        $response->fieldErrors = $fieldErrors;
                         $response->errorType = 'errorNotice';
                         $response->errorMsg = 'Einige Felder sind nicht korrekt ausgefüllt.';
                     }
@@ -301,11 +307,11 @@ Bei der Antwort vom Server muss die Config als Objekt wie folgt zurückgegeben w
     $config = new stdClass();
     $config->html = '<b>Ich komme vom Server</b>';
     $config->tooltip = 'Ich auch';
-    $response->responseData->config = $config;
+    $response->config = $config;
 
 Beispiel für das Laden von Kind-Elementen bei einem Panel:  
     
-    $response->responseData->config = json_decode('
+    $response->config = json_decode('
         {
             "caption": "Dynamisch geladenes Panel",
             "elements": [
@@ -313,7 +319,8 @@ Beispiel für das Laden von Kind-Elementen bei einem Panel:
                     "xtype":"kijs.gui.Button",
                     "caption":"Button vom Server",
                     "on":{
-                        "click":"myStyticClass.onAwesomeButtonClick"  // listener must be static
+                        "click":"myStyticClass.onAwesomeButtonClick" // listener muss 
+                                                                     // ```static``` sein
                     }
                 }
             ]

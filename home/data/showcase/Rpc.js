@@ -42,8 +42,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn:'rpc.simple', 
                                 data: 'RPC mit Promise'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -56,10 +56,10 @@ home.sc.Rpc = class home_sc_Rpc {
                         click: async function() {
                             const rpcData = await kijs.getRpc('default').do({
                                 remoteFn:'rpc.simple', 
-                                data: 'RPC mit Promise'
+                                data: 'RPC mit Promise und async/await'
                             });
-                            if (kijs.isEmpty(rpcData.errorType)) {
-                                kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(rpcData.responseData));
+                            if (kijs.isEmpty(rpcData.response.errorType)) {
+                                kijs.gui.CornerTipContainer.show('RPC OK', rpcData.response.data);
                             }
                         },
                         context: this
@@ -73,8 +73,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn:'rpc.simple', 
                                 data: 'RPC mit callback function',
                                 fn: function(e) {
-                                    if (kijs.isEmpty(e.errorType)) {
-                                        kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                    if (kijs.isEmpty(e.response.errorType)) {
+                                        kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                     }
                                 }
                             });
@@ -83,15 +83,15 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC verzögert mit Ladeanzeige',
+                    caption: 'RPC verzögert mit Wartemaske',
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                data: 'RPC verzögert mit Ladeanzeige' 
+                                data: 'RPC verzögert mit Wartemaske'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -99,17 +99,17 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: 'RPC verzögert ohne Ladeanzeige, mit cancelRunningRpcs=true',
+                    caption: 'RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true',
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                data: 'RPC verzögert ohne Ladeanzeige, mit cancelRunningRpcs=true',
+                                data: 'RPC verzögert ohne Wartemaske, mit cancelRunningRpcs=true',
                                 waitMaskTarget: 'none',
                                 cancelRunningRpcs: true
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -117,25 +117,25 @@ home.sc.Rpc = class home_sc_Rpc {
                     }
                 },{
                     xtype: 'kijs.gui.Button',
-                    caption: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true',
+                    caption: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true',
                     on: {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 1/2',
+                                data: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true 1/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.delay', 
-                                data: '2 RPCs verzögert mit Ladeanzeige und cancelRunningRpcs=true 2/2',
+                                data: '2 RPCs verzögert mit Wartemaske und cancelRunningRpcs=true 2/2',
                                 cancelRunningRpcs: true
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -157,24 +157,24 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.simple',
                                 data: 'RPC 1/3'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                             kijs.getRpc('default').do({
                                 remoteFn: 'rpc.simple',
                                 data: 'RPC 2/3'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                             kijs.getRpc('default').do({
                                 remoteFn: 'rpc.simple',
                                 data: 'RPC 3/3'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -196,8 +196,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.simple',
                                 data: 'RPC 1/3'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                             kijs.getRpc('default').do({
@@ -205,16 +205,16 @@ home.sc.Rpc = class home_sc_Rpc {
                                 data: 'RPC 2/3',
                                 exclusive: true
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                             kijs.getRpc('default').do({
                                 remoteFn: 'rpc.simple',
                                 data: 'RPC 3/3'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -236,8 +236,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.infoMsg',
                                 data: 'infoMsg'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -252,8 +252,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.cornerTipMsg', 
                                 data: 'cornerTipMsg'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -268,8 +268,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.warningMsg', 
                                 data: 'warningMsg' 
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -284,8 +284,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.errorMsg', 
                                 data: 'errorMsg' 
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -308,8 +308,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 remoteFn: 'rpc.errorNotice', 
                                 data: 'error' 
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },
@@ -325,8 +325,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 data: 'errorNotice' 
                             }).
                                 then((e) => {
-                                    if (kijs.isEmpty(e.errorType)) {
-                                        kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                    if (kijs.isEmpty(e.response.errorType)) {
+                                        kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                     }
                                 });
                         },
@@ -350,8 +350,8 @@ home.sc.Rpc = class home_sc_Rpc {
                                 waitMaskTarget: this._content.down('waitMaskTarget'),
                                 waitMaskTargetDomProperty: 'innerDom'
                             }).then((e) => {
-                                if (kijs.isEmpty(e.errorType)) {
-                                    kijs.gui.CornerTipContainer.show('RPC OK', JSON.stringify(e.responseData));
+                                if (kijs.isEmpty(e.response.errorType)) {
+                                    kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
                                 }
                             });
                         },

@@ -779,9 +779,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
                 }).then((e) => {
                     // config Properties
-                    if (e.responseData.config && this._dom) {
+                    if (e.response.config && this._dom) {
                         // config Properties übernehmen
-                        this.applyConfig(e.responseData.config);
+                        this.applyConfig(e.response.config);
                     }
                     
                     // 'afterLoad' auslösen

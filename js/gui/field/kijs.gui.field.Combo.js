@@ -399,7 +399,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
             if (forceLoad || args.query.length >= this._minChars) {
                 this._listViewEl.load(args).then((e) => {
-                    let config = e.responseData.config ?? {};
+                    let config = e.response.config ?? {};
 
                     // Nach dem Laden das value neu setzen,
                     // damit die caption erscheint (ohne change-event)
@@ -424,7 +424,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // alle Datensätze laden
             this._listViewEl.load(args)
                 .then((e) => {
-                    let config = e.responseData.config ?? {};
+                    let config = e.response.config ?? {};
 
                     // Nach dem Laden das value neu setzen,
                     // damit das Label erscheint (ohne change-event)
@@ -831,8 +831,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         // Spinbox Nachricht anhängen
-        if (e.responseData && e.responseData.spinboxMessage) {
-            this._addPlaceholder(e.responseData.spinboxMessage);
+        if (e.response && e.response.spinboxMessage) {
+            this._addPlaceholder(e.response.spinboxMessage);
         }
     }
 

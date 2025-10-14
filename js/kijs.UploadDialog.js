@@ -470,7 +470,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Fehlermeldung vom Server
         let errorMsg = '';
-        if (!e.response || !kijs.isEmpty(e.errorType)) {
+        if (!e.response || !kijs.isEmpty(e.response.errorType)) {
             errorMsg = errorMsg || e.errorMsg || kijs.getText('Es ist ein unbekannter Fehler aufgetreten') + '.';
         }
 

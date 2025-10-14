@@ -39,7 +39,7 @@ Benutzerdefinierte Funktion, die den Wert validiert.
 Beispiel:  
 
     validationFn: function(value) {
-        return value === 'test';
+      return value === 'test';
     },
     validationFnContext: this
 
@@ -53,10 +53,10 @@ Benutzerdefinierte reguläre Ausdrücke zur Validierung.
 Beispiel:  
 
     validationRegExp: [
-        { 
-            regExp: /^Test$/,
-            msg: 'Wert muss \'Test\' sein'
-        }
+      { 
+        regExp: /^Test$/,
+        msg: 'Wert muss \'Test\' sein'
+      }
     ]
 
 Diese Eigenchaften haben alle Felder.  
@@ -79,11 +79,9 @@ dann in den betroffenen Feldern angezeigt.
 Beispiel-Response:
 
     {
-        "responseData":{
-            "fieldErrors":{
-                "Anrede":"Ungültige Anrede.",
-                "Geburtsdatum":"Diese Person ist zu jung."
-            }
-        }
+      "fieldErrors":{
+        "Anrede":"Ungültige Anrede.",
+        "Geburtsdatum":"Diese Person ist zu jung."
+      }
     }
 
