@@ -306,7 +306,7 @@ home.sc.Rpc = class home_sc_Rpc {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.errorNotice', 
-                                data: 'error' 
+                                data: 'errorNotice'
                             }).then((e) => {
                                 if (kijs.isEmpty(e.response.errorType)) {
                                     kijs.gui.CornerTipContainer.show('RPC OK', e.response.data);
@@ -322,7 +322,7 @@ home.sc.Rpc = class home_sc_Rpc {
                         click: function() {
                             kijs.getRpc('default').do({ 
                                 remoteFn: 'rpc.error', 
-                                data: 'errorNotice' 
+                                data: 'error' 
                             }).
                                 then((e) => {
                                     if (kijs.isEmpty(e.response.errorType)) {
