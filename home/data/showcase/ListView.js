@@ -182,13 +182,87 @@ home.sc.ListView = class home_sc_ListView {
                             console.log(this.value);
                         }
                     }
-                }
+                },{
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
+                    value: 'ListView mit Swipe:'
+                },{
+                    xtype: 'kijs.gui.ListView',
+                    valueField: 'id',
+                    captionField: 'Bezeichnung',
+                    iconMapField: 'Icon',
+                    elementXType: 'kijs.gui.dataView.element.ListViewSwipe',
+                    showCheckBoxes: false,
+                    selectType: 'single',
+                    width: 200,
+                    data: [
+                        {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' },
+                        {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' },
+                        {id:3, Bezeichnung:'Instagram', Icon:'kijs.iconMap.Fa.instagram', iconLeft: 'kijs.iconMap.Fa.trash', captionLeft: 'Löschen', iconRight: 'kijs.iconMap.Fa.folder', captionRight: 'Archivieren' },
+                        {id:4, Bezeichnung:'TikTok', Icon:'kijs.iconMap.Fa.tiktok' },
+                        {id:5, Bezeichnung:'LinkedIn', Icon:'kijs.iconMap.Fa.linkedin', buttonsLeft: [
+                                {
+                                    xtype: 'kijs.gui.Button',
+                                    tooltip: 'Connect',
+                                    iconMap: 'kijs.iconMap.Fa.link',
+                                    on: {
+                                        click: function(e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                },{
+                                    xtype: 'kijs.gui.Button',
+                                    tooltip: 'Löschen',
+                                    iconMap: 'kijs.iconMap.Fa.trash',
+                                    on: {
+                                        click: function(e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github', buttonsRight: [
+                                {
+                                    xtype: 'kijs.gui.Button',
+                                    tooltip: 'Connect',
+                                    iconMap: 'kijs.iconMap.Fa.link',
+                                    on: {
+                                        click: function(e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                },{
+                                    xtype: 'kijs.gui.Button',
+                                    tooltip: 'Löschen',
+                                    iconMap: 'kijs.iconMap.Fa.trash',
+                                    on: {
+                                        click: function(e) {
+                                            console.log(e);
+                                        }
+                                    }
+                                }
+                            ]
+                        },
+                        {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' },
+                        {id:8, Bezeichnung:'YouTube', Icon:'kijs.iconMap.Fa.youtube' },
+                        {id:9, Bezeichnung:'WordPress', Icon:'kijs.iconMap.Fa.wordpress' },
+                        {id:10, Bezeichnung:'Slack', Icon:'kijs.iconMap.Fa.slack' },
+                        {id:11, Bezeichnung:'Figma', Icon:'kijs.iconMap.Fa.figma' }
+                    ],
+                    value: 5,
+                    on: {
+                        elementSwipe: function(e) {
+                            console.log(e);
+                        }
+                    }
+                },
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }

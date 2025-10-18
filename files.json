@@ -96,6 +96,7 @@
    "js/gui/dataView/element/kijs.gui.dataView.element.Base.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.AutoHtml.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.ListView.js",
+   "js/gui/dataView/element/kijs.gui.dataView.element.ListViewSwipe.js",
    "js/gui/dataView/element/kijs.gui.dataView.element.Tree.js",
 
    "js/gui/kijs.gui.ListView.js",
