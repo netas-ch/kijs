@@ -693,9 +693,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
             }).then((e) => {
                 // config Properties anwenden, falls vorhanden
-                if (e.responseData.config) {
+                if (e.response.config) {
                     // config Properties übernehmen
-                    this.applyConfig(e.responseData.config);
+                    this.applyConfig(e.response.config);
                 }
 
                 // 'afterSave' auslösen

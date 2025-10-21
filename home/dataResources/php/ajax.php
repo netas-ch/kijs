@@ -11,7 +11,6 @@ $requests = json_decode(file_get_contents("php://input"));
 foreach ($requests as $request) {
     $response = new stdClass();
     $response->tid = $request->tid;
-    $response->responseData = new stdClass();
 
     switch ($request->remoteFn) {
 
@@ -26,8 +25,8 @@ foreach ($requests as $request) {
                 $rows[] = array('Bez' => 'violett', 'color' => '#f0f', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = $rows;
+                $response->config = new stdClass();
+                $response->config->data = $rows;
 
                 //sleep(1);
 
@@ -71,8 +70,8 @@ foreach ($requests as $request) {
                     });
                 }
                 
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = $rows;
+                $response->config = new stdClass();
+                $response->config->data = $rows;
 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -82,7 +81,7 @@ foreach ($requests as $request) {
         case 'container.load':
             try {
                 // config
-                $response->responseData->config = json_decode('
+                $response->config = json_decode('
                     {
                         "elements": [
                             {
@@ -107,7 +106,7 @@ foreach ($requests as $request) {
         case 'containerStack.load':
             try {
                 // config
-                $response->responseData->config = json_decode('
+                $response->config = json_decode('
                     {
                         "style": { "flex": 1 },
                         
@@ -135,7 +134,7 @@ foreach ($requests as $request) {
         case 'containerTab.load':
             try {
                 // config
-                $response->responseData->config = json_decode('
+                $response->config = json_decode('
                     {
                         "elements": [
                             { "name":"b1", "tabCaption":"B 1", "tabIconMap":"kijs.iconMap.Fa.house", "html":"B 1", "innerStyle":{ "color":"#f99"} },
@@ -169,7 +168,7 @@ foreach ($requests as $request) {
         case 'dashboard.load':
             try {
                 // config
-                $response->responseData->config = json_decode('
+                $response->config = json_decode('
                     {
                         "elements": [
                             {
@@ -323,8 +322,8 @@ foreach ($requests as $request) {
         
         case 'dashboardFormPanel.load':
             try {
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = json_decode('
+                $response->config = new stdClass();
+                $response->config->data = json_decode('
                     {
                         "memo":"Ich bin eine Bemerkung!"
                     }
@@ -373,10 +372,10 @@ foreach ($requests as $request) {
                 $rows[] = array('Name' => 'Kocher', 'Vorname' => 'Paul');
                 $rows[] = array('Name' => 'Schneeberger', 'Vorname' => 'Sandro');
 
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->primaryKeyFields = ['Name','Vorname'];
-                $response->responseData->config->disabledField = 'Deaktiviert';
-                $response->responseData->config->data = $rows;
+                $response->config = new stdClass();
+                $response->config->primaryKeyFields = ['Name','Vorname'];
+                $response->config->disabledField = 'Deaktiviert';
+                $response->config->data = $rows;
 
                 $filter = array();
                 $selectFilters = '
@@ -399,7 +398,7 @@ foreach ($requests as $request) {
                      ]
                     }
                 ';
-                $response->responseData->config->selectFilters = json_decode($selectFilters);
+                $response->config->selectFilters = json_decode($selectFilters);
 
                 /*$filter = array();
                 $flt = new stdClass();
@@ -410,7 +409,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Kurt';
                 $filter[] = $flt;
-                $response->responseData->config->selectFilters[] = $filter;
+                $response->config->selectFilters[] = $filter;
 
                 $filter = array();
                 $flt = new stdClass();
@@ -421,7 +420,7 @@ foreach ($requests as $request) {
                 $flt->field = 'Vorname';
                 $flt->value = 'Silvia';
                 $filter[] = $flt;
-                $response->responseData->config->selectFilters[] = $filter;*/
+                $response->config->selectFilters[] = $filter;*/
                 
                 //sleep(1);
 
@@ -445,7 +444,7 @@ foreach ($requests as $request) {
         case 'element.load':
             try {
                 // config
-                $response->responseData->config = json_decode('
+                $response->config = json_decode('
                     {
                         "html": "Ich wurde geladen :)",
                         "tooltip": "Ich bin ein Tooltip vom Server"
@@ -461,10 +460,10 @@ foreach ($requests as $request) {
         
         case 'form.load':
             try {
-                $response->responseData->config = new stdClass();
+                $response->config = new stdClass();
                 
                 // Formular
-                $response->responseData->config->elements = json_decode('
+                $response->config->elements = json_decode('
                     [
                         {
                             "xtype": "kijs.gui.field.Combo",
@@ -486,7 +485,7 @@ foreach ($requests as $request) {
                 ');
 
                 // Formulardaten
-                $response->responseData->config->data = array(
+                $response->config->data = array(
                     'Anrede' => 'w',
                     'Name' => 'Meier',
                     'Vorname' => 'Susanne'
@@ -501,8 +500,8 @@ foreach ($requests as $request) {
         
         case 'form.loadCombo':
             try {
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = [
+                $response->config = new stdClass();
+                $response->config->data = [
                     ['caption' => 'Herr', 'value' => 'm'],
                     ['caption' => 'Frau', 'value' => 'w']
                 ];
@@ -528,7 +527,7 @@ foreach ($requests as $request) {
                 }
 
                 if (count(get_object_vars($fieldErrors))) {
-                    $response->responseData->fieldErrors = $fieldErrors;
+                    $response->fieldErrors = $fieldErrors;
                     $response->errorMsg = 'Es wurden noch nicht alle Felder richtig ausgefüllt';
                     $response->errorType = 'errorNotice';
                 }
@@ -548,13 +547,13 @@ foreach ($requests as $request) {
 
                 // Spalten zurückgeben (wenn verlangt)
                 if ($config->getMetaData === true) {
-                    $response->responseData->columns = array();
+                    $response->columns = array();
 
                     $col = new stdClass();
                     $col->caption = 'Vorname';
                     $col->valueField = 'vorname';
                     $col->editable = true;
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -584,7 +583,7 @@ foreach ($requests as $request) {
                     $col->numberStyles = $numberStyles;
                     $col->unitAfter = '%';
 
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -592,14 +591,14 @@ foreach ($requests as $request) {
                     $col->caption = 'Icon';
                     $col->iconCharField = 'icon';
                     $col->iconColorField = 'color';
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Date';
                     $col->caption = 'Date';
                     $col->valueField = 'date';
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
 
@@ -617,7 +616,7 @@ foreach ($requests as $request) {
                         ['value' => 2, 'caption' => 'Datensatz 2'],
                         ['value' => 3, 'caption' => 'Datensatz 3']
                     ];
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -627,7 +626,7 @@ foreach ($requests as $request) {
                     $col->editable = true;
                     $col->clicksToEdit = 1;
                     $col->sortable = false;
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -636,7 +635,7 @@ foreach ($requests as $request) {
                     $col->valueField = 'number2';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -644,7 +643,7 @@ foreach ($requests as $request) {
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
                     $col->editable = false;
-                    $response->responseData->columns[] = $col;
+                    $response->columns[] = $col;
                     unset ($col);
 
 
@@ -667,15 +666,15 @@ foreach ($requests as $request) {
                             $col->width = 300;
                         }
 
-                        $response->responseData->columns[] = $col;
+                        $response->columns[] = $col;
                         unset ($col);
                     }
 
-                    $response->responseData->primaryKeys = array('vorname');
+                    $response->primaryKeys = array('vorname');
                 }
 
                 // Zeilen zurückgeben
-                $response->responseData->rows = array();
+                $response->rows = array();
                 for ($i = 0; $i < $limit; $i++) {
                     $rwId = $start + $i;
 
@@ -693,7 +692,7 @@ foreach ($requests as $request) {
                     $row->color = '#' . dechex($rwId * 100);
                     $row->checkbox = $rwId % 2 === 0;
 
-                    $response->responseData->rows[] = $row;
+                    $response->rows[] = $row;
                 }
 
             } catch (Exception $ex) {
@@ -717,8 +716,8 @@ foreach ($requests as $request) {
 //                $rows[] = array('value'=>'IT', 'caption'=>'Italien');
 //                $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
                 
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = $rows;
+                $response->config = new stdClass();
+                $response->config->data = $rows;
                 //sleep(1);
 
             } catch (Exception $ex) {
@@ -736,8 +735,8 @@ foreach ($requests as $request) {
                 $rows[] = array('caption'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $rows[] = array('caption'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $rows[] = array('caption'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $response->responseData->config = new stdClass();
-                $response->responseData->config->data = $rows;
+                $response->config = new stdClass();
+                $response->config->data = $rows;
 
                 //sleep(1);
 
@@ -748,30 +747,30 @@ foreach ($requests as $request) {
         
         case 'rpc.simple':
             $response->infoMsg = 'Ich bin eine Nachricht vom Server';
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
             break;
         
         case 'rpc.delay':
             sleep(1);
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
             break;
         
         case 'rpc.infoMsg':
             $response->infoMsg = 'Ich bin eine infoMsg';
             //$response->infoTitle = 'Eigener Titel';
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
             break;
         
         case 'rpc.cornerTipMsg':
             $response->cornerTipMsg = 'Ich bin eine cornerTipMsg';
             //$response->cornerTipTitle = 'Eigener Titel';
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
             break;
         
         case 'rpc.warningMsg':
             $ignoreWarnings = $request->ignoreWarnings ?? false;
             if ($ignoreWarnings) {
-                $response->responseData = $request->requestData;
+                $response->data = $request->requestData;
             } else {
                 $response->warningMsg = 'Sind Sie sicher?';
                // $response->warningTitle = 'Eigener Titel';
@@ -781,12 +780,12 @@ foreach ($requests as $request) {
         case 'rpc.errorMsg':
             $response->errorMsg = 'Ich bin eine errorMsg';
             //$response->errorTitle = 'Eigener Titel';
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
             break;
         
         case 'rpc.errorNotice':
             try {
-                $response->responseData = $request->requestData;
+                $response->data = $request->requestData;
                 throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
                 
             } catch (Exception $ex) {
@@ -797,7 +796,7 @@ foreach ($requests as $request) {
         
         case 'rpc.error':
             try {
-                $response->responseData = $request->requestData;
+                $response->data = $request->requestData;
                 throw new Exception('Fehler! Schrecklich!!!');
                 
             } catch (Exception $ex) {
@@ -807,7 +806,7 @@ foreach ($requests as $request) {
             break;
 
         case 'tree.largeData.load':
-            $response->responseData = $request->requestData;
+            $response->data = $request->requestData;
 
             //$rows = [];
 
@@ -816,10 +815,10 @@ foreach ($requests as $request) {
             // Verzögerung um Lademaske anzuzeigen
             //sleep(rand(0, 2));
 
-            $response->responseData->config = new stdClass();
-            $response->responseData->config->data = $rows;
-            $response->responseData->config->value = '15.15.15';
-            //$response->responseData->config->expandFilters = json_decode('{ "field":"id", "operator":"IN", "value":["1","1.1"] }');
+            $response->config = new stdClass();
+            $response->config->data = $rows;
+            $response->config->value = '15.15.15';
+            //$response->config->expandFilters = json_decode('{ "field":"id", "operator":"IN", "value":["1","1.1"] }');
             break;
 
         default:

@@ -152,21 +152,13 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
                 // Abbruch durch neueren RPC bei cancelRunningRpcs=true
                 if (rpcData.response.errorType === 'cancel') {
-                    // Argument vorbereiten
-                    const e = {
-                        responseData: rpcData.response.responseData,
-                        requestData: rpcData.request.requestData,
-                        errorType: rpcData.response.errorType,
-                        errorMsg: rpcData.response.errorMsg
-                    };
-
                     // callback-fn ausführen
                     if (kijs.isFunction(config.fn)) {
-                        config.fn.call(config.context || this, e);
+                        config.fn.call(config.context || this, rpcData);
                     }
 
                     // Promise auslösen
-                    resolve(e);
+                    resolve(rpcData);
                     return;
                     
                 // Fehler --> FehlerMsg + Abbruch
@@ -225,21 +217,13 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                             // errorType ist fix 'warning'
                             rpcData.response.errorType = 'warning';
 
-                            // Argument vorbereiten
-                            const e = {
-                                responseData: rpcData.response.responseData,
-                                requestData: rpcData.request.requestData,
-                                errorType: rpcData.response.errorType,
-                                errorMsg: rpcData.response.errorMsg
-                            };
-
                             // callback-fn ausführen
                             if (kijs.isFunction(config.fn)) {
-                                config.fn.call(config.context || this, e);
+                                config.fn.call(config.context || this, rpcData);
                             }
 
                             // Promise auslösen
-                            resolve(e);
+                            resolve(rpcData);
                         }
                     }, this);
 
@@ -279,21 +263,13 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                             rpcData.response.cornerTipMsg, rpcData.response.cornerTipIcon);
                 }
 
-                // Argument vorbereiten
-                const e = {
-                    responseData: rpcData.response.responseData,
-                    requestData: rpcData.request.requestData,
-                    errorType: rpcData.response.errorType,
-                    errorMsg: rpcData.response.errorMsg
-                };
-
                 // callback-fn ausführen
                 if (kijs.isFunction(config.fn)) {
-                    config.fn.call(config.context || this, e);
+                    config.fn.call(config.context || this, rpcData);
                 }
 
                 // Promise auslösen
-                resolve(e);
+                resolve(rpcData);
             }
         });
     }

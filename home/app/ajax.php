@@ -10,26 +10,25 @@ $requests = json_decode(file_get_contents("php://input"));
 foreach ($requests as $request) {
     $response = new stdClass();
     $response->tid = $request->tid;
-    $response->responseData = $request->requestData;
 
     switch ($request->remoteFn) {
 
         case 'naviDocu.load':
             $rows = _getNavigationRowsRec('data/docu', 'treeDocu', null);
-            $response->responseData->config = new stdClass();
-            $response->responseData->config->data = $rows;
+            $response->config = new stdClass();
+            $response->config->data = $rows;
             break;
 
         case 'naviShowcase.load':
             $rows = _getNavigationRowsRec('data/showcase', 'treeShowcase', null);
-            $response->responseData->config = new stdClass();
-            $response->responseData->config->data = $rows;
+            $response->config = new stdClass();
+            $response->config->data = $rows;
             break;
 
         case 'naviTest.load':
             $rows = _getNavigationRowsRec('data/test', 'treeTest', null);
-            $response->responseData->config = new stdClass();
-            $response->responseData->config->data = $rows;
+            $response->config = new stdClass();
+            $response->config->data = $rows;
             break;
 
         default:

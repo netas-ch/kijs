@@ -94,6 +94,7 @@ home.sc.DatePicker = class home_sc_DatePicker {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
+                    valueDisplayType: 'html',
                     value: '<b>Siehe auch:</b><br>kijs.gui.TimePicker<br>kijs.gui.MonthPicker<br>kijs.gui.field.DateTime<br>kijs.gui.field.Month',
                     style: { margin: '10px 0 0 0'}
                 }

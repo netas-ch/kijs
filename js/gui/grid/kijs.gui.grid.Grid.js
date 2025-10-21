@@ -444,7 +444,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
      */
     reload(restoreSelection = true, resetData = true) {
         let selected = this.getSelectedIds();
-        return this._remoteLoad(resetData).then((responseData) => {
+        return this._remoteLoad(resetData).then((response) => {
 
             // Selektion wiederherstellen
             if (selected && restoreSelection) {
@@ -467,7 +467,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this._tableDom.height = null;
             }
 
-            return responseData;
+            return response;
         });
     }
 
@@ -1190,7 +1190,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property
                 }).then((e) => {
                     this._remoteProcess(e, args, resetData);
-                    resolve(e.responseData);
+                    resolve(e.response);
                 }).catch((ex) => {
                     reject(ex);
                 });
@@ -1200,20 +1200,20 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     _remoteProcess(e, args, resetData) {
         // columns
-        if (kijs.isArray(e.responseData.columns)) {
-            if (!kijs.isEmpty(e.responseData.resetColumns) && e.responseData.resetColumns) {
+        if (kijs.isArray(e.response.columns)) {
+            if (!kijs.isEmpty(e.response.resetColumns) && e.response.resetColumns) {
                 this._header.clear();
             }
 
             kijs.Array.clear(this._columnConfigs);
-            this.columnConfigAdd(e.responseData.columns);
+            this.columnConfigAdd(e.response.columns);
 
             this._getRemoteMetaData = false;
         }
 
         // primaryKeys
-        if (e.responseData.primaryKeys) {
-            this.primaryKeys = e.responseData.primaryKeys;
+        if (e.response.primaryKeys) {
+            this.primaryKeys = e.response.primaryKeys;
         }
 
         if (resetData) {
@@ -1222,12 +1222,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // rows
         let addedRowsCnt = 0;
-        if (kijs.isArray(e.responseData.rows)) {
+        if (kijs.isArray(e.response.rows)) {
 
             // Datensätze hinzufügen
-            if (e.responseData.rows.length > 0) {
-                this._remoteDataLastRowCnt = e.responseData.rows.length;
-                addedRowsCnt = this.rowsAdd(e.responseData.rows, args.start);
+            if (e.response.rows.length > 0) {
+                this._remoteDataLastRowCnt = e.response.rows.length;
+                addedRowsCnt = this.rowsAdd(e.response.rows, args.start);
             }
 
             // Anzahl DS zählen
@@ -1235,14 +1235,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         // Total Datensätze
-        if (kijs.isInteger(e.responseData.count)) {
-            this._remoteDataTotal = e.responseData.count;
-        } else if (e.responseData.rows && e.responseData.rows.length) {
-            this._remoteDataTotal = args.start + e.responseData.rows.length;
+        if (kijs.isInteger(e.response.count)) {
+            this._remoteDataTotal = e.response.count;
+        } else if (e.response.rows && e.response.rows.length) {
+            this._remoteDataTotal = args.start + e.response.rows.length;
         }
 
         // Sortierungs-Icon in Header-Bar
-        this._header.setSortIcons(kijs.isObject(e.responseData.sort) ? e.responseData.sort : this._remoteSort);
+        this._header.setSortIcons(kijs.isObject(e.response.sort) ? e.response.sort : this._remoteSort);
 
         this._isLoading = false;
 

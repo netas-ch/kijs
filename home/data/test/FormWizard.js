@@ -190,7 +190,7 @@ home.test.FormWizard = class home_test_FormWizard {
                 // Speichern
                 this._panel.downX('kijs.gui.container.Form').save().then((e) => {
                     // alles ok
-                    if (kijs.isEmpty(e.errorType)) {
+                    if (kijs.isEmpty(e.response.errorType)) {
                         kijs.gui.CornerTipContainer.show('Titel', 'Daten wurden verschickt!');
                         
                     // nicht alles ok
