@@ -218,45 +218,47 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * @param {Boolean} [searchFields=false] Sollen die Formularfelder neu gesucht werden?
      * @param {Boolean} [resetValidation=false] Sollen die Formularfelder als invalid markiert werden?
      * @param {Boolean} [superCall=false]
-     * @param {Object|Null} [config]
      * @returns {Promise}
      */
     // overwrite
-    load(args=null, searchFields=false, resetValidation=false, superCall=false, config=null) {
+    load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
-            super.load(args, true, config).then((e) => {
-                let config = e.response.config ?? {};
+            super.load(args, true).then((e) => {
+                if (kijs.isEmpty(e.response.errorType)) {
+                    let config = e.response.config ?? {};
 
-                // Falls das Formular destructed wurde: abbrechen
-                if (!this._dom) {
-                    resolve(e);
-                    return;
-                }
+                    // Falls das Formular destructed wurde: abbrechen
+                    if (!this._dom) {
+                        resolve(e);
+                        return;
+                    }
 
-                if (e.response.config && e.response.config.elements) {
-                    searchFields = true;
-                }
+                    if (e.response.config && e.response.config.elements) {
+                        searchFields = true;
+                    }
 
-                if (searchFields || kijs.isEmpty(this._fields)) {
-                    this.searchFields();
-                }
+                    if (searchFields || kijs.isEmpty(this._fields)) {
+                        this.searchFields();
+                    }
 
-                // Validierung zurücksetzen?
-                if (resetValidation) {
-                    this.errorsClear();
-                }
+                    // Validierung zurücksetzen?
+                    if (resetValidation) {
+                        this.errorsClear();
+                    }
 
-                // rendern
-                this.render();
+                    // rendern
+                    this.render();
 
-                // 'afterLoad' auslösen
-                if (!superCall) {
-                    this.raiseEvent('afterLoad', e);
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', Object.assign({}, e));
+                    }
                 }
 
                 // promise ausführen
                 resolve(e);
             });
+
         });
     }
 
@@ -340,7 +342,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 }
 
                 // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
+                this.raiseEvent('afterSave', Object.assign({}, e));
 
                 // Promise auslösen
                 resolve(e);

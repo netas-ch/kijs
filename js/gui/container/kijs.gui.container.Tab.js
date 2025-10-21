@@ -263,7 +263,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 }
 
                 // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
+                this.raiseEvent('afterSave', Object.assign({}, e));
 
                 // Promise auslösen
                 resolve(e);

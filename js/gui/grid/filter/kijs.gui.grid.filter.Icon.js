@@ -122,41 +122,43 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
     // PRIVATE
     // LISTENERS
-    #onAfterLoad(e) {;
-        let checkIcons = this._checkIcons();
-        let icons = checkIcons[0];
-        let iconsCheck = checkIcons[1];
-        let dataCnt = checkIcons[2];
+    #onAfterLoad(e) {
+        if (kijs.isEmpty(e.response.errorType)) {
+            let checkIcons = this._checkIcons();
+            let icons = checkIcons[0];
+            let iconsCheck = checkIcons[1];
+            let dataCnt = checkIcons[2];
 
-        // CheckboxGroup erstellen
-        if (this._checkboxGroup === null && dataCnt + icons.length <= this.columnConfig.iconsCnt) {
-            this._checkboxGroup = new kijs.gui.field.CheckboxGroup ({
-                name: 'icons',
-                valueField: 'id',
-                iconCharField: 'icon',
-                iconColorField: 'color',
-                captionField: 'caption',
-                data: icons,
-                cls: 'kijs-filter-icon-checkboxgroup',
-                checkedAll: true,
-                on: {
-                    change: this.#onFilterChange,
-                    context: this
+            // CheckboxGroup erstellen
+            if (this._checkboxGroup === null && dataCnt + icons.length <= this.columnConfig.iconsCnt) {
+                this._checkboxGroup = new kijs.gui.field.CheckboxGroup ({
+                    name: 'icons',
+                    valueField: 'id',
+                    iconCharField: 'icon',
+                    iconColorField: 'color',
+                    captionField: 'caption',
+                    data: icons,
+                    cls: 'kijs-filter-icon-checkboxgroup',
+                    checkedAll: true,
+                    on: {
+                        change: this.#onFilterChange,
+                        context: this
+                    }
+                });
+                this._menuButton.menu.add(['-', this._checkboxGroup]);
+
+            } else if (this._checkboxGroup && icons.length > 0 ) {
+
+                // Daten hinzufügen
+                if (dataCnt + icons.length <= this.columnConfig.iconsCnt){
+                    this._checkboxGroup.addData(icons);
+                    this._checkboxGroup.checkedValues = iconsCheck;
+
+                // CheckboxGroup entfernen
+                } else {
+                    this._menuButton.menu.remove(['-', this._checkboxGroup]);
+                    this._checkboxGroup = null;
                 }
-            });
-            this._menuButton.menu.add(['-', this._checkboxGroup]);
-
-        } else if (this._checkboxGroup && icons.length > 0 ) {
-
-            // Daten hinzufügen
-            if (dataCnt + icons.length <= this.columnConfig.iconsCnt){
-                this._checkboxGroup.addData(icons);
-                this._checkboxGroup.checkedValues = iconsCheck;
-
-            // CheckboxGroup entfernen
-            } else {
-                this._menuButton.menu.remove(['-', this._checkboxGroup]);
-                this._checkboxGroup = null;
             }
         }
     }

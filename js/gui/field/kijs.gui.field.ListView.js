@@ -143,32 +143,33 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      * Füllt das Listview mit Daten vom Server
      * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
-     * @param {Object|Null} [config]
      * @returns {Promise}
      */
-    load(args, superCall=false, config=null) {
+    load(args, superCall=false) {
         return new Promise((resolve, reject) => {
-            super.load(args, true, config).then((e) => {
-                let config = e.response.config ?? {};
-                
-                // Falls ein neuer Wert zurückgegeben wird, diesen nehmen
-                if (kijs.isDefined(config.value)) {
-                    this._value = config.value;
-                }
-                
-                this._listView.data = config.data;
+            super.load(args, true).then((e) => {
+                if (kijs.isEmpty(e.response.errorType)) {
+                    let config = e.response.config ?? {};
 
-                if (!kijs.isEmpty(this._value)) {
-                    this.value = this._value;
-                }
-                
-                if (!kijs.isEmpty(config.selectFilters)) {
-                    this._listView.selectByFilters(config.selectFilters);
-                }
-                
-                // 'afterLoad' auslösen
-                if (!superCall) {
-                    this.raiseEvent('afterLoad', e);
+                    // Falls ein neuer Wert zurückgegeben wird, diesen nehmen
+                    if (kijs.isDefined(config.value)) {
+                        this._value = config.value;
+                    }
+
+                    this._listView.data = config.data;
+
+                    if (!kijs.isEmpty(this._value)) {
+                        this.value = this._value;
+                    }
+
+                    if (!kijs.isEmpty(config.selectFilters)) {
+                        this._listView.selectByFilters(config.selectFilters);
+                    }
+
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', Object.assign({}, e));
+                    }
                 }
                 
                 // Promise ausführen

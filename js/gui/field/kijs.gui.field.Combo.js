@@ -424,23 +424,25 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // alle Datensätze laden
             this._listViewEl.load(args)
                 .then((e) => {
-                    let config = e.response.config ?? {};
+                    if (kijs.isEmpty(e.response.errorType)) {
+                        let config = e.response.config ?? {};
 
-                    // Nach dem Laden das value neu setzen,
-                    // damit das Label erscheint (ohne change-event)
-                    if (query === null && this._isValueInStore(this.value)) {
-                        this.value = this._value;
+                        // Nach dem Laden das value neu setzen,
+                        // damit das Label erscheint (ohne change-event)
+                        if (query === null && this._isValueInStore(this.value)) {
+                            this.value = this._value;
 
-                    // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
-                        if (kijs.toString(config.value) !== kijs.toString(this.value)) {
-                            this.value = config.value;
+                        // value mit dem RPC zurückgeben (mit change-event)
+                        } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
+                            if (kijs.toString(config.value) !== kijs.toString(this.value)) {
+                                this.value = config.value;
+                            }
                         }
-                    }
 
-                    // validieren
-                    if (this._dom) {
-                        this.validate(true);
+                        // validieren
+                        if (this._dom) {
+                            this.validate(true);
+                        }
                     }
                 });
         }
@@ -822,17 +824,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onListViewElAfterLoad(e) {
-        if (!this._remoteSort) {
-            this.value = this._value;
-        }
+        if (kijs.isEmpty(e.response.errorType)) {
+            if (!this._remoteSort) {
+                this.value = this._value;
+            }
 
-        if (this._selectFirst && this._listViewEl.data.length) {
-            this.value = this._listViewEl.data[0].value;
-        }
+            if (this._selectFirst && this._listViewEl.data.length) {
+                this.value = this._listViewEl.data[0].value;
+            }
 
-        // Spinbox Nachricht anhängen
-        if (e.response && e.response.spinboxMessage) {
-            this._addPlaceholder(e.response.spinboxMessage);
+            // Spinbox Nachricht anhängen
+            if (e.response && e.response.spinboxMessage) {
+                this._addPlaceholder(e.response.spinboxMessage);
+            }
         }
     }
 

@@ -82,7 +82,7 @@ home.sc.Element = class home_sc_Element {
                     rpcLoadFn: 'element.load',
                     autoLoad: true,
                     html: 'HTML wird dynamisch geladen',
-                    style: { 
+                    style: {
                         backgroundColor:'#ddd',
                         padding: '10px',
                         border: '1px solid #333'

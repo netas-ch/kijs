@@ -961,8 +961,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // PRIVATE
     // LISTENERS
     #onAfterLoad(e) {
-        if (!kijs.isEmpty(this._value)) {
-            this.value = this._value;
+        if (kijs.isEmpty(e.response.errorType)) {
+            if (!kijs.isEmpty(this._value)) {
+                this.value = this._value;
+            }
         }
     }
 
