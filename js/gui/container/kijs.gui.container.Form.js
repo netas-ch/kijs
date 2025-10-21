@@ -224,38 +224,41 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     load(args=null, searchFields=false, resetValidation=false, superCall=false) {
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
-                let config = e.response.config ?? {};
+                if (kijs.isEmpty(e.response.errorType)) {
+                    let config = e.response.config ?? {};
 
-                // Falls das Formular destructed wurde: abbrechen
-                if (!this._dom) {
-                    resolve(e);
-                    return;
+                    // Falls das Formular destructed wurde: abbrechen
+                    if (!this._dom) {
+                        resolve(e);
+                        return;
+                    }
+
+                    if (e.response.config && e.response.config.elements) {
+                        searchFields = true;
+                    }
+
+                    if (searchFields || kijs.isEmpty(this._fields)) {
+                        this.searchFields();
+                    }
+
+                    // Validierung zurücksetzen?
+                    if (resetValidation) {
+                        this.errorsClear();
+                    }
+
+                    // rendern
+                    this.render();
+
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', Object.assign({}, e));
+                    }
                 }
-
-                if (e.response.config && e.response.config.elements) {
-                    searchFields = true;
-                }
-
-                if (searchFields || kijs.isEmpty(this._fields)) {
-                    this.searchFields();
-                }
-
-                // Validierung zurücksetzen?
-                if (resetValidation) {
-                    this.errorsClear();
-                }
-
-                // rendern
-                this.render();
-
-                // 'afterLoad' auslösen
-                if (!superCall) {
-                    this.raiseEvent('afterLoad', e);
-                }
-
+                
                 // promise ausführen
                 resolve(e);
             });
+
         });
     }
 
@@ -339,7 +342,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 }
 
                 // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
+                this.raiseEvent('afterSave', Object.assign({}, e));
 
                 // Promise auslösen
                 resolve(e);

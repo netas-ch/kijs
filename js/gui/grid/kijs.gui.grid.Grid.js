@@ -1189,7 +1189,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property
                 }).then((e) => {
-                    this._remoteProcess(e, args, resetData);
+                    if (kijs.isEmpty(e.response.errorType)) {
+                        this._remoteProcess(e, args, resetData);
+                    }
                     resolve(e.response);
                 }).catch((ex) => {
                     reject(ex);

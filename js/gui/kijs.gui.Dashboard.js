@@ -135,7 +135,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
                 }
                 
                 // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
+                this.raiseEvent('afterSave', Object.assign({}, e));
                 
                 // Promise auslösen
                 resolve(e);

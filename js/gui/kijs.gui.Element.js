@@ -778,15 +778,17 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                     context: this
 
                 }).then((e) => {
-                    // config Properties
-                    if (e.response.config && this._dom) {
-                        // config Properties übernehmen
-                        this.applyConfig(e.response.config);
-                    }
-                    
-                    // 'afterLoad' auslösen
-                    if (!superCall) {
-                        this.raiseEvent('afterLoad', e);
+                    if (kijs.isEmpty(e.response.errorType)) {
+                        // config Properties
+                        if (e.response.config && this._dom) {
+                            // config Properties übernehmen
+                            this.applyConfig(e.response.config);
+                        }
+
+                        // 'afterLoad' auslösen
+                        if (!superCall) {
+                            this.raiseEvent('afterLoad', Object.assign({}, e));
+                        }
                     }
 
                     // promise ausführen

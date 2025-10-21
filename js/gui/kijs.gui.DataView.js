@@ -651,11 +651,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._rpcLoadFn && !options.noRpc) {
             this.load()
                 .then((e) => {
-                    // Elemente neu erstellen
-                    this._createElements(this._data);
+                    if (kijs.isEmpty(e.response.errorType)) {
+                        // Elemente neu erstellen
+                        this._createElements(this._data);
 
-                    // Eigenschaften wiederherstellen
-                    this._afterReload(options, currentConfig, true);
+                        // Eigenschaften wiederherstellen
+                        this._afterReload(options, currentConfig, true);
+                    }
                 });
 
         // reload mit lokalen Daten
@@ -699,7 +701,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 }
 
                 // 'afterSave' auslösen
-                this.raiseEvent('afterSave', e);
+                this.raiseEvent('afterSave', Object.assign({}, e));
 
                 // Promise auslösen
                 resolve(e);
