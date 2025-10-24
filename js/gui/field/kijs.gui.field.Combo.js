@@ -22,7 +22,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                                     // bis das autocomplete einsetzt. Standard: 0
 
         this._displayText = '';         // Angezeigter Text
-        this._olddisplayText = '';
 
         this._value = '';           // Wert
         this._oldValue = '';
@@ -293,7 +292,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get value() { return this._value; }
     set value(val) {
         let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
-        this._olddisplayText = this._displayText;
         this._oldValue = this._value;
         this._displayText  = this._getDisplayTextFromValue(val);
         this._value = val;
@@ -387,7 +385,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     let config = e.response.config ?? {};
 
                     // Nach dem Laden das value neu setzen,
-                    // damit die displayText erscheint (ohne change-event)
+                    // damit der displayText erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
