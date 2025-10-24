@@ -21,7 +21,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._minChars = 0;         // Anzahl Zeichen, die geschrieben werden müssen,
                                     // bis das autocomplete einsetzt. Standard: 0
 
-        this._displayText = '';         // Angezeigter Text
+        this._displayText = '';     // Angezeigter Text
 
         this._value = '';           // Wert
         this._oldValue = '';
@@ -231,8 +231,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get minChars() { return this._minChars; }
     set minChars(val) { this._minChars = intValue(val); }
-
-    get oldValue() { return this._oldValue; }
 
     // overwrite
     get readOnly() { return super.readOnly; }
