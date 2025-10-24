@@ -18,14 +18,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._minChars = null;
-        this._minSelectCount = null;
-        this._maxSelectCount = null;
-        this._caption = null;
-        this._oldCaption = null;
-        this._oldValue = null;
-        this._value = '';
+        this._minChars = 0;         // Anzahl Zeichen, die geschrieben werden müssen,
+                                    // bis das autocomplete einsetzt. Standard: 0
+
+        this._caption = '';         // Angezeigter Text
+        this._oldCaption = '';
+
+        this._value = '';           // Wert
+        this._oldValue = '';
+
         this._keyUpDeferId = null;
+
         this._remoteSort = false;   // TODO: umbenennen nach remoteFilter
         this._forceSelection = true;
         this._firstLoaded = false;
@@ -85,7 +88,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         Object.assign(this._defaultConfig, {
             autocomplete: false,
             scrollableY: 'auto',
-            minChars: 'auto',
             valueField: 'value',
             captionField: 'caption',
             iconClsField: 'iconCls',
@@ -111,7 +113,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             rpcLoadArgs: { target: 'rpcLoadArgs', context: this._listViewEl },
             rpc: { target: 'rpc', context: this._listViewEl },
 
-            minChars: { target: 'minChars', prio: 2}, // Nicht beachtet, wenn remoteSort false ist
+            minChars: true, 
 
             captionField: { target: 'captionField', context: this._listViewEl },
             disabledField: { target: 'disabledField', context: this._listViewEl },
@@ -122,9 +124,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             iconMapField: { target: 'iconMapField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },
             valueField: { target: 'valueField', context: this._listViewEl },
-
-            minSelectCount: true,
-            maxSelectCount: true,
 
             data: { prio: 1000, target: 'data' },
             value: { prio: 1001, target: 'value' },
@@ -232,23 +231,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
     get minChars() { return this._minChars; }
-    set minChars(val) {
-        if (val === 'auto') {
-            // remote combo
-            if (this._listViewEl.rpcLoadFn) {
-                this._minChars = 4;
-
-            // local combo
-            } else {
-                this._minChars = 0;
-            }
-        } else if (kijs.isInteger(val) && val > 0) {
-            this._minChars = val;
-
-        } else {
-            throw new kijs.Error(`invalid argument for parameter minChars in kijs.gui.field.Combo`);
-        }
-    }
+    set minChars(val) { this._minChars = intValue(val); }
 
     get oldValue() { return this._oldValue; }
 

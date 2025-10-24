@@ -115,6 +115,15 @@ In der Regel reicht es folgendes zu ersetzen:
  - ```e.errorType``` durch ```e.response.errorType```
 
 
+### kijs.gui.Combo überarbeitet
+ - config ```minChars``` hat neu den Standardwert 0. Den Wert ```'auto'```` gibt 
+   es nicht mehr.  
+
+**UPDATE TIPP:**: 
+Suchen ersetzen ind eigenem CSS/LESS-Code:  
+ - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
+
+
 
 Version 3.1.0
 =============
