@@ -27,13 +27,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._keyUpDeferId = null;
 
-        this._remoteSort = false;       // Soll beim Tippen ein RPC gemacht werden?
+        this._remoteSort = false;       // Soll beim Tippen ein RPC gemacht werden? (Bool)
                                         // TODO: umbenennen nach remoteFilter
-        this._forceSelection = true;    // Muss der eingegebene Wert in der Liste vorhanden sein?
-        this._firstLoaded = false;      // Wurde bereits ein RPC-Load gemacht?
+        this._forceSelection = true;    // Muss der eingegebene Wert in der Liste vorhanden sein? (Bool)
+                                        // TODO: Löschen, sollte bei einem Combo immer auf true sein.
+        this._firstLoaded = false;      // Wurde bereits ein RPC-Load gemacht? (Bool)
         this._showPlaceholder = true;   // TODO: umbenennen nach placeholder, wo ein Text
-                                        // übergeben werden kann, wie in kijs.gui.field.Text?
-        this._selectFirst = false;      // 1. Wert in der Liste als Standardwert nehmen
+                                        // übergeben werden kann, wie in kijs.gui.field.Text? (Bool)
+        this._selectFirst = false;      // 1. Wert in der Liste als Standardwert nehmen (Bool)
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -160,8 +161,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.on('input', this.#onInputDomInput, this);
         this._inputDom.on('keyUp', this.#onInputDomKeyUp, this);
         this._inputDom.on('keyDown', this.#onInputDomKeyDown, this);
+
         this._listViewEl.on('afterLoad', this.#onListViewElAfterLoad, this);
         this._listViewEl.on('elementClick', this.#onListViewElClick, this);
+
         this._spinBoxEl.on('click', this.#onSpinBoxElClick, this);
         this._spinBoxEl.on('close', this.#onSpinBoxElClose, this);
         this._spinBoxEl.on('show', this.#onSpinBoxElShow, this);
