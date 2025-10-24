@@ -129,8 +129,8 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     rpcLoadFn: 'combo.load',
                     autoLoad: true,
                     remoteSort: true,
-                    forceSelection: false,
-                    showPlaceholder: false
+                    forceSelection: false
+                    //showPlaceholder: false
                 }
             ]
         });

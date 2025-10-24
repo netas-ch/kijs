@@ -3,6 +3,7 @@
 // TODO: load() Funktion überarbeiten, so dass sie einen Basisklassenaufruf macht.
 // TODO: force-Argument bei Load entfernen. Die Anzahl eingegebenen Zeichen nicht
 //       in der Load Funktion überprüfen, sondern in #onInputDomKeyUp
+// TODO: change-Listener gleich wie bei kijs.gui.field.Text
 
 // --------------------------------------------------------------
 // kijs.gui.field.Combo
@@ -61,11 +62,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._spinBoxEl = new kijs.gui.SpinBox({
             parent: this,
-            cls: 'kijs-field-combo-spinbox',
-            scrollableY: 'auto',
             target: this,
             targetDomProperty: 'inputWrapperDom',
             ownerNodes: [this._inputWrapperDom, this._spinButtonEl.dom],
+            cls: 'kijs-field-combo-spinbox',
+            scrollableY: 'auto',
             elements: [
                 this._listViewEl
             ],
@@ -509,7 +510,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._listViewEl.add({
                     xtype: 'kijs.gui.Container',
                     name: 'kijs-gui-field-combo-placeholder',
-                    cls: 'kijs-placeholder',
+                    cls: 'kijs-field-combo-placeholder',
                     html: text,
                     htmlDisplayType: 'code'
                 });

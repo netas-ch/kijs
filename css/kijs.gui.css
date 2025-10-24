@@ -3269,7 +3269,7 @@
     flex: 1;
     padding-bottom: 3px;
   }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-placeholder {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-field-combo-placeholder {
     border: 1px solid transparent;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
