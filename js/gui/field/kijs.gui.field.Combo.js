@@ -314,6 +314,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     // overwrite
+    // TODO: gehört nicht hier hin: löschen!!!!
     get valueDisplay() {
         return this._caption;
     }
