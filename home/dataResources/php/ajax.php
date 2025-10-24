@@ -59,6 +59,11 @@ foreach ($requests as $request) {
 
                     $count++;
 
+                    // 1. Zeile mit Überschriften überspringen
+                    if ($count === 1) {
+                        continue;
+                    }
+
                     // Max 100 Datensätze zurückgeben, weil sonst der Browser überfordert ist
                     if ($count > 100) {
                         continue;

@@ -595,10 +595,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.applyFilters({field:this.displayTextField, value: inputVal, operator: 'PART'});
+            // TODO: Sollte Standardmässig mit 'BEGIN' filtern. --> Konfigurierbar machen
+            this._listViewEl.applyFilters({field: this.displayTextField, value: inputVal, operator: 'PART'});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field:this.displayTextField, value: inputVal, operator: 'PART'});
+            this._listViewEl.applyFilters({field: this.displayTextField, value: inputVal, operator: 'PART'});
 
         } else {
 
@@ -607,6 +608,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
     }
 
+    // TODO: Evtl. Standardfunktion nehmen
     _setScrollPositionToSelection() {
         let sel = this._listViewEl.getSelected();
         if (kijs.isObject(sel) && (sel instanceof kijs.gui.dataView.element.Base)) {
