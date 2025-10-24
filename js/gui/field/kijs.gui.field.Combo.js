@@ -18,20 +18,22 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._minChars = 0;         // Anzahl Zeichen, die geschrieben werden müssen,
-                                    // bis das autocomplete einsetzt. Standard: 0
+        this._minChars = 0;             // Anzahl Zeichen, die geschrieben werden müssen,
+                                        // bis das autocomplete einsetzt. Standard: 0
 
-        this._displayText = '';     // Angezeigter Text
+        this._displayText = '';         // Angezeigter Text
 
-        this._value = '';           // Wert
+        this._value = '';               // Wert
 
         this._keyUpDeferId = null;
 
-        this._remoteSort = false;   // TODO: umbenennen nach remoteFilter
-        this._forceSelection = true;
-        this._firstLoaded = false;
-        this._showPlaceholder = true; // TODO: umbenennen nach placeholder, wo ein Text übergeben werden kann, wie in kijs.gui.field.Text?
-        this._selectFirst = false;
+        this._remoteSort = false;       // Soll beim Tippen ein RPC gemacht werden?
+                                        // TODO: umbenennen nach remoteFilter
+        this._forceSelection = true;    // Muss der eingegebene Wert in der Liste vorhanden sein?
+        this._firstLoaded = false;      // Wurde bereits ein RPC-Load gemacht?
+        this._showPlaceholder = true;   // TODO: umbenennen nach placeholder, wo ein Text
+                                        // übergeben werden kann, wie in kijs.gui.field.Text?
+        this._selectFirst = false;      // 1. Wert in der Liste als Standardwert nehmen
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
