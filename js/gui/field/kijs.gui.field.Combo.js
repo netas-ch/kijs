@@ -24,7 +24,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._displayText = '';     // Angezeigter Text
 
         this._value = '';           // Wert
-        this._oldValue = '';
 
         this._keyUpDeferId = null;
 
@@ -290,7 +289,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get value() { return this._value; }
     set value(val) {
         let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
-        this._oldValue = this._value;
         this._displayText  = this._getDisplayTextFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
@@ -902,7 +900,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
         this._listViewEl = null;
-        this._oldValue = null;
         this._spinBoxEl = null;
         this._buttonsDom = null;
         this._spinButtonEl = null;
