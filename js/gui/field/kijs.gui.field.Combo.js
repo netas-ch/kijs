@@ -370,14 +370,40 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         args = kijs.isObject(args) ? args : {};
         args.remoteSort = !!this._remoteSort;
         args.value = this.value;
-        args.query = null;
+        args.query = '';
 
+        let doLoad = false;
+
+        // remoteSort
         if (this._remoteSort) {
-            args.query = kijs.toString(query);
+            // wenn genug Zeichenn getippt oder bei forceLoad
+            if (args.query.length >= this._minChars || forceLoad) {
+                doLoad = true;
 
-            // Wenn eine Eingabe erfolgt, oder bei forceLoad, laden
-            if (forceLoad || args.query.length >= this._minChars) {
-                this._listViewEl.load(args).then((e) => {
+            // sonst nicht laden und Platzhalter anzeigen
+            } else {
+                this._listViewEl.data = [];
+                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
+            }
+
+        // kein remoteSort
+        } else {
+            // nur wenn noch nicht geladen oder bei forceLoad
+            if (!this._firstLoaded || forceLoad) {
+                doLoad = true;
+            }
+        }
+
+        // Laden
+        if (doLoad) {
+            // Bereits getippte Zeichen mitgeben
+            if (this._remoteSort) {
+                args.query = kijs.toString(query);
+            }
+
+            // Laden
+            this._listViewEl.load(args).then((e) => {
+                if (kijs.isEmpty(e.response.errorType)) {
                     let config = e.response.config ?? {};
 
                     // Nach dem Laden das value neu setzen,
@@ -392,38 +418,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                         }
 
                     }
-                });
 
-            } else {
-                this._listViewEl.data = [];
-                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
-            }
-
-        } else if (!this._firstLoaded || forceLoad) {
-            // alle Datensätze laden
-            this._listViewEl.load(args)
-                .then((e) => {
-                    if (kijs.isEmpty(e.response.errorType)) {
-                        let config = e.response.config ?? {};
-
-                        // Nach dem Laden das value neu setzen,
-                        // damit das Label erscheint (ohne change-event)
-                        if (query === null && this._isValueInStore(this.value)) {
-                            this.value = this._value;
-
-                        // value mit dem RPC zurückgeben (mit change-event)
-                        } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
-                            if (kijs.toString(config.value) !== kijs.toString(this.value)) {
-                                this.value = config.value;
-                            }
-                        }
-
-                        // validieren
-                        if (this._dom) {
-                            this.validate(true);
-                        }
+                    // validieren
+                    if (!this._remoteSort && this._dom) {
+                        this.validate(true);
                     }
-                });
+                }
+            });
         }
 
         // Flag setzen
