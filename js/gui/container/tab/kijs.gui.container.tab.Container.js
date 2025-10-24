@@ -40,11 +40,11 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
             tabClosableIconMap: { target: 'closableIconMap', context: this._tabButtonEl },
             tabBadgeText: { target: 'badgeText', context: this._tabButtonEl },
             tabBadgeCls: { target: 'badgeCls', context: this._tabButtonEl },
-            tabBadgeTextHtmlDisplayType: { target: 'badgeTextHtmlDisplayType', context: this._tabButtonEl },
+            tabBadgeTextDisplayType: { target: 'badgeTextDisplayType', context: this._tabButtonEl },
             tabBadgeStyle: { target: 'badgeStyle', context: this._tabButtonEl },
             tabCaption: { target: 'caption', context: this._tabButtonEl },
             tabCaptionCls: { target: 'captionCls', context: this._tabButtonEl },
-            tabCaptionHtmlDisplayType: { target: 'captionHtmlDisplayType', context: this._tabButtonEl },
+            tabCaptionDisplayType: { target: 'captionDisplayType', context: this._tabButtonEl },
             tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },
             
             tabIcon: { target: 'icon', context: this._tabButtonEl },

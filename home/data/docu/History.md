@@ -120,8 +120,14 @@ In der Regel reicht es folgendes zu ersetzen:
    es nicht mehr.  
 
 **UPDATE TIPP:**: 
-Suchen ersetzen ind eigenem CSS/LESS-Code:  
+Suchen ersetzen in eigenem CSS/LESS-Code:  
  - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
+
+
+### Property *HtmlDisplayType umbenannt zu *DisplayType
+**UPDATE TIPP:**: 
+Suchen nach ```HtmlDisplayType``` und ersetzen zu ```DisplayType```. 
+Achtung ```htmlDisplayType``` (kleingeschrieben) nicht ersetzen!
 
 
 

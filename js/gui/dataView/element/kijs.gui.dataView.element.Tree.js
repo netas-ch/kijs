@@ -284,7 +284,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
             caption = this.dataRow[this._parentEl.captionField];
         }
         let captionEl = new kijs.gui.Element({
-            htmlDisplayType: this._parentEl.captionHtmlDisplayType,
+            htmlDisplayType: this._parentEl.captionDisplayType,
             nodeTagName: 'span',
             html: caption,
             cls: 'kijs-caption'

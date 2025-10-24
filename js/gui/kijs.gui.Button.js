@@ -44,11 +44,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         Object.assign(this._configMap, {
             badgeText: { target: 'html', context: this._badgeDom },
             badgeCls: { fn: 'function', target: this._badgeDom.clsAdd, context: this._badgeDom },
-            badgeTextHtmlDisplayType: { target: 'htmlDisplayType', context: this._badgeDom },
+            badgeTextDisplayType: { target: 'htmlDisplayType', context: this._badgeDom },
             badgeStyle: { fn: 'assign', target: 'style', context: this._badgeDom },
             caption: { target: 'html', context: this._captionDom },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
-            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
+            captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
             smallPaddings: true,                    // false=breite Abstände, true=schmale Abstände, 'auto'=automatisch (default)
@@ -97,8 +97,8 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
-    get badgeTextHtmlDisplayType() { return this._badgeDom.htmlDisplayType; }
-    set badgeTextHtmlDisplayType(val) { this._badgeDom.htmlDisplayType = val; }
+    get badgeTextDisplayType() { return this._badgeDom.htmlDisplayType; }
+    set badgeTextDisplayType(val) { this._badgeDom.htmlDisplayType = val; }
 
     get caption() { return this._captionDom.html; }
     set caption(val) {
@@ -110,8 +110,8 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
 
     get captionDom() { return this._captionDom; }
 
-    get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
-    set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+    get captionDisplayType() { return this._captionDom.htmlDisplayType; }
+    set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {

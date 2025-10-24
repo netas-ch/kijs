@@ -119,7 +119,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             label: { target: 'html', context: this._labelDom, prio: 2 },
             labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
             labelHide: true,
-            labelHtmlDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
+            labelDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
 
@@ -339,8 +339,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
-    get labelHtmlDisplayType() { return this._labelDom.htmlDisplayType; }
-    set labelHtmlDisplayType(val) { this._labelDom.htmlDisplayType = val; }
+    get labelDisplayType() { return this._labelDom.htmlDisplayType; }
+    set labelDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
     get labelPosition() {
         if (this._dom.clsHas('kijs-labelpos-top')) {

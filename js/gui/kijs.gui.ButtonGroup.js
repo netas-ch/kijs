@@ -38,7 +38,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
             caption: { target: 'html', context: this._captionDom },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
-            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
+            captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom }
         });
 
@@ -64,8 +64,8 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
     get captionDom() { return this._captionDom; }
 
-    get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
-    set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+    get captionDisplayType() { return this._captionDom.htmlDisplayType; }
+    set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
     get columns() { return this._columns; }
     set columns(val) { this._columns = kijs.isNumeric(val) ? window.parseInt(val) : 1; }

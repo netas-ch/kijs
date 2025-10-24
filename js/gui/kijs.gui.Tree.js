@@ -14,7 +14,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         super(false);
 
         this._captionField = null;
-        this._captionHtmlDisplayType = 'code';
+        this._captionDisplayType = 'code';
         this._valueField = null;
 
         this._elementDdTargetConfig = null; // Konfiguration Ordner, damit ein Drop
@@ -75,7 +75,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             expandButtonCollapsedIconMap: true,
 
             captionField: true,
-            captionHtmlDisplayType: true,
+            captionDisplayType: true,
 
             iconMap: true,
             iconChar: true,
@@ -131,8 +131,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get allowChildrenField() { return this._allowChildrenField; }
     set allowChildrenField(val) { this._allowChildrenField = val; }
 
-    get captionHtmlDisplayType() { return this._captionHtmlDisplayType; }
-    set captionHtmlDisplayType(val) { this._captionHtmlDisplayType = val; }
+    get captionDisplayType() { return this._captionDisplayType; }
+    set captionDisplayType(val) { this._captionDisplayType = val; }
 
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }

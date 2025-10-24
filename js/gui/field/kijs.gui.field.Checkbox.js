@@ -84,7 +84,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             autocomplete: false,
-            captionHtmlDisplayType: 'code',
+            captionDisplayType: 'code',
             disableFlex: true
         });
 
@@ -94,7 +94,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHide: true,
-            captionHtmlDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
+            captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
             captionWidth: { target: 'captionWidth' },
 
@@ -147,8 +147,8 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
     get captionDom() { return this._captionDom; }
 
-    get captionHtmlDisplayType() { return this._captionDom.htmlDisplayType; }
-    set captionHtmlDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+    get captionDisplayType() { return this._captionDom.htmlDisplayType; }
+    set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }

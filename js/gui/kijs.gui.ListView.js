@@ -14,7 +14,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         super(false);
 
         this._captionField = null;
-        this._captionHtmlDisplayType = 'code';
+        this._captionDisplayType = 'code';
         this._valueField = null;
 
         // Standard-Icon (optional)
@@ -48,7 +48,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             captionField: true,
-            captionHtmlDisplayType: true,
+            captionDisplayType: true,
 
             iconMap: true,
             iconChar: true,
@@ -85,8 +85,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get captionHtmlDisplayType() { return this._captionHtmlDisplayType; }    
-    set captionHtmlDisplayType(val) { this._captionHtmlDisplayType = val; }
+    get captionDisplayType() { return this._captionDisplayType; }    
+    set captionDisplayType(val) { this._captionDisplayType = val; }
     
     get captionField() { return this._captionField; }
     set captionField(val) { this._captionField = val; }
