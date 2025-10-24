@@ -118,6 +118,7 @@ In der Regel reicht es folgendes zu ersetzen:
 ### kijs.gui.Combo überarbeitet
  - config ```minChars``` hat neu den Standardwert 0. Den Wert ```'auto'```` gibt 
    es nicht mehr.  
+ - getter ```oldValue``` entfernt.  
 
 **UPDATE TIPP:**: 
 Suchen ersetzen in eigenem CSS/LESS-Code:  
