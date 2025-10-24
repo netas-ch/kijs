@@ -219,7 +219,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 label: 'animation:',
                 cls: 'kijs-inline',
                 valueField: 'id',
-                captionField: 'id',
+                displayTextField: 'id',
                 required: true,
                 data: [
                     { id:'none' },
@@ -243,7 +243,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 label: 'tabBarPos:',
                 cls: 'kijs-inline',
                 valueField: 'id',
-                captionField: 'id',
+                displayTextField: 'id',
                 required: true,
                 data: [
                     { id:'top' },
@@ -265,7 +265,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
                 label: 'tabBarAlign:',
                 cls: 'kijs-inline',
                 valueField: 'id',
-                captionField: 'id',
+                displayTextField: 'id',
                 required: true,
                 data: [
                     { id:'start' },

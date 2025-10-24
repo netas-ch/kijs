@@ -80,7 +80,7 @@ home.sc.DataView = class home_sc_DataView {
                             label: 'selectType',
                             cls: 'kijs-inline',
                             valueField: 'id',
-                            captionField: 'id',
+                            displayTextField: 'id',
                             required: true,
                             data: [
                                 { id:'none' },
@@ -104,9 +104,9 @@ home.sc.DataView = class home_sc_DataView {
                             value: 'none',
                             inputWidth: 90,
                             data: [
-                                { caption: 'keine', value: 'none' },
-                                { caption: 'A', value: 'A' },
-                                { caption: 'B', value: 'B' }
+                                { displayText: 'keine', value: 'none' },
+                                { displayText: 'A', value: 'A' },
+                                { displayText: 'B', value: 'B' }
                             ],
                             on: {
                                 change: function(e) {
@@ -243,7 +243,7 @@ home.sc.DataView = class home_sc_DataView {
                             label: 'selectType',
                             cls: 'kijs-inline',
                             valueField: 'id',
-                            captionField: 'id',
+                            displayTextField: 'id',
                             required: true,
                             data: [
                                 { id:'none' },
@@ -267,9 +267,9 @@ home.sc.DataView = class home_sc_DataView {
                             value: 'none',
                             inputWidth: 90,
                             data: [
-                                { caption: 'keine', value: 'none' },
-                                { caption: 'Name', value: 'Name' },
-                                { caption: 'Vorname', value: 'Vorname' }
+                                { displayText: 'keine', value: 'none' },
+                                { displayText: 'Name', value: 'Name' },
+                                { displayText: 'Vorname', value: 'Vorname' }
                             ],
                             on: {
                                 change: function(e) {

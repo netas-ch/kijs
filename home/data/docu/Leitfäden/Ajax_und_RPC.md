@@ -245,8 +245,8 @@ Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:
             case 'module1.loadAnredeCombo':
                 try {
                     $response->data = [
-                        ['caption' => 'Herr', 'value' => 'm'],
-                        ['caption' => 'Frau', 'value' => 'w']
+                        ['displayText' => 'Herr', 'value' => 'm'],
+                        ['displayText' => 'Frau', 'value' => 'w']
                     ];
                 } catch (Exception $ex) {
                     $response->errorType = 'error';

@@ -112,10 +112,10 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 value: 'single',
                 inputWidth: 60, // 'single', 'multi', 'simple', 'none'
                 data: [
-                    { caption: 'single', value: 'single' },
-                    { caption: 'multi', value: 'multi' },
-                    { caption: 'simple', value: 'simple' },
-                    { caption: 'none', value: 'none' }
+                    { displayText: 'single', value: 'single' },
+                    { displayText: 'multi', value: 'multi' },
+                    { displayText: 'simple', value: 'simple' },
+                    { displayText: 'none', value: 'none' }
                 ],
                 on: {
                     change: function(e) {

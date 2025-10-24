@@ -36,9 +36,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     data: [
-                        { caption: 'Apple', value: 1},
-                        { caption: 'Linux', value: 2},
-                        { caption: 'Windows', value: 3}
+                        { displayText: 'Apple', value: 1},
+                        { displayText: 'Linux', value: 2},
+                        { displayText: 'Windows', value: 3}
                     ]
                 },
 
@@ -50,15 +50,15 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Label',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     valueField: 'value',
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     value: 2,
                     data: [
-                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                     ],
                     elements:[
                         {
@@ -89,16 +89,16 @@ home.sc.field_Combo = class home_sc_field_Combo {
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Disabled',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     valueField: 'value',
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     disabledField: 'disabled',
                     value: 2,
                     data: [
-                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1, disabled: true },
-                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
-                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
+                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1, disabled: true },
+                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
+                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
                     ]
                 },
 

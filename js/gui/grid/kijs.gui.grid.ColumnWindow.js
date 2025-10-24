@@ -80,7 +80,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         let data = [];
         let values = [];
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
-            data.push({valueField: columnConfig.valueField, caption: columnConfig.caption });
+            data.push({valueField: columnConfig.valueField, displayText: columnConfig.caption });
             if (columnConfig.visible) {
                 values.push(columnConfig.valueField);
             }
@@ -91,7 +91,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
             name: 'fields',
             labelHide: true,
             valueField: 'valueField',
-            captionField: 'caption',
+            displayTextField: 'displayText',
             data: data,
             value: values,
             sortable: true
@@ -142,7 +142,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         kijs.Array.each(this.grid.columnConfigs, function(columnConfig) {
             columnConfig.visible = kijs.Array.contains(flds, columnConfig.valueField);
         }, this);
-        
+
         // Sortierung übernehmen
         let elements = this.down('fields').elements;
         for (let i=0; i<elements.length; i++) {

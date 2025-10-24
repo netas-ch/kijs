@@ -80,9 +80,9 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
             $userData->path = $pathWithTimestamp;
             $userData->filename = $filename;
             $userData->filetype = pathinfo($path, PATHINFO_EXTENSION);
-            $userData->caption = str_replace('_', ' ', $filename);
+            $userData->displayText = str_replace('_', ' ', $filename);
             if ($userData->filetype) {
-                $userData->caption = substr($userData->caption, 0, (strlen($userData->filetype)+1) * -1);
+                $userData->displayText = substr($userData->displayText, 0, (strlen($userData->filetype)+1) * -1);
             }
 
             // Dateityp
@@ -102,7 +102,7 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
                         case 'data/showcase': $userData->namespace = 'sc'; break;
                         case 'data/test': $userData->namespace = 'test'; break;
                     }
-                    $userData->className = str_replace(' ', '_', $userData->caption);
+                    $userData->className = str_replace(' ', '_', $userData->displayText);
                     break;
 
                 case 'md':
@@ -118,7 +118,7 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
             }
 
             $row = [];
-            $row['caption'] = $userData->caption;
+            $row['displayText'] = $userData->displayText;
             $row['nodeId'] = $path;
             if (!empty($userData->iconMap)) {
                 $row['iconMap'] = $userData->iconMap;
@@ -137,7 +137,7 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
 
     // rows Sortieren
     usort($rows, function($a, $b) {
-        return strcmp(strtolower($a['caption'] ?? ''), strtolower($b['caption'] ?? ''));
+        return strcmp(strtolower($a['displayText'] ?? ''), strtolower($b['displayText'] ?? ''));
     });
 
     return $rows;

@@ -28,7 +28,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
             disableFlex: true,
             showCheckBoxes: true,
             selectType: 'simple',
-            captionField: 'caption',
+            displayTextField: 'displayText',
             valueField: 'value'
         });
 
@@ -85,7 +85,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-
     // overwrite
     load(args, superCall=false) {
         return super.load(args, true).then((e) => {
@@ -114,6 +113,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         this.value = ids;
     }
     
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR

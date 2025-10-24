@@ -36,11 +36,11 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     valueField: 'value',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     data: [
-                        { caption: 'Apple', value: 1},
-                        { caption: 'Linux', value: 2},
-                        { caption: 'Windows', value: 3}
+                        { displayText: 'Apple', value: 1},
+                        { displayText: 'Linux', value: 2},
+                        { displayText: 'Windows', value: 3}
                     ],
                     elements:[
                         {
@@ -63,16 +63,16 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 },{
                     xtype: 'kijs.gui.field.ListView',
                     label: 'Label',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     valueField: 'value',
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     value: 2,
                     //showCheckBoxes: true,
                     data: [
-                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                     ],
                     on: {
                         focus:  console.log,
@@ -101,7 +101,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     label: 'ListView remote',
                     valueField: 'color',
                     //checkedAll: true,
-                    captionField: 'Bez',
+                    displayTextField: 'Bez',
                     iconCharField: 'iconChar',
                     iconColorField: 'color',
                     //rpc: 'default',
@@ -124,7 +124,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     xtype: 'kijs.gui.field.ListView',
                     label: 'ListView local',
                     valueField: 'id',
-                    captionField: 'Bezeichnung',
+                    displayTextField: 'Bezeichnung',
                     iconMapField: 'Icon',
                     iconColorField: 'Color',
                     tooltipField: 'Color',
@@ -248,7 +248,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                 label: 'selectType',
                 cls: 'kijs-inline',
                 valueField: 'id',
-                captionField: 'id',
+                displayTextField: 'id',
                 required: true,
                 data: [
                     { id:'none' },

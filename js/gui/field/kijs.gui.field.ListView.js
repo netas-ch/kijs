@@ -31,7 +31,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
             selectType: { target: 'selectType', context: this._listView },
             
-            captionField: { target: 'captionField', context: this._listView },
+            displayTextField: { target: 'displayTextField', context: this._listView },
             iconCharField: { target: 'iconCharField', context: this._listView },
             iconMapField: { target: 'iconMapField', context: this._listView },
             iconClsField: { target: 'iconClsField', context: this._listView },
@@ -76,11 +76,11 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get captionField() { return this._listView.captionField; }
-    set captionField(val) { this._listView.captionField = val; }
-
     get data() { return this._listView.data; }
     set data(val) { this._listView.data = val; }
+
+    get displayTextField() { return this._listView.displayTextField; }
+    set displayTextField(val) { this._listView.displayTextField = val; }
 
     // overwrite
     get elements() { return this._listView.elements; }

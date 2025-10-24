@@ -22,7 +22,7 @@ kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.f
             showCheckBoxes: true,
             selectType: 'single',
             valueField: 'value',
-            captionField: 'caption'
+            displayTextField: 'displayText'
         });
 
         // Config anwenden

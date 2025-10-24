@@ -147,7 +147,7 @@ home.App = class home_App {
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     iconMapField: 'iconMap',
                     allowChildrenField: 'allowChildren',
                     childrenField: 'children',
@@ -178,7 +178,7 @@ home.App = class home_App {
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     iconMapField: 'iconMap',
                     allowChildrenField: 'allowChildren',
                     childrenField: 'children',
@@ -209,7 +209,7 @@ home.App = class home_App {
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     iconMapField: 'iconMap',
                     allowChildrenField: 'allowChildren',
                     childrenField: 'children',
@@ -325,7 +325,7 @@ home.App = class home_App {
                 let tabCont = new home.TabContainer({
                     app: this,
                     name: userData.path,
-                    tabCaption: userData.caption,
+                    tabCaption: userData.displayText,
                     tabClosable: true,
                     userData: userData,
                     on: {
@@ -376,7 +376,7 @@ home.App = class home_App {
                     label: 'Design',
                     labelWidth: 74,
                     valueField: 'id',
-                    captionField: 'Bezeichnung',
+                    displayTextField: 'Bezeichnung',
                     required: true,
                     data: [
                         { id:'kijs.theme.default.css', Bezeichnung:'Standard' },
@@ -480,7 +480,7 @@ home.App = class home_App {
                     label: 'Design',
                     labelHide: true,
                     valueField: 'id',
-                    captionField: 'Bezeichnung',
+                    displayTextField: 'Bezeichnung',
                     required: true,
                     data: [
                         { id:'de', Bezeichnung:'Deutsch' },

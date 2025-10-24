@@ -36,7 +36,7 @@ home.sc.ListView = class home_sc_ListView {
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'id',
-                    captionField: 'Bezeichnung',
+                    displayTextField: 'Bezeichnung',
                     iconMapField: 'Icon',
                     //iconColorField: 'Color',
                     //tooltipField: 'Color',
@@ -78,7 +78,7 @@ home.sc.ListView = class home_sc_ListView {
                             name: 'test',
                             xtype: 'kijs.gui.ListView',
                             valueField: 'id',
-                            captionField: 'Bezeichnung',
+                            displayTextField: 'Bezeichnung',
                             iconMapField: 'Icon',
                             showCheckBoxes: false,
                             selectType: 'single',
@@ -105,7 +105,7 @@ home.sc.ListView = class home_sc_ListView {
                         },{
                             xtype: 'kijs.gui.ListView',
                             valueField: 'id',
-                            captionField: 'Bezeichnung',
+                            displayTextField: 'Bezeichnung',
                             iconMapField: 'Icon',
                             showCheckBoxes: false,
                             selectType: 'single',
@@ -130,7 +130,7 @@ home.sc.ListView = class home_sc_ListView {
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'color',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     iconMapField: 'iconMap',
                     iconColorField: 'color',
                     //rpc: 'default',
@@ -155,7 +155,7 @@ home.sc.ListView = class home_sc_ListView {
                 },{
                     xtype: 'kijs.gui.ListView',
                     valueField: 'id',
-                    captionField: 'Bezeichnung',
+                    displayTextField: 'Bezeichnung',
                     iconMapField: 'Icon',
                     iconColorField: 'Color',
                     tooltipField: 'Color',

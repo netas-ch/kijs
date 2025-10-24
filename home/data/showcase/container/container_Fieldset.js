@@ -52,11 +52,11 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
                             name: 'Anrede',
                             label: 'Anrede',
                             valueField: 'value',
-                            captionField: 'caption',
+                            displayTextField: 'displayText',
                             data: [
-                                {caption: 'Herr', value: 'm' },
-                                {caption: 'Frau', value: 'w'},
-                                {caption: 'Familie', value: 'f'}
+                                {displayText: 'Herr', value: 'm' },
+                                {displayText: 'Frau', value: 'w'},
+                                {displayText: 'Familie', value: 'f'}
                             ]
                         },{
                             xtype: 'kijs.gui.field.Text',
@@ -91,7 +91,7 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
                             rpcLoadFn: 'land.load',
                             autoLoad: true,
                             valueField: 'value',
-                            captionField: 'caption'
+                            displayTextField: 'displayText'
                         }
                     ]
                 },

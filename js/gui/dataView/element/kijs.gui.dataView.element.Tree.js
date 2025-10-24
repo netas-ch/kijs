@@ -278,16 +278,16 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         let iconEl = new kijs.gui.Icon(iconArgs);
 
 
-        // Caption
-        let caption = '';
-        if (!kijs.isEmpty(this._parentEl.captionField) && !kijs.isEmpty(this.dataRow[this._parentEl.captionField])) {
-            caption = this.dataRow[this._parentEl.captionField];
+        // displayText
+        let displayText = '';
+        if (!kijs.isEmpty(this._parentEl.displayTextField) && !kijs.isEmpty(this.dataRow[this._parentEl.displayTextField])) {
+            displayText = this.dataRow[this._parentEl.displayTextField];
         }
-        let captionEl = new kijs.gui.Element({
-            htmlDisplayType: this._parentEl.captionDisplayType,
+        let displayTextEl = new kijs.gui.Element({
+            htmlDisplayType: this._parentEl.displayTextDisplayType,
             nodeTagName: 'span',
-            html: caption,
-            cls: 'kijs-caption'
+            html: displayText,
+            cls: 'kijs-displayText'
         });
 
 
@@ -326,7 +326,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         }
 
         this.removeAll();
-        this.add([expandIconEl, iconEl, captionEl]);
+        this.add([expandIconEl, iconEl, displayTextEl]);
     }
 
 

@@ -39,36 +39,34 @@ foreach ($requests as $request) {
             try {
                 $query = $request->requestData->query ?? ''; // suchbegriff
                 $value = $request->requestData->value ?? ''; // aktuell selektierte ID
-                $noRemoteSort = ($request->requestData->remoteSort ?? null) == false; // Bei remoteSort=false alles zurückgeben
+                $remoteSort = !empty($request->requestData->remoteSort); // Bei remoteSort=false alles zurückgeben
                 $rows = array();
                 
-                // Bei remoteSort=false max. 100 Datensätze zurückgeben, weil sonst der Browser überfordert ist
                 $count = 0;
                 
-                $berufe = file('../testData/beruf.csv');
-                foreach ($berufe as $beruf) {
-                    $count++;
-                    $beruf = explode(';', trim($beruf));
-                    
-                    if ($noRemoteSort) {
-                        if ($count <= 100) {
-                            $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
-                        }
-                    } else {
-                        if ($value === (int)$beruf[0] || ($query && mb_stristr($beruf[1], $query))) {
-                            $rows[] = array('value' => (int)$beruf[0], 'caption' => $beruf[1]);
+                $Berufe = file('../testData/beruf.csv');
+                foreach ($Berufe as $Beruf) {
+                    $Beruf = explode(';', trim($Beruf));
+                    $value = (int)$Beruf[0];
+                    $displayText = $Beruf[1];
+
+                    if ($query) {
+                        if (mb_strtolower(mb_substr($displayText, 0, mb_strlen($query)))
+                                !== mb_strtolower($query)) {
+                            continue;
                         }
                     }
-                }
 
-                if ($query) {
-                    usort($rows, function ($a, $b) use ($query) {
-                        if (mb_strtolower(mb_substr($a['caption'], 0, mb_strlen($query))) === mb_strtolower($query)) {
-                            return -1;
-                        }
-                        return 0;
-                    });
+                    $count++;
+
+                    // Max 100 Datensätze zurückgeben, weil sonst der Browser überfordert ist
+                    if ($count > 100) {
+                        continue;
+                    }
+
+                    $rows[] = array('value' => (int)$value, 'displayText' => $displayText);
                 }
+                unset($Berufe);
                 
                 $response->config = new stdClass();
                 $response->config->data = $rows;
@@ -502,8 +500,8 @@ foreach ($requests as $request) {
             try {
                 $response->config = new stdClass();
                 $response->config->data = [
-                    ['caption' => 'Herr', 'value' => 'm'],
-                    ['caption' => 'Frau', 'value' => 'w']
+                    ['displayText' => 'Herr', 'value' => 'm'],
+                    ['displayText' => 'Frau', 'value' => 'w']
                 ];
 
             } catch (Exception $ex) {
@@ -612,9 +610,9 @@ foreach ($requests as $request) {
                     $col->editorXtype = 'kijs.gui.field.Combo';
                     $col->editorConfig = new stdClass();
                     $col->editorConfig->data = [
-                        ['value' => 1, 'caption' => 'Datensatz 1'],
-                        ['value' => 2, 'caption' => 'Datensatz 2'],
-                        ['value' => 3, 'caption' => 'Datensatz 3']
+                        ['value' => 1, 'displayText' => 'Datensatz 1'],
+                        ['value' => 2, 'displayText' => 'Datensatz 2'],
+                        ['value' => 3, 'displayText' => 'Datensatz 3']
                     ];
                     $response->columns[] = $col;
                     unset ($col);
@@ -708,13 +706,13 @@ foreach ($requests as $request) {
 
                 foreach ($laender as $land) {
                     $land = explode(';', trim($land));
-                    $rows[] = array('value' => $land[0], 'caption' => $land[1]);
+                    $rows[] = array('value' => $land[0], 'displayText' => $land[1]);
                 }
 
-//                $rows[] = array('value'=>'CH', 'caption'=>'Schweiz');
-//                $rows[] = array('value'=>'DE', 'caption'=>'Deutschland');
-//                $rows[] = array('value'=>'IT', 'caption'=>'Italien');
-//                $rows[] = array('value'=>'FR', 'caption'=>'Frankreich');
+//                $rows[] = array('value'=>'CH', 'displayText'=>'Schweiz');
+//                $rows[] = array('value'=>'DE', 'displayText'=>'Deutschland');
+//                $rows[] = array('value'=>'IT', 'displayText'=>'Italien');
+//                $rows[] = array('value'=>'FR', 'displayText'=>'Frankreich');
                 
                 $response->config = new stdClass();
                 $response->config->data = $rows;
@@ -729,12 +727,12 @@ foreach ($requests as $request) {
             try {
                 $rows = array();
 
-                $rows[] = array('caption'=>'rot', 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('caption'=>'grün', 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('caption'=>'blau', 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('caption'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('caption'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
-                $rows[] = array('caption'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'rot', 'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'grün', 'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'blau', 'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'gelb', 'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'hellblau', 'color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
                 $response->config = new stdClass();
                 $response->config->data = $rows;
 
@@ -932,7 +930,7 @@ function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $
 
         $row = [];
         $row['id'] = $id;
-        $row['caption'] = $id;
+        $row['displayText'] = $id;
         $row['color'] = '#' . dechex(rand(0, 240)) . dechex(rand(0, 240)) . dechex(rand(0, 240));
         $row['icon'] = $children ? 'kijs.iconMap.Fa.folder' : 'kijs.iconMap.Fa.' . ( $i % 10);
         $row['allowChildren'] = !!$children;

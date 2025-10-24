@@ -39,12 +39,12 @@ home.sc.Tree = class home_sc_Tree {
                         {
                             xtype: 'kijs.gui.Tree',
                             valueField: 'id',
-                            captionField: 'caption',
+                            displayTextField: 'displayText',
                             childrenField: 'children',
                             data: [
-                                {id:1, caption:'Facebook', children:[{id:11, caption:'GitHub', children:[{id:111, caption:'TikTok'},{id:112, caption:'LinkedIn'}]},{id:12, caption:'Discord'},{id:13, caption:'YouTube'}] },
-                                {id:2, caption:'Twitter',children:[{id:21, caption:'WordPress'},{id:22, caption:'Slack'},{id:23, caption:'Figma'}]},
-                                {id:3, caption:'Instagram'}
+                                {id:1, displayText:'Facebook', children:[{id:11, displayText:'GitHub', children:[{id:111, displayText:'TikTok'},{id:112, displayText:'LinkedIn'}]},{id:12, displayText:'Discord'},{id:13, displayText:'YouTube'}] },
+                                {id:2, displayText:'Twitter',children:[{id:21, displayText:'WordPress'},{id:22, displayText:'Slack'},{id:23, displayText:'Figma'}]},
+                                {id:3, displayText:'Instagram'}
                             ],
                             value: 2
                         }
@@ -62,7 +62,7 @@ home.sc.Tree = class home_sc_Tree {
                         {
                             xtype: 'kijs.gui.Tree',
                             valueField: 'id',
-                            captionField: 'caption',
+                            displayTextField: 'displayText',
                             iconMapField: 'icon',
                             disabledField: 'disabled',
                             expandedIconMapField: 'icon',
@@ -74,9 +74,9 @@ home.sc.Tree = class home_sc_Tree {
                             //showCheckBoxes: true,
                             //selectType: 'singleAndEmpty',
                             data: [
-                                {id:1, caption:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, caption:'GitHub', icon:'kijs.iconMap.Fa.github', disabled:1, expanded:true, children:[{id:111, caption:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, caption:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, caption:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, caption:'YouTube', icon:'kijs.iconMap.Fa.youtube', disabled:1 }] },
-                                {id:2, caption:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, caption:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, caption:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, caption:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
-                                {id:3, caption:'Instagram', icon:'kijs.iconMap.Fa.instagram'}
+                                {id:1, displayText:'Facebook', icon:'kijs.iconMap.Fa.facebook', expanded:true, children:[{id:11, displayText:'GitHub', icon:'kijs.iconMap.Fa.github', disabled:1, expanded:true, children:[{id:111, displayText:'TikTok', icon:'kijs.iconMap.Fa.tiktok'},{id:112, displayText:'LinkedIn', icon:'kijs.iconMap.Fa.linkedin'}]},{id:12, displayText:'Discord', icon:'kijs.iconMap.Fa.discord'},{id:13, displayText:'YouTube', icon:'kijs.iconMap.Fa.youtube', disabled:1 }] },
+                                {id:2, displayText:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, displayText:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, displayText:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, displayText:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
+                                {id:3, displayText:'Instagram', icon:'kijs.iconMap.Fa.instagram'}
                             ],
                             value: 2
                         }
@@ -95,7 +95,7 @@ home.sc.Tree = class home_sc_Tree {
                         {
                             xtype: 'kijs.gui.Tree',
                             valueField: 'key',
-                            captionField: 'key',
+                            displayTextField: 'key',
                             childrenField: 'children',
                             selectType: 'multi',
                             ddName: 'kijs.gui.Tree.Test',
@@ -112,7 +112,7 @@ home.sc.Tree = class home_sc_Tree {
                         },{
                             xtype: 'kijs.gui.Tree',
                             valueField: 'key',
-                            captionField: 'key',
+                            displayTextField: 'key',
                             childrenField: 'children',
                             selectType: 'multi',
                             ddName: 'kijs.gui.Tree.Test',
@@ -211,7 +211,7 @@ home.sc.Tree = class home_sc_Tree {
                             name: 'treeRemote',
                             primaryKeyFields: ['id'],
                             valueField: 'id',
-                            captionField: 'caption',
+                            displayTextField: 'displayText',
                             iconMapField: 'icon',
                             iconColorField: 'color',
                             childrenField: 'children',

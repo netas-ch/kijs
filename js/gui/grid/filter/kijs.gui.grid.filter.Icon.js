@@ -136,7 +136,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                     valueField: 'id',
                     iconCharField: 'icon',
                     iconColorField: 'color',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     data: icons,
                     cls: 'kijs-filter-icon-checkboxgroup',
                     checkedAll: true,

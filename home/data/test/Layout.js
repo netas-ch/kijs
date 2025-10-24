@@ -89,11 +89,11 @@ home.test.Layout = class home_test_Layout {
                 value: 'kijs-flexform',
                 width: 230,
                 data: [
-                    { caption: 'keine', value: 'none' },
-                    { caption: 'kijs-flexrow', value: 'kijs-flexrow' },
-                    { caption: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
-                    { caption: 'kijs-flexform', value: 'kijs-flexform' },
-                    { caption: 'kijs-flexline', value: 'kijs-flexline' }
+                    { displayText: 'keine', value: 'none' },
+                    { displayText: 'kijs-flexrow', value: 'kijs-flexrow' },
+                    { displayText: 'kijs-flexcolumn', value: 'kijs-flexcolumn' },
+                    { displayText: 'kijs-flexform', value: 'kijs-flexform' },
+                    { displayText: 'kijs-flexline', value: 'kijs-flexline' }
                 ],
                 on: {
                     change: function(e) {

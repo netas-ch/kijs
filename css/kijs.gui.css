@@ -1907,7 +1907,7 @@
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-icon:empty {
     display: none;
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-displayText {
     flex: 1;
     margin: 0;
     overflow: hidden;
@@ -2019,7 +2019,7 @@
     border-color: transparent;
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-caption {
+  div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-displayText {
     color: var(--field-disabled-fontColor);
   }
   div.kijs-listview > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
@@ -2119,7 +2119,7 @@
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-expandIcon:empty {
     display: none;
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-displayText {
     flex: 1;
     margin: 0;
     overflow: hidden;
@@ -2234,7 +2234,7 @@
     border-color: transparent;
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-caption {
+  div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled > .kijs-container-inner > .kijs-displayText {
     color: var(--field-disabled-fontColor);
   }
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element.kijs-disabled.kijs-selected:not(.kijs-display-checkboxes):not(.kijs-display-options) {
@@ -3191,10 +3191,10 @@
   div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element {
     color: var(--field-disabled-fontColor);
   }
-  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption,
-  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-caption {
+  div.kijs-field-optiongroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-displayText,
+  div.kijs-field-checkboxgroup.kijs-disabled > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-displayText,
+  div.kijs-field-optiongroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-displayText,
+  div.kijs-field-checkboxgroup.kijs-readonly > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner > .kijs-dataview-element > .kijs-displayText {
     color: var(--field-disabled-fontColor);
   }
   div.kijs-field-optiongroup.kijs-inline > .kijs-content > .kijs-inputwrapper > .kijs-listview > .kijs-container-inner,
@@ -3265,7 +3265,7 @@
     display: flex;
     flex-direction: row;
   }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-caption {
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview div.kijs-dataview-element > .kijs-container-inner > .kijs-displayText {
     flex: 1;
     padding-bottom: 3px;
   }

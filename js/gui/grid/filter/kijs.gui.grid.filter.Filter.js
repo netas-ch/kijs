@@ -55,7 +55,14 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get checkboxFilterValues() { return this._checkboxFilterGroup ? this._checkboxFilterGroup.value : []; }
+    get checkboxFilterValues() {
+        if (kijs.isEmpty(this._checkboxFilterGroup)) {
+            return [];
+        } else {
+            let val = this._checkboxFilterGroup.value;
+            return kijs.isEmpty(val) ? [] : val;
+        }
+    }
     set checkboxFilterValues(val) {
         // convert data to array
         if (!kijs.isArray(val)) {
@@ -64,8 +71,8 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         let data = [];
         kijs.Array.each(val, (arrVal) => {
             if (kijs.isString(arrVal)) {
-                data.push({caption: arrVal, value: arrVal});
-            } else if (kijs.isObject(arrVal) && kijs.isDefined(arrVal.caption) && kijs.isDefined(arrVal.value)) {
+                data.push({displayText: arrVal, value: arrVal});
+            } else if (kijs.isObject(arrVal) && kijs.isDefined(arrVal.displayText) && kijs.isDefined(arrVal.value)) {
                 data.push(arrVal);
             }
         });

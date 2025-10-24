@@ -91,7 +91,7 @@ home.sc.DropZone = class home_sc_DropZone {
                     label: 'contentTypes',
                     cls: 'kijs-inline',
                     valueField: 'id',
-                    captionField: 'id',
+                    displayTextField: 'id',
                     data: [
                         { id: 'application' },
                         { id: 'audio' },

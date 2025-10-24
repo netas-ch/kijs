@@ -265,9 +265,9 @@ home.sc.Panel = class home_sc_Panel {
                 value: 'kijs-shadow',
                 inputWidth: 90,
                 data: [
-                    { caption: 'keine', value: 'none' },
-                    { caption: 'kijs-borderless', value: 'kijs-borderless' },
-                    { caption: 'kijs-shadow', value: 'kijs-shadow' }
+                    { displayText: 'keine', value: 'none' },
+                    { displayText: 'kijs-borderless', value: 'kijs-borderless' },
+                    { displayText: 'kijs-shadow', value: 'kijs-shadow' }
                 ],
                 on: {
                     change: function(e) {

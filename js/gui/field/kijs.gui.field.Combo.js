@@ -21,8 +21,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._minChars = 0;         // Anzahl Zeichen, die geschrieben werden müssen,
                                     // bis das autocomplete einsetzt. Standard: 0
 
-        this._caption = '';         // Angezeigter Text
-        this._oldCaption = '';
+        this._displayText = '';         // Angezeigter Text
+        this._olddisplayText = '';
 
         this._value = '';           // Wert
         this._oldValue = '';
@@ -89,7 +89,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             autocomplete: false,
             scrollableY: 'auto',
             valueField: 'value',
-            captionField: 'caption',
+            displayTextField: 'displayText',
             iconClsField: 'iconCls',
             iconAnimationClsField: 'iconAnimationCls',
             iconCharField: 'iconChar',
@@ -115,7 +115,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             minChars: true, 
 
-            captionField: { target: 'captionField', context: this._listViewEl },
+            displayTextField: { target: 'displayTextField', context: this._listViewEl },
             disabledField: { target: 'disabledField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
@@ -205,9 +205,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get buttonsDom() { return this._buttonsDom; }
 
-    get captionField() { return this._listViewEl.captionField; }
-    set captionField(val) { this._listViewEl.captionField = val; }
-
     // overwrite
     get data() {
         return this._listViewEl.data;
@@ -218,6 +215,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this.value = this._listViewEl.data[0].value;
         }
     }
+
+    get displayTextField() { return this._listViewEl.displayTextField; }
+    set displayTextField(val) { this._listViewEl.displayTextField = val; }
 
    // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
@@ -293,9 +293,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get value() { return this._value; }
     set value(val) {
         let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
-        this._oldCaption = this._caption;
+        this._olddisplayText = this._displayText;
         this._oldValue = this._value;
-        this._caption  = this._getCaptionFromValue(val);
+        this._displayText  = this._getDisplayTextFromValue(val);
         this._value = val;
         this._listViewEl.value = val;
 
@@ -310,13 +310,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
 
-        this._inputDom.nodeAttributeSet('value', kijs.toString(this._caption));
+        this._inputDom.nodeAttributeSet('value', kijs.toString(this._displayText));
     }
 
     // overwrite
     // TODO: gehört nicht hier hin: löschen!!!!
     get valueDisplay() {
-        return this._caption;
+        return this._displayText;
     }
 
     get valueField() { return this._listViewEl.valueField; }
@@ -387,7 +387,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     let config = e.response.config ?? {};
 
                     // Nach dem Laden das value neu setzen,
-                    // damit die caption erscheint (ohne change-event)
+                    // damit die displayText erscheint (ohne change-event)
                     if (query === null && this._isValueInStore(this.value)) {
                         this.value = this._value;
 
@@ -503,27 +503,27 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     /**
-     * Caption zu einem Value ermitteln
+     * DisplayText zu einem Value ermitteln
      * @param {String|Number|null} val
      * @returns {String}
      */
-    _getCaptionFromValue(val) {
+    _getDisplayTextFromValue(val) {
         let found = false;
-        let caption = null;
+        let displayText = null;
         kijs.Array.each(this._listViewEl.data, function(row) {
             if (row[this.valueField] === val) {
                 found = true;
-                caption = row[this.captionField];
+                displayText = row[this.displayTextField];
                 return false;
             }
         }, this);
 
         // Falls kein Datensatz existiert, zeigen wir halt den value an
         if (!found) {
-            caption = val;
+            displayText = val;
         }
 
-        return kijs.toString(caption);
+        return kijs.toString(displayText);
     }
 
     /**
@@ -561,8 +561,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Exakten Wert suchen
         if (inputVal && key !== 'Backspace' && key !== 'Delete') {
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
-                    matchVal = row[this.captionField];
+                if (kijs.isString(row[this.displayTextField]) && row[this.displayTextField].toLowerCase() === inputVal.toLowerCase()) {
+                    matchVal = row[this.displayTextField];
                     return false;
                 }
             }, this);
@@ -570,14 +570,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Beginn suchen
             if (matchVal === '') {
                 kijs.Array.each(this._listViewEl.data, function(row) {
-                    let caption = row[this.captionField];
+                    let displayText = row[this.displayTextField];
 
                     if (
-                        kijs.isString(caption)
-                        && inputVal.length <= caption.length
-                        && caption.substr(0, inputVal.length).toLowerCase() === inputVal.toLowerCase()
+                        kijs.isString(displayText)
+                        && inputVal.length <= displayText.length
+                        && displayText.substr(0, inputVal.length).toLowerCase() === inputVal.toLowerCase()
                     ) {
-                        matchVal = caption;
+                        matchVal = displayText;
                         return false;
                     }
 
@@ -595,10 +595,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
 
             // Elemente des Dropdowns filtern
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
+            this._listViewEl.applyFilters({field:this.displayTextField, value: inputVal, operator: 'PART'});
 
         } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field:this.captionField, value: inputVal, operator: 'PART'});
+            this._listViewEl.applyFilters({field:this.displayTextField, value: inputVal, operator: 'PART'});
 
         } else {
 
@@ -691,7 +691,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Wert im Store suchen.
             kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this.captionField]) && row[this.captionField].toLowerCase() === inputVal.toLowerCase()) {
+                if (kijs.isString(row[this.displayTextField]) && row[this.displayTextField].toLowerCase() === inputVal.toLowerCase()) {
                     match = true;
                     matchVal = row[this.valueField];
                     return false;

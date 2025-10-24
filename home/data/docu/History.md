@@ -124,10 +124,43 @@ Suchen ersetzen in eigenem CSS/LESS-Code:
  - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
 
 
-### Property *HtmlDisplayType umbenannt zu *DisplayType
+### Propertys umbenannt
+#### *HtmlDisplayType umbenannt zu *DisplayType
 **UPDATE TIPP:**: 
-Suchen nach ```HtmlDisplayType``` und ersetzen zu ```DisplayType```. 
-Achtung ```htmlDisplayType``` (kleingeschrieben) nicht ersetzen!
+Suchen nach ```HtmlDisplayType``` und ersetzen durch ```DisplayType```.  
+Achtung: ```htmlDisplayType``` (kleingeschrieben) nicht ersetzen!  
+
+#### captionField umbenannt zu displayTextField
+**UPDATE TIPP:**: 
+Suchen nach ```captionField``` und ersetzen durch ```displayTextField```.  
+
+#### captionDisplayType umbenannt zu displayTextDisplayType
+**UPDATE TIPP:**: 
+Suchen nach ```captionDisplayType``` und ersetzen durch ```displayTextDisplayType```.  
+
+
+### CSS-Klasse kijs-caption umbenannt zu kijs-displayText
+Betrifft nicht alle Elemente, sondern nur folgende (es gibt noch einige Elemente, 
+die kijs-caption weiterhin benutzen):  
+ - ```kijs.gui.dataView.element.ListView```
+ - ```kijs.gui.dataView.element.Tree```
+
+**UPDATE TIPP:**:  
+Falls eigene CSS/Less-Klassen existieren, darin nach ```kijs-caption``` suchen und 
+ersetzen durch ```kijs-displayText```, aber nur in  
+ - kijs.gui.ListView  
+ - kijs.gui.Tree  
+ - kijs.gui.field.ListView  
+ - kijs.gui.field.Combo  
+ - kijs.gui.field.OptionGroup  
+ - kijs.gui.field.CheckboxGroup  
+und auch in davon vererbten.  
+
+#### Standardwert von displayTextField von ```caption``` geändert zu ```displayText```  
+**UPDATE TIPP:**:  
+Entweder in allen recordsets die Spalten ```caption``` umbenennen zu ```displayText```  
+oder bei den betroffenen Elementen das Property ```displayTextField: 'caption'``` 
+hinzufügen.  
 
 
 

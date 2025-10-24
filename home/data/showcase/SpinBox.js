@@ -119,7 +119,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                     label: 'ownPos',
                     cls: 'kijs-inline',
                     valueField: 'id',
-                    captionField: 'id',
+                    displayTextField: 'id',
                     required: true,
                     data: [
                         { id: 'tl' },
@@ -143,7 +143,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                     label: 'targetPos',
                     cls: 'kijs-inline',
                     valueField: 'id',
-                    captionField: 'id',
+                    displayTextField: 'id',
                     required: true,
                     data: [
                         { id: 'tl' },
@@ -167,7 +167,7 @@ home.sc.SpinBox = class home_sc_SpinBox {
                     label: 'autoSize',
                     cls: 'kijs-inline',
                     valueField: 'id',
-                    captionField: 'id',
+                    displayTextField: 'id',
                     required: true,
                     data: [
                         { id: 'min' },

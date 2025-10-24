@@ -94,7 +94,7 @@ home.sc.Mask = class home_sc_Mask {
                     label: 'targetEl',
                     cls: 'kijs-inline',
                     valueField: 'id',
-                    captionField: 'caption',
+                    displayTextField: 'displayText',
                     iconMapField: 'icon',
                     iconColorField: 'color',
                     required: true,
@@ -102,9 +102,9 @@ home.sc.Mask = class home_sc_Mask {
                         margin: '15px'
                     },
                     data: [
-                        { id:'elRed', caption:'rot', color:'#f00', icon:'kijs.iconMap.Fa.droplet' },
-                        { id:'elGreen', caption:'grün', color:'#0f0', icon:'kijs.iconMap.Fa.droplet' },
-                        { id:'elBlue', caption:'blau', color:'#00f', icon:'kijs.iconMap.Fa.droplet' }
+                        { id:'elRed', displayText:'rot', color:'#f00', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elGreen', displayText:'grün', color:'#0f0', icon:'kijs.iconMap.Fa.droplet' },
+                        { id:'elBlue', displayText:'blau', color:'#00f', icon:'kijs.iconMap.Fa.droplet' }
                     ],
                     value: 'elGreen'
                 },

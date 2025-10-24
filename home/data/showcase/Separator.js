@@ -116,13 +116,13 @@ home.sc.Separator = class home_sc_Separator {
                                     xtype: 'kijs.gui.field.OptionGroup',
                                     name: 'LieblingsBetriebssystem',
                                     label: 'Lieblings Betriebssystem',
-                                    captionField: 'caption',
+                                    displayTextField: 'displayText',
                                     valueField: 'value',
                                     iconMapField: 'iconMap',
                                     data: [
-                                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                                     ]
                                 }
                             ]

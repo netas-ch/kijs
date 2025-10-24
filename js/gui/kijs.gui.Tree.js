@@ -13,8 +13,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     constructor(config={}) {
         super(false);
 
-        this._captionField = null;
-        this._captionDisplayType = 'code';
+        this._displayTextField = null;
+        this._displayTextDisplayType = 'code';
         this._valueField = null;
 
         this._elementDdTargetConfig = null; // Konfiguration Ordner, damit ein Drop
@@ -74,8 +74,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             expandButtonExpandedIconMap: true,
             expandButtonCollapsedIconMap: true,
 
-            captionField: true,
-            captionDisplayType: true,
+            displayTextField: true,
+            displayTextDisplayType: true,
 
             iconMap: true,
             iconChar: true,
@@ -131,12 +131,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get allowChildrenField() { return this._allowChildrenField; }
     set allowChildrenField(val) { this._allowChildrenField = val; }
 
-    get captionDisplayType() { return this._captionDisplayType; }
-    set captionDisplayType(val) { this._captionDisplayType = val; }
-
-    get captionField() { return this._captionField; }
-    set captionField(val) { this._captionField = val; }
-
     get clsField() { return this._clsField; }
     set clsField(val) { this._clsField = val; }
 
@@ -148,6 +142,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     get collapsedIconMapField() { return this._collapsedIconMapField; }
     set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
+
+    get displayTextDisplayType() { return this._displayTextDisplayType; }
+    set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
+
+    get displayTextField() { return this._displayTextField; }
+    set displayTextField(val) { this._displayTextField = val; }
 
     get elementDdTargetConfig() {
         return this._elementDdTargetConfig;

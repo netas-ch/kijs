@@ -72,12 +72,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                     name: 'Anrede',
                                     label: 'Anrede',
                                     valueField: 'value',
-                                    captionField: 'caption',
+                                    displayTextField: 'displayText',
                                     disableFlex: true,
                                     data: [
-                                        {caption: 'Herr', value: 'm' },
-                                        {caption: 'Frau', value: 'w'},
-                                        {caption: 'Familie', value: 'f'}
+                                        {displayText: 'Herr', value: 'm' },
+                                        {displayText: 'Frau', value: 'w'},
+                                        {displayText: 'Familie', value: 'f'}
                                     ]
                                 },{
                                     xtype: 'kijs.gui.Container',
@@ -128,7 +128,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                     rpcLoadFn: 'land.load',
                                     autoLoad: true,
                                     valueField: 'value',
-                                    captionField: 'caption'
+                                    displayTextField: 'displayText'
                                 },
 
                                 {
@@ -213,13 +213,13 @@ home.sc.container_Form = class home_sc_container_Form {
                                     xtype: 'kijs.gui.field.OptionGroup',
                                     name: 'LieblingsBetriebssystem',
                                     label: 'Lieblings Betriebssystem',
-                                    captionField: 'caption',
+                                    displayTextField: 'displayText',
                                     valueField: 'value',
                                     iconMapField: 'iconMap',
                                     data: [
-                                        { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                                        { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                                        { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                                     ]
                                 },
 
@@ -439,12 +439,12 @@ home.sc.container_Form = class home_sc_container_Form {
                                             name: 'Anrede',
                                             label: 'Anrede',
                                             valueField: 'value',
-                                            captionField: 'caption',
+                                            displayTextField: 'displayText',
                                             disableFlex: true,
                                             data: [
-                                                {caption: 'Herr', value: 'm' },
-                                                {caption: 'Frau', value: 'w'},
-                                                {caption: 'Familie', value: 'f'}
+                                                {displayText: 'Herr', value: 'm' },
+                                                {displayText: 'Frau', value: 'w'},
+                                                {displayText: 'Familie', value: 'f'}
                                             ]
                                         },{
                                             xtype: 'kijs.gui.Container',
@@ -495,7 +495,7 @@ home.sc.container_Form = class home_sc_container_Form {
                                             rpcLoadFn: 'land.load',
                                             autoLoad: true,
                                             valueField: 'value',
-                                            captionField: 'caption'
+                                            displayTextField: 'displayText'
                                         }
                                     ]
                                 },{
@@ -586,13 +586,13 @@ home.sc.container_Form = class home_sc_container_Form {
                                             xtype: 'kijs.gui.field.OptionGroup',
                                             name: 'LieblingsBetriebssystem',
                                             label: 'Lieblings Betriebssystem',
-                                            captionField: 'caption',
+                                            displayTextField: 'displayText',
                                             valueField: 'value',
                                             iconMapField: 'iconMap',
                                             data: [
-                                                { caption: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                                                { caption: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                                                { caption: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                                                { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
+                                                { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
+                                                { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
                                             ]
                                         }
                                     ]
@@ -645,9 +645,9 @@ home.sc.container_Form = class home_sc_container_Form {
                 value: 'left',
                 inputWidth: 40,
                 data: [
-                    { caption: 'auto', value: 'auto' },
-                    { caption: 'left', value: 'left' },
-                    { caption: 'top', value: 'top' }
+                    { displayText: 'auto', value: 'auto' },
+                    { displayText: 'left', value: 'left' },
+                    { displayText: 'top', value: 'top' }
                 ],
                 on: {
                     change: function(e) {
