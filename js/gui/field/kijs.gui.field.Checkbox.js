@@ -83,14 +83,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            autocomplete: false,
             captionDisplayType: 'code',
             disableFlex: true
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
             captionHide: true,
