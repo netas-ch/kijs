@@ -221,8 +221,8 @@ home.sc.Tree = class home_sc_Tree {
                             rpcLoadFn: 'tree.largeData.load',
                             autoLoad: true,
 
-                            expandedField: 'expanded',
-                            value: '1.1.2'
+                            expandedField: 'expanded'
+                            //value: '1.1.2'
                         }
                     ]
                 }

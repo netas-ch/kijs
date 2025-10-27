@@ -26,6 +26,7 @@ foreach ($requests as $request) {
                 $rows[] = array('Bez' => 'hellblau', 'color' => '#0ff', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 
                 $response->config = new stdClass();
+                //$response->config->value = ['#0f0'];
                 $response->config->data = $rows;
 
                 //sleep(1);

@@ -15,7 +15,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._previousChangeValue = [];
-        this._value = null;
 
         this._listView = new kijs.gui.ListView({});
 
@@ -106,9 +105,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // overwrite
     get value() { return this._listView.value; }
     set value(val) {
-        this._value = val;
-        this._listView.value = this._value;
-        this._previousChangeValue = this._value;
+        this._listView.value = val;
+        this._previousChangeValue = val;
     }
 
     get valueField() { return this._listView.valueField; }
@@ -151,17 +149,9 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
                 if (kijs.isEmpty(e.response.errorType)) {
                     let config = e.response.config ?? {};
 
-                    // Falls ein neuer Wert zurückgegeben wird, diesen nehmen
-                    if (kijs.isDefined(config.value)) {
-                        this._value = config.value;
+                    if ('data' in config) {
+                        this._listView.data = config.data;
                     }
-
-                    this._listView.data = config.data;
-
-                    if (!kijs.isEmpty(this._value)) {
-                        this.value = this._value;
-                    }
-
                     if (!kijs.isEmpty(config.selectFilters)) {
                         this._listView.selectByFilters(config.selectFilters);
                     }
@@ -284,7 +274,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._previousChangeValue = [];
-        this._value = null;
 
         // Basisklasse entladen
         super.destruct(true);

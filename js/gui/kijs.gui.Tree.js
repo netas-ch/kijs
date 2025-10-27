@@ -118,9 +118,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             config = Object.assign({}, this._defaultConfig, config);
             this.applyConfig(config, true);
         }
-
-        // Events
-        this.on('afterLoad', this.#onAfterLoad, this);
     }
 
 
@@ -143,6 +140,16 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get collapsedIconMapField() { return this._collapsedIconMapField; }
     set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
 
+    // overwrite
+    get data() { return this._data; }
+    // overwrite
+    set data(val) {
+        // Sicherstellen, dass nach dem zuweisen von data der value erhalten bleibt
+        let v = this.value;
+        super.data = val;
+        this.value = v;
+    }
+    
     get displayTextDisplayType() { return this._displayTextDisplayType; }
     set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
 
@@ -960,14 +967,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     // PRIVATE
     // LISTENERS
-    #onAfterLoad(e) {
-        if (kijs.isEmpty(e.response.errorType)) {
-            if (!kijs.isEmpty(this._value)) {
-                this.value = this._value;
-            }
-        }
-    }
-
     // overwrite
     #onSourceDrop(e) {
         let dataRows = [];
