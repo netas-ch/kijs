@@ -16,7 +16,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._maxSelectCount = null;
         this._previousChangeValue = [];
 
-        this._listView = new kijs.gui.ListView({});
+        this._listViewEl = new kijs.gui.ListView({});
 
         this._dom.clsAdd('kijs-field-listview');
         
@@ -27,41 +27,41 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            showCheckBoxes: { target: 'showCheckBoxes', context: this._listView },
-            selectType: { target: 'selectType', context: this._listView },
+            showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
+            selectType: { target: 'selectType', context: this._listViewEl },
             
-            displayTextField: { target: 'displayTextField', context: this._listView },
-            iconCharField: { target: 'iconCharField', context: this._listView },
-            iconMapField: { target: 'iconMapField', context: this._listView },
-            iconClsField: { target: 'iconClsField', context: this._listView },
-            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listView },
-            iconColorField: { target: 'iconColorField', context: this._listView },
-            tooltipField: { target: 'tooltipField', context: this._listView },
-            disabledField: { target: 'disabledField', context: this._listView },
-            valueField: { target: 'valueField', context: this._listView },
+            displayTextField: { target: 'displayTextField', context: this._listViewEl },
+            iconCharField: { target: 'iconCharField', context: this._listViewEl },
+            iconMapField: { target: 'iconMapField', context: this._listViewEl },
+            iconClsField: { target: 'iconClsField', context: this._listViewEl },
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
+            iconColorField: { target: 'iconColorField', context: this._listViewEl },
+            tooltipField: { target: 'tooltipField', context: this._listViewEl },
+            disabledField: { target: 'disabledField', context: this._listViewEl },
+            valueField: { target: 'valueField', context: this._listViewEl },
             
-            ddName: { target: 'ddName', context: this._listView },
-            ddPosAfterFactor: { target: 'ddPosAfterFactor', context: this._listView },
-            ddPosBeforeFactor: { target: 'ddPosBeforeFactor', context: this._listView },
-            sortable: { target: 'sortable', context: this._listView },
-            ddTarget: { target: 'ddTarget', context: this._listView },
+            ddName: { target: 'ddName', context: this._listViewEl },
+            ddPosAfterFactor: { target: 'ddPosAfterFactor', context: this._listViewEl },
+            ddPosBeforeFactor: { target: 'ddPosBeforeFactor', context: this._listViewEl },
+            sortable: { target: 'sortable', context: this._listViewEl },
+            ddTarget: { target: 'ddTarget', context: this._listViewEl },
             
-            rpcSaveFn: { target: 'rpcSaveFn', context: this._listView },
-            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._listView },
-            autoSave: { target: 'autoSave', context: this._listView }, // Auto-Speichern bei DD
+            rpcSaveFn: { target: 'rpcSaveFn', context: this._listViewEl },
+            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._listViewEl },
+            autoSave: { target: 'autoSave', context: this._listViewEl }, // Auto-Speichern bei DD
             
             minSelectCount: true,
             maxSelectCount: true,
 
-            data: { prio: 1000, target: 'data', context: this._listView },
+            data: { prio: 1000, target: 'data', context: this._listViewEl },
             value: { prio: 1001, target: 'value' }
         });
 
         // Listeners
-        this._listView.on('selectionChange', this.#onListViewSelectionChange, this);
-        this._listView.once('afterLoad', this.#onceListViewAfterLoad, this);
-        this._eventForwardsAdd('ddOver', this._listView);
-        this._eventForwardsAdd('ddDrop', this._listView.dom);
+        this._listViewEl.on('selectionChange', this.#onListViewSelectionChange, this);
+        this._listViewEl.once('afterLoad', this.#onceListViewAfterLoad, this);
+        this._eventForwardsAdd('ddOver', this._listViewEl);
+        this._eventForwardsAdd('ddDrop', this._listViewEl.dom);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -75,42 +75,42 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get data() { return this._listView.data; }
-    set data(val) { this._listView.data = val; }
+    get data() { return this._listViewEl.data; }
+    set data(val) { this._listViewEl.data = val; }
 
-    get displayTextField() { return this._listView.displayTextField; }
-    set displayTextField(val) { this._listView.displayTextField = val; }
-
-    // overwrite
-    get elements() { return this._listView.elements; }
+    get displayTextField() { return this._listViewEl.displayTextField; }
+    set displayTextField(val) { this._listViewEl.displayTextField = val; }
 
     // overwrite
-    get hasFocus() { return this._listView.hasFocus; }
+    get elements() { return this._listViewEl.elements; }
+
+    // overwrite
+    get hasFocus() { return this._listViewEl.hasFocus; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
-    get listView() { return this._listView; }
+    get listView() { return this._listViewEl; }
     
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
-        this._listView.disabled = val || this._dom.clsHas('kijs-disabled');
+        this._listViewEl.disabled = val || this._dom.clsHas('kijs-disabled');
     }
 
-    get selectType() { return this._listView.selectType; }
-    set selectType(val) { this._listView.selectType = val; }
+    get selectType() { return this._listViewEl.selectType; }
+    set selectType(val) { this._listViewEl.selectType = val; }
 
     // overwrite
-    get value() { return this._listView.value; }
+    get value() { return this._listViewEl.value; }
     set value(val) {
-        this._listView.value = val;
+        this._listViewEl.value = val;
         this._previousChangeValue = val;
     }
 
-    get valueField() { return this._listView.valueField; }
-    set valueField(val) { this._listView.valueField = val; }
+    get valueField() { return this._listViewEl.valueField; }
+    set valueField(val) { this._listViewEl.valueField = val; }
 
 
 
@@ -123,18 +123,18 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
      * @returns {undefined}
      */
     addData(data) {
-        this._listView.addData(data);
+        this._listViewEl.addData(data);
     }
 
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
-        this._listView.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
+        this._listViewEl.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
     }
 
     // overwrite
     focus(alsoSetIfNoTabIndex) {
-        return this._listView.focus(alsoSetIfNoTabIndex);
+        return this._listViewEl.focus(alsoSetIfNoTabIndex);
     }
     
     /**
@@ -150,10 +150,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
                     let config = e.response.config ?? {};
 
                     if ('data' in config) {
-                        this._listView.data = config.data;
+                        this._listViewEl.data = config.data;
                     }
                     if (!kijs.isEmpty(config.selectFilters)) {
-                        this._listView.selectByFilters(config.selectFilters);
+                        this._listViewEl.selectByFilters(config.selectFilters);
                     }
 
                     // 'afterLoad' auslösen
@@ -176,7 +176,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     render(superCall) {
         super.render(true);
 
-        this._listView.renderTo(this._inputWrapperDom.node);
+        this._listViewEl.renderTo(this._inputWrapperDom.node);
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -191,7 +191,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
             this.raiseEvent('unrender');
         }
 
-        this._listView.unrender();
+        this._listViewEl.unrender();
         super.unrender(true);
     }
 
@@ -265,12 +265,12 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._listView) {
-            this._listView.destruct();
+        if (this._listViewEl) {
+            this._listViewEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
-        this._listView = null;
+        this._listViewEl = null;
         this._minSelectCount = null;
         this._maxSelectCount = null;
         this._previousChangeValue = [];
