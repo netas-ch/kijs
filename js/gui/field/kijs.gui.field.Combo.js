@@ -27,6 +27,7 @@
 // [ ] Multiselect
 // [ ] Leitfaden
 // [ ] History
+// [ ] Testen, wenn Wert nicht mehr im Combo: validieren!!!!!!!!!!!!!!!!!!
 
 
 // --------------------------------------------------------------
@@ -45,7 +46,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._value = '';               // Wert
         this._valueRow = null;          // Ganzer Datensatz zum value
 
-        this._displayLimit = 50;        // Max Anzahl Datensätze, die im ListView
+        this._displayLimit = 30;        // Max Anzahl Datensätze, die im ListView
                                         // angezeigt werden.
 
         this._queryOperator = 'BEGIN';  // Art des Vergleichs beim Tippen: 'BEGIN' oder 'PART'
@@ -130,7 +131,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             enableRemoteFiltering: { target: 'enableRemoteFiltering' }, // Sollen bim Tippen RPC-Requests gemacht werden?
             remoteFilteringDefer:  { target: 'remoteFilteringDefer' }, // Verzögerung beim Tippen zwischen des Requests
 
-            showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
 
             valueField: { target: 'valueField', context: this._listViewEl },

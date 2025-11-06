@@ -106,7 +106,10 @@ foreach ($requests as $request) {
                 $response->config->data = $rows;
                 if ($initialLoad) {
                     //$response->config->value = 1889;
-                    //$response->config->valueRow = array('value'=>1889, 'displayText'=>'Anknüpfer');
+                    //$response->config->valueRow = array('BerufId'=>1889, 'Beruf'=>'Anknüpfer');
+
+                    //$response->config->value = 129234;
+                    //$response->config->valueRow = array('BerufId'=>129234, 'Beruf'=>'Beruf, den es nicht mehr gibt');
                 }
 
             } catch (Exception $ex) {

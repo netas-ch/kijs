@@ -299,13 +299,18 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     value: 'ohne RPC',
                     style: { margin: '10px 0 0 0'}
                 },{
+                    xtype: 'kijs.gui.field.Display',
+                    value: 'Mit Wert (Unix) den es nicht mehr gibt.',
+                    style: { margin: '10px 0 0 0'}
+                },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'Label',
                     valueField: 'value',
                     displayTextField: 'displayText',
                     iconMapField: 'iconMap',
                     iconColorField: '',
-                    value: 2,
+                    value: 4,
+                    valueRow: { displayText: 'Unix', iconMap: 'kijs.iconMap.Fa.skull', value: 4},
                     data: [
                         { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
@@ -443,8 +448,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     valueField: 'BerufId',
                     displayTextField: 'Beruf',
                     enableRemoteFiltering: true,
-                    autoLoad: true//,
-                    //valueRow: {value: 1889, displayText: 'Anknüpfer'}
+                    autoLoad: true
                 },{
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
@@ -461,29 +465,6 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     autoLoad: false//,
                     //valueRow: {value: 1889, displayText: 'Anknüpfer'}
                 }
-
-
-                /*,{
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'Local Sort',
-                    //rpc: 'default'
-                    rpcLoadFn: 'combo.beruf.load',
-                    valueField: 'ISO',
-                    displayTextField: 'Beruf',
-                    autoLoad: true,
-                    remoteSort: false
-                },{
-                    xtype: 'kijs.gui.field.Combo',
-                    label: 'Kein Force',
-                    //rpc: 'default'
-                    rpcLoadFn: 'combo.beruf.load',
-                    valueField: 'ISO',
-                    displayTextField: 'Beruf',
-                    autoLoad: true,
-                    remoteSort: true,
-                    forceSelection: false
-                    //showPlaceholder: false
-                }*/
             ]
         });
 

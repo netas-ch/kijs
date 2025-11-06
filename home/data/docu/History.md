@@ -180,16 +180,34 @@ Ein ```selectType``` umbenannt. Neu gibt es folgende:
 Code nach ```simple``` durchsuchen und ersetzen durch ```simple-multi```.  
 
 
-### kijs.gui.Combo überarbeitet
-TODO: !!!!!!!!!!!!!!!!!!!!!¨
+### kijs.gui.field.Combo überarbeitet
+Es gibt viele Anpassungen und das Combo funktioniert nun etwas anders als vorher.  
+Siehe dazu den Leitfaden ```kijs.gui.field.Combo```.  
+
+An den Eigenschaften gibt es folgende Änderungen.  
  - getter ```oldValue``` entfernt.  
- - config/getter/setter ```minChars``` entfernt.
+ - config/getter/setter ```minChars``` entfernt. Ist nicht mehr nötig.  
+ - config ```showPlaceholder``` entfernt. Ist nicht mehr nötig.  
+ - config ```showCheckBoxes``` entfernt. Ist nicht mehr nötig.  
+ - config ```forceSelection``` entfernt. Der Wert muss nun immer im 
+   Combo sein.  
+ - config ```selectFirst``` entfernt. Ist nicht mehr nötig.  
+ - config ```remoteSort``` umbenannt zu ```enableRemoteFiltering```. Diese
+   config gibt an, ob beim Tippen RPC-Requests gemacht werden sollen.  
+ - Neue config/getter/setter ```displayLimit```. Maximale Anzahl Datensätze, 
+ - die in der Liste angezeigt werden. Bei mehr Datensätzen, wird die Anzahl 
+   beschränkt und es muss getippt werden. Standard=50.  
+ - Neue config/getter/setter ```queryOperator```. Art des vergleichs beim Filtern. 
+   'BEGIN' oder 'PART'. Standard='BEGIN'.  
+ - Neue config/getter/setter ```remoteFilteringDefer```. Delay zwischen dem Tippen und 
+   dem RPC-Request, wenn ```enableRemoteFiltering``` true ist. Default: 200  
+ -
 
 **UPDATE TIPP:**: 
-Suchen ersetzen in eigenem CSS/LESS-Code:  
- - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
-
-
+ - Nach ```kijs.gui.field.Combo``` suchen und die konfiguration anpassen.  
+ - Auch das CSS hat geändert, falls eigene CSS-Anpassungen existieren, auch nachführen.  
+ - Der RPC-Datenverkehr zum Combo hat geändert. Siehe Leitfaden 
+   ```kijs.gui.field.Combo```.  
 
 
 
