@@ -87,7 +87,9 @@ home.sc.DataView = class home_sc_DataView {
                                 { id:'single' },
                                 { id:'singleAndEmpty' },
                                 { id:'multi' },
-                                { id:'simple' }
+                                { id:'simple-single' },
+                                { id:'simple-singleAndEmpty' },
+                                { id:'simple-multi' }
                             ],
                             value: 'single',
                             on: {
@@ -250,7 +252,9 @@ home.sc.DataView = class home_sc_DataView {
                                 { id:'single' },
                                 { id:'singleAndEmpty' },
                                 { id:'multi' },
-                                { id:'simple' }
+                                { id:'simple-single' },
+                                { id:'simple-singleAndEmpty' },
+                                { id:'simple-multi' }
                             ],
                             value: 'multi',
                             on: {

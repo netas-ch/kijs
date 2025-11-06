@@ -27,7 +27,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         Object.assign(this._defaultConfig, {
             disableFlex: true,
             showCheckBoxes: true,
-            selectType: 'simple',
+            selectType: 'simple-multi',
             displayTextField: 'displayText',
             valueField: 'value'
         });

@@ -30,38 +30,139 @@ home.sc.ListView = class home_sc_ListView {
             headerElements: this._getHeaderElements(),
             elements:[
                 {
-                    xtype: 'kijs.gui.field.Display',
-                    cls: 'kijs-titleLarge',
-                    value: 'ListView lokal:'
-                },{
-                    xtype: 'kijs.gui.ListView',
-                    valueField: 'id',
-                    displayTextField: 'Bezeichnung',
-                    iconMapField: 'Icon',
-                    //iconColorField: 'Color',
-                    //tooltipField: 'Color',
-                    showCheckBoxes: false,
-                    selectType: 'singleAndEmpty',
-                    width: 200,
-                    data: [
-                        {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' }, 
-                        {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' }, 
-                        {id:3, Bezeichnung:'Instagram', Icon:'kijs.iconMap.Fa.instagram' },
-                        {id:4, Bezeichnung:'TikTok', Icon:'kijs.iconMap.Fa.tiktok' }, 
-                        {id:5, Bezeichnung:'LinkedIn', Icon:'kijs.iconMap.Fa.linkedin' }, 
-                        {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github' },
-                        {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' }, 
-                        {id:8, Bezeichnung:'YouTube', Icon:'kijs.iconMap.Fa.youtube' }, 
-                        {id:9, Bezeichnung:'WordPress', Icon:'kijs.iconMap.Fa.wordpress' }, 
-                        {id:10, Bezeichnung:'Slack', Icon:'kijs.iconMap.Fa.slack' }, 
-                        {id:11, Bezeichnung:'Figma', Icon:'kijs.iconMap.Fa.figma' }
-                    ],
-                    value: 5,
-                    on: {
-                        selectionChange: function(e) {
-                            console.log(this.value);
+                    xtype: 'kijs.gui.Panel',
+                    caption: 'ListView lokal',
+                    scrollableY: 'auto',
+                    cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: false,
+                    style: {
+                        flex: 'none'
+                    },
+
+                    headerElements:[
+                        {
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Disable/Enable',
+                            tooltip: 'Disable/Enable listView',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('listViewLocal');
+                                    dv.disabled = !dv.disabled;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Disable/Enable first Child',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('listViewLocal');
+                                    dv.elements[0].disabled = !dv.elements[0].disabled;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Button',
+                            caption: 'Reload',
+                            on: {
+                                click: function() {
+                                    const dv = this._content.down('listViewLocal');
+                                    dv.reload();
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.Separator'
+                        },{
+                            xtype: 'kijs.gui.field.OptionGroup',
+                            label: 'selectType',
+                            cls: 'kijs-inline',
+                            valueField: 'id',
+                            displayTextField: 'id',
+                            required: true,
+                            data: [
+                                { id:'none' },
+                                { id:'single' },
+                                { id:'singleAndEmpty' },
+                                { id:'multi' },
+                                { id:'simple-single' },
+                                { id:'simple-singleAndEmpty' },
+                                { id:'simple-multi' }
+                            ],
+                            value: 'single',
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('listViewLocal');
+                                    dv.clearSelections();
+                                    dv.selectType = e.value;
+                                },
+                                context: this
+                            }
+                        },{
+                            xtype: 'kijs.gui.field.Combo',
+                            label: 'Sortierung:',
+                            value: 'none',
+                            inputWidth: 90,
+                            data: [
+                                { displayText: 'keine', value: 'none' },
+                                { displayText: 'Aufsteigend', value: 'asc' },
+                                { displayText: 'Absteigend', value: 'desc' }
+                            ],
+                            on: {
+                                change: function(e) {
+                                    const dv = this._content.down('listViewLocal');
+                                    let sortFields = [];
+
+                                    switch (e.element.value) {
+                                        case 'asc':
+                                            sortFields.push('Bezeichnung');
+                                            break;
+                                        case 'desc':
+                                            sortFields.push({field:'Bezeichnung', desc:true});
+                                            break;
+                                    }
+
+                                    dv.applySortFields(sortFields);
+                                },
+                                context: this
+                            }
                         }
-                    }
+                    ],
+
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.ListView',
+                            name: 'listViewLocal',
+                            valueField: 'id',
+                            displayTextField: 'Bezeichnung',
+                            iconMapField: 'Icon',
+                            //iconColorField: 'Color',
+                            //tooltipField: 'Color',
+                            showCheckBoxes: false,
+                            selectType: 'single',
+                            width: 200,
+                            data: [
+                                {id:1, Bezeichnung:'Facebook', Icon:'kijs.iconMap.Fa.facebook' },
+                                {id:2, Bezeichnung:'Twitter', Icon:'kijs.iconMap.Fa.twitter' },
+                                {id:3, Bezeichnung:'Instagram', Icon:'kijs.iconMap.Fa.instagram' },
+                                {id:4, Bezeichnung:'TikTok', Icon:'kijs.iconMap.Fa.tiktok' },
+                                {id:5, Bezeichnung:'LinkedIn', Icon:'kijs.iconMap.Fa.linkedin' },
+                                {id:6, Bezeichnung:'GitHub', Icon:'kijs.iconMap.Fa.github' },
+                                {id:7, Bezeichnung:'Discord', Icon:'kijs.iconMap.Fa.discord' },
+                                {id:8, Bezeichnung:'YouTube', Icon:'kijs.iconMap.Fa.youtube' },
+                                {id:9, Bezeichnung:'WordPress', Icon:'kijs.iconMap.Fa.wordpress' },
+                                {id:10, Bezeichnung:'Slack', Icon:'kijs.iconMap.Fa.slack' },
+                                {id:11, Bezeichnung:'Figma', Icon:'kijs.iconMap.Fa.figma' }
+                            ],
+                            value: 5,
+                            on: {
+                                selectionChange: function(e) {
+                                    console.log(this.value);
+                                }
+                            }
+                        }
+                    ]
                 },
                 
                 {
@@ -161,7 +262,7 @@ home.sc.ListView = class home_sc_ListView {
                     tooltipField: 'Color',
                     disabledField: 'disabled',
                     showCheckBoxes: true,
-                    selectType: 'simple',
+                    selectType: 'simple-multi',
                     width: 200,
                     data: [
                         {id:1, Bezeichnung:'blau', Icon:'kijs.iconMap.Fa.droplet', Color:'#0088ff' }, 

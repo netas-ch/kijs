@@ -110,12 +110,12 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 xtype: 'kijs.gui.field.Combo',
                 label: 'selectType:',
                 value: 'single',
-                inputWidth: 60, // 'single', 'multi', 'simple', 'none'
+                inputWidth: 60, // 'single', 'multi', 'simple-multi', 'none'
                 data: [
+                    { displayText: 'none', value: 'none' },
                     { displayText: 'single', value: 'single' },
                     { displayText: 'multi', value: 'multi' },
-                    { displayText: 'simple', value: 'simple' },
-                    { displayText: 'none', value: 'none' }
+                    { displayText: 'simple-multi', value: 'simple-multi' }
                 ],
                 on: {
                     change: function(e) {

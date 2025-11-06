@@ -94,11 +94,13 @@ kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView ex
             switch (this._parentEl.selectType) {
                 case 'single':
                 case 'singleAndEmpty':
+                case 'simple-single':
+                case 'simple-singleAndEmpty':
                     cls = 'kijs-display-options';
                     break;
 
-                case 'simple':
                 case 'multi':
+                case 'simple-multi':
                     cls = 'kijs-display-checkboxes';
                     break;
 

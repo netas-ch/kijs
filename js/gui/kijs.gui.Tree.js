@@ -65,6 +65,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             elementXType: 'kijs.gui.dataView.element.Tree',
             selectType: 'single',
             ddName: kijs.uniqId('tree.element'),
+            valueField: 'value',
+            displayTextField: 'displayText',
             ddPosBeforeFactor: 0.5,
             ddPosAfterFactor: 0.8
         });
@@ -234,11 +236,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     case 'none':
                     case 'single':
                     case 'singleAndEmpty':
+                    case 'simple-single':
+                    case 'simple-singleAndEmpty':
                         returnAsArray = false;
                         break;
 
                     case 'multi':
-                    case 'simple':
+                    case 'simple-multi':
                         returnAsArray = true;
                         break;
 

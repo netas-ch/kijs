@@ -48,7 +48,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         this._lastSelectedRow = null;       // letzte Zeile, die selektiert wurde
         this._currentRow = null;            // Zeile, welche zurzeit fokussiert ist
-        this._selectType = 'single';        // multiselect: single|multi|simple|none
+        this._selectType = 'single';        // multiselect: none|single|multi|simple-multi
         this._focusable = true;             // ob das grid fokussiert werden kann
         this._filterable = false;
 
@@ -124,7 +124,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
                                                  // 'single' (default): Es kann nur ein Datensatz selektiert werden
                                                  // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
-                                                 // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                                 // 'simple-multi': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
         });
 
         // Config anwenden
@@ -279,7 +279,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     get selectType() { return this._selectType; }
     set selectType(val) {
-        if (!kijs.Array.contains(['single', 'multi', 'simple', 'none'], val)) {
+        if (!kijs.Array.contains(['single', 'multi', 'simple-multi', 'none'], val)) {
             throw new kijs.Error('invalid value for selectType');
         }
         this._selectType = val;
@@ -1285,7 +1285,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 // nix
                 break;
 
-            case 'simple':
+            case 'simple-multi':
                 ctrl = true;
                 break;
 

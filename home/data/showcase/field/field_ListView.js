@@ -130,7 +130,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     tooltipField: 'Color',
                     disabledField: 'disabled',
                     showCheckBoxes: true,
-                    selectType: 'simple',
+                    selectType: 'simple-multi',
                     helpText: 'Hilfe Text!',
                     required: true,
                     inputWidth: 180,
@@ -255,7 +255,9 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     { id:'single' },
                     { id:'singleAndEmpty' },
                     { id:'multi' },
-                    { id:'simple' }
+                    { id:'simple-single' },
+                    { id:'simple-singeAndEmpty' },
+                    { id:'simple-multi' }
                 ],
                 value: 'single',
                 on: {

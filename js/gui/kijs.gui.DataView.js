@@ -72,7 +72,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                                         // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
                                         // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
                                         // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
-                                        // 'simple': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                        // 'simple-single': Wie single. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                        // 'simple-singleAndEmpty': Wie singleAndEmpty. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+                                        // 'simple-multi': Wie multi. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
                                         // 'manual': Die Datensätze werden manuell selektiert
             rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
             rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
@@ -84,7 +86,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             elementDdSourceConfig: true,
 
             data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
-            sortable: { prio: 100, target: 'sortable' },
+            sortable: { prio: 70, target: 'sortable' },
             selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             ddTarget: { prio: 120, target: 'ddTarget' }
         });
@@ -422,10 +424,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
      * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
      * Dafür besser die Funktionen getSelectedPrimaryKeys() und getSelectedRows() verwenden!
-     * Bei selectType='single' oder 'singleAndEmpty' wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
+     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
+     * wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
     getSelected() {
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+
         let ret = [];
         for (let i=0, len=this._elements.length; i<len; i++) {
             if (this._elements[i].selected) {
@@ -436,7 +441,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
 
-        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
             return ret.length ? ret[0] : null;
 
         } else {
@@ -447,12 +452,14 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die PrimaryKey-Strings der selektierten Elemente als Array zurück
-     * Bei selectType='single' oder 'singleAndEmpty' wird direkt der Key-String
-     * zurückgegeben sonst ein Array mit den Keys-Strings
+     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
+     * wird direkt der Key-String zurückgegeben sonst ein Array mit den Keys-Strings
      * Siehe dazu kijs.Data.getPrimaryKey()
      * @returns {Array|String|null}
      */
     getSelectedPrimaryKeys() {
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+        
         let primaryKeys = [];
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -466,7 +473,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
 
-        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
             return primaryKeys.length ? [primaryKeys[0]] : null;
 
         } else {
@@ -477,11 +484,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die Data-rows der selektierten Elemente zurück
-     * Bei selectType='single' oder 'singleAndEmpty' wird direkt die row
-     * zurückgegeben sonst ein Array mit den rows
+     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
+     * wird direkt die row zurückgegeben sonst ein Array mit den rows
      * @returns {Array|null}
      */
     getSelectedRows() {
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+
         let rows = [];
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -496,7 +505,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         if (this._selectType === 'none') {
             return null;
 
-        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
             return rows.length ? [rows[0]] : null;
 
         } else {
@@ -1477,11 +1486,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         // darf überhaupt selektiert werden?
         switch (this._selectType) {
             case 'single':
+            case 'simple-single':
                 shift = false;
                 ctrl = false;
                 break;
 
             case 'singleAndEmpty':
+            case 'simple-singleAndEmpty':
                 shift = false;
                 ctrl = false;
 
@@ -1503,7 +1514,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 // nix
                 break;
 
-            case 'simple':
+            case 'simple-multi':
                 ctrl = true;
                 break;
 

@@ -42,7 +42,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
             elementXType: 'kijs.gui.dataView.element.ListView',
-            selectType: 'single'
+            selectType: 'single',
+            valueField: 'value',
+            displayTextField: 'displayText'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
@@ -153,11 +155,13 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
                     case 'none':
                     case 'single':
                     case 'singleAndEmpty':
+                    case 'simple-single':
+                    case 'simple-singleAndEmpty':
                         returnAsArray = false;
                         break;
 
                     case 'multi':
-                    case 'simple':
+                    case 'simple-multi':
                         returnAsArray = true;
                         break;
 
@@ -218,7 +222,14 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     }
 
     get valueField() { return this._valueField; }
-    set valueField(val) { this._valueField = val; }
+    set valueField(val) {
+        this._valueField = val;
+        if (kijs.isEmpty(val)) {
+            this._primaryKeyFields = [];
+        } else {
+            this._primaryKeyFields = [val];
+        }
+    }
 
 
 

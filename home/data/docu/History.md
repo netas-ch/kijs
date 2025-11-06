@@ -115,16 +115,6 @@ In der Regel reicht es folgendes zu ersetzen:
  - ```e.errorType``` durch ```e.response.errorType```
 
 
-### kijs.gui.Combo überarbeitet
- - config ```minChars``` hat neu den Standardwert 0. Den Wert ```'auto'```` gibt 
-   es nicht mehr.  
- - getter ```oldValue``` entfernt.  
-
-**UPDATE TIPP:**: 
-Suchen ersetzen in eigenem CSS/LESS-Code:  
- - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
-
-
 ### Propertys umbenannt
 #### *HtmlDisplayType umbenannt zu *DisplayType
 **UPDATE TIPP:**: 
@@ -162,6 +152,44 @@ und auch in davon vererbten.
 Entweder in allen recordsets die Spalten ```caption``` umbenennen zu ```displayText```  
 oder bei den betroffenen Elementen das Property ```displayTextField: 'caption'``` 
 hinzufügen.  
+
+
+### kijs.gui.DataView und vererbte
+Zusätzliche ```selectType```. Neu gibt es folgende:  
+ - ```none```  
+ - ```single```  
+ - ```singleAndEmpty```  
+ - ```multi```  
+ - ```simple-single``` (Neu)  
+ - ```simple-singleAndEmpty``` (Neu)  
+ - ```simple-multi``` (hiess früher ```simple```)  
+ - ```manual```  
+
+**UPDATE TIPP:**:  
+Code nach ```simple``` durchsuchen und ersetzen durch ```simple-multi```.  
+
+
+### kijs.gui.grid.Grid
+Ein ```selectType``` umbenannt. Neu gibt es folgende:  
+ - ```none```  
+ - ```single```  
+ - ```multi```  
+ - ```simple-multi``` (hiess früher ```simple```)  
+
+**UPDATE TIPP:**:  
+Code nach ```simple``` durchsuchen und ersetzen durch ```simple-multi```.  
+
+
+### kijs.gui.Combo überarbeitet
+TODO: !!!!!!!!!!!!!!!!!!!!!¨
+ - getter ```oldValue``` entfernt.  
+ - config/getter/setter ```minChars``` entfernt.
+
+**UPDATE TIPP:**: 
+Suchen ersetzen in eigenem CSS/LESS-Code:  
+ - ```kijs-placeholder``` ersetzen durch ```kijs-field-combo-placeholder```
+
+
 
 
 
