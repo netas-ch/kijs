@@ -1006,7 +1006,7 @@
         }
 
         &.kijs-pos-top {
-            margin-top: 1px;
+            margin-top: auto;
             box-shadow: 0 -3px 3px 3px rgba(0, 0, 0, 0.1);
         }
 
@@ -3649,36 +3649,36 @@
         }
     }
 
-    div.kijs-field-combo-spinbox > .kijs-container-inner {
-        > .kijs-listview {
+    div.kijs-field-combo-spinbox {
+        > .kijs-container-inner {
+            > .kijs-listview {
             height: 100%;
-            border: 0;
+                border: 0;
 
-            > .kijs-container-inner {
-                display: flex;
-                flex-direction: column;
-            }
-
-            div.kijs-dataview-element {
                 > .kijs-container-inner {
                     display: flex;
-                    flex-direction: row;
-
-                    > .kijs-displayText {
-                        flex: 1;
-                        padding-bottom: 3px;
-                    }
+                    flex-direction: column;
                 }
 
-            }
+                div.kijs-dataview-element {
+                    > .kijs-container-inner {
+                        display: flex;
+                        flex-direction: row;
 
-            .kijs-field-combo-placeholder {
-                border: 1px solid transparent;
+                        > .kijs-displayText {
+                            flex: 1;
+                            padding-bottom: 3px;
+                        }
+                    }
+
+                }
+            }
+            > .kijs-field-combo-writeForMore {
+                padding: 0 0 0 4px;
                 font-family: var(--default-fontFamily);
                 font-size: var(--default-fontSize);
-                color: var(--default-fontColor);
-                background-color: var(--field-disabled-bkgrndColor);
                 font-style: italic;
+                color: var(--default-disabled-fontColor);
             }
         }
     }

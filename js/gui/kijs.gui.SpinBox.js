@@ -370,7 +370,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         const prevAfterRes = this._preventAfterResize;
         this._preventAfterResize = true;
 
-        // Evtl. Grösse automatisch anpassen
+        // Evtl. Grösse automatisch an Target-Node anpassen
         if (this._autoSize !== 'none') {
             // Breite anpassen
             if ( (this._targetPos.indexOf('t') !== -1 || this._targetPos.indexOf('b') !== -1) &&
@@ -425,7 +425,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                 this._offsetY
             );
 
-        // Ausrichten an Node
+        // Ausrichten an Target Node
         } else {
             positions = this._dom.alignToTarget(
                 this.targetNode,

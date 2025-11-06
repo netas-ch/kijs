@@ -746,8 +746,24 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
             }
         }
 
-        this.left = rect.x;
-        this.top = rect.y;
+        // Je nach Positionierung die richtige Ausrichtung setzen.
+        // Damit wird bei einer nachträglichen Änderung der Grösse sichergetellt,
+        // dass der Node immer noch am richtigen Ort platziert ist.
+        let p = posSwap ? posSwap : pos;
+
+        if (p.indexOf('b')!==-1) {
+            this.style.bottom = (b.h - rect.y - rect.h) + 'px';
+        } else {
+            this.style.top = rect.y + 'px';
+        }
+
+        if (p.indexOf('r')!==-1) {
+            this.style.right = (b.w - rect.x -rect.w) + 'px';
+        } else {
+            this.style.left = rect.x + 'px';
+        }
+
+        p = null;
 
         // Abmessungen nur setzen, wenn unbedingt nötig.
         if (setWidth) {
@@ -1206,7 +1222,9 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {undefined}
      */
     scrollIntoView(options) {
-        kijs.Dom.scrollIntoView(this._node, options);
+        if (this._node) {
+            kijs.Dom.scrollIntoView(this._node, options);
+        }
     }
 
     /**

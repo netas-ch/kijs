@@ -945,7 +945,7 @@
     box-sizing: border-box;
   }
   div.kijs-spinbox.kijs-pos-top {
-    margin-top: 1px;
+    margin-top: auto;
     box-shadow: 0 -3px 3px 3px rgba(0, 0, 0, 0.1);
   }
   div.kijs-spinbox.kijs-pos-right {
@@ -3269,13 +3269,12 @@
     flex: 1;
     padding-bottom: 3px;
   }
-  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-listview .kijs-field-combo-placeholder {
-    border: 1px solid transparent;
+  div.kijs-field-combo-spinbox > .kijs-container-inner > .kijs-field-combo-writeForMore {
+    padding: 0 0 0 4px;
     font-family: var(--default-fontFamily);
     font-size: var(--default-fontSize);
-    color: var(--default-fontColor);
-    background-color: var(--field-disabled-bkgrndColor);
     font-style: italic;
+    color: var(--default-disabled-fontColor);
   }
   /* ******************
        * Field Range
