@@ -175,7 +175,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
         if (config.exclusive) {
             this._transmit(queueEl.tid);
         } else {
-            this._deferId = kijs.defer(this._transmit, this.defer, this);
+            this._deferId = kijs.defer(this._transmit, this._defer, this);
         }
 
         return ret;
