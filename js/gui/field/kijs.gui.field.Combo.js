@@ -1,9 +1,33 @@
 /* global kijs, this */
 
-// TODO: load() Funktion überarbeiten, so dass sie einen Basisklassenaufruf macht.
-// TODO: force-Argument bei Load entfernen. Die Anzahl eingegebenen Zeichen nicht
-//       in der Load Funktion überprüfen, sondern in #onInputDomKeyUp
-// TODO: change-Listener gleich wie bei kijs.gui.field.Text
+// TODO:
+// [x] change/input-events gleich wie bei kijs.gui.field.Text
+// [x] displayLimit:50 Wenn mehr Datensätze vorhanden sind wird der writeForMore-Text angezeigt
+//                     und es werden nur 50 Datensätze angezeigt.
+// [x] Beim Tippen nachladen (remoteFilter?)
+// [x] Vergleich beim Tippen 'BEGIN', 'PART'
+// [x] queryMode:'local' oder 'remote'
+// [x] queryParam --> rpcLoadArgs
+// [x] queryDelay: 500 bei remote und 10 bei local
+// [x] valueRow von Server übergeben, damit displayText, iconMap, etc. angezeigt
+//      werden kann
+// [x] WaitMask bei Load auf spinBox, wenn offen
+
+// [x] Wenn value nicht in den ersten 50 Datensätzen ist, sollte beim Aufklappen
+//     trotzdem der value in der Liste sein.
+// [x] Beim Aufklappen, sollte neben dem Wert auch noch die anderen Elemente
+//     angezeigt werden, jedenfalls wenn kein writeForMoreEl angezeigt wird.
+// [x] Wenn ein falscher Wert eingegeben wird, sollte auf der vorherige Wert
+//     wiederhergestellt werden.
+// [x] disable testen
+// [ ] autoLoad: Standardwert bei kijs.gui.Element und vererbten auf true?
+// [ ] autocomplete und virtualKeyboardPolicy umbenennen?
+// [ ] icon und Text anstelle von Input anzeigen
+// [ ] Spinbox bei mobilen Geräten unten anzeigen
+// [ ] Multiselect
+// [ ] Leitfaden
+// [ ] History
+
 
 // --------------------------------------------------------------
 // kijs.gui.field.Combo
@@ -18,23 +42,21 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._minChars = 0;             // Anzahl Zeichen, die geschrieben werden müssen,
-                                        // bis das autocomplete einsetzt. Standard: 0
-
-        this._displayText = '';         // Angezeigter Text
-
         this._value = '';               // Wert
+        this._valueRow = null;          // Ganzer Datensatz zum value
 
-        this._keyUpDeferId = null;
+        this._displayLimit = 50;        // Max Anzahl Datensätze, die im ListView
+                                        // angezeigt werden.
 
-        this._remoteSort = false;       // Soll beim Tippen ein RPC gemacht werden? (Bool)
-                                        // TODO: umbenennen nach remoteFilter
-        this._forceSelection = true;    // Muss der eingegebene Wert in der Liste vorhanden sein? (Bool)
-                                        // TODO: Löschen, sollte bei einem Combo immer auf true sein.
-        this._firstLoaded = false;      // Wurde bereits ein RPC-Load gemacht? (Bool)
-        this._showPlaceholder = true;   // TODO: umbenennen nach placeholder, wo ein Text
-                                        // übergeben werden kann, wie in kijs.gui.field.Text? (Bool)
-        this._selectFirst = false;      // 1. Wert in der Liste als Standardwert nehmen (Bool)
+        this._queryOperator = 'BEGIN';  // Art des Vergleichs beim Tippen: 'BEGIN' oder 'PART'
+
+        this._enableRemoteFiltering = false; // Soll beim Tippen auf dem Server gefiltert werden?
+        this._remoteFilteringDefer = 200;    // Delay zwischen dem Tippen und dem RPC bei remoteFiltering
+        this._remoteFilteringDeferId = null;
+
+        this._whileTyping = false;      // Wird gerade ein Buchstabe geschrieben?
+
+        this._data = [];                // Recordset mit Daten
 
         this._inputDom = new kijs.gui.Dom({
             disableEscBubbeling: true,
@@ -48,6 +70,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             scrollableY: false,
             autoLoad: false,
             focusable: false
+        });
+
+        this._writeForMoreEl = new kijs.gui.Element({
+            cls: 'kijs-field-combo-writeForMore',
+            html: kijs.getText('Schreiben für weitere') + '...'
         });
 
         this._spinButtonEl = new kijs.gui.Button({
@@ -72,10 +99,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             cls: 'kijs-field-combo-spinbox',
             scrollableY: 'auto',
             elements: [
-                this._listViewEl
+                this._listViewEl,
+                this._writeForMoreEl
             ],
             style: {
-                maxHeight: '400px'
+                maxHeight: '210px'
             }
         });
 
@@ -89,45 +117,42 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         Object.assign(this._defaultConfig, {
             autocomplete: false,
             scrollableY: 'auto',
-            valueField: 'value',
-            displayTextField: 'displayText',
-            iconClsField: 'iconCls',
-            iconAnimationClsField: 'iconAnimationCls',
-            iconCharField: 'iconChar',
-            iconMapField: 'iconMap'
+            selectType: 'single'
         });
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
-            autoLoad: { target: 'autoLoad' },
             inputMode: { target: 'inputMode' },
-            remoteSort: true,
-            showPlaceholder: true,
-            forceSelection: true,
-            selectFirst: true,
+
+            displayLimit: { target: 'displayLimit' },
+            queryOperator: { target: 'queryOperator' },
+            enableRemoteFiltering: { target: 'enableRemoteFiltering' }, // Sollen bim Tippen RPC-Requests gemacht werden?
+            remoteFilteringDefer:  { target: 'remoteFilteringDefer' }, // Verzögerung beim Tippen zwischen des Requests
 
             showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
             selectType: { target: 'selectType', context: this._listViewEl },
 
-            rpcLoadFn: { target: 'rpcLoadFn', context: this._listViewEl },
-            rpcLoadArgs: { target: 'rpcLoadArgs', context: this._listViewEl },
-            rpc: { target: 'rpc', context: this._listViewEl },
-
-            minChars: true, 
-
+            valueField: { target: 'valueField', context: this._listViewEl },
             displayTextField: { target: 'displayTextField', context: this._listViewEl },
-            disabledField: { target: 'disabledField', context: this._listViewEl },
+            displayTextDisplayType: { target: 'displayTextDisplayType', context: this._listViewEl },
+
+            clsField: { target: 'clsField', context: this._listViewEl },
+            iconMapField: { target: 'iconMapField', context: this._listViewEl },
             iconCharField: { target: 'iconCharField', context: this._listViewEl },
             iconClsField: { target: 'iconClsField', context: this._listViewEl },
             iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
-            iconMapField: { target: 'iconMapField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },
-            valueField: { target: 'valueField', context: this._listViewEl },
 
-            data: { prio: 1000, target: 'data' },
-            value: { prio: 1001, target: 'value' },
+            disabledField: { target: 'disabledField', context: this._listViewEl },  // Feldnamen für disabled (optional)
+           
+            data: { prio: 80, target: 'data' },
+
+            valueRow: { prio: 199, target: 'valueRow' },   // Datensatz zum value. Ist nötig,
+                                                           // wenn der value-Datensatz in data
+                                                           // fehlt. Z.B. weil deaktiviert
+            value: { prio: 200, target: 'value' },
 
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
@@ -135,39 +160,31 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             spinButtonIconColor: { target: 'iconColor', context: this._spinButtonEl },
             spinButtonIconMap: { target: 'iconMap', context: this._spinButtonEl },
 
-            // Attribute für SpinBoxEl weiterreichen
-            scrollableX: { target: 'scrollableX', context: this._spinboxEl },
-            scrollableY: { target: 'scrollableY', context: this._spinboxEl },
-
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
         // Event-Weiterleitungen von this._inputDom
         this._eventForwardsAdd('focus', this._inputDom);
         this._eventForwardsAdd('input', this._inputDom);
-        this._eventForwardsAdd('keyDown', this._inputDom);
-        this._eventForwardsAdd('afterLoad', this._listViewEl);
 
-//        this._eventForwardsRemove('enterPress', this._dom);
-//        this._eventForwardsRemove('enterEscPress', this._dom);
-//        this._eventForwardsRemove('escPress', this._dom);
-//        this._eventForwardsAdd('enterPress', this._inputDom);
-//        this._eventForwardsAdd('enterEscPress', this._inputDom);
-//        this._eventForwardsAdd('escPress', this._inputDom);
+        this._eventForwardsRemove('enterPress', this._dom);
+        this._eventForwardsRemove('enterEscPress', this._dom);
+        this._eventForwardsRemove('escPress', this._dom);
+        this._eventForwardsAdd('enterPress', this._inputDom);
+        this._eventForwardsAdd('enterEscPress', this._inputDom);
+        this._eventForwardsAdd('escPress', this._inputDom);
 
         // Listeners
         this._inputDom.on('blur', this.#onInputDomBlur, this);
         this._inputDom.on('change', this.#onInputDomChange, this);
         this._inputDom.on('input', this.#onInputDomInput, this);
-        this._inputDom.on('keyUp', this.#onInputDomKeyUp, this);
         this._inputDom.on('keyDown', this.#onInputDomKeyDown, this);
-
-        this._listViewEl.on('afterLoad', this.#onListViewElAfterLoad, this);
-        this._listViewEl.on('elementClick', this.#onListViewElClick, this);
 
         this._spinBoxEl.on('click', this.#onSpinBoxElClick, this);
         this._spinBoxEl.on('close', this.#onSpinBoxElClose, this);
         this._spinBoxEl.on('show', this.#onSpinBoxElShow, this);
+
+        this._listViewEl.on('elementClick', this.#onListViewElClick, this);
 
         // Config anwenden
         if (kijs.isObject(config)) {
@@ -195,46 +212,61 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
-    get autoLoad() {
-        return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-    }
-    set autoLoad(val) {
-        if (val) {
-            this.on('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        } else {
-            this.off('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
-        }
-    }
-
     get buttonsDom() { return this._buttonsDom; }
 
-    // overwrite
     get data() {
-        return this._listViewEl.data;
+        return this._data;
     }
     set data(val) {
-        this._listViewEl.data = val;
-        if (this._selectFirst) {
-            this.value = this._listViewEl.data[0].value;
+        this._data = val;
+
+        // Evtl. valueRow aktualisieren
+        if (!kijs.isEmpty(this._value)) {
+            this._valueRow = this._getValueRowFromValue(this._value);
         }
+
+        // Wert anzeigen/selektieren
+        this._listViewEl.value = this._value;
+
+        // Daten ins ListView übernehmen
+        this._applyFilterData();
     }
+
+    get displayLimit() { return this._displayLimit; }
+    set displayLimit(val) { this._displayLimit = parseInt(val); }
 
     get displayTextField() { return this._listViewEl.displayTextField; }
     set displayTextField(val) { this._listViewEl.displayTextField = val; }
+
+    get enableRemoteFiltering() { return this._enableRemoteFiltering; }
+    set enableRemoteFiltering(val) { this._enableRemoteFiltering = !!val; }
+
+    // Gibt die row zum aktuellen Wert zurück
+    get valueRow() {
+        return this._valueRow;
+    }
+    set valueRow(val) {
+        this._valueRow = val;
+    }
 
    // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
     // overwrite
-    get isEmpty() { return kijs.isEmpty(this.value); }
+    get isEmpty() { return kijs.isEmpty(this._value); }
 
     get inputDom() { return this._inputDom; }
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
-    get minChars() { return this._minChars; }
-    set minChars(val) { this._minChars = intValue(val); }
+    get queryOperator() { return this._queryOperator; }
+    set queryOperator(val) {
+        if (!kijs.Array.contains(['BEGIN', 'PART'], val)) {
+            throw new kijs.Error(`Ungültiger "queryOperator".`);
+        }
+        this._queryOperator = val;
+    }
 
     // overwrite
     get readOnly() { return super.readOnly; }
@@ -244,14 +276,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
-    get rpc() { return this._listViewEl.rpc; }
-    set rpc(val) { this._listViewEl.rpc = val; }
-
-    get rpcLoadArgs() { return this._listViewEl.rpcLoadArgs; }
-    set rpcLoadArgs(val) { this._listViewEl.rpcLoadArgs = val; }
-
-    get rpcLoadFn() { return this._listViewEl.rpcLoadFn; }
-    set rpcLoadFn(val) { this._listViewEl.rpcLoadFn = val; }
+    get remoteFilteringDefer() { return this._remoteFilteringDefer; }
+    set remoteFilteringDefer(val) {
+        this._remoteFilteringDefer = parseInt(val);
+    }
 
     /**
      * Berechnet die Höhe für die spinBox
@@ -293,29 +321,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // overwrite
     get value() { return this._value; }
     set value(val) {
-        let valueIsInStore = val === '' || val === null || this._isValueInStore(val);
-        this._displayText  = this._getDisplayTextFromValue(val);
         this._value = val;
+        this._valueRow = this._getValueRowFromValue(val);
+       
         this._listViewEl.value = val;
 
-        // falls das value nicht im store ist, vom server laden
-        if (this._remoteSort) {
-            if (!valueIsInStore && this._firstLoaded) {
-                this.load(null, true);
-            }
-            // store leeren, wenn value gelöscht wird.
-            if (this._value === '' || this._value === null) {
-//                this._listViewEl.data = [];
-            }
-        }
-
-        this._inputDom.nodeAttributeSet('value', kijs.toString(this._displayText));
-    }
-
-    // overwrite
-    // TODO: gehört nicht hier hin: löschen!!!!
-    get valueDisplay() {
-        return this._displayText;
+        // Daten ins ListView übernehmen
+        this._applyFilterData();
     }
 
     get valueField() { return this._listViewEl.valueField; }
@@ -325,8 +337,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
      * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
      * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
      */
-    get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
-    set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
+    get virtualKeyboardPolicy() { 
+        return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy');
+    }
+    set virtualKeyboardPolicy(val) {
+        this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val);
+    }
 
 
 
@@ -362,78 +378,74 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         return nde;
     }
 
+
     /**
      * Füllt das Combo mit Daten vom Server
-     * TODO: Funktion sollte folgende Argumente haben: load(args=null, superCall=false)
-     * TODO: Die Anzahl getippten Zeichen sollten vorher gezählt werden.
-     * @param {Array} args Array mit Argumenten, die an die remoteFn übergeben werden
-     * @param {Boolean} forceLoad true, wenn immer geladen werden soll
-     * @param {String} query Suchstring
-     * @returns {undefined}
+     * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
+     * @param {Boolean} [superCall=false]
+     * @returns {Promise}
      */
-    load(args=null, forceLoad=false, query=null) {
-        args = kijs.isObject(args) ? args : {};
-        args.remoteSort = !!this._remoteSort;
-        args.value = this.value;
-        args.query = '';
+    load(args, superCall=false) {
+        return new Promise((resolve, reject) => {
 
-        let doLoad = false;
-
-        // remoteSort
-        if (this._remoteSort) {
-            // wenn genug Zeichenn getippt oder bei forceLoad
-            if (args.query.length >= this._minChars || forceLoad) {
-                doLoad = true;
-
-            // sonst nicht laden und Platzhalter anzeigen
-            } else {
-                this._listViewEl.data = [];
-                this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
+            if (kijs.isEmpty(args)) {
+                args = {};
             }
 
-        // kein remoteSort
-        } else {
-            // nur wenn noch nicht geladen oder bei forceLoad
-            if (!this._firstLoaded || forceLoad) {
-                doLoad = true;
+            // Wird das 1. mal geladen?
+            if (kijs.isEmpty(args.initialLoad)) {
+                args.initialLoad = true;
             }
-        }
 
-        // Laden
-        if (doLoad) {
-            // Bereits getippte Zeichen mitgeben
-            if (this._remoteSort) {
-                args.query = kijs.toString(query);
+            // bei enableRemoteFiltering Argumente an den Server senden
+            if (this._enableRemoteFiltering) {
+
+                // Das query Limit sagt dem Server wie viele Datensätze max
+                // zurückgegeben werden dürfen.
+                // Wenn eins mehr zurückgeben wird als mit displayLimit definiert
+                // ist, wissen wir, dass es noch mehr Datensätze als die angezeigten
+                // gibt, denn dann wird writeForMoreEl angezeigt.
+                args.queryLimit = this._displayLimit + 1;
+
+                // Suchbegriff, nach dem auf dem Server gefiltert werden soll.
+                if (kijs.isEmpty(args.query)) {
+                    args.query = '';
+                }
+                // Beim ersten Start den displayText des aktuellen Werts übermitteln
+                if (kijs.isEmpty(args.initialLoad)) {
+                    args.query = kijs.toString(this._inputDom.nodeAttributeGet('value'));
+                }
+
+
+                if (kijs.isEmpty(args.queryOperator)) {
+                    args.queryOperator = this._queryOperator;
+                }
+            }
+
+            // Lademaske auf SpinBox anzeigen
+            if (this._spinBoxEl) {
+                this._spinBoxEl.waitMaskAdd();
             }
 
             // Laden
-            this._listViewEl.load(args).then((e) => {
-                if (kijs.isEmpty(e.response.errorType)) {
-                    let config = e.response.config ?? {};
-
-                    // Nach dem Laden das value neu setzen,
-                    // damit der displayText erscheint (ohne change-event)
-                    if (query === null && this._isValueInStore(this.value)) {
-                        this.value = this._value;
-
-                    // value mit dem RPC zurückgeben (mit change-event)
-                    } else if (query === null && kijs.isDefined(config.value) && config.value !== null && this._isValueInStore(config.value)) {
-                        if (kijs.toString(config.value) !== kijs.toString(this.value)) {
-                            this.value = config.value;
-                        }
-
-                    }
-
-                    // validieren
-                    if (!this._remoteSort && this._dom) {
-                        this.validate(true);
-                    }
+            super.load(args, true).then((e) => {
+                // Lademaske auf SpinBox entfernen
+                if (this._spinBoxEl) {
+                    this._spinBoxEl.waitMaskRemove();
                 }
-            });
-        }
 
-        // Flag setzen
-        this._firstLoaded = true;
+                // Promise ausführen
+                resolve(e);
+
+            }).catch((ex) => {
+                // Lademaske auf SpinBox entfernen
+                if (this._spinBoxEl) {
+                    this._spinBoxEl.waitMaskRemove();
+                }
+
+                reject(ex);
+            });
+        });
     }
 
     // overwrite
@@ -457,20 +469,33 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // overwrite
     unrender(superCall) {
-        // timer abbrechen
-        if (this._keyUpDeferId) {
-            window.clearTimeout(this._keyUpDeferId);
-            this._keyUpDeferId = null;
-        }
-
         // Event auslösen.
         if (!superCall) {
             this.raiseEvent('unrender');
         }
 
-        this._inputDom.unrender();
-        this._buttonsDom.unrender();
+        // timer abbrechen
+        if (this._remoteFilteringDeferId) {
+            window.clearTimeout(this._remoteFilteringDeferId);
+            this._remoteFilteringDeferId = null;
+        }
 
+        if (this._inputDom) {
+            this._inputDom.unrender();
+        }
+        if (this._spinButtonEl) {
+            this._spinButtonEl.unrender();
+        }
+        if (this._buttonsDom) {
+            this._buttonsDom.unrender();
+        }
+
+        if (this._listViewEl) {
+            this._listViewEl.unrender();
+        }
+        if (this._writeForMoreEl) {
+            this._writeForMoreEl.unrender();
+        }
         if (this._spinBoxEl) {
             this._spinBoxEl.unrender();
         }
@@ -481,45 +506,97 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // PROTECTED
     /**
-     * Fügt dem listView einen Platzhalter hinzu.
-     * @param {String} text Nachricht, die angezeigt wird.
+     * Weist this._data dem ListView zu und berücksichtigt dabei den eingegebenen
+     * Text und das displayLimit
+     * @param {String} text DisplayText im Input Feld, nachdem gefiltert wird
+     * @returns {undefined}
      */
-    _addPlaceholder(text) {
-        if (this._showPlaceholder) {
+    _applyFilterData(text='') {
+        let data = this._data;
 
-            if (this._listViewEl.down('kijs-gui-field-combo-placeholder')) {
-                this._listViewEl.down('kijs-gui-field-combo-placeholder').html = text;
+        // Falls nicht getippt wird, nehmen wir den displayText des aktuellen Werts
+        if (kijs.isEmpty(text) && !this._whileTyping) {
+            text = this._getDisplayTextFromValue(this._value);
+        }
 
-            } else {
-                this._listViewEl.add({
-                    xtype: 'kijs.gui.Container',
-                    name: 'kijs-gui-field-combo-placeholder',
-                    cls: 'kijs-field-combo-placeholder',
-                    html: text,
-                    htmlDisplayType: 'code'
-                });
+        let visibleWriteForMoreEl = !!this._enableRemoteFiltering ||
+                data.length > this._displayLimit;
+
+
+        // Lokal Filtern
+        let doFiltering = false;
+
+        // Während des Tippens...
+        if (this._whileTyping) {
+            // Wenn lokal gefiltert werden soll
+            if (!this._enableRemoteFiltering) {
+                doFiltering = !this._enableRemoteFiltering;
+            }
+
+        // Wenn nicht getippt wird (beim zuweisen von data)
+        } else {
+            // Wenn mehr Daten vorhanden sind als displayLimit,
+            // damit der ausgewählte Wert auch in der Liste erscheint
+            if (data.length > this._displayLimit) {
+                doFiltering = true;
+            }
+
+        }
+        
+        // Evtl. Daten filtern
+        if (doFiltering) {
+            // Operator: 'BEGIN' oder 'PART'
+            data = kijs.Data.filter(data, {
+                field: this._listViewEl.displayTextField,
+                value: text,
+                operator: this._queryOperator
+            });
+        }
+
+        // displayLimit berücksichtigen
+        if (!kijs.isEmpty(this._displayLimit) && !kijs.isEmpty(data)) {
+            if (data.length > this._displayLimit) {
+                data = kijs.Array.slice(data, 0, this._displayLimit);
             }
         }
+
+        // Daten zuweisen
+        this._listViewEl.data = data;
+
+        // Evtl. writeForMoreEl anzeigen
+        this._writeForMoreEl.visible = visibleWriteForMoreEl;
+
+        // Falls kein Element selektiert ist: 1. Element selektieren, dass nicht deaktiviert ist
+        this._selectFirstEnabledElement();
+
+        // Falls nicht getippt wird: displayText aktualisieren
+        if (!this._whileTyping) {
+            this._inputDom.nodeAttributeSet('value', text);
+        }
+        this._whileTyping = false;
     }
 
     /**
-     * DisplayText zu einem Value ermitteln
+     * DisplayText zum value ermitteln
      * @param {String|Number|null} val
      * @returns {String}
      */
     _getDisplayTextFromValue(val) {
-        let found = false;
-        let displayText = null;
-        kijs.Array.each(this._listViewEl.data, function(row) {
-            if (row[this.valueField] === val) {
-                found = true;
-                displayText = row[this.displayTextField];
-                return false;
-            }
-        }, this);
+        let displayText = '';
 
-        // Falls kein Datensatz existiert, zeigen wir halt den value an
-        if (!found) {
+        if (kijs.isEmpty(val)) {
+            return '';
+        }
+
+        // valueRow ermitteln
+        let valueRow = this._getValueRowFromValue(val);
+
+        if (!kijs.isEmpty(valueRow)) {
+            displayText = valueRow[this._listViewEl.displayTextField];
+        }
+
+        // Falls kein displayText ermittelt werden konnte, wird der value angezeigt
+        if (kijs.isEmpty(displayText)) {
             displayText = val;
         }
 
@@ -527,110 +604,55 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     /**
-     * Prüft, ob ein value im Store ist.
-     * @param {String|Number|null} val
-     * @returns {Boolean}
+     * valueRow zu einem Wert ermitteln
+     * @param {String|Number|Null} val
+     * @returns {Array}
      */
-    _isValueInStore(val) {
-        let found = false;
+    _getValueRowFromValue(val) {
+        if (kijs.isEmpty(val)) {
+            return {};
+        }
 
-        if (this._listViewEl) {
-            kijs.Array.each(this._listViewEl.data, function (row) {
-                if (row[this.valueField] === val) {
-                    found = true;
+        // Zuerst in this._valueRow suchen
+        if (!kijs.isEmpty(this._valueRow)) {
+            if (this._valueRow[this._listViewEl.valueField] === val) {
+                return this._valueRow;
+            }
+        }
+
+        // Sonst in _data suchen
+        let valueRow = {};
+        kijs.Array.each(this._data, function(row) {
+            if (row[this._listViewEl.valueField] === val) {
+                valueRow = row;
+                return false;
+            }
+        }, this);
+
+        return valueRow;
+    }
+
+
+    // Falls kein Element selektiert ist: 1. Element selektieren, dass nicht deaktiviert ist
+    _selectFirstEnabledElement() {
+        if (kijs.isEmpty(this._listViewEl.getSelected())) {
+            kijs.Array.each(this._listViewEl.elements, function(el) {
+                if (!el.disabled) {
+                    this._listViewEl.select(el, false, false);
+
+                    // Hinscrollen
+                    this._listViewEl.scrollToFocus();
+                    
                     return false;
                 }
             }, this);
-        }
-
-        return found;
-    }
-
-    /**
-     * Schreibt einen Vorschlag ins Textfeld.
-     * Funktion wird vom KeyDown verzögert ausgeführt.
-     * @param {String} key
-     * @returns {undefined}
-     */
-    _setProposal(key) {
-        let inputVal = this._inputDom.nodeAttributeGet('value'),
-            matchVal='';
-
-        inputVal = kijs.toString(inputVal).trim();
-
-        // Exakten Wert suchen
-        if (inputVal && key !== 'Backspace' && key !== 'Delete') {
-            kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this.displayTextField]) && row[this.displayTextField].toLowerCase() === inputVal.toLowerCase()) {
-                    matchVal = row[this.displayTextField];
-                    return false;
-                }
-            }, this);
-
-            // Beginn suchen
-            if (matchVal === '') {
-                kijs.Array.each(this._listViewEl.data, function(row) {
-                    let displayText = row[this.displayTextField];
-
-                    if (
-                        kijs.isString(displayText)
-                        && inputVal.length <= displayText.length
-                        && displayText.substr(0, inputVal.length).toLowerCase() === inputVal.toLowerCase()
-                    ) {
-                        matchVal = displayText;
-                        return false;
-                    }
-
-                }, this);
-            }
-
-            // Es wurde eine Übereinstimmung gefunden
-            if (matchVal) {
-                this._inputDom.nodeAttributeSet('value', kijs.toString(matchVal));
-
-                // Differenz selektieren
-                if (matchVal.length !== inputVal.length) {
-                    this._inputDom.node.setSelectionRange(inputVal.length, matchVal.length);
-                }
-            }
-
-            // Elemente des Dropdowns filtern
-            // TODO: Sollte Standardmässig mit 'BEGIN' filtern. --> Konfigurierbar machen
-            this._listViewEl.applyFilters({field: this.displayTextField, value: inputVal, operator: 'PART'});
-
-        } else if (key === 'Backspace' || key === 'Delete') {
-            this._listViewEl.applyFilters({field: this.displayTextField, value: inputVal, operator: 'PART'});
-
-        } else {
-
-            // Filter des Dropdowns zurücksetzen
-            this._listViewEl.applyFilters(null);
-        }
-    }
-
-    // TODO: Evtl. Standardfunktion nehmen
-    _setScrollPositionToSelection() {
-        let sel = this._listViewEl.getSelected();
-        if (kijs.isObject(sel) && (sel instanceof kijs.gui.dataView.element.Base)) {
-            if (kijs.isNumber(sel.top) && this._spinBoxEl.isRendered) {
-                let spH = this._spinBoxEl.dom.height, spSt = this._spinBoxEl.dom.node.scrollTop;
-
-                let minScrollValue = sel.top;
-                let maxScrollValue = sel.top - spH + sel.height;
-
-                // prüfen, ob selektion ausserhalb von Scrollbar
-                if (this._spinBoxEl.dom.node.scrollTop === 0 || this._spinBoxEl.dom.node.scrollTop > minScrollValue) {
-                    this._spinBoxEl.dom.node.scrollTop = minScrollValue;
-
-                } else if (this._spinBoxEl.dom.node.scrollTop < maxScrollValue) {
-                    this._spinBoxEl.dom.node.scrollTop = maxScrollValue+5;
-                }
-            }
         }
     }
 
     // overwrite
+    // TODO
     _validationRules(value, ignoreEmpty) {
+        console.log('validate');
         if (ignoreEmpty && kijs.isEmpty(value)) {
             return;
         }
@@ -638,10 +660,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         super._validationRules(value, ignoreEmpty);
 
         // Wert muss in der Liste vorhanden sein.
-        if (this._forceSelection && !this._remoteSort && !kijs.isEmpty(value)) {
+        /*if (!this._enableRemoteFiltering && !kijs.isEmpty(value)) {
             let match = false;
-            kijs.Array.each(this._listViewEl.data, function(row) {
-                if (row[this.valueField] === value) {
+            kijs.Array.each(this._data, function(row) {
+                if (row[this._listViewEl.valueField] === value) {
                     match = true;
                     return false;
                 }
@@ -650,17 +672,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             if (!match) {
                 this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
             }
-        }
+        }*/
     }
 
 
     // PRIVATE
     // LISTENERS
-    #onAfterFirstRenderTo(e) {
-        // forceLoad, wenn value vorhanden ist (damit label geladen wird)
-        this.load(null, this.value !== '');
-    }
-
     #onInputDomBlur() {
         // blur nur ausführen, wenn Trigger nicht offen ist und Feld kein Focus hat
         kijs.defer(function() {
@@ -677,169 +694,172 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             return;
         }
 
-        let inputVal = this._inputDom.nodeAttributeGet('value'),
-            match = false,
-            matchVal = '',
-            oldVal = this.value,
-            changed = false;
+        let oldVal = this._value;
 
-        inputVal = kijs.toString(inputVal).trim();
+        // Eingegebener Text ermitteln
+        let text = kijs.toString(this._inputDom.nodeAttributeGet('value'));
 
-        // Leerer Wert = feld löschen
-        if (inputVal === '') {
-            match = true;
+        // Wert übernehmen
+        // leer
+        if (text === '') {
+            this.value = '';
 
-        } else {
+        // Wert aus ListView übernehmen, wenn vorhanden
+        } else if (!kijs.isEmpty(this._listViewEl.data)) {
+            this.value = this._listViewEl.value;
 
-            // Wert im Store suchen.
-            kijs.Array.each(this._listViewEl.data, function(row) {
-                if (kijs.isString(row[this.displayTextField]) && row[this.displayTextField].toLowerCase() === inputVal.toLowerCase()) {
-                    match = true;
-                    matchVal = row[this.valueField];
-                    return false;
-                }
-            }, this);
-        }
-
-        if (match && matchVal !== this.value) {
-            this.value = matchVal;
-            changed = true;
-
-        // Es wurde ein Wert eingegeben, der nicht im Store ist, und das ist erlaubt.
-        } else if (!match && !this._forceSelection) {
-            if (inputVal !== this.value) {
-                this.value = inputVal;
-                changed = true;
-            }
-
-        // Es wurde ein Wert eingegeben, der nicht im Store ist, daher Feld
-        // auf letzten gültigen Wert zurücksetzen.
+        // Sonst den bestehenden Wert belassen
         } else {
             this.value = this._value;
+            
         }
 
-        // validieren
-        this.validate();
-
-        // change-event
-        if (changed) {
-            this.raiseEvent('input', { value: this.value, oldValue: oldVal });
-            this.raiseEvent('change', { value: this.value, oldValue: oldVal });
+        if (this._value !== oldVal) {
+            this.raiseEvent('input', { value: this._value, oldValue: oldVal });
+            this.raiseEvent('change', { value: this._value, oldValue: oldVal });
         }
     }
 
     #onInputDomInput(e) {
+        // Es wird ein Text eingegeben
+        this._whileTyping = true;
+
+        // Eingegebener Text ermitteln
+        let text = kijs.toString(this._inputDom.nodeAttributeGet('value'));
+
+        // SpinBox anzeigen
         this._spinBoxEl.show();
+
+        // bei enableRemoteFiltering Argumente an den Server senden
+        // das ganze verögert machen, damit nicht zu viele requests gesendet werden
+        if (this._enableRemoteFiltering) {
+            // timer abbrechen
+            if (this._remoteFilteringDeferId) {
+                window.clearTimeout(this._remoteFilteringDeferId);
+                this._remoteFilteringDeferId = null;
+            }
+            // Request verzögert starten
+            this._remoteFilteringDeferId = kijs.defer(function() {
+                let args = {
+                    initialLoad: false,
+                    query: text
+                };
+                
+                this.load(args);
+            }, this._remoteFilteringDefer, this);
+
+        // Sonst alles lokal machen
+        } else {
+            // Daten an ListView übergeben
+            this._applyFilterData(text);
+
+        }
     }
 
     #onInputDomKeyDown(e) {
-        // event beim listView ausführen, damit selektion geändert werden kann.
-        if (this._listViewEl.getSelected()) {
-            this._listViewEl.handleKeyDown(e.nodeEvent);
+        switch (e.nodeEvent.key) {
 
-        } else if (e.nodeEvent.key === 'ArrowDown') {
-            let indx = this._listViewEl.elements.length > 0 && kijs.isDefined(this._listViewEl.elements[0].index) ? this._listViewEl.elements[0].index : null;
-            if (indx !== null) {
-                this._listViewEl.selectByIndexes(indx);
-            }
-        }
+            // Enter: Ausgewählten Datensatz übernehmen und SpinBox schliessen
+            case 'Enter':
+            case 'Tab':
 
-        // Scroll
-        if (e.nodeEvent.key === 'ArrowDown' || e.nodeEvent.key === 'ArrowUp') {
-            // scrollen
-            this._setScrollPositionToSelection();
-        }
+                let oldVal = this._value;
 
-        // wenn Enter gedrückt wird, listview schliessen und ausgewählten Datensatz übernehmen.
-        if (e.nodeEvent.key === 'Enter') {
-            let dataViewElement = this._listViewEl.getSelected();
-            this._spinBoxEl.close();
-
-            if (dataViewElement && (dataViewElement instanceof kijs.gui.dataView.element.Base)) {
-                let newVal = dataViewElement.dataRow[this.valueField],
-                    oldVal = this.value,
-                    changed = newVal !== this.value;
-                this.value = newVal;
-
-                if (changed) {
-                    this.raiseEvent('change', {value: this.value, oldValue: oldVal});
+                // Wert aus ListView übernehmen
+                if (!kijs.isEmpty(this._listViewEl.data)) {
+                    this._value = this._listViewEl.value;
                 }
-            }
+                
+                if (this._value !== oldVal) {
+                    // validieren
+                    this.validate();
 
-            // event stoppen
-            e.nodeEvent.stopPropagation();
+                    // events auslösen
+                    this.raiseEvent('input', { value: this._value, oldValue: oldVal });
+                    this.raiseEvent('change', { value: this._value, oldValue: oldVal });
+                }
 
-        // Esc: Schliessen
-        } else if (e.nodeEvent.key === 'Escape') {
-            this._spinBoxEl.close();
+                // SpinBox schliessen
+                this._spinBoxEl.close();
 
-            // Selektion zurücksetzen
-            this._listViewEl.value = this.value;
+                // event stoppen
+                e.nodeEvent.stopPropagation();
+                break;
 
-            // event stoppen
-            e.nodeEvent.stopPropagation();
-        }
-    }
+            // Esc: SpinBox schliessen
+            case 'Escape':
+                // SpinBox schliessen
+                this._spinBoxEl.close();
 
-    #onInputDomKeyUp(e) {
-        // Steuerbefehle ignorieren
-        let specialKeys = [
-            'ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'ContextMenu',
-            'Delete', 'Insert', 'Home', 'End', 'Alt', 'NumpadEnter',
-            'AltGraph', 'ContextMenu', 'Control', 'Shift',
-            'Enter', 'CapsLock', 'Tab', 'OS', 'Escape', 'Space'
-        ];
-        if (kijs.Array.contains(specialKeys, e.nodeEvent.code) || kijs.Array.contains(specialKeys, e.nodeEvent.key)) {
-            return;
-        }
+                if (this._enableRemoteFiltering) {
+                    // Selektion zurücksetzen
+                    this._listViewEl.data = [];
+                    this._listViewEl.value = this._value;
 
-        // bestehendes Defer löschen
-        if (this._keyUpDeferId) {
-            window.clearTimeout(this._keyUpDeferId);
-            this._keyUpDeferId = null;
-        }
+                    // timer abbrechen
+                    if (this._remoteFilteringDeferId) {
+                        window.clearTimeout(this._remoteFilteringDeferId);
+                        this._remoteFilteringDeferId = null;
+                    }
+                    // Request starten
+                    let args = {
+                        initialLoad: false,
+                        query: this._getDisplayTextFromValue(this._value)
+                    };
+                    this.load(args);
 
-        // neues Defer schreiben
-        this._keyUpDeferId = kijs.defer(function() {
-            if (this._remoteSort) {
-                this.load(null, false, this._inputDom.nodeAttributeGet('value'));
+                } else {
+                    // Workaround: data leeren, damit das Listview sicher den
+                    // value übernimmt
+                    this._listViewEl.data = [];
+                    
+                    // alter Wert anzeigen/selektieren
+                    this._listViewEl.value = this._value;
 
-            } else {
-                this._setProposal(e.nodeEvent.key);
-            }
-        }, this._remoteSort ? 1000 : 500, this);
-    }
+                    // Daten ins ListView übernehmen
+                    this._applyFilterData();
 
-    #onListViewElAfterLoad(e) {
-        if (kijs.isEmpty(e.response.errorType)) {
-            if (!this._remoteSort) {
-                this.value = this._value;
-            }
+                }
 
-            if (this._selectFirst && this._listViewEl.data.length) {
-                this.value = this._listViewEl.data[0].value;
-            }
+                // event stoppen
+                e.nodeEvent.stopPropagation();
+                break;
 
-            // Spinbox Nachricht anhängen
-            if (e.response && e.response.spinboxMessage) {
-                this._addPlaceholder(e.response.spinboxMessage);
-            }
+            // ArrowUp und ArrowDown an ListView weitergeben
+            case 'ArrowUp':
+            case 'ArrowDown':
+                // Event weitergeben
+                if (this._spinBoxEl.isRendered) {
+                    this._listViewEl.handleKeyDown(e.nodeEvent);
+                }
+                break;
+
         }
     }
 
     #onListViewElClick(e) {
         if (!e.raiseElement.disabled) {
+            let oldVal = this._value;
+
+            this._value = this._listViewEl.value;
+
+            // valueRow aktualisieren
+            this._valueRow = this._getValueRowFromValue(this._listViewEl.value);
+
+            // displayText aktualisieren
+            let displayText = this._getDisplayTextFromValue(this._listViewEl.value);
+            this._inputDom.nodeAttributeSet('value', displayText);
+
+            // SpinBox schliessen
             this._spinBoxEl.close();
 
-            if (this.value !== this._listViewEl.value) {
-                let oldVal = this.value;
-                this.value = this._listViewEl.value;
-
+            if (this._value !== oldVal) {
                 // validieren
                 this.validate();
 
-                this.raiseEvent('input', { value: this.value, oldValue: oldVal });
-                this.raiseEvent('change', { value: this.value, oldValue: oldVal });
+                // events auslösen
+                this.raiseEvent('input', { value: this._value, oldValue: oldVal });
+                this.raiseEvent('change', { value: this._value, oldValue: oldVal });
             }
         }
     }
@@ -849,12 +869,21 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onSpinBoxElClose() {
+        // displayText aktualisieren
+        let displayText = this._getDisplayTextFromValue(this._value);
+        this._inputDom.nodeAttributeSet('value', displayText);
+
         this._inputDom.focus();
-        this.#onInputDomBlur();
     }
 
     #onSpinBoxElShow() {
-        this._setScrollPositionToSelection();
+        kijs.defer(function() {
+            if (this._listViewEl) {
+
+                // Falls kein Element selektiert ist: 1. Element selektieren, dass nicht deaktiviert ist
+                this._selectFirstEnabledElement();
+            }
+        }, 50, this);
     }
 
     #onSpinButtonClick(e) {
@@ -867,12 +896,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             } else {
                 this._spinBoxEl.show();
             }
-        }
-
-        this._listViewEl.applyFilters();
-        
-        if (this._listViewEl.data.length === 0 && this._remoteSort) {
-            this._addPlaceholder(kijs.getText('Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten', '', this._minChars) + '.');
         }
     }
 
@@ -895,22 +918,33 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this._inputDom) {
             this._inputDom.destruct();
         }
-        if (this._spinBoxEl) {
-            this._spinBoxEl.destruct();
+        if (this._spinButtonEl) {
+            this._spinButtonEl.destruct();
         }
         if (this._buttonsDom) {
             this._buttonsDom.destruct();
         }
-        if (this._spinButtonEl) {
-            this._spinButtonEl.destruct();
+
+        if (this._listViewEl) {
+            this._listViewEl.destruct();
+        }
+        if (this._writeForMoreEl) {
+            this._writeForMoreEl.destruct();
+        }
+        if (this._spinBoxEl) {
+            this._spinBoxEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
-        this._listViewEl = null;
-        this._spinBoxEl = null;
-        this._buttonsDom = null;
         this._spinButtonEl = null;
+        this._buttonsDom = null;
+
+        this._listViewEl = null;
+        this._writeForMoreEl = null;
+        this._spinBoxEl = null;
+
+        this._valueRow = null;
 
         // Basisklasse entladen
         super.destruct(true);

@@ -16,7 +16,7 @@ foreach ($requests as $request) {
 
         case 'colors.load':
             try {
-                $rows = array();
+                $rows = [];
 
                 $rows[] = array('Bez' => 'rot', 'color' => '#f00', 'iconMap' => 'kijs.iconMap.Fa.droplet');
                 $rows[] = array('Bez' => 'grün', 'color' => '#0f0', 'iconMap' => 'kijs.iconMap.Fa.droplet');
@@ -36,46 +36,121 @@ foreach ($requests as $request) {
             }
             break;
         
-        case 'combo.load':
+        case 'combo.beruf.load':
+            // Dieser rpcLoadFn unterstützt kijs.gui.field.Combo mit enableRemoteFiltering:true
+            // und auch solche mit enableRemoteFiltering:false
             try {
-                $query = $request->requestData->query ?? ''; // suchbegriff
-                $value = $request->requestData->value ?? ''; // aktuell selektierte ID
-                $remoteSort = !empty($request->requestData->remoteSort); // Bei remoteSort=false alles zurückgeben
-                $rows = array();
-                
-                $count = 0;
-                
-                $Berufe = file('../testData/beruf.csv');
-                foreach ($Berufe as $Beruf) {
-                    $Beruf = explode(';', trim($Beruf));
-                    $value = (int)$Beruf[0];
-                    $displayText = $Beruf[1];
+                // 1. Aufruf?
+                $initialLoad = true;
+                if (isset($request->requestData->initialLoad)) {
+                    $initialLoad = !!$request->requestData->initialLoad;
+                }
 
-                    if ($query) {
-                        if (mb_strtolower(mb_substr($displayText, 0, mb_strlen($query)))
-                                !== mb_strtolower($query)) {
-                            continue;
+                // Anzahl Datensätze, die maximal zurückgegeben werden dürfen (0=unbeschränkt)
+                $queryLimit = 0;
+                if (isset($request->requestData->queryLimit)) {
+                    $queryLimit = (int) $request->requestData->queryLimit;
+                }
+
+                // Daten ermitteln
+                $rows = [];
+                $Berufe = _loadJsonFile('../testData/beruf.json');
+                foreach ($Berufe as $Beruf) {
+                    $ok = true;
+
+                    // Nach Suchbegriff filtern
+                    if (isset($request->requestData->query)) {
+                        $query = $request->requestData->query . '';
+
+                        $queryOperator = 'BEGIN';   // Vergleichsart 'BEGIN' oder 'PART'
+                        if (isset($request->requestData->queryOperator)) {
+                            $queryOperator = $request->requestData->queryOperator . '';
+                        }
+
+                        if ($query !== '') {
+                            $ok = false;
+                            $pos = mb_stripos($Beruf['Beruf'], $query);
+
+                            switch ($queryOperator) {
+                                case 'PART':
+                                    if ($pos !== false) {
+                                        $ok = true;
+                                    }
+                                    break;
+
+                                case 'BEGIN':
+                                    if ($pos === 0) {
+                                        $ok = true;
+                                    }
+                                    break;
+                            }
+                            if (!$ok) {
+                                continue;
+                            }
                         }
                     }
 
-                    $count++;
+                    // Zeile übernehmen
+                    $rows[] = $Beruf;
 
-                    // 1. Zeile mit Überschriften überspringen
-                    if ($count === 1) {
-                        continue;
+                    // Maximale Anzahl Datensätze begrenzen
+                    if ($queryLimit && count($rows) >= $queryLimit) {
+                        break;
                     }
-
-                    // Max 100 Datensätze zurückgeben, weil sonst der Browser überfordert ist
-                    if ($count > 100) {
-                        continue;
-                    }
-
-                    $rows[] = array('value' => (int)$value, 'displayText' => $displayText);
                 }
                 unset($Berufe);
-                
+
+                //sleep(2);
+
                 $response->config = new stdClass();
                 $response->config->data = $rows;
+                if ($initialLoad) {
+                    //$response->config->value = 1889;
+                    //$response->config->valueRow = array('value'=>1889, 'displayText'=>'Anknüpfer');
+                }
+
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        case 'combo.farbe.load':
+            try {
+                $rows = [];
+
+                $rows[] = array('displayText'=>'rot',     'color'=>'#f00', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'grün',    'color'=>'#0f0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'blau',    'color'=>'#00f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'gelb',    'color'=>'#ff0', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'violett', 'color'=>'#f0f', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+                $rows[] = array('displayText'=>'hellblau','color'=>'#0ff', 'iconMap'=>'kijs.iconMap.Fa.droplet');
+
+                $response->config = new stdClass();
+                $response->config->value = '#0f0';
+                $response->config->data = $rows;
+
+                //sleep(1);
+
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        case 'combo.land.load':
+            try {
+                $response->config = new stdClass();
+                $response->config->data = _loadJsonFile('../testData/land.json');
+                //sleep(1);
+
+            } catch (Exception $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        case 'combo.stadt.load':
+            try {
+                $response->config = new stdClass();
+                $response->config->data = _loadJsonFile('../testData/stadt.json');
 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -706,22 +781,8 @@ foreach ($requests as $request) {
         
         case 'land.load':
             try {
-                $rows = array();
-
-                $laender = file('../testData/land.csv');
-
-                foreach ($laender as $land) {
-                    $land = explode(';', trim($land));
-                    $rows[] = array('value' => $land[0], 'displayText' => $land[1]);
-                }
-
-//                $rows[] = array('value'=>'CH', 'displayText'=>'Schweiz');
-//                $rows[] = array('value'=>'DE', 'displayText'=>'Deutschland');
-//                $rows[] = array('value'=>'IT', 'displayText'=>'Italien');
-//                $rows[] = array('value'=>'FR', 'displayText'=>'Frankreich');
-                
                 $response->config = new stdClass();
-                $response->config->data = $rows;
+                $response->config->data = _loadJsonFile('../testData/land.json');
                 //sleep(1);
 
             } catch (Exception $ex) {
@@ -951,4 +1012,9 @@ function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $
     }
 
     return $rows;
+}
+
+function _loadJsonFile($path) {
+    $content = file_get_contents($path);
+    return json_decode($content, true);
 }
