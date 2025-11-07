@@ -751,14 +751,16 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         // dass der Node immer noch am richtigen Ort platziert ist.
         let p = posSwap ? posSwap : pos;
 
-        if (p.indexOf('b')!==-1) {
+        if (p.indexOf('b') !== -1) {
             this.style.bottom = (b.h - rect.y - rect.h) + 'px';
+            this.style.marginTop = 'auto';  // muss leider sein, damit richtig positioniert wird
         } else {
             this.style.top = rect.y + 'px';
         }
 
-        if (p.indexOf('r')!==-1) {
+        if (p.indexOf('r') !== -1) {
             this.style.right = (b.w - rect.x -rect.w) + 'px';
+            this.style.marginLeft = 'auto'; // muss leider sein, damit richtig positioniert wird
         } else {
             this.style.left = rect.x + 'px';
         }
