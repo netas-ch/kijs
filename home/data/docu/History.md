@@ -184,7 +184,8 @@ Code nach ```simple``` durchsuchen und ersetzen durch ```simple-multi```.
 Es gibt viele Anpassungen und das Combo funktioniert nun etwas anders als vorher.  
 Siehe dazu den Leitfaden ```Felder/Combo```.  
 
-An den Eigenschaften gibt es folgende Änderungen.  
+An den Eigenschaften gibt es folgende Änderungen:  
+
  - getter ```oldValue``` entfernt.  
  - config/getter/setter ```minChars``` entfernt. Ist nicht mehr nötig.  
  - config ```showPlaceholder``` entfernt. Ist nicht mehr nötig.  
@@ -198,7 +199,7 @@ An den Eigenschaften gibt es folgende Änderungen.
  - die in der Liste angezeigt werden. Bei mehr Datensätzen, wird die Anzahl 
    beschränkt und es muss getippt werden. Standard=50.  
  - Neue config/getter/setter ```queryOperator```. Art des vergleichs beim Filtern. 
-   'BEGIN' oder 'PART'. Standard='BEGIN'.  
+   ```'BEGIN'``` oder ```'PART'```. Standard='BEGIN'.  
  - Neue config/getter/setter ```remoteFilteringDefer```. Delay zwischen dem Tippen und 
    dem RPC-Request, wenn ```enableRemoteFiltering``` true ist. Default: 200  
  -
