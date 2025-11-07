@@ -182,7 +182,7 @@ Code nach ```simple``` durchsuchen und ersetzen durch ```simple-multi```.
 
 ### kijs.gui.field.Combo überarbeitet
 Es gibt viele Anpassungen und das Combo funktioniert nun etwas anders als vorher.  
-Siehe dazu den Leitfaden ```kijs.gui.field.Combo```.  
+Siehe dazu den Leitfaden ```Felder/Combo```.  
 
 An den Eigenschaften gibt es folgende Änderungen.  
  - getter ```oldValue``` entfernt.  
@@ -207,7 +207,7 @@ An den Eigenschaften gibt es folgende Änderungen.
  - Nach ```kijs.gui.field.Combo``` suchen und die konfiguration anpassen.  
  - Auch das CSS hat geändert, falls eigene CSS-Anpassungen existieren, auch nachführen.  
  - Der RPC-Datenverkehr zum Combo hat geändert. Siehe Leitfaden 
-   ```kijs.gui.field.Combo```.  
+   ```Felder/Combo```.  
 
 
 

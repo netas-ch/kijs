@@ -1,34 +1,5 @@
 /* global kijs, this */
 
-// TODO:
-// [x] change/input-events gleich wie bei kijs.gui.field.Text
-// [x] displayLimit:50 Wenn mehr Datensätze vorhanden sind wird der writeForMore-Text angezeigt
-//                     und es werden nur 50 Datensätze angezeigt.
-// [x] Beim Tippen nachladen (remoteFilter?)
-// [x] Vergleich beim Tippen 'BEGIN', 'PART'
-// [x] queryMode:'local' oder 'remote'
-// [x] queryParam --> rpcLoadArgs
-// [x] queryDelay: 500 bei remote und 10 bei local
-// [x] valueRow von Server übergeben, damit displayText, iconMap, etc. angezeigt
-//      werden kann
-// [x] WaitMask bei Load auf spinBox, wenn offen
-
-// [x] Wenn value nicht in den ersten 50 Datensätzen ist, sollte beim Aufklappen
-//     trotzdem der value in der Liste sein.
-// [x] Beim Aufklappen, sollte neben dem Wert auch noch die anderen Elemente
-//     angezeigt werden, jedenfalls wenn kein writeForMoreEl angezeigt wird.
-// [x] Wenn ein falscher Wert eingegeben wird, sollte auf der vorherige Wert
-//     wiederhergestellt werden.
-// [x] disable testen
-// [ ] autoLoad: Standardwert bei kijs.gui.Element und vererbten auf true?
-// [ ] autocomplete und virtualKeyboardPolicy umbenennen?
-// [ ] icon und Text anstelle von Input anzeigen
-// [ ] Spinbox bei mobilen Geräten unten anzeigen
-// [ ] Multiselect
-// [ ] Leitfaden
-// [ ] History
-// [ ] Testen, wenn Wert nicht mehr im Combo: validieren!!!!!!!!!!!!!!!!!!
-
 
 // --------------------------------------------------------------
 // kijs.gui.field.Combo
@@ -647,32 +618,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 }
             }, this);
         }
-    }
-
-    // overwrite
-    // TODO
-    _validationRules(value, ignoreEmpty) {
-        console.log('validate');
-        if (ignoreEmpty && kijs.isEmpty(value)) {
-            return;
-        }
-
-        super._validationRules(value, ignoreEmpty);
-
-        // Wert muss in der Liste vorhanden sein.
-        /*if (!this._enableRemoteFiltering && !kijs.isEmpty(value)) {
-            let match = false;
-            kijs.Array.each(this._data, function(row) {
-                if (row[this._listViewEl.valueField] === value) {
-                    match = true;
-                    return false;
-                }
-            }, this);
-
-            if (!match) {
-                this._errors.push(kijs.getText('Der Wert "%1" ist nicht in der Liste enthalten', '', value) + '.');
-            }
-        }*/
     }
 
 
