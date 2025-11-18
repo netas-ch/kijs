@@ -90,8 +90,8 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
                             label: 'Land',
                             rpcLoadFn: 'land.load',
                             autoLoad: true,
-                            valueField: 'value',
-                            displayTextField: 'displayText'
+                            valueField: 'ISO',
+                            displayTextField: 'Land'
                         }
                     ]
                 },

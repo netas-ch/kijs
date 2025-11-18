@@ -300,7 +300,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Display',
-                    value: 'Mit Wert (Unix) den es nicht mehr gibt.',
+                    value: 'Mit Wert (Unix) den es nicht mehr gibt und allowNewValues: true',
                     style: { margin: '10px 0 0 0'}
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -310,6 +310,8 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     iconMapField: 'iconMap',
                     iconColorField: '',
                     value: 4,
+                    allowNewValues: true,
+                    required: true,
                     valueRow: { displayText: 'Unix', iconMap: 'kijs.iconMap.Fa.skull', value: 4},
                     data: [
                         { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
@@ -422,7 +424,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     rpcLoadFn: 'combo.land.load',
                     valueField: 'ISO',
                     displayTextField: 'Land',
-                    value: 'CH',
+                    value: 'FR',
                     autoLoad: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
@@ -431,8 +433,10 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     rpcLoadFn: 'combo.beruf.load',
                     valueField: 'BerufId',
                     displayTextField: 'Beruf',
+                    value: 99999,
                     autoLoad: true,
-                    displayLimit: 30
+                    displayLimit: 30,
+                    helpText: 'Beispiel mit value den es im Recordset nicht gibt.'
                 },
 
                 {
@@ -462,8 +466,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     valueField: 'BerufId',
                     displayTextField: 'Beruf',
                     enableRemoteFiltering: true,
-                    autoLoad: false//,
-                    //valueRow: {value: 1889, displayText: 'Anknüpfer'}
+                    autoLoad: false/*,
+                    value: 1889,
+                    valueRow: {value: 1889, displayText: 'Anknüpfer'}*/
                 }
             ]
         });

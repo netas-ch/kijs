@@ -17,6 +17,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._value = '';               // Wert
         this._valueRow = null;          // Ganzer Datensatz zum value
 
+        this._allowNewValues = false;   // Dürfen auch Werte eingegeben werden,
+                                        // die in der Liste nicht vorhanden sind?
+                                        
         this._displayLimit = 30;        // Max Anzahl Datensätze, die im ListView
                                         // angezeigt werden.
 
@@ -27,6 +30,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._remoteFilteringDeferId = null;
 
         this._whileTyping = false;      // Wird gerade ein Buchstabe geschrieben?
+        this._lastRpcValue = '';        // letzter Wert der via RPC an den Server
+                                        // geschickt wurde. Wird intern verwendet
+                                        // damit nicht mehrere gleiche Requests
+                                        // gesendet werden, wenn die Antwort keine
+                                        // valueRow enthält
 
         this._data = [];                // Recordset mit Daten
 
@@ -46,7 +54,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._writeForMoreEl = new kijs.gui.Element({
             cls: 'kijs-field-combo-writeForMore',
-            html: kijs.getText('Schreiben für weitere') + '...'
+            html: kijs.getText('Schreiben für Daten') + '...'
         });
 
         this._spinButtonEl = new kijs.gui.Button({
@@ -94,6 +102,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            allowNewValues: true,                       // Dürfen auch Werte eingegeben werden,
+                                                        // die in der Liste nicht vorhanden sind?
+
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             inputMode: { target: 'inputMode' },
 
@@ -218,6 +229,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
     set valueRow(val) {
         this._valueRow = val;
+
+        let displayText = this._getDisplayTextFromValue();
+        this._inputDom.nodeAttributeSet('value', displayText);
     }
 
    // overwrite
@@ -294,11 +308,15 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     set value(val) {
         this._value = val;
         this._valueRow = this._getValueRowFromValue(val);
-       
+
         this._listViewEl.value = val;
 
         // Daten ins ListView übernehmen
         this._applyFilterData();
+
+        // displayText aktualisieren
+        let displayText = this._getDisplayTextFromValue();
+        this._inputDom.nodeAttributeSet('value', displayText);
     }
 
     get valueField() { return this._listViewEl.valueField; }
@@ -363,43 +381,66 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 args = {};
             }
 
-            // Wird das 1. mal geladen?
-            if (kijs.isEmpty(args.initialLoad)) {
-                args.initialLoad = true;
-            }
-
-            // bei enableRemoteFiltering Argumente an den Server senden
-            if (this._enableRemoteFiltering) {
-
-                // Das query Limit sagt dem Server wie viele Datensätze max
-                // zurückgegeben werden dürfen.
-                // Wenn eins mehr zurückgeben wird als mit displayLimit definiert
-                // ist, wissen wir, dass es noch mehr Datensätze als die angezeigten
-                // gibt, denn dann wird writeForMoreEl angezeigt.
-                args.queryLimit = this._displayLimit + 1;
-
-                // Suchbegriff, nach dem auf dem Server gefiltert werden soll.
-                if (kijs.isEmpty(args.query)) {
-                    args.query = '';
-                }
-                // Beim ersten Start den displayText des aktuellen Werts übermitteln
+            // Standard-Argumente für den Request
+            // -----------------------------------
+            // Abfragen der valueRow
+            if (!kijs.isEmpty(args.value)) {
+                // Wird das 1. mal geladen?
                 if (kijs.isEmpty(args.initialLoad)) {
-                    args.query = kijs.toString(this._inputDom.nodeAttributeGet('value'));
+                    args.initialLoad = false;
                 }
 
+            // normaler Request
+            } else {
+                // Wird das 1. mal geladen?
+                if (kijs.isEmpty(args.initialLoad)) {
+                    args.initialLoad = true;
 
-                if (kijs.isEmpty(args.queryOperator)) {
-                    args.queryOperator = this._queryOperator;
+                    // evtl. auch die valueRow abfragen
+                    if (!kijs.isEmpty(this._value)) {
+                        args.value = this._value;
+                    }
                 }
+
+                // Serverseitiges Filtern während dem Tippen
+                if (this._enableRemoteFiltering) {
+                    // Suchbegriff, nach dem auf dem Server gefiltert werden soll
+                    if (kijs.isEmpty(args.query)) {
+                        args.query = '';
+                    }
+
+                    // Art des Vergleichs 'BEGIN' oder 'PART'
+                    if (kijs.isEmpty(args.queryOperator)) {
+                        args.queryOperator = this._queryOperator;
+                    }
+
+                    // Das query Limit sagt dem Server wie viele Datensätze max
+                    // zurückgegeben werden dürfen.
+                    // Wenn eins mehr zurückgeben wird als mit displayLimit definiert
+                    // ist, wissen wir, dass es noch mehr Datensätze als die angezeigten
+                    // gibt, denn dann wird writeForMoreEl angezeigt.
+                    args.queryLimit = this._displayLimit + 1;
+
+                }
+
             }
+
 
             // Lademaske auf SpinBox anzeigen
+            // -----------------------------------
             if (this._spinBoxEl) {
                 this._spinBoxEl.waitMaskAdd();
             }
 
+
             // Laden
+            // -----------------------------------
             super.load(args, true).then((e) => {
+                if (e.response && e.response.config && 
+                        !kijs.isEmpty(e.response.config.valueRow)) {
+                    this._lastRpcValue = '';
+                }
+
                 // Lademaske auf SpinBox entfernen
                 if (this._spinBoxEl) {
                     this._spinBoxEl.waitMaskRemove();
@@ -487,7 +528,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Falls nicht getippt wird, nehmen wir den displayText des aktuellen Werts
         if (kijs.isEmpty(text) && !this._whileTyping) {
-            text = this._getDisplayTextFromValue(this._value);
+            text = this._getDisplayTextFromValue();
         }
 
         let visibleWriteForMoreEl = !!this._enableRemoteFiltering ||
@@ -548,19 +589,18 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     /**
-     * DisplayText zum value ermitteln
-     * @param {String|Number|null} val
+     * DisplayText zum aktuellen value ermitteln
      * @returns {String}
      */
-    _getDisplayTextFromValue(val) {
+    _getDisplayTextFromValue() {
         let displayText = '';
 
-        if (kijs.isEmpty(val)) {
+        if (kijs.isEmpty(this._value)) {
             return '';
         }
 
         // valueRow ermitteln
-        let valueRow = this._getValueRowFromValue(val);
+        let valueRow = this._getValueRowFromValue(this._value);
 
         if (!kijs.isEmpty(valueRow)) {
             displayText = valueRow[this._listViewEl.displayTextField];
@@ -568,7 +608,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Falls kein displayText ermittelt werden konnte, wird der value angezeigt
         if (kijs.isEmpty(displayText)) {
-            displayText = val;
+            displayText = this._value;
         }
 
         return kijs.toString(displayText);
@@ -592,15 +632,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }
 
         // Sonst in _data suchen
-        let valueRow = {};
-        kijs.Array.each(this._data, function(row) {
-            if (row[this._listViewEl.valueField] === val) {
-                valueRow = row;
-                return false;
+        for (let i=0; i<this._data.length; i++) {
+            if (this._data[i][this._listViewEl.valueField] === val) {
+                return this._data[i];
             }
-        }, this);
+        }
 
-        return valueRow;
+        // Sonst, wenn remoteFiltering:true versuchen die valueRow per RPC zu holen
+        if (!kijs.isEmpty(this._rpcLoadFn)) {
+            // Sicherstellen, dass nicht mehrmals die gleiche Anfrage geschickt wird.
+            if (kijs.isEmpty(this._lastRpcValue) || this._lastRpcValue !== val) {
+
+                this._lastRpcValue = val;
+
+                let args = {
+                    initialLoad: false,
+                    value: this._value
+                };
+                this.load(args);
+            }
+        }
+
+        return {};
     }
 
 
@@ -713,6 +766,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 // Wert aus ListView übernehmen
                 if (!kijs.isEmpty(this._listViewEl.data)) {
                     this._value = this._listViewEl.value;
+                    this._valueRow = this._getValueRowFromValue(this._value);
                 }
                 
                 if (this._value !== oldVal) {
@@ -749,7 +803,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     // Request starten
                     let args = {
                         initialLoad: false,
-                        query: this._getDisplayTextFromValue(this._value)
+                        query: this._getDisplayTextFromValue()
                     };
                     this.load(args);
 
@@ -792,7 +846,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._valueRow = this._getValueRowFromValue(this._listViewEl.value);
 
             // displayText aktualisieren
-            let displayText = this._getDisplayTextFromValue(this._listViewEl.value);
+            let displayText = this._getDisplayTextFromValue();
             this._inputDom.nodeAttributeSet('value', displayText);
 
             // SpinBox schliessen
@@ -814,11 +868,28 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onSpinBoxElClose() {
-        // displayText aktualisieren
-        let displayText = this._getDisplayTextFromValue(this._value);
-        this._inputDom.nodeAttributeSet('value', displayText);
+        // Nicht vorhandene Werte sind erlaubt
+        if (this._allowNewValues) {
+            let oldVal = this._value;
+            
+            // Wert übernehmen
+            this._value = this._inputDom.nodeAttributeGet('value');
+
+            if (this._value !== oldVal) {
+                this.raiseEvent('input', { value: this._value, oldValue: oldVal });
+                this.raiseEvent('change', { value: this._value, oldValue: oldVal });
+            }
+
+        // Nicht vorhandene Werte sind nicht erlaubt
+        } else {
+            // displayText aktualisieren
+            let displayText = this._getDisplayTextFromValue();
+            this._inputDom.nodeAttributeSet('value', displayText);
+        }
 
         this._inputDom.focus();
+
+        this.validate();
     }
 
     #onSpinBoxElShow() {

@@ -127,8 +127,8 @@ home.sc.container_Form = class home_sc_container_Form {
                                     //rpc: 'default',
                                     rpcLoadFn: 'land.load',
                                     autoLoad: true,
-                                    valueField: 'value',
-                                    displayTextField: 'displayText'
+                                    valueField: 'ISO',
+                                    displayTextField: 'Land'
                                 },
 
                                 {
@@ -494,8 +494,8 @@ home.sc.container_Form = class home_sc_container_Form {
                                             //rpc: 'default',
                                             rpcLoadFn: 'land.load',
                                             autoLoad: true,
-                                            valueField: 'value',
-                                            displayTextField: 'displayText'
+                                            valueField: 'ISO',
+                                            displayTextField: 'Land'
                                         }
                                     ]
                                 },{

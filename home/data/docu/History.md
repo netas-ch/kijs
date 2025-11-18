@@ -15,7 +15,8 @@ Früher:
       {
         "tid":1,    // tid vom request nehmen
             "responseData": {
-                "fieldErrors":{                 // (optional) nur bei Save von kijs.gui.container.Form 
+                "fieldErrors":{                     // (optional) nur bei Save von 
+                                                    // kijs.gui.container.Form 
                     "Anrede": "Ungültige Anrede."   // Fehlermeldungen, die direkt in den 
                                                     // Feldern angezeigt werden.
                 },
@@ -190,8 +191,7 @@ An den Eigenschaften gibt es folgende Änderungen:
  - config/getter/setter ```minChars``` entfernt. Ist nicht mehr nötig.  
  - config ```showPlaceholder``` entfernt. Ist nicht mehr nötig.  
  - config ```showCheckBoxes``` entfernt. Ist nicht mehr nötig.  
- - config ```forceSelection``` entfernt. Der Wert muss nun immer im 
-   Combo sein.  
+ - config ```forceSelection``` umbenannt zu ```allowNewValues``` und Wert negiert.  
  - config ```selectFirst``` entfernt. Ist nicht mehr nötig.  
  - config ```remoteSort``` umbenannt zu ```enableRemoteFiltering```. Diese
    config gibt an, ob beim Tippen RPC-Requests gemacht werden sollen.  

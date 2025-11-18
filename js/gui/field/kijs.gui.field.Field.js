@@ -104,6 +104,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            waitMaskTargetDomProperty: 'inputWrapperDom',
             isDirty: false
         });
 

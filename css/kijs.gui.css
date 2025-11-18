@@ -2668,6 +2668,9 @@
     color: var(--field-fontColor);
     background-color: var(--field-bkgrndColor);
   }
+  div.kijs-field > .kijs-content > .kijs-inputwrapper > .kijs-mask-anchor > .kijs-mask > .kijs-mask-center > .kijs-mask-icon {
+    font-size: 23px;
+  }
   div.kijs-field > .kijs-content > .kijs-buttons,
   div.kijs-field > .kijs-content > .kijs-container-inner {
     flex: none;

@@ -35,76 +35,71 @@ foreach ($requests as $request) {
                 $response->errorMsg = $ex->getMessage();
             }
             break;
-        
+
         case 'combo.beruf.load':
             // Dieser rpcLoadFn unterstützt kijs.gui.field.Combo mit enableRemoteFiltering:true
             // und auch solche mit enableRemoteFiltering:false
             try {
+                // Feldnamen
+                $valueField = 'BerufId';
+                $displayTextField = 'Beruf';
+
+                // Berufe laden
+                $rows = _loadJsonFile('../testData/beruf.json');
+
+                if (!isset($response->config)) {
+                    $response->config = new stdClass();
+                }
+
                 // 1. Aufruf?
-                $initialLoad = true;
+                $initialLoad = false;
                 if (isset($request->requestData->initialLoad)) {
                     $initialLoad = !!$request->requestData->initialLoad;
                 }
 
-                // Anzahl Datensätze, die maximal zurückgegeben werden dürfen (0=unbeschränkt)
-                $queryLimit = 0;
-                if (isset($request->requestData->queryLimit)) {
-                    $queryLimit = (int) $request->requestData->queryLimit;
-                }
-
-                // Daten ermitteln
-                $rows = [];
-                $Berufe = _loadJsonFile('../testData/beruf.json');
-                foreach ($Berufe as $Beruf) {
-                    $ok = true;
-
-                    // Nach Suchbegriff filtern
+                // Daten laden (beim 1. Aufruf oder wenn query vorhanden)
+                if (isset($request->requestData->query) || $initialLoad) {
+                    // Suchbegriff = '' --> alle
+                    $query = '';
                     if (isset($request->requestData->query)) {
-                        $query = $request->requestData->query . '';
-
-                        $queryOperator = 'BEGIN';   // Vergleichsart 'BEGIN' oder 'PART'
-                        if (isset($request->requestData->queryOperator)) {
-                            $queryOperator = $request->requestData->queryOperator . '';
-                        }
-
-                        if ($query !== '') {
-                            $ok = false;
-                            $pos = mb_stripos($Beruf['Beruf'], $query);
-
-                            switch ($queryOperator) {
-                                case 'PART':
-                                    if ($pos !== false) {
-                                        $ok = true;
-                                    }
-                                    break;
-
-                                case 'BEGIN':
-                                    if ($pos === 0) {
-                                        $ok = true;
-                                    }
-                                    break;
-                            }
-                            if (!$ok) {
-                                continue;
-                            }
-                        }
+                        $query = strval($request->requestData->query);
                     }
 
-                    // Zeile übernehmen
-                    $rows[] = $Beruf;
+                    // Vergleichsart 'BEGIN' oder 'PART'
+                    $queryOperator = 'BEGIN';
+                    if (isset($request->requestData->queryOperator)) {
+                        $queryOperator = strval($request->requestData->queryOperator);
+                    }
 
-                    // Maximale Anzahl Datensätze begrenzen
-                    if ($queryLimit && count($rows) >= $queryLimit) {
-                        break;
+                    // Anzahl Datensätze, die maximal zurückgegeben werden dürfen (0=unbeschränkt)
+                    $queryLimit = 0;
+                    if (isset($request->requestData->queryLimit)) {
+                        $queryLimit = (int) $request->requestData->queryLimit;
+                    }
+
+                    // Daten filtern
+                    $response->config->data = _recordsetFilter($rows, $displayTextField,
+                            $query, $queryOperator, $queryLimit);
+                }
+
+
+                // valueRow ermitteln
+                if (isset($request->requestData->value)) {
+                    $value = strval($request->requestData->value);
+
+                    // Beispiel für ein Land das es nicht mehr gibt
+                    if ($value === '99999') {
+                        $response->config->valueRow = json_decode('{"BerufId":99999, "Beruf":"Weihnachtsmann"}');
+
+                    } else {
+                        $response->config->valueRow = _recordsetGetRowFromValue(
+                                $rows, $valueField, $value);
                     }
                 }
-                unset($Berufe);
 
-                //sleep(2);
-
-                $response->config = new stdClass();
-                $response->config->data = $rows;
-                if ($initialLoad) {
+                
+                // Evtl. beim 1. Aufruf noch weitere Config-Argumente mitgeben
+                if (!empty($request->requestData->initialLoad)) {
                     //$response->config->value = 1889;
                     //$response->config->valueRow = array('BerufId'=>1889, 'Beruf'=>'Anknüpfer');
 
@@ -562,6 +557,18 @@ foreach ($requests as $request) {
                             "xtype": "kijs.gui.field.Text",
                             "name": "Vorname",
                             "label": "Vorname"
+                        },{
+                            "xtype": "kijs.gui.field.Combo",
+                            "name": "BerufId",
+                            "label": "Beruf",
+                            "rpcLoadFn": "combo.beruf.load",
+                            "valueField": "BerufId",
+                            "displayTextField": "Beruf",
+                            "enableRemoteFiltering": true,
+                            "autoLoad": false,
+                            "on":{
+                             "change": "console.log"
+                            }
                         }
                     ]
                 ');
@@ -570,7 +577,8 @@ foreach ($requests as $request) {
                 $response->config->data = array(
                     'Anrede' => 'w',
                     'Name' => 'Meier',
-                    'Vorname' => 'Susanne'
+                    'Vorname' => 'Susanne',
+                    'BerufId' => 18675
                 );
                 
                 //sleep(1);
@@ -878,7 +886,7 @@ foreach ($requests as $request) {
 
             //$rows = [];
 
-            $rows = _generateRecordset(16, 16, 16, '', ['15', '15.15']);
+            $rows = _recordsetGenerateRec(16, 16, 16, '', ['15', '15.15']);
 
             // Verzögerung um Lademaske anzuzeigen
             //sleep(rand(0, 2));
@@ -905,7 +913,7 @@ print(json_encode($responses));
 // ------------------------------------
 // Hilfsfunktionen
 // ------------------------------------
-function _getIcon($id) {
+function _getIcon(int $id): int {
     $icons = [0xe005,0xe006,0xe00d,0xe012,0xe03f,0xe040,0xe041,0xe059,0xe05a,0xe05b,0xe05c,0xe05d,0xe05e,0xe05f,0xe060,0xe061,0xe062,0xe063,0xe064,0xe065,
         0xe066,0xe067,0xe068,0xe069,0xe06a,0xe06b,0xe06c,0xe06d,0xe06e,0xe06f,0xe070,0xe071,0xe072,0xe073,0xe074,0xe075,0xe076,0xe085,0xe086,0xe097,0xe098,
         0xe09a,0xe0a9,0xe0ac,0xe0b4,0xe0b7,0xe0bb,0xe0d8,0xe0df,0xe0e3,0xe0e4,0xe131,0xe139,0xe13a,0xe13b,0xe13c,0xe140,0xe152,0xe163,0xe169,0xe16d,0xe17b,
@@ -974,17 +982,69 @@ function _getIcon($id) {
     return $icons[$id % $cnt];
 }
 
+function _loadJsonFile(string $path): array {
+    $content = file_get_contents($path);
+    return json_decode($content, true);
+}
 
-function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $prefix='', $expandedIds) {
-    $rows = [];
+function _recordsetGetRowFromValue(array $rows, string $fieldName, string $value): ?array {
+    $value = strval($value);
 
-    if (!is_array($expandedIds)) {
-        if ($expandedIds) {
-            $expandedIds = [$expandedIds];
-        } else {
-            $expandedIds = [];
+    foreach ($rows as $row) {
+        if ($value === strval($row[$fieldName])) {
+            return $row;
         }
     }
+    unset($rows, $row);
+
+    return null;
+}
+
+function _recordsetFilter(array $rows, string $fieldName, string $query, 
+        string $queryOperator, int $queryLimit): array {
+    $retRows = [];
+    
+    foreach ($rows as $row) {
+        $ok = true;
+
+        if ($query !== '') {
+            $ok = false;
+            $pos = mb_stripos($row[$fieldName], $query);
+
+            switch ($queryOperator) {
+                case 'PART':
+                    if ($pos !== false) {
+                        $ok = true;
+                    }
+                    break;
+
+                case 'BEGIN':
+                    if ($pos === 0) {
+                        $ok = true;
+                    }
+                    break;
+            }
+            if (!$ok) {
+                continue;
+            }
+        }
+
+        // Maximale Anzahl Datensätze begrenzen
+        if ($queryLimit && count($retRows) >= $queryLimit) {
+            break;
+        }
+
+        // Zeile übernehmen
+        $retRows[] = $row;
+    }
+    unset($rows, $row);
+
+    return $retRows;
+}
+
+function _recordsetGenerateRec(int $rowsCount, int $childrenCount=0,
+        int $subChildrenCount=0, string $prefix='', array $expandedIds=[]): array {
+    $rows = [];
 
     for ($i=1; $i<=$rowsCount; $i++) {
         $id = $prefix;
@@ -995,7 +1055,7 @@ function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $
         
         $children = [];
         if ($childrenCount) {
-            $children = _generateRecordset($childrenCount, $subChildrenCount, 0, $id, $expandedIds);
+            $children = _recordsetGenerateRec($childrenCount, $subChildrenCount, 0, $id, $expandedIds);
         }
 
         $row = [];
@@ -1015,9 +1075,4 @@ function _generateRecordset($rowsCount, $childrenCount=0, $subChildrenCount=0, $
     }
 
     return $rows;
-}
-
-function _loadJsonFile($path) {
-    $content = file_get_contents($path);
-    return json_decode($content, true);
 }
