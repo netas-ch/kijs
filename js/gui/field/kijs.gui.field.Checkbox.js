@@ -49,6 +49,11 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: false }
+        };
+        
         this._checked = 0;                          // 0=unchecked, 1=checked, 2=indeterminated
 
         this._checkedIconMap = 'kijs.iconMap.Fa.check';

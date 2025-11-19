@@ -102,7 +102,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.calendar-days',
             disableFlex: true,
             nodeAttribute: {
@@ -124,11 +123,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
                 this._monthPicker
             ]
         });
-        
-        this._buttonsDom = new kijs.gui.Dom({
-            cls: 'kijs-buttons'
-        });
-        
+
         this._dom.clsAdd('kijs-field-month');
 
         // Standard-config-Eigenschaften mergen
@@ -197,8 +192,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-
-    get buttonsDom() { return this._buttonsDom; }
 
     get date() {
         return this._monthPicker.date;
@@ -332,11 +325,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
-        // Buttons-Container rendern (kijs.gui.Dom)
-        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
-        
         // Spin Button rendern (kijs.gui.Button)
-        this._spinButtonEl.renderTo(this._buttonsDom.node);
+        this._spinButtonEl.renderTo(this._contentDom.node, this._innerDom.node, 'before');
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -353,8 +343,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker.unrender();
         this._inputDom.unrender();
 
-        this._buttonsDom.unrender();
-        
         if (this._spinBoxEl) {
             this._spinBoxEl.unrender();
         }
@@ -598,9 +586,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         if (this._spinBoxEl) {
             this._spinBoxEl.destruct();
         }
-        if (this._buttonsDom) {
-            this._buttonsDom.destruct();
-        }
         if (this._spinButtonEl) {
             this._spinButtonEl.destruct();
         }
@@ -609,7 +594,6 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._inputDom = null;
         this._monthPicker = null;
         this._spinBoxEl = null;
-        this._buttonsDom = null;
         this._spinButtonEl = null;
         
         // Basisklasse entladen

@@ -52,6 +52,11 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._formatFn = null;
         this._formatFnContext = this;
         this._formatRegExps = [];

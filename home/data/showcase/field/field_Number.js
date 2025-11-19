@@ -47,6 +47,11 @@ home.sc.field_Number = class home_sc_field_Number {
                     label: 'Label'
                 },{
                     xtype: 'kijs.gui.field.Number',
+                    label: 'clearable',
+                    value: 100,
+                    clearable: true
+                },{
+                    xtype: 'kijs.gui.field.Number',
                     label: 'mit Spin-Buttons',
                     spinButtonsHide: false,
                     elements:[

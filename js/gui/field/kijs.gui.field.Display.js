@@ -52,6 +52,11 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._clickableLinks = false;
         this._formatFn = null;
         this._formatFnContext = this;

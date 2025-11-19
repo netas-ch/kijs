@@ -14,10 +14,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         super(false);
 
         // overwrite
-        this._valuesMapping = [
-            { nameProperty: 'name' , valueProperty: 'value' },
-            { nameProperty: 'nameEnd' , valueProperty: 'valueEnd' }
-        ];
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: null },
+            nameEnd: { valueProperty: 'valueEnd', emptyValue: null }
+        };
 
         this._nameEnd = '';
 
@@ -27,8 +27,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._displayWeekFormat = 'W Y'; // Anzeigeformat für die Woche (nur bei mode='week')
         this._displayWeekPrefix = '';    // Präfix für die Anzeige der Woche (nur bei mode='week')
-        this._valueDateFormat = '';     // Format für den Datums-Teil des value (leer=auto)
-        this._valueTimeFormat = '';     // Format für den Uhrzeit-Teil des value (leer=auto)
+        this._valueDateFormat = 'Y-m-d'; // Format für den Datums-Teil des value
+        this._valueTimeFormat = 'H:i:s'; // Format für den Uhrzeit-Teil des value
 
         this._year2000Threshold = 30;   // Wenn zweistellige Jahreszahlen eingegeben werden,
                                         // wird bei Zahlen >= diesem Wert eine 1900er Jahreszahl erstellt, sonst eine 2000er.
@@ -80,7 +80,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.calendar',
             disableFlex: true,
             nodeAttribute: {
@@ -108,10 +107,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                 close: this.#onSpinBoxElClose,
                 context: this
             }
-        });
-        
-        this._buttonsDom = new kijs.gui.Dom({
-            cls: 'kijs-buttons'
         });
         
         // Standard-config-Eigenschaften mergen
@@ -193,8 +188,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-    
-    get buttonsDom() { return this._buttonsDom; }
     
     // Gibt das Datum zurück. Falls nur eine Uhrzeit existiert, wird das Datum vom 01.01.1970 genommen
     get date() {
@@ -366,12 +359,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const valDateStart = this._datePicker.date;
         const valDateEnd = this._datePicker.dateEnd;
         const valTime = this._timePicker.value;
-        let ret = '';
+        let ret = null;
         let format = '';
 
         let datetime = null;
-        let dateFormat = '';
-        let timeFormat = '';
 
         // Startdatum (und evtl. -Uhrzeit)
         // Wenn noch eine Uhrzeit verwendet wird: mit Uhrzeit ergänzen
@@ -399,69 +390,30 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             }
         }
 
-        // Format für den Datums-Teil ermitteln
-        if (!kijs.isEmpty(valDateStart)) {
-            if (kijs.isEmpty(this._valueDateFormat)) {
-                switch (this._mode) {
-                    case 'range':
-                    case 'week':
-                    case 'date':
-                    case 'dateTime':
-                        dateFormat = 'Y-m-d';
-                        break;
-                }
-            } else {
-                dateFormat = this._valueDateFormat;
-            }
-        }
-
-        // Format für den Uhrzeit-Teil ermitteln
-        if (!kijs.isEmpty(valTime)) {
-            if (kijs.isEmpty(this._valueTimeFormat)) {
-                switch (this._mode) {
-                    // Falls ein ganzer SQL-Date-String verlangt wird, die komplette Uhrzeit nehmen
-                    case 'dateTime':
-                        timeFormat = 'H:i:s';
-                        break;
-
-                    // Wenn nur die Uhrzeit verlangt wird: anhand der Stellen automatisch ermitteln
-                    case 'time':
-                        if (this._timePicker.minutesHide) {
-                            timeFormat = 'H';
-                        } else if (this._timePicker.secondsHide) {
-                            timeFormat = 'H:i';
-                        } else {
-                            timeFormat = 'H:i:s';
-                        }
-                        break;
-                }
-            } else {
-                timeFormat = this._valueTimeFormat;
-            }
-        }
-
         // Datums- und Uhrzeitformat zusammenfügen
-        if (dateFormat && timeFormat) {
-            format = dateFormat + ' ' + timeFormat;
-        } else if (dateFormat) {
-            format = dateFormat;
-        } else if (timeFormat) {
-            format = timeFormat;
+        switch (this._mode) {
+            case 'date':
+            case 'week':
+            case 'range':
+                format = this._valueDateFormat;
+                break;
+
+            case 'time':
+                format = this._valueTimeFormat;
+                break;
+
+            case 'dateTime':
+                format = this._valueDateFormat + ' ' + this._valueTimeFormat;
+                break;
         }
 
-        if (format) {
+        if (!kijs.isEmpty(datetime) && format) {
             ret = kijs.Date.format(datetime, format);
         }
 
         // Falls leer
         if (kijs.isEmpty(ret)) {
-            // bei nur Uhrzeit = Leerstring
-            if (this._mode === 'time') {
-                ret = '';
-            // sonst immer = Null
-            } else {
-                ret = null;
-            }
+            ret = this._valuesMapping.name.emptyValue;
         }
 
         return ret;
@@ -518,20 +470,15 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     get valueEnd() {
         let date = null;
-        let dateFormat = this._valueDateFormat;
 
         if (this._hasDate()) {
             date = this._datePicker.dateEnd;
         }
 
-        if (kijs.isEmpty(dateFormat)) {
-            dateFormat = 'Y-m-d';
-        }
-
         if (kijs.isEmpty(date)) {
-            return null;
+            return this._valuesMapping.nameEnd.emptyValue;
         } else {
-            return kijs.Date.format(date, dateFormat);
+            return kijs.Date.format(date, this._valueDateFormat);
         }
     }
     set valueEnd(val) {
@@ -562,6 +509,34 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._inputDom.changeDisabled(!!val, true);
     }
 
+    // overwrite
+    clear() {
+        const emptyValue = this._valuesMapping.name.emptyValue;
+        const emptyValueEnd = this._valuesMapping.nameEnd.emptyValue;
+
+        kijs.Object.each(this._valuesMapping, function(key, map) {
+            this[map.valueProperty] = map.emptyValue;
+        }, this);
+
+        this.validate();
+
+        // Falls etwas geändert hat: Change Event auslösen
+        if (this._previousChangeValue !== emptyValue || this._previousChangeValueEnd !== emptyValueEnd) {
+            this.raiseEvent('input', {
+                value: emptyValue,
+                valueEnd: emptyValueEnd,
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
+            this.raiseEvent('change', {
+                value: emptyValue,
+                valueEnd: emptyValueEnd,
+                oldValue: this._previousChangeValue,
+                oldValueEnd: this._previousChangeValueEnd
+            });
+        }
+    }
+
     /**
      * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]
@@ -586,11 +561,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
-        // Buttons-Container rendern (kijs.gui.Dom)
-        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
-        
         // Spin Button rendern (kijs.gui.Button)
-        this._spinButtonEl.renderTo(this._buttonsDom.node);
+        this._spinButtonEl.renderTo(this._contentDom.node, this._innerDom.node, 'before');
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -610,7 +582,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._timePicker.unrender();
         this._spinBoxEl.unrender();
         this._inputDom.unrender();
-        this._buttonsDom.unrender();
         
         if (this._spinBoxEl) {
             this._spinBoxEl.unrender();
@@ -1193,9 +1164,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         if (this._spinBoxEl) {
             this._spinBoxEl.destruct();
         }
-        if (this._buttonsDom) {
-            this._buttonsDom.destruct();
-        }
         if (this._spinButtonEl) {
             this._spinButtonEl.destruct();
         }
@@ -1206,7 +1174,6 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._seperatorEl = null;
         this._timePicker = null;
         this._spinBoxEl = null;
-        this._buttonsDom = null;
         this._spinButtonEl = null;
         
         // Basisklasse entladen

@@ -211,6 +211,14 @@ An den Eigenschaften gibt es folgende Änderungen:
    ```Felder/Combo```.  
 
 
+### kijs.gui.field.DateTime
+ - ```valueTimeFormat``` ist neu Standardmässig immer ```'H:i:s'```  
+
+
+### kijs.gui.field.*
+ - Neue config/getter/setter ```clearable```. Zeigt einen Button zum leeren des Felds an.  
+
+
 
 Version 3.1.0
 =============

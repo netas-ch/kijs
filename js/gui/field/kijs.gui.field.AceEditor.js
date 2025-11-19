@@ -14,6 +14,11 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._aceEditor = null;
         this._aceEditorNode = null;
         this._mode = 'javascript';
@@ -120,6 +125,12 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         if (this._aceEditor) {
             this._aceEditor.setReadOnly(!!val);
         }
+    }
+
+    // overwrite
+    clear() {
+        this._aceEditor.session.clearAnnotations();
+        super.clear();
     }
 
     /**

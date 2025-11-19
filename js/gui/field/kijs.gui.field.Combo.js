@@ -59,7 +59,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._spinButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-down',
             disableFlex: true,
             nodeAttribute: {
@@ -85,10 +84,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             style: {
                 maxHeight: '210px'
             }
-        });
-
-        this._buttonsDom = new kijs.gui.Dom({
-            cls: 'kijs-buttons'
         });
 
         this._dom.clsAdd('kijs-field-combo');
@@ -193,8 +188,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // De-/aktiviert die Browser-Vorschläge
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
-
-    get buttonsDom() { return this._buttonsDom; }
 
     get data() {
         return this._data;
@@ -467,11 +460,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Input rendern (kijs.guiDom)
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
-        // Buttons-Container rendern (kijs.gui.Dom)
-        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
-
         // Spin Button rendern (kijs.gui.Button)
-        this._spinButtonEl.renderTo(this._buttonsDom.node);
+        this._spinButtonEl.renderTo(this._contentDom.node, this._innerDom.node, 'before');
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -498,10 +488,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this._spinButtonEl) {
             this._spinButtonEl.unrender();
         }
-        if (this._buttonsDom) {
-            this._buttonsDom.unrender();
-        }
-
         if (this._listViewEl) {
             this._listViewEl.unrender();
         }
@@ -937,10 +923,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         if (this._spinButtonEl) {
             this._spinButtonEl.destruct();
         }
-        if (this._buttonsDom) {
-            this._buttonsDom.destruct();
-        }
-
         if (this._listViewEl) {
             this._listViewEl.destruct();
         }
@@ -954,8 +936,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // Variablen (Objekte/Arrays) leeren
         this._inputDom = null;
         this._spinButtonEl = null;
-        this._buttonsDom = null;
-
         this._listViewEl = null;
         this._writeForMoreEl = null;
         this._spinBoxEl = null;

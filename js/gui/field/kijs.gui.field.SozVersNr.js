@@ -13,6 +13,11 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._allowAhvNr = false;       // darf eine alte AHV-Nr eingegeben werden?
         this._allowSozVersNr = true;    // darf eine neue Soz.vers.-Nr. eingegeben werden?
         

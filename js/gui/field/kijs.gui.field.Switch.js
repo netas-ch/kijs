@@ -49,6 +49,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: false }
+        };
+
         this._checked = 0;                          // 0=unchecked, 1=checked
 
         this._valueChecked = true;

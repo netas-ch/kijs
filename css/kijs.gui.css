@@ -2657,11 +2657,12 @@
     flex-direction: row;
     overflow: visible;
     /* für Badges */
+    align-self: stretch;
   }
   div.kijs-field > .kijs-content > .kijs-inputwrapper {
     flex: 1;
     position: relative;
-    display: block;
+    display: flex;
   }
   div.kijs-field > .kijs-content > .kijs-inputwrapper > input {
     outline: none;
@@ -2671,7 +2672,20 @@
   div.kijs-field > .kijs-content > .kijs-inputwrapper > .kijs-mask-anchor > .kijs-mask > .kijs-mask-center > .kijs-mask-icon {
     font-size: 23px;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons,
+  div.kijs-field > .kijs-content > .kijs-button {
+    flex: none;
+    height: 100%;
+    padding-top: 4px;
+    padding-right: 4px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    align-items: flex-start;
+    border-top: 1px solid var(--field-borderColor);
+    border-right: 1px solid var(--field-borderColor);
+    border-bottom: 1px solid var(--field-borderColor);
+    border-left: none;
+    border-radius: 0;
+  }
   div.kijs-field > .kijs-content > .kijs-container-inner {
     flex: none;
     display: flex;
@@ -2679,12 +2693,10 @@
     overflow: visible;
     /* für Badges */
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
     margin: 0 0 0 2px;
     height: var(--field-height);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     margin: 0;
     height: 100%;
@@ -2700,11 +2712,9 @@
     border-radius: 0;
     color: var(--button-icon-fontColor);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline > .kijs-caption,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     margin-top: calc(var(--field-label-paddingTop) - 5px);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
     width: calc(var(--icon-fontSize) + 4px);
     padding-top: 4px;
@@ -2713,25 +2723,20 @@
     padding-left: 4px;
     justify-content: center;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
     margin: 0;
     padding: 0;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-default,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
     box-shadow: none;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline:hover,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon {
     margin: 0 0 0 2px;
     height: var(--field-height);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline {
     margin: 0;
     height: 100%;
@@ -2746,19 +2751,15 @@
     color: var(--button-icon-fontColor);
     cursor: pointer;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-default,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-default {
     box-shadow: none;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-hidden,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-hidden {
     display: none;
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline:hover,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline:hover {
     background-color: var(--viewport-bkgrndColor);
   }
-  div.kijs-field > .kijs-content > .kijs-buttons > .kijs-icon.kijs-inline.kijs-disabled,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-icon.kijs-inline.kijs-disabled {
     background-color: var(--field-disabled-bkgrndColor);
     color: var(--field-disabled-fontColor);
@@ -2895,19 +2896,24 @@
     flex-direction: column;
     align-items: stretch;
   }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline {
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button {
     flex: 1;
+    border-top: 1px solid var(--field-borderColor);
+    border-right: 1px solid var(--field-borderColor);
+    border-bottom: 1px solid var(--field-borderColor);
+    border-left: none;
+    border-radius: 0;
     padding-top: 1px;
     align-items: center;
   }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline:last-child {
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button:last-child {
     border-top: none;
   }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline > .kijs-icon {
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button > .kijs-icon {
     font-size: 11px;
     line-height: 11px;
   }
-  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-hidden {
+  div.kijs-field-number > .kijs-content > .kijs-buttons > .kijs-button.kijs-hidden {
     display: none;
   }
   div.kijs-field-url.kijs-disableFlex > .kijs-content > .kijs-inputwrapper,
@@ -3557,6 +3563,7 @@
   }
   div.kijs-field-aceeditor > .kijs-content > .kijs-inputwrapper {
     flex: 1;
+    display: block;
     outline: none;
     min-width: 160px;
   }

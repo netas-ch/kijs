@@ -54,6 +54,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     //theme: 'snow',
                     //value: '',
                     inputHeight: 200,
+                    clearable: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

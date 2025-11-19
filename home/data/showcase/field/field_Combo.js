@@ -360,7 +360,8 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     valueField: 'ISO',
                     displayTextField: 'Land',
                     value: 'FR',
-                    data: Laender
+                    data: Laender,
+                    clearable: true
                 },{
                     xtype: 'kijs.gui.field.Combo',
                     label: 'ohne value',

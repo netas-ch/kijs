@@ -13,6 +13,11 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._dom.clsRemove('kijs-field-text');
         this._dom.clsAdd('kijs-field-iban');
         

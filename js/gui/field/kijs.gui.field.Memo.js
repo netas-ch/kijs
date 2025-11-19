@@ -13,6 +13,11 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._valueTrimEnable = true;
         this._previousChangeValue = '';
 

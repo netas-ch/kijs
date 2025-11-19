@@ -188,6 +188,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         for (let i=0; i<this._fields.length; i++) {
             if (this._fields[i].xtype !== 'kijs.gui.field.Display') {
                 this._fields[i].clear();
+                this._fields[i].isDirty = false;
                 this._fields[i].errorsClear();
             }
         }

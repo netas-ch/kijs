@@ -2965,11 +2965,12 @@
             display: flex;
             flex-direction: row;
             overflow: visible; /* für Badges */
-
+            align-self: stretch;
+            
             > .kijs-inputwrapper {
                 flex: 1;
                 position: relative;
-                display: block;
+                display: flex;
 
                 > input {
                     outline: none;
@@ -2982,7 +2983,21 @@
                 }
             }
 
-            > .kijs-buttons,
+            > .kijs-button {
+                flex: none;
+                height: 100%;
+                padding-top: 4px;
+                padding-right: 4px;
+                padding-bottom: 0;
+                padding-left: 4px;
+                align-items: flex-start;
+                border-top: 1px solid var(--field-borderColor);
+                border-right: 1px solid var(--field-borderColor);
+                border-bottom: 1px solid var(--field-borderColor);
+                border-left: none;
+                border-radius: 0;
+            }
+            
             > .kijs-container-inner {
                 flex: none;
                 display: flex;
@@ -3189,8 +3204,13 @@
         flex-direction: column;
         align-items: stretch;
 
-        > .kijs-button.kijs-inline {
+        > .kijs-button {
             flex: 1;
+            border-top: 1px solid var(--field-borderColor);
+            border-right: 1px solid var(--field-borderColor);
+            border-bottom: 1px solid var(--field-borderColor);
+            border-left: none;
+            border-radius: 0;
             padding-top: 1px;
             align-items: center;
             &:last-child {
@@ -4054,6 +4074,7 @@
             
             > .kijs-inputwrapper {
                 flex: 1;
+                display: block;
                 outline: none;
                 min-width: 160px;
 

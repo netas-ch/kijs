@@ -13,6 +13,11 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._disableBrowserSecurityWarning = false;
         this._passwordChar = '●';
         this._valueTrimEnable = false;

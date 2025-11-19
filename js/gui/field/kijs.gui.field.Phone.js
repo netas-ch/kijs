@@ -13,6 +13,11 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._defaultCountryCallingCode = '+41';
         this._internationalCallPrefix = '00';
         this._preventLinkButtonDisable = false;
@@ -21,7 +26,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         
         this._linkButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.phone',
             tooltip: kijs.getText('Anrufen'),
             nodeAttribute: {
@@ -31,10 +35,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
                 click: this.#onLinkButtonClick,
                 context: this
             }
-        });
-        
-        this._buttonsDom = new kijs.gui.Dom({
-            cls: 'kijs-buttons'
         });
         
         this._dom.clsRemove('kijs-field-text');
@@ -136,12 +136,9 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
     // overwrite
     render(superCall) {
         super.render(true);
-        
-        // Buttons-Container rendern (kijs.gui.Dom)
-        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
-        
+
         // Link Button rendern (kijs.gui.Button)
-        this._linkButtonEl.renderTo(this._buttonsDom.node);
+        this._linkButtonEl.renderTo(this._contentDom.node, this._innerDom.node, 'before');
 
         // Event afterRender auslösen
         if (!superCall) {
@@ -155,8 +152,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         if (!superCall) {
             this.raiseEvent('unrender');
         }
-
-        this._buttonsDom.unrender();
         
         super.unrender(true);
     }
@@ -259,9 +254,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         }
 
         // Elemente/DOM-Objekte entladen
-        if (this._buttonsDom) {
-            this._buttonsDom.destruct();
-        }
         if (this._linkButtonEl) {
             this._linkButtonEl.destruct();
         }
@@ -269,7 +261,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         // Variablen (Objekte/Arrays) leeren
         this._defaultCountryCallingCode = null;
         this._internationalCallPrefix = null;
-        this._buttonsDom = null;
         this._linkButtonEl = null;
         this._preventLinkButtonDisable = null;
         

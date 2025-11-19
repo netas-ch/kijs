@@ -49,11 +49,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     constructor(config={}) {
         super(false);
 
-        // Falls ein Feld mehrere Werte zurückgibt, muss diese Variable in
-        // der abgeleiteten Klasse überschrieben werden
-        this._valuesMapping = [{ nameProperty: 'name' , valueProperty: 'value' }];
+        // Falls ein Feld mehrere Werte zurückgibt oder einen anderen Wert als null bei leer hat,
+        // muss diese Variable in der abgeleiteten Klasse überschrieben werden
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: null }
+        };
 
         this._labelHide = false;
+        this._clearable = false;
         this._errors = [];
         this._maxLength = null;
         this._minLength = null;
@@ -82,7 +85,20 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._inputWrapperDom = new kijs.gui.Dom({
             cls: 'kijs-inputwrapper'
         });
-        
+
+        this._clearButtonEl = new kijs.gui.Button({
+            parent: this,
+            iconMap: 'kijs.iconMap.Fa.x',
+            disableFlex: true,
+            nodeAttribute: {
+                tabIndex: -1
+            },
+            on: {
+                click: this.#onClearButtonClick,
+                context: this
+            }
+        });
+
         this._errorIconEl = new kijs.gui.Icon({
             parent: this,
             iconMap: 'kijs.iconMap.Fa.circle-info',
@@ -124,6 +140,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
 
+            clearable: { target: 'clearable' }, // Button zum Leeren anzeigen?
+            clearButtonIconChar: { target: 'iconChar', context: this._clearButtonEl },
+            clearButtonIconCls: { target: 'iconCls', context: this._clearButtonEl },
+            clearButtonIconColor: { target: 'iconColor', context: this._clearButtonEl },
+            clearButtonIconMap: { target: 'iconMap', context: this._clearButtonEl },
+
             errorIcon: { target: 'errorIcon' },
             errorIconChar: { target: 'iconChar', context: this._errorIconEl },
             errorIconCls: { target: 'iconCls', context: this._errorIconEl },
@@ -162,6 +184,33 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get clearable() { return this._clearable; }
+    set clearable(val) {
+        let doRender = this._clearable !== !!val;
+
+        this._clearable = !!val;
+
+        if (doRender && this.isRendered) {
+            this.render();
+        }
+    }
+
+    get clearButtonHide() { return !this._clearButtonEl.visible; }
+    set clearButtonHide(val) { this._clearButtonEl.visible = !val; }
+
+    get clearButtonIconChar() { return this._clearButtonEl.iconChar; }
+    set clearButtonIconChar(val) { this._clearButtonEl.iconChar = val; }
+
+    get clearButtonIconCls() { return this._clearButtonEl.iconCls; }
+    set clearButtonIconCls(val) { this._clearButtonEl.iconCls = val; }
+
+    get clearButtonIconColor() { return this._clearButtonEl.iconColor; }
+    set clearButtonIconColor(val) { this._clearButtonEl.iconColor = val; }
+
+    get clearButtonIconMap() { return this._clearButtonEl.iconMap; }
+    set clearButtonIconMap(val) { this._clearButtonEl.iconMap = val; }
+
+
     get contentDom() { return this._contentDom; }
     
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
@@ -303,7 +352,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get isDirty() {
         let isDirty = false;
         if (!this.disabled) {
-            kijs.Array.each(this._valuesMapping, function(map) {
+            kijs.Object.each(this._valuesMapping, function(key, map) {
                 isDirty = isDirty || this._compareIsDirty(this._initialValues[map.valueProperty], this[map.valueProperty]);
             }, this);
         }
@@ -315,7 +364,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         } else {
             this._initialValues = {};
-            kijs.Array.each(this._valuesMapping, function(map) {
+            kijs.Object.each(this._valuesMapping, function(key, map) {
                 this._initialValues[map.valueProperty] = this[map.valueProperty];
             }, this);
         }
@@ -455,8 +504,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      */
     get values() {
         let ret = {};
-        kijs.Array.each(this._valuesMapping, function(map) {
-            const fieldName = this[map.nameProperty];
+        kijs.Object.each(this._valuesMapping, function(key, map) {
+            const fieldName = this[key];
             if (!kijs.isEmpty(fieldName)) {
                 ret[fieldName] = this[map.valueProperty];
             }
@@ -472,8 +521,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      * @param {Object} val
      */
     set values(val) {
-        kijs.Array.each(this._valuesMapping, function(map) {
-            const fieldName = this[map.nameProperty];
+        kijs.Object.each(this._valuesMapping, function(key, map) {
+            const fieldName = this[key];
             if (!kijs.isEmpty(fieldName) && val.hasOwnProperty(fieldName)) {
                 this[map.valueProperty] = val[fieldName];
             }
@@ -528,15 +577,17 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
 
-        // Icons auch aktivieren/deaktivieren
-        this._errorIconEl.changeDisabled(!!val, true);
-        this._helpIconEl.changeDisabled(!!val, true);
+        this._clearButtonEl.changeDisabled(!!val, true);
 
         // Buttons auch aktivieren/deaktivieren
         const buttons = this.getElementsByXtype('kijs.gui.Button', 1);
         kijs.Array.each(buttons, function(button) {
             button.changeDisabled(!!val, true);
         }, this);
+
+        // Icons auch aktivieren/deaktivieren
+        this._errorIconEl.changeDisabled(!!val, true);
+        this._helpIconEl.changeDisabled(!!val, true);
     }
 
     /**
@@ -544,10 +595,20 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
      * @returns {undefined}
      */
     clear() {
-        kijs.Array.each(this._valuesMapping, function(map) {
-                this[map.valueProperty] = null;
+        const emptyValue = this._valuesMapping.name.emptyValue;
+
+        let oldVal = this.value;
+
+        kijs.Object.each(this._valuesMapping, function(key, map) {
+            this[map.valueProperty] = map.emptyValue;
         }, this);
-        this.isDirty = false;
+
+        this.validate();
+
+        // Falls etwas geändert hat: Change Event auslösen
+        if (emptyValue !== oldVal) {
+            this.raiseEvent('change', { oldValue: oldVal, value: emptyValue } );
+        }
     }
 
     /**
@@ -586,8 +647,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // den Aufruf von kijs.gui.Container überspringen
         kijs.gui.Element.prototype.render.call(this, true);
 
-
-
         // Label rendern (kijs.guiDom)
         if (!this._labelHide) {
             this._labelDom.renderTo(this._dom.node);
@@ -601,9 +660,14 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         // InputWrapper rendern (kijs.guiDom)
         this._inputWrapperDom.renderTo(this._contentDom.node);
 
+        // clearButton rendern (kijs.gui.Button)
+        if (this._clearable) {
+            this._clearButtonEl.renderTo(this._contentDom.node);
+        }
+        
         // innerDOM rendern (kijs.guiDom)
         this._innerDom.renderTo(this._contentDom.node);
-        
+
         // Help icon rendern (kijs.gui.Icon)
         this._helpIconEl.renderTo(this._contentDom.node);
 
@@ -636,11 +700,21 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this.raiseEvent('unrender');
         }
 
-        this._labelDom.unrender();
-        this._inputWrapperDom.unrender();
-        this._errorIconEl.unrender();
-        this._helpIconEl.unrender();
-        this._contentDom.unrender();
+        if (this._labelDom) {
+            this._labelDom.unrender();
+        }
+        if (this._inputWrapperDom) {
+            this._inputWrapperDom.unrender();
+        }
+        if (this._errorIconEl) {
+            this._errorIconEl.unrender();
+        }
+        if (this._helpIconEl) {
+            this._helpIconEl.unrender();
+        }
+        if (this._contentDom) {
+            this._contentDom.unrender();
+        }
         super.unrender(true);
     }
 
@@ -663,13 +737,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         return kijs.isEmpty(this._errors);
     }
 
-
     /**
      * Setzt den Wert des Feldes auf den Originalwert zurück (not dirty).
      * @returns {undefined}
      */
     valuesReset() {
-        kijs.Array.each(this._valuesMapping, function(map) {
+        kijs.Object.each(this._valuesMapping, function(key, map) {
             if (kijs.isDefined(this._initialValues[map.valueProperty])) {
                 this[map.valueProperty] = this._initialValues[map.valueProperty];
             }
@@ -851,6 +924,17 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
 
+    // PRIVATE
+    // LISTENERS
+    #onClearButtonClick(e) {
+        if (this.disabled || this.readOnly) {
+             return;
+        }
+
+        this.clear();
+    }
+
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -872,6 +956,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._inputWrapperDom) {
             this._inputWrapperDom.destruct();
         }
+        if (this._clearButtonEl) {
+            this._clearButtonEl.destruct();
+        }
         if (this._errorIconEl) {
             this._errorIconEl.destruct();
         }
@@ -886,6 +973,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._errors = null;
         this._labelDom = null;
         this._inputWrapperDom = null;
+        this._clearButtonEl = null;
         this._errorIconEl = null;
         this._helpIconEl = null;
         this._contentDom = null;

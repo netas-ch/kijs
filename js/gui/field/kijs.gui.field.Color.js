@@ -52,6 +52,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._previousChangeValue = '';
         this._defaultColor = '#ffffff'; // Standardfarbe, wenn leer.
                                         // Weil das native Color-Field kann nicht leer sein.

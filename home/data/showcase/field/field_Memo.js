@@ -47,6 +47,7 @@ home.sc.field_Memo = class home_sc_field_Memo {
                     label: 'Label',
                     value: 'Bemerkung\nmit zwei Zeilen',
                     inputHeight: 100,
+                    clearable: true,
                     on: {
                         focus:  console.log,
 

@@ -13,6 +13,11 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._disabled = false;
 
         this._quillEditor = null;

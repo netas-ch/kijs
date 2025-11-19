@@ -49,7 +49,6 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         // Spin Up/Down Buttons
         this._spinUpButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-up',
             disableFlex: false,
             nodeAttribute: {
@@ -65,7 +64,6 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         
         this._spinDownButtonEl = new kijs.gui.Button({
             parent: this,
-            cls: 'kijs-inline',
             iconMap: 'kijs.iconMap.Fa.caret-down',
             disableFlex: false,
             nodeAttribute: {
@@ -286,8 +284,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._inputDom.renderTo(this._inputWrapperDom.node);
 
         // Buttons-Container rendern (kijs.gui.Dom)
-        this._buttonsDom.renderTo(this._contentDom.node, this._inputWrapperDom.node, 'after');
-        
+        this._buttonsDom.renderTo(this._contentDom.node, this._innerDom.node, 'before');
+
         // Spin Buttons rendern (kijs.gui.Button)
         this._spinUpButtonEl.renderTo(this._buttonsDom.node);
         this._spinDownButtonEl.renderTo(this._buttonsDom.node);
