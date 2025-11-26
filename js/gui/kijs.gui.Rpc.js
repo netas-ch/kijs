@@ -95,8 +95,8 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      *                                          und nicht mit anderen RPCs zusammengefasst.
      *     {kijs.gui.BoxElement|HTMLElement} [waitMaskTarget=document.body]  Ziel-BoxElement oder Ziel-Node
      *                                                                       für Lademaske, NULL=document.body, 'none' für keine Maske.
-     *     {String} [waitMaskTargetDomProperty='dom']   Name der DOM-Eigenschaft in der die Lademaske
-     *                                                  angezeigt werden soll.
+     *     {String} waitMaskTargetDomProperty   Name der DOM-Eigenschaft in der die Lademaske
+     *                                          angezeigt werden soll.
      *     {Boolean} [ignoreWarnings=false]     Sollen Warnungen ignoriert werden?
      * @returns {Promise}
      */
@@ -120,6 +120,9 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         if (config.waitMaskTarget === 'none') {
             waitMask = null;
         } else if (config.waitMaskTarget instanceof kijs.gui.Element) {
+            if (config.waitMaskTargetDomProperty) {
+                config.waitMaskTarget.waitMaskTargetDomProperty = config.waitMaskTargetDomProperty;
+            }
             waitMask = config.waitMaskTarget.waitMaskAdd();
         } else {
             waitMask = new kijs.gui.Mask({
