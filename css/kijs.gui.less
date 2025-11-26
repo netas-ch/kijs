@@ -2965,7 +2965,7 @@
             display: flex;
             flex-direction: row;
             overflow: visible; /* für Badges */
-            align-self: stretch;
+            align-self: flex-start;
             
             > .kijs-inputwrapper {
                 flex: 1;
@@ -2985,7 +2985,8 @@
 
             > .kijs-button {
                 flex: none;
-                height: 100%;
+                align-self: stretch;
+                height: auto;
                 padding-top: 4px;
                 padding-right: 4px;
                 padding-bottom: 0;
@@ -3010,7 +3011,8 @@
 
                     &.kijs-inline {
                         margin: 0;
-                        height: 100%;
+                        align-self: stretch;
+                        height: auto;
                         padding-top: 4px;
                         padding-right: 4px;
                         padding-bottom: 0;
@@ -3057,7 +3059,8 @@
 
                     &.kijs-inline {
                         margin: 0;
-                        height: 100%;
+                        align-self: stretch;
+                        height: auto;
                         padding: 3px 4px;
                         align-items: flex-start;
                         border-radius: 0px;
