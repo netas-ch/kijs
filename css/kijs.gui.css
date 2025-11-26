@@ -1781,12 +1781,6 @@
     -webkit-user-select: text;
     user-select: text;
   }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element * {
-    font-family: var(--default-fontFamily);
-    font-size: var(--item-fontSize);
-    line-height: var(--item-lineHeight);
-    color: var(--item-fontColor);
-  }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     color: var(--item-selected-fontColor);
     background-color: var(--item-selected-bkgrndColor);
