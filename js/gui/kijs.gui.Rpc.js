@@ -120,10 +120,12 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         if (config.waitMaskTarget === 'none') {
             waitMask = null;
         } else if (config.waitMaskTarget instanceof kijs.gui.Element) {
+            let oldWaitMaskTargetDomProperty = config.waitMaskTarget.waitMaskTargetDomProperty;
             if (config.waitMaskTargetDomProperty) {
                 config.waitMaskTarget.waitMaskTargetDomProperty = config.waitMaskTargetDomProperty;
             }
             waitMask = config.waitMaskTarget.waitMaskAdd();
+            config.waitMaskTarget.waitMaskTargetDomProperty = oldWaitMaskTargetDomProperty;
         } else {
             waitMask = new kijs.gui.Mask({
                 displayWaitIcon: true,
