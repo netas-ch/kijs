@@ -539,34 +539,53 @@
     width: 8px;
   }
   /* kijs.gui.field.* */
-  .kijs-field > .kijs-content > .kijs-buttons > .kijs-button,
+  .kijs-field > .kijs-content > .kijs-button,
   .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: 1px solid var(--field-borderColor);
+    margin: 0 0 0 2px;
+    height: var(--field-height);
   }
-  .kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline,
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline,
   .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
+    margin: 0;
+    align-self: stretch;
+    height: auto;
+    padding-top: 2px;
+    padding-right: 4px;
+    padding-bottom: 0;
+    padding-left: 4px;
+    align-items: flex-start;
     border-top: 1px solid var(--field-borderColor);
     border-right: 1px solid var(--field-borderColor);
     border-bottom: 1px solid var(--field-borderColor);
     border-left: none;
     border-radius: 0;
+    color: var(--button-icon-fontColor);
   }
-  .kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings,
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline > .kijs-caption,
+  .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
+    margin-top: calc(var(--field-label-paddingTop) - 5px);
+  }
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-smallpaddings,
   .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
     width: calc(var(--icon-fontSize) + 4px);
-    padding-top: 4px;
+    padding-top: 2px;
     padding-right: 4px;
     padding-bottom: 0;
     padding-left: 4px;
     justify-content: center;
   }
-  .kijs-field > .kijs-content > .kijs-buttons > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon,
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon,
   .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
     margin: 0;
     padding: 0;
+  }
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-default,
+  .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
+    box-shadow: none;
+  }
+  .kijs-field > .kijs-content > .kijs-button.kijs-inline:hover,
+  .kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
+    background-color: var(--viewport-bkgrndColor);
   }
   div.kijs-field-email > .kijs-content > .kijs-inputwrapper > input,
   div.kijs-field-iban > .kijs-content > .kijs-inputwrapper > input,

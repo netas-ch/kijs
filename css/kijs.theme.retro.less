@@ -697,34 +697,51 @@
     /* kijs.gui.field.* */
     .kijs-field {
         > .kijs-content {
-            > .kijs-buttons,
-            > .kijs-container-inner {
-                > .kijs-button {
+            > .kijs-button,
+            > .kijs-container-inner > .kijs-button {
+                margin: 0 0 0 2px;
+                height: var(--field-height);
+
+                &.kijs-inline {
+                    margin: 0;
+                    align-self: stretch;
+                    height: auto;
+                    padding-top: 2px;
+                    padding-right: 4px;
+                    padding-bottom: 0;
+                    padding-left: 4px;
+                    align-items: flex-start;
                     border-top: 1px solid var(--field-borderColor);
                     border-right: 1px solid var(--field-borderColor);
                     border-bottom: 1px solid var(--field-borderColor);
-                    border-left: 1px solid var(--field-borderColor);
+                    border-left: none;
+                    border-radius: 0;
+                    color: var(--button-icon-fontColor);
 
-                    &.kijs-inline {
-                        border-top: 1px solid var(--field-borderColor);
-                        border-right: 1px solid var(--field-borderColor);
-                        border-bottom: 1px solid var(--field-borderColor);
-                        border-left: none;
-                        border-radius: 0;
+                    > .kijs-caption {
+                        margin-top: calc(var(--field-label-paddingTop) - 5px);
+                    }
 
-                        &.kijs-smallpaddings {
-                            width: calc(var(--icon-fontSize) + 4px);
-                            padding-top: 4px;
-                            padding-right: 4px;
-                            padding-bottom: 0;
-                            padding-left: 4px;
-                            justify-content: center;
+                    &.kijs-smallpaddings {
+                        width: calc(var(--icon-fontSize) + 4px);
+                        padding-top: 2px;
+                        padding-right: 4px;
+                        padding-bottom: 0;
+                        padding-left: 4px;
+                        justify-content: center;
 
-                            > .kijs-icon {
-                                margin: 0;
-                                padding: 0;
-                            }
+                        > .kijs-icon {
+                            margin: 0;
+                            padding: 0;
                         }
+                    }
+
+                    &.kijs-default {
+                        box-shadow: none;
+                    }
+
+                    &:hover {
+                        background-color: var(--viewport-bkgrndColor);
                     }
                 }
             }
