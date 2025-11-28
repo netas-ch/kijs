@@ -42,6 +42,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            linkButtonCls: 'kijs-inline',
             disableFlex: true,
             inputMode: 'tel',
             formatRegExp:[  // Formatierung (kann mit config ersetzt werden)
@@ -70,7 +71,8 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             defaultCountryCallingCode: true,    // Standard Landesvorwahl
-            
+
+            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },
             linkButtonHide: { target: 'linkButtonHide' },
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },

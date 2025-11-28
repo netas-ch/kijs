@@ -111,6 +111,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            spinButtonCls: 'kijs-inline',
             autocomplete: false,
             disableFlex: true,
             mode: 'date',
@@ -135,6 +136,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             valueDateFormat: true,              // Format für den Datums-Teil des value (leer=auto)
             valueTimeFormat: true,              // Format für den Uhrzeit-Teil des value (leer=auto)
             emptyBtnHide: { target: 'emptyBtnHide', context: this._datePicker },
+
+            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },

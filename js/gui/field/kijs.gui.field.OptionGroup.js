@@ -18,6 +18,7 @@ kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.f
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             disableFlex: true,
             showCheckBoxes: true,
             selectType: 'single',

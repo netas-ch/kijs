@@ -2664,21 +2664,6 @@
   div.kijs-field > .kijs-content > .kijs-inputwrapper > .kijs-mask-anchor > .kijs-mask > .kijs-mask-center > .kijs-mask-icon {
     font-size: 23px;
   }
-  div.kijs-field > .kijs-content > .kijs-button {
-    flex: none;
-    align-self: stretch;
-    height: auto;
-    padding-top: 6px;
-    padding-right: 4px;
-    padding-bottom: 0;
-    padding-left: 4px;
-    align-items: flex-start;
-    border-top: 1px solid var(--field-borderColor);
-    border-right: 1px solid var(--field-borderColor);
-    border-bottom: 1px solid var(--field-borderColor);
-    border-left: none;
-    border-radius: 0;
-  }
   div.kijs-field > .kijs-content > .kijs-container-inner {
     flex: none;
     display: flex;
@@ -2686,10 +2671,12 @@
     overflow: visible;
     /* für Badges */
   }
+  div.kijs-field > .kijs-content > .kijs-button,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button {
     margin: 0 0 0 2px;
     height: var(--field-height);
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline {
     margin: 0;
     align-self: stretch;
@@ -2706,9 +2693,11 @@
     border-radius: 0;
     color: var(--button-icon-fontColor);
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline > .kijs-caption,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline > .kijs-caption {
     margin-top: calc(var(--field-label-paddingTop) - 5px);
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-smallpaddings,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings {
     width: calc(var(--icon-fontSize) + 4px);
     padding-top: 6px;
@@ -2717,13 +2706,16 @@
     padding-left: 4px;
     justify-content: center;
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-smallpaddings > .kijs-icon {
     margin: 0;
     padding: 0;
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline.kijs-default,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline.kijs-default {
     box-shadow: none;
   }
+  div.kijs-field > .kijs-content > .kijs-button.kijs-inline:hover,
   div.kijs-field > .kijs-content > .kijs-container-inner > .kijs-button.kijs-inline:hover {
     background-color: var(--viewport-bkgrndColor);
   }

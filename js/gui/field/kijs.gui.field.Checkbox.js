@@ -88,6 +88,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             captionDisplayType: 'code',
             disableFlex: true
         });

@@ -25,6 +25,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             disableFlex: true,
             showCheckBoxes: true,
             selectType: 'simple-multi',

@@ -50,11 +50,6 @@ home.sc.field_Color = class home_sc_field_Color {
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.stamp',
-                            smallPaddings: false,
-                            cls: 'kijs-inline'
-                        },{
-                            xtype: 'kijs.gui.Button',
                             iconMap: 'kijs.iconMap.Fa.stamp'
                         }
                     ],

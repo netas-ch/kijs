@@ -39,13 +39,15 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            linkButtonCls: 'kijs-inline',
             inputMode: 'url'
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             defaultProtocol: true,  // Standardprotokoll für URLs ohne Protokoll (default = 'https://')
-            
+
+            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },
             linkButtonHide: { target: 'linkButtonHide' },
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },

@@ -64,6 +64,7 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
 
          // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             min  : 0,
             max  : 100,
             step : 1,

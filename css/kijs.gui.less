@@ -2974,116 +2974,101 @@
                 }
             }
 
-            > .kijs-button {
-                flex: none;
-                align-self: stretch;
-                height: auto;
-                padding-top: 6px;
-                padding-right: 4px;
-                padding-bottom: 0;
-                padding-left: 4px;
-                align-items: flex-start;
-                border-top: 1px solid var(--field-borderColor);
-                border-right: 1px solid var(--field-borderColor);
-                border-bottom: 1px solid var(--field-borderColor);
-                border-left: none;
-                border-radius: 0;
-            }
-            
             > .kijs-container-inner {
                 flex: none;
                 display: flex;
                 flex-direction: row;
                 overflow: visible; /* für Badges */
+            }
 
-                > .kijs-button {
-                    margin: 0 0 0 2px;
-                    height: var(--field-height);
+            > .kijs-button,
+            > .kijs-container-inner > .kijs-button {
+                margin: 0 0 0 2px;
+                height: var(--field-height);
 
-                    &.kijs-inline {
-                        margin: 0;
-                        align-self: stretch;
-                        height: auto;
+                &.kijs-inline {
+                    margin: 0;
+                    align-self: stretch;
+                    height: auto;
+                    padding-top: 6px;
+                    padding-right: 4px;
+                    padding-bottom: 0;
+                    padding-left: 4px;
+                    align-items: flex-start;
+                    border-top: 1px solid var(--field-borderColor);
+                    border-right: 1px solid var(--field-borderColor);
+                    border-bottom: 1px solid var(--field-borderColor);
+                    border-left: none;
+                    border-radius: 0;
+                    color: var(--button-icon-fontColor);
+
+                    > .kijs-caption {
+                        margin-top: calc(var(--field-label-paddingTop) - 5px);
+                    }
+
+                    &.kijs-smallpaddings {
+                        width: calc(var(--icon-fontSize) + 4px);
                         padding-top: 6px;
                         padding-right: 4px;
                         padding-bottom: 0;
                         padding-left: 4px;
-                        align-items: flex-start;
-                        border-top: 1px solid var(--field-borderColor);
-                        border-right: 1px solid var(--field-borderColor);
-                        border-bottom: 1px solid var(--field-borderColor);
-                        border-left: none;
-                        border-radius: 0;
-                        color: var(--button-icon-fontColor);
+                        justify-content: center;
 
-                        > .kijs-caption {
-                            margin-top: calc(var(--field-label-paddingTop) - 5px);
-                        }
-
-                        &.kijs-smallpaddings {
-                            width: calc(var(--icon-fontSize) + 4px);
-                            padding-top: 6px;
-                            padding-right: 4px;
-                            padding-bottom: 0;
-                            padding-left: 4px;
-                            justify-content: center;
-
-                            > .kijs-icon {
-                                margin: 0;
-                                padding: 0;
-                            }
-                        }
-
-                        &.kijs-default {
-                            box-shadow: none;
-                        }
-
-                        &:hover {
-                            background-color: var(--viewport-bkgrndColor);
+                        > .kijs-icon {
+                            margin: 0;
+                            padding: 0;
                         }
                     }
-                }
 
-                > .kijs-icon {
-                    margin: 0 0 0 2px;
-                    height: var(--field-height);
+                    &.kijs-default {
+                        box-shadow: none;
+                    }
 
-                    &.kijs-inline {
-                        margin: 0;
-                        align-self: stretch;
-                        height: auto;
-                        padding: 3px 4px;
-                        align-items: flex-start;
-                        border-radius: 0px;
-                        border-top: 1px solid var(--field-borderColor);
-                        border-right: 1px solid var(--field-borderColor);
-                        border-bottom: 1px solid var(--field-borderColor);
-                        border-left: 0;
-                        background-color: var(--button-bkgrndColor);
-                        color: var(--button-icon-fontColor);
-                        cursor: pointer;
-
-                        &.kijs-default {
-                            box-shadow: none;
-                        }
-
-                        &.kijs-hidden {
-                            display: none;
-                        }
-
-                        &:hover {
-                            background-color: var(--viewport-bkgrndColor);
-                        }
-
-                        &.kijs-disabled {
-                            background-color: var(--field-disabled-bkgrndColor);
-                            color: var(--field-disabled-fontColor);
-                            cursor: default;
-                        }
+                    &:hover {
+                        background-color: var(--viewport-bkgrndColor);
                     }
                 }
             }
 
+            > .kijs-container-inner > .kijs-icon {
+                margin: 0 0 0 2px;
+                height: var(--field-height);
+
+                &.kijs-inline {
+                    margin: 0;
+                    align-self: stretch;
+                    height: auto;
+                    padding: 3px 4px;
+                    align-items: flex-start;
+                    border-radius: 0px;
+                    border-top: 1px solid var(--field-borderColor);
+                    border-right: 1px solid var(--field-borderColor);
+                    border-bottom: 1px solid var(--field-borderColor);
+                    border-left: 0;
+                    background-color: var(--button-bkgrndColor);
+                    color: var(--button-icon-fontColor);
+                    cursor: pointer;
+
+                    &.kijs-default {
+                        box-shadow: none;
+                    }
+
+                    &.kijs-hidden {
+                        display: none;
+                    }
+
+                    &:hover {
+                        background-color: var(--viewport-bkgrndColor);
+                    }
+
+                    &.kijs-disabled {
+                        background-color: var(--field-disabled-bkgrndColor);
+                        color: var(--field-disabled-fontColor);
+                        cursor: default;
+                    }
+                }
+            }
+            
             > .kijs-icon-error {
                 flex: none;
                 height: 16px;

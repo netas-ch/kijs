@@ -90,6 +90,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            spinButtonCls: 'kijs-inline',
             autocomplete: false,
             scrollableY: 'auto',
             selectType: 'single'
@@ -131,6 +132,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                                                            // fehlt. Z.B. weil deaktiviert
             value: { prio: 200, target: 'value' },
 
+            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },

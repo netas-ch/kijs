@@ -121,6 +121,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: 'kijs-inline',
             waitMaskTargetDomProperty: 'inputWrapperDom',
             isDirty: false
         });
@@ -142,6 +143,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             labelWidth: { target: 'labelWidth' },
 
             clearable: { target: 'clearable' }, // Button zum Leeren anzeigen?
+            clearButtonCls: { fn: 'function', target: this._clearButtonEl.dom.clsAdd, context: this._clearButtonEl.dom },
             clearButtonIconChar: { target: 'iconChar', context: this._clearButtonEl },
             clearButtonIconCls: { target: 'iconCls', context: this._clearButtonEl },
             clearButtonIconColor: { target: 'iconColor', context: this._clearButtonEl },

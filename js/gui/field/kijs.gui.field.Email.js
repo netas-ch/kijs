@@ -38,6 +38,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
         
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            linkButtonCls: 'kijs-inline',
             inputMode: 'email',
             validationRegExp: { // Validierung ist hier, damit sie überschrieben werden kann
                 regExp: /^[^\s\:@]+@[^\s@]+\.[a-z]+$/,
@@ -47,6 +48,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },
             linkButtonHide: { target: 'linkButtonHide' },
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },

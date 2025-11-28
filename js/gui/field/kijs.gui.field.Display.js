@@ -81,6 +81,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             submitValueEnable: false
         });
 

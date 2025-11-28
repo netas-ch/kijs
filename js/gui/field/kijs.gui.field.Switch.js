@@ -95,6 +95,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             captionDisplayType: 'code',
             disableFlex: true
         });

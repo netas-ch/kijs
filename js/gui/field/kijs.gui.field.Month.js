@@ -133,6 +133,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            spinButtonCls: 'kijs-inline',
             autocomplete: false,
             disableFlex: true
         });
@@ -149,7 +150,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             minDate: { target: 'minDate', context: this._monthPicker },
             maxValue: { target: 'maxValue', context: this._monthPicker },
             minValue: { target: 'minValue', context: this._monthPicker },
-            
+
+            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },

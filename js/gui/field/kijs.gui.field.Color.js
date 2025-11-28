@@ -79,6 +79,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            clearButtonCls: '',
             autocomplete: false,
             disableFlex: true
         });
