@@ -182,6 +182,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         val = this._insertLineBreaks(val);
 
         this._inputDom.html = val;
+        this._updateClearButtonVisibility();
     }
 
     get valueDisplayType() { return this._valueDisplayType; }

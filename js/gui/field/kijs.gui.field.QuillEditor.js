@@ -121,6 +121,9 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         } else {
             val = kijs.toString(this._value);
         }
+        if (val === '<p><br></p>') {
+            val = '';
+        }
         if (this._valueTrimEnable) {
             val = val.trim();
         }
@@ -135,6 +138,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
             this._quillEditor.clipboard.dangerouslyPasteHTML(0, val);
         }
         this.isDirty = false;
+        this._updateClearButtonVisibility();
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }

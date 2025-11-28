@@ -45,7 +45,6 @@ home.sc.field_Text = class home_sc_field_Text {
                 },{
                     xtype: 'kijs.gui.field.Text',
                     label: 'Label',
-                    value: 'mein Text',
                     clearable: true,
                     on: {
                         focus:  console.log,
@@ -65,6 +64,7 @@ home.sc.field_Text = class home_sc_field_Text {
                 },{
                     xtype: 'kijs.gui.field.Text',
                     label: 'clearable',
+                    value: 'test',
                     clearable: true
                 },{
                     xtype: 'kijs.gui.field.Text',

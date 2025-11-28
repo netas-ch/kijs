@@ -52,7 +52,7 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
                     placeholder: 'Bitte hier Text eingeben...',
                     required: true,
                     //theme: 'snow',
-                    //value: '',
+                    value: 'Dies ist mein <b>fetter</b> Text.',
                     inputHeight: 200,
                     clearable: true,
                     elements:[

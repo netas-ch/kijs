@@ -46,6 +46,7 @@ home.sc.field_Color = class home_sc_field_Color {
                     xtype: 'kijs.gui.field.Color',
                     label: 'Label',
                     value: 'rgb(0, 0, 255)',
+                    clearable: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

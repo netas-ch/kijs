@@ -170,6 +170,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             throw new kijs.Error(`config "checked" is not valid.`);
         }
         this._updateCheckboxIcon();
+        this._updateClearButtonVisibility();
     }
 
     // overwrite
@@ -251,6 +252,7 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             throw new kijs.Error(`config "value" is not valid.`);
         }
         this._updateCheckboxIcon();
+        this._updateClearButtonVisibility();
     }
 
     get valueChecked() { return this._valueChecked; }

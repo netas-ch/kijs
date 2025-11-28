@@ -69,6 +69,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
                     iconColorField: '',
                     value: 2,
                     //showCheckBoxes: true,
+                    clearable: true,
                     data: [
                         { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},

@@ -68,6 +68,11 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
+        // overwrite
+        this._valuesMapping = {
+            name: { valueProperty: 'value', emptyValue: '' }
+        };
+
         this._previousChangeDate = null;  // Wird verwendet, um das Change Event nur bei einer Wertänderung auszulösen
 
         this._year2000Threshold = 30;     // Wenn zweistellige Jahreszahlen eingegeben werden,
@@ -200,6 +205,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this._monthPicker.date = val;
         this._updateInputValue();
         this._previousChangeDate = this._monthPicker.date;
+        this._updateClearButtonVisibility();
     }
 
     get emptyBtnHide() { return this._monthPicker.emptyBtnHide; }

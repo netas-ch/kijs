@@ -79,6 +79,7 @@ home.sc.field_Checkbox = class home_sc_field_Checkbox {
                     label: '... mit Icon',
                     iconCls: 'icoWizard16',
                     caption: 'Caption',
+                    clearable: true,
                     checked: 1
                 },{
                     xtype: 'kijs.gui.field.Checkbox',

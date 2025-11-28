@@ -88,8 +88,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         this._clearButtonEl = new kijs.gui.Button({
             parent: this,
-            iconMap: 'kijs.iconMap.Fa.x',
+            iconMap: 'kijs.iconMap.Fa.xmark',
             disableFlex: true,
+            visible: false,
             nodeAttribute: {
                 tabIndex: -1
             },
@@ -172,6 +173,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this }
         });
 
+        // Listeners
+        this.on('change', this.#onChange, this);
+        
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -194,9 +198,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this.render();
         }
     }
-
-    get clearButtonHide() { return !this._clearButtonEl.visible; }
-    set clearButtonHide(val) { this._clearButtonEl.visible = !val; }
 
     get clearButtonIconChar() { return this._clearButtonEl.iconChar; }
     set clearButtonIconChar(val) { this._clearButtonEl.iconChar = val; }
@@ -477,6 +478,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     get value() { return null; }
     set value(val) {
         this.isDirty = false;
+        this._updateClearButtonVisibility();
     }
 
     /**
@@ -802,6 +804,25 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
+     * Bei clearable und wenn das Feld nicht leer ist, wird der clearButton angezeigt
+     * @returns {undefined}
+     */
+    _updateClearButtonVisibility() {
+        if (this._clearable) {
+            let hasValue = false;
+            kijs.Object.each(this._valuesMapping, function(key, map) {
+console.log(this[map.valueProperty]);
+                if (this[map.valueProperty] !== map.emptyValue) {
+                    hasValue = true;
+                    return;
+                }
+            }, this);
+            
+            this._clearButtonEl.visible = hasValue;
+        }
+    }
+
+    /**
      * Maximale Länge validieren
      * Wird aufgerufen von _validationRules
      * @param {String} value
@@ -932,6 +953,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
 
         this.clear();
+    }
+
+    #onChange(e) {
+        this._updateClearButtonVisibility();
     }
 
 

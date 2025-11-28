@@ -50,6 +50,7 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
                     xtype: 'kijs.gui.field.SozVersNr',
                     label: 'Label',
                     value: '756.1234.5678.97',
+                    clearable: true,
                     on: {
                         focus:  console.log,
 

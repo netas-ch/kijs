@@ -50,6 +50,7 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                     date: new Date(),
                     minValue: kijs.Date.addDays(new Date(), -15),
                     maxValue: kijs.Date.addDays(new Date(), 15),
+                    clearable: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

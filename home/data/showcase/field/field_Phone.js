@@ -50,6 +50,7 @@ home.sc.field_Phone = class home_sc_field_Phone {
                     //defaultCountryCallingCode: '+41',
                     //internationalCallPrefix: '00',
                     linkButtonHide: false,
+                    clearable: true,
                     on: {
                         focus:  console.log,
 

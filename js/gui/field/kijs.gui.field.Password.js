@@ -152,6 +152,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
             this._inputDom.nodeAttributeSet('value', val);
         }
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }

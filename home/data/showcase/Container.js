@@ -1,8 +1,8 @@
 /* global kijs */
 
 home.sc.Container = class home_sc_Container {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,9 +10,9 @@ home.sc.Container = class home_sc_Container {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
@@ -20,9 +20,9 @@ home.sc.Container = class home_sc_Container {
     static onRpcButtonClick(e) {
         e.element.caption = 'Ich wurde angeklickt';
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -56,9 +56,9 @@ home.sc.Container = class home_sc_Container {
                     innerStyle: {
                         backgroundColor: '#afa'
                     },
-                    tooltip: { 
-                        html: '<p>Test</p>', 
-                        followPointer: false 
+                    tooltip: {
+                        html: '<p>Test</p>',
+                        followPointer: false
                     },
                     on: {
                         click: function(e) {
@@ -84,7 +84,7 @@ home.sc.Container = class home_sc_Container {
                         }
                     }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
@@ -121,7 +121,7 @@ home.sc.Container = class home_sc_Container {
                             name: 'Mein Container',
                             height: null,
                             width: 200,
-                            style: { 
+                            style: {
                                 border:'1px solid #000',
                                 backgroundColor:'#fdf'
                             },
@@ -130,6 +130,10 @@ home.sc.Container = class home_sc_Container {
                                     xtype: 'kijs.gui.Element',
                                     html: 'A1',
                                     style: { border:'1px solid #f00' }
+                                },{
+                                    xtype: 'kijs.gui.field.Combo',
+                                    labelPosition: 'top',
+                                    label: 'Test'
                                 },{
                                     xtype: 'kijs.gui.Element',
                                     name: 'Mein Element',
@@ -149,7 +153,7 @@ home.sc.Container = class home_sc_Container {
                             xtype: 'kijs.gui.Container',
                             height: null,
                             width: 200,
-                            style: { 
+                            style: {
                                 border:'1px solid #000',
                                 backgroundColor:'#ffd'
                             },
@@ -178,7 +182,7 @@ home.sc.Container = class home_sc_Container {
                         }
                     ]
                 },
-                
+
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
@@ -194,7 +198,7 @@ home.sc.Container = class home_sc_Container {
                             html: 'HTML wird dynamisch geladen'
                         }
                     ],
-                    style: { 
+                    style: {
                         backgroundColor:'#ddd',
                         padding: '10px',
                         border: '1px solid #333'
@@ -202,10 +206,10 @@ home.sc.Container = class home_sc_Container {
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
         this._content.down('Mein Element').upX('kijs.gui.Container').downX('kijs.gui.Element').next.next.previous.html = 'Gugus';
     }
@@ -226,14 +230,14 @@ home.sc.Container = class home_sc_Container {
             }
         ];
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };

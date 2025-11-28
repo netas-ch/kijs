@@ -50,6 +50,7 @@ home.sc.field_Email = class home_sc_field_Email {
                     xtype: 'kijs.gui.field.Email',
                     label: 'Label',
                     value: 'support@netas.ch',
+                    clearable: true,
                     linkButtonHide: true,
                     elements:[
                         {

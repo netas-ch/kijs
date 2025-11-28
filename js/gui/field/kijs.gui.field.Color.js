@@ -156,6 +156,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
 

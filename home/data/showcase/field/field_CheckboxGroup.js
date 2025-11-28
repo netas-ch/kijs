@@ -56,6 +56,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
                     iconColorField: '',
                     value: [2,3],
                     //checkedAll: true,
+                    clearable: true,
                     data: [
                         { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},

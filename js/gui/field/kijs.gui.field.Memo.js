@@ -123,6 +123,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         val = kijs.toString(val);
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }

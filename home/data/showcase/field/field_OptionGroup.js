@@ -62,6 +62,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
                     iconColorField: '',
                     value: 2,
                     selectType: 'singleAndEmpty',
+                    clearable: true,
                     data: [
                         { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
                         { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},

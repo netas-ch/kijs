@@ -135,18 +135,18 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             valueDateFormat: true,              // Format für den Datums-Teil des value (leer=auto)
             valueTimeFormat: true,              // Format für den Uhrzeit-Teil des value (leer=auto)
             emptyBtnHide: { target: 'emptyBtnHide', context: this._datePicker },
-            date: { target: 'date' },           // Date Object
-            dateEnd: { target: 'dateEnd' },     // Date Object
-            value: { target: 'value' },         // Datum als SQL-String
-            valueEnd: { target: 'valueEnd' },    // End-Datum als SQL-String
-            
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },
             spinButtonIconColor: { target: 'iconColor', context: this._spinButtonEl },
             spinButtonIconMap: { target: 'iconMap', context: this._spinButtonEl },
             
-            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
+            virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' },
+
+            date: { target: 'date', prio: 1000 },           // Date Object
+            dateEnd: { target: 'dateEnd', prio: 1000 },     // Date Object
+            value: { target: 'value', prio: 1000 },         // Datum als SQL-String
+            valueEnd: { target: 'valueEnd', prio: 1000 }    // End-Datum als SQL-String
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -232,6 +232,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._previousChangeValue = this.value;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
+        this._updateClearButtonVisibility();
     }
 
     get dateEnd() {
@@ -258,6 +259,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._previousChangeValueEnd = this.valueEnd;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
+        this._updateClearButtonVisibility();
     }
 
     // overwrite
@@ -466,6 +468,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
         this._previousChangeValue = this.value;
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
+        this._updateClearButtonVisibility();
     }
 
     get valueEnd() {

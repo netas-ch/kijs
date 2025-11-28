@@ -166,6 +166,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "checked" is not valid.`);
         }
         this._updateTogglePoint(this._checked);
+        this._updateClearButtonVisibility();
     }
 
     // overwrite
@@ -246,6 +247,7 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             throw new kijs.Error(`config "value" is not valid.`);
         }
         this._updateTogglePoint(this._checked);
+        this._updateClearButtonVisibility();
     }
 
     get valueChecked() { return this._valueChecked; }

@@ -78,6 +78,7 @@ home.sc.field_Switch = class home_sc_field_Switch {
                     label: '... mit Icon',
                     iconCls: 'icoWizard16',
                     caption: 'Caption',
+                    clearable: true,
                     checked: 1
                 },{
                     xtype: 'kijs.gui.field.Switch',

@@ -186,6 +186,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         val = this._formatRules(val, false);
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }

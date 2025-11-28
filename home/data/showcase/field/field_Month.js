@@ -49,6 +49,7 @@ home.sc.field_Month = class home_sc_field_Month {
                     minValue: kijs.Date.addDays(new Date(), -65),
                     maxValue: kijs.Date.addDays(new Date(), 65),
                     lastDayOfMonthAsValue: false,
+                    clearable: true,
                     on: {
                         focus:  console.log,
 

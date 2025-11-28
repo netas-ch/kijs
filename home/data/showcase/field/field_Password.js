@@ -48,6 +48,7 @@ home.sc.field_Password = class home_sc_field_Password {
                     label: 'Label',
                     value: '123',
                     disableBrowserSecurityWarning: 'auto',
+                    clearable: true,
                     on: {
                         focus:  console.log,
 

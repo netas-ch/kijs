@@ -310,6 +310,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         // displayText aktualisieren
         let displayText = this._getDisplayTextFromValue();
         this._inputDom.nodeAttributeSet('value', displayText);
+        this._updateClearButtonVisibility();
     }
 
     get valueField() { return this._listViewEl.valueField; }

@@ -50,6 +50,7 @@ home.sc.field_Iban = class home_sc_field_Iban {
                     xtype: 'kijs.gui.field.Iban',
                     label: 'Label',
                     value: 'DE07123412341234123412',
+                    clearable: true,
                     elements:[
                         {
                             xtype: 'kijs.gui.Button',

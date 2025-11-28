@@ -98,6 +98,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         if (this._aceEditor) {
             this._aceEditor.setValue(val, 1);
         }
+        this._updateClearButtonVisibility();
     }
 
     get valueTrimEnable() { return this._valueTrimEnable; }

@@ -237,6 +237,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         val = this._formatNumber(val);
         this._inputDom.nodeAttributeSet('value', kijs.toString(val));
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
     /**

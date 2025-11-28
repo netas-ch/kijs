@@ -107,6 +107,7 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     set value(val) {
         this._listViewEl.value = val;
         this._previousChangeValue = val;
+        this._updateClearButtonVisibility();
     }
 
     get valueField() { return this._listViewEl.valueField; }
