@@ -142,6 +142,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
             labelWidth: { target: 'labelWidth' },
 
+            contentCls: { fn: 'function', target: this._contentDom.clsAdd, context: this._contentDom },
+            contentStyle: { fn: 'assign', target: 'style', context: this._contentDom },
+
             clearable: { target: 'clearable' }, // Button zum Leeren anzeigen?
             clearButtonCls: { fn: 'function', target: this._clearButtonEl.dom.clsAdd, context: this._clearButtonEl.dom },
             clearButtonIconChar: { target: 'iconChar', context: this._clearButtonEl },
