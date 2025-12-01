@@ -314,9 +314,9 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     required: true,
                     valueRow: { displayText: 'Unix', iconMap: 'kijs.iconMap.Fa.skull', value: 4},
                     data: [
-                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1},
-                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2},
-                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3}
+                        { displayText: 'Apple', iconMap: 'kijs.iconMap.Fa.apple', value: 1 },
+                        { displayText: 'Linux', iconMap: 'kijs.iconMap.Fa.linux', value: 2 },
+                        { displayText: 'Windows', iconMap: 'kijs.iconMap.Fa.windows', value: 3 }
                     ],
                     elements:[
                         {
@@ -332,7 +332,13 @@ home.sc.field_Combo = class home_sc_field_Combo {
                             }
                         },{
                             xtype: 'kijs.gui.Button',
-                            iconMap: 'kijs.iconMap.Fa.stamp'
+                            iconMap: 'kijs.iconMap.Fa.walkie-talkie',
+                            on: {
+                                click: function(e) {
+                                    kijs.gui.CornerTipContainer.show('value', '<pre>  .-""-.<br> /      \\<br>|  o  o  |<br> \\  __  /<br>  `----`</pre>');
+                                },
+                                context: this
+                            }
                         }
                     ],
                     on: {

@@ -14,7 +14,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     constructor(config={}) {
         super(false);
 
-        this._value = '';               // Wert
+        this._value = null;             // Wert
         this._valueRow = null;          // Ganzer Datensatz zum value
 
         this._allowNewValues = false;   // Dürfen auch Werte eingegeben werden,
@@ -29,8 +29,14 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._remoteFilteringDefer = 200;    // Delay zwischen dem Tippen und dem RPC bei remoteFiltering
         this._remoteFilteringDeferId = null;
 
+        this._valueSource = 'listView'; // Von wo soll der Wert beim Schliessen der SpinBox geholt werden?
+                                        // - 'listView', 'listView force' // Wert kommt vom ListView
+                                        // - 'text', 'text force'         // Wert kommt vom Textfeld
+                                        // - 'cancel'                     // Wert zurücksetzen
+                                        //                      --> 'force' = Wert zwingend übernehmen
+
         this._whileTyping = false;      // Wird gerade ein Buchstabe geschrieben?
-        this._lastRpcValue = '';        // letzter Wert der via RPC an den Server
+        this._lastRpcValue = null;      // letzter Wert der via RPC an den Server
                                         // geschickt wurde. Wird intern verwendet
                                         // damit nicht mehrere gleiche Requests
                                         // gesendet werden, wenn die Antwort keine
@@ -122,11 +128,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
             iconColorField: { target: 'iconColorField', context: this._listViewEl },
             tooltipField: { target: 'tooltipField', context: this._listViewEl },
-
             disabledField: { target: 'disabledField', context: this._listViewEl },  // Feldnamen für disabled (optional)
            
             data: { prio: 80, target: 'data' },
-
             valueRow: { prio: 199, target: 'valueRow' },   // Datensatz zum value. Ist nötig,
                                                            // wenn der value-Datensatz in data
                                                            // fehlt. Z.B. weil deaktiviert
@@ -155,7 +159,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // Listeners
         this._inputDom.on('blur', this.#onInputDomBlur, this);
-        this._inputDom.on('change', this.#onInputDomChange, this);
         this._inputDom.on('input', this.#onInputDomInput, this);
         this._inputDom.on('keyDown', this.#onInputDomKeyDown, this);
 
@@ -229,7 +232,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('value', displayText);
     }
 
-   // overwrite
+    // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
     // overwrite
@@ -311,6 +314,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         // displayText aktualisieren
         let displayText = this._getDisplayTextFromValue();
+
         this._inputDom.nodeAttributeSet('value', displayText);
         this._updateClearButtonVisibility();
     }
@@ -434,7 +438,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             super.load(args, true).then((e) => {
                 if (e.response && e.response.config && 
                         !kijs.isEmpty(e.response.config.valueRow)) {
-                    this._lastRpcValue = '';
+                    this._lastRpcValue = null;
                 }
 
                 // Lademaske auf SpinBox entfernen
@@ -627,6 +631,20 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             }
         }
 
+        // Zuerst in this._valueRow suchen, ohne Unterscheidung der Gross-/Kleinschreibung
+        if (!kijs.isEmpty(this._valueRow)) {
+            if ( (this._valueRow[this._listViewEl.valueField]+'').toLowerCase() === (val+'').toLowerCase() ) {
+                return this._valueRow;
+            }
+        }
+
+        // Sonst in _data suchen, ohne Unterscheidung der Gross-/Kleinschreibung
+        for (let i=0; i<this._data.length; i++) {
+            if ( (this._data[i][this._listViewEl.valueField]+'').toLowerCase() === (val+'').toLowerCase() ) {
+                return this._data[i];
+            }
+        }
+
         // Sonst, wenn remoteFiltering:true versuchen die valueRow per RPC zu holen
         if (!kijs.isEmpty(this._rpcLoadFn)) {
             // Sicherstellen, dass nicht mehrmals die gleiche Anfrage geschickt wird.
@@ -674,39 +692,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         }, 200, this);
     }
 
-    #onInputDomChange(e) {
-        // change event nicht berücksichtigen, wenn die spinbox
-        // offen ist.
-        if (this._spinBoxEl.isRendered) {
-            return;
-        }
-
-        let oldVal = this._value;
-
-        // Eingegebener Text ermitteln
-        let text = kijs.toString(this._inputDom.nodeAttributeGet('value'));
-
-        // Wert übernehmen
-        // leer
-        if (text === '') {
-            this.value = '';
-
-        // Wert aus ListView übernehmen, wenn vorhanden
-        } else if (!kijs.isEmpty(this._listViewEl.data)) {
-            this.value = this._listViewEl.value;
-
-        // Sonst den bestehenden Wert belassen
-        } else {
-            this.value = this._value;
-            
-        }
-
-        if (this._value !== oldVal) {
-            this.raiseEvent('input', { value: this._value, oldValue: oldVal });
-            this.raiseEvent('change', { value: this._value, oldValue: oldVal });
-        }
-    }
-
     #onInputDomInput(e) {
         // Es wird ein Text eingegeben
         this._whileTyping = true;
@@ -749,22 +734,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             // Enter: Ausgewählten Datensatz übernehmen und SpinBox schliessen
             case 'Enter':
             case 'Tab':
-
-                let oldVal = this._value;
-
-                // Wert aus ListView übernehmen
-                if (!kijs.isEmpty(this._listViewEl.data)) {
-                    this._value = this._listViewEl.value;
-                    this._valueRow = this._getValueRowFromValue(this._value);
+                if (this._valueSource === 'text') {
+                    this._valueSource = 'text force';
                 }
-                
-                if (this._value !== oldVal) {
-                    // validieren
-                    this.validate();
-
-                    // events auslösen
-                    this.raiseEvent('input', { value: this._value, oldValue: oldVal });
-                    this.raiseEvent('change', { value: this._value, oldValue: oldVal });
+                if (this._valueSource === 'listView') {
+                    this._valueSource = 'listView force';
                 }
 
                 // SpinBox schliessen
@@ -776,38 +750,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
             // Esc: SpinBox schliessen
             case 'Escape':
+                this._valueSource = 'cancel';
+
                 // SpinBox schliessen
                 this._spinBoxEl.close();
-
-                if (this._enableRemoteFiltering) {
-                    // Selektion zurücksetzen
-                    this._listViewEl.data = [];
-                    this._listViewEl.value = this._value;
-
-                    // timer abbrechen
-                    if (this._remoteFilteringDeferId) {
-                        window.clearTimeout(this._remoteFilteringDeferId);
-                        this._remoteFilteringDeferId = null;
-                    }
-                    // Request starten
-                    let args = {
-                        initialLoad: false,
-                        query: this._getDisplayTextFromValue()
-                    };
-                    this.load(args);
-
-                } else {
-                    // Workaround: data leeren, damit das Listview sicher den
-                    // value übernimmt
-                    this._listViewEl.data = [];
-                    
-                    // alter Wert anzeigen/selektieren
-                    this._listViewEl.value = this._value;
-
-                    // Daten ins ListView übernehmen
-                    this._applyFilterData();
-
-                }
 
                 // event stoppen
                 e.nodeEvent.stopPropagation();
@@ -818,37 +764,24 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             case 'ArrowDown':
                 // Event weitergeben
                 if (this._spinBoxEl.isRendered) {
+                    this._valueSource = 'listView';
                     this._listViewEl.handleKeyDown(e.nodeEvent);
                 }
                 break;
 
+            default:
+                this._valueSource = 'text';
+                break;
+                
         }
     }
 
     #onListViewElClick(e) {
         if (!e.raiseElement.disabled) {
-            let oldVal = this._value;
-
-            this._value = this._listViewEl.value;
-
-            // valueRow aktualisieren
-            this._valueRow = this._getValueRowFromValue(this._listViewEl.value);
-
-            // displayText aktualisieren
-            let displayText = this._getDisplayTextFromValue();
-            this._inputDom.nodeAttributeSet('value', displayText);
+            this._valueSource = 'listView force';
 
             // SpinBox schliessen
             this._spinBoxEl.close();
-
-            if (this._value !== oldVal) {
-                // validieren
-                this.validate();
-
-                // events auslösen
-                this.raiseEvent('input', { value: this._value, oldValue: oldVal });
-                this.raiseEvent('change', { value: this._value, oldValue: oldVal });
-            }
         }
     }
 
@@ -857,23 +790,72 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onSpinBoxElClose() {
-        // Nicht vorhandene Werte sind erlaubt
-        if (this._allowNewValues) {
-            let oldVal = this._value;
-            
-            // Wert übernehmen
-            this._value = this._inputDom.nodeAttributeGet('value');
+        let oldVal = this._value;
 
-            if (this._value !== oldVal) {
-                this.raiseEvent('input', { value: this._value, oldValue: oldVal });
-                this.raiseEvent('change', { value: this._value, oldValue: oldVal });
-            }
+        switch (this._valueSource) {
+            case 'text':
+            case 'text force':
+                const force = this._valueSource === 'text force';
 
-        // Nicht vorhandene Werte sind nicht erlaubt
-        } else {
-            // displayText aktualisieren
-            let displayText = this._getDisplayTextFromValue();
-            this._inputDom.nodeAttributeSet('value', displayText);
+                // Eingegebener Text ermitteln
+                const text = kijs.toString(this._inputDom.nodeAttributeGet('value'));
+
+                // Leerer Wert immer übernehmen
+                if (kijs.isEmpty(text)) {
+                    this.value = null;
+
+                // Wert aus ListView übernehmen, wenn vorhanden
+                } else if (!kijs.isEmpty(this._listViewEl.data)) {
+                    this.value = this._listViewEl.value;
+
+                // Sonst den bestehenden Wert belassen
+                } else {
+                    this.value = this._value;
+
+                }
+
+                if (!kijs.isEmpty(text)) {
+                    // Entspricht der eingegebene Text einem Wert in der Liste?
+                    let isInData = false;
+                    let displayText = this._getDisplayTextFromValue();
+                    isInData = (text+'').toLowerCase() === (displayText+'').toLowerCase();
+
+                    if (!force) {
+                        if (!isInData) {
+                            this.value = oldVal;
+                        }
+                    }
+
+                    // Nicht vorhandene Werte sind erlaubt
+                    if (!isInData && this._allowNewValues) {
+                        let displayText = this._getDisplayTextFromValue();
+
+                        // Wert ist nicht in der Liste (Neuer Wert)
+                        if (text !== displayText) {
+                            // Wert übernehmen
+                            this.value = text;
+                        }
+
+                    }
+                }
+
+                break;
+
+            case 'listView force':
+                this.value = this._listViewEl.value;
+                break;
+
+            case 'listView':
+            case 'cancel':
+                this.value = oldVal;
+                break;
+
+        }
+
+        // evtl. events auslösen
+        if (this._value !== oldVal) {
+            this.raiseEvent('input', { value: this._value, oldValue: oldVal });
+            this.raiseEvent('change', { value: this._value, oldValue: oldVal });
         }
 
         this._inputDom.focus();
@@ -899,6 +881,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             if (this._spinBoxEl.isRendered) {
                 this._spinBoxEl.close();
             } else {
+                this._valueSource = 'listView';
                 this._spinBoxEl.show();
             }
         }
