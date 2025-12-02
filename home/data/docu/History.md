@@ -217,6 +217,8 @@ An den Eigenschaften gibt es folgende Änderungen:
 
 ### kijs.gui.field.*
  - Neue config/getter/setter ```clearable```. Zeigt einen Button zum leeren des Felds an.  
+ - Getter ```valueDisplay``` entfernt.  
+ - Getter ```valueDisplayHtml``` entfernt.  
 
 
 

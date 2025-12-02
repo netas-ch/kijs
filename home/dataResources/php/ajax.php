@@ -691,8 +691,8 @@ foreach ($requests as $request) {
 
                     $col = new stdClass();
                     $col->caption = 'Combo';
-                    $col->valueField = 'combovalue';
-                    $col->displayField = 'combodisplay';
+                    $col->valueField = 'value';
+                    $col->displayField = 'displayText';
                     $col->tooltip = 'Franz fährt im komplett verwahrlosten Taxi quer durch Bayern';
                     $col->editable = true;
                     $col->clicksToEdit = 1;

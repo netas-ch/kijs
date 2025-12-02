@@ -210,15 +210,16 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         if (this._cellEditor) {
 
             // value lesen und Editor schliessen
-            let val = this._cellEditor.value,
+            let val = this._cellEditor.value;
 
-                // TODO: Folgende Funktionen gehören nicht ins kijs.gui.field.Field:
-                // kijs.field.Field.valueDisplay
-                // kijs.field.Field.valueDisplayHtml
-                // Diese dort entfernen und hier eine alternative machen
+            let valDsp = '';
+            if (typeof this._cellEditor.displayText !== undefined) {
+                valDsp = this._cellEditor.displayText;
+            } else if (typeof this._cellEditor.value !== undefined) {
+                valDsp = this._cellEditor.value;
+            }
 
-                valDsp = this._cellEditor.valueDisplay,
-                valDspHtml = this._cellEditor.valueDisplayHtml;
+            let valDspHtml = kijs.String.htmlspecialchars(valDsp);
 
             this._cellEditor.unrender();
             this._cellEditor = null;
