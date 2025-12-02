@@ -215,6 +215,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get displayLimit() { return this._displayLimit; }
     set displayLimit(val) { this._displayLimit = parseInt(val); }
 
+    // Gibt den aktuellen displayText zurück
+    get displayText() {
+        return kijs.toString(this._inputDom.nodeAttributeGet('value'));
+    }
+
     get displayTextField() { return this._listViewEl.displayTextField; }
     set displayTextField(val) { this._listViewEl.displayTextField = val; }
 
