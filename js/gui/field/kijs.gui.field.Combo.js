@@ -446,6 +446,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                     this._spinBoxEl.waitMaskRemove();
                 }
 
+                // 'afterLoad' auslösen
+                if (!superCall) {
+                    this.raiseEvent('afterLoad', Object.assign({}, e));
+                }
+
                 // Promise ausführen
                 resolve(e);
 

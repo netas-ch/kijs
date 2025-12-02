@@ -52,10 +52,7 @@ foreach ($requests as $request) {
                 }
 
                 // 1. Aufruf?
-                $initialLoad = false;
-                if (isset($request->requestData->initialLoad)) {
-                    $initialLoad = !!$request->requestData->initialLoad;
-                }
+                $initialLoad = $request->requestData->initialLoad ?? false;
 
                 // Daten laden (beim 1. Aufruf oder wenn query vorhanden)
                 if (isset($request->requestData->query) || $initialLoad) {
