@@ -459,6 +459,7 @@ home.sc.field_Combo = class home_sc_field_Combo {
                     valueField: 'BerufId',
                     displayTextField: 'Beruf',
                     enableRemoteFiltering: true,
+                    value: 8458,
                     autoLoad: true
                 },{
                     xtype: 'kijs.gui.field.Display',
