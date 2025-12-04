@@ -800,8 +800,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (this._clearable) {
             let hasValue = false;
             kijs.Object.each(this._valuesMapping, function(key, map) {
-console.log(this[map.valueProperty]);
-                if (this[map.valueProperty] !== map.emptyValue) {
+                if (!kijs.isEmpty(this[map.valueProperty]) && this[map.valueProperty] !== map.emptyValue) {
                     hasValue = true;
                     return;
                 }
