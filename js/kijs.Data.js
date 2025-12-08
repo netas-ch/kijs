@@ -45,6 +45,7 @@ kijs.Data = class kijs_Data {
      * Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüpfen.
      * {
      *  "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
+     *  "invert":true,     Soll das Ergebnis der Gruppe invertiert werden? default: false
      *  "parts":[ ... ]    Array mit untergeordneten Parts.
      * }
      *
@@ -244,21 +245,8 @@ kijs.Data = class kijs_Data {
 
         // part objekt
         } else if (kijs.isObject(filters)) {
-            // Klammer
-            if (kijs.isEmpty(filters.field)) {
-                if (filters.operator) {
-                    bracketOperator = filters.operator;
-                } else {
-                    bracketOperator = 'AND';
-                }
-                parts = filters.parts;
-
-            // Vergleichsoperation: Darum eine Klammer erstellen
-            } else {
-                parts = [filters];
-                bracketOperator = 'AND';
-
-            }
+            bracketOperator = 'AND';
+            parts = [filters];
 
         // ungültig
         } else {
@@ -437,6 +425,11 @@ kijs.Data = class kijs_Data {
 
                 ok = kijs.Data._rowMatchFiltersSub(row, part.parts, part.operator);
 
+                // evtl. negieren
+                if (part.invert) {
+                    ok = !ok;
+                }
+
             // Vergleichsoperation
             } else {
                 // Standard-Operator für Vergleixhsoperationen: IN bei Array, sonst =
@@ -551,6 +544,11 @@ kijs.Data = class kijs_Data {
 
                     default:
                         throw new Error('Unknown operator "' + part.operator + '" in filter.');
+                }
+
+                // evtl. negieren
+                if (part.invert) {
+                    ok = !ok;
                 }
             }
 

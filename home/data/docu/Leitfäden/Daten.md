@@ -84,6 +84,7 @@ Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüp
 
     {
      "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
+     "invert":true,     Soll das Ergebnis invertiert werden? default: false
      "parts":[ ... ]    Array mit untergeordneten Parts.
     }
 
@@ -122,6 +123,8 @@ einem vorgegebenen Wert benutzt.
                                                 übereinstimmen
 
                          Default: Wenn value ein Array ist: "IN" sonst "="
+
+     "invert": true,     Soll das Ergebnis invertiert werden? default: false
 
      "value":"Max"       beliebiger Datentyp mit dem verglichen wird.
     }
