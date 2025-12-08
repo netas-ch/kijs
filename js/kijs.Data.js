@@ -515,9 +515,12 @@ kijs.Data = class kijs_Data {
                         // dann alle Sonderzeichen maskieren
                         regexp = regexp.replace(/([^a-z0-9])/gi, '\\$1');
 
-                        // und die % und _ wiederherstellen als * und .
-                        regexp = regexp.replace(/(\\#\\[\\|\\>\\-\\.\\%\\.\\-\\<\\|\\]\\#)/gi, '*');
-                        regexp = regexp.replace(/(\\#\\[\\|\\>\\-\\.\\_\\.\\-\\<\\|\\]\\#)/gi, '.');
+                        // und die % und _ wiederherstellen als .* und .
+                        regexp = regexp.replace(/(\\#\\\[\\\|\\\>\\\-\\\.\\\%\\\.\\\-\\\<\\\|\\\]\\\#)/gi, '.*');
+                        regexp = regexp.replace(/(\\#\\\[\\\|\\\>\\\-\\\.\\\_\\\.\\\-\\\<\\\|\\\]\\\#)/gi, '.');
+
+                        // Sicherstellen, dass vorher und nachher keine Zeichen sind
+                        regexp = '^' + regexp + '$';
 
                         regexp = new RegExp(regexp, 'gi');
 
