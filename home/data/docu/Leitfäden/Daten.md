@@ -81,6 +81,7 @@ Klammern und Vergleichsoperationen:
 
 #### Klammern
 Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüpfen.
+
     {
      "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
      "parts":[ ... ]    Array mit untergeordneten Parts.
@@ -92,8 +93,8 @@ einem vorgegebenen Wert benutzt.
 
     {
      "field":"Vorname",  Feldname
-     "operator":"=",     Vergleichsoperator: default: bei einem Array als value "IN", sonst 
-                         "MATCH"
+     "operator":"=",     Vergleichsoperator: default: bei einem Array als value "IN"
+                         sonst "MATCH"
 
                          "=", "!=",
 
