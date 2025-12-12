@@ -1356,7 +1356,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
-        // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
+        // den Zeilen in data überein. Die selectedKeysRows müssen darum neu
         // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
         // Spalten angelegt und damit verglichen
         if (kijs.isEmpty(this._primaryKeyFields)) {
