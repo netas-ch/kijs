@@ -13,10 +13,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     constructor(config={}) {
         super(false);
 
-        this._displayTextField = null;
         this._displayTextDisplayType = 'code';
-        this._valueField = null;
-
         this._elementDdTargetConfig = null; // Konfiguration Ordner, damit ein Drop
         //                                  // in den Ordner gemacht werden kann.
 
@@ -34,26 +31,9 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._collapsedIconMap = 'kijs.iconMap.Fa.folder';      // Ordner zu
         this._expandedIconMap = 'kijs.iconMap.Fa.folder-open';  // Ordner auf
 
-        // Feldnamen (optional)
-        this._clsField = null;
-        this._iconMapField = null;
-        this._iconCharField = null;
-        this._iconClsField = null;
-        this._iconAnimationClsField = null;
-        this._iconColorField = null;
-
-        this._collapsedIconMapField = null;
-        this._expandedIconMapField = null;
-
-        // Feldnamen für weitere Eigenschaften
-        this._childrenField = null;       // Feldname für Kinder
-        this._expandedField = null;     // Feldname für expandiert-Feld (optional)
-
-        this._allowChildrenField = null;  // Sind Kinder erlaubt? Ja=Ordner, Nein=leaf/Datei
         this._indent = 16;              // Einrückungstiefe pro Hierarchiestufe in Pixel
         this._expandedKeysRows = [];    // Bei primaryKeyFields: Array mit PrimaryKeys der expandierten Elemente
                                         // sonst: Array mit den dataRows der expandierten Elemente
-        this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
 
@@ -76,7 +56,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             expandButtonExpandedIconMap: true,
             expandButtonCollapsedIconMap: true,
 
-            displayTextField: true,
+            displayTextField: { target: 'displayTextField' },
             displayTextDisplayType: true,
 
             iconMap: true,
@@ -88,23 +68,23 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             collapsedIconMap: true,
             expandedIconMap: true,
 
-            clsField: true,
-            iconMapField: true,
-            iconCharField: true,
-            iconClsField: true,
-            iconAnimationClsField: true,
-            iconColorField: true,
+            clsField: { target: 'clsField' },
+            iconMapField: { target: 'iconMapField' },
+            iconCharField: { target: 'iconCharField' },
+            iconClsField: { target: 'iconClsField' },
+            iconAnimationClsField: { target: 'iconAnimationClsField' },
+            iconColorField: { target: 'iconColorField' },
 
-            collapsedIconMapField: true,
-            expandedIconMapField: true,
+            collapsedIconMapField: { target: 'collapsedIconMapField' },
+            expandedIconMapField: { target: 'expandedIconMapField' },
 
             showCheckBoxes: true,
-            tooltipField: true,
-            valueField: true,
+            tooltipField: { target: 'tooltipField' },
+            valueField: { target: 'valueField' },
 
-            childrenField: true,
-            expandedField: true,
-            allowChildrenField: true,
+            childrenField: { target: 'childrenField' },
+            expandedField: { target: 'expandedField' },
+            allowChildrenField: { target: 'allowChildrenField' },
 
             indent: true,
 
@@ -127,20 +107,20 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get allowChildrenField() { return this._allowChildrenField; }
-    set allowChildrenField(val) { this._allowChildrenField = val; }
+    get allowChildrenField() { return this._fieldsMapping.allowChildrenField; }
+    set allowChildrenField(val) { this._fieldsMapping.allowChildrenField = val; }
 
-    get clsField() { return this._clsField; }
-    set clsField(val) { this._clsField = val; }
+    get clsField() { return this._fieldsMapping.clsField; }
+    set clsField(val) { this._fieldsMapping.clsField = val; }
 
-    get childrenField() { return this._childrenField; }
-    set childrenField(val) { this._childrenField = val; }
+    get childrenField() { return this._fieldsMapping.childrenField; }
+    set childrenField(val) { this._fieldsMapping.childrenField = val; }
 
     get collapsedIconMap() { return this._collapsedIconMap; }
     set collapsedIconMap(val) { this._collapsedIconMap = val; }
 
-    get collapsedIconMapField() { return this._collapsedIconMapField; }
-    set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
+    get collapsedIconMapField() { return this._fieldsMapping.collapsedIconMapField; }
+    set collapsedIconMapField(val) { this._fieldsMapping.collapsedIconMapField = val; }
 
     // overwrite
     get data() { return this._data; }
@@ -155,8 +135,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get displayTextDisplayType() { return this._displayTextDisplayType; }
     set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
 
-    get displayTextField() { return this._displayTextField; }
-    set displayTextField(val) { this._displayTextField = val; }
+    get displayTextField() { return this._fieldsMapping.displayTextField; }
+    set displayTextField(val) { this._fieldsMapping.displayTextField = val; }
 
     get elementDdTargetConfig() {
         return this._elementDdTargetConfig;
@@ -171,64 +151,64 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get expandButtonExpandedIconMap() { return this._expandButtonExpandedIconMap; }
     set expandButtonExpandedIconMap(val) { this._expandButtonExpandedIconMap = val; }
 
-    get expandedField() { return this._expandedField; }
-    set expandedField(val) { this._expandedField = val; }
+    get expandedField() { return this._fieldsMapping.expandedField; }
+    set expandedField(val) { this._fieldsMapping.expandedField = val; }
 
     get expandedIconMap() { return this._expandedIconMap; }
     set expandedIconMap(val) { this._expandedIconMap = val; }
 
-    get expandedIconMapField() { return this._expandedIconMapField; }
-    set expandedIconMapField(val) { this._expandedIconMapField = val; }
+    get expandedIconMapField() { return this._fieldsMapping.expandedIconMapField; }
+    set expandedIconMapField(val) { this._fieldsMapping.expandedIconMapField = val; }
 
     get expandedKeysRows() { return this._expandedKeysRows; }
 
     get iconAnimationCls() { return this._iconAnimationCls; }
     set iconAnimationCls(val) { this._iconAnimationCls = val; }
 
-    get iconAnimationClsField() { return this._iconAnimationClsField; }
-    set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
+    get iconAnimationClsField() { return this._fieldsMapping.iconAnimationClsField; }
+    set iconAnimationClsField(val) { this._fieldsMapping.iconAnimationClsField = val; }
 
     get iconChar() { return this._iconChar; }
     set iconChar(val) { this._iconChar = val; }
 
-    get iconCharField() { return this._iconCharField; }
-    set iconCharField(val) { this._iconCharField = val; }
+    get iconCharField() { return this._fieldsMapping.iconCharField; }
+    set iconCharField(val) { this._fieldsMapping.iconCharField = val; }
 
     get iconCls() { return this._iconCls; }
     set iconCls(val) { this._iconCls= val; }
 
-    get iconClsField() { return this._iconClsField; }
-    set iconClsField(val) { this._iconClsField = val; }
+    get iconClsField() { return this._fieldsMapping.iconClsField; }
+    set iconClsField(val) { this._fieldsMapping.iconClsField = val; }
 
     get iconColor() { return this._iconColor; }
     set iconColor(val) { this._iconColor = val; }
 
-    get iconColorField() { return this._iconColorField; }
-    set iconColorField(val) { this._iconColorField = val; }
+    get iconColorField() { return this._fieldsMapping.iconColorField; }
+    set iconColorField(val) { this._fieldsMapping.iconColorField = val; }
 
     get iconMap() { return this._iconMap; }
     set iconMap(val) { this._iconMap = val; }
 
-    get iconMapField() { return this._iconMapField; }
-    set iconMapField(val) { this._iconMapField = val; }
+    get iconMapField() { return this._fieldsMapping.iconMapField; }
+    set iconMapField(val) { this._fieldsMapping.iconMapField = val; }
 
     get indent() { return this._indent; }
 
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
 
-    get tooltipField() { return this._tooltipField; }
-    set tooltipField(val) { this._tooltipField = val; }
+    get tooltipField() { return this._fieldsMapping.tooltipField; }
+    set tooltipField(val) { this._fieldsMapping.tooltipField = val; }
 
     get value() {
         let val = null;
 
-        if (!kijs.isEmpty(this._data) && this._valueField) {
+        if (!kijs.isEmpty(this._data) && this._fieldsMapping.valueField) {
             let rows = this.getSelectedRows();
             if (!kijs.isEmpty(rows)) {
                 val = [];
                 kijs.Array.each(rows, function(row) {
-                    val.push(row[this._valueField]);
+                    val.push(row[this._fieldsMapping.valueField]);
                 }, this);
 
                 let returnAsArray = true;
@@ -270,7 +250,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         return val;
     }
     set value(val) {
-        if (kijs.isEmpty(this._valueField)) {
+        if (kijs.isEmpty(this._fieldsMapping.valueField)) {
             throw new kijs.Error(`Es wurde kein "valueField" definiert.`);
         }
 
@@ -286,7 +266,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             kijs.Array.each(val, function(v) {
                 if (!kijs.isEmpty(v)) {
                     filters.parts.push({
-                        field: this._valueField,
+                        field: this._fieldsMapping.valueField,
                         operator: '=',
                         value: v
                     });
@@ -294,7 +274,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             }, this);
         } else if (!kijs.isEmpty(val)) {
             filters = {
-                field: this._valueField,
+                field: this._fieldsMapping.valueField,
                 operator: '=',
                 value: val
             };
@@ -302,8 +282,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this.selectByFilters(filters, false, true);
     }
 
-    get valueField() { return this._valueField; }
-    set valueField(val) { this._valueField = val; }
+    get valueField() { return this._fieldsMapping.valueField; }
+    set valueField(val) { this._fieldsMapping.valueField = val; }
 
 
 
@@ -357,7 +337,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         if (!kijs.isEmpty(this._expandedKeysRows) && !kijs.isEmpty(filters)) {
 
             let keysRows = [];
-            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+            let rows = kijs.Data.filter(this._data, filters, this._fieldsMapping.childrenField);
 
             if (kijs.isEmpty(this._primaryKeyFields)) {
                 keysRows = rows;
@@ -432,7 +412,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         if (!kijs.isEmpty(filters)) {
 
             let keysRows = [];
-            let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+            let rows = kijs.Data.filter(this._data, filters, this._fieldsMapping.childrenField);
 
             if (kijs.isEmpty(this._primaryKeyFields)) {
                 keysRows = rows;
@@ -508,7 +488,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             } else {
                 for (let i=0, len=this._expandedKeysRows.length; i<len; i++) {
                     rows = filterByPrimaryKeys(this._data, this._expandedKeysRows,
-                            this._primaryKeyFields, this._childrenField);
+                            this._primaryKeyFields, this._fieldsMapping.childrenField);
                 }
             }
         }
@@ -522,7 +502,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
             rows = kijs.Data.filterByPrimaryKeys(this._data, this._selectedKeysRows,
-                    this._primaryKeyFields, this._childrenField);
+                    this._primaryKeyFields, this._fieldsMapping.childrenField);
 
         } else {
             rows = kijs.Array.clone(this._selectedKeysRows);
@@ -687,7 +667,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     // overwrite
     selectByFilters(filters, keepExisting=false, preventSelectionChange=false) {
-        let rows = kijs.Data.filter(this._data, filters, this._childrenField);
+        let rows = kijs.Data.filter(this._data, filters, this._fieldsMapping.childrenField);
 
         let ret = this.selectByDataRows(rows, keepExisting, preventSelectionChange);
 
@@ -730,7 +710,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         options.skipRemoveElements = !!options.skipRemoveElements;
 
         // Sollen gemäss recordset expandiert werden?
-        if (kijs.isEmpty(this._expandedField) && !kijs.isEmpty(this._expandedKeysRows)) {
+        if (kijs.isEmpty(this._fieldsMapping.expandedField) && !kijs.isEmpty(this._expandedKeysRows)) {
             options.skipExpandedFromExpandedField = true;
         }
 
@@ -752,7 +732,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
         // Evtl. sortieren
         if (!options.skipSort && this._sortFields) {
-            kijs.Data.sort(data, this._sortFields, this._childrenField, false);
+            kijs.Data.sort(data, this._sortFields, this._fieldsMapping.childrenField, false);
         }
 
         // Bestehende Elemente löschen
@@ -805,7 +785,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             }
 
             // Primärschlüssel oder rows der expandierten Elemente aus den Daten holen
-            if (!options.skipExpandedFromExpandedField && data[i][this._expandedField]) {
+            if (!options.skipExpandedFromExpandedField && data[i][this._fieldsMapping.expandedField]) {
                 // Falls vorhanden, die primaryKeys merken
                 if (!kijs.isEmpty(this._primaryKeyFields)) {
                     this._expandedKeysRows.push(
@@ -826,8 +806,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             newEl.parent = this;
 
             // Disabled
-            if (!kijs.isEmpty(this._disabledField) && !kijs.isEmpty(data[i][this._disabledField])
-                    && !!data[i][this._disabledField]) {
+            if (!kijs.isEmpty(this._fieldsMapping.disabledField) && !kijs.isEmpty(data[i][this._fieldsMapping.disabledField])
+                    && !!data[i][this._fieldsMapping.disabledField]) {
                 newEl.disabled = true;
             }
 
@@ -923,10 +903,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             newElements.push(newEl);
 
             // Falls Kinder existieren und der Knoten expandiert ist: die Kinder auch laden
-            if (!kijs.isEmpty(this._childrenField)) {
-                if (newEl.expanded && !kijs.isEmpty(data[i][this._childrenField])) {
+            if (!kijs.isEmpty(this._fieldsMapping.childrenField)) {
+                if (newEl.expanded && !kijs.isEmpty(data[i][this._fieldsMapping.childrenField])) {
                     let newChildElements = this._createElementsRec(
-                            data[i][this._childrenField],
+                            data[i][this._fieldsMapping.childrenField],
                             depth+1,
                             newEl,
                             currentPrimaryKey,
@@ -952,7 +932,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         if (deep === null || deep >= 1) {
             for (let i=0, len=rows.length; i<len; i++) {
                 // Sind Kinder vorhanden
-                if (!kijs.isEmpty(rows[i][this._childrenField])) {
+                if (!kijs.isEmpty(rows[i][this._fieldsMapping.childrenField])) {
                     // expandieren
                     if (kijs.isEmpty(this._primaryKeyFields)) {
                         this._expandedKeysRows.push(rows[i]);
@@ -962,7 +942,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     }
 
                     // rekursiver Aufruf
-                    this._expandAllRec(rows[i][this._childrenField], deep ? deep-1 : null);
+                    this._expandAllRec(rows[i][this._fieldsMapping.childrenField], deep ? deep-1 : null);
                 }
             }
         }
@@ -989,7 +969,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         if (e.source.name === this._ddName && e.operation === 'move') {
             // betroffene dataRows ermitteln
             if (sourceEl.parentElement) {
-                dataRows = sourceEl.parentElement.dataRow[this._childrenField];
+                dataRows = sourceEl.parentElement.dataRow[this._fieldsMapping.childrenField];
             } else {
                 dataRows = this._data;
             }
@@ -1023,7 +1003,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
 
                 // betroffene dataRows ermitteln
-                dataRows = e.target.targetEl.dataRow[this._childrenField];
+                dataRows = e.target.targetEl.dataRow[this._fieldsMapping.childrenField];
 
                 targetIndex = 0;
 
@@ -1034,7 +1014,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             } else if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
                 // betroffene dataRows ermitteln
                 if (e.target.targetEl.parentElement) {
-                    dataRows = e.target.targetEl.parentElement.dataRow[this._childrenField];
+                    dataRows = e.target.targetEl.parentElement.dataRow[this._fieldsMapping.childrenField];
                 } else {
                     dataRows = this._data;
                 }
@@ -1051,7 +1031,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             // child
             } else if (e.target.targetPos === 'child') {
                 // betroffene dataRow ermitteln
-                dataRows = e.target.targetEl.dataRow[this._childrenField];
+                dataRows = e.target.targetEl.dataRow[this._fieldsMapping.childrenField];
 
                 dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
 
@@ -1073,7 +1053,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             
             // dataRow am Ende anfügen
             if (e.target.ownerEl) {
-                e.target.ownerEl.dataRow[this._childrenField].push(kijs.gui.DragDrop.data.sourceDataRow);
+                e.target.ownerEl.dataRow[this._fieldsMapping.childrenField].push(kijs.gui.DragDrop.data.sourceDataRow);
 
             }
 

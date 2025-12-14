@@ -13,9 +13,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     constructor(config={}) {
         super(false);
 
-        this._displayTextField = null;
         this._displayTextDisplayType = 'code';
-        this._valueField = null;
 
         // Standard-Icon (optional)
         this._iconMap = null;
@@ -24,15 +22,6 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this._iconAnimationCls = null;
         this._iconColor = null;
 
-        // Feldnamen (optional)
-        this._clsField = null;
-        this._iconMapField = null;
-        this._iconCharField = null;
-        this._iconClsField = null;
-        this._iconAnimationClsField = null;
-        this._iconColorField = null;
-        
-        this._tooltipField = null;
         this._showCheckBoxes = false;
         this._value = null;
 
@@ -49,7 +38,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            displayTextField: true,
+            displayTextField: { target: 'displayTextField' },
             displayTextDisplayType: true,
 
             iconMap: true,
@@ -58,16 +47,16 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             iconAnimationCls: true,
             iconColor: true,
 
-            clsField: true,
-            iconMapField: true,
-            iconCharField: true,
-            iconClsField: true,
-            iconAnimationClsField: true,
-            iconColorField: true,
+            clsField: { target: 'clsField' },
+            iconMapField: { target: 'iconMapField' },
+            iconCharField: { target: 'iconCharField' },
+            iconClsField: { target: 'iconClsField' },
+            iconAnimationClsField: { target: 'iconAnimationClsField' },
+            iconColorField: { target: 'iconColorField' },
 
             showCheckBoxes: true,
-            tooltipField: true,
-            valueField: true,
+            tooltipField: { target: 'tooltipField' },
+            valueField: { target: 'valueField' },
 
             value: { prio: 200, target: 'value' }
         });
@@ -84,14 +73,14 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get clsField() { return this._clsField; }
-    set clsField(val) { this._clsField = val; }
+    get clsField() { return this._fieldsMapping.clsField; }
+    set clsField(val) { this._fieldsMapping.clsField = val; }
 
     // overwrite
     get data() { return this._data; }
     // overwrite
     set data(val) {
-        // Sicherstellen, dass nach dem zuweisen von data der value erhalten bleibt
+        // Sicherstellen, dass nach dem Zuweisen von data der value erhalten bleibt
         let v = this.value;
         super.data = val;
         this.value = v;
@@ -100,54 +89,54 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     get displayTextDisplayType() { return this._displayTextDisplayType; }
     set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
 
-    get displayTextField() { return this._displayTextField; }
-    set displayTextField(val) { this._displayTextField = val; }
+    get displayTextField() { return this._fieldsMapping.displayTextField; }
+    set displayTextField(val) { this._fieldsMapping.displayTextField = val; }
 
     get iconAnimationCls() { return this._iconAnimationCls; }
     set iconAnimationCls(val) { this._iconAnimationCls = val; }
 
-    get iconAnimationClsField() { return this._iconAnimationClsField; }
-    set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
+    get iconAnimationClsField() { return this._fieldsMapping.iconAnimationClsField; }
+    set iconAnimationClsField(val) { this._fieldsMapping.iconAnimationClsField = val; }
 
     get iconChar() { return this._iconChar; }
     set iconChar(val) { this._iconChar = val; }
 
-    get iconCharField() { return this._iconCharField; }
-    set iconCharField(val) { this._iconCharField = val; }
+    get iconCharField() { return this._fieldsMapping.iconCharField; }
+    set iconCharField(val) { this._fieldsMapping.iconCharField = val; }
 
     get iconCls() { return this._iconCls; }
     set iconCls(val) { this._iconCls= val; }
 
-    get iconClsField() { return this._iconClsField; }
-    set iconClsField(val) { this._iconClsField = val; }
+    get iconClsField() { return this._fieldsMapping.iconClsField; }
+    set iconClsField(val) { this._fieldsMapping.iconClsField = val; }
 
     get iconColor() { return this._iconColor; }
     set iconColor(val) { this._iconColor = val; }
 
-    get iconColorField() { return this._iconColorField; }
-    set iconColorField(val) { this._iconColorField = val; }
+    get iconColorField() { return this._fieldsMapping.iconColorField; }
+    set iconColorField(val) { this._fieldsMapping.iconColorField = val; }
 
     get iconMap() { return this._iconMap; }
     set iconMap(val) { this._iconMap = val; }
 
-    get iconMapField() { return this._iconMapField; }
-    set iconMapField(val) { this._iconMapField = val; }
+    get iconMapField() { return this._fieldsMapping.iconMapField; }
+    set iconMapField(val) { this._fieldsMapping.iconMapField = val; }
 
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
 
-    get tooltipField() { return this._tooltipField; }
-    set tooltipField(val) { this._tooltipField = val; }
+    get tooltipField() { return this._fieldsMapping.tooltipField; }
+    set tooltipField(val) { this._fieldsMapping.tooltipField = val; }
 
     get value() {
         let val = null;
 
-        if (!kijs.isEmpty(this._data) && this._valueField) {
+        if (!kijs.isEmpty(this._data) && this._fieldsMapping.valueField) {
             let rows = this.getSelectedRows();
             if (!kijs.isEmpty(rows)) {
                 val = [];
                 kijs.Array.each(rows, function(row) {
-                    val.push(row[this._valueField]);
+                    val.push(row[this._fieldsMapping.valueField]);
                 }, this);
 
                 let returnAsArray = true;
@@ -189,7 +178,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         return val;
     }
     set value(val) {
-        if (kijs.isEmpty(this._valueField)) {
+        if (kijs.isEmpty(this._fieldsMapping.valueField)) {
             throw new kijs.Error(`Es wurde kein "valueField" definiert.`);
         }
 
@@ -205,7 +194,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             kijs.Array.each(val, function(v) {
                 if (!kijs.isEmpty(v)) {
                     filters.parts.push({
-                        field: this._valueField,
+                        field: this._fieldsMapping.valueField,
                         operator: '=',
                         value: v
                     });
@@ -213,7 +202,7 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             }, this);
         } else if (!kijs.isEmpty(val)) {
             filters = {
-                field: this._valueField,
+                field: this._fieldsMapping.valueField,
                 operator: '=',
                 value: val
             };
@@ -221,9 +210,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this.selectByFilters(filters, false, true);
     }
 
-    get valueField() { return this._valueField; }
+    get valueField() { return this._fieldsMapping.valueField; }
     set valueField(val) {
-        this._valueField = val;
+        this._fieldsMapping.valueField = val;
         if (kijs.isEmpty(val)) {
             this._primaryKeyFields = [];
         } else {

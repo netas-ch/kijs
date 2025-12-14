@@ -18,7 +18,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._elementXType = 'kijs.gui.dataView.element.AutoHtml';
 
         this._primaryKeyFields = null; // Array mit den Namen der Primärschlüssel-Felder
-        this._disabledField = null;    // Feldnamen für disabled (optional)
+        this._fieldsMapping = {};      // Objekt mit Feldnamen Mapping der DataRow die im DataViewElement verwendet werden können
 
         this._ddPosAfterFactor = 0.666;  // Position, ab der nachher eingefügt wird
         this._ddPosBeforeFactor = 0.666; // Position, ab der vorher eingefügt wird
@@ -63,7 +63,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         Object.assign(this._configMap, {
             elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
             primaryKeyFields: { target: 'primaryKeyFields' }, // Array mit den Namen der Primärschlüssel-Felder
-            disabledField: true,                // Feldnamen für disabled (optional)
+            fieldsMapping: { target: 'fieldsMapping' },
+            disabledField: { target: 'disabledField' },         // Feldnamen für disabled (optional)
 
             filters: { target: 'filters' },
             sortFields: { target: 'sortFields' },
@@ -181,8 +182,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
     }
 
-    get disabledField() { return this._disabledField; }
-    set disabledField(val) { this._disabledField = val; }
+    get disabledField() { return this._fieldsMapping.disabledField; }
+    set disabledField(val) { this._fieldsMapping.disabledField = val; }
 
     get elementXType() { return this._elementXType; }
     set elementXType(val) { this._elementXType = val; }
@@ -255,6 +256,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
     set elementDdSourceConfig(val) {
         this._elementDdSourceConfig = val;
+    }
+
+    get fieldsMapping() { return this._fieldsMapping; }
+
+    set fieldsMapping(val) {
+        if (kijs.isEmpty(val)) {
+            this._fieldsMapping = {};
+        } else if (kijs.isObject(val)) {
+            this._fieldsMapping = val;
+        } else {
+            throw new kijs.Error(`fieldsMapping must be null or an object.`);
+        }
     }
 
     get filters() { return this._filters; }
@@ -1392,8 +1405,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             const newEl = this._createElement({ dataRow: data[i] });
 
             // Disabled
-            if (!kijs.isEmpty(this._disabledField) && !kijs.isEmpty(data[i][this._disabledField])
-                    && !!data[i][this._disabledField]) {
+            if (!kijs.isEmpty(this._fieldsMapping.disabledField) && !kijs.isEmpty(data[i][this._fieldsMapping._disabledField])
+                    && !!data[i][this._fieldsMapping._disabledField]) {
                 newEl.disabled = true;
             }
 
@@ -1662,6 +1675,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._lastSelectedEl = null;
         this._ddTarget = null;
         this._elementDdSourceConfig = null;
+        this._fieldsMapping = null;
         this._primaryKeyFields = null;
         this._selectedKeysRows = null;
         this._sortFields = null;
