@@ -67,7 +67,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
             showCheckBoxes: true,
             tooltipField: true,
-            valueField: true,
+
+            valueField: { prio: 60, target: 'valueField' },                // Namen des value Fields
+            primaryKeyFields: { prio: 61, target: 'primaryKeyFields' },    // Array mit den Namen der Primärschlüssel-Felder
 
             value: { prio: 200, target: 'value' }
         });
@@ -224,9 +226,9 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     get valueField() { return this._valueField; }
     set valueField(val) {
         this._valueField = val;
-        if (kijs.isEmpty(val)) {
-            this._primaryKeyFields = [];
-        } else {
+
+        // evtl. auch ins primaryKeyFields übernehmen
+        if (kijs.isEmpty(this._primaryKeyFields)) {
             this._primaryKeyFields = [val];
         }
     }

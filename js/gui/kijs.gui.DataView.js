@@ -85,8 +85,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             ddPosAfterFactor: true,
             elementDdSourceConfig: true,
 
-            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             sortable: { prio: 70, target: 'sortable' },
+            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             ddTarget: { prio: 120, target: 'ddTarget' }
         });
