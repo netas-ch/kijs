@@ -23,6 +23,8 @@ home.App = class home_App {
 
         this._viewport = null;
 
+        this._spinBox = null; // aktuell geöffnete spinBox (Sprache oder Design)
+
         // Sprache
         kijs.language = config.language ? config.language : 'de';
 
@@ -362,7 +364,11 @@ home.App = class home_App {
     // PRIVATE
     // LISTENERS
     #onBtnThemeClick(e) {
-        const spinBox = new kijs.gui.SpinBox({
+        if (this._spinBox) {
+            this._spinBox.destruct();
+        }
+
+        this._spinBox = new kijs.gui.SpinBox({
             target: e.element,
             ownerNodes: e.element,
             cls: 'kijs-flexform',
@@ -462,11 +468,15 @@ home.App = class home_App {
                 }
             ]
         });
-        spinBox.show();
+        this._spinBox.show();
     }
 
     #onBtnLanguageClick(e) {
-        const spinBox = new kijs.gui.SpinBox({
+        if (this._spinBox) {
+            this._spinBox.destruct();
+        }
+
+        this._spinBox = new kijs.gui.SpinBox({
             target: e.element,
             ownerNodes: e.element,
             cls: 'kijs-flexform',
@@ -498,7 +508,7 @@ home.App = class home_App {
                 }
             ]
         });
-        spinBox.show();
+        this._spinBox.show();
     }
 
     #onContentTabChange(e) {
@@ -570,6 +580,12 @@ home.App = class home_App {
     destruct() {
         this._viewport.destruct();
 
+        // Elemente/DOM-Objekte entladen
+        if (this._spinBox) {
+            this._spinBox.destruct();
+        }
+
+        // Variablen (Objekte/Arrays) leeren
         this._header = null;
         this._tabShowcase = null;
         this._tabTest = null;
@@ -577,6 +593,7 @@ home.App = class home_App {
         this._navigation = null;
         this._content = null;
         this._viewport = null;
+        this._spinBox = null;
     }
 
 };
