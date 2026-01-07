@@ -227,8 +227,10 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     set valueField(val) {
         this._valueField = val;
 
-        // evtl. auch ins primaryKeyFields übernehmen
-        if (kijs.isEmpty(this._primaryKeyFields)) {
+        // auch ins primaryKeyFields übernehmen
+        if (kijs.isEmpty(val)) {
+            this._primaryKeyFields = [];
+        } else {
             this._primaryKeyFields = [val];
         }
     }
