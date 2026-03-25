@@ -237,7 +237,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     set targetDomProperty(val) { this._targetDomProperty = val; };
 
     get text() { return this._textDom.html; }
-    set text(val) { this._textDom.html = val; }
+    set text(val) {
+        this._textDom.html = val;
+
+        if (!this._textDom.isRendered) {
+            this.render();
+        }
+    }
 
 
 
