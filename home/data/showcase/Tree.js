@@ -129,6 +129,66 @@ home.sc.Tree = class home_sc_Tree {
                     ]
                 },{
                     xtype: 'kijs.gui.Panel',
+                    caption: '2x Tree local mit Drag&Drop von rechts nach links',
+                    scrollableY: 'auto',
+                    cls: 'kijs-flexrow',
+                    collapsible: 'top',
+                    collapsed: false,
+                    style: {
+                        maxHeight: '300px'
+                    },
+                    elements:[
+                        {
+                            xtype: 'kijs.gui.Tree',
+                            valueField: 'key',
+                            displayTextField: 'key',
+                            childrenField: 'children',
+                            selectType: 'simple-singleAndEmpty',
+                            ddName: 'kijs.gui.Tree.Test',
+                            elementDdTargetConfig: {
+                                mapping: {
+                                    'kijs.gui.Tree.Test': {
+                                        allowMove: true,
+                                        allowCopy: true,
+                                        allowLink: false,
+                                        disableMarker: true
+                                    }
+                                }
+                            },
+                            sortable: true,
+                            data: [{key:'A1',children:[{key:'A1.1'},{key:'A1.2'},{key:'A1.3'}]}, {key:'A2',children:[{key:'A2.1'},{key:'A2.2'},{key:'A2.3'}]}, {key:'A3'}],
+                            expandFilters: { field:'key', operator:'IN', value:['A1'] },
+                            style: {
+                                flex: 1,
+                                borderRight: '1px solid var(--panel-borderColor)'
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        },{
+                            xtype: 'kijs.gui.Tree',
+                            valueField: 'key',
+                            displayTextField: 'key',
+                            childrenField: 'children',
+                            selectType: 'simple-singleAndEmpty',
+                            elementDdSourceConfig: {
+                                allowMove: true,
+                                allowCopy: true,
+                                allowLink: false,
+                                name: 'kijs.gui.Tree.Test'
+                            },
+                            data: [{key:'B1'}, {key:'B2'}, {key:'B3',children:[{key:'B3.1'},{key:'B3.2'},{key:'B3.3'}]}],
+                            expandFilters: { field:'key', operator:'IN', value:['B3'] },
+                            style: {
+                                flex: 1
+                            },
+                            innerStyle: {
+                                padding: '4px'
+                            }
+                        }
+                    ]
+                },{
+                    xtype: 'kijs.gui.Panel',
                     caption: 'Tree remote',
                     scrollableY: 'auto',
                     cls: 'kijs-flexfit',
