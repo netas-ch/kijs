@@ -1420,7 +1420,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     allowLink: false,
                     name: this._ddName
                 };
-                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+                newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
             }
 
             // click-Event
@@ -1576,7 +1576,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.handleKeyDown(e.nodeEvent);
     }
 
-    #onSourceDrop(e) {
+    #onElementSourceDrop(e) {
         // Source Element
         let sourceEl = e.source.ownerEl;
 
