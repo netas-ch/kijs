@@ -28,7 +28,11 @@ home.test.TreeDD = class home_test_TreeDD {
                 name: 'kijs.gui.Tree.Test',
                 allowMove: false,
                 allowCopy: true,
-                allowLink: false
+                allowLink: false,
+                on: {
+                    drop: this.#onTreeElementSourceDrop,
+                    context: this
+                }
             },
             //sortable: true,
             data: [{key:'A1',children:[{key:'A1.1'},{key:'A1.2'},{key:'A1.3'}]}, {key:'A2',children:[{key:'A2.1'},{key:'A2.2'},{key:'A2.3'}]}, {key:'A3'}],
@@ -82,7 +86,7 @@ home.test.TreeDD = class home_test_TreeDD {
                 posBeforeFactor: 0.5,
                 posAfterFactor: 0.8,
                 on: {
-                    drop: this.#onTreeTargetElementDrop,
+                    drop: this.#onTreeElementTargetDrop,
                     context: this
                 },
                 mapping: {
@@ -139,12 +143,82 @@ home.test.TreeDD = class home_test_TreeDD {
 
     // PRIVATE
     // LISTENERS
+    // Ende des D&D: Source Daten ins kijs.gui.DragDrop.data nehmen
+    // Bei Move Element aus Source entfernen und Source Speichern
+    #onTreeElementSourceDrop(e) {
+        let dataRows = [];
+
+        // Source Element
+        let sourceEl = e.source.ownerEl;
+
+        let targetOwnerTree = e.target.ownerEl;
+        if (targetOwnerTree instanceof kijs.gui.dataView.element.Tree) {
+            targetOwnerTree = targetOwnerTree.parent;
+        }
+
+        // Source dataRow merken, damit beim Ziel wieder eingefügt werden kann
+        kijs.gui.DragDrop.data.sourceDataRow = sourceEl.dataRow;
+
+        if (e.source.name === this._ddName && e.operation === 'move') {
+            // betroffene dataRows ermitteln
+            if (sourceEl.parentElement) {
+                dataRows = sourceEl.parentElement.dataRow[this._childrenField];
+            } else {
+                dataRows = this._data;
+            }
+
+            // Zeile aus Source entfernen
+            kijs.Array.remove(dataRows, sourceEl.dataRow);
+
+            // speichern
+            if (this._treeSource.autoSave && this._treeSource.rpcSaveFn) {
+                // nur speichern, wenn das Target ein anderes Element ist
+                // (sonst wird ja beim target bereits gespeichert)
+                if (targetOwnerTree !== this._treeSource) {
+                    this.save();
+                }
+            }
+
+            // evtl. neu laden
+            if (targetOwnerTree !== this._treeSource) {
+                this.reload({ noRpc:true });
+            }
+        }
+    }
+
+    // Ende des D&D bei Drop auf ein Element:
+    // Daten aus kijs.gui.DragDrop.data ins Target übernehmen und Target speichern
+    #onTreeElementTargetDrop(e) {
+        if (e.source.name === 'kijs.gui.Tree.Test') {
+            let dataRow = kijs.Object.clone(kijs.gui.DragDrop.data.sourceDataRow);
+
+            // dataRow am Ende anfügen
+            if (e.target.ownerEl) {
+                if (kijs.isEmpty(e.target.ownerEl.dataRow['children'])) {
+                    e.target.ownerEl.dataRow['children'] = [];
+                }
+                e.target.ownerEl.dataRow['children'].push(dataRow);
+
+            }
+
+            // neu laden
+            this._treeTarget.reload({ noRpc:true });
+
+            // speichern
+            if (this._treeTarget.autoSave && this._treeTarget.rpcSaveFn) {
+                this._treeTarget.save();
+            }
+        }
+    }
+
+    // Ende des D&D bei Drop zwischen Elemente:
+    // Daten aus kijs.gui.DragDrop.data ins Target übernehmen und Target speichern
     #onTreeTargetDrop(e) {
         if (e.source.name === 'kijs.gui.Tree.Test') {
             let dataRows = [];
             let targetIndex = null;
 
-            let dataRow = kijs.Object.clone(e.source.ownerEl.dataRow);
+            let dataRow = kijs.Object.clone(kijs.gui.DragDrop.data.sourceDataRow);
 
             // after auf einen geöffneten Ordner: einfügen als 1. Kind
             if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
@@ -194,28 +268,6 @@ home.test.TreeDD = class home_test_TreeDD {
         }
     }
 
-    #onTreeTargetElementDrop(e) {
-        if (e.source.name === 'kijs.gui.Tree.Test') {
-            let dataRow = kijs.Object.clone(e.source.ownerEl.dataRow);
-
-            // dataRow am Ende anfügen
-            if (e.target.ownerEl) {
-                if (kijs.isEmpty(e.target.ownerEl.dataRow['children'])) {
-                    e.target.ownerEl.dataRow['children'] = [];
-                }
-                e.target.ownerEl.dataRow['children'].push(dataRow);
-            }
-
-            // neu laden
-            this._treeTarget.reload({ noRpc:true });
-
-            // speichern
-            if (this._treeTarget.autoSave && this._treeTarget.rpcSaveFn) {
-                this._treeTarget.save();
-            }
-        }
-    }
-    
     
 
     // --------------------------------------------------------------
