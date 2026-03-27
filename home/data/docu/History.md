@@ -5,8 +5,20 @@ Es sind evtl. Anpassungen am Projekt nötig.
 Version 3.3.0
 =============
 ### kijs.gui.DataView und vererbte
-Elemente werden neu erst beim Click-Event selektiert. Früher wurden sie bei 
-MouseDown selektiert.  
+- Elemente werden neu erst beim Click-Event selektiert. Früher wurden sie bei 
+  MouseDown selektiert.  
+- Anpassung an save-RPC request: Neue Eigenschaft ```saveArgs```. Diese enthält 
+  die Daten des Property ```rpcSaveArgs```.  
+
+### kijs.gui.Dashboard und kijs.gui.container.Tab
+Anpassung an save-RPC request:  
+ - ```data.elements``` ist neu direkt in ```data```  
+ - Die Daten des Property ```rpcSaveArgs``` sind neu nicht mehr in ```data```, 
+   sondern in ```saveArgs```
+
+**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen von Dashboard und Tabs 
+```data.elements``` ändern zu ```data``` und berücksichtigen, dass die 
+```rpcSaveArgs``` neu nicht mehr in ```data``` sondern in ```saveArgs``` sind.  
 
 
 
