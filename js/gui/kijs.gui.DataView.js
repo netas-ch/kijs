@@ -99,7 +99,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Events
         this.on('keyDown', this.#onKeyDown, this);
-        this.on('elementMouseDown', this.#onElementMouseDown, this);
+        this.on('elementClick', this.#onElementClick, this);
     }
 
 
@@ -288,7 +288,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
     get selectedKeysRows() { return this._selectedKeysRows; }
-    
+
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
 
@@ -459,7 +459,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      */
     getSelectedPrimaryKeys() {
         const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
-        
+
         let primaryKeys = [];
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -1422,6 +1422,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 };
                 newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
             }
+            if (!kijs.isEmpty(newEl.ddSource)) {
+                newEl.ddSource.on('dragStart', this.#onElementSourceDragStart, this);
+            }
 
             // click-Event
             newEl.on('click', function(e) {
@@ -1551,10 +1554,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    
+
     // PRIVATE
     // LISTENERS
-    #onElementMouseDown(e) {
+    #onElementClick(e) {
         if (!this.disabled && !e.raiseElement.disabled) {
             this.current = e.raiseElement;
             if (this._focusable) {
@@ -1572,8 +1575,20 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    #onKeyDown(e) {
-        this.handleKeyDown(e.nodeEvent);
+    #onElementSourceDragStart(e) {
+        if (!this.disabled && !e.source.ownerEl.disabled) {
+            // Falls nicht selektiert: selektieren
+            if (!e.source.ownerEl.selected) {
+                this.current = e.source.ownerEl;
+                if (this._focusable) {
+                    e.source.ownerEl.focus();
+                }
+
+                let isShiftPress = false;
+                let isCtrlPress = false;
+                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+            }
+        }
     }
 
     #onElementSourceDrop(e) {
@@ -1601,6 +1616,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 this.reload({ noRpc:true });
             }
         }
+    }
+
+    #onKeyDown(e) {
+        this.handleKeyDown(e.nodeEvent);
     }
 
     #onTargetDrop(e) {

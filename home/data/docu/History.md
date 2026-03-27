@@ -2,6 +2,14 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.3.0
+=============
+### kijs.gui.DataView und vererbte
+Elemente werden neu erst beim Click-Event selektiert. Früher wurden sie bei 
+MouseDown selektiert.  
+
+
+
 Version 3.2.0
 =============
 ### kijs.Ajax, kijs.Rpc, kijs.gui.Rpc
