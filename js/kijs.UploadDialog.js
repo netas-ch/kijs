@@ -373,7 +373,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             fileType = file.type || 'application/octet-stream';
 
         // event
-        this.raiseEvent('fileSelected', { uploadDialog: this, fileName: fileName, fileDir: fileDir, fileType: fileType, file: file });
+        this.raiseEvent('fileSelected', { uploadDialog: this, fileName: fileName, fileDir: fileDir, fileType: fileType, uploadId: uploadId, file: file });
 
         // Upload
         if (this._ajaxUrl) {

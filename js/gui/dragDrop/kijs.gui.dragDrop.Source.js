@@ -2,6 +2,8 @@
 
 // Klasse mit Drag&Drop-Events/Funktionen, für das Element das gezogen wird
 
+// Die Klasse hat noch ein drop-Event, welches vom kijs.gui.dragDrop.Target ausgelöst wird
+
 // --------------------------------------------------------------
 // kijs.gui.dragDrop.Source
 // --------------------------------------------------------------

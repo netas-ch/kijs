@@ -85,8 +85,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             ddPosAfterFactor: true,
             elementDdSourceConfig: true,
 
-            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             sortable: { prio: 70, target: 'sortable' },
+            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             ddTarget: { prio: 120, target: 'ddTarget' }
         });
@@ -1356,7 +1356,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         // bei einem reload via RPC stimmen die selectedKeysRows nicht mehr mit
-        // den Zeilem in data überein. Die selectedKeysRows müssen darum neu
+        // den Zeilen in data überein. Die selectedKeysRows müssen darum neu
         // aus dem Recordset geholt werden. Dazu wird ein Primary-Key über alle
         // Spalten angelegt und damit verglichen
         if (kijs.isEmpty(this._primaryKeyFields)) {
@@ -1420,7 +1420,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     allowLink: false,
                     name: this._ddName
                 };
-                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+                newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
             }
 
             // click-Event
@@ -1576,7 +1576,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.handleKeyDown(e.nodeEvent);
     }
 
-    #onSourceDrop(e) {
+    #onElementSourceDrop(e) {
         // Source Element
         let sourceEl = e.source.ownerEl;
 

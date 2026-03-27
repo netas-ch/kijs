@@ -841,7 +841,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     allowLink: false,
                     name: this._ddName
                 };
-                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+                newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
             }
 
             if (this._elementDdTargetConfig) {
@@ -972,7 +972,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // PRIVATE
     // LISTENERS
     // overwrite
-    #onSourceDrop(e) {
+    #onElementSourceDrop(e) {
         let dataRows = [];
 
         // Source Element
