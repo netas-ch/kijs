@@ -691,12 +691,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             let args = {};
 
             args = Object.assign({}, args, this._rpcSaveArgs);
+            args.data = this._data;
 
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: this._data,
+                data: args,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
