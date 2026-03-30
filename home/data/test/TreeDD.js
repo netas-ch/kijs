@@ -56,6 +56,8 @@ home.test.TreeDD = class home_test_TreeDD {
             selectType: 'simple-singleAndEmpty',
             data: [{key:'B1'}, {key:'B2'}, {key:'B3',children:[{key:'B3.1'},{key:'B3.2'},{key:'B3.3'}]}],
             expandFilters: { field:'key', operator:'IN', value:['B3'] },
+            rpcSaveFn: 'tree.save',
+            autoSave: true,
             style: {
                 flex: 1
             },
@@ -175,7 +177,7 @@ home.test.TreeDD = class home_test_TreeDD {
                 // nur speichern, wenn das Target ein anderes Element ist
                 // (sonst wird ja beim target bereits gespeichert)
                 if (targetOwnerTree !== this._treeSource) {
-                    this.save();
+                    this._treeSource.save();
                 }
             }
 

@@ -894,6 +894,10 @@ foreach ($requests as $request) {
             //$response->config->expandFilters = json_decode('{ "field":"id", "operator":"IN", "value":["1","1.1"] }');
             break;
 
+        case 'tree.save':
+            $response->cornerTipMsg = 'tree.save';
+            break;
+
         default:
             $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
