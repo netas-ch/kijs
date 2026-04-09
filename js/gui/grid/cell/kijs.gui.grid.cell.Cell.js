@@ -48,7 +48,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     get cellIndex() { return this.row.grid.columnConfigs.indexOf(this._columnConfig); }
-    
+
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
@@ -68,7 +68,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     get row() { return this.parent; }
 
     get rowIndex() { return this.row.rowIndex; }
-    
+
     get value() { return this._dom.html; }
     set value(val) { this.setValue(val); }
 
@@ -87,7 +87,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             this.setValue(this.row.dataRow[dF], true, false, false);
         }
     }
-    
+
     // Overwrite
     render(superCall) {
         super.render(true);
@@ -213,9 +213,9 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             let val = this._cellEditor.value;
 
             let valDsp = '';
-            if (typeof this._cellEditor.displayText !== undefined) {
+            if (kijs.isDefined(this._cellEditor.displayText)) {
                 valDsp = this._cellEditor.displayText;
-            } else if (typeof this._cellEditor.value !== undefined) {
+            } else if (kijs.isDefined(this._cellEditor.value)) {
                 valDsp = this._cellEditor.value;
             }
 
@@ -264,7 +264,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             }
         }
     }
-    
+
     // overwrite
     unrender(superCall) {
 
@@ -323,7 +323,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
-    
+
     // PRIVATE
     // LISTENERS
     #onClick() {
@@ -378,13 +378,13 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             // Event auslösen.
             this.raiseEvent('destruct');
         }
-        
+
         // Elemente/DOM-Objekte entladen
-        
+
         // Variablen (Objekte/Arrays) leeren
 
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };
