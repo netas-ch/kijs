@@ -1191,9 +1191,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 }).then((e) => {
                     if (kijs.isEmpty(e.response.errorType)) {
                         this._remoteProcess(e, args, resetData);
+                    } else {
+                        this._isLoading = false;
                     }
                     resolve(e.response);
                 }).catch((ex) => {
+                    this._isLoading = false;
                     reject(ex);
                 });
             }
