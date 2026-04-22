@@ -316,6 +316,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         kijs.Array.each(columnConfigs, function(columnConfig) {
             let inst = this._getInstance(columnConfig, 'kijs.gui.grid.columnConfig.Text', kijs.gui.grid.columnConfig.ColumnConfig);
             inst.grid = this;
+            inst.on('change', this.#onColumnChange, this);
             this._columnConfigs.push(inst);
         }, this);
 
@@ -1361,6 +1362,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
     // PRIVATE
     // LISTENERS
+    #onColumnChange(e) {
+
+        // Event weiter werfen
+        this.raiseEvent('columnChange', e);
+    }
+
     /**
      * Wird ausgelöst, wenn die Scrollbar 200px von der letzten Zeile entfernt ist.
      * @param {IntersectionObserverEntrys} intersections
