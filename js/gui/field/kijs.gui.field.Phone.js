@@ -36,7 +36,7 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
                 context: this
             }
         });
-        
+
         this._dom.clsRemove('kijs-field-text');
         this._dom.clsAdd('kijs-field-phone');
         
@@ -46,13 +46,13 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
             disableFlex: true,
             inputMode: 'tel',
             formatRegExp:[  // Formatierung (kann mit config ersetzt werden)
-                { 
-                    regExp: /^\+41([89][0-9]{2})([0-9]{3})([0-9]{3})$/, // CH 0800 + 0900
-                    replace: '+41 $1 $2 $3'
+                {
+                    regExp: /^(0[89][0-9]{2})([0-9]{3})([0-9]{3})$/, // CH 0800 + 0900
+                    replace: '$1 $2 $3'
                 },{
-                    regExp: /^\+41([1-7][0-9])([0-9]{3})([0-9]{2})([0-9]{2})$/, // CH default
-                    replace: '+41 $1 $2 $3 $4'
-                },{ 
+                    regExp: /^(0[1-7][0-9])([0-9]{3})([0-9]{2})([0-9]{2})$/, // CH default
+                    replace: '$1 $2 $3 $4'
+                },{
                     regExp: /^\+423([0-9]{3})([0-9]{2})([0-9]{2})$/, // LI
                     replace: '+423 $1 $2 $3'
                 },{ 
