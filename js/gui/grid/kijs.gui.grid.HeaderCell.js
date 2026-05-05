@@ -12,9 +12,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // overwrite
     constructor(config={}) {
         super(false);
-        
+
         this._overflowTooltipDisable = false;   // Tooltip auf Spaltenkopf, wenn caption zu lang
-        
+
         // DOM type
         this._dom.nodeTagName = 'td';
         this._columnConfig = null;
@@ -112,9 +112,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             columnConfig: true,
-            
+
             overflowTooltipDisable: true,
-            
+
             sort: { target: 'sort' },
 
             helpIcon: { target: 'helpIcon' },
@@ -124,7 +124,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             helpIconMap: { target: 'iconMap', context: this._helpIconEl },
             helpText: { target: 'helpText' }
         });
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -204,7 +204,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
         return null;
     }
-    
+
     get overflowTooltipDisable() { return this.overflowTooltipDisable; }
     set overflowTooltipDisable(val) {
         this._overflowTooltipDisable = !!val;
@@ -212,7 +212,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
             this._updateHeaderToolTip();
         }
     }
-    
+
     get sort() { return this._sort; }
     set sort(val) {
         if (val === 'DESC') {
@@ -305,7 +305,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
         kijs.defer(this._updateHeaderToolTip, 50, this);
         this._updateHeaderToolTip();
-        
+
         // Event afterRender auslösen
         if (!superCall) {
             this.raiseEvent('afterRender');
@@ -320,6 +320,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.unrender();
+        this._sortDom.unrender();
         this._captionContainerDom.unrender();
         this._helpIconEl.unrender();
         this._menuButtonEl.unrender();
@@ -327,8 +328,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         super.unrender(true);
     }
-    
-    
+
+
     // PROTECTED
     /**
      * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
@@ -347,8 +348,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         this._overlayDom.left = newPos.x;
     }
-    
-    
+
+
     // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
     _updateHeaderToolTip() {
         if (!this.isRendered) {
@@ -409,8 +410,8 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         this._splitterMove = false;
     }
 
-    
-    
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
@@ -425,6 +426,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.destruct();
+        this._sortDom.destruct();
         this._captionContainerDom.destruct();
         this._helpIconEl.destruct();
         this._menuButtonEl.destruct();
@@ -432,6 +434,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // Variablen (Objekte/Arrays) leeren
         this._captionDom = null;
+        this._sortDom = null;
         this._helpIconEl = null;
         this._menuButtonEl = null;
         this._splitterDom = null;
@@ -439,5 +442,5 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         // Basisklasse entladen
         super.destruct(true);
     }
-    
+
 };
