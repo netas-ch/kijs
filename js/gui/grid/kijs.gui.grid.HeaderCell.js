@@ -415,6 +415,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.unrender();
+        this._sortDom.unrender();
         this._captionContainerDom.unrender();
         this._helpIconEl.unrender();
         this._menuButtonEl.unrender();
@@ -437,6 +438,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.destruct();
+        this._sortDom.destruct();
         this._captionContainerDom.destruct();
         this._helpIconEl.destruct();
         this._menuButtonEl.destruct();
@@ -444,6 +446,7 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // Variablen (Objekte/Arrays) leeren
         this._captionDom = null;
+        this._sortDom = null;
         this._helpIconEl = null;
         this._menuButtonEl = null;
         this._splitterDom = null;
