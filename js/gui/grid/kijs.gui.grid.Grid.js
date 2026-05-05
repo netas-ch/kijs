@@ -982,6 +982,9 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // columns
         if (kijs.isArray(response.columns)) {
+            kijs.Array.each(this._columnConfigs, function(columnConfig) {
+                columnConfig.destruct();
+            }, this);
             kijs.Array.clear(this._columnConfigs);
             this.columnConfigAdd(response.columns);
 
@@ -1333,6 +1336,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
+        // rows
+        kijs.Array.each(this._rows, function(row) {
+            row.unrender();
+        }, this);
+
         // header / filter
         this._header.unrender();
         this._filter.unrender();
@@ -1387,6 +1395,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
+
+        // rows
+        kijs.Array.each(this._rows, function(row) {
+            row.destruct();
+        }, this);
+
+        // columnConfigs
+        kijs.Array.each(this._columnConfigs, function(columnConfig) {
+            columnConfig.destruct();
+        }, this);
 
         // header / filter
         this._header.destruct();
@@ -1466,6 +1484,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._topDom = null;
         this._middleDom = null;
         this._bottomDom = null;
+
+        // rows
+        this._rows = null;
+        this._currentRow = null;
+
+        // columnConfigs
+        this._columnConfigs = null;
 
         // Basisklasse entladen
         super.destruct(true);

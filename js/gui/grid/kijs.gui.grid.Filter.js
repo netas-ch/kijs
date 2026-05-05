@@ -231,6 +231,12 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             this.raiseEvent('destruct');
         }
 
+        // pendenten reload-Timer abbrechen
+        if (this._filterReloadDefer) {
+            window.clearTimeout(this._filterReloadDefer);
+            this._filterReloadDefer = null;
+        }
+
         // filters destructen
         kijs.Array.each(this.filters, function(filter) {
             filter.columnConfig.off('change', this._onColumnConfigChange, this);

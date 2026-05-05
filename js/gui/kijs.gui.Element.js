@@ -1014,7 +1014,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             this._dom.destruct();
         }
         if (this._waitMaskEl) {
-            this._waitMaskEl.destruct;
+            this._waitMaskEl.destruct();
         }
 
         // Variablen (Objekte/Arrays) leeren
