@@ -160,6 +160,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             this.raiseEvent('unrender');
         }
 
+        this._menuButton.unrender();
+        if (this._checkboxFilterGroup) {
+            this._checkboxFilterGroup.unrender();
+        }
         this._searchContainer.unrender();
         this._removeFilterIcon.unrender();
 
@@ -223,10 +227,16 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         }
         
         // Elemente/DOM-Objekte entladen
+        this._menuButton.destruct();
+        if (this._checkboxFilterGroup) {
+            this._checkboxFilterGroup.destruct();
+        }
         this._searchContainer.destruct();
         this._removeFilterIcon.destruct();
 
         // Variablen (Objekte/Arrays) leeren
+        this._menuButton = null;
+        this._checkboxFilterGroup = null;
         this._searchContainer = null;
         this._removeFilterIcon = null;
 

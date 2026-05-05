@@ -105,6 +105,17 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         super.reset();
     }
 
+    // overwrite
+    unrender(superCall) {
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        this._searchField.unrender();
+
+        super.unrender(true);
+    }
+
 
     // PROTECTED
     // overwrite
