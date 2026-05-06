@@ -1664,7 +1664,7 @@
     opacity: 0.3;
   }
   div.kijs-resizer.kijs-resizer-width:not(.kijs-disabled) {
-    cursor: we-resize;
+    cursor: ew-resize;
   }
   div.kijs-resizer.kijs-resizer-height:not(.kijs-disabled) {
     cursor: ns-resize;
@@ -3396,9 +3396,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
-    /* selektion von Text erlauben */
     -webkit-user-select: text;
     user-select: text;
+    cursor: default;
   }
   div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;

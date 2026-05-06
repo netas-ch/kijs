@@ -183,7 +183,7 @@
     .kijs *, .kijs-viewport, .kijs-viewport *, .kijs-window, .kijs-window * {
         box-sizing: border-box;
         z-index: 0; /* Behebt die Probleme von z-indexen von fremden Elementen (z.B. ACE-Editor) */
-        
+
         /* Scrollbar im Chrome */
         ::-webkit-scrollbar {
             height: var(--scrollbar-width);
@@ -310,7 +310,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            
+
             /* selektion von Text erlauben */
             -webkit-user-select: text;
             user-select: text;
@@ -428,7 +428,7 @@
         overflow: hidden;
         font-family: var(--default-fontFamily);
         color: var(--default-fontColor);
-        
+
         > .kijs-header {
             flex: none;
             height: 8px;
@@ -438,7 +438,7 @@
             display: flex;
             flex-direction: row;
             z-index: 1;
-            
+
             > .kijs-icon {
                 flex: none;
                 height: var(--container-fieldset-label-height);
@@ -447,7 +447,7 @@
                 line-height: var(--container-fieldset-caption-lineHeight);
                 background-color: var(--panel-bkgrndColor);
             }
-            
+
             > .kijs-caption {
                 flex: none;
                 height: var(--container-fieldset-label-height);
@@ -459,19 +459,19 @@
                 line-height: var(--container-fieldset-caption-lineHeight);
                 background-color: var(--panel-bkgrndColor);
             }
-            
+
             > .kijs-button {
                 flex: none;
                 height: var(--container-fieldset-label-height);
                 border: 1px solid var(--panel-bkgrndColor);
                 background-color: var(--panel-bkgrndColor);
                 padding: 0;
-                
+
                 > span.kijs-icon {
                     font-size: var(--container-fieldset-icon-fontSize);
                     line-height: var(--container-fieldset-caption-lineHeight);
                 }
-                
+
                 &:hover, &:focus {
                     > span.kijs-icon {
                         color: var(--accentColor);
@@ -494,29 +494,29 @@
                 }
             }
         }
-        
+
         > .kijs-container-inner {
             border: 1px solid var(--container-fieldset-borderColor);
             border-radius: 5px;
             padding: 8px 5px 5px 5px;
-            
+
             display: flex;
             flex-direction: column;
             flex-wrap: nowrap;
 
             gap: 4px;
-            
+
             > * {
                 flex: none;
                 max-width: 600px;
             }
         }
-        
+
         &.kijs-collapse-top {
             > .kijs-header {
                     margin-left: 0;
                 }
-        
+
             > .kijs-container-inner {
                 display: none;
             }
@@ -660,7 +660,7 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
-                
+
                 &.kijs-fade-in { animation: kijs-fade-in forwards 1s; }
                 &.kijs-slide-in-top { animation: kijs-slide-in-top forwards 1s; }
                 &.kijs-slide-in-right { animation: kijs-slide-in-right forwards 1s; }
@@ -778,7 +778,7 @@
                 position: absolute;
                 width: 100%;
                 height: 100%;
-                
+
                 &.kijs-fade-in { animation: kijs-fade-in forwards 1s; }
                 &.kijs-slide-in-top { animation: kijs-slide-in-top forwards 1s; }
                 &.kijs-slide-in-right { animation: kijs-slide-in-right forwards 1s; }
@@ -1160,7 +1160,7 @@
                             color: var(--bar-fontColor);
                         }
                     }
-                    
+
                     &:focus {
                         outline: 1px dotted var(--bar-button-icon-fontColor);
                         border-radius: 2px;
@@ -1252,7 +1252,7 @@
             /*border: 1px dotted rgba(0, 0, 0, 0.5);*/
             /*border: 1px solid var(--item-selected-borderColor);*/
         }
-        
+
         &.disabled {
             border: 1px solid var(--panel-disabled-borderColor);
         }
@@ -1490,22 +1490,22 @@
         box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5), 4px 4px 4px rgba(0, 0, 0, 0.5);
         padding: 0px;
         transition: 0s;
-        
+
         &:modal::backdrop {
             background-color: var(--mask-bkgrndColor);
         }
-        
+
         user-select: none;
 
         * {
             box-sizing: border-box;
         }
-        
+
         /* Workaround: entfernt den Rahmen vom aktiven Dialog */
         &:focus-visible {
             outline: none;
         }
-        
+
         /* Buttons im Fuss eines Fensters sind blau */
         > .kijs-footer > .kijs-container-inner {
             > .kijs-button {
@@ -1562,7 +1562,7 @@
         border-radius: 0 !important;
         z-index: 60000 !important;
     }
-    
+
     div.kijs-mask {
         position: absolute;
         top: 0;
@@ -1571,7 +1571,7 @@
         bottom: 0;
         background-color: var(--mask-bkgrndColor);
     }
-    
+
     dialog.kijs-mask {
         padding: 0;
         margin: 0;
@@ -1579,12 +1579,12 @@
         width: 100%;
         height: 100%;
         background-color: transparent;
-        
+
         &::backdrop {
             background-color: var(--mask-bkgrndColor);
         }
     }
-    
+
     div.kijs-mask, dialog.kijs-mask {
         box-sizing: border-box;
         display: flex;
@@ -1595,7 +1595,7 @@
         z-index: 60000;
 
         user-select: none;
-        
+
         * {
             box-sizing: border-box;
         }
@@ -1603,7 +1603,7 @@
         &:focus {
             outline: none;
         }
-        
+
         > .kijs-mask-center {
             flex: none;
             display: flex;
@@ -1611,7 +1611,7 @@
             justify-content: center;
             align-items: center;
             background-color: transparent;
-            
+
             > .kijs-icon {
                 flex: none;
                 color: var(--mask-icon-fontColor);
@@ -1787,7 +1787,7 @@
         opacity: 0.3;
 
         &.kijs-resizer-width:not(.kijs-disabled) {
-            cursor: we-resize;
+            cursor: ew-resize;
         }
         &.kijs-resizer-height:not(.kijs-disabled) {
             cursor: ns-resize;
@@ -1900,11 +1900,11 @@
         &:focus-within {
             border-color: var(--field-focus-borderColor);
         }
-        
+
         &.kijs-borderless {
             border: none;
         }
-        
+
         > .kijs-container-inner {
             flex: 1;
             display: flex;
@@ -1932,19 +1932,19 @@
                     -webkit-user-select: text;
                     user-select: text;
                 }
-                
+
                 &.kijs-selected {
                     color: var(--item-selected-fontColor);
                     background-color: var(--item-selected-bkgrndColor);
                     border-color: var(--item-selected-borderColor);
                 }
-                
+
                 &:focus,
                 &:hover {
                     background-color: var(--item-focus-bkgrndColor);
                     border-color: var(--item-focus-borderColor);
                     color: var(--item-focus-fontColor);
-                    
+
                     &.kijs-selected {
                         background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
                         border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
@@ -1970,18 +1970,18 @@
                 &.kijs-sourceDragOver {
                     border-color: var(--accentColor3);
                 }
-                
+
                 &.kijs-disabled {
                     background-color: var(--item-disabled-bkgrndColor);
                     border-color: var(--item-disabled-borderColor);
                     color: var(--item-disabled-fontColor);
-                    
+
                     &.kijs-selected {
                         background-color: color-mix(in srgb, var(--item-disabled-bkgrndColor), var(--item-selected-bkgrndColor));
                         border-color: color-mix(in srgb, var(--item-disabled-borderColor), var(--item-selected-borderColor));
                         color: color-mix(in srgb, var(--item-disabled-fontColor), var(--item-selected-fontColor));
                     }
-                    
+
                     * {
                         color: var(--item-disabled-fontColor);
                     }
@@ -2002,7 +2002,7 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
-            
+
             > .kijs-container-inner > .kijs-dataview-element {
                 background-color: var(--field-disabled-bkgrndColor);
             }
@@ -2030,7 +2030,7 @@
         &:focus-within {
             border-color: var(--field-focus-borderColor);
         }
-        
+
         &.kijs-borderless {
             border: none;
         }
@@ -2098,7 +2098,7 @@
                 &:hover {
                     border-color: var(--item-focus-borderColor);
                     background-color: var(--item-focus-bkgrndColor);
-                    
+
                     &.kijs-selected {
                         border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
                         background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
@@ -2108,7 +2108,7 @@
                 &.kijs-display-checkboxes {
                     color: var(--field-fontColor);
                     border-color: transparent;
-                    
+
                     &:before {
                         box-sizing: border-box;
                         flex: none;
@@ -2170,11 +2170,11 @@
                         cursor: pointer;
                         content: ' ';
                     }
-                    
+
                     &.kijs-selected {
                         border-color: transparent;
                         background-color: transparent;
-                        
+
                         &:before {
                             content: '\f00c';
                         }
@@ -2184,7 +2184,7 @@
                     &:hover {
                         border-color: transparent;
                         background-color: transparent;
-                        
+
                         &:before {
                             border: 1.5px solid var(--field-focus-borderColor);
                         }
@@ -2199,7 +2199,7 @@
                     border-color: var(--accentColor3);
                     border-radius: 5px;
                 }
-                
+
                 &.kijs-disabled {
                     background-color: var(--field-bkgrndColor);
                     border-color: transparent;
@@ -2222,7 +2222,7 @@
                         background-color: var(--field-bkgrndColor);
                         border-color: transparent;
                         color: var(--field-disabled-fontColor);
-                        
+
                         &:before {
                             border: 1.5px solid var(--field-borderColor);
                             color: var(--field-disabled-fontColor);
@@ -2242,7 +2242,7 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
-            
+
             > .kijs-container-inner > .kijs-dataview-element {
                 background-color: var(--field-disabled-bkgrndColor);
             }
@@ -2266,15 +2266,15 @@
         &.kijs-transparentborder {
             border-color: transparent;
         }
-        
+
         &:focus-within {
             border-color: var(--field-focus-borderColor);
         }
-        
+
         &.kijs-borderless {
             border: none;
         }
-        
+
         > .kijs-container-inner {
             padding: 3px 0 2px 0;
 
@@ -2307,7 +2307,7 @@
                     /* selektion von Text erlauben */
                     -webkit-user-select: text;
                     user-select: text;
-                    
+
                     > .kijs-icon {
                         flex: none;
                         margin: 0;
@@ -2316,7 +2316,7 @@
                             display: none;
                         }
                     }
-                    
+
                     > .kijs-expandIcon {
                         flex: none;
                         width: 16px;
@@ -2343,7 +2343,7 @@
                 &.kijs-targetDragOver {
                     border: 1px solid var(--accentColor3);
                 }
-                
+
                 &.kijs-selected {
                     border-color: var(--item-selected-borderColor);
                     background-color: var(--item-selected-bkgrndColor);
@@ -2353,7 +2353,7 @@
                 &:hover {
                     border-color: var(--item-focus-borderColor);
                     background-color: var(--item-focus-bkgrndColor);
-                    
+
                     &.kijs-selected {
                         border-color: color-mix(in srgb, var(--item-focus-borderColor), var(--item-selected-borderColor));
                         background-color: color-mix(in srgb, var(--item-focus-bkgrndColor), var(--item-selected-bkgrndColor));
@@ -2429,7 +2429,7 @@
                     &.kijs-selected {
                         border-color: transparent;
                         background-color: transparent;
-                        
+
                         &:before {
                             content: '\f00c';
                         }
@@ -2439,7 +2439,7 @@
                     &:hover {
                         border-color: transparent;
                         background-color: transparent;
-                        
+
                         &:before {
                             border: 1.5px solid var(--field-focus-borderColor);
                         }
@@ -2454,7 +2454,7 @@
                     border-color: var(--accentColor3);
                     border-radius: 5px;
                 }
-                
+
                 &.kijs-disabled {
                     background-color: var(--field-bkgrndColor);
                     border-color: transparent;
@@ -2477,7 +2477,7 @@
                         background-color: var(--field-bkgrndColor);
                         border-color: var(--field-bkgrndColor);
                         color: var(--field-disabled-fontColor);
-                        
+
                         &:before {
                             border: 1.5px solid var(--field-borderColor);
                             color: var(--field-disabled-fontColor);
@@ -2497,7 +2497,7 @@
 
         &.kijs-disabled {
             background-color: var(--field-disabled-bkgrndColor);
-            
+
             > .kijs-container-inner > .kijs-dataview-element {
                 background-color: var(--field-disabled-bkgrndColor);
             }
@@ -2925,7 +2925,7 @@
         align-items: flex-start;
         min-height: var(--field-height);
         overflow: visible; /* für Badges */
-        
+
         > .kijs-label {
             display: block;
             flex: none;
@@ -2957,7 +2957,7 @@
             flex-direction: row;
             overflow: visible; /* für Badges */
             align-self: flex-start;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 position: relative;
@@ -2968,7 +2968,7 @@
                     color: var(--field-fontColor);
                     background-color: var(--field-bkgrndColor);
                 }
-                
+
                 > .kijs-mask-anchor > .kijs-mask > .kijs-mask-center > .kijs-mask-icon {
                     font-size: 23px;
                 }
@@ -3068,7 +3068,7 @@
                     }
                 }
             }
-            
+
             > .kijs-icon-error {
                 flex: none;
                 height: 16px;
@@ -3108,7 +3108,7 @@
                 }
             }
         }
-        
+
         &.kijs-disabled {
             > .kijs-label {
                 color: var(--field-disabled-fontColor);
@@ -3238,7 +3238,7 @@
             > .kijs-inputwrapper {
                 overflow: visible;
                 height: var(--field-height);
-                
+
                 > input {
                     width: var(--field-height);
                     height: var(--field-height);
@@ -3248,20 +3248,20 @@
                     overflow: hidden;
                     cursor: pointer;
 
-                    
+
                     &::-webkit-color-swatch-wrapper {
                         padding: 0;
                     }
-                    
+
                     &::-webkit-color-swatch {
                         border-radius: 50%;
                     }
-                    
+
                     &::-moz-color-swatch {
                         border-radius: 50%;
                     }
 
-                    
+
                     &:hover, &:focus {
                         border: 1px solid var(--field-focus-borderColor);
                     }
@@ -3452,7 +3452,7 @@
     div.kijs-field-memo {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper > textarea {
                 display: block;
                 height: 100%;
@@ -3502,7 +3502,7 @@
     div.kijs-field-listview {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3540,7 +3540,7 @@
     div.kijs-field-checkboxgroup {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 display: flex;
                 flex-direction: column;
@@ -3701,7 +3701,7 @@
                     background-color: transparent;
                     -webkit-appearance: none;
                     appearance: none;
-                    
+
                     /* Track */
                     &::-webkit-slider-runnable-track {
                         height: 1px;
@@ -3711,14 +3711,14 @@
                         height: 1px;
                         background: var(--range-bkgrndColor);
                     }
-                    
+
                     /* Track Progress */
                     /* es gibt leider kein Äquivalent für Chrome */
                     &::-moz-range-progress {
                         height: 2px;
                         background: var(--range-btnColor);
                     }
-                    
+
                     /* Thumb */
                     &::-webkit-slider-thumb {
                         margin-top: calc(var(--range-btnHeight) / 2 * -1);
@@ -3776,7 +3776,7 @@
                     background-color: var(--field-disabled-fontColor);
                     cursor: default;
                 }
-                
+
                 &::-moz-range-progress {
                     background: var(--field-disabled-fontColor);
                 }
@@ -3836,9 +3836,12 @@
                     line-height: var(--field-lineHeight);
                     color: var(--field-fontColor);
 
-                    /* selektion von Text erlauben */
+                    // selektion von Text erlauben
                     -webkit-user-select: text;
                     user-select: text;
+
+                    // Normaler Mauszeiger
+                    cursor: default;
                 }
 
                 > *:last-child {
@@ -3900,7 +3903,7 @@
                     &:focus,
                     &:hover {
                         border-color: var(--field-focus-borderColor);
-                        
+
                         > .kijs-togglePoint {
                             background-color: var(--field-item-focus-bkgrndColor);
                         }
@@ -4050,7 +4053,7 @@
     div.kijs-field-aceeditor {
         > .kijs-content {
             align-self: stretch;
-            
+
             > .kijs-inputwrapper {
                 flex: 1;
                 display: block;
@@ -4687,7 +4690,7 @@
             }
         }
     }
-        
+
 
     /* Flext den Inhalt in eine Spalte */
     div.kijs-flexcolumn, .kijs-flexcolumn {
@@ -4761,7 +4764,7 @@
             }
         }
     }
-    
+
 
 
     /* ******************
