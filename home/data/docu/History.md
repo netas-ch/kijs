@@ -2,6 +2,23 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.4.0
+=============
+### kijs.gui.DragDrop
+- Neuer Getter/Setter ```dragImageDom``` Damit kann bei Bedarf manuell ein DragImage 
+  gesetzt werden.  
+- Neuer Getter/Setter ```sourceCount``` Damit kann angegeben werden, wie viele Elemente 
+  per Drag&Drop gezogen werden.  Wenn vorhanden, wird daraus automatisch ein 
+  DragImage generiert.
+
+### kijs.gui.DragDrop.Source
+ - Neue config/getter/setter ```caption```. Bezeichnung für das DragImage 
+   (Standard: ```'1% Element'```).  
+ - Neue config/getter/setter ```captionPlural```. Bezeichnung für das DragImage 
+   (Standard: ```'1% Elemente'```).  
+
+
+
 Version 3.3.0
 =============
 ### kijs.gui.DataView und vererbte
