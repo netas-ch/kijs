@@ -1585,6 +1585,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 let isCtrlPress = false;
                 this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
             }
+
+            // Anzahl selektierte Elemente ermitteln
+            kijs.gui.DragDrop.sourceCount = this._selectedKeysRows.length;
         }
     }
 
