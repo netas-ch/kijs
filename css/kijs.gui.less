@@ -984,6 +984,33 @@
 
 
     /* ******************
+       * dragImage
+       ****************** */
+    .kijs-dragImage {
+        box-sizing: border-box;
+        position: fixed;
+        display: block;
+        overflow: hidden;
+        z-index: 50101;
+        border-radius: 4px;
+        margin: 0;
+        padding: 4px;
+        color: var(--default-fontColor);
+        border: 1px solid var(--panel-borderColor);
+        font-family: var(--default-fontFamily);
+        font-size: var(--default-fontSize);
+        background-color: var(--viewport-bkgrndColor);
+        max-width: 400px;
+        pointer-events: none;
+
+        * {
+            box-sizing: border-box;
+        }
+    }
+
+
+
+    /* ******************
        * SpinBox
        ****************** */
     div.kijs-spinbox {

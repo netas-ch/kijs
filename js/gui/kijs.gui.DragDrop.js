@@ -7,6 +7,9 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
 
     // PRIVATE VARS
     // __source {kijs.gui.Element} Element das aktuell gezogen wird
+    // __sourceCount {Int} Anzahl Elemente, die gezogen werden
+    // __dragImageDom {kijs.gui.Dom} Div, das beim D&D beim Mauszeiger angezeigt
+    //                               wird
     // __target {kijs.gui.Element} Ziel-Element
     // __data   {Object} Objekt für die Zuweisung beliebiger Daten
     // __dropMarkerDom {kijs.gui.Dom} Marker, der die Einfügeposition visualisiert
@@ -28,6 +31,20 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
             throw new kijs.Error(`kijs.gui.DragDrop.data must be an object.`);
         }
     }
+
+    static get dragImageDom() {
+        return __dragImageDom;
+    }
+    static set dragImageDom(val) {
+        if (!kijs.isEmpty(this.__dragImageDom)) {
+            if (this.__dragImageDom !== val) {
+                this.__dragImageDom.unrender();
+                this.__dragImageDom.destruct();
+                this.__dragImageDom = null;
+            }
+        }
+        this.__dragImageDom = val;
+    }
     
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
     static get source() {
@@ -38,6 +55,13 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     }
     static set source(val) {
         this.__source = val;
+    }
+
+    static get sourceCount() {
+        return this.__sourceCount;
+    }
+    static set sourceCount(val) {
+        this.__sourceCount = val;
     }
 
     static get target() {
@@ -75,6 +99,52 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
+    /**
+     * Definiert das DragImage
+     * @param {type} e
+     * @returns {undefined}
+     */
+    static createDragImage(e) {
+        let ddCaption = '';
+
+        // Falls kein DragImage definiert wurde
+        if (kijs.isEmpty(this.__dragImageDom)) {
+            if (!kijs.isEmpty(this.__sourceCount)) {
+                if (!kijs.isEmpty(this.__source)) {
+                    if (this.__sourceCount === 1) {
+                        if (!kijs.isEmpty(this.__source.caption)) {
+                            console.log(this.__source.caption);
+                            ddCaption = this.__source.caption;
+                        } else {
+                            ddCaption = '%1 Element';
+                        }
+                    } else if (this.__sourceCount > 1) {
+                        if (!kijs.isEmpty(this.__source.captionPlural)) {
+                            ddCaption = this.__source.captionPlural;
+                        } else {
+                            ddCaption = '%1 Elemente';
+                        }
+                    } else {
+                        ddCaption = '';
+                    }
+
+                    if (!kijs.isEmpty(ddCaption)) {
+                        this.__dragImageDom = new kijs.gui.Dom({
+                            nodeTagName: 'div',
+                            cls: 'kijs-dragImage',
+                            html: kijs.getText(ddCaption, '', this.__sourceCount)
+                        });
+                        this.__dragImageDom.renderTo(document.body);
+                    }
+                }
+            }
+        }
+
+        if (!kijs.isEmpty(this.__dragImageDom)) {
+            e.nodeEvent.dataTransfer.setDragImage(this.__dragImageDom.node, 0, 0);
+        }
+    }
+
     /**
      * Entfernt den Marker, der die Einfügeposition anzeigt
      * @returns {undefined}

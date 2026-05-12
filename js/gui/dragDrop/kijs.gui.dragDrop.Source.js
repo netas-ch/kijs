@@ -23,6 +23,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
                                          // verwendet werden.
 
         this._name = null;
+        this._caption = null;
+        this._captionPlural = null;
 
         this._allowMove = true;
         this._allowCopy = false;
@@ -49,6 +51,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
             allowCopy: true,    // Darf das Element per Drag&Drop kopiert werden?
             allowLink: true,    // Darf per Drag&Drop eine Verknüpfung auf das Element erstellt werden?
             name: true,         // Drag&Drop Name
+            caption: true,
+            captionPlural: true,
             on: { fn: 'assignListeners' },
             ownerEl: true,
             ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' } // Property-Name des kijs.gui.Dom, der draggable ist
@@ -74,6 +78,12 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
     get allowMove() { return this._allowMove; }
     set allowMove(val) { this._allowMove = !!val; }
+
+    get caption()  { return this._caption; }
+    set caption(val)  { this._caption = val; }
+
+    get captionPlural()  { return this._captionPlural; }
+    set captionPlural(val)  { this._captionPlural = val; }
 
     get display() { return this._display; }
 
@@ -165,6 +175,8 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         this._display = null;
         kijs.gui.DragDrop.source = null;
         kijs.gui.DragDrop.target = null;
+        kijs.gui.DragDrop.dragImageDom = null;
+        kijs.gui.DragDrop.sourceCount = null;
         kijs.gui.DragDrop.data = {};
     }
 
@@ -189,7 +201,7 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
         kijs.gui.DragDrop.source = this;
         kijs.gui.DragDrop.target = null;
-
+        
         this._ownerEl.dom.clsAdd('kijs-dragging');
 
         e.nodeEvent.dataTransfer.setData('application/' + this._name, '');
@@ -201,6 +213,9 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         this.raiseEvent('dragStart', {
             source: this
         });
+
+        // DragImage definieren
+        kijs.gui.DragDrop.createDragImage(e);
 
         // keine weiteren bubbeling-Listeners mehr ausführen
         e.nodeEvent.stopPropagation();
