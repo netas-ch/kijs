@@ -41,6 +41,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         super(false);
 
         this._displayWaitIcon = false; // Lade Icon anzeigen?
+        this._setInert = true; // inert setzen (Maskiertes Element ist nicht mehr interaktiv/fokusierbar)
 
         // Anker-Node von 0x0px mit position:relative in dem sich die Maske befindet.
         // Nur nötig, wenn das Target nicht der Body ist
@@ -95,9 +96,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             iconColor: { target: 'iconColor', context: this._iconEl },
             iconMap: { target: 'iconMap', context: this._iconEl },
             target: { target: 'target' }, // kijs.gui.Element oder body
+            inert: { target: 'inert' }, // Macht, dass Elemente hinter der Lademaske nicht interaktiv sind (Nicht fokusierbar)
             targetDomProperty: true
         });
-        
+
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
@@ -198,6 +200,15 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
+    get inert() { return this._setInert; }
+
+    set inert(val) {
+        this._setInert = !!val;
+        if (this.targetElementDom) {
+            this.targetElementDom.nodeAttributeSet('inert', !!val);
+        }
+    }
+
     // overwrite
     get isEmpty() { return this._iconEl.isEmpty; }
 
@@ -215,7 +226,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Target ist der Viewport
         if (val instanceof kijs.gui.ViewPort) {
             this._targetElement = null;
-            
+
         // Target ist ein kijs.gui.Element
         } else if ((val instanceof kijs.gui.Element) && !(val instanceof kijs.gui.ViewPort)) {
             this._targetElement = val;
@@ -235,6 +246,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
+
+    get targetElementDom() {
+        return this._targetElement instanceof kijs.gui.Element ? this._targetElement[this._targetDomProperty] : null;
+    }
 
     get text() { return this._textDom.html; }
     set text(val) {
@@ -292,7 +307,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
         // centerDom rendern
         this._maskCenterDom.renderTo(this._dom.node);
-        
+
         // Span icon rendern (kijs.gui.Icon)
         if (this._displayWaitIcon && !this._iconEl.isEmpty) {
             this._iconEl.renderTo(this._maskCenterDom.node);
@@ -345,7 +360,12 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         if (this._maskAnchorDom) {
             this._maskAnchorDom.unrender();
         }
-        
+
+        // inert entfernen
+        if (this.targetElementDom) {
+            this.targetElementDom.nodeAttributeSet('inert', false);
+        }
+
         super.unrender(true);
     }
 
@@ -355,7 +375,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
      */
     show() {
         if (this._targetElement instanceof kijs.gui.Element) {
-            let nde = this._targetElement[this._targetDomProperty].node;
+            let nde = this.targetElementDom?.node;
 
             if (nde) {
                 if (nde.hasChildNodes()) {
@@ -364,7 +384,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
                     this.renderTo(nde);
                 }
             }
-            
+
+            if (this._setInert && this.targetElementDom) {
+                this.targetElementDom.nodeAttributeSet('inert', true);
+            }
+
         } else {
             this.renderTo(document.body);
             this._dom.node.showModal();
@@ -380,13 +404,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
             let top = 0;
             let left = 0;
-            let height = this._targetElement[this._targetDomProperty].height;
-            let width = this._targetElement[this._targetDomProperty].width;
+            let height = this.targetElementDom.height;
+            let width = this.targetElementDom.width;
 
             // Weitere Eigenschaften
             // Bereits gerendert: direkt aus CSS nehmen
-            if (this._targetElement[this._targetDomProperty] && this._targetElement[this._targetDomProperty].node) {
-                style = window.getComputedStyle(this._targetElement[this._targetDomProperty].node);
+            if (this.targetElementDom?.node) {
+                style = window.getComputedStyle(this.targetElementDom.node);
             } else {
                 style = this._targetElement.style;
             }
@@ -474,5 +498,5 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         this._targetElement = null;
         this._maskAnchorDom = null;
     }
-    
+
 };

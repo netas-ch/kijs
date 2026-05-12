@@ -1,8 +1,8 @@
 /* global kijs */
 
 home.sc.Mask = class home_sc_Mask {
-    
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
@@ -10,9 +10,9 @@ home.sc.Mask = class home_sc_Mask {
         this._app = config.app;
         this._content = null;
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
@@ -54,7 +54,7 @@ home.sc.Mask = class home_sc_Mask {
                             html: 'rot',
                             tooltip: 'maskCount: 0',
                             height: 50,
-                            style: { 
+                            style: {
                                 flex: 1,
                                 border:'4px solid #f00',
                                 textAlign: 'center'
@@ -66,7 +66,7 @@ home.sc.Mask = class home_sc_Mask {
                             tooltip: 'maskCount: 1',
                             height: 50,
                             displayWaitMask: true,
-                            style: { 
+                            style: {
                                 flex: 1,
                                 border:'1px solid #0f0',
                                 textAlign: 'center'
@@ -77,7 +77,7 @@ home.sc.Mask = class home_sc_Mask {
                             html: 'blau',
                             tooltip: 'maskCount: 0',
                             height: 50,
-                            style: { 
+                            style: {
                                 flex: 1,
                                 borderRadius: '20px',
                                 border:'1px solid #00f',
@@ -86,8 +86,8 @@ home.sc.Mask = class home_sc_Mask {
                         }
                     ]
                 },
-                
-                
+
+
                 {
                     xtype: 'kijs.gui.field.OptionGroup',
                     name: 'targetElName',
@@ -98,7 +98,7 @@ home.sc.Mask = class home_sc_Mask {
                     iconMapField: 'icon',
                     iconColorField: 'color',
                     required: true,
-                    style: { 
+                    style: {
                         margin: '15px'
                     },
                     data: [
@@ -108,7 +108,7 @@ home.sc.Mask = class home_sc_Mask {
                     ],
                     value: 'elGreen'
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Container',
                     cls: 'kijs-flexline',
@@ -140,8 +140,8 @@ home.sc.Mask = class home_sc_Mask {
                         }
                     ]
                 },
-                
-                
+
+
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
@@ -271,18 +271,50 @@ home.sc.Mask = class home_sc_Mask {
                     style: { margin: '10px' },
                     innerStyle: { padding: '10px' },
                     html: 'Bitte Grösse ändern. Die Maske auf dem folgenden Panel sollte sich verschieben.'
+                },{
+                    xtype: 'kijs.gui.Button',
+                    caption: 'inert toggeln',
+                    height: 30,
+                    style: { margin: '10px' },
+                    on: {
+                        click: function(e) {
+                            const p = this.upX('kijs.gui.Container').down('panelMitForm');
+                            if (p._waitMaskEl.inert) {
+                                p.caption = 'Panel mit Form - Nicht Inert (=interaktiv)';
+                                p._waitMaskEl.inert = false;
+                            } else {
+                                p.caption = 'Panel mit Form - Inert (=nicht interaktiv)';
+                                p._waitMaskEl.inert = true;
+                            }
+                        }
+                    }
+                },{
+                    xtype: 'kijs.gui.Panel',
+                    name: 'panelMitForm',
+                    caption: 'Panel mit Form - Inert (=nicht interaktiv)',
+                    displayWaitMask: true,
+                    width: 500,
+                    style: { margin: '10px' },
+                    innerStyle: { padding: '10px' },
+                    elements: [{
+                        xtype: 'kijs.gui.field.Text',
+                        label: 'Feld 1'
+                    },{
+                        xtype: 'kijs.gui.field.Text',
+                        label: 'Feld 2'
+                    }]
                 }
             ]
         });
-        
+
         return this._content;
     }
-    
+
     run() {
 
     }
-    
-    
+
+
     // PROTECTED
     _getHeaderElements() {
         return [
@@ -298,14 +330,14 @@ home.sc.Mask = class home_sc_Mask {
             }
         ];
     }
-    
-    
-    
+
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
         this._content = null;
     }
-    
+
 };
