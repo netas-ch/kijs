@@ -67,7 +67,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         Object.assign(this._configMap, {
             dragOverCls: true,
             dragOverForbiddenCls: true,
-            contentTypes: { target: 'contentTypes' }
+            contentTypes: { target: 'contentTypes' },
+            multiple: true
         });
 
         // Drag-Events kommen nicht vom Element, sondern von dieser Klasse

@@ -1,7 +1,7 @@
 /* global kijs, this */
 
 // --------------------------------------------------------------
-// kijs.Fi.grid.Filter
+// kijs.gui.grid.Filter
 // --------------------------------------------------------------
 kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 

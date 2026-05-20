@@ -29,6 +29,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl = new kijs.gui.container.tab.Bar({
             parent: this,
             on: {
+                contextMenu: this.#onTabBarContextMenu,
                 sourceDrop: this.#onTabBarSourceDrop,
                 targetDrop: this.#onTabBarTargetDrop,
                 context: this
@@ -89,6 +90,15 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // --------------------------------------------------------------
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
+
+    get data() {
+        let data = [];
+        kijs.Array.each(this._elements, function(el) {
+            data.push(el.posData);
+        }, this);
+
+        return data;
+    }
 
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
@@ -329,6 +339,12 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
     // PRIVATE
     // LISTENERS
+    #onTabBarContextMenu(e) {
+
+        // Event werfen
+        this.raiseEvent('tabBarContextMenu', e);
+    }
+
     #onTabBarSourceDrop(e) {
         if (e.source.name === this._tabBarEl.ddName && e.operation === 'move') {
             // Source Button+Container
@@ -394,6 +410,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 // sonst nur in sichtbaren Bereich scrollen
                 newTabContainer.tabButtonEl.dom.scrollIntoView();
             }
+
+            // Event werfen
+            this.raiseEvent('change', { tabContainer: newTabContainer, index: targetIndex });
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {
