@@ -71,7 +71,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
     set defer(val) { this._defer = val; }
 
     get headers() { return this._headers; }
-    set headers(val) { this._headers = kijs.isObject(val) ? val : {}; }
+    set headers(val) { kijs.isObject(val) ? Object.assign(this._headers, val) : {}; }
 
     get url() { return this._url; }
     set url(val) { this._url = val; }
