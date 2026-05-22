@@ -113,7 +113,6 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
                 if (!kijs.isEmpty(this.__source)) {
                     if (this.__sourceCount === 1) {
                         if (!kijs.isEmpty(this.__source.caption)) {
-                            console.log(this.__source.caption);
                             ddCaption = this.__source.caption;
                         } else {
                             ddCaption = '%1 Element';
