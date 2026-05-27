@@ -1,19 +1,15 @@
-/* global kijs */
+/* global kijs, this */
 
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Icon
 // --------------------------------------------------------------
-/**
- * EVENTS
- * ----------
- *
- */
 kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.grid.filter.Filter {
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     constructor(config={}) {
         super(false);
 
@@ -40,10 +36,11 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         this.parent.grid.on('afterLoad', this._onAfterLoad, this);
     }
 
+    
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-
     get filter() {
         return Object.assign(super.filter, {
             type: 'icon',
@@ -53,9 +50,22 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
     get isFiltered() { return this._checkboxGroup ? this._checkboxGroup.value ? true : false : false; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        this._searchField.renderTo(this._searchContainer.node);
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
 
     reset() {
         if (this._checkboxGroup) {
@@ -64,7 +74,8 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         super.reset();
     }
 
-    // Private
+
+    // PROTECTED
     _checkIcons() {
         let icons = [];
         let iconsCheck = [];
@@ -80,7 +91,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                         if (cell.columnConfig.iconCharField === this.columnConfig.iconCharField){
                             let contains = false;
 
-                            // Überprüfen ob Icon schon in einem der Arrays ist
+                            // Überprüfen, ob Icon schon in einem der Arrays ist
                             if (icons.length > 0) {
                                 kijs.Array.each(icons, function(value){
                                         if (value.id === cell.originalIcon && value.icon === cell.icon && value.color === cell.iconColor && value.caption === cell.caption){
@@ -108,8 +119,8 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         return [icons, iconsCheck, dataCnt];
     }
 
-    // Events
 
+    // LISTENERS
     _onAfterLoad() {;
         let checkIcons = this._checkIcons();
         let icons = checkIcons[0];
@@ -162,29 +173,24 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
     }
 
 
-    // overwrite
-    render(superCall) {
-        super.render(true);
-
-        this._searchField.renderTo(this._searchContainer.node);
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-    }
-
 
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
+            // unrendern
             this.unrender(superCall);
+
+            // Event auslösen.
             this.raiseEvent('destruct');
         }
 
-        this._searchField.destruct();
+        // Elemente/DOM-Objekte entladen
+        if (this._searchField) {
+            this._searchField.destruct();
+        }
 
         // Variablen (Objekte/Arrays) leeren
         this._searchField = null;
@@ -192,4 +198,5 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         // Basisklasse entladen
         super.destruct(true);
     }
+    
 };
