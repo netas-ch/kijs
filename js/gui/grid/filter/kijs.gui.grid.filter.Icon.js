@@ -174,20 +174,6 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         }
     }
 
-    // overwrite
-    unrender(superCall) {
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        this._searchField.unrender();
-        if (this._checkboxGroup) {
-            this._checkboxGroup.unrender();
-        }
-
-        super.unrender(true);
-    }
-
 
     // --------------------------------------------------------------
     // DESTRUCTOR
@@ -198,19 +184,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
             this.raiseEvent('destruct');
         }
 
-        // Listener am Grid entfernen
-        if (this.parent && this.parent.grid) {
-            this.parent.grid.off('afterLoad', this._onAfterLoad, this);
-        }
-
         this._searchField.destruct();
-        if (this._checkboxGroup) {
-            this._checkboxGroup.destruct();
-        }
 
         // Variablen (Objekte/Arrays) leeren
         this._searchField = null;
-        this._checkboxGroup = null;
 
         // Basisklasse entladen
         super.destruct(true);
