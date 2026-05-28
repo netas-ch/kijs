@@ -519,6 +519,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     clear() {
         const emptyValue = this._valuesMapping.name.emptyValue;
         const emptyValueEnd = this._valuesMapping.nameEnd.emptyValue;
+        const oldValue = this[this._valuesMapping.name.valueProperty];
+        const oldValueEnd = this[this._valuesMapping.nameEnd.valueProperty];
 
         kijs.Object.each(this._valuesMapping, function(key, map) {
             this[map.valueProperty] = map.emptyValue;
@@ -527,7 +529,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this.validate();
 
         // Falls etwas geändert hat: Change Event auslösen
-        if (this._previousChangeValue !== emptyValue || this._previousChangeValueEnd !== emptyValueEnd) {
+        if (oldValue !== emptyValue || oldValueEnd !== emptyValueEnd) {
             this.raiseEvent('input', {
                 value: emptyValue,
                 valueEnd: emptyValueEnd,
