@@ -101,7 +101,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get caption() { return this._caption; }
     set caption(val) {
         this._caption = val;
-        this.raiseEvent('change', {columnConfig: this, caption: val});
+        this.raiseEvent('change', { columnConfig: this, caption: val });
     }
 
     get cellConfig() {
@@ -131,7 +131,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get editable() { return this._editable; }
     set editable(val) {
         this._editable = !!val;
-        this.raiseEvent('change', {columnConfig: this, editable: !!val});
+        this.raiseEvent('change', { columnConfig: this, editable: !!val });
     }
 
     get editorConfig() { return this._editorConfig; }
@@ -145,7 +145,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     }
 
     get filterConfig() {
-        let cCnf =  this._filterConfig || {xtype: this._filterXtype};
+        let cCnf =  this._filterConfig || { xtype: this._filterXtype };
         cCnf.columnConfig = this;
         return cCnf;
     }
@@ -169,7 +169,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     get hideable() { return this._hideable; }
     set hideable(val) {
         this._hideable = !!val;
-        this.raiseEvent('change', {columnConfig: this, hideable: !!val});
+        this.raiseEvent('change', { columnConfig: this, hideable: !!val });
     }
 
     get position() {
@@ -181,27 +181,33 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         return false;
     }
     set position(val) {
-        if (val !== this.position) {
-            this.raiseEvent('change', {columnConfig: this, position: this.position});
+        if (this._grid) {
+            if (!kijs.isInteger(val)) {
+                throw new kijs.Error('invalid position value');
+            }
+
+            if (val !== this.position) {
+                this.raiseEvent('change', { columnConfig: this, oldPosition: this.position, newPosition: val });
+            }
         }
     }
 
     get resizable() { return this._resizable; }
     set resizable(val) {
         this._resizable = !!val;
-        this.raiseEvent('change', {columnConfig: this, resizable: !!val});
+        this.raiseEvent('change', { columnConfig: this, resizable: !!val });
     }
 
     get sortable() { return this._sortable; }
     set sortable(val) {
         this._sortable = !!val;
-        this.raiseEvent('change', {columnConfig: this, sortable: !!val});
+        this.raiseEvent('change', { columnConfig: this, sortable: !!val });
     }
 
-    get tooltip() { return this._tooltip };
+    get tooltip() { return this._tooltip; };
     set tooltip(val) {
         this._tooltip = val;
-        this.raiseEvent('change', {columnConfig: this, tooltip: val});
+        this.raiseEvent('change', { columnConfig: this, tooltip: val });
     }
 
     get valueField() { return this._valueField ? this._valueField : this._displayField; }
@@ -214,7 +220,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         }
         if (val !== this._visible) {
             this._visible = !!val;
-            this.raiseEvent('change', {columnConfig: this, visible: !!val});
+            this.raiseEvent('change', { columnConfig: this, visible: !!val });
         }
     }
 
@@ -224,7 +230,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
             throw new kijs.Error('invalid width value for columnConfig');
         }
         this._width = val;
-        this.raiseEvent('change', {columnConfig: this, width: val});
+        this.raiseEvent('change', { columnConfig: this, width: val });
     }
 
 
