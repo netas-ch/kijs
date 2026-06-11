@@ -29,7 +29,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl = new kijs.gui.container.tab.Bar({
             parent: this,
             on: {
-                contextMenu: this.onTabBarContextMenu,
+                contextMenu: this.#onTabBarContextMenu,
                 sourceDrop: this.#onTabBarSourceDrop,
                 targetDrop: this.#onTabBarTargetDrop,
                 context: this
