@@ -929,8 +929,9 @@
        ****************** */
   .kijs-dragImage {
     box-sizing: border-box;
-    position: fixed;
+    position: absolute;
     display: block;
+    top: -1000px;
     overflow: hidden;
     z-index: 50101;
     border-radius: 4px;
