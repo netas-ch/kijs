@@ -45,7 +45,7 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         }
         this.__dragImageDom = val;
     }
-    
+
     // kijs.gui.Element der aktuellen Drag&Drop-Operation
     static get source() {
         if (!kijs.isDefined(this.__source)) {
@@ -108,15 +108,11 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         let ddCaption = '';
 
         // Falls kein DragImage definiert wurde
-        if (kijs.isEmpty(this.__dragImageDom)) {
+        if (kijs.isEmpty(this.__dragImageDom) && !kijs.isEmpty(this.__source.caption)) {
             if (!kijs.isEmpty(this.__sourceCount)) {
                 if (!kijs.isEmpty(this.__source)) {
                     if (this.__sourceCount === 1) {
-                        if (!kijs.isEmpty(this.__source.caption)) {
-                            ddCaption = this.__source.caption;
-                        } else {
-                            ddCaption = '%1 Element';
-                        }
+                        ddCaption = this.__source.caption;
                     } else if (this.__sourceCount > 1) {
                         if (!kijs.isEmpty(this.__source.captionPlural)) {
                             ddCaption = this.__source.captionPlural;
