@@ -29,6 +29,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl = new kijs.gui.container.tab.Bar({
             parent: this,
             on: {
+                contextMenu: this.onTabBarContextMenu,
                 sourceDrop: this.#onTabBarSourceDrop,
                 targetDrop: this.#onTabBarTargetDrop,
                 context: this
@@ -326,6 +327,11 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
     // PRIVATE
     // LISTENERS
+    #onTabBarContextMenu(e) {
+        // Event werfen
+        this.raiseEvent('tabBarContextMenu', e);
+    }
+
     #onTabBarSourceDrop(e) {
         if (e.source.name === this._tabBarEl.ddName && e.operation === 'move') {
             // Source Button+Container
