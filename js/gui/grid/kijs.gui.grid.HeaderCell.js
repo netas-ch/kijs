@@ -320,7 +320,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
 
         this._captionDom.unrender();
-        this._sortDom.unrender();
         this._captionContainerDom.unrender();
         this._helpIconEl.unrender();
         this._menuButtonEl.unrender();
