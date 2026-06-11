@@ -2,6 +2,16 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.5.0
+=============
+### kijs.gui.grid.Grid
+- Eigenschaft ```columns``` in response umbenannt zu ```columnConfigs```.  
+
+**UPDATE TIPP:**: Serverseitig bei den Load-Funktionen von kijs.gui.grid.Grid  
+```response.columns``` umbenennen zu ```response.columnConfigs```.  
+
+
+
 Version 3.4.0
 =============
 ### kijs.gui.DragDrop

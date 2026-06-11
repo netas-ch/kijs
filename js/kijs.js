@@ -19,7 +19,7 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
-    static get version() { return '3.4.0'; }
+    static get version() { return '3.5.0'; }
 
     static get language() {
         if (this.__language) {
