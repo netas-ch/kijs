@@ -1210,8 +1210,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _remoteProcess(e, args, resetData) {
-        // columns
-        if (kijs.isArray(e.response.columns)) {
+        // columnConfigs
+        if (kijs.isArray(e.response.columnConfigs)) {
             if (!kijs.isEmpty(e.response.resetColumns) && e.response.resetColumns) {
                 this._header.clear();
             }
@@ -1219,7 +1219,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 columnConfig.destruct();
             }, this);
             kijs.Array.clear(this._columnConfigs);
-            this.columnConfigAdd(e.response.columns);
+            this.columnConfigAdd(e.response.columnConfigs);
 
             this._getRemoteMetaData = false;
         }

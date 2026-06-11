@@ -634,13 +634,13 @@ foreach ($requests as $request) {
 
                 // Spalten zurückgeben (wenn verlangt)
                 if ($config->getMetaData === true) {
-                    $response->columns = array();
+                    $response->columnConfigs = array();
 
                     $col = new stdClass();
                     $col->caption = 'Vorname';
                     $col->valueField = 'vorname';
                     $col->editable = true;
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -670,7 +670,7 @@ foreach ($requests as $request) {
                     $col->numberStyles = $numberStyles;
                     $col->unitAfter = '%';
 
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -678,14 +678,14 @@ foreach ($requests as $request) {
                     $col->caption = 'Icon';
                     $col->iconCharField = 'icon';
                     $col->iconColorField = 'color';
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
                     $col->xtype = 'kijs.gui.grid.columnConfig.Date';
                     $col->caption = 'Date';
                     $col->valueField = 'date';
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
 
@@ -703,7 +703,7 @@ foreach ($requests as $request) {
                         ['value' => 2, 'displayText' => 'Datensatz 2'],
                         ['value' => 3, 'displayText' => 'Datensatz 3']
                     ];
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -713,7 +713,7 @@ foreach ($requests as $request) {
                     $col->editable = true;
                     $col->clicksToEdit = 1;
                     $col->sortable = false;
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -722,7 +722,7 @@ foreach ($requests as $request) {
                     $col->valueField = 'number2';
                     $col->editable = true;
                     $col->clicksToEdit = 1;
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
                     $col = new stdClass();
@@ -730,7 +730,7 @@ foreach ($requests as $request) {
                     $col->caption = 'Check';
                     $col->valueField = 'checkbox';
                     $col->editable = false;
-                    $response->columns[] = $col;
+                    $response->columnConfigs[] = $col;
                     unset ($col);
 
 
@@ -753,7 +753,7 @@ foreach ($requests as $request) {
                             $col->width = 300;
                         }
 
-                        $response->columns[] = $col;
+                        $response->columnConfigs[] = $col;
                         unset ($col);
                     }
 
