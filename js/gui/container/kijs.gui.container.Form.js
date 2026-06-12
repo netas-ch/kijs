@@ -287,7 +287,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             }
 
             // Zuerst lokal validieren
-            if (!this.validate()) {
+            if (!this.validate() && !kijs.isEmpty(this._defaultSaveErrorMsg)) {
                 kijs.gui.MsgBox.error(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
                 return;
             }
