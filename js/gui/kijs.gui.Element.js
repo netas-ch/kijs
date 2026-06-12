@@ -253,14 +253,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             userData: { target: 'userData' },
             visible : true,
             displayWaitMask: { target: 'displayWaitMask' },
-            waitMaskTarget: { target: 'waitMaskTarget' },
-            waitMaskTargetDomProperty: { target: 'waitMaskTargetDomProperty' },
             width: { target: 'width' },
             xtype: { fn: 'manual' },
             rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
             rpcLoadFn: true,
             rpcLoadArgs: true,
             
+            waitMaskTarget: { prio: 1000, target: 'waitMaskTarget' },
+            waitMaskTargetDomProperty: { prio: 1000, target: 'waitMaskTargetDomProperty' },
             on: { prio: 1500,  fn: 'assignListeners' },
             disabled: { prio: 2000, target: 'disabled' }
         };
@@ -609,6 +609,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     get waitMaskTarget() { return this._waitMaskTarget; }
     set waitMaskTarget(val) {
+        if (kijs.isString(val)) {
+            val = kijs.getObjectFromString(val, this);
+        }
         this._waitMaskTarget = val;
         if (!kijs.isEmpty(this._waitMaskEl)) {
             this._waitMaskEl.target = val;
