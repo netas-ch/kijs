@@ -2,6 +2,18 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.x.x
+=============
+### kijs.gui.container.Form
+Neu wird ein Formular mit dem ```form```-Tag angezeigt. Bisher wurde ein 
+```div```-Tag verwendet. Obwohl kijs keine Funktionaliäten des ```form```-Tags 
+verwendet, macht diese Änderung Sinn, weil damit Browser-Plugins wie Screenreeader 
+und Passwortmanager die Formulare erkennen können.  
+Falls aus einem Grund trotzdem wieder ein ```div```-Tag verwendet werden soll, kann  
+dies mit der config ```nodeTagName:"div"``` gemacht werden.  
+
+
+
 Version 3.5.0
 =============
 ### kijs.gui.grid.Grid
