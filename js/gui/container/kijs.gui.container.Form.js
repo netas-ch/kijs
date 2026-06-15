@@ -22,13 +22,12 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
-            // keine
+            nodeTagName: 'form'                // Die Form-Funktionalität wird von kijs nicht verwendet. Ein DIV funktioniert auch.
+                                                // Es macht trotzdem Sinn für Screenreader, Passwortmanager und andere Browser-Plugins.
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            nodeTagName: 'form',                // Die Form-Funktionalität wird von kijs nicht verwendet. Ein DIV funktioniert auch.
-                                                // Es macht trotzdem Sinn für Screenreader, Passwortmanager und andere Browser-Plugins.
             data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
             defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
             rpcSaveFn: true,
