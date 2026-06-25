@@ -256,7 +256,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                         this.raiseEvent('afterLoad', Object.assign({}, e));
                     }
                 }
-                
+
                 // promise ausführen
                 resolve(e);
             });
@@ -280,7 +280,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             args = Object.assign({}, args, this._rpcSaveArgs);
 
             if (!waitMaskTarget) {
-                waitMaskTarget = this;
+                waitMaskTarget = this.waitMaskTarget ?? this;
             }
 
             if (searchFields || kijs.isEmpty(this._fields)) {
