@@ -9,7 +9,6 @@ kijs.String = class kijs_String {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
-
     /**
      * Überprüft, ob ein String mit einem gesuchten String beginnt
      * @param {String} text
@@ -75,7 +74,6 @@ kijs.String = class kijs_String {
 
     /**
      * Konvertiert einen HTML-String in einen String, in dem die HTML-Entities durch die entsprechenden Unicode-Zeichen ersetzt sind
-     *
      * @param {String} html
      * @returns {String}
      */
@@ -306,4 +304,5 @@ kijs.String = class kijs_String {
             return text.replace(new RegExp(`(?![^\\n]{1,${length}}$)([^\\n]{1,${length}})`, 'g'), '$1\n');
         }
     }
+
 };
