@@ -2,15 +2,26 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 3.x.x
+Version 3.6.0
 =============
+### kijs.gui.Element
+Der config/setter ```waitMaskTarget``` kann neu auch ein String übergeben werden.  
+Beispiel: ```"parent"```.
+
 ### kijs.gui.container.Form
-Neu wird ein Formular mit dem ```form```-Tag angezeigt. Bisher wurde ein 
-```div```-Tag verwendet. Obwohl kijs keine Funktionaliäten des ```form```-Tags 
-verwendet, macht diese Änderung Sinn, weil damit Browser-Plugins wie Screenreeader 
-und Passwortmanager die Formulare erkennen können.  
-Falls aus einem Grund trotzdem wieder ein ```div```-Tag verwendet werden soll, kann  
-dies mit der config ```nodeTagName:"div"``` gemacht werden.  
+- Neu wird ein Formular mit dem ```form```-Tag angezeigt. Bisher wurde ein 
+  ```div```-Tag verwendet. Obwohl kijs keine Funktionaliäten des ```form```-Tags 
+  verwendet, macht diese Änderung Sinn, weil damit Browser-Plugins wie Screenreeader 
+  und Passwortmanager die Formulare erkennen können.  
+  Falls aus einem Grund trotzdem wieder ein ```div```-Tag verwendet werden soll, kann  
+  dies mit der config ```nodeTagName:"div"``` gemacht werden.  
+
+- Funktion save(searchFields=false, args=null): Das 3. Argument ```waitMaskTarget``` 
+  entfernt. Falls etwas anderes als der Standardwert ```this``` verwendet werden soll,  
+  kann die gleichnamige config/setter verwendet werden.  
+
+**UPDATE TIPP:**: JavaScript Code nach ```save(``` durchsuchen, und wenn das 3. Argument 
+```waitMaskTarget``` verwendet wird, entfernen und vorher über config/setter zuweisen.  
 
 
 
