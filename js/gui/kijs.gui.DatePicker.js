@@ -435,7 +435,7 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         let rangeEndDate = this._dateEnd;
 
         // Falls im Range-Modus nur das Startdatum vorhanden ist, als temporäres Enddatum das Datum unter dem Mauszeiger nehmen
-        if (this._mode === 'range' && kijs.isEmpty(this._dateEnd)) {
+        if (this._mode === 'range' && !kijs.isEmpty(this._date) && kijs.isEmpty(this._dateEnd)) {
             rangeEndDate = tmpRangeEndDate;
         }
 
