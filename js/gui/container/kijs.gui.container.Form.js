@@ -227,8 +227,6 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         return new Promise((resolve) => {
             super.load(args, true).then((e) => {
                 if (kijs.isEmpty(e.response.errorType)) {
-                    let config = e.response.config ?? {};
-
                     // Falls das Formular destructed wurde: abbrechen
                     if (!this._dom) {
                         resolve(e);
@@ -268,20 +266,15 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * Sendet die Formulardaten an den Server
      * @param {Boolean} searchFields
      * @param {Boolean} args
-     * @param {type} waitMaskTarget
      * @returns {Promise}
      */
-    save(searchFields=false, args=null, waitMaskTarget=null) {
+    save(searchFields=false, args=null) {
         return new Promise((resolve, reject) => {
             if (!kijs.isObject(args)) {
                 args = {};
             }
 
             args = Object.assign({}, args, this._rpcSaveArgs);
-
-            if (!waitMaskTarget) {
-                waitMaskTarget = this.waitMaskTarget ?? this;
-            }
 
             if (searchFields || kijs.isEmpty(this._fields)) {
                 this.searchFields();
@@ -302,8 +295,8 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 owner: this,
                 data: args,
                 cancelRunningRpcs: false,
-                waitMaskTarget: waitMaskTarget,
-                waitMaskTargetDomProperty: 'dom',
+                waitMaskTarget: this._waitMaskTarget,
+                waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,
                 context: this
 
             }).then((e) => {
