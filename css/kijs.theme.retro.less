@@ -676,6 +676,37 @@
 
         > .kijs-container-inner {
             padding: 3px;
+            
+            > div {
+                > .kijs-button {
+                    background: transparent;
+                    /*border-color: transparent;*/
+                    
+                    &:hover, &:focus {
+                        background: linear-gradient(#f3f4f4,#d5eafd 12px,#c3d9f3 13px,#c5dbf5);
+                    }
+
+                    &:active {
+                        background: linear-gradient(#c1d2e7,#bed1e6 12px,#8fc1f5 13px,#96c4f5);
+                    }
+                    
+                    &.kijs-disabled {
+                        background-color: var(--button-bkgrndColor);
+                        border: 1px solid var(--button-borderColor);
+                        cursor: default;
+
+                        > .kijs-caption,
+                        > .kijs-icon {
+                            color: var(--button-disabled-fontColor);
+                        }
+
+                        > .kijs-badge {
+                            background-color: var(--badge-disabled-bkgrndColor);
+                            color: var(--badge-disabled-fontColor);
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -534,6 +534,30 @@
   div.kijs-buttongroup > .kijs-container-inner {
     padding: 3px;
   }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button {
+    background: transparent;
+    /*border-color: transparent;*/
+  }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button:hover,
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button:focus {
+    background: linear-gradient(#f3f4f4, #d5eafd 12px, #c3d9f3 13px, #c5dbf5);
+  }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button:active {
+    background: linear-gradient(#c1d2e7, #bed1e6 12px, #8fc1f5 13px, #96c4f5);
+  }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button.kijs-disabled {
+    background-color: var(--button-bkgrndColor);
+    border: 1px solid var(--button-borderColor);
+    cursor: default;
+  }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button.kijs-disabled > .kijs-caption,
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button.kijs-disabled > .kijs-icon {
+    color: var(--button-disabled-fontColor);
+  }
+  div.kijs-buttongroup > .kijs-container-inner > div > .kijs-button.kijs-disabled > .kijs-badge {
+    background-color: var(--badge-disabled-bkgrndColor);
+    color: var(--badge-disabled-fontColor);
+  }
   /* kijs.gui.Tree */
   div.kijs-tree > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner > .kijs-expandIcon {
     width: 8px;
