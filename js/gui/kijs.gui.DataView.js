@@ -484,8 +484,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die Data-rows der selektierten Elemente zurück
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird direkt die row zurückgegeben sonst ein Array mit den rows
      * @returns {Array|null}
      */
     getSelectedRows() {
