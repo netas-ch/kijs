@@ -424,8 +424,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
      * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
      * Dafür besser die Funktionen getSelectedPrimaryKeys() und getSelectedRows() verwenden!
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
     getSelected() {
@@ -452,8 +450,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die PrimaryKey-Strings der selektierten Elemente als Array zurück
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird direkt der Key-String zurückgegeben sonst ein Array mit den Keys-Strings
      * Siehe dazu kijs.Data.getPrimaryKey()
      * @returns {Array|String|null}
      */
