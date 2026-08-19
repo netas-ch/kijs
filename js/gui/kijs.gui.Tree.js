@@ -988,6 +988,11 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                 let isCtrlPress = false;
                 this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
             }
+
+            // Falls expandiert: Zuklappen
+            if (e.source.ownerEl.expanded) {
+                e.source.ownerEl.collapse();
+            }
         }
     }
 
