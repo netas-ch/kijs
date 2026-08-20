@@ -17,7 +17,7 @@
  *   // JS Files
  *   echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui,grid,aceEditor,quillEditor&fileType=js');
  * ?>
- */ 
+ */
 
 $modules = filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
 $fileType = filter_input(INPUT_GET, 'fileType');    // 'js' oder 'css'

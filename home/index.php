@@ -8,10 +8,15 @@
         @layer kijs, kijs-theme, app;
     </style>
 <?php
-    // Base-URL ermittlen
+
+    // Verzeichnis
+    $baseDir = '';
+
+    // Base-URL ermitteln
     $baseUrl = '';
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
     $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
+    $baseUrl .= $baseDir;
 
     $themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css?v=' . filemtime('../css/kijs.theme.default.css');
     // CSS Files
