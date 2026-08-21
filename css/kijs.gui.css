@@ -309,6 +309,7 @@
     font-family: var(--default-fontFamily);
     font-size: var(--badge-fontSize);
     line-height: var(--badge-lineHeight);
+    font-weight: normal;
     color: var(--badge-fontColor);
     text-align: center;
     background-color: var(--badge-bkgrndColor);
@@ -1099,6 +1100,7 @@
     right: -3px;
     font-size: var(--badge-fontSize);
     line-height: var(--badge-lineHeight);
+    font-weight: normal;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button:hover > .kijs-caption,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button:hover > .kijs-caption,
