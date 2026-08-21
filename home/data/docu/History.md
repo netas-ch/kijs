@@ -2,11 +2,18 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.x.x
+=============
+### kijs.gui.field.AceEditor
+- Update auf Neuste Ace-Editor Version 1.44.0  
+
+
+
 Version 3.6.0
 =============
 ### kijs.gui.Element
 Der config/setter ```waitMaskTarget``` kann neu auch ein String übergeben werden.  
-Beispiel: ```"parent"```.
+Beispiel: ```"parent"```.  
 
 ### kijs.gui.container.Form
 - Neu wird ein Formular mit dem ```form```-Tag angezeigt. Bisher wurde ein 
