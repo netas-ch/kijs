@@ -85,6 +85,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
             formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
@@ -162,6 +163,13 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }

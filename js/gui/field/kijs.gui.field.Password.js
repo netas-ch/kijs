@@ -49,6 +49,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             disableBrowserSecurityWarning: { prio: -1, target: 'disableBrowserSecurityWarning' },  // false: Nimmt das Standard Passwort-Feld
                                                                     // true:  Eigenes Feld, dass nicht als Kennwort-Feld erkannt wird und
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
@@ -130,6 +131,13 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }

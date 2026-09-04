@@ -86,7 +86,8 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' }   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -133,6 +134,13 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     // overwrite
     get readOnly() { return super.readOnly; }

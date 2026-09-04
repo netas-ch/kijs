@@ -108,6 +108,7 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                                                         // die in der Liste nicht vorhanden sind?
 
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             inputMode: { target: 'inputMode' },
 
             displayLimit: { target: 'displayLimit' },
@@ -247,6 +248,13 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     get queryOperator() { return this._queryOperator; }
     set queryOperator(val) {

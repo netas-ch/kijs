@@ -2,10 +2,22 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
-Version 3.x.x
+Version 3.6.1
 =============
 ### kijs.gui.field.AceEditor
 - Update auf Neuste Ace-Editor Version 1.44.0  
+
+### kijs.gui.field.Password
+ - Neue config/getter/setter ```autocomplete```.  
+
+### kijs.gui.field.Color
+### kijs.gui.field.Combo
+### kijs.gui.field.Memo
+### kijs.gui.field.Month
+### kijs.gui.field.Number
+### kijs.gui.field.Password
+### kijs.gui.field.Text
+ - config/setter ```name``` wird neu auch dem ```input.name``` zugewiesen.  
 
 
 
@@ -45,9 +57,9 @@ Version 3.5.0
 Version 3.4.0
 =============
 ### kijs.gui.DragDrop
-- Neuer Getter/Setter ```dragImageDom``` Damit kann bei Bedarf manuell ein DragImage 
+- Neuer getter/setter ```dragImageDom``` Damit kann bei Bedarf manuell ein DragImage 
   gesetzt werden.  
-- Neuer Getter/Setter ```sourceCount``` Damit kann angegeben werden, wie viele Elemente 
+- Neuer getter/setter ```sourceCount``` Damit kann angegeben werden, wie viele Elemente 
   per Drag&Drop gezogen werden.  Wenn vorhanden, wird daraus automatisch ein 
   DragImage generiert.
 
