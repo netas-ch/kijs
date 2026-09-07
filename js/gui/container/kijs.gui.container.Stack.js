@@ -156,7 +156,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     set currentName(val) {
-        let elements = this.getElementsByName(val, 2, true);
+        let elements = this.getElementsByName(val, 0, true);
         if (elements.length === 0) {
             throw new kijs.Error(`currentName does not exist in elements.`);
         } else {
