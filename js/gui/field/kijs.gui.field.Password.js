@@ -48,6 +48,8 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
+            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             disableBrowserSecurityWarning: { prio: -1, target: 'disableBrowserSecurityWarning' },  // false: Nimmt das Standard Passwort-Feld
                                                                     // true:  Eigenes Feld, dass nicht als Kennwort-Feld erkannt wird und
                                                                     //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
@@ -83,6 +85,20 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
+    set autocomplete(val) {
+        let value = 'on';
+
+        if (kijs.isString(val)) {
+            value = val;
+        } else if (val === false) {
+            value = 'off';
+        }
+
+        // De-/aktiviert die Browser-Vorschläge
+        this._inputDom.nodeAttributeSet('autocomplete', value);
+    }
+
     get disableBrowserSecurityWarning() { return this._disableBrowserSecurityWarning; }
     set disableBrowserSecurityWarning(val) {
         if (val === 'auto') {
@@ -115,6 +131,13 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }

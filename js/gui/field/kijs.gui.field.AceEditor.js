@@ -58,8 +58,15 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
-    get mode() { return this._mode; }
-    set mode(val) { this._mode = val; }
+    get mode() { 
+        return this._mode;
+    }
+    set mode(val) {
+        this._mode = val;
+        if (!kijs.isEmpty(val) && this._aceEditor && this._aceEditor.session) {
+            this._aceEditor.session.setMode('ace/mode/' + val);
+        }
+    }
 
     // overwrite
     get readOnly() { return super.readOnly; }

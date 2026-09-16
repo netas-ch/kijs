@@ -522,6 +522,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         const oldValue = this[this._valuesMapping.name.valueProperty];
         const oldValueEnd = this[this._valuesMapping.nameEnd.valueProperty];
 
+        const oldValue = this[this._valuesMapping.name.valueProperty];
+        const oldValueEnd = this[this._valuesMapping.nameEnd.valueProperty];
+
         kijs.Object.each(this._valuesMapping, function(key, map) {
             this[map.valueProperty] = map.emptyValue;
         }, this);
@@ -679,7 +682,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                     });
                 }
 
-                ret = kijs.getText('%1 bis %2', '', [txtStart, txtEnd]).trim();
+                if (!kijs.isEmpty(txtStart) || !kijs.isEmpty(txtEnd)) {
+                    ret = kijs.getText('%1 bis %2', '', [txtStart, txtEnd]).trim();
+                } else {
+                    ret = '';
+                }
                 break;
 
             // week

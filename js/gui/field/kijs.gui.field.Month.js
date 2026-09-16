@@ -141,6 +141,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             year2000Threshold: true,
             emptyBtnHide: { target: 'maxDate', context: this._monthPicker },
             inputMode: { target: 'inputMode' },
@@ -226,6 +227,13 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
     get lastDayOfMonthAsValue() { return this._monthPicker.lastDayOfMonthAsValue; }
     set lastDayOfMonthAsValue(val) { this._monthPicker.lastDayOfMonthAsValue = !!val; }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
+    }
 
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }

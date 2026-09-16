@@ -991,6 +991,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('unrender');
         }
 
+        // rows
+        kijs.Array.each(this._rows, function(row) {
+            row.unrender();
+        }, this);
+
         // header / filter
         this._header.unrender();
         this._filter.unrender();
@@ -1205,12 +1210,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     _remoteProcess(e, args, resetData) {
-        // columns
-        if (kijs.isArray(e.response.columns)) {
+        // columnConfigs
+        if (kijs.isArray(e.response.columnConfigs)) {
             if (!kijs.isEmpty(e.response.resetColumns) && e.response.resetColumns) {
                 this._header.clear();
             }
-
+            kijs.Array.each(this._columnConfigs, function(columnConfig) {
+                columnConfig.destruct();
+            }, this);
             kijs.Array.clear(this._columnConfigs);
             this.columnConfigAdd(e.response.columnConfigs);
 
@@ -1363,7 +1370,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onColumnChange(e) {
-
         // Event weiter werfen
         this.raiseEvent('columnChange', e);
     }
@@ -1449,6 +1455,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.raiseEvent('destruct');
         }
 
+        // rows
+        kijs.Array.each(this._rows, function(row) {
+            row.destruct();
+        }, this);
+
+        // columnConfigs
+        kijs.Array.each(this._columnConfigs, function(columnConfig) {
+            columnConfig.destruct();
+        }, this);
+
         // header / filter
         this._header.destruct();
         this._filter.destruct();
@@ -1487,8 +1503,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._middleDom.destruct();
         this._bottomDom.destruct();
 
+
         // Variablen (Objekte/Arrays) leeren
         // -----------------------------------
+        // rows
+        this._rows = null;
+        this._currentRow = null;
+
+        // columnConfigs
+        this._columnConfigs = null;
 
         // header / filter
         this._header = null;

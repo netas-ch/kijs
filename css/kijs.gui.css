@@ -309,6 +309,7 @@
     font-family: var(--default-fontFamily);
     font-size: var(--badge-fontSize);
     line-height: var(--badge-lineHeight);
+    font-weight: normal;
     color: var(--badge-fontColor);
     text-align: center;
     background-color: var(--badge-bkgrndColor);
@@ -593,7 +594,7 @@
     flex: 1 1 auto;
   }
   div.kijs-container-stack > .kijs-container-inner > * {
-    position: absolute;
+    position: relative;
     width: 100%;
     height: 100%;
   }
@@ -925,6 +926,30 @@
     background-color: var(--icon-help-bkgrndColor);
   }
   /* ******************
+       * dragImage
+       ****************** */
+  .kijs-dragImage {
+    box-sizing: border-box;
+    position: absolute;
+    display: block;
+    top: -1000px;
+    overflow: hidden;
+    z-index: 50101;
+    border-radius: 4px;
+    margin: 0;
+    padding: 4px;
+    color: var(--default-fontColor);
+    border: 1px solid var(--panel-borderColor);
+    font-family: var(--default-fontFamily);
+    font-size: var(--default-fontSize);
+    background-color: var(--viewport-bkgrndColor);
+    max-width: 400px;
+    pointer-events: none;
+  }
+  .kijs-dragImage * {
+    box-sizing: border-box;
+  }
+  /* ******************
        * SpinBox
        ****************** */
   div.kijs-spinbox {
@@ -986,7 +1011,7 @@
     background-color: var(--viewport-bkgrndColor);
   }
   div.kijs-splitter-horizontal:not(.kijs-disabled) {
-    cursor: ew-resize;
+    cursor: col-resize;
   }
   div.kijs-splitter-overlay-horizontal {
     box-sizing: border-box;
@@ -995,14 +1020,14 @@
     height: 100%;
     background-color: var(--splitter-overlay-bkgrndColor);
     opacity: 0.8;
-    cursor: ew-resize;
+    cursor: col-resize;
   }
   div.kijs-splitter-vertical {
     height: 5px;
     background-color: var(--viewport-bkgrndColor);
   }
   div.kijs-splitter-vertical:not(.kijs-disabled) {
-    cursor: ns-resize;
+    cursor: row-resize;
   }
   div.kijs-splitter-overlay-vertical {
     box-sizing: border-box;
@@ -1011,7 +1036,7 @@
     width: 100%;
     background-color: var(--splitter-overlay-bkgrndColor);
     opacity: 0.8;
-    cursor: ns-resize;
+    cursor: row-resize;
   }
   /* ******************
        * PanelBar
@@ -1075,6 +1100,7 @@
     right: -3px;
     font-size: var(--badge-fontSize);
     line-height: var(--badge-lineHeight);
+    font-weight: normal;
   }
   div.kijs-panelbar > .kijs-container-left > .kijs-container-inner > .kijs-button:hover > .kijs-caption,
   div.kijs-panelbar > .kijs-container-right > .kijs-container-inner > .kijs-button:hover > .kijs-caption,
@@ -1664,7 +1690,7 @@
     opacity: 0.3;
   }
   div.kijs-resizer.kijs-resizer-width:not(.kijs-disabled) {
-    cursor: we-resize;
+    cursor: ew-resize;
   }
   div.kijs-resizer.kijs-resizer-height:not(.kijs-disabled) {
     cursor: ns-resize;
@@ -1775,11 +1801,6 @@
     font-size: var(--item-fontSize);
     line-height: var(--item-lineHeight);
     color: var(--item-fontColor);
-  }
-  div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element > .kijs-container-inner {
-    /* selektion von Text erlauben */
-    -webkit-user-select: text;
-    user-select: text;
   }
   div.kijs-dataview > .kijs-container-inner > .kijs-dataview-element.kijs-selected {
     color: var(--item-selected-fontColor);
@@ -3396,9 +3417,9 @@
     font-size: var(--field-fontSize);
     line-height: var(--field-lineHeight);
     color: var(--field-fontColor);
-    /* selektion von Text erlauben */
     -webkit-user-select: text;
     user-select: text;
+    cursor: default;
   }
   div.kijs-field-checkbox > .kijs-content > .kijs-inputwrapper > *:last-child {
     margin: 0;
@@ -3964,7 +3985,7 @@
     height: 100%;
     background-color: var(--splitter-overlay-bkgrndColor);
     opacity: 0.8;
-    cursor: ew-resize;
+    cursor: col-resize;
   }
   /* ******************
        * Filter

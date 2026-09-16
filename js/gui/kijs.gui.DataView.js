@@ -85,8 +85,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             ddPosAfterFactor: true,
             elementDdSourceConfig: true,
 
-            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             sortable: { prio: 70, target: 'sortable' },
+            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
             selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
             ddTarget: { prio: 120, target: 'ddTarget' }
         });
@@ -99,7 +99,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Events
         this.on('keyDown', this.#onKeyDown, this);
-        this.on('elementMouseDown', this.#onElementMouseDown, this);
+        this.on('elementClick', this.#onElementClick, this);
     }
 
 
@@ -288,7 +288,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
     get selectedKeysRows() { return this._selectedKeysRows; }
-    
+
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
 
@@ -424,8 +424,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
      * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
      * Dafür besser die Funktionen getSelectedPrimaryKeys() und getSelectedRows() verwenden!
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird das Element direkt zurückgegeben sonst ein Array mit den Elementen
      * @returns {Array|kijs.gui.dataView.element.Base|null}
      */
     getSelected() {
@@ -452,14 +450,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die PrimaryKey-Strings der selektierten Elemente als Array zurück
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird direkt der Key-String zurückgegeben sonst ein Array mit den Keys-Strings
      * Siehe dazu kijs.Data.getPrimaryKey()
      * @returns {Array|String|null}
      */
     getSelectedPrimaryKeys() {
         const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
-        
+
         let primaryKeys = [];
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -484,8 +480,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die Data-rows der selektierten Elemente zurück
-     * Bei selectType='single', 'singleAndEmpty', 'simple-single' und 'simple-singleAndEmpty'
-     * wird direkt die row zurückgegeben sonst ein Array mit den rows
      * @returns {Array|null}
      */
     getSelectedRows() {
@@ -688,16 +682,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     save() {
         return new Promise((resolve, reject) => {
-            let args = {};
-
-            args = Object.assign({}, args, this._rpcSaveArgs);
-            args.data = this._data;
-
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: args,
+                data: this._data,
+                saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
@@ -1421,7 +1411,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                     allowLink: false,
                     name: this._ddName
                 };
-                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+                newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
+            }
+            if (!kijs.isEmpty(newEl.ddSource)) {
+                newEl.ddSource.on('dragStart', this.#onElementSourceDragStart, this);
             }
 
             // click-Event
@@ -1552,10 +1545,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    
+
     // PRIVATE
     // LISTENERS
-    #onElementMouseDown(e) {
+    #onElementClick(e) {
         if (!this.disabled && !e.raiseElement.disabled) {
             this.current = e.raiseElement;
             if (this._focusable) {
@@ -1573,11 +1566,26 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    #onKeyDown(e) {
-        this.handleKeyDown(e.nodeEvent);
+    #onElementSourceDragStart(e) {
+        if (!this.disabled && !e.source.ownerEl.disabled) {
+            // Falls nicht selektiert: selektieren
+            if (!e.source.ownerEl.selected) {
+                this.current = e.source.ownerEl;
+                if (this._focusable) {
+                    e.source.ownerEl.focus();
+                }
+
+                let isShiftPress = false;
+                let isCtrlPress = false;
+                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+            }
+
+            // Anzahl selektierte Elemente ermitteln
+            kijs.gui.DragDrop.sourceCount = this._selectedKeysRows.length;
+        }
     }
 
-    #onSourceDrop(e) {
+    #onElementSourceDrop(e) {
         // Source Element
         let sourceEl = e.source.ownerEl;
 
@@ -1602,6 +1610,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 this.reload({ noRpc:true });
             }
         }
+    }
+
+    #onKeyDown(e) {
+        this.handleKeyDown(e.nodeEvent);
     }
 
     #onTargetDrop(e) {

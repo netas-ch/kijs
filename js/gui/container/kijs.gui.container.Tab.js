@@ -91,15 +91,6 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
 
-    get data() {
-        let data = [];
-        kijs.Array.each(this._elements, function(el) {
-            data.push(el.posData);
-        }, this);
-
-        return data;
-    }
-
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
@@ -245,21 +236,18 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
     save() {
         return new Promise((resolve, reject) => {
-            let args = {};
-
-            args = Object.assign({}, args, this._rpcSaveArgs);
-
             // Positionsdaten der Tabs ermitteln
-            args.elements = [];
+            let data = [];
             kijs.Array.each(this._elements, function(el) {
-                args.elements.push(el.posData);
+                data.push(el.posData);
             }, this);
 
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: args,
+                data: data,
+                saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
@@ -340,7 +328,6 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // PRIVATE
     // LISTENERS
     #onTabBarContextMenu(e) {
-
         // Event werfen
         this.raiseEvent('tabBarContextMenu', e);
     }
@@ -410,9 +397,6 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 // sonst nur in sichtbaren Bereich scrollen
                 newTabContainer.tabButtonEl.dom.scrollIntoView();
             }
-
-            // Event werfen
-            this.raiseEvent('change', { tabContainer: newTabContainer, index: targetIndex });
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {

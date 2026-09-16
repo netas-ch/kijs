@@ -244,7 +244,9 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // PRIVATE
     // LISTENERS
     #onColumnConfigChange(e) {
-        if ('visible' in e || 'width' in e || 'caption' in e || 'resizable' in e || 'sortable' in e) {
+        if (!kijs.isEmpty(e.visible) || !kijs.isEmpty(e.width) ||
+                !kijs.isEmpty(e.caption) || !kijs.isEmpty(e.resizable) ||
+                !kijs.isEmpty(e.sortable)) {
             kijs.Array.each(this.cells, function(cell) {
                 if (e.columnConfig === cell.columnConfig) {
                     if (e.caption) {
@@ -257,7 +259,8 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
             }, this);
 
         }
-        if ('position' in e) {
+        if (!kijs.isEmpty(e.oldPosition) && !kijs.isEmpty(e.newPosition)) {
+            kijs.Array.move(this.parent.columnConfigs, e.oldPosition, e.newPosition);
             this.render();
         }
     }

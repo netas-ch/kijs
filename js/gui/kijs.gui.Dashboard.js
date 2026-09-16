@@ -107,21 +107,18 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     // --------------------------------------------------------------
     save() {
         return new Promise((resolve, reject) => {
-            let args = {};
-            
-            args = Object.assign({}, args, this._rpcSaveArgs);
-            
             // Positionsdaten der Spalten + Panels ermitteln
-            args.elements = [];
+            let data = [];
             kijs.Array.each(this._elements, function(el) {
-                args.elements.push(el.posData);
+                data.push(el.posData);
             }, this);
             
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: args,
+                data: data,
+                saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',

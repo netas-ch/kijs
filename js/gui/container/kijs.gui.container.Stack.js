@@ -70,7 +70,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         this._animation = 'fade';
         this._animationDuration = 500;
 
-        this._currentEl = null;     // Aktuelles (sichtbaren) Element
+        this._currentEl = null;     // Aktuelles (sichtbares) Element
         this._elHistory = [];       // Auflistung der Elemente, die als letztes
                                     // angeklickt wurden.
                                     // Mit Hilfe dieser Auflistung kann beim 
@@ -139,7 +139,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Aktueller Container ermitteln/setzen via Index
+    // Aktuellen Container ermitteln/setzen via Index
     get currentIndex() { return this._getElIndex(this._currentEl); }
     set currentIndex(val) {
         if (this._elements[val]) {
@@ -147,7 +147,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Aktueller Container ermitteln/setzen via Name
+    // Aktuellen Container ermitteln/setzen via Name
     get currentName() { 
         if (this._currentEl) {
             return this._currentEl.name;

@@ -8,6 +8,8 @@ kijs.translation["fr"] = {
         "Letzte \u00c4nderungen": "admin"
     },
     "%1 bis %2": "%1 \u00e0 %2",
+    "%1 Element": "%1 Élement",
+    "%1 Elemente": "%1 Élements",
     "%1 ist keine g\u00fcltige Nummer": "%1 n'est pas un num\u00e9ro valide",
     "Abbrechen": "Annuler",
     "Absteigend sortieren": "Trier par ordre d\u00e9croissant",

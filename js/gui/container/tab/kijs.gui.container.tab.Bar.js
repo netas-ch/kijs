@@ -154,7 +154,7 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
                     allowCopy: false,
                     allowLink: false
                 };
-                el.ddSource.on('drop', this.#onSourceDrop, this);
+                el.ddSource.on('drop', this.#onElementSourceDrop, this);
             } else {
                 if (el.ddSource) {
                     el.ddSource.destruct();
@@ -187,7 +187,7 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         this._initTabs(e.elements);
     }
     
-    #onSourceDrop(e) {
+    #onElementSourceDrop(e) {
         this.raiseEvent('sourceDrop', e);
     }
     

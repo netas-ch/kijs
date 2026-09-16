@@ -71,7 +71,7 @@ kijs.Data = class kijs_Data {
      *                                         "IN", "NOT IN",          Der Wert muss im Array vorkommen.
      *                                                                  Value muss ein Array sein.
      *
-     *                                         "LIKE", NOT LIKE",       Im value können wie in SQL
+     *                                         "LIKE", "NOT LIKE",      Im value können wie in SQL
      *                                                                  % und _ als Platzhalter
      *                                                                  verwendet werden. (CI)
      *

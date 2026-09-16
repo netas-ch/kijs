@@ -96,6 +96,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
             allowedThousandsSeparators: true,
             alwaysDisplayDecimals: true,
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            name: { target: 'name' },
             decimalPrecision: { target: 'decimalPrecision'},
             decimalSeparator: true,
             inputMode: { target: 'inputMode' },
@@ -186,6 +187,13 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     get minValue() { return this._minValue; }
     set minValue(val) {
         this._minValue = val === null ? null : parseFloat(val);
+    }
+
+    // overwrite
+    get name() { return this._name; }
+    set name(val) {
+        super.name = val;
+        this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }

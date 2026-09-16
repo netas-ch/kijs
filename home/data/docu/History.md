@@ -2,6 +2,95 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.6.1
+=============
+### kijs.gui.field.AceEditor
+- Update auf Neuste Ace-Editor Version 1.44.0  
+
+### kijs.gui.field.Password
+ - Neue config/getter/setter ```autocomplete```.  
+
+### kijs.gui.field.Color
+### kijs.gui.field.Combo
+### kijs.gui.field.Memo
+### kijs.gui.field.Month
+### kijs.gui.field.Number
+### kijs.gui.field.Password
+### kijs.gui.field.Text
+ - config/setter ```name``` wird neu auch dem ```input.name``` zugewiesen.  
+
+
+
+Version 3.6.0
+=============
+### kijs.gui.Element
+Der config/setter ```waitMaskTarget``` kann neu auch ein String übergeben werden.  
+Beispiel: ```"parent"```.  
+
+### kijs.gui.container.Form
+- Neu wird ein Formular mit dem ```form```-Tag angezeigt. Bisher wurde ein 
+  ```div```-Tag verwendet. Obwohl kijs keine Funktionaliäten des ```form```-Tags 
+  verwendet, macht diese Änderung Sinn, weil damit Browser-Plugins wie Screenreeader 
+  und Passwortmanager die Formulare erkennen können.  
+  Falls aus einem Grund trotzdem wieder ein ```div```-Tag verwendet werden soll, kann  
+  dies mit der config ```nodeTagName:"div"``` gemacht werden.  
+
+- Funktion save(searchFields=false, args=null): Das 3. Argument ```waitMaskTarget``` 
+  entfernt. Falls etwas anderes als der Standardwert ```this``` verwendet werden soll,  
+  kann die gleichnamige config/setter verwendet werden.  
+
+**UPDATE TIPP:**: JavaScript Code nach ```save(``` durchsuchen, und wenn das 3. Argument 
+```waitMaskTarget``` verwendet wird, entfernen und vorher über config/setter zuweisen.  
+
+
+
+Version 3.5.0
+=============
+### kijs.gui.grid.Grid
+- Eigenschaft ```columns``` in response umbenannt zu ```columnConfigs```.  
+
+**UPDATE TIPP:**: Serverseitig bei den Load-Funktionen von kijs.gui.grid.Grid  
+```response.columns``` umbenennen zu ```response.columnConfigs```.  
+
+
+
+Version 3.4.0
+=============
+### kijs.gui.DragDrop
+- Neuer getter/setter ```dragImageDom``` Damit kann bei Bedarf manuell ein DragImage 
+  gesetzt werden.  
+- Neuer getter/setter ```sourceCount``` Damit kann angegeben werden, wie viele Elemente 
+  per Drag&Drop gezogen werden.  Wenn vorhanden, wird daraus automatisch ein 
+  DragImage generiert.
+
+### kijs.gui.DragDrop.Source
+ - Neue config/getter/setter ```caption```. Bezeichnung für das DragImage 
+   (Standard: ```'1% Element'```).  
+ - Neue config/getter/setter ```captionPlural```. Bezeichnung für das DragImage 
+   (Standard: ```'1% Elemente'```).  
+
+
+
+Version 3.3.0
+=============
+### kijs.gui.DataView und vererbte
+- Elemente werden neu erst beim Click-Event selektiert. Früher wurden sie bei 
+  MouseDown selektiert.  
+- Anpassung an save-RPC request: Neue Eigenschaft ```saveArgs```. Diese enthält 
+  die Daten des Property ```rpcSaveArgs```.  
+
+### kijs.gui.Dashboard und kijs.gui.container.Tab
+Anpassung an save-RPC request:  
+ - ```data.elements``` ist neu direkt in ```data```  
+ - Die Daten des Property ```rpcSaveArgs``` sind neu nicht mehr in ```data```, 
+   sondern in ```saveArgs```
+
+**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen von Dashboard und Tabs 
+```data.elements``` ändern zu ```data``` und berücksichtigen, dass die 
+```rpcSaveArgs``` neu nicht mehr in ```data``` sondern in ```saveArgs``` sind.  
+
+
+
 Version 3.2.0
 =============
 ### kijs.Ajax, kijs.Rpc, kijs.gui.Rpc

@@ -253,7 +253,7 @@ Wenn z.B. bei einem Panel nur der innerDom als Ziel dienen soll, kann dafür
 ### posBeforeFactor
 Zahl zwischen 0 und 1. Default=0.666  
 Muss <= als ```posAfterFactor``` sein.  
-Position des Splittpunkts für das Einfügen voher (before).  
+Position des Splittpunkts für das Einfügen vorher (before).  
 Wird vor dieser Position gedroppt, so wird das Element vorher eingefügt.  
 Wird nachher gedroppt, geschieht nichts.  
 
@@ -261,7 +261,7 @@ Wird nachher gedroppt, geschieht nichts.
 Zahl zwischen 0 und 1. Default=0.666  
 Muss >= als ```posBeforeFactor``` sein.  
 Position des Splittpunkts für das Einfügen nachher (after).  
-Wird vor nach Position gedroppt, so wird das Element nach eingefügt.  
+Wird nach dieser Position gedroppt, so wird das Element nachher eingefügt.  
 Wird vorher gedroppt, geschieht nichts.  
 
     flex-direction: 'column'    flex-direction: 'row'

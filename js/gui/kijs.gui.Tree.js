@@ -841,7 +841,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                     allowLink: false,
                     name: this._ddName
                 };
-                newEl.ddSource.on('drop', this.#onSourceDrop, this);
+                newEl.ddSource.on('drop', this.#onElementSourceDrop, this);
+            }
+            if (!kijs.isEmpty(newEl.ddSource)) {
+                newEl.ddSource.on('dragStart', this.#onElementSourceDragStart, this);
             }
 
             if (this._elementDdTargetConfig) {
@@ -972,7 +975,29 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // PRIVATE
     // LISTENERS
     // overwrite
-    #onSourceDrop(e) {
+    #onElementSourceDragStart(e) {
+        if (!this.disabled && !e.source.ownerEl.disabled) {
+            // Falls nicht selektiert: selektieren
+            if (!e.source.ownerEl.selected) {
+                this.current = e.source.ownerEl;
+                if (this._focusable) {
+                    e.source.ownerEl.focus();
+                }
+
+                let isShiftPress = false;
+                let isCtrlPress = false;
+                this._selectEl(this._currentEl, isShiftPress, isCtrlPress);
+            }
+
+            // Falls expandiert: Zuklappen
+            if (e.source.ownerEl.expanded) {
+                e.source.ownerEl.collapse();
+            }
+        }
+    }
+
+    // overwrite
+    #onElementSourceDrop(e) {
         let dataRows = [];
 
         // Source Element
