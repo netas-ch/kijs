@@ -91,6 +91,15 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
 
+    get data() {
+        let data = [];
+        kijs.Array.each(this._elements, function(el) {
+            data.push(el.posData);
+        }, this);
+
+        return data;
+    }
+
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
@@ -236,17 +245,12 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
     save() {
         return new Promise((resolve, reject) => {
-            // Positionsdaten der Tabs ermitteln
-            let data = [];
-            kijs.Array.each(this._elements, function(el) {
-                data.push(el.posData);
-            }, this);
 
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: data,
+                data: this.data,
                 saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
@@ -397,6 +401,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 // sonst nur in sichtbaren Bereich scrollen
                 newTabContainer.tabButtonEl.dom.scrollIntoView();
             }
+
+            // Event werfen
+            this.raiseEvent('change', { tabContainer: newTabContainer, index: targetIndex });
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {
