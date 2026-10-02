@@ -343,15 +343,6 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._checkboxIconEl.iconMap = iconMap;
     }
 
-    // overwrite
-    _validateRequired(value, ignoreEmpty) {
-        if (this._required) {
-            if (!value) {
-                this._errors.push(kijs.getText('Dieses Feld darf nicht leer sein'));
-            }
-        }
-    }
-
 
     // PRIVATE
     // LISTENERS

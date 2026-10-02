@@ -995,7 +995,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         kijs.Array.each(this._rows, function(row) {
             row.unrender();
         }, this);
-        
+
         // header / filter
         this._header.unrender();
         this._filter.unrender();
