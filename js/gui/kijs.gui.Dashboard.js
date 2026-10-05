@@ -76,7 +76,17 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     
     get ddPosBeforeAfterFactor() { return this._ddPosBeforeAfterFactor; }
     set ddPosBeforeAfterFactor(val) { this._ddPosBeforeAfterFactor = val; }
-    
+
+    get posData() {
+        // Positionsdaten der Spalten + Panels ermitteln
+        let data = [];
+        kijs.Array.each(this._elements, function(el) {
+            data.push(el.posData);
+        }, this);
+        
+        return data;
+    }
+
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
     
@@ -105,20 +115,25 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    save() {
+    save(args=null) {
         return new Promise((resolve, reject) => {
-            // Positionsdaten der Spalten + Panels ermitteln
-            let data = [];
-            kijs.Array.each(this._elements, function(el) {
-                data.push(el.posData);
-            }, this);
+            // Args
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
+            args = Object.assign({}, args, this._rpcSaveArgs);
+            
+            // Positionsdaten der Spalten + Panels
+            let posData = this.posData;
             
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                requestData: data,
-                saveArgs: this._rpcSaveArgs,
+                requestData: {
+                    posData: posData,
+                    args: args
+                },
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',

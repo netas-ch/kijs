@@ -5,14 +5,66 @@ Es sind evtl. Anpassungen am Projekt nötig.
 Version 3.7.0
 =============
 ## kijs.gui.Rpc
-- Im ```config``` Argument von Funktion ```do(config)``` die Eigenschaft ```data```  
-  umbenennen zu ```requestData```.  
+Im ```config``` Argument von Funktion ```do(config)``` die Eigenschaft ```data```  
+umbenannt zu ```requestData```.  
 
 
-**UPDATE TIPP:**: JavaScript-Code nach ```.do(``` suchen und die Eigenschaft 
+**UPDATE TIPP:**: JavaScript Code nach ```.do(``` suchen und die Eigenschaft 
 ```data``` zu ```requestData``` umbenennen.  
 Serverseitig hiess die Eigenschaft bereits ```requestData```. Deshalb muss 
 Serverseitig nichts geändert werden.  
+
+
+## kijs.gui.container.Form
+Beim save request wurden die Argumente vereinheitlicht:  
+```requestData``` enthält nun ein Objekt mit ```data``` und ```args```:  
+
+    requestData: {
+        data: data,
+        args: args
+    }
+
+Früher:  
+
+    requestData = args;
+    requestData.formData = data;
+
+**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen ```requestData``` 
+entsprechend anpassen. Achtung: ```formData``` heisst nun ```data```!  
+
+
+## kijs.gui.DataView und vererbte
+Beim save request wurden die Argumente vereinheitlicht:  
+```requestData``` enthält nun ein Objekt mit ```data``` und ```args```:  
+
+    requestData: {
+        data: data,
+        args: args
+    }
+
+Früher:  
+
+    requestData = data;
+
+**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen ```requestData``` 
+entsprechend anpassen.  
+
+
+## kijs.gui.container.Tab, kijs.gui.Dashboard
+Beim save request wurden die Argumente vereinheitlicht:  
+```requestData``` enthält nun ein Objekt mit ```posData``` und ```args```:  
+
+    requestData = {
+        posData: posData,
+        args: args
+    }
+
+Früher:  
+
+    requestData = posData;
+
+**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen ```requestData``` 
+entsprechend anpassen.  
 
 
 

@@ -91,6 +91,16 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
 
+    get posData() {
+        // Positionsdaten der Tabs ermitteln
+        let data = [];
+        kijs.Array.each(this._elements, function(el) {
+            data.push(el.posData);
+        }, this);
+
+        return data;
+    }
+
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
@@ -234,20 +244,25 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl.renderTo(this._dom.node, this._innerDom.node);
     }
 
-    save() {
+    save(args=null) {
         return new Promise((resolve, reject) => {
-            // Positionsdaten der Tabs ermitteln
-            let data = [];
-            kijs.Array.each(this._elements, function(el) {
-                data.push(el.posData);
-            }, this);
+            // Args
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
+            args = Object.assign({}, args, this._rpcSaveArgs);
+
+            // Positionsdaten der Tabs
+            let posData = this.posData;
 
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                requestData: data,
-                saveArgs: this._rpcSaveArgs,
+                data: {
+                    posData: posData,
+                    args: args
+                },
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
@@ -397,6 +412,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 // sonst nur in sichtbaren Bereich scrollen
                 newTabContainer.tabButtonEl.dom.scrollIntoView();
             }
+
+            // Event werfen
+            this.raiseEvent('change', { tabContainer: newTabContainer, index: targetIndex });
 
             // speichern
             if (this._autoSave && this._rpcSaveFn) {

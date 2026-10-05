@@ -603,7 +603,7 @@ foreach ($requests as $request) {
 
                 $fieldErrors = new stdClass();
 
-                $formData = $request->requestData->formData;
+                $formData = $request->requestData->data;
 
                 if (!property_exists($formData, 'Anrede')) {
                     throw new Exception("Das Feld 'Anrede' ist nicht vorhanden.");

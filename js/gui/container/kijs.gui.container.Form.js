@@ -270,10 +270,10 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      */
     save(searchFields=false, args=null) {
         return new Promise((resolve, reject) => {
+            // Args
             if (!kijs.isObject(args)) {
                 args = {};
             }
-
             args = Object.assign({}, args, this._rpcSaveArgs);
 
             if (searchFields || kijs.isEmpty(this._fields)) {
@@ -286,14 +286,14 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                 return;
             }
 
-            // formData ermitteln
-            args.formData = this.data;
-
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                requestData: args,
+                requestData: {
+                    data: this.data,
+                    args: args
+                },
                 cancelRunningRpcs: false,
                 waitMaskTarget: this._waitMaskTarget,
                 waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,

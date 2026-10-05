@@ -680,14 +680,22 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
     }
 
-    save() {
+    save(args=null) {
         return new Promise((resolve, reject) => {
+            // Args
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
+            args = Object.assign({}, args, this._rpcSaveArgs);
+
             // an den Server senden
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                requestData: this._data,
-                saveArgs: this._rpcSaveArgs,
+                requestData: {
+                    data: this._data,
+                    args: args
+                },
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,
                 waitMaskTargetDomProperty: 'dom',
