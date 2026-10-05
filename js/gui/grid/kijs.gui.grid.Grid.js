@@ -1190,7 +1190,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                 this.rpc.do({
                     remoteFn: this._rpcLoadFn,
                     owner: this,
-                    data: args,
+                    requestData: args,
                     cancelRunningRpcs: true,                                        // Cancel running
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property

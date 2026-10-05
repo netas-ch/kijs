@@ -293,7 +293,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: args,
+                requestData: args,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this._waitMaskTarget,
                 waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,

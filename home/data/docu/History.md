@@ -2,6 +2,20 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.7.0
+=============
+## kijs.gui.Rpc
+- Im ```config``` Argument von Funktion ```do(config)``` die Eigenschaft ```data```  
+  umbenennen zu ```requestData```.  
+
+
+**UPDATE TIPP:**: JavaScript-Code nach ```.do(``` suchen und die Eigenschaft 
+```data``` zu ```requestData``` umbenennen.  
+Serverseitig hiess die Eigenschaft bereits ```requestData```. Deshalb muss 
+Serverseitig nichts geändert werden.  
+
+
+
 Version 3.6.1
 =============
 ### kijs.gui.field.AceEditor

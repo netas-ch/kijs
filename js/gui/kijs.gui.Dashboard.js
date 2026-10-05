@@ -117,7 +117,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: data,
+                requestData: data,
                 saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,

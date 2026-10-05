@@ -774,7 +774,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
                 this.rpc.do({
                     remoteFn: this._rpcLoadFn,
                     owner: this,
-                    data: args,
+                    requestData: args,
                     cancelRunningRpcs: true,
                     waitMaskTarget: this._waitMaskTarget,
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,

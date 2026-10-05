@@ -84,7 +84,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
      * 
      * @param {Object} config   onfig-Objekt mit folgenden Eingenschaften
      *     {String} remoteFn                    Modul/Facaden-name und Methodenname Bsp: 'address.save'
-     *     {Mixed} data                         Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
+     *     {Mixed} requestData                  Argumente/Daten, die an die Server-RPC Funktion übergeben werden.
      *     {Object} [owner]                     Verweis auf das Aufzurufende Element oder eine ID, die das Element eindeutig identifiziert.
      *                                          Wird verwendet um bei cancelRunningRpcs den Eigentümer zu identifizieren.
      *     {Function} fn                        Callback-Funktion
@@ -138,7 +138,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
         // RPC
         return super.do({
             remoteFn: config.remoteFn,
-            requestData: config.data,
+            requestData: config.requestData,
             owner: config.owner,
             cancelRunningRpcs: config.cancelRunningRpcs,
             exclusive: config.exclusive,
@@ -207,7 +207,7 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
                             // Request nochmal senden mit Flag ignoreWarnings
                             this._doRpc({
                                 remoteFn: config.remoteFn,
-                                data: config.data,
+                                requestData: config.requestData,
                                 owner: config.owner,
                                 fn: config.fn,
                                 context: config.context,

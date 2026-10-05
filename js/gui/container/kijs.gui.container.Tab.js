@@ -246,7 +246,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
             this.rpc.do({
                 remoteFn: this.rpcSaveFn,
                 owner: this,
-                data: data,
+                requestData: data,
                 saveArgs: this._rpcSaveArgs,
                 cancelRunningRpcs: false,
                 waitMaskTarget: this,

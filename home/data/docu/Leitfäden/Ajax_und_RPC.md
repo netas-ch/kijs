@@ -55,7 +55,7 @@ Beispiel:
         remoteFn: 'myModule.myFunction',   // Gewünschte Funktion des Servers 
         owner: this,                       // wird gebraucht um bei cancelRunningRpcs
                                            // den owner zu unterscheiden
-        data: { ... },           // Argumente, die an den Server übermittelt werden
+        requestData: { ... },    // Argumente, die an den Server übermittelt werden
         cancelRunningRpcs: true  // Sollen bereits laufende Requests an die gleiche 
                                  // remoteFn abgebrochen werden
     }).then((e) => {
@@ -119,7 +119,7 @@ Beispiel:
     kijs.getRpc('default').do({
         remoteFn: 'myModule.myFunction',
         owner: this,
-        data: { ... }
+        requestData: { ... }
     }).then((e) => {
         if (kijs.isEmpty(e.response.errorType)) {
             // mach dies
