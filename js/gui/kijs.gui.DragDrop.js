@@ -154,12 +154,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     /**
      * Positioniert den dropMarker
      * @param {kijs.gui.Dom|Null} [targetDom=null] Null = ausblenden
-     * @param {String|Null|} [targetPos=null] 'before', 'after', 'child' oder null zum Ausblenden
-     * @param {String|Null|} [tagName=null]
+     * @param {String|Null} [targetPos=null] 'before', 'after', 'child' oder null zum Ausblenden
+     * @param {String|Null} [tagName=null]
      * @param {Number|Null} [width=null] Breite des Markers
      * @param {Number|Null} [height=null] Höhe des Markers
      * @param {String|Array|Null} [markerCls=null]  zusätzliche CSS Klassen für Marker
-     * @param {String|Null|} [markerHtml=null]       innerHTML für Marker
+     * @param {String|Null} [markerHtml=null]       innerHTML für Marker
      * @returns {undefined}
      */
     static dropMarkerUpdate(targetDom=null, targetPos=null, tagName=null,
