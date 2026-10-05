@@ -318,9 +318,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._expandedKeysRows = [];
 
         // Neu Laden
-        if (this.isRendered) {
-            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
-        }
+        this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
     }
 
     /**
@@ -352,7 +350,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      * @returns {undefined}
      */
     collapseByFilters(filters) {
-
         // Die Elemente durchgehen und wenn sie zum Filter passen: das Element vormerken
         if (!kijs.isEmpty(this._expandedKeysRows) && !kijs.isEmpty(filters)) {
 
@@ -373,9 +370,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         }
 
         // Neu Laden
-        if (this.isRendered) {
-            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
-        }
+        this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
     }
     
     /**
@@ -389,9 +384,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._expandAllRec(this._data, deep);
 
         // Neu Laden
-        if (this.isRendered) {
-            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
-        }
+        this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
     }
 
     /**
@@ -452,9 +445,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         }
 
         // Neu Laden
-        if (this.isRendered) {
-            this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
-        }
+        this.reload({ noRpc:true, skipExpandedFromExpandedField:true });
     }
 
     /**
@@ -466,6 +457,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
      */
     getExpanded() {
         let ret = [];
+        
         for (let i=0, len=this._elements.length; i<len; i++) {
             if (this._elements[i].expanded) {
                 ret.push(this._elements[i]);
