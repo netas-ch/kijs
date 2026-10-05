@@ -101,7 +101,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     get offsetY() { return this._offsetY; }
     set offsetY(val) { this._offsetY = val; }
 
-    get ownPos() { this._ownPos; }
+    get ownPos() { return this._ownPos; }
     set ownPos(val) {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._ownPos = val;
@@ -186,7 +186,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     }
 
 
-    get targetPos() { this._targetPos; }
+    get targetPos() { return this._targetPos; }
     set targetPos(val) {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
             this._targetPos = val;
