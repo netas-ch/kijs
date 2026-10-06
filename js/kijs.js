@@ -164,7 +164,7 @@ window.kijs = class kijs {
      * Beispiel: 'myApp.doThis' oder 'kijs.gui.Button'
      * @param {String} str
      * @param {Object} [parent=window]
-     * @returns {Object|Funktion|Null}
+     * @returns {Object|Function|Null}
      */
     static getObjectFromString(str, parent=window) {
         if (kijs.isFunction(str) || kijs.isObject(str)) {
@@ -229,7 +229,7 @@ window.kijs = class kijs {
         }
 
         // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
-        if (this.isDefined(kijs.translation) && kijs.translation[language] && 
+        if (this.isDefined(kijs.translation) && kijs.translation[language] &&
                 this.isDefined(kijs.translation[language][key])) {
             let txt = kijs.translation[language][key];
 
@@ -442,7 +442,7 @@ window.kijs = class kijs {
         kijs.__getTextFn = fn;
         kijs.__getTextFnContext = context || this;
     }
-    
+
     /**
      * Erstellt einen globalen Verweis auf eine RPC-Klasse.
      * Der Standard-RPC sollte 'default' heissen.
@@ -479,7 +479,7 @@ window.kijs = class kijs {
 
         return (value + '');
     }
-    
+
     /**
      * Gibt eine eindeutige ID zurück.
      * @param {String} [prefix=''] Ein optionales Prefix
