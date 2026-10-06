@@ -383,10 +383,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
                 } else {
                     this.renderTo(nde);
                 }
-            }
 
-            if (this._setInert && this.targetElementDom) {
-                this.targetElementDom.nodeAttributeSet('inert', true);
+                if (this._setInert) {
+                    this.targetElementDom.nodeAttributeSet('inert', true);
+                }
             }
 
         } else {
