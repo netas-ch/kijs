@@ -164,10 +164,11 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
     startCellEdit() {
         if (this._columnConfig.editorXtype) {
-            // editor starten
-            let editor = kijs.getObjectFromString(this._columnConfig.editorXtype);
 
-            if (!editor) {
+            // editor starten
+            const editorCls = kijs.getObjectFromString(this._columnConfig.editorXtype);
+
+            if (!editorCls) {
                 throw new kijs.Error('invalid xtype for cell editor');
             }
 
@@ -179,7 +180,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             // value speichern, um Änderungen nachzuverfolgen
             this._cellEditorValue = eArgs.value;
 
-            this._cellEditor = new editor(eArgs);
+            this._cellEditor = new editorCls(eArgs);
 
             // Nach dem Rendern den focus aufs Feld legen, damit beim blur der Editor wieder geschlossen wird.
             this._cellEditor.on('afterRender', function() {
@@ -221,7 +222,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
             let valDspHtml = kijs.String.htmlspecialchars(valDsp);
 
-            this._cellEditor.unrender();
+            this._cellEditor.destruct();
             this._cellEditor = null;
 
             this.dom.clsRemove('kijs-celledit');
@@ -274,7 +275,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
 
         if (this._cellEditor) {
-            this._cellEditor.unrender();
+            this._cellEditor.destruct();
             this._cellEditor = null;
         }
 
