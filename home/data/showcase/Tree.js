@@ -57,7 +57,6 @@ home.sc.Tree = class home_sc_Tree {
                     style: {
                         maxHeight: '300px'
                     },
-
                     elements:[
                         {
                             xtype: 'kijs.gui.Tree',
@@ -78,7 +77,32 @@ home.sc.Tree = class home_sc_Tree {
                                 {id:2, displayText:'Twitter', icon:'kijs.iconMap.Fa.twitter', children:[{id:21, displayText:'WordPress', icon:'kijs.iconMap.Fa.wordpress'},{id:22, displayText:'Slack', icon:'kijs.iconMap.Fa.slack'},{id:23, displayText:'Figma', icon:'kijs.iconMap.Fa.figma'}]},
                                 {id:3, displayText:'Instagram', icon:'kijs.iconMap.Fa.instagram'}
                             ],
-                            value: 2
+                            value: 2,
+                            on: {
+                                elementContextMenu: function(e) {
+                                    // Angeklickten Knoten selektieren
+                                    if (!e.raiseElement.selected) {
+                                        e.element.select([e.raiseElement]);
+                                    }
+
+                                    let menu = new kijs.gui.Menu({
+                                        closeOnClick: true,
+                                        elements: [
+                                            {
+                                                caption: 'Menüpunkt 1',
+                                                iconMap: 'kijs.iconMap.Fa.circle-plus'
+                                            },{
+                                                caption: 'Menüpunkt 2',
+                                                iconMap: 'kijs.iconMap.Fa.copy'
+                                            }
+                                        ]
+                                    });
+                                    menu.show(e.nodeEvent.pageX, e.nodeEvent.pageY);
+
+                                    e.nodeEvent.preventDefault();
+                                },
+                                context: this
+                            }
                         }
                     ]
                 },{
