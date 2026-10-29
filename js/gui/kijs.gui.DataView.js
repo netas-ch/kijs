@@ -302,7 +302,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 posBeforeFactor: this._ddPosBeforeAfterFactor,
                 posAfterFactor: this._ddPosBeforeAfterFactor
             };
-            this._ddTarget.on('drop', this.#onTargetDrop, this);
+            this._ddTarget.on('drop', this._onTargetDrop, this);
         }
 
         // Mapping
@@ -1554,6 +1554,43 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
 
+    // LISTENERS
+    // Listener muss Protected sein, da er vererbt wird.
+    _onTargetDrop(e) {
+        if (e.source.name === this._ddName) {
+            let targetIndex = null;
+
+            // before oder after
+            if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
+                // target index ermitteln
+                targetIndex = this._data.indexOf(e.target.targetEl.dataRow);
+                if (e.target.targetPos === 'after') {
+                    targetIndex++;
+                }
+
+                // dataRow bei gewünschtem Index einfügen
+                this._data.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // child
+            } else if (e.target.targetPos === 'child') {
+                this._data.push(kijs.gui.DragDrop.data.sourceDataRow);
+                targetIndex = this._data.length -1;
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // in sichtbaren Bereich scrollen?
+            //this._elements[targetIndex].dom.scrollIntoView();
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
+        }
+    }
+
+
     // PRIVATE
     // LISTENERS
     #onElementClick(e) {
@@ -1622,40 +1659,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     #onKeyDown(e) {
         this.handleKeyDown(e.nodeEvent);
-    }
-
-    #onTargetDrop(e) {
-        if (e.source.name === this._ddName) {
-            let targetIndex = null;
-
-            // before oder after
-            if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
-                // target index ermitteln
-                targetIndex = this._data.indexOf(e.target.targetEl.dataRow);
-                if (e.target.targetPos === 'after') {
-                    targetIndex++;
-                }
-
-                // dataRow bei gewünschtem Index einfügen
-                this._data.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
-
-            // child
-            } else if (e.target.targetPos === 'child') {
-                this._data.push(kijs.gui.DragDrop.data.sourceDataRow);
-                targetIndex = this._data.length -1;
-            }
-
-            // neu laden
-            this.reload({ noRpc:true });
-
-            // in sichtbaren Bereich scrollen?
-            //this._elements[targetIndex].dom.scrollIntoView();
-
-            // speichern
-            if (this._autoSave && this._rpcSaveFn) {
-                this.save();
-            }
-        }
     }
 
 

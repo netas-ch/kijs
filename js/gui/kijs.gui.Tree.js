@@ -964,6 +964,63 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     }
 
 
+    // LISTENERS
+    // Listener muss Protected sein, da er vererbt wird.
+    // overwrite
+    _onTargetDrop(e) {
+        if (e.source.name === this._ddName) {
+            let dataRows = [];
+            let targetIndex = null;
+
+            // after auf einen geöffneten Ordner: einfügen als 1. Kind
+            if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
+
+                // betroffene dataRows ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                targetIndex = 0;
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // before oder after
+            } else if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
+                // betroffene dataRows ermitteln
+                if (e.target.targetEl.parentElement) {
+                    dataRows = e.target.targetEl.parentElement.dataRow[this._childrenField];
+                } else {
+                    dataRows = this._data;
+                }
+
+                // target index ermitteln
+                targetIndex = dataRows.indexOf(e.target.targetEl.dataRow);
+                if (e.target.targetPos === 'after') {
+                    targetIndex++;
+                }
+
+                // dataRow bei gewünschtem Index einfügen
+                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
+
+            // child
+            } else if (e.target.targetPos === 'child') {
+                // betroffene dataRow ermitteln
+                dataRows = e.target.targetEl.dataRow[this._childrenField];
+
+                dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
+
+            }
+
+            // neu laden
+            this.reload({ noRpc:true });
+
+            // speichern
+            if (this._autoSave && this._rpcSaveFn) {
+                this.save();
+            }
+        }
+    }
+
+
     // PRIVATE
     // LISTENERS
     // overwrite
@@ -1026,60 +1083,6 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             // evtl. neu laden
             if (targetOwnerTree !== this) {
                 this.reload({ noRpc:true });
-            }
-        }
-    }
-
-    // overwrite
-    #onTargetDrop(e) {
-        if (e.source.name === this._ddName) {
-            let dataRows = [];
-            let targetIndex = null;
-
-            // after auf einen geöffneten Ordner: einfügen als 1. Kind
-            if (e.target.targetPos === 'after' && e.target.targetEl.expanded) {
-
-                // betroffene dataRows ermitteln
-                dataRows = e.target.targetEl.dataRow[this._childrenField];
-
-                targetIndex = 0;
-
-                // dataRow bei gewünschtem Index einfügen
-                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
-
-            // before oder after
-            } else if (e.target.targetPos === 'before' || e.target.targetPos === 'after') {
-                // betroffene dataRows ermitteln
-                if (e.target.targetEl.parentElement) {
-                    dataRows = e.target.targetEl.parentElement.dataRow[this._childrenField];
-                } else {
-                    dataRows = this._data;
-                }
-
-                // target index ermitteln
-                targetIndex = dataRows.indexOf(e.target.targetEl.dataRow);
-                if (e.target.targetPos === 'after') {
-                    targetIndex++;
-                }
-
-                // dataRow bei gewünschtem Index einfügen
-                dataRows.splice(targetIndex, 0, kijs.gui.DragDrop.data.sourceDataRow);
-
-            // child
-            } else if (e.target.targetPos === 'child') {
-                // betroffene dataRow ermitteln
-                dataRows = e.target.targetEl.dataRow[this._childrenField];
-
-                dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
-
-            }
-
-            // neu laden
-            this.reload({ noRpc:true });
-
-            // speichern
-            if (this._autoSave && this._rpcSaveFn) {
-                this.save();
             }
         }
     }
