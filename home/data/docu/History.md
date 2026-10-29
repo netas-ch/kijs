@@ -29,8 +29,9 @@ Früher:
     requestData = args;
     requestData.formData = data;
 
-**UPDATE TIPP:**: Serverseitig bei den Save-Funktionen ```requestData``` 
-entsprechend anpassen. Achtung: ```formData``` heisst nun ```data```!  
+**UPDATE TIPP:**: Serverseitig nach ```->formData``` suchen und bei den 
+Save-Funktionen ```requestData``` entsprechend anpassen.  
+Achtung: ```formData``` heisst nun ```data```!  
 
 
 ## kijs.gui.DataView und vererbte
