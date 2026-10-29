@@ -68,7 +68,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
             valueField: 'value',
             displayTextField: 'displayText',
             ddPosBeforeFactor: 0.5,
-            ddPosAfterFactor: 0.8
+            ddPosAfterFactor: 0.5
         });
 
         // Mapping für die Zuweisung der Config-Eigenschaften
