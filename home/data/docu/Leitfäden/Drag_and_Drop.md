@@ -315,6 +315,8 @@ anhand von ```posBeforeFactor``` und ```posAfterFactor``` in drei Zonen aufgetei
 
 Der DropMarker wird somit vom übergeordneten Target angezeigt. Für das Einfügen 
 als ```child``` sollte ```disableMarker:true``` eingestellt werden.  
+Beim Einfügen als ```child``` wird das Source-Element bei ```move``` nicht 
+ausgeblendet, damit das Layout nicht springt.  
 
     flex-direction: 'column'
     mit posBeforeFactor=0.25

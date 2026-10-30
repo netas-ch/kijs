@@ -330,7 +330,9 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         e.nodeEvent.dataTransfer.dropEffect = operation;
         
         // Bei move Source-Element ausblenden, sonst einblenden
-        if (targetPos && operation === 'move') {
+        // (bei splitChildZone als 'child' nicht ausblenden, da kein Marker den Platz
+        // füllt und das Layout sonst springt)
+        if (targetPos && operation === 'move' && !(mapping && mapping.splitChildZone && targetPos === 'child')) {
             kijs.gui.DragDrop.source.ownerEl.style.display = 'none';
         } else {
             kijs.gui.DragDrop.source.ownerEl.style.display = kijs.gui.DragDrop.source.display;
