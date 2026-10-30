@@ -843,9 +843,10 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                 newEl.ddTarget = this._elementDdTargetConfig;
             } else if (this._sortable) {
                 if (newEl.allowChildren) {
+                    // Ordner: Mitte = als Kind einfügen, oberes/unteres Viertel = davor/danach
                     let ddTarget = {
-                        posBeforeFactor: this._ddPosBeforeFactor,
-                        posAfterFactor: this._ddPosAfterFactor,
+                        posBeforeFactor: 0.25,
+                        posAfterFactor: 0.75,
                         on: {
                             drop: this.#onTargetChildDrop,
                             context: this
@@ -857,7 +858,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
                         allowMove: true,
                         allowCopy: false,
                         allowLink: false,
-                        disableMarker: true
+                        disableMarker: true,
+                        splitChildZone: true
                     };
 
                     newEl.ddTarget = ddTarget;
@@ -1003,8 +1005,12 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
             // child
             } else if (e.target.targetPos === 'child') {
-                // betroffene dataRow ermitteln
-                dataRows = e.target.targetEl.dataRow[this._childrenField];
+                // betroffene dataRow ermitteln (leerer Tree: oberste Ebene)
+                if (e.target.targetEl === this) {
+                    dataRows = this._data;
+                } else {
+                    dataRows = e.target.targetEl.dataRow[this._childrenField];
+                }
 
                 dataRows.push(kijs.gui.DragDrop.data.sourceDataRow);
 

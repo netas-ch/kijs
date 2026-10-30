@@ -278,6 +278,9 @@ Wird vorher gedroppt, geschieht nichts.
     *der kein Drop-Bereich kann benutzt werden, wenn das Element selbst wieder ein 
      Target ist.
 
+Bei ```splitChildZone:true``` im Mapping haben die beiden Werte eine andere 
+Bedeutung (siehe unten bei mapping → ```splitChildZone```).  
+
 ### mapping
 Mit dem Mapping kann definiert werden, welche Source-Elemente auf dieses Element 
 verschoben, kopiert oder verknüpft werden dürfen.  
@@ -298,6 +301,31 @@ Boolscher Wert. Default=false
 Falls der Platzhalter für die Einfügeposition (DropMarker) nicht die gleiche Grösse, 
 wie das Quell-Element haben soll, kann dies hiermit ausgeschltet werden. Die Grösse 
 der DropMarkers muss dann mittels CSS definiert werden.  
+
+#### splitChildZone
+Boolscher Wert. Default=false  
+Für Ziele, die selbst innerhalb eines übergeordneten Targets liegen (z.B. Ordner 
+in einem ```kijs.gui.Tree```).  
+Die Kind-Elemente des Ziels werden nicht berücksichtigt. Stattdessen wird das Ziel 
+anhand von ```posBeforeFactor``` und ```posAfterFactor``` in drei Zonen aufgeteilt:  
+ - Mitte: Das Element wird als ```child``` eingefügt.  
+ - oberer/unterer Rand: Dieses Target macht nichts. Das Event wird an das 
+   übergeordnete Target weitergegeben, welches das Element davor bzw. danach 
+   einfügt.  
+
+Der DropMarker wird somit vom übergeordneten Target angezeigt. Für das Einfügen 
+als ```child``` sollte ```disableMarker:true``` eingestellt werden.  
+
+    flex-direction: 'column'
+    mit posBeforeFactor=0.25
+    und posAfterFactor=0.75
+    ----------------------
+    | übergeordn. Target | -> before
+    |--------------------|
+    |    drop child      |
+    |--------------------|
+    | übergeordn. Target | -> after
+    ----------------------
 
 #### markerWidth
 Zahl. Default=null  

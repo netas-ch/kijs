@@ -409,6 +409,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     }
     
     #onDragLeave(e) {
+        // Wechselt die Maus auf den dropMarker, diesen nicht entfernen (sonst Flackern)
+        if (e.nodeEvent.relatedTarget?.classList?.contains('kijs-dropMarker')) {
+            return;
+        }
+
         // Workaround, weil das dragLeave auch kommt, wenn die Maus von einem Kind-Element weggezogen wird.
         if (this._ddEnterTarget === e.nodeEvent.target) {
             if (kijs.gui.DragDrop.source) {
@@ -457,6 +462,20 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         const isFlex = ndeParentStyle.display === 'flex';
         const isHorizontal = (isFlex && !!flexDirection.startsWith('row')) || ndeParentTagName === 'tr';
         const isReverse = isFlex && !!flexDirection.endsWith('-reverse');
+        
+        // splitChildZone: In der Mitte als 'child' einfügen. Am oberen/unteren Rand
+        // nichts tun, damit das übergeordnete Target davor/danach einfügen kann.
+        if (mapping.splitChildZone) {
+            const rectOwner = kijs.Dom.getAbsolutePos(this.ownerDom.node);
+            const diffY = e.nodeEvent.clientY - rectOwner.y;
+            if (diffY >= rectOwner.h * this._posBeforeFactor && diffY <= rectOwner.h * this._posAfterFactor) {
+                targetEl = this._ownerEl;
+                targetPos = 'child';
+                e.nodeEvent.stopPropagation();
+            }
+            this._updateGuiIndicator(e, targetEl, targetPos, operation, mapping, this._ownerEl);
+            return;
+        }
         
         // Nächstes Element mit Positionen ermitteln {el:..., diffX:..., diffY:..., w:..., h:... }
         // x und y enthalten den Abstand des Mauszeigers zum linken/oberen Rand des Elements
