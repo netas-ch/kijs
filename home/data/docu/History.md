@@ -68,6 +68,44 @@ Früher:
 entsprechend anpassen.  
 
 
+## kijs.gui.dragDrop.Target
+Neue Mapping-Eigenschaft ```splitChildZone```: In der Mitte des Ziels wird als 
+```child``` eingefügt. Am oberen und unteren Rand wird das Event an das 
+übergeordnete Target weitergegeben, welches davor bzw. danach einfügt. Siehe 
+Leitfaden Drag & Drop.  
+
+**UPDATE TIPP:**: Bei ```kijs.gui.Tree``` mit ```sortable:true``` ist nichts zu tun.  
+Wird eine eigene ```elementDdTargetConfig``` verwendet, nach dieser Eigenschaft 
+suchen und, damit auch neben einem Ordner eingefügt werden kann, im Mapping 
+```splitChildZone:true``` ergänzen. Zusätzlich die Faktoren setzen, da bei den 
+Defaults (```0.666```) keine Zone für ```child``` bleibt:  
+
+    elementDdTargetConfig: {
+        posBeforeFactor: 0.25,
+        posAfterFactor: 0.75,
+        mapping: {
+            myDdName: {
+                allowMove: true,
+                disableMarker: true,
+                splitChildZone: true
+            }
+        }
+    }
+
+
+## kijs.gui.Tree
+Drag&Drop:  
+- Bugfix: Flackern und Verschwinden des DropMarkers beim Ziehen über einen Knoten 
+  behoben. Der Default von ```ddPosAfterFactor``` ist neu ```0.5``` (vorher ```0.8```).  
+- Elemente können nun auch zwischen zwei Ordnern platziert werden. Ordner 
+  verwenden dazu ```splitChildZone``` mit fixen Faktoren: oberes Viertel = davor, 
+  Mitte = als Kind, unteres Viertel = danach. ```ddPosBeforeFactor``` und 
+  ```ddPosAfterFactor``` gelten bei Ordnern nicht mehr.  
+- Bugfix: Beim Ziehen von oben nach unten auf einen Ordner sprang das Layout.  
+- Bugfix: Ein Drop in einen leeren Tree löste einen Fehler aus und der Knoten ging 
+  verloren.  
+
+
 
 Version 3.6.1
 =============
