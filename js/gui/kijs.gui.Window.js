@@ -358,8 +358,15 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         if (height > targetNode.offsetHeight) {
             height = targetNode.offsetHeight;
         }
-        this.width = width;
-        this.height = height;
+        // Nur schreiben, wenn sich der Wert wirklich ändert. offsetLeft/offsetTop/... sind gerundet
+        // und können vom tatsächlichen (Bruchteil-)Wert abweichen. Würde man sie zurückschreiben,
+        // würde das Fenster bei jedem Resize um ca. 1px wandern.
+        if (width !== this.width) {
+            this.width = width;
+        }
+        if (height !== this.height) {
+            this.height = height;
+        }
 
         // Evtl. Position an Target anpassen
         if (left + width > targetNode.offsetLeft + targetNode.offsetWidth) {
@@ -374,8 +381,12 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         if (top < 0) {
             top = 0;
         }
-        this.left = left;
-        this.top = top;
+        if (left !== this.left) {
+            this.left = left;
+        }
+        if (top !== this.top) {
+            this.top = top;
+        }
 
         // afterResize-Event wieder zulassen
         this._preventAfterResize = prevAfterRes;
