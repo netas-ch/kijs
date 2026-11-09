@@ -164,12 +164,10 @@
   ],
 
   "aceEditor":[
-   "lib/ace/src-min-noconflict/ace.js",
    "js/gui/field/kijs.gui.field.AceEditor.js"
   ],
 
   "quillEditor":[
-   "lib/quill/quill.js",
    "js/gui/field/kijs.gui.field.QuillEditor.js"
   ]
  },

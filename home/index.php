@@ -27,6 +27,8 @@
 ?>
     <link rel="stylesheet" type="text/css" href="app/style.css?v=<?=filemtime('app/style.css')?>">
     <link rel="stylesheet" type="text/css" href="dataResources/css/style.css?v=<?=filemtime('dataResources/css/style.css')?>">
+    <script type="text/javascript" src="../lib/ace/src-min-noconflict/ace.js"></script>
+    <script type="text/javascript" src="../lib/quill/quill.js"></script>
 <?php
     // JS Files
     echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui,grid,aceEditor,quillEditor&fileType=js');
