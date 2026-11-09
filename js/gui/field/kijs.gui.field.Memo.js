@@ -216,6 +216,7 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
     #onInputDomInput(e) {
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
 

@@ -793,20 +793,28 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
+     * Gibt zurück, ob es im Feld etwas zu leeren gibt.
+     * Felder, bei denen der eingegebene Text erst später in den Wert übernommen
+     * wird, können diese Funktion überschreiben.
+     * @returns {Boolean}
+     */
+    _hasClearableContent() {
+        let hasValue = false;
+        kijs.Object.each(this._valuesMapping, function(key, map) {
+            if (!kijs.isEmpty(this[map.valueProperty]) && this[map.valueProperty] !== map.emptyValue) {
+                hasValue = true;
+            }
+        }, this);
+        return hasValue;
+    }
+
+    /**
      * Bei clearable und wenn das Feld nicht leer ist, wird der clearButton angezeigt
      * @returns {undefined}
      */
     _updateClearButtonVisibility() {
         if (this._clearable) {
-            let hasValue = false;
-            kijs.Object.each(this._valuesMapping, function(key, map) {
-                if (!kijs.isEmpty(this[map.valueProperty]) && this[map.valueProperty] !== map.emptyValue) {
-                    hasValue = true;
-                    return;
-                }
-            }, this);
-            
-            this._clearButtonEl.visible = hasValue;
+            this._clearButtonEl.visible = this._hasClearableContent();
         }
     }
 

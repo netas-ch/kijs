@@ -310,6 +310,7 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         }
 
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
     #onInputDomKeyUp(e) {

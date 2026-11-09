@@ -528,6 +528,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
     // PROTECTED
+    // overwrite
+    _hasClearableContent() {
+        // Der eingegebene Text wird erst beim Schliessen der SpinBox in den Wert übernommen
+        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
+    }
+
     /**
      * Weist this._data dem ListView zu und berücksichtigt dabei den eingegebenen
      * Text und das displayLimit
@@ -744,6 +750,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
             this._applyFilterData(text);
 
         }
+
+        this._updateClearButtonVisibility();
     }
 
     #onInputDomKeyDown(e) {

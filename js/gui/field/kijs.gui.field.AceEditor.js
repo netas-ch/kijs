@@ -246,6 +246,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
     #onInput() {
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
 

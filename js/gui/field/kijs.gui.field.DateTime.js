@@ -601,6 +601,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
 
     // PROTECTED
+    // overwrite
+    _hasClearableContent() {
+        // Der eingegebene Text wird erst beim change-Event in den Wert übernommen
+        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
+    }
+
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
@@ -1058,6 +1064,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._inputDom.nodeAttributeSet('value', this._getDisplayValue());
 
         this.validate();
+        this._updateClearButtonVisibility();
 
         // Falls etwas geändert hat: Change Event auslösen
         const value = this.value;
@@ -1090,6 +1097,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     #onInputDomInput(e) {
         this.errorsReset();
+        this._updateClearButtonVisibility();
     }
 
     #onSpinBoxElClose(e) {

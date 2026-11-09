@@ -368,6 +368,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
 
     // PROTECTED
+    // overwrite
+    _hasClearableContent() {
+        // Der eingegebene Text ergibt erst ein Datum, wenn er als Monat erkannt wird
+        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
+    }
+
     _parseStringToMonth(strInput) {
         let year = null;
         let monthIndex = null; // 0=Jan, 1=Feb, ...
@@ -501,6 +507,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
 
         this._updateInputValue();
         this.validate();
+        this._updateClearButtonVisibility();
 
         if (!kijs.Date.compare(this._monthPicker.date, oldDate)) {
             this.raiseEvent('change', {
@@ -519,6 +526,8 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         this.errorsReset();
 
         this._monthPicker.date = date;
+
+        this._updateClearButtonVisibility();
     }
 
     #onMonthPickerChange(e) {

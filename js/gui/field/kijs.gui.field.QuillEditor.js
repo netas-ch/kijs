@@ -255,6 +255,7 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
 
     #onInput() {
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
     #onInputNodeBlur() {

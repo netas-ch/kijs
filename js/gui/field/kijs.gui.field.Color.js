@@ -224,6 +224,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
     #onInputDomInput(e) {
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
 

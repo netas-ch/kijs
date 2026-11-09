@@ -410,6 +410,7 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         val = this._formatRules(val, true);
         this._inputDom.nodeAttributeSet('value', val);
         this.validate();
+        this._updateClearButtonVisibility();
     }
 
 
