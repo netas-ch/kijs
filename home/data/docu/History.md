@@ -106,6 +106,17 @@ Drag&Drop:
   verloren.  
 
 
+## kijs.gui.field.AceEditor, kijs.gui.field.QuillEditor  
+Beim minimieren wurde der Quellcode der Externen Libraries evtl. mit minimiert, 
+Was einen Fehler verursacht hat.  
+In der files.json sind diese Dateien nun nicht mehr vorhanden.  
+Sie müssen direkt in die index.html eingebunden werden.  
+
+**UPDATE TIPP:**: Falls der ACE-Editor oder der QuillEditor verwendet werden, 
+die files.json kontrollieren und die Dateien der Libraries direkt in der index.html 
+einbinden.  
+
+
 
 Version 3.6.1
 =============
