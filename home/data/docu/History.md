@@ -2,6 +2,58 @@ Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel
 Es sind evtl. Anpassungen am Projekt nötig.
 
 
+Version 3.7.1
+=============
+Diese Version enthält keine funktionalen Änderungen an kijs. Neu sind vor allem 
+die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.  
+
+
+## Home-App: API-Dokumentation
+- Neuer Tab **API** in der Navigation mit allen Klassen, gegliedert nach Namespace.  
+- Pro Klasse eine Seite mit Vererbung, abgeleiteten Klassen und den Abschnitten 
+  Configs/Getter/Setter, Funktionen und Events. Die Einträge lassen sich aufklappen 
+  und filtern und sind mit Tags gekennzeichnet (Config, Getter, Setter, readonly, 
+  static, overwrite, Vererbt, deprecated).  
+- Quellcode-Ansicht mit Zeilennummern, Link «Quelle» bei jedem Eintrag.  
+- **Lückenbericht**: zeigt, was im Code noch nicht dokumentiert ist.  
+- Die Daten werden aus den Kommentaren im Code gelesen (siehe Leitfaden 
+  [Kommentare](Leitfäden/Kommentare.md)) und in ```home/data/api.sqlite``` gespeichert. 
+  Aktualisiert wird lokal über das Symbol in der Kopfzeile der Navigation.  
+- Konzept: [API-Dokumentation](Konzepte/API-Dokumentation.md)  
+
+
+## Home-App: Weitere Neuerungen
+- Globale Suche in der Kopfzeile über API, Leitfäden, Showcase und Tests.  
+- Links zwischen den Seiten: relative Links auf Leitfäden, Showcase- und 
+  Test-Seiten sowie Links auf die API (```api:kijs.gui.Button#caption```). Die 
+  Leitfäden und die Showcase-Seiten sind mit der API verlinkt.  
+- Syntax-Highlighting in den Code-Blöcken der Dokumentation.  
+- Startseite: Schriftzug als Text (Schrift Jost), damit er auf allen Bildschirmen 
+  scharf ist, und Links auf Erste Schritte, Showcase, Dokumentation und API.  
+- Darstellung: einheitliche Navigation ohne Rahmen, Seiten im Dark Mode im 
+  gleichen Grau wie die Navigation.  
+
+
+## Dokumentation
+- Neue Seite [Erste Schritte](Erste_Schritte.md) mit Einstieg und Lesereihenfolge.  
+- Neue Leitfäden: [Config-System](Leitfäden/Config-System.md), 
+  [Lebenszyklus](Leitfäden/Lebenszyklus.md), 
+  [Element, Dom und Container](Leitfäden/Element_Dom_und_Container.md), 
+  [Tutorial Eigene Komponente](Leitfäden/Tutorial_Eigene_Komponente.md) und 
+  [Kommentare](Leitfäden/Kommentare.md).  
+- Bestehende Leitfäden überarbeitet, untereinander verlinkt und mit Abschnitten 
+  **Beispiele** (Links auf Showcase und Tests) ergänzt.  
+- Leitfaden [Aufbau einer Klasse](Leitfäden/Aufbau_einer_Klasse.md): Regeln für 
+  Überschriften und die alphabetische Sortierung ergänzt.  
+
+
+## kijs
+- Funktionen in allen Klassen alphabetisch sortiert und die Kommentar-Überschriften 
+  vereinheitlicht (gemäss Leitfaden «Aufbau einer Klasse»). Der Code verhält sich 
+  unverändert.  
+
+
+
 Version 3.7.0
 =============
 ## kijs.gui.Rpc
