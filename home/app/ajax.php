@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 // Eigene Exception
 class ki_Exception_Notice extends Exception {}
 
 $responses = array();
 
-$requests = json_decode(file_get_contents("php://input"));
+$requests = json_decode((string)file_get_contents("php://input")) ?: [];
 
 foreach ($requests as $request) {
     $response = new stdClass();
@@ -107,7 +108,7 @@ print(json_encode($responses));
 // ------------------------------------
 // Hilfsfunktionen
 // ------------------------------------
-function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
+function _getNavigationRowsRec(string $rootDir, string $treeName, ?string $nodeId): array {
     $excludeFiles = ['.', '..'];
 
     $rows = [];
@@ -116,7 +117,10 @@ function _getNavigationRowsRec($rootDir, $treeName, $nodeId) {
     if ($nodeId) {
 
         // sicherstellen, dass der übergebene Pfad ein Unterverzeichnis ist.
-        if (!str_starts_with(realpath($nodeId), realpath($rootDir))) {
+        // (Pfade sind relativ zum Ordner home, das Skript läuft in home/app)
+        $realNode = realpath('../' . $nodeId);
+        $realRoot = realpath('../' . $rootDir);
+        if ($realNode === false || $realRoot === false || !str_starts_with($realNode, $realRoot)) {
             die('invalid nodeId');
         }
         $dirPath = $nodeId;

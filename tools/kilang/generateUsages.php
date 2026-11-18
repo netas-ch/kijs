@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Erstellt die usages.php
 
@@ -17,7 +18,7 @@ $fnName = 'kijs.getText';
 $dir = '../../';
 
 
-$modules = filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
+$modules = (string)filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
 
 // Modules in array umwandeln
 $modules = explode(',', $modules);
@@ -32,7 +33,7 @@ if (!$modules) {
 }
 
 // files.json lesen
-$json = file_get_contents($dir.'files.json');
+$json = (string)file_get_contents($dir.'files.json');
 $files = json_decode($json, true);
 
 // Falls keine Module angegeben wurden, nehmen wir alle vorhandenen Module

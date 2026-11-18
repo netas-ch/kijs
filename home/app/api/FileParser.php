@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * kijs Javascript file parser
  * Zerlegt eine Javascript-Datei in einen Baum aus Elementen für die API-Dokumentation.
@@ -29,14 +30,14 @@
  * (C) 2021 by Netas AG, Gerhard Kipfer
  */
 class FileParser {
-    protected $_content = '';           // Inhalt der Datei
-    protected $_curLinePos = 0;         // Position des 1. Zeichens der aktuellen Zeile
-    protected $_elements = [];          // Baum der Elemente
-    protected $_file = '';              // Aktuelle Javascript-Datei (für Fehlermeldungen)
-    protected $_lineNo = 1;             // Aktuelle Zeile (beginnt mit 1 wie im Editor)
-    protected $_pointerStack = [];      // Stack mit Zeigern auf das aktuelle Element und seine Eltern
+    protected string $_content = '';           // Inhalt der Datei
+    protected int $_curLinePos = 0;         // Position des 1. Zeichens der aktuellen Zeile
+    protected array $_elements = [];          // Baum der Elemente
+    protected string $_file = '';              // Aktuelle Javascript-Datei (für Fehlermeldungen)
+    protected int $_lineNo = 1;             // Aktuelle Zeile (beginnt mit 1 wie im Editor)
+    protected array $_pointerStack = [];      // Stack mit Zeigern auf das aktuelle Element und seine Eltern
 
-    protected $_keywords = ['abstract', 'arguments', 'async', 'await', 'boolean',
+    protected array $_keywords = ['abstract', 'arguments', 'async', 'await', 'boolean',
                             'break', 'byte', 'case', 'catch', 'char', 'class', 'const',
                             'continue', 'debugger', 'default', 'delete', 'do', 'double',
                             'else', 'enum', 'export', 'extends', 'false', 'final', 'finally',
@@ -46,14 +47,14 @@ class FileParser {
                             'super', 'switch', 'synchronized', 'this', 'throw', 'throws', 'transient',
                             'true', 'try', 'typeof', 'var', 'void', 'volatile', 'while', 'with', 'yield'];
 
-    protected $_operators = ['++', '+=', '+', '--', '-=', '-', '**=', '**', '*=', '*', '/=', '/',
+    protected array $_operators = ['++', '+=', '+', '--', '-=', '-', '**=', '**', '*=', '*', '/=', '/',
                              '%=', '%', '>>>=', '>>>', '>>=', '>>', '<<=', '<<', '>=', '>', '<=', '<',
                              '===', '!==', '==', '!=', '=>', '=', '!', '&&=', '&&', '||=', '||', '|>',
                              '??=', '??', '?.', '?', '&=', '&', '|=', '|', '^=', '^', '...', '~', ':', '.', ',', '@'];
 
     // Nach diesen Operatoren und Schlüsselwörtern beginnt ein / einen regulären Ausdruck
-    protected $_regexpAfterOperators = ['=', '==', '===', '!=', '!==', '=>', '&&', '||', '??', '?', ':', ',', '!', '+', '-', '*', '<', '>', '<=', '>='];
-    protected $_regexpAfterKeywords = ['return', 'typeof', 'case', 'in', 'of', 'yield', 'await'];
+    protected array $_regexpAfterOperators = ['=', '==', '===', '!=', '!==', '=>', '&&', '||', '??', '?', ':', ',', '!', '+', '-', '*', '<', '>', '<=', '>='];
+    protected array $_regexpAfterKeywords = ['return', 'typeof', 'case', 'in', 'of', 'yield', 'await'];
 
 
     // --------------------------------------------------------------
@@ -63,7 +64,7 @@ class FileParser {
      * Gibt den Dateiinhalt zurück
      * @return string
      */
-    public function getContent() {
+    public function getContent(): string {
         return $this->_content;
     }
 
@@ -73,7 +74,7 @@ class FileParser {
      * @param string $file  Dateiname für Fehlermeldungen
      * @return array  Array mit dem root-Element
      */
-    public function parseContent($content, $file='') {
+    public function parseContent(string $content, string $file=''): array {
         $this->_content = $content;
         $this->_curLinePos = 0;
         $this->_elements = [];
@@ -91,7 +92,7 @@ class FileParser {
      * @param string $file  Pfad auf die gewünschte Datei
      * @return array  Array mit dem root-Element
      */
-    public function parseFile($file) {
+    public function parseFile(string $file): array {
         $content = file_get_contents($file);
         if ($content === false) {
             throw new Exception('Datei konnte nicht gelesen werden: ' . $file);
@@ -110,7 +111,7 @@ class FileParser {
      * @param string $text
      * @return boolean
      */
-    protected function _appendText($curEl, $text) {
+    protected function _appendText(stdClass $curEl, string $text): bool {
         switch ($curEl->type) {
             case 'comment': $curEl->comment .= $text; return true;
             case 'string':  $curEl->string .= $text;  return true;
@@ -124,7 +125,7 @@ class FileParser {
      * @param int $filePosEnd
      * @return stdClass  das neue aktuelle Element
      */
-    protected function _close($filePosEnd) {
+    protected function _close(int $filePosEnd): stdClass {
         $el = array_pop($this->_pointerStack);
         $el->filePosEnd = $filePosEnd;
         return end($this->_pointerStack);
@@ -137,7 +138,7 @@ class FileParser {
      * @param array $props
      * @return stdClass
      */
-    protected function _createEl($type, $p, $props=[]) {
+    protected function _createEl(string $type, int $p, array $props=[]): stdClass {
         $el = new stdClass();
         $el->type = $type;
         foreach ($props as $key => $val) {
@@ -156,7 +157,7 @@ class FileParser {
      * @param int $p
      * @return Exception
      */
-    protected function _error($msg, $p) {
+    protected function _error(string $msg, int $p): Exception {
         return new Exception('Syntax Fehler: ' . $msg . ' (' . $this->_file . ' ' . $this->_lineNo . ':' . ($p - $this->_curLinePos + 1) . ')');
     }
 
@@ -167,7 +168,7 @@ class FileParser {
      * @param stdClass $curEl
      * @return boolean
      */
-    protected function _isRegexpStart($curEl) {
+    protected function _isRegexpStart(stdClass $curEl): bool {
         // letztes Element, das kein Kommentar ist
         $previousEl = null;
         for ($i=count($curEl->elements)-1; $i>=0; $i--) {
@@ -195,7 +196,7 @@ class FileParser {
      * @param stdClass $el
      * @return stdClass
      */
-    protected function _open($curEl, $el) {
+    protected function _open(stdClass $curEl, stdClass $el): stdClass {
         $curEl->elements[] = $el;
         $this->_pointerStack[] = $el;
         return $el;
@@ -205,7 +206,7 @@ class FileParser {
      * Parst den Dateiinhalt
      * @throws Exception
      */
-    protected function _parseContent() {
+    protected function _parseContent(): void {
         $c = $this->_content;
         $len = strlen($c);
         $p = 0;
@@ -476,7 +477,7 @@ class FileParser {
      * @param array $needleArray
      * @return boolean|string
      */
-    protected function _strStartsWith($p, $needleArray) {
+    protected function _strStartsWith(int $p, array $needleArray): string|false {
         foreach ($needleArray as $needle) {
             if (substr_compare($this->_content, $needle, $p, strlen($needle)) === 0) {
                 return $needle;

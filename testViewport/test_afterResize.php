@@ -1,15 +1,19 @@
+<?php
+declare(strict_types=1);
+
+// Base-URL ermitteln
+$baseUrl = '';
+$baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
+$baseUrl .= (string)filter_input(INPUT_SERVER, 'HTTP_HOST');
+
+$themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css';
+?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         
 <?php
-    // Base-URL ermittlen
-    $baseUrl = '';
-    $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-    $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
-    
-    $themeUrl .= $baseUrl . '/kijs/css/kijs.theme.default.css';
     // CSS Files
 ?>
     <link rel="stylesheet" type="text/css" href="<?=$themeUrl?>">

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Konvertiert aus die php-Sprachdateien im Ordner data zu js-Sprachdateien im Ordner kijs/js/translation
 

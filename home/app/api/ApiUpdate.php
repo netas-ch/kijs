@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/ProjectParser.php';
 require_once __DIR__ . '/ApiDatabase.php';
 
@@ -16,16 +17,16 @@ require_once __DIR__ . '/ApiDatabase.php';
 class ApiUpdate {
     const LOCK_TIMEOUT = 600;   // Sekunden, danach gilt eine Sperre als verwaist
 
-    protected $_dataDir = '';   // home/data
-    protected $_kijsDir = '';   // kijs
+    protected string $_dataDir = '';   // home/data
+    protected string $_kijsDir = '';   // kijs
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
     public function __construct() {
-        $this->_dataDir = realpath(__DIR__ . '/../../data');
-        $this->_kijsDir = realpath(__DIR__ . '/../../..');
+        $this->_dataDir = realpath(__DIR__ . '/../../data') ?: '';
+        $this->_kijsDir = realpath(__DIR__ . '/../../..') ?: '';
     }
 
 
@@ -36,7 +37,7 @@ class ApiUpdate {
      * Ist der Aufruf lokal (Kommandozeile oder localhost)?
      * @return boolean
      */
-    public static function isLocal() {
+    public static function isLocal(): bool {
         if (PHP_SAPI === 'cli') {
             return true;
         }
@@ -52,7 +53,7 @@ class ApiUpdate {
     /**
      * Bricht ein Update ab: temporäre DB löschen und Sperre aufheben
      */
-    public function cancel() {
+    public function cancel(): void {
         $this->_checkLocal();
         if (is_file($this->_tmpPath())) {
             unlink($this->_tmpPath());
@@ -64,7 +65,7 @@ class ApiUpdate {
      * Schritt 3: Abschluss
      * @return stdClass  Zusammenfassung
      */
-    public function finish() {
+    public function finish(): stdClass {
         $this->_checkLocal();
         $this->_checkLock();
         $start = microtime(true);
@@ -120,7 +121,7 @@ class ApiUpdate {
      * Gibt den Stand der API-Datenbank zurück
      * @return stdClass  {exists, updated, kijsVersion, stats, isLocal, isRunning}
      */
-    public function getStatus() {
+    public function getStatus(): stdClass {
         $status = (object)[
             'exists' => is_file($this->_dbPath()),
             'updated' => null,
@@ -143,7 +144,7 @@ class ApiUpdate {
      * Schritt 1: Start
      * @return stdClass  {files: [{module, file}, ...]}
      */
-    public function start() {
+    public function start(): stdClass {
         $this->_checkLocal();
         if ($this->_isLocked()) {
             throw new Exception('Es läuft bereits ein Update. Bitte warten oder später nochmals versuchen.');
@@ -172,7 +173,7 @@ class ApiUpdate {
      * @param int $idx  Index in der Dateiliste von start()
      * @return stdClass  {file, classes, error}
      */
-    public function updateFile($idx) {
+    public function updateFile(int $idx): stdClass {
         $this->_checkLocal();
         $this->_checkLock();
 
@@ -208,7 +209,7 @@ class ApiUpdate {
     /**
      * Wirft eine Exception, wenn der Aufruf nicht lokal ist
      */
-    protected function _checkLocal() {
+    protected function _checkLocal(): void {
         if (!self::isLocal()) {
             throw new Exception('Das Update der API ist nur lokal (localhost) möglich.');
         }
@@ -217,7 +218,7 @@ class ApiUpdate {
     /**
      * Wirft eine Exception, wenn kein Update läuft
      */
-    protected function _checkLock() {
+    protected function _checkLock(): void {
         if (!$this->_isLocked() || !is_file($this->_tmpPath())) {
             throw new Exception('Es läuft kein Update. Bitte neu starten.');
         }
@@ -226,7 +227,7 @@ class ApiUpdate {
     /**
      * @return string
      */
-    protected function _dbPath() {
+    protected function _dbPath(): string {
         return $this->_dataDir . '/api.sqlite';
     }
 
@@ -234,8 +235,8 @@ class ApiUpdate {
      * Gibt die kijs-Version aus js/kijs.js zurück
      * @return string|null
      */
-    protected function _getKijsVersion() {
-        $content = file_get_contents($this->_kijsDir . '/js/kijs.js');
+    protected function _getKijsVersion(): ?string {
+        $content = (string)file_get_contents($this->_kijsDir . '/js/kijs.js');
         if (preg_match("/static get version\(\)\s*\{\s*return\s*'([^']+)'/", $content, $m)) {
             return $m[1];
         }
@@ -246,7 +247,7 @@ class ApiUpdate {
      * Läuft ein Update? Eine Sperre, die älter als LOCK_TIMEOUT ist, gilt als verwaist.
      * @return boolean
      */
-    protected function _isLocked() {
+    protected function _isLocked(): bool {
         if (!is_file($this->_lockPath())) {
             return false;
         }
@@ -257,21 +258,21 @@ class ApiUpdate {
     /**
      * @return string
      */
-    protected function _lockPath() {
+    protected function _lockPath(): string {
         return $this->_dataDir . '/api.lock';
     }
 
     /**
      * @return string
      */
-    protected function _tmpPath() {
+    protected function _tmpPath(): string {
         return $this->_dataDir . '/api.sqlite.tmp';
     }
 
     /**
      * Sperre aufheben
      */
-    protected function _unlock() {
+    protected function _unlock(): void {
         if (is_file($this->_lockPath())) {
             unlink($this->_lockPath());
         }

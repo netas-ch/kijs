@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * SQLite-Datenbank der API-Dokumentation
  *
@@ -6,8 +7,7 @@
  * Änderungshistorie gibt es nicht. Schema siehe createSchema().
  */
 class ApiDatabase {
-    /** @var PDO */
-    protected $_pdo = null;
+    protected ?PDO $_pdo = null;
 
 
     // --------------------------------------------------------------
@@ -16,7 +16,7 @@ class ApiDatabase {
     /**
      * @param string $path  Pfad zur SQLite-Datei
      */
-    public function __construct($path) {
+    public function __construct(string $path) {
         $this->_pdo = new PDO('sqlite:' . $path);
         $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->_pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -30,21 +30,21 @@ class ApiDatabase {
     /**
      * Löscht den Zwischenspeicher und verkleinert die Datei
      */
-    public function cleanup() {
+    public function cleanup(): void {
         $this->_pdo->exec('DROP TABLE IF EXISTS parsed');
         $this->_pdo->exec('VACUUM');
     }
     /**
      * Schliesst die Verbindung (nötig vor dem Umbenennen der Datei)
      */
-    public function close() {
+    public function close(): void {
         $this->_pdo = null;
     }
 
     /**
      * Erstellt alle Tabellen
      */
-    public function createSchema() {
+    public function createSchema(): void {
         $this->_pdo->exec("
             -- Metadaten: Datum des Updates, kijs-Version, Dauer, Statistik
             CREATE TABLE meta (
@@ -150,18 +150,18 @@ class ApiDatabase {
      * @param string $key
      * @return string|null
      */
-    public function getMeta($key) {
+    public function getMeta(string $key): ?string {
         $stmt = $this->_pdo->prepare('SELECT value FROM meta WHERE key = ?');
         $stmt->execute([$key]);
         $val = $stmt->fetchColumn();
-        return $val === false ? null : $val;
+        return $val === false || $val === null ? null : (string)$val;
     }
 
     /**
      * Gibt alle Zeilen der Tabelle parsed zurück
      * @return array
      */
-    public function getParsed() {
+    public function getParsed(): array {
         return $this->_pdo->query('SELECT * FROM parsed ORDER BY idx')->fetchAll();
     }
 
@@ -170,7 +170,7 @@ class ApiDatabase {
      * @param array $classes  Klassen aus ProjectParser::resolve()
      * @param array $issues
      */
-    public function saveClasses($classes, $issues) {
+    public function saveClasses(array $classes, array $issues): void {
         $this->_pdo->beginTransaction();
 
         $insClass = $this->_pdo->prepare('INSERT INTO class (name, nameInt, namespace, extends, module, description, examples, see, deprecated, hasDocComment, hasOldHeader, file, line)
@@ -271,7 +271,7 @@ class ApiDatabase {
      * @param array|null $classes
      * @param string|null $error
      */
-    public function saveParsed($idx, $module, $file, $classes, $error) {
+    public function saveParsed(int $idx, string $module, string $file, ?array $classes, ?string $error): void {
         $stmt = $this->_pdo->prepare('INSERT OR REPLACE INTO parsed (idx, module, file, classes, error) VALUES (?, ?, ?, ?, ?)');
         $stmt->execute([$idx, $module, $file, $classes === null ? null : $this->_json($classes), $error]);
     }
@@ -281,7 +281,7 @@ class ApiDatabase {
      * @param string $key
      * @param mixed $value
      */
-    public function setMeta($key, $value) {
+    public function setMeta(string $key, mixed $value): void {
         $stmt = $this->_pdo->prepare('INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)');
         $stmt->execute([$key, is_scalar($value) || $value === null ? $value : $this->_json($value)]);
     }
@@ -296,8 +296,8 @@ class ApiDatabase {
      * @param mixed $val
      * @return string
      */
-    protected function _json($val) {
-        return json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    protected function _json(mixed $val): string {
+        return json_encode($val, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -307,7 +307,7 @@ class ApiDatabase {
      * @param boolean $isStatic
      * @return string
      */
-    protected function _key($kind, $name, $isStatic) {
+    protected function _key(string $kind, string $name, bool $isStatic): string {
         return $kind . ':' . ($isStatic ? 'static:' : '') . $name;
     }
 

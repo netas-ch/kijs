@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 // Eigene Exception
 class ki_Exception_Notice extends Exception {}
@@ -6,7 +7,7 @@ class ki_Exception_Notice extends Exception {}
 
 $responses = array();
 
-$requests = json_decode(file_get_contents("php://input"));
+$requests = json_decode((string)file_get_contents("php://input")) ?: [];
 
 foreach ($requests as $request) {
     $response = new stdClass();
@@ -984,8 +985,8 @@ function _getIcon(int $id): int {
 }
 
 function _loadJsonFile(string $path): array {
-    $content = file_get_contents($path);
-    return json_decode($content, true);
+    $content = (string)file_get_contents($path);
+    return json_decode($content, true) ?? [];
 }
 
 function _recordsetGetRowFromValue(array $rows, string $fieldName, string $value): ?array {

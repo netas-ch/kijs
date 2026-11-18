@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // kilang Stand: 26.08.2024
 class KiLang {
 
@@ -16,13 +18,13 @@ class KiLang {
      * @param string $customerName      Name des Kunden. Bsp:'Muster AG' oder Setting: default/default
      * @param array $usages             Hier kann ein bestehendes Array oder ein leeres Array übergeben werden
      */
-    public static function addUsage($key,
-                                    $variant,
-                                    $usageGrpName,
-                                    $usageName,
-                                    $customerName,
-                                    &$usages
-    ) {
+    public static function addUsage(string $key,
+                                    string $variant,
+                                    string $usageGrpName,
+                                    string $usageName,
+                                    string $customerName,
+                                    array &$usages
+    ): void {
         self::_addUsage($usages, $key, $variant, $usageGrpName, $usageName, $customerName);
     }
 
@@ -38,12 +40,12 @@ class KiLang {
      * @param array $usages             Hier kann ein bestehendes Array oder ein leeres Array übergeben werden
      * @throws \Exception
      */
-    public static function browseCode($code,
-                                      $usageGrpName,
-                                      $usageName,
-                                      $fnName,
-                                      &$usages
-    ) {
+    public static function browseCode(string $code,
+                                      string $usageGrpName,
+                                      string $usageName,
+                                      string $fnName,
+                                      array &$usages
+    ): void {
 
         // Suche alle getText() aufrufe
 
@@ -67,7 +69,7 @@ class KiLang {
             foreach ($matches as $match) {
                 $pos = $match[0][1];
                 $key = $match[1][0];
-                $variant = $match[2][0];
+                $variant = $match[2][0] ?? '';   // fehlt, wenn keine Variante angegeben ist
                 $error = '';
 
                 // Mehrzeilige Texte in einen String umwandeln
@@ -131,13 +133,13 @@ class KiLang {
      *                                  }
      *                                  Oder als Kursform nur ['caption', 'header', 'title']
      */
-    public static function browseJson($json,
-                                      $usageGrpName,
-                                      $usageName,
-                                      $customerName,
-                                      &$usages,
-                                      $config
-    ) {
+    public static function browseJson(string|object|array|null $json,
+                                      string $usageGrpName,
+                                      string $usageName,
+                                      string $customerName,
+                                      array &$usages,
+                                      stdClass|array $config
+    ): void {
 
         // Anstelle des Config-Objekts, kann als Kurzform auch ein Array mit den propertiesToTranslate übergeben werden
         $propertiesToTranslate = [];
@@ -183,7 +185,7 @@ class KiLang {
      * @param array $usages             Hier kann ein bestehendes Array oder ein leeres Array übergeben werden
      * @throws Exception
      */
-    public static function browseFiles($filenames, $fnName, &$usages) {
+    public static function browseFiles(array|string $filenames, string $fnName, array &$usages): void {
 
         if (!is_array($filenames)) {
             $filenames = [$filenames];
@@ -206,7 +208,7 @@ class KiLang {
 
             $usageName = $filename;
 
-            $text = file_get_contents($filename);
+            $text = (string)file_get_contents($filename);
 
             self::browseCode($text, $usageGrpName, $usageName, $fnName, $usages);
         }
@@ -222,7 +224,7 @@ class KiLang {
      * @param string $languageId
      * @return string
      */
-    public static function getText($key, $variant, $args, $languageId) {
+    public static function getText(string $key, string $variant, mixed $args, string $languageId): string {
         if ($languageId !== 'de') {
             // TODO: übersetzung laden
             throw new \Exception('translation not implemented');
@@ -253,7 +255,7 @@ class KiLang {
      * @param string $variableName  Name der globalen Variable ohne $
      * @param array $usages
      */
-    public static function writeUsagesFile($filename, $variableName, &$usages) {
+    public static function writeUsagesFile(string $filename, string $variableName, array &$usages): void {
         self::_mergeUsagesArrayWithExistingFile($filename, $variableName, $usages);
 
         // Infos zum Header hinzufügen
@@ -283,13 +285,13 @@ class KiLang {
      * @param string $fileSetting Dateiname oder Settingname
      * @param int|string $lineNrCustomer Zeilennummer oder Settingbezeichnung
      */
-    private static function _addUsage(&$usages,
-                                      $key,
-                                      $variant,
-                                      $variantProperty,
-                                      $fileSetting,
-                                      $lineNrCustomer
-    ) {
+    private static function _addUsage(array &$usages,
+                                      int|string $key,
+                                      int|string $variant,
+                                      string $variantProperty,
+                                      int|string $fileSetting,
+                                      int|string $lineNrCustomer
+    ): void {
         if (!array_key_exists($key, $usages)) {
             $usages[$key] = [];
         }
@@ -321,12 +323,12 @@ class KiLang {
      * @param string $variantProperty
      * @param string|Number|Boolean $value
      */
-    private static function _addVariantProperty(&$usages,
-                                                $key,
-                                                $variant,
-                                                $variantProperty,
-                                                $value
-    ) {
+    private static function _addVariantProperty(array &$usages,
+                                                int|string $key,
+                                                int|string $variant,
+                                                string $variantProperty,
+                                                mixed $value
+    ): void {
         if (!array_key_exists($key, $usages)) {
             $usages[$key] = [];
         }
@@ -353,14 +355,14 @@ class KiLang {
      * @param stdClass $config
      * @param bool|null $noTranslate
      */
-    private static function _browseJson($json,
-                                        $usageGrpName,
-                                        $usageName,
-                                        $customerName,
-                                        &$usages,
-                                        $config,
-                                        $noTranslate = null
-    ) {
+    private static function _browseJson(mixed $json,
+                                        string $usageGrpName,
+                                        string $usageName,
+                                        string $customerName,
+                                        array &$usages,
+                                        stdClass $config,
+                                        ?bool $noTranslate = null
+    ): void {
         if ($json) {
 
             if ($noTranslate === null) {
@@ -408,10 +410,10 @@ class KiLang {
                             // Satzzeichen vom value trimmen
                             if (property_exists($config, 'trimChars') && $config->trimChars) {
                                 $trimChars = is_array($config->trimChars) ? $config->trimChars : array($config->trimChars);
-                                $trimChars = array_map(function($v) {
+                                $trimChars = array_map(function(string $v): string {
                                     return preg_quote($v, '/');
                                 }, $trimChars);
-                                $value = preg_replace('/(' . implode('|', $trimChars) . ')$/', '', $value);
+                                $value = (string)preg_replace('/(' . implode('|', $trimChars) . ')$/', '', $value);
                             }
 
                             // Parameter aus Reports ersetzen durch %1 %2 etc.
@@ -453,7 +455,7 @@ class KiLang {
      * @param array $arr
      * @return boolean
      */
-    private static function _isAssociative($arr) {
+    private static function _isAssociative(array $arr): bool {
         if ($arr === []) {
             return false;
         }
@@ -467,8 +469,8 @@ class KiLang {
      * @param string $text
      * @return string
      */
-    private static function _maskString($text) {
-        $text = str_replace(["\\", "\"", "\n", "\r"], ["\\\\", "\\\"", "\\n", ""], $text);
+    private static function _maskString(int|float|string $text): string {
+        $text = str_replace(["\\", "\"", "\n", "\r"], ["\\\\", "\\\"", "\\n", ""], (string)$text);
         return "\"$text\"";
     }
 
@@ -480,7 +482,7 @@ class KiLang {
      * @param string $variableName  Name der globalen Variable ohne $
      * @param array $usages
      */
-    private static function _mergeUsagesArrayWithExistingFile($filename, $variableName, &$usages) {
+    private static function _mergeUsagesArrayWithExistingFile(string $filename, string $variableName, array &$usages): void {
         if (file_exists($filename)) {
             include_once $filename;
             // Die bestehenden Verwendungen sind nun in der globalen Variable $so_usages
@@ -622,26 +624,26 @@ class KiLang {
      * @param string $value
      * @return string
      */
-    private static function _replaceParameters($value) {
+    private static function _replaceParameters(string $value): string {
 
         // [Parameter]
-        $value = preg_replace('/\[[^\[\]#\(\)\{\}]+\]/', '~~~', $value);
+        $value = (string)preg_replace('/\[[^\[\]#\(\)\{\}]+\]/', '~~~', $value);
 
         // #Parameter#
-        $value = preg_replace('/\#[^\[\]#\(\)\{\}]+\#/', '~~~', $value);
+        $value = (string)preg_replace('/\#[^\[\]#\(\)\{\}]+\#/', '~~~', $value);
 
         // isTrue() isFalse()
-        $value = preg_replace('/(?:boolean|date|isTrue|isFalse)\([^\(\)]+\)/i', '~~~', $value);
+        $value = (string)preg_replace('/(?:boolean|date|isTrue|isFalse)\([^\(\)]+\)/i', '~~~', $value);
 
         // Rechnungen {{3+3}}
-        $value = preg_replace('/\{\{[^\{\}]+\}\}/', '~~~', $value);
+        $value = (string)preg_replace('/\{\{[^\{\}]+\}\}/', '~~~', $value);
 
         // Parameter erstellen
         $cnt = PHP_INT_MAX;
         $paramNr = 0;
         while ($cnt > 0) {
             $paramNr++;
-            $value = preg_replace('/~~~/', '%' . $paramNr, $value, 1, $cnt);
+            $value = (string)preg_replace('/~~~/', '%' . $paramNr, $value, 1, $cnt);
         }
 
         return trim($value);
@@ -655,7 +657,8 @@ class KiLang {
      * @param int $indent Anzahl Leerzeichen für den Einzug
      * @return string
      */
-    private static function _serializeArrayToPhpCode($array, $indent=0) {
+    private static function _serializeArrayToPhpCode(array|object $array, int $indent=0): string {
+        $array = (array)$array;
         $content = '';
         $length = count($array);
         $index = 0;
@@ -720,7 +723,7 @@ class KiLang {
      *
      * @param array $usages
      */
-    private static function _sortUsages(&$usages) {
+    private static function _sortUsages(array &$usages): void {
 
         if ($usages && is_array($usages)) {
 
@@ -777,13 +780,13 @@ class KiLang {
      * @param string|Number [$lineNoCustomer=null]
      * @return boolean
      */
-    private static function _usageExist(&$usages,
-                                        $key,
-                                        $variant=null,
-                                        $variantProperty=null,
-                                        $fileSetting=null,
-                                        $lineNoCustomer=null
-    ) {
+    private static function _usageExist(array &$usages,
+                                        int|string $key,
+                                        int|string|null $variant=null,
+                                        ?string $variantProperty=null,
+                                        int|string|null $fileSetting=null,
+                                        int|string|null $lineNoCustomer=null
+    ): bool {
         if (!array_key_exists($key, $usages)) {
             return false;
         }
@@ -826,7 +829,7 @@ class KiLang {
      * @param string $variableName  Name der globalen Variable ohne $
      * @param array|stdClass|int|float|bool $array
      */
-    private static function _writePhpFile($filename, $variableName, $array) {
+    private static function _writePhpFile(string $filename, string $variableName, mixed $array): void {
 
         // Inhalt der PHP-Datei erstellen
         $content = '<?php' . "\n";

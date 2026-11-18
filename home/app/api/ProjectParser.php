@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 require_once __DIR__ . '/FileParser.php';
 require_once __DIR__ . '/DocComment.php';
 require_once __DIR__ . '/ClassParser.php';
@@ -13,7 +14,7 @@ require_once __DIR__ . '/ClassParser.php';
  *   $result = $pp->resolve($classes);
  */
 class ProjectParser {
-    protected $_root = '';
+    protected string $_root = '';
 
 
     // --------------------------------------------------------------
@@ -22,7 +23,7 @@ class ProjectParser {
     /**
      * @param string $root  Verzeichnis von kijs (mit files.json)
      */
-    public function __construct($root) {
+    public function __construct(string $root) {
         $this->_root = rtrim($root, '/');
     }
 
@@ -34,7 +35,7 @@ class ProjectParser {
      * Gibt die Liste aller Javascript-Dateien aus files.json zurück
      * @return array  [{module, file}, ...]
      */
-    public function getFiles() {
+    public function getFiles(): array {
         $json = json_decode(file_get_contents($this->_root . '/files.json'));
         if (!$json || !isset($json->js)) {
             throw new Exception('files.json konnte nicht gelesen werden');
@@ -54,7 +55,7 @@ class ProjectParser {
      * @param string $file  Pfad relativ zum kijs-Verzeichnis
      * @return array
      */
-    public function parseFile($module, $file) {
+    public function parseFile(string $module, string $file): array {
         $path = $this->_root . '/' . $file;
         $content = file_get_contents($path);
         if ($content === false) {
@@ -77,7 +78,7 @@ class ProjectParser {
      * @param array $classes
      * @return stdClass  {classes, issues, errors}
      */
-    public function resolve($classes) {
+    public function resolve(array $classes): stdClass {
         $byName = [];
         $errors = [];
         foreach ($classes as $cls) {
@@ -158,7 +159,7 @@ class ProjectParser {
      * @param boolean $isStatic
      * @return stdClass|null  {className, member}
      */
-    protected function _findInBase($byName, $cls, $listName, $name, $isStatic) {
+    protected function _findInBase(array $byName, stdClass $cls, string $listName, string $name, bool $isStatic): ?stdClass {
         $guard = 0;
         $base = $byName[$cls->extends] ?? null;
         while ($base && $guard++ < 50) {
@@ -177,9 +178,9 @@ class ProjectParser {
      * @param stdClass $cls
      * @return array
      */
-    protected function _getIssues($cls) {
+    protected function _getIssues(stdClass $cls): array {
         $issues = [];
-        $add = function($type, $member, $message) use (&$issues, $cls) {
+        $add = function(string $type, ?string $member, string $message) use (&$issues, $cls): void {
             $issues[] = (object)['class' => $cls->name, 'member' => $member, 'type' => $type, 'message' => $message];
         };
 

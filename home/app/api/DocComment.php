@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Zerlegt einen JSDoc-Kommentar (/** ... * /) in Beschreibung und Tags.
  *
@@ -9,7 +10,7 @@ class DocComment {
 
     // Überschriften des alten Kopfkommentars. Ab hier wird die Beschreibung
     // nicht mehr übernommen.
-    protected static $_oldHeaderSections = ['CONFIG-Parameter', 'FUNKTIONEN', 'EIGENSCHAFTEN', 'EVENTS'];
+    protected static array $_oldHeaderSections = ['CONFIG-Parameter', 'FUNKTIONEN', 'EIGENSCHAFTEN', 'EVENTS'];
 
 
     // --------------------------------------------------------------
@@ -20,7 +21,7 @@ class DocComment {
      * @param stdClass $commentEl  Kommentar-Element aus dem FileParser
      * @return boolean
      */
-    public static function isDocComment($commentEl) {
+    public static function isDocComment(stdClass $commentEl): bool {
         return $commentEl->type === 'comment' && $commentEl->commentType === '/*'
                 && str_starts_with($commentEl->comment, '*')
                 && !str_starts_with($commentEl->comment, '**');
@@ -31,7 +32,7 @@ class DocComment {
      * @param string $comment  Text nach /* (ohne * /)
      * @return stdClass
      */
-    public static function parse($comment) {
+    public static function parse(string $comment): stdClass {
         $doc = new stdClass();
         $doc->description = '';
         $doc->deprecated = null;
@@ -130,7 +131,7 @@ class DocComment {
      * @param string $text
      * @return stdClass|null  {type, description} oder null, falls kein Typ angegeben ist
      */
-    public static function parseTypedLine($text) {
+    public static function parseTypedLine(string $text): ?stdClass {
         $text = trim($text);
         if (!str_starts_with($text, '{')) {
             return null;
@@ -152,7 +153,7 @@ class DocComment {
      * @param string $text
      * @return stdClass
      */
-    protected static function _parseParam($text) {
+    protected static function _parseParam(string $text): stdClass {
         [$type, $rest] = self::_splitType($text);
 
         $param = (object)['name' => '', 'type' => $type, 'isOptional' => false, 'defaultValue' => null, 'description' => ''];
@@ -175,7 +176,7 @@ class DocComment {
      * @param string $text
      * @return array  [Typ oder null, Rest]
      */
-    protected static function _splitType($text) {
+    protected static function _splitType(string $text): array {
         $text = ltrim($text);
         if (!str_starts_with($text, '{')) {
             return [null, trim($text)];
@@ -200,7 +201,7 @@ class DocComment {
      * @param boolean $trimEachLine  Einrückung entfernen? (nicht bei Beispielcode)
      * @return string
      */
-    protected static function _trimLines($lines, $trimEachLine=true) {
+    protected static function _trimLines(array $lines, bool $trimEachLine=true): string {
         if ($trimEachLine) {
             $lines = array_map('rtrim', $lines);
         }

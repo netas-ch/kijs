@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 // Beispielaufrufe
 // http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js
 // http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css
@@ -19,22 +21,18 @@
  * ?>
  */
 
-$modules = filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
-$fileType = filter_input(INPUT_GET, 'fileType');    // 'js' oder 'css'
+$modules = (string)filter_input(INPUT_GET, 'modules');      // gewünschte Module kommagetrennt: 'core,gui,grid,editor'
+$fileType = (string)filter_input(INPUT_GET, 'fileType');    // 'js' oder 'css'
 
 // Base-URL ermittlen
 $baseUrl = '';
 $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-$baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
-$baseUrl .= explode('?', filter_input(INPUT_SERVER, 'REQUEST_URI'), 2)[0];
+$baseUrl .= (string)filter_input(INPUT_SERVER, 'HTTP_HOST');
+$baseUrl .= explode('?', (string)filter_input(INPUT_SERVER, 'REQUEST_URI'), 2)[0];
 $baseUrl = substr($baseUrl, 0, strlen('tools/getDebugHead.php')*-1);
 
 // Modules in array umwandeln
-$modules = explode(',', $modules);
-foreach ($modules as &$module) {
-    $module = trim($module);
-}
-unset($module);
+$modules = array_values(array_filter(array_map('trim', explode(',', $modules))));
 
 // Validieren
 if (!$modules) {
@@ -45,7 +43,7 @@ if (!in_array($fileType, ['js', 'css'])) {
 }
 
 // files.json lesen
-$json = file_get_contents('../files.json');
+$json = (string)file_get_contents('../files.json');
 $files = json_decode($json, true);
 
 // Rückgabe erstellen

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /*
  * Copyright © 2025 Netas AG, Switzerland.
@@ -16,7 +17,7 @@ $t->getData($version);
 
 
 class getFontAwesomeIcons {
-    protected $_apiUrl = 'https://api.fontawesome.com';
+    protected string $_apiUrl = 'https://api.fontawesome.com';
 
 
     public function __construct() {
@@ -24,7 +25,7 @@ class getFontAwesomeIcons {
     }
 
 
-    public function getData(string $version) {
+    public function getData(string $version): void {
 
         $graphSql = '{
             release(version:' . json_encode($version) . ') {
@@ -56,7 +57,7 @@ class getFontAwesomeIcons {
         }
 
         // Sortieren
-        usort($icons, function($a, $b) {
+        usort($icons, function(stdClass $a, stdClass $b): int {
             $aStyles = $a->styles ?? [];
             $bStyles = $b->styles ?? [];
 
@@ -124,7 +125,7 @@ class getFontAwesomeIcons {
         echo '</pre>';
     }
 
-    protected function _makeRequest($post) {
+    protected function _makeRequest(string $post): stdClass {
         $ch = curl_init();
 
         // setze die URL und andere Optionen
@@ -143,8 +144,6 @@ class getFontAwesomeIcons {
         if ($response === false) {
             throw new Exception('curl error: ' . curl_error($ch));
         }
-
-        curl_close($ch);
 
         // decodieren
         $response = json_decode($response);

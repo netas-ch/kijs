@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 /**
  * Liest die API-Dokumentation aus der SQLite-Datenbank für die Home-App
  * (Klassenbaum und Klassenseite).
  */
 class ApiReader {
-    /** @var PDO|null */
-    protected $_pdo = null;
-    protected $_showcaseDir = '';
+    protected ?PDO $_pdo = null;
+    protected string $_showcaseDir = '';
 
 
     // --------------------------------------------------------------
@@ -14,10 +14,10 @@ class ApiReader {
     // --------------------------------------------------------------
     public function __construct() {
         $dbPath = __DIR__ . '/../../data/api.sqlite';
-        $this->_showcaseDir = realpath(__DIR__ . '/../../data/showcase');
+        $this->_showcaseDir = realpath(__DIR__ . '/../../data/showcase') ?: '';
 
         if (is_file($dbPath)) {
-            $this->_pdo = new PDO('sqlite:' . $dbPath, null, null, [PDO::SQLITE_ATTR_OPEN_FLAGS => PDO::SQLITE_OPEN_READONLY]);
+            $this->_pdo = new PDO('sqlite:' . $dbPath, null, null, [Pdo\Sqlite::ATTR_OPEN_FLAGS => Pdo\Sqlite::OPEN_READONLY]);
             $this->_pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->_pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         }
@@ -32,7 +32,7 @@ class ApiReader {
      * @param string $name  z.B. 'kijs.gui.Button'
      * @return stdClass
      */
-    public function getClass($name) {
+    public function getClass(string $name): stdClass {
         $this->_checkDb();
 
         $cls = $this->_query('SELECT * FROM class WHERE name = ?', [$name])[0] ?? null;
@@ -116,7 +116,7 @@ class ApiReader {
      * Gibt den Lückenbericht zurück (Doku, die im Code noch fehlt), sortiert nach Klasse
      * @return stdClass  {types: {type: Anzahl}, issues: [{className, memberName, type, message, file}, ...]}
      */
-    public function getIssues() {
+    public function getIssues(): stdClass {
         $this->_checkDb();
 
         $issues = $this->_query("
@@ -138,7 +138,7 @@ class ApiReader {
      * Gibt den Klassenbaum für die Navigation zurück (gegliedert nach Namespace)
      * @return array
      */
-    public function getTree() {
+    public function getTree(): array {
         if (!$this->_pdo) {
             return [];
         }
@@ -188,7 +188,7 @@ class ApiReader {
     /**
      * Wirft eine Exception, wenn die DB fehlt
      */
-    protected function _checkDb() {
+    protected function _checkDb(): void {
         if (!$this->_pdo) {
             throw new Exception('Die API-Datenbank fehlt. Bitte im Tab API «API aktualisieren» klicken.');
         }
@@ -201,7 +201,7 @@ class ApiReader {
      * @param string $className
      * @return string|null  Pfad relativ zum Ordner home
      */
-    protected function _getShowcasePath($className) {
+    protected function _getShowcasePath(string $className): ?string {
         if (!str_starts_with($className, 'kijs.gui.') || !$this->_showcaseDir) {
             return null;
         }
@@ -217,7 +217,7 @@ class ApiReader {
      * @param stdClass $node
      * @return array
      */
-    protected function _getTreeRows($node) {
+    protected function _getTreeRows(stdClass $node): array {
         $rows = [];
         foreach ($node->classes as $c) {
             // Gibt es einen gleichnamigen Namespace (z.B. Klasse kijs und Namespace kijs),
@@ -245,7 +245,7 @@ class ApiReader {
         }
         foreach ($node->namespaces as $part => $ns) {
             $rows[] = [
-                'displayText' => $part,
+                'displayText' => (string)$part,
                 'nodeId' => 'apins:' . $ns->name,
                 'allowChildren' => true,
                 'expanded' => $ns->name === 'kijs',
@@ -265,7 +265,7 @@ class ApiReader {
      * @param array $params
      * @return array
      */
-    protected function _query($sql, $params=[]) {
+    protected function _query(string $sql, array $params=[]): array {
         $stmt = $this->_pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->fetchAll();

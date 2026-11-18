@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Globale Suche der Home-App über API, Leitfäden, Showcase und Tests.
  *
@@ -10,14 +11,14 @@ class HomeSearch {
     const MAX_API = 100;        // max. Treffer in der API
     const SNIPPET_LENGTH = 160; // Länge eines Textausschnitts
 
-    protected $_dataDir = '';
+    protected string $_dataDir = '';
 
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------
     public function __construct() {
-        $this->_dataDir = realpath(__DIR__ . '/../../data');
+        $this->_dataDir = realpath(__DIR__ . '/../../data') ?: '';
     }
 
 
@@ -29,7 +30,7 @@ class HomeSearch {
      * @param string $query
      * @return stdClass  {query, api: [...], docu: [...], showcase: [...], test: [...]}
      */
-    public function search($query) {
+    public function search(string $query): stdClass {
         $query = trim($query);
         if (mb_strlen($query) < 2) {
             throw new Exception('Bitte mindestens 2 Zeichen eingeben.');
@@ -54,8 +55,8 @@ class HomeSearch {
      * @param string $query
      * @return string
      */
-    protected function _getSnippet($text, $query) {
-        $text = preg_replace('/\s+/u', ' ', $text);
+    protected function _getSnippet(string $text, string $query): string {
+        $text = (string)preg_replace('/\s+/u', ' ', $text);
         $pos = mb_stripos($text, $query);
         if ($pos === false) {
             return mb_substr($text, 0, self::SNIPPET_LENGTH) . (mb_strlen($text) > self::SNIPPET_LENGTH ? ' …' : '');
@@ -72,12 +73,12 @@ class HomeSearch {
      * @param string $query
      * @return array
      */
-    protected function _searchApi($query) {
+    protected function _searchApi(string $query): array {
         $dbPath = $this->_dataDir . '/api.sqlite';
         if (!is_file($dbPath)) {
             return [];
         }
-        $pdo = new PDO('sqlite:' . $dbPath, null, null, [PDO::SQLITE_ATTR_OPEN_FLAGS => PDO::SQLITE_OPEN_READONLY]);
+        $pdo = new PDO('sqlite:' . $dbPath, null, null, [Pdo\Sqlite::ATTR_OPEN_FLAGS => Pdo\Sqlite::OPEN_READONLY]);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 
@@ -136,7 +137,7 @@ class HomeSearch {
      * @param string $query
      * @return array  sortiert nach Anzahl Treffer
      */
-    protected function _searchFiles($area, $ext, $query) {
+    protected function _searchFiles(string $area, string $ext, string $query): array {
         $dir = $this->_dataDir . '/' . $area;
         if (!is_dir($dir)) {
             return [];
@@ -149,7 +150,7 @@ class HomeSearch {
                 continue;
             }
             $title = str_replace('_', ' ', $file->getBasename('.' . $file->getExtension()));
-            $content = file_get_contents($file->getPathname());
+            $content = (string)file_get_contents($file->getPathname());
 
             $count = mb_substr_count(mb_strtolower($content), mb_strtolower($query));
             $inTitle = mb_stripos($title, $query) !== false;

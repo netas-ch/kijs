@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * kijs Class parser
  * Liest aus dem Element-Baum des FileParsers die Klassen mit allen Informationen
@@ -17,8 +18,8 @@
  * Neu geschrieben 2026 auf Basis von kijs-api (2021, Gerhard Kipfer)
  */
 class ClassParser {
-    protected $_content = '';
-    protected $_file = '';
+    protected string $_content = '';
+    protected string $_file = '';
 
 
     // --------------------------------------------------------------
@@ -31,7 +32,7 @@ class ClassParser {
      * @param string $file     Dateiname (relativ), wird in die Klassen übernommen
      * @return array
      */
-    public function parse($elements, $content, $file) {
+    public function parse(array $elements, string $content, string $file): array {
         $this->_content = $content;
         $this->_file = $file;
 
@@ -67,7 +68,7 @@ class ClassParser {
      * @param array $comments  Kommentar-Elemente direkt vor dem Member
      * @param int $lineNo      Zeile des Members
      */
-    protected function _applyMemberComments($mem, $comments, $lineNo) {
+    protected function _applyMemberComments(stdClass $mem, array $comments, int $lineNo): void {
         $mem->doc = null;
         $mem->docSource = null;
         $mem->isOverwrite = false;
@@ -104,7 +105,7 @@ class ClassParser {
      * @param array $events
      * @return stdClass
      */
-    protected function _buildClass($cls, $members, $configMap, $defaultConfig, $events) {
+    protected function _buildClass(stdClass $cls, array $members, array $configMap, array $defaultConfig, array $events): stdClass {
         $properties = [];
         $functions = [];
 
@@ -144,6 +145,7 @@ class ClassParser {
 
         // Config-Eigenschaften
         foreach ($configMap as $name => $cfg) {
+            $name = (string)$name;
             if (!isset($properties[$name])) {
                 $properties[$name] = $this->_createProperty($name, false, 'public');
                 $properties[$name]->line = $cfg->line;
@@ -233,7 +235,7 @@ class ClassParser {
      * @param stdClass $mem
      * @return stdClass
      */
-    protected function _createFunction($mem) {
+    protected function _createFunction(stdClass $mem): stdClass {
         $doc = $mem->doc;
 
         // Argumente aus der Deklaration mit @param zusammenführen
@@ -289,7 +291,7 @@ class ClassParser {
      * @param string $visibility
      * @return stdClass
      */
-    protected function _createProperty($name, $isStatic, $visibility) {
+    protected function _createProperty(string $name, bool $isStatic, string $visibility): stdClass {
         return (object)[
             'name' => $name,
             'visibility' => $visibility,
@@ -317,7 +319,7 @@ class ClassParser {
      * @param array $configMap
      * @param array $defaultConfig
      */
-    protected function _findConfigs($parentEl, &$configMap, &$defaultConfig) {
+    protected function _findConfigs(stdClass $parentEl, array &$configMap, array &$defaultConfig): void {
         foreach ($parentEl->elements ?? [] as $i => $el) {
             if (isset($el->elements) && $el->type !== 'string') {
                 $this->_findConfigs($el, $configMap, $defaultConfig);
@@ -371,7 +373,7 @@ class ClassParser {
      * @param string $memberName
      * @param array $events
      */
-    protected function _findEvents($parentEl, $memberName, &$events) {
+    protected function _findEvents(stdClass $parentEl, string $memberName, array &$events): void {
         foreach ($parentEl->elements ?? [] as $i => $el) {
             if (isset($el->elements)) {
                 $this->_findEvents($el, $memberName, $events);
@@ -399,7 +401,7 @@ class ClassParser {
      * @param int $lineNo
      * @return array  Textzeilen
      */
-    protected function _lineCommentsAbove($comments, $lineNo) {
+    protected function _lineCommentsAbove(array $comments, int $lineNo): array {
         $lines = [];
         $expected = $lineNo - 1;
         for ($i=count($comments)-1; $i>=0; $i--) {
@@ -427,7 +429,7 @@ class ClassParser {
      * @param int $pos
      * @return int
      */
-    protected function _lineOf($pos) {
+    protected function _lineOf(int $pos): int {
         return substr_count($this->_content, "\n", 0, max(0, $pos - 1)) + 1;
     }
 
@@ -437,7 +439,7 @@ class ClassParser {
      * @param int $index
      * @return stdClass|null
      */
-    protected function _nextEl($parentEl, $index) {
+    protected function _nextEl(stdClass $parentEl, int $index): ?stdClass {
         for ($i=$index+1; $i<count($parentEl->elements); $i++) {
             if ($parentEl->elements[$i]->type !== 'comment') {
                 return $parentEl->elements[$i];
@@ -451,7 +453,7 @@ class ClassParser {
      * @param stdClass $group
      * @return array
      */
-    protected function _parseArguments($group) {
+    protected function _parseArguments(stdClass $group): array {
         $args = [];
         $tokens = $this->_withoutComments($group->elements);
         foreach ($this->_splitByComma($tokens) as $part) {
@@ -490,7 +492,7 @@ class ClassParser {
      * @param int $pos  Position des Schlüsselworts class
      * @return stdClass|null
      */
-    protected function _parseClass($command, $pos) {
+    protected function _parseClass(stdClass $command, int $pos): ?stdClass {
         $els = $command->elements;
 
         $eq = $els[$pos-1] ?? null;
@@ -563,7 +565,7 @@ class ClassParser {
      * @param stdClass $cmd
      * @param array $members
      */
-    protected function _parseClassBody($cmd, &$members) {
+    protected function _parseClassBody(stdClass $cmd, array &$members): void {
         $els = $cmd->elements;
         $count = count($els);
         $comments = [];
@@ -659,7 +661,7 @@ class ClassParser {
      * @param stdClass $entry
      * @return stdClass|null  {type, description}
      */
-    protected function _parseConfigComment($entry) {
+    protected function _parseConfigComment(stdClass $entry): ?stdClass {
         $texts = array_merge($entry->commentsAbove, $entry->commentsAfter);
         if (!$texts) {
             return null;
@@ -693,7 +695,7 @@ class ClassParser {
      * @param stdClass $entry
      * @return stdClass|false
      */
-    protected function _parseConfigMapping($entry) {
+    protected function _parseConfigMapping(stdClass $entry): stdClass|false {
         $map = (object)['target' => null, 'fn' => null, 'context' => null, 'prio' => null];
 
         $v = $entry->valueEls;
@@ -724,7 +726,7 @@ class ClassParser {
      * @param stdClass $commandGroup
      * @return array
      */
-    protected function _parseObjectLiteral($commandGroup) {
+    protected function _parseObjectLiteral(stdClass $commandGroup): array {
         $entries = [];
         $cmd = $commandGroup->elements[0] ?? null;
         if (!$cmd || $cmd->type !== 'command') {
@@ -737,7 +739,7 @@ class ClassParser {
         $above = [];            // Kommentare für den nächsten Eintrag
         $aboveLastLine = null;
 
-        $finish = function() use (&$cur, &$prev, &$entries) {
+        $finish = function() use (&$cur, &$prev, &$entries): void {
             if ($cur) {
                 if ($cur->valueEls) {
                     $cur->value = $this->_text($cur->valueEls[0], end($cur->valueEls));
@@ -754,7 +756,7 @@ class ClassParser {
                 if ($el->commentType === '/*') {
                     continue;
                 }
-                if ($cur && $cur->state === 'value') {
+                if ($cur && $cur->state === 'value' && $cur->valueEls) {
                     // Kommentar am Ende des letzten Eintrags (ohne Komma)
                     if ($el->lineNo === $this->_lineOf(end($cur->valueEls)->filePosEnd)) {
                         $cur->commentsAfter[] = $text;
@@ -813,7 +815,7 @@ class ClassParser {
      * @param array $tokens
      * @return array
      */
-    protected function _splitByComma($tokens) {
+    protected function _splitByComma(array $tokens): array {
         $parts = [[]];
         foreach ($tokens as $t) {
             if ($t->type === 'operator' && $t->name === ',') {
@@ -831,7 +833,7 @@ class ClassParser {
      * @param stdClass $toEl
      * @return string
      */
-    protected function _text($fromEl, $toEl) {
+    protected function _text(stdClass $fromEl, stdClass $toEl): string {
         $end = $toEl->filePosEnd ?? $toEl->filePos;
         return trim(substr($this->_content, $fromEl->filePos, $end - $fromEl->filePos));
     }
@@ -841,7 +843,7 @@ class ClassParser {
      * @param array $elements
      * @return array
      */
-    protected function _withoutComments($elements) {
+    protected function _withoutComments(array $elements): array {
         return array_values(array_filter($elements, fn($el) => $el->type !== 'comment'));
     }
 
