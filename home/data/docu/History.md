@@ -61,6 +61,21 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
   - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
     ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
     Die Warnung in der Konsole war verdreht und ist korrigiert.  
+- Die nicht mehr verwendete Datei ```js/_kijs.Data.js``` (alte Version von 
+  ```kijs.Data```, wurde nicht geladen) ist gelöscht.  
+- Übersetzungen neu erzeugt (```js/translation```, ```tools/kilang/data/usages.php```). 
+  Die Übersetzungen für ```%1 Element``` und ```%1 Elemente``` standen nur in den 
+  JS-Dateien und sind jetzt auch in den Quelldateien ```kijs_en.php``` und 
+  ```kijs_fr.php``` eingetragen, damit sie beim Erzeugen nicht verloren gehen.  
+
+
+## PHP
+- Der gesamte PHP-Code der Home-App und der Tools ist typenstreng 
+  (```declare(strict_types=1)```, Typen für Parameter, Rückgabewerte und 
+  Eigenschaften). Ausgenommen sind ```lib``` und die erzeugten Datendateien in 
+  ```tools/kilang/data```.  
+- Für PHP 8.5 angepasst: ```Pdo\Sqlite```-Konstanten statt der veralteten 
+  ```PDO::SQLITE_*```, ```curl_close()``` entfernt.  
 
 
 
