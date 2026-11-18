@@ -160,9 +160,10 @@ class ApiReader {
             $node->classes[] = (object)['name' => $r->name, 'short' => $short];
         }
 
-        // Zuoberst der Lückenbericht, dann die Namespaces
+        // Zuerst die Namespaces, ganz unten der Lückenbericht
         $issues = (int)$this->_query('SELECT count(*) AS cnt FROM issue')[0]->cnt;
-        $rows = [[
+        $rows = $this->_getTreeRows($root);
+        $rows[] = [
             'displayText' => 'Lückenbericht (' . $issues . ')',
             'nodeId' => 'apiissues',
             'iconMap' => 'kijs.iconMap.Fa.list-check',
@@ -176,8 +177,8 @@ class ApiReader {
                 'filetype' => 'apiissues',
                 'iconMap' => 'kijs.iconMap.Fa.list-check'
             ]
-        ]];
-        return array_merge($rows, $this->_getTreeRows($root));
+        ];
+        return $rows;
     }
 
 
@@ -211,7 +212,8 @@ class ApiReader {
 
     /**
      * Wandelt einen Namespace-Knoten in Zeilen für kijs.gui.Tree um.
-     * Zuerst die Klassen, dann die Unter-Namespaces.
+     * Klassen und Unter-Namespaces werden gemeinsam alphabetisch sortiert
+     * (wie im Showcase). Der Namespace 'kijs' ist aufgeklappt.
      * @param stdClass $node
      * @return array
      */
@@ -241,16 +243,19 @@ class ApiReader {
                 ]
             ];
         }
-        ksort($node->namespaces, SORT_FLAG_CASE | SORT_STRING);
         foreach ($node->namespaces as $part => $ns) {
             $rows[] = [
                 'displayText' => $part,
                 'nodeId' => 'apins:' . $ns->name,
                 'allowChildren' => true,
+                'expanded' => $ns->name === 'kijs',
                 'children' => $this->_getTreeRows($ns),
                 'userData' => (object)['nodeId' => 'apins:' . $ns->name, 'treeName' => 'treeApi', 'filetype' => '']
             ];
         }
+
+        // Alphabetisch, ohne Rücksicht auf Ordner/Knoten (wie in app/ajax.php)
+        usort($rows, fn($a, $b) => strcmp(strtolower($a['displayText']), strtolower($b['displayText'])));
         return $rows;
     }
 

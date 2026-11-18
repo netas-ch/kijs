@@ -14,7 +14,8 @@ home.App = class home_App {
     // --------------------------------------------------------------
     constructor(config={}) {
 
-        this._apiStatusEl = null;
+        this._apiHintEl = null;     // Hinweis im Tab API, wenn die Datenbank fehlt
+        this._apiIsLocal = false;   // Update der API erlaubt (nur lokal)?
         this._btnApiUpdate = null;
         this._content = null;
         this._header = null;
@@ -324,6 +325,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeTest',
+                    cls: 'kijs-transparentborder',
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
@@ -355,6 +357,7 @@ home.App = class home_App {
                 {
                     xtype: 'kijs.gui.Tree',
                     name: 'treeDocu',
+                    cls: 'kijs-transparentborder',
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
@@ -377,22 +380,21 @@ home.App = class home_App {
             ]
         });
 
-        this._apiStatusEl = new kijs.gui.Element({
-            html: '',
-            style: {
-                fontSize: '12px'
-            }
-        });
-
+        // Schaltfläche in der Kopfzeile der Navigation, nur im Tab API sichtbar.
+        // Der Stand der API steht im Tooltip.
         this._btnApiUpdate = new kijs.gui.Button({
-            caption: 'API aktualisieren',
             iconMap: 'kijs.iconMap.Fa.arrows-rotate',
-            tooltip: 'API-Dokumentation aus dem kijs-Code neu erstellen (nur lokal)',
+            tooltip: 'API aktualisieren',
             visible: false,
             on: {
                 click: this.#onBtnApiUpdateClick,
                 context: this
             }
+        });
+
+        this._apiHintEl = new kijs.gui.Element({
+            cls: 'home-api-hint',
+            visible: false
         });
 
         this._tabApi = new kijs.gui.container.tab.Container({
@@ -401,21 +403,11 @@ home.App = class home_App {
             tabTooltip: 'API',
             cls: 'kijs-flexcolumn',
             elements: [
+                this._apiHintEl,
                 {
-                    xtype: 'kijs.gui.Container',
-                    cls: 'kijs-flexcolumn',
-                    style: {
-                        padding: '6px',
-                        gap: '6px',
-                        flex: 'none'
-                    },
-                    elements: [
-                        this._btnApiUpdate,
-                        this._apiStatusEl
-                    ]
-                },{
                     xtype: 'kijs.gui.Tree',
                     name: 'treeApi',
+                    cls: 'kijs-transparentborder',
                     selectType: 'manual',
                     primaryKeyFields: ['nodeId'],
                     valueField: 'nodeId',
@@ -425,6 +417,7 @@ home.App = class home_App {
                     childrenField: 'children',
                     rpc: 'app',
                     rpcLoadFn: 'naviApi.load',
+                    expandedField: 'expanded',
                     autoLoad: true,
                     style: {
                         flex: 1
@@ -446,11 +439,18 @@ home.App = class home_App {
             style: {
                 flex: 'none'
             },
+            headerBarElements: [
+                this._btnApiUpdate
+            ],
             elements:[
                 {
                     xtype: 'kijs.gui.container.Tab',
                     style:{
                         flex: 1
+                    },
+                    on: {
+                        change: this.#onNavigationTabChange,
+                        context: this
                     },
                     elements:[
                         this._tabShowcase,
@@ -673,6 +673,14 @@ home.App = class home_App {
     }
 
     /**
+     * Zeigt die Schaltfläche «API aktualisieren» nur im Tab API und nur lokal an
+     */
+    _updateApiButtonVisibility() {
+        this._btnApiUpdate.visible = this._apiIsLocal && this._tabApi.parent
+                && this._tabApi.parent.currentEl === this._tabApi;
+    }
+
+    /**
      * Zeigt im API-Tab den Stand der API-Datenbank an
      * @returns {Promise}
      */
@@ -686,7 +694,9 @@ home.App = class home_App {
         }
         const status = rpcData.response.data;
 
-        let html = '';
+        // Tooltip mit dem Stand, Badge bei einem Problem
+        let html = '<b>API aktualisieren</b><br>';
+        let problem = false;
         if (status.exists) {
             html += 'Stand: ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i') + '<br>';
             html += 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?');
@@ -695,18 +705,29 @@ home.App = class home_App {
             }
             if (status.kijsVersion !== kijs.version) {
                 html += '<br><b>Version stimmt nicht mit kijs ' + kijs.version + ' überein.</b>';
+                problem = true;
             }
         } else {
             html += 'Die API-Datenbank fehlt noch.';
-            if (status.isLocal) {
-                html += ' Bitte «API aktualisieren» klicken.';
-            }
+            problem = true;
         }
         if (status.isRunning) {
             html += '<br>Es läuft gerade ein Update.';
         }
-        this._apiStatusEl.html = html;
-        this._btnApiUpdate.visible = !!status.isLocal;
+        this._btnApiUpdate.tooltip = html;
+        this._btnApiUpdate.badgeText = problem ? '!' : '';
+
+        // Hinweis im Tab API, wenn die Datenbank fehlt
+        if (!status.exists) {
+            this._apiHintEl.html = 'Die API-Datenbank fehlt noch. '
+                    + (status.isLocal
+                        ? 'Bitte oben rechts auf das Symbol «API aktualisieren» klicken.'
+                        : 'Sie kann nur lokal (localhost) erstellt werden.');
+        }
+        this._apiHintEl.visible = !status.exists;
+
+        this._apiIsLocal = !!status.isLocal;
+        this._updateApiButtonVisibility();
     }
 
 
@@ -944,6 +965,10 @@ home.App = class home_App {
         }
     }
 
+    #onNavigationTabChange(e) {
+        this._updateApiButtonVisibility();
+    }
+
     #onSearchEnterPress(e) {
         this.openSearch(e.element.value);
     }
@@ -983,7 +1008,7 @@ home.App = class home_App {
         }
 
         // Variablen (Objekte/Arrays) leeren
-        this._apiStatusEl = null;
+        this._apiHintEl = null;
         this._btnApiUpdate = null;
         this._header = null;
         this._tabShowcase = null;

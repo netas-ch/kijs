@@ -481,6 +481,18 @@
         border-bottom-style: solid;
     }
 
+    /* Hinweis im Tab API, wenn die Datenbank fehlt */
+    .home-api-hint {
+        flex: none;
+        margin: 6px;
+        padding: 6px;
+        font-size: 12px;
+        line-height: 16px;
+        color: var(--grey09);
+        border: 1px solid var(--apiTagSetter);
+        border-radius: 4px;
+    }
+
     /* Globale Suche */
     .home-search-field {
         margin-right: 6px;
