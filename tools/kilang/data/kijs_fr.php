@@ -8,6 +8,8 @@ $translations["fr"] = [
         "Letzte Änderungen" => "admin"
     ],
     "%1 bis %2" => "%1 à %2",
+    "%1 Element" => "%1 Élement",
+    "%1 Elemente" => "%1 Élements",
     "%1 ist keine gültige Nummer" => "%1 n'est pas un numéro valide",
     "Abbrechen" => "Annuler",
     "Absteigend sortieren" => "Trier par ordre décroissant",
