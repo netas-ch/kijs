@@ -7,12 +7,10 @@ require_once __DIR__ . '/ClassParser.php';
  * Parst alle Javascript-Dateien von kijs (gemäss files.json), übernimmt fehlende
  * Doku von Basisklassen und erstellt den Lückenbericht.
  *
- * Verwendung:
+ * Verwendung (Update in Schritten, siehe ApiUpdate.php):
  *   $pp = new ProjectParser('/pfad/zu/kijs');
- *   $result = $pp->parseAll();
- *
- * Für das Update in Schritten (Fortschrittsanzeige) können die Dateien auch
- * einzeln mit parseFile() geparst und am Schluss mit resolve() verarbeitet werden.
+ *   foreach ($pp->getFiles() as $f) { $classes = array_merge($classes, $pp->parseFile($f->module, $f->file)); }
+ *   $result = $pp->resolve($classes);
  */
 class ProjectParser {
     protected $_root = '';
@@ -48,38 +46,6 @@ class ProjectParser {
             }
         }
         return $files;
-    }
-
-    /**
-     * Parst alle Dateien und verarbeitet das Ergebnis
-     * @return stdClass  {classes, issues, errors, stats}
-     */
-    public function parseAll() {
-        $start = microtime(true);
-        $classes = [];
-        $errors = [];
-        $files = $this->getFiles();
-
-        foreach ($files as $f) {
-            try {
-                foreach ($this->parseFile($f->module, $f->file) as $cls) {
-                    $classes[] = $cls;
-                }
-            } catch (Exception $ex) {
-                $errors[] = (object)['file' => $f->file, 'message' => $ex->getMessage()];
-            }
-        }
-
-        $result = $this->resolve($classes);
-        $result->errors = array_merge($result->errors, $errors);
-        $result->stats = (object)[
-            'files' => count($files),
-            'classes' => count($result->classes),
-            'issues' => count($result->issues),
-            'errors' => count($result->errors),
-            'seconds' => round(microtime(true) - $start, 2)
-        ];
-        return $result;
     }
 
     /**

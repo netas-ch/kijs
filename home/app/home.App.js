@@ -205,7 +205,7 @@ home.App = class home_App {
         html += '  <li><a href="#" data-home-action="api">API-Dokumentation</a></li>';
         html += ' </ul>';
         html += ' <ul class="home-start-links home-start-links-more">';
-        html += '  <li><a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a></li>';
+        html += '  <li><a href="../testViewport/test_afterResize.php">ViewPort afterResize Events</a></li>';
         html += '  <li><a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a></li>';
         html += ' </ul>';
         html += '</div>';

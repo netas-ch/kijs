@@ -269,7 +269,7 @@ werden. Ein Klick auf einen Eintrag öffnet die Klassenseite und klappt ihn auf.
 --------------------------
 | Schritt | Inhalt                                                          |
 |---------|-----------------------------------------------------------------|
-| 1       | Alten Parser übernehmen und mit dem aktuellen kijs testen, Ausgabe als JSON (**erledigt**: ```home/app/api/```, Test mit ```php home/app/api/parse.php```) |
+| 1       | Alten Parser übernehmen und mit dem aktuellen kijs testen, Ausgabe als JSON (**erledigt**: ```home/app/api/```) |
 | 2       | SQLite-Datenbank und Update mit Fortschrittsanzeige (**erledigt**: ```ApiDatabase.php```, ```ApiUpdate.php```, ```home.ApiUpdate.js```, API-Tab mit Schaltfläche und Stand) |
 | 3       | API-Tab mit Baum und Klassenseite (Abschnitte, Tags, aufklappen) (**erledigt**: ```ApiReader.php```, ```home.ApiClassPage.js```, ```home.ApiSourcePage.js```; Filter auf der Klassenseite ist schon dabei) |
 | 4       | Filter auf der Klassenseite (**erledigt** mit Schritt 3)         |
