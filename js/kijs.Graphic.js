@@ -332,6 +332,7 @@ kijs.Graphic = class kijs_Graphic {
         };
     }
 
+
     // FUNKTIONEN ZUR MANIPULATION VON BILDER
     // --------------------------------------
 

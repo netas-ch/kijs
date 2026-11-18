@@ -147,6 +147,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         super.unrender(superCall);
     }
 
+
     // PROTECTED
     _getUploadProgressBar(uploadId) {
         for (let i=0; i<this._uploads.length; i++) {

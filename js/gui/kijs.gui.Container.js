@@ -778,8 +778,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
 
-
-    // PRVATE
+    // PRIVATE
     // LISTENERS
     /**
      * Listener der aufgerufen wird, wenn sich die Grösse eines untergeordneten Elements ändert

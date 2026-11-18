@@ -10,7 +10,8 @@
 // Falls der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
 // Bei target = kijs.gui.Dom muss die Grösse manuell nachgeführt werden.
 kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
-    
+
+
     // --------------------------------------------------------------
     // CONSTRUCTOR
     // --------------------------------------------------------------

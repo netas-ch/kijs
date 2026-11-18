@@ -53,6 +53,8 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
         });
     }
 
+
+
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------

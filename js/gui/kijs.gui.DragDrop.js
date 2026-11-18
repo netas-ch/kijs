@@ -15,6 +15,8 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // __dropMarkerDom {kijs.gui.Dom} Marker, der die Einfügeposition visualisiert
     // __targetDragOverDom {kijs.gui.Dom} Dom, das aktuellen targets, dass die CSS-Klasse kijs-targetDragOver hat
 
+
+
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------

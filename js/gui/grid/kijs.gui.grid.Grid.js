@@ -138,6 +138,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
 
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -284,6 +285,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
         this._selectType = val;
     }
+
 
 
     // --------------------------------------------------------------
@@ -1070,7 +1072,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
 
-
     // PROTECTED
     /**
      * Es kann eine Config oder eine Instanz übergeben werden. Wird eine config übergeben, wird eine instanz
@@ -1363,7 +1364,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
         }
     }
-
 
 
     // PRIVATE

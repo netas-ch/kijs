@@ -117,6 +117,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
     set multiple(val) { this._multiple = val; }
 
+
+
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------

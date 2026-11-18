@@ -64,7 +64,16 @@ Beispiel aus ```kijs.gui.DragDrop```:
 ### Sichtbarkeit
 Innerhalb eines Abschnitts werden ```protected``` und ```private``` Funktionen mit 
 einer einzelnen Kommentarzeile ohne Linie markiert: ```// PROTECTED```, 
-```// PRIVATE``` und ```// LISTENERS```. Davor stehen 2 Leerzeilen.  
+```// PRIVATE``` und ```// LISTENERS```. Davor stehen 2 Leerzeilen. Folgt die 
+Markierung direkt auf eine Überschrift 1 (z.B. weil es im Abschnitt ```MEMBERS``` 
+keine öffentlichen Funktionen gibt), steht **keine Leerzeile** dazwischen:  
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+    // PROTECTED
+    _protectedMethod() {
+
 Listeners sind immer private und stehen am Schluss des Abschnitts ```PRIVATE```. 
 Gibt es keine anderen privaten Funktionen, folgt ```// LISTENERS``` direkt auf 
 ```// PRIVATE``` (siehe Beispiel unten).  

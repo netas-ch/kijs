@@ -102,6 +102,7 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         });
     }
 
+
     // PROTECTED
     _checkAll(val) {
         let ids = [];

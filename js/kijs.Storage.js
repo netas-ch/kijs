@@ -163,6 +163,8 @@ kijs.Storage = class kijs_Storage {
         return kijs.Storage.setItem(key, oldValue, mode, keyPrefix);
     }
 
+
+
     // --------------------------------------------------------------
     // PROTECTED STATICS
     // --------------------------------------------------------------

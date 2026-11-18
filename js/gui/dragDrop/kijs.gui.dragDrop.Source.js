@@ -180,6 +180,7 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         kijs.gui.DragDrop.data = {};
     }
 
+
     // PRIVATE
     // LISTENERS
     #onDragEnd(e) {

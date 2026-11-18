@@ -33,6 +33,8 @@ kijs.Observable = class kijs_Observable {
                                             //           }
     }
 
+
+
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -48,6 +50,8 @@ kijs.Observable = class kijs_Observable {
 
         return null;
     }
+
+
 
     // --------------------------------------------------------------
     // MEMBERS
@@ -240,6 +244,7 @@ kijs.Observable = class kijs_Observable {
 
         return returnValue;
     }
+
 
 
     // --------------------------------------------------------------

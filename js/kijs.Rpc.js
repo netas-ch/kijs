@@ -48,6 +48,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
     }
 
 
+
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
@@ -59,6 +60,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
             CANCELED_AFTER_TRANSMIT: 4
         };
     }
+
 
 
     // --------------------------------------------------------------
@@ -78,6 +80,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
 
     get url() { return this._url; }
     set url(val) { this._url = val; }
+
 
 
     // --------------------------------------------------------------
@@ -329,6 +332,7 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
         }
 
     }
+
 
 
     // --------------------------------------------------------------

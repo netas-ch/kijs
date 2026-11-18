@@ -158,7 +158,8 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
             });
         });
     }
-    
+
+
     // PROTECTED
     _initColumns(elements) {
         let panels = [];

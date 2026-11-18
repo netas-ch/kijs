@@ -547,7 +547,6 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinStop();
         this._inputDom.focus();
     }
-    
 
 
 
