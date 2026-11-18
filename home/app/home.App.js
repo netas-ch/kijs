@@ -191,11 +191,22 @@ home.App = class home_App {
 
     // PROTECTED
     _createContent() {
+        // Schriftzug als Text (nicht im Hintergrundbild), damit er auf allen
+        // Bildschirmen scharf ist
         let html = '';
-        html += '<div style="margin: 420px 0 0 370px">';
-        html += ' <a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a><br>';
-        html += ' <br>';
-        html += ' <a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a><br>';
+        html += '<div class="home-start">';
+        html += ' <div class="home-start-title">kijs</div>';
+        html += ' <div class="home-start-subtitle">the new aera of multidevice apps</div>';
+        html += ' <ul class="home-start-links">';
+        html += '  <li><a href="#" data-home-action="firstSteps">Erste Schritte mit kijs</a></li>';
+        html += '  <li><a href="#" data-home-action="showcase">Showcase</a></li>';
+        html += '  <li><a href="#" data-home-action="docu">Dokumentation</a></li>';
+        html += '  <li><a href="#" data-home-action="api">API-Dokumentation</a></li>';
+        html += ' </ul>';
+        html += ' <ul class="home-start-links home-start-links-more">';
+        html += '  <li><a href="../testViewPort/test_afterResize.php">ViewPort afterResize Events</a></li>';
+        html += '  <li><a href="https://kanboard.netas.ch/?controller=BoardViewController&action=readonly&token=7a2e745689468ddd16fa8dd741fcabe65b7983e8c735ab02023e338cdc67" target="blank">Kanboard (public, read only)</a></li>';
+        html += ' </ul>';
         html += '</div>';
 
         return new kijs.gui.container.Tab({
@@ -217,7 +228,11 @@ home.App = class home_App {
                     style:{
                         flex: 1
                     },
-                    html: html
+                    html: html,
+                    on: {
+                        click: this.#onHomeClick,
+                        context: this
+                    }
                 }
             ]
         });
@@ -647,6 +662,17 @@ home.App = class home_App {
     }
 
     /**
+     * Zeigt einen Bereich der Navigation an (Showcase, Tests, Doku oder API)
+     * @param {kijs.gui.container.tab.Container} tabEl  z.B. this._tabShowcase
+     */
+    _showNavigationTab(tabEl) {
+        if (this._navigation.collapsed) {
+            this._navigation.collapsed = false;
+        }
+        tabEl.parent.currentEl = tabEl;
+    }
+
+    /**
      * Zeigt im API-Tab den Stand der API-Datenbank an
      * @returns {Promise}
      */
@@ -887,6 +913,34 @@ home.App = class home_App {
     #onContentTabContainerDestruct(e) {
         if (e.element.userData && e.element.userData.destruct) {
             e.element.userData.destruct();
+        }
+    }
+
+    // Links auf der Startseite
+    #onHomeClick(e) {
+        const a = e.nodeEvent && e.nodeEvent.target.closest ? e.nodeEvent.target.closest('a[data-home-action]') : null;
+        if (!a) {
+            return;
+        }
+        e.nodeEvent.preventDefault();
+
+        switch (a.dataset.homeAction) {
+            case 'firstSteps':
+                this._showNavigationTab(this._tabDocu);
+                this.openLinkedFile('data/docu/Erste_Schritte.md');
+                break;
+
+            case 'showcase':
+                this._showNavigationTab(this._tabShowcase);
+                break;
+
+            case 'docu':
+                this._showNavigationTab(this._tabDocu);
+                break;
+
+            case 'api':
+                this._showNavigationTab(this._tabApi);
+                break;
         }
     }
 

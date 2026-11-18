@@ -10,12 +10,16 @@
     /* ---------------- */
     :root {
         --tabHomeBackground: #fff url(background.jpg) scroll no-repeat 0% 0%;
+        --tabHomeTitleColor: #858585;
+        --tabHomeSubtitleColor: #2f2f2f;
     }
 
     /* DARK Farbeschema*/
     /* --------------- */
     :root[data-theme='dark'] {
         --tabHomeBackground: #262626 url(background_dark.jpg) scroll no-repeat 0% 0%;
+        --tabHomeTitleColor: #ffa60a;
+        --tabHomeSubtitleColor: #eee;
     }
 
     /* Home Panel */
@@ -24,6 +28,49 @@
     }
     .tabHome a {
         color: var(--grey09);
+    }
+
+    /* Schriftzug und Links auf der Startseite. Die Position passt zum Hintergrundbild. */
+    .home-start {
+        position: absolute;
+        left: 367px;
+        top: 286px;
+        font-family: Futura, 'Futura PT', 'Futura Lt BT', 'Century Gothic', 'Jost', 'Roboto', sans-serif;
+        font-weight: 300;
+    }
+    .home-start-title {
+        font-size: 70px;
+        line-height: 70px;
+        color: var(--tabHomeTitleColor);
+    }
+    .home-start-subtitle {
+        margin: -6px 0 0 4px;
+        font-size: 36px;
+        line-height: 36px;
+        color: var(--tabHomeSubtitleColor);
+        white-space: nowrap;
+    }
+    .home-start-links {
+        list-style: none;
+        margin: 50px 0 0 4px;
+        padding: 0;
+        font-size: 20px;
+        line-height: 32px;
+    }
+    .home-start-links-more {
+        margin-top: 24px;
+        font-size: 14px;
+        line-height: 24px;
+    }
+    .tabHome .home-start-links a {
+        color: var(--tabHomeSubtitleColor);
+        text-decoration: none;
+    }
+    .tabHome .home-start-links a:hover {
+        text-decoration: underline;
+    }
+    .tabHome .home-start-links-more a {
+        color: var(--grey08);
     }
 
     /* Icons */
