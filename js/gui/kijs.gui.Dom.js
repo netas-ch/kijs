@@ -1128,7 +1128,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      */
     render() {
         // Node erstellen und Events abfragen
-        if (!this._node) { // !TODO wenn bereits vorhanden, passiert nichts?
+        if (!this._node) {
             this._node = document.createElement(this._nodeTagName);
 
             // Styles mergen
