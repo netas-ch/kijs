@@ -78,12 +78,14 @@ dann in den betroffenen Feldern angezeigt.
 
 Beispiel-Response:
 
-    {
-      "fieldErrors":{
-        "Anrede":"Ungültige Anrede.",
-        "Geburtsdatum":"Diese Person ist zu jung."
-      }
-    }
+```json
+{
+  "fieldErrors":{
+    "Anrede":"Ungültige Anrede.",
+    "Geburtsdatum":"Diese Person ist zu jung."
+  }
+}
+```
 
 
 Beispiele

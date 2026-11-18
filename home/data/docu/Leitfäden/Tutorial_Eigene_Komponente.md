@@ -407,16 +407,18 @@ Schritt 8: CSS
 CSS-Klassen eigener Komponenten bekommen ein eigenes Präfix (hier ```my-```), nicht 
 ```kijs-```. Das CSS gehört in die Stylesheet-Datei der Applikation (Layer ```app```).  
 
-    .my-counter {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
+```css
+.my-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
 
-    .my-counter-value {
-        min-width: 2em;
-        text-align: center;
-    }
+.my-counter-value {
+    min-width: 2em;
+    text-align: center;
+}
+```
 
 Farben werden nicht fix angegeben, sondern über die CSS-Variablen des Themes 
 (z.B. ```var(--accentColor)```). So passt die Komponente auch zum dunklen Theme.  

@@ -182,8 +182,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
             case 'md':
                 this._contSandbox.scrollableY = 'auto';
-                this._contSandbox.html = '<div class="markdown">' +
-                        marked.parse(rawCode) + '</div>';
+                this._renderMarkdown(rawCode);
                 break;
 
         }
@@ -193,8 +192,97 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
 
     // PROTECTED
+    /**
+     * Färbt alle Code-Blöcke (pre > code) in einem Node mit ACE ein.
+     * Die Sprache kommt aus dem Code-Block (```css, ```html, ```php, ```json ...),
+     * eingerückte Code-Blöcke ohne Sprache werden als JavaScript eingefärbt.
+     * Die Farben sind in app/style.css definiert (hell und dunkel).
+     * @param {HTMLElement} node
+     * @returns {Promise}
+     */
+    async _highlightCodeBlocks(node) {
+        const blocks = node.querySelectorAll('pre > code');
+        if (!blocks.length || !window.ace) {
+            return;
+        }
+
+        const highlighter = await home_TabContainer.#aceLoadModule('ace/ext/static_highlight');
+
+        // Theme ohne eigenes CSS: die Farben kommen aus style.css und passen sich
+        // so beim Umschalten zwischen hell und dunkel automatisch an.
+        const theme = { cssClass: 'home-code', cssText: '', isDark: false };
+
+        for (const code of blocks) {
+            const match = code.className.match(/language-([\w-]+)/);
+            const lang = match ? match[1].toLowerCase() : 'javascript';
+            const modeName = home_TabContainer.#languageModes[lang];
+            if (!modeName) {
+                continue;   // unbekannte Sprache: nicht einfärben
+            }
+
+            let text = code.textContent.replace(/\n$/, '');
+
+            const modeModule = await home_TabContainer.#aceLoadModule('ace/mode/' + modeName);
+            // PHP ohne '<?php' (reiner PHP-Code) als inline-PHP einfärben
+            const mode = new modeModule.Mode(modeName === 'php' && !text.includes('<?') ? { inline: true } : undefined);
+
+            const result = highlighter.render(text, mode, theme, 1, true);
+            code.parentNode.classList.add('home-code-highlighted');
+            code.innerHTML = result.html;
+        }
+    }
+
+    /**
+     * Wandelt Markdown in HTML um, färbt die Code-Blöcke ein und zeigt das Ergebnis an
+     * @param {String} rawCode
+     * @returns {Promise}
+     */
+    async _renderMarkdown(rawCode) {
+        const div = document.createElement('div');
+        div.className = 'markdown';
+        div.innerHTML = marked.parse(rawCode);
+
+        try {
+            await this._highlightCodeBlocks(div);
+        } catch (ex) {
+            // Falls das Einfärben nicht klappt, wird der Code einfach ohne Farben angezeigt
+            console.warn('Syntax highlighting failed', ex);
+        }
+
+        this._contSandbox.html = div.outerHTML;
+    }
+
 
     // PRIVATE
+    // Sprachen in Code-Blöcken -> ACE-Modus
+    static #languageModes = {
+        javascript: 'javascript',
+        js: 'javascript',
+        css: 'css',
+        less: 'css',
+        html: 'html',
+        php: 'php',
+        json: 'json',
+        sql: 'sql'
+    };
+
+    // Cache der geladenen ACE-Module
+    static #aceModules = {};
+
+    /**
+     * Lädt ein ACE-Modul (nur beim ersten Mal, danach aus dem Cache)
+     * @param {String} name  z.B. 'ace/mode/css'
+     * @returns {Promise}
+     */
+    static #aceLoadModule(name) {
+        if (!home_TabContainer.#aceModules[name]) {
+            home_TabContainer.#aceModules[name] = new Promise((resolve) => {
+                ace.config.loadModule(name, resolve);
+            });
+        }
+        return home_TabContainer.#aceModules[name];
+    }
+
     // LISTENERS
     // Relative Links auf Doku-, Showcase- und Test-Seiten in einem Tab öffnen
     // (in Markdown-Dateien und in Showcase-/Test-Seiten, z.B. Abschnitt "Siehe auch")

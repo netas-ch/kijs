@@ -16,14 +16,16 @@ Es wird zwischen zwei Fehlertypen (errorType) unterschieden
 
 Beispiel Fehlerbehandlung in PHP
 --------------------------------
-    try {
-        throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
-        throw new Exception('Fehler! Schrecklich!!!');
-    } catch (Exception $ex) {
-        $response->errorMsg = $ex->getMessage();
-        $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
-        //$response->errorTitle = 'Mein eigener Fehlertitel'; // optional
-    }
+```php
+try {
+    throw new ki_Exception_Notice('Fehler, aber nicht tragisch.');
+    throw new Exception('Fehler! Schrecklich!!!');
+} catch (Exception $ex) {
+    $response->errorMsg = $ex->getMessage();
+    $response->errorType = $ex instanceof ki_Exception_Notice ? 'errorNotice' : 'error';
+    //$response->errorTitle = 'Mein eigener Fehlertitel'; // optional
+}
+```
 
 Damit in PHP ki_Exception_Notice geworfen werden kann muss folgende Klasse in 
 PHP deklariert sein:  

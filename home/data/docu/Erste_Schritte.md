@@ -58,61 +58,63 @@ passende Showcase- und Test-Seiten.
 Eine minimale Applikation sieht so aus. Sie zeigt ein Panel mit einem Textfeld und 
 einer Schaltfläche:  
 
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8">
-        <style>
-            @layer kijs, kijs-theme, app;
-        </style>
-        <link rel="stylesheet" href="/kijs/css/kijs.theme.default.css">
-    <?php
-        // Base-URL ermitteln
-        $baseUrl = '';
-        $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-        $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
+```php
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style>
+        @layer kijs, kijs-theme, app;
+    </style>
+    <link rel="stylesheet" href="/kijs/css/kijs.theme.default.css">
+<?php
+    // Base-URL ermitteln
+    $baseUrl = '';
+    $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
+    $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
 
-        // CSS- und JS-Dateien von kijs einbinden
-        echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css');
-        echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui&fileType=js');
-    ?>
-        <script>
-            kijs.isReady(function() {
-                const viewport = new kijs.gui.ViewPort({
-                    cls: 'kijs-flexfit',
-                    elements: [
-                        {
-                            xtype: 'kijs.gui.Panel',
-                            caption: 'Hallo kijs',
-                            cls: 'kijs-flexform',
-                            innerStyle: { padding: '10px' },
-                            elements: [
-                                {
-                                    xtype: 'kijs.gui.field.Text',
-                                    name: 'name',
-                                    label: 'Name'
-                                },{
-                                    xtype: 'kijs.gui.Button',
-                                    caption: 'Begrüssen',
-                                    on: {
-                                        click: function(e) {
-                                            const name = viewport.down('name').value;
-                                            kijs.gui.MsgBox.alert('Hallo', 'Hallo ' + name + '!');
-                                        }
+    // CSS- und JS-Dateien von kijs einbinden
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css');
+    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui&fileType=js');
+?>
+    <script>
+        kijs.isReady(function() {
+            const viewport = new kijs.gui.ViewPort({
+                cls: 'kijs-flexfit',
+                elements: [
+                    {
+                        xtype: 'kijs.gui.Panel',
+                        caption: 'Hallo kijs',
+                        cls: 'kijs-flexform',
+                        innerStyle: { padding: '10px' },
+                        elements: [
+                            {
+                                xtype: 'kijs.gui.field.Text',
+                                name: 'name',
+                                label: 'Name'
+                            },{
+                                xtype: 'kijs.gui.Button',
+                                caption: 'Begrüssen',
+                                on: {
+                                    click: function(e) {
+                                        const name = viewport.down('name').value;
+                                        kijs.gui.MsgBox.alert('Hallo', 'Hallo ' + name + '!');
                                     }
                                 }
-                            ]
-                        }
-                    ]
-                });
-                viewport.render();
+                            }
+                        ]
+                    }
+                ]
             });
-        </script>
-        <title>Hallo kijs</title>
-    </head>
-    <body>
-    </body>
-    </html>
+            viewport.render();
+        });
+    </script>
+    <title>Hallo kijs</title>
+</head>
+<body>
+</body>
+</html>
+```
 
 Was hier passiert:  
 - ```@layer``` legt die Reihenfolge der CSS-Ebenen fest: Das CSS der Applikation 

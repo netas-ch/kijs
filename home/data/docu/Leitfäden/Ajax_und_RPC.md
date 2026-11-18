@@ -135,155 +135,161 @@ Der Datenverkehr mit kijs ist in JSON mit UTF-8.
 ### Aufbau der Anfrage an den Server
 kijs generiert automatisch Requests mit folgendem Aufbau:  
 
-    [
-      {
-        "tid":1,                            // eindeutige Id (wird automatisch 
-                                            // vergeben und eingefügt)
-        "remoteFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
-        "requestData": {
-          ...                               // beliebige Daten die zurückgegeben werden
-      },
-        "ignoreWarnings": false             // Sollen Warnungen ignoriert werden?
-      },{
-        "tid":2,
-        ...
-      }
-    ]
+```json
+[
+  {
+    "tid":1,                            // eindeutige Id (wird automatisch 
+                                        // vergeben und eingefügt)
+    "remoteFn": "myModule.myFunction",  // gewünschte Funktion auf dem Server
+    "requestData": {
+      ...                               // beliebige Daten die zurückgegeben werden
+  },
+    "ignoreWarnings": false             // Sollen Warnungen ignoriert werden?
+  },{
+    "tid":2,
+    ...
+  }
+]
+```
 
 ### Aufbau der Antwort vom Server
 Der Server sollte wie folgt antworten:  
 
-    [
-      {
-        "tid":1,    // tid vom request nehmen
+```json
+[
+  {
+    "tid":1,    // tid vom request nehmen
 
-        "errorTitle": "kijs",                   // (optional)
-        "errorMsg": "Ich bin eine errorMsg",    // (optional)
-        "errorType": "errorNotice",             // oder "error" (optional)
-            
-        "infoTitle": "kijs",                    // (optional)
-        "infoMsg": "Ich bin eine infoMsg",      // (optional)
+    "errorTitle": "kijs",                   // (optional)
+    "errorMsg": "Ich bin eine errorMsg",    // (optional)
+    "errorType": "errorNotice",             // oder "error" (optional)
+        
+    "infoTitle": "kijs",                    // (optional)
+    "infoMsg": "Ich bin eine infoMsg",      // (optional)
 
-        "cornerTipTitle": "kijs",               // (optional)
-        "cornerTipMsg": "Ich bin eine cornerTipMsg",  // (optional)
-        "cornerTipIcon": "Ich bin eine cornerTipMsg", // (optional: info [default], 
-                                                      // warning, error, errorNotice, 
-                                                      // alert)
+    "cornerTipTitle": "kijs",               // (optional)
+    "cornerTipMsg": "Ich bin eine cornerTipMsg",  // (optional)
+    "cornerTipIcon": "Ich bin eine cornerTipMsg", // (optional: info [default], 
+                                                  // warning, error, errorNotice, 
+                                                  // alert)
 
-        "warningTitle": "kijs",             // (optional)
-        "warningMsg": "Sind Sie sicher?",   // Wird bei der Meldung auf "ok" geklickt,
-                                            // wird der gleiche Request automatisch 
-                                            // nochmal mit "ignoreWarnings": true
-                                            // gesendet.
+    "warningTitle": "kijs",             // (optional)
+    "warningMsg": "Sind Sie sicher?",   // Wird bei der Meldung auf "ok" geklickt,
+                                        // wird der gleiche Request automatisch 
+                                        // nochmal mit "ignoreWarnings": true
+                                        // gesendet.
 
-        "fieldErrors":{                     // (optional) nur bei Save von 
-                                            // kijs.gui.container.Form 
-          "Anrede": "Ungültige Anrede."     // Fehlermeldungen, die direkt in den Feldern
-                                            // angezeigt werden.
-        },
+    "fieldErrors":{                     // (optional) nur bei Save von 
+                                        // kijs.gui.container.Form 
+      "Anrede": "Ungültige Anrede."     // Fehlermeldungen, die direkt in den Feldern
+                                        // angezeigt werden.
+    },
 
-        ...     // beliebige weitere Daten die zurückgegeben werden
+    ...     // beliebige weitere Daten die zurückgegeben werden
 
-      },{
-        "tid":2,
-        ...
-      }
-    ]
+  },{
+    "tid":2,
+    ...
+  }
+]
+```
 
 
 Beispielskript
 -----------
 Hier ein einfaches PHP-Skript, dass auf der Serverseite verwendet werden kann:  
 
-    <?php
-    $responses = array();
-    $requests = json_decode(file_get_contents("php://input"));
+```php
+<?php
+$responses = array();
+$requests = json_decode(file_get_contents("php://input"));
 
-    foreach ($requests as $request) {
-        $response = new stdClass();
-        $response->tid = $request->tid;
+foreach ($requests as $request) {
+    $response = new stdClass();
+    $response->tid = $request->tid;
 
-        switch ($request->remoteFn) {
-            case 'module1.formLoad':
-                try {
-                    // Formular
-                    $response->config = json_decode('
-                        {
-                            "elements": [
-                                {
-                                    "xtype": "kijs.gui.field.Combo",
-                                    "name": "Anrede",
-                                    "label": "Anrede",
-                                    "rpcLoadFn": "module1.loadAnredeCombo",
-                                    "autoLoad": true
-                                },{
-                                    "xtype": "kijs.gui.field.Text",
-                                    "name": "Name",
-                                    "label": "Name"
-                                },{
-                                    "xtype": "kijs.gui.field.Text",
-                                    "name": "Vorname",
-                                    "label": "Vorname"
-                                }
-                            ]
-                        }
-                    ');
-
-                    // Formulardaten
-                    $response->data = array(
-                        'Anrede' => 'w',
-                        'Name' => 'Meier',
-                        'Vorname' => 'Susanne'
-                    );
-
-                } catch (Exception $ex) {
-                    $response->errorType = 'error';
-                    $response->errorMsg = $ex->getMessage();
-                }
-                break;
-
-            case 'module1.loadAnredeCombo':
-                try {
-                    $response->data = [
-                        ['displayText' => 'Herr', 'value' => 'm'],
-                        ['displayText' => 'Frau', 'value' => 'w']
-                    ];
-                } catch (Exception $ex) {
-                    $response->errorType = 'error';
-                    $response->errorMsg = $ex->getMessage();
-                }
-                break;
-
-            case 'module1.formSave':
-                try {
-                    $formData = $request->requestData->formData;
-
-                    $fieldErrors = new stdClass();
-
-                    if (!in_array($formData->Anrede, ['m', 'w'])) {
-                        $fieldErrors->Anrede = 'Ungültige Anrede.';
+    switch ($request->remoteFn) {
+        case 'module1.formLoad':
+            try {
+                // Formular
+                $response->config = json_decode('
+                    {
+                        "elements": [
+                            {
+                                "xtype": "kijs.gui.field.Combo",
+                                "name": "Anrede",
+                                "label": "Anrede",
+                                "rpcLoadFn": "module1.loadAnredeCombo",
+                                "autoLoad": true
+                            },{
+                                "xtype": "kijs.gui.field.Text",
+                                "name": "Name",
+                                "label": "Name"
+                            },{
+                                "xtype": "kijs.gui.field.Text",
+                                "name": "Vorname",
+                                "label": "Vorname"
+                            }
+                        ]
                     }
+                ');
 
-                    if (count(get_object_vars($fieldErrors))) {
-                        $response->fieldErrors = $fieldErrors;
-                        $response->errorType = 'errorNotice';
-                        $response->errorMsg = 'Einige Felder sind nicht korrekt ausgefüllt.';
-                    }
-                } catch (Exception $ex) {
-                    $response->errorType = 'error';
-                    $response->errorMsg = $ex->getMessage();
-                }
-                break;
+                // Formulardaten
+                $response->data = array(
+                    'Anrede' => 'w',
+                    'Name' => 'Meier',
+                    'Vorname' => 'Susanne'
+                );
 
-            default:
+            } catch (Exception $ex) {
                 $response->errorType = 'error';
-                $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
-        }
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
 
-        $responses[] = $response;
+        case 'module1.loadAnredeCombo':
+            try {
+                $response->data = [
+                    ['displayText' => 'Herr', 'value' => 'm'],
+                    ['displayText' => 'Frau', 'value' => 'w']
+                ];
+            } catch (Exception $ex) {
+                $response->errorType = 'error';
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        case 'module1.formSave':
+            try {
+                $formData = $request->requestData->formData;
+
+                $fieldErrors = new stdClass();
+
+                if (!in_array($formData->Anrede, ['m', 'w'])) {
+                    $fieldErrors->Anrede = 'Ungültige Anrede.';
+                }
+
+                if (count(get_object_vars($fieldErrors))) {
+                    $response->fieldErrors = $fieldErrors;
+                    $response->errorType = 'errorNotice';
+                    $response->errorMsg = 'Einige Felder sind nicht korrekt ausgefüllt.';
+                }
+            } catch (Exception $ex) {
+                $response->errorType = 'error';
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        default:
+            $response->errorType = 'error';
+            $response->errorMsg = 'RemoteFn "' . $request->remoteFn . '" existiert nicht.';
     }
 
-    print(json_encode($responses));
+    $responses[] = $response;
+}
+
+print(json_encode($responses));
+```
 
 
 Laden von configs
@@ -304,28 +310,32 @@ Alle Elemente (kijs.gui.Element + vererbte) bieten die Möglichkeit die config d
 Die vom Server erhaltene config wird automatisch beim Empfang übernommen.  
 Bei der Antwort vom Server muss die Config als Objekt wie folgt zurückgegeben werden:  
 
-    $config = new stdClass();
-    $config->html = '<b>Ich komme vom Server</b>';
-    $config->tooltip = 'Ich auch';
-    $response->config = $config;
+```php
+$config = new stdClass();
+$config->html = '<b>Ich komme vom Server</b>';
+$config->tooltip = 'Ich auch';
+$response->config = $config;
+```
 
 Beispiel für das Laden von Kind-Elementen bei einem Panel:  
     
-    $response->config = json_decode('
-        {
-            "caption": "Dynamisch geladenes Panel",
-            "elements": [
-                {
-                    "xtype":"kijs.gui.Button",
-                    "caption":"Button vom Server",
-                    "on":{
-                        "click":"myStyticClass.onAwesomeButtonClick" // listener muss 
-                                                                     // ```static``` sein
-                    }
+```php
+$response->config = json_decode('
+    {
+        "caption": "Dynamisch geladenes Panel",
+        "elements": [
+            {
+                "xtype":"kijs.gui.Button",
+                "caption":"Button vom Server",
+                "on":{
+                    "click":"myStyticClass.onAwesomeButtonClick" // listener muss 
+                                                                 // ```static``` sein
                 }
-            ]
-        }
-    ');
+            }
+        ]
+    }
+');
+```
 
 
 Beispiele

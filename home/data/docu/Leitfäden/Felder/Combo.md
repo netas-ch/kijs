@@ -83,60 +83,64 @@ Datenverkehr zum Server
 Bei einfachen Combos ohne ```enableRemoteFiltering``` wird beim Laden einfach ein 
 Request gemacht, auf den dann mit den Daten geantwortet wird:
 
-    Request:
-    {
-        "initialLoad": true,
-        "value": "48"           // zum Abrufen der valueRow (nur, wenn der value 
-                                // bereits zu Beginn bekannt ist, sonst wird 
-                                // evtl. ein eigener Request zum Abfragen der
-                                // valueRow gemacht)
-    }
+```json
+Request:
+{
+    "initialLoad": true,
+    "value": "48"           // zum Abrufen der valueRow (nur, wenn der value 
+                            // bereits zu Beginn bekannt ist, sonst wird 
+                            // evtl. ein eigener Request zum Abfragen der
+                            // valueRow gemacht)
+}
 
-    Response:
-    {
-        "config":{
-            "data":[
-             {"value":1, "displayText":"Wert 1"},
-             {"value":2, "displayText":"Wert 2"},
-             ...
-             {"value":50, "displayText":"Wert 50"}
-            ],
-            "valueRow":{"value":48, "displayText":"Wert 48"}    // nur, wenn ```value``` 
-                                                                // im Request
-            // und evtl. noch weitere Eigenschaften vie value, etc.
-        }
+Response:
+{
+    "config":{
+        "data":[
+         {"value":1, "displayText":"Wert 1"},
+         {"value":2, "displayText":"Wert 2"},
+         ...
+         {"value":50, "displayText":"Wert 50"}
+        ],
+        "valueRow":{"value":48, "displayText":"Wert 48"}    // nur, wenn ```value``` 
+                                                            // im Request
+        // und evtl. noch weitere Eigenschaften vie value, etc.
     }
+}
+```
 
 ### RPCs während dem Schreiben
 Bei Combos mit ```enableRemoteFiltering:true``` wird dem Server mitgeteilt, was 
 für Daten verlangt werden:
 
-    Request:
-    {
-        "initialLoad": true,
-        "query": "Tes",
-        "queryOperator": "BEGIN",
-        "queryLimit": 31,
-        "value": "48"           // zum Abrufen der valueRow (nur, wenn der value 
-                                // bereits zu Beginn bekannt ist, sonst wird 
-                                // evtl. ein eigener Request zum Abfragen der
-                                // valueRow gemacht)
-    }
+```json
+Request:
+{
+    "initialLoad": true,
+    "query": "Tes",
+    "queryOperator": "BEGIN",
+    "queryLimit": 31,
+    "value": "48"           // zum Abrufen der valueRow (nur, wenn der value 
+                            // bereits zu Beginn bekannt ist, sonst wird 
+                            // evtl. ein eigener Request zum Abfragen der
+                            // valueRow gemacht)
+}
 
-    Response:
-    {
-        "config":{
-            "data":[
-             {"value":1, "displayText":"Wert 1"},
-             {"value":2, "displayText":"Wert 2"},
-             ...
-             {"value":31, "displayText":"Wert 31"}
-            ],
-            "valueRow":{"value":48, "displayText":"Wert 48"}    // nur, wenn ```value``` 
-                                                                // im Request
-            // und evtl. noch weitere Eigenschaften vie value, etc.
-        }
+Response:
+{
+    "config":{
+        "data":[
+         {"value":1, "displayText":"Wert 1"},
+         {"value":2, "displayText":"Wert 2"},
+         ...
+         {"value":31, "displayText":"Wert 31"}
+        ],
+        "valueRow":{"value":48, "displayText":"Wert 48"}    // nur, wenn ```value``` 
+                                                            // im Request
+        // und evtl. noch weitere Eigenschaften vie value, etc.
     }
+}
+```
 
 
 Argumente
@@ -160,18 +164,20 @@ Die ```valueRow``` kann lokal oder per RPC übergeben werden.
 Wird dem Combo keine ```valueRow``` übergeben, versucht es sie aus ```data``` 
 zu ermitteln. Wenn das nicht funktioniert, macht es dafür einen RPC:
 
-    Request:
-    {
-        "initialLoad": false,
-        "value": "48"
-    }
+```json
+Request:
+{
+    "initialLoad": false,
+    "value": "48"
+}
 
-    Response:
-    {
-        "config":{
-            "valueRow":{"value":48, "displayText":"Wert 48"}
-        }
+Response:
+{
+    "config":{
+        "valueRow":{"value":48, "displayText":"Wert 48"}
     }
+}
+```
 
 Falls auch der RPC keine ```valueRow``` zurückgibt, wird der ```value``` auch als 
 ```displayText``` angezeigt.  

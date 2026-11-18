@@ -264,19 +264,21 @@ Position des Splittpunkts für das Einfügen nachher (after).
 Wird nach dieser Position gedroppt, so wird das Element nachher eingefügt.  
 Wird vorher gedroppt, geschieht nichts.  
 
-    flex-direction: 'column'    flex-direction: 'row'
-    mit posBeforeFactor=0.333   mit posBeforeFactor=0.666
-    und posAfterFactor=0.666    und posAfterFactor=0.666
-    ----------------------      ------------------------------
-    |    drop before     |      |                  |         |
-    |--------------------|      |       drop       |  drop   |
-    |     kein Drop*     |      |      before      |  after  |
-    |--------------------|      |                  |         |
-    |     drop after     |      ------------------------------
-    ----------------------
-    
-    *der kein Drop-Bereich kann benutzt werden, wenn das Element selbst wieder ein 
-     Target ist.
+```text
+flex-direction: 'column'    flex-direction: 'row'
+mit posBeforeFactor=0.333   mit posBeforeFactor=0.666
+und posAfterFactor=0.666    und posAfterFactor=0.666
+----------------------      ------------------------------
+|    drop before     |      |                  |         |
+|--------------------|      |       drop       |  drop   |
+|     kein Drop*     |      |      before      |  after  |
+|--------------------|      |                  |         |
+|     drop after     |      ------------------------------
+----------------------
+
+*der kein Drop-Bereich kann benutzt werden, wenn das Element selbst wieder ein 
+ Target ist.
+```
 
 Bei ```splitChildZone:true``` im Mapping haben die beiden Werte eine andere 
 Bedeutung (siehe unten bei mapping → ```splitChildZone```).  
@@ -318,16 +320,18 @@ als ```child``` sollte ```disableMarker:true``` eingestellt werden.
 Beim Einfügen als ```child``` wird das Source-Element bei ```move``` nicht 
 ausgeblendet, damit das Layout nicht springt.  
 
-    flex-direction: 'column'
-    mit posBeforeFactor=0.25
-    und posAfterFactor=0.75
-    ----------------------
-    | übergeordn. Target | -> before
-    |--------------------|
-    |    drop child      |
-    |--------------------|
-    | übergeordn. Target | -> after
-    ----------------------
+```text
+flex-direction: 'column'
+mit posBeforeFactor=0.25
+und posAfterFactor=0.75
+----------------------
+| übergeordn. Target | -> before
+|--------------------|
+|    drop child      |
+|--------------------|
+| übergeordn. Target | -> after
+----------------------
+```
 
 #### markerWidth
 Zahl. Default=null  
@@ -379,39 +383,45 @@ gültig ist.
 Diese Klasse wird in der Regel nur bei ```disableMarker:true``` verwendet.  
 
 ### Beispiel CSS für Source
-    > .myItem {
-        &.kijs-dragging {
-            opacity: 0.6
-        }
-
-        &.kijs-sourceDragOver {
-            border: 2px solid var(--accentColor3);
-        }
+```css
+> .myItem {
+    &.kijs-dragging {
+        opacity: 0.6
     }
+
+    &.kijs-sourceDragOver {
+        border: 2px solid var(--accentColor3);
+    }
+}
+```
 
 
 ### Beispiel CSS für Target (Einfaches Ziel)
-    .myContainer {
-        &.kijs-targetDragOver {
-            border: 2px solid var(--accentColor3);
-        }
+```css
+.myContainer {
+    &.kijs-targetDragOver {
+        border: 2px solid var(--accentColor3);
     }
+}
+```
 
 
 ### Beispiel CSS für Target (Ziel mit Einfügeposition)
-    .myContainer {
-        > .kijs-container-inner {
-            
-            /* Drop Marker */
-            > .kijs-dropMarker {
-                flex: none;
-                height: 30px;
-                border: 2px solid var(--accentColor3);
-                border-radius: 5px;
-            }
-
+```css
+.myContainer {
+    > .kijs-container-inner {
+        
+        /* Drop Marker */
+        > .kijs-dropMarker {
+            flex: none;
+            height: 30px;
+            border: 2px solid var(--accentColor3);
+            border-radius: 5px;
         }
+
     }
+}
+```
 
 
 sortable

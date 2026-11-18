@@ -10,23 +10,29 @@ Namensgebungen/Konventionen
 Array mit mehreren Datensätzen ```rows```.  
 Beispiel:
 
-    [
-     { "addressId":1, "name":"Max", "vorname":"Muster" },
-     { "addressId":2, "name":"Vreni", "vorname":"Muster" },
-     { "addressId":3, "name":"Kurtli", "vorname":"Mustermann" }
-    ]
+```json
+[
+ { "addressId":1, "name":"Max", "vorname":"Muster" },
+ { "addressId":2, "name":"Vreni", "vorname":"Muster" },
+ { "addressId":3, "name":"Kurtli", "vorname":"Mustermann" }
+]
+```
 
 ### row
 Beinhaltet einen Datensatz.  
 Beispiel:
 
-    { "addressId":1, "name":"Max", "vorname":"Muster" }
+```json
+{ "addressId":1, "name":"Max", "vorname":"Muster" }
+```
 
 ### primaryKey
 Beinhaltet einen String mit einem Primärschlüssel eines Datensatzes.
 Beispiel:
 
-    "1"
+```json
+"1"
+```
 
 Siehe dazu auch weiter unten ```Identifizieren von Datensätzen```->```Primärschlüssel```.  
 
@@ -35,7 +41,9 @@ Beinhaltet ein Array mit den Feldnamen aus denen der Primärschlüssel zusammeng
 ist.  
 Beispiel:  
 
-    ["name","vorname"]
+```json
+["name","vorname"]
+```
 
 
 Filtern
@@ -60,21 +68,23 @@ gestellt:
 ### Aufbau eines Filters
 Beispiel:
 
-    "filters":{
-     "operator":"AND",
-     "parts":[
-      { "field":"Name", "operator":"=", "value":"Muster" }
-      { "field":"Vorname", "operator":"=", "value":"Max" },
-      { "field":"Anrede", "operator":"IN", "value":["Herr","Frau"] },
-      {
-       "operator":"OR",
-       "parts":[
-        { "field":"Kanton", "operator":"=", "value":"BE" },
-        { "field":"Kanton", "operator":"=", "value":"SO" }
-       ]
-      }
-     ]
-    }
+```json
+"filters":{
+ "operator":"AND",
+ "parts":[
+  { "field":"Name", "operator":"=", "value":"Muster" }
+  { "field":"Vorname", "operator":"=", "value":"Max" },
+  { "field":"Anrede", "operator":"IN", "value":["Herr","Frau"] },
+  {
+   "operator":"OR",
+   "parts":[
+    { "field":"Kanton", "operator":"=", "value":"BE" },
+    { "field":"Kanton", "operator":"=", "value":"SO" }
+   ]
+  }
+ ]
+}
+```
 
 Filter sind aus ```parts``` aufgebaut. Es gibt zwei verschiedene Arten von ```parts```,  
 Klammern und Vergleichsoperationen:
@@ -82,52 +92,56 @@ Klammern und Vergleichsoperationen:
 #### Klammern
 Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüpfen.
 
-    {
-     "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
-     "invert":true,     Soll das Ergebnis invertiert werden? default: false
-     "parts":[ ... ]    Array mit untergeordneten Parts.
-    }
+```json
+{
+ "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
+ "invert":true,     Soll das Ergebnis invertiert werden? default: false
+ "parts":[ ... ]    Array mit untergeordneten Parts.
+}
+```
 
 #### Vergleichsoperationen
 Eine Vergleichsoperation wird zum Vergleichen der Zelle im Recordset mit
 einem vorgegebenen Wert benutzt.
 
-    {
-     "field":"Vorname",  Feldname
-     "operator":"=",     Vergleichsoperator: default: bei einem Array als value "IN"
-                         sonst "MATCH"
+```json
+{
+ "field":"Vorname",  Feldname
+ "operator":"=",     Vergleichsoperator: default: bei einem Array als value "IN"
+                     sonst "MATCH"
 
-                         "=", "!=",
+                     "=", "!=",
 
-                         ">", ">=", "<", "<=",
+                     ">", ">=", "<", "<=",
 
-                         "BEGIN",               der Anfang muss übereinstimmen (CI)
-                         "PART",                ein beliebiger Teil muss übereinstimmen (CI)
-                         "END",                 das Ende muss übereinstimmen (CI)
-                         "MATCH",               Wert muss übereinstimmen (CI)
-                         "NOT",                 Wert darf nicht übereinstimmen (CI)
+                     "BEGIN",               der Anfang muss übereinstimmen (CI)
+                     "PART",                ein beliebiger Teil muss übereinstimmen (CI)
+                     "END",                 das Ende muss übereinstimmen (CI)
+                     "MATCH",               Wert muss übereinstimmen (CI)
+                     "NOT",                 Wert darf nicht übereinstimmen (CI)
 
-                         "IN", "NOT IN",        Der Wert muss im Array vorkommen.
-                                                Value muss ein Array sein.
+                     "IN", "NOT IN",        Der Wert muss im Array vorkommen.
+                                            Value muss ein Array sein.
 
-                         "LIKE", "NOT LIKE",    Im value können wie in SQL
-                                                % und _ als Platzhalter
-                                                verwendet werden. (CI)
+                     "LIKE", "NOT LIKE",    Im value können wie in SQL
+                                            % und _ als Platzhalter
+                                            verwendet werden. (CI)
 
-                         "REGEXP", "NOT REGEXP" Der value muss ein RegExp
-                                                (oder RegExp als String) sein
-                                                Beispiel: '/^[0-9A-Z]{3,4}$/gmi'
+                     "REGEXP", "NOT REGEXP" Der value muss ein RegExp
+                                            (oder RegExp als String) sein
+                                            Beispiel: '/^[0-9A-Z]{3,4}$/gmi'
 
-                                                (CI) = case-insensitive = Gross 
-                                                und Kleinschreibung muss nicht 
-                                                übereinstimmen
+                                            (CI) = case-insensitive = Gross 
+                                            und Kleinschreibung muss nicht 
+                                            übereinstimmen
 
-                         Default: Wenn value ein Array ist: "IN" sonst "="
+                     Default: Wenn value ein Array ist: "IN" sonst "="
 
-     "invert": true,     Soll das Ergebnis invertiert werden? default: false
+ "invert": true,     Soll das Ergebnis invertiert werden? default: false
 
-     "value":"Max"       beliebiger Datentyp mit dem verglichen wird.
-    }
+ "value":"Max"       beliebiger Datentyp mit dem verglichen wird.
+}
+```
 
 
 Sortieren
@@ -142,12 +156,14 @@ Um Daten in einem Recordset zu sortieren, wird die Funktion sort zur Verfügung 
 
 Beispiel für eine sortFields-Konfiguration:
 
-    [
-     { "field":"Alter", "desc":true },  // Absteigend nach Alter
-     { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
-     { "field":"Name" },                // Aufsteigend nach Name
-     "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
-    ]
+```json
+[
+ { "field":"Alter", "desc":true },  // Absteigend nach Alter
+ { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
+ { "field":"Name" },                // Aufsteigend nach Name
+ "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
+]
+```
 
 
 Identifizieren von Datensätzen
@@ -190,23 +206,25 @@ enthält.
 
 Beispiel für ein Recordset mit ```childrenField = 'kinder'```:  
 
-    [
-     {
-      "addressId":1,
-      "name":"Max",
-      "vorname":"Mustermann",
-      "kinder":[
-       {
-        "addressId":2,
-        "name":"Hansli",
-        "vorname":"Mustermann",
-        "kinder":[]
-       },{
-        "addressId":3,
-        "name":"Susi",
-        "vorname":"Mustermann",
-        "kinder":[]
-       }
-      ]
-     }
-    ]
+```json
+[
+ {
+  "addressId":1,
+  "name":"Max",
+  "vorname":"Mustermann",
+  "kinder":[
+   {
+    "addressId":2,
+    "name":"Hansli",
+    "vorname":"Mustermann",
+    "kinder":[]
+   },{
+    "addressId":3,
+    "name":"Susi",
+    "vorname":"Mustermann",
+    "kinder":[]
+   }
+  ]
+ }
+]
+```
