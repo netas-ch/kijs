@@ -322,7 +322,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
-
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -332,6 +331,7 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         super.unrender(true);
     }
+
 
     // PROTECTED
     /**
@@ -400,6 +400,73 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     
     // PRIVATE
     // LISTENERS
+    #onDocumentMouseMove(e) {
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Neue Position ermitteln
+        let x = this._dragInitialPos.windowX + (e.nodeEvent.clientX - this._dragInitialPos.mouseX);
+        let y = this._dragInitialPos.windowY + (e.nodeEvent.clientY - this._dragInitialPos.mouseY);
+
+        // Evtl. max-Position begrenzen
+        const targetNode = this.targetNode;
+
+        // Das Fenster darf auch ausserhalb des Targets sein
+        if (this._allowDragOutside) {
+            // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
+            if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
+                x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
+            }
+            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
+            if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            // Min. die HeaderBar muss sichtbr sein
+            if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
+            }
+
+        } else {
+            if (x < targetNode.offsetLeft) {
+                x = targetNode.offsetLeft;
+            }
+            if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
+                x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
+            }
+
+            if (y < targetNode.offsetTop) {
+                y = targetNode.offsetTop;
+            }
+            if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
+                y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
+            }
+
+        }
+
+        // Grösse zuweisen
+        this.left = x;
+        this.top = y;
+    }
+
+    #onDocumentMouseUp(e) {
+        // Beim ersten Auslösen Listeners gleich wieder entfernen
+        kijs.Dom.removeEventListener('mousemove', document, this);
+        kijs.Dom.removeEventListener('mouseup', document, this);
+
+        if (kijs.isEmpty(this._dragInitialPos)) {
+            return;
+        }
+
+        // Transitions-sperre wieder aufheben
+        this.dom.style.transition = this._dragInitialPos.windowTransition;
+        this._dragInitialPos = null;
+    }
+
     #onHeaderBarMouseDown(e) {
         this.toFront();
 
@@ -512,73 +579,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
         // Allfällige Transitionen temporär abschalten
         this.style.transition = 'none';
-    }
-
-    #onDocumentMouseMove(e) {
-        if (kijs.isEmpty(this._dragInitialPos)) {
-            return;
-        }
-
-        // Neue Position ermitteln
-        let x = this._dragInitialPos.windowX + (e.nodeEvent.clientX - this._dragInitialPos.mouseX);
-        let y = this._dragInitialPos.windowY + (e.nodeEvent.clientY - this._dragInitialPos.mouseY);
-
-        // Evtl. max-Position begrenzen
-        const targetNode = this.targetNode;
-
-        // Das Fenster darf auch ausserhalb des Targets sein
-        if (this._allowDragOutside) {
-            // Mindestens die Icons auf der HeaderBar müssen sichtbar sein
-            if (x < targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20) {
-                x = targetNode.offsetLeft - this.width + this._headerBarEl.containerRightEl.width + 20;
-            }
-            // Min. eine Breite, die der HeaderBar-Höhe entspricht, muss sichtbar sein
-            if ((x + this._headerBarEl.height) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
-                x = targetNode.offsetLeft + targetNode.offsetWidth - this._headerBarEl.height;
-            }
-
-            if (y < targetNode.offsetTop) {
-                y = targetNode.offsetTop;
-            }
-            // Min. die HeaderBar muss sichtbr sein
-            if ((y + this._headerBarEl.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
-                y = targetNode.offsetTop + targetNode.offsetHeight - this._headerBarEl.height;
-            }
-
-        } else {
-            if (x < targetNode.offsetLeft) {
-                x = targetNode.offsetLeft;
-            }
-            if ((x + this._dom.width) > (targetNode.offsetLeft + targetNode.offsetWidth)) {
-                x = targetNode.offsetLeft + targetNode.offsetWidth - this._dom.width;
-            }
-
-            if (y < targetNode.offsetTop) {
-                y = targetNode.offsetTop;
-            }
-            if ((y + this._dom.height) > (targetNode.offsetTop + targetNode.offsetHeight)) {
-                y = targetNode.offsetTop + targetNode.offsetHeight - this._dom.height;
-            }
-
-        }
-
-        // Grösse zuweisen
-        this.left = x;
-        this.top = y;
-    }
-
-    #onDocumentMouseUp(e) {
-        // Beim ersten Auslösen Listeners gleich wieder entfernen
-        kijs.Dom.removeEventListener('mousemove', document, this);
-        kijs.Dom.removeEventListener('mouseup', document, this);
-
-        if (kijs.isEmpty(this._dragInitialPos)) {
-            return;
-        }
-
-        // Transitions-sperre wieder aufheben
-        this.dom.style.transition = this._dragInitialPos.windowTransition;
-        this._dragInitialPos = null;
     }
 
     #onMouseDown(e) {

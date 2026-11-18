@@ -141,6 +141,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get columnConfigs() { return this._columnConfigs; }
+
     get current() { return this._currentRow; }
     /**
      * Setzt die aktuelle Zeile, die den Fokus erhalten wird.
@@ -191,8 +193,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             }
         }, this);
     }
-
-    get columnConfigs() { return this._columnConfigs; }
 
     set data(val) {
         if (!kijs.isArray(val)) {
@@ -298,16 +298,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.unSelect(this._rows, preventSelectionChange);
     }
 
-    /**
-     * Setzt alle dirty-records zurück.
-     * @returns {undefined}
-     */
-    commit() {
-        kijs.Array.each(this._rows, function(row) {
-            row.commit();
-        }, this);
-    }
-
     columnConfigAdd(columnConfigs) {
         if (!kijs.isArray(columnConfigs)) {
             columnConfigs = [columnConfigs];
@@ -323,6 +313,16 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         if (this.isRendered) {
             this.render();
         }
+    }
+
+    /**
+     * Setzt alle dirty-records zurück.
+     * @returns {undefined}
+     */
+    commit() {
+        kijs.Array.each(this._rows, function(row) {
+            row.commit();
+        }, this);
     }
 
     /**
@@ -743,64 +743,6 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Selektiert Datensätze anhand der ID
-     * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
-     * @param {Boolean} [keepExisting=false]  Soll die bestehende Selektion belassen werden?
-     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
-     * @returns {Boolean} Erfolgreich?
-     */
-    selectByIds(ids, keepExisting=false, preventEvent=false) {
-        let hasPrimarys = this._primaryKeys.length > 0,
-            multiPrimarys = this._primaryKeys.length > 1,
-            rows = [];
-
-        if (!kijs.isArray(ids)) {
-            ids = [ids];
-        }
-
-        // Keine Primarys, keine ID's
-        if (!hasPrimarys || !ids) {
-            return;
-        }
-
-        // Array mit ID's übergeben: umwandeln in Array mit Objekten
-        if (!multiPrimarys && !kijs.isObject(ids[0])) {
-            let pk = this._primaryKeys[0];
-            for (let i=0; i<ids.length; i++) {
-                let val = ids[i];
-                ids[i] = {};
-                ids[i][pk] = val;
-            }
-        }
-
-        // Zeilen holen
-        for (let i=0; i<ids.length; i++) {
-            if (kijs.isObject(ids[i])) {
-                let match=false;
-
-                kijs.Array.each(this._rows, function(row) {
-                    match = true;
-
-                    for (let idKey in ids[i]) {
-                        if (row.dataRow[idKey] !== ids[i][idKey]) {
-                            match = false;
-                        }
-                    }
-
-                    if (match) {
-                        rows.push(row);
-                    }
-
-                }, this);
-
-            }
-        }
-
-        return this.select(rows, keepExisting, preventEvent);
-    }
-
-
-    /**
      * Selektiert eine oder mehrere Zeilen
      * @param {Array|Object} filters                    Array mit Objektdefinitionen der Zeilen, die selektiert werden sollen
      *                                                  Beispiel 1 (nur ein Datensatz wird selektiert bei nur einem PrimaryKey-Field):
@@ -884,6 +826,63 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
 
         return success;
+    }
+
+    /**
+     * Selektiert Datensätze anhand der ID
+     * @param {Array} ids Array vonIds [id1, id2] oder bei mehreren primaryKeys ein Objekt mit {pkName: pkValue, pk2Name: pk2Value}
+     * @param {Boolean} [keepExisting=false]  Soll die bestehende Selektion belassen werden?
+     * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
+     * @returns {Boolean} Erfolgreich?
+     */
+    selectByIds(ids, keepExisting=false, preventEvent=false) {
+        let hasPrimarys = this._primaryKeys.length > 0,
+            multiPrimarys = this._primaryKeys.length > 1,
+            rows = [];
+
+        if (!kijs.isArray(ids)) {
+            ids = [ids];
+        }
+
+        // Keine Primarys, keine ID's
+        if (!hasPrimarys || !ids) {
+            return;
+        }
+
+        // Array mit ID's übergeben: umwandeln in Array mit Objekten
+        if (!multiPrimarys && !kijs.isObject(ids[0])) {
+            let pk = this._primaryKeys[0];
+            for (let i=0; i<ids.length; i++) {
+                let val = ids[i];
+                ids[i] = {};
+                ids[i][pk] = val;
+            }
+        }
+
+        // Zeilen holen
+        for (let i=0; i<ids.length; i++) {
+            if (kijs.isObject(ids[i])) {
+                let match=false;
+
+                kijs.Array.each(this._rows, function(row) {
+                    match = true;
+
+                    for (let idKey in ids[i]) {
+                        if (row.dataRow[idKey] !== ids[i][idKey]) {
+                            match = false;
+                        }
+                    }
+
+                    if (match) {
+                        rows.push(row);
+                    }
+
+                }, this);
+
+            }
+        }
+
+        return this.select(rows, keepExisting, preventEvent);
     }
 
     /**

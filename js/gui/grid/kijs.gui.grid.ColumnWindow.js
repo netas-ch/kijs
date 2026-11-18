@@ -107,6 +107,11 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
 
     // PRIVATE
     // LISTENERS
+    #onCancelClick(e) {
+        // Fenster schliessen
+        this.destruct();
+    }
+
     #onCheckChange(e) {
         let unchecked = kijs.Array.diff(e.oldValue, e.value);
 
@@ -158,12 +163,7 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
         // Fenster schliessen
         this.destruct();
     }
-    
-    #onCancelClick(e) {
-        // Fenster schliessen
-        this.destruct();
-    }
-    
+
 
 
     // --------------------------------------------------------------

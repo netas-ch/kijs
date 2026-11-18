@@ -381,6 +381,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._labelDom.html = val;
     }
 
+    get labelDisplayType() { return this._labelDom.htmlDisplayType; }
+    set labelDisplayType(val) { this._labelDom.htmlDisplayType = val; }
+
     get labelDom() { return this._labelDom; }
 
     get labelHide() { return this._labelHide; }
@@ -394,9 +397,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             }
         }
     }
-
-    get labelDisplayType() { return this._labelDom.htmlDisplayType; }
-    set labelDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
     get labelPosition() {
         if (this._dom.clsHas('kijs-labelpos-top')) {
@@ -632,6 +632,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         this._displayErrors();
     }
 
+    /**
+     * Setzt die Fehleranzeige zurück
+     * @return {undefined}
+     */
+    errorsReset() {
+        this._dom.clsRemove('kijs-error');
+        this._errorIconEl.visible = false;
+    }
+
     // overwrite
     render(superCall) {
         // Grosselternklassenaufruf von kijs.gui.Elements.render()
@@ -673,15 +682,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         if (!superCall) {
             this.raiseEvent('afterRender');
         }
-    }
-
-    /**
-     * Setzt die Fehleranzeige zurück
-     * @return {undefined}
-     */
-    errorsReset() {
-        this._dom.clsRemove('kijs-error');
-        this._errorIconEl.visible = false;
     }
 
     // overwrite
@@ -943,16 +943,16 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
     // PRIVATE
     // LISTENERS
+    #onChange(e) {
+        this._updateClearButtonVisibility();
+    }
+
     #onClearButtonClick(e) {
         if (this.disabled || this.readOnly) {
              return;
         }
 
         this.clear();
-    }
-
-    #onChange(e) {
-        this._updateClearButtonVisibility();
     }
 
 

@@ -62,13 +62,10 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         }
     }
 
-    get captionDom() { return this._captionDom; }
-
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
-    get columns() { return this._columns; }
-    set columns(val) { this._columns = kijs.isNumeric(val) ? window.parseInt(val) : 1; }
+    get captionDom() { return this._captionDom; }
 
     get colSizes() {
         let rs = [];
@@ -80,6 +77,9 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     set colSizes(val) {
         this._colSizes = kijs.isArray(val) ? val : [];
     }
+
+    get columns() { return this._columns; }
+    set columns(val) { this._columns = kijs.isNumeric(val) ? window.parseInt(val) : 1; }
 
     // overwrite
     get isEmpty() { return this._captionDom.isEmpty && kijs.isEmpty(this._elements); }

@@ -108,10 +108,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
-    get captionDom() { return this._captionDom; }
-
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+
+    get captionDom() { return this._captionDom; }
 
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
@@ -325,9 +325,9 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
     
-    set menuElements(val) { this._createMenu().add(val); }
     set menuCloseOnClick(val) { this._createMenu().closeOnClick = val; }
     set menuDirection(val) { this._createMenu().direction = val; }
+    set menuElements(val) { this._createMenu().add(val); }
     set menuExpandOnHover(val) { this._createMenu().expandOnHover = val; }
 
     get smallPaddings() { return this._smallPaddings; }

@@ -119,6 +119,9 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
+    get directory() { return this._directory; }
+    set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
+
     get disabled() {  return this._disabled; }
     set disabled(val) {
         this.changeDisabled(val, false);
@@ -126,9 +129,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }
-
-    get directory() { return this._directory; }
-    set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
 
     get fileExtensions() { return this._fileExtensions; }
     set fileExtensions(val) {
@@ -147,19 +147,15 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
-    get maxFilesize() {
-        return this._maxFilesize;
-    }
-
-    set maxFilesize(val) {
-        this._maxFilesize = val;
-    }
+    get maxFilesize() { return this._maxFilesize; }
+    set maxFilesize(val) { this._maxFilesize = val; }
 
     get multiple() { return this._multiple; }
     set multiple(val) { this._multiple = !!val; }
 
     get observePaste() { return this._observePaste; }
     set observePaste(val) { this._observePaste = !!val; }
+
 
 
     // --------------------------------------------------------------
@@ -254,11 +250,10 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
     /**
      * Löst eine Verbindung mit einer Dropzone mit dem UploadDialog.
-     * @param {kijs.gui.DropZone|Array} dropZones
+     * @param {kijs.gui.DropZone|Array} dropZone
      * @returns {undefined}
      */
     unbindDropZone(dropZone) {
-
         // Überprüfen, ob die DropZone im Array ist
         if (kijs.Array.contains(this._dropZones, dropZone)) {
 
@@ -269,6 +264,7 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
             kijs.Array.remove(this._dropZones, dropZone);
         }
     }
+
 
     // PROTECTED
     /**
@@ -330,7 +326,6 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
                 return false;
             }
         }
-
         return true;
     }
 

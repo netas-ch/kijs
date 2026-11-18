@@ -52,6 +52,8 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
+    get initialValue() { return this._initialValue; }
+
     get isDirty() { return kijs.toString(this._initialValue) !== kijs.toString(this.value); }
     set isDirty(val) {
         if (val === false) {
@@ -62,8 +64,6 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
             this._dom.clsAdd('kijs-grid-cell-dirty');
         }
     }
-
-    get initialValue() { return this._initialValue; }
 
     get row() { return this.parent; }
 

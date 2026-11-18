@@ -385,17 +385,10 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             return 'kijs.iconMap.Fa.chevron-up';
         }
     }
-    
+
+
     // PRIVATE
     // LISTENERS
-    #onCollapseButtonClick(e) {
-        if (this.collapsed && !this._dom.disabled) {
-            this.expand();
-        } else {
-            this.collapse();
-        }
-    }
-
     #onCaptionDomClick(e) {
         if (this.collapsible && !this._dom.disabled) {
             if (this.collapsed) {
@@ -405,7 +398,15 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
         }
     }
-    
+
+    #onCollapseButtonClick(e) {
+        if (this.collapsed && !this._dom.disabled) {
+            this.expand();
+        } else {
+            this.collapse();
+        }
+    }
+
     #onIconElClick(e) {
         if (this.collapsible && !this._dom.disabled) {
             if (this.collapsed) {

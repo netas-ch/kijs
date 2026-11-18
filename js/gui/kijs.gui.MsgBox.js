@@ -446,6 +446,10 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
 
     // PROTECTED
+    static _closeHistoryWin(index) {
+        this.__historyWin[index].close();
+    }
+
     static _convertArrayToHtml(messages) {
         if (messages.length === 1) {
             return messages[0];
@@ -457,10 +461,6 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         }, this);
          ret += '</ul>';
         return ret;
-    }
-
-    static _closeHistoryWin(index) {
-        this.__historyWin[index].close();
     }
 
     static _getConfigStringForHistory(config) {

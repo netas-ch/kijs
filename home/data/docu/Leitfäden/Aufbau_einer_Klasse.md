@@ -18,6 +18,57 @@ Sortiert wird wie folgt:
 
 3. dann alphabetisch
 
+Gibt es innerhalb eines Abschnitts eine Unterüberschrift (siehe unten), wird 
+unterhalb dieser Unterüberschrift wieder separat alphabetisch sortiert.  
+
+
+Überschriften
+-------------
+Klassen werden mit Kommentar-Überschriften gegliedert. Es gibt zwei Ebenen von 
+Überschriften und die Markierungen für die Sichtbarkeit.  
+
+### Überschrift 1
+Für die Hauptabschnitte (```CONSTRUCTOR```, ```GETTERS / SETTERS```, ```MEMBERS```, 
+```DESTRUCTOR```, ```STATICS``` ...). Text in Grossbuchstaben, mit einer Linie 
+**oberhalb und unterhalb**:  
+
+    // --------------------------------------------------------------
+    // MEMBERS
+    // --------------------------------------------------------------
+
+Davor stehen **3 Leerzeilen**. Direkt nach der Zeile mit ```class``` sind es 
+**2 Leerzeilen**.  
+
+### Überschrift 2
+Für Unterüberschriften innerhalb eines Hauptabschnitts. Die Linie steht nur 
+**unterhalb**, oben gibt es keine Linie:  
+
+    // dropFn-Funktionen für Drag&Drop-mapping
+    // --------------------------------------------------------------
+
+Davor stehen immer **2 Leerzeilen**. Folgt die Unterüberschrift direkt auf eine 
+Überschrift 1, steht nur **1 Leerzeile** dazwischen.  
+
+Beispiel aus ```kijs.gui.DragDrop```:  
+
+        static getddEffect(ddAllowMove, ddAllowCopy, ddAllowLink) {
+            ...
+        }
+
+
+        // dropFn-Funktionen für Drag&Drop-mapping
+        // --------------------------------------------------------------
+        static dropFnGetSourceEl(e) {
+            ...
+
+### Sichtbarkeit
+Innerhalb eines Abschnitts werden ```protected``` und ```private``` Funktionen mit 
+einer einzelnen Kommentarzeile ohne Linie markiert: ```// PROTECTED```, 
+```// PRIVATE``` und ```// LISTENERS```. Davor stehen 2 Leerzeilen.  
+Listeners sind immer private und stehen am Schluss des Abschnitts ```PRIVATE```. 
+Gibt es keine anderen privaten Funktionen, folgt ```// LISTENERS``` direkt auf 
+```// PRIVATE``` (siehe Beispiel unten).  
+
 
 Kommentare
 ----------

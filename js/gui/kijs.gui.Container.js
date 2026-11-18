@@ -244,16 +244,15 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
     get innerDom() { return this._innerDom; }
 
+    // overwrite
+    get isEmpty() { return this._innerDom.isEmpty && kijs.isEmpty(this._elements); }
+
     get lastChild() {
         if (this._elements.length > 0) {
             return this._elements[this._elements.length-1];
         }
         return null;
     }
-
-    // overwrite
-    get isEmpty() { return this._innerDom.isEmpty && kijs.isEmpty(this._elements); }
-
 
     get scrollableX() {
         if (this._innerDom.clsHas('kijs-scrollable-x-enable')) {
@@ -615,6 +614,23 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
     }
 
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        // innerDOM rendern
+        this._innerDom.renderTo(this._dom.node);
+
+        // Render der Elemente als Funktion, damit dies
+        // in Vererbungen überschrieben werden könnte.
+        this._renderElements();
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+
     /**
      * Sortiert die Elemente mit einer Funktion. Der Funktion werden
      * zwei Elemente zum Vergleich übergeben, die Funktion
@@ -633,23 +649,6 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             if (this.isRendered) {
                 this._renderElements();
             }
-        }
-    }
-
-    // overwrite
-    render(superCall) {
-        super.render(true);
-
-        // innerDOM rendern
-        this._innerDom.renderTo(this._dom.node);
-
-        // Render der Elemente als Funktion, damit dies
-        // in Vererbungen überschrieben werden könnte.
-        this._renderElements();
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
         }
     }
 

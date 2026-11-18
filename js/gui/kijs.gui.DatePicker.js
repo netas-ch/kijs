@@ -235,10 +235,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     get emptyBtnHide() { return this._emptyBtnHide; }
     set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
+    get headerBar() { return this._headerBar; }
+
     get headerBarHide() { return this._headerBarHide; }
     set headerBarHide(val) { this._headerBarHide = !!val; }
-
-    get headerBar() { return this._headerBar; }
 
     get maxDate() {
         return this._maxDate;

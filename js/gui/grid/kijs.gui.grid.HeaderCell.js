@@ -235,25 +235,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Setzt das caption der Zelle.
-     * @param {String} caption
-     * @param {Boolean} [updateColumnConfig=true] true, falls kein change-event ausgelöst werden soll.
-     * @returns {undefined}
-     */
-    setCaption(caption, updateColumnConfig=true) {
-        // HTML aktualisieren
-        this._captionDom.html = caption;
-
-        if (updateColumnConfig) {
-            this._columnConfig.caption = caption;
-        }
-
-        if (this.isRendered) {
-            this.render();
-        }
-    }
-
-    /**
      * Lädt das value von der dataRow
      * @returns {undefined}
      */
@@ -312,6 +293,25 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
     }
 
+    /**
+     * Setzt das caption der Zelle.
+     * @param {String} caption
+     * @param {Boolean} [updateColumnConfig=true] true, falls kein change-event ausgelöst werden soll.
+     * @returns {undefined}
+     */
+    setCaption(caption, updateColumnConfig=true) {
+        // HTML aktualisieren
+        this._captionDom.html = caption;
+
+        if (updateColumnConfig) {
+            this._columnConfig.caption = caption;
+        }
+
+        if (this.isRendered) {
+            this.render();
+        }
+    }
+
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -330,6 +330,20 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
 
     // PROTECTED
+    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
+    _updateHeaderToolTip() {
+        if (!this.isRendered) {
+            return;
+        }
+        if (!this._overflowTooltipDisable && this._captionContainerDom.width > 0) {
+            if (this._captionDom.width >= this._captionContainerDom.width) {
+                this._captionDom.tooltip = this.caption;
+            } else {
+                this._captionDom.tooltip = null;
+            }
+        }
+    }
+
     /**
      * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
      * @param {Number} xAbs     Mausposition clientX
@@ -346,21 +360,6 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         };
 
         this._overlayDom.left = newPos.x;
-    }
-
-
-    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
-    _updateHeaderToolTip() {
-        if (!this.isRendered) {
-            return;
-        }
-        if (!this._overflowTooltipDisable && this._captionContainerDom.width > 0) {
-            if (this._captionDom.width >= this._captionContainerDom.width) {
-                this._captionDom.tooltip = this.caption;
-            } else {
-                this._captionDom.tooltip = null;
-            }
-        }
     }
 
 

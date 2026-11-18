@@ -73,11 +73,11 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
     get headers() { return this._headers; }
     set headers(val) { this._headers = kijs.isObject(val) ? val : {}; }
 
-    get url() { return this._url; }
-    set url(val) { this._url = val; }
-
     get timeout() { return this._timeout; }
     set timeout(val) { this._timeout = parseInt(val); }
+
+    get url() { return this._url; }
+    set url(val) { this._url = val; }
 
 
     // --------------------------------------------------------------

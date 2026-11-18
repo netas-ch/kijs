@@ -149,10 +149,10 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._captionDom.html = val;
     }
 
-    get captionDom() { return this._captionDom; }
-
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+
+    get captionDom() { return this._captionDom; }
 
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }

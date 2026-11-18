@@ -83,7 +83,6 @@ kijs.Dom = class kijs_Dom {
         }
     }
 
-
     /**
      * Fügt eine CSS Datei hinzu
      * @param {String} src Beispiel: 'kijs.theme.myTheme.css'
@@ -171,8 +170,6 @@ kijs.Dom = class kijs_Dom {
             }
         });
     }
-
-
 
     /**
      * Gibt die absolute Position eines HTMLElements bezogen zum Browser-Rand zurück
@@ -424,9 +421,6 @@ kijs.Dom = class kijs_Dom {
             }
         });
     }
-    
-    
-    
 
     /**
      * Entfernt alle Unterelemente eines DOM-Elements
@@ -461,8 +455,7 @@ kijs.Dom = class kijs_Dom {
 
         context._nodeEventListeners = {};
     }
-    
-    
+
     /**
      * Entfernt einen Event-Listener von einem Node
      * @param {String} eventName
@@ -500,39 +493,6 @@ kijs.Dom = class kijs_Dom {
         }
     }
 
-
-    /**
-     * Fügt html-Code in einen Node. Je nach htmlDisplayType geschieht dies auf unterschiedliche Weise.
-     * Bereits vorhandener Inhalt wird gelöscht.
-     * @param {HTMLELement} node
-     * @param {String} html
-     * @param {String} htmlDisplayType [optional]   'html': als html-Inhalt (innerHtml)
-     *                                              'code': Tags werden als Text angezeigt
-     *                                              'text': Tags werden entfernt
-     * @returns {undefined}
-     */
-    static setInnerHtml(node, html, htmlDisplayType) {
-        html = kijs.toString(html);
-
-        switch (htmlDisplayType) {
-            case 'code':
-                node.textContent = html;
-                break;
-
-            case 'text':
-                let d = document.createElement('div');
-                d.innerHTML = html;
-                node.textContent = d.innerText || d.textContent || '';
-                d = null;
-                break;
-
-            case 'html':
-            default:
-                node.innerHTML = html;
-                break;
-        }
-    }
-    
     /**
      * Scrollt den Node in den sichtbaren Bereich
      * (rekursiv)
@@ -542,13 +502,13 @@ kijs.Dom = class kijs_Dom {
      *     - 'start'  Node wird am Anfang (oben) positioniert
      *     - 'end'    Node wird am Ende (unten) positioniert
      *     - 'center' Node wird in der Mitte positioniert
-     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur
      *                sowenig, dass der node im sichtbaren Bereich ist.
      *  - horizontalPosition (String) default='auto'
      *     - 'start'  Node wird am Anfang (links) positioniert
      *     - 'end'    Node wird am Ende (rechts) positioniert
      *     - 'center' Node wird in der Mitte positioniert
-     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur 
+     *     - 'auto'   Es wird nur gescrollt, wenn der Node ausserhalb ist und nur
      *                sowenig, dass der node ganz im sichtbaren Bereich ist.
      *  - verticalOffset (Number) default=0 Versatz auf Y-Achse
      *  - horizontalOffset (Number) default=0 Versatz auf X-Achse
@@ -563,26 +523,26 @@ kijs.Dom = class kijs_Dom {
         if (!node.offsetParent) {
             return;
         }
-        
+
         if (kijs.isEmpty(options)) {
             options = {};
         }
-        
+
         options.horizontalPosition = options.horizontalPosition ? options.horizontalPosition : 'auto';
         options.verticalPosition = options.verticalPosition ? options.verticalPosition : 'auto';
-        
+
         options.horizontalOffset = options.horizontalOffset ? parseInt(options.horizontalOffset) : 0;
         options.verticalOffset = options.verticalOffset ? parseInt(options.verticalOffset) : 0;
-        
+
         options.behavior = options.behavior ? options.behavior : 'auto';
-        
+
         options.scrollParentsTo = !!options.scrollParentsTo;
-        
+
         // Bei den Offset den Kehrwert nehmen
         options.horizontalOffset = options.horizontalOffset * -1;
         options.verticalOffset = options.verticalOffset * -1;
-        
-        
+
+
         // Masse des node
         const rNode = {
             x: node.offsetLeft,
@@ -590,40 +550,40 @@ kijs.Dom = class kijs_Dom {
             w: node.offsetWidth,
             h: node.offsetHeight
         };
-        
+
         // Elternknoten mit Scrollbar ermitteln
         let parentNode = node.offsetParent;
-        
+
         // Eltern durchgehen bis ein Scrollbarer gefunden wurde
         while (parentNode) {
-            
+
             // Ist der parentNode gültig?
             if (!parentNode || !parentNode.offsetParent || parentNode.offsetParent.tagName.toLowerCase() === 'html') {
                 return;
             }
-            
+
             // hat der parentNode eine Scrollbar?
             const hasXScrollbar = ["scroll", "auto"].indexOf(getComputedStyle(parentNode).overflowX) >= 0;
             const hasYScrollbar = ["scroll", "auto"].indexOf(getComputedStyle(parentNode).overflowY) >= 0;
             // oder overflow: hidden und hat einen übergrossen Inhalt (z.B. bei kijs.gui.container.Scrollable)
             const hasXOverflowContent = getComputedStyle(parentNode).overflowX === 'hidden' && parentNode.scrollWidth > parentNode.clientWidth;
             const hasYOverflowContent = getComputedStyle(parentNode).overflowY === 'hidden' && parentNode.scrollHeight > parentNode.clientHeight;
-            
+
             // scrollbar: ja
             if (hasXScrollbar || hasYScrollbar || hasXOverflowContent || hasYOverflowContent) {
                 break;
-                
+
             // scrollbar: nein
             } else {
                 // X- und Y-Position zum Node addieren
                 rNode.x += parentNode.offsetLeft;
                 rNode.y += parentNode.offsetTop;
-                
+
                 parentNode = parentNode.offsetParent;
-                
+
             }
         }
-        
+
         // Masse des parentNode
         const rParent = {
             innerW: parentNode.clientWidth,
@@ -635,12 +595,12 @@ kijs.Dom = class kijs_Dom {
             isXScrollable: parentNode.scrollWidth > parentNode.clientWidth,
             isYScrollable: parentNode.scrollHeight > parentNode.clientHeight
         };
-        
-        
+
+
         // Scrollkoordinaten, zu denen gescrollt werden soll. Null=Nicht scrollen
         let scrollToX = null;
         let scrollToY = null;
-        
+
         // Horizontale Scrollkoordinaten ermitteln (scrollToX)
         if (rParent.isXScrollable) {
             switch (options.horizontalPosition) {
@@ -676,12 +636,12 @@ kijs.Dom = class kijs_Dom {
 
                     }
                     break;
-                    
+
                 default:
                     throw new kijs.Error(`Option "horizontalPosition" is not valid`);
             }
         }
-        
+
         // Vertikale Scrollkoordinaten ermitteln (scrollToY)
         if (rParent.isYScrollable) {
             switch (options.verticalPosition) {
@@ -714,17 +674,17 @@ kijs.Dom = class kijs_Dom {
 
                     }
                     break;
-                    
+
                 default:
                     throw new kijs.Error(`Option "verticalPosition" is not valid`);
             }
         }
-        
+
         // Horizontaler Offset + Validierung
         if (scrollToX !== null) {
             // horizontalOffset
             scrollToX += options.horizontalOffset;
-            
+
             // Validierung
             if (scrollToX > rParent.scrollW - rNode.w) {
                 scrollToX = rParent.scrollW - rNode.w;
@@ -733,12 +693,12 @@ kijs.Dom = class kijs_Dom {
                 scrollToX = 0;
             }
         }
-        
+
         // Vertikaler Offset + Validierung
         if (scrollToY !== null) {
             // verticalOffset
             scrollToY += options.verticalOffset;
-            
+
             // Validierung
             if (scrollToY > rParent.scrollH - rNode.h) {
                 scrollToY = rParent.scrollH - rNode.h;
@@ -747,27 +707,27 @@ kijs.Dom = class kijs_Dom {
                 scrollToY = 0;
             }
         }
-        
+
         // scrollen, wenn nötig
         if (scrollToX !== null || scrollToY !== null) {
             let args = {};
-            
+
             if (scrollToX !== null) {
                 args.left = scrollToX;
             }
-            
+
             if (scrollToY !== null) {
                 args.top = scrollToY;
             }
-            
+
             args.behavior = options.behavior;
-            
+
             parentNode.scrollTo(args);
         }
-        
+
         // Evtl. die Eltern auch scrollen
         if (options.scrollParentsTo && parentNode !== document.body && parentNode.offsetParent) {
-            
+
             let args = {
                 horizontalPosition: options.horizontalPosition,
                 verticalPosition: options.verticalPosition,
@@ -776,7 +736,7 @@ kijs.Dom = class kijs_Dom {
                 behavior: options.behavior,
                 scrollParentsTo: true
             };
-            
+
             // falls gescrollt wurde, den Offset zurücksetzen
             if (scrollToX !== null) {
                 args.horizontalOffset = 0;
@@ -784,13 +744,44 @@ kijs.Dom = class kijs_Dom {
             if (scrollToY !== null) {
                 args.verticalOffset = 0;
             }
-            
+
             // rekursiver Aufruf
             kijs.Dom.scrollIntoView(parentNode, args);
         }
-        
+
     }
-    
+
+    /**
+     * Fügt html-Code in einen Node. Je nach htmlDisplayType geschieht dies auf unterschiedliche Weise.
+     * Bereits vorhandener Inhalt wird gelöscht.
+     * @param {HTMLELement} node
+     * @param {String} html
+     * @param {String} htmlDisplayType [optional]   'html': als html-Inhalt (innerHtml)
+     *                                              'code': Tags werden als Text angezeigt
+     *                                              'text': Tags werden entfernt
+     * @returns {undefined}
+     */
+    static setInnerHtml(node, html, htmlDisplayType) {
+        html = kijs.toString(html);
+
+        switch (htmlDisplayType) {
+            case 'code':
+                node.textContent = html;
+                break;
+
+            case 'text':
+                let d = document.createElement('div');
+                d.innerHTML = html;
+                node.textContent = d.innerText || d.textContent || '';
+                d = null;
+                break;
+
+            case 'html':
+            default:
+                node.innerHTML = html;
+                break;
+        }
+    }
     
     // Aktuelles Farbschema zurückgeben
     static themeGet() {

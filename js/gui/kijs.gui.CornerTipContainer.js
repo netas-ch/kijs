@@ -168,6 +168,21 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
         });
     }
 
+    // overwrite
+    render(superCall) {
+        super.render(true);
+
+        // popover
+        if (this._dom.node && this._dom.node.parentNode) {
+            this._dom.node.showPopover();
+        }
+
+        // Event afterRender auslösen
+        if (!superCall) {
+            this.raiseEvent('afterRender');
+        }
+    }
+
     /**
      * Zeigt ein individueller CornerTip
      * Beispiel config:
@@ -251,21 +266,6 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
                 iconColor: '#ff9900'
             }
         });
-    }
-
-    // overwrite
-    render(superCall) {
-        super.render(true);
-
-        // popover
-        if (this._dom.node && this._dom.node.parentNode) {
-            this._dom.node.showPopover();
-        }
-
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
     }
 
 

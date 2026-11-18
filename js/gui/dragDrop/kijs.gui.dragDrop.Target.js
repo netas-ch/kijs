@@ -70,7 +70,40 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     
     get mapping() { return this._mapping; }
     set mapping(val) { this._mapping = val; }
-    
+
+    // Verweis auf den kijs.gui.Dom, das als Ziel dient
+    get ownerDom() {
+        if (kijs.isEmpty(this._ownerEl)) {
+            throw new kijs.Error(`target Elements must have a 'ddTarget.ownerEl'`);
+        }
+
+        let dom = kijs.getObjectFromString(this._ownerDomProperty, this._ownerEl);
+
+        if (kijs.isEmpty(dom)) {
+            throw new kijs.Error(`target Elements must have a valide 'ddTarget.ownerDomProperty'`);
+        }
+
+        return dom;
+    }
+
+    // Property-Name des kijs.gui.Dom, das als Ziel dient
+    get ownerDomProperty() { return this._ownerDomProperty; }
+    set ownerDomProperty(val) {
+        this._ownerDomProperty = val;
+
+        // Drag&Drop Listeners
+        this.ownerDom.on('dragEnter', this.#onDragEnter, this);
+        this.ownerDom.on('dragLeave', this.#onDragLeave, this);
+        this.ownerDom.on('dragOver', this.#onDragOver, this);
+        this.ownerDom.on('drop', this.#onDrop, this);
+    }
+
+    // Eigentümer kijs.gui.Element dieser Instanz
+    get ownerEl() { return this._ownerEl; }
+    set ownerEl(val) {
+        this._ownerEl = val;
+    }
+
     get posAfterFactor() { return this._posAfterFactor; }
     set posAfterFactor(val) { 
         if (val < 0 || val > 1) {
@@ -85,39 +118,6 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             throw new kijs.Error(`'posBeforeFactor' must be between 0 and 1`);
         }
         this._posBeforeFactor = val;
-    }
-
-    // Verweis auf den kijs.gui.Dom, das als Ziel dient
-    get ownerDom() {
-        if (kijs.isEmpty(this._ownerEl)) {
-            throw new kijs.Error(`target Elements must have a 'ddTarget.ownerEl'`);
-        }
-        
-        let dom = kijs.getObjectFromString(this._ownerDomProperty, this._ownerEl);
-        
-        if (kijs.isEmpty(dom)) {
-            throw new kijs.Error(`target Elements must have a valide 'ddTarget.ownerDomProperty'`);
-        }
-        
-        return dom;
-    }
-    
-    // Property-Name des kijs.gui.Dom, das als Ziel dient
-    get ownerDomProperty() { return this._ownerDomProperty; }
-    set ownerDomProperty(val) {
-        this._ownerDomProperty = val;
-        
-        // Drag&Drop Listeners
-        this.ownerDom.on('dragEnter', this.#onDragEnter, this);
-        this.ownerDom.on('dragLeave', this.#onDragLeave, this);
-        this.ownerDom.on('dragOver', this.#onDragOver, this);
-        this.ownerDom.on('drop', this.#onDrop, this);
-    }
-    
-    // Eigentümer kijs.gui.Element dieser Instanz
-    get ownerEl() { return this._ownerEl; }
-    set ownerEl(val) { 
-        this._ownerEl = val;
     }
     
     // Zielelement, auf das, das Element gedroppt wurde
@@ -146,6 +146,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         Object.seal(this);
     }
 
+
+    // PROTECTED
     /**
      * Gibt das Kind Element zurück, dass sich unter dem Mauszeiger oder am Nächsten befindet
      * @param {Array} elements  Elements-Array
@@ -400,8 +402,8 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this._targetPos = targetPos;
         this._operation = operation;
     }
-    
-    
+
+
     // PRIVATE
     // LISTENERS
     #onDragEnter(e) {

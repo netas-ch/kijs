@@ -207,6 +207,32 @@ kijs.Date = class kijs_Date {
     }
     
     /**
+     * Konvertiert ein SQL-Datum im Format '2016-01-01' oder '2016-01-01 08:55:00' in ein Datum-Objekt
+     * @param {String} sqlDate
+     * @returns {Date}
+     */
+    static getDateFromSqlString(sqlDate) {
+        let year = parseInt(sqlDate.substr(0,4));
+        let month = parseInt(sqlDate.substr(5,2));
+        let day = parseInt(sqlDate.substr(8,2));
+        let hours = 0;
+        let minutes = 0;
+        let seconds = 0;
+
+        if (sqlDate.length >= 13) {
+            hours = parseInt(sqlDate.substr(11,2));
+        }
+        if (sqlDate.length >= 16) {
+            minutes = parseInt(sqlDate.substr(14,2));
+        }
+        if (sqlDate.length >= 19) {
+            seconds = parseInt(sqlDate.substr(17,2));
+        }
+        
+        return new Date(year, month-1, day, hours, minutes, seconds, 0);
+    }
+
+    /**
      * Konvertiert eine Wochennummer ein Datum-Objekt
      * Format: [A-Z ]+([0-9]+) ([0-9]+)
      *         Prefix  Woche   Jahr
@@ -234,32 +260,6 @@ kijs.Date = class kijs_Date {
         }
 
         return this.getFirstOfWeek(week, year);
-    }
-
-    /**
-     * Konvertiert ein SQL-Datum im Format '2016-01-01' oder '2016-01-01 08:55:00' in ein Datum-Objekt
-     * @param {String} sqlDate
-     * @returns {Date}
-     */
-    static getDateFromSqlString(sqlDate) {
-        let year = parseInt(sqlDate.substr(0,4));
-        let month = parseInt(sqlDate.substr(5,2));
-        let day = parseInt(sqlDate.substr(8,2));
-        let hours = 0;
-        let minutes = 0;
-        let seconds = 0;
-
-        if (sqlDate.length >= 13) {
-            hours = parseInt(sqlDate.substr(11,2));
-        }
-        if (sqlDate.length >= 16) {
-            minutes = parseInt(sqlDate.substr(14,2));
-        }
-        if (sqlDate.length >= 19) {
-            seconds = parseInt(sqlDate.substr(17,2));
-        }
-        
-        return new Date(year, month-1, day, hours, minutes, seconds, 0);
     }
 
     /**

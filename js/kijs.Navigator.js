@@ -18,16 +18,16 @@ kijs.Navigator = class kijs_Navigator {
 
     static get isChrome() { return kijs.Navigator.getBrowserInfo().isChrome; }
     static get isChromium() { return kijs.Navigator.getBrowserInfo().isChromium; }
-    static get isFirefox() { return kijs.Navigator.getBrowserInfo().isFirefox; }
     static get isEdge() { return kijs.Navigator.getBrowserInfo().isEdge; }
+    static get isFirefox() { return kijs.Navigator.getBrowserInfo().isFirefox; }
     static get isIE() { return kijs.Navigator.getBrowserInfo().isIE; }
     static get isSafari() { return kijs.Navigator.getBrowserInfo().isSafari; }
 
-    static get isWindows() { return kijs.Navigator.getBrowserInfo().isWindows; }
-    static get isMac() { return kijs.Navigator.getBrowserInfo().isMac; }
     static get isAndroid() { return kijs.Navigator.getBrowserInfo().isAndroid; }
     static get isIOS() { return kijs.Navigator.getBrowserInfo().isIOS; }
     static get isLinux() { return kijs.Navigator.getBrowserInfo().isLinux; }
+    static get isMac() { return kijs.Navigator.getBrowserInfo().isMac; }
+    static get isWindows() { return kijs.Navigator.getBrowserInfo().isWindows; }
 
     static get isTouch() { return navigator.maxTouchPoints > 0;}
     

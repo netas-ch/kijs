@@ -149,10 +149,10 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._captionDom.html = val;
     }
 
-    get captionDom() { return this._captionDom; }
-
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
+
+    get captionDom() { return this._captionDom; }
 
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }
@@ -436,27 +436,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         }
     }
 
-    #onSpacePress(e) {
-        if (!this.readOnly && !this.disabled) {
-            const oldChecked = this._checked;
-            const oldValue = this.value;
-
-            this._checked = this._checked ? 0 : 1;
-
-            this._updateTogglePoint(this._checked);
-            this.validate();
-
-            this.raiseEvent('change', {
-                checked: this._checked,
-                oldChecked: oldChecked,
-                value: this.value,
-                oldValue: oldValue
-            });
-        }
-        // Bildlauf der Space-Taste verhindern
-        e.nodeEvent.preventDefault();
-    }
-    
     #onMouseDown(e) {
         if (!this.readOnly && !this.disabled) {
             this._dragStart(e.nodeEvent.clientX);
@@ -482,7 +461,28 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             this._dragEnd(e);
         }
     }
-    
+
+    #onSpacePress(e) {
+        if (!this.readOnly && !this.disabled) {
+            const oldChecked = this._checked;
+            const oldValue = this.value;
+
+            this._checked = this._checked ? 0 : 1;
+
+            this._updateTogglePoint(this._checked);
+            this.validate();
+
+            this.raiseEvent('change', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
+        }
+        // Bildlauf der Space-Taste verhindern
+        e.nodeEvent.preventDefault();
+    }
+
     #onTouchEnd(e) {
         // Beim ersten Auslösen des Listeners, gleich wieder entfernen
         this._inputWrapperDom.off('touchMove', this.#onTouchMove, this);

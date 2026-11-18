@@ -130,11 +130,11 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     get allowChildrenField() { return this._allowChildrenField; }
     set allowChildrenField(val) { this._allowChildrenField = val; }
 
-    get clsField() { return this._clsField; }
-    set clsField(val) { this._clsField = val; }
-
     get childrenField() { return this._childrenField; }
     set childrenField(val) { this._childrenField = val; }
+
+    get clsField() { return this._clsField; }
+    set clsField(val) { this._clsField = val; }
 
     get collapsedIconMap() { return this._collapsedIconMap; }
     set collapsedIconMap(val) { this._collapsedIconMap = val; }

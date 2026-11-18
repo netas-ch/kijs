@@ -227,27 +227,16 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     get enableRemoteFiltering() { return this._enableRemoteFiltering; }
     set enableRemoteFiltering(val) { this._enableRemoteFiltering = !!val; }
 
-    // Gibt die row zum aktuellen Wert zurück
-    get valueRow() {
-        return this._valueRow;
-    }
-    set valueRow(val) {
-        this._valueRow = val;
-
-        let displayText = this._getDisplayTextFromValue();
-        this._inputDom.nodeAttributeSet('value', displayText);
-    }
-
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
-
-    // overwrite
-    get isEmpty() { return kijs.isEmpty(this._value); }
 
     get inputDom() { return this._inputDom; }
 
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
+
+    // overwrite
+    get isEmpty() { return kijs.isEmpty(this._value); }
 
     // overwrite
     get name() { return this._name; }
@@ -334,6 +323,17 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     get valueField() { return this._listViewEl.valueField; }
     set valueField(val) { this._listViewEl.valueField = val; }
+
+    // Gibt die row zum aktuellen Wert zurück
+    get valueRow() {
+        return this._valueRow;
+    }
+    set valueRow(val) {
+        this._valueRow = val;
+
+        let displayText = this._getDisplayTextFromValue();
+        this._inputDom.nodeAttributeSet('value', displayText);
+    }
 
     /**
      * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
@@ -529,11 +529,6 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
     // PROTECTED
     // overwrite
-    _hasClearableContent() {
-        // Der eingegebene Text wird erst beim Schliessen der SpinBox in den Wert übernommen
-        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
-    }
-
     /**
      * Weist this._data dem ListView zu und berücksichtigt dabei den eingegebenen
      * Text und das displayLimit
@@ -687,6 +682,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         return {};
     }
 
+    _hasClearableContent() {
+        // Der eingegebene Text wird erst beim Schliessen der SpinBox in den Wert übernommen
+        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
+    }
 
     // Falls kein Element selektiert ist: 1. Element selektieren, dass nicht deaktiviert ist
     _selectFirstEnabledElement() {

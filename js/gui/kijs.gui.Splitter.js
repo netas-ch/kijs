@@ -111,6 +111,28 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         return targetEl;
     }
 
+    /**
+     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
+     * @param {Number} xAbs     Mausposition clientX
+     * @param {Number} yAbs     Mausposition clientY
+     * @returns {undefined}
+     */
+    _updateOverlayPosition(xAbs, yAbs) {
+        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
+        // die relative Position bezogen zum übergeordneten DOM-Node
+        const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
+        const newPos = {
+            x: xAbs - parentPos.x,
+            y: yAbs - parentPos.y
+        };
+
+        if (this.direction === 'horizontal') {
+            this._overlayDom.left = newPos.x;
+        } else {
+            this._overlayDom.top = newPos.y;
+        }
+    }
+
     _updateSplitterPosition() {
         // Berechnet die absolute Position bezogen zum Browser-Rand für das Overlay
         const overlayPos = kijs.Dom.getAbsolutePos(this._overlayDom.node);
@@ -132,28 +154,6 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
             case 'right': this.target.width = this.target.width - offset; break;
             case 'bottom': this.target.height = this.target.height - offset; break;
             case 'left': this.target.width = this.target.width + offset; break;
-        }
-    }
-
-    /**
-     * Aktualisiert die Overlay-Position aufgrund der Mauszeiger Position
-     * @param {Number} xAbs     Mausposition clientX
-     * @param {Number} yAbs     Mausposition clientY
-     * @returns {undefined}
-     */
-    _updateOverlayPosition(xAbs, yAbs) {
-        // Berechnet aus der absoluten Position bezogen zum Browser-Rand,
-        // die relative Position bezogen zum übergeordneten DOM-Node
-        const parentPos = kijs.Dom.getAbsolutePos(this._dom.node.parentNode);
-        const newPos = {
-            x: xAbs - parentPos.x,
-            y: yAbs - parentPos.y
-        };
-
-        if (this.direction === 'horizontal') {
-            this._overlayDom.left = newPos.x;
-        } else {
-            this._overlayDom.top = newPos.y;
         }
     }
 
@@ -248,6 +248,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         this._overlayDom.render();
         this._dom.node.parentNode.appendChild(this._overlayDom.node);
     }
+
 
 
     // --------------------------------------------------------------

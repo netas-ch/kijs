@@ -69,9 +69,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         
         kijs.Object.assignDeep(this._ddMapping, val, true);
     }
-    
-    get ddPosBeforeAfterFactor() { return this._ddPosBeforeAfterFactor; }
-    set ddPosBeforeAfterFactor(val) { this._ddPosBeforeAfterFactor = val; }
 
     get ddName() {
         return this._ddName;
@@ -79,7 +76,10 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     set ddName(val) {
         this._ddName = val;
     }
-    
+
+    get ddPosBeforeAfterFactor() { return this._ddPosBeforeAfterFactor; }
+    set ddPosBeforeAfterFactor(val) { this._ddPosBeforeAfterFactor = val; }
+
     get ddTarget() { 
         return this._ddTarget; 
     }

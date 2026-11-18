@@ -885,18 +885,6 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     // PROTECTED
     /**
-     * Gibt das Icon für den Maximieren-Knopf zurück
-     * @returns {String}
-     */
-    _getMaximizeIconMap() {
-        if (this.maximized) {
-            return 'kijs.iconMap.Fa.window-restore';
-        } else {
-            return 'kijs.iconMap.Fa.window-maximize';
-        }
-    }
-
-    /**
      * Gibt das Icon für den Collapse-Knopf zurück
      * @returns {undefined}
      */
@@ -918,7 +906,19 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
         return '';
     }
-    
+
+    /**
+     * Gibt das Icon für den Maximieren-Knopf zurück
+     * @returns {String}
+     */
+    _getMaximizeIconMap() {
+        if (this.maximized) {
+            return 'kijs.iconMap.Fa.window-restore';
+        } else {
+            return 'kijs.iconMap.Fa.window-maximize';
+        }
+    }
+
     /**
      * Zeigt das Resize-Icon in der unteren rechten Ecke an oder blendet es aus.
      * @param {Boolean|null} resizeWidth Breite änderbar

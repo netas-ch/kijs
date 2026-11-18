@@ -346,29 +346,6 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
     }
 
-    // overwrite
-    unrender(superCall) {
-        // Event auslösen.
-        if (!superCall) {
-            this.raiseEvent('unrender');
-        }
-
-        if (this._maskCenterDom) {
-            this._maskCenterDom.unrender();
-        }
-
-        if (this._maskAnchorDom) {
-            this._maskAnchorDom.unrender();
-        }
-
-        // inert entfernen
-        if (this.targetElementDom) {
-            this.targetElementDom.nodeAttributeSet('inert', false);
-        }
-
-        super.unrender(true);
-    }
-
     /**
      * Zeigt die Maskierung an
      * @returns {undefined}
@@ -393,6 +370,29 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             this.renderTo(document.body);
             this._dom.node.showModal();
         }
+    }
+
+    // overwrite
+    unrender(superCall) {
+        // Event auslösen.
+        if (!superCall) {
+            this.raiseEvent('unrender');
+        }
+
+        if (this._maskCenterDom) {
+            this._maskCenterDom.unrender();
+        }
+
+        if (this._maskAnchorDom) {
+            this._maskAnchorDom.unrender();
+        }
+
+        // inert entfernen
+        if (this.targetElementDom) {
+            this.targetElementDom.nodeAttributeSet('inert', false);
+        }
+
+        super.unrender(true);
     }
 
 

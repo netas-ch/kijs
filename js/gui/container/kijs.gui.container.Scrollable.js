@@ -636,6 +636,16 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     
     // PRIVATE
     // LISTENERS
+    // Wenn die Grösse des Containers verändert wird, müssen evtl.
+    // die Buttons ein-/ausgeblendet werden
+    #onAfterResize(e) {
+        if (this._scrollableX === 'auto' || this._scrollableY === 'auto') {
+            kijs.defer(this._renderScrollButtons, 20, this);
+        } else if (this._scrollableX || this._scrollableY) {
+            kijs.defer(this._updateButtons, 20, this);
+        }
+    }
+
     #onBtnScrollDownMouseDown(e) {
         if (!this._btnDownDom.disabled) {
             this._scrollStart('down');
@@ -661,16 +671,6 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     #onBtnScrollUpMouseDown(e) {
         if (!this._btnUpDom.disabled) {
             this._scrollStart('up');
-        }
-    }
-    
-    // Wenn die Grösse des Containers verändert wird, müssen evtl. 
-    // die Buttons ein-/ausgeblendet werden
-    #onAfterResize(e) {
-        if (this._scrollableX === 'auto' || this._scrollableY === 'auto') {
-            kijs.defer(this._renderScrollButtons, 20, this);
-        } else if (this._scrollableX || this._scrollableY) {
-            kijs.defer(this._updateButtons, 20, this);
         }
     }
     

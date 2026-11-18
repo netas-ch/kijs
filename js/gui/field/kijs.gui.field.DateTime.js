@@ -601,16 +601,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
 
     // PROTECTED
-    // overwrite
-    _hasClearableContent() {
-        // Der eingegebene Text wird erst beim change-Event in den Wert übernommen
-        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
-    }
-
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
-        
+
         // spinIcon
         if (this._useDefaultSpinButtonIcon) {
             this.spinButtonIconMap = hasDate ? 'kijs.iconMap.Fa.calendar' : 'kijs.iconMap.Fa.clock';
@@ -789,6 +783,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         }
 
         return ret;
+    }
+
+    // overwrite
+    _hasClearableContent() {
+        // Der eingegebene Text wird erst beim change-Event in den Wert übernommen
+        return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
     }
 
     /**
@@ -1144,6 +1144,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     #onTimePickerEmptyClick(e) {
         this._spinBoxEl.close();
     }
+
     #onTimePickerInputFinished(e) {
         this._spinBoxEl.close();
     }

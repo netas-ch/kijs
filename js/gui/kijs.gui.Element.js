@@ -387,13 +387,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     get dom() { return this._dom; }
 
-    get isAppended() { return !!this._dom.isAppended; }
-
-    get isRendered() { return !!(this._dom && this._dom.isRendered); }
-
-    get node() { return this._dom.node; }
-    get nodeTagName() { return this._dom.nodeTagName; }
-
     get hasFocus() { return this._dom.hasFocus; }
 
     get height() { return this._dom.height; }
@@ -405,7 +398,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
-    get html() { 
+    get html() {
         return this._dom.html;
     }
     set html(val) {
@@ -430,8 +423,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
         return index;
     }
-    
+
+    get isAppended() { return !!this._dom.isAppended; }
+
     get isEmpty() { return this._dom.isEmpty; }
+
+    get isRendered() { return !!(this._dom && this._dom.isRendered); }
 
     get left() { return this._dom.left; }
     set left(val) { this._dom.left = val; }
@@ -484,6 +481,9 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             return null;
         }
     }
+
+    get node() { return this._dom.node; }
+    get nodeTagName() { return this._dom.nodeTagName; }
 
     /**
      * Gibt das Elternelement zurück
@@ -843,7 +843,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * @returns {undefined}
      */
     render(superCall) {
-
         // DOM Rendern
         this._dom.render();
 

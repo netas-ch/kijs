@@ -72,6 +72,10 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    get containerLeftEl() { return this._containerLeftEl; }
+
+    get containerRightEl() { return this._containerRightEl; }
+
     get icon() { return this._iconEl; }
     /**
      * Icon zuweisen
@@ -136,10 +140,6 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
 
     // overwrite
     get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
-
-    get containerLeftEl() { return this._containerLeftEl; }
-
-    get containerRightEl() { return this._containerRightEl; }
 
 
 

@@ -126,15 +126,16 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
 
     // PRIVATE
     // LISTENERS
-    #onWindowResize(e) {
-        this._raiseAfterResizeEvent(true, e);
-    }
-
     #onDarkModeChange(e) {
         if (this._autoTheme) {
             this.theme = null; // set to null to get the current browser theme
         }
     }
+
+    #onWindowResize(e) {
+        this._raiseAfterResizeEvent(true, e);
+    }
+
 
 
     // --------------------------------------------------------------

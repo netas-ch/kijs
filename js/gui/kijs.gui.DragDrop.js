@@ -256,42 +256,18 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     }
 
 
-
-    // --------------------------------------------------------------
     // dropFn-Funktionen für Drag&Drop-mapping
     // --------------------------------------------------------------
-    // Verschiebt das Element an den neuen Ort
-    static dropFnMoveEl(e) {
-        // vom alten Ort entfernen
-        e.source.ownerEl.parent.remove(e.source.ownerEl, {
-            preventDestruct: true,
-            preventUnrender: true,
-            preventRender: false,
-            preventEvents: false
-        });
-
-        // und beim neuen Ort wieder einfügen
-        switch (e.target.targetPos){
-            case 'child':
-                e.target.targetEl.add(e.source.ownerEl);
-                break;
-
-            case 'before':
-                e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index);
-                break;
-
-            case 'after':
-                e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index+1);
-                break;
-        }
+    static dropFnGetSourceEl(e) {
+        return e.source.ownerEl;
     }
 
     static dropFnGetSourceIndex(e) {
         return e.source.ownerEl.index;
     }
 
-    static dropFnGetSourceEl(e) {
-        return e.source.ownerEl;
+    static dropFnGetTargetEl(e) {
+        return e.target.ownerEl;
     }
 
     // Gibt die Einfügeposition im Ziel Container zurück
@@ -316,8 +292,30 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         return targetIndex;
     }
 
-    static dropFnGetTargetEl(e) {
-        return e.target.ownerEl;
+    // Verschiebt das Element an den neuen Ort
+    static dropFnMoveEl(e) {
+        // vom alten Ort entfernen
+        e.source.ownerEl.parent.remove(e.source.ownerEl, {
+            preventDestruct: true,
+            preventUnrender: true,
+            preventRender: false,
+            preventEvents: false
+        });
+
+        // und beim neuen Ort wieder einfügen
+        switch (e.target.targetPos){
+            case 'child':
+                e.target.targetEl.add(e.source.ownerEl);
+                break;
+
+            case 'before':
+                e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index);
+                break;
+
+            case 'after':
+                e.target.targetEl.parent.add(e.source.ownerEl, e.target.targetEl.index+1);
+                break;
+        }
     }
 
 };

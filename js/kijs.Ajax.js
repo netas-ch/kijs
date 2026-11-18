@@ -10,6 +10,88 @@ kijs.Ajax = class kijs_Ajax {
     // STATICS
     // --------------------------------------------------------------
     /**
+     * Generiert aus einem parameters-Object einen String, der an die URL angehängt werden kann
+     * @param {Object} obj
+     * @returns {String}
+     */
+    static createQueryStringFromObject(obj) {
+        let params = [];
+
+        for (let key in obj) {
+            let name = encodeURIComponent(key);
+            let val = obj[key];
+
+            // object
+            if (kijs.isObject(val)) {
+                throw new kijs.Error('Objects can not be convert to query strings.');
+
+            // array
+            } else if (kijs.isArray(val)) {
+                kijs.Array.each(val, function(v) {
+                    v = encodeURIComponent(v);
+                    params.push(name + '=' + v);
+                }, this);
+
+            // string, number, boolean
+            } else {
+                val = encodeURIComponent(val);
+                params.push(name + '=' + val);
+            }
+        }
+        return params.join('&');
+    }
+
+    /**
+     * Erstellt aus einem XML-Document ein Objekt
+     * @param {HTMLElement} xml
+     * @returns {Object}
+     */
+     static parseXml(xml) {
+        let ret = {};
+
+        // element
+        if (xml.nodeType === 1) {
+            // do attributes
+            if (xml.attributes.length > 0) {
+                for (let j=0; j<xml.attributes.length; j++) {
+                    let attribute = xml.attributes.item(j);
+                    ret[attribute.nodeName] = attribute.nodeValue;
+                }
+            }
+
+        // text
+        } else if (xml.nodeType === 3) {
+            ret = xml.nodeValue.trim();
+        }
+
+        // do children
+        if (xml.hasChildNodes()) {
+            for(let i=0; i<xml.childNodes.length; i++) {
+                let item = xml.childNodes.item(i);
+                let nodeName = item.nodeName;
+
+                if (typeof(ret[nodeName]) === 'undefined') {
+                    let tmp = kijs.Ajax.parseXml(item);
+                    if (tmp !== '') {
+                        ret[nodeName] = tmp;
+                    }
+                } else {
+                    if (typeof(ret[nodeName].push) === "undefined") {
+                        let old = ret[nodeName];
+                        ret[nodeName] = [];
+                        ret[nodeName].push(old);
+                    }
+                    let tmp = kijs.Ajax.parseXml(item);
+                    if (tmp !== '') {
+                        ret[nodeName].push(tmp);
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
     * Führt einen Ajax Request aus
     * Es wird immer ein Promise zurückgegeben. Bei diesem wird immer (auch im Fehlerfall) resolve ausgeführt.
     * 
@@ -189,88 +271,6 @@ kijs.Ajax = class kijs_Ajax {
             }
             xmlHttp.send(postData);
         });
-    }
-
-    /**
-     * Erstellt aus einem XML-Document ein Objekt
-     * @param {HTMLElement} xml
-     * @returns {Object}
-     */
-     static parseXml(xml) {
-        let ret = {};
-
-        // element
-        if (xml.nodeType === 1) {
-            // do attributes
-            if (xml.attributes.length > 0) {
-                for (let j=0; j<xml.attributes.length; j++) {
-                    let attribute = xml.attributes.item(j);
-                    ret[attribute.nodeName] = attribute.nodeValue;
-                }
-            }
-
-        // text
-        } else if (xml.nodeType === 3) {
-            ret = xml.nodeValue.trim();
-        }
-
-        // do children
-        if (xml.hasChildNodes()) {
-            for(let i=0; i<xml.childNodes.length; i++) {
-                let item = xml.childNodes.item(i);
-                let nodeName = item.nodeName;
-
-                if (typeof(ret[nodeName]) === 'undefined') {
-                    let tmp = kijs.Ajax.parseXml(item);
-                    if (tmp !== '') {
-                        ret[nodeName] = tmp;
-                    }
-                } else {
-                    if (typeof(ret[nodeName].push) === "undefined") {
-                        let old = ret[nodeName];
-                        ret[nodeName] = [];
-                        ret[nodeName].push(old);
-                    }
-                    let tmp = kijs.Ajax.parseXml(item);
-                    if (tmp !== '') {
-                        ret[nodeName].push(tmp);
-                    }
-                }
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * Generiert aus einem parameters-Object einen String, der an die URL angehängt werden kann
-     * @param {Object} obj
-     * @returns {String}
-     */
-    static createQueryStringFromObject(obj) {
-        let params = [];
-
-        for (let key in obj) {
-            let name = encodeURIComponent(key);
-            let val = obj[key];
-
-            // object
-            if (kijs.isObject(val)) {
-                throw new kijs.Error('Objects can not be convert to query strings.');
-
-            // array
-            } else if (kijs.isArray(val)) {
-                kijs.Array.each(val, function(v) {
-                    v = encodeURIComponent(v);
-                    params.push(name + '=' + v);
-                }, this);
-
-            // string, number, boolean
-            } else {
-                val = encodeURIComponent(val);
-                params.push(name + '=' + val);
-            }
-        }
-        return params.join('&');
     }
 
 };

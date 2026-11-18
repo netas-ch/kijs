@@ -558,12 +558,12 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
         }
     }
 
-    #onMonthPickerEmptyClick(e) {
+    #onMonthPickerCurrentClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }
 
-    #onMonthPickerCurrentClick(e) {
+    #onMonthPickerEmptyClick(e) {
         this._spinBoxEl.close();
         this._inputDom.focus();
     }

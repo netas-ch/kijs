@@ -181,12 +181,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
     }
 
-    get disabledField() { return this._disabledField; }
-    set disabledField(val) { this._disabledField = val; }
-
-    get elementXType() { return this._elementXType; }
-    set elementXType(val) { this._elementXType = val; }
-
     get ddName() { return this._ddName; }
     set ddName(val) {
         this._ddName = val;
@@ -250,12 +244,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    get disabledField() { return this._disabledField; }
+    set disabledField(val) { this._disabledField = val; }
+
     get elementDdSourceConfig() {
         return this._elementDdSourceConfig;
     }
     set elementDdSourceConfig(val) {
         this._elementDdSourceConfig = val;
     }
+
+    get elementXType() { return this._elementXType; }
+    set elementXType(val) { this._elementXType = val; }
 
     get filters() { return this._filters; }
     set filters(val) { this._filters = val; }
@@ -623,6 +623,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    // Element mit Fokus neu ermitteln
+    reassignCurrent() {
+        this._currentEl = null;
+        this.current = null;
+    }
+
     /**
      * Aktualisiert das DataView
      * @param {Object} [options={}] options mit Einstellungen zum reload
@@ -672,12 +678,6 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this._afterReload(options, currentConfig, false);
 
         }
-    }
-
-    // Element mit Fokus neu ermitteln
-    reassignCurrent() {
-        this._currentEl = null;
-        this.current = null;
     }
 
     save(args=null) {
