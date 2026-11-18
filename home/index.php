@@ -35,6 +35,11 @@
 ?>
     <script type="text/javascript" src="app/marked.min.js?v=<?=filemtime('app/marked.min.js')?>"></script>
     <script type="text/javascript" src="app/home.TabContainer.js?v=<?=filemtime('app/home.TabContainer.js')?>"></script>
+    <script type="text/javascript" src="app/home.ApiClassPage.js?v=<?=filemtime('app/home.ApiClassPage.js')?>"></script>
+    <script type="text/javascript" src="app/home.ApiIssuesPage.js?v=<?=filemtime('app/home.ApiIssuesPage.js')?>"></script>
+    <script type="text/javascript" src="app/home.ApiSourcePage.js?v=<?=filemtime('app/home.ApiSourcePage.js')?>"></script>
+    <script type="text/javascript" src="app/home.ApiUpdate.js?v=<?=filemtime('app/home.ApiUpdate.js')?>"></script>
+    <script type="text/javascript" src="app/home.SearchPage.js?v=<?=filemtime('app/home.SearchPage.js')?>"></script>
     <script type="text/javascript" src="app/home.App.js?v=<?=filemtime('app/home.App.js')?>"></script>
     <script type="text/javascript">
         kijs.isReady(function(){

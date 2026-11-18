@@ -28,13 +28,17 @@ Das Wichtigste in drei Sätzen:
 1\. Die Home-App kennenlernen
 -----------------------------
 Die Home-App (diese Seite) ist der beste Ort zum Ausprobieren. Links in der 
-Navigation gibt es drei Bereiche:  
+Navigation gibt es vier Bereiche:  
 
 | Icon | Bereich       | Inhalt                                                   |
 |------|---------------|----------------------------------------------------------|
 | Auge | **Showcase**  | Jede Komponente mit vielen Beispielen                    |
 | Code | **Tests**     | Spezielle Testfälle                                      |
 | Buch | **Doku**      | Diese Dokumentation und die Leitfäden                    |
+| Würfel | **API**     | Alle Klassen mit Configs, Getter/Setter, Funktionen und Events, dazu der Lückenbericht |
+
+Oben rechts sucht das Suchfeld (Enter) gleichzeitig in API, Leitfäden, Showcase 
+und Tests.  
 
 **Tipp:** Rechts in jedem Tab lässt sich das Panel **Source-Code** aufklappen. Dort 
 kannst du den Code des Beispiels ändern und mit dem Play-Button sofort ausführen. 
@@ -252,7 +256,7 @@ Wenn du eigene Komponenten schreiben oder kijs selbst erweitern willst.
 ---------------------
 | Frage                                      | Antwort                                        |
 |--------------------------------------------|------------------------------------------------|
-| Welche Config-Eigenschaften hat Klasse X?  | Im Quellcode der Klasse: Kommentare in der ```_configMap``` und bei den Gettern (siehe Leitfaden [Kommentare](Leitfäden/Kommentare.md)). Bei älteren Klassen im Kopfkommentar |
+| Welche Config-Eigenschaften hat Klasse X?  | Im Tab **API** auf der Seite der Klasse, z.B. [kijs.gui.Button](api:kijs.gui.Button). Die Doku stammt aus den Kommentaren im Code (siehe Leitfaden [Kommentare](Leitfäden/Kommentare.md)) |
 | Wie sieht Komponente X aus, wie verwende ich sie? | Im Showcase, mit Quellcode            |
 | Was hat sich in einer Version geändert?    | [History](History.md)                          |
 | In welchen Dateien steckt ein Modul?       | ```files.json``` im Hauptordner von kijs       |

@@ -239,5 +239,220 @@
 
 
 
+    /* API-Dokumentation */
+    /* ----------------- */
+    :root {
+        --apiTagConfig: #1f6fd1;
+        --apiTagGetter: #2e8b3a;
+        --apiTagSetter: #d9822b;
+        --apiTagGrey: #888;
+        --apiTagStatic: #7b4bc4;
+        --apiTagOverwrite: #b8930a;
+        --apiTagDeprecated: #c23c45;
+        --apiEntryHover: rgba(0, 0, 0, 0.04);
+        --apiSourceCurrent: rgba(255, 200, 0, 0.25);
+    }
+    :root[data-theme='dark'] {
+        --apiTagConfig: #4c9aff;
+        --apiTagGetter: #4fbf5f;
+        --apiTagSetter: #f0a050;
+        --apiTagGrey: #999;
+        --apiTagStatic: #b48cf0;
+        --apiTagOverwrite: #e0c040;
+        --apiTagDeprecated: #e06b74;
+        --apiEntryHover: rgba(255, 255, 255, 0.05);
+        --apiSourceCurrent: rgba(255, 200, 0, 0.18);
+    }
+
+    .home-api-page {
+        background-color: var(--grey00);
+    }
+    .home-api-page div.markdown {
+        min-height: 0;
+        max-width: 960px;
+    }
+    .home-api-header h1:first-child {
+        margin-top: 10px;
+    }
+    .home-api-chain, .home-api-links {
+        color: var(--grey08);
+    }
+
+    /* Filter: bleibt beim Scrollen oben */
+    .home-api-toolbar {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+        gap: 20px;
+        align-items: center;
+        justify-content: flex-start;
+        max-width: 940px;
+        padding: 6px 10px;
+        background-color: var(--grey00);
+        border-bottom: 1px solid var(--grey05);
+    }
+
+    .home-api-list section h2 {
+        margin-top: 24px;
+    }
+    .home-api-count {
+        font-size: 14px;
+        color: var(--grey08);
+    }
+
+    /* Eintrag */
+    .home-api-entry {
+        border-bottom: 1px solid var(--grey04);
+        scroll-margin-top: 50px;    /* nicht unter dem Filter verstecken */
+    }
+    .home-api-entry > summary {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        padding: 4px 4px;
+        cursor: pointer;
+        list-style-position: outside;
+    }
+    .home-api-entry > summary::before {
+        content: '▸';
+        width: 10px;
+        color: var(--grey08);
+    }
+    .home-api-entry > summary::-webkit-details-marker {
+        display: none;
+    }
+    .home-api-entry > summary {
+        list-style: none;
+    }
+    .home-api-entry[open] > summary::before {
+        content: '▾';
+    }
+    .home-api-entry > summary:hover {
+        background-color: var(--apiEntryHover);
+    }
+    .markdown .home-api-name {
+        font-family: monospace;
+        font-weight: bold;
+        min-width: 220px;
+    }
+    .markdown .home-api-args {
+        font-weight: normal;
+        color: var(--grey08);
+    }
+    .home-api-tags {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .markdown .home-api-type {
+        font-family: monospace;
+        color: var(--grey08);
+        text-align: right;
+    }
+    .home-api-isdeprecated .home-api-name {
+        text-decoration: line-through;
+    }
+    .home-api-body {
+        padding: 2px 10px 10px 24px;
+    }
+    .markdown .home-api-nodoc {
+        color: var(--grey07);
+        font-style: italic;
+    }
+    .markdown .home-api-deprecated, .markdown .home-api-deprecated * {
+        color: var(--apiTagDeprecated);
+    }
+    .markdown table.home-api-props th {
+        text-align: left;
+        vertical-align: top;
+        white-space: nowrap;
+    }
+    .markdown .home-api-arglist {
+        margin: 0;
+        padding-left: 16px;
+    }
+    .markdown .home-api-optional {
+        color: var(--grey08);
+        font-size: 12px;
+    }
+
+    /* Tags */
+    .markdown .home-api-tag {
+        font-size: 11px;
+        line-height: 14px;
+        padding: 0 5px;
+        border-radius: 3px;
+        color: #fff;
+        background-color: var(--apiTagGrey);
+        border: 1px solid transparent;
+    }
+    .markdown .home-api-tag-config     { background-color: var(--apiTagConfig); }
+    .markdown .home-api-tag-getter     { background-color: var(--apiTagGetter); }
+    .markdown .home-api-tag-setter     { background-color: var(--apiTagSetter); }
+    .markdown .home-api-tag-readonly   { background-color: var(--apiTagGrey); }
+    .markdown .home-api-tag-static     { background-color: var(--apiTagStatic); }
+    .markdown .home-api-tag-overwrite  { background-color: var(--apiTagOverwrite); }
+    .markdown .home-api-tag-deprecated { background-color: var(--apiTagDeprecated); }
+    .markdown .home-api-tag-inherited {
+        background-color: transparent;
+        border-color: var(--apiTagGrey);
+        color: var(--apiTagGrey);
+    }
+
+    /* Globale Suche */
+    .home-search-field {
+        margin-right: 6px;
+    }
+    .markdown .home-search-list {
+        list-style: none;
+        padding-left: 0;
+    }
+    .markdown .home-search-list li {
+        margin-bottom: 8px;
+    }
+    .markdown .home-search-kind {
+        font-size: 12px;
+        color: var(--grey08);
+    }
+    .markdown .home-search-snippet {
+        font-size: 13px;
+        color: var(--grey08);
+        overflow-wrap: anywhere;
+    }
+    .markdown mark {
+        color: inherit;
+        background-color: rgba(255, 200, 0, 0.45);
+        border-radius: 2px;
+    }
+
+    /* Quellcode */
+    .home-api-source.markdown {
+        max-width: none;
+    }
+    .home-api-source .ace_static_highlight {
+        counter-reset: ace_line;
+    }
+    .home-api-source .ace_line {
+        white-space: pre;
+        counter-increment: ace_line;
+    }
+    /* Zeilennummern */
+    .home-api-source .ace_gutter::before {
+        content: counter(ace_line);
+        display: inline-block;
+        width: 40px;
+        padding-right: 12px;
+        text-align: right;
+        color: var(--grey07);
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    .home-api-source .home-api-source-current {
+        background-color: var(--apiSourceCurrent);
+    }
+
+
+
 /* END LAYER app */
 }

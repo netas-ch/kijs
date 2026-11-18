@@ -13,6 +13,68 @@ foreach ($requests as $request) {
 
     switch ($request->remoteFn) {
 
+        // API-Dokumentation: Stand und Update in Schritten (nur lokal)
+        case 'api.status':
+        case 'api.updateCancel':
+        case 'api.updateFile':
+        case 'api.updateFinish':
+        case 'api.updateStart':
+            require_once __DIR__ . '/api/ApiUpdate.php';
+            try {
+                $update = new ApiUpdate();
+                switch ($request->remoteFn) {
+                    case 'api.status':       $response->data = $update->getStatus(); break;
+                    case 'api.updateCancel': $update->cancel(); $response->data = true; break;
+                    case 'api.updateFile':   $response->data = $update->updateFile((int)($request->requestData->idx ?? -1)); break;
+                    case 'api.updateFinish': $response->data = $update->finish(); break;
+                    case 'api.updateStart':  $response->data = $update->start(); break;
+                }
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        // API-Dokumentation: Klassenseite
+        case 'api.class':
+            require_once __DIR__ . '/api/ApiReader.php';
+            try {
+                $response->data = (new ApiReader())->getClass((string)($request->requestData->name ?? ''));
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        // API-Dokumentation: Lückenbericht
+        case 'api.issues':
+            require_once __DIR__ . '/api/ApiReader.php';
+            try {
+                $response->data = (new ApiReader())->getIssues();
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        // Globale Suche über API, Leitfäden, Showcase und Tests
+        case 'home.search':
+            require_once __DIR__ . '/api/HomeSearch.php';
+            try {
+                $response->data = (new HomeSearch())->search((string)($request->requestData->query ?? ''));
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
+        // API-Dokumentation: Klassenbaum
+        case 'naviApi.load':
+            require_once __DIR__ . '/api/ApiReader.php';
+            try {
+                $response->config = new stdClass();
+                $response->config->data = (new ApiReader())->getTree();
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
         case 'naviDocu.load':
             $rows = _getNavigationRowsRec('data/docu', 'treeDocu', null);
             $response->config = new stdClass();

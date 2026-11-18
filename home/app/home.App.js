@@ -14,12 +14,15 @@ home.App = class home_App {
     // --------------------------------------------------------------
     constructor(config={}) {
 
+        this._apiStatusEl = null;
+        this._btnApiUpdate = null;
         this._content = null;
         this._header = null;
         this._navigation = null;
         this._tabShowcase = null;
         this._tabTest = null;
         this._tabDocu = null;
+        this._tabApi = null;
 
         this._viewport = null;
 
@@ -57,6 +60,40 @@ home.App = class home_App {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Öffnet die API-Dokumentation einer Klasse in einem Tab
+     * @param {String} className     z.B. 'kijs.gui.Button'
+     * @param {String} [memberName]  Eintrag, der aufgeklappt wird, z.B. 'caption'
+     */
+    openApiClass(className, memberName=null) {
+        this._openFile({
+            nodeId: 'api:' + className,
+            treeName: 'treeApi',
+            path: 'api:' + className,
+            displayText: className,
+            filetype: 'api',
+            iconMap: 'kijs.iconMap.Fa.cube',
+            className: className,
+            memberName: memberName
+        });
+    }
+
+    /**
+     * Öffnet einen Link auf die API, z.B. aus einem Leitfaden oder einer Showcase-Seite.
+     * Formate: 'api:kijs.gui.Button' oder 'api:kijs.gui.Button#caption'
+     * @param {String} href
+     * @returns {Boolean}  false, wenn der Link ungültig ist
+     */
+    openApiLink(href) {
+        const match = /^api:([\w$.]+)(?:#([\w$]+))?$/i.exec((href || '').trim());
+        if (!match) {
+            kijs.gui.CornerTipContainer.show('API', 'Ungültiger Link: ' + kijs.String.htmlspecialchars(href), 'alert');
+            return false;
+        }
+        this.openApiClass(match[1], match[2] || null);
+        return true;
+    }
+
     /**
      * Öffnet eine Datei aus der Navigation in einem Tab (z.B. über einen Link in einem Leitfaden).
      * Unterstützt werden Markdown-Dateien der Doku sowie JS-Dateien aus Showcase, Tests und Doku.
@@ -102,6 +139,42 @@ home.App = class home_App {
         return true;
     }
 
+    /**
+     * Sucht einen Begriff in API, Leitfäden, Showcase und Tests und zeigt die
+     * Treffer in einem Tab an
+     * @param {String} query
+     */
+    openSearch(query) {
+        query = (query || '').trim();
+        if (query.length < 2) {
+            kijs.gui.CornerTipContainer.show('Suche', 'Bitte mindestens 2 Zeichen eingeben.', 'info');
+            return;
+        }
+        this._openFile({
+            path: 'search:' + query.toLowerCase(),
+            displayText: 'Suche: ' + query,
+            filetype: 'search',
+            iconMap: 'kijs.iconMap.Fa.magnifying-glass',
+            query: query
+        });
+    }
+
+    /**
+     * Öffnet den Quellcode einer kijs-Datei in einem Tab und springt zur Zeile
+     * @param {String} file  Pfad relativ zum kijs-Ordner, z.B. 'js/gui/kijs.gui.Button.js'
+     * @param {Number} [line=1]
+     */
+    openSource(file, line=1) {
+        this._openFile({
+            path: 'src:' + file,
+            displayText: file.split('/').pop(),
+            filetype: 'source',
+            iconMap: 'kijs.iconMap.Fa.file-code',
+            file: file,
+            line: line
+        });
+    }
+
     run() {
         document.title = 'kijs ' + kijs.version + ' - Home';
 
@@ -111,6 +184,8 @@ home.App = class home_App {
         this._viewport = this._createViewport();
 
         this._viewport.render();
+
+        this._updateApiStatus();
     }
 
 
@@ -158,6 +233,18 @@ home.App = class home_App {
             },
             elementsRight:[
                 {
+                    xtype: 'kijs.gui.field.Text',
+                    name: 'searchField',
+                    placeholder: 'Suchen (Enter)',
+                    cls: 'home-search-field',
+                    style: {
+                        width: '200px'
+                    },
+                    on: {
+                        enterPress: this.#onSearchEnterPress,
+                        context: this
+                    }
+                },{
                     xtype: 'kijs.gui.Button',
                     name: 'btnLanguage',
                     iconMap: 'kijs.iconMap.Fa.earth-americas',
@@ -275,6 +362,67 @@ home.App = class home_App {
             ]
         });
 
+        this._apiStatusEl = new kijs.gui.Element({
+            html: '',
+            style: {
+                fontSize: '12px'
+            }
+        });
+
+        this._btnApiUpdate = new kijs.gui.Button({
+            caption: 'API aktualisieren',
+            iconMap: 'kijs.iconMap.Fa.arrows-rotate',
+            tooltip: 'API-Dokumentation aus dem kijs-Code neu erstellen (nur lokal)',
+            visible: false,
+            on: {
+                click: this.#onBtnApiUpdateClick,
+                context: this
+            }
+        });
+
+        this._tabApi = new kijs.gui.container.tab.Container({
+            //tabCaption: 'API',
+            tabIconMap: 'kijs.iconMap.Fa.cubes',
+            tabTooltip: 'API',
+            cls: 'kijs-flexcolumn',
+            elements: [
+                {
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexcolumn',
+                    style: {
+                        padding: '6px',
+                        gap: '6px',
+                        flex: 'none'
+                    },
+                    elements: [
+                        this._btnApiUpdate,
+                        this._apiStatusEl
+                    ]
+                },{
+                    xtype: 'kijs.gui.Tree',
+                    name: 'treeApi',
+                    selectType: 'manual',
+                    primaryKeyFields: ['nodeId'],
+                    valueField: 'nodeId',
+                    displayTextField: 'displayText',
+                    iconMapField: 'iconMap',
+                    allowChildrenField: 'allowChildren',
+                    childrenField: 'children',
+                    rpc: 'app',
+                    rpcLoadFn: 'naviApi.load',
+                    autoLoad: true,
+                    style: {
+                        flex: 1
+                    },
+                    on: {
+                        keyDown: this.#onTreeKeyDown,
+                        elementClick: this.#onTreeElementClick,
+                        context: this
+                    }
+                }
+            ]
+        });
+
         return new kijs.gui.Panel({
             caption: 'Navigation',
             collapsible: 'left',
@@ -292,7 +440,8 @@ home.App = class home_App {
                     elements:[
                         this._tabShowcase,
                         this._tabTest,
-                        this._tabDocu
+                        this._tabDocu,
+                        this._tabApi
                     ]
                 }
             ]
@@ -332,6 +481,10 @@ home.App = class home_App {
         let el = null;
 
         switch (name) {
+            case 'treeApi':
+                el = this._tabApi.downX('kijs.gui.Tree');
+                break;
+
             case 'treeDocu':
                 el = this._tabDocu.downX('kijs.gui.Tree');
                 break;
@@ -368,6 +521,79 @@ home.App = class home_App {
 
         if (openTab) {
             this._content.currentName = openTab.name;
+            if (userData.filetype === 'api' && userData.memberName) {
+                openTab.expandEntry(userData.memberName);
+            } else if (userData.filetype === 'source') {
+                openTab.gotoLine(userData.line);
+            }
+            return;
+        }
+
+        // API-Dokumentation einer Klasse
+        if (userData.filetype === 'api') {
+            const page = new home.ApiClassPage({
+                app: this,
+                name: userData.path,
+                className: userData.className,
+                expandMember: userData.memberName || null,
+                tabCaption: userData.displayText,
+                tabIconMap: userData.iconMap,
+                tabClosable: true,
+                userData: userData
+            });
+            this._content.add(page);
+            this._content.currentName = userData.path;
+            page.load();
+            return;
+        }
+
+        // Lückenbericht der API-Dokumentation
+        if (userData.filetype === 'apiissues') {
+            const page = new home.ApiIssuesPage({
+                app: this,
+                name: userData.path,
+                tabCaption: userData.displayText,
+                tabIconMap: userData.iconMap,
+                tabClosable: true,
+                userData: userData
+            });
+            this._content.add(page);
+            this._content.currentName = userData.path;
+            page.load();
+            return;
+        }
+
+        // Treffer der globalen Suche
+        if (userData.filetype === 'search') {
+            const page = new home.SearchPage({
+                app: this,
+                name: userData.path,
+                query: userData.query,
+                tabCaption: kijs.String.htmlspecialchars(userData.displayText),
+                tabIconMap: userData.iconMap,
+                tabClosable: true,
+                userData: userData
+            });
+            this._content.add(page);
+            this._content.currentName = userData.path;
+            page.load();
+            return;
+        }
+
+        // Quellcode einer kijs-Datei
+        if (userData.filetype === 'source') {
+            const page = new home.ApiSourcePage({
+                name: userData.path,
+                file: userData.file,
+                line: userData.line,
+                tabCaption: userData.displayText,
+                tabIconMap: userData.iconMap,
+                tabClosable: true,
+                userData: userData
+            });
+            this._content.add(page);
+            this._content.currentName = userData.path;
+            page.load();
             return;
         }
 
@@ -420,9 +646,62 @@ home.App = class home_App {
         }
     }
 
+    /**
+     * Zeigt im API-Tab den Stand der API-Datenbank an
+     * @returns {Promise}
+     */
+    async _updateApiStatus() {
+        const rpcData = await kijs.getRpc('app').do({
+            remoteFn: 'api.status',
+            waitMaskTarget: 'none'
+        });
+        if (!kijs.isEmpty(rpcData.response.errorType)) {
+            return;
+        }
+        const status = rpcData.response.data;
+
+        let html = '';
+        if (status.exists) {
+            html += 'Stand: ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i') + '<br>';
+            html += 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?');
+            if (status.stats) {
+                html += ', ' + status.stats.classes + ' Klassen';
+            }
+            if (status.kijsVersion !== kijs.version) {
+                html += '<br><b>Version stimmt nicht mit kijs ' + kijs.version + ' überein.</b>';
+            }
+        } else {
+            html += 'Die API-Datenbank fehlt noch.';
+            if (status.isLocal) {
+                html += ' Bitte «API aktualisieren» klicken.';
+            }
+        }
+        if (status.isRunning) {
+            html += '<br>Es läuft gerade ein Update.';
+        }
+        this._apiStatusEl.html = html;
+        this._btnApiUpdate.visible = !!status.isLocal;
+    }
+
 
     // PRIVATE
     // LISTENERS
+    async #onBtnApiUpdateClick(e) {
+        const update = new home.ApiUpdate();
+        const stats = await update.run();
+        this._updateApiStatus();
+        if (stats) {
+            this._getTreeByName('treeApi').load();
+
+            // offenen Lückenbericht neu laden
+            kijs.Array.each(this._content.elements, function(el) {
+                if (el instanceof home.ApiIssuesPage) {
+                    el.load();
+                }
+            }, this);
+        }
+    }
+
     #onBtnLanguageClick(e) {
         if (this._spinBox) {
             this._spinBox.destruct();
@@ -611,6 +890,10 @@ home.App = class home_App {
         }
     }
 
+    #onSearchEnterPress(e) {
+        this.openSearch(e.element.value);
+    }
+
     #onTreeElementClick(e) {
         let focusEl = this._getTreeByName(e.element.name).current;
 
@@ -646,10 +929,13 @@ home.App = class home_App {
         }
 
         // Variablen (Objekte/Arrays) leeren
+        this._apiStatusEl = null;
+        this._btnApiUpdate = null;
         this._header = null;
         this._tabShowcase = null;
         this._tabTest = null;
         this._tabDocu = null;
+        this._tabApi = null;
         this._navigation = null;
         this._content = null;
         this._viewport = null;

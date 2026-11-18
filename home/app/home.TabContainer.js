@@ -140,6 +140,53 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
 
     // --------------------------------------------------------------
+    // STATICS
+    // --------------------------------------------------------------
+    /**
+     * Färbt alle Code-Blöcke (pre > code) in einem Node mit ACE ein.
+     * Die Sprache kommt aus dem Code-Block (```css, ```html, ```php, ```json ...),
+     * eingerückte Code-Blöcke ohne Sprache werden als JavaScript eingefärbt.
+     * Die Farben sind in app/style.css definiert (hell und dunkel).
+     * Wird auch von der API-Dokumentation verwendet.
+     * @param {HTMLElement} node
+     * @param {Boolean} [showGutter=false]  Zeilennummern anzeigen?
+     * @returns {Promise}
+     */
+    static async highlightCodeBlocks(node, showGutter=false) {
+        const blocks = node.querySelectorAll('pre > code');
+        if (!blocks.length || !window.ace) {
+            return;
+        }
+
+        const highlighter = await home_TabContainer.#aceLoadModule('ace/ext/static_highlight');
+
+        // Theme ohne eigenes CSS: die Farben kommen aus style.css und passen sich
+        // so beim Umschalten zwischen hell und dunkel automatisch an.
+        const theme = { cssClass: 'home-code', cssText: '', isDark: false };
+
+        for (const code of blocks) {
+            const match = code.className.match(/language-([\w-]+)/);
+            const lang = match ? match[1].toLowerCase() : 'javascript';
+            const modeName = home_TabContainer.#languageModes[lang];
+            if (!modeName) {
+                continue;   // unbekannte Sprache: nicht einfärben
+            }
+
+            let text = code.textContent.replace(/\n$/, '');
+
+            const modeModule = await home_TabContainer.#aceLoadModule('ace/mode/' + modeName);
+            // PHP ohne '<?php' (reiner PHP-Code) als inline-PHP einfärben
+            const mode = new modeModule.Mode(modeName === 'php' && !text.includes('<?') ? { inline: true } : undefined);
+
+            const result = highlighter.render(text, mode, theme, 1, !showGutter);
+            code.parentNode.classList.add('home-code-highlighted');
+            code.innerHTML = result.html;
+        }
+    }
+
+
+
+    // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
     // Lädt wieder den Ursprünglichen Code
@@ -193,46 +240,6 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
     // PROTECTED
     /**
-     * Färbt alle Code-Blöcke (pre > code) in einem Node mit ACE ein.
-     * Die Sprache kommt aus dem Code-Block (```css, ```html, ```php, ```json ...),
-     * eingerückte Code-Blöcke ohne Sprache werden als JavaScript eingefärbt.
-     * Die Farben sind in app/style.css definiert (hell und dunkel).
-     * @param {HTMLElement} node
-     * @returns {Promise}
-     */
-    async _highlightCodeBlocks(node) {
-        const blocks = node.querySelectorAll('pre > code');
-        if (!blocks.length || !window.ace) {
-            return;
-        }
-
-        const highlighter = await home_TabContainer.#aceLoadModule('ace/ext/static_highlight');
-
-        // Theme ohne eigenes CSS: die Farben kommen aus style.css und passen sich
-        // so beim Umschalten zwischen hell und dunkel automatisch an.
-        const theme = { cssClass: 'home-code', cssText: '', isDark: false };
-
-        for (const code of blocks) {
-            const match = code.className.match(/language-([\w-]+)/);
-            const lang = match ? match[1].toLowerCase() : 'javascript';
-            const modeName = home_TabContainer.#languageModes[lang];
-            if (!modeName) {
-                continue;   // unbekannte Sprache: nicht einfärben
-            }
-
-            let text = code.textContent.replace(/\n$/, '');
-
-            const modeModule = await home_TabContainer.#aceLoadModule('ace/mode/' + modeName);
-            // PHP ohne '<?php' (reiner PHP-Code) als inline-PHP einfärben
-            const mode = new modeModule.Mode(modeName === 'php' && !text.includes('<?') ? { inline: true } : undefined);
-
-            const result = highlighter.render(text, mode, theme, 1, true);
-            code.parentNode.classList.add('home-code-highlighted');
-            code.innerHTML = result.html;
-        }
-    }
-
-    /**
      * Wandelt Markdown in HTML um, färbt die Code-Blöcke ein und zeigt das Ergebnis an
      * @param {String} rawCode
      * @returns {Promise}
@@ -243,7 +250,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
         div.innerHTML = marked.parse(rawCode);
 
         try {
-            await this._highlightCodeBlocks(div);
+            await home_TabContainer.highlightCodeBlocks(div);
         } catch (ex) {
             // Falls das Einfärben nicht klappt, wird der Code einfach ohne Farben angezeigt
             console.warn('Syntax highlighting failed', ex);
@@ -285,7 +292,8 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
     // LISTENERS
     // Relative Links auf Doku-, Showcase- und Test-Seiten in einem Tab öffnen
-    // (in Markdown-Dateien und in Showcase-/Test-Seiten, z.B. Abschnitt "Siehe auch")
+    // (in Markdown-Dateien und in Showcase-/Test-Seiten, z.B. Abschnitt "Siehe auch").
+    // Links auf die API (api:kijs.gui.Button#caption) öffnen die Klassenseite.
     #onContSandboxClick(e) {
         if (!e.nodeEvent || !e.nodeEvent.target.closest) {
             return;
@@ -293,6 +301,13 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
         const a = e.nodeEvent.target.closest('a');
         const href = a ? a.getAttribute('href') : null;
+
+        // Link auf die API
+        if (href && /^api:/i.test(href)) {
+            e.nodeEvent.preventDefault();
+            this._app.openApiLink(href);
+            return;
+        }
 
         // Nur relative Links auf .md- und .js-Dateien. Alle anderen Links normal öffnen.
         if (!href || /^[a-z]+:/i.test(href) || !/\.(md|js)$/i.test(href.split('#')[0])) {

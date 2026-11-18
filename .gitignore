@@ -3,3 +3,7 @@
 nbproject
 /css/*.css.map
 kijs.code-workspace
+
+# API-Dokumentation: temporäre Dateien beim Update
+/home/data/api.lock
+/home/data/api.sqlite.tmp

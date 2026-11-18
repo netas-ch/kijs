@@ -187,6 +187,31 @@ Weitere JSDoc-Tags
 | ```@see```          | Verweis auf eine andere Klasse oder Funktion            |
 
 
+Links auf die API
+-----------------
+In Leitfäden, Showcase-Seiten und Beschreibungen in JSDoc-Kommentaren kann direkt 
+auf die API-Dokumentation einer Klasse oder eines Eintrags verlinkt werden:  
+
+| Link                               | Öffnet                                         |
+|------------------------------------|------------------------------------------------|
+| ```api:kijs.gui.Button```          | die Seite der Klasse                           |
+| ```api:kijs.gui.Button#caption```  | die Seite der Klasse, ```caption``` aufgeklappt |
+
+In Markdown:  
+
+```text
+Siehe [caption](api:kijs.gui.Button#caption) und [kijs.gui.Element](api:kijs.gui.Element).
+```
+
+In einer Showcase-Seite (HTML):  
+
+```html
+<a href="api:kijs.gui.Button#caption">caption</a>
+```
+
+Beispiel: [kijs.gui.Element › applyConfig](api:kijs.gui.Element#applyConfig)  
+
+
 Übergang
 --------
 Viele Klassen haben noch den alten Kopfkommentar mit den Abschnitten 
