@@ -254,20 +254,20 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
 
     // PRIVATE
-    // Sprachen in Code-Blöcken -> ACE-Modus
-    static #languageModes = {
-        javascript: 'javascript',
-        js: 'javascript',
-        css: 'css',
-        less: 'css',
-        html: 'html',
-        php: 'php',
-        json: 'json',
-        sql: 'sql'
-    };
-
     // Cache der geladenen ACE-Module
     static #aceModules = {};
+
+    // Sprachen in Code-Blöcken -> ACE-Modus
+    static #languageModes = {
+        css: 'css',
+        html: 'html',
+        javascript: 'javascript',
+        js: 'javascript',
+        json: 'json',
+        less: 'css',
+        php: 'php',
+        sql: 'sql'
+    };
 
     /**
      * Lädt ein ACE-Modul (nur beim ersten Mal, danach aus dem Cache)

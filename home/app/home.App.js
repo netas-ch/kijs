@@ -57,17 +57,6 @@ home.App = class home_App {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    run() {
-        document.title = 'kijs ' + kijs.version + ' - Home';
-
-        this._header = this._createHeader();
-        this._navigation = this._createNavigation();
-        this._content = this._createContent();
-        this._viewport = this._createViewport();
-
-        this._viewport.render();
-    }
-
     /**
      * Öffnet eine Datei aus der Navigation in einem Tab (z.B. über einen Link in einem Leitfaden).
      * Unterstützt werden Markdown-Dateien der Doku sowie JS-Dateien aus Showcase, Tests und Doku.
@@ -111,6 +100,17 @@ home.App = class home_App {
 
         this._openFile(userData);
         return true;
+    }
+
+    run() {
+        document.title = 'kijs ' + kijs.version + ' - Home';
+
+        this._header = this._createHeader();
+        this._navigation = this._createNavigation();
+        this._content = this._createContent();
+        this._viewport = this._createViewport();
+
+        this._viewport.render();
     }
 
 
@@ -349,24 +349,6 @@ home.App = class home_App {
         return el;
     }
 
-    _openFocusTreeElement(focusEl) {
-        // Ordner: Auf-/Zuklappen
-        if (focusEl.hasChildren) {
-            if (focusEl.expanded) {
-                focusEl.collapse();
-            } else {
-                focusEl.expand();
-            }
-
-        // Datei
-        } else {
-            this._openFile(focusEl.dataRow['userData']);
-
-            // TreeElement selektieren
-            focusEl.parent.select(focusEl, false, false);
-        }
-    }
-
     /**
      * Öffnet eine Datei in einem Tab oder selektiert das Tab, falls sie bereits offen ist
      * @param {Object} userData   userData aus der Navigation (path, displayText, filetype, ...)
@@ -420,9 +402,67 @@ home.App = class home_App {
         tabCont.reset();
     }
 
+    _openFocusTreeElement(focusEl) {
+        // Ordner: Auf-/Zuklappen
+        if (focusEl.hasChildren) {
+            if (focusEl.expanded) {
+                focusEl.collapse();
+            } else {
+                focusEl.expand();
+            }
+
+        // Datei
+        } else {
+            this._openFile(focusEl.dataRow['userData']);
+
+            // TreeElement selektieren
+            focusEl.parent.select(focusEl, false, false);
+        }
+    }
+
 
     // PRIVATE
     // LISTENERS
+    #onBtnLanguageClick(e) {
+        if (this._spinBox) {
+            this._spinBox.destruct();
+        }
+
+        this._spinBox = new kijs.gui.SpinBox({
+            target: e.element,
+            ownerNodes: e.element,
+            cls: 'kijs-flexform',
+            innerStyle: {
+                padding: '10px'
+            },
+            elements: [
+                {
+                    xtype: 'kijs.gui.field.OptionGroup',
+                    name: 'cssFile',
+                    label: 'Design',
+                    labelHide: true,
+                    valueField: 'id',
+                    displayTextField: 'Bezeichnung',
+                    required: true,
+                    data: [
+                        { id:'de', Bezeichnung:'Deutsch' },
+                        { id:'en', Bezeichnung:'English' },
+                        { id:'fr', Bezeichnung:'Français' }
+                    ],
+                    value: kijs.language,
+                    on: {
+                        change: function(e) {
+                            var loc = window.location;
+                            window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value;
+                        },
+                        context: this
+                    }
+                }
+            ]
+        });
+        this._spinBox.show();
+    }
+
     #onBtnThemeClick(e) {
         if (this._spinBox) {
             this._spinBox.destruct();
@@ -525,46 +565,6 @@ home.App = class home_App {
                             }
                         }
                     ]
-                }
-            ]
-        });
-        this._spinBox.show();
-    }
-
-    #onBtnLanguageClick(e) {
-        if (this._spinBox) {
-            this._spinBox.destruct();
-        }
-
-        this._spinBox = new kijs.gui.SpinBox({
-            target: e.element,
-            ownerNodes: e.element,
-            cls: 'kijs-flexform',
-            innerStyle: {
-                padding: '10px'
-            },
-            elements: [
-                {
-                    xtype: 'kijs.gui.field.OptionGroup',
-                    name: 'cssFile',
-                    label: 'Design',
-                    labelHide: true,
-                    valueField: 'id',
-                    displayTextField: 'Bezeichnung',
-                    required: true,
-                    data: [
-                        { id:'de', Bezeichnung:'Deutsch' },
-                        { id:'en', Bezeichnung:'English' },
-                        { id:'fr', Bezeichnung:'Français' }
-                    ],
-                    value: kijs.language,
-                    on: {
-                        change: function(e) {
-                            var loc = window.location;
-                            window.location = loc.protocol + '//' + loc.host + loc.pathname + '?lang=' + e.value;
-                        },
-                        context: this
-                    }
                 }
             ]
         });
