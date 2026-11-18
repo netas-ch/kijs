@@ -65,6 +65,11 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             this._dom.clsAdd(this._iconAnimationCls);
         }
     }
+    /**
+     * Unicode-Codepoint des Zeichens, z.B. 0xf015.
+     * Die Angabe als HTML-Entity (z.B. '&#xf015;') ist deprecated.
+     * @type {Number}
+     */
     get iconChar() {
         let chr = kijs.toString(this._dom.html);
         if (chr.length > 0) {
@@ -74,7 +79,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     }
     set iconChar(val) {
         if (kijs.isString(val) && val.substr(0,2) === '&#') {
-            console.warn('DEPRECATED: set iconChar with HTML entity instead of Number');
+            console.warn('DEPRECATED: set iconChar with a Number (code point) instead of an HTML entity');
             val = kijs.String.htmlentities_decode(val).codePointAt(0);
 
         } else if (!kijs.isInteger(val)) {

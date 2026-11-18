@@ -51,6 +51,16 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
 - Funktionen in allen Klassen alphabetisch sortiert und die Kommentar-Überschriften 
   vereinheitlicht (gemäss Leitfaden «Aufbau einer Klasse»). Der Code verhält sich 
   unverändert.  
+- Was bereits als veraltet galt, ist jetzt mit ```@deprecated``` markiert und wird 
+  in der API-Dokumentation so angezeigt:  
+  - ```kijs.Storage```: bitte nicht mehr verwenden, wird gelöscht, sobald nicht mehr 
+    in Gebrauch.  
+  - ```kijs.getGetParameter()```: stattdessen ```kijs.Navigator.getGetParameter()``` 
+    verwenden.  
+  - ```kijs.gui.field.CheckboxGroup.checkedValues```: stattdessen ```value``` verwenden.  
+  - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
+    ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
+    Die Warnung in der Konsole war verdreht und ist korrigiert.  
 
 
 

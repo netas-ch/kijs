@@ -1,7 +1,5 @@
 /* global kijs */
 
-// DEPRECATED: Bitte nicht mehr verwenden. Wird gelöscht sobald nicht mehr in Gebrauch
-
 // --------------------------------------------------------------
 // kijs.Storage (Static)
 // --------------------------------------------------------------
@@ -10,6 +8,8 @@
  * Damit keine Konflikte entstehen, wenn mehrere kijs-Frameworks unter
  * derselben Domain laufen, kann mit keyPrefix=true die URL als Key verwendet werden.
  * Alternativ kann als Argument ein String anderes Prefix übergeben werden.
+ *
+ * @deprecated Bitte nicht mehr verwenden. Wird gelöscht, sobald nicht mehr in Gebrauch.
  */
 kijs.Storage = class kijs_Storage {
 

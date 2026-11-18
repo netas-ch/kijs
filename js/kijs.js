@@ -153,6 +153,7 @@ window.kijs = class kijs {
      * Gibt die Parameter zurück, die mittels GET an die URL übergeben werden
      * @param {String} [parameterName] Den Parameter, der gesucht wird. Ohne Argument werden alle zurückgegeben.
      * @returns {String|Object|undefined}
+     * @deprecated Stattdessen kijs.Navigator.getGetParameter() verwenden.
      */
     static getGetParameter(parameterName) {
         console.warn(`DEPRECATED: use "kijs.Navigator.getGetParameter" instead of "kijs.getGetParameter"`);

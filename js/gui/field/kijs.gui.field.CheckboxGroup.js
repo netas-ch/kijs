@@ -59,9 +59,12 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         }
     }
 
-    // DEPRECATED
-    // Checkboxen die ausgewählt werden sollen / sind
-    // TODO: unterschied zu value?
+    /**
+     * Ausgewählte Checkboxen. Der Getter entspricht value. Der Setter schaltet die
+     * übergebenen Werte um: ausgewählte werden abgewählt, nicht ausgewählte ausgewählt.
+     * @type {Array}
+     * @deprecated Stattdessen value verwenden.
+     */
     get checkedValues () { return this.value.length ? this.value : []; }
     set checkedValues (val) {
         let value = this.value;
