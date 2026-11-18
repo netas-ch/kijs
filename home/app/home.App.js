@@ -68,6 +68,51 @@ home.App = class home_App {
         this._viewport.render();
     }
 
+    /**
+     * Öffnet eine Datei aus der Navigation in einem Tab (z.B. über einen Link in einem Leitfaden).
+     * Unterstützt werden Markdown-Dateien der Doku sowie JS-Dateien aus Showcase, Tests und Doku.
+     * @param {String} path   Pfad relativ zum Ordner home.
+     *                        Bsp: 'data/docu/Leitfäden/Config-System.md' oder 'data/showcase/field/field_Text.js'
+     * @returns {Boolean}     false, wenn die Datei nicht unterstützt wird
+     */
+    openLinkedFile(path) {
+        // Bereiche der Navigation (gleich wie in app/ajax.php)
+        const roots = [
+            { dir: 'data/docu/',     treeName: 'treeDocu',     namespace: 'docu' },
+            { dir: 'data/showcase/', treeName: 'treeShowcase', namespace: 'sc' },
+            { dir: 'data/test/',     treeName: 'treeTest',     namespace: 'test' }
+        ];
+        const root = roots.find(r => path.startsWith(r.dir));
+
+        const filename = path.split('/').pop();
+        const dotPos = filename.lastIndexOf('.');
+        const filetype = dotPos > -1 ? filename.substring(dotPos + 1).toLowerCase() : '';
+        const baseName = dotPos > -1 ? filename.substring(0, dotPos) : filename;
+
+        if (!root || !['md', 'js'].includes(filetype) || (filetype === 'md' && root.namespace !== 'docu')) {
+            return false;
+        }
+
+        const userData = {
+            nodeId: path,           // damit das Element in der Navigation selektiert wird
+            treeName: root.treeName,
+            path: path + '?v=' + Date.now(),
+            displayText: baseName.replace(/_/g, ' '),
+            filetype: filetype
+        };
+
+        if (filetype === 'md') {
+            userData.iconMap = 'kijs.iconMap.Fa.markdown';
+        } else {
+            userData.iconMap = 'kijs.iconMap.Fa.js';
+            userData.namespace = root.namespace;
+            userData.className = baseName;   // Bsp: 'field_Text' -> home.sc.field_Text
+        }
+
+        this._openFile(userData);
+        return true;
+    }
+
 
     // PROTECTED
     _createContent() {
@@ -315,49 +360,64 @@ home.App = class home_App {
 
         // Datei
         } else {
-            let userData = focusEl.dataRow['userData'];
-
-            // Wenn die Datei bereits offen ist: selektieren
-            if (this._content.down(userData.path)) {
-                this._content.currentName = userData.path;
-
-            // sonst öffnen
-            } else {
-                // Neues Tab erstellen
-                let tabCont = new home.TabContainer({
-                    app: this,
-                    name: userData.path,
-                    tabCaption: userData.displayText,
-                    tabClosable: true,
-                    userData: userData,
-                    on: {
-                        destruct: this.#onContentTabContainerDestruct,
-                        context: this
-                    }
-                });
-                if (userData.iconMap) {
-                    tabCont.tabButtonEl.iconMap = userData.iconMap;
-                }
-                if (userData.filetype) {
-                    tabCont.filetype = userData.filetype;
-                }
-                if (userData.namespace) {
-                    tabCont.namespace = userData.namespace;
-                }
-                if (userData.className) {
-                    tabCont.className = userData.className;
-                }
-                this._content.add(tabCont);
-                this._content.currentName = userData.path;
-
-                // html/js/md laden und ausführen
-                tabCont.reset();
-
-            }
+            this._openFile(focusEl.dataRow['userData']);
 
             // TreeElement selektieren
             focusEl.parent.select(focusEl, false, false);
         }
+    }
+
+    /**
+     * Öffnet eine Datei in einem Tab oder selektiert das Tab, falls sie bereits offen ist
+     * @param {Object} userData   userData aus der Navigation (path, displayText, filetype, ...)
+     * @returns {undefined}
+     */
+    _openFile(userData) {
+        // Wenn die Datei bereits offen ist: selektieren
+        // (Vergleich ohne den Parameter '?v=...')
+        const basePath = userData.path.split('?')[0];
+        let openTab = null;
+        kijs.Array.each(this._content.elements, function(el) {
+            if (el.name && el.name.split('?')[0] === basePath) {
+                openTab = el;
+                return false;
+            }
+        }, this);
+
+        if (openTab) {
+            this._content.currentName = openTab.name;
+            return;
+        }
+
+        // sonst in einem neuen Tab öffnen
+        let tabCont = new home.TabContainer({
+            app: this,
+            name: userData.path,
+            tabCaption: userData.displayText,
+            tabClosable: true,
+            userData: userData,
+            on: {
+                destruct: this.#onContentTabContainerDestruct,
+                context: this
+            }
+        });
+        if (userData.iconMap) {
+            tabCont.tabButtonEl.iconMap = userData.iconMap;
+        }
+        if (userData.filetype) {
+            tabCont.filetype = userData.filetype;
+        }
+        if (userData.namespace) {
+            tabCont.namespace = userData.namespace;
+        }
+        if (userData.className) {
+            tabCont.className = userData.className;
+        }
+        this._content.add(tabCont);
+        this._content.currentName = userData.path;
+
+        // html/js/md laden und ausführen
+        tabCont.reset();
     }
 
 
@@ -524,7 +584,7 @@ home.App = class home_App {
         }
 
         // vorheriges und aktuelles Tab sind im gleichen Tree
-        if (oldTreeEl === newTreeEl) {
+        if (newTreeEl && oldTreeEl === newTreeEl) {
             newTreeEl.selectByPrimaryKeys(e.currentEl.userData.nodeId, false, false);
             newTreeEl.reassignCurrent();
             newTreeEl.scrollToFocus();

@@ -59,3 +59,9 @@ Beispiel:
     },
     formatFnContext: this
 
+
+Beispiele
+---------
+- [Showcase field.Text](../../../showcase/field/field_Text.js)  
+- [Showcase field.Iban](../../../showcase/field/field_Iban.js)  
+- [Showcase field.SozVersNr](../../../showcase/field/field_SozVersNr.js)  

@@ -124,3 +124,9 @@ Pulse-Effekt (z.B. für Load-Icons)
     .kijs-pulse {
       animation: kijs-spin 1s infinite steps(8);
     }
+
+
+Beispiele
+---------
+- [Test Layout](../../test/Layout.js): Layout-Klassen live umschalten  
+- [Showcase container.Form](../../showcase/container/container_Form.js): Formular mit flex-Containern  

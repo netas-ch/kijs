@@ -7,11 +7,11 @@ Zähler mit Beschriftung und den Schaltflächen **-** und **+**.
     Anzahl  [ - ]  3  [ + ]
 
 Dabei kommen die Themen aus diesen Leitfäden zusammen:  
-- Aufbau einer Klasse  
-- Config-System  
-- Lebenszyklus  
-- Element, Dom und Container  
-- Ereignisse  
+- [Aufbau einer Klasse](Aufbau_einer_Klasse.md)  
+- [Config-System](Config-System.md)  
+- [Lebenszyklus](Lebenszyklus.md)  
+- [Element, Dom und Container](Element_Dom_und_Container.md)  
+- [Ereignisse](Ereignisse.md)  
 
 Anforderungen an den Zähler:  
 - Config-Eigenschaften ```caption```, ```value```, ```min```, ```max```, ```step```  
@@ -51,7 +51,7 @@ Weil der Zähler keine beliebigen Kind-Elemente aufnehmen soll, leiten wir von
 Schritt 2: Der Klassenkommentar
 -------------------------------
 Direkt über der Klasse steht ein kurzer JSDoc-Kommentar mit Beschreibung, Beispiel 
-und den Events, die die Klasse auslöst (siehe Leitfaden «Kommentare»):  
+und den Events, die die Klasse auslöst (siehe Leitfaden [Kommentare](Kommentare.md)):  
 
     /**
      * Zähler mit Beschriftung und den Schaltflächen - und +
@@ -71,7 +71,7 @@ Sie werden dort dokumentiert, wo sie im Code stehen (Schritte 3 bis 6).
 
 Schritt 3: Der Konstruktor
 --------------------------
-Der Konstruktor folgt immer dem gleichen Ablauf (siehe Leitfaden «Config-System»):  
+Der Konstruktor folgt immer dem gleichen Ablauf (siehe Leitfaden [Config-System](Config-System.md)):  
 
     // --------------------------------------------------------------
     // CONSTRUCTOR
@@ -205,7 +205,7 @@ Schritt 4: Getter und Setter
         this._valueDom.html = String(this._value);
     }
 
-Die zwei Setter zeigen die beiden Fälle aus dem Leitfaden «Lebenszyklus»:  
+Die zwei Setter zeigen die beiden Fälle aus dem Leitfaden [Lebenszyklus](Lebenszyklus.md):  
 - ```caption``` ändert, **ob** ein Node vorhanden ist (leere Beschriftung = kein 
   Node). Darum muss neu gerendert werden.  
 - ```value``` ändert nur den Inhalt eines bestehenden Dom-Objekts. Das schreibt 
@@ -287,8 +287,7 @@ Schritt 5: Öffentliche Funktionen und render
     }
 
 - **```changeDisabled```**: Weil die Schaltflächen keine Kinder eines Containers 
-  sind, müssen wir ```disabled``` selbst weitergeben. Laut Leitfaden «Disabled und 
-  ReadOnly» wird dafür ```changeDisabled()``` überschrieben, nicht der Setter 
+  sind, müssen wir ```disabled``` selbst weitergeben. Laut Leitfaden [Disabled und ReadOnly](Disabled_und_ReadOnly.md) wird dafür ```changeDisabled()``` überschrieben, nicht der Setter 
   ```disabled```. Das zweite Argument ```true``` (```callFromParent```) sorgt 
   dafür, dass eine Schaltfläche, die selbst ```disabled``` war, es auch bleibt.  
 - **```render```**: zuerst ```super.render(true)```, dann die Unterobjekte in der 
@@ -352,7 +351,7 @@ Schritt 6: Geschützte Funktionen und Listeners
   sie überschreiben, z.B. ```_limit()``` für eine andere Begrenzung.  
 - Listeners sind **private** (```#on...```) und haben genau ein Argument ```e```.  
 - Events mit ```before...``` werden **vor** der Änderung ausgelöst. Gibt ein 
-  Listener ```false``` zurück, wird abgebrochen (siehe Leitfaden «Ereignisse»).  
+  Listener ```false``` zurück, wird abgebrochen (siehe Leitfaden [Ereignisse](Ereignisse.md)).  
 - Das Event-Objekt enthält wie bei den Formularfeldern ```oldValue``` und ```value```. 
   ```element``` und ```raiseElement``` ergänzt ```kijs.gui.Element``` automatisch.  
 
@@ -474,3 +473,8 @@ Zusammenfassung
 | Events           | ```before...``` mit Abbruch, Event-Objekt ```e```, nur bei Benutzeraktion |
 | destruct         | alles zerstören, was selbst erstellt wurde                       |
 | CSS              | eigenes Präfix, Farben über Theme-Variablen                      |
+
+
+Beispiele
+---------
+- [Showcase Button](../../showcase/Button.js): kijs.gui.Button ist ähnlich aufgebaut wie der Zähler: Element mit Dom- und Element-Unterobjekten  

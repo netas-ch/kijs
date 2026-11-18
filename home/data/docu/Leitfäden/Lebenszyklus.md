@@ -22,7 +22,7 @@ jedes Mal einen neuen Node.
 ------------
 Im Konstruktor werden alle Klassenvariablen deklariert, Unterobjekte (z.B. 
 ```kijs.gui.Dom``` oder weitere Elemente) erstellt und die Config angewendet 
-(siehe Leitfaden «Config-System»).  
+(siehe Leitfaden [Config-System](Config-System.md)).  
 
 Zu diesem Zeitpunkt existiert noch kein DOM-Node. Darum:  
 - Im Konstruktor nie auf ```this._dom.node``` zugreifen.  
@@ -212,7 +212,7 @@ Beim Überschreiben gilt das gleiche Muster wie bei ```render```:
 6. ```super.destruct(true)``` aufrufen. Ganz am Schluss entfernt 
    ```kijs.Observable``` alle Listeners, die **auf diesem Objekt** registriert sind.  
 
-Das Muster dazu steht im Leitfaden «Aufbau einer Klasse».  
+Das Muster dazu steht im Leitfaden [Aufbau einer Klasse](Aufbau_einer_Klasse.md).  
 
 Nach ```destruct()``` darf das Objekt nicht mehr verwendet werden. Viele Variablen 
 sind ```null``` und ein Zugriff führt zu Fehlern.  

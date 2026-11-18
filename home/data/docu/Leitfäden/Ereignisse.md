@@ -106,7 +106,7 @@ Dazu kommen die Eigenschaften, die beim ```raiseEvent(name, e)``` übergeben wer
 z.B. ```oldValue``` und ```value``` beim ```change``` eines Felds.  
 
 Wie Events von Unterobjekten an ein Element weitergeleitet werden, steht im 
-Leitfaden «Element, Dom und Container».  
+Leitfaden [Element, Dom und Container](Element_Dom_und_Container.md).  
 
 
 Listeners mit Rückgabewerten

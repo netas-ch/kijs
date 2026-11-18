@@ -53,3 +53,9 @@ readOnly
 Betrifft nur kijs.gui.field.* Elemente.  
 
 Elemente die readOnly sind, haben die CSS Klasse ```kijs-readonly```.  
+
+
+Beispiele
+---------
+- [Showcase Button](../../showcase/Button.js): Schalter disabled in der Kopfzeile  
+- [Showcase container.Form](../../showcase/container/container_Form.js): Schalter disabled und readOnly beim Formular  

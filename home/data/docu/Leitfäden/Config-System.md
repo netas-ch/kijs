@@ -88,7 +88,7 @@ können dem Objekt **keine neuen Eigenschaften** mehr hinzugefügt werden.
 Bestehende Eigenschaften können aber weiterhin geändert werden.  
 
 Darum müssen alle Klassenvariablen im Konstruktor **vor** dem Anwenden der Config 
-deklariert werden (siehe auch Leitfaden «Namensgebung»). Wird eine Variable erst 
+deklariert werden (siehe auch Leitfaden [Namensgebung](Namensgebung.md)). Wird eine Variable erst 
 später in einer Funktion angelegt, löst JavaScript einen TypeError aus (Klassen 
 laufen immer im strict mode).  
 
@@ -285,6 +285,6 @@ Checkliste für eine neue Config-Eigenschaft
    Klassenvariable gesetzt werden. ```_defaultConfig``` ist nötig, wenn dabei der 
    Setter durchlaufen werden soll.)  
 5. Falls die Eigenschaft von anderen abhängt: ```prio``` setzen.  
-6. Dokumentieren (siehe Leitfaden «Kommentare»): beim Getter, oder als ```// {Typ} Text``` 
+6. Dokumentieren (siehe Leitfaden [Kommentare](Kommentare.md)): beim Getter, oder als ```// {Typ} Text``` 
    in der ```_configMap```, falls es keinen gleichnamigen Getter gibt.  
 7. Bei Objekten/Arrays: Variable im ```destruct()``` auf ```null``` setzen.  

@@ -328,3 +328,6 @@ Beispiel für das Laden von Kind-Elementen bei einem Panel:
     ');
 
 
+Beispiele
+---------
+- [Showcase Rpc](../../showcase/Rpc.js): Promise, callback, Wartemaske, cancelRunningRpcs, Meldungen  

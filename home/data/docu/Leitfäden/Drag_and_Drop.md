@@ -435,3 +435,11 @@ disabled
 --------
 Source-Elemente die disabled sind, können auch gezogen werden.  
 Auf Target-Elemente die disabled sind, können keine Elemente gezogen werden.  
+
+
+Beispiele
+---------
+- [Test TreeDD](../../test/TreeDD.js): Drag&Drop zwischen zwei Trees  
+- [Test DataView DD Row](../../test/DataView_DD/DataView_DD_Row.js): Sortieren per Drag&Drop in einer Zeile  
+- [Test DataView DD Col](../../test/DataView_DD/DataView_DD_Col.js): Sortieren per Drag&Drop in einer Spalte  
+- [Showcase Dashboard](../../showcase/Dashboard.js): Panels per Drag&Drop verschieben  

@@ -45,6 +45,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
                 flex: 1
             }
         });
+        this._contSandbox.on('click', this.#onContSandboxClick, this);
 
 
         // Quellcode Panel mit Editor
@@ -195,6 +196,31 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
     // PRIVATE
     // LISTENERS
+    // Relative Links auf Doku-, Showcase- und Test-Seiten in einem Tab öffnen
+    // (in Markdown-Dateien und in Showcase-/Test-Seiten, z.B. Abschnitt "Siehe auch")
+    #onContSandboxClick(e) {
+        if (!e.nodeEvent || !e.nodeEvent.target.closest) {
+            return;
+        }
+
+        const a = e.nodeEvent.target.closest('a');
+        const href = a ? a.getAttribute('href') : null;
+
+        // Nur relative Links auf .md- und .js-Dateien. Alle anderen Links normal öffnen.
+        if (!href || /^[a-z]+:/i.test(href) || !/\.(md|js)$/i.test(href.split('#')[0])) {
+            return;
+        }
+
+        // Pfad relativ zur aktuellen Datei auflösen und relativ zum Ordner home zurückgeben
+        const url = new URL(href, new URL(this._name, document.baseURI));
+        const homePath = decodeURIComponent(new URL('.', document.baseURI).pathname);
+        const path = decodeURIComponent(url.pathname).substring(homePath.length);
+
+        if (this._app.openLinkedFile(path)) {
+            e.nodeEvent.preventDefault();
+        }
+    }
+
     #onResetClick(e) {
         this.reset();
     }

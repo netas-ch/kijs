@@ -30,7 +30,7 @@ Steht direkt über der Klasse und enthält nur, was nirgends sonst im Code steht
 - die Events, die die Klasse **selbst** auslöst, mit ```@fires```  
 
 Events brauchen einen Kommentar, weil sie im Code nirgends deklariert sind (siehe 
-Leitfaden «Ereignisse»). Pro Event: Name, wann es ausgelöst wird und welche 
+Leitfaden [Ereignisse](Ereignisse.md)). Pro Event: Name, wann es ausgelöst wird und welche 
 zusätzlichen Eigenschaften ```e``` hat. Bei ```before...```-Events erwähnen, was 
 die Rückgabe ```false``` bewirkt.  
 
@@ -143,7 +143,7 @@ Ein Argument ```options``` (Objekt) wird mit Unterpunkten dokumentiert:
 
 ### Überschriebene Funktionen
 Überschriebene Funktionen werden wie bisher mit ```// overwrite``` gekennzeichnet 
-(siehe Leitfaden «Namensgebung»). Ein JSDoc-Kommentar ist nur nötig, wenn sich 
+(siehe Leitfaden [Namensgebung](Namensgebung.md)). Ein JSDoc-Kommentar ist nur nötig, wenn sich 
 das Verhalten gegenüber der Basisklasse ändert. Sonst übernimmt der Generator die 
 Doku der Basisklasse.  
 
@@ -160,7 +160,7 @@ gliedern längere Funktionen. Sie erscheinen nicht in der API-Dokumentation.
     value: { target: 'value', prio: 100 }
 
 Die Abschnitts-Überschriften (```// CONSTRUCTOR```, ```// MEMBERS```, 
-```// PROTECTED``` ...) bleiben wie im Leitfaden «Aufbau einer Klasse» beschrieben.  
+```// PROTECTED``` ...) bleiben wie im Leitfaden [Aufbau einer Klasse](Aufbau_einer_Klasse.md) beschrieben.  
 
 
 Typen

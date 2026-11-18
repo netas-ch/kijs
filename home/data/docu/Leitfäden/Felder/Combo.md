@@ -192,3 +192,8 @@ kann, wird mit diesem Wert die Anzahl mitgeteilt. Die übergebene Anzahl ist um
 eins höher als im Combo eingestellt. Also z.B. 31 statt 30. Wenn der Server so 31 
 Datensätze zurückgibt, zeigt das Combo trotzdem nur 30 Datensätze an. Es weiss 
 aber, dass es noch mehr Datensätze gibt.  
+
+
+Beispiele
+---------
+- [Showcase field.Combo](../../../showcase/field/field_Combo.js): Lokale Daten und RPC  

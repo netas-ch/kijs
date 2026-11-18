@@ -28,3 +28,8 @@ Beispiel Fehlerbehandlung in PHP
 Damit in PHP ki_Exception_Notice geworfen werden kann muss folgende Klasse in 
 PHP deklariert sein:  
     ```class ki_Exception_Notice extends Exception {}```
+
+
+Beispiele
+---------
+- [Showcase Rpc](../../showcase/Rpc.js): Schaltflächen errorNotice und error  

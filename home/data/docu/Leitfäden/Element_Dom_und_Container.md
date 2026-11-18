@@ -17,7 +17,7 @@ kijs.gui.Dom
 ```kijs.gui.Dom``` ist ein Hilfsobjekt rund um einen einzelnen HTML-Node. Man 
 arbeitet nie direkt mit dem Node, sondern immer über das Dom-Objekt. So bleiben 
 alle Eigenschaften auch dann erhalten, wenn der Node noch nicht existiert oder 
-beim ```unrender()``` gelöscht wird (siehe Leitfaden «Lebenszyklus»).  
+beim ```unrender()``` gelöscht wird (siehe Leitfaden [Lebenszyklus](Lebenszyklus.md)).  
 
 Wichtige Funktionen und Eigenschaften:  
 
@@ -34,7 +34,7 @@ Ein Dom-Objekt ist **kein** Element: Es hat keinen ```parent```, kein ```afterRe
 und taucht nicht im Element-Baum auf. Es ist nur ein Baustein innerhalb eines Elements.  
 
 ### Node-Events
-Die Events eines Dom-Objekts sind kijs-Events (siehe Leitfaden «Ereignisse») mit 
+Die Events eines Dom-Objekts sind kijs-Events (siehe Leitfaden [Ereignisse](Ereignisse.md)) mit 
 camelCase-Namen. Die Zuordnung zu den Browser-Events steht in ```_eventMap```:  
 
 | kijs-Event      | Browser-Event  |
@@ -131,7 +131,7 @@ Jedes Element kennt sein Elternelement. Damit kann im Baum navigiert werden:
 | ```upX(xtype)```       | Erstes übergeordnetes Element dieser Klasse, z.B. ```upX('kijs.gui.Window')``` |
 | ```isChildOf(el)```    | Liegt das Element (irgendwo) unterhalb von ```el```?             |
 
-Siehe aber Leitfaden «Kapselung»: Der Zugriff auf übergeordnete Elemente sollte 
+Siehe aber Leitfaden [Kapselung](Kapselung.md): Der Zugriff auf übergeordnete Elemente sollte 
 die Ausnahme sein. Meistens ist ein Event die bessere Lösung.  
 
 
@@ -153,14 +153,14 @@ Eigenschaften zwei Varianten:
 
 ```html``` und ```htmlDisplayType``` gehen beim Container in den inneren Node. 
 Die Layout-Klassen (```kijs-flexrow```, ```kijs-flexform``` ... siehe Leitfaden 
-«Layout») werden mit ```cls``` auf den äusseren Node gesetzt und wirken auf 
+[Layout](Layout.md)) werden mit ```cls``` auf den äusseren Node gesetzt und wirken auf 
 den inneren.  
 
 ### elements
 In ```elements``` können Instanzen und Config-Objekte gemischt werden. Bei 
 Config-Objekten erstellt der Container die Instanz anhand von ```xtype``` selbst. 
 Mit ```defaults``` können Standardwerte für alle Config-Objekte angegeben werden 
-(Details siehe Leitfaden «Config-System»).  
+(Details siehe Leitfaden [Config-System](Config-System.md)).  
 
     new kijs.gui.Container({
         cls: 'kijs-flexrow',
@@ -226,3 +226,9 @@ Welche Klasse ableiten?
 | soll beliebige Kind-Elemente aufnehmen können              | ```kijs.gui.Container```    |
 | braucht Titelleiste, Kopf-/Fusszeile, Schliessen-Button ...| ```kijs.gui.Panel```        |
 | ist ein Formularfeld                                       | ```kijs.gui.field.Field``` (oder ein passendes Feld) |
+
+
+Beispiele
+---------
+- [Showcase Element](../../showcase/Element.js)  
+- [Showcase Container](../../showcase/Container.js)  

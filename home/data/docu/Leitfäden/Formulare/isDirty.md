@@ -15,3 +15,8 @@ durch den Benutzer verändert wurde.
  - Direktes setzen via setter ```isDirty``` auf false. Dieser setter kann nicht 
    auf true gesetzt werden.  
    Ein Feld kann nur auf 'dirty' true gesetzt werden, indem der Wert verändert wird.  
+
+
+Beispiele
+---------
+- [Showcase container.Form](../../../showcase/container/container_Form.js): Schaltfläche check isDirty  

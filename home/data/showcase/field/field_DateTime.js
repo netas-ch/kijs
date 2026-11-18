@@ -184,7 +184,13 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
-                    value: 'Siehe auch:\n- kijs.gui.DatePicker\n- kijs.gui.MonthPicker\n- kijs.gui.TimePicker\n- kijs.gui.field.Month',
+                    valueDisplayType: 'html',
+                    value: '<b>Siehe auch:</b><ul>'
+                         + '<li><a href="../DatePicker.js">kijs.gui.DatePicker</a></li>'
+                         + '<li><a href="../MonthPicker.js">kijs.gui.MonthPicker</a></li>'
+                         + '<li><a href="../TimePicker.js">kijs.gui.TimePicker</a></li>'
+                         + '<li><a href="field_Month.js">kijs.gui.field.Month</a></li>'
+                         + '</ul>',
                     style: { margin: '10px 0 0 0'}
                 }
             ]

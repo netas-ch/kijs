@@ -22,8 +22,8 @@ Sortiert wird wie folgt:
 Kommentare
 ----------
 Welche Kommentare wo hingehören (Klassenkommentar, configMap, Getter, Funktionen), 
-steht im Leitfaden «Kommentare». Ein vollständiges Beispiel steht im Leitfaden 
-«Tutorial Eigene Komponente».  
+steht im Leitfaden [Kommentare](Kommentare.md). Ein vollständiges Beispiel steht im Leitfaden 
+[Tutorial Eigene Komponente](Tutorial_Eigene_Komponente.md).  
 
 
 Beispielaufbau
@@ -153,6 +153,6 @@ Klassen sollten immer nach folgendem Schema aufgebaut sein:
     };
 
 Details zu den einzelnen Teilen:  
-- Konstruktor, ```_defaultConfig``` und ```_configMap```: Leitfaden «Config-System»  
-- ```render```, ```unrender```, ```destruct``` und ```superCall```: Leitfaden «Lebenszyklus»  
-- Unterobjekte und Event-Weiterleitung: Leitfaden «Element, Dom und Container»  
+- Konstruktor, ```_defaultConfig``` und ```_configMap```: Leitfaden [Config-System](Config-System.md)  
+- ```render```, ```unrender```, ```destruct``` und ```superCall```: Leitfaden [Lebenszyklus](Lebenszyklus.md)  
+- Unterobjekte und Event-Weiterleitung: Leitfaden [Element, Dom und Container](Element_Dom_und_Container.md)  
