@@ -22,7 +22,7 @@ Kinder disabled.
 So kann z.B. ein ganzes GUI disabled werden, indem der Viewport auf 
 ```disabled: true``` gesetzt wird.  
 Gibt es Kind-Elemente, die schon vorher disabled waren, so bleiben sie auch nach 
-dem zurücksetzen mit ```disabled: false``` auf dem Eltern-Element immmer noch 
+dem zurücksetzen mit ```disabled: false``` auf dem Eltern-Element immer noch 
 disabled.
 
 Elemente die disabled sind, haben die CSS Klasse ```kijs-disabled```.  
@@ -39,7 +39,10 @@ Bei Panels können die einzelnen Bereich einzeln disabled werden:
 | ganzes Panel | disabled          | disabled           |
 
 Die Funktion ```changeDisabled(val, callFromParent)``` sollte nie direkt 
-aufgerufen werden. Sie wird intern verwendet. Stattdessen ```disable``` verwenden.  
+aufgerufen werden. Sie wird intern verwendet. Stattdessen den Setter ```disabled``` verwenden.  
+Ausnahme: Beim Weitergeben an eigene Unterelemente innerhalb eines überschriebenen 
+```changeDisabled()``` wird es mit ```callFromParent=true``` aufgerufen, z.B. 
+```this._iconEl.changeDisabled(!!val, true);``` (siehe ```kijs.gui.Button```).  
 
 Der Getter/Setter ```disabled``` sollte nie überschrieben werden. Stattdessen die Funktion
 ```changeDisabled(val, callFromParent)``` überschreiben.  

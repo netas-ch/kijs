@@ -13,7 +13,7 @@ Funktionalität verwendet werden.
  - Drag & Drop auch über unterschiedliche Elements möglich.
 
 ### Klassen
- - kijs.gui.dragDrop (Statische Klasse mit informationen zur aktuellen 
+ - kijs.gui.dragDrop (Statische Klasse mit Informationen zur aktuellen 
    DD-Operation und statischen Hilfsfunktionen)  
  - kijs.gui.dragDrop.Source (Klasse mit Drag&Drop-Events/Funktionen, für das 
    Element das gezogen wird)  
@@ -291,19 +291,19 @@ Hier kann eingestellt werden, ob verschieben, kopieren oder verknüpfen auf dies
 Ziel erlaubt ist.  
 
 #### disableMarker
-Boolscher Wert. Default=false  
+Boolescher Wert. Default=false  
 Soll kein DropMarker angezeigt werden?  
-Damit kann zweischen "Einfaches Ziel" und "Ziel mit Einfügeposition" umgeschaltet 
+Damit kann zwischen "Einfaches Ziel" und "Ziel mit Einfügeposition" umgeschaltet 
 werden.  
 
 #### disableMarkerAutoSize
-Boolscher Wert. Default=false  
+Boolescher Wert. Default=false  
 Falls der Platzhalter für die Einfügeposition (DropMarker) nicht die gleiche Grösse, 
-wie das Quell-Element haben soll, kann dies hiermit ausgeschltet werden. Die Grösse 
+wie das Quell-Element haben soll, kann dies hiermit ausgeschaltet werden. Die Grösse 
 der DropMarkers muss dann mittels CSS definiert werden.  
 
 #### splitChildZone
-Boolscher Wert. Default=false  
+Boolescher Wert. Default=false  
 Für Ziele, die selbst innerhalb eines übergeordneten Targets liegen (z.B. Ordner 
 in einem ```kijs.gui.Tree```).  
 Die Kind-Elemente des Ziels werden nicht berücksichtigt. Stattdessen wird das Ziel 
@@ -357,10 +357,10 @@ Es gibt zwei Events, die über Listeners abgefragt werden können:
 
 CSS
 ---
-kijs weist automatisch elementen automatisch CSS-Klassen zu:
+kijs weist Elementen automatisch CSS-Klassen zu:
 
 ### kijs-dragging
-Dem Source-Element wärend des ganzen Drag&Drop Vorgangs.  
+Dem Source-Element während des ganzen Drag&Drop Vorgangs.  
 
 ### kijs-dropMarker
 Nur bei ```disableMarker: false```.  

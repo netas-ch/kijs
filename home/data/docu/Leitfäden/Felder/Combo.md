@@ -54,7 +54,7 @@ Beginn die Daten per RPC geladen werden.
 
 
 ### RPCs während dem Schreiben
-Zu Beginn werden nur soviele Datensätze geladen, wie angezeigt werden können.  
+Zu Beginn werden nur so viele Datensätze geladen, wie angezeigt werden können.  
 Beim Tippen werden dynamisch die benötigten Datensätze nachgeladen.  
 Beispiel:  
 
@@ -183,12 +183,12 @@ Serverseitig die Resultate gefiltert werden.
 
 ### queryOperator
 Nur bei ```enableRemoteFiltering: true```.  
-```queryOperator```. Damit der Server weiss, wie gefilert werden soll, wird diese 
+```queryOperator```. Damit der Server weiss, wie gefiltert werden soll, wird diese 
 Eigenschaft auch übermittelt.  
 
 ### queryLimit
 ```queryLimit```. Damit der Server weiss, wie viele Datensätze das Combo anzeigen 
 kann, wird mit diesem Wert die Anzahl mitgeteilt. Die übergebene Anzahl ist um 
-eins höher als im Combo eingestellt. Also zB. 31 statt 30. Wenn der Server so 31 
+eins höher als im Combo eingestellt. Also z.B. 31 statt 30. Wenn der Server so 31 
 Datensätze zurückgibt, zeigt das Combo trotzdem nur 30 Datensätze an. Es weiss 
 aber, dass es noch mehr Datensätze gibt.  

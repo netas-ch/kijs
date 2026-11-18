@@ -1,6 +1,6 @@
 Namensgebung bei Variablen, Funktionen und Klassen
 ==================================================
-Namen werden grunsätzlich in Camel Case notiert.  
+Namen werden grundsätzlich in Camel Case notiert.  
 https://en.wikipedia.org/wiki/Camel_case  
 
 #### Regeln:
@@ -8,11 +8,11 @@ https://en.wikipedia.org/wiki/Camel_case
 - sie enthalten keine Sonderzeichen
 - Ziffern sind möglich, aber nicht an der 1. Stelle
 
-Boolsche Variablen müssen mit einer der folgenden Präfix beginnen:
+Boolesche Variablen müssen mit einer der folgenden Präfix beginnen:
 - ```has...```
 - ```is...```
 
-Es ist sinnvoll die Rehenfolge von Wörtern in einem Namen überlegt anzuordnen.  
+Es ist sinnvoll die Reihenfolge von Wörtern in einem Namen überlegt anzuordnen.  
 Beispiel: Bei folgende Namen, ist bei alphabetischer Reihenfolge der Zusammenhang 
 **nicht** gut ersichtlich:  
  - ```clearForm()```
@@ -34,7 +34,7 @@ Variablen
 Im kijs unterscheiden wir Variablen mit unterschiedlichen Gültigkeitsbereichen:  
 
 ### Funktionsvariable
-Diese Variablen verden innerhalb einer Funktion deklariert und verwendet.  
+Diese Variablen werden innerhalb einer Funktion deklariert und verwendet.  
 Sie werden mit let oder const deklariert und sind nur innerhalb der Funktion gültig.  
 Beispiel: ```let myVar=1;```
 
@@ -133,7 +133,7 @@ Zugriff auf Getter/Modulvariablen
 Innerhalb einer Klasse sollte grundsätzlich direkt auf Klassenvariablen zugegriffen 
 werden und nicht über einen Getter.  
 Ausnahmen:  
-- Macnhmal gibt es nur einen Getter ohne entsprechende Variable
+- Manchmal gibt es nur einen Getter ohne entsprechende Variable
 - Der Getter führt noch etwas aus
 
 

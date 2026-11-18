@@ -40,7 +40,7 @@ Beispiel:
 
 Filtern
 -------
-Um Daten in einem Recordset zu filtern, werden folgende Funktionen zur verfügung 
+Um Daten in einem Recordset zu filtern, werden folgende Funktionen zur Verfügung 
 gestellt:  
  - ```getRowByPrimaryKey(rows, primaryKey, primaryKeyFields)```  
    Gibt den Datensatz zurück, der dem primaryKey entspricht.  
@@ -171,7 +171,7 @@ enthält.
 Beispiel: ```"Muster"```  
 
 Falls der Primärschlüssel über mehrere Felder geht, werden die Inhalte der 
-betroffenen Felder zusammengesetzt. Getrennt werden sie duch eine definierte 
+betroffenen Felder zusammengesetzt. Getrennt werden sie durch eine definierte 
 Zeichenkette, den ```primaryKeyDelimiter```. Dieser ist Standardmässig  
 ```"#|[kijs]|#"```.  
 Beispiel: ```"Muster#|[kijs]|#Max"```  

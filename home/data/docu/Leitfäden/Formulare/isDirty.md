@@ -1,6 +1,6 @@
 isDirty
 =======
-Der boolsche getter/setter ```isDirty``` gibt an, ob der Inhalt eines Formularfeldes 
+Der boolesche getter/setter ```isDirty``` gibt an, ob der Inhalt eines Formularfeldes 
 durch den Benutzer verändert wurde.  
  - ```true```: es wurde etwas verändert  
  - ```false```: es wurde nichts verändert  

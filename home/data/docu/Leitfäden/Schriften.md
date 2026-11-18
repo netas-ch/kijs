@@ -5,7 +5,7 @@ Einheit px
 ----------
 Schriftgrössen sollten immer in px angegeben werden. Andere Einheiten machen für 
 Webanwendungen wenig Sinn. Schriften werden bei anderen Einheiten als px nicht 
-im gleichen Mass wie andere Inhalte skaliert. Dadurch geht das Layout kaput, 
+im gleichen Mass wie andere Inhalte skaliert. Dadurch geht das Layout kaputt, 
 dass bei kijs Pixelgenau aufgebaut ist.  
 Menschen, die eine grössere Schriftgrösse benötigen, sollten die Möglichkeit haben 
 das ganze Layout zu Zoomen (Ctrl+Mausrad). Damit werden die Schriften im gleichen 
@@ -23,7 +23,7 @@ Wichtig ist, dass verschiedene Schriftgrössen **nicht** gemischt werden.
  - Überschriften (wenn Fett nicht ausreicht)
  - Grid
 
-### Vergleich Senche ExtJs 3.4.1
+### Vergleich Sencha ExtJs 3.4.1
  - ```11px``` grid
  - ```12px``` Formularfelder, Labels
 

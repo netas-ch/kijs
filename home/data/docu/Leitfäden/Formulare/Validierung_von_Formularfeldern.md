@@ -22,8 +22,8 @@ Es gibt verschiedene Möglichkeiten um Validierungen zu definieren:
 ### required
 Pflichtfeld ja/nein.   
 Beispiel: ```required: true```  
-Diese Eigenchaft haben alle Felder.  
-Diese Validierung ist etwas anders alls alle Anderen: 
+Diese Eigenschaft haben alle Felder.  
+Diese Validierung ist etwas anders als alle Anderen: 
 - Diese Validierung wird, im Gegensatz zu allen anderen Validierungen, auch 
   ausgeführt, wenn das Feld leer ist.  
 - Sie wird bei einem neuen Datensatz nicht ausgeführt, weil sonst alle 
@@ -32,7 +32,7 @@ Diese Validierung ist etwas anders alls alle Anderen:
 ### maxLength, minLength
 Minimum und maximum Zeichenlänge.  
 Beispiel: ```maxLength: 50```  
-Diese Eigenchaften haben alle Felder.  
+Diese Eigenschaften haben alle Felder.  
 
 ### validationFn, validationFnContext
 Benutzerdefinierte Funktion, die den Wert validiert.  
@@ -43,7 +43,7 @@ Beispiel:
     },
     validationFnContext: this
 
-Diese Eigenchaften haben alle Felder.  
+Diese Eigenschaften haben alle Felder.  
 Wenn die Validierung ok ist, muss die Funktion ```true```zurückgeben, sonst 
 ```false```.  
 Wenn der Wert leer ist, wird die Funktion nicht ausgeführt.  
@@ -59,7 +59,7 @@ Beispiel:
       }
     ]
 
-Diese Eigenchaften haben alle Felder.  
+Diese Eigenschaften haben alle Felder.  
 Es kann ein oder mehrere Ausdrücke zur Validierung angegeben werden.  
 Alle Ausdrücke müssen erfüllt sein, damit die Validierung ok ist.  
 Pro Validierung kann eine ```msg``` angegeben werden, die im Fehlerfall angezeigt 

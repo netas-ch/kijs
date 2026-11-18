@@ -19,16 +19,28 @@ Sortiert wird wie folgt:
 3. dann alphabetisch
 
 
+Kommentare
+----------
+Welche Kommentare wo hingehören (Klassenkommentar, configMap, Getter, Funktionen), 
+steht im Leitfaden «Kommentare». Ein vollständiges Beispiel steht im Leitfaden 
+«Tutorial Eigene Komponente».  
+
+
 Beispielaufbau
 --------------
-Klassen sollte immer nach folgendem Schema aufgebaut sein:
+Klassen sollten immer nach folgendem Schema aufgebaut sein:
 
     /* global kijs, this */
 
     // --------------------------------------------------------------
     // xy.Classname
     // --------------------------------------------------------------
-    xy.Classname = class xy_Classname extends kijs.gui.Elements {
+    /**
+     * Beschreibung der Klasse
+     *
+     * @fires myEvent  Beschreibung. e: ...
+     */
+    xy.Classname = class xy_Classname extends kijs.gui.Element {
 
 
         // --------------------------------------------------------------
@@ -38,7 +50,27 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
         constructor(config={}) {
             super(false);
 
+            // Klassenvariablen deklarieren
+            this._text = null;
+            this._myObj = new kijs.gui.Dom();
             ...
+
+            // Standard-config-Eigenschaften mergen
+            Object.assign(this._defaultConfig, {
+                ...
+            });
+
+            // Mapping für die Zuweisung der Config-Eigenschaften
+            Object.assign(this._configMap, {
+                text: { target: 'text' },
+                ...
+            });
+
+            // Config anwenden
+            if (kijs.isObject(config)) {
+                config = Object.assign({}, this._defaultConfig, config);
+                this.applyConfig(config, true);
+            }
         }
 
 
@@ -46,6 +78,10 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
         // --------------------------------------------------------------
         // GETTERS / SETTERS
         // --------------------------------------------------------------
+        /**
+         * Beschreibung der Eigenschaft
+         * @type {String}
+         */
         get text() { return this._text; }
         set text(val) {
             this._text = val;
@@ -56,16 +92,26 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
         // --------------------------------------------------------------
         // MEMBERS
         // --------------------------------------------------------------
-        render() {
+        // overwrite
+        render(superCall) {
+            super.render(true);
             ...
+
+            // Event afterRender auslösen
+            if (!superCall) {
+                this.raiseEvent('afterRender');
+            }
         }
 
 
         // PROTECTED
-        // overwrite
-        _overwriteMethod() {
+        /**
+         * Beschreibung der Funktion
+         * @param {Number} val
+         * @returns {Boolean}
+         */
+        _protectedMethod(val) {
             ...
-            super.unrender(true);
         }
 
 
@@ -92,7 +138,7 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
 
             // Elemente/DOM-Objekte entladen
             if (this._myObj) {
-                this._myObj.destruct()
+                this._myObj.destruct();
             }
             ...
 
@@ -105,3 +151,8 @@ Klassen sollte immer nach folgendem Schema aufgebaut sein:
         }
 
     };
+
+Details zu den einzelnen Teilen:  
+- Konstruktor, ```_defaultConfig``` und ```_configMap```: Leitfaden «Config-System»  
+- ```render```, ```unrender```, ```destruct``` und ```superCall```: Leitfaden «Lebenszyklus»  
+- Unterobjekte und Event-Weiterleitung: Leitfaden «Element, Dom und Container»  

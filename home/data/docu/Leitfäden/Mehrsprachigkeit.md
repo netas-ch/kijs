@@ -45,12 +45,12 @@ eingebunden werden: ```%1```, ```%2```, usw.
 
 #### language
 Gewünschte Sprache (optional)  
-Falls keine Sprache angegeben wird, wird die unter ```kijs.language``` gloabal 
+Falls keine Sprache angegeben wird, wird die unter ```kijs.language``` global 
 eingestellte Sprache verwendet.  
 
 Die language muss im Format BCP 47 angegeben werden.
 Dieses besteht aus einem zweistelligen Sprachkürzel (in Kleinbuchstaben) und optional 
-mit einer zweistelligen Region (in Grossbuchstaben), die mit einem Bidestrich angehängt ist.  
+mit einer zweistelligen Region (in Grossbuchstaben), die mit einem Bindestrich angehängt ist.  
 
 Beispiele:
  - ```'de'``` Sprache: Deutsch
@@ -76,7 +76,7 @@ Mit dem Translate-App von Netas können aus der ```usages.php``` die Texte ausge
 werden und in eine beliebige Sprache übersetzt werden. Es pro Sprache eine PHP-Sprachdatei
 erstellt (```kijs_en.php```, ```kijs-fr.php```).  
 Die PHP-Sprachdateien können dann mit dem PHP-Skript ```tools/kilang/convertPhpLanguageFilesToJs.php``` 
-in JavaScript-Spachdateien konvertiert werden. Sie befinden sich im Ordner ```js/translation```.  
+in JavaScript-Sprachdateien konvertiert werden. Sie befinden sich im Ordner ```js/translation```.  
 Für eigene Projekte empfiehlt es sich, eigene Sprachdateien in einem eigenen Ordner 
 zu erstellen.  
 
