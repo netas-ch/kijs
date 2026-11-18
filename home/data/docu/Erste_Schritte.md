@@ -55,28 +55,75 @@ passende Showcase- und Test-Seiten.
 
 2\. Die erste eigene Seite
 --------------------------
-Eine minimale Applikation sieht so aus. Sie zeigt ein Panel mit einem Textfeld und 
-einer Schaltfläche:  
+Eine minimale Applikation ist eine einfache HTML-Datei, es braucht kein PHP. Sie 
+zeigt ein Panel mit einem Textfeld und einer Schaltfläche. Die Pfade gehen davon 
+aus, dass kijs auf dem Webserver im Ordner ```/kijs``` liegt.  
 
-```php
+```html
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
+    <title>Hallo kijs</title>
+
+    <!-- Reihenfolge der CSS-Ebenen: App überschreibt Theme, Theme überschreibt kijs -->
     <style>
         @layer kijs, kijs-theme, app;
     </style>
-    <link rel="stylesheet" href="/kijs/css/kijs.theme.default.css">
-<?php
-    // Base-URL ermitteln
-    $baseUrl = '';
-    $baseUrl .= filter_input(INPUT_SERVER, 'HTTPS', FILTER_VALIDATE_BOOLEAN) ? "https://" : "http://";
-    $baseUrl .= filter_input(INPUT_SERVER, 'HTTP_HOST');
 
-    // CSS- und JS-Dateien von kijs einbinden
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,gui&fileType=css');
-    echo file_get_contents($baseUrl . '/kijs/tools/getDebugHead.php?modules=core,translations,gui&fileType=js');
-?>
+    <!-- CSS -->
+    <link rel="stylesheet" href="/kijs/css/kijs.theme.default.css">
+    <link rel="stylesheet" href="/kijs/css/kijs.gui.css">
+
+    <!-- kijs Core -->
+    <script src="/kijs/js/kijs.js"></script>
+    <script src="/kijs/js/kijs.Error.js"></script>
+    <script src="/kijs/js/kijs.String.js"></script>
+    <script src="/kijs/js/kijs.Array.js"></script>
+    <script src="/kijs/js/kijs.Object.js"></script>
+    <script src="/kijs/js/kijs.Dom.js"></script>
+    <script src="/kijs/js/kijs.Graphic.js"></script>
+    <script src="/kijs/js/kijs.Navigator.js"></script>
+    <script src="/kijs/js/kijs.Observable.js"></script>
+    <script src="/kijs/js/kijs.Ajax.js"></script>
+    <script src="/kijs/js/kijs.Rpc.js"></script>
+
+    <!-- Icons -->
+    <script src="/kijs/js/iconMap/kijs.iconMap.js"></script>
+    <script src="/kijs/js/iconMap/kijs.iconMap.Fa.js"></script>
+
+    <!-- kijs GUI -->
+    <script src="/kijs/js/gui/kijs.gui.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.DragDrop.js"></script>
+    <script src="/kijs/js/gui/dragDrop/kijs.gui.dragDrop.js"></script>
+    <script src="/kijs/js/gui/dragDrop/kijs.gui.dragDrop.Source.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Dom.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Tooltip.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Element.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Container.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Separator.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Spacer.js"></script>
+    <script src="/kijs/js/gui/container/kijs.gui.container.js"></script>
+    <script src="/kijs/js/gui/container/kijs.gui.container.Scrollable.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.SpinBox.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.ViewPort.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Icon.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Button.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Menu.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.PanelBar.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Resizer.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Panel.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Mask.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.LayerManager.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Window.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.MsgBox.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.CornerTipContainer.js"></script>
+    <script src="/kijs/js/gui/kijs.gui.Rpc.js"></script>
+    <script src="/kijs/js/gui/field/kijs.gui.field.js"></script>
+    <script src="/kijs/js/gui/field/kijs.gui.field.Field.js"></script>
+    <script src="/kijs/js/gui/field/kijs.gui.field.Text.js"></script>
+
+    <!-- Applikation -->
     <script>
         kijs.isReady(function() {
             const viewport = new kijs.gui.ViewPort({
@@ -109,7 +156,6 @@ einer Schaltfläche:
             viewport.render();
         });
     </script>
-    <title>Hallo kijs</title>
 </head>
 <body>
 </body>
@@ -119,13 +165,34 @@ einer Schaltfläche:
 Was hier passiert:  
 - ```@layer``` legt die Reihenfolge der CSS-Ebenen fest: Das CSS der Applikation 
   (```app```) überschreibt das Theme, das Theme überschreibt kijs.  
-- ```tools/getDebugHead.php``` erzeugt die ```<link>```- und ```<script>```-Tags 
-  aller Dateien der gewünschten Module (definiert in ```files.json```). Weitere 
-  Module sind z.B. ```grid```, ```aceEditor``` und ```quillEditor```.  
+- **CSS:** Es braucht ein Theme (```kijs.theme.default.css```) und das CSS von 
+  kijs (```kijs.gui.css```). Die Schriften werden von dort automatisch geladen.  
+- **JavaScript:** Eingebunden sind nur die 42 Dateien, die dieses Beispiel 
+  braucht (von insgesamt 98 in den Modulen core und gui). Die Reihenfolge ist 
+  wichtig: Eine Datei muss immer nach den Dateien kommen, von denen sie abhängt. 
+  Die Reihenfolge in ```files.json``` ist dafür die Vorlage.  
 - ```kijs.isReady()``` wartet, bis das HTML geladen ist.  
 - Der ```kijs.gui.ViewPort``` ist das oberste Element und füllt das ganze 
   Browserfenster. Er muss als einziges Element selbst gerendert werden.  
 - Mit ```name``` und ```down()``` wird ein Element im Baum gefunden.  
+
+### Weitere Komponenten verwenden
+Werden weitere Komponenten verwendet, müssen auch deren Dateien eingebunden 
+werden, inklusive aller Dateien, von denen sie abhängen. Fehlt eine Datei, zeigt 
+die Browser-Konsole z.B. ```Unknown xtype "kijs.gui.field.Combo"``` oder 
+```Cannot read properties of undefined```.  
+
+Am einfachsten ist es, alle Dateien der benötigten Module aus ```files.json``` 
+einzubinden (```core```, ```gui``` und bei Bedarf ```grid```, ```aceEditor```, 
+```quillEditor```, ```translations``` für andere Sprachen als Deutsch). Mit PHP 
+kann ```tools/getDebugHead.php``` die ```<script>```-Tags dafür automatisch 
+erzeugen, so wie es die Home-App in ```home/index.php``` macht:  
+
+```php
+<?php
+    echo file_get_contents('http://localhost/kijs/tools/getDebugHead.php?modules=core,gui&fileType=js');
+?>
+```
 
 Grössere Applikationen bestehen aus eigenen Klassen (z.B. ```myApp.App```), so wie 
 die Home-App in ```home/app/home.App.js```.  
