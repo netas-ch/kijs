@@ -18,7 +18,7 @@ home.sc.TimePicker = class home_sc_TimePicker {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.TimePicker',
+            caption: '<a href="api:kijs.gui.TimePicker">kijs.gui.TimePicker</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

@@ -18,7 +18,7 @@ home.sc.field_Number = class home_sc_field_Number {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Number',
+            caption: '<a href="api:kijs.gui.field.Number">kijs.gui.field.Number</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

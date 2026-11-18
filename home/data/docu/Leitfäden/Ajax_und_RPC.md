@@ -4,9 +4,9 @@ Ajax und RPC
 Einführung
 ----------
 kijs stellt verschiedene Klassen zur Verfügung um Daten mit einem Server auszutauschen:  
- - ```kijs.Ajax```  
- - ```kijs.Rpc```  
- - ```kijs.gui.Rpc```  
+ - [```kijs.Ajax```](api:kijs.Ajax)  
+ - [```kijs.Rpc```](api:kijs.Rpc)  
+ - [```kijs.gui.Rpc```](api:kijs.gui.Rpc)  
 
 ### kijs.Ajax
 Diese Klasse bietet grundlegende Funktionen um Daten mit Servern auszutauschen.  
@@ -74,7 +74,7 @@ Name der globalen Instanz als String übergeben werden.
 Wird kein Name angegeben, wird standardmässig die globale Instanz 'default' 
 verwendet.  
 Globale Instanzen können über folgende Funktionen definiert/abgerufen werden:
- - ```kijs.setRpc(name, rpc)``` Erstellt eine neue globale Instanz.  
+ - [```kijs.setRpc(name, rpc)```](api:kijs#setRpc) Erstellt eine neue globale Instanz.  
     Die Standard-Instanz muss 'default' heissen.  
  - ```kijs.getRpc(name)``` Gibt eine globale Instanz zurück.  
    Falls kein name angegeben wird, wird die globale Instanz 'default' zurückgegeben.  
@@ -93,7 +93,7 @@ Der Type der Exception wird mit ```errorType``` zurückgegeben. Mögliche errorT
  - ```errorNotice``` Anwenderfehler. Z.B. ein Pflichtfeld wurde nicht ausgefüllt.  
  - ```error```       Applikationsfehler.  
 
-```errorMsg``` werden von kijs automatisch mit einer ```kijs.gui.MsgBox``` angezeigt.  
+```errorMsg``` werden von kijs automatisch mit einer [```kijs.gui.MsgBox```](api:kijs.gui.MsgBox) angezeigt.  
 Das Icon entspricht dem ```errorType```.  
 
 Es ist wichtig, dass in der callback-fn, ein auf dem Server aufgetretener Fehler, noch 

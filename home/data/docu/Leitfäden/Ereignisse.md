@@ -6,7 +6,7 @@ Einführung
 kijs verfügt über ein eigenes System von Ereignissen. Es funktioniert unabhängig 
 von den nativen JavaScript events.  
 
-Die abstrakte Klasse ```kijs.Observable``` enthält diese Funktionalität.  
+Die abstrakte Klasse [```kijs.Observable```](api:kijs.Observable) enthält diese Funktionalität.  
 Fast alle Klassen in kijs erben von ```kijs.Observable``` und erhalten dadurch 
 die Möglichkeit kijs-Ereignisse auszulösen.  
 
@@ -20,7 +20,7 @@ Argumente:
  - ```e``` Objekt mit Infos zum Ereignis.  
 
 Theoretisch können auch mehrere Argumente zu einem Ereignis definiert werden.  
-```raiseEvent(name, ...args)```. Darauf sollte aber in kijs verzichtet werden und 
+[```raiseEvent(name, ...args)```](api:kijs.Observable#raiseEvent). Darauf sollte aber in kijs verzichtet werden und 
 neben ```name``` immer nur ein Argument ```e``` verwendet werden.  
 
 Ein Ereignis muss in kijs nicht definiert werden. Sobald mit ```raiseEvent(name, e)``` 
@@ -48,7 +48,7 @@ Argumente:
    Auch ein Kontext kann als String übergeben werden. Bsp: ```'myApp.Functions'```  
 
 ### once(names, callback, context)  
-Gleich wie ```on()```, jedoch wird der Listener nach dem 1. Aufruf wieder entfernt.  
+Gleich wie [```on()```](api:kijs.Observable#on), jedoch wird der Listener nach dem 1. Aufruf wieder entfernt.  
 
 ### off(names, callback, context)  
 Entfernt einen Listener.  
@@ -71,7 +71,7 @@ Argumente:
 
 Listeners via Config
 --------------------
-Bei allen ```kijs.gui.Element``` (und ```kijs.gui.Dom```) können Listeners auch 
+Bei allen [```kijs.gui.Element```](api:kijs.gui.Element) (und [```kijs.gui.Dom```](api:kijs.gui.Dom)) können Listeners auch 
 direkt in der Config mit ```on``` angegeben werden. Der optionale Eintrag ```context``` 
 gilt für alle Listeners im Objekt:  
 
@@ -121,7 +121,7 @@ Abgebrochen wird nur bei genau ```false```. Gibt ein Listener nichts zurück
 wenn ein früherer bereits ```false``` zurückgegeben hat.  
 
 Beispiel:  
-Wenn ein Fenster ```kijs.gui.Window``` geschlossen wird, wird vorher das Ereignis 
+Wenn ein Fenster [```kijs.gui.Window```](api:kijs.gui.Window) geschlossen wird, wird vorher das Ereignis 
 ```beforeClose``` aufgerufen. Soll das Schliessen verhindert werden, kann dies über 
 einen Listener gemacht werden:
 

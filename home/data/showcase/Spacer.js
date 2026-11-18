@@ -18,7 +18,7 @@ home.sc.Spacer = class home_sc_Spacer {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Spacer',
+            caption: '<a href="api:kijs.gui.Spacer">kijs.gui.Spacer</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

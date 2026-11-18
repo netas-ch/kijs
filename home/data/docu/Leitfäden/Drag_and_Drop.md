@@ -307,7 +307,7 @@ der DropMarkers muss dann mittels CSS definiert werden.
 #### splitChildZone
 Boolescher Wert. Default=false  
 Für Ziele, die selbst innerhalb eines übergeordneten Targets liegen (z.B. Ordner 
-in einem ```kijs.gui.Tree```).  
+in einem [```kijs.gui.Tree```](api:kijs.gui.Tree)).  
 Die Kind-Elemente des Ziels werden nicht berücksichtigt. Stattdessen wird das Ziel 
 anhand von ```posBeforeFactor``` und ```posAfterFactor``` in drei Zonen aufgeteilt:  
  - Mitte: Das Element wird als ```child``` eingefügt.  

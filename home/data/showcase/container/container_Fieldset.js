@@ -18,7 +18,7 @@ home.sc.container_Fieldset = class home_sc_container_Fieldset {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Fieldset',
+            caption: '<a href="api:kijs.gui.container.Fieldset">kijs.gui.container.Fieldset</a>',
             cls: ['kijs-borderless','kijs-flexform'],
             scrollableY: 'auto',
             style: {

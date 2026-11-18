@@ -23,7 +23,7 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.ProgressBar',
+            caption: '<a href="api:kijs.gui.ProgressBar">kijs.gui.ProgressBar</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

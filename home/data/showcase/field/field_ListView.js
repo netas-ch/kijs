@@ -18,7 +18,7 @@ home.sc.field_ListView = class home_sc_field_ListView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.ListView',
+            caption: '<a href="api:kijs.gui.field.ListView">kijs.gui.field.ListView</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

@@ -9,7 +9,7 @@ Sie können aber in eine beliebige Sprache übersetzt werden.
 Technische Fehlermeldungen, die nicht zum übersetzen gedacht sind, sind  in 
 Englisch (en-US) geschrieben. Sie können nicht übersetzt werden.  
 
-Über die globale, statische Funktion ```kijs.getText(key, variant='', args=null, language=null)``` 
+Über die globale, statische Funktion [```kijs.getText(key, variant='', args=null, language=null)```](api:kijs#getText) 
 können Texte in eine beliebige Sprache übersetzt werden.  
 Beispiel:   
 ```kijs.gui.msgbox.alert(kijs.getText('Der Vorgang wurde erfolgreich abgeschlossen.'));```  
@@ -45,7 +45,7 @@ eingebunden werden: ```%1```, ```%2```, usw.
 
 #### language
 Gewünschte Sprache (optional)  
-Falls keine Sprache angegeben wird, wird die unter ```kijs.language``` global 
+Falls keine Sprache angegeben wird, wird die unter [```kijs.language```](api:kijs#language) global 
 eingestellte Sprache verwendet.  
 
 Die language muss im Format BCP 47 angegeben werden.
@@ -60,7 +60,7 @@ Beispiele:
 
 ### eigene getText()-Funktion
 Bei Bedarf kann eine eigene getText-Funktion verwendet werden.  
-Diese kann mit der Funktion ```kijs.setGetTextFn(fn, context)``` definiert werden.  
+Diese kann mit der Funktion [```kijs.setGetTextFn(fn, context)```](api:kijs#setGetTextFn) definiert werden.  
 Falls keine eigene Funktion definiert wird, verwendet kijs die kijs-eigene Funktion.  
 Diese bezieht die Texte von den Sprachdateien im Ordner: ```js/translation```  
 Sie enthält aber natürlich nur Texte, die im kijs vorkommen. Es wird darum empfohlen 
@@ -88,10 +88,10 @@ Beispiel Deutsch: 31.08.2024
 Beispiel Englisch: 08/31/2024  
 
 Folgende kijs-Elemente zeigen Datumswerte an:  
- - ```kijs.gui.DatePicker```
- - ```kijs.gui.MonthPicker```
- - ```kijs.gui.field.DateTime```
- - ```kijs.gui.field.Month```
+ - [```kijs.gui.DatePicker```](api:kijs.gui.DatePicker)
+ - [```kijs.gui.MonthPicker```](api:kijs.gui.MonthPicker)
+ - [```kijs.gui.field.DateTime```](api:kijs.gui.field.DateTime)
+ - [```kijs.gui.field.Month```](api:kijs.gui.field.Month)
 
 Sie verwenden auch die unter ```kijs.language``` definierte Sprache.  
 

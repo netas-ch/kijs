@@ -18,7 +18,7 @@ home.sc.CornerTipContainer = class home_sc_CornerTipContainer {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.CornerTipContainer',
+            caption: '<a href="api:kijs.gui.CornerTipContainer">kijs.gui.CornerTipContainer</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

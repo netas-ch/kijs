@@ -18,7 +18,7 @@ home.sc.field_Range = class home_sc_field_Range {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Range',
+            caption: '<a href="api:kijs.gui.field.Range">kijs.gui.field.Range</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

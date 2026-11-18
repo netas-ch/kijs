@@ -18,7 +18,7 @@ home.sc.DataView = class home_sc_DataView {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.DataView',
+            caption: '<a href="api:kijs.gui.DataView">kijs.gui.DataView</a>',
             scrollableY: 'auto',
             cls: ['kijs-borderless'],
             style: {

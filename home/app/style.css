@@ -400,6 +400,21 @@
         color: var(--apiTagGrey);
     }
 
+    /* Links auf die API (api:...) und verlinkter Code in der Doku */
+    .markdown a > code {
+        color: var(--accentColor);
+    }
+
+    /* Link auf die API im Titel der Showcase-Seiten */
+    .kijs-panelbar a[href^="api:"] {
+        color: inherit;
+        text-decoration: none;
+        border-bottom: 1px dotted currentColor;
+    }
+    .kijs-panelbar a[href^="api:"]:hover {
+        border-bottom-style: solid;
+    }
+
     /* Globale Suche */
     .home-search-field {
         margin-right: 6px;

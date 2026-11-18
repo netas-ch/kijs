@@ -10,7 +10,7 @@ durch den Benutzer verändert wurde.
 ```isDirty``` wird bei folgenden Aktionen verändert:  
  - Setzen der Feldwerte eines container.Form mittels ```data``` setter 
    (```isDirty``` wird auf false gesetzt).  
- - Erfolgreiches Ausführen der Funktion ```save()``` im kijs.gui.container.Form 
+ - Erfolgreiches Ausführen der Funktion [```save()```](api:kijs.gui.container.Form#save) im kijs.gui.container.Form 
    (```isDirty``` wird auf false gesetzt).  
  - Direktes setzen via setter ```isDirty``` auf false. Dieser setter kann nicht 
    auf true gesetzt werden.  

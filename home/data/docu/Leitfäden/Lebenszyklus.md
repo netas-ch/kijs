@@ -1,16 +1,16 @@
 Lebenszyklus eines GUI-Elements
 ================================
 
-Jedes ```kijs.gui.Element``` (und damit fast jede GUI-Klasse) durchläuft die 
+Jedes [```kijs.gui.Element```](api:kijs.gui.Element) (und damit fast jede GUI-Klasse) durchläuft die 
 gleichen Phasen:  
 
 | Phase           | Funktion                  | Was passiert                                        | Event                |
 |-----------------|---------------------------|-----------------------------------------------------|----------------------|
 | 1. Erstellen    | ```constructor(config)``` | Objekt und Unterobjekte werden erstellt, Config wird angewendet. Es gibt noch **keinen** DOM-Node. | – |
-| 2. Rendern      | ```render()``` / ```renderTo(node)``` | DOM-Node wird erstellt bzw. aktualisiert und eingefügt | ```afterRender```, ```afterFirstRenderTo``` |
+| 2. Rendern      | [```render()```](api:kijs.gui.Element#render) / [```renderTo(node)```](api:kijs.gui.Element#renderTo) | DOM-Node wird erstellt bzw. aktualisiert und eingefügt | ```afterRender```, ```afterFirstRenderTo``` |
 | 3. Aktualisieren| Setter, ```render()```    | Änderungen werden in den DOM übernommen              | ```afterRender```, ```afterResize```  |
-| 4. Unrendern    | ```unrender()```          | DOM-Node wird entfernt. Das Objekt bleibt bestehen und kann wieder gerendert werden. | ```unrender``` |
-| 5. Zerstören    | ```destruct()```          | Objekt wird mitsamt allen Unterobjekten entladen     | ```destruct```       |
+| 4. Unrendern    | [```unrender()```](api:kijs.gui.Element#unrender)          | DOM-Node wird entfernt. Das Objekt bleibt bestehen und kann wieder gerendert werden. | ```unrender``` |
+| 5. Zerstören    | [```destruct()```](api:kijs.gui.Element#destruct)          | Objekt wird mitsamt allen Unterobjekten entladen     | ```destruct```       |
 
 Wichtig ist die Trennung zwischen **Objekt** und **DOM-Node**: Das Objekt lebt von 
 ```constructor``` bis ```destruct```. Der DOM-Node lebt nur zwischen ```render``` und 
@@ -21,7 +21,7 @@ jedes Mal einen neuen Node.
 1\. Erstellen
 ------------
 Im Konstruktor werden alle Klassenvariablen deklariert, Unterobjekte (z.B. 
-```kijs.gui.Dom``` oder weitere Elemente) erstellt und die Config angewendet 
+[```kijs.gui.Dom```](api:kijs.gui.Dom) oder weitere Elemente) erstellt und die Config angewendet 
 (siehe Leitfaden [Config-System](Config-System.md)).  
 
 Zu diesem Zeitpunkt existiert noch kein DOM-Node. Darum:  
@@ -41,10 +41,10 @@ Zu diesem Zeitpunkt existiert noch kein DOM-Node. Darum:
 
 Normalerweise muss man nur das oberste Element selbst rendern. Alles andere 
 geschieht automatisch:  
-- ```kijs.gui.ViewPort``` verwendet ```document.body``` als eigenen Node. Hier 
+- [```kijs.gui.ViewPort```](api:kijs.gui.ViewPort) verwendet ```document.body``` als eigenen Node. Hier 
   reicht ein ```render()```.  
-- ```kijs.gui.Window.show()``` rendert das Fenster.  
-- Ein ```kijs.gui.Container``` rendert in seinem ```render()``` alle ```elements``` 
+- [```kijs.gui.Window.show()```](api:kijs.gui.Window#show) rendert das Fenster.  
+- Ein [```kijs.gui.Container```](api:kijs.gui.Container) rendert in seinem ```render()``` alle ```elements``` 
   mit ```renderTo()``` in seinen inneren Node.  
 
 ### Was beim Rendern passiert
@@ -64,11 +64,11 @@ neue Position (```appendChild``` / ```insertBefore```).
 | ```afterFirstRenderTo``` | Nur beim **ersten** ```renderTo()```, also wenn der Node das erste Mal im Dokument ist |
 
 Mit der Config ```autoLoad: true``` wird beim Event ```afterFirstRenderTo``` 
-automatisch ```load()``` aufgerufen (z.B. um Daten via RPC zu laden).  
+automatisch [```load()```](api:kijs.gui.Element#load) aufgerufen (z.B. um Daten via RPC zu laden).  
 
 ### render() überschreiben
 Klassen mit eigenen Unterobjekten überschreiben ```render()```. Dabei gilt immer das 
-gleiche Muster (gekürzt aus ```kijs.gui.Button```):  
+gleiche Muster (gekürzt aus [```kijs.gui.Button```](api:kijs.gui.Button)):  
 
     // overwrite
     render(superCall) {
@@ -131,7 +131,7 @@ DOM nachgeführt werden. Das übliche Muster:
     }
 
 Einfache Änderungen, die nur ein ```kijs.gui.Dom```-Objekt betreffen (z.B. 
-```clsAdd()```, ```style```, ```html```), schreibt das Dom-Objekt selbst direkt in 
+[```clsAdd()```](api:kijs.gui.Dom#clsAdd), ```style```, ```html```), schreibt das Dom-Objekt selbst direkt in 
 den Node, falls er existiert. Hier ist kein ```render()``` nötig.  
 
 ### Zustand nie nur im DOM speichern
@@ -144,7 +144,7 @@ nächsten Unrendern verloren.
 ```nodeAttribute``` zurück, damit sie beim nächsten Rendern wieder vorhanden sind.  
 
 ### Elemente hinzufügen und entfernen
-```kijs.gui.Container.add()``` und ```remove()``` rendern den Container automatisch 
+[```kijs.gui.Container.add()```](api:kijs.gui.Container#add) und [```remove()```](api:kijs.gui.Container#remove) rendern den Container automatisch 
 neu, wenn er bereits gerendert ist. Werden mehrere Änderungen nacheinander gemacht, 
 kann das mit ```{ preventRender: true }``` verhindert und am Schluss einmal 
 ```render()``` aufgerufen werden.  
@@ -168,7 +168,7 @@ geändert hat. Ablauf:
    ausgelöst, damit es nicht bei jedem Pixel kommt. Die Weitergabe an die Kinder 
    erfolgt dann ohne weitere Verzögerung.  
 
-Während ```applyConfig()``` im Konstruktor ist ```afterResize``` unterdrückt.  
+Während [```applyConfig()```](api:kijs.gui.Element#applyConfig) im Konstruktor ist ```afterResize``` unterdrückt.  
 
 
 4\. Unrendern
@@ -210,7 +210,7 @@ Beim Überschreiben gilt das gleiche Muster wie bei ```render```:
 4. Unterobjekte mit ```destruct()``` entladen  
 5. Variablen mit Objekten/Arrays auf ```null``` setzen  
 6. ```super.destruct(true)``` aufrufen. Ganz am Schluss entfernt 
-   ```kijs.Observable``` alle Listeners, die **auf diesem Objekt** registriert sind.  
+   [```kijs.Observable```](api:kijs.Observable) alle Listeners, die **auf diesem Objekt** registriert sind.  
 
 Das Muster dazu steht im Leitfaden [Aufbau einer Klasse](Aufbau_einer_Klasse.md).  
 

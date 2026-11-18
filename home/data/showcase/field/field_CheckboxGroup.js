@@ -18,7 +18,7 @@ home.sc.field_CheckboxGroup = class home_sc_field_CheckboxGroup {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.CheckboxGroup',
+            caption: '<a href="api:kijs.gui.field.CheckboxGroup">kijs.gui.field.CheckboxGroup</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

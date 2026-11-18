@@ -49,7 +49,7 @@ Für Unterüberschriften innerhalb eines Hauptabschnitts. Die Linie steht nur
 Davor stehen immer **2 Leerzeilen**. Folgt die Unterüberschrift direkt auf eine 
 Überschrift 1, steht nur **1 Leerzeile** dazwischen.  
 
-Beispiel aus ```kijs.gui.DragDrop```:  
+Beispiel aus [```kijs.gui.DragDrop```](api:kijs.gui.DragDrop):  
 
         static getddEffect(ddAllowMove, ddAllowCopy, ddAllowLink) {
             ...

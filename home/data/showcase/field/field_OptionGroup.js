@@ -18,7 +18,7 @@ home.sc.field_OptionGroup = class home_sc_field_OptionGroup {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.OptionGroup',
+            caption: '<a href="api:kijs.gui.field.OptionGroup">kijs.gui.field.OptionGroup</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

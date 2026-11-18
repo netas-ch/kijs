@@ -18,7 +18,7 @@ home.sc.MsgBox = class home_sc_MsgBox {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.MsgBox',
+            caption: '<a href="api:kijs.gui.MsgBox">kijs.gui.MsgBox</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

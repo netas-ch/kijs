@@ -18,7 +18,7 @@ home.sc.container_Stack = class home_sc_container_Stack {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Stack',
+            caption: '<a href="api:kijs.gui.container.Stack">kijs.gui.container.Stack</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

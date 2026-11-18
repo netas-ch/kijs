@@ -18,7 +18,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.FileUpload',
+            caption: 'kijs.gui.FileUpload (<a href="api:kijs.UploadDialog">kijs.UploadDialog</a>)',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

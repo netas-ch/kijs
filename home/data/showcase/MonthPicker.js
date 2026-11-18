@@ -18,7 +18,7 @@ home.sc.MonthPicker = class home_sc_MonthPicker {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.MonthPicker',
+            caption: '<a href="api:kijs.gui.MonthPicker">kijs.gui.MonthPicker</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

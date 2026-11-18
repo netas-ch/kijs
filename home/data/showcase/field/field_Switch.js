@@ -18,7 +18,7 @@ home.sc.field_Switch = class home_sc_field_Switch {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Switch',
+            caption: '<a href="api:kijs.gui.field.Switch">kijs.gui.field.Switch</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

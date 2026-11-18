@@ -5,9 +5,9 @@ Das GUI von kijs baut auf drei Grundklassen auf:
 
 | Klasse                   | Erbt von              | Aufgabe                                                    |
 |--------------------------|-----------------------|------------------------------------------------------------|
-| ```kijs.gui.Dom```       | ```kijs.Observable``` | Kapselt **einen** DOM-Node: CSS-Klassen, Style, HTML, Attribute, Node-Events |
-| ```kijs.gui.Element```   | ```kijs.Observable``` | Eine **Komponente** im GUI-Baum. Besitzt ein ```kijs.gui.Dom``` (```this._dom```) und kann weitere enthalten |
-| ```kijs.gui.Container``` | ```kijs.gui.Element```| Element mit **Kind-Elementen** (```elements```)              |
+| [```kijs.gui.Dom```](api:kijs.gui.Dom)       | [```kijs.Observable```](api:kijs.Observable) | Kapselt **einen** DOM-Node: CSS-Klassen, Style, HTML, Attribute, Node-Events |
+| [```kijs.gui.Element```](api:kijs.gui.Element)   | ```kijs.Observable``` | Eine **Komponente** im GUI-Baum. Besitzt ein ```kijs.gui.Dom``` (```this._dom```) und kann weitere enthalten |
+| [```kijs.gui.Container```](api:kijs.gui.Container) | ```kijs.gui.Element```| Element mit **Kind-Elementen** (```elements```)              |
 
 Fast alle GUI-Klassen erben von ```kijs.gui.Element``` oder ```kijs.gui.Container```.  
 
@@ -17,17 +17,17 @@ kijs.gui.Dom
 ```kijs.gui.Dom``` ist ein Hilfsobjekt rund um einen einzelnen HTML-Node. Man 
 arbeitet nie direkt mit dem Node, sondern immer über das Dom-Objekt. So bleiben 
 alle Eigenschaften auch dann erhalten, wenn der Node noch nicht existiert oder 
-beim ```unrender()``` gelöscht wird (siehe Leitfaden [Lebenszyklus](Lebenszyklus.md)).  
+beim [```unrender()```](api:kijs.gui.Dom#unrender) gelöscht wird (siehe Leitfaden [Lebenszyklus](Lebenszyklus.md)).  
 
 Wichtige Funktionen und Eigenschaften:  
 
 | Bereich       | Funktionen / Eigenschaften                                             |
 |---------------|------------------------------------------------------------------------|
-| CSS-Klassen   | ```clsAdd()```, ```clsRemove()```, ```clsHas()```, ```clsToggle()```, ```clsRemoveAll()``` |
+| CSS-Klassen   | [```clsAdd()```](api:kijs.gui.Dom#clsAdd), [```clsRemove()```](api:kijs.gui.Dom#clsRemove), [```clsHas()```](api:kijs.gui.Dom#clsHas), [```clsToggle()```](api:kijs.gui.Dom#clsToggle), [```clsRemoveAll()```](api:kijs.gui.Dom#clsRemoveAll) |
 | Inhalt        | ```html```, ```htmlDisplayType``` (```'html'```, ```'code'```, ```'text'```), ```isEmpty``` |
 | Darstellung   | ```style```, ```width```, ```height```, ```top```, ```left```          |
-| Attribute     | ```nodeAttributeSet()```, ```nodeAttributeGet()```, ```nodeAttributeHas()```, ```nodeAttributeRemove()``` |
-| Node          | ```node```, ```nodeTagName```, ```isRendered```, ```render()```, ```renderTo()```, ```unrender()``` |
+| Attribute     | [```nodeAttributeSet()```](api:kijs.gui.Dom#nodeAttributeSet), [```nodeAttributeGet()```](api:kijs.gui.Dom#nodeAttributeGet), [```nodeAttributeHas()```](api:kijs.gui.Dom#nodeAttributeHas), ```nodeAttributeRemove()``` |
+| Node          | ```node```, ```nodeTagName```, ```isRendered```, [```render()```](api:kijs.gui.Dom#render), [```renderTo()```](api:kijs.gui.Dom#renderTo), [```unrender()```](api:kijs.gui.Dom#unrender) |
 | Tastatur      | ```keyEventAdd()```, ```keyEventStopBubbeling()```                     |
 
 Ein Dom-Objekt ist **kein** Element: Es hat keinen ```parent```, kein ```afterResize``` 
@@ -46,7 +46,7 @@ camelCase-Namen. Die Zuordnung zu den Browser-Events steht in ```_eventMap```:
 | ```enterPress```| ```keydown``` mit Taste Enter |
 | ...             | ...            |
 
-Der Listener auf dem DOM-Node wird erst erstellt, wenn jemand mit ```on()``` auf 
+Der Listener auf dem DOM-Node wird erst erstellt, wenn jemand mit [```on()```](api:kijs.Observable#on) auf 
 das kijs-Event hört **und** der Node existiert. Beim Rendern werden die Listeners 
 nachgeholt, beim Unrendern entfernt. Man muss sich also nicht darum kümmern, ob der 
 Node schon existiert.  
@@ -71,7 +71,7 @@ Viele Config-Eigenschaften des Elements werden direkt an dieses Dom-Objekt
 weitergegeben (```cls```, ```style```, ```html```, ```nodeTagName```, 
 ```nodeAttribute``` ...).  
 
-Komplexere Elemente bestehen aus weiteren Unterobjekten. Beispiel ```kijs.gui.Button```:  
+Komplexere Elemente bestehen aus weiteren Unterobjekten. Beispiel [```kijs.gui.Button```](api:kijs.gui.Button):  
 
     this._dom               // <button class="kijs-button">
     this._iconEl            //   kijs.gui.Icon     (Element)
@@ -88,8 +88,8 @@ Komplexere Elemente bestehen aus weiteren Unterobjekten. Beispiel ```kijs.gui.Bu
 Namenskonvention für die Variablen: ```_xyDom``` für Dom-Objekte und ```_xyEl``` für 
 Elemente.  
 
-Unterobjekte werden im Konstruktor erstellt, im ```render()``` in den eigenen Node 
-gerendert und im ```destruct()``` zerstört.  
+Unterobjekte werden im Konstruktor erstellt, im [```render()```](api:kijs.gui.Element#render) in den eigenen Node 
+gerendert und im [```destruct()```](api:kijs.gui.Element#destruct) zerstört.  
 
 ### Event-Weiterleitung
 Ein Element löst Events wie ```click``` nicht selbst aus. Es leitet sie von einem 
@@ -127,8 +127,8 @@ Jedes Element kennt sein Elternelement. Damit kann im Baum navigiert werden:
 |------------------------|------------------------------------------------------------------|
 | ```parent```           | Übergeordnetes Element                                           |
 | ```next```, ```previous``` | Nächstes bzw. vorheriges Element im selben Container         |
-| ```up(name)```         | Erstes übergeordnetes Element mit diesem ```name```              |
-| ```upX(xtype)```       | Erstes übergeordnetes Element dieser Klasse, z.B. ```upX('kijs.gui.Window')``` |
+| [```up(name)```](api:kijs.gui.Element#up)         | Erstes übergeordnetes Element mit diesem ```name```              |
+| [```upX(xtype)```](api:kijs.gui.Element#upX)       | Erstes übergeordnetes Element dieser Klasse, z.B. ```upX('kijs.gui.Window')``` |
 | ```isChildOf(el)```    | Liegt das Element (irgendwo) unterhalb von ```el```?             |
 
 Siehe aber Leitfaden [Kapselung](Kapselung.md): Der Zugriff auf übergeordnete Elemente sollte 
@@ -176,8 +176,8 @@ Mit ```defaults``` können Standardwerte für alle Config-Objekte angegeben werd
 | Funktion                          | Beschreibung                                         |
 |-----------------------------------|------------------------------------------------------|
 | ```add(elements, index, options)```   | Fügt ein oder mehrere Elemente hinzu (optional an einer Position) |
-| ```remove(elements, options)```   | Entfernt Elemente. Standardmässig werden sie dabei **zerstört** |
-| ```removeAll(options)```          | Entfernt alle Elemente                               |
+| [```remove(elements, options)```](api:kijs.gui.Container#remove)   | Entfernt Elemente. Standardmässig werden sie dabei **zerstört** |
+| [```removeAll(options)```](api:kijs.gui.Container#removeAll)          | Entfernt alle Elemente                               |
 | ```hasChild(el)```                | Ist das Element ein direktes Kind?                   |
 | ```elements```, ```firstChild```, ```lastChild``` | Zugriff auf die Kind-Elemente        |
 
@@ -194,10 +194,10 @@ wird der Vorgang abgebrochen.
 ### Elemente suchen
 | Funktion                                  | Ergebnis                                       |
 |-------------------------------------------|------------------------------------------------|
-| ```down(name)```                          | Erstes Element mit diesem ```name``` (beliebige Tiefe) oder ```null``` |
-| ```downX(xtype)```                        | Erstes Element dieser Klasse oder ```null```   |
+| [```down(name)```](api:kijs.gui.Container#down)                          | Erstes Element mit diesem ```name``` (beliebige Tiefe) oder ```null``` |
+| [```downX(xtype)```](api:kijs.gui.Container#downX)                        | Erstes Element dieser Klasse oder ```null```   |
 | ```getElementsByName(name, deep, breakOnFirst)```   | Array mit allen passenden Elementen  |
-| ```getElementsByXtype(xtype, deep, breakOnFirst)``` | Array mit allen passenden Elementen  |
+| [```getElementsByXtype(xtype, deep, breakOnFirst)```](api:kijs.gui.Container#getElementsByXtype) | Array mit allen passenden Elementen  |
 
 ```deep```: ```0``` = nur direkte Kinder, ```1``` = Kinder und Enkel, ... ```-1``` = 
 unendlich (Standard).  
@@ -224,8 +224,8 @@ Welche Klasse ableiten?
 |------------------------------------------------------------|-----------------------------|
 | hat keine Kind-Elemente, nur eigene Unterobjekte           | ```kijs.gui.Element```      |
 | soll beliebige Kind-Elemente aufnehmen können              | ```kijs.gui.Container```    |
-| braucht Titelleiste, Kopf-/Fusszeile, Schliessen-Button ...| ```kijs.gui.Panel```        |
-| ist ein Formularfeld                                       | ```kijs.gui.field.Field``` (oder ein passendes Feld) |
+| braucht Titelleiste, Kopf-/Fusszeile, Schliessen-Button ...| [```kijs.gui.Panel```](api:kijs.gui.Panel)        |
+| ist ein Formularfeld                                       | [```kijs.gui.field.Field```](api:kijs.gui.field.Field) (oder ein passendes Feld) |
 
 
 Beispiele

@@ -18,7 +18,7 @@ home.sc.container_Tab = class home_sc_container_Tab {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Tab',
+            caption: '<a href="api:kijs.gui.container.Tab">kijs.gui.container.Tab</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

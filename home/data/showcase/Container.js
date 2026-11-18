@@ -28,7 +28,7 @@ home.sc.Container = class home_sc_Container {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Container',
+            caption: '<a href="api:kijs.gui.Container">kijs.gui.Container</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

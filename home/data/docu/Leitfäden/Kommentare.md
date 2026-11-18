@@ -50,7 +50,7 @@ die Rückgabe ```false``` bewirkt.
 
 Zu den eigenen Events gehören auch die, die mit ```_eventForwardsAdd()``` von 
 Unterobjekten weitergeleitet werden. Der Generator findet die Aufrufe von 
-```raiseEvent()``` und ```_eventForwardsAdd()``` im Code und kann so Events melden, 
+[```raiseEvent()```](api:kijs.Observable#raiseEvent) und ```_eventForwardsAdd()``` im Code und kann so Events melden, 
 die noch kein ```@fires``` haben.  
 
 **Nicht** in den Klassenkommentar gehören:  

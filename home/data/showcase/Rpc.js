@@ -18,7 +18,7 @@ home.sc.Rpc = class home_sc_Rpc {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Rpc',
+            caption: '<a href="api:kijs.gui.Rpc">kijs.gui.Rpc</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

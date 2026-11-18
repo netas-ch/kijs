@@ -18,7 +18,7 @@ home.sc.field_AceEditor = class home_sc_field_AceEditor {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.AceEditor',
+            caption: '<a href="api:kijs.gui.field.AceEditor">kijs.gui.field.AceEditor</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

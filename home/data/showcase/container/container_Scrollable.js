@@ -18,7 +18,7 @@ home.sc.container_Scrollable = class home_sc_container_Scrollable {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Scrollable',
+            caption: '<a href="api:kijs.gui.container.Scrollable">kijs.gui.container.Scrollable</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

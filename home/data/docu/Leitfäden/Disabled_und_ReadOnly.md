@@ -15,7 +15,7 @@ sehr ähnlich. Es gibt aber wichtige Unterschiede.
 
 disabled
 --------
-Betrifft alle ```kijs.gui.Element``` Elemente inkl. vererbte (also fast alle).  
+Betrifft alle [```kijs.gui.Element```](api:kijs.gui.Element) Elemente inkl. vererbte (also fast alle).  
 
 Wird ein Container auf ```disabled: true``` gesetzt, werden damit auch sämtliche 
 Kinder disabled.  
@@ -38,11 +38,11 @@ Bei Panels können die einzelnen Bereich einzeln disabled werden:
 | Footer Bar   | footerBarDisabled | footerBar.disabled |
 | ganzes Panel | disabled          | disabled           |
 
-Die Funktion ```changeDisabled(val, callFromParent)``` sollte nie direkt 
+Die Funktion [```changeDisabled(val, callFromParent)```](api:kijs.gui.Element#changeDisabled) sollte nie direkt 
 aufgerufen werden. Sie wird intern verwendet. Stattdessen den Setter ```disabled``` verwenden.  
 Ausnahme: Beim Weitergeben an eigene Unterelemente innerhalb eines überschriebenen 
 ```changeDisabled()``` wird es mit ```callFromParent=true``` aufgerufen, z.B. 
-```this._iconEl.changeDisabled(!!val, true);``` (siehe ```kijs.gui.Button```).  
+```this._iconEl.changeDisabled(!!val, true);``` (siehe [```kijs.gui.Button```](api:kijs.gui.Button)).  
 
 Der Getter/Setter ```disabled``` sollte nie überschrieben werden. Stattdessen die Funktion
 ```changeDisabled(val, callFromParent)``` überschreiben.  

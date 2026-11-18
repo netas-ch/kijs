@@ -1,7 +1,7 @@
 Daten
 =====================
 
-Die Klasse ```kijs.Data``` enthält einige statische Funktionen, die den Umgang mit 
+Die Klasse [```kijs.Data```](api:kijs.Data) enthält einige statische Funktionen, die den Umgang mit 
 Daten erleichtern. Diese sind hier Dokumentiert.  
 
 Namensgebungen/Konventionen
@@ -53,16 +53,16 @@ gestellt:
  - ```getRowByPrimaryKey(rows, primaryKey, primaryKeyFields)```  
    Gibt den Datensatz zurück, der dem primaryKey entspricht.  
 
- - ```filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields)```  
+ - [```filterByPrimaryKeys(rows, primaryKeys, primaryKeyFields)```](api:kijs.Data#filterByPrimaryKeys)  
    Gibt die Datensätze zurück, die den primaryKeys entsprechen.  
 
- - ```filter(rows, filters)```  
+ - [```filter(rows, filters)```](api:kijs.Data#filter)  
    Filtert ein Recordset und gibt die Datensätze zurück, die durch den Filter passen.  
 
- - ```rowMatchFilters(row, filters)```
+ - [```rowMatchFilters(row, filters)```](api:kijs.Data#rowMatchFilters)
    Überprüft, ob ein einzelner Datensatz (row) einem Filter entspricht.  
 
- - ```search(rows, filters)```  
+ - [```search(rows, filters)```](api:kijs.Data#search)  
    Filtert ein Recordset und gibt die Indexe der Datensätze zurück, die durch den Filter passen.  
 
 ### Aufbau eines Filters
@@ -147,7 +147,7 @@ einem vorgegebenen Wert benutzt.
 Sortieren
 ---------
 Um Daten in einem Recordset zu sortieren, wird die Funktion sort zur Verfügung gestellt:  
-```sort(rows, sortFields, clone=true)```
+[```sort(rows, sortFields, clone=true)```](api:kijs.Data#sort)
 
 ### Argumente
  - ```rows```       Recordset das sortiert werden soll (Array)
@@ -199,7 +199,7 @@ verwendet werden.
 
 Rekursive Datensätze
 --------------------
-kijs unterstützt auch rekursive Datensätze. Z.B. für ```kijs.gui.Tree```.  
+kijs unterstützt auch rekursive Datensätze. Z.B. für [```kijs.gui.Tree```](api:kijs.gui.Tree).  
 Bei den Funktionen in ```kijs.Data``` kann dafür das optionale Argument ```childrenField``` 
 angegeben werden. Es enthält den Feldnamen des Felds, dass das Recordset der Kinder 
 enthält.  

@@ -38,14 +38,14 @@ z.B. den der Applikation. In diesem Beispiel ```my.gui```.
 
 **Wichtig:** Der interne Klassenname (```my_gui_Counter```) muss dem vollständigen 
 Namen entsprechen, wobei die Punkte durch ```_``` ersetzt werden. Daraus ermittelt 
-kijs die Eigenschaft ```xtype```. Stimmt er nicht, funktionieren ```upX()```, 
-```downX()``` und ```getElementsByXtype()``` nicht.  
+kijs die Eigenschaft ```xtype```. Stimmt er nicht, funktionieren [```upX()```](api:kijs.gui.Element#upX), 
+[```downX()```](api:kijs.gui.Container#downX) und [```getElementsByXtype()```](api:kijs.gui.Container#getElementsByXtype) nicht.  
 
 ```kijs.createNamespace('my.gui')``` erstellt ```window.my.gui```, falls es noch 
 nicht existiert.  
 
 Weil der Zähler keine beliebigen Kind-Elemente aufnehmen soll, leiten wir von 
-```kijs.gui.Element``` ab und nicht von ```kijs.gui.Container```.  
+[```kijs.gui.Element```](api:kijs.gui.Element) ab und nicht von [```kijs.gui.Container```](api:kijs.gui.Container).  
 
 
 Schritt 2: Der Klassenkommentar
@@ -134,7 +134,7 @@ Der Konstruktor folgt immer dem gleichen Ablauf (siehe Leitfaden [Config-System]
 
 Was hier passiert:  
 - **Unterobjekte:** Beschriftung und Zahl sind einfache Nodes, also 
-  ```kijs.gui.Dom``` (Variablenname ```_xyDom```). Die Schaltflächen sind 
+  [```kijs.gui.Dom```](api:kijs.gui.Dom) (Variablenname ```_xyDom```). Die Schaltflächen sind 
   eigenständige Komponenten, also ```kijs.gui.Element``` mit ```parent: this``` 
   (Variablenname ```_xyEl```).  
 - **Listeners** auf die Unterobjekte sind private Funktionen (```#on...```).  
@@ -287,11 +287,11 @@ Schritt 5: Öffentliche Funktionen und render
     }
 
 - **```changeDisabled```**: Weil die Schaltflächen keine Kinder eines Containers 
-  sind, müssen wir ```disabled``` selbst weitergeben. Laut Leitfaden [Disabled und ReadOnly](Disabled_und_ReadOnly.md) wird dafür ```changeDisabled()``` überschrieben, nicht der Setter 
+  sind, müssen wir ```disabled``` selbst weitergeben. Laut Leitfaden [Disabled und ReadOnly](Disabled_und_ReadOnly.md) wird dafür [```changeDisabled()```](api:kijs.gui.Element#changeDisabled) überschrieben, nicht der Setter 
   ```disabled```. Das zweite Argument ```true``` (```callFromParent```) sorgt 
   dafür, dass eine Schaltfläche, die selbst ```disabled``` war, es auch bleibt.  
 - **```render```**: zuerst ```super.render(true)```, dann die Unterobjekte in der 
-  gewünschten Reihenfolge. ```render()``` kann beliebig oft aufgerufen werden.  
+  gewünschten Reihenfolge. [```render()```](api:kijs.gui.Element#render) kann beliebig oft aufgerufen werden.  
 - **```unrender```**: Event am Anfang, dann die Unterobjekte, dann die Basisklasse.  
 
 

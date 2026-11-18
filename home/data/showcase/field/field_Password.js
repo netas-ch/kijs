@@ -18,7 +18,7 @@ home.sc.field_Password = class home_sc_field_Password {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Password',
+            caption: '<a href="api:kijs.gui.field.Password">kijs.gui.field.Password</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

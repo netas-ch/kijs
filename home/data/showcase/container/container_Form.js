@@ -18,7 +18,7 @@ home.sc.container_Form = class home_sc_container_Form {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.container.Form',
+            caption: '<a href="api:kijs.gui.container.Form">kijs.gui.container.Form</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

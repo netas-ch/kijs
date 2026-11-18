@@ -18,7 +18,7 @@ home.sc.Tree = class home_sc_Tree {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Tree',
+            caption: '<a href="api:kijs.gui.Tree">kijs.gui.Tree</a>',
             scrollableY: 'auto',
             cls: ['kijs-borderless', 'kijs-flexrowwrap'],
             style: {

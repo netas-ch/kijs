@@ -18,7 +18,7 @@ home.sc.field_Month = class home_sc_field_Month {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.field.Month',
+            caption: '<a href="api:kijs.gui.field.Month">kijs.gui.field.Month</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

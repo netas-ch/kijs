@@ -18,7 +18,7 @@ home.sc.Mask = class home_sc_Mask {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Mask',
+            caption: '<a href="api:kijs.gui.Mask">kijs.gui.Mask</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

@@ -22,9 +22,9 @@ Damit das funktioniert, besitzt jede Klasse drei Bausteine:
 |-------------------|----------------------------------------------------------------|
 | ```_defaultConfig``` | Standardwerte, die verwendet werden, wenn in der Config nichts steht |
 | ```_configMap```     | Legt fest, welche Config-Eigenschaften erlaubt sind und wie sie zugewiesen werden |
-| ```applyConfig()```  | Weist eine Config gemäss ```_configMap``` zu                |
+| [```applyConfig()```](api:kijs.gui.Element#applyConfig)  | Weist eine Config gemäss ```_configMap``` zu                |
 
-Die eigentliche Arbeit macht die statische Funktion ```kijs.Object.assignConfig()```.  
+Die eigentliche Arbeit macht die statische Funktion [```kijs.Object.assignConfig()```](api:kijs.Object#assignConfig).  
 
 
 Ablauf im Konstruktor
@@ -65,11 +65,11 @@ Erst die Klasse, die mit ```new``` erstellt wurde, erhält die richtige Config u
         }
     }
 
-(gekürzt aus ```kijs.gui.Button```)  
+(gekürzt aus [```kijs.gui.Button```](api:kijs.gui.Button))  
 
 **Wichtig:**  
 - ```_defaultConfig``` und ```_configMap``` werden in der Basisklasse (z.B. 
-  ```kijs.gui.Element```) erstellt. Abgeleitete Klassen **ergänzen** sie mit 
+  [```kijs.gui.Element```](api:kijs.gui.Element)) erstellt. Abgeleitete Klassen **ergänzen** sie mit 
   ```Object.assign(...)```. Sie dürfen sie nie neu zuweisen, sonst gehen die 
   Einträge der Basisklassen verloren.  
 - Der Block «Config anwenden» steht am Ende **jedes** Konstruktors, auch wenn er 
@@ -210,7 +210,7 @@ werden, um mehrere Eigenschaften auf einmal zu ändern. Dabei werden die ```_def
 **nicht** nochmals angewendet.  
 
 Das Muster wird oft in Settern verwendet, die entweder eine Instanz oder eine Config 
-akzeptieren. Beispiel ```closeButton``` aus ```kijs.gui.Panel``` (vereinfacht):  
+akzeptieren. Beispiel ```closeButton``` aus [```kijs.gui.Panel```](api:kijs.gui.Panel) (vereinfacht):  
 
     set closeButton(val) {
         // Instanz von kijs.gui.Button
@@ -238,7 +238,7 @@ Event ```afterResize``` unterdrückt. Im Konstruktor wird immer ```true``` über
 
 xtype und defaults im Container
 -------------------------------
-In ```elements``` eines ```kijs.gui.Container``` können statt Instanzen auch 
+In ```elements``` eines [```kijs.gui.Container```](api:kijs.gui.Container) können statt Instanzen auch 
 Config-Objekte angegeben werden. Der Container erstellt die Instanz dann selbst. 
 Dafür muss ```xtype``` mit dem vollständigen Klassennamen angegeben werden:  
 
@@ -271,7 +271,7 @@ Ablauf beim Hinzufügen (```kijs.gui.Container._getInstanceForAdd()```):
 
 Wird eine fertige Instanz übergeben, werden die ```defaults``` **nicht** angewendet.  
 
-Die Kurzformen ```'-'``` (```kijs.gui.Separator```) und ```'>'``` (```kijs.gui.Spacer```) 
+Die Kurzformen ```'-'``` ([```kijs.gui.Separator```](api:kijs.gui.Separator)) und ```'>'``` ([```kijs.gui.Spacer```](api:kijs.gui.Spacer)) 
 können ebenfalls verwendet werden.  
 
 
@@ -287,4 +287,4 @@ Checkliste für eine neue Config-Eigenschaft
 5. Falls die Eigenschaft von anderen abhängt: ```prio``` setzen.  
 6. Dokumentieren (siehe Leitfaden [Kommentare](Kommentare.md)): beim Getter, oder als ```// {Typ} Text``` 
    in der ```_configMap```, falls es keinen gleichnamigen Getter gibt.  
-7. Bei Objekten/Arrays: Variable im ```destruct()``` auf ```null``` setzen.  
+7. Bei Objekten/Arrays: Variable im [```destruct()```](api:kijs.gui.Element#destruct) auf ```null``` setzen.  

@@ -9,7 +9,7 @@ Formularfelder werden bei folgenden Ereignissen formatiert:
 Und auch bei folgenden Funktionen des container.Form:
 - load()
 
-Benutzerdefinierte Formatierungen sind nur in ```kijs.gui.field.Text``` Feldern, 
+Benutzerdefinierte Formatierungen sind nur in [```kijs.gui.field.Text```](api:kijs.gui.field.Text) Feldern, 
 und davon vererbten Feldern möglich.  
 
 ### formatRegExp

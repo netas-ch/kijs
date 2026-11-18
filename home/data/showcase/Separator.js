@@ -18,7 +18,7 @@ home.sc.Separator = class home_sc_Separator {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.Separator',
+            caption: '<a href="api:kijs.gui.Separator">kijs.gui.Separator</a>',
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

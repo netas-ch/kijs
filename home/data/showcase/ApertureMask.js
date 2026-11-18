@@ -18,7 +18,7 @@ home.sc.ApertureMask = class home_sc_ApertureMask {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: 'kijs.gui.ApertureMask',
+            caption: '<a href="api:kijs.gui.ApertureMask">kijs.gui.ApertureMask</a>',
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

@@ -7,9 +7,9 @@ Formularfelder werden bei folgenden Ereignissen validiert:
 - beim Aufrufen von validate()
 
 Und auch bei folgenden Funktionen des container.Form:
-- ```load()``` (wenn das Argument ```resetValidation=true``` ist)
-- ```save()```
-- ```validate()```
+- [```load()```](api:kijs.gui.container.Form#load) (wenn das Argument ```resetValidation=true``` ist)
+- [```save()```](api:kijs.gui.container.Form#save)
+- [```validate()```](api:kijs.gui.container.Form#validate)
 
 **Hinweis:** Felder, mit ```disabled: true``` werden nicht validiert.  
 
@@ -68,7 +68,7 @@ Wenn der Wert leer ist, werden die Ausdrücke nicht ausgeführt.
 
 ### weitere
 Je nach Feldtyp, gibt es weitere Eigenschaften, mit denen validiert werden kann.  
-Beispiel bei ```kijs.gui.field.Number```: ```minValue``` und ```maxValue```.  
+Beispiel bei [```kijs.gui.field.Number```](api:kijs.gui.field.Number): ```minValue``` und ```maxValue```.  
 Diese sind bei den entsprechenden Feldern dokumentiert.  
 
 ### Validieren auf dem Webserver
