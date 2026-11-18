@@ -32,6 +32,7 @@ home.SearchPage = class home_SearchPage extends kijs.gui.container.tab.Container
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            cls: 'home-page',
             scrollableY: 'auto',
             style: {
                 flex: 1,

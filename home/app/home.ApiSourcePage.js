@@ -30,6 +30,7 @@ home.ApiSourcePage = class home_ApiSourcePage extends kijs.gui.container.tab.Con
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
+            cls: 'home-page',
             scrollableY: 'auto',
             style: {
                 flex: 1,

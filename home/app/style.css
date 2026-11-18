@@ -29,6 +29,8 @@
     /* ---------------- */
     :root {
         --tabHomeBackground: #fff url(background.jpg?v=2) scroll no-repeat 0% 0%;
+        /* Hintergrund der Seiten (Doku, API, Suche, Quellcode): wie die Navigation */
+        --homePageBkgrndColor: var(--field-bkgrndColor);
         --tabHomeTitleColor: #858585;
         --tabHomeSubtitleColor: #2f2f2f;
     }
@@ -105,7 +107,7 @@
     /* markdown */
     div.markdown {
         padding: 4px 10px;
-        background-color: var(--grey00);
+        background-color: var(--homePageBkgrndColor);
         max-width: 750px;
         min-height: 100%;
     }
@@ -330,8 +332,9 @@
         --apiSourceCurrent: rgba(255, 200, 0, 0.18);
     }
 
-    .home-api-page {
-        background-color: var(--grey00);
+    /* Hintergrund der Seiten (Doku, API, Suche, Quellcode) */
+    .home-page, .home-api-page {
+        background-color: var(--homePageBkgrndColor);
     }
     .home-api-page div.markdown {
         min-height: 0;
@@ -354,7 +357,7 @@
         justify-content: flex-start;
         max-width: 940px;
         padding: 6px 10px;
-        background-color: var(--grey00);
+        background-color: var(--homePageBkgrndColor);
         border-bottom: 1px solid var(--grey05);
     }
 

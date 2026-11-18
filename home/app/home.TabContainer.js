@@ -41,6 +41,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
         // Panel mit ausgeführtem Beispiel
         this._contSandbox = new kijs.gui.Container({
+            cls: 'home-page',
             style: {
                 flex: 1
             }
