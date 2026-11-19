@@ -104,14 +104,22 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
     /**
      * Element, bei dem der Tooltip angezeigt wird. Beim Zuweisen werden Listeners für
-     * mouseMove und mouseLeave darauf gesetzt.
+     * mouseMove und mouseLeave darauf gesetzt und vom bisherigen Element entfernt. null = keines.
      * @type {kijs.gui.Dom|null}
      */
     get target() { return this._target; }
     set target(val) {
         if (this._target !== val) {
+            // Listeners vom bisherigen target entfernen
+            if (this._target) {
+                this._target.off('mouseMove', this.#onMouseMoveTarget, this);
+                this._target.off('mouseLeave', this.#onMouseLeave, this);
+            }
+
             this._target = val;
-            this._bindEventsToTarget();
+            if (this._target) {
+                this._bindEventsToTarget();
+            }
         }
     }
 

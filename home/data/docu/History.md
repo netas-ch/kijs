@@ -128,6 +128,8 @@ mit **UPDATE TIPP** nötig.
   Eingabefeldern stand weiterhin «:». Neu gibt es auch einen Getter/Setter ```separator```.  
 - ```kijs.gui.field.Month```: Die Config ```emptyBtnHide``` führte zu einem Fehler («Cannot read 
   properties of null»), weil sie auf ```maxDate``` zeigte.  
+- ```kijs.gui.Tooltip```: Beim Wechsel von ```target``` blieben die Listeners auf dem 
+  bisherigen Element, und ```target = null``` führte zu einem Fehler.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
