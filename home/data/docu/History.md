@@ -246,6 +246,8 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.Grid```: Kam die Antwort eines Ladevorgangs erst nach dem Zerstören des Grids, 
   warf ```_remoteProcess()``` einen TypeError. Die Antwort wird dann nicht mehr verarbeitet, das 
   Promise von ```reload()``` wird trotzdem erfüllt.  
+- ```kijs.gui.grid.Grid```: Beim vollständigen Neuladen (Filtern, Sortieren, ```reload()```) sprang 
+  das Grid horizontal an den Anfang. Die horizontale Position bleibt jetzt erhalten.  
 - ```kijs.gui.field.Combo``` hält die Tasten Enter, Tab und Escape nur noch zurück, wenn die 
   Auswahlliste offen ist. Als Editor im Grid schliessen Enter, Tab und Escape die Zelle jetzt 
   auch nach einer Auswahl mit der Maus. Bei geschlossener Liste verhält sich Escape wie bei 

@@ -532,6 +532,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
         // Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad()
         let selected = this.getSelectedIds();
+        const scrollLeft = this._tableContainerDom.node ? this._tableContainerDom.node.scrollLeft : null;
         return this._remoteLoad(resetData).then((response) => {
             // Grid inzwischen zerstört
             if (!this._dom) {
@@ -557,6 +558,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             } else {
                 this._tableDom.width = null;
                 this._tableDom.height = null;
+            }
+
+            // horizontale Position wiederherstellen (auch bei einem leeren Ergebnis)
+            if (scrollLeft) {
+                this.scrollTo(null, scrollLeft);
             }
 
             return response;
@@ -1373,7 +1379,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             this.primaryKeys = e.response.primaryKeys;
         }
 
+        // Beim vollständigen Neuladen die horizontale Position merken: ohne Zeilen setzt der Browser
+        // scrollLeft auf 0. Nach dem Einfügen der neuen Zeilen wird sie wiederhergestellt.
+        let scrollLeft = null;
         if (resetData) {
+            scrollLeft = this._tableContainerDom.node ? this._tableContainerDom.node.scrollLeft : null;
             this.rowsRemoveAll();
         }
 
@@ -1389,6 +1399,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
             // Anzahl DS zählen
             this._remoteDataLoaded += addedRowsCnt;
+        }
+
+        // horizontale Position wiederherstellen
+        if (scrollLeft) {
+            this.scrollTo(null, scrollLeft);
         }
 
         // Total Datensätze
