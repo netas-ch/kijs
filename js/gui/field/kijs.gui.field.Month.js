@@ -104,7 +104,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
             autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
             name: { target: 'name' },
             year2000Threshold: true,    // {Number|null} Zweistellige Jahre ab diesem Wert werden 19xx, sonst 20xx. null = keine Umwandlung. Default: 30
-            emptyBtnHide: { target: 'maxDate', context: this._monthPicker },
+            emptyBtnHide: { target: 'emptyBtnHide' },
             inputMode: { target: 'inputMode' },
             valueFormat: { target: 'valueFormat', context: this._monthPicker },
             lastDayOfMonthAsValue: { target: 'lastDayOfMonthAsValue', context: this._monthPicker },
