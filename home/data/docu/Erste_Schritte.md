@@ -267,7 +267,7 @@ Wenn du eigene Komponenten schreiben oder kijs selbst erweitern willst.
 | [Combo](Leitfäden/Felder/Combo.md) | Lokale und Remote-Daten in einer Combo |
 | [Daten](Leitfäden/Daten.md) | Recordsets, Primärschlüssel, Filtern, Sortieren |
 | [Drag and Drop](Leitfäden/Drag_and_Drop.md) | Elemente ziehen und ablegen |
-| [Mehrsprachigkeit](Leitfäden/Mehrsprachigkeit.md) | ```kijs.getText()``` und Übersetzungen |
+| [Mehrsprachigkeit](Leitfäden/Mehrsprachigkeit.md) | ```kijs.getText()```, Übersetzungen und Formate von Zahlen und Datum |
 | [Schriften](Leitfäden/Schriften.md) | Schriftgrössen und -arten |
 
 

@@ -23,6 +23,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.Number.js" => [649]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.Number.js" => [601]
    ]
   ]
@@ -141,9 +144,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.FileUpload.js" => [295]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [274]
    ]
   ]
  ], 
@@ -153,9 +153,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.Ajax.js" => [263]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.Ajax.js" => [260]
    ]
   ]
  ], 
@@ -165,9 +162,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.Ajax.js" => [257]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.Ajax.js" => [254]
    ]
   ]
  ], 
@@ -178,6 +172,9 @@ $translations = [
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1089, 1120], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [517], 
+    "../../js/gui/field/kijs.gui.field.Number.js" => [668]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.Number.js" => [620]
    ]
   ]
@@ -189,6 +186,9 @@ $translations = [
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1073, 1106], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [504], 
+    "../../js/gui/field/kijs.gui.field.Number.js" => [663]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.Number.js" => [615]
    ]
   ]
@@ -199,9 +199,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.FileUpload.js" => [299]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [278]
    ]
   ]
  ], 
@@ -220,9 +217,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.Ajax.js" => [267]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.Ajax.js" => [264]
    ]
   ]
  ], 
@@ -232,9 +226,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.Ajax.js" => [260, 264]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.Ajax.js" => [257, 261]
    ]
   ]
  ], 
@@ -318,9 +309,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.FileUpload.js" => [368]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [347]
    ]
   ]
  ], 
@@ -339,9 +327,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/kijs.FileUpload.js" => [567]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [541]
    ]
   ]
  ], 
@@ -519,9 +504,6 @@ $translations = [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [41], 
     "../../js/gui/kijs.gui.FileUpload.js" => [194], 
     "../../js/gui/kijs.gui.MsgBox.js" => [54, 122, 155, 188, 230, 453]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.FileUpload.js" => [185]
    ]
   ]
  ], 
@@ -588,6 +570,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.Iban.js" => [129]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.Iban.js" => [128]
    ]
   ]
@@ -597,6 +582,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.SozVersNr.js" => [245]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.SozVersNr.js" => [240]
    ]
   ]
@@ -607,9 +595,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.FileUpload.js" => [170]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.FileUpload.js" => [169]
    ]
   ]
  ], 
