@@ -166,6 +166,9 @@ mit **UPDATE TIPP** nötig.
   zu keiner Datei. Er gilt jetzt wie beim ```kijs.UploadDialog``` als ```'image/*'```.  
 - ```kijs.gui.container.Tab.save()``` sendete die Daten unter ```data``` statt ```requestData```; 
   beim Server kamen darum weder ```posData``` noch ```args``` an.  
+- ```kijs.gui.SpinBox```: Die Getter ```spinBoxWidth```/```spinBoxHeight``` des Zielelements wurden 
+  nie verwendet. Die Auswahl von Combo, DateTime und Month ist darum jetzt so breit wie das 
+  ganze Feld inklusive Button (bisher ohne Button).  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

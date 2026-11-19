@@ -439,7 +439,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                 
                 let width = 0;
                 if (this._targetEl) {
-                    if (this._targetEl.hasOwnProperty('spinBoxWidth')) {
+                    if (kijs.isDefined(this._targetEl.spinBoxWidth)) {
                         width = this._targetEl.spinBoxWidth;
                     } else {
                         width = this._targetEl[this.targetDomProperty].width;
@@ -458,7 +458,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
                 
                 let height = 0;
                 if (this._targetEl) {
-                    if (this._targetEl.hasOwnProperty('spinBoxHeight')) {
+                    if (kijs.isDefined(this._targetEl.spinBoxHeight)) {
                         height = this._targetEl.spinBoxHeight;
                     } else {
                         height = this._targetEl.height;
