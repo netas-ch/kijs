@@ -110,6 +110,9 @@ allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur beim Punkt
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
+- ```kijs.gui.field.Color```: Das Event ```change``` lieferte als ```oldValue``` immer den 
+  zuletzt per Code gesetzten Wert (in Grossbuchstaben) und wurde auch ausgelöst, wenn 
+  wieder die ursprüngliche Farbe gewählt wurde.  
 
 
 ## PHP

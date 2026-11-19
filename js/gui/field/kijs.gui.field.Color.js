@@ -13,7 +13,7 @@
  *
  * @fires blur  Weitergeleitet vom input-Node
  * @fires change  Nach einer Änderung durch den Benutzer (DOM-Event change) und nach clear().
- *                e: oldValue (Wert bei der letzten Zuweisung über value), value
+ *                e: oldValue (Wert vor der Änderung), value
  * @fires input  Bei jeder Änderung in der Farbauswahl (weitergeleitet vom input-Node)
  */
 kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
@@ -169,6 +169,9 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
             val = kijs.Graphic.colorGetHex(val);
         }
 
+        // Kleinbuchstaben wie beim Getter, damit der Vergleich beim change stimmt
+        val = val.toLowerCase();
+
         this._inputDom.nodeAttributeSet('value', val);
         this._previousChangeValue = val;
         this._updateClearButtonVisibility();
@@ -235,6 +238,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
         // und das change event auslösen
         if (val !== oldVal) {
+            this._previousChangeValue = val;
             this.raiseEvent('change', { oldValue: oldVal, value: val } );
         }
     }
