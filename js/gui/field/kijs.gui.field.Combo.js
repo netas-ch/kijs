@@ -64,8 +64,8 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
         this._data = [];                // Recordset mit Daten
 
+        // Escape wird in #onInputDomKeyDown nur gestoppt, wenn die SpinBox offen ist
         this._inputDom = new kijs.gui.Dom({
-            disableEscBubbeling: true,
             nodeTagName: 'input',
             nodeAttribute: {
                 id: this._inputId
@@ -873,6 +873,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     #onInputDomKeyDown(e) {
+        // Ist die SpinBox offen? Nur dann wird die Taste hier verbraucht, sonst läuft sie
+        // weiter (z.B. zum Zellen-Editor im Grid).
+        const spinBoxOpen = this._spinBoxEl.isRendered;
+
         switch (e.nodeEvent.key) {
 
             // Enter: Ausgewählten Datensatz übernehmen und SpinBox schliessen
@@ -889,7 +893,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._spinBoxEl.close();
 
                 // event stoppen
-                e.nodeEvent.stopPropagation();
+                if (spinBoxOpen) {
+                    e.nodeEvent.stopPropagation();
+                }
                 break;
 
             // Esc: SpinBox schliessen
@@ -900,7 +906,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
                 this._spinBoxEl.close();
 
                 // event stoppen
-                e.nodeEvent.stopPropagation();
+                if (spinBoxOpen) {
+                    e.nodeEvent.stopPropagation();
+                }
                 break;
 
             // ArrowUp und ArrowDown an ListView weitergeben

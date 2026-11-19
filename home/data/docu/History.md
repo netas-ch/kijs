@@ -228,6 +228,10 @@ mit **UPDATE TIPP** nötig.
   Sind alle Icons abgewählt, wird ```icons: []``` gesendet (bisher Fehler).  
 - ```kijs.gui.field.CheckboxGroup.checkedAll``` warf einen TypeError, wenn keine Checkbox 
   ausgewählt war.  
+- ```kijs.gui.field.Combo``` hält die Tasten Enter, Tab und Escape nur noch zurück, wenn die 
+  Auswahlliste offen ist. Als Editor im Grid schliessen Enter, Tab und Escape die Zelle jetzt 
+  auch nach einer Auswahl mit der Maus. Bei geschlossener Liste verhält sich Escape wie bei 
+  einem Textfeld (schliesst z.B. ein Fenster).  
 - Grid-Filter: Die Checkboxen im Filtermenü (Icon-Auswahl und Auswahl fester Werte) haben die 
   gleiche Höhe und Einrückung wie die Buttons des Menüs. Die Icon-Auswahl füllt die ganze Breite 
   des Menüs.  
