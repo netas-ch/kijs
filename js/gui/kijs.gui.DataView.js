@@ -394,10 +394,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Evtl. ddTarget erstellen
         if (val && !this._ddTarget) {
-            this.ddTarget = {
-                posBeforeFactor: this._ddPosBeforeAfterFactor,
-                posAfterFactor: this._ddPosBeforeAfterFactor
-            };
+            this.ddTarget = {};
             this._ddTarget.on('drop', this._onTargetDrop, this);
         }
 
