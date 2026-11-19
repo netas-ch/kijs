@@ -159,6 +159,8 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.container.Fieldset```: Nach dem Zu- und Aufklappen ging eine gesetzte Höhe verloren.  
 - ```kijs.gui.Mask``` löste ```afterRender``` zweimal aus, das erste Mal bevor Icon und Text 
   gerendert waren. Jetzt nur noch einmal am Schluss.  
+- ```kijs.gui.Splitter```: Ein ungültiges ```target``` wurde wegen fehlender Klammern nicht 
+  erkannt. Jetzt kommt sofort der Fehler «Unknown format on config "target"».  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
