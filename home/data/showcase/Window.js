@@ -386,8 +386,9 @@ home.sc.Window = class home_sc_Window {
             this._win1.destruct();
         }
         
+        // über eine Kopie, weil sich jedes Fenster beim Zerstören selbst aus _wins2 entfernt
         if (!kijs.isEmpty(this._wins2)) {
-            kijs.Array.each(this._wins2, (win)=>{
+            kijs.Array.each(this._wins2.slice(), (win)=>{
                 win.destruct();
             }, this);
         }

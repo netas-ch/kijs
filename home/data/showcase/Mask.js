@@ -279,7 +279,8 @@ home.sc.Mask = class home_sc_Mask {
                     style: { margin: '10px' },
                     on: {
                         click: function(e) {
-                            const p = this.upX('kijs.gui.Container').down('panelMitForm');
+                            // upX() vergleicht den xtype exakt, darum über parent suchen
+                            const p = this.parent.down('panelMitForm');
                             if (p._waitMaskEl.inert) {
                                 p.caption = 'Panel mit Form - Nicht Inert (=interaktiv)';
                                 p._waitMaskEl.inert = false;

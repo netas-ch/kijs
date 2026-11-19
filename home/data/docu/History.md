@@ -52,6 +52,8 @@ mit **UPDATE TIPP** nötig.
   Spalte «Icon» (iconCharField) mit Tooltip und Icon-Auswahl im Filter, Testdaten in der Spalte 
   «Combo», rechts ein Protokoll der Ereignisse und im Kopf ein Menü 
   «Methoden» mit den wichtigsten Methoden (getSelected, selectByIds, getDirtyRows, commit, sort …).  
+- Showcase Window: Beim Schliessen der Seite blieben bei mehreren geöffneten Fenstern einige offen. 
+  Showcase Mask: Der Button «inert toggeln» warf einen Fehler.  
 - Werkzeuge: Das Zahnrad neben dem Suchfeld (nur lokal) öffnet eine Seite mit allen 
   Generatoren: API-Dokumentation, Texte für die Übersetzung, Sprachdateien, 
   Font-Awesome-Icons und CSS. Sie zeigt, ob die erzeugten Dateien aktuell sind, und 
