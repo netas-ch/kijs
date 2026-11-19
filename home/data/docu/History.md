@@ -260,6 +260,9 @@ mit **UPDATE TIPP** nötig.
 - Grid-Filter: Das Filter-Objekt für den Server enthält neu auch ```displayField``` (Feld mit dem 
   angezeigten Text, sonst gleich wie ```valueField```). So kann der Server z.B. bei einer Spalte 
   mit Combo-Editor im angezeigten Text suchen.  
+- Design Black (```kijs.theme.black.css```): Die Regeln am Schluss der Datei (Rahmen von Buttons, 
+  Panels und Fenstern) lagen in keiner CSS-Ebene und liessen sich darum vom CSS der Applikation 
+  nicht überschreiben. Sie sind jetzt wie beim Design Retro in der Ebene ```kijs-theme```.  
 - Grid-Filter: Die Checkboxen im Filtermenü (Auswahl fester Werte und Icon-Auswahl) haben die 
   gleiche Höhe und Einrückung wie die Buttons des Menüs und füllen seine ganze Breite.  
 - Grid-Filter: Das Filtermenü öffnet sich linksbündig direkt unter dem Filterfeld (bisher 

@@ -411,6 +411,8 @@
         border: 1px solid var(--grey05);
         border-radius: 13px;
         background-color: transparent;
+        background-image: none;     /* Retro-Design: kein Verlauf der Buttons */
+        box-shadow: none;
         color: var(--grey08);
         font-size: 13px;
     }
@@ -424,7 +426,9 @@
     .home-api-toolbar .kijs-button.home-api-chip.home-api-chip-on {
         border-color: var(--accentColor);
         background-color: var(--accentColor2);
-        color: var(--accentColor);
+        /* Akzentfarbe mit der Schriftfarbe der Buttons gemischt, damit der Text in allen
+           Designs lesbar ist (Retro hat ein sehr helles Blau) */
+        color: color-mix(in srgb, var(--accentColor), var(--button-fontColor) 35%);
     }
 
     .home-api-list section h2 {

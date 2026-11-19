@@ -296,12 +296,16 @@
 
 /* DARK Anpassungen*/
 /* ------------------- */
-button.kijs-button {
-    border: 0;
-}
-div.kijs-panel, dialog.kijs-panel {
-    border: 0;
-}
-div.kijs-window, dialog.kijs-window {
-    border: 1px solid var(--panel-borderColor);
+/* In der Ebene kijs-theme (wie beim Retro-Design), damit eigenes CSS der Applikation
+   (Ebene app bzw. ohne Ebene) diese Regeln überschreiben kann */
+@layer kijs-theme {
+    button.kijs-button {
+        border: 0;
+    }
+    div.kijs-panel, dialog.kijs-panel {
+        border: 0;
+    }
+    div.kijs-window, dialog.kijs-window {
+        border: 1px solid var(--panel-borderColor);
+    }
 }
