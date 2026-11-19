@@ -124,6 +124,8 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.Grid```: Beim Laden über ```rpcLoadFn``` wurde der Startindex nicht an 
   ```rowsAdd()``` übergeben. Bei jedem Nachladen wurden darum alle Zeilen neu gerendert, und 
   beim Aktualisieren wurde eine geänderte Reihenfolge des Servers nicht übernommen.  
+- ```kijs.gui.TimePicker```: Die Config ```separator``` änderte nur den value, zwischen den 
+  Eingabefeldern stand weiterhin «:». Neu gibt es auch einen Getter/Setter ```separator```.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

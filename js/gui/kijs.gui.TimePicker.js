@@ -177,7 +177,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             value: { target: 'value' },
             secondsHide: true,
             minutesHide: true,
-            separator: true     // {String} Trennzeichen zwischen Stunde, Minute und Sekunde im value (Standard: ':')
+            separator: { target: 'separator' }
         });
 
         // Events weiterleiten
@@ -252,6 +252,18 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
      */
     get secondsHide() { return this._secondsHide; }
     set secondsHide(val) { this._secondsHide = !!val; }
+
+    /**
+     * Trennzeichen zwischen Stunde, Minute und Sekunde im value und zwischen den Eingabefeldern.
+     * Default: ':'
+     * @type {String}
+     */
+    get separator() { return this._separator; }
+    set separator(val) {
+        this._separator = kijs.toString(val);
+        this._inputSeparator1.html = this._separator;
+        this._inputSeparator2.html = this._separator;
+    }
 
     /**
      * Uhrzeit als Text, z.B. '14:30' (mit Trennzeichen separator, zweistellig mit führender 0).
