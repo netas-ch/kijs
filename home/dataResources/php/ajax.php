@@ -952,6 +952,10 @@ function _gridGetRow(int $rwId, array $vornamen): stdClass {
     $row->statusText = $state[2];
     $row->checkbox = $rwId % 2 === 0;
 
+    // Spalte Combo (Werte wie in editorConfig->data)
+    $row->value = ($rwId % 3) + 1;
+    $row->displayText = 'Datensatz ' . $row->value;
+
     return $row;
 }
 
