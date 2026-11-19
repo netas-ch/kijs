@@ -89,34 +89,19 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._iconLeftEl = new kijs.gui.Icon({
             parent: this,
             name: 'left',
-            cls: 'kijs-icon-scrollleft',
-            on: {
-                mouseDown: this.#onBtnScrollLeftMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
-                context: this
-            }
+            cls: 'kijs-icon-scrollleft'
         });
         
         this._iconRightEl = new kijs.gui.Icon({
             parent: this,
             name: 'right',
-            cls: 'kijs-icon-scrollright',
-            on: {
-                mouseDown: this.#onBtnScrollRightMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
-                context: this
-            }
+            cls: 'kijs-icon-scrollright'
         });
         
         this._iconDownEl = new kijs.gui.Icon({
             parent: this,
             name: 'down',
-            cls: 'kijs-icon-scrolldown',
-            on: {
-                mouseDown: this.#onBtnScrollDownMouseDown,
-                mouseUp: this.#onBtnScrollMouseUp,
-                context: this
-            }
+            cls: 'kijs-icon-scrolldown'
         });
         
         this._dom.clsRemove('kijs-container');
