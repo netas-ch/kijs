@@ -667,7 +667,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas.beginPath();
         this._canvas.strokeStyle = bkgrndColor;
         this._canvas.lineWidth = 2.0;
-        this._canvas.moveTo(this._clockRadius, this._clockRadius);
+        this._canvas.moveTo(this._canvasSize / 2, this._canvasSize / 2);
         this._canvas.lineTo(coords.x, coords.y);
         this._canvas.stroke();
         this._canvas.beginPath();
