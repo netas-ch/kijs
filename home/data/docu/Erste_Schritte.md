@@ -56,6 +56,24 @@ Schau dir zuerst im Showcase diese Komponenten an:
 Die meisten Leitfäden haben am Schluss einen Abschnitt **Beispiele** mit Links auf 
 passende Showcase- und Test-Seiten.  
 
+### Die API-Dokumentation
+Im Bereich **API** (Würfel) steht zu jeder Klasse eine Seite, die automatisch aus den 
+Kommentaren im Code erstellt wird. Du erreichst sie über die Navigation, das Suchfeld 
+oder den Button **API** oben rechts auf jeder Showcase-Seite.  
+
+Eine Klassenseite zeigt:  
+- oben die Vererbung, die Beschreibung, ein Beispiel und Links auf Showcase und Quellcode  
+- darunter alle Einträge, gruppiert in **Configs/Getter/Setter**, **Funktionen** und 
+  **Events**. Mit dem **Filter** suchst du nach Name oder Beschreibung, mit **Vererbte 
+  anzeigen** blendest du die Einträge der Basisklassen ein oder aus.  
+- Ein Klick auf einen Eintrag klappt ihn auf: Beschreibung, Typ, **Standardwert**, 
+  Argumente bzw. Rückgabe, von welcher Klasse er geerbt ist und ein Link auf die 
+  Stelle im Quellcode.  
+
+Klassennamen und Leitfäden in den Beschreibungen sind verlinkt. Beginne am besten mit 
+[kijs.gui.Element](api:kijs.gui.Element) und [kijs.gui.Container](api:kijs.gui.Container): 
+Ihre Configs und Funktionen gelten für fast alle Komponenten.  
+
 
 2\. Die erste eigene Seite
 --------------------------
@@ -257,6 +275,7 @@ Wenn du eigene Komponenten schreiben oder kijs selbst erweitern willst.
 | Frage                                      | Antwort                                        |
 |--------------------------------------------|------------------------------------------------|
 | Welche Config-Eigenschaften hat Klasse X?  | Im Tab **API** auf der Seite der Klasse, z.B. [kijs.gui.Button](api:kijs.gui.Button). Die Doku stammt aus den Kommentaren im Code (siehe Leitfaden [Kommentare](Leitfäden/Kommentare.md)) |
+| Welche Events löst Klasse X aus? Was ist der Standardwert einer Config? | Ebenfalls auf der Seite der Klasse in der **API** (Abschnitt Events bzw. Eintrag aufklappen) |
 | Wie sieht Komponente X aus, wie verwende ich sie? | Im Showcase, mit Quellcode            |
 | Was hat sich in einer Version geändert?    | [History](History.md)                          |
 | In welchen Dateien steckt ein Modul?       | ```files.json``` im Hauptordner von kijs       |
