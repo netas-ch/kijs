@@ -10,8 +10,8 @@ Versionsnummern
 Version 3.7.1
 =============
 Neu sind vor allem die Dokumentation und die Home-App. An kijs selbst gibt es vor 
-allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur beim Punkt mit 
-**UPDATE TIPP** nötig (```captionHide```).  
+allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur bei den Punkten 
+mit **UPDATE TIPP** nötig.  
 
 
 ## Home-App: API-Dokumentation
@@ -113,6 +113,12 @@ allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur beim Punkt
 - ```kijs.gui.field.Color```: Das Event ```change``` lieferte als ```oldValue``` immer den 
   zuletzt per Code gesetzten Wert (in Grossbuchstaben) und wurde auch ausgelöst, wenn 
   wieder die ursprüngliche Farbe gewählt wurde.  
+- ```kijs.gui.Tree.getSelectedRows()``` behandelt jetzt auch ```selectType``` 
+  ```'simple-single'``` und ```'simple-singleAndEmpty'``` als Einzelauswahl, wie 
+  ```kijs.gui.DataView```.  
+  **UPDATE TIPP:** Bei einem Tree mit diesen ```selectType``` gibt die Funktion ohne 
+  Selektion jetzt ```null``` statt ```[]``` zurück. Code, der z.B. 
+  ```getSelectedRows().length``` prüft, muss vorher auf ```null``` prüfen.  
 
 
 ## PHP

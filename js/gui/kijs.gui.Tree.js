@@ -651,6 +651,8 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     // overwrite
     getSelectedRows() {
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+
         let rows = [];
 
         if (!kijs.isEmpty(this._primaryKeyFields)) {
@@ -665,7 +667,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         if (this._selectType === 'none') {
             return null;
 
-        } else if (kijs.Array.contains(['single', 'singleAndEmpty'], this._selectType)) {
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
             return rows.length ? [rows[0]] : null;
 
         } else {
