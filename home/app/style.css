@@ -355,10 +355,76 @@
         gap: 20px;
         align-items: center;
         justify-content: flex-start;
-        max-width: 940px;
+        max-width: 960px;       /* gleich breit wie die Liste darunter (div.markdown) */
         padding: 6px 10px;
         background-color: var(--homePageBkgrndColor);
         border-bottom: 1px solid var(--grey05);
+        gap: 8px;
+    }
+
+    /* Suchfeld mit Lupe */
+    .home-api-search {
+        align-items: center;
+        flex: 0 1 300px;
+        min-width: 120px;
+        margin-right: 4px;
+        padding: 0 10px;
+        border: 1px solid var(--grey05);
+        border-radius: 16px;
+        background-color: var(--field-bkgrndColor);
+    }
+    .home-api-toolbar > .kijs-container-inner,
+    .home-api-search > .kijs-container-inner {
+        align-items: center;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+    .home-api-toolbar .kijs-button.home-api-chip {
+        flex: none;
+        align-self: center;     /* Buttons haben sonst align-self: start (kijs-disableFlex) */
+    }
+    .home-api-search > .kijs-container-inner {
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+    .home-api-search .kijs-icon.fa-solid {
+        height: auto;
+        color: var(--grey07);
+        font-size: 13px;
+    }
+    .home-api-search .home-api-search-field > .kijs-label {
+        display: none;
+    }
+    .home-api-search .home-api-search-field input {
+        height: 28px;
+        border: none;
+        background: transparent;
+        box-shadow: none;
+        outline: none;
+    }
+
+    /* Chips: Configs, Funktionen, Events, vererbte */
+    .home-api-toolbar > .kijs-container-inner > .kijs-button.home-api-chip,
+    .home-api-toolbar > .kijs-button.home-api-chip {
+        height: 26px;
+        padding: 0 12px;
+        border: 1px solid var(--grey05);
+        border-radius: 13px;
+        background-color: transparent;
+        color: var(--grey08);
+        font-size: 13px;
+    }
+    .home-api-toolbar .kijs-button.home-api-chip > .kijs-icon {
+        font-size: 12px;
+        color: inherit;
+    }
+    .home-api-toolbar .kijs-button.home-api-chip > .kijs-caption {
+        color: inherit;
+    }
+    .home-api-toolbar .kijs-button.home-api-chip.home-api-chip-on {
+        border-color: var(--accentColor);
+        background-color: var(--accentColor2);
+        color: var(--accentColor);
     }
 
     .home-api-list section h2 {

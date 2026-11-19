@@ -57,7 +57,7 @@ Ein Klick auf eine Klasse öffnet die Doku in einem eigenen Tab (wie die Leitfä
 │ Beschreibung aus dem Klassenkommentar ...                        │
 │ Beispiele: Showcase Button · Quelle: js/gui/kijs.gui.Button.js   │
 ├──────────────────────────────────────────────────────────────────┤
-│ [Filter: ______________]  [x] Vererbte anzeigen                  │
+│ (Q Einträge filtern …) (Configs) (Funktionen) (Events) (vererbte)│
 ├──────────────────────────────────────────────────────────────────┤
 │ Configs/Getter/Setter                                            │
 │  ▸ badgeText      Config Getter Setter            String         │
@@ -122,9 +122,10 @@ Die Farben werden als CSS-Variablen definiert, damit sie im hellen und dunklen
 Theme passen.  
 
 ### Filter auf der Klassenseite
-- Ein Textfeld filtert die Einträge aller Abschnitte. Gesucht wird in Name und 
+- Das Suchfeld (mit Lupe) filtert die Einträge aller Abschnitte. Gesucht wird in Name und 
   Beschreibung. Nicht passende Einträge werden ausgeblendet.  
-- Der Schalter **Vererbte anzeigen** blendet vererbte Einträge aus.  
+- Die Chips **Configs**, **Funktionen** und **Events** blenden den ganzen Abschnitt ein 
+  oder aus, der Chip **vererbte** die Einträge aus den Basisklassen. Aktive Chips sind blau.  
 - Der Filter läuft im Browser, ohne Anfrage an den Server.  
 
 ### Globale Suche

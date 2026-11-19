@@ -18,8 +18,18 @@ mit **UPDATE TIPP** nötig.
 - Neuer Tab **API** in der Navigation mit allen Klassen, gegliedert nach Namespace.  
 - Pro Klasse eine Seite mit Vererbung, abgeleiteten Klassen und den Abschnitten 
   Configs/Getter/Setter, Funktionen und Events. Die Einträge lassen sich aufklappen 
-  und filtern und sind mit Tags gekennzeichnet (Config, Getter, Setter, readonly, 
-  static, overwrite, Vererbt, deprecated).  
+  und sind mit Tags gekennzeichnet (Config, Getter, Setter, readonly, static, 
+  overwrite, Vererbt, deprecated).  
+- Filterleiste mit Suchfeld (Name und Beschreibung) und Chips, die die Abschnitte 
+  Configs, Funktionen und Events sowie die vererbten Einträge ein- und ausblenden.  
+- Standardwerte der Configs: aus ```_defaultConfig``` bzw. aus den Zuweisungen im 
+  Constructor (z.B. ```this._columns = 1;```). Bei vererbten Configs gilt der Wert, den 
+  die Klasse überschreibt (z.B. ```kijs.gui.field.CheckboxGroup.selectType``` = 
+  ```'simple-multi'```). Configs, die an ein Unterelement weitergeleitet werden, zeigen 
+  dessen Standardwert mit Link auf die Quelle (z.B. ```kijs.gui.Button.iconCls``` von 
+  ```kijs.gui.Icon.iconCls```).  
+- In den Beschreibungen werden Klassennamen und «Leitfaden …» automatisch verlinkt und 
+  Werte wie ```null```, ```true``` oder ```'auto'``` als Code markiert.  
 - Quellcode-Ansicht mit Zeilennummern, Link «Quelle» bei jedem Eintrag.  
 - **Lückenbericht**: zeigt, was im Code noch nicht dokumentiert ist.  
 - Die Daten werden aus den Kommentaren im Code gelesen (siehe Leitfaden 
@@ -35,17 +45,6 @@ mit **UPDATE TIPP** nötig.
   Leitfäden sind mit der API verlinkt.  
 - Showcase: Jede Seite hat rechts in der Kopfzeile einen Button «API», der die 
   API-Dokumentation der gezeigten Klasse öffnet (bei mehreren Klassen über ein Menü).  
-- API: Standardwerte der Configs werden neu auch aus den Zuweisungen im Constructor gelesen 
-  (z.B. ```this._columns = 1;```), nicht mehr nur aus ```_defaultConfig```. Bei vererbten Configs 
-  zeigt die Klassenseite den Standardwert, den die Klasse überschreibt (z.B. 
-  ```kijs.gui.field.CheckboxGroup.selectType``` = ```'simple-multi'```). Configs, die an ein 
-  Unterelement weitergeleitet werden, zeigen dessen Standardwert mit Link auf die Quelle (z.B. 
-  ```kijs.gui.Button.iconCls``` von ```kijs.gui.Icon.iconCls```).  
-- API: In den Beschreibungen werden Klassennamen und «Leitfaden …» (auch mehrere, z.B. «Leitfäden 
-  Daten und Drag and Drop») automatisch verlinkt und Werte wie ```null```, ```true``` oder 
-  ```'auto'``` als Code markiert. Die langen Beschreibungen sind mit Absätzen, Listen, Tabellen 
-  und Code-Blöcken gegliedert (z.B. ```kijs.Date```, ```kijs.Data.filter```, 
-  ```kijs.gui.DataView.selectType```). Der Leitfaden «Kommentare» beschreibt die Formatierung.  
 - Showcase grid Grid: Sortieren und alle Filter (Text, Zahl, Datum, Checkbox, Icon und 
   Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
   sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» (iconMapField) und 
@@ -82,6 +81,9 @@ mit **UPDATE TIPP** nötig.
 - Funktionen in allen Klassen alphabetisch sortiert und die Kommentar-Überschriften 
   vereinheitlicht (gemäss Leitfaden «Aufbau einer Klasse»). Der Code verhält sich 
   unverändert.  
+- Lange Beschreibungen in den Kommentaren mit Absätzen, Listen, Tabellen und Code-Blöcken 
+  gegliedert (z.B. ```kijs.Date```, ```kijs.Data.filter```, ```kijs.gui.DataView.selectType```, 
+  siehe Leitfaden «Kommentare»).  
 - Was bereits als veraltet galt, ist jetzt mit ```@deprecated``` markiert und wird 
   in der API-Dokumentation so angezeigt:  
   - ```kijs.Storage```: bitte nicht mehr verwenden, wird gelöscht, sobald nicht mehr 
@@ -215,8 +217,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.filter.Icon```: Die Auswahl der Icons im Filtermenü wurde nie angezeigt, weil 
   die Config ```iconsCnt``` fehlte. Neu gibt es bei ```kijs.gui.grid.columnConfig.Icon``` wieder 
   ```iconsCnt``` (max. Anzahl Icons in der Auswahl, Default ```null``` = keine Auswahl wie bisher). 
-  Als Text der Checkboxen dient der Tooltip (```tooltipField```). Der Server muss den Filter mit 
-  ```type: 'icon'``` und dem Array ```icons``` auswerten.  
+  Als Text der Checkboxen dient der Tooltip (```tooltipField```), die Icons erscheinen wie in der 
+  Zelle. Eine Änderung der Auswahl lädt das Grid sofort neu. Der Server muss den Filter mit 
+  ```type: 'icon'``` und dem Array ```icons``` auswerten (leer, wenn kein Icon ausgewählt ist).  
 - ```kijs.gui.grid.filter.Checkbox```: «Filter löschen» setzte die Auswahl «Alle angewählten» bzw. 
   «Alle nicht angewählten» nicht zurück, der Filter blieb aktiv. Zudem waren im Menü anfangs beide 
   Einträge als ausgewählt markiert.  
@@ -240,10 +243,6 @@ mit **UPDATE TIPP** nötig.
   als neu selektiert und keine abgewählten (z.B. beim Verkleinern des Bereichs). Neu meldet das Event 
   nur die tatsächlichen Änderungen. ```selectBetween()``` hat dafür den zusätzlichen Parameter 
   ```keepExisting``` (Default ```true``` wie bisher).  
-- ```kijs.gui.grid.filter.Icon```: Änderungen in der Icon-Auswahl wurden erst nach dem Schliessen 
-  des Menüs (und auch dann nur zufällig) angewendet. Das Grid wird jetzt sofort neu geladen, wie 
-  bei der Auswahl fester Werte (```checkboxFilterValues```).  
-  Sind alle Icons abgewählt, wird ```icons: []``` gesendet (bisher Fehler).  
 - ```kijs.gui.field.CheckboxGroup.checkedAll``` warf einen TypeError, wenn keine Checkbox 
   ausgewählt war.  
 - ```kijs.gui.field.AceEditor``` und ```kijs.gui.TimePicker```: Wurden sie kurz nach dem Rendern 
@@ -261,10 +260,8 @@ mit **UPDATE TIPP** nötig.
 - Grid-Filter: Das Filter-Objekt für den Server enthält neu auch ```displayField``` (Feld mit dem 
   angezeigten Text, sonst gleich wie ```valueField```). So kann der Server z.B. bei einer Spalte 
   mit Combo-Editor im angezeigten Text suchen.  
-- Grid-Filter: Die Checkboxen im Filtermenü (Icon-Auswahl und Auswahl fester Werte) haben die 
-  gleiche Höhe und Einrückung wie die Buttons des Menüs. Die Icon-Auswahl füllt die ganze Breite 
-  des Menüs und zeigt Icons ohne Font-Awesome-Klasse wie die Zelle solid an (bisher regular bzw. 
-  leer).  
+- Grid-Filter: Die Checkboxen im Filtermenü (Auswahl fester Werte und Icon-Auswahl) haben die 
+  gleiche Höhe und Einrückung wie die Buttons des Menüs und füllen seine ganze Breite.  
 - Grid-Filter: Das Filtermenü öffnet sich linksbündig direkt unter dem Filterfeld (bisher 
   am Filter-Icon).  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 

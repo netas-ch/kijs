@@ -32,23 +32,29 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
         });
 
         this._filterField = new kijs.gui.field.Text({
-            label: 'Filter',
-            placeholder: 'Name oder Beschreibung',
-            style: { flex: 1, maxWidth: '360px' },
+            placeholder: 'Einträge filtern …',
+            cls: 'home-api-search-field',
+            style: { flex: 1 },
             on: {
                 input: this.#onFilterChange,
                 context: this
             }
         });
 
-        this._inheritedSwitch = new kijs.gui.field.Switch({
-            caption: 'Vererbte anzeigen',
-            value: true,
+        // Chips zum Ein- und Ausblenden: Art der Einträge (Abschnitt) und vererbte Einträge
+        this._chips = [
+            { name: 'property',  caption: 'Configs' },
+            { name: 'function',  caption: 'Funktionen' },
+            { name: 'event',     caption: 'Events' },
+            { name: 'inherited', caption: 'vererbte', iconMap: 'kijs.iconMap.Fa.code-merge',
+                tooltip: 'Einträge aus den Basisklassen anzeigen' }
+        ].map(c => new kijs.gui.Button(Object.assign({
+            cls: ['home-api-chip', 'home-api-chip-on'],
             on: {
-                change: this.#onFilterChange,
+                click: this.#onChipClick,
                 context: this
             }
-        });
+        }, c)));
 
         this._listEl = new kijs.gui.Element({
             cls: ['markdown', 'home-api-list'],
@@ -69,8 +75,15 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
                     xtype: 'kijs.gui.Container',
                     cls: ['kijs-flexrow', 'home-api-toolbar'],
                     elements: [
-                        this._filterField,
-                        this._inheritedSwitch
+                        {
+                            xtype: 'kijs.gui.Container',
+                            cls: ['kijs-flexrow', 'home-api-search'],
+                            elements: [
+                                { xtype: 'kijs.gui.Icon', iconMap: 'kijs.iconMap.Fa.magnifying-glass' },
+                                this._filterField
+                            ]
+                        },
+                        ...this._chips
                     ]
                 },
                 this._listEl
@@ -195,9 +208,16 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
             return;
         }
         const text = (this._filterField.value || '').toLowerCase().trim();
-        const showInherited = !!this._inheritedSwitch.value;
+        const isOn = (name) => {
+            const chip = this._chips.find(c => c.name === name);
+            return !chip || chip.dom.clsHas('home-api-chip-on');
+        };
+        const showInherited = isOn('inherited');
 
         kijs.Array.each(this._listEl.node.querySelectorAll('section'), function(section) {
+            // ganzer Abschnitt ausgeblendet (Chip Configs, Funktionen bzw. Events)
+            section.hidden = !isOn(section.dataset.kind);
+
             let visible = 0;
             kijs.Array.each(section.querySelectorAll('details'), function(entry) {
                 let show = true;
@@ -496,13 +516,13 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
      */
     _getListHtml() {
         const sections = [
-            { caption: 'Configs/Getter/Setter', items: this._data.properties },
-            { caption: 'Funktionen', items: this._data.functions },
-            { caption: 'Events', items: this._data.events }
+            { kind: 'property', caption: 'Configs/Getter/Setter', items: this._data.properties },
+            { kind: 'function', caption: 'Funktionen', items: this._data.functions },
+            { kind: 'event', caption: 'Events', items: this._data.events }
         ];
         let html = '';
         kijs.Array.each(sections, function(s) {
-            html += '<section><h2>' + s.caption + ' <span class="home-api-count"></span></h2>';
+            html += '<section data-kind="' + s.kind + '"><h2>' + s.caption + ' <span class="home-api-count"></span></h2>';
             if (s.items.length) {
                 kijs.Array.each(s.items, function(m) {
                     html += this._getEntryHtml(m);
@@ -596,6 +616,11 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
 
     // PRIVATE
     // LISTENERS
+    #onChipClick(e) {
+        e.element.dom.clsToggle('home-api-chip-on');
+        this._applyFilter();
+    }
+
     #onFilterChange(e) {
         this._applyFilter();
     }
@@ -659,10 +684,10 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
 
         // Variablen (Objekte/Arrays) leeren
         this._app = null;
+        this._chips = null;
         this._data = null;
         this._filterField = null;
         this._headerEl = null;
-        this._inheritedSwitch = null;
         this._listEl = null;
         this._pageEl = null;
 

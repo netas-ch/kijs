@@ -64,8 +64,9 @@ oder den Button **API** oben rechts auf jeder Showcase-Seite.
 Eine Klassenseite zeigt:  
 - oben die Vererbung, die Beschreibung, ein Beispiel und Links auf Showcase und Quellcode  
 - darunter alle Einträge, gruppiert in **Configs/Getter/Setter**, **Funktionen** und 
-  **Events**. Mit dem **Filter** suchst du nach Name oder Beschreibung, mit **Vererbte 
-  anzeigen** blendest du die Einträge der Basisklassen ein oder aus.  
+  **Events**. Im **Suchfeld** suchst du nach Name oder Beschreibung. Mit den Chips 
+  daneben blendest du die Abschnitte **Configs**, **Funktionen** und **Events** sowie die 
+  **vererbten** Einträge der Basisklassen ein oder aus.  
 - Ein Klick auf einen Eintrag klappt ihn auf: Beschreibung, Typ, **Standardwert**, 
   Argumente bzw. Rückgabe, von welcher Klasse er geerbt ist und ein Link auf die 
   Stelle im Quellcode.  
