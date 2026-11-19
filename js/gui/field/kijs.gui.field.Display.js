@@ -208,7 +208,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     /**
      * Fügt einen oder mehrere reguläre Ausdrücke zum Formatieren hinzu (wie bei
      * kijs.gui.field.Text.addFormatRegExp()). Mit dem Flag g werden alle Treffer ersetzt,
-     * sonst nur der erste. toLowerCase wird angenommen, aber zurzeit nicht richtig angewendet.
+     * sonst nur der erste.
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
      * @returns {undefined}
@@ -347,7 +347,7 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                         }
 
                     // oder in Kleinbuchstaben umwandeln
-                    } else if (regExp.toUpperCase) {
+                    } else if (regExp.toLowerCase) {
                         // Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt
                         if (kijs.String.contains(r.flags, 'g')) {
                             value = value.replaceAll(r, function(v) { return v.toLowerCase(); });

@@ -97,6 +97,8 @@ Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.
   automatischen Zuklappen auch die zu kleine Grösse als aufgeklappte Grösse gemerkt. 
   Beim Aufklappen kommt jetzt wieder die vorherige Grösse.  
   ```kijs.gui.field.Text```, ```Number```, ```Month```, ```Password``` und ```Memo```.  
+- ```formatRegExp``` mit ```toLowerCase: true``` hatte keine Wirkung 
+  (```kijs.gui.field.Text``` und ```kijs.gui.field.Display```).  
 
 
 ## PHP
