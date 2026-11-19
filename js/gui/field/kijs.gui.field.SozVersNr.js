@@ -166,8 +166,8 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     }
     
     /**
-     * Prüft eine neue Sozialversicherungsnummer: 13 Ziffern (Leerzeichen und Punkte werden ignoriert) mit
-     * Prüfziffer (EAN-13).
+     * Prüft eine neue Sozialversicherungsnummer: 13 Ziffern beginnend mit 756 (Ländercode der
+     * Schweiz; Leerzeichen und Punkte werden ignoriert) mit Prüfziffer (EAN-13).
      * @param {String} value
      * @returns {Boolean}
      */
@@ -181,6 +181,11 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         
         // Länge
         if (value.length !== 13) {
+            return false;
+        }
+
+        // Alle neuen Nummern beginnen mit dem Ländercode der Schweiz
+        if (value.substr(0, 3) !== '756') {
             return false;
         }
         
@@ -242,23 +247,6 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         }
     }
 
-
-    // PRIVATE
-    // LISTENERS
-    // overwrite
-    #onInputDomChange(e) {
-        // Sicherstellen, dass beim Verlassen des Feldes noch getrimmt und formatiert wird.
-        let val = this.value;
-        let oldVal = this._previousChangeValue;
-        
-        // Wert neu reinschreiben (evtl. wurde er getrimmt oder formatiert)
-        this.value = val;
-        
-        // und das change event auslösen
-        if (val !== oldVal) {
-            this.raiseEvent('change', { oldValue: oldVal, value: val } );
-        }
-    }
 
 
 
