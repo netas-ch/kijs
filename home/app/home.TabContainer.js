@@ -215,6 +215,7 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
             case 'js':
                 // falls bereits geladen: destruct
+                this._destructShowcase();
                 this._contSandbox.removeAll();
 
                 // Code ausführen
@@ -240,6 +241,20 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
 
 
     // PROTECTED
+    /**
+     * Entlädt die Showcase- bzw. Test-Klasse (z.B. home.sc.Button), falls eine geladen ist
+     * @returns {undefined}
+     */
+    _destructShowcase() {
+        const showcase = this._contSandbox ? this._contSandbox.userData : null;
+        if (showcase && kijs.isFunction(showcase.destruct)) {
+            showcase.destruct();
+        }
+        if (this._contSandbox) {
+            this._contSandbox.userData = null;
+        }
+    }
+
     /**
      * Wandelt Markdown in HTML um, färbt die Code-Blöcke ein und zeigt das Ergebnis an
      * @param {String} rawCode
@@ -338,8 +353,24 @@ home.TabContainer = class home_TabContainer extends kijs.gui.container.tab.Conta
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    destruct() {
+    // overwrite
+    destruct(superCall) {
+        if (!superCall) {
+            // unrendern
+            this.unrender(superCall);
 
+            // Event auslösen.
+            this.raiseEvent('destruct');
+        }
+
+        // Showcase entladen (z.B. Fenster, Listener auf window)
+        this._destructShowcase();
+
+        // Variablen (Objekte/Arrays) leeren
+        this._app = null;
+
+        // Basisklasse entladen (auch Sandbox, Editor und Buttons)
+        super.destruct(true);
     }
 
 };

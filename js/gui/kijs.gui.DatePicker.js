@@ -35,10 +35,8 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._minDate = null; // Min Value (Date Object)
         this._maxDate = null; // Max Value (Date Object)
         this._weekNumbersHide = false;  // Wochennummern ausblenden?
-        this._startWeekday = 1;         // Erster Tag in der Ansicht (1=Montag)
-                                        // TODO: Falls mal ein anderer Tag als der Montag verwendet werden soll,
-                                        // geht das im Moment nicht, weil noch die Funktion kijs.Date.getMonday()
-                                        // verwendet wird. Diese berücksichtigt die Einstellung hier nicht.
+        this._startWeekday = 1;         // Erster Tag in der Ansicht (1=Montag). Fix, weil an anderen
+                                        // Stellen kijs.Date.getMonday() verwendet wird.
 
         this._valueFormat = 'Y-m-d';    // Format, mit dem der value ausgeliefert wird
 

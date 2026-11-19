@@ -70,9 +70,6 @@ kijs.gui.field.Phone = class kijs_gui_field_Phone extends kijs.gui.field.Text {
                 },{ 
                     regExp: /^\+43([0-9]{3})([0-9]{4})([0-9]{6})([0-9]{4})$/, // A
                     replace: '+43 $1 $2 $3 $4'
-                //},{ 
-                //    regExp: /^\+49([0-9]{3})([0-9]{3})([0-9]{11})$/, // D // TODO: richtige Formatierung?
-                //    replace: '+49 $1 $2 $3'
                 },{ 
                     regExp: /^\+33([0-9])([0-9]{2})([0-9]{2})([0-9]{2})([0-9]{2})$/, // F
                     replace: '+33 $1 $2 $3 $4 $5'

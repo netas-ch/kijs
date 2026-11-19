@@ -722,11 +722,7 @@ home.App = class home_App {
             name: userData.path,
             tabCaption: userData.displayText,
             tabClosable: true,
-            userData: userData,
-            on: {
-                destruct: this.#onContentTabContainerDestruct,
-                context: this
-            }
+            userData: userData
         });
         if (userData.iconMap) {
             tabCont.tabButtonEl.iconMap = userData.iconMap;
@@ -1019,12 +1015,6 @@ home.App = class home_App {
                 newTreeEl.reassignCurrent();
                 newTreeEl.scrollToFocus();
             }
-        }
-    }
-
-    #onContentTabContainerDestruct(e) {
-        if (e.element.userData && e.element.userData.destruct) {
-            e.element.userData.destruct();
         }
     }
 

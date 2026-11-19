@@ -231,7 +231,7 @@ foreach ($requests as $request) {
         case 'containerTab.save':
             try {
                 // config
-                $response->cornerTipMsg = 'TODO: Speichern';
+                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
                 
                 //sleep(1);
                 
@@ -386,7 +386,7 @@ foreach ($requests as $request) {
         case 'dashboard.save':
             try {
                 // config
-                $response->cornerTipMsg = 'TODO: Speichern';
+                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
                 
                 //sleep(1);
                 
@@ -414,7 +414,7 @@ foreach ($requests as $request) {
         case 'dashboardFormPanel.save':
             try {
                 // config
-                $response->cornerTipMsg = 'TODO: Speichern';
+                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
                 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -507,7 +507,7 @@ foreach ($requests as $request) {
         case 'dataview.save':
             try {
                 // config
-                $response->cornerTipMsg = 'TODO: Speichern';
+                $response->cornerTipMsg = 'Gespeichert (Demo: die Daten werden nicht wirklich gespeichert)';
                 
                 //sleep(1);
                 

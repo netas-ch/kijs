@@ -49,8 +49,9 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Index des Datensatzes. Wird von kijs zurzeit nicht gesetzt.
+     * Index des Datensatzes. Wird von kijs nicht gesetzt und nirgends verwendet.
      * @type {Number|null}
+     * @deprecated Wird entfernt. Stattdessen den Datensatz über dataRow bzw. primaryKey ansprechen.
      */
     get dataIndex() { return this._dataIndex; }
     set dataIndex(val) { this._dataIndex = val; }
