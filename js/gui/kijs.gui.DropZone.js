@@ -85,9 +85,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Erlaubte MIME-Types, z.B. ['image/png'] oder ['image/*']. Leer = alle. Der Setter akzeptiert auch
-     * einen String und wirft einen kijs.Error bei ungültigem Media-Type. Achtung: Anders als beim
-     * kijs.UploadDialog wird 'image' nicht zu 'image/*' ergänzt und passt darum zu keiner Datei.
+     * Erlaubte MIME-Types, z.B. ['image/png'] oder ['image'] (= 'image/*'). Leer = alle. Der Setter
+     * akzeptiert auch einen String und wirft einen kijs.Error bei ungültigem Media-Type.
      * @type {String[]}
      */
     get contentTypes() { return this._contentTypes; }
@@ -102,6 +101,10 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
             let parts = contentType.toLowerCase().split('/', 2);
             if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
                 throw new kijs.Error('invalid content type "' + contentType + '"');
+            }
+            // nur der Media-Type (z.B. 'image') = alle Untertypen
+            if (parts.length === 1) {
+                parts.push('*');
             }
             this._contentTypes.push(parts.join('/'));
         }, this);
