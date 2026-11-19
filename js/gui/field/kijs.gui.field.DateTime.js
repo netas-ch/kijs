@@ -335,11 +335,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
     /**
      * Spätestes wählbares Datum als String (siehe kijs.gui.DatePicker.maxValue).
-     * Zurzeit wirkt nur die Config; der Setter schreibt wegen eines Tippfehlers in maxalue.
      * @type {String|null}
      */
     get maxValue() { return this._datePicker.maxValue; }
-    set maxValue(val) { this._datePicker.maxalue = val; }
+    set maxValue(val) { this._datePicker.maxValue = val; }
 
     /**
      * Frühestes wählbares Datum (siehe kijs.gui.DatePicker.minDate)
