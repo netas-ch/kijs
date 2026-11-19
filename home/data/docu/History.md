@@ -39,8 +39,8 @@ mit **UPDATE TIPP** nötig.
   Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
   sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» (iconMapField) und 
   Spalte «Icon» (iconCharField) mit Tooltip und Icon-Auswahl im Filter, Testdaten in der Spalte 
-  «Combo», rechts ein Protokoll der Ereignisse und unten Buttons für die 
-  wichtigsten Methoden (getSelected, selectByIds, getDirtyRows, commit, sort …).  
+  «Combo», rechts ein Protokoll der Ereignisse und im Kopf ein Menü 
+  «Methoden» mit den wichtigsten Methoden (getSelected, selectByIds, getDirtyRows, commit, sort …).  
 - Werkzeuge: Das Zahnrad neben dem Suchfeld (nur lokal) öffnet eine Seite mit allen 
   Generatoren: API-Dokumentation, Texte für die Übersetzung, Sprachdateien, 
   Font-Awesome-Icons und CSS. Sie zeigt, ob die erzeugten Dateien aktuell sind, und 

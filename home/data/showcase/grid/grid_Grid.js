@@ -35,7 +35,6 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 flex: 1
             },
             headerElements: this._getHeaderElements(),
-            footerElements: this._getFooterElements(),
             elements:[
                 {
                     xtype: 'kijs.gui.grid.Grid',
@@ -126,111 +125,6 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
 
 
     // PROTECTED
-    /**
-     * Buttons zum Ausprobieren der Methoden
-     * @returns {Array}
-     */
-    _getFooterElements() {
-        return [
-            {
-                xtype: 'kijs.gui.Button',
-                caption: 'getSelected()',
-                on: {
-                    click: function() {
-                        let sel = this.grid.getSelected();
-                        sel = kijs.isArray(sel) ? sel : (sel ? [sel] : []);
-                        this._log('getSelected()', sel.length ? sel.map(row => this._rowText(row)).join(', ') : 'keine');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'getSelectedIds()',
-                on: {
-                    click: function() {
-                        this._log('getSelectedIds()', JSON.stringify(this.grid.getSelectedIds()));
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'selectByIds([2, 4, 6])',
-                on: {
-                    click: function() {
-                        this._log('selectByIds()', this.grid.selectByIds([2, 4, 6]) ? 'erfolgreich' : 'nicht gefunden');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'clearSelections()',
-                on: {
-                    click: function() {
-                        this.grid.clearSelections();
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'getDirtyRows()',
-                on: {
-                    click: function() {
-                        const rows = this.grid.getDirtyRows();
-                        this._log('getDirtyRows()', rows.length ? rows.map(row => this._rowText(row)).join(', ') : 'keine');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'commit()',
-                on: {
-                    click: function() {
-                        this.grid.commit();
-                        this._log('commit()', 'Änderungen übernommen');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'reload()',
-                on: {
-                    click: function() {
-                        this.grid.reload();
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'sort(\'number\', \'DESC\')',
-                on: {
-                    click: function() {
-                        this.grid.sort('number', 'DESC');
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'scrollTo(0, 0)',
-                on: {
-                    click: function() {
-                        this.grid.scrollTo(0, 0);
-                    },
-                    context: this
-                }
-            },{
-                xtype: 'kijs.gui.Button',
-                caption: 'startCellEdit(0)',
-                on: {
-                    click: function() {
-                        const cell = this.grid.startCellEdit(0);
-                        this._log('startCellEdit(0)', cell ? cell.columnConfig.caption : 'keine Zelle');
-                    },
-                    context: this
-                }
-            }
-        ];
-    }
-
     _getHeaderElements() {
         return [
             {
@@ -275,6 +169,120 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
                 on: {
                     change: function(e) {
                         this.grid.selectType = e.element.value;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'Methoden',
+                iconMap: 'kijs.iconMap.Fa.list',
+                menuElements: this._getMethodMenuElements()
+            }
+        ];
+    }
+
+    /**
+     * Menü-Einträge zum Ausprobieren der Methoden
+     * @returns {Array}
+     */
+    _getMethodMenuElements() {
+        return [
+            {
+                xtype: 'kijs.gui.Button',
+                caption: 'getSelected()',
+                on: {
+                    click: function() {
+                        let sel = this.grid.getSelected();
+                        sel = kijs.isArray(sel) ? sel : (sel ? [sel] : []);
+                        this._log('getSelected()', sel.length ? sel.map(row => this._rowText(row)).join(', ') : 'keine');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'getSelectedIds()',
+                on: {
+                    click: function() {
+                        this._log('getSelectedIds()', JSON.stringify(this.grid.getSelectedIds()));
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'selectByIds([2, 4, 6])',
+                on: {
+                    click: function() {
+                        this._log('selectByIds()', this.grid.selectByIds([2, 4, 6]) ? 'erfolgreich' : 'nicht gefunden');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'clearSelections()',
+                on: {
+                    click: function() {
+                        this.grid.clearSelections();
+                    },
+                    context: this
+                }
+            },
+            '-',
+            {
+                xtype: 'kijs.gui.Button',
+                caption: 'getDirtyRows()',
+                on: {
+                    click: function() {
+                        const rows = this.grid.getDirtyRows();
+                        this._log('getDirtyRows()', rows.length ? rows.map(row => this._rowText(row)).join(', ') : 'keine');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'commit()',
+                on: {
+                    click: function() {
+                        this.grid.commit();
+                        this._log('commit()', 'Änderungen übernommen');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'startCellEdit(0)',
+                on: {
+                    click: function() {
+                        const cell = this.grid.startCellEdit(0);
+                        this._log('startCellEdit(0)', cell ? cell.columnConfig.caption : 'keine Zelle');
+                    },
+                    context: this
+                }
+            },
+            '-',
+            {
+                xtype: 'kijs.gui.Button',
+                caption: 'reload()',
+                on: {
+                    click: function() {
+                        this.grid.reload();
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'sort(\'number\', \'DESC\')',
+                on: {
+                    click: function() {
+                        this.grid.sort('number', 'DESC');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.Button',
+                caption: 'scrollTo(0, 0)',
+                on: {
+                    click: function() {
+                        this.grid.scrollTo(0, 0);
                     },
                     context: this
                 }
