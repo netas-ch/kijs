@@ -31,7 +31,7 @@ window.kijs = class kijs {
      * Version von kijs, z.B. '3.7.1'
      * @type {String}
      */
-    static get version() { return '3.7.1'; }
+    static get version() { return '3.8.0'; }
 
     /**
      * Aktuelle Sprache, z.B. 'de-CH' oder 'fr'. Default: 'de'

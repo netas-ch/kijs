@@ -9,6 +9,7 @@ home.sc.DropZone = class home_sc_DropZone {
     constructor(config={}) {
         this._app = config.app;
         this._content = null;
+        this._fileUpload = null;
     }
     
     
@@ -17,6 +18,20 @@ home.sc.DropZone = class home_sc_DropZone {
     // MEMBERS
     // --------------------------------------------------------------
     getContent() {
+        // FileUpload ohne Server: die Dateien werden nur angezeigt
+        this._fileUpload = new kijs.FileUpload({
+            on: {
+                beforeUpload: function(e) {
+                    kijs.gui.CornerTipContainer.show('Drop (OK)', kijs.String.htmlspecialchars(e.fileName));
+                    return false;
+                },
+                fileRejected: function(e) {
+                    kijs.gui.CornerTipContainer.show('Drop (abgewiesen)', kijs.String.htmlspecialchars(e.errorMsg), 'error');
+                },
+                context: this
+            }
+        });
+
         this._content = new kijs.gui.Panel({
             caption: 'kijs.gui.DropZone',
             headerBarElements: [ this._app.createApiButton('kijs.gui.DropZone') ],
@@ -52,32 +67,21 @@ home.sc.DropZone = class home_sc_DropZone {
                                 flex: 1,
                                 margin: '20px',
                                 borderRadius: '10px',
-                                lineHeight: '150px',
-                                fontFamily: '"Open Sans", "Helvetica Neue", helvetica, arial, verdana, sans-serif',
-                                fontSize: '50px',
-                                fontWeight: 'bold',
-                                color: 'var(--panel-bkgrndColor)',
-                                textAlign: 'center',
-                                verticalAlign: 'center',
                                 backgroundImage: 'repeating-linear-gradient(45deg, var(--panel-bkgrndColor) 0%, var(--panel-bkgrndColor) 0.1%, var(--panel-borderColor) 0.1%, var(--panel-borderColor) 2%, var(--panel-bkgrndColor) 2%)'
                             },
+                            innerStyle:{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '50px',
+                                fontWeight: 'bold',
+                                color: 'var(--panel-bkgrndColor)'
+                            },
                             html: 'Drop Zone',
-                            //contentTypes: 'image',
+                            fileUpload: this._fileUpload,
                             on: {
                                 drop: function(e) {
                                     console.log(e);
-                                    
-                                    let files = [];
-                                    
-                                    kijs.Array.each(e.nodeEvent.dataTransfer.files, function(file) {
-                                        files.push(file.name);
-                                    }, this);
-                                    
-                                    if (e.validMime) {
-                                        kijs.gui.CornerTipContainer.show('Drop (OK)', files.join('<br>'));
-                                    } else {
-                                        kijs.gui.CornerTipContainer.show('Drop (contentType fail)', files.join('<br>'), 'error');
-                                    }
                                 },
                                 context: this
                             }
@@ -108,7 +112,7 @@ home.sc.DropZone = class home_sc_DropZone {
                     },
                     on: {
                         change: function(e) {
-                            this._content.downX('kijs.gui.DropZone').contentTypes = e.element.value;
+                            this._fileUpload.contentTypes = e.element.value;
                         },
                         context: this
                     }
@@ -146,7 +150,12 @@ home.sc.DropZone = class home_sc_DropZone {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
+        if (this._fileUpload) {
+            this._fileUpload.destruct();
+        }
+
         this._content = null;
+        this._fileUpload = null;
     }
     
 };

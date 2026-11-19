@@ -15,9 +15,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [809, 991]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [808, 990]
    ]
   ]
  ], 
@@ -37,9 +34,6 @@ $translations = [
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [50], 
     "../../js/gui/kijs.gui.MsgBox.js" => [234, 456]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.MsgBox.js" => [233, 453]
    ]
   ]
  ], 
@@ -110,9 +104,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.Phone.js" => [42]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.Phone.js" => [40]
    ]
   ]
  ], 
@@ -140,9 +131,18 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1136]
+   ]
+  ]
+ ], 
+
+ "Der Dateityp von \"%1\" ist nicht erlaubt" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../js/kijs.FileUpload.js" => [274]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1135]
+    "../../js/kijs.FileUpload.js" => [269]
    ]
   ]
  ], 
@@ -151,7 +151,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.Ajax.js" => [245]
+    "../../js/kijs.Ajax.js" => [260]
    ]
   ]
  ], 
@@ -160,7 +160,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.Ajax.js" => [239]
+    "../../js/kijs.Ajax.js" => [254]
    ]
   ]
  ], 
@@ -172,9 +172,6 @@ $translations = [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1089, 1120], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [517], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [620]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1088, 1119]
    ]
   ]
  ], 
@@ -186,9 +183,18 @@ $translations = [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1073, 1106], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [504], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [615]
+   ]
+  ]
+ ], 
+
+ "Die Datei \"%1\" ist zu gross (max. %2)" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../js/kijs.FileUpload.js" => [278]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1072, 1105]
+    "../../js/kijs.FileUpload.js" => [273]
    ]
   ]
  ], 
@@ -198,9 +204,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1143]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1142]
    ]
   ]
  ], 
@@ -209,7 +212,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.Ajax.js" => [249]
+    "../../js/kijs.Ajax.js" => [264]
    ]
   ]
  ], 
@@ -218,7 +221,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.Ajax.js" => [242, 246]
+    "../../js/kijs.Ajax.js" => [257, 261]
    ]
   ]
  ], 
@@ -297,14 +300,23 @@ $translations = [
   ]
  ], 
 
+ "Es darf nur eine Datei hochgeladen werden" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../js/kijs.FileUpload.js" => [347]
+   ], 
+   "usagesJsOld" => [
+    "../../js/kijs.FileUpload.js" => [342]
+   ]
+  ]
+ ], 
+
  "Es fehlt das Start- oder Enddatum" => [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.DateTime.js" => [1065]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1064]
    ]
   ]
  ], 
@@ -313,10 +325,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.UploadDialog.js" => [546]
+    "../../js/kijs.FileUpload.js" => [541]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.UploadDialog.js" => [543]
+    "../../js/kijs.FileUpload.js" => [536]
    ]
   ]
  ], 
@@ -326,9 +338,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.Rpc.js" => [225]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.Rpc.js" => [220]
    ]
   ]
  ], 
@@ -383,9 +392,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.Rpc.js" => [289, 307]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.Rpc.js" => [284, 302]
    ]
   ]
  ], 
@@ -415,9 +421,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [87]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.MsgBox.js" => [86]
    ]
   ]
  ], 
@@ -426,7 +429,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.TimePicker.js" => [137]
+    "../../js/gui/kijs.gui.TimePicker.js" => [138]
    ]
   ]
  ], 
@@ -455,7 +458,7 @@ $translations = [
    "usagesJs" => [
     "../../js/gui/kijs.gui.DatePicker.js" => [136], 
     "../../js/gui/kijs.gui.MonthPicker.js" => [137], 
-    "../../js/gui/kijs.gui.TimePicker.js" => [147]
+    "../../js/gui/kijs.gui.TimePicker.js" => [148]
    ]
   ]
  ], 
@@ -492,9 +495,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [90]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.MsgBox.js" => [89]
    ]
   ]
  ], 
@@ -504,10 +504,11 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [41], 
+    "../../js/gui/kijs.gui.FileUpload.js" => [185], 
     "../../js/gui/kijs.gui.MsgBox.js" => [54, 122, 155, 188, 230, 453]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/kijs.gui.MsgBox.js" => [53, 121, 154, 187, 229, 450]
+    "../../js/gui/kijs.gui.FileUpload.js" => [177]
    ]
   ]
  ], 
@@ -519,7 +520,7 @@ $translations = [
     "../../js/gui/container/tab/kijs.gui.container.tab.Button.js" => [36], 
     "../../js/gui/kijs.gui.DatePicker.js" => [146], 
     "../../js/gui/kijs.gui.MonthPicker.js" => [147], 
-    "../../js/gui/kijs.gui.TimePicker.js" => [157]
+    "../../js/gui/kijs.gui.TimePicker.js" => [158]
    ]
   ]
  ], 
@@ -556,7 +557,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.TimePicker.js" => [166]
+    "../../js/gui/kijs.gui.TimePicker.js" => [167]
    ]
   ]
  ], 
@@ -592,7 +593,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.UploadWindow.js" => [41]
+    "../../js/gui/kijs.gui.FileUpload.js" => [169]
+   ], 
+   "usagesJsOld" => [
+    "../../js/gui/kijs.gui.FileUpload.js" => [161]
    ]
   ]
  ], 
@@ -602,21 +606,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/kijs.gui.Rpc.js" => [243]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/kijs.gui.Rpc.js" => [238]
-   ]
-  ]
- ], 
-
- "ist zu gross" => [
-  "" => [
-   "fuzzy" => [true], 
-   "usagesJs" => [
-    "../../js/kijs.UploadDialog.js" => [482]
-   ], 
-   "usagesJsOld" => [
-    "../../js/kijs.UploadDialog.js" => [479]
    ]
   ]
  ]

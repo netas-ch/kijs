@@ -21,7 +21,7 @@
    "js/kijs.Ajax.js",
    "js/kijs.Rpc.js",
 
-   "js/kijs.UploadDialog.js"
+   "js/kijs.FileUpload.js"
   ],
 
   "translations":[
@@ -84,7 +84,7 @@
    "js/gui/kijs.gui.Window.js",
    "js/gui/kijs.gui.MsgBox.js",
    "js/gui/kijs.gui.ProgressBar.js",
-   "js/gui/kijs.gui.UploadWindow.js",
+   "js/gui/kijs.gui.FileUpload.js",
 
    "js/gui/kijs.gui.CornerTipContainer.js",
 

@@ -120,6 +120,8 @@ home.ApiUpdate = class home_ApiUpdate {
             iconMap: 'kijs.iconMap.Fa.arrows-rotate',
             modal: true,
             closable: false,
+            maximizable: false,
+            resizable: false,
             width: 480,
             innerStyle: {
                 padding: '10px'
@@ -129,6 +131,7 @@ home.ApiUpdate = class home_ApiUpdate {
                 this._infoEl
             ],
             footerElements: [
+                '>',
                 this._btnClose
             ]
         });

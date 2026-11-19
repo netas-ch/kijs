@@ -110,7 +110,8 @@ kijs.Ajax = class kijs_Ajax {
     *     {Number} [timeout=0]         Timeout des Requests in Millisekunden
     *     {String} [format='json']     'json', 'xml' oder 'text'
     *     {function} fn                Callback Funktion
-    *     {function} progressFn        Progress Funktion
+    *     {function} progressFn        Progress Funktion (Download der Antwort)
+    *     {function} uploadProgressFn  Progress Funktion (Upload der postData)
     *     {Object} context             Kontext für die Callback Funktion
     *     {Object} [headers]           Objekt mit Headers die mitgesendet werden
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
@@ -186,6 +187,19 @@ kijs.Ajax = class kijs_Ajax {
                 };
             }
 
+            // Fortschritt des Uploads überwachen
+            if (kijs.isFunction(config.uploadProgressFn)) {
+                xmlHttp.upload.onprogress = function(e) {
+                    config.uploadProgressFn.call(config.context || this, {
+                        nodeEventName : 'onprogress',
+                        ajaxConfig: config,
+                        useCapture: false,
+                        nodeEvent: e,
+                        context: config.context
+                    });
+                };
+            }
+
             xmlHttp.onabort = function() {
                 config.abortHappened = true;
             };
@@ -198,6 +212,7 @@ kijs.Ajax = class kijs_Ajax {
                 
                 // Progress Listener wieder entfernen
                 xmlHttp.onprogress = null;
+                xmlHttp.upload.onprogress = null;
                 
                 if (xmlHttp.status >= 200 && xmlHttp.status <= 299) {
                     switch (config.format) {

@@ -2622,6 +2622,35 @@
                 color: var(--default-disabled-fontColor);
             }
         }
+
+        /* unbestimmter Fortschritt (percent = null) */
+        &.kijs-indeterminate {
+            > .kijs-progressbar-field {
+                overflow: hidden;
+
+                > .kijs-progressbar-bar {
+                    width: 30%;
+                    transition: none;
+                    animation: kijs-progressbar-indeterminate 1.5s ease-in-out infinite;
+                }
+            }
+        }
+    }
+
+
+
+    /* ******************
+       * DropZone
+       ****************** */
+    .kijs-dropzone {
+        &.kijs-dragover {
+            outline: 2px dashed var(--dragover-ok-borderColor);
+            outline-offset: -2px;
+        }
+
+        &.kijs-dragover-forbidden {
+            outline-color: var(--dragover-forbidden-borderColor);
+        }
     }
 
 
@@ -4660,6 +4689,12 @@
     @keyframes kijs-spin {
         from { transform: rotate(0deg); }
         to   { transform: rotate(359deg); }
+    }
+
+    /* ProgressBar mit unbestimmtem Fortschritt */
+    @keyframes kijs-progressbar-indeterminate {
+        from { left: -30%; }
+        to   { left: 100%; }
     }
 
     /* fade */

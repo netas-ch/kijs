@@ -23,11 +23,13 @@ kijs.translation["fr"] = {
     "Aufsteigend sortieren": "Trier par ordre croissant",
     "Beginnt mit...": "Commencer par...",
     "Das Datum darf nicht leer sein": "La date ne doit pas \u00eatre vide",
+    "Der Dateityp von \"%1\" ist nicht erlaubt": "Le type de fichier de \"%1\" n'est pas autoris\u00e9",
     "Der Server brauchte zu lange, um eine Antwort zu senden": "Le serveur a mis trop de temps \u00e0 envoyer une r\u00e9ponse",
     "Der Server hat mit einem Fehler geantwortet": "Le serveur a r\u00e9pondu par une erreur",
     "Der Wert \"%1\" ist nicht in der Liste enthalten": "La valeur \"%1\" ne figure pas dans la liste",
     "Der maximale Wert f\u00fcr dieses Feld ist %1": "La valeur maximale de ce champ est %1",
     "Der minimale Wert f\u00fcr dieses Feld ist %1": "La valeur minimale de ce champ est %1",
+    "Die Datei \"%1\" ist zu gross (max. %2)": "Le fichier \"%1\" est trop volumineux (max. %2)",
     "Die Uhrzeit darf nicht leer sein": "L'heure ne doit pas \u00eatre vide",
     "Die Verbindung konnte nicht aufgebaut werden": "La connexion n'a pas pu \u00eatre \u00e9tablie",
     "Die Verbindung wurde abgebrochen": "La connexion a \u00e9t\u00e9 interrompue",
@@ -39,6 +41,7 @@ kijs.translation["fr"] = {
     "Endet mit...": "Se termine par ...",
     "Enth\u00e4lt nicht...": "Ne contient pas de...",
     "Enth\u00e4lt...": "Contient...",
+    "Es darf nur eine Datei hochgeladen werden": "Un seul fichier peut \u00eatre t\u00e9l\u00e9charg\u00e9",
     "Es fehlt das Start- oder Enddatum": "Il manque la date de d\u00e9but ou de fin",
     "Es ist ein unbekannter Fehler aufgetreten": "Une erreur inconnue est survenue",
     "Fehler": "Erreur",
@@ -72,6 +75,5 @@ kijs.translation["fr"] = {
     "Ung\u00fcltige IBAN": "IBAN non valide",
     "Ung\u00fcltige Sozialversicherungs-Nr.": "N\u00b0 de s\u00e9curit\u00e9 sociale non valide",
     "Upload": "T\u00e9l\u00e9chargement",
-    "Warnung": "Avertissement",
-    "ist zu gross": "est trop grand"
+    "Warnung": "Avertissement"
 };

@@ -48,8 +48,15 @@ home.sc.ProgressBar = class home_sc_ProgressBar {
                     style: {
                         marginTop:'10px'
                     }
+                },{
+                    xtype: 'kijs.gui.ProgressBar',
+                    caption: 'percent: null (unbestimmt)',
+                    percent: null,
+                    style: {
+                        marginTop:'10px'
+                    }
                 },
-                
+
                 {
                     xtype: 'kijs.gui.Button',
                     caption: 'Progress Bar',

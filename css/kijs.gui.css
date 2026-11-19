@@ -2282,6 +2282,7 @@
        ****************** */
   div.kijs-progressbar {
     overflow: hidden;
+    /* unbestimmter Fortschritt (percent = null) */
   }
   div.kijs-progressbar > .kijs-progressbar-caption {
     padding: 0 0 2px 0;
@@ -2353,6 +2354,24 @@
   }
   div.kijs-progressbar.kijs-disabled > .kijs-progressbar-caption-bottom {
     color: var(--default-disabled-fontColor);
+  }
+  div.kijs-progressbar.kijs-indeterminate > .kijs-progressbar-field {
+    overflow: hidden;
+  }
+  div.kijs-progressbar.kijs-indeterminate > .kijs-progressbar-field > .kijs-progressbar-bar {
+    width: 30%;
+    transition: none;
+    animation: kijs-progressbar-indeterminate 1.5s ease-in-out infinite;
+  }
+  /* ******************
+       * DropZone
+       ****************** */
+  .kijs-dropzone.kijs-dragover {
+    outline: 2px dashed var(--dragover-ok-borderColor);
+    outline-offset: -2px;
+  }
+  .kijs-dropzone.kijs-dragover-forbidden {
+    outline-color: var(--dragover-forbidden-borderColor);
   }
   /* ******************
        * MonthPicker
@@ -4041,6 +4060,15 @@
     }
     to {
       transform: rotate(359deg);
+    }
+  }
+  /* ProgressBar mit unbestimmtem Fortschritt */
+  @keyframes kijs-progressbar-indeterminate {
+    from {
+      left: -30%;
+    }
+    to {
+      left: 100%;
     }
   }
   /* fade */

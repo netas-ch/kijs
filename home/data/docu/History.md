@@ -7,11 +7,11 @@ Versionsnummern
   anzupassen ist.  
 
 
-Version 3.7.1
+Version 3.8.0
 =============
 Neu sind vor allem die Dokumentation und die Home-App. An kijs selbst gibt es vor 
-allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur bei den Punkten 
-mit **UPDATE TIPP** nötig.  
+allem Fehlerbehebungen (siehe unten) und einen überarbeiteten Datei-Upload. Anpassungen 
+am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.  
 
 
 ## Home-App: API-Dokumentation
@@ -116,6 +116,110 @@ mit **UPDATE TIPP** nötig.
 - Fehlende Übersetzung «Schreiben für Daten» (```kijs.gui.field.Combo```) ergänzt.  
 
 
+## Datei-Upload überarbeitet
+Die Upload-Klassen sind neu aufgebaut. Der Core enthält keine Oberfläche mehr, und 
+```kijs.gui.DropZone``` und ```kijs.gui.ProgressBar``` hängen nicht mehr vom Upload ab.  
+
+| bis 3.7.0                  | ab 3.8.0                                                   |
+|----------------------------|------------------------------------------------------------|
+| ```kijs.UploadDialog```    | ```kijs.FileUpload``` (Core, ohne Oberfläche)              |
+| ```kijs.gui.UploadWindow```| ```kijs.gui.FileUpload``` (erbt von ```kijs.FileUpload```, zeigt das Fenster selbst an) |
+
+### Dateien
+Die Dateien ```js/kijs.UploadDialog.js``` und ```js/gui/kijs.gui.UploadWindow.js``` gibt es 
+nicht mehr. Neu sind ```js/kijs.FileUpload.js``` (Modul ```core```, nach ```kijs.Rpc.js```) 
+und ```js/gui/kijs.gui.FileUpload.js``` (Modul ```gui```, nach ```kijs.gui.ProgressBar.js```). 
+Die ```files.json``` von kijs ist angepasst.  
+
+**UPDATE TIPP:** In der ```files.json``` (bzw. überall, wo die kijs-Dateien eingebunden 
+werden) ersetzen:  
+- ```js/kijs.UploadDialog.js``` → ```js/kijs.FileUpload.js```  
+- ```js/gui/kijs.gui.UploadWindow.js``` → ```js/gui/kijs.gui.FileUpload.js```  
+
+### kijs.FileUpload
+- Configs umbenannt: ```ajaxUrl``` → ```url``` (Default ```'.'``` wie bei ```kijs.Rpc```, 
+  bisher ```'index.php'```), ```maxFilesize``` → ```maxFileSize```, ```sanitizeFilename``` → 
+  ```sanitizeFileName```. Neu: ```headers```, ```parameters``` und ```on```.  
+- ```showFileSelectDialog()``` heisst ```showFileOpenDialog()```.  
+- Neue Funktionen: ```upload(files)``` lädt Dateien direkt hoch (z.B. von einer DropZone), 
+  ```checkFile(file)``` gibt die Fehlermeldung zurück, ```isContentTypeAllowed(type)```, 
+  Getter ```isUploading```.  
+- Entfernt: ```dropZones```, ```bindDropZones()```, ```unbindDropZone()``` (stattdessen 
+  ```kijs.gui.DropZone.fileUpload```), ```disabled```, ```changeDisabled()``` und 
+  ```observePaste``` (ist jetzt in ```kijs.gui.FileUpload```).  
+- Events: In allen Argumenten heisst ```uploadDialog``` jetzt ```fileUpload```.  
+  - ```fileSelected``` → ```beforeUpload```. Gibt ein Listener ```false``` zurück, wird die 
+    Datei nicht hochgeladen (ersetzt den Upload ohne ```ajaxUrl```).  
+  - ```uploadFailed``` → ```fileRejected```, immer mit ```file```, ```fileName``` und 
+    ```errorMsg```. Wird auch ausgelöst, wenn ```multiple``` aus ist und mehrere Dateien 
+    kommen.  
+  - ```progress```: zusätzlich ```loaded``` und ```total```, ohne ```nodeEvent```.  
+  - ```upload```: zusätzlich die ganze Antwort ```response```.  
+  - ```uploadEnd```: zusätzlich ```errorMsgs``` (uploadId => Fehlermeldung).  
+- ```progress``` meldet jetzt den Fortschritt des Uploads. Bisher war es der Download der 
+  Antwort, darum sprang der Balken meist erst am Schluss.  
+- ```contentTypes``` und ```fileExtensions``` gelten mit ODER (wie das Attribut ```accept```), 
+  die Endungen ohne Unterscheidung von Gross-/Kleinschreibung. Ist beides leer, sind alle 
+  Dateien erlaubt.  
+- Antwort vom Server: Eine ```errorMsg``` wird angezeigt (bisher immer «unbekannter Fehler»). 
+  Ist die Antwort kein JSON-Objekt, gilt der Upload als fehlgeschlagen.  
+- Laufen noch Uploads, wenn weitere Dateien dazukommen, gehen die Antworten der ersten 
+  nicht mehr verloren.  
+
+### kijs.gui.FileUpload
+- Zeigt während des Uploads ein Fenster mit einem Fortschrittsbalken pro Datei. Abgewiesene 
+  Dateien und Fehler vom Server stehen unter dem Balken. Der Button OK ist aktiv, sobald 
+  alle Uploads fertig sind.  
+- Configs: ```autoClose```, ```showProgress``` und ```observePaste```. Bei 
+  ```observePaste``` kann statt ```true``` ein Element angegeben werden (z.B. die DropZone): 
+  Eingefügt wird dann nur, solange es sichtbar ist.  
+- Nach einem Fehler schloss sich das Fenster bisher auch bei allen späteren Uploads nicht 
+  mehr automatisch.  
+
+### kijs.gui.DropZone
+- Neue Config ```fileUpload```: Die abgelegten Dateien werden damit hochgeladen. Dessen 
+  ```contentTypes``` und ```multiple``` bestimmen, ob abgelegt werden darf.  
+- Entfernt: die Configs ```contentTypes``` und ```multiple```.  
+- Events ```dragEnter```, ```dragLeave```, ```dragOver``` und ```drop``` haben neue Argumente: 
+  ```dropZone```, ```nodeEvent```, ```allowed``` und bei ```drop``` ```files```. 
+  ```validMime``` gibt es nicht mehr. Gibt ein Listener auf ```drop``` ```false``` zurück, 
+  werden die Dateien nicht an den ```fileUpload``` übergeben.  
+- Reagiert nur noch auf Dateien, nicht auf gezogenen Text. Die CSS-Klasse flackert nicht 
+  mehr über Kindelementen, und bei unzulässigen Dateien zeigt der Browser «nicht ablegen» an.  
+- Neues CSS: gestrichelter Rahmen beim Darüberziehen (Variablen 
+  ```--dragover-ok-borderColor``` und ```--dragover-forbidden-borderColor```).  
+
+### kijs.gui.ProgressBar
+- Entfernt: ```uploadDialog```, ```uploadDialogId```, ```bindUploadDialog()``` und 
+  ```setProgress()```. Stattdessen ```percent``` setzen.  
+- ```percent = null``` zeigt einen durchlaufenden Balken (Fortschritt unbekannt). Werte 
+  ausserhalb von 0–100 werden begrenzt statt einen Fehler auszulösen.  
+- Neue Configs ```captionDisplayType``` und ```bottomCaptionDisplayType```.  
+- ```showPercent``` wirkt jetzt auch nach dem Rendern.  
+
+### kijs.Ajax
+- Neue Config ```uploadProgressFn``` für den Fortschritt des Uploads (```progressFn``` 
+  meldet den Download der Antwort).  
+
+### Home-App
+- Showcase FileUpload mit echtem Upload (```home/dataResources/php/upload.php```, 
+  speichert nichts), DropZone und Einfügen aus der Zwischenablage. Showcase DropZone und 
+  ProgressBar angepasst.  
+
+**UPDATE TIPP:** Im Projekt suchen nach ```UploadDialog```, ```UploadWindow```, 
+```showFileSelectDialog```, ```ajaxUrl```, ```maxFilesize```, ```sanitizeFilename```, 
+```fileSelected```, ```uploadFailed```, ```bindUploadDialog```, ```setProgress``` und 
+```validMime``` sowie nach ```kijs.gui.DropZone``` mit ```contentTypes``` oder ```multiple```, 
+und gemäss den Punkten oben anpassen. Meist reicht:  
+```javascript
+const fu = new kijs.gui.FileUpload({ url: 'upload.php', contentTypes: ['image'] });
+fu.showFileOpenDialog();
+new kijs.gui.DropZone({ fileUpload: fu });   // falls eine DropZone verwendet wird
+```
+Auf dem Server bleiben die Header ```X-Filename``` und ```X-Filepath``` gleich. Die Antwort 
+muss ein JSON-Objekt sein, Fehler als ```errorMsg```.  
+
+
 ## Fehlerbehebungen
 - ```kijs.gui.Dom.nodeAttributeHas()``` gab nach dem Rendern das umgekehrte Resultat zurück.  
 - ```kijs.gui.Element```: Das Event ```keyPress``` wurde weitergeleitet, war aber in 
@@ -159,13 +263,6 @@ mit **UPDATE TIPP** nötig.
   einen Fehler. Gibt jetzt alle GET-Parameter als Objekt zurück.  
 - ```kijs.Navigator.osVersion``` lieferte unter Linux mit Firefox die Firefox-Version. Unter 
   Linux ist der Wert jetzt immer leer, weil der User-Agent keine Linux-Version enthält.  
-- ```kijs.UploadDialog```: Ohne ```contentTypes``` und ```fileExtensions``` wurde jede Datei 
-  abgewiesen. Jetzt sind dann alle Dateien erlaubt.  
-- ```kijs.gui.UploadWindow``` liess sich ohne ```uploadDialog``` nicht erstellen (Fehler 
-  «uploadDialog must be of type kijs.UploadDialog»). Und ```showFileSelectDialog()``` erstellte 
-  den UploadDialog ohne Listeners, sodass das Fenster nie erschien.  
-- ```kijs.gui.ProgressBar```: Mit einem verbundenen ```kijs.UploadDialog``` wurde der 
-  Fortschritt nie angezeigt, weil die Listeners noch die alten Event-Argumente erwarteten.  
 - ```kijs.gui.grid.Grid```: Beim Verschieben einer Spalte (```columnConfig.position``` bzw. 
   Spaltenfenster) gingen die Zellen der Zeilen und die Filter nicht mit, und beim Verschieben 
   nach rechts landete die Spalte eine Position zu weit links.  
@@ -183,8 +280,6 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.Splitter```: Ein ungültiges ```target``` wurde wegen fehlender Klammern nicht 
   erkannt. Jetzt kommt sofort der Fehler «Unknown format on config "target"».  
 - ```kijs.gui.DragDrop.dragImageDom```: Der Getter warf einen ReferenceError.  
-- ```kijs.gui.DropZone.contentTypes```: Ein Media-Type ohne Untertyp (z.B. ```'image'```) passte 
-  zu keiner Datei. Er gilt jetzt wie beim ```kijs.UploadDialog``` als ```'image/*'```.  
 - ```kijs.gui.container.Tab.save()``` sendete die Daten unter ```data``` statt ```requestData```; 
   beim Server kamen darum weder ```posData``` noch ```args``` an.  
 - ```kijs.gui.SpinBox```: Die Getter ```spinBoxWidth```/```spinBoxHeight``` des Zielelements wurden 

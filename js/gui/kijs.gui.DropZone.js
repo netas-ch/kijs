@@ -5,17 +5,23 @@
 // --------------------------------------------------------------
 /**
  * Container, auf den Dateien gezogen werden können. Beim Darüberziehen erhält er die CSS-Klasse
- * dragOverCls, bei unpassendem Dateityp oder zu vielen Dateien zusätzlich dragOverForbiddenCls.
- * Die Dateien werden mit dem drop-Event weitergegeben, z.B. an einen kijs.UploadDialog
- * (siehe kijs.UploadDialog.bindDropZones()). Ist die DropZone deaktiviert, werden keine Events ausgelöst.
+ * dragOverCls. Ist ein fileUpload zugewiesen, werden die abgelegten Dateien damit hochgeladen.
+ * Dessen contentTypes und multiple bestimmen auch, ob die Dateien abgelegt werden dürfen:
+ * wenn nicht, erhält die DropZone zusätzlich dragOverForbiddenCls und der Browser zeigt
+ * an, dass nicht abgelegt werden kann.
+ *
+ * Reagiert nur auf Dateien, nicht auf gezogenen Text oder Elemente. Ist die DropZone deaktiviert,
+ * werden keine Events ausgelöst und es kann nichts abgelegt werden.
  *
  * @example
- * const dz = new kijs.gui.DropZone({ html: 'Dateien hierher ziehen', contentTypes: ['image/png', 'image/jpeg'] });
- * new kijs.UploadDialog({ ajaxUrl: 'upload.php', contentTypes: ['image'], dropZones: dz });
+ * const fu = new kijs.FileUpload({ url: 'upload.php', contentTypes: ['image'] });
+ * new kijs.gui.DropZone({ html: 'Bilder hierher ziehen', fileUpload: fu });
  *
- * @fires dragOver  Beim Darüberziehen. Zusätzlich zu den Argumenten des DOM-Events: validMime
- *                  (passt der Typ zu contentTypes?), allowed (passt die Anzahl zu multiple?)
- * @fires drop  Beim Loslassen. Zusätzlich zu den Argumenten des DOM-Events: validMime, allowed
+ * @fires dragEnter  Dateien werden über die DropZone gezogen. e: dropZone, nodeEvent, allowed
+ * @fires dragLeave  Dateien werden aus der DropZone gezogen. e: dropZone, nodeEvent
+ * @fires dragOver  Laufend beim Darüberziehen. e: dropZone, nodeEvent, allowed
+ * @fires drop  Dateien wurden abgelegt. Gibt ein Listener false zurück, werden sie nicht an den
+ *              fileUpload übergeben. e: dropZone, nodeEvent, files, allowed
  */
 kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
@@ -29,19 +35,10 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
         this._dragOverCls = 'kijs-dragover';
         this._dragOverForbiddenCls = 'kijs-dragover-forbidden';
-        this._contentTypes = [];
-        this._multiple = true;
-        this._validMediaTypes = [
-            'application',
-            'audio',
-            'example',
-            'image',
-            'message',
-            'model',
-            'multipart',
-            'text',
-            'video'
-        ];
+        this._fileUpload = null;
+
+        this._allowed = true;       // intern: dürfen die gezogenen Dateien abgelegt werden?
+        this._dragEnterCount = 0;   // intern: dragenter/dragleave kommen auch von Kindelementen
 
         // CSS
         this._dom.clsAdd('kijs-dropzone');
@@ -54,9 +51,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             dragOverCls: true,              // {String} CSS-Klasse beim Darüberziehen. Default: 'kijs-dragover'
-            dragOverForbiddenCls: true,     // {String} CSS-Klasse bei unpassendem Typ oder zu vielen Dateien. Default: 'kijs-dragover-forbidden'
-            contentTypes: { target: 'contentTypes' },
-            multiple: true
+            dragOverForbiddenCls: true,     // {String} CSS-Klasse, wenn die Dateien nicht abgelegt werden dürfen. Default: 'kijs-dragover-forbidden'
+            fileUpload: { target: 'fileUpload' }
         });
 
         // Drag-Events kommen nicht vom Element, sondern von dieser Klasse
@@ -73,10 +69,9 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
         // Events für DOM mappen
         this._dom.on('dragEnter', this.#onDragEnter, this);
-        this._dom.on('dragOver', this.#onDragOver, this);
         this._dom.on('dragLeave', this.#onDragLeave, this);
+        this._dom.on('dragOver', this.#onDragOver, this);
         this._dom.on('drop', this.#onDrop, this);
-
     }
 
 
@@ -85,38 +80,17 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Erlaubte MIME-Types, z.B. ['image/png'] oder ['image'] (= 'image/*'). Leer = alle. Der Setter
-     * akzeptiert auch einen String und wirft einen kijs.Error bei ungültigem Media-Type.
-     * @type {String[]}
+     * kijs.FileUpload, mit dem die abgelegten Dateien hochgeladen werden. null = die Dateien
+     * werden nur mit dem Event drop weitergegeben. Andere Werte werfen einen kijs.Error.
+     * @type {kijs.FileUpload|null}
      */
-    get contentTypes() { return this._contentTypes; }
-    set contentTypes(val) {
-        if (!kijs.isArray(val)) {
-            val = [val];
+    get fileUpload() { return this._fileUpload; }
+    set fileUpload(val) {
+        if (!kijs.isEmpty(val) && !(val instanceof kijs.FileUpload)) {
+            throw new kijs.Error(`config "fileUpload" must be of type kijs.FileUpload`);
         }
-        
-        this._contentTypes = [];
-        
-        kijs.Array.each(val, function(contentType) {
-            let parts = contentType.toLowerCase().split('/', 2);
-            if (!kijs.Array.contains(this._validMediaTypes, parts[0])) {
-                throw new kijs.Error('invalid content type "' + contentType + '"');
-            }
-            // nur der Media-Type (z.B. 'image') = alle Untertypen
-            if (parts.length === 1) {
-                parts.push('*');
-            }
-            this._contentTypes.push(parts.join('/'));
-        }, this);
+        this._fileUpload = val || null;
     }
-
-    /**
-     * Dürfen mehrere Dateien gleichzeitig abgelegt werden? Default: true
-     * @type {Boolean}
-     */
-    get multiple() { return this._multiple; }
-
-    set multiple(val) { this._multiple = val; }
 
 
 
@@ -125,95 +99,127 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // --------------------------------------------------------------
     // PROTECTED
     /**
-     * Prüft, ob alle Dateien mit Typ zu contentTypes passen (genauer Typ oder 'typ/*').
-     * @param {DataTransferItemList} dataTransferItems
+     * Prüft, ob die gezogenen Dateien abgelegt werden dürfen (multiple und contentTypes vom
+     * fileUpload). Ohne fileUpload ist alles erlaubt.
+     * @param {DataTransfer} dataTransfer
      * @returns {Boolean}
      */
-    _checkMime(dataTransferItems) {
-        for (let i=0; i<dataTransferItems.length; i++) {
-            if (dataTransferItems[i].type) {
-                let mime = dataTransferItems[i].type.toLowerCase();
-                let mimeParts = dataTransferItems[i].type.split('/', 2);
-                if (!kijs.Array.contains(this._contentTypes, mime) && !kijs.Array.contains(this._contentTypes, mimeParts[0] + '/*')) {
-                    return false;
-                }
+    _checkAllowed(dataTransfer) {
+        if (!this._fileUpload || !dataTransfer || !dataTransfer.items) {
+            return true;
+        }
+
+        const items = Array.from(dataTransfer.items).filter(item => item.kind === 'file');
+
+        if (!this._fileUpload.multiple && items.length > 1) {
+            return false;
+        }
+
+        for (const item of items) {
+            if (!this._fileUpload.isContentTypeAllowed(item.type)) {
+                return false;
             }
         }
+
         return true;
+    }
+
+    /**
+     * Werden Dateien gezogen?
+     * @param {DataTransfer} dataTransfer
+     * @returns {Boolean}
+     */
+    _isFileDrag(dataTransfer) {
+        return !!dataTransfer && kijs.Array.contains(Array.from(dataTransfer.types || []), 'Files');
+    }
+
+    /**
+     * Entfernt die CSS-Klassen und setzt den Zustand zurück
+     * @returns {undefined}
+     */
+    _resetDragOver() {
+        this._allowed = true;
+        this._dragEnterCount = 0;
+        this._dom.clsRemove(this._dragOverCls);
+        this._dom.clsRemove(this._dragOverForbiddenCls);
     }
 
 
     // PRIVATE
     // LISTENERS
     #onDragEnter(e) {
-        if (!this.disabled) {
-            this._dom.clsAdd(this._dragOverCls);
-            this.raiseEvent('dragEnter', e);
+        if (this.disabled || !this._isFileDrag(e.nodeEvent.dataTransfer)) {
+            return;
         }
+
+        this._dragEnterCount++;
+        if (this._dragEnterCount > 1) {
+            return;
+        }
+
+        this._allowed = this._checkAllowed(e.nodeEvent.dataTransfer);
+
+        this._dom.clsAdd(this._dragOverCls);
+        if (!this._allowed) {
+            this._dom.clsAdd(this._dragOverForbiddenCls);
+        }
+
+        this.raiseEvent('dragEnter', { dropZone: this, nodeEvent: e.nodeEvent, allowed: this._allowed });
     }
 
     #onDragLeave(e) {
-        if (!this.disabled) {
-            this._dom.clsRemove(this._dragOverCls);
-            this._dom.clsRemove(this._dragOverForbiddenCls);
-            this.raiseEvent('dragLeave', e);
+        if (this._dragEnterCount === 0) {
+            return;
         }
+
+        this._dragEnterCount--;
+        if (this._dragEnterCount > 0) {
+            return;
+        }
+
+        this._resetDragOver();
+        this.raiseEvent('dragLeave', { dropZone: this, nodeEvent: e.nodeEvent });
     }
 
     #onDragOver(e) {
+        if (!this._isFileDrag(e.nodeEvent.dataTransfer)) {
+            return;
+        }
+
+        // Ohne preventDefault würde der Browser die Datei selbst öffnen
         e.nodeEvent.preventDefault();
 
-        if (!this.disabled) {
-            // 'forbidden' Klasse, falls ungültiger Dateityp
-            let valid = true;
-            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
-                if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
-                    valid = false;
-                    this._dom.clsAdd(this._dragOverForbiddenCls);
-                }
-            }
-            e.validMime = valid;
-
-            // 'forbidden' Klasse, falls nicht mehrere Dateien hinzugefügt werden dürfen
-            let allowed = true;
-            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items) {
-                if (!this._multiple && e.nodeEvent.dataTransfer.items.length > 1) {
-                    allowed = false;
-                    this._dom.clsAdd(this._dragOverForbiddenCls);
-                }
-            }
-            e.allowed = allowed;
-
-            this._dom.clsAdd(this._dragOverCls);
-            this.raiseEvent('dragOver', e);
+        if (this.disabled || !this._allowed) {
+            e.nodeEvent.dataTransfer.dropEffect = 'none';
+            return;
         }
+
+        e.nodeEvent.dataTransfer.dropEffect = 'copy';
+        this.raiseEvent('dragOver', { dropZone: this, nodeEvent: e.nodeEvent, allowed: this._allowed });
     }
 
     #onDrop(e) {
+        if (!this._isFileDrag(e.nodeEvent.dataTransfer)) {
+            return;
+        }
+
         e.nodeEvent.preventDefault();
 
-        if (!this.disabled) {
-            this._dom.clsRemove(this._dragOverCls);
-            this._dom.clsRemove(this._dragOverForbiddenCls);
+        const allowed = this._allowed;
+        this._resetDragOver();
 
-            // Dateityp überprüfen
-            let valid = true;
-            if (e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && this._contentTypes.length > 0) {
-                if (!this._checkMime(e.nodeEvent.dataTransfer.items)) {
-                    valid = false;
-                }
-            }
+        if (this.disabled || !allowed) {
+            return;
+        }
 
-            e.validMime = valid;
+        const files = Array.from(e.nodeEvent.dataTransfer.files);
 
-            // Mehrfachauswahl prüfen
-            let allowed = true;
-            if (!this._multiple && e.nodeEvent.dataTransfer && e.nodeEvent.dataTransfer.items && e.nodeEvent.dataTransfer.items.length > 1) {
-                allowed = false;
-            }
-            e.allowed = allowed;
+        if (this.raiseEvent('drop', { dropZone: this, nodeEvent: e.nodeEvent, files: files, allowed: allowed }) === false) {
+            return;
+        }
 
-            this.raiseEvent('drop', e);
+        if (this._fileUpload) {
+            this._fileUpload.upload(files);
         }
     }
 
@@ -233,11 +239,7 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         }
 
         // Variablen (Objekte/Arrays) leeren
-        this._dragOverCls = null;
-        this._dragOverForbiddenCls = null;
-        this._contentTypes = null;
-        this._multiple = null;
-        this._validMediaTypes = null;
+        this._fileUpload = null;
 
         // Basisklasse entladen
         super.destruct(true);
