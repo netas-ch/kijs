@@ -132,6 +132,8 @@ mit **UPDATE TIPP** nötig.
   bisherigen Element, und ```target = null``` führte zu einem Fehler.  
 - ```kijs.Navigator.getParams``` rief eine nicht vorhandene Funktion auf und warf darum immer 
   einen Fehler. Gibt jetzt alle GET-Parameter als Objekt zurück.  
+- ```kijs.Navigator.osVersion``` lieferte unter Linux mit Firefox die Firefox-Version. Unter 
+  Linux ist der Wert jetzt immer leer, weil der User-Agent keine Linux-Version enthält.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

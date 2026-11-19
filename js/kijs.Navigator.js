@@ -109,7 +109,7 @@ kijs.Navigator = class kijs_Navigator {
     static get osVendor()  { return kijs.Navigator.getBrowserInfo().osVendor; }
     /**
      * Version des Betriebssystems, bei Windows z.B. 'XP', '7', '10' (Windows 11 meldet sich als '10'),
-     * sonst aus dem User-Agent. Bei Linux wird der Wert von 'rv:' übernommen (Gecko-Version von Firefox).
+     * sonst aus dem User-Agent. Unter Linux leer (der User-Agent enthält keine Version).
      * @type {String}
      */
     static get osVersion() { return kijs.Navigator.getBrowserInfo().osVersion; }
@@ -287,10 +287,7 @@ kijs.Navigator = class kijs_Navigator {
         if (!bi.os && ua.match(/Linux/i)) {
             bi.isLinux = true;
             bi.os = 'Linux';
-            let os = ua.match(/rv:([0-9\.]+)/i);
-            if (os) {
-                bi.osVersion = os[1];
-            }
+            // Der User-Agent enthält keine Linux-Version ('rv:' ist die Version von Firefox)
         }
 
         // Speichern für schnellerer Zugriff
