@@ -4615,9 +4615,23 @@
         > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
             cursor: pointer;
 
-            &.kijs-display-checkboxes::before {
-                padding: 3px 7px 3px 3px;
-                color: var(--buttonGroup-button-fontColor);
+            // gleiche Höhe und Einrückung wie die Buttons im Menü
+            &.kijs-display-checkboxes {
+                min-height: 28px;
+                padding: 0 8px;
+                align-items: center;
+
+                // Checkbox an der Stelle der Button-Icons
+                &::before {
+                    padding: 0;
+                    width: 16px;
+                    height: 16px;
+                    margin: 0 6px 0 2px;
+                    font-size: 12px;
+                    line-height: 14px;
+                    text-align: center;
+                    color: var(--buttonGroup-button-fontColor);
+                }
             }
 
             .kijs-icon {

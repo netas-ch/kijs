@@ -38,7 +38,7 @@ mit **UPDATE TIPP** nötig.
 - Showcase grid Grid: Sortieren und alle Filter (Text, Zahl, Datum, Checkbox, Icon und 
   Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
   sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» mit Tooltip und 
-  Icon-Auswahl im Filter, rechts ein Protokoll der Ereignisse und unten Buttons für die 
+  Icon-Auswahl im Filter, Testdaten in der Spalte «Combo», rechts ein Protokoll der Ereignisse und unten Buttons für die 
   wichtigsten Methoden (getSelected, selectByIds, getDirtyRows, commit, sort …).  
 - Werkzeuge: Das Zahnrad neben dem Suchfeld (nur lokal) öffnet eine Seite mit allen 
   Generatoren: API-Dokumentation, Texte für die Übersetzung, Sprachdateien, 
@@ -222,6 +222,15 @@ mit **UPDATE TIPP** nötig.
   bzw. ```selectionChange``` werden nur noch ausgelöst, wenn sich die Selektion ändert (bisher 
   z.B. auch beim erneuten Klick auf die selektierte Zeile). Beim DataView enthält das Event nur 
   noch die tatsächlich selektierten bzw. abgewählten Elemente.  
+- ```kijs.gui.grid.filter.Icon```: Änderungen in der Icon-Auswahl wurden erst nach dem Schliessen 
+  des Menüs (und auch dann nur zufällig) angewendet. Das Grid wird jetzt sofort neu geladen, wie 
+  bei der Auswahl fester Werte (```checkboxFilterValues```).  
+  Sind alle Icons abgewählt, wird ```icons: []``` gesendet (bisher Fehler).  
+- ```kijs.gui.field.CheckboxGroup.checkedAll``` warf einen TypeError, wenn keine Checkbox 
+  ausgewählt war.  
+- Grid-Filter: Die Checkboxen im Filtermenü (Icon-Auswahl und Auswahl fester Werte) haben die 
+  gleiche Höhe und Einrückung wie die Buttons des Menüs. Die Icon-Auswahl füllt die ganze Breite 
+  des Menüs.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

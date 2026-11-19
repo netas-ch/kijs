@@ -3998,9 +3998,21 @@
   .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element {
     cursor: pointer;
   }
+  .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes,
+  .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes {
+    min-height: 28px;
+    padding: 0 8px;
+    align-items: center;
+  }
   .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before,
   .kijs-filter-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element.kijs-display-checkboxes::before {
-    padding: 3px 7px 3px 3px;
+    padding: 0;
+    width: 16px;
+    height: 16px;
+    margin: 0 6px 0 2px;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
     color: var(--buttonGroup-button-fontColor);
   }
   .kijs-filter-icon-checkboxgroup > .kijs-content > .kijs-inputwrapper > .kijs-listview .kijs-dataview-element .kijs-icon,

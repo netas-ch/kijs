@@ -67,7 +67,11 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
      * nach jedem load().
      * @type {Boolean}
      */
-    get checkedAll () { return this.value.length === this.data.length; }
+    get checkedAll () {
+        // value ist null, wenn nichts ausgewählt ist
+        const value = this.value;
+        return (kijs.isArray(value) ? value.length : 0) === (this.data ? this.data.length : 0);
+    }
     set checkedAll (val) {
         this._checkedAll = !!val;
         if (this.data) {

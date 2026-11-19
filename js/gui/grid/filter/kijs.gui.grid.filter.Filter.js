@@ -95,7 +95,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
                 cls: 'kijs-filter-checkboxgroup',
                 disableFlex: false,
                 on: {
-                    change: this._applyToGrid,
+                    // sofort neu laden, auch wenn das Menü noch offen ist
+                    change: function() {
+                        this._applyToGrid(true);
+                    },
                     context: this
                 }
             });

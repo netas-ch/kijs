@@ -58,14 +58,16 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Filter-Objekt für den Server: zusätzlich type 'icon' und icons (ausgewählte Icons oder null).
+     * Filter-Objekt für den Server: zusätzlich type 'icon' und icons (ausgewählte Icons, [] wenn keines
+     * ausgewählt ist, null ohne Icon-Auswahl).
      * Ist bei der Spalte kein valueField gesetzt, wird iconMapField bzw. iconCharField verwendet.
      * @type {Object}
      */
     get filter() {
         let flt = Object.assign(super.filter, {
             type: 'icon',
-            icons: this._checkboxGroup ? this._checkboxGroup.value : null
+            // nichts ausgewählt: leeres Array (keine Zeile anzeigen)
+            icons: this._checkboxGroup ? (this._checkboxGroup.value || []) : null
         });
         if (!flt.valueField) {
             flt.valueField = this.columnConfig.iconMapField || this.columnConfig.iconCharField || '';
@@ -203,6 +205,7 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
                     displayTextField: 'caption',
                     data: icons,
                     cls: 'kijs-filter-icon-checkboxgroup',
+                    disableFlex: false,     // ganze Breite des Menüs
                     checkedAll: true,
                     on: {
                         change: this.#onFilterChange,
@@ -230,7 +233,8 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
     }
 
     #onFilterChange() {
-       this._applyToGrid();
+        // sofort neu laden, auch wenn das Menü noch offen ist
+        this._applyToGrid(true);
     }
 
     #onKeyDown(e) {
