@@ -35,6 +35,11 @@ mit **UPDATE TIPP** nötig.
   Leitfäden sind mit der API verlinkt.  
 - Showcase: Jede Seite hat rechts in der Kopfzeile einen Button «API», der die 
   API-Dokumentation der gezeigten Klasse öffnet (bei mehreren Klassen über ein Menü).  
+- Showcase grid Grid: Sortieren und alle Filter (Text, Zahl, Datum, Checkbox, Icon und 
+  Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
+  sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» mit Tooltip und 
+  Icon-Auswahl im Filter, rechts ein Protokoll der Ereignisse und unten Buttons für die 
+  wichtigsten Methoden (getSelected, selectByIds, getDirtyRows, commit, sort …).  
 - Werkzeuge: Das Zahnrad neben dem Suchfeld (nur lokal) öffnet eine Seite mit allen 
   Generatoren: API-Dokumentation, Texte für die Übersetzung, Sprachdateien, 
   Font-Awesome-Icons und CSS. Sie zeigt, ob die erzeugten Dateien aktuell sind, und 

@@ -629,9 +629,9 @@ foreach ($requests as $request) {
                 $config = $request->requestData->config ?? new stdClass();
             
             
-                $start = (int)$config->start;
-                $limit = (int)$config->limit;
-                $vornamen = file('../testData/vornamen.txt');
+                $start = (int)($config->start ?? 0);
+                $limit = (int)($config->limit ?? 100);
+                $vornamen = file('../testData/vornamen.txt', FILE_IGNORE_NEW_LINES);
 
                 // Spalten zurückgeben (wenn verlangt)
                 if ($config->getMetaData === true) {
@@ -679,6 +679,18 @@ foreach ($requests as $request) {
                     $col->caption = 'Icon';
                     $col->iconCharField = 'icon';
                     $col->iconColorField = 'color';
+                    $response->columnConfigs[] = $col;
+                    unset ($col);
+
+                    // Status-Icon mit Tooltip und Icon-Auswahl im Filter
+                    $col = new stdClass();
+                    $col->xtype = 'kijs.gui.grid.columnConfig.Icon';
+                    $col->caption = 'Status';
+                    $col->iconMapField = 'status';
+                    $col->iconColorField = 'statusColor';
+                    $col->tooltipField = 'statusText';
+                    $col->iconsCnt = 10;
+                    $col->width = 70;
                     $response->columnConfigs[] = $col;
                     unset ($col);
 
@@ -758,30 +770,23 @@ foreach ($requests as $request) {
                         unset ($col);
                     }
 
-                    $response->primaryKeys = array('vorname');
+                    $response->primaryKeys = array('number');
                 }
 
-                // Zeilen zurückgeben
-                $response->rows = array();
-                for ($i = 0; $i < $limit; $i++) {
-                    $rwId = $start + $i;
-
-                    $row = new stdClass();
-                    for ($y=0; $y<26; $y++) {
-                        $row->{'field_' . strtolower(substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1))} = substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1) . $rwId;
-                    }
-
-                    $row->vorname = array_key_exists($rwId, $vornamen) ? $vornamen[$rwId] : '';
-                    $row->number = $rwId;
-                    $row->number1 = $rwId*2;
-                    $row->number2 = null;
-                    $row->date = time() + (3600 * 24 * $rwId);
-                    $row->icon = _getIcon($rwId);
-                    $row->color = '#' . dechex($rwId * 100);
-                    $row->checkbox = $rwId % 2 === 0;
-
-                    $response->rows[] = $row;
+                // Alle Zeilen erzeugen, filtern und sortieren
+                $rows = [];
+                for ($rwId = 0; $rwId < 1000; $rwId++) {
+                    $rows[] = _gridGetRow($rwId, $vornamen);
                 }
+                $rows = _gridFilterRows($rows, is_array($config->filter ?? null) ? $config->filter : []);
+                if (isset($config->sort) && is_object($config->sort) && !empty($config->sort->field)) {
+                    $rows = _gridSortRows($rows, (string)$config->sort->field, (string)($config->sort->direction ?? 'ASC'));
+                    $response->sort = $config->sort;
+                }
+
+                // Gewünschten Bereich zurückgeben
+                $response->count = count($rows);
+                $response->rows = array_slice($rows, $start, $limit);
 
             } catch (Exception $ex) {
                 $response->errorMsg = $ex->getMessage();
@@ -915,6 +920,140 @@ print(json_encode($responses));
 // ------------------------------------
 // Hilfsfunktionen
 // ------------------------------------
+/**
+ * Erzeugt eine Zeile für das Showcase-Grid (grid.load)
+ */
+function _gridGetRow(int $rwId, array $vornamen): stdClass {
+    $states = [
+        ['kijs.iconMap.Fa.circle-check', '#2e7d32', 'Erledigt'],
+        ['kijs.iconMap.Fa.spinner', '#ef6c00', 'In Arbeit'],
+        ['kijs.iconMap.Fa.circle-pause', '#757575', 'Pausiert'],
+        ['kijs.iconMap.Fa.circle-xmark', '#c62828', 'Fehler'],
+        ['kijs.iconMap.Fa.star', '#f9a825', 'Wichtig']
+    ];
+
+    $row = new stdClass();
+    for ($y=0; $y<26; $y++) {
+        $row->{'field_' . strtolower(substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1))} = substr('ABCDEFGHIJKLMNOPQRSTUVWXYZ', $y, 1) . $rwId;
+    }
+
+    $state = $states[$rwId % count($states)];
+
+    // Vornamen über die ganze (alphabetische) Liste verteilen
+    $row->vorname = $vornamen ? trim((string)$vornamen[($rwId * 47) % count($vornamen)]) : '';
+    $row->number = $rwId;
+    $row->number1 = $rwId*2;
+    $row->number2 = null;
+    $row->date = mktime(0, 0, 0, 1, 1, 2026) + (3600 * 24 * $rwId);
+    $row->icon = _getIcon($rwId);
+    $row->color = '#' . dechex($rwId * 100);
+    $row->status = $state[0];
+    $row->statusColor = $state[1];
+    $row->statusText = $state[2];
+    $row->checkbox = $rwId % 2 === 0;
+
+    return $row;
+}
+
+/**
+ * Filtert die Zeilen des Showcase-Grids nach den Filtern von kijs.gui.grid.Filter
+ * (Typen text, number, date, checkbox, icon und checkboxFilter)
+ */
+function _gridFilterRows(array $rows, array $filters): array {
+    foreach ($filters as $filter) {
+        if (!is_object($filter) || empty($filter->valueField)) {
+            continue;
+        }
+        $field = (string)$filter->valueField;
+
+        $rows = array_values(array_filter($rows, function(stdClass $row) use ($filter, $field): bool {
+            $value = $row->$field ?? null;
+
+            // Auswahl fester Werte (checkboxFilterValues)
+            if (!empty($filter->checkboxFilter) && !in_array((string)$value, array_map('strval', $filter->checkboxFilter), true)) {
+                return false;
+            }
+
+            $search = isset($filter->search) ? trim((string)$filter->search) : '';
+            $compare = (string)($filter->compare ?? '');
+
+            switch ($filter->type ?? '') {
+                case 'text':
+                    if ($search === '') {
+                        return true;
+                    }
+                    $v = mb_strtolower((string)$value);
+                    $s = mb_strtolower($search);
+                    return match ($compare) {
+                        'equal' => $v === $s,
+                        'unequal' => $v !== $s,
+                        'end' => str_ends_with($v, $s),
+                        'part' => str_contains($v, $s),
+                        'notpart' => !str_contains($v, $s),
+                        default => str_starts_with($v, $s)
+                    };
+
+                case 'number':
+                case 'date':
+                    if ($search === '') {
+                        return true;
+                    }
+                    if ($filter->type === 'date') {
+                        $d = DateTime::createFromFormat('!d.m.Y', $search) ?: DateTime::createFromFormat('!Y-m-d', $search);
+                        if (!$d) {
+                            return true;
+                        }
+                        $s = (float)$d->getTimestamp();
+                        $v = $value === null ? null : (float)mktime(0, 0, 0, (int)date('n', (int)$value), (int)date('j', (int)$value), (int)date('Y', (int)$value));
+                    } else {
+                        if (!is_numeric($search)) {
+                            return true;
+                        }
+                        $s = (float)$search;
+                        $v = $value === null ? null : (float)$value;
+                    }
+                    if ($v === null) {
+                        return $compare === 'unequal';
+                    }
+                    return match ($compare) {
+                        'unequal' => $v !== $s,
+                        'smaller' => $v < $s,
+                        'bigger' => $v > $s,
+                        default => $v === $s
+                    };
+
+                case 'checkbox':
+                    return match ($filter->checkbox ?? null) {
+                        'checked' => (bool)$value,
+                        'unchecked' => !$value,
+                        default => true
+                    };
+
+                case 'icon':
+                    return !is_array($filter->icons ?? null) || in_array($value, $filter->icons, true);
+            }
+            return true;
+        }));
+    }
+    return $rows;
+}
+
+/**
+ * Sortiert die Zeilen des Showcase-Grids
+ */
+function _gridSortRows(array $rows, string $field, string $direction): array {
+    $factor = strtoupper($direction) === 'DESC' ? -1 : 1;
+    usort($rows, function(stdClass $a, stdClass $b) use ($field, $factor): int {
+        $va = $a->$field ?? null;
+        $vb = $b->$field ?? null;
+        if (is_string($va) || is_string($vb)) {
+            return $factor * strnatcasecmp((string)$va, (string)$vb);
+        }
+        return $factor * ($va <=> $vb);
+    });
+    return $rows;
+}
+
 function _getIcon(int $id): int {
     $icons = [0xe005,0xe006,0xe00d,0xe012,0xe03f,0xe040,0xe041,0xe059,0xe05a,0xe05b,0xe05c,0xe05d,0xe05e,0xe05f,0xe060,0xe061,0xe062,0xe063,0xe064,0xe065,
         0xe066,0xe067,0xe068,0xe069,0xe06a,0xe06b,0xe06c,0xe06d,0xe06e,0xe06f,0xe070,0xe071,0xe072,0xe073,0xe074,0xe075,0xe076,0xe085,0xe086,0xe097,0xe098,

@@ -588,6 +588,17 @@
     }
 
 
+    /* Showcase grid_Grid: Ereignis-Protokoll */
+    .home-sc-grid-eventlog {
+        font-size: 12px;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+    .home-sc-grid-eventlog-time {
+        color: var(--grey07);
+    }
+
+
 
 /* END LAYER app */
 }
