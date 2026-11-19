@@ -35,7 +35,7 @@ kijs.gui.grid.columnConfig.Text = class kijs_gui_grid_columnConfig_Text extends 
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
-            this.applyConfig(config, true);
+            this.applyConfig(config);
         }
     }
     

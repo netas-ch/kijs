@@ -17,6 +17,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     constructor(config={}) {
         super(false);
 
+        this._dataIndex = null;  // Index des Datensatzes
         this._dataRow = {};     // Verweis auf den Data-Datensatz
         this._primaryKey = null; // PrimaryKey-String
 
@@ -49,7 +50,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     // --------------------------------------------------------------
     /**
      * Index des Datensatzes. Wird von kijs zurzeit nicht gesetzt.
-     * @type {Number|undefined}
+     * @type {Number|null}
      */
     get dataIndex() { return this._dataIndex; }
     set dataIndex(val) { this._dataIndex = val; }

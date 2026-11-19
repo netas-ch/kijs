@@ -53,7 +53,7 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
-            this.applyConfig(config, true);
+            this.applyConfig(config);
         }
 
         this.cellConfig = {

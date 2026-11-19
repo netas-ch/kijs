@@ -104,7 +104,7 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
-            this.applyConfig(config, true);
+            this.applyConfig(config);
         }
 
         if (this._cellConfig === null) {
@@ -336,23 +336,10 @@ kijs.gui.grid.columnConfig.ColumnConfig = class kijs_gui_grid_columnConfig_Colum
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
-     * @param {Boolean} [preventEvents=false]   // Das Auslösen des afterResize-Event verhindern?
      * @returns {undefined}
      */
-    applyConfig(config={}, preventEvents=false) {
-        // evtl. afterResize-Event deaktivieren
-        const prevAfterRes = this._preventAfterResize;
-        if (preventEvents) {
-            this._preventAfterResize = true;
-        }
-
-        // Config zuweisen
+    applyConfig(config={}) {
         kijs.Object.assignConfig(this, config, this._configMap);
-
-        // Evtl. afterResize-Event wieder zulassen
-        if (preventEvents) {
-            this._preventAfterResize = prevAfterRes;
-        }
     }
     
 };

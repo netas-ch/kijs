@@ -254,7 +254,7 @@ kijs.Data = class kijs_Data {
 
         // ungültig
         } else {
-            throw new Error('Invalid filter.');
+            throw new kijs.Error('Invalid filter.');
 
         }
 
@@ -434,7 +434,7 @@ kijs.Data = class kijs_Data {
                 }
 
                 if (!kijs.isArray(part.parts)) {
-                    throw new Error('Property "parts" must be an array in filter.');
+                    throw new kijs.Error('Property "parts" must be an array in filter.');
                 }
 
                 ok = kijs.Data._rowMatchFiltersSub(row, part.parts, part.operator);
@@ -454,15 +454,15 @@ kijs.Data = class kijs_Data {
                 }
 
                 if (!kijs.isDefined(part.field)) {
-                    throw new Error('Property "field" missing in filter.');
+                    throw new kijs.Error('Property "field" missing in filter.');
                 }
 
                 if (!kijs.isDefined(part.value)) {
-                    throw new Error('Property "value" missing in filter.');
+                    throw new kijs.Error('Property "value" missing in filter.');
                 }
 
                 if (!kijs.isDefined(row[part.field])) {
-                    throw new Error('Column "' + part.field + '" does not exist in recordset.');
+                    throw new kijs.Error('Column "' + part.field + '" does not exist in recordset.');
                 }
 
                 switch (part.operator) {
@@ -546,7 +546,7 @@ kijs.Data = class kijs_Data {
                         } else if (kijs.isString(part.value)) {
                             regexp = kijs.String.toRegExp(part.value);
                         } else {
-                            throw new Error('Property "value" must be a valid RegExp in filter.');
+                            throw new kijs.Error('Property "value" must be a valid RegExp in filter.');
                         }
 
                         ok = String(row[part.field]).match(regexp) !== null;
@@ -557,7 +557,7 @@ kijs.Data = class kijs_Data {
                         break;
 
                     default:
-                        throw new Error('Unknown operator "' + part.operator + '" in filter.');
+                        throw new kijs.Error('Unknown operator "' + part.operator + '" in filter.');
                 }
 
                 // evtl. negieren
@@ -576,7 +576,7 @@ kijs.Data = class kijs_Data {
                     break;
 
                 default:
-                    throw new Error('Unknown operator "' + bracketOperator + '" in filter.');
+                    throw new kijs.Error('Unknown operator "' + bracketOperator + '" in filter.');
             }
 
         });

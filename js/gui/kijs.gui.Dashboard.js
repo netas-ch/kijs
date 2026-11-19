@@ -297,7 +297,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
                 }
                 
             } else {
-                throw new Error('The elements of a dashboard-Column must be an instance of kijs.gui.dashboard.Panel');
+                throw new kijs.Error('The elements of a dashboard-Column must be an instance of kijs.gui.dashboard.Panel');
             }
         }, this);
     }

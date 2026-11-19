@@ -41,7 +41,7 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
-            this.applyConfig(config, true);
+            this.applyConfig(config);
         }
 
         if (!this._format) {

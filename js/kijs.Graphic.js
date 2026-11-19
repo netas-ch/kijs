@@ -153,8 +153,8 @@ kijs.Graphic = class kijs_Graphic {
     }
 
 
-    // FUNKTIONEN ZUR MANIPULATION VON FARBEN
-    // --------------------------------------
+    // Funktionen zur Manipulation von Farben
+    // --------------------------------------------------------------
 
     /**
      * Ändert die Helligkeit einer Farbe.
@@ -337,8 +337,8 @@ kijs.Graphic = class kijs_Graphic {
     }
 
 
-    // FUNKTIONEN ZUR MANIPULATION VON BILDER
-    // --------------------------------------
+    // Funktionen zur Manipulation von Bildern
+    // --------------------------------------------------------------
 
     /**
      * Konvertiert ein Bild in ein anderes Dateiformat.

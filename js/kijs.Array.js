@@ -20,7 +20,7 @@ kijs.Array = class kijs_Array {
      */
     static arrayBufferToBase64(buf) {
         const bufView = new Uint8Array(buf);
-        var binary = '';
+        let binary = '';
         for (let i=0; i<bufView.length; i++) {
             binary += String.fromCharCode(bufView[i]);
         }

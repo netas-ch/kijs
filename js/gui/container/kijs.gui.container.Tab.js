@@ -444,7 +444,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
                 newTabContainer = sourceContainer;
 
             } else {
-                throw new Error('Drag&Drop of elements other than kijs.gui.container.Tab.container is not yet implemented.');
+                throw new kijs.Error('Drag&Drop of elements other than kijs.gui.container.Tab.container is not yet implemented.');
 
             }
 

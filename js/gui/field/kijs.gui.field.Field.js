@@ -423,7 +423,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
     set isDirty(val) {
         if (val) {
-            throw new Error(`"isDirty" cannot be set to true.`);
+            throw new kijs.Error(`"isDirty" cannot be set to true.`);
 
         } else {
             this._initialValues = {};

@@ -243,13 +243,13 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
     /**
      * Schliesst alle Untermenus
-     * @param {kijs.gui.Menu|kijs.gui.Button|null} exeption Instanz, welche nicht geschlossen werden soll.
+     * @param {kijs.gui.Menu|kijs.gui.Button|null} exception Instanz, welche nicht geschlossen werden soll.
      * @returns {undefined}
      */
-    closeSubMenus(exeption=null) {
+    closeSubMenus(exception=null) {
         // Untermenu Schliessen
         kijs.Array.each(this.elements, function(element) {
-            if ((element instanceof kijs.gui.Button) && element.menu && element.menu !== exeption && element !== exeption) {
+            if ((element instanceof kijs.gui.Button) && element.menu && element.menu !== exception && element !== exception) {
                 element.menu.close();
             }
         }, this);

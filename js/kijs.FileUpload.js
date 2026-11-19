@@ -113,7 +113,7 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
 
 
     // --------------------------------------------------------------
-    // STATIC MEMBERS
+    // STATICS
     // --------------------------------------------------------------
     /**
      * Normalisiert eine Liste von MIME-Types: Kleinschreibung, nur der Media-Type (z.B. 'image')

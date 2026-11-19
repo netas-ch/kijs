@@ -38,7 +38,7 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
         // Config anwenden
         if (kijs.isObject(config)) {
             config = Object.assign({}, this._defaultConfig, config);
-            this.applyConfig(config, true);
+            this.applyConfig(config);
         }
 
         this.cellConfig = {

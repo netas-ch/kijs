@@ -114,6 +114,13 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
   JS-Dateien und sind jetzt auch in den Quelldateien ```kijs_en.php``` und 
   ```kijs_fr.php``` eingetragen, damit sie beim Erzeugen nicht verloren gehen.  
 - Fehlende Übersetzung «Schreiben für Daten» (```kijs.gui.field.Combo```) ergänzt.  
+- Fehler werden überall als ```kijs.Error``` geworfen (bisher in ```kijs.Data```, 
+  ```kijs.gui.field.Field```, ```kijs.gui.container.Tab``` und ```kijs.gui.Dashboard``` als 
+  ```Error```). Da ```kijs.Error``` von ```Error``` erbt, funktionieren bestehende 
+  ```catch```-Blöcke weiterhin.  
+- ```kijs.gui.grid.columnConfig.ColumnConfig.applyConfig()```: Das Argument 
+  ```preventEvents``` ist entfernt. Es hatte keine Wirkung, weil eine ColumnConfig kein 
+  ```afterResize```-Event hat.  
 
 
 ## Datei-Upload überarbeitet
@@ -222,6 +229,8 @@ muss ein JSON-Objekt sein, Fehler als ```errorMsg```.
 
 ## Fehlerbehebungen
 - ```kijs.gui.Dom.nodeAttributeHas()``` gab nach dem Rendern das umgekehrte Resultat zurück.  
+- ```kijs.gui.grid.Filter```: Beim Zerstören wurde ein noch ausstehendes Neuladen der Filter 
+  nicht abgebrochen (falscher Variablenname im Destructor).  
 - ```kijs.gui.Element```: Das Event ```keyPress``` wurde weitergeleitet, war aber in 
   ```kijs.gui.Dom``` nicht vorhanden; ein Listener führte beim Rendern zu einem Fehler. 
   Die Weiterleitung ist entfernt (stattdessen ```keyDown``` verwenden).  

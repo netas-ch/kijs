@@ -25,7 +25,8 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         this._dom.nodeTagName = 'tr';
         
         this._cells = [];
-        
+        this._ddTarget = null;
+
         /*this._ddName = kijs.uniqId('kijs.gui.grid.HeaderCell');
         
         this.ddTarget = {
@@ -334,7 +335,7 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         // Variablen (Objekte/Arrays) leeren
         this._cells = null;
-        //this._ddTarget = null;
+        this._ddTarget = null;
 
         // Basisklasse entladen
         super.destruct(true);

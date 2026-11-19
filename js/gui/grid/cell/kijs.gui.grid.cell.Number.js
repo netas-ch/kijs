@@ -54,7 +54,7 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
 
 
     // --------------------------------------------------------------
-    // GETTER/SETTER
+    // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
      * CSS-Styles je nach Wert: Array mit Objekten {from, to, …Styles}, z.B.

@@ -164,23 +164,7 @@ kijs.Storage = class kijs_Storage {
     }
 
 
-
-    // --------------------------------------------------------------
-    // PROTECTED STATICS
-    // --------------------------------------------------------------
-
-    /**
-     * Gibt die Instanz auf den Storage zurück.
-     * @param {String} mode 'session' oder 'local'
-     * @returns {Storage}
-     */
-    static _getStorage(mode) {
-        if (!kijs.Array.contains(['session', 'local'], mode)) {
-            throw new kijs.Error('invalid storage mode');
-        }
-        return mode === 'session' ? window.sessionStorage : window.localStorage;
-    }
-
+    // PROTECTED
     /**
      * Gibt das Prefix zurück
      * @param {String|Boolean} pref
@@ -195,4 +179,17 @@ kijs.Storage = class kijs_Storage {
         }
         return prefix;
     }
+
+    /**
+     * Gibt die Instanz auf den Storage zurück.
+     * @param {String} mode 'session' oder 'local'
+     * @returns {Storage}
+     */
+    static _getStorage(mode) {
+        if (!kijs.Array.contains(['session', 'local'], mode)) {
+            throw new kijs.Error('invalid storage mode');
+        }
+        return mode === 'session' ? window.sessionStorage : window.localStorage;
+    }
+
 };

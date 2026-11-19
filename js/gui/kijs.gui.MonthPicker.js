@@ -238,9 +238,6 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
      */
     get headerBar() { return this._headerBar; }
 
-    //get headerBarFormat() { return this._headerBarFormat; }
-    //set headerBarFormat(val) { this._headerBarFormat = val; }
-
     /**
      * Kopfzeile ausblenden? Default: false
      * @type {Boolean}
