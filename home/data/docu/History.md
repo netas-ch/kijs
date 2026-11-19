@@ -165,6 +165,47 @@ window.localStorage.setItem('kijs-myKey', JSON.stringify({ value: value }));
   entfernen, sonst gibt es den Fehler «Unknown config "captionHide"».  
 
 
+## Zahlen und Datum im Format der Sprache
+Zahlen und Datum werden jetzt im Format der Sprache ```kijs.language``` angezeigt und 
+eingelesen. Die Formate liefert der Browser (```Intl```).  
+
+| ```kijs.language``` | Zahl          | Datum                |
+|---------------------|---------------|----------------------|
+| ```de-CH```         | 1'234'567.89  | 19.11.2026, 14:05    |
+| ```de```            | 1.234.567,89  | 19.11.2026, 14:05    |
+| ```fr-CH```         | 1 234 567,89  | 19.11.2026 14:05     |
+| ```en-US```         | 1,234,567.89  | 11/19/2026, 02:05 PM |
+
+- ```kijs.language``` darf eine Region enthalten, z.B. ```de-CH``` oder ```fr-CH```. 
+  ```kijs.getText()``` verwendet dann die Übersetzung der Sprache ohne Region (```fr```), 
+  sofern es keine eigene gibt.  
+- ```kijs.Number.format()``` und ```kijs.Number.parse()```: Ohne Angabe der Trennzeichen gelten 
+  die der Sprache (bisher fest ```.``` und ```'```). Neu: ```kijs.Number.getDecimalSeparator()``` 
+  und ```kijs.Number.getThousandsSeparator()```. ```parse()``` entfernte bisher nur das erste 
+  ungültige Zeichen.  
+- ```kijs.gui.field.Number```: ```decimalSeparator``` ist standardmässig das der Sprache (bisher 
+  ```.```), ```thousandsSeparator``` bleibt ```''``` (keines, ```null``` = das der Sprache). Bei der 
+  Eingabe werden das Dezimaltrennzeichen der Sprache und ```.``` bzw. ```,``` akzeptiert, sofern 
+  es nicht das Tausendertrennzeichen ist (bei ```de``` ist ```1.500``` also 1500). Die Meldungen 
+  zu ```minValue```/```maxValue``` zeigen die Zahl formatiert.  
+- ```kijs.gui.grid.columnConfig.Number``` und ```kijs.gui.grid.cell.Number```: Trennzeichen 
+  standardmässig aus der Sprache (bisher fest ```.``` und ```'```).  
+- ```kijs.gui.grid.columnConfig.Date``` und ```kijs.gui.grid.cell.Date```: Ohne ```format``` wird 
+  im Format der Sprache angezeigt (bisher fest ```d.m.Y``` bzw. ```d.m.Y H:i```). Neu dafür: 
+  ```kijs.Date.formatLocal(date, hasTime)```.  
+- Datumsfelder (```kijs.gui.field.DateTime```, ```kijs.gui.field.Month```, DatePicker, 
+  MonthPicker) waren schon bisher sprachabhängig.  
+- Die Sprache wird beim Start der App gesetzt. Für einen Wechsel die Seite neu laden bzw. die 
+  Oberfläche neu aufbauen, wie es die Home-App mit ```?lang=``` macht. Die Home-App bietet 
+  jetzt ```de-CH```, ```fr-CH``` und ```en``` an.  
+
+**UPDATE TIPP:** Schweizer Projekte ```kijs.language``` mit Region setzen, z.B. 
+```kijs.language = 'de-CH'``` (bzw. ```'fr-CH'```, ```'it-CH'```). Mit ```'de'``` werden Zahlen 
+sonst deutsch formatiert (```1.234,5```), und in Zahlenfeldern gilt das Komma als 
+Dezimaltrennzeichen und der Punkt als Tausendertrennzeichen. Wer ein festes Format braucht, 
+gibt die Trennzeichen bzw. ```format``` weiterhin selbst an.  
+
+
 ## Datei-Upload überarbeitet
 Die Upload-Klassen sind neu aufgebaut. Der Core enthält keine Oberfläche mehr, und 
 ```kijs.gui.DropZone``` und ```kijs.gui.ProgressBar``` hängen nicht mehr vom Upload ab.  

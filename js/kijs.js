@@ -35,6 +35,11 @@ window.kijs = class kijs {
 
     /**
      * Aktuelle Sprache, z.B. 'de-CH' oder 'fr'. Default: 'de'
+     *
+     * Sie bestimmt die Übersetzungen (getText) und die Formate von Zahlen und Datum. Für das
+     * Schweizer Format (1'234.5) die Region angeben, z.B. 'de-CH' oder 'fr-CH'; mit 'de' wird
+     * deutsch formatiert (1.234,5). Die Sprache wird beim Start der App gesetzt. Für einen Wechsel
+     * die Seite neu laden bzw. die Oberfläche neu aufbauen.
      * @type {String}
      */
     static get language() {
@@ -214,7 +219,8 @@ window.kijs = class kijs {
     }
 
     /**
-     * Text für Übersetzung zurückgeben
+     * Text für Übersetzung zurückgeben. Gibt es für eine Sprache mit Region (z.B. 'fr-CH') keine
+     * eigene Sprachdatei, wird die Sprache ohne Region verwendet ('fr').
      * @param {String} key
      * @param {String} variant
      * @param {mixed} args
@@ -234,7 +240,11 @@ window.kijs = class kijs {
             return kijs.__getTextFn.call(kijs.__getTextFnContext || this, key, variant, args, language);
         }
 
-        // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt
+        // sonst schauen, ob es eine Sprachdatei von kijs in der gewünschten Sprache gibt,
+        // evtl. ohne Region (z.B. 'fr-CH' -> 'fr')
+        if (this.isDefined(kijs.translation) && !kijs.translation[language]) {
+            language = language.split('-')[0];
+        }
         if (this.isDefined(kijs.translation) && kijs.translation[language] &&
                 this.isDefined(kijs.translation[language][key])) {
             let txt = kijs.translation[language][key];

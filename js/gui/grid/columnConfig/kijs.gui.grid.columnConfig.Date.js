@@ -35,7 +35,7 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             hasTime: true,  // {Boolean} Mit Uhrzeit? Bestimmt das Standardformat. Default: false
-            format: true    // {String} Format für kijs.Date.format(). Default: 'd.m.Y' bzw. mit hasTime 'd.m.Y H:i'
+            format: true    // {String|null} Format für kijs.Date.format(), z.B. 'd.m.Y'. Default: null = Format der Sprache kijs.language (siehe kijs.Date.formatLocal())
         });
 
         // Config anwenden
@@ -44,13 +44,6 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
             this.applyConfig(config);
         }
 
-        if (!this._format) {
-            if (this._hasTime) {
-                this._format = 'd.m.Y H:i';
-            } else {
-                this._format = 'd.m.Y';
-            }
-        }
 
         this.cellConfig = {
             hasTime: this._hasTime,

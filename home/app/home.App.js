@@ -30,7 +30,8 @@ home.App = class home_App {
         this._spinBox = null; // aktuell geöffnete spinBox (Sprache oder Design)
 
         // Sprache
-        kijs.language = config.language ? config.language : 'de';
+        // Sprache mit Region, damit Zahlen und Datum im Schweizer Format angezeigt werden
+        kijs.language = config.language ? config.language : 'de-CH';
 
         // RPC-Instanz für das App
         let appRpcConfig = {};
@@ -854,9 +855,9 @@ home.App = class home_App {
                     displayTextField: 'Bezeichnung',
                     required: true,
                     data: [
-                        { id:'de', Bezeichnung:'Deutsch' },
+                        { id:'de-CH', Bezeichnung:'Deutsch' },
                         { id:'en', Bezeichnung:'English' },
-                        { id:'fr', Bezeichnung:'Français' }
+                        { id:'fr-CH', Bezeichnung:'Français' }
                     ],
                     value: kijs.language,
                     on: {

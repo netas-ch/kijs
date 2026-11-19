@@ -190,6 +190,23 @@ kijs.Date = class kijs_Date {
     }
 
     /**
+     * Formatiert ein Datum im Format der Sprache, z.B. '19.11.2026' bei 'de-CH', '19/11/2026' bei
+     * 'fr' oder '11/19/2026' bei 'en-US'. Mit hasTime zusätzlich die Uhrzeit (Stunden und Minuten).
+     * @param {Date} date
+     * @param {Boolean} [hasTime=false]  Uhrzeit anzeigen?
+     * @param {String|null} [language=null]  null = kijs.language
+     * @returns {String}
+     */
+    static formatLocal(date, hasTime=false, language=null) {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        if (hasTime) {
+            options.hour = '2-digit';
+            options.minute = '2-digit';
+        }
+        return date.toLocaleString(language || kijs.language, options);
+    }
+
+    /**
      * Berechnet das Alter aus einem Geburtsdatum
      * @param {String|Date|Number} birthday
      * @param {String|Date|Number|Null} [curDate=Now]

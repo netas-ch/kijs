@@ -27,8 +27,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         this._editorXtype = 'kijs.gui.field.Number';
 
         this._decimalPrecision = null;
-        this._decimalSeparator = '.';
-        this._thousandsSeparator = '\'';
+        this._decimalSeparator = null;      // null = aus kijs.language
+        this._thousandsSeparator = null;    // null = aus kijs.language
 
         this._numberStyles = [];
 
@@ -43,8 +43,8 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             decimalPrecision: true,     // {Number|null} Anzahl Nachkommastellen. null = unverändert
-            decimalSeparator: true,     // {String} Dezimaltrennzeichen. Default: '.'
-            thousandsSeparator: true,   // {String} Tausendertrennzeichen. Default: "'"
+            decimalSeparator: true,     // {String|null} Dezimaltrennzeichen. Default: null = das der Sprache kijs.language
+            thousandsSeparator: true,   // {String|null} Tausendertrennzeichen ('' = keines). Default: null = das der Sprache kijs.language
             numberStyles: true,         // {Object[]} CSS-Styles je nach Wert (siehe kijs.gui.grid.cell.Number.numberStyles)
             unitBefore: true,           // {String} Text vor der Zahl
             unitAfter: true             // {String} Text nach der Zahl

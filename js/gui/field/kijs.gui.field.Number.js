@@ -7,6 +7,8 @@
  * Zahlenfeld mit Buttons zum Hoch- und Runterzählen (gedrückt halten zählt beschleunigt weiter).
  * Beim Verlassen des Felds wird die Zahl gerundet und formatiert (Dezimal- und
  * Tausendertrennzeichen). Validiert werden gültige Zahl, minValue und maxValue.
+ * Ohne Angabe gelten die Trennzeichen der Sprache kijs.language (z.B. 'de-CH': 1234.5,
+ * 'de' oder 'fr': 1234,5).
  *
  * @example
  * new kijs.gui.field.Number({ label: 'Betrag', allowDecimals: true, alwaysDisplayDecimals: true,
@@ -31,7 +33,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._allowDecimals = false;
         this._alwaysDisplayDecimals = false;
         this._decimalPrecision = 2;
-        this._decimalSeparator = '.';
+        this._decimalSeparator = null;      // null = aus kijs.language
         this._minValue = null;
         this._maxValue = null;
         this._thousandsSeparator = '';
@@ -43,8 +45,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         this._spinDelayCurrent = null;
         this._spinDeferId = null;
 
-        this._allowedDecimalSeparators = ['.', ','];
-        this._allowedThousandsSeparators = ['\'', ' ', '`', '´'];
+        this._allowedDecimalSeparators = null;      // null = aus der Sprache (siehe _getAllowedSeparators)
+        this._allowedThousandsSeparators = null;    // null = aus der Sprache
 
         this._previousChangeValue = '';
 
@@ -107,8 +109,8 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             allowDecimals: true,
-            allowedDecimalSeparators: true,     // {Array} Bei der Eingabe erlaubte Dezimaltrennzeichen. Default: ['.', ',']
-            allowedThousandsSeparators: true,   // {Array} Bei der Eingabe erlaubte Tausendertrennzeichen. Default: ["'", ' ', '`', '´']
+            allowedDecimalSeparators: true,     // {Array|null} Bei der Eingabe erlaubte Dezimaltrennzeichen. Default: null = das der Sprache, dazu '.' bzw. ',' sofern es nicht das Tausendertrennzeichen ist
+            allowedThousandsSeparators: true,   // {Array|null} Bei der Eingabe erlaubte Tausendertrennzeichen. Default: null = das der Sprache, Leerzeichen und Apostrophe
             alwaysDisplayDecimals: true,
             autocomplete: { target: 'autocomplete' },
             name: { target: 'name' },
@@ -195,10 +197,13 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     }
 
     /**
-     * Dezimaltrennzeichen in der Anzeige. Default: '.'
-     * @type {String}
+     * Dezimaltrennzeichen in der Anzeige. Default: null = das der Sprache kijs.language
+     * (der Getter gibt dann dieses zurück)
+     * @type {String|null}
      */
-    get decimalSeparator() { return this._decimalSeparator; }
+    get decimalSeparator() {
+        return this._decimalSeparator === null ? kijs.Number.getDecimalSeparator() : this._decimalSeparator;
+    }
     set decimalSeparator(val) {
         this._decimalSeparator = val;
     }
@@ -325,10 +330,13 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     get spinUpButton() { return this._spinUpButtonEl; }
 
     /**
-     * Tausendertrennzeichen in der Anzeige. Default: '' (keines)
-     * @type {String}
+     * Tausendertrennzeichen in der Anzeige. Default: '' (keines). null = das der Sprache
+     * kijs.language (der Getter gibt dann dieses zurück)
+     * @type {String|null}
      */
-    get thousandsSeparator() { return this._thousandsSeparator; }
+    get thousandsSeparator() {
+        return this._thousandsSeparator === null ? kijs.Number.getThousandsSeparator() : this._thousandsSeparator;
+    }
     set thousandsSeparator(val) {
         this._thousandsSeparator = val;
     }
@@ -439,8 +447,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
      * @returns {String}
      */
     _formatNumber(value) {
-        // vorhandene Formatierung entfernen
-        value = this._unformatNumber(value);
+        // Ein Wert ohne Formatierung ('1234.5' bzw. eine Zahl) wird direkt übernommen. Sonst die
+        // Formatierung entfernen. Wichtig z.B. bei 'de', wo der Punkt das Tausendertrennzeichen ist.
+        value = kijs.toString(value).trim();
+        if (!value.match(/^-?[0-9]+(?:\.[0-9]+)?$/)) {
+            value = this._unformatNumber(value);
+        }
 
         // Wenn Nummer nicht valide ist, wird der Ursprungswert zurückgegeben?
         if (!value.match(/^-?[0-9]+(?:\.[0-9]+)?$/)) {
@@ -458,10 +470,44 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
         value = kijs.Number.format(
                 value,
                 (this._alwaysDisplayDecimals ? this._decimalPrecision : null),
-                this._decimalSeparator,
-                this._thousandsSeparator);
+                this.decimalSeparator,
+                this.thousandsSeparator);
 
         return value;
+    }
+
+    /**
+     * Gibt die bei der Eingabe erlaubten Trennzeichen zurück. Ohne eigene Angabe
+     * (allowedDecimalSeparators/allowedThousandsSeparators) aus der Sprache: als Dezimaltrennzeichen
+     * das der Sprache und zusätzlich '.' bzw. ',', sofern es nicht das Tausendertrennzeichen ist;
+     * als Tausendertrennzeichen das der Sprache sowie Leerzeichen und Apostrophe.
+     * @returns {Object} { decimal: [...], thousands: [...] }
+     */
+    _getAllowedSeparators() {
+        let decimal = this._allowedDecimalSeparators;
+        let thousands = this._allowedThousandsSeparators;
+        const dec = this.decimalSeparator;
+        const thou = kijs.Number.getThousandsSeparator();
+
+        if (!kijs.isArray(decimal)) {
+            decimal = [dec];
+            kijs.Array.each(['.', ','], function(sep) {
+                if (sep !== dec && sep !== thou && sep !== this._thousandsSeparator) {
+                    decimal.push(sep);
+                }
+            }, this);
+        }
+
+        if (!kijs.isArray(thousands)) {
+            thousands = [thou, '\'', '’', '`', '´', ' ', '\u00a0', '\u202f'];
+            if (!kijs.isEmpty(this._thousandsSeparator)) {
+                thousands.push(this._thousandsSeparator);
+            }
+            // nichts, das auch Dezimaltrennzeichen ist
+            thousands = thousands.filter(sep => !kijs.isEmpty(sep) && !kijs.Array.contains(decimal, sep));
+        }
+
+        return { decimal: decimal, thousands: thousands };
     }
 
     /**
@@ -560,13 +606,15 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
     _unformatNumber(value) {
         value = kijs.toString(value).trim();
 
+        const seps = this._getAllowedSeparators();
+
         // Tausendertrennzeichen entfernen
-        kijs.Array.each(this._allowedThousandsSeparators, function(sep) {
+        kijs.Array.each(seps.thousands, function(sep) {
             value = kijs.String.replaceAll(value, sep, '');
         }, this);
 
         // Dezimaltrennzeichen durch . ersetzen
-        kijs.Array.each(this._allowedDecimalSeparators, function(sep) {
+        kijs.Array.each(seps.decimal, function(sep) {
             value = kijs.String.replaceAll(value, sep, '.');
         }, this);
 
@@ -612,12 +660,12 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
 
         // Min. value testen
         if (this._minValue !== null && value < this._minValue) {
-            this._errors.push(kijs.getText('Der minimale Wert für dieses Feld ist %1', '', this._minValue));
+            this._errors.push(kijs.getText('Der minimale Wert für dieses Feld ist %1', '', this._formatNumber(this._minValue)));
         }
 
         // Max. value testen
         if (this._maxValue !== null && value > this._maxValue) {
-            this._errors.push(kijs.getText('Der maximale Wert für dieses Feld ist %1', '', this._maxValue));
+            this._errors.push(kijs.getText('Der maximale Wert für dieses Feld ist %1', '', this._formatNumber(this._maxValue)));
         }
     }
 

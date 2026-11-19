@@ -22,8 +22,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
 
         // Nummer-Einstellungen
         this._decimalPrecision = null;
-        this._decimalSeparator = '.';
-        this._thousandsSeparator = '\'';
+        this._decimalSeparator = null;      // null = aus kijs.language
+        this._thousandsSeparator = null;    // null = aus kijs.language
 
         this._numberStyles = [];
         this._unitBefore = '';
@@ -37,8 +37,8 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             decimalPrecision: true,     // {Number|null} Anzahl Nachkommastellen. null = unverändert
-            decimalSeparator: true,     // {String} Dezimaltrennzeichen. Default: '.'
-            thousandsSeparator: true,   // {String} Tausendertrennzeichen. Default: "'"
+            decimalSeparator: true,     // {String|null} Dezimaltrennzeichen. Default: null = das der Sprache kijs.language
+            thousandsSeparator: true,   // {String|null} Tausendertrennzeichen ('' = keines). Default: null = das der Sprache kijs.language
             numberStyles: {target: 'numberStyles'},
             unitBefore: true,           // {String} Text vor der Zahl, z.B. 'CHF '
             unitAfter: true             // {String} Text nach der Zahl, z.B. ' %'

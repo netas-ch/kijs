@@ -5,6 +5,8 @@
 // --------------------------------------------------------------
 /**
  * Statische Klasse mit Hilfsfunktionen für Zahlen: formatieren, parsen, runden und Zufallszahlen.
+ * Ohne Angabe der Trennzeichen gelten die der Sprache kijs.language (z.B. 'de-CH': 1'234.5,
+ * 'de': 1.234,5, 'fr': 1 234,5).
  */
 kijs.Number = class kijs_Number {
 
@@ -16,13 +18,21 @@ kijs.Number = class kijs_Number {
     /**
      * Formatiert eine Zahl
      * @param {Number} number
-     * @param {Number|String|null} [decimals='']    // Anzahl Kommastellen '' oder null = auto
-     * @param {String} [decPoint='.']               // Dezimaltrennzeichen
-     * @param {String} [thousandsSep='\'']          // Tausendertrennzeichen
+     * @param {Number|String|null} [decimals=0]     // Anzahl Kommastellen '' oder null = auto
+     * @param {String|null} [decPoint=null]         // Dezimaltrennzeichen. null = aus kijs.language
+     * @param {String|null} [thousandsSep=null]     // Tausendertrennzeichen. null = aus kijs.language,
+     *                                              // '' = keines
      * @returns {String}
      */
-    static format(number, decimals=0, decPoint='.', thousandsSep='\'') {
+    static format(number, decimals=0, decPoint=null, thousandsSep=null) {
         let ret = '';
+
+        if (decPoint === null) {
+            decPoint = kijs.Number.getDecimalSeparator();
+        }
+        if (thousandsSep === null) {
+            thousandsSep = kijs.Number.getThousandsSeparator();
+        }
 
         // Bei decimals==='' oder null automatisch die Anzahl Kommastellen ermitteln
         if (decimals==='' || decimals===null) {
@@ -69,23 +79,55 @@ kijs.Number = class kijs_Number {
     }
     
     /**
+     * Gibt das Dezimaltrennzeichen einer Sprache zurück, z.B. '.' für 'de-CH' oder ',' für 'de'
+     * @param {String|null} [language=null]  null = kijs.language
+     * @returns {String}
+     */
+    static getDecimalSeparator(language=null) {
+        return kijs.Number.#getSeparators(language).decimal;
+    }
+
+    /**
+     * Gibt das Tausendertrennzeichen einer Sprache zurück, z.B. "'" für 'de-CH', '.' für 'de' oder
+     * ein schmales Leerzeichen für 'fr'
+     * @param {String|null} [language=null]  null = kijs.language
+     * @returns {String}
+     */
+    static getThousandsSeparator(language=null) {
+        return kijs.Number.#getSeparators(language).thousands;
+    }
+
+    /**
      * Parst ein String zu einer Nummer und rundet auf die angegebenen Decimals.
      * Die Funktion rundet kaufmännisch, d.H. 0.5 wird immer aufgerundet.
+     * Ist das Tausendertrennzeichen ein Leerzeichen oder Apostroph, werden alle Varianten davon
+     * entfernt (z.B. auch ein normales Leerzeichen statt des schmalen bei 'fr').
      * @param {String} number
-     * @param {Number} decimals
-     * @param {String} decPoint
-     * @param {String} thousandsSep
-     * @returns {Number}
+     * @param {Number} [decimals=0]
+     * @param {String|null} [decPoint=null]      Dezimaltrennzeichen. null = aus kijs.language
+     * @param {String|null} [thousandsSep=null]  Tausendertrennzeichen. null = aus kijs.language
+     * @returns {Number|null}
      */
-    static parse(number, decimals=0, decPoint='.', thousandsSep='\'') {
+    static parse(number, decimals=0, decPoint=null, thousandsSep=null) {
+        if (decPoint === null) {
+            decPoint = kijs.Number.getDecimalSeparator();
+        }
+        if (thousandsSep === null) {
+            thousandsSep = kijs.Number.getThousandsSeparator();
+        }
+
         number = kijs.toString(number);
         if (thousandsSep !== '') {
             number = kijs.String.replaceAll(number, thousandsSep, '');
+            // Varianten von Leerzeichen und Apostroph
+            if (/^[\s\u00a0\u202f'’]$/.test(thousandsSep)) {
+                number = number.replace(/[\s\u00a0\u202f'’]/g, '');
+            }
         }
         if (decPoint !== '.' && decPoint !== '') {
             number = kijs.String.replaceAll(number, decPoint, '.');
         }
-        number = number.replace(/[^\-0-9\.]/, '');
+        number = number.replace(/[^\-0-9\.]/g, '');
         number = window.parseFloat(number);
 
         if (!window.isNaN(number)) {
@@ -142,6 +184,36 @@ kijs.Number = class kijs_Number {
         } else {
             return kijs.Number.round(number);
         }
+    }
+
+
+    // PRIVATE
+    static #separators = {};    // Cache: Sprache => { decimal, thousands }
+
+    /**
+     * Ermittelt die Trennzeichen einer Sprache mit Intl.NumberFormat (mit Cache)
+     * @param {String|null} language  null = kijs.language
+     * @returns {Object} { decimal, thousands }
+     */
+    static #getSeparators(language) {
+        language = language || kijs.language;
+
+        if (!kijs.Number.#separators[language]) {
+            let decimal = '.';
+            let thousands = '\'';
+            try {
+                const parts = new Intl.NumberFormat(language).formatToParts(1234567.8);
+                const d = parts.find(p => p.type === 'decimal');
+                const g = parts.find(p => p.type === 'group');
+                decimal = d ? d.value : decimal;
+                thousands = g ? g.value : '';
+            } catch (ex) {
+                // unbekannte Sprache: Schweizer Format
+            }
+            kijs.Number.#separators[language] = { decimal: decimal, thousands: thousands };
+        }
+
+        return kijs.Number.#separators[language];
     }
 
 };
