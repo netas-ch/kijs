@@ -7,14 +7,18 @@
  * Aufklappbarer Container (Popover), der an einem Zielelement (target) ausgerichtet wird, z.B. die
  * Auswahl eines Combo- oder DateTime-Felds oder ein kijs.gui.Menu. Die Lage wird über die
  * Ankerpunkte ownPos und targetPos bestimmt:
- *       tl --- t --- tr
- *       |             |
- *       l      c      r
- *       |             |
- *       bl --- b --- br
- * Hat die SpinBox keinen Platz, wird sie auf die andere Seite gewechselt (allowSwapX/Y). Sie schliesst
- * sich bei einem Mausklick, Mausrad oder einer Grössenänderung ausserhalb (ausser auf den ownerNodes)
- * sowie mit Escape, F4 und Tab. Auf dem target öffnet ArrowDown die SpinBox, F4 öffnet bzw. schliesst sie.
+ *
+ *     tl --- t --- tr
+ *     |             |
+ *     l      c      r
+ *     |             |
+ *     bl --- b --- br
+ *
+ * Hat die SpinBox keinen Platz, wird sie auf die andere Seite gewechselt (allowSwapX/Y).
+ *
+ * Sie schliesst sich bei einem Mausklick, Mausrad oder einer Grössenänderung ausserhalb (ausser auf
+ * den ownerNodes) sowie mit Escape, F4 und Tab. Auf dem target öffnet ArrowDown die SpinBox, F4
+ * öffnet bzw. schliesst sie.
  *
  * @example
  * const sb = new kijs.gui.SpinBox({ target: myButton, html: 'Inhalt' });

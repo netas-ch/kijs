@@ -90,7 +90,11 @@ Beschreibung, Link auf passende Showcase-Seiten und auf die Quelldatei.
 Jeder Eintrag zeigt in der Kopfzeile Name, Tags und Typ. Ein Klick klappt ihn auf.  
 
 **Aufgeklappt** werden je nach Art angezeigt:  
-- Beschreibung (Markdown, mit Syntax-Highlighting in Code-Blöcken)  
+- Beschreibung (Markdown, mit Syntax-Highlighting in Code-Blöcken). Bei der Anzeige werden 
+  Klassennamen (```kijs.gui.Button```, auch mit Eintrag wie ```kijs.gui.DataView.selectType```) 
+  und «Leitfaden Name» automatisch verlinkt und ```null```, ```true```, ```false```, 
+  ```undefined``` sowie Strings in einfachen Anführungszeichen als Code markiert. Im Kommentar 
+  ist dafür kein Markdown nötig.  
 - Typ und Standardwert (aus ```_defaultConfig```, sonst aus der Zuweisung im Constructor; bei 
   vererbten Configs der Wert, den die Klasse in ihrem ```_defaultConfig``` überschreibt; bei 
   Configs, die an ein Unterelement weitergeleitet werden, der Standardwert dort mit Link auf 

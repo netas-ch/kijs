@@ -576,18 +576,22 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     /**
      * Richtet ein Element nach einem Ziel aus.
+     *
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
      * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
-     * gewechselt werden (allowSwapX & allowSwapY)
+     * gewechselt werden (allowSwapX & allowSwapY).
+     *
+     * Ankerpunkte (targetPos und pos):
+     *
+     *     tl --- t --- tr
+     *     |             |
+     *     l      c      r
+     *     |             |
+     *     bl --- b --- br
+     *
      * @param {Object} target Objekt mit x, y, w, h
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
-     *                                   tl --- t --- tr
-     *                                   |             |
-     *                                   l      c      r
-     *                                   |             |
-     *                                   bl --- b --- br
-     *
      * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
      * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?
@@ -763,18 +767,22 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
     /**
      * Richtet ein Element nach einem Ziel-Element aus.
+     *
      * Dazu wird für beide Elemente ein Ankerpunkt angegeben. Das Element wird dann so positioniert,
      * dass sein Ankerpunkt die gleichen Koordinaten wie der Ankerpunkt des Ziel-Elements hat.
      * Falls das Element an der neuen Position nicht Platz haben sollte, kann die Position automatisch
-     * gewechselt werden (allowSwapX & allowSwapY)
+     * gewechselt werden (allowSwapX & allowSwapY).
+     *
+     * Ankerpunkte (targetPos und pos):
+     *
+     *     tl --- t --- tr
+     *     |             |
+     *     l      c      r
+     *     |             |
+     *     bl --- b --- br
+     *
      * @param {kijs.gui.Element|HTMLElement} targetNode
      * @param {String} [targetPos='bl'] Ankerpunkt beim Zielelement
-     *                                   tl --- t --- tr
-     *                                   |             |
-     *                                   l      c      r
-     *                                   |             |
-     *                                   bl --- b --- br
-     *
      * @param {String} [pos='tl'] Ankerpunkt beim Element das Ausgerichtet werden soll
      * @param {Boolean} [allowSwapX=true]   Swappen möglich auf X-Achse?
      * @param {Boolean} [allowSwapY=true]   Swappen möglich auf Y-Achse?

@@ -5,10 +5,12 @@
 // --------------------------------------------------------------
 /**
  * Textfeld für eine Telefonnummer mit Formatierung und einem Button, der die gültige Nummer mit tel:
- * anruft. Die internationale Vorwahl (internationalCallPrefix, z.B. 00) wird durch + ersetzt. Nummern
- * des eigenen Landes (defaultCountryCallingCode) werden lokal mit führender 0 angezeigt. Die
- * Standard-Formatierungen (formatRegExp) gelten für CH, LI, A und F; passt keine, bleibt die
- * Eingabe unverändert.
+ * anruft.
+ *
+ * - Die internationale Vorwahl (internationalCallPrefix, z.B. 00) wird durch + ersetzt.
+ * - Nummern des eigenen Landes (defaultCountryCallingCode) werden lokal mit führender 0 angezeigt.
+ * - Die Standard-Formatierungen (formatRegExp) gelten für CH, LI, A und F; passt keine, bleibt die
+ *   Eingabe unverändert.
  *
  * @example
  * new kijs.gui.field.Phone({ label: 'Telefon', name: 'telefon' });

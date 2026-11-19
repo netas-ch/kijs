@@ -6,9 +6,11 @@
 /**
  * Halbtransparente Maske mit einem Ausschnitt für ein Element (target), das unmaskiert bleibt. Der
  * Rest des Bildschirms wird von vier Masken (oben, rechts, unten, links) überdeckt und kann nicht
- * bedient werden. Ist das target ein kijs.gui.Element, werden seine Grössenänderungen automatisch
- * übernommen. Bei einem kijs.gui.Dom muss die Position manuell nachgeführt werden (render()).
- * Änderungen der Fenstergrösse werden immer übernommen.
+ * bedient werden.
+ *
+ * Ist das target ein kijs.gui.Element, werden seine Grössenänderungen automatisch übernommen. Bei
+ * einem kijs.gui.Dom muss die Position manuell nachgeführt werden (render()). Änderungen der
+ * Fenstergrösse werden immer übernommen.
  *
  * @example
  * const mask = new kijs.gui.ApertureMask({ target: myField });

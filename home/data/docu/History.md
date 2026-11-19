@@ -41,6 +41,11 @@ mit **UPDATE TIPP** nötig.
   ```kijs.gui.field.CheckboxGroup.selectType``` = ```'simple-multi'```). Configs, die an ein 
   Unterelement weitergeleitet werden, zeigen dessen Standardwert mit Link auf die Quelle (z.B. 
   ```kijs.gui.Button.iconCls``` von ```kijs.gui.Icon.iconCls```).  
+- API: In den Beschreibungen werden Klassennamen und «Leitfaden …» (auch mehrere, z.B. «Leitfäden 
+  Daten und Drag and Drop») automatisch verlinkt und Werte wie ```null```, ```true``` oder 
+  ```'auto'``` als Code markiert. Die langen Beschreibungen sind mit Absätzen, Listen, Tabellen 
+  und Code-Blöcken gegliedert (z.B. ```kijs.Date```, ```kijs.Data.filter```, 
+  ```kijs.gui.DataView.selectType```). Der Leitfaden «Kommentare» beschreibt die Formatierung.  
 - Showcase grid Grid: Sortieren und alle Filter (Text, Zahl, Datum, Checkbox, Icon und 
   Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
   sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» (iconMapField) und 

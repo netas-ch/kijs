@@ -5,9 +5,12 @@
 // --------------------------------------------------------------
 /**
  * Zeigt ein Recordset (data) als Liste von Elementen an. Pro Datensatz wird ein Element vom
- * Typ elementXType erstellt (abgeleitet von kijs.gui.dataView.element.Base). Die Datensätze
- * können gefiltert, sortiert, selektiert und mit der Tastatur durchlaufen werden und, mit
- * sortable, per Drag&Drop verschoben werden. Basisklasse von kijs.gui.ListView und kijs.gui.Tree.
+ * Typ elementXType erstellt (abgeleitet von kijs.gui.dataView.element.Base).
+ *
+ * Die Datensätze können gefiltert, sortiert, selektiert und mit der Tastatur durchlaufen werden
+ * und, mit sortable, per Drag&Drop verschoben werden. Basisklasse von kijs.gui.ListView und
+ * kijs.gui.Tree.
+ *
  * Siehe Leitfäden Daten und Drag and Drop.
  *
  * @example
@@ -137,6 +140,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     /**
      * Aktuelles Element: das Element mit dem Fokus bei der Tastaturnavigation.
      * Nicht verwechseln mit den selektierten Elementen!
+     *
      * null = automatisch ermitteln (bisheriges, erstes selektiertes, erstes aktives oder erstes Element).
      * Um den Fokus zu setzen, die Funktion focus() des Elements verwenden.
      * @type {kijs.gui.dataView.element.Base|null}
@@ -373,12 +377,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Art der Selektion:
-     * 'none' nichts selektierbar;
-     * 'single' ein Datensatz, Abwählen nicht möglich (Default);
-     * 'singleAndEmpty' wie single, Abwählen möglich;
-     * 'multi' mehrere mit Shift- und Ctrl-Taste;
-     * 'simple-single', 'simple-singleAndEmpty', 'simple-multi' wie oben, aber ohne Shift- und Ctrl-Taste;
-     * 'manual' Selektion nur per Code
+     * - 'none' nichts selektierbar
+     * - 'single' ein Datensatz, Abwählen nicht möglich (Default)
+     * - 'singleAndEmpty' wie single, Abwählen möglich
+     * - 'multi' mehrere mit Shift- und Ctrl-Taste
+     * - 'simple-single', 'simple-singleAndEmpty', 'simple-multi' wie oben, aber ohne Shift- und Ctrl-Taste
+     * - 'manual' Selektion nur per Code
      * @type {String}
      */
     get selectType() { return this._selectType; }
@@ -518,6 +522,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
     /**
      * Gibt die selektierten Elemente zurück.
+     *
      * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
      * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
      * Dafür besser die Funktionen getSelectedPrimaryKeys() und getSelectedRows() verwenden!

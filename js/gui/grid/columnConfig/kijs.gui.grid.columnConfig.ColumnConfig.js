@@ -7,8 +7,10 @@
  * Abstrakte Basisklasse für die Konfiguration einer Spalte von kijs.gui.grid.Grid. Legt fest,
  * welches Feld des Datensatzes angezeigt wird, sowie Beschriftung, Breite, Sichtbarkeit und mit
  * welchen Klassen Zelle (cellXtype), Filter (filterXtype) und Editor (editorXtype) erstellt werden.
+ *
  * Nicht direkt instanzieren, sondern eine abgeleitete Klasse verwenden, z.B.
  * kijs.gui.grid.columnConfig.Text.
+ *
  * Achtung: Über die Config werden die Werte direkt zugewiesen, ohne Prüfung und ohne change-Event
  * (ausser bei caption).
  *

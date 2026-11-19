@@ -6,11 +6,14 @@
 /**
  * Container mit Registerkarten: Eine Tab-Bar (kijs.gui.container.tab.Bar) zeigt für jedes
  * Element einen Tab-Button, ein Klick darauf zeigt das Element an (wie kijs.gui.container.Stack,
- * Default-Animation 'fade'). Es können nur kijs.gui.container.tab.Container hinzugefügt werden
- * (xtype kann auch weggelassen werden). Tabs können über den Schliessen-Button bzw. das
- * Kontextmenü geschlossen und mit sortable per Drag&Drop verschoben werden, auch in einen anderen
- * Tab-Container mit dem gleichen ddName. Mit rpcSaveFn und autoSave werden die Positionen
- * (posData) nach Änderungen an den Server gesendet.
+ * Default-Animation 'fade').
+ *
+ * - Es können nur kijs.gui.container.tab.Container hinzugefügt werden (xtype kann auch
+ *   weggelassen werden).
+ * - Tabs können über den Schliessen-Button bzw. das Kontextmenü geschlossen und mit sortable per
+ *   Drag&Drop verschoben werden, auch in einen anderen Tab-Container mit dem gleichen ddName.
+ * - Mit rpcSaveFn und autoSave werden die Positionen (posData) nach Änderungen an den Server
+ *   gesendet.
  *
  * @example
  * new kijs.gui.container.Tab({

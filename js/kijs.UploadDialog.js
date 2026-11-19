@@ -10,9 +10,12 @@
 /**
  * Öffnet den Dialog des Browsers zum Auswählen von Dateien (showFileSelectDialog()) oder nimmt
  * Dateien von verbundenen kijs.gui.DropZone-Elementen bzw. aus der Zwischenablage (observePaste)
- * entgegen. Jede Datei wird einzeln per POST an ajaxUrl gesendet: der Dateiinhalt als Body,
- * Dateiname und Ordner URL-codiert in den Headern fileNameHeader und pathNameHeader. Die Antwort
- * wird als JSON erwartet, die Eigenschaft upload daraus wird mit dem Event upload weitergegeben.
+ * entgegen.
+ *
+ * Jede Datei wird einzeln per POST an ajaxUrl gesendet: der Dateiinhalt als Body, Dateiname und
+ * Ordner URL-codiert in den Headern fileNameHeader und pathNameHeader. Die Antwort wird als JSON
+ * erwartet, die Eigenschaft upload daraus wird mit dem Event upload weitergegeben.
+ *
  * Erlaubt sind Dateien, die zu contentTypes bzw. fileExtensions passen. Ist beides leer, sind
  * alle Dateien erlaubt.
  *

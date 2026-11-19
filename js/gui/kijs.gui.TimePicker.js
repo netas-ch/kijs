@@ -268,6 +268,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     /**
      * Uhrzeit als Text, z.B. '14:30' (mit Trennzeichen separator, zweistellig mit führender 0).
      * Minuten und Sekunden sind nur enthalten, wenn sie nicht ausgeblendet sind. Leer: ''.
+     *
      * Beim Setzen werden 24 Uhr bzw. 60 Minuten/Sekunden zu 0; ungültige Werte werfen einen
      * kijs.Error. Ausgeblendete Teile werden auf 0 gesetzt. Löst kein change-Event aus.
      * @type {String}

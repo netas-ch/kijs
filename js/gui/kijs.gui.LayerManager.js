@@ -6,7 +6,9 @@
 /**
  * Verwaltet den z-index von Fenstern (Singleton: new kijs.gui.LayerManager() gibt immer die gleiche
  * Instanz zurück). Wird ein Fenster aktiviert, wird der z-index aller Fenster mit dem gleichen
- * parentNode neu berechnet und es erscheint zuvorderst. Neben kijs.gui.Window können auch Masken
+ * parentNode neu berechnet und es erscheint zuvorderst.
+ *
+ * Neben kijs.gui.Window können auch Masken
  * (kijs.gui.Mask) aufgenommen werden. Das ist bei modalen Fenstern nötig, deren Masken einen
  * eigenen z-index erhalten.
  */

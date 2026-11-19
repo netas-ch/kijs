@@ -217,6 +217,89 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
     }
 
     /**
+     * Bereitet eine Beschreibung für die Anzeige auf und gibt sie als HTML zurück (Markdown):
+     *  - Klassennamen (kijs.gui.Button, kijs.gui.DataView.selectType) werden zu Links
+     *  - «Leitfaden Drag and Drop» verlinkt den Leitfaden
+     *  - null, true, false, undefined und Strings in einfachen Anführungszeichen ('auto') werden als Code markiert
+     * Bestehendes Markdown (`Code`, [Links](...)) bleibt unverändert.
+     * @param {String} text
+     * @returns {String}
+     */
+    _formatDescription(text) {
+        const links = this._data && this._data.textLinks ? this._data.textLinks : { classes: [], guides: {} };
+        const classes = new Set(links.classes);
+        const guideTitles = Object.keys(links.guides);
+        const esc = kijs.String.htmlspecialchars;
+
+        // Leitfaden am Anfang einer Wortfolge suchen: längster Titel, mit dem sie beginnt,
+        // sonst ein eindeutiger Titel, der mit dem ersten Wort beginnt (z.B. «Element»)
+        const titlesByLength = guideTitles.slice().sort((a, b) => b.length - a.length);
+        const findGuide = (phrase) => {
+            for (const title of titlesByLength) {
+                // Wörter des Titels, im Text auch durch Komma getrennt («Element, Dom und Container»)
+                const words = title.split(' ').map(w => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+                const m = phrase.match(new RegExp('^' + words.join('[\\s,]+') + '(?![\\wÄÖÜäöü-])', 'i'));
+                if (m) {
+                    return { title: title, text: m[0], rest: phrase.substring(m[0].length) };
+                }
+            }
+            const word = (phrase.match(/^[\wÄÖÜäöü-]+/) || [''])[0];
+            const starts = word ? guideTitles.filter(t => t.toLowerCase().startsWith(word.toLowerCase() + ' ')) : [];
+            if (starts.length === 1) {
+                return { title: starts[0], text: word, rest: phrase.substring(word.length) };
+            }
+            return null;
+        };
+
+        // neue RegExp pro Aufruf, weil fmt() für den Rest nach einem Leitfaden rekursiv aufgerufen wird
+        const fmt = (str0) => str0.replace(/(`[^`]*`)|(\[[^\]]*\]\([^)]*\))|(Leitf[aä]den\s+)([A-Za-zÄÖÜäöü](?:(?!\bkijs\.)[^.;:()\n])*)|(\bkijs(?:\.[A-Za-z_$][\w$]*)+)|\b(null|true|false|undefined)\b|((?<![\w'])'[^'\s]*'(?![\w']))/g, (match, code, mdLink, guideWord, guidePhrase, cls, keyword, str) => {
+            // bestehendes Markdown
+            if (code || mdLink) {
+                return match;
+            }
+
+            // Leitfaden, auch mehrere: «Leitfäden Daten und Drag and Drop», «Leitfäden A, B und C»
+            if (guideWord) {
+                let html = guideWord;
+                let phrase = guidePhrase;
+                let g = findGuide(phrase);
+                if (!g) {
+                    return guideWord + fmt(guidePhrase);
+                }
+                while (g) {
+                    html += '<a href="#" data-home-file="' + esc(links.guides[g.title]) + '">' + esc(g.text) + '</a>';
+                    phrase = g.rest;
+                    const sep = phrase.match(/^(\s*(?:,|\bund\b|\boder\b)\s*)(\S.*)$/);
+                    g = sep ? findGuide(sep[2]) : null;
+                    if (g) {
+                        html += sep[1];
+                    }
+                }
+                return html + fmt(phrase);
+            }
+
+            // Klasse, evtl. mit Eintrag: längster bekannter Klassenname
+            if (cls) {
+                const parts = cls.split('.');
+                for (let n = parts.length; n > 1; n--) {
+                    const name = parts.slice(0, n).join('.');
+                    if (classes.has(name)) {
+                        const member = parts[n] || null;
+                        const rest = parts.slice(n + (member ? 1 : 0)).map(p => '.' + p).join('');
+                        return this._getClassLinkHtml(name, member) + rest;
+                    }
+                }
+                return match;
+            }
+
+            // Werte
+            return '`' + (keyword || str) + '`';
+        });
+
+        return marked.parse(fmt(text));
+    }
+
+    /**
      * Gibt die Argumente einer Funktion als Liste zurück
      * @param {Array} args
      * @returns {String}
@@ -293,7 +376,7 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
         if (m.deprecated) {
             body += '<p class="home-api-deprecated"><b>Deprecated:</b> ' + esc(m.deprecated) + '</p>';
         }
-        body += m.description ? marked.parse(m.description) : '<p class="home-api-nodoc">Keine Beschreibung</p>';
+        body += m.description ? this._formatDescription(m.description) : '<p class="home-api-nodoc">Keine Beschreibung</p>';
 
         const rows = [];
         if (m.kind === 'property') {
@@ -387,7 +470,7 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
         }
 
         if (d.description) {
-            html += marked.parse(d.description);
+            html += this._formatDescription(d.description);
         } else {
             html += '<p class="home-api-nodoc">Noch keine Beschreibung (Klassenkommentar fehlt).</p>';
         }

@@ -118,6 +118,12 @@ class ApiReader {
             }
         }
 
+        // Ziele für Links in den Beschreibungen (siehe home.ApiClassPage._formatDescription)
+        $cls->textLinks = (object)[
+            'classes' => array_map(fn($r) => $r->name, $this->_query('SELECT name FROM class')),
+            'guides' => $this->_getGuides()
+        ];
+
         return $cls;
     }
 
@@ -201,6 +207,28 @@ class ApiReader {
         if (!$this->_pdo) {
             throw new Exception('Die API-Datenbank fehlt. Bitte im Tab API «API aktualisieren» klicken.');
         }
+    }
+
+    /**
+     * Gibt die Leitfäden zurück: Titel (Dateiname mit Leerzeichen statt _) -> Pfad relativ zum Ordner home
+     *   'Drag and Drop' -> 'data/docu/Leitfäden/Drag_and_Drop.md'
+     * @return array
+     */
+    protected function _getGuides(): array {
+        $guides = [];
+        $dir = realpath(__DIR__ . '/../../data/docu/Leitfäden');
+        if (!$dir) {
+            return $guides;
+        }
+        $it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, FilesystemIterator::SKIP_DOTS));
+        foreach ($it as $file) {
+            if ($file->getExtension() === 'md') {
+                $title = str_replace('_', ' ', $file->getBasename('.md'));
+                $guides[$title] = 'data/docu/Leitfäden/' . ltrim(str_replace('\\', '/', substr($file->getPathname(), strlen($dir))), '/');
+            }
+        }
+        ksort($guides);
+        return $guides;
     }
 
     /**

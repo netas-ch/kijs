@@ -5,10 +5,11 @@
 // --------------------------------------------------------------
 /**
  * Statische Klasse für Meldungsfenster (kijs.gui.Window, modal): alert, confirm, info, warning,
- * error, errorNotice und prompt sowie show() für eigene Konfigurationen. Alle Funktionen geben ein
- * Promise zurück, das beim Schliessen mit e.btn (Name des Buttons, 'none' ohne Button) und e.value
- * (Wert bei prompt) aufgelöst wird. Ist bereits ein gleiches Fenster offen (gleiche Beschriftung,
- * Meldung, Icon, Buttons …), wird dieses vorher geschlossen.
+ * error, errorNotice und prompt sowie show() für eigene Konfigurationen.
+ *
+ * Alle Funktionen geben ein Promise zurück, das beim Schliessen mit e.btn (Name des Buttons, 'none'
+ * ohne Button) und e.value (Wert bei prompt) aufgelöst wird. Ist bereits ein gleiches Fenster offen
+ * (gleiche Beschriftung, Meldung, Icon, Buttons …), wird dieses vorher geschlossen.
  *
  * @example
  * kijs.gui.MsgBox.confirm('Löschen', 'Wirklich löschen?').then(e => {
@@ -237,43 +238,45 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
     }
 
     /**
-     * Zeigt ein individuelles Meldungsfenster
-     * Beispiel config:
-     * config = {
-     *     caption: 'Testmeldung',
-     *     msg: 'Hallo Welt!',
+     * Zeigt ein individuelles Meldungsfenster.
      *
-     *     closable: true, // Soll das Fenster ein X zum Schliessen haben?
+     * Beispiel für config:
      *
-     *     //Falls ein Input-Field gewünscht wird, können in einem Objekt die 
-     *     // Eigenschaften des Fields angegeben werden:
-     *     fieldConfig: {
-     *         xtype: 'kijs.gui.field.Text',
-     *         label: 'Wert',
-     *         value: 'Mein Testwert'
+     *     config = {
+     *         caption: 'Testmeldung',
+     *         msg: 'Hallo Welt!',
+     *
+     *         closable: true, // Soll das Fenster ein X zum Schliessen haben?
+     *
+     *         //Falls ein Input-Field gewünscht wird, können in einem Objekt die 
+     *         // Eigenschaften des Fields angegeben werden:
+     *         fieldConfig: {
+     *             xtype: 'kijs.gui.field.Text',
+     *             label: 'Wert',
+     *             value: 'Mein Testwert'
+     *         }
+     *
+     *         fn: function(e, el) {
+     *             alert('Es wurde geklickt auf: ' + e.btn);
+     *         },
+     *         context: this,
+     *         iconMap: '',
+     *         icon: {
+     *             iconMap: 'kijs.iconMap.Fa.circle-question',
+     *             style: {
+     *                 color: '#ff9900'
+     *             }
+     *         },
+     *         buttons: [
+     *             {
+     *                 name: 'ok',
+     *                 caption: 'OK'
+     *             },{
+     *                 name: 'cancel',
+     *                 caption: 'Abbrechen'
+     *             }
+     *         ]
      *     }
-     *
-     *     fn: function(e, el) {
-     *         alert('Es wurde geklickt auf: ' + e.btn);
-     *     },
-     *     context: this,
-     *     iconMap: '',
-     *     icon: {
-     *         iconMap: 'kijs.iconMap.Fa.circle-question',
-     *         style: {
-     *             color: '#ff9900'
-     *         }
-     *     },
-     *     buttons: [
-     *         {
-     *             name: 'ok',
-     *             caption: 'OK'
-     *         },{
-     *             name: 'cancel',
-     *             caption: 'Abbrechen'
-     *         }
-     *     ]
-     * }
      * @param {Object} config
      * @returns {Promise}
      */

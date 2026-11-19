@@ -221,10 +221,14 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     set tooltipField(val) { this._tooltipField = val; }
 
     /**
-     * Wert: der Inhalt von valueField der selektierten Datensätze. Bei einfacher Selektion ein
-     * einzelner Wert, bei 'multi' und 'simple-multi' ein Array, bei 'manual' ein Array nur bei
-     * mehreren Werten. Nichts selektiert = null. Der Setter selektiert die passenden Datensätze
-     * (ohne selectionChange); ohne valueField gibt es einen Fehler.
+     * Wert: der Inhalt von valueField der selektierten Datensätze.
+     * - Bei einfacher Selektion ein einzelner Wert
+     * - bei 'multi' und 'simple-multi' ein Array
+     * - bei 'manual' ein Array nur bei mehreren Werten
+     * - Nichts selektiert = null
+     *
+     * Der Setter selektiert die passenden Datensätze (ohne selectionChange); ohne valueField gibt es
+     * einen Fehler.
      * @type {*|Array|null}
      */
     get value() {

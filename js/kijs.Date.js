@@ -6,38 +6,35 @@
 /**
  * Statische Klasse mit Hilfsfunktionen für Datum und Uhrzeit.
  *
- * Datumsformatierung (kijs.Date.format)
- * ------------------
- * Tag
- * d   Tag des Monats, 2-stellig mit führender Null  01 bis 31
- * D   Wochentag, gekürzt auf zwei Buchstaben  Mo bis So
- * j   Tag des Monats ohne führende Nullen    1 bis 31
- * l   (kleines 'L') Ausgeschriebener Wochentag Montag bis Sontag
+ * Formatzeichen für kijs.Date.format():
  *
- * Monat
- * F   Monat als ganzes Wort, wie Januar bis Dezember
- * m   Monat als Zahl, mit führenden Nullen  01 bis 12
- * M   Monatsname mit drei Buchstaben  Jan bis Dez
- * n   Monatszahl, ohne führende Nullen  1 bis 12
- *
- * Woche
- * W  ISO-8601 Wochennummer des Jahres, die Woche beginnt am Montag
- *
- * Jahr
- * Y   Vierstellige Jahreszahl  Beispiele: 1999 oder 2003
- * y   Jahreszahl, zweistellig  Beispiele: 99 oder 03
- * L   Schaltjahr oder nicht  1 für ein Schaltjahr, ansonsten 0
- *
- * Uhrzeit
- * G   Stunde im 24-Stunden-Format, ohne führende Nullen  0 bis 23
- * H   Stunde im 24-Stunden-Format, mit führenden Nullen  00 bis 23
- * i   Minuten, mit führenden Nullen  00 bis 59
- * s   Sekunden, mit führenden Nullen  00 bis 59
- *
- * Vollständiges Datum/Uhrzeit
- * c   ISO 8601 (Date.toISOString())
- * r   Date.toString()
- * U   Sekunden seit Beginn der UNIX-Epoche
+ * | Zeichen | Bedeutung | Werte |
+ * |---|---|---|
+ * | **Tag** | | |
+ * | d | Tag des Monats, 2-stellig mit führender Null | 01 bis 31 |
+ * | D | Wochentag, gekürzt auf zwei Buchstaben | Mo bis So |
+ * | j | Tag des Monats ohne führende Nullen | 1 bis 31 |
+ * | l | (kleines 'L') Ausgeschriebener Wochentag | Montag bis Sontag |
+ * | **Monat** | | |
+ * | F | Monat als ganzes Wort | Januar bis Dezember |
+ * | m | Monat als Zahl, mit führenden Nullen | 01 bis 12 |
+ * | M | Monatsname mit drei Buchstaben | Jan bis Dez |
+ * | n | Monatszahl, ohne führende Nullen | 1 bis 12 |
+ * | **Woche** | | |
+ * | W | ISO-8601 Wochennummer des Jahres, die Woche beginnt am Montag | |
+ * | **Jahr** | | |
+ * | Y | Vierstellige Jahreszahl | 1999 oder 2003 |
+ * | y | Jahreszahl, zweistellig | 99 oder 03 |
+ * | L | Schaltjahr oder nicht | 1 für ein Schaltjahr, ansonsten 0 |
+ * | **Uhrzeit** | | |
+ * | G | Stunde im 24-Stunden-Format, ohne führende Nullen | 0 bis 23 |
+ * | H | Stunde im 24-Stunden-Format, mit führenden Nullen | 00 bis 23 |
+ * | i | Minuten, mit führenden Nullen | 00 bis 59 |
+ * | s | Sekunden, mit führenden Nullen | 00 bis 59 |
+ * | **Vollständiges Datum/Uhrzeit** | | |
+ * | c | ISO 8601 (Date.toISOString()) | |
+ * | r | Date.toString() | |
+ * | U | Sekunden seit Beginn der UNIX-Epoche | |
  *
  * @example
  * kijs.Date.format(new Date(), 'd.m.Y H:i');
@@ -242,15 +239,20 @@ kijs.Date = class kijs_Date {
     }
 
     /**
-     * Konvertiert eine Wochennummer ein Datum-Objekt
-     * Format: [A-Z ]+([0-9]+) ([0-9]+)
-     *         Prefix  Woche   Jahr
+     * Konvertiert eine Wochennummer in ein Datum-Objekt.
+     *
+     * Format:
+     *
+     *     [A-Z ]+([0-9]+) ([0-9]+)
+     *     Prefix  Woche   Jahr
      *
      * Es muss mit einem beliebigen String begonnen werden.
      * Darauf folgt die Wochen-Nr und mit einem Leerzeichen getrennt das Jahr.
      * Anschliessend können noch andere Texte/Zahlen/Zeichen sein, diese werden aber ignoriert.
-     * Beispiele: 'Woche 4 2017', 'W4 17', 'W 4 2017', 'Wo 4 17'
-     * Weitere Beispiele: 'Wo 4 2017 vom 23.01.2017'
+     *
+     * Beispiele:
+     * - 'Woche 4 2017', 'W4 17', 'W 4 2017', 'Wo 4 17'
+     * - 'Wo 4 2017 vom 23.01.2017'
      * @param {String} strWeek
      * @returns {Date}  Datum des Montags der gewählten Woche
      */

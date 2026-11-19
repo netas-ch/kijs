@@ -528,6 +528,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Sortiert die Kind-Elemente mit einer Funktion. Der Funktion werden
      * zwei Elemente zum Vergleich übergeben, die Funktion
      * muss 1, 0 oder -1 zurückgeben, wenn a grösser, gleich oder kleiner b ist.
+     *
      * Ist der Container gerendert, werden die Elemente in der neuen Reihenfolge gerendert.
      * @param {Function} compareFn
      * @param {Object|null} [context=null]   Kontext der Funktion. Default: der Container

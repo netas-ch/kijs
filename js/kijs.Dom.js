@@ -26,17 +26,17 @@ kijs.Dom = class kijs_Dom {
      * Die Delegates werden dann in der Eigenschaft context._nodeEventListeners gespeichert,
      * damit kann dann ein Listener später auch wieder entfernt werden.
      *
-     * context._nodeEventListeners: {
-     *     click: [
-     *         {node: ..., useCapture: true/false, delegate: ...},
-     *         {node: ..., useCapture: true/false, delegate: ...}
-     *     ],
+     *     context._nodeEventListeners: {
+     *         click: [
+     *             {node: ..., useCapture: true/false, delegate: ...},
+     *             {node: ..., useCapture: true/false, delegate: ...}
+     *         ],
      *
-     *     mousemove: [
-     *         {node: ..., useCapture: true/false, delegate: ...},
-     *         {node: ..., useCapture: true/false, delegate: ...}
-     *     ]
-     * }
+     *         mousemove: [
+     *             {node: ..., useCapture: true/false, delegate: ...},
+     *             {node: ..., useCapture: true/false, delegate: ...}
+     *         ]
+     *     }
      *
      * @param {String} eventName Name des DOM-Events
      * @param {Node} node DOM-Node
@@ -196,10 +196,10 @@ kijs.Dom = class kijs_Dom {
 
     /**
      * Gibt das Erste untergeordnete Element zurück, dass Selektiert werden kann (tabIndex >= 0).
-     *     undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst funktioniert es nicht)
-     *     tabIndex -1: nur via focus() Befehl fokussierbar
-     *     tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
-     *     tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
+     * - undefined: nicht fokussierbar (bei undefined muss die Eigenschaft mit removeAttribute('tabIndex') entfernt werden. Sonst funktioniert es nicht)
+     * - tabIndex -1: nur via focus() Befehl fokussierbar
+     * - tabIndex  0: Fokussierbar - Browser bestimmt die Tab-Reihenfolge
+     * - tabIndex >0: Fokussierbar - in der Reihenfolge wie der tabIndex
      * @param {Node} node
      * @returns {Node|null}
      */

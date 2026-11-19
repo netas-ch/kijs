@@ -7,8 +7,10 @@
  * Halbtransparente Maske, die über den Body oder ein kijs.gui.Element (target) gelegt wird und so
  * die Bedienung der dahinterliegenden Oberfläche verhindert. Optional mit Ladesymbol
  * (displayWaitIcon) und Text darunter.
+ *
  * Beim Body als target wird die Maske als natives dialog-Tag modal angezeigt. Das verhindert auch
  * die Navigation per Tastatur unter der Maske.
+ *
  * Bei anderen targets wird zuerst ein Anker-Div (0x0px) als erster Node in das target eingefügt,
  * darin liegt das div der Maske. Mit inert (Default: true) wird das target dabei nicht interaktiv
  * und nicht fokussierbar. Mit targetDomProperty kann ein Teil des Elements maskiert werden, z.B.
@@ -247,6 +249,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     /**
      * Element, das überdeckt wird. Der Setter akzeptiert ein kijs.gui.Element, document.body oder
      * leer (= Body). Ein kijs.gui.ViewPort gilt auch als Body. Der Getter gibt beim Body null zurück.
+     *
      * Bei Grössenänderungen und Sichtbarkeitswechsel des Elements wird die Maske angepasst, beim
      * Zerstören des Elements wird sie auch zerstört.
      * @type {kijs.gui.Element|null}

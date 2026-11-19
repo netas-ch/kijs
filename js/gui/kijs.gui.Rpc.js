@@ -5,10 +5,15 @@
 // --------------------------------------------------------------
 /**
  * Erweiterung von kijs.Rpc für die Oberfläche: zeigt während des RPC eine Lademaske und wertet
- * die Antwort aus. errorMsg wird als Fehler (kijs.gui.MsgBox.error bzw. errorNotice), warningMsg
- * als Warnung mit der Möglichkeit, den RPC mit ignoreWarnings zu wiederholen, infoMsg als Info und
- * cornerTipMsg als kijs.gui.CornerTipContainer angezeigt. Die Titel können vom Server mitgegeben
- * werden (errorTitle, warningTitle, infoTitle, cornerTipTitle), sonst gelten die Standardtitel.
+ * die Antwort aus:
+ *
+ * - errorMsg wird als Fehler angezeigt (kijs.gui.MsgBox.error bzw. errorNotice)
+ * - warningMsg als Warnung mit der Möglichkeit, den RPC mit ignoreWarnings zu wiederholen
+ * - infoMsg als Info
+ * - cornerTipMsg als kijs.gui.CornerTipContainer
+ *
+ * Die Titel können vom Server mitgegeben werden (errorTitle, warningTitle, infoTitle,
+ * cornerTipTitle), sonst gelten die Standardtitel.
  *
  * @example
  * const rpc = new kijs.gui.Rpc({ url: 'index.php' });

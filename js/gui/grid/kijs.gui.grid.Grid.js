@@ -522,16 +522,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * TODO: Wir müssten nur einzelne Rows updaten können.
-     * Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
-     * Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad():
-     *
      * Lädt die Daten im Grid neu.
      * @param {Boolean} restoreSelection
      * @param {Boolean} resetData Vollständig & von Anfang an neu laden (z.B. beim Filtern, Sortieren)
      * @returns {Promise}
      */
     reload(restoreSelection = true, resetData = true) {
+        // TODO: Wir müssten nur einzelne Rows updaten können.
+        // Wenn Zeile 1000 geändert wird sind wir wieder bei 1 und müssen bis Zeile 1000 scrollen, da diese nicht mehr geladen ist.
+        // Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad()
         let selected = this.getSelectedIds();
         return this._remoteLoad(resetData).then((response) => {
 

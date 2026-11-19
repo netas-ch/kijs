@@ -6,11 +6,15 @@
 /**
  * Drag&Drop-Ziel eines Elements: nimmt gezogene kijs.gui.dragDrop.Source an, deren name im mapping
  * vorkommt. Je nach Mausposition wird vor, nach oder (in der Mitte) als Kind eingefügt; ein Marker
- * zeigt die Einfügeposition. Wird meist über die Eigenschaft ddTarget erstellt (z.B. bei
- * kijs.gui.DataView, kijs.gui.dashboard.Column oder kijs.gui.container.tab.Bar).
+ * zeigt die Einfügeposition.
  *
- * mapping: { sourceName: { allowMove, allowCopy, allowLink, disableMarker, disableMarkerAutoSize,
- * markerWidth, markerHeight, markerCls, markerHtml, splitChildZone } }
+ * Wird meist über die Eigenschaft ddTarget erstellt (z.B. bei kijs.gui.DataView,
+ * kijs.gui.dashboard.Column oder kijs.gui.container.tab.Bar).
+ *
+ * Aufbau von mapping:
+ *
+ *     { sourceName: { allowMove, allowCopy, allowLink, disableMarker, disableMarkerAutoSize,
+ *                     markerWidth, markerHeight, markerCls, markerHtml, splitChildZone } }
  *
  * @example
  * myDataView.ddTarget = {

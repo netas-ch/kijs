@@ -591,6 +591,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
     /**
      * Gibt die expandierten Elemente zurück.
+     *
      * Vorsicht: falls bei einem Tree ein Element noch nicht erstellt wurde, weil der Eltern-Knoten
      * nicht aufgeklappt wurde, wird es nicht zurückgegeben.
      * Dafür besser die Funktionen getExpandedPrimaryKeys() und getExpandedRows() verwenden!

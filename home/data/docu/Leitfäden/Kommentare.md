@@ -91,9 +91,11 @@ Ist die Beschreibung zu lang für eine Zeile, steht sie als ```//```-Zeilen
     smallPaddings: true,
 
 ### Standardwerte
-Standardwerte aus ```_defaultConfig``` liest der Generator selbst. Kommt der 
-Standardwert nur aus der Deklaration der Klassenvariable, wird er in der 
-Beschreibung angegeben: ```Default: 0```.  
+Standardwerte liest der Generator selbst: aus ```_defaultConfig```, sonst aus der 
+Zuweisung im Constructor (```this._columns = 1;```) und bei Configs, die an ein 
+Unterelement weitergeleitet werden, aus dessen Klasse. Nur wenn der Standardwert so 
+nicht ermittelt werden kann (z.B. Setter ohne Feld oder berechnete Werte), wird er in 
+der Beschreibung angegeben: ```Default: 0```.  
 
 
 3\. Eigenschaften (Getter/Setter)
@@ -185,6 +187,32 @@ Weitere JSDoc-Tags
 | ```@deprecated```   | Nicht mehr verwenden, mit Hinweis auf die Alternative   |
 | ```@example```      | Beispielcode (im Klassen- oder Funktionskommentar)      |
 | ```@see```          | Verweis auf eine andere Klasse oder Funktion            |
+
+
+Formatierung der Beschreibungen
+-------------------------------
+Beschreibungen in JSDoc-Kommentaren sind Markdown.  
+- Eine **Leerzeile** (```*``` allein auf der Zeile) beginnt einen neuen Absatz. Ein 
+  Zeilenumbruch ohne Leerzeile bleibt im gleichen Absatz, so können die Zeilen frei 
+  umbrochen werden.  
+- Aufzählungen (z.B. die möglichen Werte einer Eigenschaft) als **Liste** mit ```- ```.  
+- Der erste Satz fasst kurz zusammen, worum es geht. Längere Erklärungen folgen in 
+  eigenen Absätzen.  
+
+Für Code-Markierungen und Links ist im Kommentar nichts nötig. Die API-Dokumentation 
+verlinkt Klassennamen (```kijs.gui.Button```, ```kijs.gui.DataView.selectType```) und 
+«Leitfaden Name» automatisch und markiert ```null```, ```true```, ```false```, 
+```undefined``` und Strings in einfachen Anführungszeichen als Code.  
+
+    /**
+     * Art der Selektion:
+     * - 'none' nichts selektierbar
+     * - 'single' ein Datensatz, Abwählen nicht möglich (Default)
+     * - 'multi' mehrere mit Shift- und Ctrl-Taste
+     *
+     * Siehe Leitfaden Daten.
+     * @type {String}
+     */
 
 
 Links auf die API

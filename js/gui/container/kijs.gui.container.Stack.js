@@ -220,9 +220,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     
     /**
      * Aktuelles Element wechseln und dabei eine Animation abspielen. change wird sofort ausgelöst, das
-     * Promise nach der Animation erfüllt. Ist das Element schon aktuell, ist noch keines aktiv, ist die
-     * Dauer 0 oder bricht beforeChange ab, wird es sofort erfüllt (bei einem Abbruch mit dem
-     * unveränderten Element als currentEl).
+     * Promise nach der Animation erfüllt.
+     *
+     * Ist das Element schon aktuell, ist noch keines aktiv, ist die Dauer 0 oder bricht beforeChange
+     * ab, wird es sofort erfüllt (bei einem Abbruch mit dem unveränderten Element als currentEl).
      * @param {Integer|String|kijs.gui.Element} el  Index, Name oder Element (sonst kijs.Error)
      * @param {String|null} [animation=null]  null = animation
      * @param {Integer|null} [duration=null]  Dauer in ms. null = animationDuration

@@ -6,9 +6,11 @@
 /**
  * Fenster (Panel im dialog-Tag), das mit show() angezeigt und in das target gerendert wird. Es ist
  * standardmässig verschiebbar (draggable), in der Grösse veränderbar, maximierbar und schliessbar.
+ *
  * Als target kann document.body oder ein kijs.gui.Element angegeben werden. Beim Body ist der Body
  * auch der übergeordnete Node (parentNode), bei einem Element dessen parentNode. Mit
  * targetDomProperty kann ein Teil des Elements als target dienen, z.B. 'innerDom' bei einem Panel.
+ *
  * Die Fenster werden über den kijs.gui.LayerManager in den Vordergrund geholt.
  *
  * @example

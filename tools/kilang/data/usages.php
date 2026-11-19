@@ -14,10 +14,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [808, 990]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [809, 991]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [809, 995]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [808, 990]
    ]
   ]
  ], 
@@ -36,6 +36,9 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [50], 
+    "../../js/gui/kijs.gui.MsgBox.js" => [234, 456]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [233, 453]
    ]
   ]
@@ -64,9 +67,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/filter/kijs.gui.grid.filter.Filter.js" => [252]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/grid/filter/kijs.gui.grid.filter.Filter.js" => [241]
    ]
   ]
  ], 
@@ -76,9 +76,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js" => [106]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js" => [89]
    ]
   ]
  ], 
@@ -88,9 +85,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js" => [113]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/grid/filter/kijs.gui.grid.filter.Checkbox.js" => [96]
    ]
   ]
  ], 
@@ -115,6 +109,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.Phone.js" => [42]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/field/kijs.gui.field.Phone.js" => [40]
    ]
   ]
@@ -142,10 +139,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1135]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1136]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1140]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1135]
    ]
   ]
  ], 
@@ -172,12 +169,12 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1088, 1119], 
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1089, 1120], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [517], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [620]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1093, 1124]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1088, 1119]
    ]
   ]
  ], 
@@ -186,12 +183,12 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1072, 1105], 
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1073, 1106], 
     "../../js/gui/field/kijs.gui.field.Month.js" => [504], 
     "../../js/gui/field/kijs.gui.field.Number.js" => [615]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1077, 1110]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1072, 1105]
    ]
   ]
  ], 
@@ -200,10 +197,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1142]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1143]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1147]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1142]
    ]
   ]
  ], 
@@ -304,10 +301,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1064]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1065]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1069]
+    "../../js/gui/field/kijs.gui.field.DateTime.js" => [1064]
    ]
   ]
  ], 
@@ -316,10 +313,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.UploadDialog.js" => [543]
+    "../../js/kijs.UploadDialog.js" => [546]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.UploadDialog.js" => [538]
+    "../../js/kijs.UploadDialog.js" => [543]
    ]
   ]
  ], 
@@ -328,6 +325,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/kijs.gui.Rpc.js" => [225]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.Rpc.js" => [220]
    ]
   ]
@@ -347,9 +347,6 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/filter/kijs.gui.grid.filter.Filter.js" => [243]
-   ], 
-   "usagesJsOld" => [
-    "../../js/gui/grid/filter/kijs.gui.grid.filter.Filter.js" => [231]
    ]
   ]
  ], 
@@ -385,6 +382,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/kijs.gui.Rpc.js" => [289, 307]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.Rpc.js" => [284, 302]
    ]
   ]
@@ -414,6 +414,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/kijs.gui.MsgBox.js" => [87]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [86]
    ]
   ]
@@ -488,6 +491,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/kijs.gui.MsgBox.js" => [90]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [89]
    ]
   ]
@@ -498,6 +504,9 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [41], 
+    "../../js/gui/kijs.gui.MsgBox.js" => [54, 122, 155, 188, 230, 453]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.MsgBox.js" => [53, 121, 154, 187, 229, 450]
    ]
   ]
@@ -592,6 +601,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/gui/kijs.gui.Rpc.js" => [243]
+   ], 
+   "usagesJsOld" => [
     "../../js/gui/kijs.gui.Rpc.js" => [238]
    ]
   ]
@@ -601,10 +613,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.UploadDialog.js" => [479]
+    "../../js/kijs.UploadDialog.js" => [482]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.UploadDialog.js" => [474]
+    "../../js/kijs.UploadDialog.js" => [479]
    ]
   ]
  ]

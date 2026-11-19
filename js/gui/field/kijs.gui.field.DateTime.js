@@ -470,6 +470,7 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     /**
      * Wert als String: Datum im Format valueDateFormat, Uhrzeit im Format valueTimeFormat
      * (je nach mode). Gibt es nur eine Uhrzeit, gilt das Datum 01.01.1970. Leer = null.
+     *
      * Der Setter erwartet Datum und Uhrzeit durch ein Leerzeichen getrennt, z.B. '2024-12-31 18:00:00'.
      * @type {String|null}
      */

@@ -25,72 +25,70 @@ kijs.Data = class kijs_Data {
     // STATICS
     // --------------------------------------------------------------
     /**
-     * Gibt Zeilen aus einem Recordset zurück, die einem Filter entsprechen
+     * Gibt Zeilen aus einem Recordset zurück, die einem Filter entsprechen.
      *
      * Beispiel:
-     * "filters":{
-     *  "operator":"AND",
-     *  "parts":[
-     *   { "field":"Name", "operator":"=", "value":"Muster" }
-     *   { "field":"Vorname", "operator":"=", "value":"Max" },
-     *   { "field":"Anrede", "operator":"IN", "value":["Herr","Frau"] },
-     *   {
-     *    "operator":"OR",
-     *    "parts":[
-     *     { "field":"Kanton", "operator":"=", "value":"BE" },
-     *     { "field":"Kanton", "operator":"=", "value":"SO" }
-     *    ]
-     *   }
-     *  ]
-     * }
+     *
+     *     "filters":{
+     *      "operator":"AND",
+     *      "parts":[
+     *       { "field":"Name", "operator":"=", "value":"Muster" }
+     *       { "field":"Vorname", "operator":"=", "value":"Max" },
+     *       { "field":"Anrede", "operator":"IN", "value":["Herr","Frau"] },
+     *       {
+     *        "operator":"OR",
+     *        "parts":[
+     *         { "field":"Kanton", "operator":"=", "value":"BE" },
+     *         { "field":"Kanton", "operator":"=", "value":"SO" }
+     *        ]
+     *       }
+     *      ]
+     *     }
      *
      * Filter sind aus parts aufgebaut. Es gibt zwei verschiedene parts:
      *
-     * Klammer
-     * -------
-     * Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüpfen.
-     * {
-     *  "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
-     *  "invert":true,     Soll das Ergebnis der Gruppe invertiert werden? default: false
-     *  "parts":[ ... ]    Array mit untergeordneten Parts.
-     * }
+     * **Klammer:** Klammern werden verwendet um parts zu gruppieren und mit AND oder OR zu verknüpfen.
      *
+     *     {
+     *      "operator":"AND",  Logischer Operator: "AND", "OR" default: "AND"
+     *      "invert":true,     Soll das Ergebnis der Gruppe invertiert werden? default: false
+     *      "parts":[ ... ]    Array mit untergeordneten Parts.
+     *     }
      *
-     * Vergleichsoperation
-     * -------------------
-     * Eine Vergleichsoperation wird zum Vergleichen der Zelle im Recordset mit
+     * **Vergleichsoperation:** Eine Vergleichsoperation wird zum Vergleichen der Zelle im Recordset mit
      * einem vorgegebenen Wert benutzt.
-     * {
-     *  "field":"Vorname",  Feldname
-     *  "operator":"=",    Vergleichsoperator: default: bei einem Array als value "IN", sonst "MATCH"
      *
-     *                                         "=", "!=",
+     *     {
+     *      "field":"Vorname",  Feldname
+     *      "operator":"=",    Vergleichsoperator: default: bei einem Array als value "IN", sonst "MATCH"
      *
-     *                                         ">", ">=", "<", "<=",
+     *                                             "=", "!=",
      *
-     *                                         "BEGIN",                 der Anfang muss übereinstimmen (CI)
-     *                                         "PART",                  ein beliebiger Teil muss übereinstimmen (CI)
-     *                                         "END",                   das Ende muss übereinstimmen (CI)
-     *                                         "MATCH",                 Wert muss übereinstimmen (CI)
-     *                                         "NOT",                   Wert darf nicht übereinstimmen (CI)
+     *                                             ">", ">=", "<", "<=",
      *
-     *                                         "IN", "NOT IN",          Der Wert muss im Array vorkommen.
-     *                                                                  Value muss ein Array sein.
+     *                                             "BEGIN",                 der Anfang muss übereinstimmen (CI)
+     *                                             "PART",                  ein beliebiger Teil muss übereinstimmen (CI)
+     *                                             "END",                   das Ende muss übereinstimmen (CI)
+     *                                             "MATCH",                 Wert muss übereinstimmen (CI)
+     *                                             "NOT",                   Wert darf nicht übereinstimmen (CI)
      *
-     *                                         "LIKE", "NOT LIKE",      Im value können wie in SQL
-     *                                                                  % und _ als Platzhalter
-     *                                                                  verwendet werden. (CI)
+     *                                             "IN", "NOT IN",          Der Wert muss im Array vorkommen.
+     *                                                                      Value muss ein Array sein.
      *
-     *                                         "REGEXP", "NOT REGEXP"   Der value muss ein RegExp
-     *                                                                  (oder RegExp als String) sein
-     *                                                                  Beispiel: '/^[0-9A-Z]{3,4}$/gmi'
+     *                                             "LIKE", "NOT LIKE",      Im value können wie in SQL
+     *                                                                      % und _ als Platzhalter
+     *                                                                      verwendet werden. (CI)
      *
-     *                                                                  (CI) = case-insensitive = Gross und Kleinschreibung muss nicht übereinstimmen
+     *                                             "REGEXP", "NOT REGEXP"   Der value muss ein RegExp
+     *                                                                      (oder RegExp als String) sein
+     *                                                                      Beispiel: '/^[0-9A-Z]{3,4}$/gmi'
      *
-     *                                         Default: Wenn value ein Array ist: "IN" sonst "="
+     *                                                                      (CI) = case-insensitive = Gross und Kleinschreibung muss nicht übereinstimmen
      *
-     *  "value":"Max"                          beliebiger Datentyp mit dem verglichen wird.
-     * }
+     *                                             Default: Wenn value ein Array ist: "IN" sonst "="
+     *
+     *      "value":"Max"                          beliebiger Datentyp mit dem verglichen wird.
+     *     }
      *
      * @param {Array} rows
      * @param {Array|Object} filters
@@ -287,19 +285,20 @@ kijs.Data = class kijs_Data {
     }
 
     /**
-     * Sortiert ein Recordset
+     * Sortiert ein Recordset.
      *
      * Beispiel:
-     *  [
-     *   { "field":"Alter", "desc":true },  // Absteigend nach Alter
-     *   { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
-     *   { "field":"Name" },                // Aufsteigend nach Name
-     *   "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
-     *  ]
      *
-     * "field"      Feldname des zu sortierenden Felds
-     * "desc"       Aufsteigend (false, default) oder Absteigend (true) sortieren
-     *      *
+     *     [
+     *      { "field":"Alter", "desc":true },  // Absteigend nach Alter
+     *      { "field":"Ort", "desc":false },   // Aufsteigend nach Ort
+     *      { "field":"Name" },                // Aufsteigend nach Name
+     *      "Vorname"                          // Aufsteigend nach Vorname (Kurzschreibweise)
+     *     ]
+     *
+     * - "field": Feldname des zu sortierenden Felds
+     * - "desc": Aufsteigend (false, default) oder Absteigend (true) sortieren
+     *
      * @param {Array} rows
      * @param {Array} sortFields   Array mit der Sortierungskonfiguration
      *                             Beispiel: [ { "field":"Alter", "desc":true }, "Vorname" ]
@@ -373,7 +372,8 @@ kijs.Data = class kijs_Data {
     }
 
     /**
-     * Verweise in einem Recordset aktualiseren
+     * Verweise in einem Recordset aktualiseren.
+     *
      * Falls kein Primärschlüssel definiert wurde, arbeitet kijs mit den Verweisen
      * auf die einzelnen Zeilen (row). Werden die Daten neu via RPC geladen,
      * stimmen die Verweise nicht mehr, da sie auf das alte Recordset verweisen.

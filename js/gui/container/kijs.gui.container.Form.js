@@ -71,9 +71,11 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Daten des Formulars als Objekt, z.B. {id:1, name:'Muster'}. Der Getter ergänzt das zuletzt
-     * gesetzte Objekt mit den Werten der Felder (ohne deaktivierte Felder und solche ohne
-     * submitValueEnable). Der Setter füllt die Felder ab, validiert sie und setzt isDirty zurück.
+     * Daten des Formulars als Objekt, z.B. {id:1, name:'Muster'}.
+     *
+     * - Der Getter ergänzt das zuletzt gesetzte Objekt mit den Werten der Felder (ohne deaktivierte
+     *   Felder und solche ohne submitValueEnable).
+     * - Der Setter füllt die Felder ab, validiert sie und setzt isDirty zurück.
      * @type {Object}
      */
     get data() {
@@ -309,6 +311,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * Validiert das Formular und sendet die Daten (data) mit args an rpcSaveFn. Enthält die Antwort
      * config, wird sie angewendet; fieldErrors werden bei den Feldern angezeigt. Ohne Fehler wird
      * isDirty zurückgesetzt. Danach wird afterSave ausgelöst.
+     *
      * Ist das Formular ungültig und defaultSaveErrorMsg gesetzt, wird nur die Meldung angezeigt und
      * das Promise mit response.errorType 'errorNotice' erfüllt (ohne Request an den Server).
      * @param {Boolean} [searchFields=false]  Felder vorher neu suchen?
