@@ -3805,6 +3805,27 @@
             }
         }
 
+
+        /* Anzeige des Werts (showValue) */
+        > .kijs-content > .kijs-inputwrapper {
+            align-items: center;
+            gap: 8px;
+
+            > input {
+                flex: 1 1 auto;
+                min-width: 0;
+            }
+
+            > .kijs-field-range-value {
+                flex: none;
+                min-width: 2.5em;
+                text-align: right;
+                font-family: var(--default-fontFamily);
+                font-size: var(--field-fontSize);
+                color: var(--field-fontColor);
+            }
+        }
+
         &.kijs-disableFlex {
             align-self: start;
             flex: none;

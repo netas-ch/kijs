@@ -41,6 +41,28 @@ home.sc.field_Range = class home_sc_field_Range {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
+                    value: 'showValue, Kommazahlen (step: 0.5)',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.field.Range',
+                    label: 'Faktor',
+                    min: 0,
+                    max: 5,
+                    step: 0.5,
+                    value: 2.5,
+                    showValue: true
+                },{
+                    xtype: 'kijs.gui.field.Range',
+                    label: 'ohne value',
+                    helpText: 'min: 200, max: 300, kein value: der Regler steht in der Mitte',
+                    min: 200,
+                    max: 300,
+                    showValue: true
+                },
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -107,7 +129,7 @@ home.sc.field_Range = class home_sc_field_Range {
             },{
                 xtype: 'kijs.gui.field.Switch',
                 label: 'disableFlex',
-                value: false,
+                value: true,
                 on: {
                     change: function(e) {
                         this._updateProperty('disableFlex', e.element.value);
@@ -148,6 +170,15 @@ home.sc.field_Range = class home_sc_field_Range {
                     change: function(e) {
                         this._updateProperty('required', e.element.value);
                         this._callFunction('validate');
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'showValue',
+                on: {
+                    change: function(e) {
+                        this._updateProperty('showValue', e.element.value);
                     },
                     context: this
                 }
@@ -287,7 +318,7 @@ home.sc.field_Range = class home_sc_field_Range {
     
     _updateProperty(propertyName, value) {
         kijs.Array.each(this._content.elements, function(el) {
-            if (el instanceof kijs.gui.field.Field) {
+            if (el instanceof kijs.gui.field.Field && propertyName in el) {
                 el[propertyName] = value;
             }
         }, this);

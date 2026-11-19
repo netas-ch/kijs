@@ -3314,6 +3314,9 @@
   /* ******************
        * Field Range
        ****************** */
+  div.kijs-field-range {
+    /* Anzeige des Werts (showValue) */
+  }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
     width: 100%;
     height: var(--range-btnHeight);
@@ -3365,6 +3368,22 @@
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:focus::-moz-range-thumb,
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input:hover::-moz-range-thumb {
     background: var(--field-focus-borderColor);
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper {
+    align-items: center;
+    gap: 8px;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  div.kijs-field-range > .kijs-content > .kijs-inputwrapper > .kijs-field-range-value {
+    flex: none;
+    min-width: 2.5em;
+    text-align: right;
+    font-family: var(--default-fontFamily);
+    font-size: var(--field-fontSize);
+    color: var(--field-fontColor);
   }
   div.kijs-field-range.kijs-disableFlex {
     align-self: start;

@@ -227,6 +227,30 @@ Auf dem Server bleiben die Header ```X-Filename``` und ```X-Filepath``` gleich. 
 muss ein JSON-Objekt sein, Fehler als ```errorMsg```.  
 
 
+## kijs.gui.field.Range überarbeitet
+- Erbt direkt von ```kijs.gui.field.Field``` statt von ```kijs.gui.field.Text```. Die Configs 
+  und Funktionen für Text entfallen: ```autocomplete```, ```formatFn```, ```formatFnContext```, 
+  ```formatRegExp```, ```addFormatRegExp()```, ```inputMode```, ```placeholder```, 
+  ```valueTrimEnable``` und ```virtualKeyboardPolicy```.  
+- ```value```, ```min```, ```max``` und ```step``` sind Zahlen, auch mit Kommastellen 
+  (z.B. ```step: 0.5```). Bisher wurden ```value``` und ```step``` mit ```parseInt``` gelesen, 
+  Kommazahlen gingen darum verloren, und ```min```/```max``` gaben Strings zurück.  
+- Ohne ```value``` steht der Regler in der Mitte zwischen ```min``` und ```max``` (bisher 
+  immer 50, z.B. bei ```min: 200``` darum ganz links). ```clear()``` setzt ihn dorthin zurück.  
+- Der Wert wird schon vor dem Rendern wie im Browser auf ```min```, ```max``` und ```step``` 
+  begrenzt.  
+- ```change``` kommt nur noch, wenn sich der Wert wirklich geändert hat, und ```oldValue``` ist 
+  eine Zahl.  
+- ```readOnly``` und ```disabled``` wirken zusammen: Wird ```readOnly``` ausgeschaltet, bleibt 
+  ein deaktiviertes Feld deaktiviert.  
+- Neue Config ```showValue```: zeigt den aktuellen Wert neben dem Regler an.  
+- Showcase field Range mit Beispielen zu ```showValue``` und Kommazahlen.  
+
+**UPDATE TIPP:** Im Projekt nach ```kijs.gui.field.Range``` suchen: Text-Configs wie 
+```placeholder``` oder ```formatFn``` entfernen (sonst Fehler «Unknown config»). Wer sich auf den 
+Startwert 50 verlassen hat, ```value: 50``` angeben.  
+
+
 ## Fehlerbehebungen
 - ```kijs.gui.Dom.nodeAttributeHas()``` gab nach dem Rendern das umgekehrte Resultat zurück.  
 - ```kijs.gui.grid.Filter```: Beim Zerstören wurde ein noch ausstehendes Neuladen der Filter 
