@@ -256,19 +256,17 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     }
 
     /**
-     * Setzt den Fokus auf den Anzeige-Node. selectText=true führt zurzeit zu einem Fehler,
-     * weil der Node ein div ohne Funktion select() ist.
+     * Setzt den Fokus auf den Anzeige-Node.
      * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
-     * @param {Boolean} [selectText=false]
+     * @param {Boolean} [selectText=false]  den angezeigten Text markieren?
      * @returns {HTMLElement|null|false}
      */
     // overwrite
     focus(alsoSetIfNoTabIndex, selectText) {
         let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
-        if (selectText) {
-            if (nde) {
-                nde.select();
-            }
+        if (selectText && nde) {
+            // Der Node ist ein div (kein input), darum über die Selection markieren
+            window.getSelection().selectAllChildren(nde);
         }
         return nde;
     }

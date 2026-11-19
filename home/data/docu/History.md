@@ -99,6 +99,8 @@ Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.
   ```kijs.gui.field.Text```, ```Number```, ```Month```, ```Password``` und ```Memo```.  
 - ```formatRegExp``` mit ```toLowerCase: true``` hatte keine Wirkung 
   (```kijs.gui.field.Text``` und ```kijs.gui.field.Display```).  
+- ```kijs.gui.field.Display.focus()``` mit ```selectText = true``` führte zu einem Fehler. 
+  Jetzt wird der angezeigte Text markiert.  
 
 
 ## PHP
