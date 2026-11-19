@@ -101,8 +101,8 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
             this._uploadDialog.off(null, null, this);
         }
 
-        this._uploadDialog = val;
-        if (kijs.isDefined(val)) {
+        this._uploadDialog = val || null;
+        if (val) {
             if (!(val instanceof kijs.UploadDialog)) {
                 throw new kijs.Error('uploadDialog must be of type kijs.UploadDialog');
             }
@@ -128,7 +128,8 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // TODO: Umbenennen zu showFileOpenDialog !!!!!
     showFileSelectDialog(multiple=null, directory=null) {
         if (!(this._uploadDialog instanceof kijs.UploadDialog)) {
-            this._uploadDialog = new kijs.UploadDialog();
+            // über den Setter, damit die Listeners gesetzt werden
+            this.uploadDialog = new kijs.UploadDialog();
         }
 
         this._uploadDialog.showFileSelectDialog(multiple, directory);

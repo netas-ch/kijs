@@ -136,6 +136,9 @@ mit **UPDATE TIPP** nötig.
   Linux ist der Wert jetzt immer leer, weil der User-Agent keine Linux-Version enthält.  
 - ```kijs.UploadDialog```: Ohne ```contentTypes``` und ```fileExtensions``` wurde jede Datei 
   abgewiesen. Jetzt sind dann alle Dateien erlaubt.  
+- ```kijs.gui.UploadWindow``` liess sich ohne ```uploadDialog``` nicht erstellen (Fehler 
+  «uploadDialog must be of type kijs.UploadDialog»). Und ```showFileSelectDialog()``` erstellte 
+  den UploadDialog ohne Listeners, sodass das Fenster nie erschien.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
