@@ -399,9 +399,9 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
             // Source Container merken, damit er beim Ziel wieder eingefügt werden kann
             kijs.gui.DragDrop.data.sourceContainer = sourceContainer;
 
-            // Events vom sourceButton entfernen
-            sourceButton.off('click', this.#onTabButtonElClick, this);
-            sourceButton.icon2.off('click', this.#onTabButtonElCloseClick, this);
+            // Alle Listeners dieses Tab-Containers vom sourceButton entfernen
+            // (click, closeClick, closeAllClick, closeOtherClick). Beim Ziel werden sie neu gesetzt.
+            sourceButton.off(null, null, this);
             sourceButton.ddSource.off('drop');
 
             // Container vom alten Ort entfernen
