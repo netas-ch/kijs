@@ -28,9 +28,6 @@
  * @fires escPress  Weitergeleitet vom DOM-Node
  * @fires focus  Weitergeleitet vom DOM-Node
  * @fires keyDown  Weitergeleitet vom DOM-Node
- * @fires keyPress  Soll vom DOM-Node weitergeleitet werden. Achtung: kijs.gui.Dom kennt keyPress nicht,
- *                  mit einem Listener wird darum beim Rendern der kijs.Error
- *                  «kijsEvent "keyPress" is not mapped» geworfen.
  * @fires keyUp  Weitergeleitet vom DOM-Node
  * @fires mouseDown  Weitergeleitet vom DOM-Node
  * @fires mouseEnter  Weitergeleitet vom DOM-Node
@@ -157,7 +154,6 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // key events
         this._eventForwardsAdd('keyDown', this._dom);
         this._eventForwardsAdd('keyUp', this._dom);
-        this._eventForwardsAdd('keyPress', this._dom);
         this._eventForwardsAdd('enterPress', this._dom);
         this._eventForwardsAdd('enterEscPress', this._dom);
         this._eventForwardsAdd('escPress', this._dom);
@@ -335,10 +331,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Zurzeit immer false, weil kijs.gui.Dom keine Eigenschaft isAppended hat.
+     * Hängt der DOM-Node im Dokument? (Im Unterschied zu isRendered, das nur angibt,
+     * ob der Node erstellt ist.)
      * @type {Boolean}
      */
-    get isAppended() { return !!this._dom.isAppended; }
+    get isAppended() { return !!(this._dom.node && this._dom.node.isConnected); }
 
     /**
      * Ist html leer?
@@ -747,52 +744,58 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
     /**
      * Lädt die Config via RPC (rpc, rpcLoadFn) und wendet response.config an. Danach wird
-     * afterLoad ausgelöst. Ohne rpcLoadFn wird nichts geladen und das Promise nie erfüllt.
+     * afterLoad ausgelöst. Ohne rpcLoadFn wird nichts geladen: Es gibt eine Warnung in der
+     * Konsole und das Promise wird sofort mit errorType 'error' erfüllt.
      * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden.
      *                         rpcLoadArgs überschreiben gleichnamige Argumente.
      * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterLoad)
      * @returns {Promise}       Wird mit dem RPC-Ergebnis erfüllt
      */
     load(args=null, superCall=false) {
+        if (!this._rpcLoadFn) {
+            console.warn(`kijs.gui.Element.load(): no rpcLoadFn`, this);
+            return Promise.resolve({
+                response: { errorType: 'error', errorMsg: 'load() without rpcLoadFn' },
+                request: null
+            });
+        }
+
         return new Promise((resolve, reject) => {
-            if (this._rpcLoadFn) {
+            if (!kijs.isObject(args)) {
+                args = {};
+            }
+            args = Object.assign({}, args, this._rpcLoadArgs);
 
-                if (!kijs.isObject(args)) {
-                    args = {};
-                }
-                args = Object.assign({}, args, this._rpcLoadArgs);
+            this.rpc.do({
+                remoteFn: this._rpcLoadFn,
+                owner: this,
+                requestData: args,
+                cancelRunningRpcs: true,
+                waitMaskTarget: this._waitMaskTarget,
+                waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,
+                context: this
 
-                this.rpc.do({
-                    remoteFn: this._rpcLoadFn,
-                    owner: this,
-                    requestData: args,
-                    cancelRunningRpcs: true,
-                    waitMaskTarget: this._waitMaskTarget,
-                    waitMaskTargetDomProperty: this._waitMaskTargetDomProperty,
-                    context: this
-
-                }).then((e) => {
-                    if (kijs.isEmpty(e.response.errorType)) {
-                        // config Properties
-                        if (e.response.config && this._dom) {
-                            // config Properties übernehmen
-                            this.applyConfig(e.response.config);
-                        }
-
-                        // 'afterLoad' auslösen
-                        if (!superCall) {
-                            this.raiseEvent('afterLoad', Object.assign({}, e));
-                        }
+            }).then((e) => {
+                if (kijs.isEmpty(e.response.errorType)) {
+                    // config Properties
+                    if (e.response.config && this._dom) {
+                        // config Properties übernehmen
+                        this.applyConfig(e.response.config);
                     }
 
-                    // promise ausführen
-                    resolve(e);
-                    
-                }).catch((ex) => {
-                    reject(ex);
+                    // 'afterLoad' auslösen
+                    if (!superCall) {
+                        this.raiseEvent('afterLoad', Object.assign({}, e));
+                    }
+                }
 
-                });
-            }
+                // promise ausführen
+                resolve(e);
+
+            }).catch((ex) => {
+                reject(ex);
+
+            });
         });
     }
 

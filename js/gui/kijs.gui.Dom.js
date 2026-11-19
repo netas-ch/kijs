@@ -843,6 +843,7 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @param {Boolean} val
      * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elternelement kommt.
      * @returns {undefined}
+     * @deprecated Stattdessen changeDisabled() verwenden. Für readOnly siehe kijs.gui.field.Field.readOnly.
      */
     changeReadOnly(val, callFromParent) {
         // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
@@ -1011,11 +1012,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
      * @returns {Boolean}
      */
     nodeAttributeHas(name) {
-        if (this._node) {
-            return kijs.isEmpty(this._nodeAttribute[name]);
-        } else {
-            return !!this._nodeAttribute.hasOwnProperty(name);
-        }
+        // _nodeAttribute wird von nodeAttributeSet() auch nach dem Rendern nachgeführt
+        return this._nodeAttribute.hasOwnProperty(name);
     }
 
     /**

@@ -1,11 +1,16 @@
-Neuerungen mit dem Vermerk **UPDATE TIPP:** ... sind nicht rückwärtskompatibel.
-Es sind evtl. Anpassungen am Projekt nötig.
+Versionsnummern
+---------------
+- **Kleine Versionen** (letzte Stelle, z.B. 3.7.0 → 3.7.1) sind rückwärtskompatibel. 
+  Der Code eines Projekts muss nicht angepasst werden.  
+- **Grössere Versionen** (z.B. 3.7.x → 3.8.0) können Anpassungen am Projekt nötig machen. 
+  Diese Neuerungen sind mit **UPDATE TIPP:** ... gekennzeichnet und beschreiben, was 
+  anzupassen ist.  
 
 
 Version 3.7.1
 =============
-Diese Version enthält keine funktionalen Änderungen an kijs. Neu sind vor allem 
-die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.  
+Neu sind vor allem die Dokumentation und die Home-App. An kijs selbst gibt es nur 
+Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.  
 
 
 ## Home-App: API-Dokumentation
@@ -64,6 +69,8 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
   - ```kijs.getGetParameter()```: stattdessen ```kijs.Navigator.getGetParameter()``` 
     verwenden.  
   - ```kijs.gui.field.CheckboxGroup.checkedValues```: stattdessen ```value``` verwenden.  
+  - ```kijs.gui.Dom.changeReadOnly()```: macht dasselbe wie ```changeDisabled()```, 
+    stattdessen ```changeDisabled()``` verwenden.  
   - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
     ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
     Die Warnung in der Konsole war verdreht und ist korrigiert.  
@@ -73,6 +80,19 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
   Die Übersetzungen für ```%1 Element``` und ```%1 Elemente``` standen nur in den 
   JS-Dateien und sind jetzt auch in den Quelldateien ```kijs_en.php``` und 
   ```kijs_fr.php``` eingetragen, damit sie beim Erzeugen nicht verloren gehen.  
+- Fehlende Übersetzung «Schreiben für Daten» (```kijs.gui.field.Combo```) ergänzt.  
+
+
+## Fehlerbehebungen
+- ```kijs.gui.Dom.nodeAttributeHas()``` gab nach dem Rendern das umgekehrte Resultat zurück.  
+- ```kijs.gui.Element```: Das Event ```keyPress``` wurde weitergeleitet, war aber in 
+  ```kijs.gui.Dom``` nicht vorhanden; ein Listener führte beim Rendern zu einem Fehler. 
+  Die Weiterleitung ist entfernt (stattdessen ```keyDown``` verwenden).  
+- ```kijs.gui.Element.isAppended``` war immer ```false```. Gibt jetzt an, ob der Node 
+  im Dokument hängt.  
+- ```kijs.gui.Element.load()``` ohne ```rpcLoadFn``` gab ein Promise zurück, das nie 
+  erfüllt wurde. Jetzt wird es sofort mit ```response.errorType = 'error'``` erfüllt 
+  und in der Konsole erscheint eine Warnung.  
 
 
 ## PHP
