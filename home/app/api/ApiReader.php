@@ -64,7 +64,8 @@ class ApiReader {
 
         // Einträge inkl. vererbte
         $rows = $this->_query("
-            SELECT m.*, src.name AS ownerClass, src.file AS file, inh.name AS inheritedFrom
+            SELECT m.*, src.name AS ownerClass, src.file AS file, inh.name AS inheritedFrom,
+                cm.defaultValue AS classDefaultValue
             FROM class_member cm
             JOIN member m ON m.memberId = cm.memberId
             JOIN class src ON src.classId = m.classId
@@ -95,6 +96,14 @@ class ApiReader {
             }
             $r->examples = json_decode($r->examples ?? '[]');
             $r->raisedIn = json_decode($r->raisedIn ?? '[]');
+
+            // Geerbte Config: Standardwert, den diese Klasse (bzw. eine dazwischen) überschreibt
+            if ($r->classDefaultValue !== null) {
+                $r->defaultValue = $r->classDefaultValue;
+                $r->defaultFrom = null;
+            }
+            unset($r->classDefaultValue);
+
             switch ($r->kind) {
                 case 'property':
                     $cls->properties[] = $r;

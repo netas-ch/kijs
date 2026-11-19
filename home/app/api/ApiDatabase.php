@@ -97,6 +97,7 @@ class ApiDatabase {
                 isDocumented INTEGER,       -- nur Events: mit @fires dokumentiert
                 type TEXT,                  -- Typ bzw. Rückgabetyp
                 defaultValue TEXT,
+                defaultFrom TEXT,           -- weitergeleiteter Standardwert: Quelle, z.B. 'kijs.gui.Icon.iconCls'
                 description TEXT,           -- Markdown
                 returnsDescription TEXT,
                 deprecated TEXT,
@@ -128,10 +129,13 @@ class ApiDatabase {
 
             -- Alle Einträge einer Klasse inkl. vererbte
             -- inheritedFromClassId ist NULL bei eigenen Einträgen
+            -- defaultValue: Standardwert einer geerbten Config, den die Klasse (oder eine
+            -- Klasse dazwischen) in ihrem _defaultConfig überschreibt, sonst NULL
             CREATE TABLE class_member (
                 classId INTEGER REFERENCES class(classId),
                 memberId INTEGER REFERENCES member(memberId),
                 inheritedFromClassId INTEGER,
+                defaultValue TEXT,
                 PRIMARY KEY (classId, memberId)
             );
 
@@ -176,13 +180,14 @@ class ApiDatabase {
         $insClass = $this->_pdo->prepare('INSERT INTO class (name, nameInt, namespace, extends, module, description, examples, see, deprecated, hasDocComment, hasOldHeader, file, line)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $insMember = $this->_pdo->prepare('INSERT INTO member (classId, name, kind, visibility, isConfig, hasGetter, hasSetter, isReadOnly, isStatic, isAsync, isOverwrite,
-            isForwarded, isDocumented, type, defaultValue, description, returnsDescription, deprecated, examples, configTarget, configFn, configContext, configPrio,
+            isForwarded, isDocumented, type, defaultValue, defaultFrom, description, returnsDescription, deprecated, examples, configTarget, configFn, configContext, configPrio,
             raisedIn, docSource, docFrom, line, configLine)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $insArg = $this->_pdo->prepare('INSERT INTO argument (memberId, idx, name, type, isOptional, defaultValue, description, isDocumented) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
 
         $classIds = [];     // Name -> classId
         $ownMembers = [];   // classId -> [key -> memberId]
+        $configNames = [];  // memberId -> Name (nur Configs, für die Standardwerte der abgeleiteten Klassen)
 
         foreach ($classes as $cls) {
             $insClass->execute([
@@ -198,17 +203,21 @@ class ApiDatabase {
                 $insMember->execute([
                     $classId, $p->name, 'property', $p->visibility, (int)$p->isConfig, (int)$p->hasGetter, (int)$p->hasSetter,
                     (int)$p->isReadOnly, (int)$p->isStatic, 0, (int)$p->isOverwrite, null, null,
-                    $p->type, $p->defaultValue, $p->description, null, $p->deprecated, null,
+                    $p->type, $p->defaultValue, $p->defaultFrom ?? null, $p->description, null, $p->deprecated, null,
                     $p->config->target ?? null, $p->config->fn ?? null, $p->config->context ?? null, $p->config->prio ?? null,
                     null, $p->docSource, $p->docFrom ?? null, $p->line, $p->configLine
                 ]);
-                $ownMembers[$classId][$this->_key('property', $p->name, $p->isStatic)] = (int)$this->_pdo->lastInsertId();
+                $memberId = (int)$this->_pdo->lastInsertId();
+                $ownMembers[$classId][$this->_key('property', $p->name, $p->isStatic)] = $memberId;
+                if ($p->isConfig) {
+                    $configNames[$memberId] = $p->name;
+                }
             }
 
             foreach ($cls->functions as $f) {
                 $insMember->execute([
                     $classId, $f->name, 'function', $f->visibility, 0, 0, 0, 0, (int)$f->isStatic, (int)$f->isAsync, (int)$f->isOverwrite,
-                    null, null, $f->returns->type ?? null, null, $f->description, $f->returns->description ?? null, $f->deprecated,
+                    null, null, $f->returns->type ?? null, null, null, $f->description, $f->returns->description ?? null, $f->deprecated,
                     $this->_json($f->examples), null, null, null, null, null, $f->docSource, $f->docFrom ?? null, $f->line, null
                 ]);
                 $memberId = (int)$this->_pdo->lastInsertId();
@@ -221,7 +230,7 @@ class ApiDatabase {
             foreach ($cls->events as $e) {
                 $insMember->execute([
                     $classId, $e->name, 'event', 'public', 0, 0, 0, 0, 0, 0, 0, (int)$e->isForwarded, (int)$e->isDocumented,
-                    null, null, $e->description, null, null, null, null, null, null, null,
+                    null, null, null, $e->description, null, null, null, null, null, null, null,
                     $this->_json($e->raisedIn), $e->isDocumented ? (isset($e->docFrom) ? 'base' : 'jsdoc') : null, $e->docFrom ?? null, null, null
                 ]);
                 $ownMembers[$classId][$this->_key('event', $e->name, false)] = (int)$this->_pdo->lastInsertId();
@@ -230,7 +239,9 @@ class ApiDatabase {
 
         // Vererbung: alle Einträge inkl. der Basisklassen. Der Eintrag der
         // abgeleiteten Klasse überschreibt den gleichnamigen der Basisklasse.
-        $insClassMember = $this->_pdo->prepare('INSERT INTO class_member (classId, memberId, inheritedFromClassId) VALUES (?, ?, ?)');
+        // Bei geerbten Configs gilt der Standardwert aus dem _defaultConfig der
+        // nächsten Klasse unterhalb der Basisklasse, die ihn überschreibt.
+        $insClassMember = $this->_pdo->prepare('INSERT INTO class_member (classId, memberId, inheritedFromClassId, defaultValue) VALUES (?, ?, ?, ?)');
         $byName = [];
         foreach ($classes as $cls) {
             $byName[$cls->name] = $cls;
@@ -238,19 +249,30 @@ class ApiDatabase {
         foreach ($classes as $cls) {
             $classId = $classIds[$cls->name];
             $all = [];
+            $defaults = [];     // _defaultConfig der bisher durchlaufenen (abgeleiteten) Klassen
             $cur = $cls;
             $guard = 0;
             while ($cur && $guard++ < 50) {
                 $curId = $classIds[$cur->name];
                 foreach ($ownMembers[$curId] as $key => $memberId) {
                     if (!isset($all[$key])) {
-                        $all[$key] = [$memberId, $curId === $classId ? null : $curId];
+                        $fromId = $curId === $classId ? null : $curId;
+                        $default = null;
+                        if ($fromId !== null && isset($configNames[$memberId]) && array_key_exists($configNames[$memberId], $defaults)) {
+                            $default = $defaults[$configNames[$memberId]];
+                        }
+                        $all[$key] = [$memberId, $fromId, $default];
+                    }
+                }
+                foreach ((array)($cur->defaultConfig ?? []) as $name => $value) {
+                    if (!array_key_exists($name, $defaults)) {
+                        $defaults[$name] = $value;
                     }
                 }
                 $cur = $byName[$cur->extends] ?? null;
             }
-            foreach ($all as [$memberId, $fromId]) {
-                $insClassMember->execute([$classId, $memberId, $fromId]);
+            foreach ($all as [$memberId, $fromId, $default]) {
+                $insClassMember->execute([$classId, $memberId, $fromId, $default]);
             }
         }
 

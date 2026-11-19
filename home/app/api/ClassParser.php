@@ -7,7 +7,10 @@ declare(strict_types=1);
  * «Kommentare»:
  *  - Klassenkommentar (JSDoc) mit Beschreibung, @example und @fires
  *  - Config-Eigenschaften aus der _configMap mit Kommentar // {Typ} Text
- *  - Standardwerte aus _defaultConfig
+ *  - Standardwerte aus _defaultConfig, sonst aus der Zuweisung this._name = Wert im Constructor
+ *    (nur einfache Werte wie null, true, false, Zahlen, Strings, [] und {}). Bei Configs, die an
+ *    ein Unterelement weitergeleitet werden (context), wird die Klasse des Unterelements aus
+ *    this._xyEl = new Klasse({...}) gemerkt (defaultForward, aufgelöst im ProjectParser).
  *  - Getter/Setter mit JSDoc beim Getter (@type)
  *  - Funktionen mit JSDoc (@param, @returns), // overwrite
  *  - Events aus raiseEvent() und _eventForwardsAdd()
@@ -102,10 +105,11 @@ class ClassParser {
      * @param array $members
      * @param array $configMap
      * @param array $defaultConfig
+     * @param stdClass $fields  Zuweisungen im Constructor {values, types}, siehe _findFieldAssignments()
      * @param array $events
      * @return stdClass
      */
-    protected function _buildClass(stdClass $cls, array $members, array $configMap, array $defaultConfig, array $events): stdClass {
+    protected function _buildClass(stdClass $cls, array $members, array $configMap, array $defaultConfig, stdClass $fields, array $events): stdClass {
         $properties = [];
         $functions = [];
 
@@ -169,6 +173,45 @@ class ClassParser {
             }
         }
 
+        // Configs ohne _defaultConfig: Standardwert aus der Zuweisung im Constructor
+        // (Feld _name bzw. das Feld des Setters target). Nicht bei Weiterleitung an eine
+        // Funktion (fn). Bei Weiterleitung an ein Unterelement (context) wird der Wert aus dem
+        // Config-Objekt bei new Klasse({...}) genommen oder später im ProjectParser aufgelöst.
+        foreach ($properties as $name => $prop) {
+            if (!$prop->isConfig || $prop->defaultValue !== null || array_key_exists($name, $defaultConfig)) {
+                continue;
+            }
+            $map = $prop->config;
+            if (!empty($map->fn)) {
+                continue;
+            }
+            $target = ltrim((string)($map->target ?? ''), '_');
+            if (!preg_match('/^[A-Za-z0-9]+$/', $target)) {
+                $target = $name;
+            }
+
+            // Weiterleitung an ein Unterelement: this._xyEl
+            if (!empty($map->context) && $map->context !== 'this') {
+                $field = preg_match('/^this\.(_[A-Za-z0-9]+)$/', (string)$map->context, $m) ? $m[1] : null;
+                $type = $field ? ($fields->types[$field] ?? null) : null;
+                if ($type) {
+                    if (array_key_exists($target, $type->config)) {
+                        $prop->defaultValue = $type->config[$target];
+                    } else {
+                        $prop->defaultForward = (object)['class' => $type->class, 'member' => $target];
+                    }
+                }
+                continue;
+            }
+
+            foreach (array_unique(['_' . $name, '_' . $target]) as $field) {
+                if (array_key_exists($field, $fields->values)) {
+                    $prop->defaultValue = $fields->values[$field];
+                    break;
+                }
+            }
+        }
+
         // Aufbereiten
         $propList = [];
         foreach ($properties as $prop) {
@@ -224,10 +267,31 @@ class ClassParser {
         $result->hasOldHeader = $cls->doc->hasOldHeader ?? false;
         $result->file = $this->_file;
         $result->line = $cls->line;
+        $result->defaultConfig = (object)$defaultConfig;  // für geerbte Configs (siehe ApiDatabase)
         $result->properties = $propList;
         $result->functions = $functions;
         $result->events = array_values($eventList);
         return $result;
+    }
+
+    /**
+     * Enthält ein Element (rekursiv) eine Variable, deren Name auf $suffix endet?
+     * @param stdClass $el
+     * @param string $suffix  z.B. 'applyConfig'
+     * @return bool
+     */
+    protected function _containsVariable(stdClass $el, string $suffix): bool {
+        if ($el->type === 'variable' && str_ends_with((string)($el->name ?? ''), $suffix)) {
+            return true;
+        }
+        if ($el->type !== 'string') {
+            foreach ($el->elements ?? [] as $child) {
+                if ($this->_containsVariable($child, $suffix)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -305,6 +369,8 @@ class ClassParser {
             'isOverwrite' => false,
             'config' => null,
             'defaultValue' => null,
+            'defaultForward' => null,   // {class, member}: Standardwert kommt aus einem Unterelement
+            'defaultFrom' => null,      // 'kijs.gui.Icon.iconCls': Quelle des weitergeleiteten Standardwerts
             'doc' => null,
             'docFrom' => null,
             'docSource' => null,
@@ -394,6 +460,61 @@ class ClassParser {
                 }
             }
         }
+    }
+
+    /**
+     * Liest die Zuweisungen this._name = ... im Constructor vor applyConfig() (nur auf oberster Ebene)
+     *  - values: einfache Werte (null, true, false, Zahlen, Strings, [] und {})
+     *  - types:  Unterelemente this._xyEl = new Klasse({...}) mit Klasse und den einfachen Werten
+     *            im Config-Objekt
+     * @param stdClass $body  Körper des Constructors
+     * @return stdClass  {values: Feldname -> Wert, types: Feldname -> {class, config}}
+     */
+    protected function _findFieldAssignments(stdClass $body): stdClass {
+        $simple = '/^(null|true|false|-?\d+(\.\d+)?|\'[^\'\n]*\'|"[^"\n]*"|\[\s*\]|\{\s*\})$/';
+        $result = (object)['values' => [], 'types' => []];
+        foreach ($body->elements ?? [] as $cmd) {
+            if ($cmd->type !== 'command') {
+                continue;
+            }
+            // Nach applyConfig() gesetzte Werte sind keine Standardwerte mehr
+            if ($this->_containsVariable($cmd, 'applyConfig')) {
+                break;
+            }
+            $tokens = $this->_withoutComments($cmd->elements ?? []);
+            if (count($tokens) < 3 || $tokens[0]->type !== 'variable' || !str_starts_with((string)$tokens[0]->name, 'this._')
+                    || $tokens[1]->type !== 'operator' || $tokens[1]->name !== '=') {
+                continue;
+            }
+            $field = substr((string)$tokens[0]->name, 5);   // ohne 'this.'
+            if (array_key_exists($field, $result->values) || isset($result->types[$field])) {
+                continue;
+            }
+
+            // Unterelement: new Klasse({...})
+            if ($tokens[2]->type === 'keyword' && $tokens[2]->name === 'new'
+                    && isset($tokens[3]) && $tokens[3]->type === 'variable') {
+                $config = [];
+                $group = $tokens[4] ?? null;
+                $obj = $group && $group->type === 'group' ? ($this->_withoutComments($group->elements ?? [])[0] ?? null) : null;
+                if ($obj && $obj->type === 'commandGroup') {
+                    foreach ($this->_parseObjectLiteral($obj) as $entry) {
+                        $v = trim((string)$entry->value);
+                        if (preg_match($simple, $v)) {
+                            $config[$entry->name] = $v;
+                        }
+                    }
+                }
+                $result->types[$field] = (object)['class' => (string)$tokens[3]->name, 'config' => $config];
+                continue;
+            }
+
+            $value = rtrim($this->_text($tokens[2], end($tokens)), "; \t\r\n");
+            if (preg_match($simple, $value)) {
+                $result->values[$field] = $value;
+            }
+        }
+        return $result;
     }
 
     /**
@@ -544,9 +665,11 @@ class ClassParser {
         // Configs aus dem Constructor
         $configMap = [];
         $defaultConfig = [];
+        $fields = (object)['values' => [], 'types' => []];
         foreach ($members as $mem) {
             if ($mem->kind === 'method' && $mem->name === 'constructor') {
                 $this->_findConfigs($mem->body, $configMap, $defaultConfig);
+                $fields = $this->_findFieldAssignments($mem->body);
             }
         }
 
@@ -558,7 +681,7 @@ class ClassParser {
             }
         }
 
-        return $this->_buildClass($cls, $members, $configMap, $defaultConfig, $events);
+        return $this->_buildClass($cls, $members, $configMap, $defaultConfig, $fields, $events);
     }
 
     /**

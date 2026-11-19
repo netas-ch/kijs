@@ -91,7 +91,10 @@ Jeder Eintrag zeigt in der Kopfzeile Name, Tags und Typ. Ein Klick klappt ihn au
 
 **Aufgeklappt** werden je nach Art angezeigt:  
 - Beschreibung (Markdown, mit Syntax-Highlighting in Code-Blöcken)  
-- Typ und Standardwert (aus ```_defaultConfig```)  
+- Typ und Standardwert (aus ```_defaultConfig```, sonst aus der Zuweisung im Constructor; bei 
+  vererbten Configs der Wert, den die Klasse in ihrem ```_defaultConfig``` überschreibt; bei 
+  Configs, die an ein Unterelement weitergeleitet werden, der Standardwert dort mit Link auf 
+  die Quelle)  
 - Argumente mit Typ, Standardwert und Beschreibung, Rückgabewert  
 - bei vererbten Einträgen: von welcher Klasse  
 - bei Configs mit Weiterleitung: Ziel (z.B. ```caption``` → ```_captionDom.html```)  
@@ -136,7 +139,7 @@ Theme passen.
 | Beschreibung, Beispiel | Klassenkommentar (```/** ... */``` über der Klasse), ```@example``` |
 | Events                 | ```@fires``` im Klassenkommentar; zusätzlich werden ```raiseEvent('xy')``` und ```_eventForwardsAdd('xy', ...)``` im Code gesucht |
 | Config-Eigenschaften   | Einträge in ```_configMap``` (inkl. ```Object.assign(this._configMap, ...)```), Kommentar ```// {Typ} Text``` |
-| Standardwerte          | ```_defaultConfig```                                              |
+| Standardwerte          | ```_defaultConfig```, sonst ```this._name = Wert``` im Constructor vor ```applyConfig()``` (nur einfache Werte wie ```null```, ```true```, Zahlen, Strings, ```[]```, ```{}```). Bei Configs, die an ein Unterelement weitergeleitet werden (```context: this._xyEl```), gilt der Wert im Config-Objekt bei ```this._xyEl = new Klasse({...})```, sonst der Standardwert des Ziels in dieser Klasse (auch über mehrere Stufen). Configs mit ```fn``` und Setter ohne Feld (z.B. ```placeholder```) erhalten keinen Standardwert; hier hilft ```Default: …``` im Kommentar. |
 | Getter/Setter          | ```get xy()``` / ```set xy()```, JSDoc beim Getter (```@type```) |
 | Funktionen             | Methoden ohne ```_``` und ```#```, JSDoc (```@param```, ```@returns```) |
 | static, overwrite      | Schlüsselwort ```static```, Kommentar ```// overwrite```         |

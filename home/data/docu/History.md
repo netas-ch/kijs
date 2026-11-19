@@ -35,6 +35,12 @@ mit **UPDATE TIPP** nötig.
   Leitfäden sind mit der API verlinkt.  
 - Showcase: Jede Seite hat rechts in der Kopfzeile einen Button «API», der die 
   API-Dokumentation der gezeigten Klasse öffnet (bei mehreren Klassen über ein Menü).  
+- API: Standardwerte der Configs werden neu auch aus den Zuweisungen im Constructor gelesen 
+  (z.B. ```this._columns = 1;```), nicht mehr nur aus ```_defaultConfig```. Bei vererbten Configs 
+  zeigt die Klassenseite den Standardwert, den die Klasse überschreibt (z.B. 
+  ```kijs.gui.field.CheckboxGroup.selectType``` = ```'simple-multi'```). Configs, die an ein 
+  Unterelement weitergeleitet werden, zeigen dessen Standardwert mit Link auf die Quelle (z.B. 
+  ```kijs.gui.Button.iconCls``` von ```kijs.gui.Icon.iconCls```).  
 - Showcase grid Grid: Sortieren und alle Filter (Text, Zahl, Datum, Checkbox, Icon und 
   Auswahl fester Werte) funktionieren jetzt, da die Testdaten auf dem Server gefiltert, 
   sortiert und mit Total zurückgegeben werden. Neue Spalte «Status» (iconMapField) und 

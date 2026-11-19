@@ -146,6 +146,9 @@ class ProjectParser {
             }
         }
 
+        // Standardwerte von Configs, die an ein Unterelement weitergeleitet werden
+        $this->_resolveForwardedDefaults($byName);
+
         // Lückenbericht
         $issues = [];
         foreach ($byName as $cls) {
@@ -162,6 +165,33 @@ class ProjectParser {
     // --------------------------------------------------------------
     // PROTECTED
     // --------------------------------------------------------------
+    /**
+     * Gibt den Standardwert einer Eigenschaft zurück, wie er in einer Klasse gilt: _defaultConfig
+     * der Klasse oder einer Basisklasse (die unterste gewinnt), sonst der Standardwert der
+     * Eigenschaft selbst (eigene oder geerbte).
+     * @param array $byName
+     * @param string $className
+     * @param string $name
+     * @return string|null
+     */
+    protected function _effectiveDefault(array $byName, string $className, string $name): ?string {
+        $guard = 0;
+        $cur = $byName[$className] ?? null;
+        while ($cur && $guard++ < 50) {
+            $defaultConfig = (array)($cur->defaultConfig ?? []);
+            if (array_key_exists($name, $defaultConfig)) {
+                return (string)$defaultConfig[$name];
+            }
+            foreach ($cur->properties as $prop) {
+                if ($prop->name === $name && !$prop->isStatic && $prop->defaultValue !== null) {
+                    return (string)$prop->defaultValue;
+                }
+            }
+            $cur = $byName[$cur->extends] ?? null;
+        }
+        return null;
+    }
+
     /**
      * Sucht ein dokumentiertes Event mit dem gleichen Namen in den Basisklassen
      * @param array $byName
@@ -254,6 +284,36 @@ class ProjectParser {
         }
 
         return $issues;
+    }
+
+
+    /**
+     * Löst die Standardwerte der Configs auf, die an ein Unterelement weitergeleitet werden
+     * (defaultForward aus dem ClassParser): Der Wert ist der Standardwert des Ziels in der Klasse
+     * des Unterelements. In mehreren Durchgängen, damit auch Ketten aufgelöst werden.
+     * @param array $byName
+     */
+    protected function _resolveForwardedDefaults(array $byName): void {
+        for ($pass = 0; $pass < 5; $pass++) {
+            $changed = false;
+            foreach ($byName as $cls) {
+                foreach ($cls->properties as $prop) {
+                    $fwd = $prop->defaultForward ?? null;
+                    if (!$fwd || $prop->defaultValue !== null) {
+                        continue;
+                    }
+                    $value = $this->_effectiveDefault($byName, $fwd->class, $fwd->member);
+                    if ($value !== null) {
+                        $prop->defaultValue = $value;
+                        $prop->defaultFrom = $fwd->class . '.' . $fwd->member;
+                        $changed = true;
+                    }
+                }
+            }
+            if (!$changed) {
+                break;
+            }
+        }
     }
 
 }

@@ -301,7 +301,13 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
                 rows.push(['Typ', this._getTypeHtml(m.type)]);
             }
             if (m.defaultValue !== null) {
-                rows.push(['Standardwert', '<code>' + esc(m.defaultValue) + '</code>']);
+                let dflt = '<code>' + esc(m.defaultValue) + '</code>';
+                // weitergeleitet an ein Unterelement: Quelle anzeigen
+                if (m.defaultFrom) {
+                    const pos = m.defaultFrom.lastIndexOf('.');
+                    dflt += ' (von ' + this._getClassLinkHtml(m.defaultFrom.substring(0, pos), m.defaultFrom.substring(pos + 1)) + ')';
+                }
+                rows.push(['Standardwert', dflt]);
             }
             if (m.isConfig && (m.configContext || m.configFn || (m.configTarget && m.configTarget !== m.name && m.configTarget !== '_' + m.name))) {
                 rows.push(['Config-Ziel', this._getConfigTargetHtml(m)]);
