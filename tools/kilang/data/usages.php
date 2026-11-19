@@ -215,8 +215,12 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/field/kijs.gui.field.Checkbox.js" => [423], 
+    "../../js/gui/field/kijs.gui.field.Checkbox.js" => [422], 
     "../../js/gui/field/kijs.gui.field.Field.js" => [982], 
+    "../../js/gui/field/kijs.gui.field.Switch.js" => [485]
+   ], 
+   "usagesJsOld" => [
+    "../../js/gui/field/kijs.gui.field.Checkbox.js" => [423], 
     "../../js/gui/field/kijs.gui.field.Switch.js" => [479]
    ]
   ]
@@ -429,6 +433,24 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/field/kijs.gui.field.Url.js" => [33]
+   ]
+  ]
+ ], 
+
+ "Max. %1 dürfen ausgewählt werden" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.ListView.js" => [284, 287]
+   ]
+  ]
+ ], 
+
+ "Min. %1 müssen ausgewählt werden" => [
+  "" => [
+   "fuzzy" => [true], 
+   "usagesJs" => [
+    "../../js/gui/field/kijs.gui.field.ListView.js" => [271, 274]
    ]
   ]
  ], 

@@ -58,6 +58,8 @@ kijs.translation["fr"] = {
     "Kleiner als...": "Plus petit que...",
     "Leeren": "Vider",
     "Link in neuem Tab \u00f6ffnen": "Ouvrir le lien dans un nouvel onglet",
+    "Max. %1 d\u00fcrfen ausgew\u00e4hlt werden": "Au maximum %1 peuvent \u00eatre s\u00e9lectionn\u00e9s",
+    "Min. %1 m\u00fcssen ausgew\u00e4hlt werden": "Au moins %1 doivent \u00eatre s\u00e9lectionn\u00e9s",
     "Nein": "Non",
     "OK": "OK",
     "Schliessen": "Fermer",

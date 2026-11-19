@@ -268,10 +268,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
             if (kijs.isArray(value)) {
                 if (value.length < minSelectCount) {
-                    this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+                    this._errors.push(kijs.getText('Min. %1 müssen ausgewählt werden', '', minSelectCount));
                 }
             } else if (kijs.isEmpty(value) && minSelectCount > 0) {
-                this._errors.push(`Min. ${minSelectCount} müssen ausgewählt werden`);
+                this._errors.push(kijs.getText('Min. %1 müssen ausgewählt werden', '', minSelectCount));
             }
         }
 
@@ -281,10 +281,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
 
             if (kijs.isArray(value)) {
                 if (value.length > maxSelectCount) {
-                    this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+                    this._errors.push(kijs.getText('Max. %1 dürfen ausgewählt werden', '', maxSelectCount));
                 }
             } else if (!kijs.isEmpty(value) && maxSelectCount < 1) {
-                this._errors.push(`Max. ${maxSelectCount} dürfen ausgewählt werden`);
+                this._errors.push(kijs.getText('Max. %1 dürfen ausgewählt werden', '', maxSelectCount));
             }
         }
     }

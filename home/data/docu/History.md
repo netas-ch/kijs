@@ -112,6 +112,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.field.ListView``` leitete die Events ```ddOver``` und ```ddDrop``` weiter, die nie 
   ausgelöst wurden; ein Listener auf ```ddDrop``` führte beim Rendern zu einem Fehler. Die 
   Weiterleitungen sind entfernt.  
+- ```kijs.gui.field.ListView``` (auch CheckboxGroup und OptionGroup): Die Meldungen von 
+  ```minSelectCount``` und ```maxSelectCount``` waren nicht übersetzbar und sind jetzt 
+  auch auf Englisch und Französisch vorhanden.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
