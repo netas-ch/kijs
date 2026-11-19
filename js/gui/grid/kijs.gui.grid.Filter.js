@@ -228,7 +228,7 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
             }, this);
 
         }
-        if ('position' in e) {
+        if ('newPosition' in e) {
             this.render();
         }
     }

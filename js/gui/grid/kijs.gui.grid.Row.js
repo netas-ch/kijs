@@ -313,7 +313,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
             }, this);
 
         }
-        if ('position' in e) {
+        if ('newPosition' in e) {
             this.render();
         }
     }

@@ -284,7 +284,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
         }
         if (!kijs.isEmpty(e.oldPosition) && !kijs.isEmpty(e.newPosition)) {
-            kijs.Array.move(this.parent.columnConfigs, e.oldPosition, e.newPosition);
+            // kijs.Array.move() fügt vor dem Element am Zielindex ein. Beim Verschieben nach
+            // rechts darum +1, damit die Spalte danach genau auf newPosition steht.
+            const toIndex = e.newPosition > e.oldPosition ? e.newPosition + 1 : e.newPosition;
+            kijs.Array.move(this.parent.columnConfigs, e.oldPosition, toIndex);
             this.render();
         }
     }

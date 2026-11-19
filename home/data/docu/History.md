@@ -141,6 +141,9 @@ mit **UPDATE TIPP** nötig.
   den UploadDialog ohne Listeners, sodass das Fenster nie erschien.  
 - ```kijs.gui.ProgressBar```: Mit einem verbundenen ```kijs.UploadDialog``` wurde der 
   Fortschritt nie angezeigt, weil die Listeners noch die alten Event-Argumente erwarteten.  
+- ```kijs.gui.grid.Grid```: Beim Verschieben einer Spalte (```columnConfig.position``` bzw. 
+  Spaltenfenster) gingen die Zellen der Zeilen und die Filter nicht mit, und beim Verschieben 
+  nach rechts landete die Spalte eine Position zu weit links.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
