@@ -3,7 +3,23 @@
 // --------------------------------------------------------------
 // kijs.gui.Menu
 // --------------------------------------------------------------
-
+/**
+ * Dropdown-Menü (abgeleitet von kijs.gui.SpinBox). Die Elemente sind standardmässig Buttons
+ * (kijs.gui.Button). Ein Button mit der Eigenschaft menu öffnet ein Untermenü. Meist wird das Menü
+ * über die Eigenschaft menu eines kijs.gui.Button erstellt.
+ *
+ * @example
+ * new kijs.gui.Button({
+ *     caption: 'Datei',
+ *     menu: {
+ *         closeOnClick: true,
+ *         elements: [
+ *             { caption: 'Öffnen', on: { click: function() { ... } } },
+ *             { caption: 'Zuletzt geöffnet', menu: { elements: [ ... ] } }
+ *         ]
+ *     }
+ * });
+ */
 kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
 
 
@@ -66,6 +82,11 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button, der das Menü per Klick öffnet und schliesst. Das Menü wird an ihm ausgerichtet.
+     * Nur kijs.gui.Button, sonst kijs.Error.
+     * @type {kijs.gui.Button|null}
+     */
     get button() { return this._button; }
     set button(val) {
         if (!(val instanceof kijs.gui.Button)) {
@@ -84,6 +105,11 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         this.ownerNodeAdd(this._button);
     }
 
+    /**
+     * Alle Menüs schliessen, wenn auf einen Button ohne Untermenü geklickt wird? Wird an die Untermenüs
+     * weitergegeben. Default: false
+     * @type {Boolean}
+     */
     get closeOnClick() { return this._closeOnClick; }
     set closeOnClick(val) {
         val = !!val;
@@ -110,6 +136,11 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         this._closeOnClick = val;
     }
 
+    /**
+     * Richtung, in die das Menü geöffnet wird: 'left', 'right', 'up', 'down' oder 'auto' (unter dem
+     * Button bzw. in einem Untermenü rechts). Andere Werte werfen einen kijs.Error. Default: 'auto'
+     * @type {String}
+     */
     get direction() { return this._direction; }
     set direction(val) {
         // auto: Falls der Button nicht im Menu ist, nach unten, sonst nach rechts
@@ -148,6 +179,11 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         this._direction = val;
     }
 
+    /**
+     * Menü öffnen, wenn die Maus 500 ms über dem Button ist? 'auto' = nur bei Untermenüs. Wirkt nur
+     * mit button. Default: 'auto'
+     * @type {Boolean}
+     */
     get expandOnHover() { return this._expandOnHover; }
     set expandOnHover(val) {
         if (this._button) {
@@ -249,7 +285,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
         }
     }
     
-    // overwerite
+    // overwrite
     unrender(superCall) {
         // timer abbrechen
         if (this._expandDeferId) {
@@ -305,7 +341,7 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
-    // overwerite
+    // overwrite
     destruct(superCall) {
         if (!superCall) {
             // unrender

@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.Row
 // --------------------------------------------------------------
+/**
+ * Zeile (tr) von kijs.gui.grid.Grid mit einer Zelle pro Spalte (columnConfigs des Grids). Die Zellen
+ * werden beim Rendern erstellt und nach der Position der Spalten sortiert.
+ *
+ * @fires change  Wird von einer Zelle ausgelöst, wenn sich ihr Wert ändert. e: value, valueDisplay, cell
+ */
 kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
 
@@ -26,7 +32,7 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            dataRow: true
+            dataRow: true     // {Object} Datensatz der Zeile
         });
 
         // Config anwenden
@@ -41,6 +47,10 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Zellen der Zeile in der aktuellen Reihenfolge
+     * @type {kijs.gui.grid.cell.Cell[]}
+     */
     get cells() {
         let cells = [];
         for (let i=0; i<this._cells.length; i++) {
@@ -49,6 +59,10 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         return cells;
     }
 
+    /**
+     * Ist die Zeile die aktuelle (CSS-Klasse kijs-current)?
+     * @type {Boolean}
+     */
     get current() { return !!this._dom.clsHas('kijs-current'); }
     set current(val) {
         if (val) {
@@ -58,15 +72,31 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Datensatz der Zeile (siehe auch updateDataRow())
+     * @type {Object|null}
+     */
     get dataRow() { return this._dataRow; }
     set dataRow(val) { this._dataRow = val; }
 
+    /**
+     * Grid der Zeile (parent)
+     * @type {kijs.gui.grid.Grid}
+     */
     get grid() { return this.parent; }
     
+    /**
+     * Hat die Zeile einen geraden Index (0, 2, 4 …)?
+     * @type {Boolean}
+     */
     get impair() {
         return this.rowIndex % 2 === 0;
     }
 
+    /**
+     * Wurde eine Zelle der Zeile geändert?
+     * @type {Boolean}
+     */
     get isDirty() {
         let isDirty = false;
         kijs.Array.each(this._cells, function(cell) {
@@ -94,10 +124,18 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         return this.grid.rows[i];
     }
 
+    /**
+     * Index der Zeile in den rows des Grids
+     * @type {Number}
+     */
     get rowIndex() {
         return this.grid.rows.indexOf(this);
     }
 
+    /**
+     * Ist die Zeile selektiert (CSS-Klasse kijs-selected)?
+     * @type {Boolean}
+     */
     get selected() { return !!this._dom.clsHas('kijs-selected'); }
     set selected(val) {
         if (val) {
@@ -208,6 +246,11 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Erstellt für jede Spalte ohne Zelle eine neue Zelle (xtype aus cellConfig) und lädt ihren Wert aus
+     * der dataRow. Wirft einen kijs.Error bei ungültigem xtype.
+     * @returns {undefined}
+     */
     _createCells() {
         let newColumnConfigs = [];
 
@@ -241,6 +284,10 @@ kijs.gui.grid.Row = class kijs_gui_grid_Row extends kijs.gui.Element {
         }, this);
     }
 
+    /**
+     * Sortiert die Zellen nach der Position ihrer Spalte.
+     * @returns {undefined}
+     */
     _sortCells() {
         this._cells.sort(function(a, b) {
             if (a.columnConfig.position < b.columnConfig.position) {

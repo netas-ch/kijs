@@ -4,17 +4,28 @@
 // kijs.gui.container.Tab
 // --------------------------------------------------------------
 /**
- * Tab Container.
- * Es können nur kijs.gui.container.tab.Container hinzugefügt werden (xtype kann
- * auch weggelassen werden).
+ * Container mit Registerkarten: Eine Tab-Bar (kijs.gui.container.tab.Bar) zeigt für jedes
+ * Element einen Tab-Button, ein Klick darauf zeigt das Element an (wie kijs.gui.container.Stack,
+ * Default-Animation 'fade'). Es können nur kijs.gui.container.tab.Container hinzugefügt werden
+ * (xtype kann auch weggelassen werden). Tabs können über den Schliessen-Button bzw. das
+ * Kontextmenü geschlossen und mit sortable per Drag&Drop verschoben werden, auch in einen anderen
+ * Tab-Container mit dem gleichen ddName. Mit rpcSaveFn und autoSave werden die Positionen
+ * (posData) nach Änderungen an den Server gesendet.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.container.Stack
- *    kijs.gui.container.Tab
+ * @example
+ * new kijs.gui.container.Tab({
+ *     tabBarPos: 'left',
+ *     sortable: true,
+ *     elements: [
+ *         { tabCaption: 'Adresse', html: '...' },
+ *         { tabCaption: 'Notizen', tabClosable: false, html: '...' }
+ *     ]
+ * });
  *
- *
+ * @fires afterSave  Nach dem Speichern mit save(). e: Antwort des RPC
+ * @fires change  Zusätzlich zu kijs.gui.container.Stack: nach dem Einfügen eines gezogenen Tabs.
+ *                e: tabContainer, index
+ * @fires tabBarContextMenu  Kontextmenü auf der Tab-Bar (weitergeleitet)
  */
 kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container.Stack {
 
@@ -58,22 +69,20 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            tabBarPos: { target: 'tabBarPos' }, // Position der TabBar 'top', 'left',
-                                                // 'bottom' oder 'right' (default: 'top')
-            tabBarAlign: { target: 'tabBarAlign'},// Ausrichtung der Tabs 'start',
-                                                  // center oder 'end' (default: 'start')
-            tabBarScrollableX: { target: 'scrollableX', context: this._tabBarEl },
-            tabBarScrollableY: { target: 'scrollableY', context: this._tabBarEl },
+            tabBarPos: { target: 'tabBarPos' },
+            tabBarAlign: { target: 'tabBarAlign'},
+            tabBarScrollableX: { target: 'scrollableX', context: this._tabBarEl },  // {Boolean|String} Horizontal scrollbare Tab-Bar (siehe kijs.gui.container.Scrollable.scrollableX). Default: 'auto'
+            tabBarScrollableY: { target: 'scrollableY', context: this._tabBarEl },  // {Boolean|String} Vertikal scrollbare Tab-Bar (siehe kijs.gui.container.Scrollable.scrollableY). Default: 'auto'
 
-            ddName: { target: 'ddName', context: this._tabBarEl },
-            ddPosBeforeAfterFactor: { target: 'ddPosBeforeAfterFactor', context: this._tabBarEl },
-            ddMapping: { target: 'ddMapping', context: this._tabBarEl },
+            ddName: { target: 'ddName', context: this._tabBarEl },  // {String} Name für Drag&Drop der Tabs. Tab-Container mit gleichem ddName können Tabs austauschen. Default: eindeutige ID
+            ddPosBeforeAfterFactor: { target: 'ddPosBeforeAfterFactor', context: this._tabBarEl },  // {Number} Position auf dem Ziel-Tab, ab der nachher statt vorher eingefügt wird. Default: 0.666
+            ddMapping: { target: 'ddMapping', context: this._tabBarEl },    // {Object} Drag&Drop-Mapping der Tab-Bar. Achtung: Die Tab-Bar hat keinen Setter ddMapping (Tippfehler ddMappping), die Zuweisung wirft darum einen TypeError
 
-            rpcSaveFn: true,    // Name der remoteFn. Bsp: 'myTabs.save'
-            rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
-            autoSave: true,     // Automatisches Speichern bei Änderungen
+            rpcSaveFn: true,
+            rpcSaveArgs: true,
+            autoSave: true,
 
-            sortable: { prio: 90, target: 'sortable', context: this._tabBarEl }
+            sortable: { prio: 90, target: 'sortable', context: this._tabBarEl }  // {Boolean} Tabs per Drag&Drop verschiebbar? Default: false
         });
 
         // Config anwenden
@@ -88,9 +97,17 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Nach Änderungen (Tab geschlossen oder verschoben) automatisch save() aufrufen? Nur mit rpcSaveFn. Default: false
+     * @type {Boolean}
+     */
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
 
+    /**
+     * Positionsdaten aller Tabs in der aktuellen Reihenfolge (posData der tab.Container)
+     * @type {Object[]}
+     */
     get posData() {
         // Positionsdaten der Tabs ermitteln
         let data = [];
@@ -101,12 +118,24 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         return data;
     }
 
+    /**
+     * Zusätzliche RPC-Argumente fürs Speichern. Überschreiben gleichnamige Argumente von save().
+     * @type {Object}
+     */
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
+    /**
+     * Name der remoteFn zum Speichern, z.B. 'myTabs.save'
+     * @type {String|null}
+     */
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
+    /**
+     * Ausrichtung der Tabs: 'start', 'center' oder 'end'. Andere Werte werfen einen kijs.Error. Default: 'start'
+     * @type {String}
+     */
     get tabBarAlign() { return this._tabBarAlign; }
     set tabBarAlign(val) {
         if (!kijs.Array.contains(['start','center','end'], val)) {
@@ -127,6 +156,10 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         }
     }
 
+    /**
+     * Position der Tab-Bar: 'top', 'right', 'bottom' oder 'left'. Andere Werte werfen einen kijs.Error. Default: 'top'
+     * @type {String}
+     */
     get tabBarPos() { return this._tabBarPos; }
     set tabBarPos(val) {
 
@@ -244,6 +277,12 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
         this._tabBarEl.renderTo(this._dom.node, this._innerDom.node);
     }
 
+    /**
+     * Sendet die Positionsdaten (posData) an rpcSaveFn. Enthält die Antwort config, wird sie
+     * angewendet. Danach wird afterSave ausgelöst.
+     * @param {Object|null} [args=null]  Argumente für den Server (rpcSaveArgs haben Vorrang)
+     * @returns {Promise}  Wird mit der Antwort des RPC aufgelöst
+     */
     save(args=null) {
         return new Promise((resolve, reject) => {
             // Args
@@ -304,7 +343,11 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
 
     // PROTECTED
-    // Ermittelt den Index eines TabButtons
+    /**
+     * Ermittelt den Index eines Tab-Buttons in der Tab-Bar
+     * @param {kijs.gui.container.tab.Button} el
+     * @returns {Number|null}  null, wenn nicht gefunden
+     */
     _getTabButtonElIndex(el) {
         let index = null;
 

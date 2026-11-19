@@ -4,171 +4,26 @@
 // kijs.gui.Container
 // --------------------------------------------------------------
 /**
- * Container Element, welches untergeordnete Elemente beinhalten kann.
- * Das Element besteht aus zwei ineinanderliegenden dom-Nodes.
+ * Element mit Kind-Elementen. Es besteht aus zwei DOM-Nodes: dom (aussen) und innerDom
+ * (innen). Die Kind-Elemente und html werden in innerDom gerendert.
+ * Siehe Leitfaden Element, Dom und Container.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
+ * @example
+ * new kijs.gui.Container({
+ *     defaults: { style: { margin: '4px' } },
+ *     elements: [
+ *         { xtype: 'kijs.gui.Element', html: 'Hallo' },
+ *         new kijs.gui.Button({ caption: 'OK' })
+ *     ]
+ * });
  *
- * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
- * ----------------
- * defaults     Object [optional]       Objekt mit Config-Parameter, die bei allen untergeordneten elements
- *                                      angewendet werden.
- *
- * clsInner     Array|String [optional] CSS-Klassennamen für den inneren dom-Node
- *                                      Beispiel: clsInner:['cls-a','cls-b'] oder cls:'cls-a cls-b'
- *
- * styleInner   Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript für das innere dom-Element
- *                                      Beispiel: styleInner:{background-color:'#ff8800'}
- *
- * elements     Array|Object            Array mit den untergeordneten elements.
- *                                      Es können sowohl Config-Objekte, als auch Instanzen der Klasse im Array sein.
- *                                      Beispiel: elements:[
- *                                          {
- *                                              xtype: 'kijs.gui.Element',
- *                                              html: 'Hello World'
- *                                          }, new kijs.gui.Element({
- *                                              html: 'Hallo Welt'
- *                                          })
- *                                      ]
- *
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- *
- * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
- * ----------
- * addClsInner                          Fügt eine oder mehrere CSS-Klassen zum inneren dom-Node hinzu
- *  Args: cls   String|Array
- *
- * hasClsInner                          Überprüft, ob der innere dom-Node eine CSS-Klasse hat
- *  Args:
- *   cls        String
- *  Return: Boolean
- *
- * removeClsInner                       Entfernt eine oder mehrere CSS-Klassen vom inneren dom-Node
- *  Args:
- *   cls        String|Array
- *
- *
- * add                                  Fügt ein oder mehrere Elemente hinzu
- *  Args:
- *   elements   Array|Object            Es können sowohl Config-Objekte, als auch Instanzen der Klasse im Array sein.
- *   before     Number|Function [optional]  Index der Position oder Verweis auf das Element, vor dem eingefügt werden soll.
- *   options
- *
- * getElementsByName                    Gibt untergeordnete Elemente aufgrund ihres 'name' zurück
- *  Args:
- *   name       String
- *   deep       Number [optional] default=-1 Gewünschte Suchtiefe
- *                                            0=nur im aktuellen Container
- *                                            1=im aktuellen Container und in deren untergeordneten
- *                                            2=im aktuellen Container, deren untergeordneten und deren untergeordneten
- *                                            n=...
- *                                            -1=unendlich
- *   breakOnFirst {Boolean} [optional] default=false Soll nur das Erste Element zurückgegeben werden?
- *  Return: Array
- *
- * getElementsByXtype                   Gibt untergeordnete Elemente aufgrund ihres 'xtype' zurück
- *  Args:
- *   xtype      String
- *   deep       Number [optional] default=-1 Gewünschte Suchtiefe
- *                                            0=nur im aktuellen Container
- *                                            1=im aktuellen Container und in deren untergeordneten
- *                                            2=im aktuellen Container, deren untergeordneten und deren untergeordneten
- *                                            n=...
- *                                            -1=unendlich
- *   breakOnFirst {Boolean} [optional] default=false Soll nur das Erste Element zurückgegeben werden?
- *  Return: Array
- *
- * hasChild                             Überprüft, ob ein untergeordnetes Element existiert
- *  Args:
- *   element    kijs.gui.Element
- *  Return: Boolean
- *
- * remove                               Löscht ein oder mehrere untergeordnete Elemente
- *  Args:
- *   elements    Object|Array
- *   options
- *
- * removeAll                            Löscht alle untergeordneten Elemente
- *  Args:
- *   options
- *   
- * down                                 Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
- *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
- *   name       String
- *  Return: kijs.gui.Element|null
- *
- * downX                                Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
- *  Args:                               dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
- *   xtype      String
- *  Return: kijs.gui.Element|null
- *
- *
- * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
- * -------------
- * innerDom     HTML-Element            Verweis auf den inneren dom-Node
- *
- * elements     Array                   Array mit den untergeordneten Elementen
- *
- * isEmpty      Boolean (readonly)
- *
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- *
- * EVENTS
- * ----------
- * add
- * beforeAdd
- * beforeRemove
- * childElementAfterResize
- * remove
- *
- * // Geerbte Events
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * changeVisibility
- * click
- * dblClick
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseEnter
- * mouseLeave
- * mouseMove
- * mouseUp
- * singleClick
- * touchStart
- * touchEnd
- * touchMove
- * touchCancel
- * unrender
- * wheel
- *
- * // key events
- * keyDown
- * keyUp
- * keyPress
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @fires add  Nach dem Hinzufügen mit add(). e: elements (die neuen Elemente)
+ * @fires beforeAdd  Vor dem Hinzufügen mit add(). e: elements. Rückgabe false bricht ab
+ * @fires beforeRemove  Vor dem Entfernen mit remove(). e: removeElements. Rückgabe false bricht ab
+ * @fires childElementAfterResize  Nach afterResize eines Kind-Elements. e: childElement
+ * @fires remove  Nach dem Entfernen mit remove()
+ * @fires scroll  Weitergeleitet von innerDom
+ * @fires scrollEnd  Weitergeleitet von innerDom
  */
 kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
 
@@ -200,8 +55,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
             defaults: true,
             html: { target: 'html', context: this._innerDom },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._innerDom },
-            innerCls: { fn: 'function', target: this._innerDom.clsAdd, context: this._innerDom },
-            innerStyle : { fn: 'assign', target: 'style', context: this._innerDom },
+            innerCls: { fn: 'function', target: this._innerDom.clsAdd, context: this._innerDom },  // {String|Array} CSS-Klassen von innerDom
+            innerStyle : { fn: 'assign', target: 'style', context: this._innerDom },             // {Object} CSS-Styles von innerDom, z.B. { padding: '10px' }
 
             elements: { prio: 1000, fn: 'function', target: this._replaceElements, context: this }
         });
@@ -222,11 +77,27 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Standard-Config für Kind-Elemente, die als Config-Objekt hinzugefügt werden. Eigenschaften,
+     * die in der Config des Kind-Elements schon vorhanden sind, werden nicht überschrieben.
+     * Unbekannte Eigenschaften lösen beim Kind-Element keinen Fehler aus.
+     * @type {Object}
+     */
     get defaults() { return this._defaults; }
     set defaults(val) { this._defaults = val; }
     
+    /**
+     * Kind-Elemente. In der Config: Array mit Instanzen oder Config-Objekten (mit xtype).
+     * Als Kurzform gibt es '-' für kijs.gui.Separator und '>' für kijs.gui.Spacer.
+     * Die Config ersetzt alle bestehenden Kind-Elemente. Sonst add() und remove() verwenden.
+     * @type {kijs.gui.Element[]}
+     */
     get elements() { return this._elements; }
 
+    /**
+     * Erstes Kind-Element oder null
+     * @type {kijs.gui.Element|null}
+     */
     get firstChild() {
         if (this._elements.length > 0) {
             return this._elements[0];
@@ -234,19 +105,39 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         return null;
     }
 
+    /**
+     * Inhalt von innerDom (siehe kijs.gui.Dom.html)
+     * @type {String}
+     */
     // overwrite
     get html() { return this._innerDom.html; }
     set html(val) { this._innerDom.html = val; }
 
+    /**
+     * Darstellung von html in innerDom: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType)
+     * @type {String}
+     */
     // overwrite
     get htmlDisplayType() { return this._innerDom.htmlDisplayType; }
     set htmlDisplayType(val) { this._innerDom.htmlDisplayType = val; }
 
+    /**
+     * Innerer DOM-Node, in den die Kind-Elemente und html gerendert werden
+     * @type {kijs.gui.Dom}
+     */
     get innerDom() { return this._innerDom; }
 
+    /**
+     * Leer, wenn innerDom kein html und der Container keine Kind-Elemente hat
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return this._innerDom.isEmpty && kijs.isEmpty(this._elements); }
 
+    /**
+     * Letztes Kind-Element oder null
+     * @type {kijs.gui.Element|null}
+     */
     get lastChild() {
         if (this._elements.length > 0) {
             return this._elements[this._elements.length-1];
@@ -254,6 +145,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         return null;
     }
 
+    /**
+     * Scrollen auf der X-Achse: true=immer, false=nie, 'auto'=wenn nötig. Default: false
+     * @type {Boolean|String}
+     */
     get scrollableX() {
         if (this._innerDom.clsHas('kijs-scrollable-x-enable')) {
             return true;
@@ -274,6 +169,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Scrollen auf der Y-Achse: true=immer, false=nie, 'auto'=wenn nötig. Default: false
+     * @type {Boolean|String}
+     */
     get scrollableY() {
         if (this._innerDom.clsHas('kijs-scrollable-y-enable')) {
             return true;
@@ -300,13 +199,13 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt ein oder mehrere Elemente hinzu.
-     * @param {Object|Array} elements
-     * @param {Number} [index=null] Position an der Eingefügt werden soll null=am Schluss
+     * Fügt ein oder mehrere Elemente hinzu. Elemente, die schon im Container sind, werden ignoriert.
+     * Ist der Container gerendert, wird er neu gerendert. Danach wird afterResize ausgelöst.
+     * @param {kijs.gui.Element|Object|String|Array} elements  Instanz, Config-Objekt (mit xtype), '-' oder '>' oder ein Array davon
+     * @param {Number|null} [index=null]          Position, an der eingefügt werden soll. null=am Schluss
      * @param {Object} [options={}]
-     *  options Eigenschaften:
-     *    {Boolean} [preventRender=false]   render verhindern?
-     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeAdd und add-Events verhindern?
+     * @param {Boolean} [options.preventRender=false]   render verhindern?
+     * @param {Boolean} [options.preventEvents=false]   beforeAdd und add nicht auslösen?
      * @returns {undefined}
      */
     add(elements, index=null, options={}) {
@@ -353,6 +252,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         this.raiseEvent('afterResize');
     }
 
+    /**
+     * Ändert disabled beim Container und allen Kind-Elementen (siehe kijs.gui.Element.changeDisabled)
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elterncontainer kommt.
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -365,7 +270,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
      * @param {String} name
-     * @returns {kijs_gui_Element|null}
+     * @returns {kijs.gui.Element|null}
      */
     down(name) {
         const ret = this.getElementsByName(name, -1, true);
@@ -380,7 +285,7 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
      * Durchläuft den Element-Baum nach unten und gibt das erste Element zurück,
      * dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
      * @param {String} xtype
-     * @returns {kijs_gui_Element|null}
+     * @returns {kijs.gui.Element|null}
      */
     downX(xtype) {
         const ret = this.getElementsByXtype(xtype, -1, true);
@@ -394,14 +299,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     /**
      * Gibt untergeordnete Elemente aufgrund ihres 'name' zurück
      * @param {String} name
-     * @param {Number} deep [optional] default=-1    Gewünschte Suchtiefe
-     *                                               0=nur im aktuellen Container
-     *                                               1=im aktuellen Container und in deren untergeordneten
-     *                                               2=im aktuellen Container, deren untergeordneten und deren untergeordneten
-     *                                               n=...
-     *                                               -1=unendlich
-     * @param {Boolean} breakOnFirst [optional] default=false Soll nur das erste Element zurückgegeben werden?
-     * @returns {Array}
+     * @param {Number} [deep=-1]    Suchtiefe: 0=nur im aktuellen Container, 1=zusätzlich in den
+     *                               Kind-Containern, n=..., -1=unendlich
+     * @param {Boolean} [breakOnFirst=false] Nur das erste gefundene Element zurückgeben?
+     * @returns {kijs.gui.Element[]}
      */
     getElementsByName(name, deep=-1, breakOnFirst=false) {
         let ret=[];
@@ -447,14 +348,10 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     /**
      * Gibt untergeordnete Elemente aufgrund ihres 'xtype' zurück
      * @param {String} xtype
-     * @param {Number} deep [optional] default=-1    Gewünschte Suchtiefe
-     *                                               0=nur im aktuellen Container
-     *                                               1=im aktuellen Container und in deren untergeordneten
-     *                                               2=im aktuellen Container, deren untergeordneten und deren untergeordneten
-     *                                               n=...
-     *                                               -1=unendlich
-     * @param {Boolean} breakOnFirst [optional] default=false Soll nur das erste Element zurückgegeben werden?
-     * @returns {Array}
+     * @param {Number} [deep=-1]    Suchtiefe: 0=nur im aktuellen Container, 1=zusätzlich in den
+     *                               Kind-Containern, n=..., -1=unendlich
+     * @param {Boolean} [breakOnFirst=false] Nur das erste gefundene Element zurückgeben?
+     * @returns {kijs.gui.Element[]}
      */
     getElementsByXtype(xtype, deep=-1, breakOnFirst=false) {
         let ret=[];
@@ -499,13 +396,9 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     
     /**
      * Gibt alle Unterelemente als flaches Array zurück
-     * @param {Number} [deep]         default=-1    Gewünschte Suchtiefe
-     *                                              0=nur im aktuellen Container
-     *                                              1=im aktuellen Container und in deren untergeordneten
-     *                                              2=im aktuellen Container, deren untergeordneten und deren untergeordneten
-     *                                              n=...
-     *                                              -1=unendlich
-     * @returns {Array}
+     * @param {Number} [deep=-1]    Suchtiefe: 0=nur im aktuellen Container, 1=zusätzlich in den
+     *                               Kind-Containern, n=..., -1=unendlich
+     * @returns {kijs.gui.Element[]}
      */
     getElementsRec(deep=-1) {
         let ret = [];
@@ -546,15 +439,15 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Löscht ein oder mehrere untergeordnete Elemente
-     * @param {Object|Array} elements
+     * Entfernt ein oder mehrere Kind-Elemente. Standardmässig werden sie dabei zerstört (destruct).
+     * Ist ein Element nicht im Container, gibt es einen Fehler.
+     * @param {kijs.gui.Element|Array} elements
      * @param {Object} [options={}]
-     *  options Eigenschaften:
-     *    {Boolean} [preventDestruct=false] desctruct verhindern?
-     *    {Boolean} [preventUnrender=false] unrender verhindern?
-     *    {Boolean} [preventRender=false]   render verhindern?
-     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
-     * @param {Boolean} [superCall=false]
+     * @param {Boolean} [options.preventDestruct=false] destruct verhindern? Dann wird nur unrender ausgeführt
+     * @param {Boolean} [options.preventUnrender=false] unrender verhindern (nur zusammen mit preventDestruct)?
+     * @param {Boolean} [options.preventRender=false]   Neu-Rendern des Containers verhindern?
+     * @param {Boolean} [options.preventEvents=false]   beforeRemove und remove nicht auslösen?
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein beforeRemove)
      * @returns {undefined}
      */
     remove(elements, options={}, superCall) {
@@ -599,13 +492,8 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Löscht alle untergeordneten Elemente
-     * @param {Object} [options={}]
-     *  options Eigenschaften:
-     *    {Boolean} [preventDestruct=false] desctruct verhindern?
-     *    {Boolean} [preventUnrender=false] unrender verhindern?
-     *    {Boolean} [preventRender=false]   render verhindern?
-     *    {Boolean} [preventEvents=false]   Das Auslösen des beforeRemove und remove-Events verhindern?
+     * Entfernt alle Kind-Elemente (siehe remove())
+     * @param {Object} [options={}]   Optionen wie bei remove()
      * @returns {undefined}
      */
     removeAll(options={}) {
@@ -614,6 +502,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Rendert den Container, innerDom und alle Kind-Elemente und löst afterRender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterRender)
+     * @returns {undefined}
+     */
     // overwrite
     render(superCall) {
         super.render(true);
@@ -632,11 +525,12 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     }
 
     /**
-     * Sortiert die Elemente mit einer Funktion. Der Funktion werden
+     * Sortiert die Kind-Elemente mit einer Funktion. Der Funktion werden
      * zwei Elemente zum Vergleich übergeben, die Funktion
      * muss 1, 0 oder -1 zurückgeben, wenn a grösser, gleich oder kleiner b ist.
+     * Ist der Container gerendert, werden die Elemente in der neuen Reihenfolge gerendert.
      * @param {Function} compareFn
-     * @param {Object|null} context
+     * @param {Object|null} [context=null]   Kontext der Funktion. Default: der Container
      * @returns {undefined}
      */
     sort(compareFn, context=null) {
@@ -652,6 +546,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Entfernt den Container und alle Kind-Elemente aus dem DOM und löst unrender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein unrender-Event)
+     * @returns {undefined}
+     */
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -801,6 +700,11 @@ kijs.gui.Container = class kijs_gui_Container extends kijs.gui.Element {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    /**
+     * Gibt den Container und alle Kind-Elemente frei (siehe kijs.gui.Element.destruct)
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse
+     * @returns {undefined}
+     */
     // overwrite
     destruct(superCall) {
         if (!superCall) {

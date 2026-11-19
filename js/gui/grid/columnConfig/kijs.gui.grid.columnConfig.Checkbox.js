@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
+/**
+ * Spalte mit Checkboxen in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Checkbox, Filter
+ * kijs.gui.grid.filter.Checkbox). Die Checkbox wird direkt angeklickt, es gibt keinen Editor.
+ */
 kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
@@ -28,7 +32,7 @@ kijs.gui.grid.columnConfig.Checkbox = class kijs_gui_grid_columnConfig_Checkbox 
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disabled: true
+            disabled: true     // {Boolean} Checkboxen deaktivieren (nicht anklickbar)? Default: false
         });
 
         // Config anwenden

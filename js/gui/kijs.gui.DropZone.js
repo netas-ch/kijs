@@ -4,30 +4,18 @@
 // kijs.gui.DropZone
 // --------------------------------------------------------------
 /**
- * DropZone für Dateitransfer. Dem Container wird beim Dragover eine CSS-Klasse zugewiesen, um die Zone zu markieren.
+ * Container, auf den Dateien gezogen werden können. Beim Darüberziehen erhält er die CSS-Klasse
+ * dragOverCls, bei unpassendem Dateityp oder zu vielen Dateien zusätzlich dragOverForbiddenCls.
+ * Die Dateien werden mit dem drop-Event weitergegeben, z.B. an einen kijs.UploadDialog
+ * (siehe kijs.UploadDialog.bindDropZones()). Ist die DropZone deaktiviert, werden keine Events ausgelöst.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.DropZone
+ * @example
+ * const dz = new kijs.gui.DropZone({ html: 'Dateien hierher ziehen', contentTypes: ['image/png', 'image/jpeg'] });
+ * new kijs.UploadDialog({ ajaxUrl: 'upload.php', contentTypes: ['image'], dropZones: dz });
  *
- * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
- * ----------------
- * contentTypes    Array|String Ein (oder ein Array von) Content-Types. z.B. "image/jpeg" für JPG's oder nur "image" alle Bildtypen.
- *
- * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
- * ----------
- *
- *
- * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
- * -------------
- * contentTypes
- *
- *
- * EVENTS
- * ----------
- *
- *
+ * @fires dragOver  Beim Darüberziehen. Zusätzlich zu den Argumenten des DOM-Events: validMime
+ *                  (passt der Typ zu contentTypes?), allowed (passt die Anzahl zu multiple?)
+ * @fires drop  Beim Loslassen. Zusätzlich zu den Argumenten des DOM-Events: validMime, allowed
  */
 kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
@@ -65,8 +53,8 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            dragOverCls: true,
-            dragOverForbiddenCls: true,
+            dragOverCls: true,              // {String} CSS-Klasse beim Darüberziehen. Default: 'kijs-dragover'
+            dragOverForbiddenCls: true,     // {String} CSS-Klasse bei unpassendem Typ oder zu vielen Dateien. Default: 'kijs-dragover-forbidden'
             contentTypes: { target: 'contentTypes' },
             multiple: true
         });
@@ -96,6 +84,12 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Erlaubte MIME-Types, z.B. ['image/png'] oder ['image/*']. Leer = alle. Der Setter akzeptiert auch
+     * einen String und wirft einen kijs.Error bei ungültigem Media-Type. Achtung: Anders als beim
+     * kijs.UploadDialog wird 'image' nicht zu 'image/*' ergänzt und passt darum zu keiner Datei.
+     * @type {String[]}
+     */
     get contentTypes() { return this._contentTypes; }
     set contentTypes(val) {
         if (!kijs.isArray(val)) {
@@ -113,6 +107,10 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
         }, this);
     }
 
+    /**
+     * Dürfen mehrere Dateien gleichzeitig abgelegt werden? Default: true
+     * @type {Boolean}
+     */
     get multiple() { return this._multiple; }
 
     set multiple(val) { this._multiple = val; }
@@ -123,6 +121,11 @@ kijs.gui.DropZone = class kijs_gui_DropZone extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     // PROTECTED
+    /**
+     * Prüft, ob alle Dateien mit Typ zu contentTypes passen (genauer Typ oder 'typ/*').
+     * @param {DataTransferItemList} dataTransferItems
+     * @returns {Boolean}
+     */
     _checkMime(dataTransferItems) {
         for (let i=0; i<dataTransferItems.length; i++) {
             if (dataTransferItems[i].type) {

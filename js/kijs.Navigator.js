@@ -4,7 +4,12 @@
 // kijs.Navigator (Static)
 // --------------------------------------------------------------
 /**
- * Klasse gibt Angaben zu Browser und Betriebssystem des Browsers zurück.
+ * Statische Klasse mit Angaben zu Browser und Betriebssystem (aus dem User-Agent) sowie
+ * Hilfsfunktionen für GET-Parameter und mailto-/tel-Links.
+ *
+ * @example
+ * if (kijs.Navigator.isFirefox) { ... }
+ * console.log(kijs.Navigator.browser + ' ' + kijs.Navigator.browserVersion + ' auf ' + kijs.Navigator.os);
  */
 kijs.Navigator = class kijs_Navigator {
 
@@ -12,29 +17,108 @@ kijs.Navigator = class kijs_Navigator {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Name des Browsers: 'Edge', 'Firefox', 'Internet Explorer', 'Vivaldi', 'Opera',
+     * 'Internet Browser' (Samsung), 'Chrome', 'Safari' oder '' (unbekannt)
+     * @type {String}
+     */
     static get browser() { return kijs.Navigator.getBrowserInfo().browser; }
+    /**
+     * Hersteller des Browsers, z.B. 'Google', 'Mozilla', 'Microsoft', 'Apple'. '' = unbekannt
+     * @type {String}
+     */
     static get browserVendor() { return kijs.Navigator.getBrowserInfo().browserVendor; }
+    /**
+     * Version des Browsers, z.B. '120.0.0.0'. '' = unbekannt
+     * @type {String}
+     */
     static get browserVersion() { return kijs.Navigator.getBrowserInfo().browserVersion; }
 
+    /**
+     * Ist es Google Chrome? (Andere Chromium-Browser: siehe isChromium)
+     * @type {Boolean}
+     */
     static get isChrome() { return kijs.Navigator.getBrowserInfo().isChrome; }
+    /**
+     * Ist es ein Chromium-Browser (Chrome, Edge ab Chromium, Vivaldi, Opera, Samsung)?
+     * @type {Boolean}
+     */
     static get isChromium() { return kijs.Navigator.getBrowserInfo().isChromium; }
+    /**
+     * Ist es Microsoft Edge (alt oder Chromium)?
+     * @type {Boolean}
+     */
     static get isEdge() { return kijs.Navigator.getBrowserInfo().isEdge; }
+    /**
+     * Ist es Firefox?
+     * @type {Boolean}
+     */
     static get isFirefox() { return kijs.Navigator.getBrowserInfo().isFirefox; }
+    /**
+     * Ist es Internet Explorer 11?
+     * @type {Boolean}
+     */
     static get isIE() { return kijs.Navigator.getBrowserInfo().isIE; }
+    /**
+     * Ist es Safari?
+     * @type {Boolean}
+     */
     static get isSafari() { return kijs.Navigator.getBrowserInfo().isSafari; }
 
+    /**
+     * Ist das Betriebssystem Android?
+     * @type {Boolean}
+     */
     static get isAndroid() { return kijs.Navigator.getBrowserInfo().isAndroid; }
+    /**
+     * Ist das Betriebssystem iOS bzw. iPadOS?
+     * @type {Boolean}
+     */
     static get isIOS() { return kijs.Navigator.getBrowserInfo().isIOS; }
+    /**
+     * Ist das Betriebssystem Linux (ohne Android)?
+     * @type {Boolean}
+     */
     static get isLinux() { return kijs.Navigator.getBrowserInfo().isLinux; }
+    /**
+     * Ist das Betriebssystem macOS?
+     * @type {Boolean}
+     */
     static get isMac() { return kijs.Navigator.getBrowserInfo().isMac; }
+    /**
+     * Ist das Betriebssystem Windows?
+     * @type {Boolean}
+     */
     static get isWindows() { return kijs.Navigator.getBrowserInfo().isWindows; }
 
+    /**
+     * Unterstützt das Gerät Touch-Eingaben (navigator.maxTouchPoints > 0)?
+     * @type {Boolean}
+     */
     static get isTouch() { return navigator.maxTouchPoints > 0;}
     
+    /**
+     * Name des Betriebssystems: 'Windows', 'iOS', 'iPadOS', 'macOS', 'Android', 'Linux' oder '' (unbekannt)
+     * @type {String}
+     */
     static get os() { return kijs.Navigator.getBrowserInfo().os; }
+    /**
+     * Hersteller des Betriebssystems: 'Microsoft', 'Apple', 'Google' oder '' (auch bei Linux)
+     * @type {String}
+     */
     static get osVendor()  { return kijs.Navigator.getBrowserInfo().osVendor; }
+    /**
+     * Version des Betriebssystems, bei Windows z.B. 'XP', '7', '10' (Windows 11 meldet sich als '10'),
+     * sonst aus dem User-Agent. Bei Linux wird der Wert von 'rv:' übernommen (Gecko-Version von Firefox).
+     * @type {String}
+     */
     static get osVersion() { return kijs.Navigator.getBrowserInfo().osVersion; }
 
+    /**
+     * Sollte alle GET-Parameter der URL zurückgeben. Ruft aber die nicht vorhandene Funktion
+     * getGetParams() auf und wirft darum einen Fehler. Stattdessen getGetParameter() verwenden.
+     * @type {Object}
+     */
     static get getParams() { return kijs.Navigator.getGetParams(); }
 
 
@@ -42,6 +126,14 @@ kijs.Navigator = class kijs_Navigator {
     // --------------------------------------------------------------
     // STATICS
     // --------------------------------------------------------------
+    /**
+     * Ermittelt Browser und Betriebssystem aus einem User-Agent. Das Ergebnis für den eigenen
+     * Browser wird zwischengespeichert.
+     * @param {String|null} [userAgent=null]  null = window.navigator.userAgent
+     * @returns {Object}  {browser, browserVendor, browserVersion, os, osVendor, osVersion, isChrome,
+     *                    isChromium, isEdge, isFirefox, isIE, isSafari, isAndroid, isIOS, isLinux,
+     *                    isMac, isWindows} (Bedeutung siehe gleichnamige Getter)
+     */
     static getBrowserInfo(userAgent=null) {
         let ua = userAgent || window.navigator.userAgent;
 
@@ -212,7 +304,10 @@ kijs.Navigator = class kijs_Navigator {
 
     /**
      * Fragt 'GET' Parameter aus der URL ab.
-     * @param {String|Null} parameterName Null=alle
+     * @param {String} [parameterName]  Name des Parameters. Ohne Angabe werden alle zurückgegeben.
+     * @returns {Object|String|null|undefined}  Ohne parameterName: Objekt mit allen Parametern.
+     *                                          Sonst der Wert, null bei Parameter ohne Wert,
+     *                                          undefined, wenn er nicht vorhanden ist.
      */
     static getGetParameter(parameterName) {
         const params = {};
@@ -254,6 +349,12 @@ kijs.Navigator = class kijs_Navigator {
 
 
     // PROTECTED
+    /**
+     * Gibt die Version nach 'browser/' im User-Agent zurück.
+     * @param {String} ua  User-Agent
+     * @param {String} browser  Token, z.B. 'Firefox'
+     * @returns {String}  Version oder '', wenn das Token fehlt
+     */
     static _browserVersion(ua, browser) {
         let re = new RegExp(browser + '/([0-9\\.]+)', 'i');
         let match = ua.match(re);
@@ -266,8 +367,12 @@ kijs.Navigator = class kijs_Navigator {
     
     
     // LISTENERS
-    // Listener, der verhindert, dass beim Aufruf von kijs.Navigator.openEmailPhoneLink()
-    // ein anderer beforeunload Listener aufgerufen werden kann.
+    /**
+     * Listener, der verhindert, dass beim Aufruf von kijs.Navigator.openEmailPhoneLink()
+     * ein anderer beforeunload Listener aufgerufen werden kann.
+     * @param {Event} nodeEvent
+     * @returns {undefined}
+     */
     static __onWindowBeforeUnload(nodeEvent) {
         if (kijs.Navigator.__disableBeforeUnload) {
             nodeEvent.stopImmediatePropagation();

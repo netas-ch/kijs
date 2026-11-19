@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Checkbox
 // --------------------------------------------------------------
+/**
+ * Filter für Checkbox-Spalten in kijs.gui.grid.Grid: Im Menü kann nach allen angewählten bzw. allen
+ * nicht angewählten Zeilen gefiltert werden.
+ */
 kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs.gui.grid.filter.Filter {
 
 
@@ -39,6 +43,10 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter-Objekt für den Server: zusätzlich type 'checkbox' und checkbox ('checked', 'unchecked' oder null)
+     * @type {Object}
+     */
     get filter() {
         return Object.assign(super.filter, {
             type: 'checkbox',
@@ -46,6 +54,10 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         });
     }
 
+    /**
+     * Ist der Filter aktiv?
+     * @type {Boolean}
+     */
     get isFiltered() { return super.isFiltered || this._compare !== null; }
 
 
@@ -67,6 +79,10 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
     }
 
     // overwrite
+    /**
+     * Gibt die Menü-Elemente zurück, mit den Buttons «Alle angewählten» und «Alle nicht angewählten»
+     * @returns {Array}
+     */
     _getMenuButtons() {
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_checked',

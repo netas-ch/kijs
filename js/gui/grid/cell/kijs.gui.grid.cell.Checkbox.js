@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Checkbox
 // --------------------------------------------------------------
+/**
+ * Zelle mit einer Checkbox in kijs.gui.grid.Grid (siehe kijs.gui.grid.columnConfig.Checkbox). Ein Klick
+ * schaltet den Wert um, ausser die Zelle ist deaktiviert. true, 1 und '1' gelten als ausgewählt.
+ */
 kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui.grid.cell.Cell {
 
 
@@ -46,6 +50,10 @@ kijs.gui.grid.cell.Checkbox = class kijs_gui_grid_cell_Checkbox extends kijs.gui
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     // Overwrite
+    /**
+     * Ist die Checkbox ausgewählt?
+     * @type {Boolean}
+     */
     get value() { return this._checked; }
     set value(val) { this.setValue(val); }
 

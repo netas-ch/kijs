@@ -1,8 +1,18 @@
 /* global kijs */
 
 // --------------------------------------------------------------
-// kijs.gui.Dom (Static)
+// kijs.gui.DragDrop (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit dem Zustand der aktuellen Drag&Drop-Operation (source, target, data …) und
+ * Hilfsfunktionen. Die dropFn-Funktionen können im Drop-Event eines kijs.gui.dragDrop.Target
+ * verwendet werden, um Quelle, Ziel und Einfügeposition zu ermitteln oder das Element zu verschieben.
+ *
+ * @example
+ * target.on('drop', function(e) {
+ *     kijs.gui.DragDrop.dropFnMoveEl(e);
+ * });
+ */
 kijs.gui.DragDrop = class kijs_gui_DragDrop {
 
     // PRIVATE VARS
@@ -20,6 +30,11 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Objekt für beliebige Daten der aktuellen Drag&Drop-Operation. Der Setter akzeptiert nur Objekte,
+     * sonst kijs.Error.
+     * @type {Object}
+     */
     static get data() {
         if (!kijs.isDefined(this.__data)) {
             this.__data = {};
@@ -34,6 +49,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         }
     }
 
+    /**
+     * Bild, das beim Ziehen beim Mauszeiger angezeigt wird. Beim Setzen wird ein anderes vorheriges
+     * Bild entladen. Achtung: Der Getter liest die nicht definierte Variable __dragImageDom und wirft
+     * darum einen ReferenceError.
+     * @type {kijs.gui.Dom|null}
+     */
     static get dragImageDom() {
         return __dragImageDom;
     }
@@ -48,7 +69,10 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         this.__dragImageDom = val;
     }
 
-    // kijs.gui.Element der aktuellen Drag&Drop-Operation
+    /**
+     * Element der aktuellen Drag&Drop-Operation
+     * @type {kijs.gui.Element|null}
+     */
     static get source() {
         if (!kijs.isDefined(this.__source)) {
             this.__source = null;
@@ -59,6 +83,10 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         this.__source = val;
     }
 
+    /**
+     * Anzahl Elemente, die gezogen werden
+     * @type {Number|undefined}
+     */
     static get sourceCount() {
         return this.__sourceCount;
     }
@@ -66,6 +94,10 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         this.__sourceCount = val;
     }
 
+    /**
+     * Ziel-Element der aktuellen Drag&Drop-Operation
+     * @type {kijs.gui.Element|null}
+     */
     static get target() {
         if (!kijs.isDefined(this.__target)) {
             this.__target = null;
@@ -76,7 +108,11 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         this.__target = val;
     }
 
-    // CSS-Klasse kijs-targetDragOver einem DOM zuweisen/entfernen
+    /**
+     * Dom des aktuellen Ziels mit der CSS-Klasse kijs-targetDragOver. Beim Setzen wird die Klasse beim
+     * vorherigen entfernt und beim neuen hinzugefügt.
+     * @type {kijs.gui.Dom|null}
+     */
     static get targetDragOverDom() {
         if (!kijs.isDefined(this.__targetDragOverDom)) {
             this.__targetDragOverDom = null;
@@ -260,19 +296,39 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
 
     // dropFn-Funktionen für Drag&Drop-mapping
     // --------------------------------------------------------------
+    /**
+     * Gibt das gezogene Element zurück (e.source.ownerEl)
+     * @param {Object} e  Argument des drop-Events
+     * @returns {kijs.gui.Element}
+     */
     static dropFnGetSourceEl(e) {
         return e.source.ownerEl;
     }
 
+    /**
+     * Gibt den Index des gezogenen Elements in seinem Container zurück
+     * @param {Object} e  Argument des drop-Events
+     * @returns {Number}
+     */
     static dropFnGetSourceIndex(e) {
         return e.source.ownerEl.index;
     }
 
+    /**
+     * Gibt das Ziel-Element zurück (e.target.ownerEl)
+     * @param {Object} e  Argument des drop-Events
+     * @returns {kijs.gui.Element}
+     */
     static dropFnGetTargetEl(e) {
         return e.target.ownerEl;
     }
 
-    // Gibt die Einfügeposition im Ziel Container zurück
+    /**
+     * Gibt die Einfügeposition im Ziel-Container zurück: bei targetPos 'child' am Ende, bei 'before'
+     * der Index des Zielelements, bei 'after' der Index danach.
+     * @param {Object} e  Argument des drop-Events
+     * @returns {Number|null}
+     */
     static dropFnGetTargetIndex(e) {
         let targetIndex = null;
 
@@ -294,7 +350,12 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
         return targetIndex;
     }
 
-    // Verschiebt das Element an den neuen Ort
+    /**
+     * Verschiebt das gezogene Element an den neuen Ort (als Kind bzw. vor oder nach dem Zielelement).
+     * Es wird dabei weder zerstört noch neu erstellt.
+     * @param {Object} e  Argument des drop-Events
+     * @returns {undefined}
+     */
     static dropFnMoveEl(e) {
         // vom alten Ort entfernen
         e.source.ownerEl.parent.remove(e.source.ownerEl, {

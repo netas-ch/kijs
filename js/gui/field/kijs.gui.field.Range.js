@@ -10,43 +10,11 @@
 // TODO: der default von disableFlex sollte false sein
 
 /**
- * EVENTS
- * ----------
- * blur
- * input
+ * Schieberegler (HTML input type="range") für ganze Zahlen zwischen min und max.
+ * Defaults: min 0, max 100, step 1, value 50.
  *
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
- *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @example
+ * new kijs.gui.field.Range({ label: 'Lautstärke', min: 0, max: 10, value: 5 });
  */
 kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
 
@@ -90,18 +58,33 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Ein Schieberegler ist nie leer
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return false; }
 
+    /**
+     * Grösster Wert (Attribut max). Default: 100
+     * @type {Number|String}
+     */
     set max(val) { this._inputDom.nodeAttributeSet('max', val); }
     get max() { return this._inputDom.nodeAttributeGet('max'); }
 
+    /**
+     * Kleinster Wert (Attribut min). Default: 0
+     * @type {Number|String}
+     */
     set min(val) { this._inputDom.nodeAttributeSet('min', val); }
     get min() { return this._inputDom.nodeAttributeGet('min'); }
 
+    /**
+     * Schreibgeschützt. Weil input type="range" kein Attribut readOnly kennt, wird der
+     * input-Node dafür deaktiviert.
+     * @type {Boolean}
+     */
     // overwrite
-    // 'range' kennt das HTML-Attribut readOnly nicht,
-    // darum disabled benutzen.
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
         super.readOnly = !!val;
@@ -112,9 +95,17 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Text {
         }
     }
 
+    /**
+     * Schrittweite (Attribut step). Der Getter gibt sie als ganze Zahl zurück (parseInt). Default: 1
+     * @type {Number}
+     */
     set step(val) { this._inputDom.nodeAttributeSet('step', val); }
     get step() { return parseInt(this._inputDom.nodeAttributeGet('step')); }
 
+    /**
+     * Wert als ganze Zahl (parseInt)
+     * @type {Number}
+     */
     set value(val) { super.value = val; }
     get value() { return parseInt(super.value); }
 

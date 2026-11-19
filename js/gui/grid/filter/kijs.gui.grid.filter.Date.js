@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Date
 // --------------------------------------------------------------
+/**
+ * Datumsfilter für kijs.gui.grid.Grid (wie kijs.gui.grid.filter.Number, mit type 'date').
+ */
 kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.grid.filter.Number {
 
 
@@ -35,6 +38,10 @@ kijs.gui.grid.filter.Date = class kijs_gui_grid_filter_Date extends kijs.gui.gri
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter-Objekt für den Server: wie beim Zahlenfilter, aber mit type 'date'
+     * @type {Object}
+     */
     get filter() {
         return Object.assign(super.filter, {
             type: 'date'

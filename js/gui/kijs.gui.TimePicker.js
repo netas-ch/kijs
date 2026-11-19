@@ -3,6 +3,24 @@
 // --------------------------------------------------------------
 // kijs.gui.TimePicker
 // --------------------------------------------------------------
+/**
+ * Auswahl einer Uhrzeit über eine analoge Uhr (Canvas): zuerst wird die Stunde angeklickt
+ * (innen 1-12, aussen 13-00), danach die Minute und evtl. die Sekunde in
+ * 5er-Schritten. Darüber gibt es eine Kopfzeile und Eingabefelder für Stunde, Minute und Sekunde,
+ * darunter die Buttons Jetzt, Leeren und Schliessen. Wird z.B. von kijs.gui.field.DateTime
+ * verwendet.
+ *
+ * @example
+ * new kijs.gui.TimePicker({ value: '14:30', secondsHide: true });
+ *
+ * @fires change  Nach einer Änderung durch den Benutzer (Uhr, Eingabefelder, Jetzt, Leeren).
+ *                e: value, oldValue
+ * @fires closeClick  Klick auf den Button Schliessen
+ * @fires emptyClick  Klick auf den Button Leeren
+ * @fires inputFinished  Der letzte sichtbare Teil (Stunde, Minute oder Sekunde) wurde in der Uhr
+ *                       oder in einem Eingabefeld erfasst
+ * @fires nowClick  Klick auf den Button Jetzt
+ */
 kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
 
@@ -150,16 +168,16 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            headerBarHide: true,                // HeaderBar ausblenden
-            inputHide: true,                    // Input-Felder ausblenden
-            nowBtnHide: true,                   // Jetzt Button ausblenden
-            emptyBtnHide: true,                 // Leer lassen Button ausblenden
-            closeBtnHide: true,                 // Schliessen Button ausblenden
-            headerText: { target: 'html', context: this._headerBar },
+            headerBarHide: true,
+            inputHide: true,
+            nowBtnHide: true,
+            emptyBtnHide: true,
+            closeBtnHide: true,
+            headerText: { target: 'html', context: this._headerBar },   // {String} Text in der Kopfzeile (Standard: 'Uhrzeit')
             value: { target: 'value' },
-            secondsHide: true,                  // Sekunden auch erfassen?
-            minutesHide: true,                  // Minuten auch erfassen?
-            separator: true
+            secondsHide: true,
+            minutesHide: true,
+            separator: true     // {String} Trennzeichen zwischen Stunde, Minute und Sekunde im value (Standard: ':')
         });
 
         // Events weiterleiten
@@ -180,29 +198,68 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button Schliessen ausblenden? Standard: true. Wirkt beim nächsten Rendern.
+     * @type {Boolean}
+     */
     get closeBtnHide() { return this._closeBtnHide; }
     set closeBtnHide(val) { this._closeBtnHide = !!val; }
 
+    /**
+     * Button Leeren ausblenden? Wirkt beim nächsten Rendern.
+     * @type {Boolean}
+     */
     get emptyBtnHide() { return this._emptyBtnHide; }
     set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
+    /**
+     * Kopfzeile
+     * @type {kijs.gui.PanelBar}
+     */
     get headerBar() { return this._headerBar; }
 
+    /**
+     * Kopfzeile ausblenden? Wirkt beim nächsten Rendern.
+     * @type {Boolean}
+     */
     get headerBarHide() { return this._headerBarHide; }
     set headerBarHide(val) { this._headerBarHide = !!val; }
 
+    /**
+     * Eingabefelder für Stunde, Minute und Sekunde ausblenden? Wirkt beim nächsten Rendern.
+     * @type {Boolean}
+     */
     get inputHide() { return this._inputHide; }
     set inputHide(val) { this._inputHide = !!val; }
 
+    /**
+     * Minuten ausblenden? Dann wird nur die Stunde erfasst und der value enthält keine Minuten.
+     * @type {Boolean}
+     */
     get minutesHide() { return this._minutesHide; }
     set minutesHide(val) { this._minutesHide = !!val; }
 
+    /**
+     * Button Jetzt ausblenden? Wirkt beim nächsten Rendern.
+     * @type {Boolean}
+     */
     get nowBtnHide() { return this._nowBtnHide; }
     set nowBtnHide(val) { this._nowBtnHide = !!val; }
 
+    /**
+     * Sekunden ausblenden? Standard: true. Dann enthält der value keine Sekunden.
+     * @type {Boolean}
+     */
     get secondsHide() { return this._secondsHide; }
     set secondsHide(val) { this._secondsHide = !!val; }
 
+    /**
+     * Uhrzeit als Text, z.B. '14:30' (mit Trennzeichen separator, zweistellig mit führender 0).
+     * Minuten und Sekunden sind nur enthalten, wenn sie nicht ausgeblendet sind. Leer: ''.
+     * Beim Setzen werden 24 Uhr bzw. 60 Minuten/Sekunden zu 0; ungültige Werte werfen einen
+     * kijs.Error. Ausgeblendete Teile werden auf 0 gesetzt. Löst kein change-Event aus.
+     * @type {String}
+     */
     get value() {
         let val = '';
         if (!this._empty) {
@@ -263,6 +320,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Aktiviert/deaktiviert auch Kopfzeile, Eingabefelder und Buttons und zeichnet die Uhr neu
+     * (Zeiger in der Farbe für deaktiviert).
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -388,6 +452,14 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Schreibt einen Text an eine Position auf der Uhr (Farbe aus der CSS-Variable --clock-fontColor).
+     * @param {String|Number} text
+     * @param {Number} fontSize  Schriftgrösse in px
+     * @param {Number} degree  Winkel in Grad (0 = oben, im Uhrzeigersinn)
+     * @param {Number} distance  Abstand vom Kreisrand in px
+     * @returns {undefined}
+     */
     _addTextToArc(text, fontSize, degree, distance) {
         let coords = this._degreeToCoordinates(degree, distance);
         this._canvas.font = fontSize+'px Arial,sans-serif';
@@ -397,6 +469,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas.fillText(text, coords.x - (measure.width /2), coords.y + (fontSize / 2));
     }
 
+    /**
+     * Passt die Grösse des Canvas an und zeichnet die Uhr neu: Hintergrund, Zeiger und je nach
+     * Modus die Stunden, Minuten oder Sekunden. Ohne Grösse oder ohne Canvas passiert nichts.
+     * @param {Object|null} [pointerPos=null]  Zeigerposition {degree, distance}. Bei null wird die
+     *                                         Position aus der aktuellen Uhrzeit berechnet.
+     * @returns {undefined}
+     */
     _calculate(pointerPos=null) {
         // Grösse einstellen.
         this._canvasSize = Math.min(this._canvasDivDom.width, this._canvasDivDom.height);
@@ -440,6 +519,12 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Rechnet eine Position im Canvas in Winkel und Abstand vom Kreisrand um.
+     * @param {Number} ox  x-Koordinate im Canvas
+     * @param {Number} oy  y-Koordinate im Canvas
+     * @returns {Object}  {degree, distance}. distance ist negativ ausserhalb des Kreises.
+     */
     _coordinatesToDegree(ox, oy) {
         let x = ox - (this._canvasSize / 2);
         let y = (this._canvasSize / 2) - oy;
@@ -456,6 +541,11 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         return {degree: degree, distance: distance};
     }
 
+    /**
+     * Gibt die Zeigerposition einer Stunde zurück (1-12 innen, 13-23 und 0 aussen).
+     * @param {Number} hour
+     * @returns {Object}  {degree, distance}
+     */
     _degreeByHour(hour) {
         let ret = {degree: 0, distance: 0};
         ret.distance = hour < 13 && hour > 0 ? this._distance.hourAm : this._distance.hourPm;
@@ -466,14 +556,30 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         return ret;
     }
 
+    /**
+     * Gibt die Zeigerposition einer Minute zurück.
+     * @param {Number} minute
+     * @returns {Object}  {degree, distance}
+     */
     _degreeByMinute(minute) {
         return {degree: minute / 60 * 360, distance: this._distance.minute};
     }
 
+    /**
+     * Gibt die Zeigerposition einer Sekunde zurück.
+     * @param {Number} second
+     * @returns {Object}  {degree, distance}
+     */
     _degreeBySecond(second) {
         return {degree: second / 60 * 360, distance: this._distance.second};
     }
 
+    /**
+     * Rechnet Winkel und Abstand vom Kreisrand in eine Position im Canvas um.
+     * @param {Number} degree  Winkel in Grad (0 = oben, im Uhrzeigersinn)
+     * @param {Number} distance  Abstand vom Kreisrand in px
+     * @returns {Object}  {x, y}
+     */
     _degreeToCoordinates(degree, distance) {
         degree = degree+90;
         // h = c * sinus(degree)
@@ -490,6 +596,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         return {x: x, y: y};
     }
 
+    /**
+     * Zeichnet den Kreis der Uhr (Farbe aus der CSS-Variable --clock-bkgrndColor).
+     * @returns {undefined}
+     */
     _drawBackground() {
         // Kreis für Uhr zeichnen
         this._canvas.beginPath();
@@ -504,6 +614,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas.fill();
     }
 
+    /**
+     * Zeichnet die Stunden 1-12 (innen) und 13-00 (aussen, kleiner).
+     * @returns {undefined}
+     */
     _drawHours() {
         for (let i=1; i<=24; i++) {
             let dist = i<=12 ? this._distance.hourAm : this._distance.hourPm;
@@ -514,6 +628,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zeichnet die Minuten in 5er-Schritten (00, 5, 10 ... 55).
+     * @returns {undefined}
+     */
     _drawMinutes() {
         for (let i=0;i<12;i++) {
             let text = i!==0 ? i*5 : '00';
@@ -521,6 +639,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zeichnet den Zeiger mit Kreis am Ende (Farbe aus --clock-pointer-bkgrndColor bzw.
+     * --clock-disabled-pointer-bkgrndColor, wenn deaktiviert).
+     * @param {Number} degree  Winkel in Grad (0 = oben, im Uhrzeigersinn)
+     * @param {Number} distance  Abstand vom Kreisrand in px
+     * @returns {undefined}
+     */
     _drawPointer(degree, distance) {
         const cStyle = getComputedStyle(document.documentElement);
         const bkgrndColor = this.disabled
@@ -539,6 +664,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._canvas.fill();
     }
 
+    /**
+     * Zeichnet die Sekunden in 5er-Schritten (00, 5, 10 ... 55).
+     * @returns {undefined}
+     */
     _drawSeconds() {
         for (let i=0; i<12; i++) {
             let text = i!==0 ? i*5 : '00';
@@ -546,6 +675,10 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Schreibt die aktuelle Uhrzeit in die gerenderten Eingabefelder (leer, wenn kein Wert).
+     * @returns {undefined}
+     */
     _updateInputFields() {
         if (this._inputHourDom.isRendered) {
             this._inputHourDom.nodeAttributeSet('value', this._empty ? '' : this._zeroPad(this._hour));

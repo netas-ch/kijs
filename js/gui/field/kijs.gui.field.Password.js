@@ -3,6 +3,18 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Password
 // --------------------------------------------------------------
+/**
+ * Feld für ein Passwort. Mit disableBrowserSecurityWarning wird statt eines Passwort-Felds ein Textfeld
+ * verwendet, das die Zeichen selbst durch passwordChar ersetzt. Dann gibt der Browser bei einer
+ * unsicheren Verbindung keine Warnung aus; der Cursor kann nur ans Ende gesetzt oder alles markiert werden.
+ *
+ * @example
+ * new kijs.gui.field.Password({ label: 'Passwort', name: 'passwort', required: true });
+ *
+ * @fires blur  Weitergeleitet vom input-Node
+ * @fires change  Nachdem der Benutzer den Wert geändert und das Feld verlassen hat. e: oldValue, value
+ * @fires input  Bei jeder Eingabe (weitergeleitet vom input-Node)
+ */
 kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.Field {
 
 
@@ -48,14 +60,11 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             name: { target: 'name' },
-            disableBrowserSecurityWarning: { prio: -1, target: 'disableBrowserSecurityWarning' },  // false: Nimmt das Standard Passwort-Feld
-                                                                    // true:  Eigenes Feld, dass nicht als Kennwort-Feld erkannt wird und
-                                                                    //        deshalb auch keine Warnung bei unsicherer Verbindung ausgibt
-                                                                    // 'auto' bei unsicherer Verbindung && Firefox = true sonst false
+            disableBrowserSecurityWarning: { prio: -1, target: 'disableBrowserSecurityWarning' },
             passwordChar: true,
-            valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrimEnable: true,
             placeholder: { target: 'placeholder' },
 
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
@@ -85,6 +94,11 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete. Default: 'off'
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -99,6 +113,11 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
+    /**
+     * Eigenes Feld statt Passwort-Feld verwenden (keine Browser-Warnung bei unsicherer Verbindung)?
+     * 'auto' = nur in Firefox bei unsicherer Verbindung. Default: false
+     * @type {Boolean|String}
+     */
     get disableBrowserSecurityWarning() { return this._disableBrowserSecurityWarning; }
     set disableBrowserSecurityWarning(val) {
         if (val === 'auto') {
@@ -127,6 +146,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des input-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
     // overwrite
@@ -139,9 +162,17 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
+    /**
+     * Zeichen, das mit disableBrowserSecurityWarning anstelle der eingegebenen Zeichen angezeigt wird. Default: '●'
+     * @type {String}
+     */
     get passwordChar() { return this._passwordChar; }
     set passwordChar(val) { this._passwordChar = val; }
 
+    /**
+     * Platzhaltertext im leeren Feld. Achtung: Der Getter gibt zurzeit nichts zurück.
+     * @type {String}
+     */
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }
 
@@ -178,6 +209,10 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts automatisch entfernen? Default: false
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
@@ -242,7 +277,11 @@ kijs.gui.field.Password = class kijs_gui_field_Password extends kijs.gui.field.F
 
 
     // PROTECTED
-    // Stellt sicher, dass der Cursor nur ans Feldende gesetzt oder alles markiert werden kann
+    /**
+     * Stellt sicher, dass der Cursor nur am Feldende steht oder alles markiert ist (sonst wird alles markiert).
+     * Nur mit disableBrowserSecurityWarning.
+     * @returns {undefined}
+     */
     _reposCursor() {
         const val = this._inputDom.node.value;
         const len = val.length;

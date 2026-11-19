@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.Observable (Abstract)
 // --------------------------------------------------------------
+/**
+ * Basisklasse für alle Klassen mit Events. Verwaltet die Listeners (on, once, off)
+ * und löst Events aus (raiseEvent). Siehe Leitfaden Ereignisse.
+ */
 kijs.Observable = class kijs_Observable {
 
 
@@ -40,8 +44,8 @@ kijs.Observable = class kijs_Observable {
     // --------------------------------------------------------------
 
     /**
-     * Gibt den Namen der Javascript-Klasse zurück
-     * @returns {String|null}
+     * Name der Javascript-Klasse mit Punkten, z.B. 'kijs.gui.Button'
+     * @type {String|null}
      */
     get jsClassName() {
         if (kijs.isString(this.constructor.name)) {
@@ -90,12 +94,12 @@ kijs.Observable = class kijs_Observable {
 
     /**
      * Entfernt ein oder mehrere Listeners
-     * @param {string|array|null} [names] - Name oder Array mit Namen der Listeners oder leer um alle zu löschen.
+     * @param {string|array|null} [names] Name oder Array mit Namen der Listeners oder leer um alle zu löschen.
      *
-     * @param {function|null} [callback]  - Callback Funktion, deren Listeners gelöscht werden sollen.
+     * @param {function|null} [callback]  Callback Funktion, deren Listeners gelöscht werden sollen.
      *                                      Wenn leer, werden alle gelöscht.
      *
-     * @param {object|null} [context]     - Kontext der Callback Funktion, deren Listeners gelöscht werden sollen.
+     * @param {object|null} [context]     Kontext der Callback Funktion, deren Listeners gelöscht werden sollen.
      *                                      Wenn leer, werden alle gelöscht.
      *
      * @returns {undefined}
@@ -153,9 +157,9 @@ kijs.Observable = class kijs_Observable {
 
     /**
      * Erstellt einen Listener
-     * @param {string|array} names - Name oder Array mit Namen des Listeners
-     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn
-     * @param {Object} context - Kontext für die Callback-Funktion
+     * @param {string|array} names  Name oder Array mit Namen des Listeners
+     * @param {function} callback    Callback-Funktion
+     * @param {Object} context       Kontext für die Callback-Funktion
      * @returns {undefined}
      */
     on(names, callback, context) {
@@ -187,9 +191,9 @@ kijs.Observable = class kijs_Observable {
 
     /**
      * Erstellt einen Listener, der nur einmal ausgeführt wird und sich dann selber wieder entfernt
-     * @param {string|array} names - Name oder Array mit Namen des Listeners
-     * @param {function} callback - Callback-Funktion oder bei name=Object: Standard-Callback-Fn
-     * @param {Object} context - Kontext für die Callback-Funktion
+     * @param {string|array} names  Name oder Array mit Namen des Listeners
+     * @param {function} callback    Callback-Funktion
+     * @param {Object} context       Kontext für die Callback-Funktion
      * @returns {undefined}
      */
     once(names, callback, context) {
@@ -205,9 +209,9 @@ kijs.Observable = class kijs_Observable {
 
     /**
      * Löst einen Event aus
-     * @param {String} [name] - Name des Events oder leer um alle Events auszulösen
-     * @param {Mixed} [args] - beliebig viele Argumente, die dem Event übergeben werden
-     * @returns {Boolean} - Falls ein Listener false zurückgibt, ist die Rückgabe false, sonst true
+     * @param {String|Array} [name] Name des Events, Array mit Namen oder leer um alle Events auszulösen
+     * @param {*} [args]             beliebig viele Argumente, die den Listeners übergeben werden
+     * @returns {Boolean}            Falls ein Listener false zurückgibt, ist die Rückgabe false, sonst true
      */
     raiseEvent(name, ...args) {
         this._events = this._events || {};
@@ -250,6 +254,11 @@ kijs.Observable = class kijs_Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    /**
+     * Gibt das Objekt frei: entfernt alle Listeners. Abgeleitete Klassen geben hier
+     * zusätzlich ihre Unterobjekte frei.
+     * @returns {undefined}
+     */
     destruct() {
         this.off();
     }

@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.Resizer
 // --------------------------------------------------------------
+/**
+ * Griff zum Verändern der Grösse eines Elements (target) per Maus oder Touch. Wird von kijs.gui.Panel
+ * und kijs.gui.Window mit der Eigenschaft resizable verwendet. Die maximale Grösse ergibt sich aus
+ * dem übergeordneten Element (bei Fenstern aus dem targetNode) und den targetMin/Max-Werten.
+ */
 kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
 
@@ -35,7 +40,7 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            target: { target: '_targetEl' },
+            target: { target: '_targetEl' },    // {kijs.gui.Element} Element, dessen Grösse verändert wird
             targetMaxHeight: true,
             targetMaxWidth: true,
             targetMinHeight: true,
@@ -62,6 +67,10 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Darf die Höhe verändert werden? Default: true
+     * @type {Boolean}
+     */
     get allowResizeHeight() {
         return this._dom.clsHas('kijs-resizer-height');
     }
@@ -73,6 +82,10 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Darf die Breite verändert werden? Default: true
+     * @type {Boolean}
+     */
     get allowResizeWidth() {
         return this._dom.clsHas('kijs-resizer-width');
     }
@@ -84,17 +97,37 @@ kijs.gui.Resizer = class kijs_gui_Resizer extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Element, dessen Grösse verändert wird
+     * @type {kijs.gui.Element|null}
+     */
     get target() { return this._targetEl; }
 
+    /**
+     * Maximale Höhe des targets in px. Leer = keine Begrenzung
+     * @type {Number|null}
+     */
     get targetMaxHeight() { return this._targetMaxHeight; }
     set targetMaxHeight(val) { this._targetMaxHeight = val; }
 
+    /**
+     * Maximale Breite des targets in px. Leer = keine Begrenzung
+     * @type {Number|null}
+     */
     get targetMaxWidth() { return this._targetMaxWidth; }
     set targetMaxWidth(val) { this._targetMaxWidth = val; }
 
+    /**
+     * Minimale Höhe des targets in px. Leer = keine Begrenzung
+     * @type {Number|null}
+     */
     get targetMinHeight() { return this._targetMinHeight; }
     set targetMinHeight(val) { this._targetMinHeight = val; }
 
+    /**
+     * Minimale Breite des targets in px. Leer = keine Begrenzung
+     * @type {Number|null}
+     */
     get targetMinWidth() { return this._targetMinWidth; }
     set targetMinWidth(val) { this._targetMinWidth = val; }
 

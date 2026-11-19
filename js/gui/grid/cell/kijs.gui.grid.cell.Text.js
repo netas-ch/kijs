@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Text
 // --------------------------------------------------------------
+/**
+ * Zelle für Text in kijs.gui.grid.Grid (siehe kijs.gui.grid.columnConfig.Text).
+ */
 kijs.gui.grid.cell.Text = class kijs_gui_grid_cell_Text extends kijs.gui.grid.cell.Cell {
 
 

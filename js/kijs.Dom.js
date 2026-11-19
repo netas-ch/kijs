@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.Dom (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für DOM-Nodes: Event-Listener, CSS- und JS-Dateien,
+ * Positionen, Fokus, Scrollen, innerHTML und Farbschema (themeGet/themeSet).
+ */
 kijs.Dom = class kijs_Dom {
 
 
@@ -783,12 +787,20 @@ kijs.Dom = class kijs_Dom {
         }
     }
     
-    // Aktuelles Farbschema zurückgeben
+    /**
+     * Gibt das aktuelle Farbschema zurück (Attribut data-theme des html-Tags)
+     * @returns {String|undefined}
+     */
     static themeGet() {
         return document.querySelector('html').dataset.theme;
     }
 
-    // Farbschema aktivieren. 'light', 'dark' oder null=auto oder ein benutzerdefiniertes Farbschema
+    /**
+     * Aktiviert ein Farbschema (Attribut data-theme des html-Tags)
+     * @param {String|null} theme  'light', 'dark', ein eigenes Farbschema oder null = je nach
+     *                             Einstellung des Betriebssystems (prefers-color-scheme)
+     * @returns {undefined}
+     */
     static themeSet(theme) {
         if (theme === null) {
             if (!!window.matchMedia('(prefers-color-scheme: dark)').matches) {

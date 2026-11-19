@@ -3,13 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.LayerManager (Singleton)
 // --------------------------------------------------------------
-// Der Layermanager wird verwendet, um den z-index von Fenstern zu managen.
-// Wird ein Fenster angeklickt, so wird der z-index aller Fenster mit dem gleichen
-// parentNode neu berechnet und es erscheint zuvorderst.
-// Neben kijs.gui.Window können auch Masken (kijs.gui.Mask) in den Layermanager
-// aufgenommen werden. Dies ist bei modalen Fenster notwendig. Deren masken werden
-// separat im Layermanager geführt.
-// --------------------------------------------------------------
+/**
+ * Verwaltet den z-index von Fenstern (Singleton: new kijs.gui.LayerManager() gibt immer die gleiche
+ * Instanz zurück). Wird ein Fenster aktiviert, wird der z-index aller Fenster mit dem gleichen
+ * parentNode neu berechnet und es erscheint zuvorderst. Neben kijs.gui.Window können auch Masken
+ * (kijs.gui.Mask) aufgenommen werden. Das ist bei modalen Fenstern nötig, deren Masken einen
+ * eigenen z-index erhalten.
+ */
 kijs.gui.LayerManager = class kijs_gui_LayerManager {
 
 
@@ -238,6 +238,10 @@ kijs.gui.LayerManager = class kijs_gui_LayerManager {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    /**
+     * Entfernt die Listeners von allen Elementen und leert die Verwaltung.
+     * @returns {undefined}
+     */
     destruct() {
         // Listeners entfernen
         for (var parentProp of this._parents.values()) {

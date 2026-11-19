@@ -3,6 +3,14 @@
 // --------------------------------------------------------------
 // kijs.gui.ViewPort
 // --------------------------------------------------------------
+/**
+ * Container, der den ganzen Body (document.body) einnimmt. Basis jeder kijs-Oberfläche. Er
+ * überwacht die Fenstergrösse (afterResize) und die Einstellung des Farbschemas des Betriebssystems.
+ *
+ * @example
+ * const viewport = new kijs.gui.ViewPort({ cls: 'kijs-flexrow', elements: [ ... ] });
+ * viewport.render();
+ */
 kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
 
 
@@ -51,6 +59,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Kontextmenü des Browsers auf dem Body unterdrücken? Nur true oder false, sonst kijs.Error. Default: false
+     * @type {Boolean}
+     */
     get disableContextMenu() {
         return kijs.Dom.hasEventListener('contextmenu', document.body, this);
     }
@@ -69,6 +81,11 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Verhindern, dass der Browser eine auf die Seite gezogene Datei öffnet? Nur true oder false,
+     * sonst kijs.Error. Default: true
+     * @type {Boolean}
+     */
     get disableDrop() {
         return kijs.Dom.hasEventListener('dragover', window, this) && kijs.Dom.hasEventListener('drop', window, this);
     }

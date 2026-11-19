@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.Ajax (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse für Ajax-Requests (XMLHttpRequest) mit Promise und Callback.
+ *
+ * @example
+ * kijs.Ajax.request({ url: 'data.php', method: 'GET', format: 'json' }).then(e => { ... });
+ */
 kijs.Ajax = class kijs_Ajax {
 
 

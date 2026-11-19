@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
+/**
+ * Spalte für ein Datum in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Date, Filter
+ * kijs.gui.grid.filter.Date). Achtung: Der Standard-Editor 'kijs.gui.field.Date' existiert nicht.
+ */
 kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
@@ -30,8 +34,8 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            hasTime: true,
-            format: true
+            hasTime: true,  // {Boolean} Mit Uhrzeit? Bestimmt das Standardformat. Default: false
+            format: true    // {String} Format für kijs.Date.format(). Default: 'd.m.Y' bzw. mit hasTime 'd.m.Y H:i'
         });
 
         // Config anwenden

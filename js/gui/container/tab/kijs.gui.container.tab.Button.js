@@ -4,13 +4,13 @@
 // kijs.gui.container.tab.Button
 // --------------------------------------------------------------
 /**
- * Tab-Button Element, das in kijs.gui.container.tab.Elementen verwendet wird.
+ * Tab-Button in der Tab-Leiste von kijs.gui.container.Tab. Gehört zu einem
+ * kijs.gui.container.tab.Container (tabContainerEl) und hat optional einen Schliessen-Button (icon2)
+ * sowie ein Kontextmenü mit Schliessen, Alle schliessen und Andere schliessen.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Button
- *   kijs.gui.container.tab.Button
- *
+ * @fires closeAllClick  Klick auf Alle schliessen im Kontextmenü
+ * @fires closeClick  Klick auf den Schliessen-Button oder auf Schliessen im Kontextmenü
+ * @fires closeOtherClick  Klick auf Andere schliessen im Kontextmenü
  */
 kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs.gui.Button {
 
@@ -85,6 +85,10 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Schliessen-Button ausblenden? Im Kontextmenü sind Schliessen und Alle schliessen dann deaktiviert. Default: false
+     * @type {Boolean}
+     */
     get closeButtonHide() { return this._closeButtonHide; }
     set closeButtonHide(val) {
         this._closeButtonHide = val;
@@ -95,6 +99,10 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
         }
     }
     
+    /**
+     * Icon des Schliessen-Buttons. Default: 'kijs.iconMap.Fa.xmark'
+     * @type {String}
+     */
     get closeButtonIconMap() { return this._closeButtonIconMap; }
     set closeButtonIconMap(val) {
         this._closeButtonIconMap = val;
@@ -103,11 +111,23 @@ kijs.gui.container.tab.Button = class kijs_gui_container_tab_Button extends kijs
         }
     }
 
+    /**
+     * Kontextmenü des Tab-Buttons
+     * @type {kijs.gui.Menu}
+     */
     get menuEl() { return this._menuEl; }
 
+    /**
+     * Kontextmenü ausblenden? Default: false
+     * @type {Boolean}
+     */
     get menuHide() { return !!this._menuHide; }
     set menuHide(val) { this._menuHide = !!val; }
     
+    /**
+     * tab.Container, zu dem der Button gehört
+     * @type {kijs.gui.container.tab.Container|null}
+     */
     get tabContainerEl() { return this._tabContainerEl; }
 
 

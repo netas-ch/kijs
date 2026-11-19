@@ -3,28 +3,23 @@
 // --------------------------------------------------------------
 // kijs.gui.Mask
 // --------------------------------------------------------------
-// Halbtransparente Maske, die über den Body oder ein kijs.gui.Element gelegt wird
-// und so die Bedienung der dahinterliegenden Oberfläche verhindert.
-//
-// Mit der Eigenschaft displayWaitIcon=true kann ein Ladesymbol mit angezeigt werden.
-//
-// Mit text kann ein Ladetext unterhalb des Icons angezeigt werden.
-//
-// Das Element, dass überdeckt wird, wird mit der Eigenschaft target festgelegt.
-// Dies kann der document.body sein oder ein kijs.gui.Element.
-//
-// Beim Body als target wird die Maske mit dem nativen dialog-Tag dem body angefügt.
-// Dies verhindert auch die Navigation via Tastatur unterhalb der Maske.
-//
-// Bei allen anderen targets, wird in den target zuerst ein Anchor-Div (0x0px div)
-// als erster Node eingefügt und darin befindet sich das div der Maske.
-// Eine Navigation via Tastatur wird damit nicht verhindert.
-//
-// Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
-// als target dient. Wird nichts angegeben, so dient das ganze Element als target.
-// Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
-// Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
-// --------------------------------------------------------------
+/**
+ * Halbtransparente Maske, die über den Body oder ein kijs.gui.Element (target) gelegt wird und so
+ * die Bedienung der dahinterliegenden Oberfläche verhindert. Optional mit Ladesymbol
+ * (displayWaitIcon) und Text darunter.
+ * Beim Body als target wird die Maske als natives dialog-Tag modal angezeigt. Das verhindert auch
+ * die Navigation per Tastatur unter der Maske.
+ * Bei anderen targets wird zuerst ein Anker-Div (0x0px) als erster Node in das target eingefügt,
+ * darin liegt das div der Maske. Mit inert (Default: true) wird das target dabei nicht interaktiv
+ * und nicht fokussierbar. Mit targetDomProperty kann ein Teil des Elements maskiert werden, z.B.
+ * bei einem kijs.gui.Panel mit 'innerDom' nur der Inhalt.
+ *
+ * @example
+ * const mask = new kijs.gui.Mask({ target: myPanel, targetDomProperty: 'innerDom', displayWaitIcon: true, text: 'Laden...' });
+ * mask.show();
+ * // ...
+ * mask.destruct();
+ */
 kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
     // PRIVATE VARS
@@ -88,7 +83,7 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             displayWaitIcon: true,
-            icon: { target: 'icon' },       // Lade Icon anzeigen?
+            icon: { target: 'icon' },
             text: { target: 'html', context: this._textDom },
             iconChar: { target: 'iconChar', context: this._iconEl },
             iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
@@ -112,6 +107,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Standard-Animation des Ladesymbols für neue Masken. Default: 'kijs-spin'
+     * @type {String|null}
+     */
     static get defaultIconAnimationCls() {
         if (kijs.isDefined(kijs.gui.Mask.__defaultIconAnimationCls)) {
             return kijs.gui.Mask.__defaultIconAnimationCls;
@@ -124,6 +123,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         kijs.gui.Mask.__defaultIconAnimationCls = iconAnimationCls;
     }
 
+    /**
+     * Standard-Icon des Ladesymbols für neue Masken. Default: 'kijs.iconMap.Fa.circle-notch'
+     * @type {String|null}
+     */
     static get defaultIconMap() {
         if (kijs.isDefined(kijs.gui.Mask.__defaultIconMap)) {
             return kijs.gui.Mask.__defaultIconMap;
@@ -141,6 +144,10 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Ladesymbol anzeigen? Default: false
+     * @type {Boolean}
+     */
     get displayWaitIcon() { return !!this._displayWaitIcon; }
     set displayWaitIcon(val) {
         this._displayWaitIcon = !!val;
@@ -185,21 +192,46 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Animations-Klasse des Ladesymbols (siehe defaultIconAnimationCls)
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
     set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
+    /**
+     * Zeichen des Ladesymbols
+     * @type {String|Number}
+     */
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Ladesymbols
+     * @type {String|null}
+     */
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) { this._iconEl.iconCls = val; }
 
+    /**
+     * Farbe des Ladesymbols
+     * @type {String|null}
+     */
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { this._iconEl.iconColor = val; }
 
+    /**
+     * Icon des Ladesymbols aus einer IconMap (siehe defaultIconMap)
+     * @type {String|null}
+     */
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
+    /**
+     * Maskiertes Element beim Anzeigen nicht mehr interaktiv und fokussierbar machen (Attribut inert)?
+     * Gilt nicht für den Body als target. Default: true
+     * @type {Boolean}
+     */
     get inert() { return this._setInert; }
 
     set inert(val) {
@@ -212,6 +244,13 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     // overwrite
     get isEmpty() { return this._iconEl.isEmpty; }
 
+    /**
+     * Element, das überdeckt wird. Der Setter akzeptiert ein kijs.gui.Element, document.body oder
+     * leer (= Body). Ein kijs.gui.ViewPort gilt auch als Body. Der Getter gibt beim Body null zurück.
+     * Bei Grössenänderungen und Sichtbarkeitswechsel des Elements wird die Maske angepasst, beim
+     * Zerstören des Elements wird sie auch zerstört.
+     * @type {kijs.gui.Element|null}
+     */
     get target() {
         return this._targetElement;
     }
@@ -244,13 +283,25 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Name der Dom-Eigenschaft des targets, die überdeckt wird, z.B. 'innerDom'. Gilt nicht für den Body. Default: 'dom'
+     * @type {String}
+     */
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
 
+    /**
+     * Überdecktes kijs.gui.Dom (target[targetDomProperty]) oder null beim Body
+     * @type {kijs.gui.Dom|null}
+     */
     get targetElementDom() {
         return this._targetElement instanceof kijs.gui.Element ? this._targetElement[this._targetDomProperty] : null;
     }
 
+    /**
+     * Text unter dem Ladesymbol
+     * @type {String}
+     */
     get text() { return this._textDom.html; }
     set text(val) {
         this._textDom.html = val;
@@ -397,6 +448,11 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Passt Position, Grösse und Eckenradius der Maske an targetElementDom an (Rahmen und Padding
+     * des targets werden berücksichtigt). Beim Body passiert nichts.
+     * @returns {undefined}
+     */
     _updateMaskSize() {
         // nur nötig, wenn Target != Body
         if (this._targetElement instanceof kijs.gui.Element) {

@@ -3,6 +3,19 @@
 // --------------------------------------------------------------
 // kijs.gui.field.OptionGroup
 // --------------------------------------------------------------
+/**
+ * Gruppe von Optionsfeldern (kijs.gui.field.ListView mit selectType 'single'). Ohne required kann
+ * die Auswahl auch wieder aufgehoben werden ('singleAndEmpty'). Die Daten haben standardmässig die
+ * Felder value und displayText.
+ *
+ * @example
+ * new kijs.gui.field.OptionGroup({
+ *     label: 'Anrede',
+ *     name: 'anrede',
+ *     required: true,
+ *     data: [ { value: 'f', displayText: 'Frau' }, { value: 'm', displayText: 'Herr' } ]
+ * });
+ */
 kijs.gui.field.OptionGroup = class kijs_gui_field_OptionGroup extends kijs.gui.field.ListView {
 
 

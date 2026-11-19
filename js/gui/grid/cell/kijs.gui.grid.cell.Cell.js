@@ -3,6 +3,16 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Cell (Abstract)
 // --------------------------------------------------------------
+/**
+ * Abstrakte Basisklasse für eine Zelle (td) einer Zeile von kijs.gui.grid.Grid. Zeigt den Wert des
+ * displayField der Spalte (columnConfig) an. Ist die Spalte editable, wird mit clicksToEdit Klicks
+ * ein Editor (editorXtype) in der Zelle geöffnet; Tab springt zur nächsten, Enter zur Zelle darunter,
+ * Escape bricht ab.
+ *
+ * @fires change  Nach einer Änderung des Werts mit setValue() (ohne silent) oder im Editor. Wird auch
+ *                bei der Zeile (zusätzlich e.cell) und beim Grid (zusätzlich e.row, e.cell) ausgelöst.
+ *                e: value, valueDisplay
+ */
 kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element {
 
 
@@ -28,7 +38,7 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true
+            columnConfig: true     // {kijs.gui.grid.columnConfig.ColumnConfig} Spalte der Zelle
         });
 
         // Config anwenden
@@ -47,13 +57,30 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Index der Spalte in den columnConfigs des Grids
+     * @type {Number}
+     */
     get cellIndex() { return this.row.grid.columnConfigs.indexOf(this._columnConfig); }
 
+    /**
+     * Spalte der Zelle
+     * @type {kijs.gui.grid.columnConfig.ColumnConfig|null}
+     */
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
+    /**
+     * Ursprünglicher Wert (als String) zum Erkennen von Änderungen
+     * @type {String|null}
+     */
     get initialValue() { return this._initialValue; }
 
+    /**
+     * Wurde der Wert seit dem letzten Zurücksetzen geändert? Setzen auf false übernimmt den aktuellen
+     * Wert als initialValue, true markiert die Zelle als geändert.
+     * @type {Boolean}
+     */
     get isDirty() { return kijs.toString(this._initialValue) !== kijs.toString(this.value); }
     set isDirty(val) {
         if (val === false) {
@@ -65,10 +92,22 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
+    /**
+     * Zeile der Zelle (parent)
+     * @type {kijs.gui.grid.Row}
+     */
     get row() { return this.parent; }
 
+    /**
+     * Index der Zeile
+     * @type {Number}
+     */
     get rowIndex() { return this.row.rowIndex; }
 
+    /**
+     * Wert der Zelle (der angezeigte HTML-Inhalt). Der Setter ruft setValue() auf.
+     * @type {String}
+     */
     get value() { return this._dom.html; }
     set value(val) { this.setValue(val); }
 
@@ -162,6 +201,11 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
+    /**
+     * Öffnet den Editor (editorXtype mit editorConfig) in der Zelle und löst beim Grid startCellEdit aus.
+     * Wirft einen kijs.Error, wenn editorXtype nicht gefunden wird. Ohne editorXtype passiert nichts.
+     * @returns {undefined}
+     */
     startCellEdit() {
         if (this._columnConfig.editorXtype) {
 
@@ -207,6 +251,12 @@ kijs.gui.grid.cell.Cell = class kijs_gui_grid_cell_Cell extends kijs.gui.Element
         }
     }
 
+    /**
+     * Schliesst den Editor. Ohne cancelEdit wird der Wert in die dataRow (valueField und evtl.
+     * displayField) und die Zelle übernommen, beim Grid stopCellEdit und bei einer Änderung change ausgelöst.
+     * @param {Boolean} [cancelEdit=false]  Änderung verwerfen?
+     * @returns {undefined}
+     */
     stopCellEdit(cancelEdit=false) {
         if (this._cellEditor) {
 

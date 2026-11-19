@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.Icon
 // --------------------------------------------------------------
+/**
+ * Icon als Zeichen einer Icon-Schrift (iconChar, z.B. Font Awesome) oder als CSS-Klasse
+ * mit Hintergrundbild (iconCls). Am einfachsten wird es über iconMap zugewiesen.
+ *
+ * @example
+ * new kijs.gui.Icon({ iconMap: 'kijs.iconMap.Fa.house', iconColor: '#f80' });
+ */
 kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
 
 
@@ -49,6 +56,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * CSS-Klasse für eine Animation, z.B. 'kijs-spin' oder 'kijs-pulse'
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconAnimationCls; }
     set iconAnimationCls(val) {
         if (kijs.isEmpty(val)) {
@@ -65,6 +76,7 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
             this._dom.clsAdd(this._iconAnimationCls);
         }
     }
+
     /**
      * Unicode-Codepoint des Zeichens, z.B. 0xf015.
      * Die Angabe als HTML-Entity (z.B. '&#xf015;') ist deprecated.
@@ -89,6 +101,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         this._dom.html = kijs.isInteger(val) ? String.fromCodePoint(val) : '';
     }
 
+    /**
+     * CSS-Klasse des Icons, z.B. für ein Icon als Hintergrundbild oder die Schrift 'fa-solid'
+     * @type {String|null}
+     */
     get iconCls() { return this._iconCls; }
     set iconCls(val) {
         if (kijs.isEmpty(val)) {
@@ -106,9 +122,19 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Farbe des Icons (CSS color)
+     * @type {String}
+     */
     get iconColor() { return this._dom.style.color; }
     set iconColor(val) { this._dom.style.color = val; }
 
+    /**
+     * Icon aus einer iconMap: Name als String, z.B. 'kijs.iconMap.Fa.house', oder Objekt
+     * { char, cls, color, style }. Leer entfernt das Zeichen.
+     * Der Getter gibt ein Objekt mit char, cls und color zurück.
+     * @type {String|Object}
+     */
     get iconMap() {
         let ret = {};
         if (this.iconChar) {
@@ -156,9 +182,18 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Name der zugewiesenen iconMap, z.B. 'kijs.iconMap.Fa.house'. Der Setter weist iconMap zu.
+     * @type {String|null}
+     */
     get iconMapName() { return this._iconMapName; }
     set iconMapName(val) { this.iconMap = val; }
 
+    /**
+     * Grösse in Pixel (ganze Zahl). Bei iconChar wird fontSize gesetzt, bei iconCls Breite,
+     * Höhe und Grösse des Hintergrundbilds. Gilt für das beim Zuweisen vorhandene Zeichen bzw. iconCls.
+     * @type {Number|null}
+     */
     get iconSize() { return this._iconSize; }
     set iconSize(val) {
         if (val && !kijs.isInteger(val)) {
@@ -188,6 +223,10 @@ kijs.gui.Icon = class kijs_gui_Icon extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Leer, wenn weder iconChar noch iconCls gesetzt ist
+     * @type {Boolean}
+     */
     get isEmpty() {
         return kijs.isEmpty(this._dom.html) && kijs.isEmpty(this._iconCls);
     }

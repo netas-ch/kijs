@@ -3,7 +3,17 @@
 // --------------------------------------------------------------
 // kijs.gui.Rpc
 // --------------------------------------------------------------
-// Erweiterung von kijs.Rpc, der die Meldungsfenster anzeigt
+/**
+ * Erweiterung von kijs.Rpc für die Oberfläche: zeigt während des RPC eine Lademaske und wertet
+ * die Antwort aus. errorMsg wird als Fehler (kijs.gui.MsgBox.error bzw. errorNotice), warningMsg
+ * als Warnung mit der Möglichkeit, den RPC mit ignoreWarnings zu wiederholen, infoMsg als Info und
+ * cornerTipMsg als kijs.gui.CornerTipContainer angezeigt. Die Titel können vom Server mitgegeben
+ * werden (errorTitle, warningTitle, infoTitle, cornerTipTitle), sonst gelten die Standardtitel.
+ *
+ * @example
+ * const rpc = new kijs.gui.Rpc({ url: 'index.php' });
+ * rpc.do({ remoteFn: 'address.save', requestData: data, waitMaskTarget: myPanel }).then(e => { ... });
+ */
 kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
 
 
@@ -46,18 +56,38 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Icon des CornerTips, wenn die Antwort kein cornerTipIcon enthält (siehe kijs.gui.CornerTipContainer.show). Default: 'info'
+     * @type {String}
+     */
     get defaultCornerTipIcon() { return this._defaultCornerTipIcon; }
     set defaultCornerTipIcon(val) { this._defaultCornerTipIcon = val; }
 
+    /**
+     * Titel des CornerTips, wenn die Antwort keinen cornerTipTitle enthält. null = 'Info'
+     * @type {String|null}
+     */
     get defaultCornerTipTitle() { return this._defaultCornerTipTitle; }
     set defaultCornerTipTitle(val) { this._defaultCornerTipTitle = val; }
 
+    /**
+     * Titel der Fehlermeldung, wenn die Antwort keinen errorTitle enthält. null = 'Fehler'
+     * @type {String|null}
+     */
     get defaultErrorTitle() { return this._defaultErrorTitle; }
     set defaultErrorTitle(val) { this._defaultErrorTitle = val; }
 
+    /**
+     * Titel der Info-Meldung, wenn die Antwort keinen infoTitle enthält. null = 'Info'
+     * @type {String|null}
+     */
     get defaultInfoTitle() { return this._defaultInfoTitle; }
     set defaultInfoTitle(val) { this._defaultInfoTitle = val; }
 
+    /**
+     * Titel der Warnung, wenn die Antwort keinen warningTitle enthält. null = 'Warnung'
+     * @type {String|null}
+     */
     get defaultWarningTitle() { return this._defaultWarningTitle; }
     set defaultWarningTitle(val) { this._defaultWarningTitle = val; }
 
@@ -115,6 +145,13 @@ kijs.gui.Rpc = class kijs_gui_Rpc extends kijs.Rpc {
     
     
     // PROTECTED
+    /**
+     * Führt den RPC mit Lademaske aus, zeigt die Meldungen an und löst das Promise von do() auf.
+     * Bei einer Warnung wird der RPC nach Bestätigung mit ignoreWarnings=true wiederholt.
+     * @param {Object} config  Config wie bei do()
+     * @param {Function} resolve  resolve-Funktion des Promise von do()
+     * @returns {Promise}  Promise von kijs.Rpc.do()
+     */
     _doRpc(config, resolve) {
         // Lademaske anzeigen
         let waitMask;

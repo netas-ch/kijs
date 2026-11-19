@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Date
 // --------------------------------------------------------------
+/**
+ * Zelle für ein Datum in kijs.gui.grid.Grid (siehe kijs.gui.grid.columnConfig.Date). Der Wert wird mit
+ * kijs.Date.create() gelesen und mit format angezeigt.
+ */
 kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.cell.Cell {
 
 
@@ -23,8 +27,8 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            hasTime: true,
-            format: true
+            hasTime: true,  // {Boolean} Mit Uhrzeit? Bestimmt das Standardformat. Default: false
+            format: true    // {String} Format für kijs.Date.format(). Default: 'd.m.Y' bzw. mit hasTime 'd.m.Y H:i'
         });
 
         // Config anwenden

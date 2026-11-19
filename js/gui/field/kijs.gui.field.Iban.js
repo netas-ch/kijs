@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Iban
 // --------------------------------------------------------------
+/**
+ * Textfeld für eine IBAN. Die Eingabe wird in Vierergruppen und Grossbuchstaben formatiert und über die
+ * Prüfsumme (Modulo 97) validiert.
+ *
+ * @example
+ * new kijs.gui.field.Iban({ label: 'IBAN', name: 'iban' });
+ */
 kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
 
 
@@ -59,6 +66,12 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     // MEMBERS
     // --------------------------------------------------------------
     // PROTECTED
+    /**
+     * Berechnet den Rest einer Division für eine Zahl als String (auch für sehr lange Zahlen).
+     * @param {String} aNumStr  Zahl als String
+     * @param {Number} aDiv  Divisor
+     * @returns {Number}
+     */
     _modulo(aNumStr, aDiv) {
         let tmp = "";
         let i, r;
@@ -70,6 +83,12 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
         return tmp / 1;
     }
     
+    /**
+     * Prüft eine IBAN: nur A-Z und 0-9 (Leerzeichen werden ignoriert) und Prüfsumme Modulo 97 = 1.
+     * Die Länge pro Land wird nicht geprüft.
+     * @param {String} value
+     * @returns {Boolean}
+     */
     _validateIban(value) {
         value = kijs.toString(value).toUpperCase().replace(/\s/g, '');
 

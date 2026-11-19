@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Filter (Abstract)
 // --------------------------------------------------------------
+/**
+ * Abstrakte Basisklasse für einen Filter (td) in der Filterzeile (kijs.gui.grid.Filter) von
+ * kijs.gui.grid.Grid. Hat ein Menü zum Löschen des Filters bzw. aller Filter und optional eine
+ * Auswahl fester Werte (checkboxFilterValues). Das Filter-Objekt (filter) wird an den Server gesendet.
+ *
+ * @fires filter  Wenn der Filter geändert hat. e: filter, forceReload (sofort neu laden?)
+ */
 kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui.Element {
 
 
@@ -39,7 +46,7 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true,
+            columnConfig: true,     // {kijs.gui.grid.columnConfig.ColumnConfig} Spalte des Filters
             checkboxFilterValues: { target: 'checkboxFilterValues' }
         });
 
@@ -55,6 +62,11 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Feste Werte zur Auswahl im Menü (CheckboxGroup). Der Setter akzeptiert Strings oder Objekte
+     * {displayText, value} (auch einzeln), der Getter gibt die ausgewählten Werte zurück.
+     * @type {Array}
+     */
     get checkboxFilterValues() {
         if (kijs.isEmpty(this._checkboxFilterGroup)) {
             return [];
@@ -93,8 +105,16 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         this._checkboxFilterGroup.data = data;
     }
     
+    /**
+     * Spalte des Filters
+     * @type {kijs.gui.grid.columnConfig.ColumnConfig}
+     */
     get columnConfig() { return this._columnConfig; }
     
+    /**
+     * Filter-Objekt für den Server: {type, valueField} und mit checkboxFilterValues zusätzlich checkboxFilter
+     * @type {Object}
+     */
     get filter() {
         let flt = {
             type: '',
@@ -106,6 +126,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         return flt;
     }
     
+    /**
+     * Ist der Filter aktiv?
+     * @type {Boolean}
+     */
     get isFiltered() { return !!(this.checkboxFilterValues.length > 0); }
 
 
@@ -113,6 +137,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Hat der Filter den Fokus (Menü offen)?
+     * @returns {Boolean}
+     */
     hasFocus() {
         return !!this._menuButton.menu.isRendered;
     }
@@ -143,6 +171,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         }
     }
 
+    /**
+     * Setzt den Filter zurück und löst filter aus.
+     * @returns {undefined}
+     */
     reset() {
         // Filter zurücksetzen
         if (this._checkboxFilterGroup !== null) {
@@ -172,15 +204,27 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     
     
     // PROTECTED
-    // wendet den Filter auf das grid an.
+    /**
+     * Löst filter aus, damit die Filterzeile das Grid neu lädt.
+     * @param {Boolean} [forceReload=false]  Sofort neu laden, auch wenn ein Filterfeld den Fokus hat?
+     * @returns {undefined}
+     */
     _applyToGrid(forceReload=false) {
         this.raiseEvent('filter', {filter: this.filter, forceReload: forceReload});
     }
 
+    /**
+     * Gibt die Menü-Elemente der Auswahl fester Werte zurück (Trennlinie und CheckboxGroup)
+     * @returns {Array}  Leer ohne checkboxFilterValues
+     */
     _getCheckboxMenuButtons() {
         return this._checkboxFilterGroup !== null ? ['-', this._checkboxFilterGroup] : [];
     }
 
+    /**
+     * Gibt die Menü-Buttons «Filter löschen» und «Alle Filter löschen» zurück
+     * @returns {Object[]}
+     */
     _getDefaultMenuButtons() {
         return [
             {
@@ -207,6 +251,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         ];
     }
 
+    /**
+     * Gibt alle Menü-Elemente des Filters zurück
+     * @returns {Array}
+     */
     _getMenuButtons() {
         return kijs.Array.concat(this._getDefaultMenuButtons(), this._getCheckboxMenuButtons());
     }

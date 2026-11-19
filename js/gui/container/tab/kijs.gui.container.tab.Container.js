@@ -4,15 +4,16 @@
 // kijs.gui.container.tab.Container
 // --------------------------------------------------------------
 /**
- * Container Element, zur Verwendung in kijs.gui.container.tab.Elementen.
- * Es hat zusätzlich zum normalen Container noch ein paar Eigenschaften, für den
- * Tab-Button in der Tab-Bar.
+ * Container für eine Seite von kijs.gui.container.Tab. Zusätzlich zum normalen Container
+ * hat er einen Tab-Button (kijs.gui.container.tab.Button) für die Tab-Bar, der über die
+ * Config-Eigenschaften tab... konfiguriert wird.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.container.tab.Container
- *
+ * @example
+ * new kijs.gui.container.Tab({
+ *     elements: [
+ *         { xtype: 'kijs.gui.container.tab.Container', tabCaption: 'Adresse', tabClosable: true, html: '...' }
+ *     ]
+ * });
  */
 kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extends kijs.gui.Container {
 
@@ -37,25 +38,25 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             tabClosable: { target: 'tabClosable' },
-            tabClosableIconMap: { target: 'closableIconMap', context: this._tabButtonEl },
-            tabBadgeText: { target: 'badgeText', context: this._tabButtonEl },
-            tabBadgeCls: { target: 'badgeCls', context: this._tabButtonEl },
-            tabBadgeTextDisplayType: { target: 'badgeTextDisplayType', context: this._tabButtonEl },
-            tabBadgeStyle: { target: 'badgeStyle', context: this._tabButtonEl },
-            tabCaption: { target: 'caption', context: this._tabButtonEl },
-            tabCaptionCls: { target: 'captionCls', context: this._tabButtonEl },
-            tabCaptionDisplayType: { target: 'captionDisplayType', context: this._tabButtonEl },
-            tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },
+            tabClosableIconMap: { target: 'closableIconMap', context: this._tabButtonEl },   // {String} Icon des Schliessen-Buttons. Achtung: zeigt auf die nicht vorhandene Eigenschaft closableIconMap des Tab-Buttons und wirkt darum nicht
+            tabBadgeText: { target: 'badgeText', context: this._tabButtonEl },   // {String} Badge-Text des Tab-Buttons (siehe kijs.gui.Button.badgeText)
+            tabBadgeCls: { target: 'badgeCls', context: this._tabButtonEl },   // {String} CSS-Klasse des Badges. Achtung: Der Tab-Button hat keine Eigenschaft badgeCls (nur die Config), darum wirkt es nicht
+            tabBadgeTextDisplayType: { target: 'badgeTextDisplayType', context: this._tabButtonEl },   // {String} Darstellung des Badge-Texts (siehe kijs.gui.Button.badgeTextDisplayType)
+            tabBadgeStyle: { target: 'badgeStyle', context: this._tabButtonEl },   // {Object} CSS-Styles des Badges. Achtung: Der Tab-Button hat keine Eigenschaft badgeStyle (nur die Config), darum wirkt es nicht
+            tabCaption: { target: 'caption', context: this._tabButtonEl },   // {String} Beschriftung des Tab-Buttons
+            tabCaptionCls: { target: 'captionCls', context: this._tabButtonEl },   // {String} CSS-Klasse der Beschriftung. Achtung: Der Tab-Button hat keine Eigenschaft captionCls (nur die Config), darum wirkt es nicht
+            tabCaptionDisplayType: { target: 'captionDisplayType', context: this._tabButtonEl },   // {String} Darstellung der Beschriftung (siehe kijs.gui.Button.captionDisplayType)
+            tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },   // {Object} CSS-Styles der Beschriftung. Achtung: Der Tab-Button hat keine Eigenschaft captionStyle (nur die Config), darum wirkt es nicht
             
-            tabIcon: { target: 'icon', context: this._tabButtonEl },
-            tabIconMap: { target: 'iconMap', context: this._tabButtonEl },
-            tabIconChar: { target: 'iconChar', context: this._tabButtonEl },
-            tabIconCls: { target: 'iconCls', context: this._tabButtonEl },
-            tabIconAnimationCls: { target: 'iconAnimationCls', context: this._tabButtonEl },
-            tabIconColor: { target: 'iconColor', context: this._tabButtonEl },
-            tabStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl },
-            tabTooltip: { target: 'tooltip', context: this._tabButtonEl },
-            tabWidth: { target: 'width', context: this._tabButtonEl },
+            tabIcon: { target: 'icon', context: this._tabButtonEl },   // {kijs.gui.Icon|Object} Icon des Tab-Buttons (siehe kijs.gui.Button.icon)
+            tabIconMap: { target: 'iconMap', context: this._tabButtonEl },   // {String} Icon aus einer IconMap, z.B. 'kijs.iconMap.Fa.house'
+            tabIconChar: { target: 'iconChar', context: this._tabButtonEl },   // {String|Number} Zeichen des Icons
+            tabIconCls: { target: 'iconCls', context: this._tabButtonEl },   // {String} CSS-Klasse des Icons
+            tabIconAnimationCls: { target: 'iconAnimationCls', context: this._tabButtonEl },   // {String} Animations-Klasse des Icons (siehe kijs.gui.Icon.iconAnimationCls)
+            tabIconColor: { target: 'iconColor', context: this._tabButtonEl },   // {String} Farbe des Icons
+            tabStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl },   // {Object} CSS-Styles des Tab-Buttons
+            tabTooltip: { target: 'tooltip', context: this._tabButtonEl },   // {String|Object} Tooltip des Tab-Buttons (siehe kijs.gui.Element.tooltip)
+            tabWidth: { target: 'width', context: this._tabButtonEl },   // {Number} Breite des Tab-Buttons in px
             
             tabMenuHide: { target: 'menuHide', context: this._tabButtonEl }
         });
@@ -72,7 +73,11 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // gibt Grund-Daten zum Container zurück, wie caption und Position.
+    /**
+     * Grunddaten des Containers zum Speichern der Tab-Positionen: tabCaption, tabIconMap,
+     * tabClosable und, falls vorhanden, name, disabled und userData.
+     * @type {Object}
+     */
     get posData() {
         let ret = {
             tabCaption: this._tabButtonEl.caption,
@@ -91,14 +96,30 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         return ret;
     }
     
+    /**
+     * Tab-Button in der Tab-Bar
+     * @type {kijs.gui.container.tab.Button}
+     */
     get tabButtonEl() { return this._tabButtonEl; }
 
+    /**
+     * Hat der Tab-Button einen Schliessen-Button? Default: true
+     * @type {Boolean}
+     */
     get tabClosable() { return !this._tabButtonEl.closeButtonHide; }
     set tabClosable(val) { this._tabButtonEl.closeButtonHide = !val; }
 
+    /**
+     * Icon des Schliessen-Buttons. Default: 'kijs.iconMap.Fa.xmark'
+     * @type {String}
+     */
     get tabClosableIconMap() { return this._tabButtonEl.closeButtonIconMap; }
     set tabClosableIconMap(val) { this._tabButtonEl.closeButtonIconMap = val; }
 
+    /**
+     * Kontextmenü (Schliessen, Alle schliessen …) des Tab-Buttons ausblenden?
+     * @type {Boolean}
+     */
     get tabMenuHide() { return this._tabButtonEl.menuHide; }
     set tabMenuHide(val) { this._tabButtonEl.menuHide = val; }
 

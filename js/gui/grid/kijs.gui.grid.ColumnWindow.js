@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.ColumnWindow
 // --------------------------------------------------------------
+/**
+ * Fenster zum Ein- und Ausblenden und Sortieren der Spalten eines kijs.gui.grid.Grid. Wird aus dem Menü
+ * einer kijs.gui.grid.HeaderCell geöffnet (parent). Spalten ohne hideable können nicht abgewählt
+ * werden. Mit OK werden visible und position der Spalten übernommen.
+ */
 kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.Window {
 
 
@@ -69,6 +74,10 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Grid der Kopfzelle (parent.header.grid)
+     * @type {kijs.gui.grid.Grid}
+     */
     get grid() { return this.parent.header.grid; }
 
 
@@ -76,6 +85,11 @@ kijs.gui.grid.ColumnWindow = class kijs_gui_grid_ColumnWindow extends kijs.gui.W
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Erstellt eine CheckboxGroup mit allen Spalten (ausgewählt = sichtbar) und zeigt das Fenster an.
+     * @returns {undefined}
+     */
+    // overwrite
     show() {
         let data = [];
         let values = [];

@@ -3,6 +3,23 @@
 // --------------------------------------------------------------
 // kijs.gui.ButtonGroup
 // --------------------------------------------------------------
+/**
+ * Container, der Buttons (oder andere Elemente) mit einer Beschriftung in einem Raster mit columns
+ * Spalten anordnet. Die Elemente werden spaltenweise von oben nach unten verteilt. Mit colSizes und
+ * rowSizes kann ein Element mehrere Spalten bzw. Zeilen belegen.
+ *
+ * @example
+ * new kijs.gui.ButtonGroup({
+ *     caption: 'Ansicht',
+ *     columns: 2,
+ *     rowSizes: [2],
+ *     elements: [
+ *         { xtype: 'kijs.gui.Button', caption: 'Gross' },
+ *         { xtype: 'kijs.gui.Button', caption: 'Liste' },
+ *         { xtype: 'kijs.gui.Button', caption: 'Details' }
+ *     ]
+ * });
+ */
 kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
 
@@ -32,14 +49,14 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columns: true,  // Anzahl Spalten
-            rowSizes: { target: 'rowSizes' }, // pro Element: Anzahl verwendete Zeilen
-            colSizes: { target: 'colSizes' }, // pro Element: Anzahl verwendete Spalten
+            columns: true,
+            rowSizes: { target: 'rowSizes' },
+            colSizes: { target: 'colSizes' },
 
             caption: { target: 'html', context: this._captionDom },
-            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
+            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },     // {String|Array} CSS-Klassen der Beschriftung
             captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
-            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom }
+            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom }     // {Object} CSS-Styles der Beschriftung
         });
 
         // Config anwenden
@@ -54,6 +71,10 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung der Gruppe
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) {
         this._captionDom.html = val;
@@ -62,11 +83,24 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Darstellung der Beschriftung (siehe kijs.gui.Dom.htmlDisplayType)
+     * @type {String}
+     */
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
+    /**
+     * kijs.gui.Dom der Beschriftung
+     * @type {kijs.gui.Dom}
+     */
     get captionDom() { return this._captionDom; }
 
+    /**
+     * Anzahl belegte Spalten pro Element (Index wie elements). Der Getter ergänzt fehlende Werte mit 1.
+     * Kein Array = [].
+     * @type {Number[]}
+     */
     get colSizes() {
         let rs = [];
         for (let i=0; i<this.elements.length; i++) {
@@ -78,12 +112,21 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
         this._colSizes = kijs.isArray(val) ? val : [];
     }
 
+    /**
+     * Anzahl Spalten. Nicht numerisch = 1. Default: 1
+     * @type {Number}
+     */
     get columns() { return this._columns; }
     set columns(val) { this._columns = kijs.isNumeric(val) ? window.parseInt(val) : 1; }
 
     // overwrite
     get isEmpty() { return this._captionDom.isEmpty && kijs.isEmpty(this._elements); }
 
+    /**
+     * Anzahl belegte Zeilen pro Element (Index wie elements). Der Getter ergänzt fehlende Werte mit 1.
+     * Kein Array = [].
+     * @type {Number[]}
+     */
     get rowSizes() {
         let rs = [];
         for (let i=0; i<this.elements.length; i++) {
@@ -130,6 +173,11 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
 
     // PROTECTED
+    /**
+     * Berechnet die Belegung des Rasters. Jede Zelle enthält den Index des Elements, das dort
+     * beginnt, 'R' für eine weitere vom Element belegte Zelle oder ist leer.
+     * @returns {Array[]}  matrix[Zeile][Spalte]
+     */
     _getTableMatrix() {
         let colSizes = this.colSizes;
         let rowSizes = this.rowSizes;

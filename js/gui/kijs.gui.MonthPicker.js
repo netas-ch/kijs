@@ -3,6 +3,25 @@
 // --------------------------------------------------------------
 // kijs.gui.MonthPicker
 // --------------------------------------------------------------
+/**
+ * Auswahl eines Monats: links die 12 Monate, rechts 5 Jahre (mit Buttons und Mausrad
+ * scrollbar). Die Kopfzeile wechselt zum vorherigen bzw. nächsten Monat. Darunter gibt es die
+ * Buttons Aktueller Monat, Leeren und Schliessen. Wird z.B. von kijs.gui.DatePicker und
+ * kijs.gui.field.Month verwendet.
+ *
+ * @example
+ * new kijs.gui.MonthPicker({ value: '2024-05-01', lastDayOfMonthAsValue: true });
+ *
+ * @fires change  Nach einer Änderung durch einen Klick (Monat, Jahr, vorheriger/nächster Monat,
+ *                Aktueller Monat, Leeren). e: value, oldValue, date, oldDate
+ * @fires closeClick  Klick auf den Button Schliessen
+ * @fires currentClick  Klick auf den Button Aktueller Monat
+ * @fires emptyClick  Klick auf den Button Leeren
+ * @fires monthClick  Klick auf einen wählbaren Monat
+ * @fires monthDblClick  Doppelklick auf einen wählbaren Monat
+ * @fires yearClick  Klick auf ein Jahr
+ * @fires yearDblClick  Doppelklick auf ein Jahr
+ */
 kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
 
@@ -138,15 +157,15 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            lastDayOfMonthAsValue: true,       // Soll beim Abfragen des Value oder Date der letzte Tag des Monats zurückgegeben werden?
-            valueFormat: true,                  // Format, mit dem der value ausgeliefert wird
-            minValue: { target: 'minValue' },   // Kleinster zu wählender Monat     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
-            maxValue: { target: 'maxValue' },   // Grösster zu wählender Monat      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
-            headerBarHide: true,                // HeaderBar ausblenden
-            currentBtnHide: true,               // Aktueller Monat Button ausblenden
-            emptyBtnHide: true,                 // Leer lassen Button ausblenden
-            closeBtnHide: true,                 // Schliessen Button ausblenden
-            value: { target: 'value' }          // (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
+            lastDayOfMonthAsValue: true,
+            valueFormat: true,
+            minValue: { target: 'minValue' },
+            maxValue: { target: 'maxValue' },
+            headerBarHide: true,
+            currentBtnHide: true,
+            emptyBtnHide: true,
+            closeBtnHide: true,
+            value: { target: 'value' }
         });
 
         // Events weiterleiten
@@ -165,12 +184,25 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button Schliessen ausblenden? Default: true
+     * @type {Boolean}
+     */
     get closeBtnHide() { return this._closeBtnHide; }
     set closeBtnHide(val) { this._closeBtnHide = !!val; }
 
+    /**
+     * Button Aktueller Monat ausblenden? Default: false
+     * @type {Boolean}
+     */
     get currentBtnHide() { return this._currentBtnHide; }
     set currentBtnHide(val) { this._currentBtnHide = !!val; }
 
+    /**
+     * Gewählter Monat als Date: der 1. Tag bzw. mit lastDayOfMonthAsValue der letzte Tag des
+     * Monats. Der Setter akzeptiert ein beliebiges Datum des Monats (alles, was kijs.Date.create() kennt).
+     * @type {Date|null}
+     */
     get date() {
         if (kijs.isEmpty(this._date)) {
             return null;
@@ -193,40 +225,76 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this._calculate(true);
     }
     
+    /**
+     * Button Leeren ausblenden? Default: false
+     * @type {Boolean}
+     */
     get emptyBtnHide() { return this._emptyBtnHide; }
     set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
+    /**
+     * Kopfzeile mit dem Monat und den Buttons vorheriger/nächster Monat
+     * @type {kijs.gui.PanelBar}
+     */
     get headerBar() { return this._headerBar; }
 
     //get headerBarFormat() { return this._headerBarFormat; }
     //set headerBarFormat(val) { this._headerBarFormat = val; }
 
+    /**
+     * Kopfzeile ausblenden? Default: false
+     * @type {Boolean}
+     */
     get headerBarHide() { return this._headerBarHide; }
     set headerBarHide(val) { this._headerBarHide = !!val; }
 
+    /**
+     * Gibt date bzw. value den letzten statt den ersten Tag des Monats zurück? Default: false
+     * @type {Boolean}
+     */
     get lastDayOfMonthAsValue() { return this._lastDayOfMonthAsValue; }
     set lastDayOfMonthAsValue(val) { this._lastDayOfMonthAsValue = !!val; }
 
+    /**
+     * Spätester wählbarer Monat (letzter Tag des Monats). Der Setter akzeptiert ein beliebiges Datum des Monats.
+     * @type {Date|null}
+     */
     get maxDate() { return this._maxDate; }
     set maxDate(val) {
         this._maxDate = kijs.isEmpty(val) ? null : kijs.Date.getLastOfMonth(kijs.Date.create(val));
     }
     
+    /**
+     * Spätester wählbarer Monat als String im Format valueFormat (siehe maxDate)
+     * @type {String}
+     */
     get maxValue() {  return kijs.Date.format(this.maxDate, this._valueFormat); }
     set maxValue(val) {
         this.maxDate = val;
     }
     
+    /**
+     * Frühester wählbarer Monat (erster Tag des Monats). Der Setter akzeptiert ein beliebiges Datum des Monats.
+     * @type {Date|null}
+     */
     get minDate() { return this._minDate; }
     set minDate(val) {
         this._minDate = kijs.isEmpty(val) ? null : kijs.Date.getFirstOfMonth(kijs.Date.create(val));
     }
 
+    /**
+     * Frühester wählbarer Monat als String im Format valueFormat (siehe minDate)
+     * @type {String}
+     */
     get minValue() { return kijs.Date.format(this.minDate, this._valueFormat); }
     set minValue(val) {
         this.minDate = val;
     }
 
+    /**
+     * Gewählter Monat als String im Format valueFormat (siehe date). Leer = ''
+     * @type {String}
+     */
     get value() {
         let date = this.date;
         if (kijs.isEmpty(date)) {
@@ -239,6 +307,10 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         this.date = val;
     }
 
+    /**
+     * Format von value, minValue und maxValue (siehe kijs.Date.format()). Default: 'Y-m-d'
+     * @type {String}
+     */
     get valueFormat() { return this._valueFormat; }
     set valueFormat(val) { this._valueFormat = val; }
 
@@ -273,6 +345,12 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Setzt den Fokus auf den ersten sichtbaren Button (Schliessen, Aktueller Monat, Leeren),
+     * sonst auf das Element
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @returns {HTMLElement|null|false}
+     */
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         // Wenn möglich den Fokus auf einen Button setzen
@@ -290,7 +368,11 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
+    /**
+     * Begrenzt ein Datum auf minDate und maxDate
+     * @param {Date} value
+     * @returns {Date}
+     */
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -380,6 +462,11 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Aktualisiert Monate und Jahre: Markierung des Werts und nicht wählbare Monate. Nur wenn gerendert.
+     * @param {Boolean} [scrollIntoView]  Die Jahre so verschieben, dass das gewählte Jahr sichtbar ist
+     * @returns {undefined}
+     */
     _calculate(scrollIntoView) {
         if (!this.isRendered) {
             return;
@@ -444,7 +531,10 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Erstellt die 12 Monate kijs.gui.Dom
+    /**
+     * Erstellt die 12 Monate als kijs.gui.Dom
+     * @returns {undefined}
+     */
     _createMonthsDom() {
         for (let i=0; i<12; i++) {
             this._monthsDom.push(new kijs.gui.Dom({
@@ -458,7 +548,10 @@ kijs.gui.MonthPicker = class kijs_gui_MonthPicker extends kijs.gui.Element {
         }
     }
 
-    // Erstellt die 5 Jahres kijs.gui.Dom beginnend bei startYear
+    /**
+     * Erstellt die 5 Jahre als kijs.gui.Dom, beginnend bei _startYear
+     * @returns {undefined}
+     */
     _createYearsDom() {
         for (let i=0; i<this._yearsCount; i++) {
             this._yearsDom.push(new kijs.gui.Dom({

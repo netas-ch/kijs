@@ -3,6 +3,24 @@
 // --------------------------------------------------------------
 // kijs.gui.DatePicker
 // --------------------------------------------------------------
+/**
+ * Kalender zum Auswählen eines Datums, einer Woche oder eines Zeitraums (mode). Er zeigt einen
+ * Monat mit 6 Wochen und Wochennummern. Ein Klick auf die Kopfzeile öffnet eine Monatsauswahl
+ * (kijs.gui.MonthPicker). Darunter gibt es die Buttons Heute, Leeren und Schliessen.
+ * Wird von kijs.gui.field.DateTime verwendet.
+ *
+ * @example
+ * new kijs.gui.DatePicker({ mode: 'range', minValue: '2024-01-01' });
+ *
+ * @fires change  Nach einer Änderung durch einen Klick (Tag, Heute, Leeren). e: value, date, valueEnd,
+ *                dateEnd, oldValue, oldDate, oldValueEnd, oldDateEnd
+ * @fires closeClick  Klick auf den Button Schliessen
+ * @fires dayClick  Klick auf einen wählbaren Tag
+ * @fires dayDblClick  Doppelklick auf einen wählbaren Tag
+ * @fires emptyClick  Klick auf den Button Leeren
+ * @fires inputFinished  Die Auswahl ist abgeschlossen (Tag gewählt bzw. bei 'range' das Enddatum)
+ * @fires todayClick  Klick auf den Button Heute
+ */
 kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
 
@@ -138,19 +156,19 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            mode: true,                         // Modus: 'date', 'week' oder 'range'
-            weekNumbersHide: true,              // Wochennummern ausblenden?
-            valueFormat: true,                  // Format, mit dem der value ausgeliefert wird
-            minValue: { target: 'minValue' },   // Kleinster zu wählender Wert     (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
-            maxValue: { target: 'maxValue' },   // Grösster zu wählender Wert      (Date Object oder SQL-String mit einem beliebigen Datum des Monats)
-            headerBarHide: true,                // HeaderBar ausblenden
-            todayBtnHide: true,                 // Heute Button ausblenden
-            emptyBtnHide: true,                 // Leer lassen Button ausblenden
-            closeBtnHide: true,                 // Schliessen Button ausblenden
-            date: { target: 'date' },           // Date Object
-            dateEnd: { target: 'dateEnd' },     // Date Object
-            value: { target: 'value' },         // SQL-String
-            valueEnd: { target: 'valueEnd' }    // SQL-String
+            mode: true,
+            weekNumbersHide: true,
+            valueFormat: true,
+            minValue: { target: 'minValue' },
+            maxValue: { target: 'maxValue' },
+            headerBarHide: true,
+            todayBtnHide: true,
+            emptyBtnHide: true,
+            closeBtnHide: true,
+            date: { target: 'date' },
+            dateEnd: { target: 'dateEnd' },
+            value: { target: 'value' },
+            valueEnd: { target: 'valueEnd' }
         });
 
         // Events weiterleiten
@@ -168,9 +186,19 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button Schliessen ausblenden? Default: true
+     * @type {Boolean}
+     */
     get closeBtnHide() { return this._closeBtnHide; }
     set closeBtnHide(val) { this._closeBtnHide = !!val; }
 
+    /**
+     * Datum (bei 'week' und 'range' das Startdatum). Liegt das Enddatum davor, wird dieses
+     * zurückgegeben. Der Setter akzeptiert alles, was kijs.Date.create() kennt; bei 'week' wird auf
+     * den Montag gesetzt und das Enddatum ergänzt.
+     * @type {Date|null}
+     */
     get date() {
         if (kijs.isEmpty(this._date)) {
             // Falls es ein End-Datum gibt dieses nehmen
@@ -207,6 +235,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._calculate();
     }
 
+    /**
+     * Enddatum (bei 'week' und 'range'). Ohne Startdatum null.
+     * @type {Date|null}
+     */
     get dateEnd() {
         if (kijs.isEmpty(this._dateEnd)) {
             return null;
@@ -232,14 +264,30 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._calculate();
     }
     
+    /**
+     * Button Leeren ausblenden? Default: false
+     * @type {Boolean}
+     */
     get emptyBtnHide() { return this._emptyBtnHide; }
     set emptyBtnHide(val) { this._emptyBtnHide = !!val; }
 
+    /**
+     * Kopfzeile mit Monat und den Buttons vorheriger/nächster Monat
+     * @type {kijs.gui.PanelBar}
+     */
     get headerBar() { return this._headerBar; }
 
+    /**
+     * Kopfzeile ausblenden? Default: false
+     * @type {Boolean}
+     */
     get headerBarHide() { return this._headerBarHide; }
     set headerBarHide(val) { this._headerBarHide = !!val; }
 
+    /**
+     * Spätestes wählbares Datum. Der Setter akzeptiert alles, was kijs.Date.create() kennt.
+     * @type {Date|null}
+     */
     get maxDate() {
         return this._maxDate;
     }
@@ -247,6 +295,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._maxDate = kijs.isEmpty(val) ? null : kijs.Date.create(val);
     }
     
+    /**
+     * Spätestes wählbares Datum als String im Format valueFormat (siehe maxDate)
+     * @type {String}
+     */
     get maxValue() {
         return kijs.Date.format(this.maxDate, this._valueFormat);
     }
@@ -254,6 +306,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this.maxDate = val;
     }
 
+    /**
+     * Frühestes wählbares Datum. Der Setter akzeptiert alles, was kijs.Date.create() kennt.
+     * @type {Date|null}
+     */
     get minDate() {
         return this._minDate;
     }
@@ -261,6 +317,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._minDate = kijs.isEmpty(val) ? null : kijs.Date.create(val);
     }
 
+    /**
+     * Frühestes wählbares Datum als String im Format valueFormat (siehe minDate)
+     * @type {String}
+     */
     get minValue() {
         return kijs.Date.format(this.minDate, this._valueFormat);
     }
@@ -268,6 +328,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this.minDate = val;
     }
 
+    /**
+     * Modus: 'date', 'week' oder 'range'. Default: 'date'
+     * @type {String}
+     */
     get mode() {
         return this._mode;
     }
@@ -276,9 +340,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this._calculate();
     }
 
+    /**
+     * Button Heute ausblenden? Default: false
+     * @type {Boolean}
+     */
     get todayBtnHide() { return this._todayBtnHide; }
     set todayBtnHide(val) { this._todayBtnHide = !!val; }
 
+    /**
+     * Datum als String im Format valueFormat. Leer = ''
+     * @type {String}
+     */
     get value() {
         if (kijs.isEmpty(this._date)) {
             return '';
@@ -290,6 +362,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this.date = val;
     }
 
+    /**
+     * Enddatum als String im Format valueFormat. Leer = ''
+     * @type {String}
+     */
     get valueEnd() {
         if (kijs.isEmpty(this._dateEnd)) {
             return '';
@@ -301,9 +377,17 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         this.dateEnd = val;
     }
 
+    /**
+     * Format von value, valueEnd, minValue und maxValue (siehe kijs.Date.format()). Default: 'Y-m-d'
+     * @type {String}
+     */
     get valueFormat() { return this._valueFormat; }
     set valueFormat(val) { this._valueFormat = val; }
 
+    /**
+     * Wochennummern ausblenden? Default: false
+     * @type {Boolean}
+     */
     get weekNumbersHide() { return this._weekNumbersHide; }
     set weekNumbersHide(val) { this._weekNumbersHide = !!val; }
 
@@ -330,7 +414,11 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
     
-    // Falls value ausserhalb von minValue oder maxValue ist, wird er auf den nächstmöglichen Wert verändert.
+    /**
+     * Begrenzt ein Datum auf minDate und maxDate
+     * @param {Date} value
+     * @returns {Date}
+     */
     getNextValidDate(value) {
         if (this._minDate && value < this._minDate) {
             value = this._minDate;
@@ -422,6 +510,12 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Aktualisiert den Kalender: Monat, Tage, Markierung des Werts und deaktivierte Tage.
+     * Nur wenn gerendert.
+     * @param {Date|null} [tmpRangeEndDate=null]  Bei 'range' ohne Enddatum: Tag unter dem Mauszeiger
+     * @returns {undefined}
+     */
     _calculate(tmpRangeEndDate = null) {
         if (!this.isRendered) {
             return;
@@ -605,7 +699,11 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
-    // Stellt sicher, dass das Enddatum hinter dem Startdatum liegt
+    /**
+     * Passt Start- und Enddatum an mode an: bei 'date' kein Enddatum, bei 'week' Montag bis
+     * Sonntag, bei 'range' das Enddatum nach dem Startdatum
+     * @returns {undefined}
+     */
     _checkValueOrder() {
         if (this._mode === 'date') {
             this._dateEnd = null;
@@ -641,7 +739,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
-    // Erstellt die Kalender Items als kijs.gui.Dom
+    /**
+     * Erstellt die Felder des Kalenders (Spaltenüberschriften, Wochennummern, Tage) als kijs.gui.Dom
+     * @returns {undefined}
+     */
     _createItemsDom() {
         const rowsCount = this._weeksCount + 1;   // Anzahl Wochen + Spaltenheader
         const itemsCount = rowsCount * (this._weekNumbersHide ? 7 : 8);
@@ -668,7 +769,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
-    // Spaltenüberschrift + 6 Zeilen erstellen
+    /**
+     * Erstellt die Zeilen des Kalenders (Spaltenüberschriften und 6 Wochen)
+     * @returns {undefined}
+     */
     _createRowsDom() {
         const count = this._weeksCount + 1;
 
@@ -686,7 +790,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
-    // Rendert die 12 Monate kijs.gui.Dom
+    /**
+     * Rendert die Felder des Kalenders in die Zeilen
+     * @returns {undefined}
+     */
     _renderItemsDom() {
         const rowsCount = this._weeksCount + 1;   // Anzahl Wochen + Spaltenheader
         const itemsPerRow = this._weekNumbersHide ? 7 : 8;
@@ -703,7 +810,10 @@ kijs.gui.DatePicker = class kijs_gui_DatePicker extends kijs.gui.Element {
         }
     }
 
-    // Rendert die Zeilen
+    /**
+     * Rendert die Zeilen des Kalenders
+     * @returns {undefined}
+     */
     _renderRowsDom() {
         const rowsCount = this._weeksCount + 1;   // Anzahl Wochen + Spaltenheader
         const curRowsCount = this._rowsDom.length;

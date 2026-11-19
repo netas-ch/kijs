@@ -4,137 +4,51 @@
 // kijs.gui.Dom
 // --------------------------------------------------------------
 /**
- * Hilfsobjekt zum Handeln von DOM-Nodes
+ * Hilfsobjekt für einen einzelnen DOM-Node. CSS-Klassen, Styles, HTML, Attribute und
+ * Abmessungen bleiben im Objekt erhalten, auch wenn der Node nicht gerendert ist, und
+ * werden beim Rendern auf den Node übertragen.
  *
- * CONFIG-Parameter
- * ----------------
- * cls          Array|String [optional] CSS-Klassennamen
- *                                      Beispiel: cls:['cls-a','cls-b'] oder cls:'cls-a cls-b'
+ * Die Events des DOM-Nodes werden als kijs-Events ausgelöst. Welches kijs-Event zu welchem
+ * DOM-Event gehört, steht in der Eigenschaft _eventMap (erweiterbar mit der Config eventMap).
+ * Ein Listener auf den DOM-Node wird erst erstellt, wenn es einen kijs-Listener gibt.
+ * Das Event-Objekt e enthält: nodeEvent (Event des Browsers), nodeEventName, useCapture,
+ * dom (dieses Objekt) und eventName.
  *
- * disabled     Boolean
- *
- * disableEnterBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Enter
- *
- * disableEscBubbeling Boolean [optional] Stoppt das Bubbeling der KeyDown-Events von Escape
- *
- * eventMap     Object [optional]
- *
- * html         String [optional]       HTML-Code, der in das Element eingefügt wird
- *                                      Beispiel: html:'<p>Hallo Welt</p>'
- *
- * htmlDisplayType String [optional]    Darstellung der Eigenschaft 'html'. Default: 'html'
- *                                      html: als html-Inhalt (innerHtml)
- *                                      code: Tags werden als als Text angezeigt
- *                                      text: Tags werden entfernt
- *
- * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen.
- *                                      Bsp: { id: 123, for: 'meinFeld' }
- *
- * nodeTagName  String [optional]       Tag-Name des DOM-node. Default='div'
- *                                      Beispiel: nodeTagName='section'
- *
- * on           Object [optional]       Objekt mit Listener-Funktionen und optionalem context.
- *                                      Wenn kein context angegeben wird, so wird das aktuelle Objekt genommen.
- *                                      Beispiel: on: {
- *                                          click: function(e) {
- *                                              ...
- *                                          },
- *                                          dblclick: function(e) {
- *                                              ...
- *                                          },
- *                                          context: xy
- *                                      }
- *
- * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
- *                                      Beispiel: style:{background-color:'#ff8800'}
- *
- *
- * FUNKTIONEN
- * ----------
- * alignToTarget                        Richtet ein Element nach einem Ziel-Element aus.
- * applyConfig                          Wendet ein Konfigurations-Objekt an
- *  Args:
- *   config     Object
- *
- * destruct                             Destruktor ->Entlädt das Objekt samt allen untergeordneten Objekten
- *
- * clsAdd                                  Fügt eine oder mehrere CSS-Klassen hinzu
- *  Args: cls   String|Array
- *
- * clsHas                                  Überprüft, ob das Element eine CSS-Klasse hat
- *  Args:
- *   cls        String
- *  Return: Boolean
- *
- * clsRemove                               Entfernt eine oder mehrere CSS-Klassen
- *  Args:
- *   cls        String|Array
- *
- * clsRemoveAll                            Entfernt alle CSS-Klassen
- *
- * clsToggle                               Schaltet die übergebenen CSS-Klassen ein oder aus
- *  Args:
- *   cls        String|Array
- *
- * keyEventAdd                              Erstellt einen Tastendruck-Listener
- *  Args:
- *   keys       Number|Array                Bezeichnung der Tasten. Bsp: ['Enter', 'A', 'Tab', 'Space']
- *   fn         Function|String             Funktion oder Name des kijs-Events das ausgelöst werden soll
- *   context     [kijs.gui.Element|kijs.gui.Dom]  Kontext
- *   modifier    [Object]                   Muss eine Modifier-Taste gedrückt sein? null=egal
- *                                          modifier={shift:null, ctrl:false, alt:false}
- *   stopPropagation [Boolean]              Bubbeling ausschalten?
- *   preventDefault   [Boolean]             Listeners vom Browser deaktivieren?
- *
- * keyEventStopBubbeling                    Stoppt das Bubbeling der KeyDown-Events
- *  Args:
- *   keys           Array                   Array mit Keys. Bsp: ['Enter', 'Escape']
- *   modifier       [modifier]              Muss eine Modifier-Taste gedrückt sein?
- *                                          modifier = {shift:false, ctrl:false, alt:false}]
- *
- * nodeAttributeGet                         Gibt den Wert einer Eigenschaft des DOM-Nodes zurück
- *  Args:
- *   name           String
- *  Return: Boolean
- *
- * nodeAttributeSet                         Fügt eine oder mehrere Eigenschaften zum DOM-Node hinzu.
- *                                          Bsp. mehrere: name: { tabIndex:-1, type:'button' }
- *  Args:
- *   name           String|Object
- *   value          String|null
- *
- * nodeAttributeHas                         Überprüft, ob der DOM-Node eine Eigenschaft bestimmte hat
- *  Args:
- *   name           String
- *
- * nodeAttributeRemove                      Entfernt eine Eigenschaft vom DOM-Node
- *  Args:
- *   name           String
- *
- * render                               rendert den DOM-Node
- *
- * renderTo                             rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
- *  Args:
- *   targetNode    HTMLElement
- *   insertBefore  HTMLElement [optional]
- *
- *
- * EIGENSCHAFTEN
- * -------------
- * disabled
- * disableEnterBubbeling
- * disableEscBubbeling
- * height
- * html
- * htmlDisplayType
- * isEmpty          Boolean (readonly)
- * isRendered       Boolean (readonly)
- * left
- * node             HTML-Element            Verweis auf den DOM-Node
- * nodeTagName
- * style
- * top
- * width
+ * @fires blur  DOM-Event blur
+ * @fires change  DOM-Event change
+ * @fires click  DOM-Event click
+ * @fires contextMenu  Rechte Maustaste, langes Berühren oder Kontextmenü-Taste (DOM-Event contextmenu).
+ *                     Auf iOS und Mac mit Touch nach 500 ms Berühren (dort fehlt das DOM-Event)
+ * @fires dblClick  DOM-Event dblclick
+ * @fires drag  DOM-Event drag
+ * @fires dragEnd  DOM-Event dragend
+ * @fires dragEnter  DOM-Event dragenter
+ * @fires dragExit  DOM-Event dragexit
+ * @fires dragLeave  DOM-Event dragleave
+ * @fires dragOver  DOM-Event dragover
+ * @fires dragStart  DOM-Event dragstart
+ * @fires drop  DOM-Event drop
+ * @fires enterEscPress  Taste Enter oder Escape gedrückt (DOM-Event keydown)
+ * @fires enterPress  Taste Enter gedrückt (DOM-Event keydown)
+ * @fires escPress  Taste Escape gedrückt (DOM-Event keydown)
+ * @fires focus  DOM-Event focus
+ * @fires input  DOM-Event input
+ * @fires keyDown  DOM-Event keydown
+ * @fires keyUp  DOM-Event keyup
+ * @fires mouseDown  DOM-Event mousedown
+ * @fires mouseEnter  DOM-Event mouseenter
+ * @fires mouseLeave  DOM-Event mouseleave
+ * @fires mouseMove  DOM-Event mousemove
+ * @fires mouseUp  DOM-Event mouseup
+ * @fires scroll  DOM-Event scroll
+ * @fires scrollEnd  DOM-Event scrollend. Wo der Browser es nicht kennt, 100 ms nach dem letzten scroll
+ * @fires singleClick  DOM-Event click, aber höchstens einmal innerhalb von 600 ms
+ * @fires spacePress  Leertaste gedrückt (DOM-Event keydown)
+ * @fires touchCancel  DOM-Event touchcancel
+ * @fires touchEnd  DOM-Event touchend
+ * @fires touchMove  DOM-Event touchmove
+ * @fires touchStart  DOM-Event touchstart
+ * @fires wheel  DOM-Event wheel
  */
 kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
@@ -197,19 +111,19 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            cls: { fn: 'function', target: this.clsAdd },
+            cls: { fn: 'function', target: this.clsAdd },   // {String|Array} CSS-Klassen, z.B. 'cls-a cls-b' oder ['cls-a', 'cls-b']
             disableEnterBubbeling: { target: 'disableEnterBubbeling' },
             disableEscBubbeling: { target: 'disableEscBubbeling' },
-            eventMap: { fn: 'assign' },
+            eventMap: { fn: 'assign' },                     // {Object} Zusätzliche Zuordnungen kijs-Event -> DOM-Event (wird in _eventMap übernommen), z.B. { f2Press: { nodeEventName: 'keydown', keys: ['F2'] } }
             html: true,
             htmlDisplayType: true,
             left: true,
             top: true,
             width: true,
             height: true,
-            nodeAttribute: { fn: 'assign' },
+            nodeAttribute: { fn: 'assign' },                // {Object} Attribute des Nodes, z.B. { id: 'meinFeld', tabIndex: -1 }
             nodeTagName: { target: 'nodeTagName' },
-            on: { fn: 'assignListeners' },
+            on: { fn: 'assignListeners' },                  // {Object} Listeners, z.B. { click: fn, context: this }. Ohne context gilt dieses Objekt
             style : { fn: 'assign' },
             tooltip: { target: 'tooltip' },
 
@@ -298,15 +212,19 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
+    /**
+     * Deaktiviert. Setzt das Attribut disabled und die CSS-Klasse kijs-disabled.
+     * Getter und Setter nicht überschreiben, sondern die Funktion changeDisabled().
+     * @type {Boolean}
+     */
     get disabled() { return !!this.clsHas('kijs-disabled'); }
     set disabled(val) {
         this.changeDisabled(val, false);
     }
 
     /**
-     * Stoppt das Bubbeling der KeyDown-Events von Enter
-     * @returns {Boolean}
+     * Stoppt das Bubbling des Events enterPress (Taste Enter) zu den übergeordneten Nodes
+     * @type {Boolean}
      */
     get disableEnterBubbeling() { return this._disableEnterBubbeling;  }
     set disableEnterBubbeling(val) {
@@ -319,8 +237,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Stoppt das Bubbeling der KeyDown-Events von Escape
-     * @returns {Boolean}
+     * Stoppt das Bubbling des Events escPress (Taste Escape) zu den übergeordneten Nodes
+     * @type {Boolean}
      */
     get disableEscBubbeling() { return this._disableEscBubbeling;  }
     set disableEscBubbeling(val) {
@@ -332,13 +250,17 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Hat der Node den Fokus?
+     * @type {Boolean}
+     */
     get hasFocus() {
         return this._node === document.activeElement;
     }
 
     /**
-     * Wurde die Eigenschaft "height" manuell zugewiesen?
-     * @returns {Boolean}
+     * Wurde die Eigenschaft height zugewiesen?
+     * @type {Boolean}
      */
     get hasHeight() {
         if (this._node) {
@@ -349,8 +271,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Wurde die Eigenschaft "left" manuell zugewiesen?
-     * @returns {Boolean}
+     * Wurde die Eigenschaft left zugewiesen?
+     * @type {Boolean}
      */
     get hasLeft() {
         if (this._node) {
@@ -361,8 +283,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Wurde die Eigenschaft "top" manuell zugewiesen?
-     * @returns {Boolean}
+     * Wurde die Eigenschaft top zugewiesen?
+     * @type {Boolean}
      */
     get hasTop() {
         if (this._node) {
@@ -373,8 +295,8 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Wurde die Eigenschaft "width" manuell zugewiesen?
-     * @returns {Boolean}
+     * Wurde die Eigenschaft width zugewiesen?
+     * @type {Boolean}
      */
     get hasWidth() {
         if (this._node) {
@@ -384,6 +306,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Höhe in Pixel. Ist der Node gerendert, gibt der Getter offsetHeight zurück, sonst
+     * den zugewiesenen Wert. Leer = nicht setzen.
+     * @type {Number|null}
+     */
     get height() {
         if (this._node) {
             return this._node.offsetHeight;
@@ -409,6 +336,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Inhalt des Nodes. Wie er dargestellt wird, bestimmt htmlDisplayType.
+     * @type {String}
+     */
     get html() { return this._html; }
     set html(val) {
         this._html = val;
@@ -417,13 +348,32 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Darstellung von html: 'html' als HTML, 'code' Tags werden als Text angezeigt,
+     * 'text' Tags werden entfernt. Default: 'html'.
+     * Gilt ab dem nächsten Zuweisen von html bzw. beim Rendern.
+     * @type {String}
+     */
     get htmlDisplayType() { return this._htmlDisplayType; }
     set htmlDisplayType(val) { this._htmlDisplayType = val; }
 
+    /**
+     * Ist html leer?
+     * @type {Boolean}
+     */
     get isEmpty() { return kijs.isEmpty(this.html); }
 
+    /**
+     * Ist der Node gerendert?
+     * @type {Boolean}
+     */
     get isRendered() { return !!this._node; }
 
+    /**
+     * Abstand von links in Pixel. Ist der Node gerendert, gibt der Getter offsetLeft zurück, sonst
+     * den zugewiesenen Wert. Leer = nicht setzen.
+     * @type {Number|null}
+     */
     get left() {
         if (this._node) {
             return this._node.offsetLeft;
@@ -449,6 +399,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Der DOM-Node, null wenn nicht gerendert. Beim Zuweisen wird nodeTagName vom Node übernommen.
+     * @type {HTMLElement|null}
+     */
     get node() { return this._node; }
     set node(val) {
         this._node = val;
@@ -457,6 +411,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Tag-Name des Nodes. Default: 'div'.
+     * Ist der Node bereits mit einem anderen Tag gerendert, gibt es einen Fehler.
+     * @type {String}
+     */
     get nodeTagName() { return this._nodeTagName; }
     set nodeTagName(val) {
         this._nodeTagName = val;
@@ -465,6 +424,12 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * CSS-Styles als Objekt, z.B. { backgroundColor: '#f80' }.
+     * Der Setter ergänzt die bestehenden Styles. Ist der Node gerendert, gibt der
+     * Getter node.style zurück.
+     * @type {Object}
+     */
     get style() {
         if (this._node) {
             return this._node.style;
@@ -485,6 +450,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Tooltip: Text (HTML), Array mit Texten (wird als Liste angezeigt), Config-Objekt
+     * oder kijs.gui.Tooltip. Leer = kein Tooltip. Der Getter gibt die kijs.gui.Tooltip-Instanz zurück.
+     * @type {String|Array|Object|kijs.gui.Tooltip|null}
+     */
     get tooltip() { return this._tooltip; }
     set tooltip(val) {
         if (kijs.isEmpty(val)) {
@@ -539,6 +509,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Abstand von oben in Pixel. Ist der Node gerendert, gibt der Getter offsetTop zurück, sonst
+     * den zugewiesenen Wert. Leer = nicht setzen.
+     * @type {Number|null}
+     */
     get top() {
         if (this._node) {
             return this._node.offsetTop;
@@ -564,6 +539,11 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
         }
     }
 
+    /**
+     * Breite in Pixel. Ist der Node gerendert, gibt der Getter offsetWidth zurück, sonst
+     * den zugewiesenen Wert. Leer = nicht setzen.
+     * @type {Number|null}
+     */
     get width() {
         if (this._node) {
             return this._node.offsetWidth;
@@ -858,12 +838,10 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Ändert die Eigenschaft disabled.
-     * Sollte nicht direkt aufgerufen werden.
-     * Bitte den Setter disabled verwenden.
+     * Macht zurzeit dasselbe wie changeDisabled(): setzt das Attribut disabled und
+     * die CSS-Klasse kijs-disabled.
      * @param {Boolean} val
-     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom changeDisabled
-     *                                          des Elternelements kommt.
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elternelement kommt.
      * @returns {undefined}
      */
     changeReadOnly(val, callFromParent) {

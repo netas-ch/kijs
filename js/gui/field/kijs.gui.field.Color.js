@@ -4,43 +4,17 @@
 // kijs.gui.field.Color
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * blur
- * input
+ * Farbfeld mit der Farbauswahl des Browsers (HTML input type="color"). Der Wert ist eine
+ * Farbe als Hex-Code in Kleinbuchstaben, z.B. '#ff8800'. Weil das Feld des Browsers nicht leer
+ * sein kann, gilt ohne Wert '#ffffff'.
  *
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
+ * @example
+ * new kijs.gui.field.Color({ label: 'Farbe', name: 'farbe', value: '#ff8800' });
  *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @fires blur  Weitergeleitet vom input-Node
+ * @fires change  Nach einer Änderung durch den Benutzer (DOM-Event change) und nach clear().
+ *                e: oldValue (Wert bei der letzten Zuweisung über value), value
+ * @fires input  Bei jeder Änderung in der Farbauswahl (weitergeleitet vom input-Node)
  */
 kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
@@ -86,7 +60,7 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             name: { target: 'name' }
         });
 
@@ -114,6 +88,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete. Default: false
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -128,14 +107,30 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
+    /**
+     * Hat der input-Node den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des input-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Ist der Wert leer? Weil ohne Wert '#ffffff' gilt, praktisch immer false.
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    /**
+     * Name des Felds. Wird auch als Attribut name des input-Nodes gesetzt.
+     * @type {String|null}
+     */
     // overwrite
     get name() { return this._name; }
     set name(val) {
@@ -143,6 +138,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
+    /**
+     * Schreibgeschützt. Weil input type="color" kein Attribut readOnly kennt, wird der
+     * input-Node dafür deaktiviert.
+     * @type {Boolean}
+     */
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -150,6 +150,11 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
         this._inputDom.disabled = val || this._dom.clsHas('kijs-disabled');
     }
 
+    /**
+     * Farbe als Hex-Code in Kleinbuchstaben, z.B. '#ff8800'. Der Setter akzeptiert alle Formate,
+     * die kijs.Graphic.colorGetHex() kennt. Leer = '#ffffff'.
+     * @type {String}
+     */
     // overwrite
     get value() {
         let val = this._inputDom.nodeAttributeGet('value');
@@ -174,12 +179,23 @@ kijs.gui.field.Color = class kijs_gui_field_Color extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Ändert disabled beim Feld und beim input-Node. Bei readOnly bleibt der input-Node deaktiviert.
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elterncontainer kommt.
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
         this._inputDom.changeDisabled(!!val || this._dom.clsHas('kijs-readonly'), false);
     }
 
+    /**
+     * Setzt den Fokus auf den input-Node
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @returns {HTMLElement|null|false}
+     */
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         return this._inputDom.focus(alsoSetIfNoTabIndex);

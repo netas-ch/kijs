@@ -245,7 +245,9 @@ class ClassParser {
         }
         $args = [];
         foreach ($mem->arguments as $arg) {
-            $p = $docParams[$arg->name] ?? null;
+            // Rest-Parameter (...args) darf im JSDoc auch ohne ... stehen
+            $docName = isset($docParams[$arg->name]) ? $arg->name : ltrim($arg->name, '.');
+            $p = $docParams[$docName] ?? null;
             $args[] = (object)[
                 'name' => $arg->name,
                 'type' => $p->type ?? null,
@@ -254,7 +256,7 @@ class ClassParser {
                 'description' => $p->description ?? '',
                 'isDocumented' => $p !== null
             ];
-            unset($docParams[$arg->name]);
+            unset($docParams[$docName]);
         }
         // Unterpunkte (options.xy) und Argumente, die nur im JSDoc stehen
         foreach ($docParams as $p) {
@@ -688,7 +690,7 @@ class ClassParser {
 
     /**
      * Wertet den Wert eines configMap-Eintrags aus
-     *   true             -> gleichnamige Eigenschaft
+     *   true             -> Eigenschaft '_' + Name (z.B. _html, ohne Setter)
      *   'xy'             -> Eigenschaft xy
      *   { target, fn, context, prio }
      *   false            -> Config ist deaktiviert
@@ -703,7 +705,7 @@ class ClassParser {
             return false;
         }
         if (count($v) === 1 && $v[0]->type === 'keyword' && $v[0]->name === 'true') {
-            $map->target = $entry->name;
+            $map->target = '_' . $entry->name;
         } elseif (count($v) === 1 && $v[0]->type === 'string') {
             $map->target = $v[0]->string;
         } elseif (count($v) === 1 && $v[0]->type === 'commandGroup') {
@@ -715,6 +717,11 @@ class ClassParser {
             }
         } else {
             $map->target = $entry->value;
+        }
+
+        // Ohne target schreibt kijs.Object.assignConfig() in die Eigenschaft '_' + Name
+        if ($map->target === null) {
+            $map->target = '_' . $entry->name;
         }
         return $map;
     }

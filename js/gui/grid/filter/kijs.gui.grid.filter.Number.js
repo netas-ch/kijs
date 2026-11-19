@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Number
 // --------------------------------------------------------------
+/**
+ * Zahlenfilter für kijs.gui.grid.Grid (wie kijs.gui.grid.filter.Text, mit anderen Vergleichsarten).
+ */
 kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui.grid.filter.Text {
 
 
@@ -30,7 +33,7 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            compare: true
+            compare: true  // {String|Boolean} Vergleichsart: 'equal', 'unequal', 'smaller' oder 'bigger'. false = keine Auswahl im Menü. Default: 'equal'
         });
 
         // Config anwenden
@@ -45,6 +48,10 @@ kijs.gui.grid.filter.Number = class kijs_gui_grid_filter_Number extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter-Objekt für den Server: zusätzlich type 'number', search und compare
+     * @type {Object}
+     */
     get filter() {
         return Object.assign(super.filter, {
             type: 'number',

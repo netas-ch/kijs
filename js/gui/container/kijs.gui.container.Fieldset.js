@@ -3,6 +3,23 @@
 // --------------------------------------------------------------
 // kijs.gui.container.Fieldset
 // --------------------------------------------------------------
+/**
+ * Container mit Kopfzeile (Icon, Beschriftung und optional ein Button zum Auf- und Zuklappen),
+ * um zusammengehörende Elemente, z.B. Felder in einem Formular, zu gruppieren. Mit collapsible
+ * kann der Inhalt über den Button, das Icon oder die Beschriftung zugeklappt werden.
+ *
+ * @example
+ * new kijs.gui.container.Fieldset({
+ *     caption: 'Adresse',
+ *     collapsible: true,
+ *     elements: [
+ *         { xtype: 'kijs.gui.field.Text', name: 'strasse', label: 'Strasse' }
+ *     ]
+ * });
+ *
+ * @fires collapse  Nach dem Zuklappen
+ * @fires expand  Nach dem Aufklappen
+ */
 kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui.Container {
 
 
@@ -54,11 +71,11 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             // caption
             caption: { target: 'html', context: this._captionDom },
             
-            iconChar: { target: 'iconChar', context: this._iconEl },
-            iconCls: { target: 'iconCls', context: this._iconEl },
-            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
-            iconColor: { target: 'iconColor', context: this._iconEl },
-            iconMap: { target: 'iconMap', context: this._iconEl },
+            iconChar: { target: 'iconChar', context: this._iconEl },    // {String|Number} Zeichen des Icons in der Kopfzeile
+            iconCls: { target: 'iconCls', context: this._iconEl },      // {String} CSS-Klasse des Icons
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },    // {String} Animations-Klasse des Icons (siehe kijs.gui.Icon.iconAnimationCls)
+            iconColor: { target: 'iconColor', context: this._iconEl },  // {String} Farbe des Icons
+            iconMap: { target: 'iconMap', context: this._iconEl },      // {String} Icon aus einer IconMap, z.B. 'kijs.iconMap.Fa.house'
             
             // inner
             innerDisabled: { target: 'innerDisabled' },
@@ -81,11 +98,24 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung in der Kopfzeile
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) { this._captionDom.html = val; }
 
+    /**
+     * kijs.gui.Dom der Beschriftung
+     * @type {kijs.gui.Dom}
+     */
     get captionDom() { return this._captionDom; }
 
+    /**
+     * Button zum Auf- und Zuklappen. Der Setter akzeptiert eine kijs.gui.Button-Instanz, ein
+     * Config-Objekt oder null (entfernt den Button). Wird meist über collapsible erstellt.
+     * @type {kijs.gui.Button|null}
+     */
     get collapseButton() { return this._collapseButtonEl; }
     set collapseButton(val) {
         // Button entfernen
@@ -121,6 +151,10 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         }
     }
 
+    /**
+     * Ist der Inhalt zugeklappt? Der Setter akzeptiert auch 'toggle'.
+     * @type {Boolean}
+     */
     get collapsed() {
         return this._dom.clsHas('kijs-collapse-top');
     }
@@ -140,6 +174,10 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         }
     }
 
+    /**
+     * Kann der Inhalt zugeklappt werden? true erstellt den collapseButton, false entfernt ihn.
+     * @type {Boolean}
+     */
     get collapsible() { return !!this._collapseButtonEl; }
     set collapsible(val) {
         if (val) {
@@ -156,6 +194,10 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
     }
     
 
+    /**
+     * kijs.gui.Dom der Kopfzeile
+     * @type {kijs.gui.Dom}
+     */
     get headerDom() { return this._headerDom; }
 
     // overwrite
@@ -187,6 +229,11 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         }
     }
 
+    /**
+     * Die enthaltenen Elemente deaktivieren (die Kopfzeile bleibt aktiv)? Wirkt beim Setzen auf die
+     * vorhandenen Elemente.
+     * @type {Boolean}
+     */
     get innerDisabled() { return this._innerDisabled; }
     set innerDisabled(val) {
         this._innerDisabled = !!val;
@@ -239,7 +286,8 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
 
     /**
      * Expandiert den Container
-     * @param {Number} size [optional] Höhe in die der Container wiederhergestellt werden soll
+     * @param {Number} [size]  Höhe, in die der Container wiederhergestellt werden soll. Wirkt zurzeit
+     *                         nicht, weil _collapseHeight im Fieldset nicht definiert ist.
      * @returns {undefined}
      */
     expand(size) {
@@ -376,7 +424,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
     // PROTECTED
     /**
      * Gibt das Icon für den Collapse-Knopf zurück
-     * @returns {undefined}
+     * @returns {String}  'kijs.iconMap.Fa.chevron-down' wenn zugeklappt, sonst 'kijs.iconMap.Fa.chevron-up'
      */
     _getCollapseIconMap() {
         if (this.collapsed) {

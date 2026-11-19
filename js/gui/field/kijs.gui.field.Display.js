@@ -4,43 +4,12 @@
 // kijs.gui.field.Display
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * blur
- * input
+ * Feld, das einen Wert nur anzeigt (nicht bearbeitbar). Zeilenumbrüche werden als <br>
+ * dargestellt, Weblinks und E-Mail-Adressen können anklickbar gemacht werden (clickableLinks).
+ * Der Wert wird standardmässig nicht übermittelt (submitValueEnable: false).
  *
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
- *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @example
+ * new kijs.gui.field.Display({ label: 'Hinweis', value: 'Siehe www.kijs.ch', clickableLinks: true });
  */
 kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Field {
 
@@ -87,12 +56,12 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            clickableLinks: true,         // Weblink zum Anklicken machen
+            clickableLinks: true,
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
-            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
+            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },  // {Object|Array} Regulärer Ausdruck zum Formatieren (siehe addFormatRegExp())
             valueDisplayType: true,
-            valueTrimEnable: true       // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrimEnable: true
         });
 
         // Config anwenden
@@ -107,6 +76,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Weblinks (http://, https://, ftp://, www.) und E-Mail-Adressen im Wert anklickbar machen? Default: false
+     * @type {Boolean}
+     */
     get clickableLinks() { return this._clickableLinks; }
     set clickableLinks(val) {
         this._clickableLinks = !!val;
@@ -115,6 +88,11 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
 
+    /**
+     * Eigene Funktion zum Formatieren oder ihr Name als String. Sie erhält den Wert und gibt den
+     * formatierten Wert zurück. Bei leerem Wert wird sie nicht aufgerufen.
+     * @type {Function|String}
+     */
     get formatFn() { return this._formatFn; }
     set formatFn(val) {
         let fn = kijs.getFunctionFromString(val);
@@ -125,6 +103,10 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
 
+    /**
+     * Kontext von formatFn: Objekt oder Name als String. Default: das Feld
+     * @type {Object|String}
+     */
     get formatFnContext() { return this._formatFnContext; }
     set formatFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -135,14 +117,31 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         }
     }
 
+    /**
+     * Hat der Anzeige-Node den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des Anzeige-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Ist die Anzeige leer?
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._inputDom.html); }
 
+    /**
+     * Wert als String. Beim Zuweisen wird er formatiert (formatRegExp, formatFn) und nach
+     * valueDisplayType, clickableLinks und mit Zeilenumbrüchen angezeigt.
+     * @type {String}
+     */
     // overwrite
     get value() {
         let val = kijs.toString(this._value);
@@ -186,9 +185,18 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Darstellung des Werts: 'html' als HTML, 'code' Tags werden als Text angezeigt,
+     * 'text' Tags werden entfernt. Gilt ab dem nächsten Zuweisen von value. Default: 'code'
+     * @type {String}
+     */
     get valueDisplayType() { return this._valueDisplayType; }
     set valueDisplayType(val) { this._valueDisplayType = val; }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts entfernen? Default: true
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
@@ -198,11 +206,11 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke zum Formatieren hinzu (wie bei
+     * kijs.gui.field.Text.addFormatRegExp()). Mit dem Flag g werden alle Treffer ersetzt,
+     * sonst nur der erste. toLowerCase wird angenommen, aber zurzeit nicht richtig angewendet.
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
-     *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
-     *                       sonst replace()
      * @returns {undefined}
      */
     addFormatRegExp(regExps) {
@@ -248,12 +256,13 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
     }
 
     /**
-     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
-     * @param {Boolean} [alsoSetIfNoTabIndex=false]
+     * Setzt den Fokus auf den Anzeige-Node. selectText=true führt zurzeit zu einem Fehler,
+     * weil der Node ein div ohne Funktion select() ist.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
      * @param {Boolean} [selectText=false]
-     * @returns {undefined}
-     * @overwrite
+     * @returns {HTMLElement|null|false}
      */
+    // overwrite
     focus(alsoSetIfNoTabIndex, selectText) {
         let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
         if (selectText) {
@@ -380,12 +389,20 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
         return value;
     }
 
-    // Ersetzt /n durch <br>
+    /**
+     * Ersetzt Zeilenumbrüche (\n) durch <br>
+     * @param {String} txt
+     * @returns {String}
+     */
     _insertLineBreaks(txt) {
         return txt.replace(/\n/gim, '<br>');
     }
 
-    // Ersetzt Links durch <a>-Tags
+    /**
+     * Ersetzt Weblinks und E-Mail-Adressen durch <a>-Tags
+     * @param {String} txt
+     * @returns {String}
+     */
     _linkify(txt) {
         let pattern;
         

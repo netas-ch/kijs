@@ -3,6 +3,17 @@
 // --------------------------------------------------------------
 // kijs.gui.Button
 // --------------------------------------------------------------
+/**
+ * Schaltfläche (HTML-Tag button) mit Beschriftung, Icon, zweitem Icon (rechts) und Badge.
+ * Mit menu bzw. menuElements öffnet die Schaltfläche ein kijs.gui.Menu.
+ *
+ * @example
+ * new kijs.gui.Button({
+ *     caption: 'Speichern',
+ *     iconMap: 'kijs.iconMap.Fa.floppy-disk',
+ *     on: { click: function(e) { ... }, context: this }
+ * });
+ */
 kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
 
 
@@ -43,15 +54,15 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             badgeText: { target: 'html', context: this._badgeDom },
-            badgeCls: { fn: 'function', target: this._badgeDom.clsAdd, context: this._badgeDom },
+            badgeCls: { fn: 'function', target: this._badgeDom.clsAdd, context: this._badgeDom },         // {String|Array} CSS-Klassen des Badges
             badgeTextDisplayType: { target: 'htmlDisplayType', context: this._badgeDom },
-            badgeStyle: { fn: 'assign', target: 'style', context: this._badgeDom },
+            badgeStyle: { fn: 'assign', target: 'style', context: this._badgeDom },                    // {Object} CSS-Styles des Badges
             caption: { target: 'html', context: this._captionDom },
-            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
+            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },   // {String|Array} CSS-Klassen der Beschriftung
             captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom },
-            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
-            disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
-            smallPaddings: true,                    // false=breite Abstände, true=schmale Abstände, 'auto'=automatisch (default)
+            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },                // {Object} CSS-Styles der Beschriftung
+            disableFlex: { target: 'disableFlex' },
+            smallPaddings: true,
 
             icon: { target: 'icon' },
             iconMap: { target: 'iconMap', context: this._iconEl },
@@ -69,10 +80,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             
             isDefault: { target: 'isDefault' },
             menu: { target: 'menu' },
-            menuElements: { target: 'menuElements', prio: 200 },
-            menuCloseOnClick: { target: 'menuCloseOnClick', prio: 201 },
-            menuDirection: { target: 'menuDirection', prio: 200 },
-            menuExpandOnHover: { target: 'menuExpandOnHover', prio: 200 }
+            menuElements: { target: 'menuElements', prio: 200 },            // {Array} Elemente des Menüs (erstellt das Menü, siehe kijs.gui.Menu)
+            menuCloseOnClick: { target: 'menuCloseOnClick', prio: 201 },    // {Boolean} closeOnClick des Menüs (siehe kijs.gui.Menu)
+            menuDirection: { target: 'menuDirection', prio: 200 },          // {String} direction des Menüs (siehe kijs.gui.Menu)
+            menuExpandOnHover: { target: 'menuExpandOnHover', prio: 200 }   // {Boolean} expandOnHover des Menüs (siehe kijs.gui.Menu)
         });
 
         // Config anwenden
@@ -87,8 +98,16 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * kijs.gui.Dom des Badges
+     * @type {kijs.gui.Dom}
+     */
     get badgeDom() { return this._badgeDom; }
 
+    /**
+     * Text des Badges (kleine Markierung, z.B. eine Anzahl). Leer = kein Badge
+     * @type {String}
+     */
     get badgeText() { return this._badgeDom.html; }
     set badgeText(val) {
         this._badgeDom.html = val;
@@ -97,9 +116,17 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Darstellung des Badge-Texts: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType)
+     * @type {String}
+     */
     get badgeTextDisplayType() { return this._badgeDom.htmlDisplayType; }
     set badgeTextDisplayType(val) { this._badgeDom.htmlDisplayType = val; }
 
+    /**
+     * Beschriftung (HTML)
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) {
         this._captionDom.html = val;
@@ -108,11 +135,23 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Darstellung der Beschriftung: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType)
+     * @type {String}
+     */
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
+    /**
+     * kijs.gui.Dom der Beschriftung
+     * @type {kijs.gui.Dom}
+     */
     get captionDom() { return this._captionDom; }
 
+    /**
+     * true = der Button braucht nur die nötige Breite, false = er nutzt die ganze Breite. Default: true
+     * @type {Boolean}
+     */
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -125,15 +164,20 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
     
+    /**
+     * Wie caption
+     * @type {String}
+     */
     // overwrite
     get html() { return this.caption; }
     set html(val) { this.caption = val; }
 
-    get icon() { return this._iconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon links: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get icon() { return this._iconEl; }
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -165,6 +209,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * CSS-Klasse für eine Animation des Icons, z.B. 'kijs-spin' (siehe kijs.gui.Icon)
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
     set iconAnimationCls(val) {
         this._iconEl.iconAnimationCls = val;
@@ -173,6 +221,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { 
         this._iconEl.iconChar = val;
@@ -181,6 +233,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * CSS-Klasse des Icons (siehe kijs.gui.Icon.iconCls)
+     * @type {String|null}
+     */
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) {
         this._iconEl.iconCls = val;
@@ -189,6 +245,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Farbe des Icons
+     * @type {String}
+     */
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { 
         this._iconEl.iconColor = val;
@@ -197,6 +257,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Icon aus einer iconMap, z.B. 'kijs.iconMap.Fa.house' (siehe kijs.gui.Icon.iconMap)
+     * @type {String|Object}
+     */
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { 
         this._iconEl.iconMap = val;
@@ -205,11 +269,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
-    get icon2() { return this._icon2El; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon2-Config oder kijs.gui.Icon Element
+     * Zweites Icon rechts: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Bei einem Menü zeigt es die Richtung an. Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get icon2() { return this._icon2El; }
     set icon2(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -242,6 +307,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * CSS-Klasse für eine Animation des zweiten Icons
+     * @type {String|null}
+     */
     get icon2AnimationCls() { return this._icon2El.iconAnimationCls; }
     set icon2AnimationCls(val) {
         this._icon2El.iconAnimationCls = val;
@@ -250,6 +319,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zeichen des zweiten Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get icon2Char() { return this._icon2El.iconChar; }
     set icon2Char(val) {
         this._icon2El.iconChar = val; 
@@ -258,6 +331,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * CSS-Klasse des zweiten Icons
+     * @type {String|null}
+     */
     get icon2Cls() { return this._icon2El.iconCls; }
     set icon2Cls(val) { 
         this._icon2El.iconCls = val; 
@@ -266,6 +343,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Farbe des zweiten Icons
+     * @type {String}
+     */
     get icon2Color() { return this._icon2El.iconColor; }
     set icon2Color(val) { 
         this._icon2El.iconColor = val; 
@@ -274,6 +355,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zweites Icon aus einer iconMap (siehe kijs.gui.Icon.iconMap)
+     * @type {String|Object}
+     */
     get icon2Map() { return this._icon2El.iconMap; }
     set icon2Map(val) { 
         this._icon2El.iconMap = val; 
@@ -282,6 +367,10 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Standard-Schaltfläche (wird hervorgehoben, CSS-Klasse kijs-default)
+     * @type {Boolean}
+     */
     get isDefault() {
         return this._dom.clsHas('kijs-default');
     }
@@ -293,9 +382,18 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Leer, wenn Beschriftung, beide Icons und Badge leer sind
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return this._captionDom.isEmpty && this._iconEl.isEmpty && this._icon2El.isEmpty && this._badgeDom.isEmpty; }
 
+    /**
+     * Menü, das beim Klick geöffnet wird: Config-Objekt oder kijs.gui.Menu. Leer entfernt das Menü.
+     * Der Getter gibt die kijs.gui.Menu-Instanz zurück.
+     * @type {kijs.gui.Menu|Object|null}
+     */
     get menu() { return this._menuEl; }
     set menu(val) {
         // Menu zurücksetzen?
@@ -330,6 +428,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
     set menuElements(val) { this._createMenu().add(val); }
     set menuExpandOnHover(val) { this._createMenu().expandOnHover = val; }
 
+    /**
+     * Schmale Abstände links und rechts: true, false oder 'auto'. 'auto' = schmal, wenn der
+     * Button keine Beschriftung hat und disableFlex gesetzt ist. Default: 'auto'
+     * @type {Boolean|String}
+     */
     get smallPaddings() { return this._smallPaddings; }
     set smallPaddings(val) {
         let changed = this._smallPaddings !== val;
@@ -352,7 +455,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         this._iconEl.changeDisabled(!!val, true);
     }
     
-    // Overwrite
+    /**
+     * Rendert den Button mit Icons, Beschriftung und Badge (nur die nicht leeren) und löst afterRender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterRender)
+     * @returns {undefined}
+     */
+    // overwrite
     render(superCall) {
         // Evtl. schmale Ränder anzeigen?
         if (this._hasSmallPaddings()) {
@@ -447,9 +555,12 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         return this._menuEl;
     }
     
-    // Sollen links/rechts nur schmale Paddings angezeigt werden?
+    /**
+     * Sollen links und rechts nur schmale Abstände angezeigt werden? (siehe smallPaddings)
+     * @returns {Boolean}
+     */
     _hasSmallPaddings() {
-        // 'auto' = falls der Button keine caption hat und nicht disableFlex hat, 
+        // 'auto' = falls der Button keine caption hat und disableFlex hat,
         // wird er mit kleineren Paddings angezeigt.
         if (this._smallPaddings === 'auto') {
             return this._captionDom.isEmpty && this._dom.clsHas('kijs-disableFlex');

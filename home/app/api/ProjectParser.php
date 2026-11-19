@@ -132,6 +132,18 @@ class ProjectParser {
                     }
                 }
             }
+
+            // Events, die schon in einer Basisklasse dokumentiert sind (geerbte Events)
+            foreach ($cls->events as $ev) {
+                if (!$ev->isDocumented) {
+                    $baseEv = $this->_findEventInBase($byName, $cls, $ev->name);
+                    if ($baseEv) {
+                        $ev->description = $baseEv->member->description;
+                        $ev->isDocumented = true;
+                        $ev->docFrom = $baseEv->className;
+                    }
+                }
+            }
         }
 
         // Lückenbericht
@@ -150,6 +162,27 @@ class ProjectParser {
     // --------------------------------------------------------------
     // PROTECTED
     // --------------------------------------------------------------
+    /**
+     * Sucht ein dokumentiertes Event mit dem gleichen Namen in den Basisklassen
+     * @param array $byName
+     * @param stdClass $cls
+     * @param string $name
+     * @return stdClass|null  {className, member}
+     */
+    protected function _findEventInBase(array $byName, stdClass $cls, string $name): ?stdClass {
+        $guard = 0;
+        $base = $byName[$cls->extends] ?? null;
+        while ($base && $guard++ < 50) {
+            foreach ($base->events as $ev) {
+                if ($ev->name === $name && $ev->isDocumented) {
+                    return (object)['className' => $base->name, 'member' => $ev];
+                }
+            }
+            $base = $byName[$base->extends] ?? null;
+        }
+        return null;
+    }
+
     /**
      * Sucht einen dokumentierten Member mit dem gleichen Namen in den Basisklassen
      * @param array $byName

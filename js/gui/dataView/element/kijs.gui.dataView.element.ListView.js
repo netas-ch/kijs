@@ -3,12 +3,21 @@
 // --------------------------------------------------------------
 // kijs.gui.dataView.element.ListView
 // --------------------------------------------------------------
+/**
+ * Element für kijs.gui.ListView: zeigt Icon und Text eines Datensatzes, optional mit Tooltip,
+ * CSS-Klasse und Checkbox bzw. Option (je nach showCheckBoxes und selectType der ListView).
+ */
 kijs.gui.dataView.element.ListView = class kijs_gui_dataView_element_ListView extends kijs.gui.dataView.element.Base {
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Erstellt Icon und Text aus den Feldern bzw. Standardwerten der ListView (iconMapField, iconMap,
+     * displayTextField, tooltipField, clsField …).
+     * @returns {undefined}
+     */
     update() {
 
         // Icon

@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.gui.Separator (Trennlinie für Menüs und Toolbars)
 // --------------------------------------------------------------
+/**
+ * Trennlinie für Menüs und Toolbars.
+ *
+ * @example
+ * new kijs.gui.Menu({ elements: [ { caption: 'Öffnen' }, { xtype: 'kijs.gui.Separator' }, { caption: 'Beenden' } ] });
+ */
 kijs.gui.Separator = class kijs_gui_Separator extends kijs.gui.Element {
 
 

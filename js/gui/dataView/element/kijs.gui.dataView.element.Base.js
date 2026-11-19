@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.dataView.element.Base
 // --------------------------------------------------------------
+/**
+ * Basisklasse für ein Element (einen Datensatz) in kijs.gui.DataView. Abgeleitete Klassen erstellen
+ * den Inhalt in update(). Der Typ wird mit elementXType der DataView bestimmt.
+ */
 kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends kijs.gui.Container {
 
 
@@ -43,18 +47,26 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Index des Datensatzes. Wird von kijs zurzeit nicht gesetzt.
+     * @type {Number|undefined}
+     */
     get dataIndex() { return this._dataIndex; }
     set dataIndex(val) { this._dataIndex = val; }
 
+    /**
+     * Datensatz des Elements. Beim Setzen wird primaryKey aus den primaryKeyFields der DataView berechnet.
+     * @type {Object}
+     */
     get dataRow() { return this._dataRow; }
     set dataRow(val) {
         this._dataRow = val;
         this._primaryKey = kijs.Data.getPrimaryKeyString(this._dataRow, this._parentEl.primaryKeyFields);
     }
 
-    /*
-     * Falls primaryKeyFields definiert sind, wird der PrimaryKey zurück gegeben, sonst die dataRow
-     * @returns {String|Array}
+    /**
+     * primaryKey, falls die DataView primaryKeyFields hat, sonst dataRow
+     * @type {String|Object}
      */
     get keyRow() {
         if (this._parentEl.primaryKeyFields) {
@@ -64,8 +76,16 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
         }
     }
 
+    /**
+     * Primärschlüssel als String (siehe kijs.Data.getPrimaryKeyString())
+     * @type {String|null}
+     */
     get primaryKey() { return this._primaryKey; }
 
+    /**
+     * Ist das Element selektiert? Beim Setzen wird auch selectedKeysRows der DataView angepasst.
+     * @type {Boolean}
+     */
     get selected() { return this._dom.clsHas('kijs-selected'); }
     set selected(val) {
         if (val) {
@@ -97,6 +117,7 @@ kijs.gui.dataView.element.Base = class kijs_gui_dataView_element_Base extends ki
     /**
      * Erstellt den Inhalt.
      * Diese Funktion muss überschrieben werden.
+     * @returns {undefined}
      */
     update() {
 

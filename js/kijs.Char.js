@@ -4,12 +4,22 @@
 // kijs.Char (Static)
 // --------------------------------------------------------------
 
+/**
+ * Statische Klasse mit Hilfsfunktionen für Buchstaben mit Akzenten und anderen Sonderzeichen.
+ *
+ * @example
+ * kijs.Char.replaceSpecialChars('Müller'); // 'Muller'
+ */
 kijs.Char = class kijs_Char {
 
 
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Tabelle der Grundbuchstaben (A-Z, a-z) mit den Unicode-Codepoints ihrer Varianten mit Akzenten
+     * @type {Object}
+     */
     static get charTable() {
         return {
             A: [     // capital A

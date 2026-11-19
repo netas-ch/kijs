@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.dataView.element.Tree
 // --------------------------------------------------------------
+/**
+ * Element (Knoten) für kijs.gui.Tree. Zeigt einen Datensatz eingerückt nach depth und kann auf- und
+ * zugeklappt werden.
+ *
+ * @fires collapse  Nach dem Zuklappen mit collapse()
+ * @fires expand  Nach dem Aufklappen mit expand()
+ */
 kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends kijs.gui.dataView.element.Base {
 
 
@@ -29,7 +36,7 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         Object.assign(this._configMap, {
             depth: true,
             parentElement: { target: '_parentElementEl' },
-            ddName: true,
+            ddName: true,   // {String} Drag&Drop-Name. Wird vom Tree mitgegeben. Default: eindeutige ID
             ddTarget: { prio: 10, target: 'ddTarget' }
         });
 
@@ -58,6 +65,11 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
         }
     }
 
+    /**
+     * Drag&Drop-Ziel des Knotens. Der Setter akzeptiert ein Config-Objekt für kijs.gui.dragDrop.Target
+     * (ownerDomProperty Default 'innerDom') oder null. Andere Werte werfen einen kijs.Error.
+     * @type {kijs.gui.dragDrop.Target|null}
+     */
     get ddTarget() {
         return this._ddTarget;
     }
@@ -93,6 +105,11 @@ kijs.gui.dataView.element.Tree = class kijs_gui_dataView_element_Tree extends ki
      */
     get depth() { return this._depth; }
 
+    /**
+     * Ist der Knoten aufgeklappt (in expandedKeysRows des Trees)? Der Setter ändert nur expandedKeysRows,
+     * ohne neu zu laden (siehe expand() und collapse()).
+     * @type {Boolean}
+     */
     get expanded() {
         if (this._parentEl.primaryKeyFields) {
             if (kijs.Array.contains(this._parentEl.expandedKeysRows, this._primaryKey)) {

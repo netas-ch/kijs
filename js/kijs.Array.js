@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.Array (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für Arrays.
+ */
 kijs.Array = class kijs_Array {
 
 

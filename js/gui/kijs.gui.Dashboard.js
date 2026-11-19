@@ -3,6 +3,25 @@
 // --------------------------------------------------------------
 // kijs.gui.Dashboard
 // --------------------------------------------------------------
+/**
+ * Dashboard aus Spalten (kijs.gui.dashboard.Column) mit Panels (kijs.gui.dashboard.Panel). Mit
+ * sortable (Default: true) können die Panels über ihre Kopfzeile per Drag&Drop zwischen den Spalten
+ * verschoben werden. Mit rpcSaveFn und autoSave werden die Positionen (posData) nach dem Verschieben
+ * oder Schliessen eines Panels an den Server gesendet.
+ *
+ * @example
+ * new kijs.gui.Dashboard({
+ *     cls: 'kijs-flexrow',
+ *     rpcSaveFn: 'dashboard.save',
+ *     autoSave: true,
+ *     elements: [
+ *         { xtype: 'kijs.gui.dashboard.Column', elements: [ { xtype: 'kijs.gui.dashboard.Panel', name: 'news', caption: 'News' } ] },
+ *         { xtype: 'kijs.gui.dashboard.Column', elements: [ { xtype: 'kijs.gui.dashboard.Panel', name: 'todo', caption: 'Aufgaben' } ] }
+ *     ]
+ * });
+ *
+ * @fires afterSave  Nach dem Speichern mit save(). e: Antwort des RPC
+ */
 kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
 
 
@@ -36,12 +55,12 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
             ddPanelName: true,
             ddPosBeforeAfterFactor: true,
             
-            rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
-            rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
-            autoSave: true,     // Automatisches Speichern bei Änderungen
+            rpcSaveFn: true,
+            rpcSaveArgs: true,
+            autoSave: true,
             
             sortable: { prio: 90, target: 'sortable' },
-            ddMapping: { prio: 100, target: 'ddMapping' }
+            ddMapping: { prio: 100, target: 'ddMapping' }   // {Object} Zusätzliches Drag&Drop-Mapping der Spalten. Achtung: Es gibt keinen Setter ddMapping (Tippfehler ddMappping), die Zuweisung wirft darum einen TypeError
         });
         
         // Listeners
@@ -59,10 +78,23 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Nach dem Verschieben oder Schliessen eines Panels automatisch save() aufrufen? Nur mit rpcSaveFn. Default: false
+     * @type {Boolean}
+     */
     get autoSave() { return this._autoSave; }
     set autoSave(val) { this._autoSave = !!val; }
 
+    /**
+     * Drag&Drop-Mapping der Spalten (mit sortable der Eintrag für ddPanelName)
+     * @type {Object}
+     */
     get ddMapping() { return this._ddMapping; }
+    /**
+     * Ergänzt das ddMapping (assignDeep). Wegen des Tippfehlers im Namen nur als ddMappping erreichbar.
+     * Kein Objekt = kijs.Error.
+     * @type {Object}
+     */
     set ddMappping(val) {
         if (!kijs.isObject(val)) {
             throw new kijs.Error(`"ddMapping" is not valid.`);
@@ -71,12 +103,24 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
         kijs.Object.assignDeep(this._ddMapping, val, true);
     }
     
+    /**
+     * Drag&Drop-Name der Panels. Default: 'kijs.gui.dashboard.Panel'
+     * @type {String}
+     */
     get ddPanelName() { return this._ddPanelName; }
     set ddPanelName(val) { this._ddPanelName = val; }
     
+    /**
+     * Position auf dem Ziel-Panel, ab der nachher statt vorher eingefügt wird. Default: 0.66
+     * @type {Number}
+     */
     get ddPosBeforeAfterFactor() { return this._ddPosBeforeAfterFactor; }
     set ddPosBeforeAfterFactor(val) { this._ddPosBeforeAfterFactor = val; }
 
+    /**
+     * Positionsdaten aller Spalten mit ihren Panels (posData der Spalten)
+     * @type {Object[]}
+     */
     get posData() {
         // Positionsdaten der Spalten + Panels ermitteln
         let data = [];
@@ -87,12 +131,24 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
         return data;
     }
 
+    /**
+     * Zusätzliche RPC-Argumente fürs Speichern. Überschreiben gleichnamige Argumente von save().
+     * @type {Object}
+     */
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
     
+    /**
+     * Name der remoteFn zum Speichern, z.B. 'dashboard.save'
+     * @type {String|null}
+     */
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
+    /**
+     * Panels per Drag&Drop verschiebbar? Default: true
+     * @type {Boolean}
+     */
     get sortable() { return this._sortable; }
     set sortable(val) { 
         this._sortable = !!val;
@@ -115,6 +171,12 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Sendet die Positionsdaten (posData) an rpcSaveFn. Enthält die Antwort config, wird sie
+     * angewendet. Danach wird afterSave ausgelöst.
+     * @param {Object|null} [args=null]  Argumente für den Server (rpcSaveArgs haben Vorrang)
+     * @returns {Promise}  Wird mit der Antwort des RPC aufgelöst
+     */
     save(args=null) {
         return new Promise((resolve, reject) => {
             // Args
@@ -161,6 +223,11 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
 
 
     // PROTECTED
+    /**
+     * Richtet Drag&Drop-Ziele der Spalten ein (bzw. entfernt sie ohne sortable) und danach deren Panels.
+     * @param {kijs.gui.Element[]} [elements]  Leer = alle Elemente
+     * @returns {undefined}
+     */
     _initColumns(elements) {
         let panels = [];
         
@@ -191,6 +258,12 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
         this._initPanels(panels);
     }
     
+    /**
+     * Setzt die Listeners der Panels und richtet ihre Drag&Drop-Quelle (Kopfzeile) ein bzw. entfernt sie.
+     * Andere Elemente als kijs.gui.dashboard.Panel werfen einen Error.
+     * @param {kijs.gui.Element[]} [elements]  Leer = alle Panels aller Spalten
+     * @returns {undefined}
+     */
     _initPanels(elements) {
         if (kijs.isEmpty(elements)) {
             elements = [];

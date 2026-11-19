@@ -3,7 +3,16 @@
 // --------------------------------------------------------------
 // kijs.gui.field.AceEditor
 // --------------------------------------------------------------
-// Text/Sourcecode Editor
+/**
+ * Editor für Text und Quellcode (Ace) mit Syntax-Hervorhebung je nach mode. Ace muss zusätzlich
+ * geladen werden (lib/ace). Der Editor wird beim ersten Rendern erstellt.
+ *
+ * @example
+ * new kijs.gui.field.AceEditor({ label: 'Code', name: 'code', mode: 'json', height: 300 });
+ *
+ * @fires change  Beim Verlassen des Editors, wenn der Wert geändert hat. e: value, oldValue
+ * @fires input  Bei jeder Änderung des Texts (Ace-Event change, ohne Argumente)
+ */
 kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field.Field {
 
 
@@ -31,9 +40,9 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            mode: true,          // 'javascript' (Default), 'json', 'css', 'html', 'php', 'mysql', 'plain_text' (weitere siehe Ordner kijs\lib\ace)
-            theme: true,         // (siehe Ordner kijs\lib\ace)
-            valueTrimEnable: true, // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            mode: true,
+            theme: true,
+            valueTrimEnable: true,
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
 
@@ -58,6 +67,11 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    /**
+     * Modus für die Syntax-Hervorhebung, z.B. 'javascript', 'json', 'css', 'html', 'php', 'mysql' oder
+     * 'plain_text' (weitere siehe lib/ace). Default: 'javascript'
+     * @type {String}
+     */
     get mode() { 
         return this._mode;
     }
@@ -77,6 +91,10 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         }
     }
 
+    /**
+     * Ace-Theme (siehe lib/ace). null = Standard von Ace
+     * @type {String|null}
+     */
     get theme() { return this._theme; }
     set theme(val) {
         this._theme = val;
@@ -108,6 +126,10 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts automatisch entfernen? Default: true
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 

@@ -4,41 +4,9 @@
 // kijs.gui.container.Scrollable
 // --------------------------------------------------------------
 /**
- * Wie kijs.gui.Container, jedoch werden anstelle von Scrollbars Scroll-Buttons angezeigt.
- *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.container.Scrollable
- *
- * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
- * ----------------
- * disableSmoothScrolling Boolean [optional] default=false  Sanftes Scrollen ausschalten
- * 
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- * 
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- * scrollDelay  Number [optional] default=150               Wert in ms. Wenn eine Scroll-Taste 
- *                                                          gehalten wird, wird in diesem Abstand gescrollt
- * 
- * scrollStep   Number [optional] default=20                Anzahl Pixel, die bei einem Klick auf einen
- *                                                          Scroll-Button gescrollt wird
- * 
- * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
- * -------------
- * scrollableX  Boolean|String [optional] default=false     Soll auf der X-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- * 
- * scrollableY  Boolean|String [optional] default=false     Soll auf der Y-Achse gescrollt werden können?
- *                                                          true=Ja, false=Nein, 'auto'=wenn erforderlich
- *
- *
- * EVENTS
- * ----------
- * 
+ * Wie kijs.gui.Container, aber mit Scroll-Buttons statt Scrollbars. Gescrollt wird mit den
+ * Buttons (gedrückt halten scrollt weiter), mit dem Mausrad und durch Wischen.
+ * Wird z.B. für den Kopf- und Fussbereich von kijs.gui.Panel verwendet.
  */
 kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs.gui.Container {
 
@@ -171,25 +139,25 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
             scrollStep: true,
             
             iconDown: { target: 'iconDown' },
-            iconDownMap: { target: 'iconMap', context: this._iconDownEl },
+            iconDownMap: { target: 'iconMap', context: this._iconDownEl },   // {String|Object} Icon des Buttons nach unten aus einer iconMap
             iconDownChar: { target: 'iconChar', context: this._iconDownEl },
             iconDownCls: { target: 'iconCls', context: this._iconDownEl },
             iconDownColor: { target: 'iconColor', context: this._iconDownEl },
             
             iconLeft: { target: 'iconLeft' },
-            iconLeftMap: { target: 'iconMap', context: this._iconLeftEl },
+            iconLeftMap: { target: 'iconMap', context: this._iconLeftEl },   // {String|Object} Icon des Buttons nach links aus einer iconMap
             iconLeftChar: { target: 'iconChar', context: this._iconLeftEl },
             iconLeftCls: { target: 'iconCls', context: this._iconLeftEl },
             iconLeftColor: { target: 'iconColor', context: this._iconLeftEl },
             
             iconRight: { target: 'iconRight' },
-            iconRightMap: { target: 'iconMap', context: this._iconRightEl },
+            iconRightMap: { target: 'iconMap', context: this._iconRightEl },   // {String|Object} Icon des Buttons nach rechts aus einer iconMap
             iconRightChar: { target: 'iconChar', context: this._iconRightEl },
             iconRightCls: { target: 'iconCls', context: this._iconRightEl },
             iconRightColor: { target: 'iconColor', context: this._iconRightEl },
 
             iconUp: { target: 'iconUp' },
-            iconUpMap: { target: 'iconMap', context: this._iconUpEl },
+            iconUpMap: { target: 'iconMap', context: this._iconUpEl },   // {String|Object} Icon des Buttons nach oben aus einer iconMap
             iconUpChar: { target: 'iconChar', context: this._iconUpEl },
             iconUpCls: { target: 'iconCls', context: this._iconUpEl },
             iconUpColor: { target: 'iconColor', context: this._iconUpEl }
@@ -216,15 +184,20 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Sanftes Scrollen mit den Buttons ausschalten? Default: false
+     * @type {Boolean}
+     */
     get disableSmoothScrolling() { return this._disableSmoothScrolling; }
     set disableSmoothScrolling(val) { this._disableSmoothScrolling = val; }
     
     
-    get iconDown() { return this._iconDownEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon des Buttons nach unten: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get iconDown() { return this._iconDownEl; }
     set iconDown(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -256,23 +229,36 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
 
+    /**
+     * Zeichen des Icons nach unten (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconDownChar() { return this._iconDownEl.iconChar; }
     set iconDownChar(val) { this._iconDownEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons nach unten
+     * @type {String|null}
+     */
     get iconDownCls() { return this._iconDownEl.iconCls; }
     set iconDownCls(val) { this._iconDownEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons nach unten
+     * @type {String}
+     */
     get iconDownColor() { return this._iconDownEl.iconColor; }
     set iconDownColor(val) { this._iconDownEl.iconColor = val; }
 
     set iconDownMap(val) { this._iconDownEl.iconMap = val; }
     
     
-    get iconLeft() { return this._iconLeftEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon des Buttons nach links: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get iconLeft() { return this._iconLeftEl; }
     set iconLeft(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -304,23 +290,36 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
 
+    /**
+     * Zeichen des Icons nach links (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconLeftChar() { return this._iconLeftEl.iconChar; }
     set iconLeftChar(val) { this._iconLeftEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons nach links
+     * @type {String|null}
+     */
     get iconLeftCls() { return this._iconLeftEl.iconCls; }
     set iconLeftCls(val) { this._iconLeftEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons nach links
+     * @type {String}
+     */
     get iconLeftColor() { return this._iconLeftEl.iconColor; }
     set iconLeftColor(val) { this._iconLeftEl.iconColor = val; }
 
     set iconLeftMap(val) { this._iconLeftEl.iconMap = val; }
     
     
-    get iconRight() { return this._iconRightEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon des Buttons nach rechts: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get iconRight() { return this._iconRightEl; }
     set iconRight(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -352,23 +351,36 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
 
+    /**
+     * Zeichen des Icons nach rechts (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconRightChar() { return this._iconRightEl.iconChar; }
     set iconRightChar(val) { this._iconRightEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons nach rechts
+     * @type {String|null}
+     */
     get iconRightCls() { return this._iconRightEl.iconCls; }
     set iconRightCls(val) { this._iconRightEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons nach rechts
+     * @type {String}
+     */
     get iconRightColor() { return this._iconRightEl.iconColor; }
     set iconRightColor(val) { this._iconRightEl.iconColor = val; }
 
     set iconRightMap(val) { this._iconRightEl.iconMap = val; }
     
     
-    get iconUp() { return this._iconUpEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon des Buttons nach oben: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get iconUp() { return this._iconUpEl; }
     set iconUp(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -400,18 +412,34 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
 
+    /**
+     * Zeichen des Icons nach oben (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconUpChar() { return this._iconUpEl.iconChar; }
     set iconUpChar(val) { this._iconUpEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons nach oben
+     * @type {String|null}
+     */
     get iconUpCls() { return this._iconUpEl.iconCls; }
     set iconUpCls(val) { this._iconUpEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons nach oben
+     * @type {String}
+     */
     get iconUpColor() { return this._iconUpEl.iconColor; }
     set iconUpColor(val) { this._iconUpEl.iconColor = val; }
 
     set iconUpMap(val) { this._iconUpEl.iconMap = val; }
     
     
+    /**
+     * Scroll-Buttons auf der X-Achse: true=immer, false=nie, 'auto'=wenn nötig. Default: false
+     * @type {Boolean|String}
+     */
     // overwrite
     get scrollableX() { return this._scrollableX; };
     // overwrite
@@ -422,6 +450,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
     
+    /**
+     * Scroll-Buttons auf der Y-Achse: true=immer, false=nie, 'auto'=wenn nötig. Default: false
+     * @type {Boolean|String}
+     */
     // overwrite
     get scrollableY() { return this._scrollableY; }
     // overwrite
@@ -432,9 +464,17 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
     
+    /**
+     * Abstand in ms, in dem weiter gescrollt wird, solange ein Button gedrückt ist. Default: 150
+     * @type {Number}
+     */
     get scrollDelay() { return this._scrollDelay; }
     set scrollDelay(val) { this._scrollDelay = val; }
 
+    /**
+     * Anzahl Pixel pro Schritt beim Scrollen mit den Buttons. Default: 20
+     * @type {Number}
+     */
     get scrollStep() { return this._scrollStep; }
     set scrollStep(val) { this._scrollStep = val; }
 
@@ -499,7 +539,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
 
 
     // PROTECTED
-    // Scroll-Buttons rendern/entfernen
+    /**
+     * Rendert die Scroll-Buttons, die nach scrollableX und scrollableY nötig sind, und entfernt die anderen
+     * @returns {undefined}
+     */
     _renderScrollButtons() {
         let hasScrollX = false;
         let hasScrollY = false;
@@ -582,7 +625,11 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._updateButtons();
     }
     
-    // starten das Scrollen in eine Richtung
+    /**
+     * Scrollt um scrollStep in eine Richtung und wiederholt das alle scrollDelay ms bis _scrollStop()
+     * @param {String} dir  'up', 'down', 'left' oder 'right'
+     * @returns {undefined}
+     */
     _scrollStart(dir) {
         // falls bereits gescrollt wird: abbrechen
         this._scrollStop();
@@ -605,7 +652,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         this._scrollDeferId = kijs.defer(this._scrollStart, this._scrollDelay, this, dir);
     }
     
-    // stoppt das Scrollen
+    /**
+     * Stoppt das Scrollen mit den Buttons
+     * @returns {undefined}
+     */
     _scrollStop() {
         if (this._scrollDeferId) {
             clearTimeout(this._scrollDeferId);
@@ -613,7 +663,10 @@ kijs.gui.container.Scrollable = class kijs_gui_container_Scrollable extends kijs
         }
     }
     
-    // Schaltflächen aktivieren/deaktivieren
+    /**
+     * Deaktiviert die Scroll-Buttons, in deren Richtung nicht mehr gescrollt werden kann
+     * @returns {undefined}
+     */
     _updateButtons() {
         if (!this._innerDom) {
             return;

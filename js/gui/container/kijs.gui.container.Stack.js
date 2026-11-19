@@ -4,57 +4,19 @@
 // kijs.gui.container.Stack
 // --------------------------------------------------------------
 /**
- * Container Element, dass untergeordnete Elemente beinhalten kann.
- * Es wird jeweils nur ein Element angezeigt. 
- * Die Elemente können mit den currentEl, currentIndex und currentName
- * gewechselt werden.
- * Mit der Funktion setCurrentAnimated() können sie auch animiert gewechselt werden.
+ * Container, der jeweils nur eines seiner Elemente anzeigt. Das angezeigte Element wird mit
+ * currentEl, currentIndex oder currentName gewechselt, mit setCurrentAnimated() auch animiert.
+ * Wird ein Element entfernt, wird das zuvor angezeigte wieder aktiviert (History).
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.container.Stack
+ * @example
+ * const stack = new kijs.gui.container.Stack({
+ *     animation: 'slideLeft',
+ *     elements: [ { name: 'liste', html: 'Liste' }, { name: 'detail', html: 'Detail' } ]
+ * });
+ * stack.setCurrentAnimated('detail');
  *
- * CONFIG-Parameter (es gelten auch die Config-Parameter der Basisklassen)
- * ----------------
- * animation           String [optional]     Standard Animation. Gültige Werte:
- *                                              none:           Keine Animation
- *                                              fade:           Überblenden (default)
- *                                              slideLeft:      Ausfahren nach links
- *                                              slideRight:     Ausfahren nach rechts
- *                                              slideTop:       Ausfahren nach oben
- *                                              slideBottom:    Ausfahren nach unten
- *
- * animationDuration   Integer [optional]   Dauer der Animation in Millisekunden (default: 1000).
- * 
- * currentEl           kijs.gui.Element [optional] Element, das als Erstes angezeigt wird
- * currentIndex        Integer [optional]          Element, das als Erstes angezeigt wird (default: 0)
- * currentName         String [optional]           Element, das als Erstes angezeigt wird
- * 
- *
- * FUNKTIONEN (es gelten auch die Funktionen der Basisklassen)
- * ----------
- * setCurrentAnimated                       Wechselt das Element mit einer Animation
- *  Args: element   Mixed                   Element, das angezeigt werden soll.
- *                                              String = Name des Elements
- *                                              Int = Index des Elements
- *                                              Object = Verweis auf das Element
- *        animation String [optional]       Art der Animation
- *        duration  Integer [optional]      Dauer der Animation in Millisekunden
- *
- *
- * EIGENSCHAFTEN (es gelten auch die Eigenschaften der Basisklassen)
- * -------------
- *  currentEl           kijs.gui.Element    Gibt das zurzeit aktive Element zurück oder setzt es
- *  currentIndex        Integer [optional]  Gibt das zurzeit aktive Element zurück oder setzt es
- *  currentName         String [optional]   Gibt das zurzeit aktive Element zurück oder setzt es
- *  animation           String              Gibt die Standardanimation zurück oder setzt sie
- *  animationDuration   Integer             Gibt die Standarddauer zurück oder setzt sie
- *
- *
- * EVENTS
- * ----------
- *
+ * @fires beforeChange  Vor dem Wechsel mit setCurrentAnimated(). Rückgabe false bricht ab. e: newEl, oldEl
+ * @fires change  Nach dem Wechsel des aktuellen Elements (nur wenn gerendert). e: currentEl, oldEl
  */
 kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Container {
     
@@ -106,6 +68,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Standard-Animation beim Wechsel: 'none', 'fade', 'slideTop', 'slideRight', 'slideBottom' oder
+     * 'slideLeft'. Andere Werte werfen einen kijs.Error. Default: 'fade'
+     * @type {String}
+     */
     get animation() { return this._animation; }
     set animation(val) {
         if (this._getAnimationCls(val, 'in') === null) {
@@ -115,12 +82,20 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         this._animation = val;
     }
     
+    /**
+     * Standard-Dauer der Animation in ms. Default: 500
+     * @type {Number}
+     */
     get animationDuration() { return this._animationDuration; }
     set animationDuration(val) {
         this._animationDuration = val;
     }
     
-    // Aktueller Container ermitteln/setzen
+    /**
+     * Aktuell angezeigtes Element. Der Setter wechselt ohne Animation und wirft einen kijs.Error, wenn
+     * das Element nicht enthalten ist.
+     * @type {kijs.gui.Element|null}
+     */
     get currentEl() { return this._currentEl; }
     set currentEl(val) {
         if (!this.hasChild(val)) {
@@ -139,7 +114,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Aktuellen Container ermitteln/setzen via Index
+    /**
+     * Index des aktuellen Elements. Ein nicht vorhandener Index wird ignoriert. Default: 0
+     * @type {Number|null}
+     */
     get currentIndex() { return this._getElIndex(this._currentEl); }
     set currentIndex(val) {
         if (this._elements[val]) {
@@ -147,7 +125,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
-    // Aktuellen Container ermitteln/setzen via Name
+    /**
+     * Name des aktuellen Elements. Der Setter wirft einen kijs.Error, wenn es keines mit diesem Namen gibt.
+     * @type {String|null}
+     */
     get currentName() { 
         if (this._currentEl) {
             return this._currentEl.name;
@@ -235,11 +216,13 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
     
     /**
-     * Aktuelles Element wechseln und dabei eine Animation abspielen
-     * @param {Integer|String|kijs.gui.Element} el
-     * @param {String} animation
-     * @param {Integer} duration
-     * @returns {Promise}
+     * Aktuelles Element wechseln und dabei eine Animation abspielen. change wird sofort ausgelöst, das
+     * Promise erst nach der Animation erfüllt. Ist das Element schon aktuell, ist noch keines aktiv,
+     * ist die Dauer 0 oder bricht beforeChange ab, wird das Promise nicht erfüllt.
+     * @param {Integer|String|kijs.gui.Element} el  Index, Name oder Element (sonst kijs.Error)
+     * @param {String|null} [animation=null]  null = animation
+     * @param {Integer|null} [duration=null]  Dauer in ms. null = animationDuration
+     * @returns {Promise}  e: currentEl, oldEl
      */
     setCurrentAnimated(el, animation=null, duration=null) {
         return new Promise((resolve, reject) => {
@@ -328,10 +311,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     }
 
     /**
-     * Aktiviert das vorherige Element
-     * @param {String} animation
-     * @param {Integer} duration
-     * @returns {Promise}
+     * Aktiviert das vorherige Element aus der History (siehe setCurrentAnimated())
+     * @param {String|null} [animation=null]
+     * @param {Integer|null} [duration=null]
+     * @returns {undefined}
      */
     setPreviousAnimated(animation=null, duration=null) {
         if (this._elHistory.length > 1) {
@@ -359,7 +342,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     
     
     // PROTECTED
-    // Entfernt CSS-Klassen, zIndex und animationDuration der Animation
+    /**
+     * Entfernt bei allen Elementen die Animations-Klassen und setzt zIndex und animationDuration zurück.
+     * @returns {undefined}
+     */
     _cleanUp() {
         const animationClasses = [
             'kijs-fade-in',
@@ -384,6 +370,12 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         }
     }
     
+    /**
+     * Gibt die CSS-Klasse einer Animation zurück, z.B. 'kijs-slide-in-left'
+     * @param {String} animation
+     * @param {String} dir  'in' oder 'out'
+     * @returns {String|null}  '' bei 'none', null bei unbekannter Animation
+     */
     _getAnimationCls(animation, dir) {
         let ret = null;
         
@@ -399,7 +391,12 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return ret;
     }
     
-    // Gibt ein Element anhand eines Index, eines Namens oder einem Element zurück
+    /**
+     * Gibt ein Element anhand eines Index, eines Namens oder eines Elements zurück. Wirft einen
+     * kijs.Error, wenn es nicht enthalten ist.
+     * @param {Integer|String|kijs.gui.Element} el
+     * @returns {kijs.gui.Element}
+     */
     _getElFromIndexNameEl(el) {
         // by index
         if (kijs.isInteger(el)) {
@@ -418,7 +415,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return el;
     }
     
-    // Ermittelt den Index eines Elements
+    /**
+     * Ermittelt den Index eines Elements
+     * @param {kijs.gui.Element} el
+     * @returns {Number|null}  null, wenn nicht enthalten
+     */
     _getElIndex(el) {
         let index = null;
         
@@ -432,8 +433,11 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return index;
     }
     
-    // Setzt das aktuelle Element, aktualisiert die History und wirft das change-Event
-    // Falls das aktuelle Element geändert hat, wird true zurückgegeben, sonst false
+    /**
+     * Setzt das aktuelle Element, aktualisiert die History und löst change aus (wenn gerendert)
+     * @param {kijs.gui.Element} el
+     * @returns {Boolean}  Hat das aktuelle Element geändert?
+     */
     _setCurrent(el) {
         if (el !== this._currentEl) {
             let oldEl = this._currentEl;
@@ -453,7 +457,10 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
         return false;
     }
     
-    // nur das currentEl ist sichtbar, alle anderen werden ausgeblendet
+    /**
+     * Macht nur currentEl sichtbar und blendet alle anderen Elemente aus.
+     * @returns {undefined}
+     */
     _updateElementsVisibility() {
         for (let i=0; i<this._elements.length; i++) {
             this._elements[i].visible = this._elements[i] === this._currentEl;

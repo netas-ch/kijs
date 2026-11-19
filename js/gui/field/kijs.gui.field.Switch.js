@@ -4,40 +4,17 @@
 // kijs.gui.field.Switch
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
+ * Schalter (ein/aus) mit Beschriftung (caption) und optionalem Icon. Umgeschaltet wird mit
+ * Klick, mit der Leertaste oder durch Ziehen des Schalt-Punkts. Welcher Wert zu welchem
+ * Zustand gehört, bestimmen valueChecked und valueUnchecked.
  *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @example
+ * new kijs.gui.field.Switch({ label: 'Aktiv', name: 'aktiv', value: true });
+ *
+ * @fires blur  Weitergeleitet vom Schalter
+ * @fires change  Nach dem Umschalten durch den Benutzer (Klick, Leertaste, Ziehen) und nach clear().
+ *                e: checked, oldChecked, value, oldValue
+ * @fires input  Nach dem Umschalten mit einem Klick. e: checked, oldChecked, value, oldValue
  */
 kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field {
 
@@ -103,18 +80,18 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             caption: { target: 'html', context: this._captionDom, prio: 2 },
-            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
-            captionHide: true,
+            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },   // {String|Array} CSS-Klassen der Beschriftung
+            captionHide: true,   // {Boolean} Wird zurzeit nicht ausgewertet
             captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
-            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
+            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },   // {Object} CSS-Styles der Beschriftung
             captionWidth: { target: 'captionWidth' },
 
             icon: { target: 'icon' },
-            iconChar: { target: 'iconChar', context: this._iconEl },
-            iconCls: { target: 'iconCls', context: this._iconEl },
-            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
-            iconColor: { target: 'iconColor', context: this._iconEl },
-            iconMap: { target: 'iconMap', context: this._iconEl },
+            iconChar: { target: 'iconChar', context: this._iconEl },   // {Number} Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+            iconCls: { target: 'iconCls', context: this._iconEl },   // {String} CSS-Klasse des Icons
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },   // {String} CSS-Klasse für eine Animation des Icons
+            iconColor: { target: 'iconColor', context: this._iconEl },   // {String} Farbe des Icons
+            iconMap: { target: 'iconMap', context: this._iconEl },   // {String|Object} Icon aus einer iconMap, z.B. 'kijs.iconMap.Fa.house'
 
             valueChecked: { prio: 1002, target: '_valueChecked' },
             valueUnchecked: { prio: 1002, target: '_valueUnchecked' },
@@ -144,19 +121,39 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung rechts des Schalters
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) {
         this._captionDom.html = val;
     }
 
+    /**
+     * Darstellung der Beschriftung: 'html', 'code' oder 'text'. Default: 'code'
+     * @type {String}
+     */
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
+    /**
+     * kijs.gui.Dom der Beschriftung
+     * @type {kijs.gui.Dom}
+     */
     get captionDom() { return this._captionDom; }
 
+    /**
+     * Breite der Beschriftung in Pixel
+     * @type {Number|null}
+     */
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }
 
+    /**
+     * Zustand: 0 = aus, 1 = ein. Der Setter akzeptiert auch true, false, leer und '0'/'1'.
+     * @type {Number}
+     */
     get checked() { return this._checked; }
     set checked(val) {
         if (val === 1 || val === '1' || val === true) {
@@ -170,14 +167,19 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Hat der Schalter den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
-    get icon() { return this._iconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Zusätzliches Icon vor der Beschriftung: Config-Objekt oder kijs.gui.Icon. Leer setzt es zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get icon() { return this._iconEl; }
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -210,26 +212,59 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         }
     }
 
+    /**
+     * CSS-Klasse für eine Animation des Icons
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
     set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
+    /**
+     * Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons
+     * @type {String|null}
+     */
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) { this._iconEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons
+     * @type {String}
+     */
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { this._iconEl.iconColor = val; }
 
+    /**
+     * Icon aus einer iconMap (siehe kijs.gui.Icon.iconMap)
+     * @type {String|Object}
+     */
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
+    /**
+     * kijs.gui.Dom des Eingabebereichs (Schalter, Icon und Beschriftung)
+     * @type {kijs.gui.Dom}
+     */
     get inputWrapperDom() { return this._inputWrapperDom; }
 
+    /**
+     * Leer im Zustand aus
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return this._checked === 0; }
 
+    /**
+     * Wert des aktuellen Zustands (valueChecked oder valueUnchecked).
+     * Der Setter akzeptiert diese Werte sowie true/false, 0/1, '0'/'1' und null.
+     * @type {*}
+     */
     // overwrite
     get value() {
         switch (this._checked) {
@@ -251,9 +286,17 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Wert im Zustand ein. Default: true
+     * @type {*}
+     */
     get valueChecked() { return this._valueChecked; }
     set valueChecked(val) { this._valueChecked = val; }
 
+    /**
+     * Wert im Zustand aus. Default: false
+     * @type {*}
+     */
     get valueUnchecked() { return this._valueUnchecked; }
     set valueUnchecked(val) { this._valueUnchecked = val; }
 
@@ -262,6 +305,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Setzt den Fokus auf den Schalter
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @returns {HTMLElement|null|false}
+     */
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         return this._inputDom.focus(alsoSetIfNoTabIndex);
@@ -314,6 +362,12 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
 
 
     // PROTECTED
+    /**
+     * Ende des Ziehens: übernimmt den Zustand, auf dem der Schalt-Punkt steht, und löst
+     * change aus, falls er sich geändert hat
+     * @param {Object} e
+     * @returns {undefined}
+     */
     _dragEnd(e) {
         const checked = this._dom.clsHas('kijs-checked') ? 1 : 0;
 
@@ -348,6 +402,11 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._dragPosXStart = null;
     }
     
+    /**
+     * Verschiebt den Schalt-Punkt beim Ziehen. Über der Mitte gilt der Zustand ein.
+     * @param {Number} x   X-Koordinate der Maus bzw. des Fingers
+     * @returns {undefined}
+     */
     _dragMove(x) {
         let deltaX = x - this._dragPosXStart;
 
@@ -379,11 +438,21 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._togglePointDom.style.marginLeft = deltaX + 'px';
     }
     
+    /**
+     * Beginn des Ziehens: merkt sich die Startposition
+     * @param {Number} x   X-Koordinate der Maus bzw. des Fingers
+     * @returns {undefined}
+     */
     _dragStart(x) {
         // Startposition merken
         this._dragPosXStart = x;
     }
 
+    /**
+     * Setzt die CSS-Klasse kijs-checked bzw. kijs-unchecked
+     * @param {Number} checked   0 oder 1
+     * @returns {undefined}
+     */
     _updateTogglePoint(checked) {
         let cls;
         
@@ -397,6 +466,12 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         this._dom.clsAdd(cls);
     }
 
+    /**
+     * Eingabe erforderlich validieren: Fehler, wenn der Wert falsy ist (z.B. aus mit valueUnchecked=false)
+     * @param {*} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
     // overwrite
     _validateRequired(value, ignoreEmpty) {
         if (this._required) {

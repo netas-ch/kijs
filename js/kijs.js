@@ -3,6 +3,14 @@
 // --------------------------------------------------------------
 // kijs (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Basisklasse von kijs und Namensraum aller Klassen. Enthält Typprüfungen (isArray,
+ * isEmpty …), Hilfsfunktionen (defer, getText, uniqId …) sowie die Version und die aktuelle Sprache.
+ *
+ * @example
+ * if (kijs.isEmpty(value)) { ... }
+ * kijs.defer(function() { ... }, 100, this);
+ */
 window.kijs = class kijs {
 
     // PRIVATE VARS
@@ -19,8 +27,16 @@ window.kijs = class kijs {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Version von kijs, z.B. '3.7.1'
+     * @type {String}
+     */
     static get version() { return '3.7.1'; }
 
+    /**
+     * Aktuelle Sprache, z.B. 'de-CH' oder 'fr'. Default: 'de'
+     * @type {String}
+     */
     static get language() {
         if (this.__language) {
             return this.__language;

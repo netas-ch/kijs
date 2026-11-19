@@ -4,40 +4,13 @@
 // kijs.gui.field.Field (Abstract)
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
+ * Basisklasse aller Formularfelder. Ein Feld besteht aus dem Label (labelDom) und dem
+ * Inhalt (contentDom) mit dem Eingabebereich (inputWrapperDom), dem Button zum Leeren und
+ * den Icons für Hilfe und Fehler. Abgeleitete Klassen überschreiben value.
+ * Siehe Leitfäden Validierung von Formularfeldern, isDirty sowie Disabled und ReadOnly.
  *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @fires change  Nach einer Änderung des Werts durch clear() (in abgeleiteten Klassen auch durch
+ *                den Benutzer). e: oldValue, value
  */
 kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
@@ -128,7 +101,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            disableFlex: { target: 'disableFlex' }, // false=ganze Breite wird genutzt, true=nur die benötigte Breite wird genutzt
+            disableFlex: { target: 'disableFlex' },
             labelPosition: { target: 'labelPosition' },
             isDirty: { target: 'isDirty', prio: 3000 },
             
@@ -136,17 +109,17 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             inputWidth: { target: 'inputWidth' },
             
             label: { target: 'html', context: this._labelDom, prio: 2 },
-            labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },
+            labelCls: { fn: 'function', target: this._labelDom.clsAdd, context: this._labelDom },     // {String|Array} CSS-Klassen des Labels
             labelHide: true,
             labelDisplayType: { target: 'htmlDisplayType', context: this._labelDom },
-            labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },
+            labelStyle: { fn: 'assign', target: 'style', context: this._labelDom },                // {Object} CSS-Styles des Labels
             labelWidth: { target: 'labelWidth' },
 
-            contentCls: { fn: 'function', target: this._contentDom.clsAdd, context: this._contentDom },
-            contentStyle: { fn: 'assign', target: 'style', context: this._contentDom },
+            contentCls: { fn: 'function', target: this._contentDom.clsAdd, context: this._contentDom },   // {String|Array} CSS-Klassen von contentDom
+            contentStyle: { fn: 'assign', target: 'style', context: this._contentDom },                  // {Object} CSS-Styles von contentDom
 
-            clearable: { target: 'clearable' }, // Button zum Leeren anzeigen?
-            clearButtonCls: { fn: 'function', target: this._clearButtonEl.dom.clsAdd, context: this._clearButtonEl.dom },
+            clearable: { target: 'clearable' },
+            clearButtonCls: { fn: 'function', target: this._clearButtonEl.dom.clsAdd, context: this._clearButtonEl.dom },    // {String|Array} CSS-Klassen des Buttons zum Leeren. Default: 'kijs-inline'
             clearButtonIconChar: { target: 'iconChar', context: this._clearButtonEl },
             clearButtonIconCls: { target: 'iconCls', context: this._clearButtonEl },
             clearButtonIconColor: { target: 'iconColor', context: this._clearButtonEl },
@@ -167,15 +140,15 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
 
             value: { target: 'value', prio: 1000 },
 
-            maxLength: true,
-            minLength: true,
-            readOnly: { target: 'readOnly' },   // deaktiviert das Feld, die Buttons bleiben aber aktiv (siehe auch disabled)
-            required: { target: 'required' },   // Eingabe erforderlich?
-            submitValueEnable: true,    // Soll der Wert in einem container.Form übermittelt werden?
+            maxLength: true,    // {Number|null} Maximale Anzahl Zeichen (Validierung)
+            minLength: true,    // {Number|null} Minimale Anzahl Zeichen (Validierung)
+            readOnly: { target: 'readOnly' },
+            required: { target: 'required' },
+            submitValueEnable: true,
 
             validationFn: { target: 'validationFn' },
             validationFnContext: { target: 'validationFnContext' },
-            validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this }
+            validationRegExp: { fn: 'function', target: this.addValidationRegExp, context: this }    // {Object|Array} Regulärer Ausdruck zum Validieren (siehe addValidationRegExp())
         });
 
         // Listeners
@@ -193,6 +166,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button zum Leeren anzeigen? Er ist nur sichtbar, wenn das Feld etwas enthält. Default: false
+     * @type {Boolean}
+     */
     get clearable() { return this._clearable; }
     set clearable(val) {
         let doRender = this._clearable !== !!val;
@@ -204,21 +181,45 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zeichen des Icons im Button zum Leeren (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get clearButtonIconChar() { return this._clearButtonEl.iconChar; }
     set clearButtonIconChar(val) { this._clearButtonEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons im Button zum Leeren (siehe kijs.gui.Icon.iconCls)
+     * @type {String}
+     */
     get clearButtonIconCls() { return this._clearButtonEl.iconCls; }
     set clearButtonIconCls(val) { this._clearButtonEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons im Button zum Leeren
+     * @type {String}
+     */
     get clearButtonIconColor() { return this._clearButtonEl.iconColor; }
     set clearButtonIconColor(val) { this._clearButtonEl.iconColor = val; }
 
+    /**
+     * Icon des Buttons zum Leeren aus einer iconMap, z.B. 'kijs.iconMap.Fa.xmark'
+     * @type {String}
+     */
     get clearButtonIconMap() { return this._clearButtonEl.iconMap; }
     set clearButtonIconMap(val) { this._clearButtonEl.iconMap = val; }
 
 
+    /**
+     * kijs.gui.Dom des Inhalts (Eingabebereich, Button zum Leeren, Icons)
+     * @type {kijs.gui.Dom}
+     */
     get contentDom() { return this._contentDom; }
     
+    /**
+     * true = das Feld braucht nur die nötige Breite, false = es nutzt die ganze Breite
+     * @type {Boolean}
+     */
     get disableFlex() { return this._dom.clsHas('kijs-disableFlex'); }
     set disableFlex(val) {
         if (val) {
@@ -231,11 +232,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
-    get errorIcon() { return this._errorIconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon für die Fehleranzeige: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get errorIcon() { return this._errorIconEl; }
     set errorIcon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -267,23 +269,40 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zeichen des Fehler-Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get errorIconChar() { return this._errorIconEl.iconChar; }
     set errorIconChar(val) { this._errorIconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Fehler-Icons
+     * @type {String}
+     */
     get errorIconCls() { return this._errorIconEl.iconCls; }
     set errorIconCls(val) { this._errorIconEl.iconCls = val; }
 
+    /**
+     * Farbe des Fehler-Icons
+     * @type {String}
+     */
     get errorIconColor() { return this._errorIconEl.iconColor; }
     set errorIconColor(val) { this._errorIconEl.iconColor = val;}
 
+    /**
+     * Fehler-Icon aus einer iconMap. Default: 'kijs.iconMap.Fa.circle-info'
+     * @type {String}
+     */
     get errorIconMap() { return this._errorIconEl.iconMap; }
     set errorIconMap(val) { this._errorIconEl.iconMap = val;}
 
-    get helpIcon() { return this._helpIconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon für den Hilfetext: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get helpIcon() { return this._helpIconEl; }
     set helpIcon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -312,24 +331,48 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zeichen des Hilfe-Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get helpIconChar() { return this._helpIconEl.iconChar; }
     set helpIconChar(val) { this._helpIconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Hilfe-Icons
+     * @type {String}
+     */
     get helpIconCls() { return this._helpIconEl.iconCls; }
     set helpIconCls(val) { this._helpIconEl.iconCls = val; }
 
+    /**
+     * Farbe des Hilfe-Icons
+     * @type {String}
+     */
     get helpIconColor() { return this._helpIconEl.iconColor; }
     set helpIconColor(val) { this._helpIconEl.iconColor = val; }
 
+    /**
+     * Hilfe-Icon aus einer iconMap. Default: 'kijs.iconMap.Fa.circle-question'
+     * @type {String}
+     */
     get helpIconMap() { return this._helpIconEl.iconMap; }
     set helpIconMap(val) { this._helpIconEl.iconMap = val; }
 
+    /**
+     * Hilfetext, wird als Tooltip des Hilfe-Icons angezeigt. Leer = Icon ausblenden
+     * @type {String}
+     */
     get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
         this._helpIconEl.tooltip = val;
         this._helpIconEl.visible = this._helpIconEl.tooltip && !kijs.isEmpty(this._helpIconEl.tooltip.html);
     }
     
+    /**
+     * Höhe des Eingabebereichs (inputWrapperDom) in Pixel
+     * @type {Number|null}
+     */
     get inputHeight() { return this._inputWrapperDom.height; }
     set inputHeight(val) {
         this._inputWrapperDom.height = val;
@@ -339,6 +382,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Breite des Eingabebereichs (inputWrapperDom) in Pixel. Bei einer fixen Breite wird flex:none gesetzt.
+     * @type {Number|null}
+     */
     get inputWidth() { return this._inputWrapperDom.width; }
     set inputWidth(val) {
         this._inputWrapperDom.width = val;
@@ -353,8 +400,18 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
             this._raiseAfterResizeEvent(true);
         }
     }
+    /**
+     * kijs.gui.Dom des Eingabebereichs
+     * @type {kijs.gui.Dom}
+     */
     get inputWrapperDom() { return this._inputWrapperDom; }
 
+    /**
+     * Wurde der Wert seit dem Laden bzw. dem letzten Zurücksetzen geändert? Bei disabled immer false.
+     * Kann nur auf false gesetzt werden: dann gelten die aktuellen Werte als Ausgangswerte.
+     * Siehe Leitfaden isDirty.
+     * @type {Boolean}
+     */
     get isDirty() {
         let isDirty = false;
         if (!this.disabled) {
@@ -376,16 +433,32 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Beschriftung des Felds
+     * @type {String}
+     */
     get label() { return this._labelDom.html; }
     set label(val) {
         this._labelDom.html = val;
     }
 
+    /**
+     * Darstellung des Labels: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType). Default: 'code'
+     * @type {String}
+     */
     get labelDisplayType() { return this._labelDom.htmlDisplayType; }
     set labelDisplayType(val) { this._labelDom.htmlDisplayType = val; }
 
+    /**
+     * kijs.gui.Dom des Labels
+     * @type {kijs.gui.Dom}
+     */
     get labelDom() { return this._labelDom; }
 
+    /**
+     * Label ausblenden? Default: false
+     * @type {Boolean}
+     */
     get labelHide() { return this._labelHide; }
     set labelHide(val) {
         this._labelHide = val;
@@ -398,6 +471,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Position des Labels: 'left' (Default), 'top' oder 'auto' (bei schmalen Bildschirmen bis 500px oben)
+     * @type {String}
+     */
     get labelPosition() {
         if (this._dom.clsHas('kijs-labelpos-top')) {
             return 'top';
@@ -440,9 +517,18 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
     
+    /**
+     * Breite des Labels in Pixel
+     * @type {Number|null}
+     */
     get labelWidth() { return this._labelDom.width; }
     set labelWidth(val) { this._labelDom.width = val; }
 
+    /**
+     * Schreibgeschützt. Anders als bei disabled bleiben die Buttons des Felds aktiv.
+     * Siehe Leitfaden Disabled und ReadOnly.
+     * @type {Boolean}
+     */
     get readOnly() { return this._dom.clsHas('kijs-readonly'); }
     set readOnly(val) {
         if (val) {
@@ -452,13 +538,25 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Eingabe erforderlich? (Validierung) Default: false
+     * @type {Boolean}
+     */
     get required() { return this._required; }
     set required(val) { this._required = !!val; }
 
-    // false, falls der Wert vom Feld nicht übermittelt werden soll.
+    /**
+     * Soll der Wert in einem kijs.gui.container.Form übermittelt werden? Default: true
+     * @type {Boolean}
+     */
     get submitValueEnable() { return this._submitValueEnable; }
     set submitValueEnable(val) { this._submitValueEnable = !!val; }
 
+    /**
+     * Eigene Validierungsfunktion oder ihr Name als String. Sie erhält den Wert und gibt einen
+     * Fehlertext, ein Array mit Fehlertexten oder nichts zurück. Bei leerem Wert wird sie nicht aufgerufen.
+     * @type {Function|String}
+     */
     get validationFn() { return this._validationFn; }
     set validationFn(val) {
         let fn = kijs.getFunctionFromString(val);
@@ -469,6 +567,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Kontext von validationFn: Objekt oder Name als String. Default: das Feld
+     * @type {Object|String}
+     */
     get validationFnContext() { return this._validationFnContext; }
     set validationFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -479,7 +581,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
-    // Muss überschrieben werden
+    /**
+     * Wert des Felds. Abgeleitete Klassen überschreiben Getter und Setter; hier ist er immer null.
+     * Der Setter setzt isDirty zurück.
+     * @type {*}
+     */
     get value() { return null; }
     set value(val) {
         this.isDirty = false;
@@ -487,11 +593,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Gibt ein Objekt zurück mit den Werten des Felds
-     * Format {name: value}
-     * Beispiel nur ein Wert: {value:'2021-02-01'}
-     * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
-     * @return {undefined}
+     * Alle Werte des Felds als Objekt im Format { Feldname: Wert }. Felder mit mehreren Werten
+     * (z.B. ein Zeitraum) haben mehrere Einträge, z.B. { von: '2021-02-01', bis: '2021-02-03' }.
+     * Der Setter weist alle Werte gleichzeitig zu und setzt isDirty zurück.
+     * @type {Object}
      */
     get values() {
         let ret = {};
@@ -505,12 +610,6 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         return ret;
     }
 
-    /**
-     * Für Felder mit mehreren Werten: Damit können mehrere Werte gleichzeitig
-     * zugewiesen werden.
-     * Beispiel mehrere Werte: {value:'2021-02-01', valueEnd:'2021-02-03'}
-     * @param {Object} val
-     */
     set values(val) {
         kijs.Object.each(this._valuesMapping, function(key, map) {
             const fieldName = this[key];
@@ -527,8 +626,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere reguläre Ausdrücke zum Validieren hinzu
-     * @param {Object|String|Array} regExps Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Vierstellige Zahl erforderlich' }
+     * Fügt einen oder mehrere reguläre Ausdrücke zum Validieren hinzu. Passt der Wert nicht,
+     * wird msg als Fehler angezeigt (ohne msg ein Standardtext).
+     * @param {Object|Array} regExps  Objekt { regExp, msg } oder Array davon. regExp als RegExp oder String.
+     *                                Beispiel: { regExp: '/^[0-9]{3,4}$/', msg: 'Drei- oder vierstellige Zahl erforderlich' }
      * @returns {undefined}
      */
     addValidationRegExp(regExps) {
@@ -564,6 +665,12 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }, this);
     }
 
+    /**
+     * Ändert disabled beim Feld, seinen Buttons und Icons (siehe kijs.gui.Element.changeDisabled)
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elterncontainer kommt.
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -582,7 +689,8 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Setz den Wert auf null
+     * Leert das Feld (alle Werte auf ihren Leerwert), validiert und löst change aus,
+     * falls sich der Wert geändert hat.
      * @returns {undefined}
      */
     clear() {
@@ -603,8 +711,9 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Fügt Fehler aus einer externen Validation hinzu
+     * Fügt Fehler aus einer externen Validierung hinzu und zeigt sie an
      * @param {String|Array} errors
+     * @returns {undefined}
      */
     errorsAdd(errors) {
         if (!errors) {
@@ -622,7 +731,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Setzt die Validierungsfehler zurück
+     * Löscht die Validierungsfehler und blendet die Fehleranzeige aus
      * @returns {undefined}
      */
     errorsClear() {
@@ -633,14 +742,19 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Setzt die Fehleranzeige zurück
-     * @return {undefined}
+     * Blendet die Fehleranzeige aus, ohne die Fehler zu löschen
+     * @returns {undefined}
      */
     errorsReset() {
         this._dom.clsRemove('kijs-error');
         this._errorIconEl.visible = false;
     }
 
+    /**
+     * Rendert das Feld mit Label, Eingabebereich, Buttons und Icons und löst afterRender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterRender)
+     * @returns {undefined}
+     */
     // overwrite
     render(superCall) {
         // Grosselternklassenaufruf von kijs.gui.Elements.render()
@@ -684,6 +798,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Entfernt das Feld aus dem DOM und löst unrender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein unrender-Event)
+     * @returns {undefined}
+     */
     // overwrite
     unrender(superCall) {
         // Event auslösen.
@@ -710,9 +829,10 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Validiert den Inhalt des Felds
+     * Validiert den Wert und zeigt die Fehler an. Bei disabled wird nicht validiert.
+     * Siehe Leitfaden Validierung von Formularfeldern.
      * @param {Boolean} [ignoreEmpty=false] nicht validieren, wenn das Feld leer ist.
-     * @returns {Boolean}
+     * @returns {Boolean}   true, wenn es keine Fehler gibt
      */
     validate(ignoreEmpty) {
         this._errors = [];
@@ -729,7 +849,7 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     }
 
     /**
-     * Setzt den Wert des Feldes auf den Originalwert zurück (not dirty).
+     * Setzt die Werte auf die Ausgangswerte zurück (siehe isDirty) und blendet die Fehleranzeige aus.
      * @returns {undefined}
      */
     valuesReset() {
@@ -960,6 +1080,11 @@ kijs.gui.field.Field = class kijs_gui_field_Field extends kijs.gui.Container {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    /**
+     * Gibt das Feld mit Label, Buttons und Icons frei (siehe kijs.gui.Element.destruct)
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse
+     * @returns {undefined}
+     */
     // overwrite
     destruct(superCall) {
         if (!superCall) {

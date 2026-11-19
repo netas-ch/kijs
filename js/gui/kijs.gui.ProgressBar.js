@@ -4,16 +4,12 @@
 // kijs.gui.ProgressBar
 // --------------------------------------------------------------
 /**
- * ProgressBar Element, welches einen Ladebalken anzeigt.
+ * Fortschrittsbalken mit Beschriftung darüber (caption) und darunter (bottomCaption) sowie optional
+ * der Prozentzahl im Balken. Kann an einen kijs.UploadDialog gebunden werden.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.ProgressBar
- *
- * EVENTS
- * ----------
- *
-
+ * @example
+ * const pb = new kijs.gui.ProgressBar({ caption: 'Export', percent: 0 });
+ * pb.percent = 50;
  */
 kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
 
@@ -73,21 +69,46 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung unter dem Balken (HTML)
+     * @type {String}
+     */
     get bottomCaption() { return this._bottomCaptionDom.html; }
     set bottomCaption(val) { this._bottomCaptionDom.html = val;  }
 
+    /**
+     * Beschriftung über dem Balken (HTML)
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) { this._captionDom.html = val;  }
 
+    /**
+     * Fortschritt in Prozent (0-100, siehe setProgress()). Default: 0
+     * @type {Number}
+     */
     get percent() { return this._percent; }
     set percent(val) { this.setProgress(val); }
 
+    /**
+     * Prozentzahl im Balken anzeigen? Default: true
+     * @type {Boolean}
+     */
     get showPercent() { return this._showPercent; }
     set showPercent(val) { this._showPercent = val; }
 
+    /**
+     * Verbundener kijs.UploadDialog (siehe bindUploadDialog()). Achtung: Die Listeners erwarten noch
+     * die alten Event-Argumente, darum wird der Fortschritt zurzeit nicht übernommen.
+     * @type {kijs.UploadDialog|null}
+     */
     get uploadDialog() { return this._uploadDialog; }
     set uploadDialog(val) { this.bindUploadDialog(val); }
 
+    /**
+     * uploadId des Uploads, dessen Fortschritt angezeigt wird. null = der erste
+     * @type {Number|null}
+     */
     get uploadDialogId() { return this._uploadDialogId; }
     set uploadDialogId(val) { this._uploadDialogId = val; }
 

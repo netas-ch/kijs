@@ -3,6 +3,31 @@
 // --------------------------------------------------------------
 // kijs.gui.DataView
 // --------------------------------------------------------------
+/**
+ * Zeigt ein Recordset (data) als Liste von Elementen an. Pro Datensatz wird ein Element vom
+ * Typ elementXType erstellt (abgeleitet von kijs.gui.dataView.element.Base). Die Datensätze
+ * können gefiltert, sortiert, selektiert und mit der Tastatur durchlaufen werden und, mit
+ * sortable, per Drag&Drop verschoben werden. Basisklasse von kijs.gui.ListView und kijs.gui.Tree.
+ * Siehe Leitfäden Daten und Drag and Drop.
+ *
+ * @example
+ * new kijs.gui.DataView({
+ *     primaryKeyFields: ['id'],
+ *     selectType: 'multi',
+ *     data: [ { id: 1, caption: 'Eins' }, { id: 2, caption: 'Zwei' } ]
+ * });
+ *
+ * @fires afterSave  Nach save(). e: zusätzlich die Antwort des RPC (response, request)
+ * @fires ddTargetDrop  Weitergeleitet vom Drag&Drop-Ziel (Event drop von ddTarget)
+ * @fires elementClick  Klick auf ein Element. e: Event des Elements (element ist das DataView, raiseElement das Element)
+ * @fires elementContextMenu  Kontextmenü auf einem Element. e: wie bei elementClick
+ * @fires elementDblClick  Doppelklick auf ein Element. e: wie bei elementClick
+ * @fires elementFocus  Ein Element hat den Fokus erhalten. e: wie bei elementClick
+ * @fires elementMouseDown  mouseDown auf einem Element. e: wie bei elementClick
+ * @fires elementMouseUp  mouseUp auf einem Element. e: wie bei elementClick
+ * @fires selectionChange  Nach einer Änderung der Selektion. e: selectedElements, selectedKeysRows,
+ *                         unselectedElements, unselectedKeysRows, changed
+ */
 kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
 
@@ -61,24 +86,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            elementXType: true,         // xtype für DataView-Element. Muss von 'kijs.gui.dataView.element.Base' vererbt sein.
-            primaryKeyFields: { target: 'primaryKeyFields' }, // Array mit den Namen der Primärschlüssel-Felder
-            disabledField: true,                // Feldnamen für disabled (optional)
+            elementXType: true,
+            primaryKeyFields: { target: 'primaryKeyFields' },
+            disabledField: true,
 
             filters: { target: 'filters' },
             sortFields: { target: 'sortFields' },
-            focusable: { target: 'focusable' },  // Kann das Dataview den Fokus erhalten?
-            selectType: true,           // 'none': Es kann nichts selektiert werden
-                                        // 'single' (default): Es kann nur ein Datensatz selektiert werden. Abwählen ist nicht möglich.
-                                        // 'singleAndEmpty': Wie Single. Der aktuelle Datensatz kann aber abgewählt werden.
-                                        // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
-                                        // 'simple-single': Wie single. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
-                                        // 'simple-singleAndEmpty': Wie singleAndEmpty. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
-                                        // 'simple-multi': Wie multi. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
-                                        // 'manual': Die Datensätze werden manuell selektiert
-            rpcSaveFn: true,    // Name der remoteFn. Bsp: 'dashboard.save'
-            rpcSaveArgs: true,  // Standard RPC-Argumente fürs Speichern
-            autoSave: true,     // Automatisches Speichern bei Änderungen
+            focusable: { target: 'focusable' },
+            selectType: true,
+            rpcSaveFn: true,
+            rpcSaveArgs: true,
+            autoSave: true,
 
             ddName: true,
             ddPosBeforeFactor: true,
@@ -86,8 +104,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             elementDdSourceConfig: true,
 
             sortable: { prio: 70, target: 'sortable' },
-            data: { prio: 80, target: 'data' },   // Recordset-Array [{id:1, caption:'Wert 1'}] oder Werte-Array ['Wert 1']
-            selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // Filter, die definieren, welche Datensätze die standardmässig selektiert sind.
+            data: { prio: 80, target: 'data' },
+            selectFilters: { prio: 110, fn: 'function', target: this.selectByFilters, context: this }, // {Array|Object} Filter für die Datensätze, die nach dem Erstellen selektiert sind (siehe selectByFilters())
             ddTarget: { prio: 120, target: 'ddTarget' }
         });
 
@@ -107,23 +125,23 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Nach dem Verschieben per Drag&Drop automatisch speichern (save())? Nur mit rpcSaveFn. Default: false
+     * @type {Boolean}
+     */
     get autoSave() { return this._autoSave; }
     set autoSave(val) {
         this._autoSave = !!val;
     }
 
-    get current() { return this._currentEl; }
-
     /**
-     * Setzt das aktuelle Element, dass den Fokus erhalten wird.
-     * Vorsicht current und selected ist nicht das gleiche!
-     *  current = Element das den Fokus (Tastaturnavagation) hat
-     *  selected = Element oder Elemente, die selektiert sind.
-     * Null = automatische Ermittlung
-     * Um den Fokus zu setzen, bitte die Funktion .focus() vom Element verwenden.
-     * @param {kijs.gui.dataView.element.Base|null} el
-     * @returns {undefined}
+     * Aktuelles Element: das Element mit dem Fokus bei der Tastaturnavigation.
+     * Nicht verwechseln mit den selektierten Elementen!
+     * null = automatisch ermitteln (bisheriges, erstes selektiertes, erstes aktives oder erstes Element).
+     * Um den Fokus zu setzen, die Funktion focus() des Elements verwenden.
+     * @type {kijs.gui.dataView.element.Base|null}
      */
+    get current() { return this._currentEl; }
     set current(el) {
         // Falls kein el übergeben wurde:
         if (!el && !kijs.isEmpty(this._elements)) {
@@ -172,6 +190,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
     }
 
+    /**
+     * Recordset mit den Daten, z.B. [{ id: 1, caption: 'Wert 1' }]. Beim Zuweisen werden
+     * die Elemente neu erstellt.
+     * @type {Array}
+     */
     get data() { return this._data; }
     set data(val) {
         this._data = kijs.isEmpty(val) ? [] : val;
@@ -181,6 +204,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this.current = null;
     }
 
+    /**
+     * Name für Drag&Drop beim Verschieben innerhalb des DataViews (sortable). Default: eine eindeutige ID
+     * @type {String}
+     */
     get ddName() { return this._ddName; }
     set ddName(val) {
         this._ddName = val;
@@ -192,6 +219,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Anteil der Elementhöhe, ab dem beim Ziehen nach dem Element eingefügt wird. Default: 0.666
+     * @type {Number}
+     */
     get ddPosAfterFactor() { return this._ddPosAfterFactor; }
     set ddPosAfterFactor(val) {
         this._ddPosAfterFactor = val;
@@ -200,6 +231,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Anteil der Elementhöhe, bis zu dem beim Ziehen vor dem Element eingefügt wird. Default: 0.666
+     * @type {Number}
+     */
     get ddPosBeforeFactor() { return this._ddPosBeforeFactor; }
     set ddPosBeforeFactor(val) {
         this._ddPosBeforeFactor = val;
@@ -208,6 +243,11 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Drag&Drop-Ziel: Config-Objekt für kijs.gui.dragDrop.Target oder null. Der Getter gibt die
+     * kijs.gui.dragDrop.Target-Instanz zurück. Siehe Leitfaden Drag and Drop.
+     * @type {Object|kijs.gui.dragDrop.Target|null}
+     */
     get ddTarget() {
         return this._ddTarget;
     }
@@ -244,9 +284,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Name des Felds im Datensatz, das bestimmt, ob ein Element deaktiviert ist
+     * @type {String|null}
+     */
     get disabledField() { return this._disabledField; }
     set disabledField(val) { this._disabledField = val; }
 
+    /**
+     * Config für die Drag&Drop-Quelle der Elemente (siehe kijs.gui.dragDrop.Source)
+     * @type {Object|null}
+     */
     get elementDdSourceConfig() {
         return this._elementDdSourceConfig;
     }
@@ -254,22 +302,44 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         this._elementDdSourceConfig = val;
     }
 
+    /**
+     * xtype der Elemente. Muss von kijs.gui.dataView.element.Base abgeleitet sein.
+     * Default: 'kijs.gui.dataView.element.AutoHtml'
+     * @type {String}
+     */
     get elementXType() { return this._elementXType; }
     set elementXType(val) { this._elementXType = val; }
 
+    /**
+     * Filter. Es werden nur Datensätze angezeigt, die sie erfüllen (siehe kijs.Data.filter()).
+     * Zum Anwenden auf ein gerendertes DataView applyFilters() verwenden.
+     * @type {Array|Object}
+     */
     get filters() { return this._filters; }
     set filters(val) { this._filters = val; }
 
+    /**
+     * Kann das DataView den Fokus erhalten? Default: true
+     * @type {Boolean}
+     */
     get focusable() { return this._focusable; }
     set focusable(val) {
         this._focusable = val;
     }
 
+    /**
+     * Hat das aktuelle Element den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() {
         return this._currentEl ? this._currentEl.hasFocus : false;
     }
 
+    /**
+     * Namen der Primärschlüssel-Felder. Ein String wird in ein Array umgewandelt.
+     * @type {Array|String|null}
+     */
     get primaryKeyFields() { return this._primaryKeyFields; }
     set primaryKeyFields(val) {
         if (kijs.isString(val)) {
@@ -281,17 +351,43 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     };
 
+    /**
+     * Argumente, die bei save() an die remoteFn übergeben werden. Sie überschreiben gleichnamige Argumente des Aufrufs.
+     * @type {Object}
+     */
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
+    /**
+     * Name der remoteFn für save(), z.B. 'dataview.save'
+     * @type {String|null}
+     */
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
+    /**
+     * Selektierte Datensätze: mit primaryKeyFields deren Primärschlüssel, sonst die Datensätze selbst
+     * @type {Array}
+     */
     get selectedKeysRows() { return this._selectedKeysRows; }
 
+    /**
+     * Art der Selektion:
+     * 'none' nichts selektierbar;
+     * 'single' ein Datensatz, Abwählen nicht möglich (Default);
+     * 'singleAndEmpty' wie single, Abwählen möglich;
+     * 'multi' mehrere mit Shift- und Ctrl-Taste;
+     * 'simple-single', 'simple-singleAndEmpty', 'simple-multi' wie oben, aber ohne Shift- und Ctrl-Taste;
+     * 'manual' Selektion nur per Code
+     * @type {String}
+     */
     get selectType() { return this._selectType; }
     set selectType(val) { this._selectType = val; }
 
+    /**
+     * Können die Elemente per Drag&Drop verschoben werden? Default: false
+     * @type {Boolean}
+     */
     get sortable() { return this._sortable; }
     set sortable(val) {
         this._sortable = !!val;
@@ -331,6 +427,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Sortierung (siehe kijs.Data.sort()). Zum Anwenden auf ein gerendertes DataView applySortFields() verwenden.
+     * @type {Array}
+     */
     get sortFields() { return this._sortFields; }
     set sortFields(val) { this._sortFields = val; }
 
@@ -340,8 +440,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt Daten hinzu
-     * @param {type} data
+     * Fügt Datensätze hinzu und erstellt deren Elemente
+     * @param {Object|Array} data
      * @returns {undefined}
      */
     addData(data) {
@@ -353,8 +453,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Wendet Filter auf das DataView an.
-     * @param {Array|Object} filters
+     * Setzt die Filter und lädt das DataView neu (ohne RPC), falls es gerendert ist.
+     * @param {Array|Object} filters   siehe kijs.Data.filter()
      * @returns {undefined}
      */
     applyFilters(filters) {
@@ -365,8 +465,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Wendet eine Sortierung auf das DataView an.
-     * @param {Array} sortFields
+     * Setzt die Sortierung und lädt das DataView neu (ohne RPC), falls es gerendert ist.
+     * @param {Array} sortFields   siehe kijs.Data.sort()
      * @returns {undefined}
      */
     applySortFields(sortFields) {
@@ -508,7 +608,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    // wird auch von kijs.gui.Combo verwendet
+    /**
+     * Tastaturnavigation: Pfeiltasten wechseln das aktuelle Element (je nach selectType mit
+     * Selektion), die Leertaste selektiert. Wird auch von kijs.gui.field.Combo verwendet.
+     * @param {KeyboardEvent} nodeEvent
+     * @returns {undefined}
+     */
     handleKeyDown(nodeEvent) {
         let isShiftPress = !!nodeEvent.shiftKey;
         let isCtrlPress = !!nodeEvent.ctrlKey;
@@ -623,26 +728,26 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
-    // Element mit Fokus neu ermitteln
+    /**
+     * Ermittelt das aktuelle Element (current) neu
+     * @returns {undefined}
+     */
     reassignCurrent() {
         this._currentEl = null;
         this.current = null;
     }
 
     /**
-     * Aktualisiert das DataView
-     * @param {Object} [options={}] options mit Einstellungen zum reload
-     *      {
-     *       noRpc: false,              // Soll kein RPC gemacht werden?
-     *       skipSelected: false        // Sollen nicht wieder die gleichen Elemente wie
-     *                                  // vorher selektiert werden?
-     *       skipFilters: false         // Soll nicht gefiltert werden?
-     *       skipSort: false            // Soll nicht sortiert werden?
-     *       skipFocus: false,          // Soll das DataView nicht wieder den Fokus
-     *                                  // erhalten, wenn es ihn vorher hatte?
-     *       skipRemoveElements: false  // Sollen die bestehenden Elemente nicht entfernt werden?
-     *       skipScroll: false          // Soll nicht wieder zur gleichen Position gescrollt werden?
-     *      }
+     * Lädt das DataView neu: mit rpcLoadFn per RPC (load()), sonst aus den lokalen Daten.
+     * Selektion, Fokus und Scroll-Position bleiben erhalten.
+     * @param {Object} [options={}]
+     * @param {Boolean} [options.noRpc=false]               Kein RPC, nur die lokalen Daten
+     * @param {Boolean} [options.skipSelected=false]        Selektion nicht wiederherstellen?
+     * @param {Boolean} [options.skipFilters=false]         Nicht filtern?
+     * @param {Boolean} [options.skipSort=false]            Nicht sortieren?
+     * @param {Boolean} [options.skipFocus=false]           Fokus nicht wiederherstellen?
+     * @param {Boolean} [options.skipRemoveElements=false]  Bestehende Elemente nicht entfernen?
+     * @param {Boolean} [options.skipScroll=false]          Scroll-Position nicht wiederherstellen?
      * @returns {undefined}
      */
     reload(options={}) {
@@ -680,6 +785,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Speichert die Daten per RPC (rpcSaveFn). requestData enthält data (alle Datensätze) und
+     * args. Wendet response.config an und löst danach afterSave aus.
+     * @param {Object} [args=null]   Argumente für die remoteFn. rpcSaveArgs überschreiben gleichnamige.
+     * @returns {Promise}           Wird mit dem RPC-Ergebnis erfüllt
+     */
     save(args=null) {
         return new Promise((resolve, reject) => {
             // Args
@@ -1290,6 +1401,12 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         return currentConfig;
     }
 
+    /**
+     * Erstellt ein Element (xtype aus der Config oder elementXType), lädt seinen Inhalt
+     * (update()) und löst beim Element afterUpdate aus.
+     * @param {Object} config
+     * @returns {kijs.gui.dataView.element.Base}
+     */
     _createElement(config) {
         let newConfig = { ...config };
 
@@ -1555,7 +1672,13 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
 
 
     // LISTENERS
-    // Listener muss Protected sein, da er vererbt wird.
+    /**
+     * Listener für drop beim Verschieben innerhalb des DataViews (sortable): fügt den Datensatz
+     * an der neuen Position ein, lädt neu und speichert bei autoSave.
+     * Protected, weil abgeleitete Klassen ihn überschreiben.
+     * @param {Object} e
+     * @returns {undefined}
+     */
     _onTargetDrop(e) {
         if (e.source.name === this._ddName) {
             let targetIndex = null;

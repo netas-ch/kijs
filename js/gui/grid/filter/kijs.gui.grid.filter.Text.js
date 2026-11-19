@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Text
 // --------------------------------------------------------------
+/**
+ * Textfilter für kijs.gui.grid.Grid mit Suchfeld und Auswahl der Vergleichsart im Menü. Gefiltert wird
+ * beim Verlassen des Suchfelds (change) oder sofort mit Enter.
+ */
 kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.grid.filter.Filter {
 
 
@@ -47,7 +51,7 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             placeholder: {target: 'placeholder'},
-            compare: true
+            compare: true   // {String|Boolean} Vergleichsart: 'equal', 'unequal', 'begin', 'end', 'part' oder 'notpart'. false = keine Auswahl im Menü. Default: 'begin'
         });
 
         // Config anwenden
@@ -62,6 +66,10 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter-Objekt für den Server: zusätzlich type 'text', search (Suchtext) und compare
+     * @type {Object}
+     */
     get filter() {
         return Object.assign(super.filter, {
             type: 'text',
@@ -70,8 +78,16 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         });
     }
 
+    /**
+     * Ist der Filter aktiv (Suchtext oder Auswahl fester Werte)?
+     * @type {Boolean}
+     */
     get isFiltered() { return super.isFiltered || this._searchField.value !== ''; }
 
+    /**
+     * Platzhaltertext im Suchfeld. Default: 'Suche...'
+     * @type {String}
+     */
     get placeholder() { return this._searchField.placeholder; }
     set placeholder(val) { this._searchField.placeholder = val; }
 
@@ -80,6 +96,10 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Hat der Filter den Fokus (Menü offen oder Suchfeld)?
+     * @returns {Boolean}
+     */
     hasFocus() {
         if (super.hasFocus() || this._searchField.hasFocus) {
             return true;
@@ -100,6 +120,10 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
         }
     }
 
+    /**
+     * Leert das Suchfeld und setzt den Filter zurück.
+     * @returns {undefined}
+     */
     reset() {
         this._searchField.value = '';
         super.reset();
@@ -108,6 +132,10 @@ kijs.gui.grid.filter.Text = class kijs_gui_grid_filter_Text extends kijs.gui.gri
 
     // PROTECTED
     // overwrite
+    /**
+     * Gibt die Menü-Elemente zurück, mit den Buttons für die Vergleichsart
+     * @returns {Array}
+     */
     _getMenuButtons() {
         let compareButtons = [];
 

@@ -3,6 +3,26 @@
 // --------------------------------------------------------------
 // kijs.gui.SpinBox
 // --------------------------------------------------------------
+/**
+ * Aufklappbarer Container (Popover), der an einem Zielelement (target) ausgerichtet wird, z.B. die
+ * Auswahl eines Combo- oder DateTime-Felds oder ein kijs.gui.Menu. Die Lage wird über die
+ * Ankerpunkte ownPos und targetPos bestimmt:
+ *       tl --- t --- tr
+ *       |             |
+ *       l      c      r
+ *       |             |
+ *       bl --- b --- br
+ * Hat die SpinBox keinen Platz, wird sie auf die andere Seite gewechselt (allowSwapX/Y). Sie schliesst
+ * sich bei einem Mausklick, Mausrad oder einer Grössenänderung ausserhalb (ausser auf den ownerNodes)
+ * sowie mit Escape, F4 und Tab. Auf dem target öffnet ArrowDown die SpinBox, F4 öffnet bzw. schliesst sie.
+ *
+ * @example
+ * const sb = new kijs.gui.SpinBox({ target: myButton, html: 'Inhalt' });
+ * sb.show();
+ *
+ * @fires close  Nach dem Schliessen
+ * @fires show  Nach dem Anzeigen
+ */
 kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
 
 
@@ -62,7 +82,7 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
             targetPos: true,
             target: { target: 'target' },
             targetDomProperty: true,
-            ownerNodes: { fn: 'appendUnique', target: '_ownerNodes' }
+            ownerNodes: { fn: 'appendUnique', target: '_ownerNodes' }  // {Array} Weitere kijs.gui.Element, kijs.gui.Dom oder HTML-Nodes, bei deren Klick die SpinBox offen bleibt (siehe ownerNodeAdd())
         });
 
         // Listener
@@ -80,12 +100,26 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Darf die SpinBox horizontal auf die andere Seite wechseln, wenn sie keinen Platz hat? Default: true
+     * @type {Boolean}
+     */
     get allowSwapX() { return this._allowSwapX; }
     set allowSwapX(val) { this._allowSwapX = !!val; }
 
+    /**
+     * Darf die SpinBox vertikal auf die andere Seite wechseln, wenn sie keinen Platz hat? Default: true
+     * @type {Boolean}
+     */
     get allowSwapY() { return this._allowSwapY; }
     set allowSwapY(val) { this._allowSwapY = !!val; }
 
+    /**
+     * Grösse an das target anpassen (bei Ausrichtung oben/unten die Breite, links/rechts die Höhe):
+     * 'min' mindestens, 'max' höchstens, 'fit' gleich gross wie das target, 'none' nicht anpassen.
+     * Andere Werte werfen einen kijs.Error. Default: 'min'
+     * @type {String}
+     */
     get autoSize() { return this._autoSize; }
     set autoSize(val) {
         if (kijs.Array.contains(['min', 'max', 'fit', 'none'], val)) {
@@ -95,12 +129,25 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Verschiebung aus dem Ankerpunkt auf der X-Achse in px. Default: 0
+     * @type {Number}
+     */
     get offsetX() { return this._offsetX; }
     set offsetX(val) { this._offsetX = val; }
 
+    /**
+     * Verschiebung aus dem Ankerpunkt auf der Y-Achse in px. Default: 0
+     * @type {Number}
+     */
     get offsetY() { return this._offsetY; }
     set offsetY(val) { this._offsetY = val; }
 
+    /**
+     * Ankerpunkt der SpinBox: 'tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b' oder 'br'. Andere Werte werfen
+     * einen kijs.Error. Default: 'tl'
+     * @type {String}
+     */
     get ownPos() { return this._ownPos; }
     set ownPos(val) {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {
@@ -152,6 +199,11 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Element, an dem die SpinBox ausgerichtet wird. Andere Werte als ein kijs.gui.Element oder null
+     * werfen einen kijs.Error.
+     * @type {kijs.gui.Element|null}
+     */
     get target() {
         return this._targetEl;
     }
@@ -174,6 +226,10 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Name der Dom-Eigenschaft des targets, an der ausgerichtet wird. Default: 'dom'
+     * @type {String}
+     */
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
 
@@ -186,6 +242,11 @@ kijs.gui.SpinBox = class kijs_gui_SpinBox extends kijs.gui.Container {
     }
 
 
+    /**
+     * Ankerpunkt beim target: 'tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b' oder 'br'. Andere Werte werfen
+     * einen kijs.Error. Default: 'bl'
+     * @type {String}
+     */
     get targetPos() { return this._targetPos; }
     set targetPos(val) {
         if (kijs.Array.contains(['tl', 't', 'tr', 'l', 'c', 'r', 'bl', 'b', 'br'], val)) {

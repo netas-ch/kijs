@@ -3,6 +3,14 @@
 // --------------------------------------------------------------
 // kijs.gui.field.SozVersNr
 // --------------------------------------------------------------
+/**
+ * Textfeld für eine Schweizer Sozialversicherungsnummer (13 Ziffern, Format xxx.xxxx.xxxx.xx) und
+ * optional die alte AHV-Nummer (11 Ziffern, Format xxx.xx.xxx.xxx). Die Eingabe wird formatiert und
+ * über die Prüfziffer validiert.
+ *
+ * @example
+ * new kijs.gui.field.SozVersNr({ label: 'AHV-Nr.', name: 'ahvNr' });
+ */
 kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field.Text {
 
 
@@ -33,8 +41,8 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            allowAhvNr: true,       // darf eine alte AHV-Nr eingegeben werden?
-            allowSozVersNr: true    // darf eine neue Soz.vers.-Nr. eingegeben werden?
+            allowAhvNr: true,
+            allowSozVersNr: true
         });
 
         // Config anwenden
@@ -49,9 +57,17 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Darf eine alte AHV-Nummer (11 Ziffern) eingegeben werden? Default: false
+     * @type {Boolean}
+     */
     get allowAhvNr() { return this._allowAhvNr; }
     set allowAhvNr(val) { this._allowAhvNr = val; }
 
+    /**
+     * Darf eine neue Sozialversicherungsnummer (13 Ziffern) eingegeben werden? Default: true
+     * @type {Boolean}
+     */
     get allowSozVersNr() { return this._allowSozVersNr; }
     set allowSozVersNr(val) { this._allowSozVersNr = val; }
 
@@ -61,6 +77,14 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
     // MEMBERS
     // --------------------------------------------------------------
     // PROTECTED
+    /**
+     * Formatiert die Nummer (Leerzeichen und Punkte werden entfernt). Während der Eingabe wird die alte
+     * AHV-Nummer nur formatiert, wenn die neue nicht erlaubt ist. Passt kein Format, bleibt der Wert
+     * unverändert. Wird als formatFn verwendet.
+     * @param {String} value
+     * @param {Boolean} whileTyping  Wird gerade getippt?
+     * @returns {String}
+     */
     _formatNr(value, whileTyping) {
         let origValue = value;
         
@@ -94,7 +118,11 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         }
     }
     
-    // alte AHV-Nr. validieren
+    /**
+     * Prüft eine alte AHV-Nummer: 11 Ziffern (Leerzeichen und Punkte werden ignoriert) mit Prüfziffer (Modulo 11).
+     * @param {String} value
+     * @returns {Boolean}
+     */
     _validateAhvNr(value) {
         value = kijs.toString(value).replace(/[ \.]*/g, '');
 
@@ -137,7 +165,12 @@ kijs.gui.field.SozVersNr = class kijs_gui_field_SozVersNr extends kijs.gui.field
         return true;
     }
     
-    // neue Sozialversicherungs-Nr. validieren
+    /**
+     * Prüft eine neue Sozialversicherungsnummer: 13 Ziffern (Leerzeichen und Punkte werden ignoriert) mit
+     * Prüfziffer (EAN-13).
+     * @param {String} value
+     * @returns {Boolean}
+     */
     _validateSozVersNr(value) {
         value = kijs.toString(value).replace(/[ \.]*/g, '');
         

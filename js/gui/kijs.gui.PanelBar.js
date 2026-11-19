@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.gui.PanelBar
 // --------------------------------------------------------------
+/**
+ * Leiste mit Icon, Beschriftung (html) und Elementen links (containerLeftEl) und rechts
+ * (containerRightEl). Wird als Kopf- und Fusszeile von kijs.gui.Panel verwendet.
+ * Die Events click, dblClick und mouseDown kommen nur von der Beschriftung und dem Icon,
+ * nicht von den Elementen links und rechts.
+ */
 kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
 
 
@@ -37,14 +43,14 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             icon: { target: 'icon' },
-            iconChar: { target: 'iconChar', context: this._iconEl },
-            iconCls: { target: 'iconCls', context: this._iconEl },
-            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
-            iconColor: { target: 'iconColor', context: this._iconEl },
-            iconMap: { target: 'iconMap', context: this._iconEl },
+            iconChar: { target: 'iconChar', context: this._iconEl },   // {Number} Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+            iconCls: { target: 'iconCls', context: this._iconEl },   // {String} CSS-Klasse des Icons
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },   // {String} CSS-Klasse für eine Animation des Icons
+            iconColor: { target: 'iconColor', context: this._iconEl },   // {String} Farbe des Icons
+            iconMap: { target: 'iconMap', context: this._iconEl },   // {String|Object} Icon aus einer iconMap, z.B. 'kijs.iconMap.Fa.house'
 
-            elementsLeft: { fn: 'function', target: this._containerLeftEl.add, context: this._containerLeftEl },
-            elementsRight: { fn: 'function', target: this._containerRightEl.add, context: this._containerRightEl }
+            elementsLeft: { fn: 'function', target: this._containerLeftEl.add, context: this._containerLeftEl },   // {Array} Elemente links (zwischen Icon und Beschriftung)
+            elementsRight: { fn: 'function', target: this._containerRightEl.add, context: this._containerRightEl }   // {Array} Elemente rechts
         });
 
         // click- und mouseDown-Event soll nur auf dem label und icon kommen. Bei den elements nicht.
@@ -72,15 +78,24 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Container für die Elemente links (zwischen Icon und Beschriftung)
+     * @type {kijs.gui.Container}
+     */
     get containerLeftEl() { return this._containerLeftEl; }
 
+    /**
+     * Container für die Elemente rechts
+     * @type {kijs.gui.Container}
+     */
     get containerRightEl() { return this._containerRightEl; }
 
-    get icon() { return this._iconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Icon: Config-Objekt oder kijs.gui.Icon. Leer setzt das Icon zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get icon() { return this._iconEl; }
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -138,6 +153,10 @@ kijs.gui.PanelBar = class kijs_gui_PanelBar extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Leer, wenn Beschriftung, Icon und die Elemente links und rechts leer sind
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return super.isEmpty && this._iconEl.isEmpty && this._containerLeftEl.isEmpty && this._containerRightEl.isEmpty; }
 

@@ -4,178 +4,47 @@
 // kijs.gui.Element
 // --------------------------------------------------------------
 /**
- * Ein einfaches DOM-Element ohne Positionierungen.
+ * Basisklasse aller GUI-Komponenten. Ein Element besteht aus einem kijs.gui.Dom-Objekt
+ * (Eigenschaft dom) und kann in einem kijs.gui.Container stehen (Eigenschaft parent).
+ * Siehe Leitfäden Lebenszyklus und Element, Dom und Container.
  *
- * CONFIG-Parameter
- * ----------------
- * afterResizeDelay Number [optional=300]
+ * Das Event-Objekt e enthält bei allen Events: element (dieses Element), eventName und
+ * raiseElement (das Element, das das Event ursprünglich ausgelöst hat). Bei den Events, die
+ * vom DOM-Node weitergeleitet werden, zusätzlich die Eigenschaften von kijs.gui.Dom
+ * (nodeEvent, nodeEventName, useCapture, dom).
  *
- * cls          Array|String [optional] CSS-Klassennamen
- *                                      Beispiel: cls:['cls-a','cls-b'] oder cls:'cls-a cls-b'
- *
- * displayWaitMask Booelan [optional]   Soll die Lademaske angezeigt werden?
- *
- * height       Number [optional]       Höhe
- *
- * html         String [optional]       HTML-Code, der in das Element eingefügt wird
- *                                      Beispiel: html:'<p>Hallo Welt</p>'
- *
- * htmlDisplayType String [optional]    Darstellung der Eigenschaft 'html'. Default: 'html'
- *                                      html: als html-Inhalt (innerHtml)
- *                                      code: Tags werden als als Text angezeigt
- *                                      text: Tags werden entfernt
- *
- * left         Number [optional]       X-Koordinate
- *
- * name         String [optional]       Element-Namen Siehe dazu auch kijs.gui.Container.getElementByName()
- *
- * nodeAttribute Object [optional]      Eigenschaften, die in den Node übernommen werden sollen.
- *                                      Bsp: { id: 123, for: 'meinFeld' }
- *
- * nodeTagName   String [optional]      Tag-Name des DOM-node. Default='div'
- *                                      Beispiel: nodeTagName='section'
- *
- * on           Object [optional]       Objekt mit Listener-Funktionen und optionalem context.
- *                                      Wenn kein context angegeben wird, so wird das aktuelle Objekt genommen.
- *                                      Beispiel: on: {
- *                                          click: function(e) {
- *                                              ...
- *                                          },
- *                                          dblclick: function(e) {
- *                                              ...
- *                                          },
- *                                          context: xy
- *                                      }
- *
- * parent       kijs.gui.Element [optional] Verweis auf das übergeordnete Element
- *
- * style        Object [optional]       Objekt mit CSS-Style Anweisungen als Javascript
- *                                      Beispiel: style:{background-color:'#ff8800'}
- *
- * tooltip      String|Object|kijs.gui.Tooltip [optional]  Tooltip als
- *                                                   - String (HTML-Code). Beispiel: html:'<p>Hallo Welt</p>'
- *                                                   - Tooltip-Config Objekt
- *                                                   - kijs.gui.Tooltip-Instanz
- *
- * top          Number [optional]       Y-Koordinate
- *
- * visible      Boolean [optional]      Sichtbarkeit des Elements Default=true
- *                                      Beispiel: visible:false
- *
- * width        Number [optional]      Breite
- *
- *
- *
- * FUNKTIONEN
- * ----------
- * applyConfig                          Wendet ein Konfigurations-Objekt an
- *  Args:
- *   config     Object
- *
- * destruct                             Destruktor ->Entlädt das Objekt samt allen untergeordneten Objekten
-
- * waitMaskAdd                          Zeigt die Lademaske an oder zählt den Zähler hoch, falls sie schon sichtbar ist
- *
- * waitMaskRemove                       Zählt den Zähler nach unten und blendet bei 0 die Lademaske aus
- *
- * render                               rendert den DOM-Node
- *
- * renderTo                             rendert den DOM-Node und fügt ihn einem Parent-DOM-Node hinzu
- *  Args:
- *   targetNode    HTMLElement
- *   insertBefore  HTMLElement [optional]
- *
- * up                                   Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
- *  Args:                               dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
- *   name          String
- *  Return:        kijs_gui_Element|null
- *
- * upX                                  Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
- *  Args:                               dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
- *   name          String
- *  Return:        kijs_gui_Element|null
- *
- *
- * EIGENSCHAFTEN
- * -------------
- * afterResizeDelay
- *
- * cls          String|Array            CSS-Klassenname(n)
- *
- * height       Number                  Höhe
- *
- * html         String                  Siehe kijs.gui.Dom.html
- *
- * htmlDisplayType String               Siehe kijs.gui.Dom.htmlDisplayType
- *
- * isEmpty      Boolean (readonly)
- *
- * isRendered   Boolean (readonly)
- *
- * left         Number                  X-Koordinate
- *
- * node         HTML-Element (readonly) Verweis auf den DOM-Node
- *
- * name
- *
- * next         kijs.gui.Element|null (readonly)   Gibt das nächste element im elements-Array zurück
- *
- * parent       kijs.gui.Element|null (readonly)   Verweis auf das übergeordnete Element
- *
- * previous     kijs.gui.Element|null (readonly)   Gibt das vorherige element im elements-Array zurück
- *
- * style        (readonly)
- *
- * userData     Objekt mit Daten die einem Element mitgegeben können z.B. eine ID
- *
- * tooltip
- *
- * top          Number                  Y-Koordinate
- *
- * visible
- *
- * width        Number                  Breite
- *
- * xtype        String (readonly)       Gibt den Namen der Klasse zurück
- *
- *
- * EVENTS
- * ----------
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * changeVisibility
- * click
- * dblClick
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseEnter
- * mouseLeave
- * mouseMove
- * mouseUp
- * singleClick
- * touchStart
- * touchEnd
- * touchMove
- * touchCancel
- * unrender
- * wheel
- *
- * // key events
- * keyDown
- * keyUp
- * keyPress
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @fires afterFirstRenderTo  Nach dem ersten renderTo()
+ * @fires afterLoad  Nach einem erfolgreichen load(). e: zusätzlich die Antwort des RPC (response, request)
+ * @fires afterRender  Nach dem Rendern
+ * @fires afterResize  Nachdem sich die Grösse geändert hat (bei Änderungen über height, width oder html
+ *                     um afterResizeDelay verzögert)
+ * @fires changeVisibility  Nach einer Änderung von visible. e: visible
+ * @fires click  Weitergeleitet vom DOM-Node
+ * @fires contextMenu  Weitergeleitet vom DOM-Node (siehe kijs.gui.Dom)
+ * @fires dblClick  Weitergeleitet vom DOM-Node
+ * @fires destruct  Beim Freigeben mit destruct()
+ * @fires enterEscPress  Weitergeleitet vom DOM-Node
+ * @fires enterPress  Weitergeleitet vom DOM-Node
+ * @fires escPress  Weitergeleitet vom DOM-Node
+ * @fires focus  Weitergeleitet vom DOM-Node
+ * @fires keyDown  Weitergeleitet vom DOM-Node
+ * @fires keyPress  Soll vom DOM-Node weitergeleitet werden. Achtung: kijs.gui.Dom kennt keyPress nicht,
+ *                  mit einem Listener wird darum beim Rendern der kijs.Error
+ *                  «kijsEvent "keyPress" is not mapped» geworfen.
+ * @fires keyUp  Weitergeleitet vom DOM-Node
+ * @fires mouseDown  Weitergeleitet vom DOM-Node
+ * @fires mouseEnter  Weitergeleitet vom DOM-Node
+ * @fires mouseLeave  Weitergeleitet vom DOM-Node
+ * @fires mouseMove  Weitergeleitet vom DOM-Node
+ * @fires mouseUp  Weitergeleitet vom DOM-Node
+ * @fires singleClick  Weitergeleitet vom DOM-Node (siehe kijs.gui.Dom)
+ * @fires spacePress  Weitergeleitet vom DOM-Node
+ * @fires touchCancel  Weitergeleitet vom DOM-Node
+ * @fires touchEnd  Weitergeleitet vom DOM-Node
+ * @fires touchMove  Weitergeleitet vom DOM-Node
+ * @fires touchStart  Weitergeleitet vom DOM-Node
+ * @fires unrender  Beim Entfernen des DOM-Nodes mit unrender()
+ * @fires wheel  Weitergeleitet vom DOM-Node
  */
 kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
 
@@ -233,19 +102,19 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             afterResizeDelay: true,
-            autoLoad: { target: 'autoLoad' },   // Soll nach dem ersten Rendern automatisch die Load-Funktion aufgerufen werden?
-            cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },
-            disableEnterBubbeling: { target: 'disableEnterBubbeling', context: this._dom },
-            disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },
+            autoLoad: { target: 'autoLoad' },
+            cls: { fn: 'function', target: this._dom.clsAdd, context: this._dom },  // {String|Array} CSS-Klassen, z.B. 'cls-a cls-b' oder ['cls-a', 'cls-b']
+            disableEnterBubbeling: { target: 'disableEnterBubbeling', context: this._dom },  // {Boolean} Bubbling der Taste Enter stoppen (siehe kijs.gui.Dom)
+            disableEscBubbeling: { target: 'disableEscBubbeling', context: this._dom },      // {Boolean} Bubbling der Taste Escape stoppen (siehe kijs.gui.Dom)
             nodeTagName: { target: 'nodeTagName', context: this._dom },
-            defaults: { fn: 'manual' }, // wird nur bei containern gebraucht
-            ddSource: { target: 'ddSource' },   // Drag&Drop-Source Einstellungen
+            defaults: { fn: 'manual' }, // {Object} Nur bei Containern: Standard-Config der Kind-Elemente (siehe kijs.gui.Container)
+            ddSource: { target: 'ddSource' },
             height: { target: 'height' },
             html: { target: 'html', context: this._dom },
             htmlDisplayType: { target: 'htmlDisplayType', context: this._dom },
             left: { target: 'left' },
             name: true,
-            nodeAttribute: { fn: 'function', target: this._dom.nodeAttributeSet, context: this._dom },
+            nodeAttribute: { fn: 'function', target: this._dom.nodeAttributeSet, context: this._dom },  // {Object} Attribute des Nodes, z.B. { id: 'meinFeld', tabIndex: -1 }
             parent: { target: 'parent' },
             style : { fn: 'assign', target: 'style', context: this._dom },
             tooltip: { target: 'tooltip' },
@@ -254,14 +123,14 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
             visible : true,
             displayWaitMask: { target: 'displayWaitMask' },
             width: { target: 'width' },
-            xtype: { fn: 'manual' },
-            rpc: { target: 'rpc' },     // Instanz von kijs.gui.Rpc oder Name einer RPC
+            xtype: { fn: 'manual' },    // {String} Klassenname. Wird beim Erstellen aus einem Config-Objekt gebraucht (z.B. in elements eines Containers)
+            rpc: { target: 'rpc' },
             rpcLoadFn: true,
             rpcLoadArgs: true,
             
             waitMaskTarget: { prio: 1000, target: 'waitMaskTarget' },
             waitMaskTargetDomProperty: { prio: 1000, target: 'waitMaskTargetDomProperty' },
-            on: { prio: 1500,  fn: 'assignListeners' },
+            on: { prio: 1500,  fn: 'assignListeners' },     // {Object} Listeners, z.B. { click: fn, context: this }. Ohne context gilt dieses Element
             disabled: { prio: 2000, target: 'disabled' }
         };
 
@@ -312,9 +181,17 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Verzögerung in ms, mit der afterResize nach einer Änderung von height, width oder html ausgelöst wird. Default: 300
+     * @type {Number}
+     */
     get afterResizeDelay() { return this._afterResizeDelay; }
     set afterResizeDelay(val) { this._afterResizeDelay = val; }
 
+    /**
+     * Soll nach dem ersten renderTo() automatisch load() aufgerufen werden?
+     * @type {Boolean}
+     */
     get autoLoad() {
         return this.hasListener('afterFirstRenderTo', this.#onAfterFirstRenderTo, this);
     }
@@ -326,6 +203,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Damit das Element per Drag&Drop gezogen werden kann: Config-Objekt für kijs.gui.dragDrop.Source
+     * oder null. Der Getter gibt die kijs.gui.dragDrop.Source-Instanz zurück. Siehe Leitfaden Drag and Drop.
+     * @type {Object|kijs.gui.dragDrop.Source|null}
+     */
     get ddSource() { 
         return this._ddSource; 
     }
@@ -355,12 +237,20 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
-    // sollte nicht überschrieben werden. Bitte die Funktion changeDisabled() überschreiben.
+    /**
+     * Deaktiviert (siehe kijs.gui.Dom.disabled).
+     * Getter und Setter nicht überschreiben, sondern die Funktion changeDisabled().
+     * @type {Boolean}
+     */
     get disabled() {  return this._dom.disabled; }
     set disabled(val) {
         this.changeDisabled(val, false);
     }
     
+    /**
+     * Lademaske anzeigen? false entfernt die Lademaske, auch wenn sie mit waitMaskAdd() mehrfach angefordert wurde.
+     * @type {Boolean}
+     */
     get displayWaitMask() { return !kijs.isEmpty(this._waitMaskEl); }
     set displayWaitMask(val) {
         if (val) {
@@ -385,10 +275,22 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Das kijs.gui.Dom-Objekt des Elements
+     * @type {kijs.gui.Dom}
+     */
     get dom() { return this._dom; }
 
+    /**
+     * Hat der DOM-Node den Fokus?
+     * @type {Boolean}
+     */
     get hasFocus() { return this._dom.hasFocus; }
 
+    /**
+     * Höhe in Pixel (siehe kijs.gui.Dom.height). Eine Änderung löst afterResize verzögert aus.
+     * @type {Number|null}
+     */
     get height() { return this._dom.height; }
     set height(val) {
         this._dom.height = val;
@@ -398,6 +300,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Inhalt des Elements (siehe kijs.gui.Dom.html). Ändert sich dadurch die Grösse, wird afterResize verzögert ausgelöst.
+     * @type {String}
+     */
     get html() {
         return this._dom.html;
     }
@@ -406,12 +312,16 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         this._raiseAfterResizeEvent(true);
     }
 
+    /**
+     * Darstellung von html: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType). Default: 'html'
+     * @type {String}
+     */
     get htmlDisplayType() { return this._dom.htmlDisplayType; }
     set htmlDisplayType(val) { this._dom.htmlDisplayType = val; }
 
     /**
      * Index im elements-Array des parent-Containers
-     * @returns {Number|null}
+     * @type {Number|null}
      */
     get index() {
         if (kijs.isEmpty(this.parent) || kijs.isEmpty(this.parent.elements)) {
@@ -424,18 +334,34 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         return index;
     }
 
+    /**
+     * Zurzeit immer false, weil kijs.gui.Dom keine Eigenschaft isAppended hat.
+     * @type {Boolean}
+     */
     get isAppended() { return !!this._dom.isAppended; }
 
+    /**
+     * Ist html leer?
+     * @type {Boolean}
+     */
     get isEmpty() { return this._dom.isEmpty; }
 
+    /**
+     * Ist das Element gerendert?
+     * @type {Boolean}
+     */
     get isRendered() { return !!(this._dom && this._dom.isRendered); }
 
+    /**
+     * Abstand von links in Pixel (siehe kijs.gui.Dom.left)
+     * @type {Number|null}
+     */
     get left() { return this._dom.left; }
     set left(val) { this._dom.left = val; }
 
     /**
-     * Gibt das Element zurück, das grafisch unterhalb liegt.
-     * @returns {kijs.gui.Element|null}
+     * Das Element im gleichen Container, das grafisch unterhalb liegt (gleiches left, nächstgrösseres top)
+     * @type {kijs.gui.Element|null}
      */
     get lowerElement() {
         if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
@@ -455,12 +381,16 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         return lowerEl;
     }
 
+    /**
+     * Name des Elements. Damit kann es gefunden werden, z.B. mit up() oder kijs.gui.Container.down().
+     * @type {String|null}
+     */
     get name() { return this._name; }
     set name(val) { this._name = val; }
 
     /**
-     * Gibt das nächste element im elements-Array zurück
-     * @returns {kijs.gui.Element|null}
+     * Das nächste Element im elements-Array des Containers
+     * @type {kijs.gui.Element|null}
      */
     get next() {
         if (!this._parentEl || !this._parentEl.elements) {
@@ -482,12 +412,20 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Der DOM-Node, null wenn nicht gerendert
+     * @type {HTMLElement|null}
+     */
     get node() { return this._dom.node; }
+    /**
+     * Tag-Name des DOM-Nodes (siehe kijs.gui.Dom.nodeTagName). Default: 'div'
+     * @type {String}
+     */
     get nodeTagName() { return this._dom.nodeTagName; }
 
     /**
-     * Gibt das Elternelement zurück
-     * @returns {kijs.gui.Element|null}
+     * Elternelement (Container). Das Element reagiert auf dessen afterResize.
+     * @type {kijs.gui.Element|null}
      */
     get parent() { return this._parentEl; }
     set parent(val) {
@@ -505,8 +443,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Gibt das vorherige element im elements-Array zurück
-     * @returns {kijs.gui.Element|null}
+     * Das vorherige Element im elements-Array des Containers
+     * @type {kijs.gui.Element|null}
      */
     get previous() {
         if (!this._parentEl || !this._parentEl.elements) {
@@ -528,6 +466,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * RPC-Instanz für load(): kijs.gui.Rpc oder Name einer mit kijs.setRpc() registrierten Instanz.
+     * Ohne Angabe gibt der Getter kijs.getRpc('default') zurück.
+     * @type {kijs.gui.Rpc|String}
+     */
     get rpc() {
         return this._rpc || kijs.getRpc('default');
     }
@@ -543,23 +486,43 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
     
+    /**
+     * Argumente, die bei load() an die remoteFn übergeben werden. Sie überschreiben gleichnamige Argumente des Aufrufs.
+     * @type {Object}
+     */
     get rpcLoadArgs() { return this._rpcLoadArgs; }
     set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
 
+    /**
+     * Name der remoteFn für load(), z.B. 'address.load'
+     * @type {String|null}
+     */
     get rpcLoadFn() { return this._rpcLoadFn; }
     set rpcLoadFn(val) { this._rpcLoadFn = val; }
 
+    /**
+     * CSS-Styles (siehe kijs.gui.Dom.style). Über die Config werden sie ergänzt.
+     * @type {Object}
+     */
     get style() { return this._dom.style; }
 
+    /**
+     * Tooltip (siehe kijs.gui.Dom.tooltip)
+     * @type {String|Array|Object|kijs.gui.Tooltip|null}
+     */
     get tooltip() { return this._dom.tooltip; }
     set tooltip(val) { this._dom.tooltip = val; };
 
+    /**
+     * Abstand von oben in Pixel (siehe kijs.gui.Dom.top)
+     * @type {Number|null}
+     */
     get top() { return this._dom.top; }
     set top(val) { this._dom.top = val; }
 
     /**
-     * Gibt das Element zurück, das grafisch oberhalb liegt.
-     * @returns {kijs.gui.Element|null}
+     * Das Element im gleichen Container, das grafisch oberhalb liegt (gleiches left, nächstkleineres top)
+     * @type {kijs.gui.Element|null}
      */
     get upperElement() {
         if (!this._parentEl || !this._parentEl.elements || kijs.isEmpty(this.top)) {
@@ -579,6 +542,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         return upperEl;
     }
 
+    /**
+     * Beliebige Daten zum Element, z.B. eine ID. Nur Objekt oder null.
+     * @type {Object|null}
+     */
     get userData() { return this._userData; }
     set userData(val) {
         if (val === null || kijs.isObject(val)) {
@@ -588,6 +555,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Sichtbar? Ein unsichtbares Element hat die CSS-Klasse kijs-hidden. Eine Änderung löst changeVisibility aus. Default: true
+     * @type {Boolean}
+     */
     get visible() {
         return this._visible;
     }
@@ -607,6 +578,11 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Element, über dem die Lademaske angezeigt wird. Default: das Element selbst.
+     * Ein String wird mit kijs.getObjectFromString(val, this) aufgelöst.
+     * @type {kijs.gui.Element|String}
+     */
     get waitMaskTarget() { return this._waitMaskTarget; }
     set waitMaskTarget(val) {
         if (kijs.isString(val)) {
@@ -618,6 +594,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Name der Dom-Eigenschaft von waitMaskTarget, über der die Lademaske liegt. Default: 'dom'
+     * @type {String}
+     */
     get waitMaskTargetDomProperty() { return this._waitMaskTargetDomProperty; }
     set waitMaskTargetDomProperty(val) {
         this._waitMaskTargetDomProperty = val;
@@ -626,6 +606,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Breite in Pixel (siehe kijs.gui.Dom.width). Ist das Element gerendert, löst eine Änderung afterResize verzögert aus.
+     * @type {Number|null}
+     */
     get width() { return this._dom.width; }
     set width(val) {
         this._dom.width = val;
@@ -635,6 +619,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         }
     }
 
+    /**
+     * Klassenname mit Punkten, z.B. 'kijs.gui.Button'
+     * @type {String}
+     */
     get xtype() {
         if (kijs.isString(this.constructor.name) && !kijs.isEmpty(this.constructor.name)) {
             return this.constructor.name.replace(/_/g, '.');
@@ -675,9 +663,10 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Wendet die Konfigurations-Eigenschaften an
+     * Wendet die Konfigurations-Eigenschaften an und versiegelt danach das Objekt (Object.seal).
+     * Siehe Leitfaden Config-System.
      * @param {Object} config
-     * @param {Boolean} [preventEvents=false]   // Das Auslösen des afterResize-Event verhindern?
+     * @param {Boolean} [preventEvents=false]   Das Auslösen von afterResize verhindern?
      * @returns {undefined}
      */
     applyConfig(config={}, preventEvents=false) {
@@ -757,10 +746,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Lädt die config via RPC
-     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
-     * @param {Boolean} [superCall=false]
-     * @returns {Promise}
+     * Lädt die Config via RPC (rpc, rpcLoadFn) und wendet response.config an. Danach wird
+     * afterLoad ausgelöst. Ohne rpcLoadFn wird nichts geladen und das Promise nie erfüllt.
+     * @param {Object}  [args] Objekt mit Argumenten, die an die remoteFn übergeben werden.
+     *                         rpcLoadArgs überschreiben gleichnamige Argumente.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterLoad)
+     * @returns {Promise}       Wird mit dem RPC-Ergebnis erfüllt
      */
     load(args=null, superCall=false) {
         return new Promise((resolve, reject) => {
@@ -822,6 +813,13 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
         super.on(names, callback, context);
     }
 
+    /**
+     * Löst ein Event aus. Ergänzt e um element, eventName und raiseElement
+     * (raiseElement bleibt beim Weiterleiten erhalten).
+     * @param {String} name
+     * @param {Object} [e={}]
+     * @returns {Boolean}   false, wenn ein Listener false zurückgibt
+     */
     // overwrite
     raiseEvent(name, e={}) {
         Object.assign(e, {
@@ -838,8 +836,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * rendert den DOM-Node
-     * @param {Boolean} [superCall=false]
+     * Rendert den DOM-Node und löst afterRender aus. Siehe Leitfaden Lebenszyklus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterRender)
      * @returns {undefined}
      */
     render(superCall) {
@@ -866,7 +864,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * rendert das Element und fügt den DOM-Node einem Parent-DOM-Node hinzu
+     * Rendert das Element und fügt den DOM-Node einem Parent-DOM-Node hinzu.
+     * Beim ersten Mal wird afterFirstRenderTo ausgelöst.
      * @param {HTMLElement} targetNode           Eltern-Node
      * @param {HTMLElement} [referenceNode=null] Referenzknoten, Falls der Node
      *                                           statt angehängt eingefügt werden soll
@@ -888,8 +887,8 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     }
 
     /**
-     * Node aus DOM entfernen, falls vorhanden
-     * @param {Boolean} superCall
+     * Entfernt den DOM-Node aus dem DOM und löst unrender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein unrender-Event)
      * @returns {undefined}
      */
     unrender(superCall) {
@@ -913,7 +912,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Namen (Eigenschaft 'name') übereinstimmt.
      * @param {String} name
-     * @returns {kijs_gui_Element|null}
+     * @returns {kijs.gui.Element|null}
      */
     up(name) {
         if (!kijs.isEmpty(name) && this.parent) {
@@ -930,7 +929,7 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
      * Durchläuft den Element-Baum nach oben und gibt das erste Element zurück,
      * dass mit dem Klassennamen (Eigenschaft 'xtype') übereinstimmt.
      * @param {String} xtype
-     * @returns {kijs_gui_Element|null}
+     * @returns {kijs.gui.Element|null}
      */
     upX(xtype) {
         if (!kijs.isEmpty(xtype) && this.parent) {
@@ -1183,6 +1182,12 @@ kijs.gui.Element = class kijs_gui_Element extends kijs.Observable {
     // --------------------------------------------------------------
     // DESTRUCTOR
     // --------------------------------------------------------------
+    /**
+     * Gibt das Element frei: unrender(), Event destruct, Unterobjekte (Dom, Lademaske,
+     * Drag&Drop) freigeben. Siehe Leitfaden Lebenszyklus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse
+     * @returns {undefined}
+     */
     // overwrite
     destruct(superCall) {
         // afterResize-Events verhindern

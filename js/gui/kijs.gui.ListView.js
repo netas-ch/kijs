@@ -3,6 +3,21 @@
 // --------------------------------------------------------------
 // kijs.gui.ListView
 // --------------------------------------------------------------
+/**
+ * Liste zum Auswählen von Datensätzen (DataView mit Elementen vom Typ
+ * kijs.gui.dataView.element.ListView). Jeder Eintrag zeigt einen Text und optional ein Icon,
+ * Optionsfeld oder Checkbox. Der Wert (value) ist der Inhalt von valueField der selektierten
+ * Datensätze. valueField wird auch als primaryKeyFields verwendet.
+ *
+ * Für Text, Icon, CSS-Klasse und Tooltip können Feldnamen der Datensätze angegeben werden
+ * (…Field). Ist für das Icon kein Feldname angegeben, gilt das Icon der ListView für alle Einträge.
+ *
+ * @example
+ * new kijs.gui.ListView({
+ *     data: [ { value: 1, displayText: 'Eins' }, { value: 2, displayText: 'Zwei' } ],
+ *     value: 2
+ * });
+ */
 kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
 
 
@@ -68,8 +83,8 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
             showCheckBoxes: true,
             tooltipField: true,
 
-            valueField: { prio: 60, target: 'valueField' },                // Namen des value Fields
-            primaryKeyFields: { prio: 61, target: 'primaryKeyFields' },    // Array mit den Namen der Primärschlüssel-Felder
+            valueField: { prio: 60, target: 'valueField' },
+            primaryKeyFields: { prio: 61, target: 'primaryKeyFields' },
 
             value: { prio: 200, target: 'value' }
         });
@@ -86,9 +101,17 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Name des Felds mit zusätzlichen CSS-Klassen pro Eintrag
+     * @type {String|null}
+     */
     get clsField() { return this._clsField; }
     set clsField(val) { this._clsField = val; }
 
+    /**
+     * Recordset mit den Daten (siehe kijs.gui.DataView.data). Der Wert (value) bleibt beim Zuweisen erhalten.
+     * @type {Array}
+     */
     // overwrite
     get data() { return this._data; }
     // overwrite
@@ -99,48 +122,111 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this.value = v;
     }
 
+    /**
+     * Darstellung des Texts: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType). Default: 'code'
+     * @type {String}
+     */
     get displayTextDisplayType() { return this._displayTextDisplayType; }
     set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
 
+    /**
+     * Name des Felds mit dem angezeigten Text. Default: 'displayText'
+     * @type {String|null}
+     */
     get displayTextField() { return this._displayTextField; }
     set displayTextField(val) { this._displayTextField = val; }
 
+    /**
+     * CSS-Klasse für eine Animation des Icons aller Einträge (ohne iconAnimationClsField)
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconAnimationCls; }
     set iconAnimationCls(val) { this._iconAnimationCls = val; }
 
+    /**
+     * Name des Felds mit der CSS-Klasse für eine Animation des Icons
+     * @type {String|null}
+     */
     get iconAnimationClsField() { return this._iconAnimationClsField; }
     set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
 
+    /**
+     * Zeichen des Icons aller Einträge (ohne iconCharField, siehe kijs.gui.Icon.iconChar)
+     * @type {Number|null}
+     */
     get iconChar() { return this._iconChar; }
     set iconChar(val) { this._iconChar = val; }
 
+    /**
+     * Name des Felds mit dem Zeichen des Icons
+     * @type {String|null}
+     */
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }
 
+    /**
+     * CSS-Klasse des Icons aller Einträge (ohne iconClsField)
+     * @type {String|null}
+     */
     get iconCls() { return this._iconCls; }
     set iconCls(val) { this._iconCls= val; }
 
+    /**
+     * Name des Felds mit der CSS-Klasse des Icons
+     * @type {String|null}
+     */
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
+    /**
+     * Farbe des Icons aller Einträge (ohne iconColorField)
+     * @type {String|null}
+     */
     get iconColor() { return this._iconColor; }
     set iconColor(val) { this._iconColor = val; }
 
+    /**
+     * Name des Felds mit der Farbe des Icons
+     * @type {String|null}
+     */
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
 
+    /**
+     * Icon aller Einträge aus einer iconMap (ohne iconMapField), z.B. 'kijs.iconMap.Fa.file'
+     * @type {String|null}
+     */
     get iconMap() { return this._iconMap; }
     set iconMap(val) { this._iconMap = val; }
 
+    /**
+     * Name des Felds mit dem Icon aus einer iconMap
+     * @type {String|null}
+     */
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }
 
+    /**
+     * Optionsfelder (bei einfacher Selektion) bzw. Checkboxen (bei multi) anzeigen? Default: false
+     * @type {Boolean}
+     */
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
 
+    /**
+     * Name des Felds mit dem Tooltip pro Eintrag
+     * @type {String|null}
+     */
     get tooltipField() { return this._tooltipField; }
     set tooltipField(val) { this._tooltipField = val; }
 
+    /**
+     * Wert: der Inhalt von valueField der selektierten Datensätze. Bei einfacher Selektion ein
+     * einzelner Wert, bei 'multi' und 'simple-multi' ein Array, bei 'manual' ein Array nur bei
+     * mehreren Werten. Nichts selektiert = null. Der Setter selektiert die passenden Datensätze
+     * (ohne selectionChange); ohne valueField gibt es einen Fehler.
+     * @type {*|Array|null}
+     */
     get value() {
         let val = null;
 
@@ -223,6 +309,10 @@ kijs.gui.ListView = class kijs_gui_ListView extends kijs.gui.DataView {
         this.selectByFilters(filters, false, true);
     }
 
+    /**
+     * Name des Felds mit dem Wert. Wird auch als primaryKeyFields verwendet. Default: 'value'
+     * @type {String|null}
+     */
     get valueField() { return this._valueField; }
     set valueField(val) {
         this._valueField = val;

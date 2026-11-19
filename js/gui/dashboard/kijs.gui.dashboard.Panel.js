@@ -4,14 +4,7 @@
 // kijs.gui.dashboard.Panel
 // --------------------------------------------------------------
 /**
- * Panel Element, zur Verwendung in kijs.gui.dashboard Elementen.
- *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.Panel
- *    kijs.gui.dashboard.Panel
- *
+ * Panel in einer Spalte (kijs.gui.dashboard.Column) eines kijs.gui.Dashboard.
  */
 kijs.gui.dashboard.Panel = class kijs_gui_dashboard_Panel extends kijs.gui.Panel {
 

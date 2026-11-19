@@ -3,6 +3,18 @@
 // --------------------------------------------------------------
 // kijs.Rpc
 // --------------------------------------------------------------
+/**
+ * Sendet RPC-Aufrufe (remoteFn + requestData) per Ajax-POST an den Server. Aufrufe, die innerhalb
+ * von defer Millisekunden erfolgen, werden in einem Request zusammengefasst (ausser exclusive).
+ * Für die Oberfläche mit Lademaske und Fehlermeldungen gibt es kijs.gui.Rpc.
+ *
+ * @example
+ * const rpc = new kijs.Rpc({ url: 'index.php' });
+ * rpc.do({ remoteFn: 'address.load', requestData: { id: 1 } }).then(e => { console.log(e.response); });
+ *
+ * @fires response  Nach dem Erhalt der Antwort eines Requests, bevor die einzelnen Antworten
+ *                  verarbeitet werden. e: Daten des Ajax-Requests
+ */
 kijs.Rpc = class kijs_Rpc extends kijs.Observable {
 
 
@@ -33,11 +45,11 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            defaultErrorType: true, // Standard errorType, wenn eine errorMsg vorhanden ist ohne errorType
-            defer: true,        // millisekunden, in denen auf weitere RPC gewartet wird
-            timeout: true,      // millisekunden, nach denen der RPC abgebrochen wird
-            url: true,          // server URL
-            parameters: true    // optionale GET-Parameter
+            defaultErrorType: true,
+            defer: true,
+            timeout: true,
+            url: true,
+            parameters: true    // {Object} Zusätzliche GET-Parameter für die URL. Default: {}
         };
 
         // Config anwenden
@@ -52,6 +64,11 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Status eines RPC in der Warteschlange: QUEUE (1), TRANSMITTED (2), CANCELED_BEFORE_TRANSMIT (3),
+     * CANCELED_AFTER_TRANSMIT (4)
+     * @type {Object}
+     */
     static get states() {
         return {
             QUEUE: 1,
@@ -66,18 +83,38 @@ kijs.Rpc = class kijs_Rpc extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * errorType, wenn die Antwort eine errorMsg ohne errorType enthält. Default: 'errorNotice'
+     * @type {String}
+     */
     get defaultErrorType() { return this._defaultErrorType; }
     set defaultErrorType(val) { this._defaultErrorType = val; }
 
+    /**
+     * Millisekunden, in denen auf weitere RPCs gewartet wird, um sie zusammen zu senden. Default: 10
+     * @type {Number}
+     */
     get defer() { return this._defer; }
     set defer(val) { this._defer = val; }
 
+    /**
+     * Header, die mitgesendet werden. Kein Objekt = {}. Default: {'X-LIBRARY': 'kijs'}
+     * @type {Object}
+     */
     get headers() { return this._headers; }
     set headers(val) { this._headers = kijs.isObject(val) ? val : {}; }
 
+    /**
+     * Millisekunden, nach denen der Request abgebrochen wird. 0 = kein Timeout. Default: 0
+     * @type {Number}
+     */
     get timeout() { return this._timeout; }
     set timeout(val) { this._timeout = parseInt(val); }
 
+    /**
+     * URL des Servers. Default: '.'
+     * @type {String}
+     */
     get url() { return this._url; }
     set url(val) { this._url = val; }
 

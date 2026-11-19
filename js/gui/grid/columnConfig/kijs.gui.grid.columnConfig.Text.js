@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
+/**
+ * Spalte für Text in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Text, Filter kijs.gui.grid.filter.Text,
+ * Editor kijs.gui.field.Text). Standard-Spalte des Grids.
+ */
 kijs.gui.grid.columnConfig.Text = class kijs_gui_grid_columnConfig_Text extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 

@@ -222,7 +222,7 @@ class ApiDatabase {
                 $insMember->execute([
                     $classId, $e->name, 'event', 'public', 0, 0, 0, 0, 0, 0, 0, (int)$e->isForwarded, (int)$e->isDocumented,
                     null, null, $e->description, null, null, null, null, null, null, null,
-                    $this->_json($e->raisedIn), $e->isDocumented ? 'jsdoc' : null, null, null, null
+                    $this->_json($e->raisedIn), $e->isDocumented ? (isset($e->docFrom) ? 'base' : 'jsdoc') : null, $e->docFrom ?? null, null, null
                 ]);
                 $ownMembers[$classId][$this->_key('event', $e->name, false)] = (int)$this->_pdo->lastInsertId();
             }

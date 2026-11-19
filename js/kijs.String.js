@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.String (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für Strings.
+ */
 kijs.String = class kijs_String {
 
 

@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.Graphic (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für Rechtecke (Ausrichten, Abstand, Überlappung), Farben
+ * (Umrechnung, Helligkeit) und Bilder.
+ */
 kijs.Graphic = class kijs_Graphic {
 
 

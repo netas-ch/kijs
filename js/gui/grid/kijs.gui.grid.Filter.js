@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.Filter
 // --------------------------------------------------------------
+/**
+ * Filterzeile (tr) von kijs.gui.grid.Grid mit einem Filter (kijs.gui.grid.filter.Filter) pro Spalte.
+ * Standardmässig ausgeblendet (über das Menü einer Kopfzelle einblendbar). Ändert ein Filter, wird das
+ * Grid nach 50 ms neu geladen, sobald kein Filterfeld mehr den Fokus hat (bzw. sofort mit forceReload).
+ */
 kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
 
@@ -42,6 +47,10 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter in der aktuellen Reihenfolge
+     * @type {kijs.gui.grid.filter.Filter[]}
+     */
     get filters() {
         let filters = [];
         for (let i=0; i<this._filters.length; i++) {
@@ -50,6 +59,10 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         return filters;
     }
 
+    /**
+     * Grid der Filterzeile (parent)
+     * @type {kijs.gui.grid.Grid}
+     */
     get grid() { return this.parent; }
 
 
@@ -58,8 +71,8 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Gibt die Filter-Objekte als Array zurück, welche auf dem Server angewendet werden.
-     * @returns {undefined}
+     * Gibt die Filter-Objekte der aktiven Filter zurück, welche auf dem Server angewendet werden.
+     * @returns {Object[]}
      */
     getFilters() {
         let filters = [];
@@ -127,6 +140,11 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Erstellt für jede Spalte ohne Filter einen neuen Filter (xtype aus filterConfig). Wirft einen
+     * kijs.Error bei ungültigem xtype.
+     * @returns {undefined}
+     */
     _createFilters() {
         let newColumnConfigs = [];
 
@@ -166,6 +184,10 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         }, this);
     }
 
+    /**
+     * Hat ein Filterfeld den Fokus?
+     * @returns {Boolean}
+     */
     _filterHasFocus() {
         let hasFocus = false;
         kijs.Array.each(this.filters, function(filter) {
@@ -177,6 +199,10 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
         return hasFocus;
     }
     
+    /**
+     * Sortiert die Filter nach der Position ihrer Spalte.
+     * @returns {undefined}
+     */
     _sortFilters() {
         this._filters.sort(function(a, b) {
             if (a.columnConfig.position < b.columnConfig.position) {

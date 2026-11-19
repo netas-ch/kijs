@@ -1,12 +1,22 @@
 /* global kijs, this */
 
-// Klasse mit Drag&Drop-Events/Funktionen, für das Element das gezogen wird
-
-// Die Klasse hat noch ein drop-Event, welches vom kijs.gui.dragDrop.Target ausgelöst wird
-
 // --------------------------------------------------------------
 // kijs.gui.dragDrop.Source
 // --------------------------------------------------------------
+/**
+ * Drag&Drop-Quelle eines Elements: macht den Dom ownerDomProperty des Elements ownerEl ziehbar. Wird
+ * meist über die Eigenschaft ddSource eines kijs.gui.Element erstellt. Ein kijs.gui.dragDrop.Target
+ * nimmt die Quelle an, wenn sein mapping einen Eintrag mit dem name der Quelle enthält.
+ *
+ * @example
+ * myPanel.ddSource = { name: 'myPanels', ownerDomProperty: 'headerBar.dom', allowMove: true };
+ *
+ * @fires destruct  Beim Zerstören
+ * @fires dragEnd  Nach Abschluss des Drag&Drop (durch drop oder Abbruch). e: source
+ * @fires dragStart  Beim Start des Ziehens. e: source
+ * @fires drop  Wird vom Target vor dessen drop-Event ausgelöst. Rückgabe false bricht ab.
+ *              e: source, target, operation ('move', 'copy', 'link' oder 'none'), mapping
+ */
 kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observable {
 
 
@@ -47,15 +57,15 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            allowMove: true,    // Darf das Element per Drag&Drop verschoben werden?
-            allowCopy: true,    // Darf das Element per Drag&Drop kopiert werden?
-            allowLink: true,    // Darf per Drag&Drop eine Verknüpfung auf das Element erstellt werden?
-            name: true,         // Drag&Drop Name
+            allowMove: true,
+            allowCopy: true,
+            allowLink: true,
+            name: true,
             caption: true,
             captionPlural: true,
-            on: { fn: 'assignListeners' },
+            on: { fn: 'assignListeners' },  // {Object} Listeners, z.B. { drop: fn, context: this }
             ownerEl: true,
-            ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' } // Property-Name des kijs.gui.Dom, der draggable ist
+            ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' }
         };
 
         // Config anwenden
@@ -70,30 +80,66 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Darf das Element per Drag&Drop kopiert werden (Ctrl bzw. Alt auf dem Mac)? Default: false
+     * @type {Boolean}
+     */
     get allowCopy() { return this._allowCopy; }
     set allowCopy(val) { this._allowCopy = !!val; }
 
+    /**
+     * Darf per Drag&Drop eine Verknüpfung erstellt werden (Ctrl+Shift bzw. Alt+Cmd auf dem Mac)? Default: false
+     * @type {Boolean}
+     */
     get allowLink() { return this._allowLink; }
     set allowLink(val) { this._allowLink = !!val; }
 
+    /**
+     * Darf das Element per Drag&Drop verschoben werden? Default: true
+     * @type {Boolean}
+     */
     get allowMove() { return this._allowMove; }
     set allowMove(val) { this._allowMove = !!val; }
 
+    /**
+     * Text im Bild beim Mauszeiger beim Ziehen eines Elements
+     * @type {String|null}
+     */
     get caption()  { return this._caption; }
     set caption(val)  { this._caption = val; }
 
+    /**
+     * Text im Bild beim Mauszeiger beim Ziehen mehrerer Elemente
+     * @type {String|null}
+     */
     get captionPlural()  { return this._captionPlural; }
     set captionPlural(val)  { this._captionPlural = val; }
 
+    /**
+     * CSS-display des Elements beim Start des Ziehens (zum Wiedereinblenden nach dem Ausblenden bei move)
+     * @type {String|null}
+     */
     get display() { return this._display; }
 
+    /**
+     * Höhe des Elements beim Start des Ziehens (für den Drop-Marker)
+     * @type {Number|null}
+     */
     get height() { return this._height; }
 
-    // Drag&Drop Name
+    /**
+     * Drag&Drop-Name. Das Target akzeptiert die Quelle, wenn sein mapping diesen Namen enthält.
+     * Pflicht beim Ziehen, sonst kijs.Error.
+     * @type {String|null}
+     */
     get name() { return this._name; }
     set name(val) { this._name = val; }
 
-    // Verweis auf den kijs.gui.Dom, der draggable ist
+    /**
+     * kijs.gui.Dom, der gezogen werden kann (ownerEl[ownerDomProperty]). Wirft einen kijs.Error ohne
+     * ownerEl oder bei ungültiger ownerDomProperty.
+     * @type {kijs.gui.Dom}
+     */
     get ownerDom() {
         if (kijs.isEmpty(this._ownerEl)) {
             throw new kijs.Error(`draggable Elements must have a 'ddSource.ownerEl'`);
@@ -108,7 +154,11 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         return dom;
     }
 
-    // Property-Name des kijs.gui.Dom, der draggable ist
+    /**
+     * Name (auch Pfad, z.B. 'headerBar.dom') der Dom-Eigenschaft von ownerEl, die gezogen werden kann.
+     * Beim Setzen wird der Dom draggable gemacht.
+     * @type {String|null}
+     */
     get ownerDomProperty() { return this._ownerDomProperty; }
     set ownerDomProperty(val) {
         this._ownerDomProperty = val;
@@ -121,12 +171,19 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         this.ownerDom.on('dragEnd', this.#onDragEnd, this);
     }
 
-    // Eigentümer kijs.gui.Element dieser Instanz
+    /**
+     * Element, zu dem die Quelle gehört
+     * @type {kijs.gui.Element|null}
+     */
     get ownerEl() { return this._ownerEl; }
     set ownerEl(val) {
         this._ownerEl = val;
     }
 
+    /**
+     * Breite des Elements beim Start des Ziehens (für den Drop-Marker)
+     * @type {Number|null}
+     */
     get width() { return this._width; }
 
 
@@ -149,7 +206,11 @@ kijs.gui.dragDrop.Source = class kijs_gui_dragDrop_Source extends kijs.Observabl
         Object.seal(this);
     }
 
-    // Drag&Drop ist abgeschlossen (durch drop oder Abbruch)
+    /**
+     * Schliesst das Drag&Drop ab (durch drop oder Abbruch): entfernt den Drop-Marker und die CSS-Klassen,
+     * blendet das Element wieder ein, löst dragEnd aus und setzt kijs.gui.DragDrop zurück.
+     * @returns {undefined}
+     */
     dragEnd() {
         // dropMarker entfernen
         kijs.gui.DragDrop.dropMarkerRemove();

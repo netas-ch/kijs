@@ -4,13 +4,7 @@
 // kijs.gui.dashboard.Column
 // --------------------------------------------------------------
 /**
- * Panel Element, zur Verwendung in kijs.gui.dashboard Elementen.
- *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.dashboard.Column
- *
+ * Spalte eines kijs.gui.Dashboard. Enthält kijs.gui.dashboard.Panel-Elemente.
  */
 kijs.gui.dashboard.Column = class kijs_gui_dashboard_Column extends kijs.gui.Container {
 
@@ -49,6 +43,11 @@ kijs.gui.dashboard.Column = class kijs_gui_dashboard_Column extends kijs.gui.Con
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Drag&Drop-Ziel der Spalte. Der Setter akzeptiert ein Config-Objekt für kijs.gui.dragDrop.Target
+     * (ownerDomProperty Default 'innerDom') oder null. Andere Werte werfen einen kijs.Error.
+     * @type {kijs.gui.dragDrop.Target|null}
+     */
     get ddTarget() { 
         return this._ddTarget; 
     }

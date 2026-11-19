@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.Object (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für Objekte, u.a. assignConfig() für die Zuweisung der
+ * Config-Eigenschaften über die configMap.
+ */
 kijs.Object = class kijs_Object {
 
 

@@ -3,6 +3,12 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.HeaderCell
 // --------------------------------------------------------------
+/**
+ * Kopfzelle (td) einer Spalte von kijs.gui.grid.Grid: Beschriftung, Sortier-Symbol, Hilfe-Icon (Tooltip
+ * aus dem tooltip der Spalte) und ein Menü zum Sortieren, für die Spalten (kijs.gui.grid.ColumnWindow)
+ * und zum Ein- und Ausblenden der Filterzeile. Mit dem Schieber am rechten Rand wird die Breite der
+ * Spalte verändert. Ist die Beschriftung zu lang, wird sie als Tooltip angezeigt.
+ */
 kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Element {
 
 
@@ -111,9 +117,9 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columnConfig: true,
+            columnConfig: true,     // {kijs.gui.grid.columnConfig.ColumnConfig} Spalte der Kopfzelle
 
-            overflowTooltipDisable: true,
+            overflowTooltipDisable: true,   // {Boolean} Keinen Tooltip anzeigen, wenn die Beschriftung zu lang ist? Default: false
 
             sort: { target: 'sort' },
 
@@ -137,12 +143,24 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung. Der Setter schreibt sie auch in die columnConfig (siehe setCaption()).
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) { this.setCaption(val); }
 
+    /**
+     * Spalte der Kopfzelle
+     * @type {kijs.gui.grid.columnConfig.ColumnConfig|null}
+     */
     get columnConfig() { return this._columnConfig; }
     set columnConfig(val) { this._columnConfig = val; }
 
+    /**
+     * Kopfzeile (parent)
+     * @type {kijs.gui.grid.Header}
+     */
     get header() { return this.parent; }
 
     get helpIcon() { return this._helpIconEl; }
@@ -180,18 +198,38 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
     }
 
+    /**
+     * Zeichen des Hilfe-Icons. Default: 0xf29C
+     * @type {String|Number}
+     */
     get helpIconChar() { return this._helpIconEl.iconChar; }
     set helpIconChar(val) { this._helpIconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Hilfe-Icons
+     * @type {String|null}
+     */
     get helpIconCls() { return this._helpIconEl.iconCls; }
     set helpIconCls(val) { this._helpIconEl.iconCls = val; }
 
+    /**
+     * Farbe des Hilfe-Icons
+     * @type {String|null}
+     */
     get helpIconColor() { return this._helpIconEl.iconColor; }
     set helpIconColor(val) { this._helpIconEl.iconColor = val; }
 
+    /**
+     * Icon des Hilfe-Icons aus einer IconMap
+     * @type {String}
+     */
     get helpIconMap() { return this._helpIconEl.iconMap; }
     set helpIconMap(val) { this._helpIconEl.iconMap = val; }
 
+    /**
+     * Text im Tooltip des Hilfe-Icons. Leer = Icon ausgeblendet.
+     * @type {String}
+     */
     get helpText() { return this._helpIconEl.tooltip.html; }
     set helpText(val) {
         this._helpIconEl.tooltip.html = val;
@@ -205,6 +243,11 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         return null;
     }
 
+    /**
+     * Keinen Tooltip anzeigen, wenn die Beschriftung zu lang ist? Achtung: Der Getter ruft sich selbst
+     * auf und wirft darum einen RangeError.
+     * @type {Boolean}
+     */
     get overflowTooltipDisable() { return this.overflowTooltipDisable; }
     set overflowTooltipDisable(val) {
         this._overflowTooltipDisable = !!val;
@@ -213,6 +256,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
         }
     }
 
+    /**
+     * Sortier-Symbol: 'ASC', 'DESC' oder null (kein Symbol)
+     * @type {String|null}
+     */
     get sort() { return this._sort; }
     set sort(val) {
         if (val === 'DESC') {
@@ -330,7 +377,11 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
 
 
     // PROTECTED
-    // Caption als Tooltip anzeigen, wenn nicht genug Platz im Spaltenkopf
+    /**
+     * Zeigt die Beschriftung als Tooltip an, wenn sie im Spaltenkopf keinen Platz hat (ausser mit
+     * overflowTooltipDisable).
+     * @returns {undefined}
+     */
     _updateHeaderToolTip() {
         if (!this.isRendered) {
             return;

@@ -8,19 +8,30 @@
 
 
 /**
- * Die Klasse öffnet ein Fenster zum Auswählen einer Datei zum Upload
- * oder nimmt die Datei über eine Dropzone entgegen. Nach Auswahl wird
- * die Datei an den Server gesendet.
+ * Öffnet den Dialog des Browsers zum Auswählen von Dateien (showFileSelectDialog()) oder nimmt
+ * Dateien von verbundenen kijs.gui.DropZone-Elementen bzw. aus der Zwischenablage (observePaste)
+ * entgegen. Jede Datei wird einzeln per POST an ajaxUrl gesendet: der Dateiinhalt als Body,
+ * Dateiname und Ordner URL-codiert in den Headern fileNameHeader und pathNameHeader. Die Antwort
+ * wird als JSON erwartet, die Eigenschaft upload daraus wird mit dem Event upload weitergegeben.
+ * Achtung: Erlaubt sind nur Dateien, die zu contentTypes bzw. fileExtensions passen. Ist beides
+ * leer, wird jede Datei abgewiesen (uploadFailed).
  *
- *  * EVENTS
- * ----------
- * fileSelected -- wird ausgeführt, wenn eine Datei ausgewählt wurde
- * uploadFailed -- MIME nicht erlaubt
- * uploadStart  -- Upload wird gestartet
- * progress     -- Fortschritt beim Upload
- * upload       -- Upload abgeschlossen
- * uploadEnd    -- alle Uploads in der Schlange abgeschlossen
+ * @example
+ * const ud = new kijs.UploadDialog({ ajaxUrl: 'upload.php', contentTypes: ['image'] });
+ * ud.on('uploadEnd', function(e) { console.log(e.uploadResponses); });
+ * ud.showFileSelectDialog();
  *
+ * @fires fileSelected  Für jede zugelassene Datei vor dem Upload.
+ *                      e: uploadDialog, fileName, fileDir, fileType, uploadId, file
+ * @fires progress  Fortschritt eines Uploads. e: uploadDialog, nodeEvent, uploadId,
+ *                  percent (0-100 oder null, wenn nicht berechenbar)
+ * @fires upload  Ein Upload ist abgeschlossen. e: uploadDialog, uploadResponse, errorMsg, uploadId
+ * @fires uploadEnd  Alle laufenden Uploads sind abgeschlossen. e: uploadDialog,
+ *                   uploadResponses (Objekt uploadId => uploadResponse)
+ * @fires uploadFailed  Datei abgewiesen. Bei unpassendem Typ e: uploadDialog, fileName, fileType;
+ *                      bei zu grosser Datei nur e: errMsg
+ * @fires uploadStart  Der Upload einer Datei wurde gestartet (nur mit ajaxUrl).
+ *                     e: uploadDialog, fileName, fileDir, fileType, uploadId
  */
 kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
@@ -69,14 +80,14 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            ajaxUrl: true,
+            ajaxUrl: true,          // {String} URL, an welche die Dateien gesendet werden. Leer = kein Upload (nur fileSelected). Default: 'index.php'
             directory: { target: 'directory' },
             multiple: { target: 'multiple' },
             fileExtensions:  { target: 'fileExtensions' },
-            fileNameHeader: true,
-            pathNameHeader: true,
+            fileNameHeader: true,   // {String} Name des Headers mit dem Dateinamen. Default: 'X-Filename'
+            pathNameHeader: true,   // {String} Name des Headers mit dem relativen Ordner (bei Ordner-Upload). Default: 'X-Filepath'
             maxFilesize: true,
-            sanitizeFilename: true,
+            sanitizeFilename: true, // {Boolean} Dateinamen bereinigen: Sonderzeichen ersetzen, alle Zeichen ausser a-z, A-Z, 0-9 und - werden zu _. Default: false
             dropZones: { target: 'dropZones' },
             contentTypes: { target: 'contentTypes' },
             observePaste: { target: 'observePaste' }
@@ -98,6 +109,12 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Erlaubte MIME-Types, z.B. ['image/png'] oder ['image'] (= 'image/*'). Der Setter akzeptiert auch
+     * einen String und wirft einen kijs.Error bei ungültigem Media-Type. Hat die Datei keinen Type,
+     * wird stattdessen fileExtensions geprüft.
+     * @type {String[]}
+     */
     get contentTypes() { return this._contentTypes; }
     set contentTypes(val) {
         if (!kijs.isArray(val)) {
@@ -119,17 +136,35 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
+    /**
+     * Ganzen Ordner statt Dateien auswählen? Wird nur übernommen, wenn der Browser es unterstützt.
+     * @type {Boolean}
+     */
     get directory() { return this._directory; }
     set directory(val) { this._directory = !!val && this._browserSupportsDirectoryUpload(); }
 
+    /**
+     * Deaktiviert? Dann wird weder der Dialog geöffnet noch etwas hochgeladen. Wirkt auch
+     * auf die verbundenen DropZones.
+     * @type {Boolean}
+     */
     get disabled() {  return this._disabled; }
     set disabled(val) {
         this.changeDisabled(val, false);
     }
 
+    /**
+     * Verbundene DropZones. Der Setter ruft bindDropZones() auf (fügt hinzu).
+     * @type {kijs.gui.DropZone[]}
+     */
     get dropZones() { return this._dropZones; }
     set dropZones(val) { this.bindDropZones(val); }
 
+    /**
+     * Erlaubte Dateiendungen, z.B. ['.pdf'] (der Punkt wird ergänzt). Wird geprüft, wenn keine
+     * contentTypes angegeben sind oder die Datei keinen MIME-Type hat. Der Setter akzeptiert auch einen String.
+     * @type {String[]}
+     */
     get fileExtensions() { return this._fileExtensions; }
     set fileExtensions(val) {
         if (!kijs.isArray(val)) {
@@ -147,12 +182,25 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
+    /**
+     * Maximale Dateigrösse in Bytes. null = keine Begrenzung
+     * @type {Number|null}
+     */
     get maxFilesize() { return this._maxFilesize; }
     set maxFilesize(val) { this._maxFilesize = val; }
 
+    /**
+     * Dürfen mehrere Dateien ausgewählt werden? Default: true
+     * @type {Boolean}
+     */
     get multiple() { return this._multiple; }
     set multiple(val) { this._multiple = !!val; }
 
+    /**
+     * Dateien aus der Zwischenablage (Einfügen im Fenster) hochladen? Gibt es DropZones, nur wenn
+     * mindestens eine davon einen parent hat.
+     * @type {Boolean}
+     */
     get observePaste() { return this._observePaste; }
     set observePaste(val) { this._observePaste = !!val; }
 
@@ -197,7 +245,12 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }, this);
     }
 
-    // overwrite
+    /**
+     * Aktiviert/deaktiviert den UploadDialog und die verbundenen DropZones.
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  wird nicht verwendet
+     * @returns {undefined}
+     */
     changeDisabled(val, callFromParent) {
         this._disabled = !!val;
 
@@ -329,6 +382,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return true;
     }
 
+    /**
+     * Gibt den Dateinamen zurück, mit sanitizeFilename bereinigt.
+     * @param {String} fileName
+     * @returns {String}
+     */
     _getFilename(fileName) {
         if (this._sanitizeFilename) {
             fileName = kijs.Char.replaceSpecialChars(fileName);
@@ -360,6 +418,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         return '';
     }
 
+    /**
+     * Löst fileSelected aus und sendet die Datei an ajaxUrl (falls angegeben).
+     * @param {File} file
+     * @returns {undefined}
+     */
     _uploadFile(file) {
         let uploadId = this._uploadId++,
             headers = {},
@@ -393,6 +456,12 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
         }
     }
 
+    /**
+     * Prüft die Dateien (Typ, Grösse) und lädt die zugelassenen hoch. Für die anderen wird
+     * uploadFailed ausgelöst.
+     * @param {FileList|File[]} fileList
+     * @returns {undefined}
+     */
     _uploadFiles(fileList) {
         this._uploadResponses = {};
         if (fileList) {

@@ -3,6 +3,21 @@
 // --------------------------------------------------------------
 // kijs.gui.field.DateTime
 // --------------------------------------------------------------
+/**
+ * Feld für Datum, Uhrzeit, Datum mit Uhrzeit, Kalenderwoche oder Zeitraum (mode). Die Eingabe
+ * erfolgt als Text oder über die aufklappbare Auswahl (kijs.gui.DatePicker, kijs.gui.TimePicker).
+ * Der Wert ist ein String im Format valueDateFormat bzw. valueTimeFormat (Default 'Y-m-d' und
+ * 'H:i:s'). Bei 'week' und 'range' gibt es zusätzlich valueEnd (Feldname nameEnd).
+ *
+ * @example
+ * new kijs.gui.field.DateTime({ label: 'Termin', name: 'termin', mode: 'dateTime' });
+ *
+ * @fires blur  Weitergeleitet vom input-Node
+ * @fires change  Nach einer Änderung durch den Benutzer (Verlassen des Textfelds bzw. Schliessen der
+ *                Auswahl) und nach clear(). e: value, valueEnd, oldValue, oldValueEnd
+ * @fires input  Bei jeder Eingabe im Textfeld (weitergeleitet) und zusammen mit change
+ *               (e: value, valueEnd, oldValue, oldValueEnd)
+ */
 kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.Field {
 
 
@@ -121,23 +136,23 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             inputMode: { target: 'inputMode' },
             nameEnd: true,
-            mode: { target: 'mode' },           // Modus: 'date', 'time', 'dateTime', 'week' oder 'range'
-            secondsHide: { target: 'secondsHide', context: this._timePicker },   // Sekunden auch erfassen?
-            minutesHide: { target: 'minutesHide', context: this._timePicker },   // Minuten auch erfassen?
-            timeRequired: true,                 // Muss die Zeit eingegeben werden?
+            mode: { target: 'mode' },
+            secondsHide: { target: 'secondsHide', context: this._timePicker },   // {Boolean} Sekunden ausblenden (siehe kijs.gui.TimePicker.secondsHide)
+            minutesHide: { target: 'minutesHide', context: this._timePicker },   // {Boolean} Minuten ausblenden (siehe kijs.gui.TimePicker.minutesHide)
+            timeRequired: true,
             maxValue: { target: 'maxValue', context: this._datePicker },
             minValue: { target: 'minValue', context: this._datePicker },
-            year2000Threshold: true,
-            displayWeekFormat: true,            // Anzeigeformat für die Woche (nur bei mode='week')
-            displayWeekPrefix: true,            // Präfix für die Anzeige der Woche (nur bei mode='week')
-            valueDateFormat: true,              // Format für den Datums-Teil des value (leer=auto)
-            valueTimeFormat: true,              // Format für den Uhrzeit-Teil des value (leer=auto)
-            emptyBtnHide: { target: 'emptyBtnHide', context: this._datePicker },
+            year2000Threshold: true,    // {Number|null} Zweistellige Jahre ab diesem Wert werden 19xx, sonst 20xx. null = keine Umwandlung. Default: 30
+            displayWeekFormat: true,    // {String} Anzeigeformat der Woche bei mode 'week' (siehe kijs.Date.format()). Default: 'W Y'
+            displayWeekPrefix: true,    // {String} Text für die Anzeige der Woche, %1 wird durch die Woche ersetzt. Default: 'KW %1' (übersetzt)
+            valueDateFormat: true,      // {String} Format des Datums im Wert (siehe kijs.Date.format()). Default: 'Y-m-d'
+            valueTimeFormat: true,      // {String} Format der Uhrzeit im Wert. Default: 'H:i:s'
+            emptyBtnHide: { target: 'emptyBtnHide', context: this._datePicker },  // {Boolean} Button zum Leeren in der Datumsauswahl ausblenden
 
-            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },
+            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },   // {String|Array} CSS-Klassen des Buttons zum Aufklappen. Default: 'kijs-inline'
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },
@@ -146,10 +161,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
             
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' },
 
-            date: { target: 'date', prio: 1000 },           // Date Object
-            dateEnd: { target: 'dateEnd', prio: 1000 },     // Date Object
-            value: { target: 'value', prio: 1000 },         // Datum als SQL-String
-            valueEnd: { target: 'valueEnd', prio: 1000 }    // End-Datum als SQL-String
+            date: { target: 'date', prio: 1000 },
+            dateEnd: { target: 'dateEnd', prio: 1000 },
+            value: { target: 'value', prio: 1000 },
+            valueEnd: { target: 'valueEnd', prio: 1000 }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -178,6 +193,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete. Default: false
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -192,7 +212,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
     
-    // Gibt das Datum zurück. Falls nur eine Uhrzeit existiert, wird das Datum vom 01.01.1970 genommen
+    /**
+     * Wert als Date-Objekt. Gibt es nur eine Uhrzeit, gilt das Datum 01.01.1970.
+     * Der Setter akzeptiert alles, was kijs.Date.create() kennt.
+     * @type {Date|null}
+     */
     get date() {
         let date = null;
 
@@ -238,6 +262,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Enddatum als Date-Objekt (bei mode 'week' und 'range'). Beim Zuweisen wird die Uhrzeit geleert.
+     * @type {Date|null}
+     */
     get dateEnd() {
         let date = null;
         if (this._hasDate()) {
@@ -265,31 +293,72 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
-    // overwrite
+    /**
+     * Die Datumsauswahl
+     * @type {kijs.gui.DatePicker}
+     */
     get datePicker() { return this._datePicker; }
 
-   // overwrite
+    /**
+     * Hat der input-Node den Fokus?
+     * @type {Boolean}
+     */
+    // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des input-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Attribut inputmode des input-Nodes (virtuelle Tastatur)
+     * @type {String}
+     */
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
+    /**
+     * Ist der Wert leer?
+     * @type {Boolean}
+     */
+    // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    /**
+     * Spätestes wählbares Datum (siehe kijs.gui.DatePicker.maxDate)
+     * @type {Date|null}
+     */
     get maxDate() { return this._datePicker.maxDate; }
     set maxDate(val) { this._datePicker.maxDate = val; }
 
+    /**
+     * Spätestes wählbares Datum als String (siehe kijs.gui.DatePicker.maxValue).
+     * Zurzeit wirkt nur die Config; der Setter schreibt wegen eines Tippfehlers in maxalue.
+     * @type {String|null}
+     */
     get maxValue() { return this._datePicker.maxValue; }
     set maxValue(val) { this._datePicker.maxalue = val; }
 
+    /**
+     * Frühestes wählbares Datum (siehe kijs.gui.DatePicker.minDate)
+     * @type {Date|null}
+     */
     get minDate() { return this._datePicker.minDate; }
     set minDate(val) { this._datePicker.minDate = val; }
 
+    /**
+     * Frühestes wählbares Datum als String (siehe kijs.gui.DatePicker.minValue)
+     * @type {String|null}
+     */
     get minValue() { return this._datePicker.minValue; }
     set minValue(val) { this._datePicker.minValue = val; }
 
+    /**
+     * Modus: 'date', 'time', 'dateTime', 'week' oder 'range'. Beim Zuweisen wird der Wert geleert. Default: 'date'
+     * @type {String}
+     */
     get mode() {
         return this._mode;
     }
@@ -307,9 +376,17 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this.value = null;
     }
 
+    /**
+     * Feldname für valueEnd (bei mode 'week' und 'range'), z.B. beim Übermitteln in einem Formular
+     * @type {String}
+     */
     get nameEnd() { return this._nameEnd; }
     set nameEnd(val) { this._nameEnd = val; }
 
+    /**
+     * Schreibgeschützt. Setzt auch readOnly beim input-Node.
+     * @type {Boolean}
+     */
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -318,16 +395,16 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     /**
-     * Berechnet die Höhe für die spinBox
-     * @returns {Number}
+     * Höhe für die SpinBox (Höhe des Eingabebereichs)
+     * @type {Number}
      */
     get spinBoxHeight() {
         return this._inputWrapperDom.height;
     }
 
     /**
-     * Berechnet die Breite für die spinBox
-     * @returns {Number}
+     * Breite für die SpinBox (Eingabebereich und, falls sichtbar, Button zum Aufklappen)
+     * @type {Number}
      */
     get spinBoxWidth() {
         let width = this._inputWrapperDom.width;
@@ -337,28 +414,66 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         return width;
     }
 
+    /**
+     * Button zum Aufklappen der Auswahl
+     * @type {kijs.gui.Button}
+     */
     get spinButton() { return this._spinButtonEl; }
     
+    /**
+     * Button zum Aufklappen ausblenden?
+     * @type {Boolean}
+     */
     get spinButtonHide() { return !this._spinButtonEl.visible; }
     set spinButtonHide(val) { this._spinButtonEl.visible = !val; }
 
+    /**
+     * Zeichen des Icons im Button zum Aufklappen
+     * @type {Number}
+     */
     get spinButtonIconChar() { return this._spinButtonEl.iconChar; }
     set spinButtonIconChar(val) { this._spinButtonEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons im Button zum Aufklappen
+     * @type {String|null}
+     */
     get spinButtonIconCls() { return this._spinButtonEl.iconCls; }
     set spinButtonIconCls(val) { this._spinButtonEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons im Button zum Aufklappen
+     * @type {String}
+     */
     get spinButtonIconColor() { return this._spinButtonEl.iconColor; }
     set spinButtonIconColor(val) { this._spinButtonEl.iconColor = val; }
 
+    /**
+     * Icon des Buttons zum Aufklappen. Default: Kalender bzw. bei mode 'time' Uhr
+     * @type {String|Object}
+     */
     get spinButtonIconMap() { return this._spinButtonEl.iconMap; }
     set spinButtonIconMap(val) { this._spinButtonEl.iconMap = val; }
 
+    /**
+     * Die Uhrzeitauswahl
+     * @type {kijs.gui.TimePicker}
+     */
     get timePicker() { return this._timePicker; }
 
+    /**
+     * Muss bei mode 'dateTime' auch die Uhrzeit eingegeben werden? Default: false
+     * @type {Boolean}
+     */
     get timeRequired() { return this._timeRequired; }
     set timeRequired(val) { this._timeRequired = !!val; }
 
+    /**
+     * Wert als String: Datum im Format valueDateFormat, Uhrzeit im Format valueTimeFormat
+     * (je nach mode). Gibt es nur eine Uhrzeit, gilt das Datum 01.01.1970. Leer = null.
+     * Der Setter erwartet Datum und Uhrzeit durch ein Leerzeichen getrennt, z.B. '2024-12-31 18:00:00'.
+     * @type {String|null}
+     */
     // overwrite
     get value() {
         const valDateStart = this._datePicker.date;
@@ -474,6 +589,10 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Enddatum als String im Format valueDateFormat (bei mode 'week' und 'range'). Leer = null
+     * @type {String|null}
+     */
     get valueEnd() {
         let date = null;
 
@@ -492,8 +611,9 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     /**
-     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
-     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     * Bestimmt, ob beim Fokus die virtuelle Tastatur geöffnet wird ('auto') oder nicht
+     * ('manual', Default bei diesem Feld). Nur auf Mobilgeräten mit Chrome.
+     * @type {String}
      */
     get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
     set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
@@ -547,12 +667,12 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
     }
 
     /**
-     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
-     * @param {Boolean} [alsoSetIfNoTabIndex=false]
-     * @param {Boolean} [selectText=false]
-     * @returns {undefined}
-     * @overwrite
+     * Setzt den Fokus auf den input-Node. Optional wird der Text markiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @param {Boolean} [selectText=false]           Text markieren?
+     * @returns {HTMLElement|null|false}
      */
+    // overwrite
     focus(alsoSetIfNoTabIndex, selectText) {
         let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
         if (selectText) {
@@ -601,6 +721,11 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
 
 
     // PROTECTED
+    /**
+     * Stellt die Auswahl passend zu mode zusammen (Datums- und/oder Uhrzeitauswahl) und
+     * setzt das Icon des Buttons zum Aufklappen
+     * @returns {undefined}
+     */
     _createSpinBoxElements() {
         const hasDate = this._hasDate();
         const hasTime = this._hasTime();
@@ -807,6 +932,13 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
         return this._mode === 'time' || this._mode === 'dateTime';
     }
 
+    /**
+     * Wertet einen eingegebenen Text je nach mode aus und überträgt ihn in die Auswahl
+     * (zweistellige Jahre nach year2000Threshold)
+     * Ist der Text ungültig, wird der Wert geleert.
+     * @param {String} strInput
+     * @returns {undefined}
+     */
     _parseString(strInput) {
         let ok = false;
 

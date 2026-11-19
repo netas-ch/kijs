@@ -3,6 +3,14 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.column.Column
 // --------------------------------------------------------------
+/**
+ * Spalte für Zahlen in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Number, Filter
+ * kijs.gui.grid.filter.Number, Editor kijs.gui.field.Number). Die Zahlen-Einstellungen werden an die
+ * Zellen und den Editor weitergegeben.
+ *
+ * @example
+ * { xtype: 'kijs.gui.grid.columnConfig.Number', caption: 'Betrag', valueField: 'betrag', decimalPrecision: 2, unitAfter: ' CHF' }
+ */
 kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
@@ -34,12 +42,12 @@ kijs.gui.grid.columnConfig.Number = class kijs_gui_grid_columnConfig_Number exte
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            decimalPrecision: true,
-            decimalSeparator: true,
-            thousandsSeparator: true,
-            numberStyles: true,
-            unitBefore: true,
-            unitAfter: true
+            decimalPrecision: true,     // {Number|null} Anzahl Nachkommastellen. null = unverändert
+            decimalSeparator: true,     // {String} Dezimaltrennzeichen. Default: '.'
+            thousandsSeparator: true,   // {String} Tausendertrennzeichen. Default: "'"
+            numberStyles: true,         // {Object[]} CSS-Styles je nach Wert (siehe kijs.gui.grid.cell.Number.numberStyles)
+            unitBefore: true,           // {String} Text vor der Zahl
+            unitAfter: true             // {String} Text nach der Zahl
         });
 
         // Config anwenden

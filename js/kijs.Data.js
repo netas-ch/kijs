@@ -3,8 +3,9 @@
 // --------------------------------------------------------------
 // kijs.Data (Static)
 // --------------------------------------------------------------
-/*
- *
+/**
+ * Statische Klasse mit Hilfsfunktionen für Recordsets (Arrays von Objekten): filtern, suchen,
+ * sortieren und Primärschlüssel.
  */
 kijs.Data = class kijs_Data {
 
@@ -12,6 +13,10 @@ kijs.Data = class kijs_Data {
     // --------------------------------------------------------------
     // STATIC GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Trennzeichen zwischen den Werten eines zusammengesetzten Primärschlüssels (siehe getPrimaryKeyString)
+     * @type {String}
+     */
     static primaryKeyDelimiter = '#|[kijs]|#';
 
 
@@ -399,7 +404,15 @@ kijs.Data = class kijs_Data {
 
 
     // PROTECTED
-    // recursive
+    /**
+     * Prüft rekursiv, ob eine Zeile die Filter-Teile erfüllt (Klammern ohne field werden rekursiv
+     * geprüft, invert negiert das Resultat). Wirft einen Error bei fehlendem field, value oder
+     * unbekannter Spalte.
+     * @param {Object} row
+     * @param {Array} parts  Filter-Teile (siehe rowMatchFilters)
+     * @param {String} [bracketOperator='AND']  'AND' oder 'OR'
+     * @returns {Boolean}
+     */
     static _rowMatchFiltersSub(row, parts, bracketOperator) {
         if (bracketOperator) {
             bracketOperator = bracketOperator.toUpperCase();

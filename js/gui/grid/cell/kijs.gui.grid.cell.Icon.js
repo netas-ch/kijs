@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Icon
 // --------------------------------------------------------------
+/**
+ * Zelle mit einem Icon in kijs.gui.grid.Grid (siehe kijs.gui.grid.columnConfig.Icon). Icon, CSS-Klasse,
+ * Farbe und Tooltip werden aus den Feldern der dataRow gelesen (iconMapField, iconCharField,
+ * iconClsField, iconColorField, tooltipField). Die Zelle ist nie dirty.
+ */
 kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.cell.Cell {
 
 
@@ -31,7 +36,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            iconChar: true,   // Alias für html
+            iconChar: true,     // {String|Number} Wird zurzeit nicht verwendet (schreibt nur _iconChar)
             iconCls: { target: 'iconCls' },
             iconColor: { target: 'iconColor' }
         });
@@ -48,17 +53,37 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Codepoint des angezeigten Icons
+     * @type {Number|null}
+     */
     get icon() { return this._icon; }
 
     set iconCls(val) { this._addIconCls(val); }
+    /**
+     * Zusätzliche CSS-Klasse des Icons. Muss ein String sein, sonst kijs.Error.
+     * @type {String|null}
+     */
     get iconCls() { return this._iconCls; }
 
     set iconColor(val) { this._dom.style.color = val; this._iconColor = val; }
+    /**
+     * Farbe des Icons
+     * @type {String|null}
+     */
     get iconColor() { return this._iconColor; }
 
     set isDirty(val) {}
+    /**
+     * Immer false (der Setter hat keine Wirkung)
+     * @type {Boolean}
+     */
     get isDirty() { return false; }
     
+    /**
+     * Icon-Wert, wie er übergeben wurde (z.B. IconMap-Name oder HTML-Entity)
+     * @type {String|Number|null}
+     */
     get originalIcon() { return this._originalIcon; }
     
     

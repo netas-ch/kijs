@@ -3,12 +3,23 @@
 // --------------------------------------------------------------
 // kijs.gui.ApertureMask
 // --------------------------------------------------------------
-// Halbtransparente Maske mit einem Ausschnitt für ein Element,
-// das unmaskiert bleibt.
-// Das Element, dass nicht überdeckt wird, wird mit der Eigenschaft target festgelegt.
-// Der Rest des Bildschirms wird von der Maske überdeckt und kann nicht mehr bedient werden.
-// Falls der target ein kijs.gui.Element ist, werden Grössenänderungen am Element automatisch übernommen.
-// Bei target = kijs.gui.Dom muss die Grösse manuell nachgeführt werden.
+/**
+ * Halbtransparente Maske mit einem Ausschnitt für ein Element (target), das unmaskiert bleibt. Der
+ * Rest des Bildschirms wird von vier Masken (oben, rechts, unten, links) überdeckt und kann nicht
+ * bedient werden. Ist das target ein kijs.gui.Element, werden seine Grössenänderungen automatisch
+ * übernommen. Bei einem kijs.gui.Dom muss die Position manuell nachgeführt werden (render()).
+ * Änderungen der Fenstergrösse werden immer übernommen.
+ *
+ * @example
+ * const mask = new kijs.gui.ApertureMask({ target: myField });
+ * mask.show();
+ * // ...
+ * mask.hide();
+ *
+ * @fires afterRender  Nach jedem render()
+ * @fires destruct  Beim Zerstören
+ * @fires unrender  Beim Entfernen aus dem DOM
+ */
 kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
 
 
@@ -36,7 +47,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
             animated: { target: 'animated' },
-            cls: { fn: 'function', target: this.clsAdd },
+            cls: { fn: 'function', target: this.clsAdd },   // {String|Array} Zusätzliche CSS-Klassen der Masken (siehe clsAdd())
             target: { target: 'target' }
         };
 
@@ -55,6 +66,10 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Ein- und Ausblenden animieren (CSS-Klasse animated)? Default: true
+     * @type {Boolean}
+     */
     get animated() { return this._topDom.clsHas('animated'); }
     set animated(val) {
         if (val) {
@@ -72,8 +87,16 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
     }
     
+    /**
+     * Ist die Maske im DOM?
+     * @type {Boolean}
+     */
     get isRendered() { return !!this._topDom.isRendered; }
 
+    /**
+     * Element, das unmaskiert bleibt. Andere Werte werfen einen kijs.Error.
+     * @type {kijs.gui.Element|kijs.gui.Dom|null}
+     */
     get target() { return this._target; }
     set target(val) {
 
@@ -99,6 +122,10 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
     }
 
+    /**
+     * Ist die Maske sichtbar (= gerendert)? Der Setter ruft show() bzw. hide() auf.
+     * @type {Boolean}
+     */
     get visible() { return this.isRendered; }
     set visible(val) {
         if (val && !this.visible) {
@@ -158,6 +185,10 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
     }
     
+    /**
+     * Aktualisiert die Position der Masken und hängt sie, falls nötig, an den Body an.
+     * @returns {undefined}
+     */
     render() {
         this._updatePosition();
         
@@ -171,7 +202,10 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         this.raiseEvent('afterRender');
     }
     
-    // Zeigt die Maske an.
+    /**
+     * Zeigt die Maske an (mit animated nach 10 ms eingeblendet).
+     * @returns {undefined}
+     */
     show() {
         this.render();
         
@@ -194,6 +228,11 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         }
     }
     
+    /**
+     * Entfernt die Masken aus dem DOM.
+     * @param {Boolean} [superCall=false]  true, wenn von einer abgeleiteten Klasse aufgerufen (kein unrender-Event)
+     * @returns {undefined}
+     */
     unrender(superCall=false) {
         // Event auslösen.
         if (!superCall) {
@@ -208,7 +247,10 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
 
     
     // PROTECTED
-    // Aktualisiert die Position der Masken
+    /**
+     * Passt Position und Grösse der Masken an die Position des targets an.
+     * @returns {undefined}
+     */
     _updatePosition() {
         let dom = null;
         

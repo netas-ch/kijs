@@ -3,7 +3,16 @@
 // --------------------------------------------------------------
 // kijs.gui.field.QuillEditor
 // --------------------------------------------------------------
-// WYSIWYG Editor
+/**
+ * WYSIWYG-Editor (Quill). Der Wert ist HTML. Quill muss zusätzlich geladen werden (Modul
+ * quillEditor in files.json). Der Editor wird beim ersten Rendern erstellt.
+ *
+ * @example
+ * new kijs.gui.field.QuillEditor({ label: 'Text', name: 'text', height: 300 });
+ *
+ * @fires change  Beim Verlassen des Editors, wenn der Wert geändert hat. e: value, oldValue
+ * @fires input  Bei jeder Änderung des Texts (Quill-Event text-change, ohne Argumente)
+ */
 kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.field.Field {
 
 
@@ -60,10 +69,10 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            placeholder: true,
-            theme: true,          // snow (default), bubble
-            toolbarOptions : true,
-            valueTrimEnable: true // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            placeholder: true,      // {String} Platzhaltertext im leeren Editor (gilt beim Erstellen des Editors)
+            theme: true,
+            toolbarOptions : true,  // {Array} Buttons der Toolbar im Format von Quill (modules.toolbar). Gilt beim Erstellen des Editors
+            valueTrimEnable: true
         });
 
         // Listeners
@@ -85,6 +94,10 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
     // GETTERS / SETTERS
     // --------------------------------------------------------------
 
+    /**
+     * Inhalt im Delta-Format von Quill. Nur verfügbar, wenn der Editor erstellt ist.
+     * @type {Object}
+     */
     get content() {
         return this._quillEditor.getContents();
     }
@@ -111,6 +124,10 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         }
     }
 
+    /**
+     * Quill-Theme: 'snow' oder 'bubble'. Gilt beim Erstellen des Editors. Default: 'snow'
+     * @type {String}
+     */
     get theme() { return this._theme; }
     set theme(val) { this._theme = val; }
 
@@ -142,6 +159,10 @@ kijs.gui.field.QuillEditor = class kijs_gui_field_QuillEditor extends kijs.gui.f
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts automatisch entfernen? Default: true
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 

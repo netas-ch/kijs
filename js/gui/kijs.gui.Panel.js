@@ -3,6 +3,26 @@
 // --------------------------------------------------------------
 // kijs.gui.Panel
 // --------------------------------------------------------------
+/**
+ * Container mit Kopfzeile (headerBar), Kopfbereich (header), Inhalt, Fussbereich (footer)
+ * und Fusszeile (footerBar). Das Panel kann auf- und zugeklappt, maximiert, geschlossen und
+ * in der Grösse verändert werden. Bereiche ohne Inhalt werden nicht gerendert.
+ * Die Taste Enter löst click beim Standard-Button (isDefault) im footer aus,
+ * die Taste Escape schliesst ein schliessbares Panel.
+ *
+ * @example
+ * new kijs.gui.Panel({
+ *     caption: 'Adresse',
+ *     collapsible: 'top',
+ *     elements: [ ... ],
+ *     footerElements: [ { xtype: 'kijs.gui.Button', caption: 'OK', isDefault: true } ]
+ * });
+ *
+ * @fires beforeClose  Vor dem Schliessen mit close(). Rückgabe false bricht ab
+ * @fires close  Nach dem Schliessen mit close()
+ * @fires collapse  Nach dem Zuklappen
+ * @fires expand  Nach dem Aufklappen
+ */
 kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
 
@@ -79,56 +99,56 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
             collapseHeight: true,
             collapseWidth: true,
 
-            iconChar: { target: 'iconChar', context: this._headerBarEl },
-            iconCls: { target: 'iconCls', context: this._headerBarEl },
-            iconAnimationCls: { target: 'iconAnimationCls', context: this._headerBarEl },
-            iconColor: { target: 'iconColor', context: this._headerBarEl },
-            iconMap: { target: 'iconMap', context: this._headerBarEl },
+            iconChar: { target: 'iconChar', context: this._headerBarEl },   // {Number} Zeichen des Icons in der Kopfzeile (siehe kijs.gui.Icon.iconChar)
+            iconCls: { target: 'iconCls', context: this._headerBarEl },   // {String} CSS-Klasse des Icons in der Kopfzeile
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._headerBarEl },   // {String} CSS-Klasse für eine Animation des Icons in der Kopfzeile
+            iconColor: { target: 'iconColor', context: this._headerBarEl },   // {String} Farbe des Icons in der Kopfzeile
+            iconMap: { target: 'iconMap', context: this._headerBarEl },   // {String|Object} Icon in der Kopfzeile aus einer iconMap, z.B. 'kijs.iconMap.Fa.house'
             
-            headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },
-            headerBarCaption: { target: 'html', context: this._headerBarEl },
-            headerBarIconCls: { target: 'iconCls', context: this._headerBarEl },
-            headerBarDefaults: { target: 'defaults', context: this._headerBarEl },
-            headerBarDisabled: { target: 'disabled', context: this._headerBarEl },
-            headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },
-            headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },
+            headerBarCls: { fn: 'function', target: this._headerBarEl.dom.clsAdd, context: this._headerBarEl.dom },   // {String|Array} CSS-Klassen der Kopfzeile
+            headerBarCaption: { target: 'html', context: this._headerBarEl },   // {String} Beschriftung der Kopfzeile (wie caption)
+            headerBarIconCls: { target: 'iconCls', context: this._headerBarEl },   // {String} CSS-Klasse des Icons in der Kopfzeile (wie iconCls)
+            headerBarDefaults: { target: 'defaults', context: this._headerBarEl },   // {Object} Standard-Config der Elemente in der Kopfzeile
+            headerBarDisabled: { target: 'disabled', context: this._headerBarEl },   // {Boolean} Kopfzeile deaktivieren
+            headerBarElements: { fn: 'function', target: this._headerBarEl.containerRightEl.add, context: this._headerBarEl.containerRightEl },   // {Array} Elemente rechts in der Kopfzeile (vor den Buttons zum Zuklappen, Maximieren und Schliessen)
+            headerBarStyle: { fn: 'assign', target: 'style', context: this._headerBarEl.dom },   // {Object} CSS-Styles der Kopfzeile
 
             // header
-            headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },
-            headerDefaults: { target: 'defaults', context: this._headerEl },
-            headerDisabled: { target: 'disabled', context: this._headerEl },
-            headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },
-            headerInnerCls: { fn: 'function', target: this._headerEl.innerDom.clsAdd, context: this._headerEl.innerDom },
-            headerInnerStyle: { fn: 'assign', target: 'style', context: this._headerEl.innerDom },
-            headerScrollableX: { target: 'scrollableX', context: this._headerEl },
-            headerScrollableY: { target: 'scrollableY', context: this._headerEl },
-            headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },
+            headerCls: { fn: 'function', target: this._headerEl.dom.clsAdd, context: this._headerEl.dom },   // {String|Array} CSS-Klassen des Kopfbereichs
+            headerDefaults: { target: 'defaults', context: this._headerEl },   // {Object} Standard-Config der Elemente im Kopfbereich
+            headerDisabled: { target: 'disabled', context: this._headerEl },   // {Boolean} Kopfbereich deaktivieren
+            headerElements: { fn: 'function', target: this._headerEl.add, context: this._headerEl },   // {Array} Elemente im Kopfbereich (zwischen Kopfzeile und Inhalt)
+            headerInnerCls: { fn: 'function', target: this._headerEl.innerDom.clsAdd, context: this._headerEl.innerDom },   // {String|Array} CSS-Klassen des inneren Nodes im Kopfbereich
+            headerInnerStyle: { fn: 'assign', target: 'style', context: this._headerEl.innerDom },   // {Object} CSS-Styles des inneren Nodes im Kopfbereich
+            headerScrollableX: { target: 'scrollableX', context: this._headerEl },   // {Boolean|String} Scrollen im Kopfbereich auf der X-Achse (siehe kijs.gui.Container.scrollableX). Default: 'auto'
+            headerScrollableY: { target: 'scrollableY', context: this._headerEl },   // {Boolean|String} Scrollen im Kopfbereich auf der Y-Achse. Default: false
+            headerStyle: { fn: 'assign', target: 'style', context: this._headerEl.dom },   // {Object} CSS-Styles des Kopfbereichs
             
             // inner
             innerDisabled: { target: 'innerDisabled' },
             
             // footer
-            footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },
-            footerDefaults: { target: 'defaults', context: this._footerEl },
-            footerDisabled: { target: 'disabled', context: this._footerEl },
-            footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },
-            footerInnerCls: { fn: 'function', target: this._footerEl.innerDom.clsAdd, context: this._footerEl.innerDom },
-            footerInnerStyle: { fn: 'assign', target: 'style', context: this._footerEl.innerDom },
-            footerScrollableX: { target: 'scrollableX', context: this._footerEl },
-            footerScrollableY: { target: 'scrollableY', context: this._footerEl },
-            footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },
+            footerCls: { fn: 'function', target: this._footerEl.dom.clsAdd, context: this._footerEl.dom },   // {String|Array} CSS-Klassen des Fussbereichs
+            footerDefaults: { target: 'defaults', context: this._footerEl },   // {Object} Standard-Config der Elemente im Fussbereich
+            footerDisabled: { target: 'disabled', context: this._footerEl },   // {Boolean} Fussbereich deaktivieren
+            footerElements: { fn: 'function', target: this._footerEl.add, context: this._footerEl },   // {Array} Elemente im Fussbereich (unter dem Inhalt), z.B. Buttons
+            footerInnerCls: { fn: 'function', target: this._footerEl.innerDom.clsAdd, context: this._footerEl.innerDom },   // {String|Array} CSS-Klassen des inneren Nodes im Fussbereich
+            footerInnerStyle: { fn: 'assign', target: 'style', context: this._footerEl.innerDom },   // {Object} CSS-Styles des inneren Nodes im Fussbereich
+            footerScrollableX: { target: 'scrollableX', context: this._footerEl },   // {Boolean|String} Scrollen im Fussbereich auf der X-Achse. Default: 'auto'
+            footerScrollableY: { target: 'scrollableY', context: this._footerEl },   // {Boolean|String} Scrollen im Fussbereich auf der Y-Achse. Default: false
+            footerStyle: { fn: 'assign', target: 'style', context: this._footerEl.dom },   // {Object} CSS-Styles des Fussbereichs
 
             // footerBar
-            footerBarCaption: { target: 'html', context: this._footerBarEl },
-            footerBarIconCls: { target: 'iconCls', context: this._footerBarEl },
-            footerBarDefaults: { target: 'defaults', context: this._footerBarEl },
-            footerBarDisabled: { target: 'disabled', context: this._footerBarEl },
-            footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },
-            footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },
+            footerBarCaption: { target: 'html', context: this._footerBarEl },   // {String} Beschriftung der Fusszeile
+            footerBarIconCls: { target: 'iconCls', context: this._footerBarEl },   // {String} CSS-Klasse des Icons in der Fusszeile
+            footerBarDefaults: { target: 'defaults', context: this._footerBarEl },   // {Object} Standard-Config der Elemente in der Fusszeile
+            footerBarDisabled: { target: 'disabled', context: this._footerBarEl },   // {Boolean} Fusszeile deaktivieren
+            footerBarElements: { fn: 'function', target: this._footerBarEl.containerLeftEl.add, context: this._footerBarEl.containerLeftEl },   // {Array} Elemente links in der Fusszeile
+            footerBarStyle: { fn: 'assign', target: 'style', context: this._footerBarEl.dom },   // {Object} CSS-Styles der Fusszeile
 
-            resizable: { target: 'resizable' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Grösse angezeigt werden.
-            resizableWidth: { target: 'resizableWidth' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Breite angezeigt werden.
-            resizableHeight: { target: 'resizableHeight' }, // Soll in der rechten unteren Ecke das resize-Symbol zum Ändern der Höhe angezeigt werden.
+            resizable: { target: 'resizable' },
+            resizableWidth: { target: 'resizableWidth' },
+            resizableHeight: { target: 'resizableHeight' },
             
             collapsible: { prio: 1002, target: 'collapsible' },
             collapseButton: { prio: 1003, target: 'collapseButton' },
@@ -159,9 +179,17 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung der Kopfzeile
+     * @type {String}
+     */
     get caption() { return this._headerBarEl.html; }
     set caption(val) { this._headerBarEl.html = val; }
 
+    /**
+     * Button zum Schliessen anzeigen? Ein Klick darauf oder die Taste Escape ruft close() auf.
+     * @type {Boolean}
+     */
     get closable() { return !!this._closeButtonEl;}
     set closable(val) {
         if (val) {
@@ -177,6 +205,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Button zum Schliessen: Config-Objekt oder kijs.gui.Button. Leer entfernt ihn.
+     * Der Getter gibt die kijs.gui.Button-Instanz zurück.
+     * @type {kijs.gui.Button|Object|null}
+     */
     get closeButton() { return this._closeButtonEl; }
     set closeButton(val) {
         // Button entfernen
@@ -212,6 +245,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Button zum Auf- und Zuklappen: Config-Objekt oder kijs.gui.Button. Leer entfernt ihn.
+     * Der Getter gibt die kijs.gui.Button-Instanz zurück.
+     * @type {kijs.gui.Button|Object|null}
+     */
     get collapseButton() { return this._collapseButtonEl; }
     set collapseButton(val) {
         // Button entfernen
@@ -249,6 +287,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Zugeklappt? Der Setter akzeptiert auch 'toggle' zum Umschalten.
+     * @type {Boolean|String}
+     */
     get collapsed() {
         return this._dom.clsHas('kijs-collapse-top') ||
                 this._dom.clsHas('kijs-collapse-right') ||
@@ -271,12 +313,27 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Wird die Höhe kleiner oder gleich diesem Wert gesetzt, wird zugeklappt
+     * (bei collapsible 'top' oder 'bottom'). Default: 50
+     * @type {Number|null}
+     */
     get collapseHeight() { return this._collapseHeight; }
     set collapseHeight(val) { this._collapseHeight = val; }
 
+    /**
+     * Wird die Breite kleiner oder gleich diesem Wert gesetzt, wird zugeklappt
+     * (bei collapsible 'left' oder 'right'). Default: 50
+     * @type {Number|null}
+     */
     get collapseWidth() { return this._collapseWidth; }
     set collapseWidth(val) { this._collapseWidth = val; }
 
+    /**
+     * Richtung, in die zugeklappt werden kann: 'top', 'right', 'bottom', 'left' oder false.
+     * Zeigt den Button zum Auf- und Zuklappen an. Ein Klick auf die Kopfzeile klappt ebenfalls auf und zu.
+     * @type {String|Boolean}
+     */
     get collapsible() {
         if (this._collapseButtonEl) {
             return this._collapsible;
@@ -311,16 +368,41 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
     
+    /**
+     * Kann das Panel verschoben werden? Beim Panel immer false (siehe kijs.gui.Window)
+     * @type {Boolean}
+     */
     get draggable() { return false; }
 
+    /**
+     * Fussbereich (unter dem Inhalt)
+     * @type {kijs.gui.container.Scrollable}
+     */
     get footer() { return this._footerEl; }
 
+    /**
+     * Fusszeile
+     * @type {kijs.gui.PanelBar}
+     */
     get footerBar() { return this._footerBarEl; }
 
+    /**
+     * Kopfbereich (zwischen Kopfzeile und Inhalt)
+     * @type {kijs.gui.container.Scrollable}
+     */
     get header() { return this._headerEl; }
 
+    /**
+     * Kopfzeile mit Beschriftung, Icon und Buttons
+     * @type {kijs.gui.PanelBar}
+     */
     get headerBar() { return this._headerBarEl; }
 
+    /**
+     * Höhe in Pixel (siehe kijs.gui.Element.height). Bei collapsible 'top' oder 'bottom' wird
+     * bei einer Höhe bis collapseHeight zugeklappt und bei einer grösseren Höhe aufgeklappt.
+     * @type {Number|null}
+     */
     // overwrite
     get height() { return super.height; }
     set height(val) {
@@ -350,6 +432,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Nur den Inhalt (die Kind-Elemente) deaktivieren, nicht Kopf- und Fussbereich
+     * @type {Boolean}
+     */
     get innerDisabled() { return this._innerDisabled; }
     set innerDisabled(val) {
         this._innerDisabled = !!val;
@@ -358,6 +444,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }, this);
     }
 
+    /**
+     * Button zum Maximieren anzeigen?
+     * @type {Boolean}
+     */
     get maximizable() { return !!this._maximizeButtonEl; }
     set maximizable(val) {
         if (val) {
@@ -373,6 +463,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Button zum Maximieren: Config-Objekt oder kijs.gui.Button. Leer entfernt ihn.
+     * Der Getter gibt die kijs.gui.Button-Instanz zurück.
+     * @type {kijs.gui.Button|Object|null}
+     */
     get maximizeButton() { return this._maximizeButtonEl; }
     set maximizeButton(val) {
         // Button entfernen
@@ -408,6 +503,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Maximiert? (siehe maximize() und restore())
+     * @type {Boolean}
+     */
     get maximized() {
         return this._dom.clsHas('kijs-maximize');
     }
@@ -419,6 +518,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
+    /**
+     * Symbol in der rechten unteren Ecke anzeigen, um Breite und Höhe zu ändern?
+     * @type {Boolean}
+     */
     get resizable() { return !!this._resizerEl; }
     set resizable(val) {
         if (val) {
@@ -428,6 +531,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
     
+    /**
+     * Symbol in der rechten unteren Ecke anzeigen, um die Höhe zu ändern?
+     * @type {Boolean}
+     */
     get resizableHeight() {
         return this._resizerEl && this._resizerEl.allowResizeHeight;
     }
@@ -435,6 +542,10 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._setResizable(null, !!val);
     }
     
+    /**
+     * Symbol in der rechten unteren Ecke anzeigen, um die Breite zu ändern?
+     * @type {Boolean}
+     */
     get resizableWidth() {
         return this._resizerEl && this._resizerEl.allowResizeWidth;
     }
@@ -442,6 +553,11 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._setResizable(!!val, null);
     }
     
+    /**
+     * Breite in Pixel (siehe kijs.gui.Element.width). Bei collapsible 'left' oder 'right' wird
+     * bei einer Breite bis collapseWidth zugeklappt und bei einer grösseren Breite aufgeklappt.
+     * @type {Number|null}
+     */
     // overwrite
     get width() { return super.width; }
     set width(val) {
@@ -476,6 +592,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Ändert disabled beim Panel mit allen Bereichen (siehe kijs.gui.Element.changeDisabled)
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elterncontainer kommt.
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -489,8 +611,9 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
     
     /**
-     * Schliesst das Panel
-     * @param {Boolean} [preventDestruct=false]  Kein 'close' Event auslösen
+     * Schliesst das Panel: entfernt es aus dem Elterncontainer (bzw. aus dem DOM), löst close aus
+     * und gibt es frei.
+     * @param {Boolean} [preventDestruct=false]  Das Panel nicht freigeben (destruct)?
      * @param {Boolean} [preventEvents=false]    Das Auslösen des beforeClose und close-Events verhindern?
      * @param {Boolean} [superCall=false]
      * @returns {undefined}
@@ -525,8 +648,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     /**
-     * Minimiert das Panel in eine gewünschte Richtung
-     * @param {String} direction [optional]
+     * Klappt das Panel zu und löst collapse aus. Ein maximiertes Panel wird zuerst wiederhergestellt.
+     * @param {String} [direction]   'top', 'right', 'bottom' oder 'left'. Default: collapsible bzw. 'top'
      * @returns {undefined}
      */
     collapse(direction) {
@@ -587,8 +710,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     /**
-     * Expandiert das Panel
-     * @param {Number} size [optional] Breite oder Höhe in die das Panel wiederhergestellt werden soll
+     * Klappt das Panel auf und löst expand aus.
+     * @param {Number} [size]   Breite oder Höhe nach dem Aufklappen. Default: die Grösse vor dem Zuklappen
      * @returns {undefined}
      */
     expand(size) {
@@ -651,6 +774,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._raiseAfterResizeEvent(true);
     }
 
+    /**
+     * Setzt den Fokus: zuerst auf ein Element im Inhalt, dann auf ein Element im footer,
+     * sonst auf das Panel selbst.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]   Fokus direkt auf das Panel setzen (siehe kijs.gui.Dom.focus)
+     * @returns {HTMLElement|null|false}
+     */
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         if (alsoSetIfNoTabIndex) {
@@ -687,7 +816,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     /**
-     * Maximiert das Panel
+     * Maximiert das Panel: der Node wird in den body verschoben und füllt diesen aus.
      * @returns {undefined}
      */
     maximize() {
@@ -740,7 +869,12 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         this._raiseAfterResizeEvent(true);
     }
 
-    // Overwrite
+    /**
+     * Rendert das Panel mit allen Bereichen, die nicht leer sind, und löst afterRender aus.
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterRender)
+     * @returns {undefined}
+     */
+    // overwrite
     render(superCall) {
         // dom mit elements rendern (innerDom)
         super.render(true);
@@ -784,7 +918,13 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
         }
     }
 
-    // Overwrite
+    /**
+     * Wie kijs.gui.Element.renderTo(). Ein maximiertes Panel wird in den body gerendert.
+     * @param {HTMLElement} targetNode
+     * @param {HTMLElement} [insertBefore]   Node, vor dem eingefügt wird
+     * @returns {undefined}
+     */
+    // overwrite
     renderTo(targetNode, insertBefore) {
         // Falls das Panel schon maximiert geöffnet werden soll, muss der Node zum body verschoben werden
         if (this.maximized && kijs.isEmpty(this._domPos)) {
@@ -800,7 +940,7 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
     }
 
     /**
-     * Verlässt die maximierte Ansicht
+     * Verlässt die maximierte Ansicht und stellt Position und Grösse wieder her.
      * @returns {undefined}
      */
     restore() {
@@ -885,8 +1025,8 @@ kijs.gui.Panel = class kijs_gui_Panel extends kijs.gui.Container {
 
     // PROTECTED
     /**
-     * Gibt das Icon für den Collapse-Knopf zurück
-     * @returns {undefined}
+     * Gibt das Icon für den Button zum Auf- und Zuklappen zurück
+     * @returns {String}
      */
     _getCollapseIconMap() {
         if (this.collapsed) {

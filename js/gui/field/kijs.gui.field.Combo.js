@@ -4,6 +4,26 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Combo
 // --------------------------------------------------------------
+/**
+ * Kombinationsfeld: Textfeld mit einer aufklappbaren Liste (kijs.gui.ListView in einer
+ * kijs.gui.SpinBox). Beim Tippen wird die Liste gefiltert, lokal oder mit
+ * enableRemoteFiltering auf dem Server (load() mit query, queryOperator, queryLimit).
+ * Es werden höchstens displayLimit Einträge angezeigt. Siehe Leitfaden Combo.
+ *
+ * @example
+ * new kijs.gui.field.Combo({
+ *     label: 'Land',
+ *     valueField: 'id', displayTextField: 'name',
+ *     data: [ { id: 'CH', name: 'Schweiz' }, { id: 'DE', name: 'Deutschland' } ]
+ * });
+ *
+ * @fires blur  200 ms nach dem Verlassen des Textfelds, falls die Liste nicht offen ist und das
+ *              Textfeld den Fokus nicht wieder hat
+ * @fires change  Nach dem Schliessen der Liste, wenn sich der Wert geändert hat, und nach clear().
+ *                e: value, oldValue
+ * @fires input  Bei jeder Eingabe im Textfeld (weitergeleitet) und nach dem Schliessen der Liste,
+ *               wenn sich der Wert geändert hat (e: value, oldValue)
+ */
 kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
@@ -104,40 +124,37 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            allowNewValues: true,                       // Dürfen auch Werte eingegeben werden,
-                                                        // die in der Liste nicht vorhanden sind?
+            allowNewValues: true,   // {Boolean} Dürfen auch Werte eingegeben werden, die nicht in der Liste sind? Default: false
 
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             name: { target: 'name' },
             inputMode: { target: 'inputMode' },
 
             displayLimit: { target: 'displayLimit' },
             queryOperator: { target: 'queryOperator' },
-            enableRemoteFiltering: { target: 'enableRemoteFiltering' }, // Sollen bim Tippen RPC-Requests gemacht werden?
-            remoteFilteringDefer:  { target: 'remoteFilteringDefer' }, // Verzögerung beim Tippen zwischen des Requests
+            enableRemoteFiltering: { target: 'enableRemoteFiltering' },
+            remoteFilteringDefer:  { target: 'remoteFilteringDefer' },
 
-            selectType: { target: 'selectType', context: this._listViewEl },
+            selectType: { target: 'selectType', context: this._listViewEl },   // {String} siehe kijs.gui.DataView.selectType. Default: 'single'
 
             valueField: { target: 'valueField', context: this._listViewEl },
             displayTextField: { target: 'displayTextField', context: this._listViewEl },
-            displayTextDisplayType: { target: 'displayTextDisplayType', context: this._listViewEl },
+            displayTextDisplayType: { target: 'displayTextDisplayType', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.displayTextDisplayType
 
-            clsField: { target: 'clsField', context: this._listViewEl },
-            iconMapField: { target: 'iconMapField', context: this._listViewEl },
-            iconCharField: { target: 'iconCharField', context: this._listViewEl },
-            iconClsField: { target: 'iconClsField', context: this._listViewEl },
-            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
-            iconColorField: { target: 'iconColorField', context: this._listViewEl },
-            tooltipField: { target: 'tooltipField', context: this._listViewEl },
-            disabledField: { target: 'disabledField', context: this._listViewEl },  // Feldnamen für disabled (optional)
+            clsField: { target: 'clsField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.clsField
+            iconMapField: { target: 'iconMapField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconMapField
+            iconCharField: { target: 'iconCharField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconCharField
+            iconClsField: { target: 'iconClsField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconClsField
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconAnimationClsField
+            iconColorField: { target: 'iconColorField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconColorField
+            tooltipField: { target: 'tooltipField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.tooltipField
+            disabledField: { target: 'disabledField', context: this._listViewEl },  // {String} siehe kijs.gui.DataView.disabledField
            
             data: { prio: 80, target: 'data' },
-            valueRow: { prio: 199, target: 'valueRow' },   // Datensatz zum value. Ist nötig,
-                                                           // wenn der value-Datensatz in data
-                                                           // fehlt. Z.B. weil deaktiviert
+            valueRow: { prio: 199, target: 'valueRow' },
             value: { prio: 200, target: 'value' },
 
-            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },
+            spinButtonCls: { fn: 'function', target: this._spinButtonEl.dom.clsAdd, context: this._spinButtonEl.dom },   // {String|Array} CSS-Klassen des Buttons zum Aufklappen. Default: 'kijs-inline'
             spinButtonHide: { target: 'spinButtonHide' },
             spinButtonIconChar: { target: 'iconChar', context: this._spinButtonEl },
             spinButtonIconCls: { target: 'iconCls', context: this._spinButtonEl },
@@ -181,6 +198,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete. Default: false
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -195,6 +217,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
+    /**
+     * Recordset mit allen Einträgen. Die Liste zeigt davon die gefilterten an.
+     * @type {Array}
+     */
     get data() {
         return this._data;
     }
@@ -213,31 +239,67 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._applyFilterData();
     }
 
+    /**
+     * Höchstens so viele Einträge werden in der Liste angezeigt. Gibt es mehr, erscheint
+     * der Hinweis «Schreiben für Daten». Default: 30
+     * @type {Number}
+     */
     get displayLimit() { return this._displayLimit; }
     set displayLimit(val) { this._displayLimit = parseInt(val); }
 
-    // Gibt den aktuellen displayText zurück
+    /**
+     * Text im Textfeld
+     * @type {String}
+     */
     get displayText() {
         return kijs.toString(this._inputDom.nodeAttributeGet('value'));
     }
 
+    /**
+     * Name des Felds mit dem angezeigten Text (siehe kijs.gui.ListView.displayTextField)
+     * @type {String|null}
+     */
     get displayTextField() { return this._listViewEl.displayTextField; }
     set displayTextField(val) { this._listViewEl.displayTextField = val; }
 
+    /**
+     * Beim Tippen auf dem Server filtern (per load() mit query)? Default: false
+     * @type {Boolean}
+     */
     get enableRemoteFiltering() { return this._enableRemoteFiltering; }
     set enableRemoteFiltering(val) { this._enableRemoteFiltering = !!val; }
 
+    /**
+     * Hat der input-Node den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des input-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Attribut inputmode des input-Nodes (virtuelle Tastatur)
+     * @type {String}
+     */
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
+    /**
+     * Ist der Wert leer?
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return kijs.isEmpty(this._value); }
 
+    /**
+     * Name des Felds. Wird auch als Attribut name des input-Nodes gesetzt.
+     * @type {String|null}
+     */
     // overwrite
     get name() { return this._name; }
     set name(val) {
@@ -245,6 +307,11 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
+    /**
+     * Art des Vergleichs beim Filtern: 'BEGIN' (Text beginnt mit der Eingabe) oder 'PART'
+     * (enthält die Eingabe). Default: 'BEGIN'
+     * @type {String}
+     */
     get queryOperator() { return this._queryOperator; }
     set queryOperator(val) {
         if (!kijs.Array.contains(['BEGIN', 'PART'], val)) {
@@ -253,6 +320,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._queryOperator = val;
     }
 
+    /**
+     * Schreibgeschützt. Setzt readOnly beim input-Node und deaktiviert die Liste.
+     * @type {Boolean}
+     */
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -261,22 +332,26 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
+    /**
+     * Verzögerung in ms zwischen der letzten Eingabe und dem RPC bei enableRemoteFiltering. Default: 200
+     * @type {Number}
+     */
     get remoteFilteringDefer() { return this._remoteFilteringDefer; }
     set remoteFilteringDefer(val) {
         this._remoteFilteringDefer = parseInt(val);
     }
 
     /**
-     * Berechnet die Höhe für die spinBox
-     * @returns {Number}
+     * Höhe für die SpinBox (Höhe des Eingabebereichs)
+     * @type {Number}
      */
     get spinBoxHeight() {
         return this._inputWrapperDom.height;
     }
 
     /**
-     * Berechnet die Breite für die spinBox
-     * @returns {Number}
+     * Breite für die SpinBox (Eingabebereich und, falls sichtbar, Button zum Aufklappen)
+     * @type {Number}
      */
     get spinBoxWidth() {
         let width = this._inputWrapperDom.width;
@@ -286,23 +361,52 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         return width;
     }
 
+    /**
+     * Button zum Aufklappen der Liste
+     * @type {kijs.gui.Button}
+     */
     get spinButton() { return this._spinButtonEl; }
 
+    /**
+     * Button zum Aufklappen ausblenden?
+     * @type {Boolean}
+     */
     get spinButtonHide() { return !this._spinButtonEl.visible; }
     set spinButtonHide(val) { this._spinButtonEl.visible = !val; }
 
+    /**
+     * Zeichen des Icons im Button zum Aufklappen
+     * @type {Number}
+     */
     get spinButtonIconChar() { return this._spinButtonEl.iconChar; }
     set spinButtonIconChar(val) { this._spinButtonEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons im Button zum Aufklappen
+     * @type {String|null}
+     */
     get spinButtonIconCls() { return this._spinButtonEl.iconCls; }
     set spinButtonIconCls(val) { this._spinButtonEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons im Button zum Aufklappen
+     * @type {String}
+     */
     get spinButtonIconColor() { return this._spinButtonEl.iconColor; }
     set spinButtonIconColor(val) { this._spinButtonEl.iconColor = val; }
 
+    /**
+     * Icon des Buttons zum Aufklappen aus einer iconMap. Default: 'kijs.iconMap.Fa.caret-down'
+     * @type {String|Object}
+     */
     get spinButtonIconMap() { return this._spinButtonEl.iconMap; }
     set spinButtonIconMap(val) { this._spinButtonEl.iconMap = val; }
 
+    /**
+     * Wert (Inhalt von valueField des gewählten Datensatzes bzw. mit allowNewValues ein
+     * eingegebener Text). Beim Zuweisen wird der passende Text angezeigt.
+     * @type {*}
+     */
     // overwrite
     get value() { return this._value; }
     set value(val) {
@@ -321,10 +425,19 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Name des Felds mit dem Wert (siehe kijs.gui.ListView.valueField)
+     * @type {String|null}
+     */
     get valueField() { return this._listViewEl.valueField; }
     set valueField(val) { this._listViewEl.valueField = val; }
 
-    // Gibt die row zum aktuellen Wert zurück
+    /**
+     * Datensatz zum Wert. Über die Config nötig, wenn der Datensatz nicht in data ist
+     * (z.B. weil er deaktiviert ist oder erst per RPC geladen wird). Der Setter zeigt den
+     * passenden Text an.
+     * @type {Object|null}
+     */
     get valueRow() {
         return this._valueRow;
     }
@@ -336,8 +449,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     /**
-     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
-     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     * Bestimmt, ob beim Fokus die virtuelle Tastatur geöffnet wird ('auto', Default)
+     * oder nicht ('manual'). Nur auf Mobilgeräten mit Chrome.
+     * @type {String}
      */
     get virtualKeyboardPolicy() { 
         return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy');
@@ -364,12 +478,12 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
     }
 
     /**
-     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
-     * @param {Boolean} [alsoSetIfNoTabIndex=false]
-     * @param {Boolean} [selectText=false]
-     * @returns {undefined}
-     * @overwrite
+     * Setzt den Fokus auf den input-Node. Optional wird der Text markiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @param {Boolean} [selectText=false]           Text markieren?
+     * @returns {HTMLElement|null|false}
      */
+    // overwrite
     focus(alsoSetIfNoTabIndex, selectText) {
         let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
         if (selectText) {
@@ -382,7 +496,9 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
 
 
     /**
-     * Füllt das Combo mit Daten vom Server
+     * Lädt die Daten per RPC. Ergänzt die Argumente: initialLoad (erster Aufruf), value (um die
+     * valueRow zu erhalten) und bei enableRemoteFiltering query, queryOperator und
+     * queryLimit (displayLimit + 1). Siehe Leitfaden Combo.
      * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
      * @param {Boolean} [superCall=false]
      * @returns {Promise}
@@ -687,7 +803,10 @@ kijs.gui.field.Combo = class kijs_gui_field_Combo extends kijs.gui.field.Field {
         return super._hasClearableContent() || !kijs.isEmpty(this._inputDom.nodeAttributeGet('value'));
     }
 
-    // Falls kein Element selektiert ist: 1. Element selektieren, dass nicht deaktiviert ist
+    /**
+     * Selektiert das erste aktive Element der Liste, falls keines selektiert ist, und scrollt dorthin
+     * @returns {undefined}
+     */
     _selectFirstEnabledElement() {
         if (kijs.isEmpty(this._listViewEl.getSelected())) {
             kijs.Array.each(this._listViewEl.elements, function(el) {

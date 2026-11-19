@@ -3,6 +3,19 @@
 // --------------------------------------------------------------
 // kijs.gui.Tooltip
 // --------------------------------------------------------------
+/**
+ * Tooltip, der beim Bewegen der Maus über ein kijs.gui.Dom (target) als Popover beim Mauszeiger
+ * angezeigt und beim Verlassen wieder ausgeblendet wird. Wird normalerweise nicht direkt
+ * erstellt, sondern über die Eigenschaft tooltip von kijs.gui.Dom bzw. kijs.gui.Element.
+ *
+ * @example
+ * new kijs.gui.Button({ caption: 'Speichern', tooltip: 'Speichert die Änderungen' });
+ * new kijs.gui.Button({ caption: 'Info', tooltip: { html: 'Hinweis', followPointer: false } });
+ *
+ * @fires afterRender  Nach dem Rendern
+ * @fires destruct  Beim Zerstören
+ * @fires unrender  Beim Ausblenden bzw. Entfernen aus dem DOM
+ */
 kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
 
@@ -32,15 +45,15 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         this._configMap = {
-            cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },
-            disabled        : true,
-            followPointer   : true,
+            cls             : { fn: 'function', target: this._dom.clsAdd, context: this._dom },  // {String|Array} Zusätzliche CSS-Klassen
+            disabled        : true,     // {Boolean} Tooltip deaktivieren (wird dann nicht angezeigt). Achtung: Über die Config wird hide() nicht aufgerufen.
+            followPointer   : true,     // {Boolean} Soll sich der Tooltip mit dem Mauszeiger verschieben? Default: true
             html            : { target: 'html', context: this._dom },
-            htmlDisplayType : { target: 'htmlDisplayType', context: this._dom },
-            offsetX         : true,
-            offsetY         : true,
-            on              : { fn: 'assignListeners' },
-            style           : { fn: 'assign', target: 'style', context: this._dom },
+            htmlDisplayType : { target: 'htmlDisplayType', context: this._dom },    // {String} Darstellung von html (siehe kijs.gui.Dom.htmlDisplayType)
+            offsetX         : true,     // {Number} Horizontaler Abstand zum Mauszeiger in px. Default: 13
+            offsetY         : true,     // {Number} Vertikaler Abstand zum Mauszeiger in px. Default: 10
+            on              : { fn: 'assignListeners' },    // {Object} Listeners, z.B. { afterRender: fn, context: this }
+            style           : { fn: 'assign', target: 'style', context: this._dom },    // {Object} CSS-Styles des Tooltips
             target          : { target: 'target' }
         };
 
@@ -57,6 +70,10 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Tooltip deaktiviert? Beim Deaktivieren wird er ausgeblendet.
+     * @type {Boolean}
+     */
     get disabled() { return this._disabled; }
     set disabled(val) {
         this._disabled = !!val;
@@ -66,13 +83,30 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         }
     }
 
+    /**
+     * kijs.gui.Dom des Tooltips
+     * @type {kijs.gui.Dom}
+     */
     get dom() { return this._dom; }
 
+    /**
+     * Inhalt des Tooltips
+     * @type {String}
+     */
     get html() { return this._dom.html; }
     set html(val) { this._dom.html = val; }
 
+    /**
+     * Ist der Inhalt leer?
+     * @type {Boolean}
+     */
     get isEmpty() { return this._dom.isEmpty; }
 
+    /**
+     * Element, bei dem der Tooltip angezeigt wird. Beim Zuweisen werden Listeners für
+     * mouseMove und mouseLeave darauf gesetzt.
+     * @type {kijs.gui.Dom|null}
+     */
     get target() { return this._target; }
     set target(val) {
         if (this._target !== val) {
@@ -95,7 +129,10 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         kijs.Object.assignConfig(this, config, this._configMap);
     }
 
-
+    /**
+     * Blendet den Tooltip aus (siehe unrender()).
+     * @returns {undefined}
+     */
     hide() {
         this.unrender();
     }
@@ -115,6 +152,14 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
         }
     }
 
+    /**
+     * Zeigt den Tooltip an. Die Position (plus offsetX/offsetY) wird beim ersten Anzeigen und mit
+     * followPointer bei jedem Aufruf gesetzt und so angepasst, dass der Tooltip im Fenster Platz hat.
+     * Bewegt sich die Maus ausserhalb von target, wird er wieder ausgeblendet.
+     * @param {Number} [x]  x-Position (clientX) des Mauszeigers
+     * @param {Number} [y]  y-Position (clientY) des Mauszeigers
+     * @returns {undefined}
+     */
     show(x, y) {
         let updatePos = false;
 
@@ -199,6 +244,10 @@ kijs.gui.Tooltip = class kijs_gui_Tooltip extends kijs.Observable {
 
 
     // PROTECTED
+    /**
+     * Setzt die Listeners für mouseMove (show) und mouseLeave (hide) auf target.
+     * @returns {undefined}
+     */
     _bindEventsToTarget() {
         this._target.on('mouseMove', this.#onMouseMoveTarget, this);
         this._target.on('mouseLeave', this.#onMouseLeave, this);

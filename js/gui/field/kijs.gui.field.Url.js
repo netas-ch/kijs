@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Url
 // --------------------------------------------------------------
+/**
+ * Textfeld für eine URL mit einem Button, der die gültige URL in einem neuen Tab öffnet. Fehlt das
+ * Protokoll, wird defaultProtocol ergänzt.
+ *
+ * @example
+ * new kijs.gui.field.Url({ label: 'Webseite', name: 'url' });
+ */
 kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
 
 
@@ -45,9 +52,9 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            defaultProtocol: true,  // Standardprotokoll für URLs ohne Protokoll (default = 'https://')
+            defaultProtocol: true,
 
-            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },
+            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },  // {String|Array} CSS-Klassen des Link-Buttons. Default: 'kijs-inline'
             linkButtonHide: { target: 'linkButtonHide' },
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },
@@ -67,23 +74,51 @@ kijs.gui.field.Url = class kijs_gui_field_Url extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Protokoll, das beim Öffnen einer URL ohne Protokoll ergänzt wird. Leer = nichts ergänzen. Default: 'https://'
+     * @type {String}
+     */
     get defaultProtocol() { return this._defaultProtocol; }
     set defaultProtocol(val) { this._defaultProtocol = val; }
     
+    /**
+     * Button, der die URL in einem neuen Tab öffnet
+     * @type {kijs.gui.Button}
+     */
     get linkButton() { return this._linkButtonEl; }
     
+    /**
+     * Link-Button ausblenden?
+     * @type {Boolean}
+     */
     get linkButtonHide() { return !this._linkButtonEl.visible; }
     set linkButtonHide(val) { this._linkButtonEl.visible = !val; }
 
+    /**
+     * Zeichen des Icons im Link-Button
+     * @type {String|Number}
+     */
     get linkButtonIconChar() { return this._linkButtonEl.iconChar; }
     set linkButtonIconChar(val) { this._linkButtonEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons im Link-Button
+     * @type {String|null}
+     */
     get linkButtonIconCls() { return this._linkButtonEl.iconCls; }
     set linkButtonIconCls(val) { this._linkButtonEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons im Link-Button
+     * @type {String|null}
+     */
     get linkButtonIconColor() { return this._linkButtonEl.iconColor; }
     set linkButtonIconColor(val) { this._linkButtonEl.iconColor = val; }
 
+    /**
+     * Icon des Link-Buttons. Default: 'kijs.iconMap.Fa.arrow-up-right-from-square'
+     * @type {String}
+     */
     get linkButtonIconMap() { return this._linkButtonEl.iconMap; }
     set linkButtonIconMap(val) { this._linkButtonEl.iconMap = val; }
     

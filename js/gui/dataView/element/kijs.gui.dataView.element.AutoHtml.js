@@ -3,12 +3,20 @@
 // --------------------------------------------------------------
 // kijs.gui.dataView.element.AutoHtml
 // --------------------------------------------------------------
+/**
+ * Element für kijs.gui.DataView, das alle Felder des Datensatzes als «Feldname: Wert» untereinander
+ * anzeigt. Standard-Element der DataView.
+ */
 kijs.gui.dataView.element.AutoHtml = class kijs_gui_dataView_element_AutoHtml extends kijs.gui.dataView.element.Base {
 
 
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Erstellt pro Feld des Datensatzes eine Zeile mit Feldname und Wert.
+     * @returns {undefined}
+     */
     update() {
         let html = '';
 

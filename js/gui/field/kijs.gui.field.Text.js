@@ -4,43 +4,17 @@
 // kijs.gui.field.Text
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * blur
- * input
+ * Einzeiliges Textfeld (HTML-Tag input). Der Wert kann beim Tippen und beim Verlassen des
+ * Felds mit formatRegExp und formatFn formatiert werden.
+ * Siehe Leitfäden Formatierung von Formularfeldern und Validierung von Formularfeldern.
  *
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
+ * @example
+ * new kijs.gui.field.Text({ label: 'Name', name: 'name', required: true });
  *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @fires blur  Weitergeleitet vom input-Node
+ * @fires change  Nachdem der Benutzer den Wert geändert und das Feld verlassen hat (DOM-Event change)
+ *                oder nach clear(). e: oldValue, value
+ * @fires input  Bei jeder Eingabe (weitergeleitet vom input-Node)
  */
 kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
@@ -84,13 +58,13 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
 
        // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             name: { target: 'name' },
             formatFn: { target: 'formatFn' },
             formatFnContext: { target: 'formatFnContext' },
-            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },
+            formatRegExp: { fn: 'function', target: this.addFormatRegExp, context: this },  // {Object|Array} Regulärer Ausdruck zum Formatieren (siehe addFormatRegExp())
             inputMode: { target: 'inputMode' },
-            valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrimEnable: true,
             placeholder: { target: 'placeholder' },
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
@@ -119,6 +93,11 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete, z.B. 'email'. Default: false
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -133,6 +112,12 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('autocomplete', value);
     }
 
+    /**
+     * Eigene Funktion zum Formatieren oder ihr Name als String. Sie erhält den Wert und
+     * whileTyping (true beim Tippen, false beim Verlassen und beim Zuweisen von value) und gibt
+     * den formatierten Wert zurück. Bei leerem Wert wird sie nicht aufgerufen.
+     * @type {Function|String}
+     */
     get formatFn() { return this._formatFn; }
     set formatFn(val) {
         let fn = kijs.getFunctionFromString(val);
@@ -143,6 +128,10 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }
     }
 
+    /**
+     * Kontext von formatFn: Objekt oder Name als String. Default: das Feld
+     * @type {Object|String}
+     */
     get formatFnContext() { return this._formatFnContext; }
     set formatFnContext(val) {
         let context = kijs.getObjectFromString(val);
@@ -153,17 +142,37 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }
     }
 
+    /**
+     * Hat der input-Node den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des input-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Attribut inputmode des input-Nodes (bestimmt die virtuelle Tastatur), z.B. 'numeric' oder 'email'
+     * @type {String}
+     */
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
+    /**
+     * Ist der Wert leer?
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    /**
+     * Name des Felds. Wird auch als Attribut name des input-Nodes gesetzt.
+     * @type {String|null}
+     */
     // overwrite
     get name() { return this._name; }
     set name(val) {
@@ -171,9 +180,17 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
+    /**
+     * Platzhalter-Text im leeren Feld. Zurzeit gibt der Getter immer undefined zurück (fehlendes return).
+     * @type {String}
+     */
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }
 
+    /**
+     * Schreibgeschützt (siehe kijs.gui.field.Field.readOnly). Setzt auch das Attribut readOnly des input-Nodes.
+     * @type {Boolean}
+     */
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -181,6 +198,11 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('readOnly', !!val);
     }
 
+    /**
+     * Wert als String. Bei valueTrimEnable ohne Leerzeichen am Anfang und Ende.
+     * Beim Zuweisen wird der Wert formatiert (formatRegExp, formatFn).
+     * @type {String}
+     */
     // overwrite
     get value() {
         let val = kijs.toString(this._inputDom.nodeAttributeGet('value'));
@@ -197,12 +219,17 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts entfernen? Default: true
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 
     /**
-     * Die virtual keyboard policy bestimmt, ob beim focus die virtuelle
-     * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
+     * Bestimmt, ob beim Fokus die virtuelle Tastatur geöffnet wird ('auto', Default)
+     * oder nicht ('manual'). Nur auf Mobilgeräten mit Chrome.
+     * @type {String}
      */
     get virtualKeyboardPolicy() { return this._inputDom.nodeAttributeGet('virtualKeyboardPolicy'); }
     set virtualKeyboardPolicy(val) { this._inputDom.nodeAttributeSet('virtualKeyboardPolicy', val); }
@@ -213,11 +240,12 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt einen oder mehrere reguläre Ausdrücke (replace) zum Formatieren hinzu
+     * Fügt einen oder mehrere reguläre Ausdrücke zum Formatieren hinzu. Jeder Eintrag hat regExp
+     * (RegExp oder String) und entweder replace (Ersatz-Text) oder toUpperCase: true.
+     * Mit dem Flag g werden alle Treffer ersetzt, sonst nur der erste.
+     * toLowerCase wird angenommen, aber zurzeit nicht richtig angewendet.
      * @param {Object|Array} regExps
      *                       Beispiel: { regExp: '/([0-9]{3})([0-9]{3})/', replace: '$1 $2'  }
-     *                       Wenn das literal /g vorhanden ist, wird replaceAll ausgeführt,
-     *                       sonst replace()
      * @returns {undefined}
      */
     addFormatRegExp(regExps) {
@@ -256,6 +284,12 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
         }, this);
     }
 
+    /**
+     * Ändert disabled beim Feld und beim input-Node (siehe kijs.gui.Element.changeDisabled)
+     * @param {Boolean} val
+     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elterncontainer kommt.
+     * @returns {undefined}
+     */
     // overwrite
     changeDisabled(val, callFromParent) {
         super.changeDisabled(!!val, callFromParent);
@@ -263,12 +297,12 @@ kijs.gui.field.Text = class kijs_gui_field_Text extends kijs.gui.field.Field {
     }
 
     /**
-     * Setzt den Focus auf das Feld. Optional wird der Text selektiert.
-     * @param {Boolean} [alsoSetIfNoTabIndex=false]
-     * @param {Boolean} [selectText=false]
-     * @returns {undefined}
-     * @overwrite
+     * Setzt den Fokus auf den input-Node. Optional wird der Text markiert.
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @param {Boolean} [selectText=false]           Text markieren?
+     * @returns {HTMLElement|null|false}
      */
+    // overwrite
     focus(alsoSetIfNoTabIndex, selectText) {
         let nde = this._inputDom.focus(alsoSetIfNoTabIndex);
         if (selectText) {

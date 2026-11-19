@@ -8,6 +8,18 @@
 // --------------------------------------------------------------
 // kijs.gui.field.CheckboxGroup
 // --------------------------------------------------------------
+/**
+ * Gruppe von Checkboxen (kijs.gui.field.ListView mit selectType 'simple-multi'). Der Wert ist ein
+ * Array mit den valueField-Werten der ausgewählten Einträge. Die Daten haben standardmässig die
+ * Felder value und displayText.
+ *
+ * @example
+ * new kijs.gui.field.CheckboxGroup({
+ *     label: 'Farben',
+ *     name: 'farben',
+ *     data: [ { value: 'r', displayText: 'Rot' }, { value: 'g', displayText: 'Grün' } ]
+ * });
+ */
 kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.gui.field.ListView {
 
 
@@ -50,7 +62,11 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    // Alle Checkboxen auswählen / sind ausgewählt
+    /**
+     * Sind alle Checkboxen ausgewählt? Beim Setzen werden alle aus- bzw. abgewählt, mit true auch
+     * nach jedem load().
+     * @type {Boolean}
+     */
     get checkedAll () { return this.value.length === this.data.length; }
     set checkedAll (val) {
         this._checkedAll = !!val;
@@ -107,6 +123,11 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
 
 
     // PROTECTED
+    /**
+     * Wählt alle Einträge aus (value = alle valueField-Werte) bzw. keinen.
+     * @param {Boolean} val
+     * @returns {undefined}
+     */
     _checkAll(val) {
         let ids = [];
 

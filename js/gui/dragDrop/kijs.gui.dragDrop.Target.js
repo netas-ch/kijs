@@ -1,10 +1,27 @@
 /* global kijs, this */
 
-// Klasse mit Drag&Drop-Events/Funktionen, für das Ziel-Element
-
 // --------------------------------------------------------------
 // kijs.gui.dragDrop.Target
 // --------------------------------------------------------------
+/**
+ * Drag&Drop-Ziel eines Elements: nimmt gezogene kijs.gui.dragDrop.Source an, deren name im mapping
+ * vorkommt. Je nach Mausposition wird vor, nach oder (in der Mitte) als Kind eingefügt; ein Marker
+ * zeigt die Einfügeposition. Wird meist über die Eigenschaft ddTarget erstellt (z.B. bei
+ * kijs.gui.DataView, kijs.gui.dashboard.Column oder kijs.gui.container.tab.Bar).
+ *
+ * mapping: { sourceName: { allowMove, allowCopy, allowLink, disableMarker, disableMarkerAutoSize,
+ * markerWidth, markerHeight, markerCls, markerHtml, splitChildZone } }
+ *
+ * @example
+ * myDataView.ddTarget = {
+ *     mapping: { myPanels: { allowMove: true } },
+ *     on: { drop: function(e) { kijs.gui.DragDrop.dropFnMoveEl(e); } }
+ * };
+ *
+ * @fires destruct  Beim Zerstören
+ * @fires drop  Nach dem Ablegen, wenn das drop-Event der Source nicht false zurückgab.
+ *              e: source, target, operation ('move', 'copy', 'link' oder 'none'), mapping
+ */
 kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observable {
      
     
@@ -46,9 +63,9 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
             ddMarkerTagName: true,
             posBeforeFactor: true,
             posAfterFactor: true,
-            on: { fn: 'assignListeners' },
+            on: { fn: 'assignListeners' },  // {Object} Listeners, z.B. { drop: fn, context: this }
             mapping: { target: 'mapping' },
-            ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' } // Property-Name des kijs.gui.Dom, der als Ziel dient
+            ownerDomProperty: { prio: 1000, target: 'ownerDomProperty' }
         };
 
         // Config anwenden
@@ -63,15 +80,29 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Tag-Name des Drop-Markers (wird klein geschrieben). Default: 'div'
+     * @type {String}
+     */
     get ddMarkerTagName() { return this._ddMarkerTagName; }
     set ddMarkerTagName(val) {
         this._ddMarkerTagName = val.toLowerCase();
     }
     
+    /**
+     * Akzeptierte Quellen: Objekt mit dem name der Source als Schlüssel und den Optionen
+     * (allowMove, allowCopy, allowLink, disableMarker, disableMarkerAutoSize, markerWidth, markerHeight,
+     * markerCls, markerHtml, splitChildZone) als Wert
+     * @type {Object}
+     */
     get mapping() { return this._mapping; }
     set mapping(val) { this._mapping = val; }
 
-    // Verweis auf den kijs.gui.Dom, das als Ziel dient
+    /**
+     * kijs.gui.Dom, der als Ziel dient (ownerEl[ownerDomProperty]). Wirft einen kijs.Error ohne
+     * ownerEl oder bei ungültiger ownerDomProperty.
+     * @type {kijs.gui.Dom}
+     */
     get ownerDom() {
         if (kijs.isEmpty(this._ownerEl)) {
             throw new kijs.Error(`target Elements must have a 'ddTarget.ownerEl'`);
@@ -86,7 +117,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         return dom;
     }
 
-    // Property-Name des kijs.gui.Dom, das als Ziel dient
+    /**
+     * Name (auch Pfad) der Dom-Eigenschaft von ownerEl, die als Ziel dient. Beim Setzen werden die
+     * Drag&Drop-Listeners gesetzt.
+     * @type {String|null}
+     */
     get ownerDomProperty() { return this._ownerDomProperty; }
     set ownerDomProperty(val) {
         this._ownerDomProperty = val;
@@ -98,12 +133,20 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this.ownerDom.on('drop', this.#onDrop, this);
     }
 
-    // Eigentümer kijs.gui.Element dieser Instanz
+    /**
+     * Element, zu dem das Ziel gehört
+     * @type {kijs.gui.Element|null}
+     */
     get ownerEl() { return this._ownerEl; }
     set ownerEl(val) {
         this._ownerEl = val;
     }
 
+    /**
+     * Anteil der Höhe bzw. Breite eines Kind-Elements, ab dem nachher eingefügt wird (0-1, sonst
+     * kijs.Error). Dazwischen wird als Kind eingefügt. Default: 0.666
+     * @type {Number}
+     */
     get posAfterFactor() { return this._posAfterFactor; }
     set posAfterFactor(val) { 
         if (val < 0 || val > 1) {
@@ -112,6 +155,11 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this._posAfterFactor = val;
     }
     
+    /**
+     * Anteil der Höhe bzw. Breite eines Kind-Elements, bis zu dem vorher eingefügt wird (0-1, sonst
+     * kijs.Error). Muss kleiner oder gleich posAfterFactor sein. Default: 0.666
+     * @type {Number}
+     */
     get posBeforeFactor() { return this._posBeforeFactor; }
     set posBeforeFactor(val) { 
         if (val < 0 || val > 1) {
@@ -120,10 +168,16 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         this._posBeforeFactor = val;
     }
     
-    // Zielelement, auf das, das Element gedroppt wurde
+    /**
+     * Zielelement der aktuellen Drag&Drop-Operation
+     * @type {kijs.gui.Element|null}
+     */
     get targetEl() { return this._targetEl; }
     
-    // Einfügeposition beim Ziel {String} 'before', 'after', 'child'
+    /**
+     * Einfügeposition beim Zielelement: 'before', 'after' oder 'child'
+     * @type {String|null}
+     */
     get targetPos() { return this._targetPos; }
     
     
@@ -230,7 +284,14 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         return ret;
     }
     
-    // Ermittelt die Operation 'move', 'copy', 'link' oder 'none'
+    /**
+     * Ermittelt die Operation aus den gedrückten Tasten (Ctrl = copy, Ctrl+Shift = link; auf dem Mac
+     * Alt bzw. Alt+Cmd) und dem, was Quelle und mapping erlauben. Ist nur eine Operation erlaubt, gilt
+     * diese ohne Taste.
+     * @param {Object} e  Argument des DOM-Events
+     * @param {Object} mapping  Eintrag aus mapping für die Quelle
+     * @returns {String}  'move', 'copy', 'link' oder 'none'
+     */
     _getOperation(e, mapping) {
         let operation = 'none';
         
@@ -322,7 +383,17 @@ kijs.gui.dragDrop.Target = class kijs_gui_dragDrop_Target extends kijs.Observabl
         return operation;
     }
     
-    // Marker positionieren, Source ein-/ausblenden, CSS aktualisieren
+    /**
+     * Positioniert den Drop-Marker, blendet die Quelle bei move aus bzw. wieder ein und setzt die
+     * CSS-Klassen kijs-sourceDragOver und kijs-targetDragOver. Ohne targetPos wird der Marker ausgeblendet.
+     * @param {Object} e  Argument des DOM-Events
+     * @param {kijs.gui.Element|null} [targetEl=null]
+     * @param {String|null} [targetPos=null]  'before', 'after' oder 'child'
+     * @param {String} [operation='none']
+     * @param {Object|null} [mapping=null]
+     * @param {kijs.gui.Element|null} [targetOwnerEl=null]
+     * @returns {undefined}
+     */
     _updateGuiIndicator(e, targetEl=null, targetPos=null, operation='none', mapping=null, targetOwnerEl=null) {
         if (kijs.isEmpty(operation)) {
             operation = 'none';

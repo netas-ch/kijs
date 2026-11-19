@@ -3,6 +3,18 @@
 // --------------------------------------------------------------
 // kijs.gui.MsgBox (static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse für Meldungsfenster (kijs.gui.Window, modal): alert, confirm, info, warning,
+ * error, errorNotice und prompt sowie show() für eigene Konfigurationen. Alle Funktionen geben ein
+ * Promise zurück, das beim Schliessen mit e.btn (Name des Buttons, 'none' ohne Button) und e.value
+ * (Wert bei prompt) aufgelöst wird. Ist bereits ein gleiches Fenster offen (gleiche Beschriftung,
+ * Meldung, Icon, Buttons …), wird dieses vorher geschlossen.
+ *
+ * @example
+ * kijs.gui.MsgBox.confirm('Löschen', 'Wirklich löschen?').then(e => {
+ *     if (e.btn === 'yes') { ... }
+ * });
+ */
 kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
     // PRIVATE VARS
@@ -446,10 +458,21 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
 
 
     // PROTECTED
+    /**
+     * Schliesst das Fenster mit diesem Index in der History
+     * @param {Number} index
+     * @returns {undefined}
+     */
     static _closeHistoryWin(index) {
         this.__historyWin[index].close();
     }
 
+    /**
+     * Wandelt mehrere Meldungen in eine Aufzählung (ul) um. Eine einzelne Meldung wird unverändert
+     * zurückgegeben.
+     * @param {String[]} messages
+     * @returns {String}
+     */
     static _convertArrayToHtml(messages) {
         if (messages.length === 1) {
             return messages[0];
@@ -463,6 +486,12 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return ret;
     }
 
+    /**
+     * Erstellt aus der Config einen JSON-String (caption, msg, closable, Icon, fieldConfig und
+     * Button-Namen), um gleiche Fenster zu erkennen.
+     * @param {Object} config
+     * @returns {String}
+     */
     static _getConfigStringForHistory(config) {
         let c = {};
 
@@ -498,6 +527,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return JSON.stringify(c);
     }
 
+    /**
+     * Gibt den Index eines offenen Fensters mit gleicher Config in der History zurück
+     * @param {Object} config
+     * @returns {Number}  -1, wenn keines offen ist
+     */
     static _getHistoryIndex(config) {
         let cfgStr = this._getConfigStringForHistory(config);
 
@@ -509,6 +543,11 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         return this.__historyConfigString.indexOf(cfgStr);
     }
 
+    /**
+     * Entfernt ein Fenster aus der History
+     * @param {kijs.gui.Window} win
+     * @returns {undefined}
+     */
     static _removeFromHistory(win) {
         let index = this.__historyWin.indexOf(win);
 
@@ -523,6 +562,12 @@ kijs.gui.MsgBox = class kijs_gui_MsgBox {
         }
     }
 
+    /**
+     * Speichert ein geöffnetes Fenster mit seiner Config in der History
+     * @param {Object} config
+     * @param {kijs.gui.Window} win
+     * @returns {undefined}
+     */
     static _writeToHistory(config, win) {
         let cfgStr = this._getConfigStringForHistory(config);
 

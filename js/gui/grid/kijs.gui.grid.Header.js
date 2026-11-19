@@ -7,6 +7,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.Header
 // --------------------------------------------------------------
+/**
+ * Kopfzeile (tr) von kijs.gui.grid.Grid mit einer kijs.gui.grid.HeaderCell pro Spalte. Die Zellen werden
+ * beim Rendern erstellt und nach der Position der Spalten sortiert.
+ */
 kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
 
@@ -64,6 +68,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Kopfzellen in der aktuellen Reihenfolge
+     * @type {kijs.gui.grid.HeaderCell[]}
+     */
     get cells() {
         let cells = [];
         for (let i=0; i<this._cells.length; i++) {
@@ -101,6 +109,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }
     }*/
 
+    /**
+     * Grid der Kopfzeile (parent)
+     * @type {kijs.gui.grid.Grid}
+     */
     get grid() { return this.parent; }
 
 
@@ -108,6 +120,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Zerstört alle Kopfzellen.
+     * @returns {undefined}
+     */
     clear() {
         // cells entfernen
         kijs.Array.each(this._cells, function(cell) {
@@ -187,6 +203,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
 
 
     // PROTECTED
+    /**
+     * Erstellt für jede Spalte ohne Kopfzelle eine neue kijs.gui.grid.HeaderCell.
+     * @returns {undefined}
+     */
     _createCells() {
         let newColumnConfigs = [];
 
@@ -228,6 +248,10 @@ kijs.gui.grid.Header = class kijs_gui_grid_Header extends kijs.gui.Element {
         }, this);
     }
 
+    /**
+     * Sortiert die Kopfzellen nach der Position ihrer Spalte.
+     * @returns {undefined}
+     */
     _sortCells() {
         this._cells.sort(function(a, b) {
             if (a.columnConfig.position < b.columnConfig.position) {

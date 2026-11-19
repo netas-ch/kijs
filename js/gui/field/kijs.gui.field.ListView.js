@@ -3,6 +3,27 @@
 // --------------------------------------------------------------
 // kijs.gui.field.ListView
 // --------------------------------------------------------------
+/**
+ * Formularfeld mit einer kijs.gui.ListView. Der Wert ist der Wert der ListView (siehe
+ * kijs.gui.ListView.value). Die meisten Config-Eigenschaften werden an die ListView
+ * weitergegeben. Mit minSelectCount und maxSelectCount kann die Anzahl ausgewählter
+ * Einträge validiert werden.
+ *
+ * @example
+ * new kijs.gui.field.ListView({
+ *     label: 'Farben',
+ *     selectType: 'simple-multi',
+ *     showCheckBoxes: true,
+ *     data: [ { value: 'r', displayText: 'Rot' }, { value: 'g', displayText: 'Grün' } ]
+ * });
+ *
+ * @fires change  Nach einer Änderung der Selektion. e: oldValue, value
+ * @fires ddDrop  Soll vom DOM-Node der ListView weitergeleitet werden. Achtung: kijs.gui.Dom kennt ddDrop
+ *                nicht, mit einem Listener wird darum beim Rendern der kijs.Error
+ *                «kijsEvent "ddDrop" is not mapped» geworfen.
+ * @fires ddOver  Soll von der ListView weitergeleitet werden. Achtung: Die ListView löst ddOver nie aus.
+ * @fires input  Nach einer Änderung der Selektion. e: oldValue, value
+ */
 kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.Field {
 
 
@@ -27,31 +48,31 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },
+            showCheckBoxes: { target: 'showCheckBoxes', context: this._listViewEl },   // {Boolean} siehe kijs.gui.ListView.showCheckBoxes
             selectType: { target: 'selectType', context: this._listViewEl },
             
             displayTextField: { target: 'displayTextField', context: this._listViewEl },
-            iconCharField: { target: 'iconCharField', context: this._listViewEl },
-            iconMapField: { target: 'iconMapField', context: this._listViewEl },
-            iconClsField: { target: 'iconClsField', context: this._listViewEl },
-            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },
-            iconColorField: { target: 'iconColorField', context: this._listViewEl },
-            tooltipField: { target: 'tooltipField', context: this._listViewEl },
-            disabledField: { target: 'disabledField', context: this._listViewEl },
+            iconCharField: { target: 'iconCharField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconCharField
+            iconMapField: { target: 'iconMapField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconMapField
+            iconClsField: { target: 'iconClsField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconClsField
+            iconAnimationClsField: { target: 'iconAnimationClsField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconAnimationClsField
+            iconColorField: { target: 'iconColorField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.iconColorField
+            tooltipField: { target: 'tooltipField', context: this._listViewEl },   // {String} siehe kijs.gui.ListView.tooltipField
+            disabledField: { target: 'disabledField', context: this._listViewEl },   // {String} siehe kijs.gui.DataView.disabledField
             valueField: { target: 'valueField', context: this._listViewEl },
             
-            ddName: { target: 'ddName', context: this._listViewEl },
-            ddPosAfterFactor: { target: 'ddPosAfterFactor', context: this._listViewEl },
-            ddPosBeforeFactor: { target: 'ddPosBeforeFactor', context: this._listViewEl },
-            sortable: { target: 'sortable', context: this._listViewEl },
-            ddTarget: { target: 'ddTarget', context: this._listViewEl },
+            ddName: { target: 'ddName', context: this._listViewEl },   // {String} siehe kijs.gui.DataView.ddName
+            ddPosAfterFactor: { target: 'ddPosAfterFactor', context: this._listViewEl },   // {Number} siehe kijs.gui.DataView.ddPosAfterFactor
+            ddPosBeforeFactor: { target: 'ddPosBeforeFactor', context: this._listViewEl },   // {Number} siehe kijs.gui.DataView.ddPosBeforeFactor
+            sortable: { target: 'sortable', context: this._listViewEl },   // {Boolean} siehe kijs.gui.DataView.sortable
+            ddTarget: { target: 'ddTarget', context: this._listViewEl },   // {Object|null} siehe kijs.gui.DataView.ddTarget
             
-            rpcSaveFn: { target: 'rpcSaveFn', context: this._listViewEl },
-            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._listViewEl },
-            autoSave: { target: 'autoSave', context: this._listViewEl }, // Auto-Speichern bei DD
+            rpcSaveFn: { target: 'rpcSaveFn', context: this._listViewEl },   // {String} siehe kijs.gui.DataView.rpcSaveFn
+            rpcSaveArgs: { target: 'rpcSaveArgs', context: this._listViewEl },   // {Object} siehe kijs.gui.DataView.rpcSaveArgs
+            autoSave: { target: 'autoSave', context: this._listViewEl },     // {Boolean} siehe kijs.gui.DataView.autoSave
             
-            minSelectCount: true,
-            maxSelectCount: true,
+            minSelectCount: true,   // {Number|null} Minimale Anzahl ausgewählter Einträge (Validierung)
+            maxSelectCount: true,   // {Number|null} Maximale Anzahl ausgewählter Einträge (Validierung)
 
             data: { prio: 1000, target: 'data', context: this._listViewEl },
             value: { prio: 1001, target: 'value' }
@@ -75,23 +96,51 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Daten der ListView (siehe kijs.gui.ListView.data)
+     * @type {Array}
+     */
     get data() { return this._listViewEl.data; }
     set data(val) { this._listViewEl.data = val; }
 
+    /**
+     * Name des Felds mit dem angezeigten Text (siehe kijs.gui.ListView.displayTextField)
+     * @type {String|null}
+     */
     get displayTextField() { return this._listViewEl.displayTextField; }
     set displayTextField(val) { this._listViewEl.displayTextField = val; }
 
+    /**
+     * Elemente der ListView
+     * @type {kijs.gui.Element[]}
+     */
     // overwrite
     get elements() { return this._listViewEl.elements; }
 
+    /**
+     * Hat die ListView den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._listViewEl.hasFocus; }
 
+    /**
+     * Ist der Wert leer?
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
 
+    /**
+     * Die kijs.gui.ListView des Felds
+     * @type {kijs.gui.ListView}
+     */
     get listView() { return this._listViewEl; }
     
+    /**
+     * Schreibgeschützt. Die ListView wird dafür deaktiviert.
+     * @type {Boolean}
+     */
     // overwrite
     get readOnly() { return super.readOnly; }
     set readOnly(val) {
@@ -99,9 +148,17 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._listViewEl.disabled = val || this._dom.clsHas('kijs-disabled');
     }
 
+    /**
+     * Art der Selektion (siehe kijs.gui.DataView.selectType)
+     * @type {String}
+     */
     get selectType() { return this._listViewEl.selectType; }
     set selectType(val) { this._listViewEl.selectType = val; }
 
+    /**
+     * Wert der ListView (siehe kijs.gui.ListView.value)
+     * @type {*|Array|null}
+     */
     // overwrite
     get value() { return this._listViewEl.value; }
     set value(val) {
@@ -110,6 +167,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Name des Felds mit dem Wert (siehe kijs.gui.ListView.valueField)
+     * @type {String|null}
+     */
     get valueField() { return this._listViewEl.valueField; }
     set valueField(val) { this._listViewEl.valueField = val; }
 
@@ -119,8 +180,8 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     // MEMBERS
     // --------------------------------------------------------------
     /**
-     * Fügt Daten hinzu
-     * @param {Array} data
+     * Fügt der ListView Datensätze hinzu
+     * @param {Object|Array} data
      * @returns {undefined}
      */
     addData(data) {
@@ -139,9 +200,10 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
     }
     
     /**
-     * Füllt das Listview mit Daten vom Server
+     * Lädt per RPC (siehe kijs.gui.Element.load()). Aus response.config werden data in die
+     * ListView übernommen und selectFilters angewendet. Danach wird afterLoad ausgelöst.
      * @param {Object|Null} [args] Objekt mit Argumenten, die an die remoteFn übergeben werden
-     * @param {Boolean} [superCall=false]
+     * @param {Boolean} [superCall=false]   true beim Aufruf aus einer abgeleiteten Klasse (dann kein afterLoad)
      * @returns {Promise}
      */
     load(args, superCall=false) {

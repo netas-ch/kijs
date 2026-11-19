@@ -8,21 +8,17 @@
 // TODO: Sollte von kijs.FileUpload erben !!!!!
 
 
-// Das Fenster kann mit der Mehtode .show() angezeigt werden.
-// Es wird dann in das target gerendert.
-// Als target kann der document.body oder ein kijs.gui.Element angegeben
-// werden.
-// Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode).
-// Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node
-// des Elements, sondern dessen parentNode.
-// Deshalb gibt es die Eigenschaften targetNode und parentNode, welche bei einem
-// kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body
-// als target, hingegen schon.
-// Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
-// als target dient, wird nichts angegeben, so dient das ganze Element als target.
-// Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
-// Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
-// --------------------------------------------------------------
+/**
+ * Modales Fenster, das den Fortschritt der Uploads eines kijs.UploadDialog anzeigt. Beim Start eines
+ * Uploads wird für jede Datei ein kijs.gui.ProgressBar hinzugefügt und das Fenster angezeigt.
+ * Fehlermeldungen werden unter dem Balken angezeigt. Ohne Fehler schliesst es sich mit autoClose
+ * eine Sekunde nach dem letzten Upload, sonst über den Button OK.
+ *
+ * @example
+ * const ud = new kijs.UploadDialog({ ajaxUrl: 'upload.php', contentTypes: ['image'] });
+ * new kijs.gui.UploadWindow({ uploadDialog: ud });
+ * ud.showFileSelectDialog();
+ */
 kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
 
@@ -78,7 +74,7 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             uploadDialog: { target: 'uploadDialog' },
-            autoClose: true
+            autoClose: true     // {Boolean} Fenster nach dem letzten Upload automatisch schliessen, wenn kein Fehler aufgetreten ist. Default: true
         });
 
         // Config anwenden
@@ -93,6 +89,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * kijs.UploadDialog, dessen Uploads angezeigt werden (Events uploadStart, uploadFailed, upload,
+     * uploadEnd). Andere Werte werfen einen kijs.Error.
+     * @type {kijs.UploadDialog|null}
+     */
     get uploadDialog() { return this._uploadDialog; }
     set uploadDialog(val) {
         // falls bereits verknüpft, events entfernen
@@ -149,6 +150,11 @@ kijs.gui.UploadWindow = class kijs_gui_UploadWindow extends kijs.gui.Window {
 
 
     // PROTECTED
+    /**
+     * Gibt den Fortschrittsbalken eines Uploads zurück
+     * @param {Number} uploadId
+     * @returns {kijs.gui.ProgressBar|null}
+     */
     _getUploadProgressBar(uploadId) {
         for (let i=0; i<this._uploads.length; i++) {
             if (this._uploads[i].uploadId === uploadId)  {

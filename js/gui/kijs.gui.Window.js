@@ -3,21 +3,18 @@
 // --------------------------------------------------------------
 // kijs.gui.Window
 // --------------------------------------------------------------
-// Das Fenster kann mit der Methode .show() angezeigt werden.
-// Es wird dann in das target gerendert.
-// Als target kann der document.body oder ein kijs.gui.Element angegeben
-// werden.
-// Beim Body als target ist der Body auch gleich der übergeordnete Node (parentNode).
-// Beim einem kijs.gui.Element als target ist das übergeordnete Element nicht der node
-// des Elements, sondern dessen parentNode.
-// Deshalb gibt es die Eigenschaften targetNode und parentNode, welche bei einem
-// kijs.gui.Element als target nicht den gleichen node als Inhalt haben. Beim body
-// als target, hingegen schon.
-// Mit der targetDomProperty kann noch festgelegt werden, welcher node eines Elements
-// als target dient, wird nichts angegeben, so dient das ganze Element als target.
-// Es kann z.B. bei einem kijs.gui.Panel nur der innere Teil als target angegeben werden.
-// Dazu kann die Eigenschaft targetDomProperty="innerDom" definiert werden.
-// --------------------------------------------------------------
+/**
+ * Fenster (Panel im dialog-Tag), das mit show() angezeigt und in das target gerendert wird. Es ist
+ * standardmässig verschiebbar (draggable), in der Grösse veränderbar, maximierbar und schliessbar.
+ * Als target kann document.body oder ein kijs.gui.Element angegeben werden. Beim Body ist der Body
+ * auch der übergeordnete Node (parentNode), bei einem Element dessen parentNode. Mit
+ * targetDomProperty kann ein Teil des Elements als target dienen, z.B. 'innerDom' bei einem Panel.
+ * Die Fenster werden über den kijs.gui.LayerManager in den Vordergrund geholt.
+ *
+ * @example
+ * const win = new kijs.gui.Window({ caption: 'Adresse', width: 400, height: 300, modal: true, html: '...' });
+ * win.show();
+ */
 kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
 
 
@@ -60,13 +57,13 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             draggable: { target: 'draggable' },
-            allowDragOutside: true,         // Darf das Fenster ausserhalb des sichtbaren Bereichs gezogen werden?
-            modal: { target: 'modal' },     // Soll das Fenster modal geöffnet werden (alles Andere wird mit einer halbtransparenten Maske verdeckt)?
+            allowDragOutside: true,
+            modal: { target: 'modal' },
             resizeDelay: true,
             target: { target: 'target' },
             targetDomProperty: true,
 
-            moveWhenVirtualKeyboard: true
+            moveWhenVirtualKeyboard: true   // {Boolean} Fenster neu zentrieren, wenn eine virtuelle Tastatur eingeblendet wird (Virtual Keyboard API, nur Chrome mit SSL). Default: false
         });
 
         // Listeners
@@ -91,6 +88,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Darf das Fenster teilweise ausserhalb des targets gezogen werden? Die Icons der Kopfzeile
+     * bleiben sichtbar. Default: true
+     * @type {Boolean}
+     */
     get allowDragOutside() { return this._allowDragOutside; }
     set allowDragOutside(val) {
         this._allowDragOutside = val;
@@ -114,6 +116,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._draggable = !!val;
     }
 
+    /**
+     * Fenster modal anzeigen (showModal des dialog-Tags, alles andere ist nicht bedienbar)? Default: true,
+     * wenn beim Erstellen schon ein modales dialog-Tag offen ist, sonst false.
+     * @type {Boolean}
+     */
     get modal() { return !!this._modal; }
     set modal(val) {
         this._modal = !!val;
@@ -134,9 +141,18 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
+    /**
+     * Min. Verzögerung zwischen zwei Resize-Events in ms. Wird zurzeit nicht verwendet. Default: 300
+     * @type {Number}
+     */
     get resizeDelay() { return this._resizeDelay; }
     set resizeDelay(val) { this._resizeDelay = val; }
 
+    /**
+     * Ziel, in das das Fenster gerendert wird: document.body oder ein kijs.gui.Element (null = Body).
+     * Wird das Element zerstört, wird auch das Fenster zerstört.
+     * @type {kijs.gui.Element|HTMLElement}
+     */
     get target() {
         return this._targetX;
     }
@@ -174,6 +190,10 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         }
     }
 
+    /**
+     * Name der Dom-Eigenschaft des targets, z.B. 'innerDom'. Gilt nicht für den Body. Default: 'dom'
+     * @type {String}
+     */
     get targetDomProperty() { return this._targetDomProperty; };
     set targetDomProperty(val) { this._targetDomProperty = val; };
 
@@ -315,6 +335,11 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this.toFront();
     }
 
+    /**
+     * Holt das Fenster über den kijs.gui.LayerManager in den Vordergrund (nur wenn es im DOM ist und
+     * nicht gerade in der Grösse verändert wird).
+     * @returns {undefined}
+     */
     toFront() {
         if (this._dom.node && this._dom.node.parentNode &&
                 (!this.resizer || (this.resizer && !this.resizer.domOverlay))) {

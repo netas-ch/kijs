@@ -4,40 +4,19 @@
 // kijs.gui.field.Checkbox
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * // Geerbte Events
- * add
- * afterFirstRenderTo
- * afterRender
- * afterResize
- * beforeAdd
- * beforeRemove
- * changeVisibility
- * childElementAfterResize
- * dblClick
- * contextMenu
- * destruct
- * drag
- * dragEnd
- * dragLeave
- * dragOver
- * dragStart
- * drop
- * focus
- * mouseDown
- * mouseLeave
- * mouseMove
- * mouseUp
- * remove
- * wheel
+ * Checkbox mit Beschriftung (caption) und optionalem Icon. Mit threeState gibt es einen
+ * dritten Zustand (determinated). Umgeschaltet wird mit Klick auf Checkbox oder Label und mit
+ * der Leertaste. Welcher Wert zu welchem Zustand gehört, bestimmen valueChecked,
+ * valueUnchecked und valueDeterminated.
  *
- * // key events
- * keyDown
- * enterPress
- * enterEscPress
- * escPress
- * spacePress
+ * @example
+ * new kijs.gui.field.Checkbox({ label: 'Newsletter', caption: 'abonnieren', name: 'newsletter' });
+ *
+ * @fires blur  Weitergeleitet vom Eingabebereich
+ * @fires change  Nach dem Umschalten durch den Benutzer (Klick oder Leertaste) und nach clear().
+ *                e: checked, oldChecked, value, oldValue
+ * @fires input  Nach dem Umschalten mit einem Klick (nicht mit der Leertaste).
+ *               e: checked, oldChecked, value, oldValue
  */
 kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.Field {
 
@@ -96,22 +75,22 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             caption: { target: 'html', context: this._captionDom, prio: 2 },
-            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },
-            captionHide: true,
+            captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },   // {String|Array} CSS-Klassen der Beschriftung
+            captionHide: true,   // {Boolean} Wird zurzeit nicht ausgewertet
             captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
-            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },
+            captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },   // {Object} CSS-Styles der Beschriftung
             captionWidth: { target: 'captionWidth' },
 
-            checkedIconMap: true,
-            determinatedIconMap: true,
-            uncheckedIconMap: true,
+            checkedIconMap: true,   // {String} Icon der Checkbox im Zustand checked. Default: 'kijs.iconMap.Fa.check'
+            determinatedIconMap: true,   // {String} Icon der Checkbox im Zustand determinated. Default: 'kijs.iconMap.Fa.minus'
+            uncheckedIconMap: true,   // {String|null} Icon der Checkbox im Zustand unchecked. Default: null
 
             icon: { target: 'icon' },
-            iconChar: { target: 'iconChar', context: this._iconEl },
-            iconCls: { target: 'iconCls', context: this._iconEl },
-            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },
-            iconColor: { target: 'iconColor', context: this._iconEl },
-            iconMap: { target: 'iconMap', context: this._iconEl },
+            iconChar: { target: 'iconChar', context: this._iconEl },   // {Number} Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+            iconCls: { target: 'iconCls', context: this._iconEl },   // {String} CSS-Klasse des Icons
+            iconAnimationCls: { target: 'iconAnimationCls', context: this._iconEl },   // {String} CSS-Klasse für eine Animation des Icons
+            iconColor: { target: 'iconColor', context: this._iconEl },   // {String} Farbe des Icons
+            iconMap: { target: 'iconMap', context: this._iconEl },   // {String|Object} Icon aus einer iconMap, z.B. 'kijs.iconMap.Fa.house'
 
             threeState: { prio: 1001, target: '_threeState' },
 
@@ -144,21 +123,46 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Beschriftung rechts der Checkbox
+     * @type {String}
+     */
     get caption() { return this._captionDom.html; }
     set caption(val) {
         this._captionDom.html = val;
     }
 
+    /**
+     * Darstellung der Beschriftung: 'html', 'code' oder 'text'. Default: 'code'
+     * @type {String}
+     */
     get captionDisplayType() { return this._captionDom.htmlDisplayType; }
     set captionDisplayType(val) { this._captionDom.htmlDisplayType = val; }
 
+    /**
+     * kijs.gui.Dom der Beschriftung
+     * @type {kijs.gui.Dom}
+     */
     get captionDom() { return this._captionDom; }
 
+    /**
+     * Breite der Beschriftung in Pixel
+     * @type {Number|null}
+     */
     get captionWidth() { return this._captionDom.width; }
     set captionWidth(val) { this._captionDom.width = val; }
 
+    /**
+     * Icon der Checkbox selbst
+     * @type {kijs.gui.Icon}
+     */
     get checkboxIcon() { return this._checkboxIconEl; }
 
+    /**
+     * Zustand: 0 = unchecked, 1 = checked, 2 = determinated. Der Setter akzeptiert auch
+     * true, false, leer und die Zahlen als String.
+     * @type {Number}
+     */
     get checked() { return this._checked; }
     set checked(val) {
         if (val === 2 || val === '2') {
@@ -174,14 +178,19 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Hat der Eingabebereich den Fokus?
+     * @type {Boolean}
+     */
     // overwrite
     get hasFocus() { return this._inputWrapperDom.hasFocus; }
 
-    get icon() { return this._iconEl; }
     /**
-     * Icon zuweisen
-     * @param {kijs.gui.Icon|Object} val     Icon als icon-Config oder kijs.gui.Icon Element
+     * Zusätzliches Icon vor der Beschriftung: Config-Objekt oder kijs.gui.Icon. Leer setzt es zurück.
+     * Der Getter gibt die kijs.gui.Icon-Instanz zurück.
+     * @type {kijs.gui.Icon|Object|null}
      */
+    get icon() { return this._iconEl; }
     set icon(val) {
         // Icon zurücksetzen?
         if (kijs.isEmpty(val)) {
@@ -209,29 +218,66 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         }
     }
 
+    /**
+     * CSS-Klasse für eine Animation des Icons
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconEl.iconAnimationCls; }
     set iconAnimationCls(val) { this._iconEl.iconAnimationCls = val; }
 
+    /**
+     * Zeichen des Icons (siehe kijs.gui.Icon.iconChar)
+     * @type {Number}
+     */
     get iconChar() { return this._iconEl.iconChar; }
     set iconChar(val) { this._iconEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons
+     * @type {String|null}
+     */
     get iconCls() { return this._iconEl.iconCls; }
     set iconCls(val) { this._iconEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons
+     * @type {String}
+     */
     get iconColor() { return this._iconEl.iconColor; }
     set iconColor(val) { this._iconEl.iconColor = val; }
 
+    /**
+     * Icon aus einer iconMap (siehe kijs.gui.Icon.iconMap)
+     * @type {String|Object}
+     */
     get iconMap() { return this._iconEl.iconMap; }
     set iconMap(val) { this._iconEl.iconMap = val; }
 
+    /**
+     * kijs.gui.Dom des Eingabebereichs (Checkbox, Icon und Beschriftung)
+     * @type {kijs.gui.Dom}
+     */
     get inputWrapperDom() { return this._inputWrapperDom; }
 
+    /**
+     * Leer im Zustand unchecked
+     * @type {Boolean}
+     */
     // overwrite
     get isEmpty() { return this._checked === 0; }
 
+    /**
+     * Kann der Benutzer auch den dritten Zustand (determinated) wählen? Default: false
+     * @type {Boolean}
+     */
     get threeState() { return this._threeState; }
     set threeState(val) { this._threeState = val; }
 
+    /**
+     * Wert des aktuellen Zustands (valueChecked, valueUnchecked oder valueDeterminated).
+     * Der Setter akzeptiert diese Werte sowie true/false, 0/1/2, '0'/'1' und null.
+     * @type {*}
+     */
     // overwrite
     get value() {
         switch (this._checked) {
@@ -256,12 +302,24 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Wert im Zustand checked. Default: true
+     * @type {*}
+     */
     get valueChecked() { return this._valueChecked; }
     set valueChecked(val) { this._valueChecked = val; }
 
+    /**
+     * Wert im Zustand determinated. Default: 2
+     * @type {*}
+     */
     get valueDeterminated() { return this._valueDeterminated; }
     set valueDeterminated(val) { this._valueDeterminated = val; }
 
+    /**
+     * Wert im Zustand unchecked. Default: false
+     * @type {*}
+     */
     get valueUnchecked() { return this._valueUnchecked; }
     set valueUnchecked(val) { this._valueUnchecked = val; }
 
@@ -270,6 +328,11 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Setzt den Fokus auf den Eingabebereich
+     * @param {Boolean} [alsoSetIfNoTabIndex=false]  siehe kijs.gui.Dom.focus
+     * @returns {HTMLElement|null|false}
+     */
     // overwrite
     focus(alsoSetIfNoTabIndex) {
         return this._inputWrapperDom.focus(alsoSetIfNoTabIndex);
@@ -318,6 +381,10 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
 
 
     // PROTECTED
+    /**
+     * Setzt CSS-Klasse und Icon der Checkbox passend zum Zustand
+     * @returns {undefined}
+     */
     _updateCheckboxIcon() {
         let cls, iconMap;
 
@@ -343,6 +410,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
         this._checkboxIconEl.iconMap = iconMap;
     }
 
+    /**
+     * Eingabe erforderlich validieren: Fehler, wenn der Wert falsy ist (z.B. unchecked mit valueUnchecked=false)
+     * @param {*} value
+     * @param {Boolean} ignoreEmpty
+     * @returns {undefined}
+     */
     // overwrite
     _validateRequired(value, ignoreEmpty) {
         if (this._required) {

@@ -3,6 +3,11 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.filter.Icon
 // --------------------------------------------------------------
+/**
+ * Filter für Icon-Spalten in kijs.gui.grid.Grid: Nach jedem Laden sollen die vorkommenden Icons als
+ * Auswahl im Menü angeboten werden. Achtung: Die Auswahl hängt von columnConfig.iconsCnt ab, das es nicht
+ * gibt, und wird darum zurzeit nie erstellt.
+ */
 kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.grid.filter.Filter {
 
     
@@ -41,6 +46,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Filter-Objekt für den Server: zusätzlich type 'icon' und icons (ausgewählte Icons oder null)
+     * @type {Object}
+     */
     get filter() {
         return Object.assign(super.filter, {
             type: 'icon',
@@ -48,6 +57,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         });
     }
 
+    /**
+     * Ist eine Icon-Auswahl vorhanden?
+     * @type {Boolean}
+     */
     get isFiltered() { return this._checkboxGroup ? this._checkboxGroup.value ? true : false : false; }
 
 
@@ -67,6 +80,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
         }
     }
     
+    /**
+     * Wählt alle Icons aus und setzt den Filter zurück.
+     * @returns {undefined}
+     */
     reset() {
         if (this._checkboxGroup) {
             this._checkboxGroup.checkedAll = true;
@@ -76,6 +93,10 @@ kijs.gui.grid.filter.Icon = class kijs_gui_grid_filter_Icon extends kijs.gui.gri
 
 
     // PROTECTED
+    /**
+     * Sucht in den Zellen der Spalte die Icons, die noch nicht in der Auswahl sind.
+     * @returns {Array}  [icons, iconsCheck, dataCnt]: neue Icons, deren IDs und Anzahl bisheriger Einträge
+     */
     _checkIcons() {
         let icons = [];
         let iconsCheck = [];

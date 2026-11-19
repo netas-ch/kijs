@@ -3,6 +3,14 @@
 // --------------------------------------------------------------
 // kijs.gui.CornerTipContainer
 // --------------------------------------------------------------
+/**
+ * Container unten rechts für kurze Meldungen (CornerTips), die nach dismissDelay automatisch wieder
+ * verschwinden. Meist über die statische Funktion show() verwendet, die eine gemeinsame Instanz
+ * erstellt und wieder zerstört, wenn sie leer ist.
+ *
+ * @example
+ * kijs.gui.CornerTipContainer.show('Gespeichert', 'Die Adresse wurde gespeichert.', 'info');
+ */
 kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui.Container {
 
 
@@ -46,8 +54,8 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
      * Zeigt einen CornerTip an und erstellt dafür eine Singleton-Instanz
      * @param {String} caption
      * @param {String} html
-     * @param {String} [icon='alert'] 'alert', 'info', 'errorNotice' oder 'error'
-     * @param {Number} dismissDelay Anzeigedauer in ms
+     * @param {String} [icon='alert'] 'alert', 'info', 'warning', 'errorNotice' oder 'error'
+     * @param {Number} [dismissDelay=5000] Anzeigedauer in ms
      * @returns {undefined}
      */
     static show(caption, html, icon='alert', dismissDelay=5000) {
@@ -80,6 +88,10 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Anzeigedauer eines CornerTips in ms. Leer = bleibt bis zum Schliessen. Default: 5000
+     * @type {Number|null}
+     */
     get dismissDelay() { return this._dismissDelay; }
     set dismissDelay(val) { this._dismissDelay = val; }
 
@@ -270,6 +282,12 @@ kijs.gui.CornerTipContainer = class kijs_gui_CornerTipContainer extends kijs.gui
 
 
     // PROTECTED
+    /**
+     * Wandelt mehrere Meldungen in eine Aufzählung (ul) um. Eine einzelne Meldung wird unverändert
+     * zurückgegeben.
+     * @param {String[]} messages
+     * @returns {String}
+     */
     _convertArrayToHtml(messages) {
         if (messages.length === 1) {
             return messages[0];

@@ -3,11 +3,11 @@
 // --------------------------------------------------------------
 // kijs.Date (Static)
 // --------------------------------------------------------------
-/*
- * Datumsformatierung
- * ------------------
- * date.format(date, 'd.m.Y H:i', de);
+/**
+ * Statische Klasse mit Hilfsfunktionen für Datum und Uhrzeit.
  *
+ * Datumsformatierung (kijs.Date.format)
+ * ------------------
  * Tag
  * d   Tag des Monats, 2-stellig mit führender Null  01 bis 31
  * D   Wochentag, gekürzt auf zwei Buchstaben  Mo bis So
@@ -33,6 +33,14 @@
  * H   Stunde im 24-Stunden-Format, mit führenden Nullen  00 bis 23
  * i   Minuten, mit führenden Nullen  00 bis 59
  * s   Sekunden, mit führenden Nullen  00 bis 59
+ *
+ * Vollständiges Datum/Uhrzeit
+ * c   ISO 8601 (Date.toISOString())
+ * r   Date.toString()
+ * U   Sekunden seit Beginn der UNIX-Epoche
+ *
+ * @example
+ * kijs.Date.format(new Date(), 'd.m.Y H:i');
  */
 kijs.Date = class kijs_Date {
 
@@ -392,10 +400,10 @@ kijs.Date = class kijs_Date {
         return kijs.isEmpty(date) ? '' : this.format(date, 'Y-m-d H:i:s');
     }
     
-    /*
+    /**
      * Gibt die Uhrzeit als SQL-String im Format "H:i:s" zurück
-     * @param {Time} time
-     * @return {String}
+     * @param {Date} time
+     * @returns {String}  '' wenn leer
      */
     static getSqlTime(time) {
         return kijs.isEmpty(time) ? '' : this.format(time, 'H:i:s');

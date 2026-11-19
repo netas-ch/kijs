@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.Number (Static)
 // --------------------------------------------------------------
+/**
+ * Statische Klasse mit Hilfsfunktionen für Zahlen: formatieren, parsen, runden und Zufallszahlen.
+ */
 kijs.Number = class kijs_String {
 
 

@@ -3,6 +3,10 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.cell.Number
 // --------------------------------------------------------------
+/**
+ * Zelle für Zahlen in kijs.gui.grid.Grid (siehe kijs.gui.grid.columnConfig.Number). Zahlen werden mit
+ * kijs.Number.format() formatiert, mit unitBefore/unitAfter ergänzt und je nach numberStyles gestaltet.
+ */
 kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.grid.cell.Cell {
 
 
@@ -32,12 +36,12 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            decimalPrecision: true,
-            decimalSeparator: true,
-            thousandsSeparator: true,
+            decimalPrecision: true,     // {Number|null} Anzahl Nachkommastellen. null = unverändert
+            decimalSeparator: true,     // {String} Dezimaltrennzeichen. Default: '.'
+            thousandsSeparator: true,   // {String} Tausendertrennzeichen. Default: "'"
             numberStyles: {target: 'numberStyles'},
-            unitBefore: true,
-            unitAfter: true
+            unitBefore: true,           // {String} Text vor der Zahl, z.B. 'CHF '
+            unitAfter: true             // {String} Text nach der Zahl, z.B. ' %'
         });
 
         // Config anwenden
@@ -52,6 +56,11 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
     // --------------------------------------------------------------
     // GETTER/SETTER
     // --------------------------------------------------------------
+    /**
+     * CSS-Styles je nach Wert: Array mit Objekten {from, to, …Styles}, z.B.
+     * [{ to: -0.01, color: 'red' }]. Fehlt from bzw. to, gilt keine Grenze.
+     * @type {Object[]}
+     */
     get numberStyles() { return this._numberStyles; }
     set numberStyles(val) {
         if (!kijs.isArray(val)) {
@@ -60,6 +69,10 @@ kijs.gui.grid.cell.Number = class kijs_gui_grid_cell_Number extends kijs.gui.gri
         this._numberStyles = val;
     }
 
+    /**
+     * Wert als Zahl (bzw. unverändert, wenn er keine Zahl ist)
+     * @type {Number|String|null}
+     */
     get value() { return this._numValue; }
     set value(val) { super.value = val; }
 

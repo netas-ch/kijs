@@ -3,6 +3,9 @@
 // --------------------------------------------------------------
 // kijs.gui.Spacer (Abstandshalter für Toolbars)
 // --------------------------------------------------------------
+/**
+ * Leeres Element als Abstandshalter in Toolbars (CSS-Klasse kijs-spacer).
+ */
 kijs.gui.Spacer = class kijs_gui_Spacer extends kijs.gui.Element {
 
 

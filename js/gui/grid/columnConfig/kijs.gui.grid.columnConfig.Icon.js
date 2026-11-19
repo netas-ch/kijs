@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.grid.columnConfig.Column
 // --------------------------------------------------------------
+/**
+ * Spalte mit Icons in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Icon, Filter kijs.gui.grid.filter.Icon).
+ * Icon, CSS-Klasse, Farbe und Tooltip kommen aus Feldern des Datensatzes.
+ *
+ * @example
+ * { xtype: 'kijs.gui.grid.columnConfig.Icon', caption: 'Status', iconMapField: 'statusIcon', iconColorField: 'statusColor' }
+ */
 kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends kijs.gui.grid.columnConfig.ColumnConfig {
 
 
@@ -51,18 +58,38 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
     get displayField() { return super.displayField ? super.displayField : this._iconCharField; }
     set displayField(val) { this.iconCharField = val; }
     
+    /**
+     * Feld mit dem Icon-Zeichen (Codepoint oder HTML-Entity). Leer = displayField
+     * @type {String|null}
+     */
     get iconCharField() { return this._iconCharField ? this._iconCharField : super.displayField; }
     set iconCharField(val) { this._iconCharField = val; }
 
+    /**
+     * Feld mit einer zusätzlichen CSS-Klasse des Icons
+     * @type {String|null}
+     */
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
+    /**
+     * Feld mit der Farbe des Icons
+     * @type {String|null}
+     */
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
 
+    /**
+     * Feld mit dem Namen einer IconMap, z.B. 'kijs.iconMap.Fa.house'
+     * @type {String|null}
+     */
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }
 
+    /**
+     * Feld mit dem Tooltip-Text
+     * @type {String|null}
+     */
     get tooltipField() { return this._tooltipField; }
     set tooltipField(val) { this._tooltipField = val; }
 

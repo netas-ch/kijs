@@ -7,14 +7,25 @@
 // kijs.gui.grid.Grid
 // --------------------------------------------------------------
 /**
- * EVENTS
- * ----------
- * afterLoad
- * beforeSelectionChange
- * selectionChange
- * rowClick
- * rowDblClick
+ * Tabelle (Grid) mit Spalten (columnConfigs), Kopfzeile mit Sortierung, Filterzeile und
+ * Zeilen (kijs.gui.grid.Row). Die Daten werden mit rpcLoadFn schrittweise vom Server geladen
+ * (remoteDataStep Datensätze pro Request, weitere beim Scrollen ans Ende) oder über data zugewiesen.
+ * Der Server kann auch columnConfigs und primaryKeys liefern.
  *
+ * @example
+ * new kijs.gui.grid.Grid({
+ *     rpcLoadFn: 'grid.load',
+ *     selectType: 'multi',
+ *     filterable: true
+ * });
+ *
+ * @fires afterLoad  Nach dem Verarbeiten der Daten eines Requests. e: RPC-Ergebnis (response, request)
+ * @fires beforeSelectionChange  Vor einer Änderung der Selektion. e: rows, unSelect, keepExisting
+ *                               (nur bei select()), cancel. e.cancel = true bricht ab
+ * @fires columnChange  Nach einer Änderung an einer Spalte (Event change der columnConfig)
+ * @fires rowClick  Klick auf eine Zeile. e: Event der Zeile
+ * @fires rowDblClick  Doppelklick auf eine Zeile. e: Event der Zeile
+ * @fires selectionChange  Nach einer Änderung der Selektion. e: rows, unSelect
  */
 kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
@@ -105,10 +116,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            rpc:            { target: 'rpc' },  // Instanz von kijs.gui.Rpc oder Name einer RPC
+            rpc:            { target: 'rpc' },
             rpcLoadFn:      true,
             rpcLoadArgs:    true,
-            rpcSaveFn:      true,
+            rpcSaveFn:      true,   // {String} Wird zurzeit nicht verwendet
             rpcSaveArgs:    true,
             waitMaskTarget: true,
             waitMaskTargetDomProperty: true,
@@ -118,13 +129,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             data:           { target: 'data' },
             remoteDataStep: { target: 'remoteDataStep' },
 
-            focusable: true,
+            focusable: true,    // {Boolean} Kann das Grid den Fokus erhalten? Default: true
             filterable: true,
             filterVisible: { target: 'filterVisible' },
-            selectType: { target: 'selectType' } // 'none': Es kann nichts selektiert werden
-                                                 // 'single' (default): Es kann nur ein Datensatz selektiert werden
-                                                 // 'multi': Mit den Shift- und Ctrl-Tasten können mehrere Datensätze selektiert werden.
-                                                 // 'simple-multi': Es können mehrere Datensätze selektiert werden. Shift- und Ctrl-Tasten müssen dazu nicht gedrückt werden.
+            selectType: { target: 'selectType' }
         });
 
         // Config anwenden
@@ -142,16 +150,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Spalten (Instanzen von kijs.gui.grid.columnConfig.ColumnConfig). In der Config: Array mit
+     * Instanzen oder Config-Objekten; ohne xtype gilt 'kijs.gui.grid.columnConfig.Text'.
+     * Die Config fügt die Spalten hinzu (columnConfigAdd()).
+     * @type {kijs.gui.grid.columnConfig.ColumnConfig[]}
+     */
     get columnConfigs() { return this._columnConfigs; }
 
-    get current() { return this._currentRow; }
     /**
-     * Setzt die aktuelle Zeile, die den Fokus erhalten wird.
-     * Null = automatische Ermittlung
-     * Um den Fokus zu setzen verwenden Sie stattdessen die Funktion .focus() von der Zeile.
-     * @param {kijs.gui.grid.Row|null} cRow
-     * @returns {undefined}
+     * Aktuelle Zeile: die Zeile mit dem Fokus bei der Tastaturnavigation.
+     * null = automatisch ermitteln (bisherige, erste selektierte oder erste Zeile).
+     * Um den Fokus zu setzen, die Funktion focus() der Zeile verwenden.
+     * @type {kijs.gui.grid.Row|null}
      */
+    get current() { return this._currentRow; }
     set current(cRow) {
         // Falls kein cRow übergeben wurde:
         if (!cRow && !kijs.isEmpty(this._rows)) {
@@ -195,6 +208,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
     }
 
+    /**
+     * Datensätze aller Zeilen. Der Setter ersetzt alle Zeilen.
+     * @type {Array}
+     */
     set data(val) {
         if (!kijs.isArray(val)) {
             val = [val];
@@ -210,14 +227,30 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return dataRows;
     }
 
+    /**
+     * Filterzeile
+     * @type {kijs.gui.grid.Filter}
+     */
     get filter() { return this._filter; }
 
+    /**
+     * Filter im Menü der Spaltenköpfe anbieten? Default: false
+     * @type {Boolean}
+     */
     get filterable() { return this._filterable; }
     set filterable(val) { this._filterable = !!val; }
 
+    /**
+     * Filterzeile anzeigen?
+     * @type {Boolean}
+     */
     get filterVisible() { return this._filter.visible; }
     set filterVisible(val) { this._filter.visible = !!val; }
 
+    /**
+     * Erste Zeile oder null
+     * @type {kijs.gui.grid.Row|null}
+     */
     get firstRow() {
         if (this._rows.length > 0) {
             return this._rows[0];
@@ -225,6 +258,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return null;
     }
 
+    /**
+     * Letzte Zeile oder null
+     * @type {kijs.gui.grid.Row|null}
+     */
     get lastRow() {
         if (this._rows.length > 0) {
             return this._rows[this._rows.length-1];
@@ -232,6 +269,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return null;
     }
 
+    /**
+     * Namen der Primärschlüssel-Felder (Strings). Ein einzelner Name wird in ein Array umgewandelt.
+     * @type {Array|String}
+     */
     set primaryKeys(val) {
         if (!kijs.isArray(val)) {
             val = [val];
@@ -245,6 +286,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
     get primaryKeys() { return this._primaryKeys; }
 
+    /**
+     * Anzahl Datensätze pro Request. Keine ganze Zahl ergibt 100. Default: 100
+     * @type {Number}
+     */
     get remoteDataStep() { return this._remoteDataStep; }
     set remoteDataStep(val) {
         if (!kijs.isInteger(val)) {
@@ -253,10 +298,24 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this._remoteDataStep = val;
     }
 
+    /**
+     * Zeilen des Grids
+     * @type {kijs.gui.grid.Row[]}
+     */
     get rows() { return this._rows; }
 
+    /**
+     * Anzahl Datensätze: Total vom Server (response.count), sonst die Anzahl geladener
+     * @type {Number}
+     */
     get rowsCount() { return this._remoteDataTotal || this._remoteDataLoaded; }
 
+    /**
+     * RPC-Instanz: kijs.gui.Rpc oder Name einer mit kijs.setRpc() registrierten Instanz.
+     * Ohne Angabe gibt der Getter kijs.getRpc('default') zurück.
+     * @type {kijs.gui.Rpc|String}
+     */
+    // overwrite
     get rpc() {
         return this._rpc || kijs.getRpc('default');
     }
@@ -272,12 +331,25 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Zusätzliche Argumente für den Request von rpcLoadFn (werden zu requestData hinzugefügt)
+     * @type {Object|null}
+     */
     get rpcLoadArgs() { return this._rpcLoadArgs; }
     set rpcLoadArgs(val) { this._rpcLoadArgs = val; }
 
+    /**
+     * Wird zurzeit nicht verwendet
+     * @type {Object|null}
+     */
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
+    /**
+     * Art der Selektion: 'none', 'single' (Default), 'multi' (mit Shift- und Ctrl-Taste)
+     * oder 'simple-multi' (ohne Shift- und Ctrl-Taste). Andere Werte ergeben einen Fehler.
+     * @type {String}
+     */
     get selectType() { return this._selectType; }
     set selectType(val) {
         if (!kijs.Array.contains(['single', 'multi', 'simple-multi', 'none'], val)) {
@@ -300,6 +372,12 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.unSelect(this._rows, preventSelectionChange);
     }
 
+    /**
+     * Fügt eine oder mehrere Spalten hinzu (Instanz oder Config-Objekt, ohne xtype
+     * 'kijs.gui.grid.columnConfig.Text'). Ist das Grid gerendert, wird es neu gerendert.
+     * @param {Object|kijs.gui.grid.columnConfig.ColumnConfig|Array} columnConfigs
+     * @returns {undefined}
+     */
     columnConfigAdd(columnConfigs) {
         if (!kijs.isArray(columnConfigs)) {
             columnConfigs = [columnConfigs];
@@ -430,7 +508,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }
     }
 
-    // Normales Load überbrücken
+    /**
+     * Lädt die Daten neu (ruft reload() auf). Anders als kijs.gui.Element.load() gibt die
+     * Funktion kein Promise zurück.
+     * @param {Object} [args={}]
+     * @param {Boolean} [args.restoreSelection]   Selektion wiederherstellen (siehe reload())
+     * @param {Boolean} [args.resetData]          Von Anfang an neu laden (siehe reload())
+     * @returns {undefined}
+     */
+    // overwrite
     load(args = {}) {
         this.reload(args.restoreSelection, args.resetData);
     }
@@ -609,6 +695,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return newRows;
     }
 
+    /**
+     * Entfernt Zeilen. Übergeben werden Zeilen (kijs.gui.grid.Row) oder Datensätze.
+     * @param {kijs.gui.grid.Row|Object|Array} rows
+     * @returns {undefined}
+     */
     rowsRemove(rows) {
         if (!kijs.isArray(rows)) {
             rows = [rows];
@@ -632,6 +723,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         }, this);
     }
 
+    /**
+     * Entfernt alle Zeilen und setzt den Zähler der geladenen Datensätze zurück
+     * @returns {undefined}
+     */
     rowsRemoveAll() {
         this._remoteDataLoaded = 0;
         this._remoteDataStartIndex = 0;
@@ -641,6 +736,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.scrollTo(0);
     }
 
+    /**
+     * Scrollt die linken und rechten Spalten (scrollTop) und Kopf- und Fusszeile (scrollLeft).
+     * Zurzeit wird nur gescrollt, wenn der jeweilige Bereich bereits gescrollt ist (der Code prüft
+     * scrollTop statt der Existenz des Nodes), und der Bereich mit den Daten selbst wird nicht gescrollt.
+     * @param {Number} [scrollTop]
+     * @param {Number} [scrollLeft]
+     * @returns {undefined}
+     */
     scrollTo(scrollTop, scrollLeft) {
         if (kijs.isInteger(scrollTop)) {
             if (this._leftContainerDom && this._leftContainerDom.node && this._leftContainerDom.node.scrollTop) {
@@ -1140,6 +1243,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         return rowMatch;
     }
 
+    /**
+     * Lädt Daten per RPC (rpcLoadFn). requestData enthält config (sort, getMetaData, filter,
+     * start, limit) und rpcLoadArgs. Ohne rpcLoadFn oder während eines Ladevorgangs wird nichts
+     * geladen und das Promise nie erfüllt.
+     * @param {Boolean} [resetData=false]      Von Anfang an neu laden
+     * @param {Boolean} [loadNextData=false]   Die nächsten remoteDataStep Datensätze laden
+     * @returns {Promise}   Wird mit response erfüllt
+     */
     _remoteLoad(resetData=false, loadNextData=false) {
         return new Promise((resolve, reject) => {
             if (
@@ -1209,6 +1320,14 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         });
     }
 
+    /**
+     * Verarbeitet die Antwort von _remoteLoad(): columnConfigs, primaryKeys, rows, count und
+     * sort. Löst danach afterLoad aus.
+     * @param {Object} e          RPC-Ergebnis
+     * @param {Object} args       requestData des Requests
+     * @param {Boolean} resetData Wurde von Anfang an neu geladen?
+     * @returns {undefined}
+     */
     _remoteProcess(e, args, resetData) {
         // columnConfigs
         if (kijs.isArray(e.response.columnConfigs)) {
@@ -1263,6 +1382,11 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         this.raiseEvent('afterLoad', e);
     }
 
+    /**
+     * Rendert die Zeilen ab einem Index und aktualisiert den Beobachter für das Nachladen beim Scrollen
+     * @param {Number} [offset=0]
+     * @returns {undefined}
+     */
     _renderRows(offset=0) {
         for (let i=offset; i<this._rows.length; i++) {
             this._rows[i].renderTo(this._tableDom.node);

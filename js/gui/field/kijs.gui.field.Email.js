@@ -3,6 +3,13 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Email
 // --------------------------------------------------------------
+/**
+ * Textfeld für eine E-Mail-Adresse mit Validierung (validationRegExp) und einem Button, der mit
+ * mailto: eine E-Mail an die gültige Adresse erstellt.
+ *
+ * @example
+ * new kijs.gui.field.Email({ label: 'E-Mail', name: 'email' });
+ */
 kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
 
@@ -48,7 +55,7 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },
+            linkButtonCls: { fn: 'function', target: this._linkButtonEl.dom.clsAdd, context: this._linkButtonEl.dom },  // {String|Array} CSS-Klassen des Link-Buttons. Default: 'kijs-inline'
             linkButtonHide: { target: 'linkButtonHide' },
             linkButtonIconChar: { target: 'iconChar', context: this._linkButtonEl },
             linkButtonIconCls: { target: 'iconCls', context: this._linkButtonEl },
@@ -69,23 +76,51 @@ kijs.gui.field.Email = class kijs_gui_field_Email extends kijs.gui.field.Text {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Button, der eine E-Mail an die Adresse erstellt (mailto:)
+     * @type {kijs.gui.Button}
+     */
     get linkButton() { return this._linkButtonEl; }
     
+    /**
+     * Link-Button ausblenden?
+     * @type {Boolean}
+     */
     get linkButtonHide() { return !this._linkButtonEl.visible; }
     set linkButtonHide(val) { this._linkButtonEl.visible = !val; }
 
+    /**
+     * Zeichen des Icons im Link-Button
+     * @type {String|Number}
+     */
     get linkButtonIconChar() { return this._linkButtonEl.iconChar; }
     set linkButtonIconChar(val) { this._linkButtonEl.iconChar = val; }
 
+    /**
+     * CSS-Klasse des Icons im Link-Button
+     * @type {String|null}
+     */
     get linkButtonIconCls() { return this._linkButtonEl.iconCls; }
     set linkButtonIconCls(val) { this._linkButtonEl.iconCls = val; }
 
+    /**
+     * Farbe des Icons im Link-Button
+     * @type {String|null}
+     */
     get linkButtonIconColor() { return this._linkButtonEl.iconColor; }
     set linkButtonIconColor(val) { this._linkButtonEl.iconColor = val; }
 
+    /**
+     * Icon des Link-Buttons. Default: 'kijs.iconMap.Fa.envelope'
+     * @type {String}
+     */
     get linkButtonIconMap() { return this._linkButtonEl.iconMap; }
     set linkButtonIconMap(val) { this._linkButtonEl.iconMap = val; }
 
+    /**
+     * Link-Button aktiv lassen, wenn das Feld deaktiviert ist? Default: false
+     * @type {Boolean}
+     */
     get preventLinkButtonDisable() { return this._preventLinkButtonDisable; }
     set preventLinkButtonDisable(val) { this._preventLinkButtonDisable = val; }
     

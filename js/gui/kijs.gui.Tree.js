@@ -3,6 +3,24 @@
 // --------------------------------------------------------------
 // kijs.gui.Tree
 // --------------------------------------------------------------
+/**
+ * Baum mit auf- und zuklappbaren Knoten (DataView mit Elementen vom Typ
+ * kijs.gui.dataView.element.Tree). Die Kinder eines Datensatzes stehen im Feld childrenField.
+ * Ordner zeigen collapsedIconMap bzw. expandedIconMap, Dateien iconMap. Der Wert (value) ist
+ * der Inhalt von valueField der selektierten Datensätze (wie bei kijs.gui.ListView).
+ * Siehe Leitfaden Drag and Drop für das Verschieben von Knoten.
+ *
+ * @example
+ * new kijs.gui.Tree({
+ *     primaryKeyFields: ['id'],
+ *     childrenField: 'children',
+ *     allowChildrenField: 'isFolder',
+ *     data: [ { id: 1, displayText: 'Ordner', isFolder: true, children: [ { id: 2, displayText: 'Datei' } ] } ]
+ * });
+ *
+ * @fires elementCollapse  Ein Knoten wurde zugeklappt. e: Event des Elements
+ * @fires elementExpand  Ein Knoten wurde aufgeklappt. e: Event des Elements
+ */
 kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
 
@@ -110,7 +128,7 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
             elementDdTargetConfig: true,
 
-            expandFilters: { prio: 90, fn: 'function', target: this.expandByFilters, context: this }, // Filter, die definieren, welche Knoten die expandiert werden.
+            expandFilters: { prio: 90, fn: 'function', target: this.expandByFilters, context: this }, // {Array|Object} Filter für die Knoten, die aufgeklappt sind (siehe expandByFilters())
 
             value: { prio: 200, target: 'value' }
         });
@@ -127,21 +145,45 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Name des Felds, das bestimmt, ob ein Knoten Kinder haben kann (Ordner) oder nicht (Datei)
+     * @type {String|null}
+     */
     get allowChildrenField() { return this._allowChildrenField; }
     set allowChildrenField(val) { this._allowChildrenField = val; }
 
+    /**
+     * Name des Felds mit dem Array der Kind-Datensätze
+     * @type {String|null}
+     */
     get childrenField() { return this._childrenField; }
     set childrenField(val) { this._childrenField = val; }
 
+    /**
+     * Name des Felds mit zusätzlichen CSS-Klassen pro Knoten
+     * @type {String|null}
+     */
     get clsField() { return this._clsField; }
     set clsField(val) { this._clsField = val; }
 
+    /**
+     * Icon eines zugeklappten Ordners. Default: 'kijs.iconMap.Fa.folder'
+     * @type {String|null}
+     */
     get collapsedIconMap() { return this._collapsedIconMap; }
     set collapsedIconMap(val) { this._collapsedIconMap = val; }
 
+    /**
+     * Name des Felds mit dem Icon eines zugeklappten Ordners
+     * @type {String|null}
+     */
     get collapsedIconMapField() { return this._collapsedIconMapField; }
     set collapsedIconMapField(val) { this._collapsedIconMapField = val; }
 
+    /**
+     * Recordset mit den Daten (siehe kijs.gui.DataView.data). Der Wert (value) bleibt beim Zuweisen erhalten.
+     * @type {Array}
+     */
     // overwrite
     get data() { return this._data; }
     // overwrite
@@ -152,12 +194,25 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this.value = v;
     }
     
+    /**
+     * Darstellung des Texts: 'html', 'code' oder 'text' (siehe kijs.gui.Dom.htmlDisplayType). Default: 'code'
+     * @type {String}
+     */
     get displayTextDisplayType() { return this._displayTextDisplayType; }
     set displayTextDisplayType(val) { this._displayTextDisplayType = val; }
 
+    /**
+     * Name des Felds mit dem angezeigten Text. Default: 'displayText'
+     * @type {String|null}
+     */
     get displayTextField() { return this._displayTextField; }
     set displayTextField(val) { this._displayTextField = val; }
 
+    /**
+     * Config für das Drag&Drop-Ziel der Knoten (siehe kijs.gui.dragDrop.Target), damit in einen
+     * Ordner hinein abgelegt werden kann
+     * @type {Object|null}
+     */
     get elementDdTargetConfig() {
         return this._elementDdTargetConfig;
     }
@@ -165,61 +220,142 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this._elementDdTargetConfig = val;
     }
 
+    /**
+     * Icon des Buttons zum Aufklappen bei einem zugeklappten Knoten. Default: 'kijs.iconMap.Fa.caret-right'
+     * @type {String}
+     */
     get expandButtonCollapsedIconMap() { return this._expandButtonCollapsedIconMap; }
     set expandButtonCollapsedIconMap(val) { this._expandButtonCollapsedIconMap = val; }
 
+    /**
+     * Icon des Buttons zum Aufklappen bei einem aufgeklappten Knoten. Default: 'kijs.iconMap.Fa.caret-down'
+     * @type {String}
+     */
     get expandButtonExpandedIconMap() { return this._expandButtonExpandedIconMap; }
     set expandButtonExpandedIconMap(val) { this._expandButtonExpandedIconMap = val; }
 
+    /**
+     * Name des Felds, das bestimmt, ob ein Knoten aufgeklappt ist
+     * @type {String|null}
+     */
     get expandedField() { return this._expandedField; }
     set expandedField(val) { this._expandedField = val; }
 
+    /**
+     * Icon eines aufgeklappten Ordners. Default: 'kijs.iconMap.Fa.folder-open'
+     * @type {String|null}
+     */
     get expandedIconMap() { return this._expandedIconMap; }
     set expandedIconMap(val) { this._expandedIconMap = val; }
 
+    /**
+     * Name des Felds mit dem Icon eines aufgeklappten Ordners
+     * @type {String|null}
+     */
     get expandedIconMapField() { return this._expandedIconMapField; }
     set expandedIconMapField(val) { this._expandedIconMapField = val; }
 
+    /**
+     * Aufgeklappte Knoten: mit primaryKeyFields deren Primärschlüssel, sonst die Datensätze selbst
+     * @type {Array}
+     */
     get expandedKeysRows() { return this._expandedKeysRows; }
 
+    /**
+     * CSS-Klasse für eine Animation des Icons aller Knoten (ohne iconAnimationClsField)
+     * @type {String|null}
+     */
     get iconAnimationCls() { return this._iconAnimationCls; }
     set iconAnimationCls(val) { this._iconAnimationCls = val; }
 
+    /**
+     * Name des Felds mit der CSS-Klasse für eine Animation des Icons
+     * @type {String|null}
+     */
     get iconAnimationClsField() { return this._iconAnimationClsField; }
     set iconAnimationClsField(val) { this._iconAnimationClsField = val; }
 
+    /**
+     * Zeichen des Icons aller Knoten (ohne iconCharField, siehe kijs.gui.Icon.iconChar)
+     * @type {Number|null}
+     */
     get iconChar() { return this._iconChar; }
     set iconChar(val) { this._iconChar = val; }
 
+    /**
+     * Name des Felds mit dem Zeichen des Icons
+     * @type {String|null}
+     */
     get iconCharField() { return this._iconCharField; }
     set iconCharField(val) { this._iconCharField = val; }
 
+    /**
+     * CSS-Klasse des Icons aller Knoten (ohne iconClsField)
+     * @type {String|null}
+     */
     get iconCls() { return this._iconCls; }
     set iconCls(val) { this._iconCls= val; }
 
+    /**
+     * Name des Felds mit der CSS-Klasse des Icons
+     * @type {String|null}
+     */
     get iconClsField() { return this._iconClsField; }
     set iconClsField(val) { this._iconClsField = val; }
 
+    /**
+     * Farbe des Icons aller Knoten (ohne iconColorField)
+     * @type {String|null}
+     */
     get iconColor() { return this._iconColor; }
     set iconColor(val) { this._iconColor = val; }
 
+    /**
+     * Name des Felds mit der Farbe des Icons
+     * @type {String|null}
+     */
     get iconColorField() { return this._iconColorField; }
     set iconColorField(val) { this._iconColorField = val; }
 
+    /**
+     * Icon der Dateien (Knoten ohne Kinder) aus einer iconMap (ohne iconMapField). Default: 'kijs.iconMap.Fa.file'
+     * @type {String|null}
+     */
     get iconMap() { return this._iconMap; }
     set iconMap(val) { this._iconMap = val; }
 
+    /**
+     * Name des Felds mit dem Icon aus einer iconMap
+     * @type {String|null}
+     */
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }
 
+    /**
+     * Einrückung pro Ebene in Pixel. Kann nur über die Config gesetzt werden. Default: 16
+     * @type {Number}
+     */
     get indent() { return this._indent; }
 
+    /**
+     * Optionsfelder (bei einfacher Selektion) bzw. Checkboxen (bei multi) anzeigen? Default: false
+     * @type {Boolean}
+     */
     get showCheckBoxes() { return this._showCheckBoxes; }
     set showCheckBoxes(val) { this._showCheckBoxes = val; }
 
+    /**
+     * Name des Felds mit dem Tooltip pro Knoten
+     * @type {String|null}
+     */
     get tooltipField() { return this._tooltipField; }
     set tooltipField(val) { this._tooltipField = val; }
 
+    /**
+     * Wert: der Inhalt von valueField der selektierten Datensätze (siehe kijs.gui.ListView.value).
+     * Ohne valueField gibt der Setter einen Fehler.
+     * @type {*|Array|null}
+     */
     get value() {
         let val = null;
 
@@ -302,6 +438,11 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
         this.selectByFilters(filters, false, true);
     }
 
+    /**
+     * Name des Felds mit dem Wert. Default: 'value'. Anders als bei kijs.gui.ListView wird er
+     * nicht als primaryKeyFields übernommen.
+     * @type {String|null}
+     */
     get valueField() { return this._valueField; }
     set valueField(val) { this._valueField = val; }
 
@@ -967,7 +1108,13 @@ kijs.gui.Tree = class kijs_gui_Tree extends kijs.gui.DataView {
 
 
     // LISTENERS
-    // Listener muss Protected sein, da er vererbt wird.
+    /**
+     * Listener für drop beim Verschieben im Baum (sortable): fügt den Datensatz vor, nach oder
+     * als Kind des Ziels ein (bei einem aufgeklappten Ordner und 'after' als erstes Kind),
+     * lädt neu und speichert bei autoSave.
+     * @param {Object} e
+     * @returns {undefined}
+     */
     // overwrite
     _onTargetDrop(e) {
         if (e.source.name === this._ddName) {

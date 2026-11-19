@@ -3,6 +3,21 @@
 // --------------------------------------------------------------
 // kijs.gui.Splitter
 // --------------------------------------------------------------
+/**
+ * Trennbalken zwischen zwei Elementen, mit dem die Breite bzw. Höhe des Nachbarelements (target)
+ * per Maus oder Touch verändert werden kann. Während des Ziehens wird ein Overlay angezeigt, die
+ * Grösse wird beim Loslassen übernommen.
+ *
+ * @example
+ * new kijs.gui.Container({
+ *     cls: 'kijs-flexrow',
+ *     elements: [
+ *         { xtype: 'kijs.gui.Panel', caption: 'Navigation', width: 200 },
+ *         { xtype: 'kijs.gui.Splitter', targetPos: 'left' },
+ *         { xtype: 'kijs.gui.Panel', caption: 'Inhalt', style: { flex: 1 } }
+ *     ]
+ * });
+ */
 kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
 
@@ -26,7 +41,7 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            target: { target: 'target' },   // Optional. Wenn leer wird das Target aufgrund der targetPos ermittelt
+            target: { target: 'target' },
             targetPos: { target: 'targetPos' }
         });
 
@@ -48,6 +63,10 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Richtung des Splitters aus targetPos: 'horizontal' (left, right) oder 'vertical' (top, bottom)
+     * @type {String}
+     */
     get direction() {
         if (this._targetPos === 'left' || this._targetPos === 'right') {
             return 'horizontal';
@@ -58,6 +77,11 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Element, dessen Grösse verändert wird. Leer = das vorherige (targetPos 'left', 'top') bzw.
+     * nächste Element (targetPos 'right', 'bottom'); gibt es keines, wirft der Getter einen kijs.Error.
+     * @type {kijs.gui.Element}
+     */
     get target() {
         // Falls das Target nicht bekannt ist: automatisch aufgrund der targetPos ermitteln
         if (!this._targetEl) {
@@ -75,6 +99,10 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         this._targetEl = val;
     }
 
+    /**
+     * Lage des targets: 'left', 'right', 'top' oder 'bottom'. Andere Werte werfen einen kijs.Error. Default: 'left'
+     * @type {String}
+     */
     get targetPos() { return this._targetPos; }
     set targetPos(val) {
         if (!kijs.Array.contains(['top', 'right', 'left', 'bottom'], val)) {
@@ -134,6 +162,10 @@ kijs.gui.Splitter = class kijs_gui_Splitter extends kijs.gui.Element {
         }
     }
 
+    /**
+     * Blendet das Overlay aus und passt die Breite bzw. Höhe des targets um die Verschiebung an.
+     * @returns {undefined}
+     */
     _updateSplitterPosition() {
         // Berechnet die absolute Position bezogen zum Browser-Rand für das Overlay
         const overlayPos = kijs.Dom.getAbsolutePos(this._overlayDom.node);

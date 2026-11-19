@@ -3,6 +3,26 @@
 // --------------------------------------------------------------
 // kijs.gui.container.Form
 // --------------------------------------------------------------
+/**
+ * Formular: Container, der alle enthaltenen Felder (kijs.gui.field.Field, auch verschachtelt)
+ * findet und gemeinsam behandelt. Über data werden die Werte als Objekt (Feldname => Wert) gesetzt
+ * bzw. gelesen, mit load() vom Server geladen und mit save() an rpcSaveFn gesendet. Vor dem Speichern
+ * wird lokal validiert; Fehler des Servers (fieldErrors) werden bei den Feldern angezeigt.
+ *
+ * @example
+ * const form = new kijs.gui.container.Form({
+ *     rpcLoadFn: 'address.load',
+ *     rpcSaveFn: 'address.save',
+ *     elements: [
+ *         { xtype: 'kijs.gui.field.Text', name: 'name', label: 'Name', required: true }
+ *     ]
+ * });
+ * form.load({ id: 1 });
+ *
+ * @fires afterSave  Nach save(). e: Antwort des RPC (response, request)
+ * @fires blur  Ein Feld hat den Fokus verloren (weitergeleitet vom Feld)
+ * @fires change  Ein Feld wurde geändert (weitergeleitet vom Feld)
+ */
 kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Container {
 
 
@@ -28,8 +48,8 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            data: { target: 'data', prio: 2000}, // Recordset-Row-Objekt {id:1, caption:'Wert 1'}
-            defaultSaveErrorMsg: true,          // Meldung, wenn nicht ausgefüllte Felder vorhanden sind. null wenn keine Meldung.
+            data: { target: 'data', prio: 2000},
+            defaultSaveErrorMsg: true,
             rpcSaveFn: true,
             rpcSaveArgs: true
         });
@@ -50,6 +70,12 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Daten des Formulars als Objekt, z.B. {id:1, name:'Muster'}. Der Getter ergänzt das zuletzt
+     * gesetzte Objekt mit den Werten der Felder (ohne deaktivierte Felder und solche ohne
+     * submitValueEnable). Der Setter füllt die Felder ab, validiert sie und setzt isDirty zurück.
+     * @type {Object}
+     */
     get data() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -85,9 +111,18 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         }, this);
     }
 
+    /**
+     * Meldung, wenn beim Speichern nicht alle Felder gültig sind. Leer = keine Meldung, dann wird trotzdem
+     * gespeichert. Default: 'Es wurden noch nicht alle Felder richtig ausgefüllt.'
+     * @type {String|null}
+     */
     get defaultSaveErrorMsg() { return this._defaultSaveErrorMsg; }
     set defaultSaveErrorMsg(val) { this._defaultSaveErrorMsg = val; }
 
+    /**
+     * Alle Felder im Formular (siehe searchFields())
+     * @type {kijs.gui.field.Field[]}
+     */
     get fields() {
         if (kijs.isEmpty(this._fields)) {
             this.searchFields();
@@ -166,9 +201,17 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         }
     }
 
+    /**
+     * Zusätzliche RPC-Argumente fürs Speichern. Überschreiben gleichnamige Argumente von save().
+     * @type {Object}
+     */
     get rpcSaveArgs() { return this._rpcSaveArgs; }
     set rpcSaveArgs(val) { this._rpcSaveArgs = val; }
 
+    /**
+     * Name der remoteFn zum Speichern, z.B. 'address.save'
+     * @type {String|null}
+     */
     get rpcSaveFn() { return this._rpcSaveFn; }
     set rpcSaveFn(val) { this._rpcSaveFn = val; }
 
@@ -263,9 +306,13 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
     }
 
     /**
-     * Sendet die Formulardaten an den Server
-     * @param {Boolean} searchFields
-     * @param {Boolean} args
+     * Validiert das Formular und sendet die Daten (data) mit args an rpcSaveFn. Enthält die Antwort
+     * config, wird sie angewendet; fieldErrors werden bei den Feldern angezeigt. Ohne Fehler wird
+     * isDirty zurückgesetzt. Danach wird afterSave ausgelöst.
+     * Ist das Formular ungültig und defaultSaveErrorMsg gesetzt, wird nur die Meldung angezeigt
+     * (das Promise wird dann nie erfüllt).
+     * @param {Boolean} [searchFields=false]  Felder vorher neu suchen?
+     * @param {Object|null} [args=null]  Argumente für den Server (rpcSaveArgs haben Vorrang)
      * @returns {Promise}
      */
     save(searchFields=false, args=null) {

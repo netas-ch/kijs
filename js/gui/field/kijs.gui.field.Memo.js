@@ -3,6 +3,17 @@
 // --------------------------------------------------------------
 // kijs.gui.field.Memo
 // --------------------------------------------------------------
+/**
+ * Mehrzeiliges Textfeld (textarea). Enter erzeugt eine neue Zeile und wird nicht an übergeordnete
+ * Elemente weitergegeben.
+ *
+ * @example
+ * new kijs.gui.field.Memo({ label: 'Bemerkungen', name: 'bemerkungen', height: 100 });
+ *
+ * @fires blur  Weitergeleitet vom textarea-Node
+ * @fires change  Nachdem der Benutzer den Wert geändert und das Feld verlassen hat. e: oldValue, value
+ * @fires input  Bei jeder Eingabe (weitergeleitet vom textarea-Node)
+ */
 kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
 
@@ -43,10 +54,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            autocomplete: { target: 'autocomplete' },   // De-/aktiviert die Browser-Vorschläge
+            autocomplete: { target: 'autocomplete' },
             name: { target: 'name' },
             inputMode: { target: 'inputMode' },
-            valueTrimEnable: true,             // Sollen Leerzeichen am Anfang und Ende des Values automatisch entfernt werden?
+            valueTrimEnable: true,
             placeholder: { target: 'placeholder' },
             virtualKeyboardPolicy: { target: 'virtualKeyboardPolicy' }
         });
@@ -75,6 +86,11 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Vorschläge des Browsers: true (Attribut 'on'), false ('off') oder ein Wert für das
+     * Attribut autocomplete. Default: false
+     * @type {Boolean|String}
+     */
     get autocomplete() { return this._inputDom.nodeAttributeGet('autocomplete'); }
     set autocomplete(val) {
         let value = 'on';
@@ -92,8 +108,16 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     // overwrite
     get hasFocus() { return this._inputDom.hasFocus; }
 
+    /**
+     * kijs.gui.Dom des textarea-Nodes
+     * @type {kijs.gui.Dom}
+     */
     get inputDom() { return this._inputDom; }
 
+    /**
+     * Attribut inputmode des textarea-Nodes (virtuelle Tastatur)
+     * @type {String}
+     */
     get inputMode() { return this._inputDom.nodeAttributeGet('inputMode'); }
     set inputMode(val) { this._inputDom.nodeAttributeSet('inputMode', val); }
 
@@ -107,6 +131,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._inputDom.nodeAttributeSet('name', kijs.toString(val));
     }
 
+    /**
+     * Platzhaltertext im leeren Feld. Achtung: Der Getter gibt zurzeit nichts zurück.
+     * @type {String}
+     */
     get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) {
         this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val));
@@ -134,6 +162,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
         this._updateClearButtonVisibility();
     }
 
+    /**
+     * Leerzeichen am Anfang und Ende des Werts automatisch entfernen? Default: true
+     * @type {Boolean}
+     */
     get valueTrimEnable() { return this._valueTrimEnable; }
     set valueTrimEnable(val) { this._valueTrimEnable = !!val; }
 

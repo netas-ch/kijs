@@ -4,18 +4,13 @@
 // kijs.gui.container.tab.Bar
 // --------------------------------------------------------------
 /**
- * Funktionsweise, wie kijs.gui.container.Scrollable.
- * Das Element wird für die Tab-Leiste in kijs.gui.container.Tab verwendet.
- * Es sollte sonst nicht verwendet werden. sonst bitte kijs.gui.container.Scrollable
- * nehmen.
+ * Tab-Leiste von kijs.gui.container.Tab (scrollbar wie kijs.gui.container.Scrollable). Enthält die
+ * Tab-Buttons und macht sie mit sortable per Drag&Drop verschiebbar. Sollte sonst nicht verwendet
+ * werden, dafür gibt es kijs.gui.container.Scrollable.
  *
- * KLASSENHIERARCHIE
- * kijs.gui.Element
- *  kijs.gui.Container
- *   kijs.gui.container.Scrollable
- *    kijs.gui.container.tab.Bar
- *
- * 
+ * @fires ddTargetDrop  drop-Event des ddTarget (weitergeleitet)
+ * @fires sourceDrop  Ein Tab-Button dieser Leiste wurde abgelegt (drop-Event seiner Source). e: wie drop
+ * @fires targetDrop  Ein Tab-Button wurde auf dieser Leiste abgelegt (drop-Event des ddTarget). e: wie drop
  */
 kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.container.Scrollable {
 
@@ -61,7 +56,16 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
+    /**
+     * Drag&Drop-Mapping des ddTarget (mit sortable der Eintrag für ddName)
+     * @type {Object}
+     */
     get ddMapping() { return this._ddMapping; }
+    /**
+     * Ergänzt das ddMapping (assignDeep). Wegen des Tippfehlers im Namen nur als ddMappping erreichbar.
+     * Kein Objekt = kijs.Error.
+     * @type {Object}
+     */
     set ddMappping(val) {
         if (!kijs.isObject(val)) {
             throw new kijs.Error(`"ddMapping" is not valid.`);
@@ -70,6 +74,10 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         kijs.Object.assignDeep(this._ddMapping, val, true);
     }
 
+    /**
+     * Drag&Drop-Name der Tab-Buttons. Default: eindeutige ID
+     * @type {String}
+     */
     get ddName() {
         return this._ddName;
     }
@@ -77,9 +85,18 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         this._ddName = val;
     }
 
+    /**
+     * Position auf dem Ziel-Tab, ab der nachher statt vorher eingefügt wird. Default: 0.666
+     * @type {Number}
+     */
     get ddPosBeforeAfterFactor() { return this._ddPosBeforeAfterFactor; }
     set ddPosBeforeAfterFactor(val) { this._ddPosBeforeAfterFactor = val; }
 
+    /**
+     * Drag&Drop-Ziel der Leiste. Der Setter akzeptiert ein Config-Objekt für kijs.gui.dragDrop.Target
+     * (ownerDomProperty Default 'innerDom') oder null. Andere Werte werfen einen kijs.Error.
+     * @type {kijs.gui.dragDrop.Target|null}
+     */
     get ddTarget() { 
         return this._ddTarget; 
     }
@@ -110,6 +127,10 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
         }
     }
     
+    /**
+     * Tab-Buttons per Drag&Drop verschiebbar? Default: false
+     * @type {Boolean}
+     */
     get sortable() { return this._sortable; }
     set sortable(val) {
         this._sortable = !!val;
@@ -134,7 +155,12 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
-    // aktiviert/deaktiviert Drag&Drop bei den Tabs
+    /**
+     * Aktiviert bzw. deaktiviert Drag&Drop bei den Tab-Buttons und der Leiste (je nach sortable).
+     * @param {kijs.gui.Element[]} [elements]  Tab-Buttons. Leer = es werden die Elemente von Kindern
+     *                                         mit xtype 'kijs.gui.Button' genommen.
+     * @returns {undefined}
+     */
     _initTabs(elements) {
         if (kijs.isEmpty(elements)) {
             elements = [];

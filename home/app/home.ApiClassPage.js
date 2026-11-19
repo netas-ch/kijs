@@ -303,7 +303,7 @@ home.ApiClassPage = class home_ApiClassPage extends kijs.gui.container.tab.Conta
             if (m.defaultValue !== null) {
                 rows.push(['Standardwert', '<code>' + esc(m.defaultValue) + '</code>']);
             }
-            if (m.isConfig && (m.configContext || m.configFn || (m.configTarget && m.configTarget !== m.name))) {
+            if (m.isConfig && (m.configContext || m.configFn || (m.configTarget && m.configTarget !== m.name && m.configTarget !== '_' + m.name))) {
                 rows.push(['Config-Ziel', this._getConfigTargetHtml(m)]);
             }
             if (m.configPrio !== null) {
