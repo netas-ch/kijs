@@ -203,28 +203,13 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
     // overwrite
     get height() { return super.height; }
     set height(val) {
-        let doFn = false;
-
-        if (this.collapsible && kijs.isNumber(this._collapseHeight)) {
-            if (val <= this._collapseHeight) {
-                doFn = 'collapse';
-            } else if (this.collapsed) {
-                doFn = 'expand';
-            }
-        }
-        
-        // Höhe merken, damit beim Aufklappen, wieder die gleiche Höhe wiederhergestellt werden kann
-        if (kijs.isNumber(this._collapseHeight) && val > kijs.isNumber(this._collapseHeight)) {
+        // Höhe merken, damit beim Aufklappen wieder die gleiche Höhe wiederhergestellt werden kann
+        if (kijs.isNumber(val)) {
             this._expandedHeight = val;
         }
-        
-        if (doFn === 'collapse') {
-            if (!this.collapsed) {
-                this.collapse();
-            }
-        } else if (doFn === 'expand') {
-            this.expand(val);
-        } else {
+
+        // Im zugeklappten Zustand nur merken, sonst würde der Inhalt wieder sichtbar
+        if (!this.collapsed) {
             super.height = val;
         }
     }
@@ -286,8 +271,8 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
 
     /**
      * Expandiert den Container
-     * @param {Number} [size]  Höhe, in die der Container wiederhergestellt werden soll. Wirkt zurzeit
-     *                         nicht, weil _collapseHeight im Fieldset nicht definiert ist.
+     * @param {Number} [size]  Höhe, in die der Container wiederhergestellt werden soll.
+     *                         Default: die Höhe vor dem Zuklappen
      * @returns {undefined}
      */
     expand(size) {
@@ -311,9 +296,7 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
         
         // Übergebene Grösse wiederherstellen
         if (!kijs.isEmpty(size)) {
-            if (size > this._collapseHeight) {
-                this.height = size;
-            }
+            this.height = size;
         }
 
         // Event werfen
@@ -340,21 +323,6 @@ kijs.gui.container.Fieldset = class kijs_gui_container_Fieldset extends kijs.gui
             }
             return nde;
         }
-
-        // Darf der Node den Fokus erhalten?
-        if (alsoSetIfNoTabIndex) {
-            this._dom.node.focus();
-
-        // sonst den Fokus auf den ersten möglichen untergeordneten Node setzen
-        } else {
-            const nde = kijs.Dom.getFirstFocusableNode(this._node);
-            if (nde) {
-                nde.focus();
-                return nde;
-            }
-        }
-        
-        return false;
     }
 
     // Overwrite
