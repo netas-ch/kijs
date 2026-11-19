@@ -375,12 +375,15 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
                         }, this);
                     }
 
-                    // Falls keine errorMsg übergeben wurde, die Standardmeldung nehmen
-                    if (kijs.isEmpty(e.errorTitle) && !kijs.isEmpty(this._defaultSaveErrorTitle)) {
-                        e.errorTitle = this._defaultSaveErrorTitle;
-                    }
-                    if (kijs.isEmpty(e.errorMsg)) {
-                        e.errorMsg = this._defaultSaveErrorMsg;
+                    // Falls der Server keine Meldung mitgeschickt hat (die Meldungen zeigt kijs.gui.Rpc
+                    // bereits an), die Standardmeldung anzeigen. Mit dem errorType gilt das Formular
+                    // nicht als gespeichert (isDirty bleibt).
+                    if (kijs.isEmpty(e.response.errorType) && kijs.isEmpty(e.response.errorMsg)) {
+                        if (!kijs.isEmpty(this._defaultSaveErrorMsg)) {
+                            kijs.gui.MsgBox.errorNotice(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
+                        }
+                        e.response.errorType = 'errorNotice';
+                        e.response.errorMsg = this._defaultSaveErrorMsg;
                     }
                 }
 

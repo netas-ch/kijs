@@ -172,6 +172,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.container.Form.save()```: Bei einem ungültigen Formular wurde das Promise nie 
   erfüllt. Jetzt wird es mit ```response.errorType = 'errorNotice'``` erfüllt. Der Titel der 
   Meldung ist «Fehler» (bisher «Fehler.»).  
+- ```kijs.gui.container.Form.save()```: Lieferte der Server ```fieldErrors``` ohne Meldung, 
+  erschien keine Meldung und das Formular galt als gespeichert. Jetzt erscheint 
+  ```defaultSaveErrorMsg``` und ```isDirty``` bleibt bestehen.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
