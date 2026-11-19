@@ -84,16 +84,17 @@ kijs.gui.field.Iban = class kijs_gui_field_Iban extends kijs.gui.field.Text {
     }
     
     /**
-     * Prüft eine IBAN: nur A-Z und 0-9 (Leerzeichen werden ignoriert) und Prüfsumme Modulo 97 = 1.
-     * Die Länge pro Land wird nicht geprüft.
+     * Prüft eine IBAN: Aufbau (zwei Buchstaben Ländercode, zwei Prüfziffern, danach 11-30
+     * Buchstaben oder Ziffern, Leerzeichen werden ignoriert) und Prüfsumme Modulo 97 = 1.
+     * Die genaue Länge pro Land wird nicht geprüft.
      * @param {String} value
      * @returns {Boolean}
      */
     _validateIban(value) {
         value = kijs.toString(value).toUpperCase().replace(/\s/g, '');
 
-        // Nicht erlaubte Zeichen?
-        if (!value || /[^A-Z0-9]/.test(value)) {
+        // Aufbau: Ländercode, Prüfziffern, Kontoangaben (Gesamtlänge 15-34)
+        if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]{11,30}$/.test(value)) {
             return false;
         }
 
