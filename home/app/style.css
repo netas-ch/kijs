@@ -474,14 +474,43 @@
         color: var(--accentColor);
     }
 
-    /* Link auf die API im Titel der Showcase-Seiten */
-    .kijs-panelbar a[href^="api:"] {
-        color: inherit;
-        text-decoration: none;
-        border-bottom: 1px dotted currentColor;
+    /* Werkzeuge */
+    .home-tools-tool {
+        max-width: 960px;
+        padding: 6px 0 14px 0;
+        border-bottom: 1px solid var(--grey04);
     }
-    .kijs-panelbar a[href^="api:"]:hover {
-        border-bottom-style: solid;
+    .home-tools-icon {
+        flex: none;
+        width: 32px;
+        padding-top: 22px;
+        font-size: 20px;
+        color: var(--apiTagConfig);
+    }
+    .home-tools-tool div.markdown {
+        padding-bottom: 0;
+    }
+    .home-tools-state {
+        margin-left: 6px;
+        padding: 1px 6px;
+        font-size: 12px;
+        font-weight: normal;
+        border-radius: 3px;
+        vertical-align: middle;
+        color: #fff;
+    }
+    .home-tools-ok {
+        background-color: var(--apiTagGetter);
+    }
+    .home-tools-outdated {
+        background-color: var(--apiTagDeprecated);
+    }
+    .home-tools-files {
+        color: var(--grey08);
+    }
+    .home-tools-buttons {
+        gap: 6px;
+        padding-left: 10px;
     }
 
     /* Hinweis im Tab API, wenn die Datenbank fehlt */
@@ -494,6 +523,16 @@
         color: var(--grey09);
         border: 1px solid var(--apiTagSetter);
         border-radius: 4px;
+    }
+
+    /* Fusszeile im Tab API (Version und Datum der API) */
+    .home-api-footer {
+        flex: none;
+        padding: 4px 6px;
+        font-size: 11px;
+        line-height: 14px;
+        color: var(--grey08);
+        border-top: 1px solid var(--grey04);
     }
 
     /* Globale Suche */

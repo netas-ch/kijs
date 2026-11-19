@@ -55,6 +55,21 @@ foreach ($requests as $request) {
             }
             break;
 
+        // Werkzeuge: Stand der generierten Dateien und Ausführen (nur lokal)
+        case 'tools.run':
+        case 'tools.status':
+            require_once __DIR__ . '/tools/HomeTools.php';
+            try {
+                $tools = new HomeTools();
+                switch ($request->remoteFn) {
+                    case 'tools.run':    $response->data = $tools->run((string)($request->requestData->id ?? '')); break;
+                    case 'tools.status': $response->data = $tools->getStatus(); break;
+                }
+            } catch (Throwable $ex) {
+                $response->errorMsg = $ex->getMessage();
+            }
+            break;
+
         // Globale Suche über API, Leitfäden, Showcase und Tests
         case 'home.search':
             require_once __DIR__ . '/api/HomeSearch.php';

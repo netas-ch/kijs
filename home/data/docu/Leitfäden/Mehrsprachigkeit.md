@@ -69,14 +69,16 @@ eine eigene Funktion mit eigenen Sprachdateien zu verwenden.
 ### Texte aus Quellcode extrahieren
 Mit dem PHP-Skript ```tools/kilang/generateUsages.php``` kann automatisiert die Datei 
 ```tools/kilang/data/usages.php``` generiert werden. Diese durchsucht das kijs nach 
-Texten und schreibt diese in die ```usages.php```.  
+Texten und schreibt diese in die ```usages.php```. Lokal geht das auch in der 
+Home-App über das Zahnrad oben rechts (**Werkzeuge**).  
 
 ### Texte übersetzen
 Mit dem Translate-App von Netas können aus der ```usages.php``` die Texte ausgelesen 
 werden und in eine beliebige Sprache übersetzt werden. Es pro Sprache eine PHP-Sprachdatei
 erstellt (```kijs_en.php```, ```kijs-fr.php```).  
 Die PHP-Sprachdateien können dann mit dem PHP-Skript ```tools/kilang/convertPhpLanguageFilesToJs.php``` 
-in JavaScript-Sprachdateien konvertiert werden. Sie befinden sich im Ordner ```js/translation```.  
+in JavaScript-Sprachdateien konvertiert werden (auch über die **Werkzeuge** der Home-App). 
+Sie befinden sich im Ordner ```js/translation```.  
 Für eigene Projekte empfiehlt es sich, eigene Sprachdateien in einem eigenen Ordner 
 zu erstellen.  
 

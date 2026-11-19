@@ -43,8 +43,8 @@ kijs
       └─ ...
 ```
 
-- In der Kopfzeile des Tabs eine Schaltfläche **API aktualisieren** und das Datum 
-  des letzten Updates (als Tooltip).  
+- Aktualisiert wird über die Seite **Werkzeuge** (Zahnrad in der Kopfzeile der 
+  Home-App). Der Tooltip des Zahnrads zeigt das Datum des letzten Updates.  
 
 ### Klassenseite
 Ein Klick auf eine Klasse öffnet die Doku in einem eigenen Tab (wie die Leitfäden).  
@@ -240,7 +240,7 @@ Datei und am Schluss einer Zusammenfassung (Anzahl Klassen, Warnungen, Lücken).
 Weil die neue DB erst am Schluss umbenannt wird, ist die API während des Updates 
 weiter benutzbar und es gibt nie einen halb aktualisierten Stand.  
 
-Das Update ist **nur lokal** möglich: Die Schaltfläche **API aktualisieren** wird 
+Das Update ist **nur lokal** möglich: Das Zahnrad (Werkzeuge) wird 
 nur angezeigt, wenn die Home-App über ```localhost```, ```127.0.0.1``` oder ```::1``` 
 aufgerufen wird. Zusätzlich prüfen die drei RPCs ```$_SERVER['REMOTE_ADDR']``` und 
 lehnen Aufrufe von anderen Adressen ab.  
@@ -248,7 +248,7 @@ lehnen Aufrufe von anderen Adressen ab.
 Die Datei ```home/data/api.sqlite``` wird ins Git eingecheckt, damit die API nach 
 dem Klonen sofort verfügbar ist. Nach einer Änderung am kijs-Code wird das Update 
 lokal ausgeführt und die Datei mitcommittet. Fehlt die Datei trotzdem, zeigt der 
-API-Tab einen Hinweis mit der Schaltfläche **API aktualisieren**.  
+API-Tab einen Hinweis auf die Werkzeuge.  
 
 
 7\. Lückenbericht

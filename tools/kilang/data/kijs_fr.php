@@ -61,6 +61,7 @@ $translations["fr"] = [
     "Nein" => "Non",
     "OK" => "OK",
     "Schliessen" => "Fermer",
+    "Schreiben für Daten" => "Écrivez pour plus de données",
     "Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten" => "Écrivez au moins %1 caractère pour lancer la recherche",
     "Spalten" => "Colonnes",
     "Suche" => "Recherche",

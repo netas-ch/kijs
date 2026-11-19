@@ -61,6 +61,7 @@ kijs.translation["fr"] = {
     "Nein": "Non",
     "OK": "OK",
     "Schliessen": "Fermer",
+    "Schreiben f\u00fcr Daten": "\u00c9crivez pour plus de donn\u00e9es",
     "Schreiben Sie mindestens %1 Zeichen, um die Suche zu starten": "\u00c9crivez au moins %1 caract\u00e8re pour lancer la recherche",
     "Spalten": "Colonnes",
     "Suche": "Recherche",

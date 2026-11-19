@@ -43,6 +43,7 @@ $themeUrl = $baseUrl . '/kijs/css/kijs.theme.default.css?v=' . filemtime('../css
     <script type="text/javascript" src="app/home.ApiSourcePage.js?v=<?=filemtime('app/home.ApiSourcePage.js')?>"></script>
     <script type="text/javascript" src="app/home.ApiUpdate.js?v=<?=filemtime('app/home.ApiUpdate.js')?>"></script>
     <script type="text/javascript" src="app/home.SearchPage.js?v=<?=filemtime('app/home.SearchPage.js')?>"></script>
+    <script type="text/javascript" src="app/home.ToolsPage.js?v=<?=filemtime('app/home.ToolsPage.js')?>"></script>
     <script type="text/javascript" src="app/home.App.js?v=<?=filemtime('app/home.App.js')?>"></script>
     <script type="text/javascript">
         kijs.isReady(function(){

@@ -14,9 +14,9 @@ home.App = class home_App {
     // --------------------------------------------------------------
     constructor(config={}) {
 
+        this._apiFooterEl = null;   // Fusszeile im Tab API mit Version und Datum der API
         this._apiHintEl = null;     // Hinweis im Tab API, wenn die Datenbank fehlt
-        this._apiIsLocal = false;   // Update der API erlaubt (nur lokal)?
-        this._btnApiUpdate = null;
+        this._btnTools = null;      // Zahnrad in der Kopfzeile (Werkzeuge, nur lokal)
         this._content = null;
         this._header = null;
         this._navigation = null;
@@ -119,6 +119,20 @@ home.App = class home_App {
     }
 
     /**
+     * Öffnet den Lückenbericht der API-Dokumentation in einem Tab
+     */
+    openApiIssues() {
+        this._openFile({
+            nodeId: 'apiissues',
+            treeName: 'treeApi',
+            path: 'apiissues',
+            displayText: 'Lückenbericht',
+            filetype: 'apiissues',
+            iconMap: 'kijs.iconMap.Fa.list-check'
+        });
+    }
+
+    /**
      * Öffnet einen Link auf die API, z.B. aus einem Leitfaden oder einer Showcase-Seite.
      * Formate: 'api:kijs.gui.Button' oder 'api:kijs.gui.Button#caption'
      * @param {String} href
@@ -215,6 +229,18 @@ home.App = class home_App {
         });
     }
 
+    /**
+     * Öffnet die Werkzeuge (Generatoren für API, Sprachdateien usw.) in einem Tab
+     */
+    openTools() {
+        this._openFile({
+            path: 'tools',
+            displayText: 'Werkzeuge',
+            filetype: 'tools',
+            iconMap: 'kijs.iconMap.Fa.gear'
+        });
+    }
+
     run() {
         document.title = 'kijs ' + kijs.version + ' - Home';
 
@@ -226,6 +252,28 @@ home.App = class home_App {
         this._viewport.render();
 
         this._updateApiStatus();
+    }
+
+    /**
+     * Aktualisiert die API-Dokumentation mit Fortschrittsanzeige und lädt danach den
+     * Klassenbaum und einen offenen Lückenbericht neu.
+     * @returns {Promise}  Zusammenfassung oder null bei Abbruch oder Fehler
+     */
+    async updateApi() {
+        const update = new home.ApiUpdate();
+        const stats = await update.run();
+        this._updateApiStatus();
+        if (stats) {
+            this._getTreeByName('treeApi').load();
+
+            // offenen Lückenbericht neu laden
+            kijs.Array.each(this._content.elements, function(el) {
+                if (el instanceof home.ApiIssuesPage) {
+                    el.load();
+                }
+            }, this);
+        }
+        return stats;
     }
 
 
@@ -279,6 +327,18 @@ home.App = class home_App {
     }
 
     _createHeader() {
+        // Zahnrad für die Werkzeuge, nur lokal sichtbar (siehe _updateApiStatus)
+        this._btnTools = new kijs.gui.Button({
+            name: 'btnTools',
+            iconMap: 'kijs.iconMap.Fa.gear',
+            tooltip: 'Werkzeuge',
+            visible: false,
+            on: {
+                click: this.#onBtnToolsClick,
+                context: this
+            }
+        });
+
         return new kijs.gui.PanelBar({
             html: 'kijs ' + kijs.version + ' - Home',
             iconCls: 'icoKijs16',
@@ -299,7 +359,9 @@ home.App = class home_App {
                         enterPress: this.#onSearchEnterPress,
                         context: this
                     }
-                },{
+                },
+                this._btnTools,
+                {
                     xtype: 'kijs.gui.Button',
                     name: 'btnLanguage',
                     iconMap: 'kijs.iconMap.Fa.earth-americas',
@@ -419,20 +481,13 @@ home.App = class home_App {
             ]
         });
 
-        // Schaltfläche in der Kopfzeile der Navigation, nur im Tab API sichtbar.
-        // Der Stand der API steht im Tooltip.
-        this._btnApiUpdate = new kijs.gui.Button({
-            iconMap: 'kijs.iconMap.Fa.arrows-rotate',
-            tooltip: 'API aktualisieren',
-            visible: false,
-            on: {
-                click: this.#onBtnApiUpdateClick,
-                context: this
-            }
-        });
-
         this._apiHintEl = new kijs.gui.Element({
             cls: 'home-api-hint',
+            visible: false
+        });
+
+        this._apiFooterEl = new kijs.gui.Element({
+            cls: 'home-api-footer',
             visible: false
         });
 
@@ -466,7 +521,8 @@ home.App = class home_App {
                         elementClick: this.#onTreeElementClick,
                         context: this
                     }
-                }
+                },
+                this._apiFooterEl
             ]
         });
 
@@ -478,18 +534,11 @@ home.App = class home_App {
             style: {
                 flex: 'none'
             },
-            headerBarElements: [
-                this._btnApiUpdate
-            ],
             elements:[
                 {
                     xtype: 'kijs.gui.container.Tab',
                     style:{
                         flex: 1
-                    },
-                    on: {
-                        change: this.#onNavigationTabChange,
-                        context: this
                     },
                     elements:[
                         this._tabShowcase,
@@ -617,6 +666,22 @@ home.App = class home_App {
             return;
         }
 
+        // Werkzeuge
+        if (userData.filetype === 'tools') {
+            const page = new home.ToolsPage({
+                app: this,
+                name: userData.path,
+                tabCaption: userData.displayText,
+                tabIconMap: userData.iconMap,
+                tabClosable: true,
+                userData: userData
+            });
+            this._content.add(page);
+            this._content.currentName = userData.path;
+            page.load();
+            return;
+        }
+
         // Treffer der globalen Suche
         if (userData.filetype === 'search') {
             const page = new home.SearchPage({
@@ -712,15 +777,8 @@ home.App = class home_App {
     }
 
     /**
-     * Zeigt die Schaltfläche «API aktualisieren» nur im Tab API und nur lokal an
-     */
-    _updateApiButtonVisibility() {
-        this._btnApiUpdate.visible = this._apiIsLocal && this._tabApi.parent
-                && this._tabApi.parent.currentEl === this._tabApi;
-    }
-
-    /**
-     * Zeigt im API-Tab den Stand der API-Datenbank an
+     * Zeigt den Stand der API-Datenbank im Tab API und beim Zahnrad (Werkzeuge) an.
+     * Das Zahnrad ist nur lokal sichtbar.
      * @returns {Promise}
      */
     async _updateApiStatus() {
@@ -733,11 +791,11 @@ home.App = class home_App {
         }
         const status = rpcData.response.data;
 
-        // Tooltip mit dem Stand, Badge bei einem Problem
-        let html = '<b>API aktualisieren</b><br>';
+        // Tooltip mit dem Stand der API, Badge bei einem Problem
+        let html = '<b>Werkzeuge</b><br>API-Dokumentation ';
         let problem = false;
         if (status.exists) {
-            html += 'Stand: ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i') + '<br>';
+            html += 'vom ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i') + '<br>';
             html += 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?');
             if (status.stats) {
                 html += ', ' + status.stats.classes + ' Klassen';
@@ -747,47 +805,37 @@ home.App = class home_App {
                 problem = true;
             }
         } else {
-            html += 'Die API-Datenbank fehlt noch.';
+            html += 'fehlt noch.';
             problem = true;
         }
         if (status.isRunning) {
             html += '<br>Es läuft gerade ein Update.';
         }
-        this._btnApiUpdate.tooltip = html;
-        this._btnApiUpdate.badgeText = problem ? '!' : '';
+        this._btnTools.tooltip = html;
+        this._btnTools.badgeText = problem ? '!' : '';
+        this._btnTools.visible = !!status.isLocal;
 
         // Hinweis im Tab API, wenn die Datenbank fehlt
         if (!status.exists) {
             this._apiHintEl.html = 'Die API-Datenbank fehlt noch. '
                     + (status.isLocal
-                        ? 'Bitte oben rechts auf das Symbol «API aktualisieren» klicken.'
+                        ? 'Sie kann über das Zahnrad oben rechts (Werkzeuge) erstellt werden.'
                         : 'Sie kann nur lokal (localhost) erstellt werden.');
         }
         this._apiHintEl.visible = !status.exists;
 
-        this._apiIsLocal = !!status.isLocal;
-        this._updateApiButtonVisibility();
+        // Fusszeile mit Version und Datum
+        if (status.exists) {
+            this._apiFooterEl.html = 'kijs ' + kijs.String.htmlspecialchars(status.kijsVersion || '?')
+                    + ' · ' + kijs.Date.format(new Date(status.updated), 'd.m.Y H:i');
+            this._apiFooterEl.tooltip = 'Version und Datum der API-Dokumentation';
+        }
+        this._apiFooterEl.visible = !!status.exists;
     }
 
 
     // PRIVATE
     // LISTENERS
-    async #onBtnApiUpdateClick(e) {
-        const update = new home.ApiUpdate();
-        const stats = await update.run();
-        this._updateApiStatus();
-        if (stats) {
-            this._getTreeByName('treeApi').load();
-
-            // offenen Lückenbericht neu laden
-            kijs.Array.each(this._content.elements, function(el) {
-                if (el instanceof home.ApiIssuesPage) {
-                    el.load();
-                }
-            }, this);
-        }
-    }
-
     #onBtnLanguageClick(e) {
         if (this._spinBox) {
             this._spinBox.destruct();
@@ -936,6 +984,10 @@ home.App = class home_App {
         this._spinBox.show();
     }
 
+    #onBtnToolsClick(e) {
+        this.openTools();
+    }
+
     #onContentTabChange(e) {
         let oldTreeEl = null;
         let newTreeEl = null;
@@ -1004,10 +1056,6 @@ home.App = class home_App {
         }
     }
 
-    #onNavigationTabChange(e) {
-        this._updateApiButtonVisibility();
-    }
-
     #onSearchEnterPress(e) {
         this.openSearch(e.element.value);
     }
@@ -1047,8 +1095,9 @@ home.App = class home_App {
         }
 
         // Variablen (Objekte/Arrays) leeren
+        this._apiFooterEl = null;
         this._apiHintEl = null;
-        this._btnApiUpdate = null;
+        this._btnTools = null;
         this._header = null;
         this._tabShowcase = null;
         this._tabTest = null;

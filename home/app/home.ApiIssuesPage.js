@@ -64,7 +64,7 @@ home.ApiIssuesPage = class home_ApiIssuesPage extends kijs.gui.container.tab.Con
                     html: '<h1>Lückenbericht</h1>'
                         + '<p>Was im Code noch nicht nach dem Leitfaden '
                         + '<a href="#" data-home-file="data/docu/Leitfäden/Kommentare.md">Kommentare</a> '
-                        + 'dokumentiert ist. Der Bericht wird bei «API aktualisieren» neu erstellt.</p>'
+                        + 'dokumentiert ist. Der Bericht wird beim Aktualisieren der API-Dokumentation (Werkzeuge) neu erstellt.</p>'
                 },
                 {
                     xtype: 'kijs.gui.Container',

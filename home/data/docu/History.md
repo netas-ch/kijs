@@ -18,7 +18,7 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
 - **Lückenbericht**: zeigt, was im Code noch nicht dokumentiert ist.  
 - Die Daten werden aus den Kommentaren im Code gelesen (siehe Leitfaden 
   [Kommentare](Leitfäden/Kommentare.md)) und in ```home/data/api.sqlite``` gespeichert. 
-  Aktualisiert wird lokal über das Symbol in der Kopfzeile der Navigation.  
+  Aktualisiert wird lokal über die Werkzeuge (siehe unten).  
 - Konzept: [API-Dokumentation](Konzepte/API-Dokumentation.md)  
 
 
@@ -29,6 +29,10 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
   Leitfäden sind mit der API verlinkt.  
 - Showcase: Jede Seite hat rechts in der Kopfzeile einen Button «API», der die 
   API-Dokumentation der gezeigten Klasse öffnet (bei mehreren Klassen über ein Menü).  
+- Werkzeuge: Das Zahnrad neben dem Suchfeld (nur lokal) öffnet eine Seite mit allen 
+  Generatoren: API-Dokumentation, Texte für die Übersetzung, Sprachdateien, 
+  Font-Awesome-Icons und CSS. Sie zeigt, ob die erzeugten Dateien aktuell sind, und 
+  führt die Generatoren aus.  
 - Syntax-Highlighting in den Code-Blöcken der Dokumentation.  
 - Startseite: Schriftzug als Text (Schrift Jost), damit er auf allen Bildschirmen 
   scharf ist, und Links auf Erste Schritte, Showcase, Dokumentation und API.  
