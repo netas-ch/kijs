@@ -132,10 +132,10 @@ kijs.gui.field.Memo = class kijs_gui_field_Memo extends kijs.gui.field.Field {
     }
 
     /**
-     * Platzhaltertext im leeren Feld. Achtung: Der Getter gibt zurzeit nichts zurück.
+     * Platzhaltertext im leeren Feld
      * @type {String}
      */
-    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    get placeholder() { return this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) {
         this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val));
     }

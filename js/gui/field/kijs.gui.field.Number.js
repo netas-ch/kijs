@@ -264,7 +264,7 @@ kijs.gui.field.Number = class kijs_gui_field_Number extends kijs.gui.field.Field
      * Platzhalter-Text im leeren Feld. Zurzeit gibt der Getter immer undefined zurück (fehlendes return).
      * @type {String}
      */
-    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    get placeholder() { return this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }
 
     /**

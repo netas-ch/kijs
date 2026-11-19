@@ -96,6 +96,7 @@ Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.
 - ```kijs.gui.Panel```: Mit ```collapseHeight``` bzw. ```collapseWidth``` wurde beim 
   automatischen Zuklappen auch die zu kleine Grösse als aufgeklappte Grösse gemerkt. 
   Beim Aufklappen kommt jetzt wieder die vorherige Grösse.  
+  ```kijs.gui.field.Text```, ```Number```, ```Month```, ```Password``` und ```Memo```.  
 
 
 ## PHP

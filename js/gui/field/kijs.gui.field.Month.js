@@ -226,7 +226,7 @@ kijs.gui.field.Month = class kijs_gui_field_Month extends kijs.gui.field.Field {
      * Platzhaltertext im leeren Feld
      * @type {String}
      */
-    get placeholder() { this._inputDom.nodeAttributeGet('placeholder'); }
+    get placeholder() { return this._inputDom.nodeAttributeGet('placeholder'); }
     set placeholder(val) { this._inputDom.nodeAttributeSet('placeholder', kijs.toString(val)); }
 
     // overwrite
