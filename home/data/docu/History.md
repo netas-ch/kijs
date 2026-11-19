@@ -9,8 +9,9 @@ Versionsnummern
 
 Version 3.7.1
 =============
-Neu sind vor allem die Dokumentation und die Home-App. An kijs selbst gibt es nur 
-Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.  
+Neu sind vor allem die Dokumentation und die Home-App. An kijs selbst gibt es vor 
+allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur beim Punkt mit 
+**UPDATE TIPP** nötig (```captionHide```).  
 
 
 ## Home-App: API-Dokumentation
@@ -74,6 +75,11 @@ Fehlerbehebungen (siehe unten). Es sind keine Anpassungen am Projekt nötig.
   - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
     ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
     Die Warnung in der Konsole war verdreht und ist korrigiert.  
+- ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch```: Die Config 
+  ```captionHide``` ist entfernt. Sie war seit Version 2.1.1 ohne Wirkung und wurde 
+  nur noch angenommen, damit alte Configs keinen Fehler auslösen.  
+  **UPDATE TIPP:** Im JavaScript-Code nach ```captionHide``` suchen und die Eigenschaft 
+  entfernen, sonst gibt es den Fehler «Unknown config "captionHide"».  
 - Die nicht mehr verwendete Datei ```js/_kijs.Data.js``` (alte Version von 
   ```kijs.Data```, wurde nicht geladen) ist gelöscht.  
 - Übersetzungen neu erzeugt (```js/translation```, ```tools/kilang/data/usages.php```). 

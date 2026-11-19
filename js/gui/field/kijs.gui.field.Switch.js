@@ -81,7 +81,6 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
         Object.assign(this._configMap, {
             caption: { target: 'html', context: this._captionDom, prio: 2 },
             captionCls: { fn: 'function', target: this._captionDom.clsAdd, context: this._captionDom },   // {String|Array} CSS-Klassen der Beschriftung
-            captionHide: true,   // {Boolean} Wird zurzeit nicht ausgewertet
             captionDisplayType: { target: 'htmlDisplayType', context: this._captionDom, prio: 1 },
             captionStyle: { fn: 'assign', target: 'style', context: this._captionDom },   // {Object} CSS-Styles der Beschriftung
             captionWidth: { target: 'captionWidth' },
