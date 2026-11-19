@@ -34,6 +34,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
         this._theme = null;
         this._value = '';
         this._valueTrimEnable = true;
+        this._virtualKeyboardPolicy = null;     // wird beim Rendern auf den Node angewendet
         this._previousChangeValue = '';
 
         this._dom.clsAdd('kijs-field-aceeditor');
@@ -62,7 +63,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
     // --------------------------------------------------------------
     // GETTERS / SETTERS
     // --------------------------------------------------------------
-    get hasFocus() { return this._aceEditorNode.firstChild === document.activeElement; }
+    get hasFocus() { return !!this._aceEditorNode && this._aceEditorNode.firstChild === document.activeElement; }
 
     // overwrite
     get isEmpty() { return kijs.isEmpty(this.value); }
@@ -138,10 +139,14 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
      * Tastatur geöffnet wird ('auto', default) oder nicht ('manual'). (Nur Mobile, Chrome)
      */
     get virtualKeyboardPolicy() {
-        return this._aceEditorNode.firstChild.virtualKeyboardPolicy;
+        return this._aceEditorNode ? this._aceEditorNode.firstChild.virtualKeyboardPolicy : this._virtualKeyboardPolicy;
     }
     set virtualKeyboardPolicy(val) {
-        this._aceEditorNode.firstChild.virtualKeyboardPolicy = val;
+        // Der Node existiert erst nach dem Rendern: Wert merken und dort anwenden
+        this._virtualKeyboardPolicy = val;
+        if (this._aceEditorNode) {
+            this._aceEditorNode.firstChild.virtualKeyboardPolicy = val;
+        }
     }
 
 
@@ -192,6 +197,9 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
             this._aceEditor = ace.edit(this._aceEditorNode);
             let inputNode = this._aceEditorNode.firstChild;
             inputNode.id = this._inputId;
+            if (!kijs.isEmpty(this._virtualKeyboardPolicy)) {
+                inputNode.virtualKeyboardPolicy = this._virtualKeyboardPolicy;
+            }
 
             // Zeitverzögert den Listener erstellen
             kijs.defer(function() {
@@ -294,11 +302,14 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
             this.raiseEvent('destruct');
         }
 
-        kijs.Dom.removeEventListener('change', this._aceEditorNode.firstChild, this);
-
-        // Elemente/DOM-Objekte entladen
-        this._aceEditor.destroy();
-        this._aceEditor.container.remove();
+        // Elemente/DOM-Objekte entladen (nur falls der Editor gerendert wurde)
+        if (this._aceEditorNode) {
+            kijs.Dom.removeEventListener('blur', this._aceEditorNode.firstChild, this);
+        }
+        if (this._aceEditor) {
+            this._aceEditor.destroy();
+            this._aceEditor.container.remove();
+        }
 
         // Variablen (Objekte/Arrays) leeren
         this._aceEditor = null;

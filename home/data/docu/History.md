@@ -181,6 +181,8 @@ mit **UPDATE TIPP** nötig.
   jetzt auch zurück.  
 - ```kijs.gui.container.tab.Bar```: Wurde ```sortable``` nachträglich eingeschaltet, liessen sich 
   die bestehenden Tabs nicht verschieben. Zudem wurden dabei Listeners mehrfach gesetzt.  
+- ```kijs.gui.field.AceEditor```: Vor dem ersten Rendern führten die Config 
+  ```virtualKeyboardPolicy```, der Getter ```hasFocus``` und ```destruct()``` zu einem Fehler.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
