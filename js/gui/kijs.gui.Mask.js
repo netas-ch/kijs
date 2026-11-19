@@ -306,7 +306,9 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
     set text(val) {
         this._textDom.html = val;
 
-        if (!this._textDom.isRendered) {
+        // Ist die Maske bereits angezeigt, neu rendern, damit der Text erscheint.
+        // Sonst wird er beim Anzeigen gerendert.
+        if (this.isRendered && !this._textDom.isRendered) {
             this.render();
         }
     }
