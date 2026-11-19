@@ -509,16 +509,15 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Lädt die Daten neu (ruft reload() auf). Anders als kijs.gui.Element.load() gibt die
-     * Funktion kein Promise zurück.
+     * Lädt die Daten neu (ruft reload() auf).
      * @param {Object} [args={}]
      * @param {Boolean} [args.restoreSelection]   Selektion wiederherstellen (siehe reload())
      * @param {Boolean} [args.resetData]          Von Anfang an neu laden (siehe reload())
-     * @returns {undefined}
+     * @returns {Promise}  Promise von reload()
      */
     // overwrite
     load(args = {}) {
-        this.reload(args.restoreSelection, args.resetData);
+        return this.reload(args.restoreSelection, args.resetData);
     }
 
     /**
