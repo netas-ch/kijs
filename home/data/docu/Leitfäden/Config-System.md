@@ -14,7 +14,8 @@ Das ist ein einfaches Objekt mit den gewünschten Eigenschaften:
     });
 
 Weil die Config ein reines Objekt ist, kann sie auch als JSON vom Server kommen 
-oder als Kind-Element in einem Container angegeben werden (siehe ```xtype``` weiter unten).  
+(siehe Leitfaden [Oberfläche vom Server](Oberfläche_vom_Server.md)) oder als Kind-Element 
+in einem Container angegeben werden (siehe ```xtype``` weiter unten).  
 
 Damit das funktioniert, besitzt jede Klasse drei Bausteine:  
 

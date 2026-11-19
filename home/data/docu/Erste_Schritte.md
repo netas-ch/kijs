@@ -18,10 +18,14 @@ Es besteht aus zwei Teilen:
 | **Core** | ```js/```     | Hilfsklassen ohne GUI: ```kijs.Array```, ```kijs.Date```, ```kijs.Observable```, ```kijs.Rpc``` ... |
 | **GUI**  | ```js/gui/``` | Die Komponenten: ```kijs.gui.Button```, ```kijs.gui.Panel```, ```kijs.gui.field.Text``` ... |
 
-Das Wichtigste in drei Sätzen:  
+Das Wichtigste in vier Sätzen:  
 - Jede Komponente wird mit einem **Config-Objekt** erstellt: ```new kijs.gui.Button({ caption: 'OK' })```.  
 - Komponenten werden zu einem **Baum** zusammengesetzt. Kind-Elemente können statt 
   als Instanz auch als Config mit ```xtype``` angegeben werden.  
+- Weil eine Config ein reines Objekt ist, kann sie auch als JSON **vom Server** kommen. 
+  Jedes Element kann seine Config mit ```load()``` nachladen. So kann der Server ganze 
+  Oberflächen erzeugen, z.B. Formulare mit Feldern aus der Datenbank (siehe Leitfaden 
+  [Oberfläche vom Server](Leitfäden/Oberfläche_vom_Server.md)).  
 - Komponenten kommunizieren über **Ereignisse**: ```button.on('click', ...)```.  
 
 
@@ -44,7 +48,8 @@ und Tests.
 kannst du den Code des Beispiels ändern und mit dem Play-Button sofort ausführen. 
 Mit dem Pfeil-Button wird der ursprüngliche Code wiederhergestellt.  
 
-Schau dir zuerst im Showcase diese Komponenten an:  
+Schau dir zuerst im Showcase diese Komponenten an (bei Container und container.Form 
+kommt ein Teil vom Server):  
 - [Button](../showcase/Button.js)  
 - [Panel](../showcase/Panel.js)  
 - [Container](../showcase/Container.js)  
@@ -246,16 +251,17 @@ Diese Regeln gelten für jeden Code, auch für den Code deiner Applikation.
 | 8 | [Layout](Leitfäden/Layout.md) | CSS-Klassen wie ```kijs-flexrow``` und ```kijs-flexform``` |
 | 9 | [Disabled und ReadOnly](Leitfäden/Disabled_und_ReadOnly.md) | Unterschied und Weitergabe an Kind-Elemente |
 | 10 | [Ajax und RPC](Leitfäden/Ajax_und_RPC.md) | Kommunikation mit dem Server |
-| 11 | [Fehlerbehandlung](Leitfäden/Fehlerbehandlung.md) | ```error``` und ```errorNotice``` |
+| 11 | [Oberfläche vom Server](Leitfäden/Oberfläche_vom_Server.md) | Elemente und Formulare vom Server laden: ```rpcLoadFn```, ```load()```, ```autoLoad``` |
+| 12 | [Fehlerbehandlung](Leitfäden/Fehlerbehandlung.md) | ```error``` und ```errorNotice``` |
 
 ### C. Eigene Komponenten entwickeln
 Wenn du eigene Komponenten schreiben oder kijs selbst erweitern willst.  
 
 | # | Leitfaden | Worum geht es? |
 |---|-----------|----------------|
-| 12 | [Config-System](Leitfäden/Config-System.md) | Diesmal ganz: ```_configMap```, ```prio```, ```applyConfig()``` |
-| 13 | [Lebenszyklus](Leitfäden/Lebenszyklus.md) | ```render```, ```unrender```, ```destruct``` und ```superCall``` |
-| 14 | [Tutorial Eigene Komponente](Leitfäden/Tutorial_Eigene_Komponente.md) | Alles zusammen an einem Beispiel, Schritt für Schritt |
+| 13 | [Config-System](Leitfäden/Config-System.md) | Diesmal ganz: ```_configMap```, ```prio```, ```applyConfig()``` |
+| 14 | [Lebenszyklus](Leitfäden/Lebenszyklus.md) | ```render```, ```unrender```, ```destruct``` und ```superCall``` |
+| 15 | [Tutorial Eigene Komponente](Leitfäden/Tutorial_Eigene_Komponente.md) | Alles zusammen an einem Beispiel, Schritt für Schritt |
 
 ### D. Nachschlagen bei Bedarf
 
