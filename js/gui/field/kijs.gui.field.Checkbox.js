@@ -15,7 +15,7 @@
  * @fires blur  Weitergeleitet vom Eingabebereich
  * @fires change  Nach dem Umschalten durch den Benutzer (Klick oder Leertaste) und nach clear().
  *                e: checked, oldChecked, value, oldValue
- * @fires input  Nach dem Umschalten mit einem Klick (nicht mit der Leertaste).
+ * @fires input  Nach dem Umschalten durch den Benutzer (Klick oder Leertaste), vor change.
  *               e: checked, oldChecked, value, oldValue
  */
 kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.Field {
@@ -483,6 +483,12 @@ kijs.gui.field.Checkbox = class kijs_gui_field_Checkbox extends kijs.gui.field.F
             this._updateCheckboxIcon();
             this.validate();
 
+            this.raiseEvent('input', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
             this.raiseEvent('change', {
                 checked: this._checked,
                 oldChecked: oldChecked,

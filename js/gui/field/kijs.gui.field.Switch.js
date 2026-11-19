@@ -14,7 +14,8 @@
  * @fires blur  Weitergeleitet vom Schalter
  * @fires change  Nach dem Umschalten durch den Benutzer (Klick, Leertaste, Ziehen) und nach clear().
  *                e: checked, oldChecked, value, oldValue
- * @fires input  Nach dem Umschalten mit einem Klick. e: checked, oldChecked, value, oldValue
+ * @fires input  Nach dem Umschalten durch den Benutzer (Klick, Leertaste, Ziehen), vor change.
+ *               e: checked, oldChecked, value, oldValue
  */
 kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field {
 
@@ -391,6 +392,12 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             //this._updateTogglePoint(this._checked);
             this.validate();
 
+            this.raiseEvent('input', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
             this.raiseEvent('change', {
                 checked: this._checked,
                 oldChecked: oldChecked,
@@ -546,6 +553,12 @@ kijs.gui.field.Switch = class kijs_gui_field_Switch extends kijs.gui.field.Field
             this._updateTogglePoint(this._checked);
             this.validate();
 
+            this.raiseEvent('input', {
+                checked: this._checked,
+                oldChecked: oldChecked,
+                value: this.value,
+                oldValue: oldValue
+            });
             this.raiseEvent('change', {
                 checked: this._checked,
                 oldChecked: oldChecked,

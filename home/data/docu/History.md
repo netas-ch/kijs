@@ -107,6 +107,9 @@ allem Fehlerbehebungen (siehe unten). Anpassungen am Projekt sind nur beim Punkt
   (```kijs.gui.field.Text``` und ```kijs.gui.field.Display```).  
 - ```kijs.gui.field.Display.focus()``` mit ```selectText = true``` führte zu einem Fehler. 
   Jetzt wird der angezeigte Text markiert.  
+- ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
+  jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
+  (bisher nur beim Klick).  
 
 
 ## PHP
