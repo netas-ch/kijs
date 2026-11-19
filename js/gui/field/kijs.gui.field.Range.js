@@ -6,7 +6,8 @@
 /**
  * Schieberegler (HTML input type="range") für Zahlen zwischen min und max. Mit step sind auch
  * Kommazahlen möglich (z.B. step: 0.5). Mit showValue wird der aktuelle Wert neben dem Regler
- * angezeigt.
+ * angezeigt. Mit vertical steht der Regler senkrecht (unten min, oben max), die Länge folgt der
+ * Höhe des Felds (mindestens 150px).
  *
  * Ein Schieberegler ist nie leer: Ohne value steht er in der Mitte zwischen min und max
  * (gerundet auf step), clear() setzt ihn dorthin zurück.
@@ -73,7 +74,8 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Field {
             min: { target: 'min', prio: 100 },
             name: { target: 'name' },
             showValue: { target: 'showValue' },
-            step: { target: 'step', prio: 100 }
+            step: { target: 'step', prio: 100 },
+            vertical: { target: 'vertical' }
         });
 
         // Event-Weiterleitungen von this._inputDom
@@ -195,6 +197,19 @@ kijs.gui.field.Range = class kijs_gui_field_Range extends kijs.gui.field.Field {
         this._previousChangeValue = this.value;
         this._updateValueDom();
         this._updateClearButtonVisibility();
+    }
+
+    /**
+     * Regler senkrecht anzeigen (unten min, oben max)? Default: false
+     * @type {Boolean}
+     */
+    get vertical() { return this._dom.clsHas('kijs-vertical'); }
+    set vertical(val) {
+        if (val) {
+            this._dom.clsAdd('kijs-vertical');
+        } else {
+            this._dom.clsRemove('kijs-vertical');
+        }
     }
 
 

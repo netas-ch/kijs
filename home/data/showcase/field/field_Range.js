@@ -63,6 +63,35 @@ home.sc.field_Range = class home_sc_field_Range {
                 {
                     xtype: 'kijs.gui.field.Display',
                     cls: 'kijs-titleLarge',
+                    value: 'vertical',
+                    style: { margin: '10px 0 0 0'}
+                },{
+                    xtype: 'kijs.gui.Container',
+                    cls: 'kijs-flexrow',
+                    innerStyle: { gap: '20px', alignItems: 'flex-start' },
+                    elements: [
+                        {
+                            xtype: 'kijs.gui.field.Range',
+                            vertical: true,
+                            labelHide: true,
+                            value: 30,
+                            showValue: true
+                        },{
+                            xtype: 'kijs.gui.field.Range',
+                            vertical: true,
+                            labelHide: true,
+                            height: 220,
+                            min: 0,
+                            max: 10,
+                            value: 8,
+                            showValue: true
+                        }
+                    ]
+                },
+
+                {
+                    xtype: 'kijs.gui.field.Display',
+                    cls: 'kijs-titleLarge',
                     value: 'mit Label',
                     style: { margin: '10px 0 0 0'}
                 },{
@@ -129,7 +158,7 @@ home.sc.field_Range = class home_sc_field_Range {
             },{
                 xtype: 'kijs.gui.field.Switch',
                 label: 'disableFlex',
-                value: true,
+                value: false,
                 on: {
                     change: function(e) {
                         this._updateProperty('disableFlex', e.element.value);

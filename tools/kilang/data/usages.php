@@ -33,6 +33,7 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [50], 
+    "../../js/gui/kijs.gui.FileUpload.js" => [186], 
     "../../js/gui/kijs.gui.MsgBox.js" => [234, 456]
    ]
   ]
@@ -139,10 +140,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.FileUpload.js" => [274]
+    "../../js/kijs.FileUpload.js" => [295]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [269]
+    "../../js/kijs.FileUpload.js" => [274]
    ]
   ]
  ], 
@@ -151,6 +152,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/kijs.Ajax.js" => [263]
+   ], 
+   "usagesJsOld" => [
     "../../js/kijs.Ajax.js" => [260]
    ]
   ]
@@ -160,6 +164,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/kijs.Ajax.js" => [257]
+   ], 
+   "usagesJsOld" => [
     "../../js/kijs.Ajax.js" => [254]
    ]
   ]
@@ -191,10 +198,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.FileUpload.js" => [278]
+    "../../js/kijs.FileUpload.js" => [299]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [273]
+    "../../js/kijs.FileUpload.js" => [278]
    ]
   ]
  ], 
@@ -212,6 +219,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/kijs.Ajax.js" => [267]
+   ], 
+   "usagesJsOld" => [
     "../../js/kijs.Ajax.js" => [264]
    ]
   ]
@@ -221,6 +231,9 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
+    "../../js/kijs.Ajax.js" => [260, 264]
+   ], 
+   "usagesJsOld" => [
     "../../js/kijs.Ajax.js" => [257, 261]
    ]
   ]
@@ -304,10 +317,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.FileUpload.js" => [347]
+    "../../js/kijs.FileUpload.js" => [368]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [342]
+    "../../js/kijs.FileUpload.js" => [347]
    ]
   ]
  ], 
@@ -325,10 +338,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/kijs.FileUpload.js" => [541]
+    "../../js/kijs.FileUpload.js" => [567]
    ], 
    "usagesJsOld" => [
-    "../../js/kijs.FileUpload.js" => [536]
+    "../../js/kijs.FileUpload.js" => [541]
    ]
   ]
  ], 
@@ -382,7 +395,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.DatePicker.js" => [126]
+    "../../js/gui/kijs.gui.DatePicker.js" => [124]
    ]
   ]
  ], 
@@ -456,7 +469,7 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.DatePicker.js" => [136], 
+    "../../js/gui/kijs.gui.DatePicker.js" => [134], 
     "../../js/gui/kijs.gui.MonthPicker.js" => [137], 
     "../../js/gui/kijs.gui.TimePicker.js" => [148]
    ]
@@ -504,11 +517,11 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/grid/kijs.gui.grid.ColumnWindow.js" => [41], 
-    "../../js/gui/kijs.gui.FileUpload.js" => [185], 
+    "../../js/gui/kijs.gui.FileUpload.js" => [194], 
     "../../js/gui/kijs.gui.MsgBox.js" => [54, 122, 155, 188, 230, 453]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/kijs.gui.FileUpload.js" => [177]
+    "../../js/gui/kijs.gui.FileUpload.js" => [185]
    ]
   ]
  ], 
@@ -518,7 +531,7 @@ $translations = [
    "fuzzy" => [true], 
    "usagesJs" => [
     "../../js/gui/container/tab/kijs.gui.container.tab.Button.js" => [36], 
-    "../../js/gui/kijs.gui.DatePicker.js" => [146], 
+    "../../js/gui/kijs.gui.DatePicker.js" => [144], 
     "../../js/gui/kijs.gui.MonthPicker.js" => [147], 
     "../../js/gui/kijs.gui.TimePicker.js" => [158]
    ]
@@ -593,10 +606,10 @@ $translations = [
   "" => [
    "fuzzy" => [true], 
    "usagesJs" => [
-    "../../js/gui/kijs.gui.FileUpload.js" => [169]
+    "../../js/gui/kijs.gui.FileUpload.js" => [170]
    ], 
    "usagesJsOld" => [
-    "../../js/gui/kijs.gui.FileUpload.js" => [161]
+    "../../js/gui/kijs.gui.FileUpload.js" => [169]
    ]
   ]
  ], 

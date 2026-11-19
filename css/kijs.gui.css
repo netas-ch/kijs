@@ -3316,6 +3316,7 @@
        ****************** */
   div.kijs-field-range {
     /* Anzeige des Werts (showValue) */
+    /* senkrechter Regler (vertical): unten min, oben max. Das Feld wächst nicht in die Breite. */
   }
   div.kijs-field-range > .kijs-content > .kijs-inputwrapper > input {
     width: 100%;
@@ -3391,6 +3392,48 @@
   }
   div.kijs-field-range.kijs-disableFlex > .kijs-content > .kijs-inputwrapper {
     width: var(--defaultField-inputWidth);
+  }
+  div.kijs-field-range.kijs-vertical {
+    flex: none;
+    align-self: flex-start;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content {
+    height: 100%;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper {
+    flex-direction: column;
+    width: auto;
+    height: 100%;
+    min-height: 150px;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > input {
+    writing-mode: vertical-lr;
+    direction: rtl;
+    flex: 1 1 auto;
+    width: var(--range-btnHeight);
+    height: auto;
+    min-height: 0;
+    margin: 0;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-runnable-track {
+    width: 1px;
+    height: auto;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > input::-webkit-slider-thumb {
+    margin-top: 0;
+    margin-left: calc(var(--range-btnHeight) / 2 * -1);
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > input::-moz-range-track {
+    width: 1px;
+    height: auto;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > input::-moz-range-progress {
+    width: 2px;
+    height: auto;
+  }
+  div.kijs-field-range.kijs-vertical > .kijs-content > .kijs-inputwrapper > .kijs-field-range-value {
+    min-width: 0;
+    text-align: center;
   }
   div.kijs-field-range.kijs-error > .kijs-content > .kijs-inputwrapper > input {
     background-color: var(--field-error-bkgrndColor);

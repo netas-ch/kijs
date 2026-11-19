@@ -3835,6 +3835,55 @@
             }
         }
 
+        /* senkrechter Regler (vertical): unten min, oben max. Das Feld wächst nicht in die Breite. */
+        &.kijs-vertical {
+            flex: none;
+            align-self: flex-start;
+
+            > .kijs-content {
+                height: 100%;
+
+                > .kijs-inputwrapper {
+                    flex-direction: column;
+                    width: auto;
+                    height: 100%;
+                    min-height: 150px;
+
+                    > input {
+                        writing-mode: vertical-lr;
+                        direction: rtl;
+                        flex: 1 1 auto;
+                        width: var(--range-btnHeight);
+                        height: auto;
+                        min-height: 0;
+                        margin: 0;
+
+                        &::-webkit-slider-runnable-track {
+                            width: 1px;
+                            height: auto;
+                        }
+                        &::-webkit-slider-thumb {
+                            margin-top: 0;
+                            margin-left: calc(var(--range-btnHeight) / 2 * -1);
+                        }
+                        &::-moz-range-track {
+                            width: 1px;
+                            height: auto;
+                        }
+                        &::-moz-range-progress {
+                            width: 2px;
+                            height: auto;
+                        }
+                    }
+
+                    > .kijs-field-range-value {
+                        min-width: 0;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+
         &.kijs-error > .kijs-content > .kijs-inputwrapper > input {
             background-color: var(--field-error-bkgrndColor);
         }
