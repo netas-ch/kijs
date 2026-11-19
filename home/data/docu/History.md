@@ -144,6 +144,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.Grid```: Beim Verschieben einer Spalte (```columnConfig.position``` bzw. 
   Spaltenfenster) gingen die Zellen der Zeilen und die Filter nicht mit, und beim Verschieben 
   nach rechts landete die Spalte eine Position zu weit links.  
+- ```kijs.gui.container.tab.Container```: Die Configs ```tabClosableIconMap```, ```tabBadgeCls```, 
+  ```tabBadgeStyle```, ```tabCaptionCls``` und ```tabCaptionStyle``` führten zu einem Fehler 
+  («object is not extensible»). Sie wirken jetzt auf den Tab-Button.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

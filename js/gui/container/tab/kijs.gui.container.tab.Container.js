@@ -38,15 +38,15 @@ kijs.gui.container.tab.Container = class kijs_gui_container_tab_Container extend
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
             tabClosable: { target: 'tabClosable' },
-            tabClosableIconMap: { target: 'closableIconMap', context: this._tabButtonEl },   // {String} Icon des Schliessen-Buttons. Achtung: zeigt auf die nicht vorhandene Eigenschaft closableIconMap des Tab-Buttons und wirkt darum nicht
+            tabClosableIconMap: { target: 'tabClosableIconMap' },
             tabBadgeText: { target: 'badgeText', context: this._tabButtonEl },   // {String} Badge-Text des Tab-Buttons (siehe kijs.gui.Button.badgeText)
-            tabBadgeCls: { target: 'badgeCls', context: this._tabButtonEl },   // {String} CSS-Klasse des Badges. Achtung: Der Tab-Button hat keine Eigenschaft badgeCls (nur die Config), darum wirkt es nicht
+            tabBadgeCls: { fn: 'function', target: this._tabButtonEl.badgeDom.clsAdd, context: this._tabButtonEl.badgeDom },   // {String|Array} CSS-Klassen des Badges
             tabBadgeTextDisplayType: { target: 'badgeTextDisplayType', context: this._tabButtonEl },   // {String} Darstellung des Badge-Texts (siehe kijs.gui.Button.badgeTextDisplayType)
-            tabBadgeStyle: { target: 'badgeStyle', context: this._tabButtonEl },   // {Object} CSS-Styles des Badges. Achtung: Der Tab-Button hat keine Eigenschaft badgeStyle (nur die Config), darum wirkt es nicht
+            tabBadgeStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl.badgeDom },   // {Object} CSS-Styles des Badges
             tabCaption: { target: 'caption', context: this._tabButtonEl },   // {String} Beschriftung des Tab-Buttons
-            tabCaptionCls: { target: 'captionCls', context: this._tabButtonEl },   // {String} CSS-Klasse der Beschriftung. Achtung: Der Tab-Button hat keine Eigenschaft captionCls (nur die Config), darum wirkt es nicht
+            tabCaptionCls: { fn: 'function', target: this._tabButtonEl.captionDom.clsAdd, context: this._tabButtonEl.captionDom },   // {String|Array} CSS-Klassen der Beschriftung
             tabCaptionDisplayType: { target: 'captionDisplayType', context: this._tabButtonEl },   // {String} Darstellung der Beschriftung (siehe kijs.gui.Button.captionDisplayType)
-            tabCaptionStyle: { target: 'captionStyle', context: this._tabButtonEl },   // {Object} CSS-Styles der Beschriftung. Achtung: Der Tab-Button hat keine Eigenschaft captionStyle (nur die Config), darum wirkt es nicht
+            tabCaptionStyle: { fn: 'assign', target: 'style', context: this._tabButtonEl.captionDom },   // {Object} CSS-Styles der Beschriftung
             
             tabIcon: { target: 'icon', context: this._tabButtonEl },   // {kijs.gui.Icon|Object} Icon des Tab-Buttons (siehe kijs.gui.Button.icon)
             tabIconMap: { target: 'iconMap', context: this._tabButtonEl },   // {String} Icon aus einer IconMap, z.B. 'kijs.iconMap.Fa.house'
