@@ -71,7 +71,9 @@ kijs.Navigator = class kijs_Navigator {
      */
     static get isAndroid() { return kijs.Navigator.getBrowserInfo().isAndroid; }
     /**
-     * Ist das Betriebssystem iOS bzw. iPadOS?
+     * Ist das Betriebssystem iOS bzw. iPadOS? Achtung: Ein iPad meldet sich seit iPadOS 13
+     * standardmässig wie ein Mac und ergibt darum false (und isMac = true). Für die Bedienung
+     * per Touch besser isTouch verwenden.
      * @type {Boolean}
      */
     static get isIOS() { return kijs.Navigator.getBrowserInfo().isIOS; }
@@ -81,7 +83,8 @@ kijs.Navigator = class kijs_Navigator {
      */
     static get isLinux() { return kijs.Navigator.getBrowserInfo().isLinux; }
     /**
-     * Ist das Betriebssystem macOS?
+     * Ist das Betriebssystem macOS? Achtung: Auch ein iPad ab iPadOS 13 ergibt true, weil es sich
+     * standardmässig wie ein Mac meldet (siehe isIOS).
      * @type {Boolean}
      */
     static get isMac() { return kijs.Navigator.getBrowserInfo().isMac; }
@@ -98,7 +101,9 @@ kijs.Navigator = class kijs_Navigator {
     static get isTouch() { return navigator.maxTouchPoints > 0;}
     
     /**
-     * Name des Betriebssystems: 'Windows', 'iOS', 'iPadOS', 'macOS', 'Android', 'Linux' oder '' (unbekannt)
+     * Name des Betriebssystems: 'Windows', 'iOS', 'iPadOS', 'macOS', 'Android', 'Linux' oder '' (unbekannt).
+     * 'iPadOS' nur, wenn sich das iPad als solches meldet; ab iPadOS 13 ergibt es standardmässig
+     * 'macOS' (siehe isIOS).
      * @type {String}
      */
     static get os() { return kijs.Navigator.getBrowserInfo().os; }
