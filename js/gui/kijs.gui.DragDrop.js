@@ -51,12 +51,11 @@ kijs.gui.DragDrop = class kijs_gui_DragDrop {
 
     /**
      * Bild, das beim Ziehen beim Mauszeiger angezeigt wird. Beim Setzen wird ein anderes vorheriges
-     * Bild entladen. Achtung: Der Getter liest die nicht definierte Variable __dragImageDom und wirft
-     * darum einen ReferenceError.
+     * Bild entladen.
      * @type {kijs.gui.Dom|null}
      */
     static get dragImageDom() {
-        return __dragImageDom;
+        return this.__dragImageDom ?? null;
     }
     static set dragImageDom(val) {
         if (!kijs.isEmpty(this.__dragImageDom)) {
