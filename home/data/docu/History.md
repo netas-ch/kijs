@@ -155,6 +155,8 @@ mit **UPDATE TIPP** nötig.
   einem Fehler, weil der Setter wegen eines Tippfehlers ```ddMappping``` hiess (auch in 
   ```kijs.gui.container.tab.Bar```). Der Setter heisst jetzt ```ddMapping```.  
 - ```kijs.gui.container.Fieldset```: Nach dem Zu- und Aufklappen ging eine gesetzte Höhe verloren.  
+- ```kijs.gui.Mask``` löste ```afterRender``` zweimal aus, das erste Mal bevor Icon und Text 
+  gerendert waren. Jetzt nur noch einmal am Schluss.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

@@ -348,11 +348,6 @@ kijs.gui.Mask = class kijs_gui_Mask extends kijs.gui.Element {
             }, 300, this);
         }
 
-        // Event afterRender auslösen
-        if (!superCall) {
-            this.raiseEvent('afterRender');
-        }
-
         // Grösse der Maske an target anpassen
         this._updateMaskSize();
 
