@@ -115,13 +115,16 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
     get columnConfig() { return this._columnConfig; }
     
     /**
-     * Filter-Objekt für den Server: {type, valueField} und mit checkboxFilterValues zusätzlich checkboxFilter
+     * Filter-Objekt für den Server: {type, valueField, displayField} und mit checkboxFilterValues
+     * zusätzlich checkboxFilter. displayField ist das Feld mit dem angezeigten Text (z.B. bei einer
+     * Spalte mit Combo-Editor), sonst gleich wie valueField.
      * @type {Object}
      */
     get filter() {
         let flt = {
             type: '',
-            valueField: this._columnConfig.valueField
+            valueField: this._columnConfig.valueField,
+            displayField: this._columnConfig.displayField
         };
         if (this._checkboxFilterGroup) {
             flt.checkboxFilter = this.checkboxFilterValues;

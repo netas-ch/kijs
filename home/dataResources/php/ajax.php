@@ -986,6 +986,10 @@ function _gridFilterRows(array $rows, array $filters): array {
                     if ($search === '') {
                         return true;
                     }
+                    // Text im angezeigten Feld suchen (z.B. Spalte Combo: displayText statt value)
+                    if (!empty($filter->displayField)) {
+                        $value = $row->{(string)$filter->displayField} ?? null;
+                    }
                     $v = mb_strtolower((string)$value);
                     $s = mb_strtolower($search);
                     return match ($compare) {

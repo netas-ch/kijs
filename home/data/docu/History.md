@@ -232,6 +232,9 @@ mit **UPDATE TIPP** nötig.
   Auswahlliste offen ist. Als Editor im Grid schliessen Enter, Tab und Escape die Zelle jetzt 
   auch nach einer Auswahl mit der Maus. Bei geschlossener Liste verhält sich Escape wie bei 
   einem Textfeld (schliesst z.B. ein Fenster).  
+- Grid-Filter: Das Filter-Objekt für den Server enthält neu auch ```displayField``` (Feld mit dem 
+  angezeigten Text, sonst gleich wie ```valueField```). So kann der Server z.B. bei einer Spalte 
+  mit Combo-Editor im angezeigten Text suchen.  
 - Grid-Filter: Die Checkboxen im Filtermenü (Icon-Auswahl und Auswahl fester Werte) haben die 
   gleiche Höhe und Einrückung wie die Buttons des Menüs. Die Icon-Auswahl füllt die ganze Breite 
   des Menüs.  
