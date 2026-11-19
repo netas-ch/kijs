@@ -817,12 +817,8 @@ kijs.gui.field.DateTime = class kijs_gui_field_DateTime extends kijs.gui.field.F
                    
                     // Der 1.1. eines Jahres kann noch zur letzten Woche des Vorjahres gehören
                     // und der 31.12. bereits zur 1. Woche des nächsten Jahres.
-                    // damit das richtige Jahr angezeigt wird, je nachdem das start- oder enddatum nehmen.
-                    if (valDateStart.getMonth >= 6) {
-                        ret = kijs.Date.format(valDateEnd, this._displayWeekFormat);
-                    } else {
-                        ret = kijs.Date.format(valDateStart, this._displayWeekFormat);
-                    }
+                    // Nach ISO-8601 gehört eine Woche zum Jahr ihres Donnerstags: darum diesen formatieren.
+                    ret = kijs.Date.format(kijs.Date.addDays(valDateStart, 3), this._displayWeekFormat);
 
                     // Evtl. Präfix einfügen
                     if (!kijs.isEmpty(this._displayWeekPrefix)) {

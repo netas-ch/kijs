@@ -117,6 +117,8 @@ mit **UPDATE TIPP** nötig.
   auch auf Englisch und Französisch vorhanden.  
 - ```kijs.gui.field.DateTime```: Der Setter ```maxValue``` warf wegen eines Tippfehlers einen 
   Fehler. Als Config funktionierte ```maxValue``` bereits.  
+- ```kijs.gui.field.DateTime``` im Modus ```week```: Bei einer Woche über den Jahreswechsel 
+  wurde teilweise das falsche Jahr angezeigt (z.B. «KW 01 2025» statt «KW 01 2026»).  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
