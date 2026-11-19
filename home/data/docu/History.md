@@ -240,6 +240,9 @@ mit **UPDATE TIPP** nötig.
   Sind alle Icons abgewählt, wird ```icons: []``` gesendet (bisher Fehler).  
 - ```kijs.gui.field.CheckboxGroup.checkedAll``` warf einen TypeError, wenn keine Checkbox 
   ausgewählt war.  
+- ```kijs.gui.field.AceEditor``` und ```kijs.gui.TimePicker```: Wurden sie kurz nach dem Rendern 
+  wieder zerstört, warf ein verzögerter Aufruf (Listener bzw. Zeichnen der Uhr) einen TypeError. 
+  Die verzögerten Aufrufe werden jetzt beim Entladen abgebrochen.  
 - ```kijs.gui.field.Combo``` hält die Tasten Enter, Tab und Escape nur noch zurück, wenn die 
   Auswahlliste offen ist. Als Editor im Grid schliessen Enter, Tab und Escape die Zelle jetzt 
   auch nach einer Auswahl mit der Maus. Bei geschlossener Liste verhält sich Escape wie bei 

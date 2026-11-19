@@ -31,6 +31,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     constructor(config={}) {
         super(false);
 
+        this._calculateDeferId = null;      // verzögertes Zeichnen nach dem Rendern (siehe render)
         this._secondsHide = true;
         this._minutesHide = false;
         this._separator = ':';
@@ -422,8 +423,12 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this.raiseEvent('afterRender');
         }
 
-        // canvas zeichnen
-        kijs.defer(function() {
+        // canvas zeichnen (wird in unrender() abgebrochen)
+        if (this._calculateDeferId) {
+            window.clearTimeout(this._calculateDeferId);
+        }
+        this._calculateDeferId = kijs.defer(function() {
+            this._calculateDeferId = null;
             this._calculate();
         }, 10, this);
     }
@@ -459,7 +464,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         if (this._footerDivDom) {
             this._footerDivDom.unrender();
         }
-        
+
+        // verzögertes Zeichnen abbrechen
+        if (this._calculateDeferId) {
+            window.clearTimeout(this._calculateDeferId);
+            this._calculateDeferId = null;
+        }
+
         super.unrender(true);
     }
 

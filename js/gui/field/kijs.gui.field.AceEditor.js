@@ -30,6 +30,7 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
         this._aceEditor = null;
         this._aceEditorNode = null;
+        this._listenerDeferId = null;           // verzögertes Erstellen der Listener (siehe render)
         this._mode = 'javascript';
         this._theme = null;
         this._value = '';
@@ -201,8 +202,12 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
                 inputNode.virtualKeyboardPolicy = this._virtualKeyboardPolicy;
             }
 
-            // Zeitverzögert den Listener erstellen
-            kijs.defer(function() {
+            // Zeitverzögert den Listener erstellen (wird in destruct() abgebrochen)
+            this._listenerDeferId = kijs.defer(function() {
+                this._listenerDeferId = null;
+                if (!this._aceEditor) {
+                    return;
+                }
                 this._aceEditor.on('change', () => { this.raiseEvent('input'); });
                 this._aceEditor.getSession().on('changeAnnotation', () => { this.#onAnnotationChange(); });
 
@@ -300,6 +305,12 @@ kijs.gui.field.AceEditor = class kijs_gui_field_AceEditor extends kijs.gui.field
 
             // Event auslösen.
             this.raiseEvent('destruct');
+        }
+
+        // verzögertes Erstellen der Listener abbrechen
+        if (this._listenerDeferId) {
+            window.clearTimeout(this._listenerDeferId);
+            this._listenerDeferId = null;
         }
 
         // Elemente/DOM-Objekte entladen (nur falls der Editor gerendert wurde)
