@@ -18,7 +18,8 @@ home.sc.DatePicker = class home_sc_DatePicker {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.DatePicker">kijs.gui.DatePicker</a>',
+            caption: 'kijs.gui.DatePicker',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.DatePicker') ],
             scrollableY: 'auto',
             cls: ['kijs-borderless', 'kijs-flexform'],
             style: {

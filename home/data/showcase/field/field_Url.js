@@ -18,7 +18,8 @@ home.sc.field_Url = class home_sc_field_Url {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Url">kijs.gui.field.Url</a>',
+            caption: 'kijs.gui.field.Url',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Url') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

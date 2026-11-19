@@ -18,7 +18,8 @@ home.sc.Icon = class home_sc_Icon {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Icon">kijs.gui.Icon</a>',
+            caption: 'kijs.gui.Icon',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Icon') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

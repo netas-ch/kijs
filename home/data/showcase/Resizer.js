@@ -19,7 +19,8 @@ home.sc.Resizer = class home_sc_Resizer {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Resizer">kijs.gui.Resizer</a>',
+            caption: 'kijs.gui.Resizer',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Resizer') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

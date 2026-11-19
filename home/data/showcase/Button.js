@@ -20,7 +20,8 @@ home.sc.Button = class home_sc_Button {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Button">kijs.gui.Button</a>',
+            caption: 'kijs.gui.Button',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Button') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

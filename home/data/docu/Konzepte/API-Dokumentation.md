@@ -275,7 +275,7 @@ werden. Ein Klick auf einen Eintrag öffnet die Klassenseite und klappt ihn auf.
 | 4       | Filter auf der Klassenseite (**erledigt** mit Schritt 3)         |
 | 5       | Globale Suche (**erledigt**: ```HomeSearch.php```, RPC ```home.search```, ```home.SearchPage.js```) |
 | 6       | Lückenbericht (**erledigt**: Eintrag zuoberst im API-Baum, RPC ```api.issues```, ```home.ApiIssuesPage.js```) |
-| 7       | Links ```api:``` in Leitfäden und Showcase-Seiten (**erledigt**: ```home.App.openApiLink()```, Format im Leitfaden [Kommentare](../Leitfäden/Kommentare.md)) |
+| 7       | Links ```api:``` in Leitfäden (**erledigt**: ```home.App.openApiLink()```, Format im Leitfaden [Kommentare](../Leitfäden/Kommentare.md)), Showcase-Seiten mit Button «API» rechts in der Kopfzeile (**erledigt**: ```home.App.createApiButton()```) |
 | später  | Direktlinks über die URL (z.B. ```#api/kijs.gui.Button/caption```), dann auch für Leitfäden, Showcase und Tests |
 
 Jeder Schritt ist für sich testbar.  

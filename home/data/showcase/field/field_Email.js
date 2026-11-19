@@ -18,7 +18,8 @@ home.sc.field_Email = class home_sc_field_Email {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Email">kijs.gui.field.Email</a>',
+            caption: 'kijs.gui.field.Email',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Email') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

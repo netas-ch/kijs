@@ -18,7 +18,8 @@ home.sc.DropZone = class home_sc_DropZone {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.DropZone">kijs.gui.DropZone</a>',
+            caption: 'kijs.gui.DropZone',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.DropZone') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

@@ -22,7 +22,8 @@ home.sc.field_QuillEditor = class home_sc_field_QuillEditor {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.QuillEditor">kijs.gui.field.QuillEditor</a>',
+            caption: 'kijs.gui.field.QuillEditor',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.QuillEditor') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

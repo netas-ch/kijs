@@ -18,7 +18,8 @@ home.sc.field_Iban = class home_sc_field_Iban {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Iban">kijs.gui.field.Iban</a>',
+            caption: 'kijs.gui.field.Iban',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Iban') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

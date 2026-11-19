@@ -20,7 +20,8 @@ home.sc.grid_Grid = class home_sc_grid_Grid {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.grid.Grid">kijs.gui.grid.Grid</a>',
+            caption: 'kijs.gui.grid.Grid',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.grid.Grid') ],
             cls: ['kijs-borderless', 'kijs-flexfit'],
             //scrollableY: 'auto',
             style: {

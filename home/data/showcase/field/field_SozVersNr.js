@@ -18,7 +18,8 @@ home.sc.field_SozVersNr = class home_sc_field_SozVersNr {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.SozVersNr">kijs.gui.field.SozVersNr</a>',
+            caption: 'kijs.gui.field.SozVersNr',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.SozVersNr') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

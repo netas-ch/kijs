@@ -18,7 +18,8 @@ home.sc.field_DateTime = class home_sc_field_DateTime {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.DateTime">kijs.gui.field.DateTime</a>',
+            caption: 'kijs.gui.field.DateTime',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.DateTime') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

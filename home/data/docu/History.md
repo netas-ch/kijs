@@ -26,7 +26,9 @@ die Dokumentation und die Home-App. Es sind keine Anpassungen am Projekt nötig.
 - Globale Suche in der Kopfzeile über API, Leitfäden, Showcase und Tests.  
 - Links zwischen den Seiten: relative Links auf Leitfäden, Showcase- und 
   Test-Seiten sowie Links auf die API (```api:kijs.gui.Button#caption```). Die 
-  Leitfäden und die Showcase-Seiten sind mit der API verlinkt.  
+  Leitfäden sind mit der API verlinkt.  
+- Showcase: Jede Seite hat rechts in der Kopfzeile einen Button «API», der die 
+  API-Dokumentation der gezeigten Klasse öffnet (bei mehreren Klassen über ein Menü).  
 - Syntax-Highlighting in den Code-Blöcken der Dokumentation.  
 - Startseite: Schriftzug als Text (Schrift Jost), damit er auf allen Bildschirmen 
   scharf ist, und Links auf Erste Schritte, Showcase, Dokumentation und API.  

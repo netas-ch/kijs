@@ -269,7 +269,8 @@ home.sc.field_Combo = class home_sc_field_Combo {
         ];
 
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Combo">kijs.gui.field.Combo</a>',
+            caption: 'kijs.gui.field.Combo',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Combo') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

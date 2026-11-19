@@ -18,7 +18,8 @@ home.sc.field_Text = class home_sc_field_Text {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Text">kijs.gui.field.Text</a>',
+            caption: 'kijs.gui.field.Text',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Text') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

@@ -18,7 +18,8 @@ home.sc.Menu = class home_sc_Menu {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Menu">kijs.gui.Menu</a>',
+            caption: 'kijs.gui.Menu',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Menu') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

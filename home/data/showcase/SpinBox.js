@@ -19,7 +19,8 @@ home.sc.SpinBox = class home_sc_SpinBox {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.SpinBox">kijs.gui.SpinBox</a>',
+            caption: 'kijs.gui.SpinBox',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.SpinBox') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

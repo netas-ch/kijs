@@ -275,7 +275,8 @@ home.sc.Dashboard = class home_sc_Dashboard {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Dashboard">kijs.gui.Dashboard</a>',
+            caption: 'kijs.gui.Dashboard',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Dashboard') ],
             scrollableY: false,
             cls: ['kijs-borderless', 'kijs-flexfit'],
             style: {

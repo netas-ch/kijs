@@ -18,7 +18,8 @@ home.sc.field_Memo = class home_sc_field_Memo {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.field.Memo">kijs.gui.field.Memo</a>',
+            caption: 'kijs.gui.field.Memo',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.field.Memo') ],
             cls: ['kijs-borderless', 'kijs-flexform'],
             scrollableY: 'auto',
             style: {

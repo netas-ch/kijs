@@ -16,7 +16,8 @@ home.sc.ButtonGroup = class home_sc_ButtonGroup {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.ButtonGroup">kijs.gui.ButtonGroup</a>',
+            caption: 'kijs.gui.ButtonGroup',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.ButtonGroup') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

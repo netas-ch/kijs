@@ -62,6 +62,45 @@ home.App = class home_App {
     // MEMBERS
     // --------------------------------------------------------------
     /**
+     * Erstellt die Config eines Buttons, der die API-Dokumentation öffnet (z.B. für die Kopfzeile
+     * einer Showcase-Seite). Bei mehreren Klassen öffnet der Button ein Menü mit allen Klassen.
+     * @param {String|String[]} classNames  z.B. 'kijs.gui.Button'
+     * @returns {Object}  Config für kijs.gui.Button
+     */
+    createApiButton(classNames) {
+        if (!kijs.isArray(classNames)) {
+            classNames = [classNames];
+        }
+
+        const config = {
+            xtype: 'kijs.gui.Button',
+            caption: 'API',
+            iconMap: 'kijs.iconMap.Fa.cubes'
+        };
+
+        if (classNames.length === 1) {
+            config.tooltip = 'API-Dokumentation von ' + classNames[0];
+            config.on = {
+                click: () => { this.openApiClass(classNames[0]); }
+            };
+        } else {
+            config.tooltip = 'API-Dokumentation';
+            config.menu = {
+                closeOnClick: true,
+                elements: classNames.map(className => ({
+                    caption: className,
+                    iconMap: 'kijs.iconMap.Fa.cube',
+                    on: {
+                        click: () => { this.openApiClass(className); }
+                    }
+                }))
+            };
+        }
+
+        return config;
+    }
+
+    /**
      * Öffnet die API-Dokumentation einer Klasse in einem Tab
      * @param {String} className     z.B. 'kijs.gui.Button'
      * @param {String} [memberName]  Eintrag, der aufgeklappt wird, z.B. 'caption'

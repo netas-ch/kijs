@@ -18,7 +18,8 @@ home.sc.PanelBar = class home_sc_PanelBar {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.PanelBar">kijs.gui.PanelBar</a>',
+            caption: 'kijs.gui.PanelBar',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.PanelBar') ],
             cls: 'kijs-borderless',
             scrollableY: 'auto',
             style: {

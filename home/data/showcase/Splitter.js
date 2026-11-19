@@ -18,7 +18,8 @@ home.sc.Splitter = class home_sc_Splitter {
     // --------------------------------------------------------------
     getContent() {
         this._content = new kijs.gui.Panel({
-            caption: '<a href="api:kijs.gui.Splitter">kijs.gui.Splitter</a>',
+            caption: 'kijs.gui.Splitter',
+            headerBarElements: [ this._app.createApiButton('kijs.gui.Splitter') ],
             cls: ['kijs-borderless', 'kijs-flexcolumn'],
             style: {
                 flex: 1
