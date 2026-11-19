@@ -533,6 +533,10 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
         // Als Workaround laden wir bei resetData = false alle im Grid vorhandenen Rows neu. Siehe this._remoteLoad()
         let selected = this.getSelectedIds();
         return this._remoteLoad(resetData).then((response) => {
+            // Grid inzwischen zerstört
+            if (!this._dom) {
+                return response;
+            }
 
             // Selektion wiederherstellen
             if (selected && restoreSelection) {
@@ -1320,6 +1324,13 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
                     waitMaskTarget: showWaitMask ? this._waitMaskTarget : 'none',   // Wait Mask Target
                     waitMaskTargetDomProperty: this._waitMaskTargetDomProperty      // Wait Mask Target Dom Property
                 }).then((e) => {
+                    // Grid inzwischen zerstört: Antwort nicht mehr verarbeiten
+                    if (!this._dom) {
+                        this._isLoading = false;
+                        resolve(e.response);
+                        return;
+                    }
+
                     if (kijs.isEmpty(e.response.errorType)) {
                         this._remoteProcess(e, args, resetData);
                     } else {

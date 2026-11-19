@@ -243,6 +243,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.field.AceEditor``` und ```kijs.gui.TimePicker```: Wurden sie kurz nach dem Rendern 
   wieder zerstört, warf ein verzögerter Aufruf (Listener bzw. Zeichnen der Uhr) einen TypeError. 
   Die verzögerten Aufrufe werden jetzt beim Entladen abgebrochen.  
+- ```kijs.gui.grid.Grid```: Kam die Antwort eines Ladevorgangs erst nach dem Zerstören des Grids, 
+  warf ```_remoteProcess()``` einen TypeError. Die Antwort wird dann nicht mehr verarbeitet, das 
+  Promise von ```reload()``` wird trotzdem erfüllt.  
 - ```kijs.gui.field.Combo``` hält die Tasten Enter, Tab und Escape nur noch zurück, wenn die 
   Auswahlliste offen ist. Als Editor im Grid schliessen Enter, Tab und Escape die Zelle jetzt 
   auch nach einer Auswahl mit der Maus. Bei geschlossener Liste verhält sich Escape wie bei 
