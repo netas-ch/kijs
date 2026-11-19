@@ -164,6 +164,8 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.DragDrop.dragImageDom```: Der Getter warf einen ReferenceError.  
 - ```kijs.gui.DropZone.contentTypes```: Ein Media-Type ohne Untertyp (z.B. ```'image'```) passte 
   zu keiner Datei. Er gilt jetzt wie beim ```kijs.UploadDialog``` als ```'image/*'```.  
+- ```kijs.gui.container.Tab.save()``` sendete die Daten unter ```data``` statt ```requestData```; 
+  beim Server kamen darum weder ```posData``` noch ```args``` an.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
