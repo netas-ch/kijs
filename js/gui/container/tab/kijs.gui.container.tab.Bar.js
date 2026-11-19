@@ -71,14 +71,6 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     }
 
     /**
-     * Alter Name des Setters ddMapping (Tippfehler)
-     * @type {Object}
-     * @deprecated Stattdessen ddMapping verwenden.
-     */
-    get ddMappping() { return this.ddMapping; }
-    set ddMappping(val) { this.ddMapping = val; }
-
-    /**
      * Drag&Drop-Name der Tab-Buttons. Default: eindeutige ID
      * @type {String}
      */

@@ -37,7 +37,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
         this._modal = !!document.querySelector('dialog:modal[open]'); // wenn ein modales Fenster offen ist, sollten die Unterfenster auch modal sein;
 
         this._draggable = false;
-        this._resizeDelay = 300;    // min. Delay zwischen zwei Resize-Events
 
         this._targetX = null;           // Zielelement (kijs.gui.Element) oder Body (HTMLElement)
         this._targetDomProperty = 'dom'; // Dom-Eigenschaft im Zielelement (String) (Spielt bei Body als target keine Rolle)
@@ -61,7 +60,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             draggable: { target: 'draggable' },
             allowDragOutside: true,
             modal: { target: 'modal' },
-            resizeDelay: true,
             target: { target: 'target' },
             targetDomProperty: true,
 
@@ -142,14 +140,6 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
             return this._targetX;
         }
     }
-
-    /**
-     * Min. Verzögerung zwischen zwei Resize-Events in ms. Wird nicht verwendet. Default: 300
-     * @type {Number}
-     * @deprecated Stattdessen afterResizeDelay verwenden (siehe kijs.gui.Element.afterResizeDelay).
-     */
-    get resizeDelay() { return this._resizeDelay; }
-    set resizeDelay(val) { this._resizeDelay = val; }
 
     /**
      * Ziel, in das das Fenster gerendert wird: document.body oder ein kijs.gui.Element (null = Body).

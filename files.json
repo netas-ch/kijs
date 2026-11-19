@@ -14,7 +14,6 @@
    "js/kijs.Navigator.js",
    "js/kijs.Char.js",
    "js/kijs.Data.js",
-   "js/kijs.Storage.js",
 
    "js/kijs.Observable.js",
 

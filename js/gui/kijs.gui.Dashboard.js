@@ -100,14 +100,6 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     }
 
     /**
-     * Alter Name des Setters ddMapping (Tippfehler)
-     * @type {Object}
-     * @deprecated Stattdessen ddMapping verwenden.
-     */
-    get ddMappping() { return this.ddMapping; }
-    set ddMappping(val) { this.ddMapping = val; }
-    
-    /**
      * Drag&Drop-Name der Panels. Default: 'kijs.gui.dashboard.Panel'
      * @type {String}
      */

@@ -84,27 +84,7 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
 - Lange Beschreibungen in den Kommentaren mit Absätzen, Listen, Tabellen und Code-Blöcken 
   gegliedert (z.B. ```kijs.Date```, ```kijs.Data.filter```, ```kijs.gui.DataView.selectType```, 
   siehe Leitfaden «Kommentare»).  
-- Was bereits als veraltet galt, ist jetzt mit ```@deprecated``` markiert und wird 
-  in der API-Dokumentation so angezeigt:  
-  - ```kijs.Storage```: bitte nicht mehr verwenden, wird gelöscht, sobald nicht mehr 
-    in Gebrauch.  
-  - ```kijs.getGetParameter()```: stattdessen ```kijs.Navigator.getGetParameter()``` 
-    verwenden.  
-  - ```kijs.gui.field.CheckboxGroup.checkedValues```: stattdessen ```value``` verwenden.  
-  - ```kijs.gui.Dom.changeReadOnly()```: macht dasselbe wie ```changeDisabled()```, 
-    stattdessen ```changeDisabled()``` verwenden.  
-  - ```ddMappping``` (Tippfehler) in ```kijs.gui.container.tab.Bar``` und ```kijs.gui.Dashboard```: 
-    stattdessen ```ddMapping``` verwenden.  
-  - ```kijs.gui.Window.resizeDelay```: wird nicht verwendet, stattdessen ```afterResizeDelay``` 
-    verwenden.  
-  - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
-    ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
-    Die Warnung in der Konsole war verdreht und ist korrigiert.  
-- ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch```: Die Config 
-  ```captionHide``` ist entfernt. Sie war seit Version 2.1.1 ohne Wirkung und wurde 
-  nur noch angenommen, damit alte Configs keinen Fehler auslösen.  
-  **UPDATE TIPP:** Im JavaScript-Code nach ```captionHide``` suchen und die Eigenschaft 
-  entfernen, sonst gibt es den Fehler «Unknown config "captionHide"».  
+- Was als veraltet galt, ist entfernt (siehe «Veraltetes entfernt»).  
 - ```kijs.gui.container.Scrollable```: Sind beide Achsen scrollbar, kann mit Shift + 
   Mausrad horizontal gescrollt werden.  
 - Die nicht mehr verwendete Datei ```js/_kijs.Data.js``` (alte Version von 
@@ -121,6 +101,57 @@ am Projekt sind nur bei den Punkten mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.columnConfig.ColumnConfig.applyConfig()```: Das Argument 
   ```preventEvents``` ist entfernt. Es hatte keine Wirkung, weil eine ColumnConfig kein 
   ```afterResize```-Event hat.  
+
+
+## Veraltetes entfernt
+Was seit längerem als veraltet galt oder nie eine Wirkung hatte, ist entfernt. Wer es noch 
+verwendet, erhält einen Fehler (z.B. «Unknown config» oder «is not a function»).  
+
+- ```kijs.Storage``` mit der Datei ```js/kijs.Storage.js```.  
+  **UPDATE TIPP:** Die Datei aus der ```files.json``` (bzw. überall, wo die kijs-Dateien 
+  eingebunden werden) entfernen. Im Code nach ```kijs.Storage``` suchen und direkt 
+  ```window.localStorage``` bzw. ```window.sessionStorage``` verwenden. Damit bereits 
+  gespeicherte Werte lesbar bleiben: kijs.Storage speicherte unter dem Schlüssel 
+  ```'kijs-' + key``` (mit ```keyPrefix``` ```'kijs-' + prefix + '-' + key```) und den Wert als 
+  JSON im Format ```{"value": ...}```, z.B.:  
+```javascript
+// bisher: kijs.Storage.getItem('myKey');
+const raw = window.localStorage.getItem('kijs-myKey');
+const value = raw ? JSON.parse(raw).value : null;
+
+// bisher: kijs.Storage.setItem('myKey', value);
+window.localStorage.setItem('kijs-myKey', JSON.stringify({ value: value }));
+```
+- ```kijs.getGetParameter()``` (veraltet seit 1.2.0).  
+  **UPDATE TIPP:** Nach ```kijs.getGetParameter``` suchen und durch 
+  ```kijs.Navigator.getGetParameter``` ersetzen.  
+- ```kijs.gui.Icon.iconChar``` als HTML-Entity, z.B. ```'&#xf015;'``` (veraltet seit 1.2.6). 
+  Eine Entity wirft jetzt einen ```kijs.Error```. Gilt für alle Elemente mit Icon (Button, 
+  Panel, PanelBar ...), nicht aber für ```kijs.gui.grid.cell.Icon```.  
+  **UPDATE TIPP:** Nach ```iconChar``` mit ```'&#x``` suchen und den Codepoint als Zahl 
+  angeben: ```'&#xf015;'``` → ```0xf015```. Einfacher ist meist ```iconMap```, z.B. 
+  ```'kijs.iconMap.Fa.house'```.  
+- ```kijs.gui.field.CheckboxGroup.checkedValues``` (veraltet seit 2.3.1).  
+  **UPDATE TIPP:** Nach ```checkedValues``` suchen und durch ```value``` ersetzen. Achtung: 
+  Der Setter von ```checkedValues``` schaltete die übergebenen Werte um, ```value``` setzt sie.  
+- ```kijs.gui.Dom.changeReadOnly()```: machte dasselbe wie ```changeDisabled()```.  
+  **UPDATE TIPP:** Nach ```changeReadOnly``` suchen und durch ```changeDisabled``` ersetzen, 
+  bei Feldern stattdessen ```readOnly``` setzen.  
+- ```kijs.gui.Window.resizeDelay```: hatte keine Wirkung.  
+  **UPDATE TIPP:** Die Config ```resizeDelay``` entfernen. Für die Verzögerung des Events 
+  ```afterResize``` gibt es ```afterResizeDelay```.  
+- ```ddMappping``` (Tippfehler) in ```kijs.gui.Dashboard``` und 
+  ```kijs.gui.container.tab.Bar``` (siehe auch Fehlerbehebungen: die Config ```ddMapping``` 
+  funktioniert jetzt).  
+  **UPDATE TIPP:** Nach ```ddMappping``` (drei p) suchen und durch ```ddMapping``` ersetzen.  
+- ```kijs.gui.dataView.element.Base.dataIndex```: wurde von kijs nie gesetzt.  
+  **UPDATE TIPP:** Falls ein Projekt den Wert selbst setzt und liest: den Datensatz über 
+  ```dataRow``` bzw. ```primaryKey``` ansprechen.  
+- ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch```: Die Config 
+  ```captionHide``` war seit Version 2.1.1 ohne Wirkung und wurde nur noch angenommen, 
+  damit alte Configs keinen Fehler auslösen.  
+  **UPDATE TIPP:** Im JavaScript-Code nach ```captionHide``` suchen und die Eigenschaft 
+  entfernen, sonst gibt es den Fehler «Unknown config "captionHide"».  
 
 
 ## Datei-Upload überarbeitet

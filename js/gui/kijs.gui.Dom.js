@@ -846,39 +846,6 @@ kijs.gui.Dom = class kijs_gui_Dom extends kijs.Observable {
     }
 
     /**
-     * Macht zurzeit dasselbe wie changeDisabled(): setzt das Attribut disabled und
-     * die CSS-Klasse kijs-disabled.
-     * @param {Boolean} val
-     * @param {Boolean} [callFromParent=false]  True, wenn der Aufruf vom Elternelement kommt.
-     * @returns {undefined}
-     * @deprecated Stattdessen changeDisabled() verwenden. Für readOnly siehe kijs.gui.field.Field.readOnly.
-     */
-    changeReadOnly(val, callFromParent) {
-        // Falls der Aufruf vom Elterncontainer kommt, wird beim Zurücksetzen von
-        // disabled wieder der vorherige Wert zugewiesen.
-        if (callFromParent) {
-            if (!val) {
-                val = !!this._disabledInitial;
-            }
-
-        } else {
-            this._disabledInitial = !!val;
-
-        }
-
-        this.nodeAttributeSet('disabled', !!val);
-        if (this._tooltip) {
-            this._tooltip.disabled = !!val;
-        }
-
-        if (val) {
-            this.clsAdd('kijs-disabled');
-        } else {
-            this.clsRemove('kijs-disabled');
-        }
-    }
-
-    /**
      * Fügt eine oder mehrere CSS-Klassen hinzu
      * @param {String|Array} cls
      * @returns {undefined}

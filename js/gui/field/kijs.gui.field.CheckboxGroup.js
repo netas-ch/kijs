@@ -1,10 +1,5 @@
 /* global kijs, this */
 
-
-// TODO: Eigenschaft "checkedValues" entfernen. Der Name ist verwirrend und es besteht eine grosse
-// Ähnlichkeit zu value. Evtl. dafür neue Funktionen: checkAll(), uncheckAll() oder noch besser die 
-// Filter des zugrundeliegenden DataView verwenden.
-
 // --------------------------------------------------------------
 // kijs.gui.field.CheckboxGroup
 // --------------------------------------------------------------
@@ -77,31 +72,6 @@ kijs.gui.field.CheckboxGroup = class kijs_gui_field_CheckboxGroup extends kijs.g
         if (this.data) {
            this._checkAll(val);
         }
-    }
-
-    /**
-     * Ausgewählte Checkboxen. Der Getter entspricht value. Der Setter schaltet die
-     * übergebenen Werte um: ausgewählte werden abgewählt, nicht ausgewählte ausgewählt.
-     * @type {Array}
-     * @deprecated Stattdessen value verwenden.
-     */
-    get checkedValues () { return this.value.length ? this.value : []; }
-    set checkedValues (val) {
-        let value = this.value;
-
-        if (!kijs.isArray(val)){
-            val = [val];
-        }
-        kijs.Array.each(val, function(v){
-            if (kijs.Array.contains(value, v)){
-                kijs.Array.remove(value, v);
-            } else {
-                value.push(v);
-            }
-
-        }, this);
-
-        this.value = value;
     }
 
 
