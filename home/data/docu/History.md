@@ -119,6 +119,11 @@ mit **UPDATE TIPP** nötig.
   Fehler. Als Config funktionierte ```maxValue``` bereits.  
 - ```kijs.gui.field.DateTime``` im Modus ```week```: Bei einer Woche über den Jahreswechsel 
   wurde teilweise das falsche Jahr angezeigt (z.B. «KW 01 2025» statt «KW 01 2026»).  
+- ```kijs.gui.grid.Grid.scrollTo()``` scrollte den Bereich mit den Daten nicht. Beim 
+  Neuladen (```rowsRemoveAll()```) steht die Tabelle jetzt wieder oben.  
+- ```kijs.gui.grid.Grid```: Beim Laden über ```rpcLoadFn``` wurde der Startindex nicht an 
+  ```rowsAdd()``` übergeben. Bei jedem Nachladen wurden darum alle Zeilen neu gerendert, und 
+  beim Aktualisieren wurde eine geänderte Reihenfolge des Servers nicht übernommen.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

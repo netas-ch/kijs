@@ -737,31 +737,30 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Scrollt die linken und rechten Spalten (scrollTop) und Kopf- und Fusszeile (scrollLeft).
-     * Zurzeit wird nur gescrollt, wenn der jeweilige Bereich bereits gescrollt ist (der Code prüft
-     * scrollTop statt der Existenz des Nodes), und der Bereich mit den Daten selbst wird nicht gescrollt.
+     * Scrollt den Bereich mit den Daten und gleicht Kopf- und Fusszeile sowie die linken und
+     * rechten Spalten an.
      * @param {Number} [scrollTop]
      * @param {Number} [scrollLeft]
      * @returns {undefined}
      */
     scrollTo(scrollTop, scrollLeft) {
-        if (kijs.isInteger(scrollTop)) {
-            if (this._leftContainerDom && this._leftContainerDom.node && this._leftContainerDom.node.scrollTop) {
-                this._leftContainerDom.node.scrollTop = scrollTop;
-            }
-            if (this._rightContainerDom && this._rightContainerDom.node && this._rightContainerDom.node.scrollTop) {
-                this._rightContainerDom.node.scrollTop = scrollTop;
-            }
+        const nde = this._tableContainerDom ? this._tableContainerDom.node : null;
+        if (!nde) {
+            return;
         }
 
-        if (kijs.isInteger(scrollLeft)) {
-            if (this._headerContainerDom && this._headerContainerDom.node && this._headerContainerDom.node.scrollTop) {
-                this._headerContainerDom.node.scrollLeft = scrollLeft;
-            }
-            if (this._footerContainerDom && this._footerContainerDom.node && this._footerContainerDom.node.scrollTop) {
-                this._footerContainerDom.node.scrollLeft = scrollLeft;
-            }
+        if (kijs.isInteger(scrollTop)) {
+            nde.scrollTop = scrollTop;
         }
+        if (kijs.isInteger(scrollLeft)) {
+            nde.scrollLeft = scrollLeft;
+        }
+
+        // Die anderen Bereiche gleich angleichen (das scroll-Event kommt erst später)
+        this._headerContainerDom.node.scrollLeft = nde.scrollLeft;
+        this._footerContainerDom.node.scrollLeft = nde.scrollLeft;
+        this._leftContainerDom.node.scrollTop = nde.scrollTop;
+        this._rightContainerDom.node.scrollTop = nde.scrollTop;
     }
 
     /**
@@ -1359,7 +1358,7 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
             // Datensätze hinzufügen
             if (e.response.rows.length > 0) {
                 this._remoteDataLastRowCnt = e.response.rows.length;
-                addedRowsCnt = this.rowsAdd(e.response.rows, args.start);
+                addedRowsCnt = this.rowsAdd(e.response.rows, args.config ? args.config.start : null);
             }
 
             // Anzahl DS zählen
