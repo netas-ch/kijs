@@ -117,6 +117,9 @@ kijs.Ajax = class kijs_Ajax {
     *                                  Bsp: {"content-type":"application/x-www-form-urlencoded; charset=UTF-8"}
     *     {Boolean} [disableCaching=false]    Um Antworten aus dem Cache zu verhindern wird ein Parameter
     *                                         'noCache' mit dem aktuellen Timestamp als Wert erstellt
+    *     {AbortSignal} [signal]       Signal eines AbortController zum Abbrechen des Requests (wie bei fetch).
+    *                                  Danach gilt: errorMsg 'Die Verbindung wurde abgebrochen.' und
+    *                                  request.abortHappened = true
     * @returns {Promise}
     */
     static request(config={}) {
@@ -290,7 +293,18 @@ kijs.Ajax = class kijs_Ajax {
                     }
                 }
             }
+
             xmlHttp.send(postData);
+
+            // Abbrechen über ein AbortSignal. Erst nach send(), weil abort() vorher
+            // kein loadend auslöst und das Promise sonst nie erfüllt würde.
+            if (config.signal) {
+                if (config.signal.aborted) {
+                    xmlHttp.abort();
+                } else {
+                    config.signal.addEventListener('abort', () => { xmlHttp.abort(); }, { once: true });
+                }
+            }
         });
     }
 

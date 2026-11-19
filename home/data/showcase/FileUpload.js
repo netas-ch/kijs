@@ -49,7 +49,7 @@ home.sc.FileUpload = class home_sc_FileUpload {
                     xtype: 'kijs.gui.Element',
                     html: 'Die Dateien werden nicht gespeichert. Dateien mit «fehler» im Namen lösen eine '
                         + 'Fehlermeldung vom Server aus. Dateien können auch auf die DropZone gezogen oder '
-                        + 'mit Ctrl+V eingefügt werden.'
+                        + 'mit Ctrl+V eingefügt werden. Mit «Langsamer Server» lässt sich der Upload abbrechen.'
                 },{
                     xtype: 'kijs.gui.Container',
                     cls: 'kijs-flexrow',
@@ -170,6 +170,16 @@ home.sc.FileUpload = class home_sc_FileUpload {
                 on: {
                     change: function(e) {
                         this._fileUpload.maxFileSize = e.element.value ? 1024*1024 : null;
+                    },
+                    context: this
+                }
+            },{
+                xtype: 'kijs.gui.field.Switch',
+                label: 'Langsamer Server',
+                tooltip: 'Der Server wartet 3 Sekunden, bevor er antwortet. So lässt sich Abbrechen ausprobieren.',
+                on: {
+                    change: function(e) {
+                        this._fileUpload.parameters = e.element.value ? { slow: 1 } : {};
                     },
                     context: this
                 }

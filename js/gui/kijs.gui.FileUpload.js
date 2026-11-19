@@ -6,6 +6,7 @@
 /**
  * kijs.FileUpload mit Oberfläche: Während des Uploads zeigt ein modales Fenster für jede Datei
  * einen kijs.gui.ProgressBar an, abgewiesene Dateien und Fehler vom Server stehen unter dem Balken.
+ * Während des Uploads können alle laufenden Uploads mit dem Button Abbrechen abgebrochen werden.
  * Ohne Fehler schliesst sich das Fenster mit autoClose eine Sekunde nach dem letzten Upload,
  * sonst über den Button OK.
  *
@@ -181,6 +182,14 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
                     '>',
                     {
                         xtype: 'kijs.gui.Button',
+                        name: 'btnCancel',
+                        caption: kijs.getText('Abbrechen'),
+                        on: {
+                            click: this.#onBtnCancelClick,
+                            context: this
+                        }
+                    },{
+                        xtype: 'kijs.gui.Button',
                         name: 'btnOk',
                         caption: kijs.getText('OK'),
                         isDefault: true,
@@ -208,11 +217,12 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
     }
 
     /**
-     * Aktiviert den Button OK, wenn keine Uploads mehr laufen
+     * Aktiviert während des Uploads den Button Abbrechen, danach den Button OK
      * @returns {undefined}
      */
-    _updateBtnOk() {
+    _updateButtons() {
         if (this._win) {
+            this._win.footer.down('btnCancel').disabled = !this.isUploading;
             this._win.footer.down('btnOk').disabled = this.isUploading;
         }
     }
@@ -220,6 +230,10 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
 
     // PRIVATE
     // LISTENERS
+    #onBtnCancelClick() {
+        this.abort();
+    }
+
     #onBtnOkClick() {
         if (!this.isUploading) {
             this._closeWindow();
@@ -234,7 +248,7 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
         const progressBar = this._addProgressBar(e.fileName);
         progressBar.showPercent = false;
         this._setError(progressBar, e.errorMsg);
-        this._updateBtnOk();
+        this._updateButtons();
     }
 
     #onProgress(e) {
@@ -247,7 +261,10 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
     #onUpload(e) {
         const progressBar = this._progressBars.get(e.uploadId);
         if (progressBar) {
-            progressBar.percent = 100;
+            // abgebrochen: Balken bleibt stehen
+            if (!e.isAborted) {
+                progressBar.percent = 100;
+            }
             if (e.errorMsg) {
                 this._setError(progressBar, e.errorMsg);
             }
@@ -255,7 +272,7 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
     }
 
     #onUploadEnd() {
-        this._updateBtnOk();
+        this._updateButtons();
 
         if (this._win && this._autoClose && !this._hasErrors) {
             kijs.defer(function() {
@@ -273,7 +290,7 @@ kijs.gui.FileUpload = class kijs_gui_FileUpload extends kijs.FileUpload {
         }
 
         this._progressBars.set(e.uploadId, this._addProgressBar(e.fileName));
-        this._updateBtnOk();
+        this._updateButtons();
     }
 
     #onWindowPaste(e) {

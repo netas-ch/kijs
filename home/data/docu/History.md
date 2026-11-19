@@ -191,8 +191,9 @@ werden) ersetzen:
   ```sanitizeFileName```. Neu: ```headers```, ```parameters``` und ```on```.  
 - ```showFileSelectDialog()``` heisst ```showFileOpenDialog()```.  
 - Neue Funktionen: ```upload(files)``` lädt Dateien direkt hoch (z.B. von einer DropZone), 
-  ```checkFile(file)``` gibt die Fehlermeldung zurück, ```isContentTypeAllowed(type)```, 
-  Getter ```isUploading```.  
+  ```abort(uploadId)``` bricht einen oder alle laufenden Uploads ab, ```checkFile(file)``` gibt 
+  die Fehlermeldung zurück, ```isContentTypeAllowed(type)```, Getter ```isUploading```. Beim 
+  Zerstören werden laufende Uploads abgebrochen.  
 - Entfernt: ```dropZones```, ```bindDropZones()```, ```unbindDropZone()``` (stattdessen 
   ```kijs.gui.DropZone.fileUpload```), ```disabled```, ```changeDisabled()``` und 
   ```observePaste``` (ist jetzt in ```kijs.gui.FileUpload```).  
@@ -203,7 +204,8 @@ werden) ersetzen:
     ```errorMsg```. Wird auch ausgelöst, wenn ```multiple``` aus ist und mehrere Dateien 
     kommen.  
   - ```progress```: zusätzlich ```loaded``` und ```total```, ohne ```nodeEvent```.  
-  - ```upload```: zusätzlich die ganze Antwort ```response```.  
+  - ```upload```: zusätzlich die ganze Antwort ```response``` und ```isAborted``` (mit 
+    ```abort()``` abgebrochen?).  
   - ```uploadEnd```: zusätzlich ```errorMsgs``` (uploadId => Fehlermeldung).  
 - ```progress``` meldet jetzt den Fortschritt des Uploads. Bisher war es der Download der 
   Antwort, darum sprang der Balken meist erst am Schluss.  
@@ -217,8 +219,8 @@ werden) ersetzen:
 
 ### kijs.gui.FileUpload
 - Zeigt während des Uploads ein Fenster mit einem Fortschrittsbalken pro Datei. Abgewiesene 
-  Dateien und Fehler vom Server stehen unter dem Balken. Der Button OK ist aktiv, sobald 
-  alle Uploads fertig sind.  
+  Dateien und Fehler vom Server stehen unter dem Balken. Während des Uploads ist der Button 
+  Abbrechen aktiv, danach der Button OK.  
 - Configs: ```autoClose```, ```showProgress``` und ```observePaste```. Bei 
   ```observePaste``` kann statt ```true``` ein Element angegeben werden (z.B. die DropZone): 
   Eingefügt wird dann nur, solange es sichtbar ist.  
@@ -249,6 +251,9 @@ werden) ersetzen:
 ### kijs.Ajax
 - Neue Config ```uploadProgressFn``` für den Fortschritt des Uploads (```progressFn``` 
   meldet den Download der Antwort).  
+- Neue Config ```signal```: ein ```AbortSignal``` (```AbortController```) zum Abbrechen des 
+  Requests, wie bei ```fetch()```. Danach ist ```errorMsg``` «Die Verbindung wurde abgebrochen.» 
+  und ```request.abortHappened``` ```true```.  
 
 ### Home-App
 - Showcase FileUpload mit echtem Upload (```home/dataResources/php/upload.php```, 
@@ -286,6 +291,9 @@ muss ein JSON-Objekt sein, Fehler als ```errorMsg```.
 - ```readOnly``` und ```disabled``` wirken zusammen: Wird ```readOnly``` ausgeschaltet, bleibt 
   ein deaktiviertes Feld deaktiviert.  
 - Neue Config ```showValue```: zeigt den aktuellen Wert neben dem Regler an.  
+- Neue Config ```vertical```: senkrechter Regler (unten ```min```, oben ```max```). Die Länge 
+  folgt der Höhe des Felds (```height```), mindestens 150px. Braucht einen aktuellen Browser 
+  (Chrome 124, Firefox 120, Safari 17.4).  
 - Showcase field Range mit Beispielen zu ```showValue``` und Kommazahlen.  
 
 **UPDATE TIPP:** Im Projekt nach ```kijs.gui.field.Range``` suchen: Text-Configs wie 
@@ -294,6 +302,11 @@ Startwert 50 verlassen hat, ```value: 50``` angeben.
 
 
 ## Fehlerbehebungen
+- ```kijs.gui.ViewPort.disableDrop``` (Default ```true```) rief bei jedem Ziehen auf der Seite 
+  ```preventDefault()``` auf, auch bei Text. Darum liess sich z.B. markierter Text nicht in 
+  ein Eingabefeld ziehen, und überall sah es so aus, als könne man ablegen. Jetzt gilt es nur 
+  noch für Dateien ausserhalb einer Ablagefläche: Dort zeigt der Browser «nicht ablegen» an 
+  und öffnet die Datei nicht.  
 - **Sicherheit:** Die Darstellungsart ```'text'``` (```htmlDisplayType```, 
   ```captionDisplayType``` usw. über ```kijs.Dom.setInnerHtml()``` sowie 
   ```kijs.gui.field.Display.valueDisplayType```) führte Event-Handler im Wert aus, z.B. 

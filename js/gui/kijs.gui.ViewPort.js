@@ -82,8 +82,10 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     }
 
     /**
-     * Verhindern, dass der Browser eine auf die Seite gezogene Datei öffnet? Nur true oder false,
-     * sonst kijs.Error. Default: true
+     * Verhindern, dass der Browser eine auf die Seite gezogene Datei öffnet? Gilt nur für Dateien
+     * ausserhalb einer Ablagefläche (z.B. kijs.gui.DropZone): Dort zeigt der Browser an, dass nicht
+     * abgelegt werden kann. Gezogener Text und kijs-Drag&Drop sind nicht betroffen.
+     * Nur true oder false, sonst kijs.Error. Default: true
      * @type {Boolean}
      */
     get disableDrop() {
@@ -91,14 +93,19 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
     }
     set disableDrop(val) {
         if (val === true) {
-            // Standardmässig öffnet der Browser das Dokument, wenn
-            // es über einer Webseite verschoben wird. Mittels preventDefault
-            // wird sichergestellt, dass in diesem Fall nichts passiert.
+            // Standardmässig öffnet der Browser eine Datei, die auf die Webseite gezogen
+            // wird. Hat keine Ablagefläche das Event schon behandelt (preventDefault),
+            // wird das hier verhindert.
             kijs.Dom.addEventListener('dragover', window, function(e) {
-                e.nodeEvent.preventDefault();
+                if (this._isFileDrag(e.nodeEvent) && !e.nodeEvent.defaultPrevented) {
+                    e.nodeEvent.preventDefault();
+                    e.nodeEvent.dataTransfer.dropEffect = 'none';
+                }
             }, this);
             kijs.Dom.addEventListener('drop', window, function(e) {
-                e.nodeEvent.preventDefault();
+                if (this._isFileDrag(e.nodeEvent)) {
+                    e.nodeEvent.preventDefault();
+                }
             }, this);
 
         } else if (val === false) {
@@ -138,6 +145,18 @@ kijs.gui.ViewPort = class kijs_gui_ViewPort extends kijs.gui.Container {
 
         // afterResize-Event auslösen
         this._raiseAfterResizeEvent(true);
+    }
+
+
+    // PROTECTED
+    /**
+     * Werden Dateien gezogen (nicht Text oder Elemente)?
+     * @param {DragEvent} nodeEvent
+     * @returns {Boolean}
+     */
+    _isFileDrag(nodeEvent) {
+        const dt = nodeEvent.dataTransfer;
+        return !!dt && kijs.Array.contains(Array.from(dt.types || []), 'Files');
     }
 
 

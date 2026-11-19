@@ -34,8 +34,9 @@
  *                      e: fileUpload, file, fileName, errorMsg
  * @fires progress  Fortschritt eines Uploads.
  *                  e: fileUpload, uploadId, loaded, total (oder null), percent (0-100 oder null)
- * @fires upload  Ein Upload ist abgeschlossen (auch im Fehlerfall).
- *                e: fileUpload, uploadId, response, uploadResponse, errorMsg ('' = kein Fehler)
+ * @fires upload  Ein Upload ist abgeschlossen (auch im Fehlerfall oder nach abort()).
+ *                e: fileUpload, uploadId, response, uploadResponse, errorMsg ('' = kein Fehler),
+ *                isAborted (mit abort() abgebrochen?)
  * @fires uploadEnd  Alle laufenden Uploads sind abgeschlossen. e: fileUpload,
  *                   uploadResponses (uploadId => uploadResponse), errorMsgs (uploadId => errorMsg)
  * @fires uploadStart  Der Upload einer Datei wurde gestartet.
@@ -64,6 +65,7 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
         this._sanitizeFileName = false;
         this._url = '.';
 
+        this._abortControllers = new Map(); // intern: uploadId => AbortController der laufenden Uploads
         this._errorMsgs = {};           // intern: uploadId => errorMsg der laufenden Serie
         this._nextUploadId = 1;         // intern
         this._runningUploadIds = [];    // intern
@@ -253,6 +255,25 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Bricht laufende Uploads ab. Für jeden abgebrochenen Upload wird upload mit isAborted = true
+     * ausgelöst, danach wie gewohnt uploadEnd.
+     * @param {Number|null} [uploadId=null]  uploadId eines Uploads, null = alle laufenden
+     * @returns {undefined}
+     */
+    abort(uploadId=null) {
+        if (!this._abortControllers) {
+            return;
+        }
+        if (uploadId === null) {
+            kijs.Array.each(Array.from(this._abortControllers.values()), function(controller) {
+                controller.abort();
+            }, this);
+        } else if (this._abortControllers.has(uploadId)) {
+            this._abortControllers.get(uploadId).abort();
+        }
+    }
+
     /**
      * Wendet die Konfigurations-Eigenschaften an
      * @param {Object} config
@@ -500,6 +521,8 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
         headers[this._pathNameHeader] = encodeURIComponent(fileDir);
         headers['Content-Type'] = fileType;
 
+        const abortController = new AbortController();
+        this._abortControllers.set(uploadId, abortController);
         this._runningUploadIds.push(uploadId);
 
         kijs.Ajax.request({
@@ -509,6 +532,7 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
             format: 'json',
             headers: headers,
             postData: file,
+            signal: abortController.signal,
             uploadProgressFn: (e) => { this.#onUploadProgress(e, uploadId); }
         }).then((e) => {
             this.#onUploadEnd(e, uploadId);
@@ -529,6 +553,8 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
         }
 
         kijs.Array.remove(this._runningUploadIds, uploadId);
+        this._abortControllers.delete(uploadId);
+        const isAborted = !!(e.request && e.request.abortHappened);
 
         // Fehlermeldung (Verbindung oder Server)
         let errorMsg = '';
@@ -554,7 +580,8 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
             uploadId: uploadId,
             response: e.response,
             uploadResponse: uploadResponse,
-            errorMsg: errorMsg
+            errorMsg: errorMsg,
+            isAborted: isAborted
         });
 
         // Wenn alle laufenden Uploads abgeschlossen sind: uploadEnd
@@ -598,9 +625,13 @@ kijs.FileUpload = class kijs_FileUpload extends kijs.Observable {
     // DESTRUCTOR
     // --------------------------------------------------------------
     destruct() {
+        // laufende Uploads abbrechen
+        this.abort();
+
         super.destruct();
 
         // Variablen (Objekte/Arrays) leeren
+        this._abortControllers = null;
         this._contentTypes = null;
         this._errorMsgs = null;
         this._fileExtensions = null;

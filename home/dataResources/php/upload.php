@@ -8,6 +8,8 @@ declare(strict_types=1);
 // Headern X-Filename und X-Filepath (siehe kijs.FileUpload).
 // Die Dateien werden NICHT gespeichert, es wird nur gelesen und die Grösse zurückgegeben.
 // Enthält der Dateiname «fehler», wird zum Testen eine Fehlermeldung zurückgegeben.
+// Mit dem GET-Parameter slow=1 wartet der Server 3 Sekunden, bevor er antwortet
+// (zum Testen von Abbrechen).
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -37,6 +39,11 @@ try {
         $size += $chunk === false ? 0 : strlen($chunk);
     }
     fclose($input);
+
+    // Langsamer Server simulieren
+    if ((string)($_GET['slow'] ?? '') === '1') {
+        sleep(3);
+    }
 
     if (stripos($fileName, 'fehler') !== false) {
         throw new Exception('Testfehler: Der Dateiname enthält «fehler»');
