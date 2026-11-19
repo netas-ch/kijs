@@ -165,7 +165,8 @@ kijs.gui.grid.Filter = class kijs_gui_grid_Filter extends kijs.gui.Element {
 
         // Falls Filter noch nicht vorhanden, neue Filter erstellen.
         kijs.Array.each(newColumnConfigs, function(columnConfig) {
-            let filterConfig = columnConfig.filterConfig;
+            // Kopie, damit die filterConfig der Spalte unverändert bleibt
+            let filterConfig = Object.assign({}, columnConfig.filterConfig);
             let constr = kijs.getObjectFromString(filterConfig.xtype);
 
             if (!constr) {

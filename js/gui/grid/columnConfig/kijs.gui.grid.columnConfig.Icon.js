@@ -27,6 +27,7 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
         this._iconClsField = null;
         this._iconMapField = null;
         this._iconColorField = null;
+        this._iconsCnt = null;
         this._tooltipField = null;
 
         // Standard-config-Eigenschaften mergen
@@ -40,6 +41,7 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
             iconClsField:  true,
             iconMapField:  true,
             iconColorField: true,
+            iconsCnt: true,         // {Number|null} Max. Anzahl Icons in der Auswahl des Filters. Default: null (keine Auswahl)
             tooltipField: true
         });
 
@@ -59,10 +61,16 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
     set displayField(val) { this.iconCharField = val; }
     
     /**
-     * Feld mit dem Icon-Zeichen (Codepoint oder HTML-Entity). Leer = displayField
+     * Feld mit dem Icon-Zeichen (Codepoint oder HTML-Entity). Leer = displayField, ausser es ist ein
+     * iconMapField gesetzt.
      * @type {String|null}
      */
-    get iconCharField() { return this._iconCharField ? this._iconCharField : super.displayField; }
+    get iconCharField() {
+        if (this._iconCharField) {
+            return this._iconCharField;
+        }
+        return this._iconMapField ? null : super.displayField;
+    }
     set iconCharField(val) { this._iconCharField = val; }
 
     /**
@@ -85,6 +93,15 @@ kijs.gui.grid.columnConfig.Icon = class kijs_gui_grid_columnConfig_Icon extends 
      */
     get iconMapField() { return this._iconMapField; }
     set iconMapField(val) { this._iconMapField = val; }
+
+    /**
+     * Maximale Anzahl verschiedener Icons, die der Filter (kijs.gui.grid.filter.Icon) als Auswahl
+     * anbietet. Kommen mehr Icons vor, wird keine Auswahl angezeigt. null = keine Auswahl.
+     * Der Server muss den Filter mit type 'icon' auswerten (Array icons mit den ausgewählten Icons).
+     * @type {Number|null}
+     */
+    get iconsCnt() { return this._iconsCnt; }
+    set iconsCnt(val) { this._iconsCnt = val; }
 
     /**
      * Feld mit dem Tooltip-Text

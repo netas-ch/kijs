@@ -244,11 +244,10 @@ kijs.gui.grid.HeaderCell = class kijs_gui_grid_HeaderCell extends kijs.gui.Eleme
     }
 
     /**
-     * Keinen Tooltip anzeigen, wenn die Beschriftung zu lang ist? Achtung: Der Getter ruft sich selbst
-     * auf und wirft darum einen RangeError.
+     * Keinen Tooltip anzeigen, wenn die Beschriftung zu lang ist?
      * @type {Boolean}
      */
-    get overflowTooltipDisable() { return this.overflowTooltipDisable; }
+    get overflowTooltipDisable() { return this._overflowTooltipDisable; }
     set overflowTooltipDisable(val) {
         this._overflowTooltipDisable = !!val;
         if (this.isRendered) {

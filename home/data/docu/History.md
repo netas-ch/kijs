@@ -186,6 +186,28 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.grid.Grid```: Datumszellen (```columnConfig.Date``` mit ```editable```) liessen sich 
   nicht bearbeiten, weil der Standard-Editor ```kijs.gui.field.Date``` nicht existiert. Neu wird 
   ```kijs.gui.field.DateTime``` verwendet.  
+- ```kijs.gui.grid.cell.Icon```: Die Config ```iconChar``` hatte keine Wirkung. Neu setzt sie das 
+  Icon (Codepoint, HTML-Entity oder Name einer iconMap).  
+- ```kijs.gui.grid.HeaderCell```: Das Lesen von ```overflowTooltipDisable``` warf einen 
+  ```RangeError``` (Getter rief sich selbst auf).  
+- ```kijs.gui.grid.Filter```: Beim Erstellen der Filter wurde aus einer gesetzten 
+  ```columnConfig.filterConfig``` der ```xtype``` gelöscht und ```parent``` hineingeschrieben. Ein 
+  erneutes Erstellen des Filters für die gleiche Spalte schlug darum fehl.  
+- ```kijs.gui.grid.filter.Icon```: Die Auswahl der Icons im Filtermenü wurde nie angezeigt, weil 
+  die Config ```iconsCnt``` fehlte. Neu gibt es bei ```kijs.gui.grid.columnConfig.Icon``` wieder 
+  ```iconsCnt``` (max. Anzahl Icons in der Auswahl, Default ```null``` = keine Auswahl wie bisher). 
+  Als Text der Checkboxen dient der Tooltip (```tooltipField```). Der Server muss den Filter mit 
+  ```type: 'icon'``` und dem Array ```icons``` auswerten.  
+- ```kijs.gui.grid.filter.Checkbox```: «Filter löschen» setzte die Auswahl «Alle angewählten» bzw. 
+  «Alle nicht angewählten» nicht zurück, der Filter blieb aktiv. Zudem waren im Menü anfangs beide 
+  Einträge als ausgewählt markiert.  
+- ```kijs.gui.grid.filter.Filter```: Beim Entladen eines gerenderten Grids mit 
+  ```checkboxFilterValues``` wurde die CheckboxGroup doppelt entladen 
+  (TypeError «Cannot read properties of null»).  
+- ```kijs.gui.grid.columnConfig.Icon```: Mit ```iconMapField``` und ```valueField``` zeigte die Zelle 
+  statt des Icons den Wert aus ```valueField``` an (```iconCharField``` fiel auf ```displayField``` 
+  zurück). Der Filter ```kijs.gui.grid.filter.Icon``` sammelt zudem nur noch die Icons der eigenen 
+  Spalte.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

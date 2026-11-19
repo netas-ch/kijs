@@ -275,8 +275,10 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
         }
         
         // Elemente/DOM-Objekte entladen
+        // Die CheckboxGroup wird mit dem Menü entladen, falls sie darin ist (nach dem Rendern)
+        const groupInMenu = !!(this._checkboxFilterGroup && this._checkboxFilterGroup.parent);
         this._menuButton.destruct();
-        if (this._checkboxFilterGroup) {
+        if (this._checkboxFilterGroup && !groupInMenu) {
             this._checkboxFilterGroup.destruct();
         }
         this._searchContainer.destruct();

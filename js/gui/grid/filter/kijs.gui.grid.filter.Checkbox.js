@@ -65,6 +65,23 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
     // --------------------------------------------------------------
     // MEMBERS
     // --------------------------------------------------------------
+    /**
+     * Setzt die Vergleichsart zurück (weder angewählte noch nicht angewählte) und löst filter aus.
+     * @returns {undefined}
+     */
+    reset() {
+        this._compare = null;
+
+        kijs.Array.each(this._menuButton.menu.elements, function(element) {
+            if (kijs.Array.contains(['btn_compare_checked', 'btn_compare_unchecked'], element.name)) {
+                element.iconMap = 'kijs.iconMap.Fa.square';
+            }
+        }, this);
+
+        super.reset();
+    }
+
+
     // PROTECTED
     _applyToGrid() {
         if (this._compare === 'checked') {
@@ -87,7 +104,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         return kijs.Array.concat(this._getDefaultMenuButtons(), ['-',{
             name: 'btn_compare_checked',
             caption : kijs.getText('Alle angewählten'),
-            iconMap: 'kijs.iconMap.Fa.square-check', //  fa-square-o
+            iconMap: this._compare === 'checked' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this.#onFilterChange,
                 context: this
@@ -95,7 +112,7 @@ kijs.gui.grid.filter.Checkbox = class kijs_gui_grid_filter_Checkbox extends kijs
         },{
             caption : kijs.getText('Alle nicht angewählten'),
             name: 'btn_compare_unchecked',
-            iconMap: 'kijs.iconMap.Fa.square-check', // fa-square-o
+            iconMap: this._compare === 'unchecked' ? 'kijs.iconMap.Fa.square-check' : 'kijs.iconMap.Fa.square',
             on: {
                 click: this.#onFilterChange,
                 context: this

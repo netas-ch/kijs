@@ -36,7 +36,7 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            iconChar: true,     // {String|Number} Wird zurzeit nicht verwendet (schreibt nur _iconChar)
+            iconChar: { target: 'iconChar' },
             iconCls: { target: 'iconCls' },
             iconColor: { target: 'iconColor' }
         });
@@ -58,6 +58,14 @@ kijs.gui.grid.cell.Icon = class kijs_gui_grid_cell_Icon extends kijs.gui.grid.ce
      * @type {Number|null}
      */
     get icon() { return this._icon; }
+
+    /**
+     * Setzt das Icon: Codepoint, HTML-Entity (z.B. '&#xf00c;') oder Name einer iconMap
+     * (z.B. 'kijs.iconMap.Fa.check'). Wird beim Laden der dataRow durch iconMapField bzw.
+     * iconCharField überschrieben.
+     * @type {String|Number|null}
+     */
+    set iconChar(val) { this._setDomHtml(val); }
 
     set iconCls(val) { this._addIconCls(val); }
     /**
