@@ -175,6 +175,10 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.container.Form.save()```: Lieferte der Server ```fieldErrors``` ohne Meldung, 
   erschien keine Meldung und das Formular galt als gespeichert. Jetzt erscheint 
   ```defaultSaveErrorMsg``` und ```isDirty``` bleibt bestehen.  
+- ```kijs.gui.container.Stack.setCurrentAnimated()```: Das Promise wurde nicht erfüllt, wenn das 
+  Element schon aktuell war, noch keines aktiv war, ohne Animation (Dauer 0 bzw. ```'none'```) 
+  oder bei einem Abbruch durch ```beforeChange```. ```setPreviousAnimated()``` gibt das Promise 
+  jetzt auch zurück.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

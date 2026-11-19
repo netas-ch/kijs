@@ -11,7 +11,10 @@
  * @example
  * const stack = new kijs.gui.container.Stack({
  *     animation: 'slideLeft',
- *     elements: [ { name: 'liste', html: 'Liste' }, { name: 'detail', html: 'Detail' } ]
+ *     elements: [
+ *         { xtype: 'kijs.gui.Element', name: 'liste', html: 'Liste' },
+ *         { xtype: 'kijs.gui.Element', name: 'detail', html: 'Detail' }
+ *     ]
  * });
  * stack.setCurrentAnimated('detail');
  *
@@ -217,8 +220,9 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
     
     /**
      * Aktuelles Element wechseln und dabei eine Animation abspielen. change wird sofort ausgelöst, das
-     * Promise erst nach der Animation erfüllt. Ist das Element schon aktuell, ist noch keines aktiv,
-     * ist die Dauer 0 oder bricht beforeChange ab, wird das Promise nicht erfüllt.
+     * Promise nach der Animation erfüllt. Ist das Element schon aktuell, ist noch keines aktiv, ist die
+     * Dauer 0 oder bricht beforeChange ab, wird es sofort erfüllt (bei einem Abbruch mit dem
+     * unveränderten Element als currentEl).
      * @param {Integer|String|kijs.gui.Element} el  Index, Name oder Element (sonst kijs.Error)
      * @param {String|null} [animation=null]  null = animation
      * @param {Integer|null} [duration=null]  Dauer in ms. null = animationDuration
@@ -249,11 +253,13 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             // Wenn kein Element oder das Element bereits aktuell ist,
             // nichts tun
             if (kijs.isEmpty(el) || oldEl === el) {
+                resolve({ currentEl: oldEl, oldEl: oldEl });
                 return;
             }
 
             // beforeChange Event ausführen
             if (this.raiseEvent('beforeChange', {newEl: el, oldEl: this._currentEl}) === false) {
+                resolve({ currentEl: oldEl, oldEl: oldEl });
                 return;
             }
 
@@ -261,6 +267,7 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
             // Animation nötig
             if (!oldEl || duration === 0) {
                 this.currentEl = el;
+                resolve({ currentEl: el, oldEl: oldEl });
                 return;
             }
 
@@ -314,14 +321,15 @@ kijs.gui.container.Stack = class kijs_gui_container_Stack extends kijs.gui.Conta
      * Aktiviert das vorherige Element aus der History (siehe setCurrentAnimated())
      * @param {String|null} [animation=null]
      * @param {Integer|null} [duration=null]
-     * @returns {undefined}
+     * @returns {Promise}  e: currentEl, oldEl. Ohne vorheriges Element mit null erfüllt.
      */
     setPreviousAnimated(animation=null, duration=null) {
         if (this._elHistory.length > 1) {
             const el = this._elHistory[this._elHistory.length - 2];
             this._elHistory.pop();
-            this.setCurrentAnimated(el, animation, duration);
+            return this.setCurrentAnimated(el, animation, duration);
         }
+        return Promise.resolve(null);
     }
     
     // overwrite
