@@ -169,6 +169,9 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.SpinBox```: Die Getter ```spinBoxWidth```/```spinBoxHeight``` des Zielelements wurden 
   nie verwendet. Die Auswahl von Combo, DateTime und Month ist darum jetzt so breit wie das 
   ganze Feld inklusive Button (bisher ohne Button).  
+- ```kijs.gui.container.Form.save()```: Bei einem ungültigen Formular wurde das Promise nie 
+  erfüllt. Jetzt wird es mit ```response.errorType = 'errorNotice'``` erfüllt. Der Titel der 
+  Meldung ist «Fehler» (bisher «Fehler.»).  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

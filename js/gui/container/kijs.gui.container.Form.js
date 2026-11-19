@@ -38,7 +38,7 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
         this._rpcSaveArgs = {};     // Standard RPC-Argumente
         this._fields = [];          // Array mit kijs.gui.field.Fields-Elementen
         this._defaultSaveErrorMsg = kijs.getText(`Es wurden noch nicht alle Felder richtig ausgefüllt`) + '.';
-        this._defaultSaveErrorTitle = kijs.getText(`Fehler`) + '.';
+        this._defaultSaveErrorTitle = kijs.getText(`Fehler`);
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
@@ -309,8 +309,8 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
      * Validiert das Formular und sendet die Daten (data) mit args an rpcSaveFn. Enthält die Antwort
      * config, wird sie angewendet; fieldErrors werden bei den Feldern angezeigt. Ohne Fehler wird
      * isDirty zurückgesetzt. Danach wird afterSave ausgelöst.
-     * Ist das Formular ungültig und defaultSaveErrorMsg gesetzt, wird nur die Meldung angezeigt
-     * (das Promise wird dann nie erfüllt).
+     * Ist das Formular ungültig und defaultSaveErrorMsg gesetzt, wird nur die Meldung angezeigt und
+     * das Promise mit response.errorType 'errorNotice' erfüllt (ohne Request an den Server).
      * @param {Boolean} [searchFields=false]  Felder vorher neu suchen?
      * @param {Object|null} [args=null]  Argumente für den Server (rpcSaveArgs haben Vorrang)
      * @returns {Promise}
@@ -330,6 +330,12 @@ kijs.gui.container.Form = class kijs_gui_container_Form extends kijs.gui.Contain
             // Zuerst lokal validieren
             if (!this.validate() && !kijs.isEmpty(this._defaultSaveErrorMsg)) {
                 kijs.gui.MsgBox.error(this._defaultSaveErrorTitle, this._defaultSaveErrorMsg);
+
+                // Promise trotzdem erfüllen, damit ein await nicht hängen bleibt
+                resolve({
+                    response: { errorType: 'errorNotice', errorMsg: this._defaultSaveErrorMsg },
+                    request: null
+                });
                 return;
             }
 
