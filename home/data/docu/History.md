@@ -72,6 +72,8 @@ mit **UPDATE TIPP** nötig.
   - ```kijs.gui.field.CheckboxGroup.checkedValues```: stattdessen ```value``` verwenden.  
   - ```kijs.gui.Dom.changeReadOnly()```: macht dasselbe wie ```changeDisabled()```, 
     stattdessen ```changeDisabled()``` verwenden.  
+  - ```ddMappping``` (Tippfehler) in ```kijs.gui.container.tab.Bar``` und ```kijs.gui.Dashboard```: 
+    stattdessen ```ddMapping``` verwenden.  
   - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
     ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
     Die Warnung in der Konsole war verdreht und ist korrigiert.  
@@ -149,6 +151,9 @@ mit **UPDATE TIPP** nötig.
   («object is not extensible»). Sie wirken jetzt auf den Tab-Button.  
 - ```kijs.gui.container.Tab```: Nach dem Verschieben eines Tabs per Drag&Drop in einen anderen 
   Tab-Container führte das Schliessen zu einem Fehler («el does not exist in elements»).  
+- ```kijs.gui.container.Tab``` und ```kijs.gui.Dashboard```: Die Config ```ddMapping``` führte zu 
+  einem Fehler, weil der Setter wegen eines Tippfehlers ```ddMappping``` hiess (auch in 
+  ```kijs.gui.container.tab.Bar```). Der Setter heisst jetzt ```ddMapping```.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

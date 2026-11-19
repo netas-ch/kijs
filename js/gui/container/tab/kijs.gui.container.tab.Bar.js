@@ -57,22 +57,26 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // GETTERS / SETTERS
     // --------------------------------------------------------------
     /**
-     * Drag&Drop-Mapping des ddTarget (mit sortable der Eintrag für ddName)
+     * Drag&Drop-Mapping des ddTarget (mit sortable der Eintrag für ddName). Der Setter ergänzt das
+     * bestehende Mapping (assignDeep). Kein Objekt = kijs.Error.
      * @type {Object}
      */
     get ddMapping() { return this._ddMapping; }
-    /**
-     * Ergänzt das ddMapping (assignDeep). Wegen des Tippfehlers im Namen nur als ddMappping erreichbar.
-     * Kein Objekt = kijs.Error.
-     * @type {Object}
-     */
-    set ddMappping(val) {
+    set ddMapping(val) {
         if (!kijs.isObject(val)) {
             throw new kijs.Error(`"ddMapping" is not valid.`);
         }
-        
+
         kijs.Object.assignDeep(this._ddMapping, val, true);
     }
+
+    /**
+     * Alter Name des Setters ddMapping (Tippfehler)
+     * @type {Object}
+     * @deprecated Stattdessen ddMapping verwenden.
+     */
+    get ddMappping() { return this.ddMapping; }
+    set ddMappping(val) { this.ddMapping = val; }
 
     /**
      * Drag&Drop-Name der Tab-Buttons. Default: eindeutige ID

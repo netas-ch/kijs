@@ -60,7 +60,7 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
             autoSave: true,
             
             sortable: { prio: 90, target: 'sortable' },
-            ddMapping: { prio: 100, target: 'ddMapping' }   // {Object} Zusätzliches Drag&Drop-Mapping der Spalten. Achtung: Es gibt keinen Setter ddMapping (Tippfehler ddMappping), die Zuweisung wirft darum einen TypeError
+            ddMapping: { prio: 100, target: 'ddMapping' }
         });
         
         // Listeners
@@ -86,22 +86,26 @@ kijs.gui.Dashboard = class kijs_gui_Dashboard extends kijs.gui.Container {
     set autoSave(val) { this._autoSave = !!val; }
 
     /**
-     * Drag&Drop-Mapping der Spalten (mit sortable der Eintrag für ddPanelName)
+     * Drag&Drop-Mapping der Spalten (mit sortable der Eintrag für ddPanelName). Der Setter ergänzt das
+     * bestehende Mapping (assignDeep). Kein Objekt = kijs.Error.
      * @type {Object}
      */
     get ddMapping() { return this._ddMapping; }
-    /**
-     * Ergänzt das ddMapping (assignDeep). Wegen des Tippfehlers im Namen nur als ddMappping erreichbar.
-     * Kein Objekt = kijs.Error.
-     * @type {Object}
-     */
-    set ddMappping(val) {
+    set ddMapping(val) {
         if (!kijs.isObject(val)) {
             throw new kijs.Error(`"ddMapping" is not valid.`);
         }
-        
+
         kijs.Object.assignDeep(this._ddMapping, val, true);
     }
+
+    /**
+     * Alter Name des Setters ddMapping (Tippfehler)
+     * @type {Object}
+     * @deprecated Stattdessen ddMapping verwenden.
+     */
+    get ddMappping() { return this.ddMapping; }
+    set ddMappping(val) { this.ddMapping = val; }
     
     /**
      * Drag&Drop-Name der Panels. Default: 'kijs.gui.dashboard.Panel'

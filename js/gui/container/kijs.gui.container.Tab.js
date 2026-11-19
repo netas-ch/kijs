@@ -76,7 +76,7 @@ kijs.gui.container.Tab = class kijs_gui_container_Tab extends kijs.gui.container
 
             ddName: { target: 'ddName', context: this._tabBarEl },  // {String} Name für Drag&Drop der Tabs. Tab-Container mit gleichem ddName können Tabs austauschen. Default: eindeutige ID
             ddPosBeforeAfterFactor: { target: 'ddPosBeforeAfterFactor', context: this._tabBarEl },  // {Number} Position auf dem Ziel-Tab, ab der nachher statt vorher eingefügt wird. Default: 0.666
-            ddMapping: { target: 'ddMapping', context: this._tabBarEl },    // {Object} Drag&Drop-Mapping der Tab-Bar. Achtung: Die Tab-Bar hat keinen Setter ddMapping (Tippfehler ddMappping), die Zuweisung wirft darum einen TypeError
+            ddMapping: { target: 'ddMapping', context: this._tabBarEl },    // {Object} Zusätzliches Drag&Drop-Mapping der Tab-Bar (siehe kijs.gui.container.tab.Bar.ddMapping)
 
             rpcSaveFn: true,
             rpcSaveArgs: true,
