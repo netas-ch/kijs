@@ -13,8 +13,8 @@
  * entgegen. Jede Datei wird einzeln per POST an ajaxUrl gesendet: der Dateiinhalt als Body,
  * Dateiname und Ordner URL-codiert in den Headern fileNameHeader und pathNameHeader. Die Antwort
  * wird als JSON erwartet, die Eigenschaft upload daraus wird mit dem Event upload weitergegeben.
- * Achtung: Erlaubt sind nur Dateien, die zu contentTypes bzw. fileExtensions passen. Ist beides
- * leer, wird jede Datei abgewiesen (uploadFailed).
+ * Erlaubt sind Dateien, die zu contentTypes bzw. fileExtensions passen. Ist beides leer, sind
+ * alle Dateien erlaubt.
  *
  * @example
  * const ud = new kijs.UploadDialog({ ajaxUrl: 'upload.php', contentTypes: ['image'] });
@@ -342,6 +342,11 @@ kijs.UploadDialog = class kijs_UploadDialog extends kijs.Observable {
      * @returns {Boolean}
      */
     _checkMime(mime) {
+        // Ohne Einschränkung sind alle Dateien erlaubt
+        if (this._contentTypes.length === 0 && this._fileExtensions.length === 0) {
+            return true;
+        }
+
         let match=false;
         if (mime.type && this._contentTypes.length > 0) {
             mime = mime.type.toLowerCase();
