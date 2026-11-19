@@ -115,11 +115,10 @@ kijs.Navigator = class kijs_Navigator {
     static get osVersion() { return kijs.Navigator.getBrowserInfo().osVersion; }
 
     /**
-     * Sollte alle GET-Parameter der URL zurückgeben. Ruft aber die nicht vorhandene Funktion
-     * getGetParams() auf und wirft darum einen Fehler. Stattdessen getGetParameter() verwenden.
+     * Alle GET-Parameter der URL als Objekt (siehe getGetParameter())
      * @type {Object}
      */
-    static get getParams() { return kijs.Navigator.getGetParams(); }
+    static get getParams() { return kijs.Navigator.getGetParameter(); }
 
 
 
