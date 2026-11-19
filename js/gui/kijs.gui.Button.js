@@ -452,7 +452,6 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
         super.changeDisabled(!!val, callFromParent);
         this._iconEl.changeDisabled(!!val, true);
         this._icon2El.changeDisabled(!!val, true);
-        this._iconEl.changeDisabled(!!val, true);
     }
     
     /**
