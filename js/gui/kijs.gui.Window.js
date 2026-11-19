@@ -142,8 +142,9 @@ kijs.gui.Window = class kijs_gui_Window extends kijs.gui.Panel {
     }
 
     /**
-     * Min. Verzögerung zwischen zwei Resize-Events in ms. Wird zurzeit nicht verwendet. Default: 300
+     * Min. Verzögerung zwischen zwei Resize-Events in ms. Wird nicht verwendet. Default: 300
      * @type {Number}
+     * @deprecated Stattdessen afterResizeDelay verwenden (siehe kijs.gui.Element.afterResizeDelay).
      */
     get resizeDelay() { return this._resizeDelay; }
     set resizeDelay(val) { this._resizeDelay = val; }

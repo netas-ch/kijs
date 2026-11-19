@@ -74,6 +74,8 @@ mit **UPDATE TIPP** nötig.
     stattdessen ```changeDisabled()``` verwenden.  
   - ```ddMappping``` (Tippfehler) in ```kijs.gui.container.tab.Bar``` und ```kijs.gui.Dashboard```: 
     stattdessen ```ddMapping``` verwenden.  
+  - ```kijs.gui.Window.resizeDelay```: wird nicht verwendet, stattdessen ```afterResizeDelay``` 
+    verwenden.  
   - ```kijs.gui.Icon.iconChar```: die Angabe als HTML-Entity (z.B. ```'&#xf015;'```) 
     ist veraltet, stattdessen den Codepoint als Zahl angeben (z.B. ```0xf015```). 
     Die Warnung in der Konsole war verdreht und ist korrigiert.  
