@@ -65,20 +65,25 @@ kijs.Date = class kijs_Date {
      */
     static addMonths(date, months) {
         const ret = new Date(date.valueOf());
+        const day = ret.getDate();
+
+        // Auf den 1. setzen, damit z.B. der 31. Januar nicht in den März überläuft,
+        // danach den Tag auf den letzten Tag des Zielmonats begrenzen
+        ret.setDate(1);
         ret.setMonth(ret.getMonth() + months);
+        ret.setDate(Math.min(day, this.getLastOfMonth(ret).getDate()));
         return ret;
     }
 
     /**
-     * Addiert oder subtrahiert Jahre zu einem Datum
+     * Addiert oder subtrahiert Jahre zu einem Datum. Der 29. Februar wird in einem
+     * Nicht-Schaltjahr zum 28. Februar.
      * @param {Date} date
-     * @param {Number} yars
+     * @param {Number} years
      * @returns {Date}
      */
-    static addYears(date, yars) {
-        const ret = new Date(date.valueOf());
-        ret.setFullYear(ret.getFullYear() + yars);
-        return ret;
+    static addYears(date, years) {
+        return this.addMonths(date, years * 12);
     }
 
     /**
@@ -254,10 +259,13 @@ kijs.Date = class kijs_Date {
      * - 'Woche 4 2017', 'W4 17', 'W 4 2017', 'Wo 4 17'
      * - 'Wo 4 2017 vom 23.01.2017'
      * @param {String} strWeek
-     * @returns {Date}  Datum des Montags der gewählten Woche
+     * @returns {Date|null}  Datum des Montags der gewählten Woche oder null, wenn ungültig
      */
     static getDateFromWeekString(strWeek) {
-        const matches = strWeek.match(/^[^0-9]+([0-9]{1,2})[^0-9]?([0-9]{2,4})?/);
+        const matches = kijs.toString(strWeek).match(/^[^0-9]*([0-9]{1,2})[^0-9]?([0-9]{2,4})?/);
+        if (!matches) {
+            return null;
+        }
         const week = parseInt(matches[1]);
         let year = matches[2] ? parseInt(matches[2]) : (new Date).getFullYear();
 
@@ -268,6 +276,11 @@ kijs.Date = class kijs_Date {
             } else if (year >= 70) {
                 year += 1900;
             }
+        }
+
+        // Wochen-Nr. prüfen
+        if (week < 1 || week > this.getNumberOfWeeks(year)) {
+            return null;
         }
 
         return this.getFirstOfWeek(week, year);
@@ -342,13 +355,14 @@ kijs.Date = class kijs_Date {
 
     /**
      * Gibt das Datum des ersten Tags (Montag) einer Kalenderwoche nach ISO-8601 zurück
-     * @param {Date} date Beliebiges Datum in der Woche
-     * @returns {Date} Montag der Woche
+     * @param {Date} date Beliebiges Datum in der Woche (wird nicht verändert)
+     * @returns {Date} Montag der Woche (neues Objekt, mit der Uhrzeit von date)
      */
     static getMonday(date) {
-        const day = date.getDay(),
-            diff = date.getDate() - day + (day === 0 ? -6:1);
-        return new Date(date.setDate(diff));
+        const ret = new Date(date.getTime());
+        const day = ret.getDay();
+        ret.setDate(ret.getDate() - day + (day === 0 ? -6 : 1));
+        return ret;
     }
 
     /**
@@ -483,7 +497,7 @@ kijs.Date = class kijs_Date {
         const format = this.#getLocalDateFormat(language);
 
         if (format === null) {
-            return;
+            return null;
         }
 
         // Alle Trennzeichen durch Leerzeichen ersetzen
@@ -552,7 +566,14 @@ kijs.Date = class kijs_Date {
         }
 
         // Daraus nun ein Datum erstellen
-        return new Date(year, month-1, day);
+        const date = new Date(year, month-1, day);
+
+        // Ungültiger Tag (z.B. 31.02.)? Dann hätte JavaScript in den nächsten Monat gerechnet.
+        if (date.getDate() !== day || date.getMonth() !== month-1) {
+            return null;
+        }
+
+        return date;
     }
 
      /**
@@ -585,7 +606,7 @@ kijs.Date = class kijs_Date {
 
          // Datum
         if (arr.length >= 1) {
-            date = this.parseLocalDateString(arr[0], year2000Threshold);
+            date = this.parseLocalDateString(arr[0], year2000Threshold, language);
             if (kijs.isEmpty(date)) {
                 return null;
             }
@@ -599,13 +620,16 @@ kijs.Date = class kijs_Date {
                 tmp += ' ' + arr[2];
             }
 
-            time = this.parseLocalTimeString(tmp);
+            time = this.parseLocalTimeString(tmp, language);
             if (kijs.isEmpty(time)) {
                 return null;
             }
         }
 
-        return new Date(this.format(date, 'Y-m-d') + ' ' + time);
+        // Datum aus den Bestandteilen erstellen (new Date('Y-m-d H:i:s') ist kein Standardformat
+        // und wird nicht von allen Browsern gelesen)
+        const t = time ? time.split(':').map(Number) : [0, 0, 0];
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate(), t[0], t[1], t[2]);
     }
 
     /**
@@ -615,6 +639,7 @@ kijs.Date = class kijs_Date {
      * @returns {String|Null}
      */
     static parseLocalTimeString(strInput, language='auto') {
+        let isAm = false;
         let isPm = false;
         let hour = null;
         let minute = null;
@@ -625,11 +650,12 @@ kijs.Date = class kijs_Date {
         const format = this.#getLocalTimeFormat(language);
 
         if (format === null) {
-            return;
+            return null;
         }
 
-        // PM?
-        isPm = !!strInput.match(/PM/gi);
+        // AM/PM?
+        isAm = !!strInput.match(/AM/i);
+        isPm = !!strInput.match(/PM/i);
 
         // Alle Trennzeichen durch Leerzeichen ersetzen
         strInput = strInput.replace(/[^0-9]+/g, ' ');
@@ -661,7 +687,7 @@ kijs.Date = class kijs_Date {
                     }
                     break;
 
-                // Stunde 12-Stunden-Format
+                // Stunde 12-Stunden-Format (eine Stunde über 12 wird als 24-Stunden-Format gelesen)
                 case 'h':
                     hour = parseInt(arr[i]);
                     if (hour < 0 || hour > 23) {
@@ -669,13 +695,15 @@ kijs.Date = class kijs_Date {
                     }
                     if (hour < 12 && isPm) {
                         hour += 12;
+                    } else if (hour === 12 && isAm) {
+                        hour = 0;   // 12 AM = Mitternacht
                     }
                     break;
 
                 // Minute
                 case 'm':
                     minute = parseInt(arr[i]);
-                    if (minute < 0 || minute > 60) {
+                    if (minute < 0 || minute > 59) {
                         return null;
                     }
                     break;
@@ -683,7 +711,7 @@ kijs.Date = class kijs_Date {
                 // Sekunde
                 case 'i':
                     second = parseInt(arr[i]);
-                    if (second < 0 || second > 60) {
+                    if (second < 0 || second > 59) {
                         return null;
                     }
                     break;
@@ -739,6 +767,11 @@ kijs.Date = class kijs_Date {
             } else {
                 year += 2000;
             }
+        }
+
+        // Wochen-Nr. prüfen
+        if (week < 1 || week > kijs.Date.getNumberOfWeeks(year)) {
+            return null;
         }
 
         // Datum vom ersten Wochentag zurückgeben
@@ -861,7 +894,7 @@ kijs.Date = class kijs_Date {
             minute: '2-digit',
             second: 'numeric'
         });
-        // 18 durch H ersetzen (25-Stundenformat)
+        // 18 durch H ersetzen (24-Stundenformat)
         format = format.replace(/18/g, 'H');
         // 06 durch h ersetzen (12-Stundenformat)
         format = format.replace(/06/g, 'h');
