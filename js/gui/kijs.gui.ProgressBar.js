@@ -98,8 +98,7 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
     set showPercent(val) { this._showPercent = val; }
 
     /**
-     * Verbundener kijs.UploadDialog (siehe bindUploadDialog()). Achtung: Die Listeners erwarten noch
-     * die alten Event-Argumente, darum wird der Fortschritt zurzeit nicht übernommen.
+     * Verbundener kijs.UploadDialog, dessen Fortschritt angezeigt wird (siehe bindUploadDialog())
      * @type {kijs.UploadDialog|null}
      */
     get uploadDialog() { return this._uploadDialog; }
@@ -212,19 +211,19 @@ kijs.gui.ProgressBar = class kijs_gui_ProgressBar extends kijs.gui.Element {
 
     // PRIVATE
     // LISTENERS
-    #onUploadDialogProgress(ud, e, id, percent) {
+    #onUploadDialogProgress(e) {
         if (this._uploadDialogId === null) {
-            this._uploadDialogId = id;
+            this._uploadDialogId = e.uploadId;
         }
 
-        if (kijs.isInteger(percent) && this._uploadDialogId === id) {
-            this.setProgress(percent);
+        if (kijs.isInteger(e.percent) && this._uploadDialogId === e.uploadId) {
+            this.setProgress(e.percent);
         }
     }
 
     // Upload fertig
-    #onUploadDialogUpload(ud, resp, error, id) {
-        if (this._uploadDialogId === id) {
+    #onUploadDialogUpload(e) {
+        if (this._uploadDialogId === e.uploadId) {
             this.setProgress(100);
         }
     }

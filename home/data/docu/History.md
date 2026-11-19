@@ -139,6 +139,8 @@ mit **UPDATE TIPP** nötig.
 - ```kijs.gui.UploadWindow``` liess sich ohne ```uploadDialog``` nicht erstellen (Fehler 
   «uploadDialog must be of type kijs.UploadDialog»). Und ```showFileSelectDialog()``` erstellte 
   den UploadDialog ohne Listeners, sodass das Fenster nie erschien.  
+- ```kijs.gui.ProgressBar```: Mit einem verbundenen ```kijs.UploadDialog``` wurde der 
+  Fortschritt nie angezeigt, weil die Listeners noch die alten Event-Argumente erwarteten.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
