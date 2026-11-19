@@ -213,6 +213,15 @@ mit **UPDATE TIPP** nötig.
   statt des Icons den Wert aus ```valueField``` an (```iconCharField``` fiel auf ```displayField``` 
   zurück). Der Filter ```kijs.gui.grid.filter.Icon``` sammelt zudem nur noch die Icons der eigenen 
   Spalte.  
+- ```kijs.gui.grid.Grid``` und ```kijs.gui.DataView``` (und damit ListView, Tree und die Felder): 
+  ```select()```, ```selectByIds()```, ```selectByFilters()``` bzw. ```selectByDataRows()``` 
+  beachten jetzt ```selectType```. Bei einer Einzelauswahl wird nur der erste Datensatz 
+  selektiert (die bisherige Selektion wird ersetzt), bei ```'none'``` nichts. Bisher konnten 
+  per Code mehrere Zeilen markiert werden, obwohl ```getSelected()``` nur die erste lieferte.  
+- ```kijs.gui.grid.Grid``` und ```kijs.gui.DataView```: Die Events ```beforeSelectionChange``` 
+  bzw. ```selectionChange``` werden nur noch ausgelöst, wenn sich die Selektion ändert (bisher 
+  z.B. auch beim erneuten Klick auf die selektierte Zeile). Beim DataView enthält das Event nur 
+  noch die tatsächlich selektierten bzw. abgewählten Elemente.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  

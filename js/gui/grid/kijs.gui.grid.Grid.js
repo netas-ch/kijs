@@ -764,7 +764,8 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
     }
 
     /**
-     * Selektiert eine oder mehrere Zeilen
+     * Selektiert eine oder mehrere Zeilen. Bei selectType 'single' wird nur die erste Zeile
+     * selektiert (und die bisherige Selektion ersetzt), bei 'none' nichts.
      * @param {kijs.gui.grid.Row|Array} rows oder Array mit Zeilen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]  Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventEvent=false]  Soll der SelectionChange-Event verhindert werden?
@@ -777,6 +778,21 @@ kijs.gui.grid.Grid = class kijs_gui_grid_Grid extends kijs.gui.Element {
 
         if (!kijs.isArray(rows)) {
             rows = [rows];
+        }
+
+        // selectType beachten
+        if (this._selectType === 'none') {
+            return false;
+        } else if (this._selectType === 'single') {
+            rows = rows.slice(0, 1);
+            keepExisting = false;
+        }
+
+        // Ändert sich die Selektion überhaupt? Sonst keine Events auslösen.
+        const changed = rows.some(row => !row.selected)
+                || (!keepExisting && this._rows.some(row => row.selected && !rows.includes(row)));
+        if (!changed) {
+            return true;
         }
 
         // beforeSelectionChange-Event

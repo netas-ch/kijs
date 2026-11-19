@@ -840,7 +840,9 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Selektiert ein oder mehrere Elemente
+     * Selektiert ein oder mehrere Elemente. Bei einer Einzelauswahl (selectType 'single',
+     * 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty') wird nur das erste Element
+     * selektiert (und die bisherige Selektion ersetzt), bei 'none' nichts.
      * @param {kijs.gui.Element|Array} elements Element oder Array mit Elementen, die selektiert werden sollen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
@@ -863,6 +865,15 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             }
         }
 
+        // selectType beachten: bei 'none' nichts, bei Einzelauswahl nur das erste Element
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+        if (this._selectType === 'none') {
+            return args;
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
+            elements = elements.slice(0, 1);
+            keepExisting = false;
+        }
+
         if (!keepExisting){
             args = this.clearSelections(true);
         }
@@ -874,6 +885,18 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
                 elements[i].selected = true;
                 args.changed = true;
             }
+        }
+
+        // Elemente, die abgewählt und wieder selektiert wurden, sind keine Änderung
+        if (args.changed) {
+            const reselected = args.selectedElements.filter(el => args.unselectedElements.includes(el));
+            if (reselected.length) {
+                args.selectedElements = args.selectedElements.filter(el => !reselected.includes(el));
+                args.selectedKeysRows = args.selectedElements.map(el => el.keyRow);
+                args.unselectedElements = args.unselectedElements.filter(el => !reselected.includes(el));
+            }
+            args.changed = args.selectedElements.length > 0 || args.selectedKeysRows.length > 0
+                    || args.unselectedElements.length > 0 || args.unselectedKeysRows.length > 0;
         }
 
         // SelectionChange auslösen
@@ -931,7 +954,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
     }
 
     /**
-     * Selektiert ein oder mehrere Elemente
+     * Selektiert ein oder mehrere Elemente. selectType wird wie bei select() beachtet.
      * @param {Array} rows Recordset mit rows der zu selektierenden Elementen
      * @param {Boolean} [keepExisting=false]            Soll die bestehende selektion belassen werden?
      * @param {Boolean} [preventSelectionChange=false]  Soll das SelectionChange-Event verhindert werden?
@@ -945,6 +968,17 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             unselectedKeysRows: [],
             changed: false
         };
+
+        // selectType beachten: bei 'none' nichts, bei Einzelauswahl nur der erste Datensatz
+        const arrSingle = ['single', 'singleAndEmpty', 'simple-single', 'simple-singleAndEmpty'];
+        if (this._selectType === 'none') {
+            return args;
+        } else if (kijs.Array.contains(arrSingle, this._selectType)) {
+            if (kijs.isArray(rows)) {
+                rows = rows.slice(0, 1);
+            }
+            keepExisting = false;
+        }
 
         if (!keepExisting) {
             args = this.clearSelections(true);
@@ -1650,18 +1684,16 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
             this.selectBetween(this._lastSelectedEl, el);
 
         } else {
-            // bestehende Selektierung entfernen
-            if (!ctrl) {
-                this.clearSelections(true);
-            }
-
-            if (el.selected) {
+            // mit Ctrl ein selektiertes Element abwählen
+            if (ctrl && el.selected) {
                 this.unSelect(el);
                 if (el === this._lastSelectedEl) {
                     this._lastSelectedEl = null;
                 }
+
+            // selektieren (ohne Ctrl wird die bestehende Selektierung ersetzt)
             } else {
-                this.select(el, true);
+                this.select(el, ctrl);
                 this._lastSelectedEl = el;
             }
         }
