@@ -18,10 +18,6 @@
  * });
  *
  * @fires change  Nach einer Änderung der Selektion. e: oldValue, value
- * @fires ddDrop  Soll vom DOM-Node der ListView weitergeleitet werden. Achtung: kijs.gui.Dom kennt ddDrop
- *                nicht, mit einem Listener wird darum beim Rendern der kijs.Error
- *                «kijsEvent "ddDrop" is not mapped» geworfen.
- * @fires ddOver  Soll von der ListView weitergeleitet werden. Achtung: Die ListView löst ddOver nie aus.
  * @fires input  Nach einer Änderung der Selektion. e: oldValue, value
  */
 kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.Field {
@@ -81,8 +77,6 @@ kijs.gui.field.ListView = class kijs_gui_field_ListView extends kijs.gui.field.F
         // Listeners
         this._listViewEl.on('selectionChange', this.#onListViewSelectionChange, this);
         this._listViewEl.once('afterLoad', this.#onceListViewAfterLoad, this);
-        this._eventForwardsAdd('ddOver', this._listViewEl);
-        this._eventForwardsAdd('ddDrop', this._listViewEl.dom);
 
         // Config anwenden
         if (kijs.isObject(config)) {
