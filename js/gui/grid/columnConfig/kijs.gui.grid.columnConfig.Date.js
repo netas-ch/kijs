@@ -5,7 +5,7 @@
 // --------------------------------------------------------------
 /**
  * Spalte für ein Datum in kijs.gui.grid.Grid (Zelle kijs.gui.grid.cell.Date, Filter
- * kijs.gui.grid.filter.Date). Achtung: Der Standard-Editor 'kijs.gui.field.Date' existiert nicht.
+ * kijs.gui.grid.filter.Date, Editor kijs.gui.field.DateTime).
  */
 kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends kijs.gui.grid.columnConfig.ColumnConfig {
 
@@ -22,7 +22,7 @@ kijs.gui.grid.columnConfig.Date = class kijs_gui_grid_columnConfig_Date extends 
         this._filterXtype = 'kijs.gui.grid.filter.Date';
 
         // Editor
-        this._editorXtype = 'kijs.gui.field.Date';
+        this._editorXtype = 'kijs.gui.field.DateTime';
 
         this._hasTime = false;
         this._format = null;

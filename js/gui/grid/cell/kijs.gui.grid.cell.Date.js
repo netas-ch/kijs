@@ -52,8 +52,8 @@ kijs.gui.grid.cell.Date = class kijs_gui_grid_cell_Date extends kijs.gui.grid.ce
     _getEditorArgs() {
         let eArgs = super._getEditorArgs();
 
-        eArgs.hasTime = this._hasTime;
-        eArgs.displayFormat = this._format;
+        // field.DateTime zeigt das Datum im Format der eingestellten Sprache an
+        eArgs.mode = this._hasTime ? 'dateTime' : 'date';
 
         return eArgs;
     }

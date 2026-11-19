@@ -183,6 +183,9 @@ mit **UPDATE TIPP** nötig.
   die bestehenden Tabs nicht verschieben. Zudem wurden dabei Listeners mehrfach gesetzt.  
 - ```kijs.gui.field.AceEditor```: Vor dem ersten Rendern führten die Config 
   ```virtualKeyboardPolicy```, der Getter ```hasFocus``` und ```destruct()``` zu einem Fehler.  
+- ```kijs.gui.grid.Grid```: Datumszellen (```columnConfig.Date``` mit ```editable```) liessen sich 
+  nicht bearbeiten, weil der Standard-Editor ```kijs.gui.field.Date``` nicht existiert. Neu wird 
+  ```kijs.gui.field.DateTime``` verwendet.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
