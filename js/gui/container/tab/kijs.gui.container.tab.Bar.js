@@ -161,18 +161,12 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
     // --------------------------------------------------------------
     /**
      * Aktiviert bzw. deaktiviert Drag&Drop bei den Tab-Buttons und der Leiste (je nach sortable).
-     * @param {kijs.gui.Element[]} [elements]  Tab-Buttons. Leer = es werden die Elemente von Kindern
-     *                                         mit xtype 'kijs.gui.Button' genommen.
+     * @param {kijs.gui.Element[]} [elements]  Tab-Buttons. Leer = alle Tab-Buttons der Leiste
      * @returns {undefined}
      */
     _initTabs(elements) {
         if (kijs.isEmpty(elements)) {
-            elements = [];
-            kijs.Array.each(this._elements, (el) => {
-                if (el.xtype === 'kijs.gui.Button') {
-                    elements = kijs.Array.concat(elements, el.elements);
-                }
-            }, this);
+            elements = this._elements.filter(el => el instanceof kijs.gui.container.tab.Button);
         }
         
         // source
@@ -184,7 +178,9 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
                     allowCopy: false,
                     allowLink: false
                 };
-                el.ddSource.on('drop', this.#onElementSourceDrop, this);
+                if (!el.ddSource.hasListener('drop', this.#onElementSourceDrop, this)) {
+                    el.ddSource.on('drop', this.#onElementSourceDrop, this);
+                }
             } else {
                 if (el.ddSource) {
                     el.ddSource.destruct();
@@ -200,8 +196,12 @@ kijs.gui.container.tab.Bar = class kijs_gui_container_tab_Bar extends kijs.gui.c
                 posAfterFactor: this._ddPosBeforeAfterFactor,
                 mapping: this._ddMapping
             };
-            this.ddTarget.on('drop', this.#onTargetDrop, this);
-            this.on('add', this.#onAddTabs, this);
+            if (!this.ddTarget.hasListener('drop', this.#onTargetDrop, this)) {
+                this.ddTarget.on('drop', this.#onTargetDrop, this);
+            }
+            if (!this.hasListener('add', this.#onAddTabs, this)) {
+                this.on('add', this.#onAddTabs, this);
+            }
         } else {
             if (this._ddTarget) {
                 this._ddTarget.destruct();

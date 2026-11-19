@@ -179,6 +179,8 @@ mit **UPDATE TIPP** nötig.
   Element schon aktuell war, noch keines aktiv war, ohne Animation (Dauer 0 bzw. ```'none'```) 
   oder bei einem Abbruch durch ```beforeChange```. ```setPreviousAnimated()``` gibt das Promise 
   jetzt auch zurück.  
+- ```kijs.gui.container.tab.Bar```: Wurde ```sortable``` nachträglich eingeschaltet, liessen sich 
+  die bestehenden Tabs nicht verschieben. Zudem wurden dabei Listeners mehrfach gesetzt.  
 - ```kijs.gui.field.Checkbox``` und ```kijs.gui.field.Switch``` lösen das Event ```input``` 
   jetzt auch beim Umschalten mit der Leertaste aus, der Switch auch beim Ziehen 
   (bisher nur beim Klick).  
