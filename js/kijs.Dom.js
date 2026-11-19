@@ -289,6 +289,22 @@ kijs.Dom = class kijs_Dom {
     }
 
     /**
+     * Entfernt die Tags aus HTML-Code und gibt den Text zurück. Entities wie &amp;amp; werden
+     * umgewandelt. Das HTML wird in einem inerten Dokument (DOMParser) gelesen: Bilder werden
+     * nicht geladen und Event-Handler wie onerror nicht ausgeführt.
+     * @param {String} html
+     * @returns {String}
+     */
+    static htmlToText(html) {
+        html = kijs.toString(html);
+        if (html === '') {
+            return '';
+        }
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        return doc.body ? doc.body.textContent : '';
+    }
+
+    /**
      * Gibt den index einer childNode in einer Node oder NodeList zurück
      * @param {Node|NodeList} parentNode
      * @param {Node} childNode
@@ -774,10 +790,7 @@ kijs.Dom = class kijs_Dom {
                 break;
 
             case 'text':
-                let d = document.createElement('div');
-                d.innerHTML = html;
-                node.textContent = d.innerText || d.textContent || '';
-                d = null;
+                node.textContent = kijs.Dom.htmlToText(html);
                 break;
 
             case 'html':

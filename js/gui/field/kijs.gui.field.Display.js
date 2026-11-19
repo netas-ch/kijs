@@ -161,10 +161,9 @@ kijs.gui.field.Display = class kijs_gui_field_Display extends kijs.gui.field.Fie
                 break;
 
             case 'text':
-                let d = document.createElement('div');
-                d.innerHTML = val;
-                val = d.innerText || d.textContent || '';
-                d = null;
+                // Tags entfernen und den Text wieder maskieren, weil er unten als HTML
+                // eingesetzt wird (sonst würde z.B. &lt;img ...&gt; wieder zu einem Tag)
+                val = kijs.String.htmlspecialchars(kijs.Dom.htmlToText(val));
                 break;
 
             case 'html':

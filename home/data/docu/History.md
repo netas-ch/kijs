@@ -252,6 +252,13 @@ Startwert 50 verlassen hat, ```value: 50``` angeben.
 
 
 ## Fehlerbehebungen
+- **Sicherheit:** Die Darstellungsart ```'text'``` (```htmlDisplayType```, 
+  ```captionDisplayType``` usw. über ```kijs.Dom.setInnerHtml()``` sowie 
+  ```kijs.gui.field.Display.valueDisplayType```) führte Event-Handler im Wert aus, z.B. 
+  ```<img src=x onerror="...">```. Der Text wird jetzt mit der neuen Funktion 
+  ```kijs.Dom.htmlToText()``` in einem inerten Dokument gelesen. Bei 
+  ```kijs.gui.field.Display``` wurden zudem maskierte Tags (```&lt;img ...&gt;```) wieder 
+  zu echten Tags; der Text wird jetzt maskiert eingesetzt.  
 - ```kijs.gui.Dom.nodeAttributeHas()``` gab nach dem Rendern das umgekehrte Resultat zurück.  
 - ```kijs.gui.grid.Filter```: Beim Zerstören wurde ein noch ausstehendes Neuladen der Filter 
   nicht abgebrochen (falscher Variablenname im Destructor).  
