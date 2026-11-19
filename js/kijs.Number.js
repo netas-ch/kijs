@@ -6,7 +6,7 @@
 /**
  * Statische Klasse mit Hilfsfunktionen für Zahlen: formatieren, parsen, runden und Zufallszahlen.
  */
-kijs.Number = class kijs_String {
+kijs.Number = class kijs_Number {
 
 
     // --------------------------------------------------------------
