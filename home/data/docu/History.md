@@ -234,6 +234,10 @@ mit **UPDATE TIPP** nötig.
   bzw. ```selectionChange``` werden nur noch ausgelöst, wenn sich die Selektion ändert (bisher 
   z.B. auch beim erneuten Klick auf die selektierte Zeile). Beim DataView enthält das Event nur 
   noch die tatsächlich selektierten bzw. abgewählten Elemente.  
+- ```kijs.gui.DataView```: Beim Shift-Klick meldete ```selectionChange``` alle Elemente des Bereichs 
+  als neu selektiert und keine abgewählten (z.B. beim Verkleinern des Bereichs). Neu meldet das Event 
+  nur die tatsächlichen Änderungen. ```selectBetween()``` hat dafür den zusätzlichen Parameter 
+  ```keepExisting``` (Default ```true``` wie bisher).  
 - ```kijs.gui.grid.filter.Icon```: Änderungen in der Icon-Auswahl wurden erst nach dem Schliessen 
   des Menüs (und auch dann nur zufällig) angewendet. Das Grid wird jetzt sofort neu geladen, wie 
   bei der Auswahl fester Werte (```checkboxFilterValues```).  

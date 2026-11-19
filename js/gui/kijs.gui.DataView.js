@@ -917,9 +917,10 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
      * @param {kijs.gui.Element} el1
      * @param {kijs.gui.Element} el2
      * @param {bool} [preventSelectionChange=false]     Soll das SelectionChange-Event verhindert werden?
+     * @param {bool} [keepExisting=true]                Soll die bestehende Selektion belassen werden?
      * @returns {Object} Mit den Änderungen { selectedElements:[], selectedKeysRows:[], unselectedElements:[], unselectedKeysRows:[] }
      */
-    selectBetween(el1, el2, preventSelectionChange=false) {
+    selectBetween(el1, el2, preventSelectionChange=false, keepExisting=true) {
         let found = false;
 
         let args = {
@@ -952,7 +953,7 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }, this);
 
         if (!kijs.isEmpty(elements)) {
-            return this.select(elements, true, preventSelectionChange);
+            return this.select(elements, keepExisting, preventSelectionChange);
         } else {
             return args;
         }
@@ -1680,13 +1681,8 @@ kijs.gui.DataView = class kijs_gui_DataView extends kijs.gui.Container {
         }
 
         if (shift && this._lastSelectedEl) {
-            // bestehende Selektierung entfernen
-            if (!ctrl) {
-                this.clearSelections(true);
-            }
-
-            // selektieren
-            this.selectBetween(this._lastSelectedEl, el);
+            // Bereich selektieren (ohne Ctrl wird die bestehende Selektierung ersetzt)
+            this.selectBetween(this._lastSelectedEl, el, false, !!ctrl);
 
         } else {
             // mit Ctrl ein selektiertes Element abwählen
