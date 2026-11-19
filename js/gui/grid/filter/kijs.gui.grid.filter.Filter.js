@@ -38,6 +38,11 @@ kijs.gui.grid.filter.Filter = class kijs_gui_grid_filter_Filter extends kijs.gui
             menuElements: []
         });
 
+        // Menü linksbündig unter dem Filterfeld öffnen
+        this._menuButton.menu.target = this;
+        this._menuButton.menu.ownPos = 'tl';
+        this._menuButton.menu.targetPos = 'bl';
+
 
         // Standard-config-Eigenschaften mergen
         Object.assign(this._defaultConfig, {
