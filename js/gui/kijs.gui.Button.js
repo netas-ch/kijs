@@ -547,6 +547,11 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             });
         }
 
+        // Wird das Menu zerstört, den Verweis darauf entfernen
+        if (!this._menuEl.hasListener('destruct', this.#onMenuDestruct, this)) {
+            this._menuEl.on('destruct', this.#onMenuDestruct, this);
+        }
+
         if (!this.icon2Char) {
             this.icon2Map = this._menuEl.getIconMap();
         }
@@ -567,8 +572,17 @@ kijs.gui.Button = class kijs_gui_Button extends kijs.gui.Element {
             return !!this._smallPaddings;
         }
     }
-    
-    
+
+
+    // PRIVATE
+    // LISTENERS
+    #onMenuDestruct(e) {
+        if (e.element === this._menuEl) {
+            this._menuEl = null;
+        }
+    }
+
+
 
     // --------------------------------------------------------------
     // DESTRUCTOR

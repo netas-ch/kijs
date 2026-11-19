@@ -170,9 +170,12 @@ kijs.Graphic = class kijs_Graphic {
 
 
     /**
-     * Parst eine Farbe in einem beliebigen Format zu einem RGB-Objekt
+     * Parst eine Farbe zu einem RGB-Objekt { r, g, b }. Möglich sind alle CSS-Farben als String
+     * (Name, '#f80', '#ff8800', 'rgb()', 'rgba()', 'hsl()' ...), ein Array [r, g, b] oder ein
+     * Objekt { r, g, b } bzw. { h, s, v }. Die Transparenz (Alpha) wird ignoriert.
+     * Ungültige Werte werfen einen kijs.Error.
      * @param {String|Array|Object} color
-     * @returns {Object|null}
+     * @returns {Object}
      */
     static colorGet(color) {
         if (kijs.isString(color)) {
@@ -224,6 +227,13 @@ kijs.Graphic = class kijs_Graphic {
                     g: parseInt(mt[2], 10),
                     b: parseInt(mt[3], 10)
                 };
+
+            // sonst vom Browser umrechnen lassen (alle übrigen CSS-Farben)
+            } else {
+                const rgb = kijs.Graphic.#colorGetFromBrowser(color);
+                if (rgb) {
+                    return rgb;
+                }
             }
 
         } else if (kijs.isArray(color) && kijs.isNumber(color[0])  && kijs.isNumber(color[1])  && kijs.isNumber(color[2])) {
@@ -352,6 +362,7 @@ kijs.Graphic = class kijs_Graphic {
             img.src = URL.createObjectURL(sourceImage);
 
             img.onload = () => {
+                URL.revokeObjectURL(img.src);
                 try {
                     if ('OffscreenCanvas' in window) {
                         const osc = new OffscreenCanvas(img.width, img.height);
@@ -392,9 +403,51 @@ kijs.Graphic = class kijs_Graphic {
             };
 
             img.onerror = (e) => {
+                URL.revokeObjectURL(img.src);
                 reject(e);
             };
         });
+    }
+
+
+    // PRIVATE
+    /**
+     * Rechnet eine CSS-Farbe mit Hilfe eines Canvas in RGB um
+     * @param {String} color
+     * @returns {Object|null} { r, g, b } oder null, wenn der Browser die Farbe nicht kennt
+     */
+    static #colorGetFromBrowser(color) {
+        if (typeof document === 'undefined') {
+            return null;
+        }
+
+        const ctx = document.createElement('canvas').getContext('2d');
+        if (!ctx) {
+            return null;
+        }
+
+        // Eine ungültige Farbe lässt fillStyle unverändert. Darum mit zwei verschiedenen
+        // Ausgangswerten prüfen: Nur eine gültige Farbe ergibt beide Male dasselbe.
+        ctx.fillStyle = '#000000';
+        ctx.fillStyle = color;
+        const val1 = ctx.fillStyle;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillStyle = color;
+        const val2 = ctx.fillStyle;
+        if (val1 !== val2) {
+            return null;
+        }
+
+        // Ergebnis ist '#rrggbb' oder 'rgba(r, g, b, a)'
+        let mt = val1.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+        if (mt) {
+            return { r: parseInt(mt[1], 16), g: parseInt(mt[2], 16), b: parseInt(mt[3], 16) };
+        }
+        mt = val1.match(/^rgba?\(\s*([0-9]+)\s*,\s*([0-9]+)\s*,\s*([0-9]+)/i);
+        if (mt) {
+            return { r: parseInt(mt[1], 10), g: parseInt(mt[2], 10), b: parseInt(mt[3], 10) };
+        }
+        return null;
     }
 
 };

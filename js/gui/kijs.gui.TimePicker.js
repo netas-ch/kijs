@@ -35,7 +35,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._secondsHide = true;
         this._minutesHide = false;
         this._separator = ':';
-        this._empty = true,
+        this._empty = true;
         this._hour = 0;
         this._minute = 0;
         this._second = 0;
@@ -297,6 +297,15 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         this._minute = val[1] && !this._minutesHide ? parseInt(val[1]) : 0;
         this._second = val[2] && !this._secondsHide ? parseInt(val[2]) : 0;
         this._clockMode = 1;
+
+        // keine Zahl (z.B. 'abc')?
+        if (isNaN(this._hour) || isNaN(this._minute) || isNaN(this._second)) {
+            this._empty = true;
+            this._hour = 0;
+            this._minute = 0;
+            this._second = 0;
+            throw new kijs.Error('invalid time');
+        }
 
         if (this._hour === 24) {
             this._hour = 0;
@@ -718,12 +727,12 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
     /**
      * Ergänzt die 0 einer Zahl.
      * @param {Integer|String} number
-     * @param {Integer} lenght
+     * @param {Integer} length
      * @returns {String}
      */
-    _zeroPad(number, lenght=2) {
+    _zeroPad(number, length=2) {
         number = kijs.toString(number);
-        while (number.length < lenght) {
+        while (number.length < length) {
             number = '0' + number;
         }
         return number;
@@ -902,7 +911,13 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
         const fld = e.context;
         let inputFinished = false;
 
-        this._empty = kijs.isEmpty(fld.node.value);
+        // Wird die Stunde gelöscht, ist die ganze Zeit leer. Wird nur die Minute oder Sekunde
+        // gelöscht, bleibt die Stunde erhalten und dieser Teil wird 0.
+        if (fld === this._inputHourDom) {
+            this._empty = kijs.isEmpty(fld.node.value);
+        } else if (!kijs.isEmpty(fld.node.value)) {
+            this._empty = false;
+        }
         if (this._empty) {
             this._hour = 0;
             this._minute = 0;
@@ -910,7 +925,7 @@ kijs.gui.TimePicker = class kijs_gui_TimePicker extends kijs.gui.Element {
             this._clockMode = 1;
         } else {
             if (fld === this._inputHourDom) {
-                this._hour = parseInt(fld.node.value);
+                this._hour = fld.node.value ? parseInt(fld.node.value) : 0;
                 if (this._minutesHide) {
                     inputFinished = true;
                 }

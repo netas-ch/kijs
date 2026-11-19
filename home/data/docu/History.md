@@ -302,6 +302,43 @@ Startwert 50 verlassen hat, ```value: 50``` angeben.
 
 
 ## Fehlerbehebungen
+- ```kijs.gui.Menu```: Wurde nur das Menu zerstört, hielt der Button es weiter fest, und 
+  ```destruct()``` des Buttons warf einen Fehler («Cannot read properties of null»). Der Button 
+  vergisst das Menu jetzt, und das Menu entfernt seine Listeners vom Button.  
+- ```kijs.gui.ApertureMask```: Ein ```show()``` kurz nach ```hide()``` wurde wieder 
+  ausgeblendet, und ein ```destruct()``` in dieser Zeit warf einen Fehler.  
+- ```kijs.Date```:  
+  - ```getMonday()``` und ```getSunday()``` veränderten das übergebene Datum.  
+  - ```addMonths()``` lief über das Monatsende hinaus (31. Januar + 1 Monat = 3. März). Jetzt 
+    wird auf den letzten Tag des Monats begrenzt (28. Februar), ebenso bei ```addYears()``` 
+    vom 29. Februar aus. Davon profitieren auch ```kijs.gui.MonthPicker``` und 
+    ```kijs.gui.DatePicker```, die beim Blättern vom 31. aus einen Monat übersprangen.  
+  - ```parseLocalDateString()``` machte aus einem ungültigen Datum wie ```31.02.2026``` 
+    stillschweigend den 3. März. Jetzt wird ```null``` zurückgegeben.  
+  - ```parseLocalTimeString()``` liess Minuten und Sekunden bis 60 zu (```10:60``` = 11:00), 
+    und ```12:30 AM``` ergab 12:30 statt 0:30.  
+  - ```parseLocalDateTimeString()``` gab ```language``` nicht weiter und erstellte das Datum 
+    über einen String, den nicht alle Browser lesen.  
+  - ```getDateFromWeekString()``` warf ohne Text vor der Wochen-Nr. (z.B. ```'12/2026'```) einen 
+    Fehler. Ungültige Wochen-Nrn. (z.B. 60) ergeben jetzt wie bei 
+    ```parseLocalWeekString()``` ```null```.  
+- ```kijs.gui.TimePicker```: ```value = 'abc'``` ergab ```'NaN:00'```, jetzt einen ```kijs.Error```. 
+  Wurde das Feld der Minute oder Sekunde geleert, war die ganze Uhrzeit weg. Jetzt wird nur 
+  dieser Teil 0, die Uhrzeit ist erst leer, wenn die Stunde geleert wird.  
+- ```kijs.gui.field.Iban```: Geprüft wurde nur die Prüfsumme, darum galten z.B. ```'1'``` oder 
+  ```'98'``` als gültig. Jetzt wird auch der Aufbau geprüft (Ländercode, Prüfziffern, 
+  15-34 Zeichen).  
+- ```kijs.gui.field.SozVersNr```: Jede 13-stellige Zahl mit gültiger Prüfziffer wurde 
+  angenommen, z.B. ein Strichcode. Neue Nummern müssen jetzt mit 756 beginnen.  
+- ```kijs.Navigator```: ```getGetParameter()``` gab für Werte mit ```=``` (z.B. 
+  ```?token=abc==```) ```null``` zurück und wandelte ```+``` nicht in ein Leerzeichen um. Ein 
+  aktuelles Opera (```OPR/``` im User-Agent) wurde als Chrome erkannt.  
+- ```kijs.Graphic```: ```colorGet()``` (und damit z.B. ```kijs.gui.field.Color```) kannte nur 
+  22 Farbnamen und warf bei allen anderen CSS-Farben einen Fehler, z.B. ```'darkred'```, 
+  ```rgba()```, ```hsl()``` oder ```#rrggbbaa```. Diese rechnet jetzt der Browser um (ohne 
+  Transparenz). ```imageConvert()``` gab die Objekt-URL des Bildes nicht frei.  
+- ```kijs.gui.ButtonGroup```: Die Config ```columns``` umging den Setter, ```'2'``` blieb 
+  darum ein String.  
 - ```kijs.gui.ViewPort.disableDrop``` (Default ```true```) rief bei jedem Ziehen auf der Seite 
   ```preventDefault()``` auf, auch bei Text. Darum liess sich z.B. markierter Text nicht in 
   ein Eingabefeld ziehen, und überall sah es so aus, als könne man ablegen. Jetzt gilt es nur 

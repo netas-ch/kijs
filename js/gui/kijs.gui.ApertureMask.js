@@ -34,6 +34,7 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
         
         this._defaultConfig = {};
         
+        this._hideDeferId = null;   // intern: verzögertes Entfernen nach dem Ausblenden
         this._target = null;
 
         this._topDom = new kijs.gui.Dom({cls:['kijs-aperturemask', 'top']});
@@ -178,7 +179,9 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
 
         if (this.animated) {
             // animation läuft 0.2s, danach aus DOM entfernen
-            kijs.defer(function() {
+            this._clearHideDefer();
+            this._hideDeferId = kijs.defer(function() {
+                this._hideDeferId = null;
                 this.unrender();
             }, 200, this);
 
@@ -209,6 +212,9 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
      * @returns {undefined}
      */
     show() {
+        // ein noch ausstehendes Entfernen von hide() abbrechen
+        this._clearHideDefer();
+
         this.render();
         
         // einblenden
@@ -249,6 +255,17 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
 
     
     // PROTECTED
+    /**
+     * Bricht das verzögerte Entfernen von hide() ab
+     * @returns {undefined}
+     */
+    _clearHideDefer() {
+        if (this._hideDeferId) {
+            window.clearTimeout(this._hideDeferId);
+            this._hideDeferId = null;
+        }
+    }
+
     /**
      * Passt Position und Grösse der Masken an die Position des targets an.
      * @returns {undefined}
@@ -315,6 +332,9 @@ kijs.gui.ApertureMask = class kijs_gui_ApertureMask extends kijs.Observable {
             // Event auslösen.
             this.raiseEvent('destruct');
         }
+
+        // verzögertes Entfernen abbrechen
+        this._clearHideDefer();
 
         // Node-Event Listener von Window entfernen
         kijs.Dom.removeEventListener('resize', window, this);

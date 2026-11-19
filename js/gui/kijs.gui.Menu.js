@@ -351,6 +351,11 @@ kijs.gui.Menu = class kijs_gui_Menu extends kijs.gui.SpinBox {
             this.raiseEvent('destruct');
         }
 
+        // Listeners vom Button entfernen
+        if (this._button) {
+            this._button.off(null, null, this);
+        }
+
         // Variablen (Objekte/Arrays) leeren
         this._button = null;
 

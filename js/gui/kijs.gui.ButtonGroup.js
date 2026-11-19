@@ -49,7 +49,7 @@ kijs.gui.ButtonGroup = class kijs_gui_ButtonGroup extends kijs.gui.Container {
 
         // Mapping für die Zuweisung der Config-Eigenschaften
         Object.assign(this._configMap, {
-            columns: true,
+            columns: { target: 'columns' },
             rowSizes: { target: 'rowSizes' },
             colSizes: { target: 'colSizes' },
 

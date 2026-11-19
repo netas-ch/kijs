@@ -197,11 +197,11 @@ kijs.Navigator = class kijs_Navigator {
             bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Vivaldi');
             bi.isChromium = true;
 
-        // Opera (Chromium)
-        } else if (kijs.Navigator._browserVersion(ua, 'Opera')) {
+        // Opera (Chromium, heute mit 'OPR/' im User-Agent)
+        } else if (kijs.Navigator._browserVersion(ua, 'OPR') || kijs.Navigator._browserVersion(ua, 'Opera')) {
             bi.browser = 'Opera';
             bi.browserVendor = 'Opera';
-            bi.browserVersion = kijs.Navigator._browserVersion(ua, 'Opera');
+            bi.browserVersion = kijs.Navigator._browserVersion(ua, 'OPR') || kijs.Navigator._browserVersion(ua, 'Opera');
             bi.isChromium = true;
 
         // Samsung Browser (Chromium)
@@ -309,13 +309,26 @@ kijs.Navigator = class kijs_Navigator {
         const params = {};
         if ('search' in window.location && window.location.search && 
                 window.location.search.length > 1) {
+            // '+' steht für ein Leerzeichen, ungültige %-Codes bleiben unverändert
+            const decode = (str) => {
+                str = str.replace(/\+/g, ' ');
+                try {
+                    return decodeURIComponent(str);
+                } catch (ex) {
+                    return str;
+                }
+            };
+
             const pt = window.location.search.substr(1).split('&');
             for (let i=0; i<pt.length; i++) {
-                let tmp = pt[i].split('='), key, val;
-                key = decodeURIComponent(tmp[0]);
-                val = tmp.length === 2 ? decodeURIComponent(tmp[1]) : null;
-                params[key] = val;
-            };
+                if (pt[i] === '') {
+                    continue;
+                }
+                // nur beim ersten '=' trennen, der Wert darf selbst '=' enthalten
+                const pos = pt[i].indexOf('=');
+                const key = decode(pos === -1 ? pt[i] : pt[i].substring(0, pos));
+                params[key] = pos === -1 ? null : decode(pt[i].substring(pos + 1));
+            }
         }
 
         if (!kijs.isDefined(parameterName)) {
